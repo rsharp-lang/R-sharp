@@ -1,0 +1,12 @@
+﻿Imports System.Text
+''' <summary>
+''' 生成每一个工具的引用文献的工具
+''' </summary>
+Module Cite
+
+    Public Sub GenerateDocument(repository As String)
+        Dim index As New StringBuilder(My.Resources.index)
+
+        Call index.SaveTo($"{repository}/cites.html", System.Text.Encoding.UTF8)
+    End Sub
+End Module

@@ -1,0 +1,335 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Molk+
+</name>
+</assembly>
+<members>
+<member name="P:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.Button.UI">
+	<summary>
+ The UI style definition data for this button control.(这个按钮控件的UI样式定义数据)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.Button">
+	<summary>
+ 一个可以自定义样式的按钮控件
+ </summary>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.Caption.UIThemes">
+	<summary>
+ 当前的控件主题在这里更换
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.Caption.Update">
+	<summary>
+ Updates the ui visualize of this caption bar.
+ </summary>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.TabControl.ITabControl`1.PagesCount">
+	<summary>
+ 返回容器内的标签数目
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.TabControl.ITabControl`1.AddTabPageEx(System.String,System.Action)">
+	<summary>
+ 添加新标签页的逻辑，在本过程之中并不包含有UI布局等细节的控制
+ </summary>
+	<param name="Name"></param>
+	<param name="TabCloseEventHandle"></param>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.TabControl.ITabControl`1.RemoveTabPage(System.String,System.Action)">
+	<summary>
+ 用于处理用户鼠标点击事件的过程
+ </summary>
+	<param name="Name"></param>
+	<param name="TabCloseEventHandler"></param>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.TabControl.ITabControl`1">
+	<summary>
+ 多标签页的基本框架
+ </summary>
+	<typeparam name="T"></typeparam>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.TabControl.ITabPage.Panel">
+	<summary>
+ Only contains one control in this panel control.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.TabControl.ITabPage._Id">
+	<summary>
+ 用于标识当前的标签页对象的位置的属性值
+ </summary>
+	<remarks></remarks>
+</member><member name="E:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.TabControl.ITabPage.ITabPageEx.TabPageInactive">
+	<summary>
+ 当前的标签页失活
+ </summary>
+	<remarks></remarks>
+</member><member name="E:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.TabControl.ITabPage.ITabPageEx.TabPageActive">
+	<summary>
+ 当前的标签页被激活
+ </summary>
+	<remarks></remarks>
+</member><member name="E:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.TabControl.ITabPage.ITabPageEx.CloseAllTabs">
+	<summary>
+ 关闭所有的标签页（用户点击了右键菜单上面的关闭所有标签页的按钮）
+ </summary>
+	<remarks></remarks>
+</member><member name="E:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.TabControl.ITabPage.ITabPageEx.CloseAllTabsButThis">
+	<summary>
+ 关闭所有的标签页但是当前标签页除外（用户点击了右键菜单上面的关闭所有标签页但是当前的标签页除外的按钮）
+ </summary>
+	<remarks></remarks>
+</member><member name="E:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.TabControl.ITabPage.ITabPageEx.CloseTabPage">
+	<summary>
+ 关闭当前标签页（用户点击了右键菜单上面的关闭当前标签页的按钮）
+ </summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.TabControl.ITabPage.EventTabPageInactive">
+	<summary>
+ 当前的标签页失活
+ </summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.TabControl.ITabPage.EventTabPageActive">
+	<summary>
+ 当前的标签页被激活
+ </summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.TabControl.ITabPage.EventCloseAllTabs">
+	<summary>
+ 关闭所有的标签页（用户点击了右键菜单上面的关闭所有标签页的按钮）
+ </summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.TabControl.ITabPage.EventCloseAllTabsButThis">
+	<summary>
+ 关闭所有的标签页但是当前标签页除外（用户点击了右键菜单上面的关闭所有标签页但是当前的标签页除外的按钮）
+ </summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.TabControl.ITabPage.EventCloseTabPage">
+	<summary>
+ 关闭当前标签页（用户点击了右键菜单上面的关闭当前标签页的按钮）
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.TabControl.ITabPage.ActiveTabPage">
+	<summary>
+ 本方法激活当前的标签页同时取消其他的标签页的激活状态，假若要仅仅更改当前标签页的激活状态，请使用Active属性
+ </summary>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.TabControl.ITabPage.Active">
+	<summary>
+ 获取一个值来指示当前的标签页是否处于激活的状态
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.TabControl.ITabPage">
+	<summary>
+ 标签页的基本框架
+ </summary>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Molk.API.Gtk.SkinEngine">
+	<summary>
+ Gtk窗口装饰器的皮肤引擎
+ </summary>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Molk.API.Gtk.File.MetaCityTheme">
+	<summary>
+ 皮肤引擎的皮肤数据存储结构
+ </summary>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Molk.Visualise.Elements.Caption.HeightLimits">
+	<summary>
+ 标题栏的高度上线
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Molk.Visualise.Elements.Caption.Molk">
+	<summary>
+ Default UI visualize style.
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Molk.API.MoveScreen.Enabled">
+	<summary>
+ Enabled this feature or not?
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.Image.Bitmap">
+	<summary>
+ 背景图像数据的存放位置
+ </summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.Image._opacity">
+	<summary>
+ 图像控件的透明度
+ </summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.Image.tmrFadeInn">
+	<summary>
+ 图像控件渐现动画绘制线程
+ </summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.Image.tmrFadeOut">
+	<summary>
+ 图像控件渐隐动画绘制线程
+ </summary>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.Image.Image">
+	<summary>
+ 设置或者获取图像控件的背景图片
+ </summary>
+	<value>图像控件的背景图片</value>
+	<returns>图像控件的背景图片</returns>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.Image.Opacity">
+	<summary>
+ 在这里获取或者设置控件的透明度（0-255）
+ </summary>
+	<value>控件的透明度</value>
+	<returns>控件的透明度</returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.Image.FadeIn">
+	<summary>
+ 启动控件的渐现动画的绘制线程
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.Image.FadeOut">
+	<summary>
+ 启动控件的渐隐动画的绘制线程
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.Image.OnPaint(System.Windows.Forms.PaintEventArgs)">
+	<summary>
+ 复写了控件的绘制事件，仅当使用控件的Opacity属性更改透明度的时候，会调用Invalidate()过程，发生绘制事件
+ </summary>
+	<param name="pe"></param>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.Image">
+	<summary>
+	</summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Molk.Common.YaHei">
+	<summary>
+ Microsoft YaHei font.(微软雅黑字体)
+ </summary>
+	<remarks></remarks>
+</member><member name="E:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.TabControl.TabPage.TabPage.TabPageInactive">
+	<summary>
+ 当前的标签页失活
+ </summary>
+	<remarks></remarks>
+</member><member name="E:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.TabControl.TabPage.TabPage.TabPageActive">
+	<summary>
+ 当前的标签页被激活
+ </summary>
+	<remarks></remarks>
+</member><member name="E:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.TabControl.TabPage.TabPage.CloseAllTabs">
+	<summary>
+ 关闭所有的标签页（用户点击了右键菜单上面的关闭所有标签页的按钮）
+ </summary>
+	<remarks></remarks>
+</member><member name="E:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.TabControl.TabPage.TabPage.CloseAllTabsButThis">
+	<summary>
+ 关闭所有的标签页但是当前标签页除外（用户点击了右键菜单上面的关闭所有标签页但是当前的标签页除外的按钮）
+ </summary>
+	<remarks></remarks>
+</member><member name="E:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.TabControl.TabPage.TabPage.CloseTabPage">
+	<summary>
+ 关闭当前标签页（用户点击了右键菜单上面的关闭当前标签页的按钮）
+ </summary>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Molk.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Microsoft.VisualBasic.Molk.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="P:Microsoft.VisualBasic.Molk.My.Resources.Resources.Active">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Microsoft.VisualBasic.Molk.My.Resources.Resources.Caption">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Microsoft.VisualBasic.Molk.My.Resources.Resources.Check">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Microsoft.VisualBasic.Molk.My.Resources.Resources.CheckPreLight">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Microsoft.VisualBasic.Molk.My.Resources.Resources.Close">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Microsoft.VisualBasic.Molk.My.Resources.Resources.ControlBox">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Microsoft.VisualBasic.Molk.My.Resources.Resources.Inactive">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Microsoft.VisualBasic.Molk.My.Resources.Resources.InactivePrelight">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Microsoft.VisualBasic.Molk.My.Resources.Resources.LabelBase">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Microsoft.VisualBasic.Molk.My.Resources.Resources.LabelHead">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Microsoft.VisualBasic.Molk.My.Resources.Resources.LabelUnSelected">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Microsoft.VisualBasic.Molk.My.Resources.Resources.Maximum">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Microsoft.VisualBasic.Molk.My.Resources.Resources.Minimize">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Microsoft.VisualBasic.Molk.My.Resources.Resources.Uncheck">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Microsoft.VisualBasic.Molk.My.Resources.Resources.UncheckPreLight">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Microsoft.VisualBasic.Molk.My.Resources.Resources.vs10ide">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="T:Microsoft.VisualBasic.Molk.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="F:Microsoft.VisualBasic.Molk.Windows.Forms.Controls.Checkbox.UIBase">
+	<summary>
+ Create a checkbox ui with text and then assign the new ui to variable [_UI]
+ </summary>
+	<remarks></remarks>
+</member>
+</members>
+</doc>

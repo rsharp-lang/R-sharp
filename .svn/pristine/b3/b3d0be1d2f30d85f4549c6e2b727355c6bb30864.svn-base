@@ -1,0 +1,2712 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+	<head>
+		
+		<meta charset="utf-8">
+		<title>Framework.Extensions</title>
+		
+		<style>::-moz-selection {
+        background: #b3d4fc;
+        text-shadow: none;
+      }
+
+      ::selection {
+        background: #b3d4fc;
+        text-shadow: none;
+      }
+
+      html {
+        padding: 30px 10px;
+        font-size: 16px;
+        line-height: 1.4;
+        color: #737373;
+        background: #f0f0f0;
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+      }
+
+      html,
+      input {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      }
+
+      body {
+        max-width: 1500px;
+        _width: 1500px;
+        padding: 30px 20px 50px;
+        border: 1px solid #b3b3b3;
+        border-radius: 4px;
+        margin: 0 auto;
+        box-shadow: 0 1px 10px #a7a7a7, inset 0 1px 0 #fff;
+        background: #fcfcfc;
+      }
+
+      h1 {
+        margin: 0 10px;
+        font-size: 35px;
+        text-align: center;
+      }
+
+      h1 span {
+        color: #bbb;
+      }
+
+      h3 {
+        margin: 1.5em 0 0.5em;
+      }
+
+      p {
+        margin: 1em 0;
+      }
+
+      ul {
+        padding: 0 0 0 40px;
+        margin: 1em 0;
+      }
+
+      .container {
+        max-width: 900px;
+        _width: 900px;
+        margin: 0 auto;
+      }
+
+      /* google search */
+
+      #goog-fixurl ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      #goog-fixurl form {
+        margin: 0;
+      }
+
+      #goog-wm-qt,
+      #goog-wm-sb {
+        border: 1px solid #bbb;
+        font-size: 16px;
+        line-height: normal;
+        vertical-align: top;
+        color: #444;
+        border-radius: 2px;
+      }
+
+      #goog-wm-qt {
+        width: 220px;
+        height: 20px;
+        padding: 5px;
+        margin: 5px 10px 0 0;
+        box-shadow: inset 0 1px 1px #ccc;
+      }
+
+      #goog-wm-sb {
+        display: inline-block;
+        height: 32px;
+        padding: 0 10px;
+        margin: 5px 0 0;
+        white-space: nowrap;
+        cursor: pointer;
+        background-color: #f5f5f5;
+        background-image: -webkit-linear-gradient(rgba(255,255,255,0), #f1f1f1);
+        background-image: -moz-linear-gradient(rgba(255,255,255,0), #f1f1f1);
+        background-image: -ms-linear-gradient(rgba(255,255,255,0), #f1f1f1);
+        background-image: -o-linear-gradient(rgba(255,255,255,0), #f1f1f1);
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        *overflow: visible;
+        *display: inline;
+        *zoom: 1;
+      }
+
+      #goog-wm-sb:hover,
+      #goog-wm-sb:focus {
+        border-color: #aaa;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+        background-color: #f8f8f8;
+      }
+
+      #goog-wm-qt:hover,
+      #goog-wm-qt:focus {
+        border-color: #105cb6;
+        outline: 0;
+        color: #222;
+      }
+
+      input::-moz-focus-inner {
+        padding: 0;
+        border: 0;
+      }</style>
+	  
+	  <body>
+	  
+	  <div class="container">
+	    
+	  <h1>Document for <strong>  Framework.Extensions</strong> <span>:-)</span></h1>
+	  <br />
+			
+	  <script>var GOOG_FIXURL_LANG = (navigator.language || '').slice(0,2),GOOG_FIXURL_SITE = location.host;</script>
+	<!--  <script src="//linkhelp.clients.google.com/tbproxy/lh/wm/fixurl.js"></script> -->
+	  </div>
+	      	<font face="Microsoft YaHei" size="2">
+	  	  <table>
+  <tr>
+    <th align="left">	  <p><h2><font size=5><span><a href="./index.html">< Back To Index</a></span></font></h2></p>
+	<p>
+	 <table>
+	 
+	       <tr>
+    <td valign="top">Related Namespace</td>
+	<td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td>
+    <td align="left"><li><a href="./App.html">App</a></li>
+<li><a href="./CommandLine.html">CommandLine</a></li>
+<li><a href="./Cowsay.html">Cowsay</a></li>
+<li><a href="./Framework.Extensions.html">Framework.Extensions</a></li>
+<li><a href="./GDI+.html">GDI+</a></li>
+<li><a href="./Interpreter.html">Interpreter</a></li>
+<li><a href="./Large_Text_File.html">Large_Text_File</a></li>
+<li><a href="./Md5Hash.html">Md5Hash</a></li>
+<li><a href="./MMFSocket.html">MMFSocket</a></li>
+<li><a href="./Ngen.html">Ngen</a></li>
+<li><a href="./Program.Path.Search.html">Program.Path.Search</a></li>
+<li><a href="./Settings.Inf.html">Settings.Inf</a></li>
+<li><a href="./Software.Toolkits.html">Software.Toolkits</a></li>
+<li><a href="./STDIO.html">STDIO</a></li>
+<li><a href="./StringHelpers.html">StringHelpers</a></li>
+<li><a href="./VBMath.html">VBMath</a></li>
+<li><a href="./WebServices.html">WebServices</a></li></td>
+  </tr>
+	 
+	  </table>
+	
+	</p>
+	</th>
+    <th></th>
+  </tr>
+  <tr>
+    <td>Package</td>
+    <td align="left"><strong>Framework.Extensions</strong></td>
+  </tr>
+ 
+                <tr>
+    <td>HOME</td>
+    <td align="left"><a href="http://gcmodeller.org">http://gcmodeller.org</a></td>
+  </tr>
+                <tr>
+    <td>Publisher</td>
+    <td align="left">xie.guigang@gmail.com</td>
+  </tr>
+                <tr>
+    <td>Description</td>
+    <td align="left">The common extension methods module in this Microsoft.VisualBasic program assembly.Common extension methods library for convenient the programming job.</td>
+  </tr>
+  
+      <tr>
+    <td valign="top">Cited References</td>
+    <td align="left"></td>
+  </tr>
+  
+                  <tr>
+    <td></td>
+    <td></td>
+  </tr>
+  
+              
+  
+  </font>
+</table>
+	  <br />
+	  
+	    <table>
+		    <tr>
+    <td valign="top"><strong>Summary Contents</strong></td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+		<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+		<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+		<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+		<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+		<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+    <td><table>
+  <tr>
+    <th align="left">
+                                           <a href="#CLI_PATH">CLI_PATH</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Collection2GenericIEnumerable">Collection2GenericIEnumerable</a> </th><td> </td><td> </td><td> </td>
+<th align="left">Try convert the type specific collection data type into a generic enumerable collection data type.</th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#DEBUG.ECHO">DEBUG.ECHO</a> </th><td> </td><td> </td><td> </td>
+<th align="left">Output the full debug information while the project is debugging in debug mode.<br />Output the full debug information while the project is debugging in debug mode.</th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Delegate.GET_Invoke">Delegate.GET_Invoke</a> </th><td> </td><td> </td><td> </td>
+<th align="left">Get the method reflection entry point for a anonymous lambda expression.</th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Dir.basename">Dir.basename</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#double.is.na">double.is.na</a> </th><td> </td><td> </td><td> </td>
+<th align="left">Is this double type of the number is an NA type infinity number. this is major comes from the devided by ZERO.</th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Elements.Randomize">Elements.Randomize</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#File.Exists">File.Exists</a> </th><td> </td><td> </td><td> </td>
+<th align="left">Check if the target file object is exists on your file system or not.</th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#File.FullPath">File.FullPath</a> </th><td> </td><td> </td><td> </td>
+<th align="left">Gets the full path of the directory or file.</th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#File.IsOpened">File.IsOpened</a> </th><td> </td><td> </td><td> </td>
+<th align="left">Detect while the target file is opened by someone process.</th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#File.Select">File.Select</a> </th><td> </td><td> </td><td> </td>
+<th align="left">Open the file open dialog to gets the file</th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#FlushMemory">FlushMemory</a> </th><td> </td><td> </td><td> </td>
+<th align="left">Rabbish collection to free the junk memory.</th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#FlushStream">FlushStream</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Fuzzy_Match">Fuzzy_Match</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Get.Binary">Get.Binary</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Get.Boolean">Get.Boolean</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Get.Description">Get.Description</a> </th><td> </td><td> </td><td> </td>
+<th align="left">Get the description data from a enum type value, if the target have no <see cref="DescriptionAttribute"></see> attribute data then function will return the string value from the ToString() function.</th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Get.FirstValue">Get.FirstValue</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Get.Item">Get.Item</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Get.Properties">Get.Properties</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#get_item">get_item</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Invoke">Invoke</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#IsNullOrEmpty">IsNullOrEmpty</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#IsTextFile">IsTextFile</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Move.Next">Move.Next</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#mv.split">mv.split</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Path2Url">Path2Url</a> </th><td> </td><td> </td><td> </td>
+<th align="left">Gets the URL type file path.</th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Pause">Pause</a> </th><td> </td><td> </td><td> </td>
+<th align="left">Pause the console program.</th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Rand">Rand</a> </th><td> </td><td> </td><td> </td>
+<th align="left">Returns a random floating-point number between 0.0 and 1.0.</th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Run">Run</a> </th><td> </td><td> </td><td> </td>
+<th align="left">Running the object model driver, the target object should implement the driver interface.</th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#RunCLI">RunCLI</a> </th><td> </td><td> </td><td> </td>
+<th align="left">Running the string as cli command line and the specific type define as a interpreter.<br />Running the string as cli command line and the specific type define as a interpreter.</th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#SendMessage">SendMessage</a> </th><td> </td><td> </td><td> </td>
+<th align="left"><br /></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Sequence.Index">Sequence.Index</a> </th><td> </td><td> </td><td> </td>
+<th align="left">Gets the subscript index of a generic collection.</th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Sequence.Random">Sequence.Random</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Shell">Shell</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#swap">swap</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#takes">takes</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#trim">trim</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#trim_nullvalue">trim_nullvalue</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#value.Copy">value.Copy</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Write.Text">Write.Text</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Xml.CreateObject">Xml.CreateObject</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Xml.GetAttribute">Xml.GetAttribute</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+</table>
+</td>
+  </tr>
+		</table>
+	  	  <br />
+		  <hr>
+	  	<font face="Microsoft YaHei" size="2">
+	  <p><li>
+    <p>Help for "CLI_PATH":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="CLI_PATH">CLI_PATH</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::CliPath
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Path</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.String.html">System.String</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Collection2GenericIEnumerable":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Collection2GenericIEnumerable">Collection2GenericIEnumerable</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td>Try convert the type specific collection data type into a generic enumerable collection data type.</td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::Collection2GenericIEnumerable
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Type</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Type.html">System.Type</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left">[Optional]</td>
+    <td align="left"><strong>DebuggerMessage</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Boolean.html">System.Boolean</a></td>
+<td align="left"></td>
+<td align="left"> = True</td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Type.html">System.Type</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<strong>DEBUG.ECHO</strong><br />
+<strong>+ 2 Overloads</strong><p>
+..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll!Microsoft.VisualBasic.Extensions::System.String __DEBUG_ECHO(System.String, Int32)
+<li>
+    <p>Help for "DEBUG.ECHO":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="DEBUG.ECHO">DEBUG.ECHO</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td>Output the full debug information while the project is debugging in debug mode.</td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::__DEBUG_ECHO
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Message</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left">The message fro output to the debugger console, this function will add 
+a time stamp automaticly to the leading position of the message.</td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left">[Optional]</td>
+    <td align="left"><strong>Indent</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"> = 0</td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.String.html">System.String</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll!Microsoft.VisualBasic.Extensions::System.String __DEBUG_ECHO(System.Text.StringBuilder, Int32)
+<li>
+    <p>Help for "DEBUG.ECHO":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="DEBUG.ECHO">DEBUG.ECHO</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td>Output the full debug information while the project is debugging in debug mode.</td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::__DEBUG_ECHO
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Message</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Text.StringBuilder.html">System.Text.StringBuilder</a></td>
+<td align="left">The message fro output to the debugger console, this function will add 
+a time stamp automaticly to the leading position of the message.</td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left">[Optional]</td>
+    <td align="left"><strong>Indent</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"> = 0</td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.String.html">System.String</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Delegate.GET_Invoke":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Delegate.GET_Invoke">Delegate.GET_Invoke</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td>Get the method reflection entry point for a anonymous lambda expression.</td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::GetDelegateInvokeEntryPoint
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>obj</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Object.html">System.Object</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Reflection.MethodInfo.html">System.Reflection.MethodInfo</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Dir.basename":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Dir.basename">Dir.basename</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::BaseName
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>dir</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.String.html">System.String</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "double.is.na":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="double.is.na">double.is.na</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td>Is this double type of the number is an NA type infinity number. this is major comes from the devided by ZERO.</td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::Is_NA_UHandle
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>n</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Double.html">System.Double</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Boolean.html">System.Boolean</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Elements.Randomize":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Elements.Randomize">Elements.Randomize</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::RandomizeElements
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Collection</strong></td>
+    <td align="left"><a href="./TypeLinks/.html"></a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/IEnumerable+.html"></a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "File.Exists":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="File.Exists">File.Exists</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td>Check if the target file object is exists on your file system or not.</td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::FileExists
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>path</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Boolean.html">System.Boolean</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "File.FullPath":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="File.FullPath">File.FullPath</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td>Gets the full path of the directory or file.</td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::FullPath
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>path</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.String.html">System.String</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "File.IsOpened":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="File.IsOpened">File.IsOpened</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td>Detect while the target file is opened by someone process.</td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::FileOpened
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>FileName</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Boolean.html">System.Boolean</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "File.Select":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="File.Select">File.Select</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td>Open the file open dialog to gets the file</td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::SelectFile
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left">[Optional]</td>
+    <td align="left"><strong>ext</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left"></td>
+<td align="left"> = *.*</td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.String.html">System.String</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "FlushMemory":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="FlushMemory">FlushMemory</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td>Rabbish collection to free the junk memory.</td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::FlushMemory
+<br />Function Returns: 
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Void.html">System.Void</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "FlushStream":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="FlushStream">FlushStream</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::FlushStream
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>ChunkBuffer</strong></td>
+    <td align="left"><a href="./TypeLinks/c9e6e8580deaf9034b3d4c4166ca3460.html">System.Collections.Generic.IEnumerable`1[[System.Byte, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Path.Save</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Boolean.html">System.Boolean</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Fuzzy_Match":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Fuzzy_Match">Fuzzy_Match</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::FuzzyMatching
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Query</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Subject</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Boolean.html">System.Boolean</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Get.Binary":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Get.Binary">Get.Binary</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::ToBinary
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Date</strong></td>
+    <td align="left"><a href="./TypeLinks/System.DateTime.html">System.DateTime</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int64.html">System.Int64</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Get.Boolean":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Get.Boolean">Get.Boolean</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::getBoolean
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>str</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Boolean.html">System.Boolean</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Get.Description":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Get.Description">Get.Description</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td>Get the description data from a enum type value, if the target have no <see cref="DescriptionAttribute"></see> attribute data then function will return the string value from the ToString() function.</td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::Description
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>value</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Enum.html">System.Enum</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.String.html">System.String</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Get.FirstValue":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Get.FirstValue">Get.FirstValue</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::GetFirstValue
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Collection</strong></td>
+    <td align="left"><a href="./TypeLinks/.html"></a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/.html"></a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Get.Item":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Get.Item">Get.Item</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::GetItem
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Collection</strong></td>
+    <td align="left"><a href="./TypeLinks/.html"></a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>UniqueId</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left">[Optional]</td>
+    <td align="left"><strong>IgnoreCase</strong></td>
+    <td align="left"><a href="./TypeLinks/System.StringComparison.html">System.StringComparison</a></td>
+<td align="left"></td>
+<td align="left"> = Ordinal</td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/.html"></a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Get.Properties":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Get.Properties">Get.Properties</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::GetReadWriteProperties
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>type</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Type.html">System.Type</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/IEnumerable+System.Reflection.PropertyInfo.html">System.Reflection.PropertyInfo[]</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "get_item":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="get_item">get_item</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::GetItem
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Collection</strong></td>
+    <td align="left"><a href="./TypeLinks/.html"></a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>index</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/.html"></a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Invoke":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Invoke">Invoke</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::Invoke
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Process</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Diagnostics.Process.html">System.Diagnostics.Process</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "IsNullOrEmpty":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="IsNullOrEmpty">IsNullOrEmpty</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::IsNullOrEmpty
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>stringCollection</strong></td>
+    <td align="left"><a href="./TypeLinks/a2c0494d65a2e4c2ff5258bb8b26d486.html">System.Collections.Generic.IEnumerable`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>strict</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Boolean.html">System.Boolean</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Boolean.html">System.Boolean</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "IsTextFile":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="IsTextFile">IsTextFile</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::IsTextFile
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>FilePath</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left">[Optional]</td>
+    <td align="left"><strong>ChunkLength</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"> = 4096</td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Boolean.html">System.Boolean</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Move.Next":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Move.Next">Move.Next</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::MoveNext
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>p</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int64&.html">System.Int64&</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int64.html">System.Int64</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "mv.split":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="mv.split">mv.split</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::SplitMV
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>dir</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>moveto</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>split</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Path2Url":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Path2Url">Path2Url</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td>Gets the URL type file path.</td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::ToFileURL
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Path</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.String.html">System.String</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Pause":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Pause">Pause</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td>Pause the console program.</td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::Pause
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left">[Optional]</td>
+    <td align="left"><strong>Prompted</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left"></td>
+<td align="left"> = Press any key to continute...</td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Void.html">System.Void</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Rand":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Rand">Rand</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td>Returns a random floating-point number between 0.0 and 1.0.</td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::RandomDouble
+<br />Function Returns: 
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Double.html">System.Double</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Run":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Run">Run</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td>Running the object model driver, the target object should implement the driver interface.</td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::RunDriver
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>driver</strong></td>
+    <td align="left"><a href="./TypeLinks/Microsoft.VisualBasic.ComponentModel.DataSourceModel.IObjectModel_Driver.html">Microsoft.VisualBasic.ComponentModel.DataSourceModel.IObjectModel_Driver</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<strong>RunCLI</strong><br />
+<strong>+ 2 Overloads</strong><p>
+..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll!Microsoft.VisualBasic.Extensions::Int32 RunCLI(System.Type, System.String)
+<li>
+    <p>Help for "RunCLI":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="RunCLI">RunCLI</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td>Running the string as cli command line and the specific type define as a interpreter.</td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::RunCLI
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Interpreter</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Type.html">System.Type</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>args</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll!Microsoft.VisualBasic.Extensions::Int32 RunCLI(System.Type, Microsoft.VisualBasic.CommandLine.CommandLine)
+<li>
+    <p>Help for "RunCLI":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="RunCLI">RunCLI</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td>Running the string as cli command line and the specific type define as a interpreter.</td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::RunCLI
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Interpreter</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Type.html">System.Type</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>args</strong></td>
+    <td align="left"><a href="./TypeLinks/Microsoft.VisualBasic.CommandLine.CommandLine.html">Microsoft.VisualBasic.CommandLine.CommandLine</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<strong>SendMessage</strong><br />
+<strong>+ 2 Overloads</strong><p>
+..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll!Microsoft.VisualBasic.Extensions::Void SendMessage(System.Net.IPEndPoint, System.String, System.Action`1[System.String])
+<li>
+    <p>Help for "SendMessage":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="SendMessage">SendMessage</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::SendMessage
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>host</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Net.IPEndPoint.html">System.Net.IPEndPoint</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>request</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Callback</strong></td>
+    <td align="left"><a href="./TypeLinks/1aa6153f30bfaa24167e1a296e98b357.html">System.Action`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Void.html">System.Void</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll!Microsoft.VisualBasic.Extensions::Void SendMessage(Microsoft.VisualBasic.WrapperClassTools.Net.IPEndPoint, System.String, System.Action`1[System.String])
+<li>
+    <p>Help for "SendMessage":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="SendMessage">SendMessage</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::SendMessage
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>host</strong></td>
+    <td align="left"><a href="./TypeLinks/Microsoft.VisualBasic.WrapperClassTools.Net.IPEndPoint.html">Microsoft.VisualBasic.WrapperClassTools.Net.IPEndPoint</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>request</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Callback</strong></td>
+    <td align="left"><a href="./TypeLinks/1aa6153f30bfaa24167e1a296e98b357.html">System.Action`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Void.html">System.Void</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Sequence.Index":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Sequence.Index">Sequence.Index</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td>Gets the subscript index of a generic collection.</td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::Sequence
+<br />Function Returns: A integer array of subscript index of the target generic collection.
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Data.Collection</strong></td>
+    <td align="left"><a href="./TypeLinks/.html"></a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left">[Optional]</td>
+    <td align="left"><strong>Index.OffSet</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"> = 0</td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/IEnumerable+System.Int32.html">System.Int32[]</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Sequence.Random":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Sequence.Random">Sequence.Random</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::RandomSequence
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>n</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/IEnumerable+System.Int32.html">System.Int32[]</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Shell":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Shell">Shell</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::Shell
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>CommandLine</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/Microsoft.VisualBasic.CommandLine.IORedirect.html">Microsoft.VisualBasic.CommandLine.IORedirect</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "swap":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="swap">swap</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::Swap
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>obj1</strong></td>
+    <td align="left"><a href="./TypeLinks/.html"></a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>obj2</strong></td>
+    <td align="left"><a href="./TypeLinks/.html"></a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Void.html">System.Void</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "takes":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="takes">takes</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::Takes
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Collection</strong></td>
+    <td align="left"><a href="./TypeLinks/.html"></a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>IndexCollection</strong></td>
+    <td align="left"><a href="./TypeLinks/IEnumerable+System.Int32.html">System.Int32[]</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left">[Optional]</td>
+    <td align="left"><strong>OffSet</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"> = 0</td>
+  </tr> 
+ <tr>
+                              <td align="left">[Optional]</td>
+    <td align="left"><strong>reversedSelect</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Boolean.html">System.Boolean</a></td>
+<td align="left"></td>
+<td align="left"> = False</td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/IEnumerable+.html"></a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "trim":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="trim">trim</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::TrimA
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>strText</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left">[Optional]</td>
+    <td align="left"><strong>VbCRLF_Replace</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left"></td>
+<td align="left"> =  </td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.String.html">System.String</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "trim_nullvalue":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="trim_nullvalue">trim_nullvalue</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::TrimNull
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Collection</strong></td>
+    <td align="left"><a href="./TypeLinks/.html"></a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/IEnumerable+.html"></a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "value.Copy":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="value.Copy">value.Copy</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::CopyTo
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>value</strong></td>
+    <td align="left"><a href="./TypeLinks/.html"></a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>target</strong></td>
+    <td align="left"><a href="./TypeLinks/.html"></a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/.html"></a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Write.Text":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Write.Text">Write.Text</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::SaveTo
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Text</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Path</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left">[Optional]</td>
+    <td align="left"><strong>Encoding</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Text.Encoding.html">System.Text.Encoding</a></td>
+<td align="left"></td>
+<td align="left"> = </td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Boolean.html">System.Boolean</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Xml.CreateObject":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Xml.CreateObject">Xml.CreateObject</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::CreateObjectFromXml
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Xml</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Text.StringBuilder.html">System.Text.StringBuilder</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>TypeInfo</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Type.html">System.Type</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Object.html">System.Object</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Xml.GetAttribute":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Xml.GetAttribute">Xml.GetAttribute</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Extensions::Get_XmlAttributeValue
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>strData</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Name</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.String.html">System.String</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+</p></font>
+	  		<font face="Microsoft YaHei" size="1.5">
+		<div align="right">
+			<br />	<br />	<br />
+			<hr>
+				
+		<p>Copyright (c) <a href="http://gcmodeller.org">GCModeller Virtual Cell System</a>. 2015 All rights reserved.</p>
+		</div></font>
+	  </body>

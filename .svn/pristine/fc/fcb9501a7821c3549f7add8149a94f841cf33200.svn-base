@@ -1,0 +1,68 @@
+﻿---------------------------------------- 2015年3月24日 - 22:34:17 ----------------------------------------
+
+
+2015/3/24 22:34:17 - 139  [ERR][Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ObjectModels.Exceptions.ScriptRunTimeException]: 	
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+	[Shoal shell script text details]
+	
+	  
+	imports wavelets
+	imports r.net
+	imports io_device.csv
+	imports system
+	
+	chipdata < (imports.csv) ../DM_1184.GeneChipDataSamples.csv
+	chipdata <- $chipdata -> as.datasource
+	chipdata <= $chipdata(0)
+	chipdata <- $chipdata -> get.X
+	
+	s4obj <- $chipdata -> dwt.r.invoke filter haar n.levels 5 
+	result.type <- wavelets result.type.schema
+	result <- ctype r.data $s4obj cast.type $result.type
+	
+	call $result > ./Test.Result.ShoalInvoke.xml
+	
+	return $result
+	
+	--------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	
+	[ERROR_LINE]
+	   ---->  chipdata <= $chipdata(0)  ............................. line: 6
+	
+	------------------------------
+	
+	[ShellScript Memory Dump Details]
+	
+	 Imports Constants:
+	
+	  app_data     = C:\Users\WORKGROUP\AppData\Roaming\Test\Test.Project\1.0.0.0
+	  bin          = E:\GCModeller\GCI Project\Shoal\RDotNET.Extensions.ShellScriptAPI\bin\Test.Project\bin\Debug\Test.Project.exe
+	  desktop      = E:\Desktop
+	  home         = E:\GCModeller\GCI Project\Shoal\RDotNET.Extensions.ShellScriptAPI\bin\Test.Project\bin\Debug
+	  my_document  = D:\Documents
+	  null         = NULL
+	  temp         = D:\TMP
+	
+	
+	Variables:
+	
+	  $         = VB$AnonymousType_1`2[System.String,System.Double[]][]
+	  chipdata  = VB$AnonymousType_1`2[System.String,System.Double[]][]
+	
+	
+	[System.Exception Details Information]
+	
+	 Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ObjectModels.Exceptions.SyntaxErrorException: Unable to get the collection indexer!
+	   at Microsoft.VisualBasic.Scripting.ShoalShell.BuildInModules.System.Array.get_Item(String script, I_MemoryManagementDevice Memory) in E:\GCModeller\GCI Project\Shoal\ShoalShell\Microsoft.VisualBasic.Scripting.ShoalShell\BuildInModules\Array.vb:line 168
+	   at Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Interpreter._Closure$__37._Closure$__40._Lambda$__225() in E:\GCModeller\GCI Project\Shoal\ShoalShell\Microsoft.VisualBasic.Scripting.ShoalShell\Interpreter\Interpreter.vb:line 279
+	   at Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ObjectModels.ShellScript.InternalExecuteScript(ScriptCodeLine CodeLine) in E:\GCModeller\GCI Project\Shoal\ShoalShell\Microsoft.VisualBasic.Scripting.ShoalShell\RuntimeObjects\ObjectModels\ObjectModels.vb:line 115
+	   at Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ObjectModels.ShellScript.InternalExecuteScript(ScriptCodeLine[] CodeLines) in E:\GCModeller\GCI Project\Shoal\ShoalShell\Microsoft.VisualBasic.Scripting.ShoalShell\RuntimeObjects\ObjectModels\ObjectModels.vb:line 133
+	
+	
+
+
+-------------------- END_OF_LOGGING --------------------
+
+-------------------- END_OF_LOGGING --------------------

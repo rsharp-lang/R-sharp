@@ -1,0 +1,35 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Microsoft.VisualBasic.Webservices.Bing
+</name>
+</assembly>
+<members>
+<member name="M:Microsoft.VisualBasic.Webservices.Bing.SearchEngineProvider.Search(System.String,System.Int32)">
+ <summary>
+ 
+ </summary>
+ <param name="KeywordExpression"></param>
+ <param name="getCounts">if the result count is smaller that this parameter value then will return the real counts. Default value is 10(the bing default first page item count).</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.Webservices.Bing.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.Webservices.Bing.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.Webservices.Bing.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+</members>
+</doc>

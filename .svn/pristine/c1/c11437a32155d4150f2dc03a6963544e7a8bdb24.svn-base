@@ -1,0 +1,49 @@
+﻿---------------------------------------- Wednesday, April 15, 2015 - 11:06:25 AM ----------------------------------------
+
+
+4/15/2015 11:06:25 AM - 206  [ERR][                    ]: 	
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+	[Shoal shell script text details]
+	
+	  library "../../../../..\ShoalShell\bin\Debug\ShoalShell.Plugins.Win32API_v2.0_22.0.7601.121__ed1d5d0cd8c60cc9a.dll"
+	imports winmm.dll
+	filename <- "F:\Music\NOKIA.wav"
+	call winmm.dll playsounda lpszname $filename hmodule 0 dwflags &SND_FILENAME
+	--------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	
+	System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation. ---> System.IO.FileNotFoundException: Could not load file or assembly 'file:///E:\SIYU_DNAuction\Shared Reference\ShoalShell\bin\Debug\ShoalShell.Plugins.Win32API_v2.0_22.0.7601.121__ed1d5d0cd8c60cc9a.dll' or one of its dependencies. The system cannot find the file specified.
+	   at System.Reflection.RuntimeAssembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, RuntimeAssembly locationHint, StackCrawlMark& stackMark, IntPtr pPrivHostBinder, Boolean throwOnFileNotFound, Boolean forIntrospection, Boolean suppressSecurityChecks)
+	   at System.Reflection.RuntimeAssembly.InternalLoadAssemblyName(AssemblyName assemblyRef, Evidence assemblySecurity, RuntimeAssembly reqAssembly, StackCrawlMark& stackMark, IntPtr pPrivHostBinder, Boolean throwOnFileNotFound, Boolean forIntrospection, Boolean suppressSecurityChecks)
+	   at System.Reflection.RuntimeAssembly.InternalLoadFrom(String assemblyFile, Evidence securityEvidence, Byte[] hashValue, AssemblyHashAlgorithm hashAlgorithm, Boolean forIntrospection, Boolean suppressSecurityChecks, StackCrawlMark& stackMark)
+	   at System.Reflection.Assembly.LoadFrom(String assemblyFile)
+	   at Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.RegistryModuleLoader.get_ModuleFromAssembly(String AssemblyPath) in E:\SIYU_DNAuction\Shared Reference\Shoal\ShoalShell\Microsoft.VisualBasic.Scripting.ShoalShell\DelegateHandlers\TypeLibraryRegistry\RegistryModuleLoader.vb:line 69
+	   at Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.DelegateRegistry.RegisterAssemblyModule(String AssemblyPath, String AssemblyName) in E:\SIYU_DNAuction\Shared Reference\Shoal\ShoalShell\Microsoft.VisualBasic.Scripting.ShoalShell\DelegateHandlers\TypeLibraryRegistry\DelegateRegistry.vb:line 304
+	   at Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.InternalCommands.Library(String assemblyPath) in E:\SIYU_DNAuction\Shared Reference\Shoal\ShoalShell\Microsoft.VisualBasic.Scripting.ShoalShell\Interpreter\InternalCommands.vb:line 338
+	   --- End of inner exception stack trace ---
+	   at System.RuntimeMethodHandle.InvokeMethod(Object target, Object[] arguments, Signature sig, Boolean constructor)
+	   at System.Reflection.RuntimeMethodInfo.UnsafeInvokeInternal(Object obj, Object[] parameters, Object[] arguments)
+	   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+	   at System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
+	   at Microsoft.VisualBasic.CommandLine.Reflection.EntryPoints.CommandEntryPointInfo.Invoke(Object[] parameters, Object target, Boolean Throw) in E:\SIYU_DNAuction\Shared Reference\Shoal\Microsoft.VisualBasic.Architecture.Framework\CommandLine\Reflection\EntryPoints\CommandEntryPointInfo.vb:line 146
+	   at Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.MethodDelegateCaller.InternalDelegateInvoke(CommandEntryPointInfo EntryPointHandle, Object[] argvs, ShellScript ScriptEngine) in E:\SIYU_DNAuction\Shared Reference\Shoal\ShoalShell\Microsoft.VisualBasic.Scripting.ShoalShell\DelegateHandlers\EntryPointHandlers\MethodDelegateCaller.vb:line 286
+	   at Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.MethodDelegateCaller.InternalCallOnlyOneParameterMethod(ParameterInfo Parameter, CommandEntryPointInfo _Delegate, CommandLine argvs, I_MemoryManagementDevice MemoryDevice) in E:\SIYU_DNAuction\Shared Reference\Shoal\ShoalShell\Microsoft.VisualBasic.Scripting.ShoalShell\DelegateHandlers\EntryPointHandlers\MethodDelegateCaller.vb:line 101
+	   at Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.MethodDelegateCaller.CallMethod(CommandEntryPointInfo Delegate, CommandLine argvs, I_MemoryManagementDevice MemoryDevice) in E:\SIYU_DNAuction\Shared Reference\Shoal\ShoalShell\Microsoft.VisualBasic.Scripting.ShoalShell\DelegateHandlers\EntryPointHandlers\MethodDelegateCaller.vb:line 191
+	   at Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.MethodDelegateCaller.CallMethod(CommandMethodEntryPoint EntryPoint, CommandLine argvs, I_MemoryManagementDevice MemoryDevice, String TypeSignature) in E:\SIYU_DNAuction\Shared Reference\Shoal\ShoalShell\Microsoft.VisualBasic.Scripting.ShoalShell\DelegateHandlers\EntryPointHandlers\MethodDelegateCaller.vb:line 221
+	   at Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.ImportsEntryPointManager.InternalEntryPointLoader._Closure$__12._Closure$__13._Lambda$__68() in E:\SIYU_DNAuction\Shared Reference\Shoal\ShoalShell\Microsoft.VisualBasic.Scripting.ShoalShell\DelegateHandlers\EntryPointHandlers\InternalEntryPointLoader.vb:line 47
+	   at Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Interpreter.InternalGetImportsCommandEntryPoint(CommandLine cmdInfo, PreExecuteTypes& ExeType) in E:\SIYU_DNAuction\Shared Reference\Shoal\ShoalShell\Microsoft.VisualBasic.Scripting.ShoalShell\Interpreter\Interpreter.vb:line 464
+	   at Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Interpreter.TryParseCommand(CommandLine cmdInfo, String ExtendedVariable, PreExecuteTypes& ExeType) in E:\SIYU_DNAuction\Shared Reference\Shoal\ShoalShell\Microsoft.VisualBasic.Scripting.ShoalShell\Interpreter\Interpreter.vb:line 504
+	   at Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Interpreter.InternalTryParse(CommandLine Command, Int32 LineNumber, String ExtensionMethodVariable) in E:\SIYU_DNAuction\Shared Reference\Shoal\ShoalShell\Microsoft.VisualBasic.Scripting.ShoalShell\Interpreter\Interpreter.vb:line 392
+	   at Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Interpreter._Lambda$__201(VB$AnonymousType_33`2 $VB$It) in E:\SIYU_DNAuction\Shared Reference\Shoal\ShoalShell\Microsoft.VisualBasic.Scripting.ShoalShell\Interpreter\Interpreter.vb:line 100
+	   at System.Linq.Enumerable.WhereSelectArrayIterator`2.MoveNext()
+	   at System.Linq.Buffer`1..ctor(IEnumerable`1 source)
+	   at System.Linq.Enumerable.ToArray[TSource](IEnumerable`1 source)
+	   at Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Interpreter.CreateScriptObject(String ShellScript) in E:\SIYU_DNAuction\Shared Reference\Shoal\ShoalShell\Microsoft.VisualBasic.Scripting.ShoalShell\Interpreter\Interpreter.vb:line 98
+	   at Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ShellScript.EXEC(String ShellScript) in E:\SIYU_DNAuction\Shared Reference\Shoal\ShoalShell\Microsoft.VisualBasic.Scripting.ShoalShell\RuntimeObjects\ShellScript.vb:line 339
+	
+
+
+-------------------- END_OF_LOGGING --------------------
+
+-------------------- END_OF_LOGGING --------------------

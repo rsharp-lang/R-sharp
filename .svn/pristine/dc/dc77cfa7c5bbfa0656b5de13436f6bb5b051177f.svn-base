@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+	<head>
+		
+		<meta charset="utf-8">
+		<title>VBMath</title>
+		
+		<style>::-moz-selection {
+        background: #b3d4fc;
+        text-shadow: none;
+      }
+
+      ::selection {
+        background: #b3d4fc;
+        text-shadow: none;
+      }
+
+      html {
+        padding: 30px 10px;
+        font-size: 16px;
+        line-height: 1.4;
+        color: #737373;
+        background: #f0f0f0;
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+      }
+
+      html,
+      input {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      }
+
+      body {
+        max-width: 1500px;
+        _width: 1500px;
+        padding: 30px 20px 50px;
+        border: 1px solid #b3b3b3;
+        border-radius: 4px;
+        margin: 0 auto;
+        box-shadow: 0 1px 10px #a7a7a7, inset 0 1px 0 #fff;
+        background: #fcfcfc;
+      }
+
+      h1 {
+        margin: 0 10px;
+        font-size: 35px;
+        text-align: center;
+      }
+
+      h1 span {
+        color: #bbb;
+      }
+
+      h3 {
+        margin: 1.5em 0 0.5em;
+      }
+
+      p {
+        margin: 1em 0;
+      }
+
+      ul {
+        padding: 0 0 0 40px;
+        margin: 1em 0;
+      }
+
+      .container {
+        max-width: 900px;
+        _width: 900px;
+        margin: 0 auto;
+      }
+
+      /* google search */
+
+      #goog-fixurl ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      #goog-fixurl form {
+        margin: 0;
+      }
+
+      #goog-wm-qt,
+      #goog-wm-sb {
+        border: 1px solid #bbb;
+        font-size: 16px;
+        line-height: normal;
+        vertical-align: top;
+        color: #444;
+        border-radius: 2px;
+      }
+
+      #goog-wm-qt {
+        width: 220px;
+        height: 20px;
+        padding: 5px;
+        margin: 5px 10px 0 0;
+        box-shadow: inset 0 1px 1px #ccc;
+      }
+
+      #goog-wm-sb {
+        display: inline-block;
+        height: 32px;
+        padding: 0 10px;
+        margin: 5px 0 0;
+        white-space: nowrap;
+        cursor: pointer;
+        background-color: #f5f5f5;
+        background-image: -webkit-linear-gradient(rgba(255,255,255,0), #f1f1f1);
+        background-image: -moz-linear-gradient(rgba(255,255,255,0), #f1f1f1);
+        background-image: -ms-linear-gradient(rgba(255,255,255,0), #f1f1f1);
+        background-image: -o-linear-gradient(rgba(255,255,255,0), #f1f1f1);
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        *overflow: visible;
+        *display: inline;
+        *zoom: 1;
+      }
+
+      #goog-wm-sb:hover,
+      #goog-wm-sb:focus {
+        border-color: #aaa;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+        background-color: #f8f8f8;
+      }
+
+      #goog-wm-qt:hover,
+      #goog-wm-qt:focus {
+        border-color: #105cb6;
+        outline: 0;
+        color: #222;
+      }
+
+      input::-moz-focus-inner {
+        padding: 0;
+        border: 0;
+      }</style>
+	  
+	  <body>
+	  
+	  <div class="container">
+	    
+	  <h1>Document for <strong>  VBMath</strong> <span>:-)</span></h1>
+	  <br />
+			
+	  <script>var GOOG_FIXURL_LANG = (navigator.language || '').slice(0,2),GOOG_FIXURL_SITE = location.host;</script>
+	<!--  <script src="//linkhelp.clients.google.com/tbproxy/lh/wm/fixurl.js"></script> -->
+	  </div>
+	      	<font face="Microsoft YaHei" size="2">
+	  	  <table>
+  <tr>
+    <th align="left">	  <p><h2><font size=5><span><a href="./index.html">< Back To Index</a></span></font></h2></p>
+	<p>
+	 <table>
+	 
+	       <tr>
+    <td valign="top">Related Namespace</td>
+	<td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td>
+    <td align="left"><li><a href="./App.html">App</a></li>
+<li><a href="./CommandLine.html">CommandLine</a></li>
+<li><a href="./Cowsay.html">Cowsay</a></li>
+<li><a href="./Framework.Extensions.html">Framework.Extensions</a></li>
+<li><a href="./GDI+.html">GDI+</a></li>
+<li><a href="./Interpreter.html">Interpreter</a></li>
+<li><a href="./Large_Text_File.html">Large_Text_File</a></li>
+<li><a href="./Md5Hash.html">Md5Hash</a></li>
+<li><a href="./MMFSocket.html">MMFSocket</a></li>
+<li><a href="./Ngen.html">Ngen</a></li>
+<li><a href="./Program.Path.Search.html">Program.Path.Search</a></li>
+<li><a href="./Settings.Inf.html">Settings.Inf</a></li>
+<li><a href="./Software.Toolkits.html">Software.Toolkits</a></li>
+<li><a href="./STDIO.html">STDIO</a></li>
+<li><a href="./StringHelpers.html">StringHelpers</a></li>
+<li><a href="./VBMath.html">VBMath</a></li>
+<li><a href="./WebServices.html">WebServices</a></li></td>
+  </tr>
+	 
+	  </table>
+	
+	</p>
+	</th>
+    <th></th>
+  </tr>
+  <tr>
+    <td>Package</td>
+    <td align="left"><strong>VBMath</strong></td>
+  </tr>
+ 
+                <tr>
+    <td>HOME</td>
+    <td align="left"><a href=""></a></td>
+  </tr>
+                <tr>
+    <td>Publisher</td>
+    <td align="left">xie.guigang@gmail.com</td>
+  </tr>
+                <tr>
+    <td>Description</td>
+    <td align="left"></td>
+  </tr>
+  
+      <tr>
+    <td valign="top">Cited References</td>
+    <td align="left"></td>
+  </tr>
+  
+                  <tr>
+    <td></td>
+    <td></td>
+  </tr>
+  
+              
+  
+  </font>
+</table>
+	  <br />
+	  
+	    <table>
+		    <tr>
+    <td valign="top"><strong>Summary Contents</strong></td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+		<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+		<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+		<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+		<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+		<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+    <td><table>
+  <tr>
+    <th align="left">
+                                           <a href="#Euclidean">Euclidean</a> </th><td> </td><td> </td><td> </td>
+<th align="left">Euclidean Distance<br />Euclidean Distance<br />Euclidean Distance<br />Euclidean Distance</th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Evaluate">Evaluate</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Load.Vector">Load.Vector</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Median">Median</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#PI">PI</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#RangesAt">RangesAt</a> </th><td> </td><td> </td><td> </td>
+<th align="left"><br /><br /></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Ranks">Ranks</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Ranks.Log2">Ranks.Log2</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Ranks.Mapping">Ranks.Mapping</a> </th><td> </td><td> </td><td> </td>
+<th align="left"><br /><br /></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#RMS">RMS</a> </th><td> </td><td> </td><td> </td>
+<th align="left">Root mean square</th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Scale">Scale</a> </th><td> </td><td> </td><td> </td>
+<th align="left">function centers and/or scales the columns of a numeric matrix.</th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Set.Variable">Set.Variable</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#STD">STD</a> </th><td> </td><td> </td><td> </td>
+<th align="left">Standard Deviation<br />Standard Deviation<br />Standard Deviation<br />Standard Deviation</th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Sum">Sum</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+</table>
+</td>
+  </tr>
+		</table>
+	  	  <br />
+		  <hr>
+	  	<font face="Microsoft YaHei" size="2">
+	  <p><strong>Euclidean</strong><br />
+<strong>+ 4 Overloads</strong><p>
+..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll!Microsoft.VisualBasic.VBMath::Double EuclideanDistance(System.Collections.Generic.IEnumerable`1[System.Double])
+<li>
+    <p>Help for "Euclidean":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Euclidean">Euclidean</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td>Euclidean Distance</td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.VBMath::EuclideanDistance
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Vector</strong></td>
+    <td align="left"><a href="./TypeLinks/4a5e06c873b0d25b9f0300114a755206.html">System.Collections.Generic.IEnumerable`1[[System.Double, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Double.html">System.Double</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll!Microsoft.VisualBasic.VBMath::Double EuclideanDistance(System.Collections.Generic.IEnumerable`1[System.Int32])
+<li>
+    <p>Help for "Euclidean":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Euclidean">Euclidean</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td>Euclidean Distance</td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.VBMath::EuclideanDistance
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Vector</strong></td>
+    <td align="left"><a href="./TypeLinks/fab86413447169fb7c8d3ed0ca12ff5b.html">System.Collections.Generic.IEnumerable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Double.html">System.Double</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll!Microsoft.VisualBasic.VBMath::Double EuclideanDistance(System.Collections.Generic.IEnumerable`1[System.Int32], System.Collections.Generic.IEnumerable`1[System.Int32])
+<li>
+    <p>Help for "Euclidean":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Euclidean">Euclidean</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td>Euclidean Distance</td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.VBMath::EuclideanDistance
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>a</strong></td>
+    <td align="left"><a href="./TypeLinks/fab86413447169fb7c8d3ed0ca12ff5b.html">System.Collections.Generic.IEnumerable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>b</strong></td>
+    <td align="left"><a href="./TypeLinks/fab86413447169fb7c8d3ed0ca12ff5b.html">System.Collections.Generic.IEnumerable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Double.html">System.Double</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll!Microsoft.VisualBasic.VBMath::Double EuclideanDistance(System.Collections.Generic.IEnumerable`1[System.Double], System.Collections.Generic.IEnumerable`1[System.Double])
+<li>
+    <p>Help for "Euclidean":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Euclidean">Euclidean</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td>Euclidean Distance</td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.VBMath::EuclideanDistance
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>a</strong></td>
+    <td align="left"><a href="./TypeLinks/4a5e06c873b0d25b9f0300114a755206.html">System.Collections.Generic.IEnumerable`1[[System.Double, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>b</strong></td>
+    <td align="left"><a href="./TypeLinks/4a5e06c873b0d25b9f0300114a755206.html">System.Collections.Generic.IEnumerable`1[[System.Double, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Double.html">System.Double</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Evaluate":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Evaluate">Evaluate</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Mathematical.Extensions.Shoal_HybridScripting.API::Evaluate
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Script</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Object.html">System.Object</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Load.Vector":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Load.Vector">Load.Vector</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Mathematical.Extensions.Shoal_HybridScripting.API::LoadVector
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>path</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/IEnumerable+System.Double.html">System.Double[]</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Median":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Median">Median</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.VBMath::Median
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>data</strong></td>
+    <td align="left"><a href="./TypeLinks/4a5e06c873b0d25b9f0300114a755206.html">System.Collections.Generic.IEnumerable`1[[System.Double, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Double.html">System.Double</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "PI":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="PI">PI</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.VBMath::PI
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>data</strong></td>
+    <td align="left"><a href="./TypeLinks/4a5e06c873b0d25b9f0300114a755206.html">System.Collections.Generic.IEnumerable`1[[System.Double, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Double.html">System.Double</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<strong>RangesAt</strong><br />
+<strong>+ 3 Overloads</strong><p>
+..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll!Microsoft.VisualBasic.VBMath::Boolean RangesAt(Double, Double, Double)
+<li>
+    <p>Help for "RangesAt":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="RangesAt">RangesAt</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.VBMath::RangesAt
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>n</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Double.html">System.Double</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>LowerBound</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Double.html">System.Double</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>UpBound</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Double.html">System.Double</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Boolean.html">System.Boolean</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll!Microsoft.VisualBasic.VBMath::Boolean RangesAt(Int32, Double, Double)
+<li>
+    <p>Help for "RangesAt":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="RangesAt">RangesAt</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.VBMath::RangesAt
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>n</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>LowerBound</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Double.html">System.Double</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>UpBound</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Double.html">System.Double</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Boolean.html">System.Boolean</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll!Microsoft.VisualBasic.VBMath::Boolean RangesAt(Int64, Double, Double)
+<li>
+    <p>Help for "RangesAt":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="RangesAt">RangesAt</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.VBMath::RangesAt
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>n</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int64.html">System.Int64</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>LowerBound</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Double.html">System.Double</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>UpBound</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Double.html">System.Double</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Boolean.html">System.Boolean</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Ranks":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Ranks">Ranks</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Mathematical.Extensions.Shoal_HybridScripting.API::Ranks
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>data</strong></td>
+    <td align="left"><a href="./TypeLinks/4a5e06c873b0d25b9f0300114a755206.html">System.Collections.Generic.IEnumerable`1[[System.Double, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left">[Optional]</td>
+    <td align="left"><strong>Log2Rank</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Boolean.html">System.Boolean</a></td>
+<td align="left"></td>
+<td align="left"> = False</td>
+  </tr> 
+ <tr>
+                              <td align="left">[Optional]</td>
+    <td align="left"><strong>Level</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"> = 10</td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/IEnumerable+System.Int32.html">System.Int32[]</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Ranks.Log2":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Ranks.Log2">Ranks.Log2</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.VBMath::Log2Ranks
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>data</strong></td>
+    <td align="left"><a href="./TypeLinks/4a5e06c873b0d25b9f0300114a755206.html">System.Collections.Generic.IEnumerable`1[[System.Double, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left">[Optional]</td>
+    <td align="left"><strong>Level</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"> = 10</td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/IEnumerable+System.Int32.html">System.Int32[]</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<strong>Ranks.Mapping</strong><br />
+<strong>+ 3 Overloads</strong><p>
+..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll!Microsoft.VisualBasic.VBMath::Int32[] GenerateMapping(System.Collections.Generic.IEnumerable`1[System.Double], Int32)
+<li>
+    <p>Help for "Ranks.Mapping":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Ranks.Mapping">Ranks.Mapping</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.VBMath::GenerateMapping
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>data</strong></td>
+    <td align="left"><a href="./TypeLinks/4a5e06c873b0d25b9f0300114a755206.html">System.Collections.Generic.IEnumerable`1[[System.Double, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left">[Optional]</td>
+    <td align="left"><strong>Level</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"> = 10</td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/IEnumerable+System.Int32.html">System.Int32[]</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll!Microsoft.VisualBasic.VBMath::Int32[] GenerateMapping(System.Collections.Generic.IEnumerable`1[System.Int32], Int32)
+<li>
+    <p>Help for "Ranks.Mapping":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Ranks.Mapping">Ranks.Mapping</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.VBMath::GenerateMapping
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>data</strong></td>
+    <td align="left"><a href="./TypeLinks/fab86413447169fb7c8d3ed0ca12ff5b.html">System.Collections.Generic.IEnumerable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left">[Optional]</td>
+    <td align="left"><strong>Level</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"> = 10</td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/IEnumerable+System.Int32.html">System.Int32[]</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll!Microsoft.VisualBasic.VBMath::Int32[] GenerateMapping(System.Collections.Generic.IEnumerable`1[System.Int64], Int32)
+<li>
+    <p>Help for "Ranks.Mapping":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Ranks.Mapping">Ranks.Mapping</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.VBMath::GenerateMapping
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>data</strong></td>
+    <td align="left"><a href="./TypeLinks/264d58c96fabdf42e51d5f6b4155f32d.html">System.Collections.Generic.IEnumerable`1[[System.Int64, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left">[Optional]</td>
+    <td align="left"><strong>Level</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"> = 10</td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/IEnumerable+System.Int32.html">System.Int32[]</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "RMS":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="RMS">RMS</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td>Root mean square</td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.VBMath::RMS
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>data</strong></td>
+    <td align="left"><a href="./TypeLinks/4a5e06c873b0d25b9f0300114a755206.html">System.Collections.Generic.IEnumerable`1[[System.Double, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Double.html">System.Double</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Scale":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Scale">Scale</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td>function centers and/or scales the columns of a numeric matrix.</td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.VBMath::Scale
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>x</strong></td>
+    <td align="left"><a href="./TypeLinks/4a5e06c873b0d25b9f0300114a755206.html">System.Collections.Generic.IEnumerable`1[[System.Double, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</a></td>
+<td align="left">numeric matrix</td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left">[Optional]</td>
+    <td align="left"><strong>center</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Boolean.html">System.Boolean</a></td>
+<td align="left">either a logical value or a numeric vector of length equal to the number of columns of x</td>
+<td align="left"> = True</td>
+  </tr> 
+ <tr>
+                              <td align="left">[Optional]</td>
+    <td align="left"><strong>scale</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Boolean.html">System.Boolean</a></td>
+<td align="left">either a logical value or a numeric vector of length equal to the number of columns of x</td>
+<td align="left"> = True</td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/IEnumerable+System.Double.html">System.Double[]</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Set.Variable":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Set.Variable">Set.Variable</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.Mathematical.Extensions.Shoal_HybridScripting.API::SetValue
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>var</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String.html">System.String</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>value</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Object.html">System.Object</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Boolean.html">System.Boolean</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<strong>STD</strong><br />
+<strong>+ 4 Overloads</strong><p>
+..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll!Microsoft.VisualBasic.VBMath::Double STD(System.Collections.Generic.IEnumerable`1[System.Double])
+<li>
+    <p>Help for "STD":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="STD">STD</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td>Standard Deviation</td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.VBMath::STD
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>values</strong></td>
+    <td align="left"><a href="./TypeLinks/4a5e06c873b0d25b9f0300114a755206.html">System.Collections.Generic.IEnumerable`1[[System.Double, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Double.html">System.Double</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll!Microsoft.VisualBasic.VBMath::Double STD(System.Collections.Generic.IEnumerable`1[System.Int32])
+<li>
+    <p>Help for "STD":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="STD">STD</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td>Standard Deviation</td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.VBMath::STD
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>values</strong></td>
+    <td align="left"><a href="./TypeLinks/fab86413447169fb7c8d3ed0ca12ff5b.html">System.Collections.Generic.IEnumerable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Double.html">System.Double</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll!Microsoft.VisualBasic.VBMath::Double STD(System.Collections.Generic.IEnumerable`1[System.Int64])
+<li>
+    <p>Help for "STD":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="STD">STD</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td>Standard Deviation</td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.VBMath::STD
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>values</strong></td>
+    <td align="left"><a href="./TypeLinks/264d58c96fabdf42e51d5f6b4155f32d.html">System.Collections.Generic.IEnumerable`1[[System.Int64, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Double.html">System.Double</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll!Microsoft.VisualBasic.VBMath::Double STD(System.Collections.Generic.IEnumerable`1[System.Single])
+<li>
+    <p>Help for "STD":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="STD">STD</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td>Standard Deviation</td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.VBMath::STD
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>values</strong></td>
+    <td align="left"><a href="./TypeLinks/1c6b8f6e6f8697a6900c886226597e1c.html">System.Collections.Generic.IEnumerable`1[[System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Double.html">System.Double</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Sum":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Sum">Sum</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.VisualBasic.VBMath::Sum
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>bc</strong></td>
+    <td align="left"><a href="./TypeLinks/82c85792465d30c71f6c91ef40d1dda8.html">System.Collections.Generic.IEnumerable`1[[System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Double.html">System.Double</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+</p></font>
+	  		<font face="Microsoft YaHei" size="1.5">
+		<div align="right">
+			<br />	<br />	<br />
+			<hr>
+				
+		<p>Copyright (c) <a href="http://gcmodeller.org">GCModeller Virtual Cell System</a>. 2015 All rights reserved.</p>
+		</div></font>
+	  </body>

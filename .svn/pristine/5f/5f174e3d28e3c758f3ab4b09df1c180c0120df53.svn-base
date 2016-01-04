@@ -1,0 +1,7 @@
+Imports Distance.Levenshtein
+
+Dim HTML <- {ComputeDistance "ATGCGACCCGC", "ATGTAACCCGGC"}
+Call Write.Xml.DistResult $HTML, ./testAlignment.xml
+HTML <- ToHTML $HTML
+
+$HTML > ./testHTML.html

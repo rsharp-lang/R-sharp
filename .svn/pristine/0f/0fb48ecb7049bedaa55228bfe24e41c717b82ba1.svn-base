@@ -1,0 +1,9 @@
+fsa <- seqtools read.fasta E:\BLAST\db\MetaCyc\ecoli\dnaseq.fsa
+$fsa
+dd <- seqtools get_fasta fasta $fsa index 1212
+$dd
+seq <- seqtools get_sequence $dd
+$seq
+rdd <- seqtools reverse_sequence $dd
+rseq <- seqtools get_sequence $rdd
+$rseq

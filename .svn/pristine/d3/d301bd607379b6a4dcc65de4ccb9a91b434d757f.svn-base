@@ -1,0 +1,701 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+LINQ
+</name>
+</assembly>
+<members>
+<member name="T:LINQ.Framework.ObjectModel.ParallelLINQ">
+	<summary>
+ 并行LINQ查询表达式的对象模型
+ </summary>
+	<remarks></remarks>
+</member><member name="T:LINQ.Framework.ObjectModel.LINQ">
+	<summary>
+ LINQ查询表达式的对象模型
+ </summary>
+	<remarks></remarks>
+</member><member name="F:LINQ.Framework.DynamicCode.VBC.DynamicCompiler.DotNETReferenceAssembliesDir">
+	<summary>
+	</summary>
+	<remarks></remarks>
+</member><member name="M:LINQ.Framework.DynamicCode.VBC.DynamicCompiler.#ctor(LINQ.Statements.LINQStatement,System.String)">
+	<summary>
+	</summary>
+	<param name="LINQStatement"></param>
+	<param name="SDK">.NET Framework Reference Assembly文件夹的位置</param>
+	<remarks></remarks>
+</member><member name="M:LINQ.Framework.DynamicCode.VBC.DynamicCompiler.Compile(System.CodeDom.CodeCompileUnit,System.String[],System.String,System.String)">
+	<summary>
+ Compile the codedom object model into a binary assembly module file.(将CodeDOM对象模型编译为二进制应用程序文件)
+ </summary>
+	<param name="ObjectModel">CodeDom dynamic code object model.(目标动态代码的对象模型)</param>
+	<param name="Reference">Reference assemby file path collection.(用户代码的引用DLL文件列表)</param>
+	<param name="DotNETReferenceAssembliesDir">.NET Framework SDK</param>
+	<param name="CodeStyle">VisualBasic, C#</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:LINQ.Framework.DynamicCode.VBC.DynamicCompiler.GenerateCode(System.CodeDom.CodeNamespace,System.String)">
+	<summary>
+ Generate the source code from the CodeDOM object model.(根据对象模型生成源代码以方便调试程序)
+ </summary>
+	<param name="NameSpace"></param>
+	<param name="CodeStyle">VisualBasic, C#</param>
+	<returns></returns>
+	<remarks>
+ You can easily convert the source code between VisualBasic and C# using this function just by makes change in statement: 
+ CodeDomProvider.GetCompilerInfo("VisualBasic").CreateProvider().GenerateCodeFromNamespace([NameSpace], sWriter, Options)
+ Modify the VisualBasic in to C#
+ </remarks>
+</member><member name="M:LINQ.Framework.DynamicCode.VBC.DynamicCompiler.DeclareFunction(System.String,System.String,System.CodeDom.CodeStatementCollection)">
+	<summary>
+ Declare a function with a specific function name and return type. please notice that in this newly 
+ declare function there is always a local variable name rval using for return the value.
+ (申明一个方法，返回指定类型的数据并且具有一个特定的函数名，请注意，在这个新申明的函数之中，
+ 固定含有一个rval的局部变量用于返回数据)
+ </summary>
+	<param name="Name">Function name.(函数名)</param>
+	<param name="Type">Function return value type.(该函数的返回值类型)</param>
+	<returns>A codeDOM object model of the target function.(一个函数的CodeDom对象模型)</returns>
+	<remarks></remarks>
+</member><member name="T:LINQ.Framework.DynamicCode.VBC.DynamicCompiler">
+	<summary>
+ 编译整个LINQ语句的动态代码编译器
+ </summary>
+	<remarks></remarks>
+</member><member name="P:LINQ.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:LINQ.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:LINQ.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="M:LINQ.Extensions.GetXml``1(``0)">
+	<summary>
+ 将一个类对象序列化为XML文档
+ </summary>
+	<typeparam name="T"></typeparam>
+	<param name="e"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:LINQ.Extensions.LoadXml``1(System.String)">
+	<summary>
+	</summary>
+	<typeparam name="T"></typeparam>
+	<param name="Xml">XML文件的文件路径</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:LINQ.Extensions.Save(System.String,System.String,System.Text.Encoding)">
+	<summary>
+ 将目标文本字符串写入到一个指定路径的文件之中，但是不会在文件末尾追加新的数据
+ </summary>
+	<param name="Path"></param>
+	<param name="Text"></param>
+	<param name="Encoding"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:LINQ.Extensions.IsNullOrEmpty``1(System.Collections.Generic.IEnumerable{``0})">
+	<summary>
+ 判断目标集合是否为空
+ </summary>
+	<typeparam name="T"></typeparam>
+	<param name="Collection"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="F:LINQ.Parser.TokenType.NotAToken">
+	<summary>
+ This is reserved for the NullToken.
+ </summary>
+</member><member name="F:LINQ.Parser.TokenType.Identifier">
+	<summary>
+ An identifier can be either a class or property name.  The tokenizer does 
+ not have enough information to make that distinction.
+ </summary>
+</member><member name="F:LINQ.Parser.TokenType.Operator">
+	<summary>
+ An operator like + or *.
+ </summary>
+</member><member name="F:LINQ.Parser.TokenType.Comma">
+	<summary>
+ A comma
+ </summary>
+</member><member name="F:LINQ.Parser.TokenType.Dot">
+	<summary>
+ A dot (".").
+ </summary>
+</member><member name="F:LINQ.Parser.TokenType.Primitive">
+	<summary>
+ A primitive like a quoted string, boolean value, or number.
+ </summary>
+</member><member name="F:LINQ.Parser.TokenType.OpenParens">
+	<summary>
+ Open parenthesis
+ </summary>
+</member><member name="F:LINQ.Parser.TokenType.CloseParens">
+	<summary>
+ Close parenthesis
+ </summary>
+</member><member name="F:LINQ.Parser.TokenType.OpenBracket">
+	<summary>
+ Open bracket
+ </summary>
+</member><member name="F:LINQ.Parser.TokenType.CloseBracket">
+	<summary>
+ Close bracket
+ </summary>
+</member><member name="F:LINQ.Parser.TokenType.Quote">
+	<summary>
+ Double quote token, only used internally by tokenizer.
+ </summary>
+</member><member name="T:LINQ.Parser.TokenType">
+	<summary>
+ Enumerates the types of tokens that can be classified by the tokenizer.
+ </summary>
+</member><member name="F:LINQ.Parser.TokenPriority.None">
+	<summary>
+ Default
+ </summary>
+</member><member name="F:LINQ.Parser.TokenPriority.Or">
+	<summary>
+ Bitwise or
+ </summary>
+</member><member name="F:LINQ.Parser.TokenPriority.And">
+	<summary>
+ Bitwise and
+ </summary>
+</member><member name="F:LINQ.Parser.TokenPriority.Not">
+	<summary>
+ Bitwise not
+ </summary>
+</member><member name="F:LINQ.Parser.TokenPriority.Equality">
+	<summary>
+ Equality comparisons like &gt;, &lt;=, ==, etc.
+ </summary>
+</member><member name="F:LINQ.Parser.TokenPriority.PlusMinus">
+	<summary>
+ Plus or minus
+ </summary>
+</member><member name="F:LINQ.Parser.TokenPriority.Mod">
+	<summary>
+ Modulus
+ </summary>
+</member><member name="F:LINQ.Parser.TokenPriority.MulDiv">
+	<summary>
+ Multiply or divide
+ </summary>
+</member><member name="F:LINQ.Parser.TokenPriority.UnaryMinus">
+	<summary>
+ Unary minus
+ </summary>
+</member><member name="T:LINQ.Parser.TokenPriority">
+	<summary>
+ Indicates priority in order of operations.
+ </summary>
+</member><member name="T:LINQ.Script.Tokens.FileIO">
+	<summary>
+ A FileIO object using for load object collection data from a specific file with a load method provide by the LINQ entity object.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:LINQ.Statements.Tokens.ObjectCollection.CollectionTypes.File">
+	<summary>
+ 目标集合类型为一个数据文件
+ </summary>
+	<remarks></remarks>
+</member><member name="F:LINQ.Statements.Tokens.ObjectCollection.CollectionTypes.Reference">
+	<summary>
+ 目标集合类型为一个内存对象的引用
+ </summary>
+	<remarks></remarks>
+</member><member name="P:LINQ.Statements.Tokens.ObjectCollection.ILINQCollection">
+	<summary>
+ ILINQCollection对象的实例
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:LINQ.Statements.Tokens.ObjectCollection.Value">
+	<summary>
+ The file io object url or a object collection reference in the LINQ Frameowrk runtime. 
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:LINQ.Statements.Tokens.ObjectCollection.LoadExternalModule(LINQ.Framework.TypeRegistry.RegistryItem)">
+	<summary>
+ 加载外部模块之中的ILINQCollection类型信息
+ </summary>
+	<param name="RegistryItem"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:LINQ.Statements.Tokens.ObjectCollection">
+	<summary>
+ 表示目标对象的数据集合的文件路径或者内存对象的引用
+ </summary>
+	<remarks></remarks>
+</member><member name="T:LINQ.Script.Tokens.ValueAssignment">
+	<summary>
+ Value assignment statement for assign the value the a variable in the LINQ script runtime.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:LINQ.Statements.Tokens.ReadOnlyObject.#ctor(LINQ.Statements.LINQStatement,LINQ.Parser.Parser,System.String)">
+	<summary>
+	</summary>
+	<param name="Statement">LINQ表达式</param>
+	<param name="Parser">Parser实例</param>
+	<param name="Declare">所解析出来的申明语句</param>
+	<remarks></remarks>
+</member><member name="M:LINQ.Statements.Tokens.ReadOnlyObject.Parser.GetLetStatements(LINQ.Statements.LINQStatement)">
+	<summary>
+ 获取Let只读对象的申明语句
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:LINQ.Statements.Tokens.ReadOnlyObject">
+	<summary>
+ Object declared using a LET expression.(使用Let语句所声明的只读对象)
+ </summary>
+	<remarks></remarks>
+</member><member name="M:LINQ.Framework.Reflection.LINQEntity.GetEntityType(System.Type)">
+	<summary>
+ 获取目标类型上的自定义属性中的LINQEntity类型对象中的EntityType属性值
+ </summary>
+	<param name="Type"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:LINQ.Framework.Reflection.LINQEntity">
+	<summary>
+ LINQ entity type
+ </summary>
+	<remarks></remarks>
+</member><member name="P:LINQ.Parser.Parser.RecognizedTypes">
+	<summary>
+ A collection of identifiers that should be recognized as types.
+ </summary>
+</member><member name="P:LINQ.Parser.Parser.Enums">
+	<summary>
+ A collection of identifiers that should be recognized as enums.
+ </summary>
+</member><member name="P:LINQ.Parser.Parser.Fields">
+	<summary>
+ A collection of names of fields.
+ </summary>
+</member><member name="M:LINQ.Parser.Parser.ParseExpression(System.String)">
+	<summary>
+ Parses an expression into a <see cref="T:System.CodeDom.CodeExpression"/>.
+ </summary>
+	<param name="exp">expression to parse</param>
+	<returns>CodeDom representing the expression</returns>
+</member><member name="M:LINQ.Parser.Parser.ReadExpression(LINQ.Parser.Tokenizer,LINQ.Parser.TokenPriority)">
+	<summary>
+ Recursive method that reads an expression.
+ </summary>
+	<param name="t"></param>
+	<param name="priority"></param>
+	<returns></returns>
+</member><member name="M:LINQ.Parser.Parser.ReadIdentifier(LINQ.Parser.Tokenizer)">
+	<summary>
+ When an identifier is encountered, it could be a number of things.  A single identifer by itself
+ is considered a variable.  The pattern identifier[.identifier]+ will consider the 
+ first identifier as a variable and the others as properties.  Any identifier that is followed
+ by an open parenthesis is considered to be a function call.  Indexes are not handled yet, but
+ should be handled in the future.  If the identifier is "this" then a this reference is used.
+ </summary>
+	<param name="t"></param>
+	<returns></returns>
+</member><member name="T:LINQ.Parser.Parser">
+	<summary>
+ Parses expressions written in strings into CodeDom expressions.  There is a certain 
+ amount of context that the parser may need to be familiar with.  This is why the 
+ parsing methods are not exposed as static.
+ </summary>
+</member><member name="P:LINQ.Parser.Token.Text">
+	<summary>
+ The text that makes up the token.
+ </summary>
+</member><member name="P:LINQ.Parser.Token.ParsedObject">
+	<summary>
+ If the token can be parsed into a type like an integer, this property holds that value.
+ </summary>
+</member><member name="P:LINQ.Parser.Token.Type">
+	<summary>
+ Token type
+ </summary>
+</member><member name="P:LINQ.Parser.Token.Priority">
+	<summary>
+ Token priority
+ </summary>
+</member><member name="M:LINQ.Parser.Token.#ctor(System.String,LINQ.Parser.TokenType,LINQ.Parser.TokenPriority)">
+	<summary>
+ Constructor for tokens that are not parsed.
+ </summary>
+	<param name="text"></param>
+	<param name="type"></param>
+	<param name="priority"></param>
+</member><member name="M:LINQ.Parser.Token.#ctor(System.Object,LINQ.Parser.TokenType,LINQ.Parser.TokenPriority)">
+	<summary>
+ Constructor for tokens that are parsed.
+ </summary>
+	<param name="parsedObj"></param>
+	<param name="type"></param>
+	<param name="priority"></param>
+</member><member name="F:LINQ.Parser.Token.NullToken">
+	<summary>
+ The null token represents a state where the <see cref="T:LINQ.Parser.Tokenizer"/> encountered an error
+ or has not begun parsing yet.
+ </summary>
+</member><member name="T:LINQ.Parser.Token">
+	<summary>
+ Represents a token that is parsed out by the <see cref="T:LINQ.Parser.Tokenizer"/>.
+ </summary>
+</member><member name="P:LINQ.Statements.LINQStatement.Object">
+	<summary>
+ An object element in the target query collection.(目标待查询集合之中的一个元素)
+ </summary>
+	<remarks></remarks>
+</member><member name="P:LINQ.Statements.LINQStatement.ConditionTest">
+	<summary>
+ Where test condition for the query.(查询所使用的Where条件测试语句)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:LINQ.Statements.LINQStatement.Collection">
+	<summary>
+ Target query collection expression, this can be a file path or a database connection string.
+ (目标待查询集合，值可以为一个文件路径或者数据库连接字符串)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:LINQ.Statements.LINQStatement.ReadOnlyObjects">
+	<summary>
+ A read only object collection which were construct by the LET statement token in the LINQ statement.
+ (使用Let语句所构造出来的只读对象类型的对象申明集合)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:LINQ.Statements.LINQStatement.SelectConstruct">
+	<summary>
+ A expression for return the query result.(用于生成查询数据返回的语句)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="F:LINQ.Statements.LINQStatement.ILINQProgram">
+	<summary>
+ 本LINQ脚本对象所编译出来的临时模块
+ </summary>
+	<remarks></remarks>
+</member><member name="P:LINQ.Statements.LINQStatement.TypeId">
+	<summary>
+ 获取目标LINQCollection待查询集合中的元素对象的类型标识符，以进行外部模块的动态加载
+ 与RegistryItem中的Name属性值相对应
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:LINQ.Statements.LINQStatement.CreateInstance">
+	<summary>
+ Create a instance for the compiled LINQ statement object model.
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:LINQ.Statements.LINQStatement.TryParse(System.String,LINQ.Framework.TypeRegistry)">
+	<summary>
+ Try to parsing a linq query script into a statement object model and compile the model into a assembly dynamic.
+ (尝试着从所输入的命令语句中解析出一个LINQ查询命令对象，并完成动态编译过程)
+ </summary>
+	<param name="StatementText"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:LINQ.Statements.LINQStatement">
+	<summary>
+ A linq statement object model.
+ </summary>
+	<remarks>
+ From [Object [As TypeId]] 
+ In [Collection] 
+ Let [Declaration1, Declaration2, ...]
+ Where [Condition Test] 
+ Select [Object/Object Constrctor] 
+ [Distinct] 
+ [Order Statement]</remarks>
+</member><member name="F:LINQ.Framework.LQueryFramework.DefaultFile">
+	<summary>
+ LINQ查询框架的默认注册表文件的文件名
+ </summary>
+	<remarks></remarks>
+</member><member name="P:LINQ.Framework.LQueryFramework.ReferenceAssembly">
+	<summary>
+ 本模块的完整的文件路径
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:LINQ.Framework.LQueryFramework.LoadExternalModule(System.String)">
+	<summary>
+ 加载外部模块，并查询出目标类型的ILINQCollection接口类型信息
+ </summary>
+	<param name="TypeId">目标对象的类型标识符，即RegistryItem对象中的Name属性</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:LINQ.Framework.LQueryFramework.LoadAssembly(System.Reflection.Assembly,System.Type)">
+	<summary>
+ 查找出目标模块之中的含有指定的自定义属性的所有类型
+ </summary>
+	<param name="Assembly"></param>
+	<param name="FindEntry">目标自定义属性的类型</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:LINQ.Framework.LQueryFramework.GetValue(System.String,System.Object)">
+	<summary>
+	</summary>
+	<param name="PropertyName"></param>
+	<param name="Target"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:LINQ.Framework.LQueryFramework.TypeMissingExzception">
+	<summary>
+ Exception for [We could not found any registered type information from the type registry.]
+ </summary>
+	<remarks></remarks>
+</member><member name="M:LINQ.Framework.LQueryFramework.EXEC(LINQ.Statements.LINQStatement)">
+	<summary>
+ Execute a compiled LINQ statement object model to query a object-orientale database.
+ </summary>
+	<param name="Statement"></param>
+	<returns></returns>
+	<remarks>
+ Dim List As List(Of Object) = New List(Of Object)
+ 
+ For Each [Object] In LINQ.GetCollection(Statement)
+    Call SetObject([Object])
+    If True = Test() Then
+        List.Add(SelectConstruct())
+    End If
+ Next
+ Return List.ToArray
+ </remarks>
+</member><member name="M:LINQ.Framework.LQueryFramework.CreateObjectModel(LINQ.Statements.LINQStatement)">
+	<summary>
+ 创建一个LINQ查询表达式的对象句柄
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:LINQ.Script.Runtime.SetObject(System.String,System.Object[])">
+	<summary>
+	</summary>
+	<param name="Name"></param>
+	<param name="Collection"></param>
+	<remarks></remarks>
+</member><member name="M:LINQ.Script.Runtime.Source(System.String)">
+	<summary>
+ 执行一个LINQ查询脚本文件
+ </summary>
+	<param name="FilePath">LINQ脚本文件的文件路径</param>
+	<returns></returns>
+	<remarks>
+ 脚本要求：
+ 
+ </remarks>
+</member><member name="P:LINQ.Framework.TypeRegistry.RegistryItem.Name">
+	<summary>
+ 类型的简称或者别称，即本属性为LINQEntity自定义属性中的构造函数的参数
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:LINQ.Framework.TypeRegistry.RegistryItem.AssemblyPath">
+	<summary>
+ 建议使用相对路径，以防止移动程序的时候任然需要重新注册方可以使用
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:LINQ.Framework.TypeRegistry.RegistryItem.TypeId">
+	<summary>
+ Full type name for the target LINQ entity type.(目标LINQEntity集合中的类型全称)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:LINQ.Framework.TypeRegistry.RegistryItem.op_Implicit(System.Object[])~LINQ.Framework.TypeRegistry.RegistryItem">
+	<summary>
+	</summary>
+	<param name="Obj">Name, TypeId, AssemblyPath, IsInnerType</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:LINQ.Framework.TypeRegistry.RegistryItem">
+	<summary>
+ item in the type registry table
+ </summary>
+	<remarks></remarks>
+</member><member name="P:LINQ.Framework.TypeRegistry.SDK">
+	<summary>
+ .NET Framework的Reference Assembly文件夹的位置
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:LINQ.Framework.TypeRegistry.FindAssemblyPath(System.String)">
+	<summary>
+ 返回包含有该类型的目标模块的文件路径
+ </summary>
+	<param name="Name">LINQ Entity集合中的元素的简称或者别称，即Item中的Name属性</param>
+	<returns>If the key is not exists in this object, than the function will return a empty string.</returns>
+	<remarks></remarks>
+</member><member name="M:LINQ.Framework.TypeRegistry.Find(System.String)">
+	<summary>
+ Return a registry item in the table using its specific name property.
+ (返回注册表中的一个指定名称的项目)
+ </summary>
+	<param name="Name"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:LINQ.Framework.TypeRegistry.Register(System.String)">
+	<summary>
+ Registry the external LINQ entity assembly module in the LINQFramework
+ </summary>
+	<param name="AssemblyPath">DLL file path</param>
+	<returns></returns>
+	<remarks>查询出目标元素的类型定义并获取信息</remarks>
+</member><member name="T:LINQ.Framework.TypeRegistry">
+	<summary>
+ Type registry table for loading the external LINQ entity assembly module. 
+ </summary>
+	<remarks></remarks>
+</member><member name="M:LINQ.Framework.DynamicCode.DynamicInvoke.GetType(System.Reflection.Assembly,System.String)">
+	<summary>
+	</summary>
+	<param name="Assembly"></param>
+	<param name="TypeId">将要查找的目标对象</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:LINQ.Framework.ILINQCollection.GetCollection(System.String)">
+	<summary>
+ Get a Collection of the target LINQ entity from file object.(从文件对象获取目标LINQ实体对象的集合)
+ </summary>
+	<param name="FilePath"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:LINQ.Framework.ILINQCollection.GetEntityType">
+	<summary>
+ Get the type information of the element object in the linq entity collection.
+ (获取LINQ实体集合中的元素对象的类型信息)
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:LINQ.Framework.ILINQCollection">
+	<summary>
+ LINQ Entity
+ </summary>
+	<remarks></remarks>
+</member><member name="M:LINQ.Parser.Tokenizer.#ctor(System.String)">
+	<summary>
+ A tokenizer is always constructed on a single string.  Create one tokenizer per string.
+ </summary>
+	<param name="s">string to tokenize</param>
+</member><member name="M:LINQ.Parser.Tokenizer.MoveNext">
+	<summary>
+ Moves to the next character.  If there are no more characters, then the tokenizer is
+ invalid.
+ </summary>
+</member><member name="P:LINQ.Parser.Tokenizer.Current">
+	<summary>
+ Allows access to the token most recently parsed.
+ </summary>
+</member><member name="P:LINQ.Parser.Tokenizer.IsInvalid">
+	<summary>
+ Indicates that there are no more characters in the string and tokenizer is finished.
+ </summary>
+</member><member name="P:LINQ.Parser.Tokenizer.IsChar">
+	<summary>
+ Is the current character a letter or underscore?
+ </summary>
+</member><member name="P:LINQ.Parser.Tokenizer.IsDot">
+	<summary>
+ Is the current character a dot (".")?
+ </summary>
+</member><member name="P:LINQ.Parser.Tokenizer.IsComma">
+	<summary>
+ Is the current character a comma?
+ </summary>
+</member><member name="P:LINQ.Parser.Tokenizer.IsNumber">
+	<summary>
+ Is the current character a number?
+ </summary>
+</member><member name="P:LINQ.Parser.Tokenizer.IsSpace">
+	<summary>
+ Is the current character a whitespace character?
+ </summary>
+</member><member name="P:LINQ.Parser.Tokenizer.IsOperator">
+	<summary>
+ Is the current character an operator?
+ </summary>
+</member><member name="M:LINQ.Parser.Tokenizer.GetNextToken">
+	<summary>
+ Gets the next token in the string.  Reads as many characters as necessary to retrieve
+ that token.
+ </summary>
+	<returns>next token</returns>
+</member><member name="M:LINQ.Parser.Tokenizer.GetString">
+	<summary>
+ Anything that starts with a character is considered a string.  This could be a 
+ primitive quoted string, a primitive expression, or an identifier
+ </summary>
+	<returns></returns>
+</member><member name="M:LINQ.Parser.Tokenizer.GetNumber">
+	<summary>
+ A token that starts with a number can be an integer, a long, or a double.
+ </summary>
+	<returns></returns>
+	<remarks>
+ An integer is the default for numbers.  Numbers can also be followed by a
+ l, L, d, or D character to indicate a long or a double value respectively.
+ Any numbers containing a dot (".") are considered doubles.
+ </remarks>
+</member><member name="M:LINQ.Parser.Tokenizer.GetOperator">
+	<summary>
+ Some operators take more than one character.  Also, the tokenizer is able to 
+ categorize the token's priority based on what kind of operator it is.
+ </summary>
+	<returns></returns>
+</member><member name="T:LINQ.Parser.Tokenizer">
+	<summary>
+ Divides the string into tokens.
+ </summary>
+</member><member name="P:LINQ.Statements.Tokens.ObjectDeclaration.Name">
+	<summary>
+ 变量的名称
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:LINQ.Statements.Tokens.ObjectDeclaration.TypeId">
+	<summary>
+ 变量的类型标识符
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:LINQ.Script.Tokens.Method">
+	<summary>
+ This statement call a known method in the LINQ Frameowrk.
+ </summary>
+	<remarks></remarks>
+</member><member name="T:LINQ.Script.ScriptParser">
+	<summary>
+ A LINQ query script parser.
+ </summary>
+	<remarks></remarks>
+</member>
+</members>
+</doc>

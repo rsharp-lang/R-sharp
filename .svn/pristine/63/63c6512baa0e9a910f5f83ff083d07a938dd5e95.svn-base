@@ -1,0 +1,1623 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv
+</name>
+</assembly>
+<members>
+<member name="T:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.ComponentModels.op_ReadLoad">
+ <summary>
+ Data structure for high perfermence data loading.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.ComponentModels.op_ReadLoad.Attribute(System.String)">
+ <summary>
+ Get or set the string value in the specific attribute name of current line.
+ </summary>
+ <param name="columnName"></param>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.ComponentModels.op_ReadLoad.TryCast``1">
+ <summary>
+ 函数会尝试将目标对象的属性值按照名称进行赋值，前提是目标属性值的类型应该为基本的类型。假若类型转换不成功，则会返回空对象
+ </summary>
+ <typeparam name="T"></typeparam>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.ComponentModels.op_ReadLoad.GetKey(System.String)">
+ <summary>
+ 将大小写敏感转换为大小写不敏感
+ </summary>
+ <param name="key"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.CsvIgnoredField">
+ <summary>
+ This property will not write into the csv document file.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.ColumnAttribute">
+ <summary>
+ This is a column in the csv document. 
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.ColumnAttribute.Type">
+ <summary>
+ The basically data type enumeration in the .NET Framework.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.ColumnAttribute.Type.Enum">
+ <summary>
+ <see cref="T:System.Enum"></see>, This column its data type is a enumeration, then the csv reflector will convert the enumeration string into the enum value automatically.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.ColumnAttribute.Type.Object">
+ <summary>
+ <see cref="T:System.Object"></see>
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.ColumnAttribute.Type.Integer">
+ <summary>
+ <see cref="T:System.Int32"></see>
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.ColumnAttribute.Type.Long">
+ <summary>
+ <see cref="T:System.Int64"></see>
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.ColumnAttribute.Type.String">
+ <summary>
+ <see cref="T:System.String"></see>
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.ColumnAttribute.Type.Double">
+ <summary>
+ <see cref="T:System.Double"></see>
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.ColumnAttribute.Type.DateTime">
+ <summary>
+ <see cref="F:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.ColumnAttribute.Type.DateTime"></see>
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.ColumnAttribute.Type.Bool">
+ <summary>
+ <see cref="T:System.Boolean"></see>
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.ArrayColumn">
+ <summary>
+ This property is a array data type object.(并不建议使用本Csv属性来储存大量的文本字符串，极容易出错)
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.CsvEnumColumn">
+ <summary>
+ The data type of this property value is the type of <see cref="T:System.Enum"></see>
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.CsvEnumColumn.#ctor(System.Type,System.String)">
+ <summary>
+ 
+ </summary>
+ <param name="Name"></param>
+ <param name="EnumType">目标类型必须为Enum类型</param>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.Reflector">
+ <summary>
+ The dynamics reflection operations on Csv data source services. 
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.Reflector.LoadDataToObject(Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.DataFrame,System.Type,System.Boolean)">
+ <summary>
+ 将Csv文件加载至一个目标集合之中以完成数据从文件之中的读取操作
+ </summary>
+ <param name="CsvData"></param>
+ <param name="TypeInfo"></param>
+ <param name="explicit"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.Reflector.InternalTypeSchema">
+ <summary>
+ 从目标对象解析出来的Csv文件的结构组织数据
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.Reflector.InternalTypeSchema.Columns">
+ <summary>
+ 基本数据类型的列
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.Reflector.InternalTypeSchema.ArrayCols">
+ <summary>
+ 基本数据类型的数组形式的列
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.Reflector.Convert``1(Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.DataFrame,System.Boolean)">
+ <summary>
+ 从文件之中读取数据并转换为对象数据
+ </summary>
+ <typeparam name="ItemType"></typeparam>
+ <param name="CsvData"></param>
+ <param name="explicit"></param>
+ <returns></returns>
+ <remarks>在这里查找所有具有写属性的属性对象即可</remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.Reflector.Load``1(System.String,System.Boolean,System.Text.Encoding)">
+ <summary>
+ Method for load a csv data file into a specific type of object collection.
+ </summary>
+ <typeparam name="ItemType"></typeparam>
+ <param name="Explicit">当本参数值为False的时候，所有的简单属性值都将被解析出来，而忽略掉其是否带有<see cref="T:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.ColumnAttribute"></see>自定义属性</param>
+ <param name="Path"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.Reflector.Save(System.Collections.Generic.IEnumerable{System.Object},System.Boolean)">
+ <summary>
+ Save the specifc type object collection into the csv data file.(将目标对象数据的集合转换为Csv文件已进行数据保存操作) 
+ </summary>
+ <param name="Collection"></param>
+ <param name="Explicit"></param>
+ <returns></returns>
+ <remarks>查找所有具备读属性的属性值</remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.Reflector.Save``1(System.Collections.Generic.IEnumerable{``0},System.Boolean)">
+ <summary>
+ Save the specifc type object collection into the csv data file.(将目标对象数据的集合转换为Csv文件已进行数据保存操作，非并行化的以保持数据原有的顺序) 
+ </summary>
+ <typeparam name="ItemType"></typeparam>
+ <param name="Collection"></param>
+ <param name="Explicit"></param>
+ <returns></returns>
+ <remarks>查找所有具备读属性的属性值</remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.Reflector.ExportAsPropertyAttributes``1(System.Collections.Generic.IEnumerable{``0},System.Boolean)">
+ <summary>
+ 将数据集合导出为键值对，以方便其他操作 
+ </summary>
+ <typeparam name="ItemType"></typeparam>
+ <param name="Collection"></param>
+ <param name="Explicit"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.Reflector.Cast(System.Reflection.TypeInfo,System.String)">
+ <summary>
+ 
+ </summary>
+ <param name="TypeInfo">必须是基本的类型，否则会转换出错</param>
+ <param name="value"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.Reflector.OperationTypes.ReadDataFromObject">
+ <summary>
+ 需要从对象之中读取数据，需要将数据写入文件的时候使用
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.Reflector.OperationTypes.WriteDataToObject">
+ <summary>
+ 需要相对象写入数据，从文件之中加载数据的时候使用
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.Reflector.InternalKnowingPropertyIsCsvIgnored(System.Reflection.PropertyInfo)">
+ <summary>
+ 判断目标属性对象<paramref name="Property"></paramref>是否在反射操作Csv数据的时候是被忽略的
+ </summary>
+ <param name="Property"></param>
+ <returns>当返回TRUE的时候，说明目标属性被忽略，反之则不会被忽略</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.Reflector.InternalGetColumnFieldsUnExplicit(System.Reflection.PropertyInfo[],Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.Reflector.OperationTypes)">
+ <summary>
+ 指示是否查找具备读属性的属性值，否则，只要具备了写属性的属性都会被查找出来，当保存数据的时候，查找所有具备读属性的属性值，当读取文件数据的时候，查找所有具备写属性的属性值
+ </summary>
+ <param name="Mode">从文件之中读取属性的时候设置为False，反之向文件写入数据的时候设置为True</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File">
+ <summary>
+ A comma character seperate table file that can be read and write in the EXCEL.(一个能够被Excel程序所读取的表格文件)
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RowObject">
+ <summary>
+ A line of data in the csv file.(Csv表格文件之中的一行)
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RowObject._InnerColumnList">
+ <summary>
+ 本行对象中的所有的单元格的数据集合
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RowObject.SplitRegxExpression">
+ <summary>
+ A regex expression string that use for split the line text.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RowObject.Column(System.Int32)">
+ <summary>
+ Get the cell data in a specific column number. if the column is not exists in this row then will return a empty string.
+ (获取某一列中的数据，若该列不存在则返回空字符串)
+ </summary>
+ <param name="Index"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RowObject.Width">
+ <summary>
+ 非空白单元格的数目
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RowObject.NotNullColumns">
+ <summary>
+ 返回本行中的非空白数据
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RowObject.IsNullOrEmpty">
+ <summary>
+ is this row object contains any data?
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RowObject.InsertAt(System.String,System.Int32)">
+ <summary>
+ insert the data into a spercific column  
+ </summary>
+ <param name="value"></param>
+ <param name="column"></param>
+ <returns>仅为LINQ查询使用的一个无意义的值</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RowObject.ToString">
+ <summary>
+ Displaying in IDE
+ </summary>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RowObject.Takes(System.Int32)">
+ <summary>
+ Takes the data in the specific number of columns, if columns is not exists in this row object, then a part of returned data will be the empty string. 
+ </summary>
+ <param name="Count"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RowObject.Takes(System.Int32[],System.Boolean)">
+ <summary>
+ Takes the data in the specific column index collection, if the column is not exists in the row object, then a part of the returned data will be the empty string.
+ </summary>
+ <param name="Cols"></param>
+ <param name="retNullable">(当不存在数据的时候是否返回空字符串，默认返回空字符串)</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RowObject.GetColumn(System.Int32,System.String@)">
+ <summary>
+ 返回一个指示：是否为空？
+ </summary>
+ <param name="Idx"></param>
+ <param name="retStr"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RowObject.LocateKeyWord(System.String,System.Boolean)">
+ <summary>
+ 查询某一个关键词在本行中的哪一个单元格，返回-1表示没有查询到本关键词
+ </summary>
+ <param name="KeyWord"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RowObject.AsLine">
+ <summary>
+ 将当前的行对象转换为文件中的一行字符串
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RowObject.op_Explicit(Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RowObject)~System.String">
+ <summary>
+ Write to file.
+ </summary>
+ <param name="e"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RowObject.Generate">
+ <summary>
+ Generate a line of the string data in the csv document.
+ </summary>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RowObject.op_Implicit(System.String)~Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RowObject">
+ <summary>
+ Row parsing into column tokens
+ </summary>
+ <param name="Line"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RowObject.Distinct(System.Collections.Generic.IEnumerable{Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RowObject})">
+ <summary>
+ 去除行集合中的重复的数据行
+ </summary>
+ <param name="RowCollection"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RowObject.Contains(Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RowObject)">
+ <summary>
+ 查看目标行是否被包含在本行之中，即是否对应元素相等
+ </summary>
+ <param name="Row"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File._InnerListTable">
+ <summary>
+ First line in the table is the column name definition line.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.Width">
+ <summary>
+ Get the max width number of the rows in the table.(返回表中的元素最多的一列的列数目)
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.Column(System.Int32)">
+ <summary>
+ Get all data of a column of a specific column number.(获取文件中的某一列中的所有数据)
+ </summary>
+ <param name="Index"></param>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.AppendRange(System.Collections.Generic.IEnumerable{Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RowObject})">
+ <summary>
+ Add a data row collection into this Csv file object instance and then return the total row number after the add operation.
+ (向CSV文件之中批量添加行记录，之后返回当前所打开的文件在添加纪录之后的总行数)
+ </summary>
+ <param name="RowCollection"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.Get_DataRow(System.Int32)">
+ <summary>
+ Get a data row in the specific row number, when a row is not exists in current csv file then the function will return a empty row.
+ (当目标对象不存在的时候，会返回一个空行对象)
+ </summary>
+ <param name="line"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.Find(System.String)">
+ <summary>
+ 返回包含有目标关键词的行
+ </summary>
+ <param name="KeyWord"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.FindAtColumn(System.String,System.Int32)">
+ <summary>
+ Using the content in a specific column as the target for search using a specific keyword, and then return all of the rows that have the query keyword.
+ (以指定的列中的内容搜索关键词，并返回检索成功的行的集合)
+ </summary>
+ <param name="KeyWord"></param>
+ <param name="Column"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.Cell(System.Int32,System.Int32)">
+ <summary>
+ Get and set the string content in a specific table cell.(设置或者获取某一个指定的单元格中的字符串内容) 
+ </summary>
+ <param name="X"></param>
+ <param name="Y"></param>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.Remove(System.Func{Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RowObject,System.Boolean})">
+ <summary>
+ Delete all of the row that meet the delete condition.(将所有满足条件的行进行删除)
+ </summary>
+ <param name="Condition"></param>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.DeleteCell(System.Func{System.String,System.Boolean},System.Int32)">
+ <summary>
+ 删除目标列中的单元格中符合条件的内容
+ </summary>
+ <param name="Condition">条件测试</param>
+ <param name="index">列标号</param>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RemoveRange(System.Collections.Generic.IEnumerable{Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RowObject})">
+ <summary>
+ Remove the item in a specific row collection.
+ </summary>
+ <param name="RowCollection"></param>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.Generate">
+ <summary>
+ Generate the csv data file document using the table data.(将表格对象转换为文本文件以进行保存)
+ </summary>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.GenerateDocument">
+ <summary>
+ 将表对象转换为文本文件之中的文本内容
+ </summary>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.InsertEmptyColumnBefore(System.Int32)">
+ <summary>
+ Insert a new empty line of row data before the specific row number.(在指定列标号的列之前插入一行空列)
+ </summary>
+ <param name="column"></param>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.Counts(System.String,System.Boolean,System.Boolean)">
+ <summary>
+ 统计某一个指定的列之中的各个项目的出现次数
+ </summary>
+ <param name="ColumnIndex"></param>
+ <param name="FirstLineTitle"></param>
+ <param name="IgnoreBlanks"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.Save(System.String,System.Boolean,System.Text.Encoding)">
+ <summary>
+ 
+ </summary>
+ <param name="Path"></param>
+ <param name="LazySaved">Optional, this is for the consideration of performance and memory consumption. 
+ When a data file is very large, then you may encounter a out of memory exception on a 32 bit platform, 
+ then you should set this parameter to True to avoid this problem. Defualt is False for have a better 
+ performance.
+ (当估计到文件的数据量很大的时候，请使用本参数，以避免内存溢出致使应用程序崩溃，默认为False，不开启缓存)
+ </param>
+ <remarks>当目标保存路径不存在的时候，会自动创建文件夹</remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.InternalCreateTableVector">
+ <summary>
+ 这个方法是保存<see cref="T:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.DataFrame"></see>对象之中的数据所需要的
+ </summary>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.InternalLazySaved(System.String,Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File,System.Text.Encoding)">
+ <summary>
+ 在保存大文件时为了防止在保存的过程中出现内存溢出所使用的一种保存方法
+ </summary>
+ <param name="FilePath"></param>
+ <param name="File"></param>
+ <param name="encoding"></param>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.op_Implicit(System.String)~Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File">
+ <summary>
+ Read a Csv file, default encoding is utf8
+ </summary>
+ <param name="Path"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.Internal_LINQ_LOAD(System.String[])">
+ <summary>
+ 
+ </summary>
+ <param name="data"></param>
+ <returns></returns>
+ <remarks>为了提高数据的加载效率，先使用LINQ预加载数据，之后使用Parallel LINQ进行数据的解析操作</remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.FastLoad(System.String,System.Boolean,System.Text.Encoding)">
+ <summary>
+ If you are sure about your csv data document have no character such like " or, in a cell, then you can try using this fast load method to load your csv data. 
+ if not, please using the <see cref="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.Load(System.String,System.Text.Encoding)"></see> method to avoid of the data damages.
+ (假若你确信你的数据文件之中仅含有数字之类的数据，则可以尝试使用本方法进行快速加载，假若文件之中每一个单元格还含有引起歧义的例如双引号或者逗号，则请不要使用本方法进行加载)
+ </summary>
+ <param name="path"></param>
+ <param name="encoding"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.Load(System.String,System.Text.Encoding)">
+ <summary>
+ Load the csv data document from a given path.(从指定的文件路径之中加载一个CSV格式的数据文件)
+ </summary>
+ <param name="Path"></param>
+ <param name="encoding"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.Distinct(System.String,System.Int32,System.Boolean)">
+ <summary>
+ 去除Csv文件之中的重复记录
+ </summary>
+ <param name="File"></param>
+ <param name="OrderBy">当为本参数指定一个非负数值的时候，程序会按照指定的列值进行排序</param>
+ <param name="Asc">当进行排序操作的时候，是否按照升序进行排序，否则按照降序排序</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.Normalization(System.String,System.String)">
+ <summary>
+ 将一些奇怪的符号去除
+ </summary>
+ <param name="path"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.Distinct(Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File,System.Int32,System.Boolean)">
+ <summary>
+ 去除Csv文件之中的重复记录
+ </summary>
+ <param name="OrderBy">当为本参数指定一个非负数值的时候，程序会按照指定的列值进行排序</param>
+ <param name="Asc">当进行排序操作的时候，是否按照升序进行排序，否则按照降序排序</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.IsNullOrEmpty(System.Collections.Generic.IEnumerable{Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RowObject})">
+ <summary>
+ 判断目标数据文件是否为空
+ </summary>
+ <param name="CsvFile"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.Insert(System.Int32,Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RowObject)">
+ <summary>
+ 在所指定的行号下面插入一行数据
+ </summary>
+ <param name="rowId"></param>
+ <param name="Row"></param>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.InsertAt(System.Int32,Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File.RowObject)">
+ <summary>
+ 使用IList接口本身的Insert方法来执行插入
+ </summary>
+ <param name="index"></param>
+ <param name="item"></param>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.DataFrame">
+ <summary>
+ The dynamics data frame object which its first line is not contains the but using for the title property.
+ (第一行总是没有的，即本对象类型适用于第一行为列标题行的数据)
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.DataFrame._Internal_CurrentPointer">
+ <summary>
+ <see cref="F:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.DataFrame._Internal_CurrentLine"></see>在<see cref="F:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File._InnerListTable"></see>之中的位置
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.DataFrame._Internal_ColumnList">
+ <summary>
+ Using the first line of the csv row as the column headers in this csv file.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.DataFrame.ChangeMapping(System.Collections.Generic.Dictionary{System.String,System.String})">
+ <summary>
+ 
+ </summary>
+ <param name="MappingData">{oldFieldName, newFieldName}</param>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.DataFrame.get_DataSource">
+ <summary>
+ Get the lines data for the convinent data operation.(为了保持一致的顺序，这个函数是非并行化的)
+ </summary>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.DataFrame.Load(System.String,System.Text.Encoding)">
+ <summary>
+ Try loading a excel csv data file as a dynamics data frame object.(尝试加载一个Csv文件为数据框对象，请注意，第一行必须要为标题行)
+ </summary>
+ <param name="path"></param>
+ <param name="encoding"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.DataFrame.InternalReviewColumnHeader(System.String)">
+ <summary>
+ 这里不能够使用Trim函数，因为Column也可能是故意定义了空格在其实或者结束的位置的，使用Trim函数之后，反而会导致GetOrder函数执行失败。故而在这里只给出警告信息即可
+ </summary>
+ <param name="strValue"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.DataFrame.GetOrdinal(System.String)">
+ <summary>
+ Function return -1 when column not found. 
+ </summary>
+ <param name="Column"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.DataFrame.GetOrdinalSchema(System.String[])">
+ <summary>
+ Gets the order list of the specific column list, -1 value will be returned when it is not exists in the table.
+ (获取列集合的位置列表，不存在的列则返回-1)
+ </summary>
+ <param name="ColumnList"></param>
+ <returns></returns>
+ <remarks>由于存在一一对应关系，这里不会再使用并行拓展</remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.DataFrame.Read">
+ <summary>
+ The data frame object start to reading the data in this table, if the current pointer is reach 
+ the top of the lines then this function will returns FALSE to stop the reading loop.
+ </summary>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.DataFrame.Reset">
+ <summary>
+ Reset the reading position in the data frame object.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.DataFrame.CopyFrom(Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File)">
+ <summary>
+ 这个方法会清除当前对象之中的原有数据
+ </summary>
+ <param name="CsvDocument"></param>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.DataVisualization.DocumentFormat.DataImports">
+ <summary>
+ Module provides the csv data imports operation of the csv document creates from a text file.(模块提供了从文本文档之中导入数据的方法)
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.DataVisualization.DocumentFormat.DataImports.SplitRegxExpression">
+ <summary>
+ A regex expression string that use for split the line text.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.DataImports.Imports(System.String,System.Char,System.Text.Encoding)">
+ <summary>
+ Imports the data in a well formatted text file using a specific delimiter, default delimiter is comma character.
+ </summary>
+ <param name="txtPath">The file path for the data imports text file.(将要进行数据导入的文本文件)</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.DataImports.RowParsing(System.String,System.String)">
+ <summary>
+ Row parsing its column tokens
+ </summary>
+ <param name="Line"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.DataImports.FixLengthImports(System.String,System.Int32,System.Text.Encoding)">
+ <summary>
+ Imports the data in a well formatted text file using the fix length as the data separate method.
+ </summary>
+ <param name="txtPath"></param>
+ <param name="length">The string length width of the data row.(固定的列字符数的宽度)</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.DataImports.MatchDataType(System.Collections.Generic.IEnumerable{System.String})">
+ <summary>
+ 从字符串集合之中推测可能的数据类型
+ </summary>
+ <param name="Column"></param>
+ <returns></returns>
+ <remarks>
+ 推测规则：
+ 会对数据进行采样
+ 类型的优先级别为：
+ </remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.CsvChartDevice.CreateSerial(System.String)">
+ <summary>
+ 创建一条曲线
+ </summary>
+ <param name="name">曲线的名称</param>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Extensions">
+ <summary>
+ The shortcuts operation for the common csv document operations.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Extensions.DataFrame(System.Data.Common.DbDataReader)">
+ <summary>
+ Convert a database table into a dynamics dataframe in VisualBasic.(将数据库之中所读取出来的数据表转换为表格对象)
+ </summary>
+ <param name="DataSource"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Extensions.DataFrame(Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File)">
+ <summary>
+ Create a dynamics data frame object from a csv document object.(从Csv文件之中创建一个数据框容器)
+ </summary>
+ <param name="CsvData"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Extensions.AsDataSource``1(Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.File,System.Boolean)">
+ <summary>
+ Convert the csv data file to a type specific collection.(将目标Csv文件转换为特定类型的集合数据) 
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="CsvData"></param>
+ <param name="explicit"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Extensions.AsDataSource``1(System.String,System.String,System.Boolean)">
+ <summary>
+ 
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="ImportsFile">The file path of the text doucment which will be imports as a csv document.</param>
+ <param name="Delimiter">The delimiter to parsing a row in the csv document.</param>
+ <param name="explicit"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Extensions.AsDataSource``1(System.Collections.Generic.IEnumerable{System.String},System.String,System.Boolean)">
+ <summary>
+ Convert the string collection as the type specific collection, please make sure the first element 
+ in this collection is stands for the title row.
+ (将字符串数组转换为数据源对象，注意：请确保第一行为标题行)
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="strDataLines"></param>
+ <param name="Delimiter"></param>
+ <param name="explicit"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Extensions.LoadCsv``1(System.String,System.Boolean,System.Text.Encoding)">
+ <summary>
+ Load a csv data file document using a specific object type.(将某一个Csv数据文件加载仅一个特定类型的对象集合中)
+ </summary>
+ <typeparam name="T">The type parameter of the element in the returns collection data.</typeparam>
+ <param name="Path">The csv document file path.(目标Csv数据文件的文件路径)</param>
+ <param name="explicit"></param>
+ <param name="encoding"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Extensions.SaveTo``1(System.Collections.Generic.IEnumerable{``0},System.String,System.Boolean,System.Text.Encoding)">
+ <summary>
+ Save the object collection data dump into a csv file.(将一个对象数组之中的对象保存至一个Csv文件之中，请注意，这个方法仅仅会保存简单的基本数据类型的属性值)
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Collection"></param>
+ <param name="path"></param>
+ <param name="explicit">If true then all of the simple data type property its value will be save to the data file, 
+ if not then only save the property with the <see cref="T:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Csv.Reflection.ColumnAttribute"></see>
+ </param>
+ <param name="encoding"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Extensions.GenerateCsvDocument``1(System.Collections.Generic.IEnumerable{``0},System.Boolean)">
+ <summary>
+ Generate a csv document from a object collection.(从一个特定类型的数据集合之中生成一个Csv文件，非并行化的以保持数据原有的顺序)
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Collection"></param>
+ <param name="explicit"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Extensions.SaveTo(System.Collections.Generic.IEnumerable{System.Double},System.String)">
+ <summary>
+ Save the data collection vector as a csv document.
+ </summary>
+ <param name="data"></param>
+ <param name="path"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.Extensions.LoadDblVector(System.String)">
+ <summary>
+ Load the data from the csv document as a double data type vector. 
+ </summary>
+ <param name="path"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.DataVisualization.DocumentFormat.My.CommonExtensions._Assembly">
+ <summary>
+ 调用本模块的程序集的可执行文件的完整的文件路径
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.DataVisualization.DocumentFormat.My.CommonExtensions.ExePath">
+ <summary>
+ Get the exe file full path string.(调用本模块的程序集的可执行文件的完整的文件路径)
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.DataVisualization.DocumentFormat.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.DataVisualization.DocumentFormat.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.DataVisualization.DocumentFormat.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+<member name="T:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions">
+ <summary>
+ Common extension methods library for convenient the programming job.
+ </summary>
+ <remarks></remarks>  
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.NormalizeXMLString(System.String)">
+ <summary>
+ 对Xml文件之中的特殊字符进行转义处理
+ </summary>
+ <param name="str"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.GetAttribute``1(System.Reflection.MemberInfo)">
+ <summary>
+ Get the specific type of custom attribute from a property.
+ (从一个属性对象中获取特定的自定义属性对象)
+ </summary>
+ <typeparam name="T">The type of the custom attribute.(自定义属性的类型)</typeparam>
+ <param name="Property">Target property object.(目标属性对象)</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.GetAttribute``1(System.Reflection.PropertyInfo)">
+ <summary>
+ Get the specific type of custom attribute from a property.
+ (从一个属性对象中获取特定的自定义属性对象)
+ </summary>
+ <typeparam name="T">The type of the custom attribute.(自定义属性的类型)</typeparam>
+ <param name="Property">Target property object.(目标属性对象)</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.GetAnonymousTypeList``1(System.Collections.Generic.IEnumerable{``0})">
+ <summary>
+ 使用这个方法获取得到匿名类型的列表数据集合对象
+ </summary>
+ <typeparam name="TAnonymousType"></typeparam>
+ <param name="typedef"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.StringSplit(System.String,System.String,System.Boolean)">
+ <summary>
+ This method is used to replace most calls to the Java String.split method.
+ </summary>
+ <param name="source"></param>
+ <param name="regexDelimiter"></param>
+ <param name="trimTrailingEmptyStrings"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.GetDelegateInvokeEntryPoint(System.Object)">
+ <summary>
+ 当函数返回Nothing的时候说明目标对象不是一个函数指针
+ </summary>
+ <param name="obj"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.ToMatrix``1(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{``0}})">
+ <summary>
+ 
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="collection">要求集合之中的每一列之中的数据的元素数目都相等</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.SlideWindowHandle`1">
+ <summary>
+ 滑窗操作的数据模型
+ </summary>
+ <typeparam name="T"></typeparam>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.SlideWindowHandle`1.p">
+ <summary>
+ 在创建的滑窗的队列之中当前的窗口对象的位置
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.SlideWindowHandle`1.Left">
+ <summary>
+ 当前窗口在原始的序列之中的左端起始位点
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.SlideWindowHandle`1.Length">
+ <summary>
+ 窗口长度
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.CreateSlideWindows``1(System.Collections.Generic.IEnumerable{``0},System.Int32,System.Int32)">
+ <summary>
+ Create a collection of slide Windows data for the target collection object.(创建一个滑窗集合)
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="data"></param>
+ <param name="slideWindowSize">窗口的大小</param>
+ <param name="offset">在序列之上移动的步长</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.NIL">
+ <summary>
+ Chr(0): NULL char
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.SplitCollection``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+ <summary>
+ 将目标集合之中的数据按照<paramref name="splitCount"></paramref>参数分配到子集合之中
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="collection"></param>
+ <param name="splitCount">每一个子集合之中的元素的数目</param>
+ <returns></returns>
+ <remarks></remarks>
+ 
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.Invoke(System.Diagnostics.Process)">
+ <summary>
+ 本方法会执行外部命令并等待其执行完毕，函数返回状态值
+ </summary>
+ <param name="Process"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.RandomDouble">
+ <summary>
+ Gets a random number in the region of [0,1]. (获取一个[0,1]区间之中的随机数)
+ </summary>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.GetString(System.String,System.Char)">
+ <summary>
+ 获取""或者其他字符所包围的字符串的值
+ </summary>
+ <param name="s"></param>
+ <param name="wrapper"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.SetValueMethod``1(``0@,``0)">
+ <summary>
+ Value assignment to the target variable. 
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="var"></param>
+ <param name="value"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.Free``1(``0@)">
+ <summary>
+ Free this variable pointer in the memory.
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="obj"></param>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.Pause(System.String)">
+ <summary>
+ Pause the console program.
+ </summary>
+ <param name="Prompted"></param>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.ParseDouble(System.String)">
+ <summary>
+ 使用正则表达式解析目标字符串对象之中的一个实数
+ </summary>
+ <param name="s"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.ReadUltraLargeTextFile(System.String,System.Text.Encoding)">
+ <summary>
+ 当所被读取的文本文件的大小超过了<see cref="T:System.Text.StringBuilder"></see>的上限的时候，就需要使用本方法进行读取操作了。<paramref name="Path">目标文件</paramref>必须是已经存在的文件
+ </summary>
+ <param name="Path">目标文件必须是已经存在的文件</param>
+ <param name="Encoding"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.Collection2GenericIEnumerable(System.Type)">
+ <summary>
+ 尝试将目标集合类型转换为通用的枚举类型
+ </summary>
+ <param name="Type"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.SavePackage(System.Collections.Generic.IEnumerable{System.Byte},System.String)">
+ <summary>
+ Save the binary data into the filesystem.(保存二进制数据包值文件系统)
+ </summary>
+ <param name="data"></param>
+ <param name="saveto"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.ModifyValue``1(``0,System.Action)">
+ <summary>
+ Execute a property modify method and then return the target instance object.(修改目标对象的属性之后返回目标对象)
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="obj"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.ModifyValue``1(System.Reflection.PropertyInfo,``0,System.Func{System.Object,System.Object})">
+ <summary>
+ Modify target object property value using a <paramref name="valueModifier">specific value provider</paramref> and then return original instance object.
+ (修改目标对象的属性之后返回目标对象)
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="obj"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.FlushMemory">
+ <summary>
+ Rabbish collection to free the junk memory.(垃圾回收)
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.MatrixToVector``1(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{``0}})">
+ <summary>
+ Merge the target array collection into one collection.(将目标数组的集合合并为一个数组)
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Collection"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.MatrixToUltraLargeVector``1(System.Collections.Generic.IEnumerable{``0[]})">
+ <summary>
+ Merge the target array collection into one collection.(将目标数组的集合合并为一个数组，这个方法是提供给超大的集合的，即元素的数目非常的多的，即超过了<see cref="T:System.Int32"></see>的上限值)
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Collection"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.MatrixTranspose``1(System.Collections.Generic.IEnumerable{``0[]})">
+ <summary>
+ 将矩阵之中的元素进行行列位置的互换
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="MAT"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.MatrixTransposeIgnoredDimensionAgreement``1(System.Collections.Generic.IEnumerable{``0[]})">
+ <summary>
+ 将矩阵之中的元素进行行列位置的互换，请注意，假若长度不一致的话，会按照最短的元素来转置，故而使用本函数可能会造成一些信息的丢失
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="MAT"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.Intersection(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{System.String}})">
+ <summary>
+ 求交集
+ </summary>
+ <param name="Chunkbuffer"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.StdError(System.Collections.Generic.IEnumerable{System.Double})">
+ <summary>
+ 求取该数据集的标准差
+ </summary>
+ <param name="data"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.Description(System.Enum)">
+ <summary>
+ Get the description data from a enum type value, if the target have no <see cref="T:System.ComponentModel.DescriptionAttribute"></see> attribute data 
+ then function will return the string value from the ToString() function.
+ </summary>
+ <param name="e"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.TrimNull``1(System.Collections.Generic.IEnumerable{``0})">
+ <summary>
+ Remove all of the null object in the target object collection
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Collection"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.RandomizeElements``1(System.Collections.Generic.IEnumerable{``0})">
+ <summary>
+ Return a collection with randomize element position in <paramref name="Collection">the original collection</paramref>.(从原有序序列中获取一个随机元素的序列)
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Collection"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.GetFirstValue``1(System.Collections.Generic.IEnumerable{``0})">
+ <summary>
+ Get the value of the first element, if the collection is null or empty then return nothing as default value
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Collection"></param>
+ <returns></returns>
+ <remarks></remarks>
+ 
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.CopyTo``1(``0,``0@)">
+ <summary>
+ Copy the value in <paramref name="value"></paramref> into target variable <paramref name="target"></paramref> and then return the target variable.
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="value"></param>
+ <param name="target"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.TakeRandomly``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+ <summary>
+ 随机的在目标集合中选取指定数目的子集合
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Collection"></param>
+ <param name="Counts">当目标数目大于或者等于目标集合的数目的时候，则返回目标集合</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.ToStringArray``1(System.Collections.Generic.IEnumerable{``0})">
+ <summary>
+ Convert target object type collection into a string array using the Object.ToString() interface function.
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Collection"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.Union(System.String[],System.String[])">
+ <summary>
+ Get a sub set of the string data which is contains in both collection <paramref name="strArray1"></paramref> and <paramref name="strArray2"></paramref>
+ </summary>
+ <param name="strArray1"></param>
+ <param name="strArray2"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.SwapWith``1(``0@,``0@)">
+ <summary>
+ Swap the value in the two variables.
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="obj1"></param>
+ <param name="obj2"></param>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.SwapItem``1(System.Collections.Generic.List{``0}@,``0,``0)">
+ <summary>
+ Swap the two item position in the target <paramref name="List">list</paramref>.
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="List"></param>
+ <param name="obj_1"></param>
+ <param name="obj_2"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.MoveNext(System.Int32@)">
+ <summary>
+ <paramref name="p"></paramref> plus one and then return its previous value.
+ </summary>
+ <param name="p"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.Sequence``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+ <summary>
+ 获取某一个集合的下标的集合
+ </summary>
+ <typeparam name="T">集合中的元素为任意类型的</typeparam>
+ <param name="Collection">目标集合对象</param>
+ <returns></returns>
+ <remarks></remarks>
+ 
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.Takes``1(System.Collections.Generic.IEnumerable{``0},System.Int32[],System.Int32,System.Boolean)">
+ <summary>
+ 
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Collection"></param>
+ <param name="IndexCollection">所要获取的目标对象的下表的集合</param>
+ <param name="reversedSelect">是否为反向选择</param>
+ <param name="OffSet">当进行反选的时候，本参数将不会起作用</param>
+ <returns></returns>
+ <remarks></remarks>
+ 
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.InternalReversedTakeSelected``1(System.Collections.Generic.IEnumerable{``0},System.Int32[])">
+ <summary>
+ 反选，即将所有不出现在<paramref name="indexs"></paramref>之中的元素都选取出来
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="coll"></param>
+ <param name="indexs"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.Sequence(System.Int32)">
+ <summary>
+ 产生指定数目的一个递增序列
+ </summary>
+ <param name="n">大于或者等于0的一个数，当小于0的时候会出错</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.Sequence(System.Int64)">
+ <summary>
+ 产生指定数目的一个递增序列
+ </summary>
+ <param name="n"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.Sequence(System.UInt32)">
+ <summary>
+ 产生指定数目的一个递增序列
+ </summary>
+ <param name="n"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.Append``1(System.Collections.Generic.List{``0},System.Collections.Generic.IEnumerable{``0})">
+ <summary>
+ 向一个列表对象之中批量添加一个对象的集合
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="List"></param>
+ <param name="Collection"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.ToDictionary``2(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{``0,``1}})">
+ <summary>
+ 将目标键值对对象的集合转换为一个字典对象
+ </summary>
+ <typeparam name="TKey"></typeparam>
+ <typeparam name="TValue"></typeparam>
+ <param name="Collection"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.IsNullOrEmpty``1(System.Collections.Generic.IEnumerable{``0})">
+ <summary>
+ This object collection is a null object or contains zero count items.(判断某一个对象集合是否为空)
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Collection"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.SaveTo(System.String,System.String,System.Text.Encoding)">
+ <summary>
+ Write the text file data into a file which was specific by the <paramref name="Path"></paramref> value, this function not append the new data onto the target file.
+ (将目标文本字符串写入到一个指定路径的文件之中，但是不会在文件末尾追加新的数据)
+ </summary>
+ <param name="Path"></param>
+ <param name="Text"></param>
+ <param name="Encoding"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.SaveTo(System.Collections.Generic.IEnumerable{System.String},System.String,System.Text.Encoding)">
+ <summary>
+ 将目标字符串数据全部写入到文件之中，当所写入的文件位置之上没有父文件夹存在的时候，会自动创建文件夹
+ </summary>
+ <param name="array"></param>
+ <param name="path"></param>
+ <param name="encoding"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.GetXml``1(``0)">
+ <summary>
+ 将一个类对象序列化为XML文档
+ </summary>
+ <typeparam name="T">目标对象类型必须为一个Class</typeparam>
+ <param name="obj"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.LoadXml``1(System.String,System.Text.Encoding)">
+ <summary>
+ 
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="XmlFile">XML文件的文件路径</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.Serialize``1(``0,System.String)">
+ <summary>
+ 使用二进制序列化保存一个对象
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Obj"></param>
+ <param name="path"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.Load``1(System.String)">
+ <summary>
+ 使用反二进制序列化从指定的文件之中加载一个对象
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="path"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.CreateObjectFromXml``1(System.String,System.Boolean)">
+ <summary>
+ Generate a specific type object from a xml document stream.(使用一个XML文本内容创建一个XML映射对象)
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Xml">This parameter value is the document text of the xml file, not the file path of the xml file.(是Xml文件的文件内容而非文件路径)</param>
+ <param name="ThrowEx">Should this program throw the exception when the xml deserialization error happens? 
+ if False then this function will returns a null value instead of throw exception.
+ (在进行Xml反序列化的时候是否抛出错误，默认抛出错误，否则返回一个空对象)</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.CreateObjectFromXmlSegment``1(System.String)">
+ <summary>
+ 使用一个XML文本内容的一个片段创建一个XML映射对象
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Xml">是Xml文件的文件内容而非文件路径</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.π(System.Collections.Generic.IEnumerable{System.Double})">
+ <summary>
+ 获取一个实数集合中所有元素的积
+ </summary>
+ <param name="Elements"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.ILLEGAL_PATH_CHARACTERS_ENUMERATION">
+ <summary>
+ 枚举所有非法的路径字符
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.NormalizePathString(System.String,System.Boolean)">
+ <summary>
+ 将目标字符串之中的非法的字符替换为"_"符号以成为正确的文件名字符串
+ </summary>
+ <param name="str"></param>
+ <param name="OnlyASCII">当本参数为真的时候，仅26个字母，0-9数字和下划线_以及小数点可以被保留下来</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.Removes``1(System.Collections.Generic.List{``0}@,System.Collections.Generic.IEnumerable{``0})">
+ <summary>
+ Remove all of the element in the <paramref name="collection"></paramref> from target <paramref name="List">list</paramref>
+ </summary> 
+ <typeparam name="T"></typeparam>
+ <param name="List"></param>
+ <param name="collection"></param>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.GetValue(System.String)">
+ <summary>
+ 获取两个尖括号之间的内容
+ </summary>
+ <param name="strData"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.Get_PageContent(System.String,System.UInt32,System.Boolean)">
+ <summary>
+ Get the html page content from a website request or a html file on the local filesystem.
+ </summary>
+ <param name="url">web http request url or a file path handle</param>
+ <param name="RequestTimeOut">发生错误的时候的重试的次数</param>
+ <returns></returns>
+ <remarks></remarks>
+ 
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.InnerExtensions.DownloadFile(System.String,System.String)">
+ <summary>
+ download the file from <paramref name="strUrl"></paramref> to <paramref name="SavedPath">local file</paramref>.
+ </summary>
+ <param name="strUrl"></param>
+ <param name="SavedPath"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.DataVisualization.DocumentFormat.LQuerySchedule`1">
+ <summary>
+ 用于高效率执行批量查询操作和用于检测操作超时的工具对象，请注意，为了提高查询的工作效率，请尽量避免在查询操作之中生成新的临时对象
+ </summary>
+ <remarks>在使用Parallel LINQ的时候，请务必要注意不能够使用Let语句操作共享变量，因为排除死锁的开销比较大</remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.DataVisualization.DocumentFormat.LQuerySchedule`1._TimeOut">
+ <summary>
+ 查询操作超时的时间阈值，单位为秒
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.DataVisualization.DocumentFormat.LQuerySchedule`1._n">
+ <summary>
+ 查询操作的线程数目
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.LQuerySchedule`1.#ctor(System.Int32,System.Int32)">
+ <summary>
+ 
+ </summary>
+ <param name="timeout">查询操作超时的时间阈值，单位为秒</param>
+ <param name="n">这个参数通常是指CPU的核心数目，或者查询任务执行的最大线程数目</param>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.DataVisualization.DocumentFormat.LQuerySchedule`1.CPU_NUMBER">
+ <summary>
+ Get the number of processors on the current machine.(获取当前的系统主机的CPU核心数)
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.DataVisualization.DocumentFormat.LQuerySchedule`1.Recommended_NUM_THREADS">
+ <summary>
+ The possible recommended threads of the linq based on you machine processors number, i'm not sure...
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.LQuerySchedule`1.InternalInvokeQuery``1(System.Collections.Generic.IEnumerable{`0},System.Func{`0,``0},``0)">
+ <summary>
+ 当查询操作超时的时候，单条查询线程会返回<paramref name="Default">默认值</paramref>
+ </summary>
+ <typeparam name="Out">返回的值类型</typeparam>
+ <param name="Collection"></param>
+ <param name="invoke"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.LQuerySchedule`1.InternalStartLQuery``1(System.Collections.Generic.IEnumerable{`0},System.Func{`0,``0})">
+ <summary>
+ 采取非并行化的方式启动计算线程
+ </summary>
+ <typeparam name="TOut"></typeparam>
+ <param name="Collection"></param>
+ <param name="invoke"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.LQuerySchedule`1.InvokeQuery_UltraLargeSize``1(System.Collections.Generic.IEnumerable{`0},System.Func{`0,``0})">
+ <summary>
+ 当需要进行超大规模的查询的时候，请使用本方法
+ </summary>
+ <typeparam name="TOut"></typeparam>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.LQuerySchedule`1.InternalInvokeQuery``1(System.Collections.Generic.IEnumerable{`0},System.Func{`0,``0},System.Func{`0,``0})">
+ <summary>
+ 
+ </summary>
+ <typeparam name="Out"></typeparam>
+ <param name="Collection"></param>
+ <param name="invoke"></param>
+ <param name="get_Default">当查询超时的时候，使用本方法获得一个默认值</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DataVisualization.DocumentFormat.LQuerySchedule`1.PBS_TEST">
+ <summary>
+ DEBUG
+ </summary>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+</members>
+</doc>

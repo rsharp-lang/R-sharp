@@ -1,0 +1,1837 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+	<head>
+		
+		<meta charset="utf-8">
+		<title>gdi32.dll</title>
+		
+		<style>::-moz-selection {
+        background: #b3d4fc;
+        text-shadow: none;
+      }
+
+      ::selection {
+        background: #b3d4fc;
+        text-shadow: none;
+      }
+
+      html {
+        padding: 30px 10px;
+        font-size: 16px;
+        line-height: 1.4;
+        color: #737373;
+        background: #f0f0f0;
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+      }
+
+      html,
+      input {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      }
+
+      body {
+        max-width: 1500px;
+        _width: 1500px;
+        padding: 30px 20px 50px;
+        border: 1px solid #b3b3b3;
+        border-radius: 4px;
+        margin: 0 auto;
+        box-shadow: 0 1px 10px #a7a7a7, inset 0 1px 0 #fff;
+        background: #fcfcfc;
+      }
+
+      h1 {
+        margin: 0 10px;
+        font-size: 35px;
+        text-align: center;
+      }
+
+      h1 span {
+        color: #bbb;
+      }
+
+      h3 {
+        margin: 1.5em 0 0.5em;
+      }
+
+      p {
+        margin: 1em 0;
+      }
+
+      ul {
+        padding: 0 0 0 40px;
+        margin: 1em 0;
+      }
+
+      .container {
+        max-width: 900px;
+        _width: 900px;
+        margin: 0 auto;
+      }
+
+      /* google search */
+
+      #goog-fixurl ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      #goog-fixurl form {
+        margin: 0;
+      }
+
+      #goog-wm-qt,
+      #goog-wm-sb {
+        border: 1px solid #bbb;
+        font-size: 16px;
+        line-height: normal;
+        vertical-align: top;
+        color: #444;
+        border-radius: 2px;
+      }
+
+      #goog-wm-qt {
+        width: 220px;
+        height: 20px;
+        padding: 5px;
+        margin: 5px 10px 0 0;
+        box-shadow: inset 0 1px 1px #ccc;
+      }
+
+      #goog-wm-sb {
+        display: inline-block;
+        height: 32px;
+        padding: 0 10px;
+        margin: 5px 0 0;
+        white-space: nowrap;
+        cursor: pointer;
+        background-color: #f5f5f5;
+        background-image: -webkit-linear-gradient(rgba(255,255,255,0), #f1f1f1);
+        background-image: -moz-linear-gradient(rgba(255,255,255,0), #f1f1f1);
+        background-image: -ms-linear-gradient(rgba(255,255,255,0), #f1f1f1);
+        background-image: -o-linear-gradient(rgba(255,255,255,0), #f1f1f1);
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        *overflow: visible;
+        *display: inline;
+        *zoom: 1;
+      }
+
+      #goog-wm-sb:hover,
+      #goog-wm-sb:focus {
+        border-color: #aaa;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+        background-color: #f8f8f8;
+      }
+
+      #goog-wm-qt:hover,
+      #goog-wm-qt:focus {
+        border-color: #105cb6;
+        outline: 0;
+        color: #222;
+      }
+
+      input::-moz-focus-inner {
+        padding: 0;
+        border: 0;
+      }</style>
+	  
+	  <body>
+	  
+	  <div class="container">
+	    
+	  <h1>Document for <strong>  gdi32.dll</strong> <span>:-)</span></h1>
+	  <br />
+			
+	  <script>var GOOG_FIXURL_LANG = (navigator.language || '').slice(0,2),GOOG_FIXURL_SITE = location.host;</script>
+	<!--  <script src="//linkhelp.clients.google.com/tbproxy/lh/wm/fixurl.js"></script> -->
+	  </div>
+	      	<font face="Microsoft YaHei" size="2">
+	  	  <table>
+  <tr>
+    <th align="left">	  <p><h2><font size=5><span><a href="./index.html">< Back To Index</a></span></font></h2></p>
+	<p>
+	 <table>
+	 
+	       <tr>
+    <td valign="top">Related Namespace</td>
+	<td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td>
+    <td align="left"><li><a href="./comdlg32.dll.html">comdlg32.dll</a></li>
+<li><a href="./gdi32.dll.html">gdi32.dll</a></li>
+<li><a href="./kernel32.dll.html">kernel32.dll</a></li>
+<li><a href="./shell32.dll.html">shell32.dll</a></li>
+<li><a href="./user32.dll.html">user32.dll</a></li>
+<li><a href="./winmm.dll.html">winmm.dll</a></li></td>
+  </tr>
+	 
+	  </table>
+	
+	</p>
+	</th>
+    <th></th>
+  </tr>
+  <tr>
+    <td>Package</td>
+    <td align="left"><strong>gdi32.dll</strong></td>
+  </tr>
+ 
+                <tr>
+    <td>HOME</td>
+    <td align="left"><a href=""></a></td>
+  </tr>
+                <tr>
+    <td>Publisher</td>
+    <td align="left">Copyright (C) 2014 Microsoft Corporation</td>
+  </tr>
+                <tr>
+    <td>Description</td>
+    <td align="left">GDI32.DLL exports Graphics Device Interface (GDI) functions that perform primitive drawing functions for 
+                  output to video displays and printers. Applications call GDI functions directly to perform low-level drawing, text output, 
+                  font management, and similar functions.
+                  Initially, GDI supported 16 and 256 color EGA/VGA display cards and monochrome printers. The functionality has expanded 
+                  over the years, and now includes support for things like TrueType fonts, alpha channels, and multiple monitors.</td>
+  </tr>
+  
+      <tr>
+    <td valign="top">Cited References</td>
+    <td align="left"></td>
+  </tr>
+  
+                  <tr>
+    <td></td>
+    <td></td>
+  </tr>
+  
+              
+  
+  </font>
+</table>
+	  <br />
+	  
+	    <table>
+		    <tr>
+    <td valign="top"><strong>Summary Contents</strong></td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+		<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+		<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+		<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+		<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+		<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+    <td><table>
+  <tr>
+    <th align="left">
+                                           <a href="#BitBlt">BitBlt</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#CreateBitmap">CreateBitmap</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#CreateBitmapIndirect">CreateBitmapIndirect</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#CreateCompatibleBitmap">CreateCompatibleBitmap</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#CreateCompatibleDC">CreateCompatibleDC</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#CreatePatternBrush">CreatePatternBrush</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#CreatePen">CreatePen</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#CreateSolidBrush">CreateSolidBrush</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#DeleteDC">DeleteDC</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#DeleteObject">DeleteObject</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Escape">Escape</a> </th><td> </td><td> </td><td> </td>
+<th align="left">The Escape function allows applications to access capabilities of a particular device not directly available through GDI. Escape calls made by an application are translated and sent to the driver.</th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#GetMapMode">GetMapMode</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#GetObjectA">GetObjectA</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#GetPixel">GetPixel</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Polygon">Polygon</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#Rectangle">Rectangle</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#RestoreDC">RestoreDC</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#SaveDC">SaveDC</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#SelectObject">SelectObject</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#SetBkColor">SetBkColor</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#SetBkMode">SetBkMode</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#SetMapMode">SetMapMode</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#SetPixelV">SetPixelV</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#SetTextColor">SetTextColor</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#StretchBlt">StretchBlt</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+</table>
+</td>
+  </tr>
+		</table>
+	  	  <br />
+		  <hr>
+	  	<font face="Microsoft YaHei" size="2">
+	  <p><li>
+    <p>Help for "BitBlt":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="BitBlt">BitBlt</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.Gdi32::BitBlt
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hDestDC</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>x</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>y</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>nWidth</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>nHeight</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hSrcDC</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>xSrc</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>ySrc</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>dwRop</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "CreateBitmap":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="CreateBitmap">CreateBitmap</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.Gdi32::CreateBitmap
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>nWidth</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>nHeight</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>nPlanes</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>nBitCount</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>lpBits</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Object.html">System.Object</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "CreateBitmapIndirect":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="CreateBitmapIndirect">CreateBitmapIndirect</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.Gdi32::CreateBitmapIndirect
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>lpBitmap</strong></td>
+    <td align="left"><a href="./TypeLinks/Microsoft.VisualBasic.Win32API+C_BITMAP.html">Microsoft.VisualBasic.Win32API+C_BITMAP</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "CreateCompatibleBitmap":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="CreateCompatibleBitmap">CreateCompatibleBitmap</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.Gdi32::CreateCompatibleBitmap
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hdc</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>nWidth</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>nHeight</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "CreateCompatibleDC":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="CreateCompatibleDC">CreateCompatibleDC</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.Gdi32::CreateCompatibleDC
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hdc</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "CreatePatternBrush":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="CreatePatternBrush">CreatePatternBrush</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.Gdi32::CreatePatternBrush
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hBitmap</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "CreatePen":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="CreatePen">CreatePen</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.Gdi32::CreatePen
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>nPenStyle</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>nWidth</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>crColor</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "CreateSolidBrush":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="CreateSolidBrush">CreateSolidBrush</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.Gdi32::CreateSolidBrush
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>crColor</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "DeleteDC":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="DeleteDC">DeleteDC</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.Gdi32::DeleteDC
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hdc</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "DeleteObject":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="DeleteObject">DeleteObject</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.Gdi32::DeleteObject
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hObject</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Escape":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Escape">Escape</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td>The Escape function allows applications to access capabilities of a particular device not directly available through GDI. Escape calls made by an application are translated and sent to the driver.</td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.Gdi32::Escape
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hdc</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int64.html">System.Int64</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>nEscape</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int64.html">System.Int64</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>nCount</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int64.html">System.Int64</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>lpInData</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String&.html">System.String&</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>lpOutData</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Object.html">System.Object</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int64.html">System.Int64</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "GetMapMode":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="GetMapMode">GetMapMode</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.Gdi32::GetMapMode
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hdc</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "GetObjectA":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="GetObjectA">GetObjectA</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.Gdi32::GetObject
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hObject</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>nCount</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>lpObject</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Object.html">System.Object</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "GetPixel":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="GetPixel">GetPixel</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.Gdi32::GetPixel
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hdc</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>x</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>y</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Polygon":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Polygon">Polygon</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.Gdi32::Polygon
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hdc</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>lpPoint</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Drawing.Point.html">System.Drawing.Point</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>nCount</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "Rectangle":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="Rectangle">Rectangle</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.Gdi32::Rectangle
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hdc</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>X1</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Y1</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>X2</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Y2</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "RestoreDC":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="RestoreDC">RestoreDC</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.Gdi32::RestoreDC
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hdc</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>nSavedDC</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "SaveDC":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="SaveDC">SaveDC</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.Gdi32::SaveDC
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hdc</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "SelectObject":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="SelectObject">SelectObject</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.Gdi32::SelectObject
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hdc</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hObject</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "SetBkColor":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="SetBkColor">SetBkColor</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.Gdi32::SetBkColor
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hdc</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>crColor</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "SetBkMode":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="SetBkMode">SetBkMode</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.Gdi32::SetBkMode
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hdc</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>nBkMode</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "SetMapMode":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="SetMapMode">SetMapMode</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.Gdi32::SetMapMode
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hdc</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>nMapMode</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "SetPixelV":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="SetPixelV">SetPixelV</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.Gdi32::SetPixelV
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hdc</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>x</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>y</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>crColor</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "SetTextColor":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="SetTextColor">SetTextColor</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.Gdi32::SetTextColor
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hdc</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>crColor</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "StretchBlt":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="StretchBlt">StretchBlt</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.Gdi32::StretchBlt
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hdc</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>x</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>y</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>nWidth</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>nHeight</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hSrcDC</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>xSrc</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>ySrc</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>nSrcWidth</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>nSrcHeight</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>dwRop</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+</p></font>
+	  		<font face="Microsoft YaHei" size="1.5">
+		<div align="right">
+			<br />	<br />	<br />
+			<hr>
+				
+		<p>Copyright (c) <a href="http://gcmodeller.org">GCModeller Virtual Cell System</a>. 2015 All rights reserved.</p>
+		</div></font>
+	  </body>

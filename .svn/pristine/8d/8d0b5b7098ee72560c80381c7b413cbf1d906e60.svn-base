@@ -1,0 +1,63 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Metro
+</name>
+</assembly>
+<members>
+<member name="M:Microsoft.VisualBasic.Forms.MetroUI.Form.HiWord(System.Int32)">
+	<summary>
+ Equivalent to the HiWord C Macro
+ </summary>
+	<param name="dwValue"></param>
+	<returns></returns>
+</member><member name="P:Microsoft.VisualBasic.Forms.MetroUI.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Microsoft.VisualBasic.Forms.MetroUI.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Microsoft.VisualBasic.Forms.MetroUI.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="F:Microsoft.VisualBasic.Forms.MetroUI.API.Dwm.WTNCA_NODRAWCAPTION">
+	<summary>
+ Do Not Draw The Caption (Text)
+ </summary>
+</member><member name="F:Microsoft.VisualBasic.Forms.MetroUI.API.Dwm.WTNCA_NODRAWICON">
+	<summary>
+ Do Not Draw the Icon
+ </summary>
+</member><member name="F:Microsoft.VisualBasic.Forms.MetroUI.API.Dwm.WTNCA_NOSYSMENU">
+	<summary>
+ Do Not Show the System Menu
+ </summary>
+</member><member name="F:Microsoft.VisualBasic.Forms.MetroUI.API.Dwm.WTNCA_NOMIRRORHELP">
+	<summary>
+ Do Not Mirror the Question mark Symbol
+ </summary>
+</member><member name="T:Microsoft.VisualBasic.Forms.MetroUI.API.Dwm.WTA_OPTIONS">
+	<summary>
+ The Options of What Attributes to Add/Remove
+ </summary>
+</member><member name="T:Microsoft.VisualBasic.Forms.MetroUI.API.Dwm.WindowThemeAttributeType">
+	<summary>
+ What Type of Attributes? (Only One is Currently Defined)
+ </summary>
+</member><member name="M:Microsoft.VisualBasic.Forms.MetroUI.API.Dwm.SetWindowThemeAttribute(System.IntPtr,Microsoft.VisualBasic.Forms.MetroUI.API.Dwm.WindowThemeAttributeType,Microsoft.VisualBasic.Forms.MetroUI.API.Dwm.WTA_OPTIONS@,System.UInt32)">
+	<summary>
+ Set The Window's Theme Attributes
+ </summary>
+	<param name="hWnd">The Handle to the Window</param>
+	<param name="wtype">What Type of Attributes</param>
+	<param name="attributes">The Attributes to Add/Remove</param>
+	<param name="size">The Size of the Attributes Struct</param>
+	<returns>If The Call Was Successful or Not</returns>
+</member>
+</members>
+</doc>

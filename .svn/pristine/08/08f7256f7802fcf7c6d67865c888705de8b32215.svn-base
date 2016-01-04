@@ -1,0 +1,1 @@
+shoal -scan.plugins -dir ./

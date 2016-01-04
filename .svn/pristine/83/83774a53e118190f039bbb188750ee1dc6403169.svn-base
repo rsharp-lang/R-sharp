@@ -1,0 +1,3 @@
+call $ msgbox title "old value" message $a
+a <- new_value_from_the_source_called_script!
+call $ msgbox title "new value" message $a

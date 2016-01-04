@@ -1,0 +1,251 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+ShellScript
+</name>
+</assembly>
+<members>
+<member name="M:Microsoft.VisualBasic.ShellScript.DelegateHandlers.MethodDelegate.GetParameters(System.Reflection.MethodInfo)">
+	<summary>
+	</summary>
+	<returns>参数名，参数类型</returns>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.ShellScript.DelegateHandlers.MethodDelegate.CreateBasicValue">
+	<summary>
+ 基本数据类型的转换操作
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.ShellScript.Runtime.Objects.ShellScript.GetValue(System.String)">
+	<summary>
+	</summary>
+	<param name="variableName">请使用变量引用表达式</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.ShellScript.Runtime.Objects.ShellScript.EXEC(System.String)">
+	<summary>
+ Execute a shellscript file
+ </summary>
+	<param name="ShellScript">
+ This script data should be a line of the script code that of which is user type input from the console terminal
+ or a text file content from the return value of <see cref="M:Microsoft.VisualBasic.FileIO.FileSystem.ReadAllText(System.String)"></see>
+	</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.ShellScript.Runtime.Objects.ShellScript.PrintVariable(System.String)">
+	<summary>
+ 系统有一个默认的保留变量$
+ </summary>
+	<param name="VariableName"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.ShellScript.Runtime.Objects.ShellScript.PrintConstant(System.String)">
+	<summary>
+ 系统有一个默认的保留变量$
+ </summary>
+	<param name="VariableName"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.ShellScript.Runtime.Objects.ShellScript">
+	<summary>
+ Shell Script Host, vbss
+ </summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.ShellScript.CommonExtensions.LINQFramework">
+	<summary>
+ 为整个ShellScript提供LINQ查询支持的LINQ运行时环境
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.ShellScript.CommonExtensions.IsGenericEnumerable(System.Type)">
+	<summary>
+ 判断目标类型是否为一个Array类型
+ </summary>
+	<param name="Type"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.ShellScript.Interpreter.DelegateDeclaration.TryParse(System.String)">
+	<summary>
+ 将Delegate解析出来后，替换掉Delegate的申明字符串为空字符串
+ </summary>
+	<param name="ShellScript"></param>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.ShellScript.Runtime.Objects.ObjectModels.ShellScript.CodeLine.LineFlag">
+	<summary>
+ 每一行代码都有一个Goto标号进行唯一标识的
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.ShellScript.Runtime.Objects.ObjectModels.ShellScript.CodeLine.ExtensionMethodVariable">
+	<summary>
+ 假若当前的命令行对象为拓展方法的话，则本属性不应该为空
+ </summary>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.ShellScript.Runtime.Objects.ObjectModels.ShellScript">
+	<summary>
+ 对脚本进行解析之后，将会创建出一个脚本的对象模型
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.ShellScript.SystemBuildInCommands.ForEach(System.Object,System.String)">
+	<summary>
+	</summary>
+	<param name="in"></param>
+	<param name="call">脚本命令或者脚本文件与参数列表</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.ShellScript.SystemBuildInCommands.ImportsNamespace(System.String)">
+	<summary>
+ 使用本方法导入外部命令，这样子就可以直接调用方法而不需要每一个命令行都添加模块名称了
+ </summary>
+	<param name="AssemblyName"></param>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.ShellScript.SystemBuildInCommands.Library(System.String)">
+	<summary>
+ 动态注册一个链接库，在进行挂载
+ </summary>
+	<param name="assemblyPath"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.ShellScript.SystemBuildInCommands.Libraries">
+	<summary>
+ 列举出所有已经注册的动态链接库
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.ShellScript.SystemBuildInCommands.WriteText(System.Object,System.String)">
+	<summary>
+	</summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.ShellScript.SystemBuildInCommands.Source(Microsoft.VisualBasic.CommandLine.CommandLine)">
+	<summary>
+ 脚本与脚本之间的参数传递是通过共享内存变量来实现的
+ </summary>
+	<param name="argv"></param>
+	<returns>返回目标脚本执行过后的Memory对象</returns>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.ShellScript.SystemBuildInCommands">
+	<summary>
+ 一个脚本程序中仅允许有一个内建命令的实例
+ </summary>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.ShellScript.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Microsoft.VisualBasic.ShellScript.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Microsoft.VisualBasic.ShellScript.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="T:Microsoft.VisualBasic.ShellScript.ScriptInfo">
+	<summary>
+ ShellScript information header parser
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.ShellScript.DelegateHandlers.DelegateRegistry.AssemblyModule.IsUpdateToDate">
+	<summary>
+ 根据<see cref="F:Microsoft.VisualBasic.ShellScript.DelegateHandlers.DelegateRegistry.AssemblyModule.AssemblyPath"></see>的值来查找目标，然后比较修改时间来判断时候已被更新
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.ShellScript.DelegateHandlers.DelegateRegistry.LoadLibrary(System.String,Microsoft.VisualBasic.ShellScript.Runtime.Objects.MemoryManagement)">
+	<summary>
+ 挂载一个模块
+ </summary>
+	<param name="AssemblyPath"></param>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.ShellScript.DelegateHandlers.DelegateRegistry.RegisterAssemblyModule(System.String,System.String)">
+	<summary>
+	</summary>
+	<param name="AssemblyPath"></param>
+	<param name="AssemblyName">一个Dll文件之内可能会定义多个模块，当仅定义一个模块的时候，则本参数会覆盖掉模块内的名称定义，当定义有多个模块的时候，则本参数不会起任何作用</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.ShellScript.DelegateHandlers.DelegateRegistry.CreateDefault">
+	<summary>
+ 从<see cref="F:Microsoft.VisualBasic.ShellScript.DelegateHandlers.DelegateRegistry.DefaultFile">默认的配置文件</see>加载注册表
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.ShellScript.DelegateHandlers.DelegateRegistry">
+	<summary>
+ The type registry of the external plugin module assembly, the assembly file should be a standard.NET DLL or exe which was written by VisualBasic or C#.
+ (外部命令必须通过这个类型注册表才可以被用户调用)
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.ShellScript.DelegateHandlers.RegistryModuleLoader.#ctor(System.String,System.String[])">
+	<summary>
+	</summary>
+	<param name="RegistryFile">注册表的文件路径</param>
+	<param name="PreLoadAssembly">预加载的模块名称</param>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.ShellScript.DelegateHandlers.RegistryModuleLoader.LoadModules(System.String)">
+	<summary>
+	</summary>
+	<param name="AssemblyPath">必须是完整的路径字符串</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.ShellScript.Interpreter.Interpreter.CreateObject(System.String)">
+	<summary>
+	</summary>
+	<param name="ShellScript"></param>
+	<returns></returns>
+	<remarks>
+ #为注释符，解析器会自动忽略改行
+ </remarks>
+</member><member name="M:Microsoft.VisualBasic.ShellScript.Interpreter.Interpreter.TryParse(System.String,System.Int32,System.String)">
+	<summary>
+ 返回变量名和变量的赋值方法；对于方法调用，总是将得到的值赋值给一个<see cref="F:Microsoft.VisualBasic.ShellScript.Runtime.Objects.MemoryManagement.CONSERVED_SYSTEM_VARIABLE">保留的系统变量</see>
+	</summary>
+	<param name="Command"></param>
+	<param name="ExtensionMethodVariable">这个参数是由<see cref="M:Microsoft.VisualBasic.ShellScript.Interpreter.Interpreter.TryParseExtensionMethodSyntax(System.String,System.Int32)"></see>函数所传递进来的</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.ShellScript.Interpreter.Interpreter.TryParseCommand(System.String,System.String)">
+	<summary>
+ 对于拓展方法而言，所调用的目标拓展方法之中的第一个参数为调用目标拓展方法的对象
+ </summary>
+	<param name="Command"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.ShellScript.Interpreter.Interpreter">
+	<summary>
+	</summary>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.ShellScript.Runtime.Objects.MemoryManagement.TryGetValue(System.String)">
+	<summary>
+ 请使用变量引用表达式
+ </summary>
+	<param name="variable"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.ShellScript.Runtime.Objects.MemoryManagement.ImportsConstant(System.Type)">
+	<summary>
+ 导入所定义常数
+ </summary>
+	<param name="Assembly"></param>
+	<returns>返回导入成功的常数数目</returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.ShellScript.Runtime.Objects.MemoryManagement.GetName(System.Reflection.FieldInfo)">
+	<summary>
+		<see cref="M:Microsoft.VisualBasic.ShellScript.Runtime.Objects.MemoryManagement.ImportsConstant(System.Type)"></see>
+	</summary>
+	<param name="field"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.ShellScript.Runtime.Objects.MemoryManagement">
+	<summary>
+ This class manage the memory of the shellscript, it mainly consist of two parts: 
+ List(Of KeyValuePair(Of String, Object)) was manage for the variables that created by the script executation;
+ while the SortedDictionary(Of String, Object) was manage for the constants that was imports by the user using the Imports command
+ (脚本对象的内存管理模块)
+ </summary>
+	<remarks></remarks>
+</member>
+</members>
+</doc>

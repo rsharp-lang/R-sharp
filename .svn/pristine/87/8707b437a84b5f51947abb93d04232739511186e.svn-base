@@ -1,0 +1,1356 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Microsoft.VisualBasic.Scripting.ShoalShell
+</name>
+</assembly>
+<members>
+<member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DeviceDriver.IODeviceDriver.ImportsHandler(System.Type)">
+	<summary>
+ 返回成功导入的IO方法
+ </summary>
+	<param name="Module"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DeviceDriver.IODeviceDriver.WriteData(System.String,System.String)">
+	<summary>
+ This function will trying to save the data in a properly method from the data type:
+ Function will trying save the string as a text file;
+ Basic data type collection will be save as a csv data table;
+ All of the other data type will be saved based on the registry data;
+ If the method is not found in the registry for the data type, then function will throw a method missing exception!
+ (函数会尝试根据文件的类型来选择合适的保存格式:
+ 字符串类型会保存为文本文件
+ 数组会保存为Csv
+ 其他的复杂类型会尝试根据注册的句柄来执行相应的数据保存操作)
+ </summary>
+	<param name="variable"></param>
+	<param name="path"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.DelegateDeclaration.InternalCreateEntryPoint(System.Object,Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.I_MemoryManagementDevice)">
+	<summary>
+ 在运行时通过API命令获取一个.NET函数的函数指针作为Delegate的语法:
+ 
+ Function &lt;- * command  
+ 
+ 函数会自动解析出参数信息，并且使用等式左端的变量名作为函数名
+ </summary>
+	<param name="obj"></param>
+	<returns></returns>
+	<remarks>
+	</remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.DelegateDeclaration.TryParse(System.String,Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.ImportsEntryPointManager)">
+	<summary>
+ 将Delegate解析出来后，替换掉Delegate的申明字符串为空字符串，脚本行在这里已经过Trim处理，并且移除了注释行
+ </summary>
+	<param name="ShellScript"></param>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.DelegateDeclaration.TryParseHybridScript(System.Collections.Generic.List{System.String}@,Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.ImportsEntryPointManager)">
+	<summary>
+ 解析混合编程的脚本块
+ </summary>
+	<param name="Source"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.DelegateDeclaration.TryParseFunctionBody(System.Collections.Generic.List{System.String}@,System.String[])">
+	<summary>
+ 返回{对象名, 对象脚本文本}
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.DelegateDeclaration">
+	<summary>
+	</summary>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.HybridsScripting.ScriptEntryPoint">
+	<summary>
+ 与ShellScript进行混合编程的脚本语言，必须要在API的命名空间之中实现这个自定义属性
+ </summary>
+	<remarks>每一次切换脚本语句环境之前先使用!EntryName来进行，之后直接可以只用左移运算符尽心计算求值</remarks>
+</member><member name="F:Microsoft.VisualBasic.Scripting.ShoalShell.HybridsScripting.ScriptEntryInterface.InterfaceTypes.EntryPointInit">
+	<summary>
+ 有些简单类型可能并不需要初始化过程，所以这一个接口现在是可选的
+ </summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Scripting.ShoalShell.HybridsScripting.ScriptEntryInterface.InterfaceTypes.Evaluate">
+	<summary>
+ Public Function Evaluate(script As String) As Object
+ </summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Scripting.ShoalShell.HybridsScripting.ScriptEntryInterface.InterfaceTypes.SetValue">
+	<summary>
+ Public Function SetValue(variableName As String, value As Object) As Boolean
+ </summary>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.HybridsScripting.ScriptEntryInterface.InterfaceTypes">
+	<summary>
+ 混合编程的接口类型
+ </summary>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.HybridsScripting.ScriptEntryInterface">
+	<summary>
+ 必须要具备两种类型的接口，目标脚本执行环境才会被成功挂载
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.HybridsScripting.DataConvert.#ctor(System.Char,System.Boolean)">
+	<summary>
+	</summary>
+	<param name="type">
+ 数据类型的后缀，推荐：
+ $ <see cref="T:System.String"></see>
+ &amp; <see cref="T:System.Int64"></see>
+ % <see cref="T:System.Int32"></see>
+ ? <see cref="T:System.Boolean"></see>
+ ! <see cref="T:System.Double"></see>
+ @ <see cref="T:System.DateTime"></see>
+	</param>
+	<param name="ConservedString">在脚本环境之中必须要有一个保留的字符串转换方法</param>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.InternalTextEngine">
+	<summary>
+ 内建的文本处理引擎
+ </summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.SignatureSignedFunctionEntryPoint._ParameterSignature">
+	<summary>
+ 参数列表按照从小到大排序之后计算MD5哈希值作为参数列表的数字签名
+ </summary>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.SignatureSignedFunctionEntryPoint.TypeSignature">
+	<summary>
+ 返回值的数字签名
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.SignatureSignedFunctionEntryPoint.ParameterSignature">
+	<summary>
+ 参数列表按照从小到大排序之后计算MD5哈希值作为参数列表的数字签名
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.SignatureSignedFunctionEntryPoint.NonOptional">
+	<summary>
+ 非可选参数的数目
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.SignatureSignedFunctionEntryPoint.CreateObject(System.Reflection.MethodInfo,Microsoft.VisualBasic.CommandLine.Reflection.OverloadsSignatureHandle[])">
+	<summary>
+ 创建共享方法的签名实例
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.SignatureSignedFunctionEntryPoint.InternalTypeEquals(System.Type,System.Type)">
+	<summary>
+ 判断两种类型是否相等
+ </summary>
+	<param name="TypeA">重载方法的参数类型</param>
+	<param name="TypeB"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.SignatureSignedFunctionEntryPoint.Equals(System.Collections.Generic.Dictionary{System.String,System.Type},System.String)">
+	<summary>
+ 完全不相似的两个函数会返回0，值越高，则越有可能被用作为重载函数
+ </summary>
+	<param name="paras"></param>
+	<param name="SignatureHandle">本参数只是在可能发生参数列表签名冲突的时候使用，故而大多数的时候可能为空</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.SignatureSignedFunctionEntryPoint.Equals(System.Object)">
+	<summary>
+ 判断两个函数入口点对象是否具有完全一样的数字签名
+ </summary>
+	<param name="obj"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.SignatureSignedFunctionEntryPoint">
+	<summary>
+ 用于表示一个已经被签名的函数
+ </summary>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ObjectModels.Exceptions.SyntaxErrorException">
+	<summary>
+ Syntax error in the shoal shell interpreter script text parsing.
+ </summary>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ObjectModels.IScriptEngineComponent.ScriptEngine">
+	<summary>
+ Script host entry.
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ObjectModels.IScriptEngineComponent">
+	<summary>
+ This type of the class object consist of the shoal shell scripting engine.
+ </summary>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ObjectModels.ScriptInfo">
+	<summary>
+ ShellScript information header parser
+ </summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Reflection.Delegate._Paramaters">
+	<summary>
+ 参数的类型都默认为Object类型
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Reflection.Delegate.InternalCreateObject(System.String,System.String,Microsoft.VisualBasic.CommandLine.Reflection.OverloadsSignatureHandle[],Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.I_MemoryManagementDevice,Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.InternalCommands.ScriptSourceHandle)">
+	<summary>
+ '&lt;string&gt; example(obj as text, obj2 as csv, obj3 as fasta) &lt;- *
+ </summary>
+	<param name="strDefinitionData">Delegate的头部</param>
+	<param name="Memory">解析的过程之中抛出异常所需要使用的</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Reflection.Delegate.InternalGetType(System.String,Microsoft.VisualBasic.CommandLine.Reflection.OverloadsSignatureHandle[])">
+	<summary>
+ 当找不到类型的时候会返回Nothing
+ </summary>
+	<param name="typeName"></param>
+	<param name="Handles"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.I_MemoryManagementDevice._InnerList">
+	<summary>
+ 变量集合
+ </summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.I_MemoryManagementDevice._ImportsDataSource">
+	<summary>
+		<see cref="F:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.I_MemoryManagementDevice._InnerList"></see>会优先于本对象被调用
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.I_MemoryManagementDevice.TryGetValue(System.String)">
+	<summary>
+ 请使用变量引用表达式
+ </summary>
+	<param name="variable"></param>
+	<returns></returns>
+	<remarks>
+ 普通变量：
+ var &lt;- expression
+ 
+ 指针变量
+ $p &lt;- expression
+ 假若$p变量的值为var，即
+ $p 
+   = [0] var
+ 
+ 则
+ 上述表达式等同于
+ var &lt;- expression
+ </remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.I_MemoryManagementDevice.ImportsConstant(System.Type)">
+	<summary>
+ 导入所定义常数
+ </summary>
+	<param name="Assembly"></param>
+	<returns>返回导入成功的常数数目</returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.I_MemoryManagementDevice.GetName(System.Reflection.FieldInfo)">
+	<summary>
+		<see cref="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.I_MemoryManagementDevice.ImportsConstant(System.Type)"></see>
+	</summary>
+	<param name="field"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.I_MemoryManagementDevice.Remove(System.Collections.Generic.KeyValuePair{System.String,System.Object})">
+	<summary>
+ 删除一个变量对象
+ </summary>
+	<param name="item"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.I_MemoryManagementDevice.InsertOrUpdate(System.String,System.Object)">
+	<summary>
+ 添加新的变量对象或者更新目标变量对象的值
+ </summary>
+	<param name="key"></param>
+	<param name="value"></param>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.I_MemoryManagementDevice.ExistsVariable(System.String)">
+	<summary>
+ Indicated that the variable which was specific by <paramref name="var"></paramref> is exists in the scripting host memory or not.
+ (使用本方法来判断目标表达式的所指向的变量是否在脚本宿主引擎之中存在)
+ </summary>
+	<param name="var">变量名称</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.I_MemoryManagementDevice.Item(System.String)">
+	<summary>
+ 获取内存之中的变量值
+ </summary>
+	<param name="key">变量名，不需要添加使用引用符$，假若需要返回系统保留变量$的值，请使用空字符串</param>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.I_MemoryManagementDevice.Delete(System.String)">
+	<summary>
+ 从内存之中删除一个变量对象
+ </summary>
+	<param name="VariableName"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.I_MemoryManagementDevice.Values">
+	<summary>
+ 实际上返回其自身内部的变量列表
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.I_MemoryManagementDevice.FormatString(System.String)">
+	<summary>
+ 将会替换掉所有在<paramref name="expression"></paramref>参数之中出现的变量名为内存之中的变量的ToString()方法所得到的值
+ 对于想要输出$variableName这种类型的字符串，而不是输出值，则请使用\进行反义操作
+ </summary>
+	<param name="expression"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.I_MemoryManagementDevice">
+	<summary>
+ This class manage the memory of the shellscript, it mainly consist of two parts: 
+ List(Of KeyValuePair(Of String, Object)) was manage for the variables that created by the script executation;
+ while the SortedDictionary(Of String, Object) was manage for the constants that was imports by the user using the Imports command
+ (脚本对象的内存管理模块)
+ </summary>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.Wiki.WebServiceHandler">
+	<summary>
+ Query for the online SourceForge website wiki in the shoal project.(查询在线的sourceforge网站上面的wiki内容)
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.ImportsEntryPointManager.InternalEntryPointLoader.GetCommand(Microsoft.VisualBasic.CommandLine.CommandLine)">
+	<summary>
+	</summary>
+	<param name="Command"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.RegistryNodes.MethodMeta">
+	<summary>
+ 一个方法的元数据
+ </summary>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.RegistryNodes.ModuleLoadEntry.CommandHandles">
+	<summary>
+ 本命名空间之下的所有的可以使用的函数命令的简单介绍
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.RegistryNodes.ModuleLoadEntry.IsUpdateToDate">
+	<summary>
+ 根据<see cref="P:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.RegistryNodes.ModuleLoadEntry.AssemblyPath"></see>的值来查找目标，然后比较修改时间来判断时候已被更新
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.RegistryNodes.ModuleLoadEntry">
+	<summary>
+ 一个<see cref="T:Microsoft.VisualBasic.CommandLine.Reflection.Namespace">命名空间对象</see>
+	</summary>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.RegistryNodes.Namespace.Entries">
+	<summary>
+ 这些模块都具有相同的命名空间，则在加载进入内存的时候就会被合并在一个模块之中
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.RegistryNodes.I_Wiki_Handler.Match(System.String)">
+	<summary>
+ 模糊匹配并返回匹配结果，当返回空字符串的时候，则说明没有被匹配上
+ </summary>
+	<param name="keyword"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.RegistryNodes.I_Wiki_Handler">
+	<summary>
+ 这个对象是可以接受wiki查询操作的
+ </summary>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.Dynamics.TopStackValue">
+	<summary>
+ 获取Shoal之中的系统保留变量$的值
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.Dynamics.CreateDefaultEnvironment">
+	<summary>
+	</summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.Dynamics.TryInvokeMember(System.Dynamic.InvokeMemberBinder,System.Object[],System.Object@)">
+	<summary>
+ 首先尝试查看<see cref="F:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.Dynamics.VirtualInvokeMethod_NSCache"></see>里面的数据，假若没有的话在直接查找，假若有数据，则执行命名空间的连接操作之后在查找执行
+ </summary>
+	<param name="binder"></param>
+	<param name="args"></param>
+	<param name="result"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.Dynamics">
+	<summary>
+ Dynamics programming environment. If the environment thorw member not found exception, then you should consider of the 
+ target method namespace may be not registered yet so then you should try using 
+ <see cref="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.Dynamics.CreateDefaultEnvironment"></see> to initialize the environment.
+ (Shoal脚本的动态编程环境，注意：假若提示找不到方法或者空引用，请使用带参数的<see cref="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.Dynamics.CreateDefaultEnvironment">
+ 创建方法</see>在扫描完插件文件夹之后再来创建对象实例)
+ 
+ <see cref="T:System.IConvertible"></see>所返回的是Shoal的系统保留变量的值
+ </summary>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.InternalCommands.ScriptSourceHandle">
+	<summary>
+ 脚本的执行入口点的定义
+ </summary>
+	<param name="Script">脚本中的内容</param>
+	<param name="parameters">如果为Nothing，则说明目标脚本的执行不需求参数</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.InternalCommands.GetValue(System.String)">
+	<summary>
+ 尝试获取脚本宿主内存之中的变量的值
+ </summary>
+	<param name="name"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.InternalCommands.ForEach(System.Object,System.String)">
+	<summary>
+	</summary>
+	<param name="in"></param>
+	<param name="call">脚本命令或者脚本文件与参数列表</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.InternalCommands.FileInclude(System.String)">
+	<summary>
+ include &lt;filepath&gt;
+ </summary>
+	<param name="path"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.InternalCommands.ImportsNamespace(System.String)">
+	<summary>
+ 使用本方法导入外部命令，这样子就可以直接调用方法而不需要每一个命令行都添加模块名称了
+ </summary>
+	<param name="Namespace"></param>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.InternalCommands.Library(System.String)">
+	<summary>
+ 动态注册一个链接库，在进行挂载
+ </summary>
+	<param name="assemblyPath"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.InternalCommands.Libraries">
+	<summary>
+ 列举出所有已经注册的动态链接库
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.InternalCommands.Cd(System.String)">
+	<summary>
+ 切换ShoalShell的当前工作目录
+ </summary>
+	<param name="to"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.InternalCommands.WriteText(System.Object,System.String)">
+	<summary>
+	</summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.InternalCommands.Source(Microsoft.VisualBasic.CommandLine.CommandLine)">
+	<summary>
+ 脚本与脚本之间的参数传递是通过共享内存变量来实现的
+ </summary>
+	<param name="argv"></param>
+	<returns>返回目标脚本执行过后的Memory对象</returns>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.InternalCommands">
+	<summary>
+ 一个脚本程序中仅允许有一个内建命令的实例
+ </summary>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.My.Resources.Resources.gpl">
+	<summary>
+  Looks up a localized string similar to                     GNU GENERAL PUBLIC LICENSE
+                       Version 3, 29 June 2007
+
+ Copyright (C) 2007 Free Software Foundation, Inc. &lt;http://fsf.org/&gt;
+ Everyone is permitted to copy and distribute verbatim copies
+ of this license document, but changing it is not allowed.
+
+                            Preamble
+
+  The GNU General Public License is a free, copyleft license for
+software and other kinds of works.
+
+  The licenses for most software and other practical works are designed
+to take away yo [rest of string was truncated]";.
+</summary>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.My.Resources.Resources.license">
+	<summary>
+  Looks up a localized string similar to This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU  [rest of string was truncated]";.
+</summary>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DeviceDriver.InputDeviceDriver.TypeCasting(System.Object,System.String)">
+	<summary>
+	</summary>
+	<param name="obj">目标函数的第一个参数，本方法会根据这个参数以及<paramref name="typeId"></paramref>参数查找最合适的句柄来处理本参数的输入</param>
+	<param name="typeId"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.DeviceDriver.InputDeviceDriver">
+	<summary>
+ 字典之中的Key属性分别为所需要转换的目标类型的简称和输入的第一个参数的类型,目标方法只能够有一个参数
+ </summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ObjectModels.ShellScript._Flag_OnErrorResumeNext">
+	<summary>
+ This flag variable indicated that the "On Error Resume Next" option is setup or not, 
+ if TRUE then when an exception occurs, the shoal shell will record the exception 
+ information and then trying to ignored the error and continute running the script.
+ </summary>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ObjectModels.ShellScript">
+	<summary>
+ The parsed object model result for the target input script text.(对脚本进行解析之后，将会创建出一个脚本的对象模型)
+ </summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ShellScript._ImportsNamespace">
+	<summary>
+ 在当前的脚本环境之中已经导入的命名空间
+ </summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ShellScript._InternalEntryPointManager">
+	<summary>
+ 从外部所导入的命令以及内部的命令的集合
+ </summary>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ShellScript.ImportsNamespaceList">
+	<summary>
+ 在当前的脚本环境之中已经导入的命名空间
+ </summary>
+	<remarks></remarks>
+</member><member name="E:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ShellScript.ImportsNamespace">
+	<summary>
+ 这个是为IDE的开发而准备的
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ShellScript.ImportsNewNamespace">
+	<summary>
+ 当编译器导入了新的命名空间的时候，就会调用这个方法，将消息传递给IDE，更新IDE的界面
+ </summary>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ShellScript.ImportsMethods">
+	<summary>
+ Get the imports method from a specific namespace in the shoal shell script engine.(获取在脚本引擎之中已经被导入的命名空间之中的方法)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ShellScript.#ctor(System.Boolean)">
+	<summary>
+ Interpreter对象之中的IOSupport对象的初始化需要Memory对象实例，所以请不要轻易修改这里的对象的初始化顺序
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ShellScript.InternalInitialize(Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.DelegateRegistry,System.Boolean)">
+	<summary>
+ 脚本引擎内部初始化脚本编程环境
+ </summary>
+	<param name="LibraryRegistry"></param>
+	<param name="ShowInitializeMessage"></param>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ShellScript.InstallModules(System.String)">
+	<summary>
+ 向Shoal脚本安装插件模块的dll或者exe文件
+ </summary>
+	<param name="assembly"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ShellScript.ExternalScriptInteropEvaluate(System.String)">
+	<summary>
+ 使用外部的脚本环境进行运算
+ </summary>
+	<param name="ScriptText"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ShellScript.AttachesEntryPoint(System.String)">
+	<summary>
+ 载入外部脚本的挂载点
+ </summary>
+	<param name="name"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ShellScript.GetValue(System.String)">
+	<summary>
+ 变量不存在的话则会返回字符串自身
+ </summary>
+	<param name="variableName">请使用变量引用表达式</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ShellScript.ExceptionHandleRedirect">
+	<summary>
+ 日志文件路径，当发生错误的时候，假若本属性不为空，则会将错误的信息同时写入在这里，否则仅将错误信息写入主日志文件之中
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ShellScript.EXEC(System.String)">
+	<summary>
+ Execute a shellscript file.
+ (执行一个脚本文件中的脚本文本内容，请注意，函数仅返回脚本的执行状态，0位执行成功，其他非0数字可能表示执行失败，
+ 假若目标脚本有return关键词返回执行结果，需要得到脚本的具体返回数据，请使用<see cref="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ShellScript.GetStackValue"></see>方法获取。)
+ </summary>
+	<param name="ShellScript">
+ This script data should be a line of the script code that of which is user type input from the console terminal
+ or a text file content from the return value of <see cref="M:Microsoft.VisualBasic.FileIO.FileSystem.ReadAllText(System.String)"></see>
+	</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ShellScript.InternalSourceScript(System.String,System.Collections.Generic.KeyValuePair{System.String,System.Object}[])">
+	<summary>
+	</summary>
+	<param name="ShellScript">这个参数是脚本文件的文本内容，而非脚本文件的路径</param>
+	<param name="parameters"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ShellScript.PrintVariable(System.String)">
+	<summary>
+ 系统有一个默认的保留变量$
+ </summary>
+	<param name="VariableName"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ShellScript.PrintConstant(System.String)">
+	<summary>
+ 系统有一个默认的保留变量$
+ </summary>
+	<param name="VariableName"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ShellScript">
+	<summary>
+ ShoalShell Scripting Host, shl.(ShoalShell的脚本编程的引擎)
+ </summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Scripting.ShoalShell.BuildInModules.System.Array.SplitRegxExpression">
+	<summary>
+ A regex expression string that use for split the line text.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.BuildInModules.System.Array.ParseVector(System.String)">
+	<summary>
+ Row parsing into column tokens
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.BuildInModules.System.Array.get_Item(System.String,Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.I_MemoryManagementDevice)">
+	<summary>
+ 字典和集合的元素获取方法统一从这里开始
+ </summary>
+	<param name="script"></param>
+	<param name="Memory"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.BuildInModules.System.Array.get_ArrayItem(System.String,System.String,Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.I_MemoryManagementDevice)">
+	<summary>
+ 当所引用的集合为空的时候，返回空，当应用的指针为空或者下标越界的时候，返回空值
+ </summary>
+	<param name="script"></param>
+	<param name="indexer"></param>
+	<param name="Memory"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.BuildInModules.System.Array.Object2Collection(System.Object)">
+	<summary>
+ 字符串对象会被转换为字符数组
+ </summary>
+	<param name="var"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.ImportsEntryPointManager._InternalDelegateHash">
+	<summary>
+ 与<see cref="F:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.ImportsEntryPointManager._InternalImportsEntryPointHash"></see>所不同的是，这个存储的是Delegate，里面的命令会优先于<see cref="F:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.ImportsEntryPointManager._InternalImportsEntryPointHash"></see>中的命令被调用
+ </summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.ImportsEntryPointManager._TEMP_HANDLERS">
+	<summary>
+ 当切换工作目录的时候，程序会自动扫描当前工作目录之下的所有可用的脚本文件，使用文件名作为临时的函数名
+ </summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.ImportsEntryPointManager._HybridScriptingDelegates">
+	<summary>
+ 请注意，这里面的所有的对象的键值都是小写字母的
+ </summary>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.ImportsEntryPointManager.TempShellCommands">
+	<summary>
+ 当前的工作目录之下的脚本文件都会被当作为临时的脚本命令来使用
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.ImportsEntryPointManager.GetHybridsScript(System.String)">
+	<summary>
+	</summary>
+	<param name="name">大小写不敏感</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.ImportsEntryPointManager.DeclaresHybridScripting(System.String,System.String)">
+	<summary>
+ 旧的脚本会被新的脚本所替换
+ </summary>
+	<param name="name">大小写不敏感</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.ImportsEntryPointManager.InternalScanTempShell(System.String,System.Boolean)">
+	<summary>
+	</summary>
+	<param name="dir"></param>
+	<param name="disp_inits_message">假若这个命令是在初始化的时候调用的话，则使用这个参数来根据配置数据来决定是否显示程序的初始化消息</param>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.ImportsEntryPointManager.ImportsInstanceNamespace(System.Object)">
+	<summary>
+ 请使用这个方法导入实例对象之中的定义的命令
+ </summary>
+	<param name="InvokedObject"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.ImportsEntryPointManager.ImportsNamespace(System.String)">
+	<summary>
+ 使用本方法导入外部命令，这样子就可以直接调用方法而不需要每一个命令行都添加模块名称了(这个方法导入的是共享方法，对于实例方法不能够通过本方法进行导入)
+ </summary>
+	<param name="Namespace"></param>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.ImportsEntryPointManager.InternalMountEntryPoint(System.Collections.Generic.List{Microsoft.VisualBasic.CommandLine.Reflection.EntryPoints.CommandEntryPointInfo})">
+	<summary>
+ 从命名空间之中导入方法
+ </summary>
+	<param name="EntryPointList"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.ImportsEntryPointManager.InternalMountEntryPoint(System.Reflection.MethodInfo)">
+	<summary>
+ 这个函数是为了Delegate和混合编程的Delegate所准备的
+ </summary>
+	<param name="EntryPoint"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.ImportsEntryPointManager.DeclaresDelegate(Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Reflection.Delegate)">
+	<summary>
+ Delegate也可以与导入的函数产生重载
+ </summary>
+	<param name="Delegate">Delegate函数指针</param>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.ImportsEntryPointManager.ExistsCommand(System.String)">
+	<summary>
+	</summary>
+	<param name="CommandName">对大小写不敏感</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.ImportsEntryPointManager.EntryPoint(System.String)">
+	<summary>
+ 大小写不敏感
+ </summary>
+	<param name="key"></param>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.ImportsEntryPointManager.ImportsMethods">
+	<summary>
+ 获取所有已经导入进来的方法的名称
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.ImportsEntryPointManager.TryGetValue(System.String,Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.CommandMethodEntryPoint@)">
+	<summary>
+ 大小写不敏感，所以无需在进行ToLower的额外处理，临时脚本命令会优先于内部命令被调用
+ </summary>
+	<param name="key"></param>
+	<param name="value"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DeviceDriver.OutputDeviceDriver.HandleOutput(System.String)">
+	<summary>
+	</summary>
+	<param name="variable">Variable Name.(变量名)</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.DeviceDriver.OutputDeviceDriver">
+	<summary>
+ Output support module for that data type.(各种数据类型的输出模块)
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ObjectModels.DataSourceMapping.DataSourceMappingHandler.ExistsVariable(System.String)">
+	<summary>
+	</summary>
+	<param name="Name">请去除$前缀符号</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ObjectModels.DataSourceMapping.DataSourceMappingHandler.GetValue(System.String)">
+	<summary>
+ 目标对象不存在则会返回空值
+ </summary>
+	<param name="Name"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ObjectModels.DataSourceMapping.DataSourceMappingHandler">
+	<summary>
+ 由于数据源的作用主要是设置共享变量或者环境参数，故而在获取参数变量的时候，系统的自由参数会被优先读取
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ObjectModels.DataSourceMapping.DataSourceModle.Imports(System.Reflection.TypeInfo,System.Boolean)">
+	<summary>
+ 只会绑定非实例的属性或者域
+ </summary>
+	<param name="Assembly"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.MethodDelegateCaller.RequiredHostMemory">
+	<summary>
+ This method required the host memory, when this attribute was applied on a method, 
+ then the host memory object will be append to the last of the parameter value list.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.MethodDelegateCaller.GetParameters(System.Reflection.MethodInfo)">
+	<summary>
+	</summary>
+	<returns>参数名，参数类型</returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.MethodDelegateCaller.CallMethod(Microsoft.VisualBasic.CommandLine.Reflection.EntryPoints.CommandEntryPointInfo,Microsoft.VisualBasic.CommandLine.CommandLine,Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.I_MemoryManagementDevice)">
+	<summary>
+ 这个函数处理共享方法和实例方法的调用
+ </summary>
+	<param name="Delegate"></param>
+	<param name="argvs"></param>
+	<param name="MemoryDevice"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.MethodDelegateCaller.CallMethod(System.Reflection.MethodInfo,Microsoft.VisualBasic.CommandLine.CommandLine,Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.I_MemoryManagementDevice)">
+	<summary>
+ 这个方法处理共享方法的调用
+ </summary>
+	<param name="Delegate"></param>
+	<param name="argvs"></param>
+	<param name="MemoryDevice"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.MethodDelegateCaller.CallMethod(Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.CommandMethodEntryPoint,Microsoft.VisualBasic.CommandLine.CommandLine,Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.I_MemoryManagementDevice,System.String)">
+	<summary>
+	</summary>
+	<param name="EntryPoint"></param>
+	<param name="argvs"></param>
+	<param name="MemoryDevice"></param>
+	<param name="TypeSignature">函数会根据这个值来决定重载函数的调用，可以为空字符串</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.MethodDelegateCaller.InternalGetVariable(Microsoft.VisualBasic.CommandLine.CommandLine,Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.I_MemoryManagementDevice)">
+	<summary>
+ 拓展方法的函数肯定会有一个参数，并且该函数的第一个参数为拓展方法的目标参数对象
+ </summary>
+	<param name="argvs"></param>
+	<param name="MemoryDevice"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.MethodDelegateCaller.InternalCreateBasicValue">
+	<summary>
+ 基本数据类型的转换操作
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.MethodDelegateCaller.GetDescription(System.Reflection.MethodInfo,System.String)">
+	<summary>
+ Get the help information description for the target command method.(获取一个方法的详细帮助信息)
+ </summary>
+	<param name="MethodInfo"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.MethodDelegateCaller">
+	<summary>
+ 对于第一个参数为脚本引擎的类型，则可以在调用的时候直接忽略第一个参数
+ </summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.DelegateRegistry._HybridsScriptingEntrypoints">
+	<summary>
+ 这个挂载点列表是全部被一次性加载的
+ </summary>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.DelegateRegistry.RegisteredModules">
+	<summary>
+ This property list all of the module which was registered in the shoal shell.
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.DelegateRegistry.HybridsScriptingEntrypoints">
+	<summary>
+ 与外部脚本环境进行交互所需要的挂载点的注册表
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.DelegateRegistry.CheckForLibraryConsists(System.Boolean)">
+	<summary>
+ 返回错误的插件模块的数目
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.DelegateRegistry.LoadLibrary(System.String,Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.I_MemoryManagementDevice)">
+	<summary>
+ 挂载一个模块
+ </summary>
+	<param name="AssemblyPath"></param>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.DelegateRegistry.RegisterAssemblyModule(System.String,System.String)">
+	<summary>
+ Register the external assembly module entry points for dynamic load.(注册动态调用的外部模块)
+ </summary>
+	<param name="AssemblyPath"></param>
+	<param name="AssemblyName">一个Dll文件之内可能会定义多个模块，当仅定义一个模块的时候，则本参数会覆盖掉模块内的名称定义，当定义有多个模块的时候，则本参数不会起任何作用，假若留空，则使用模块之中的默认值</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.DelegateRegistry.Internal_getRelativePath(System.String)">
+	<summary>
+ 假若目标模块文件在与程序模块是同一个文件夹之下的，则会返回相对路径，假若为不同文件夹之下的，则会返回全路径
+ </summary>
+	<param name="path"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.DelegateRegistry.InternalGetExternalInteropEntryPoints(System.String)">
+	<summary>
+ 解析混合编程的脚本环境的环境入口点
+ </summary>
+	<param name="AssemblyPath">模块文件的文件路径</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.DelegateRegistry._DefaultFile">
+	<summary>
+ 默认的注册表配置文件，该文件是在与本程序同一个文件夹之下的以程序名开始的XML文件.在该文件之中包含有所有的类型注册信息
+ </summary>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.DelegateRegistry.DefaultFile">
+	<summary>
+ 默认的注册表配置文件，该文件是在与本程序同一个文件夹之下的以程序名开始的XML文件.在该文件之中包含有所有的类型注册信息
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.DelegateRegistry.CreateDefault">
+	<summary>
+ Load the registry file from a default registry file.(从<see cref="P:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.DelegateRegistry.DefaultFile">默认的配置文件</see>加载注册表)
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.DelegateRegistry.CreateFromFile(System.String)">
+	<summary>
+ 请使用本方法或者<see cref="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.DelegateRegistry.CreateDefault"></see>方法进行创建，否则都将会创建失败
+ </summary>
+	<param name="XmlFile"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.DelegateRegistry">
+	<summary>
+ The type registry of the external plugin module assembly, the assembly file should be a standard.NET DLL or exe which was written by VisualBasic or C#.
+ (外部命令必须通过这个类型注册表才可以被用户调用)
+ </summary>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.RegistryNodes.Module.Item(System.String)">
+	<summary>
+ Gets a command entry point from the registry table using its <paramref name="key">name</paramref> property. 
+ </summary>
+	<param name="key"></param>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.RegistryNodes.Module">
+	<summary>
+ Namespace object for the imports operations
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Interpreter.#ctor(Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ShellScript,System.String,System.Boolean,System.Boolean)">
+	<summary>
+	</summary>
+	<param name="ScriptHost"></param>
+	<param name="LibraryRegistry">注册表文件的文件路径</param>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Interpreter.CreateScriptObject(System.String)">
+	<summary>
+ Parsing the <paramref name="ShellScript">script text</paramref> into the script objectmodel and then return for execute.
+ </summary>
+	<param name="ShellScript"></param>
+	<returns></returns>
+	<remarks>
+ #为注释符，解析器会自动忽略改行
+ </remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Interpreter.ProcessIncludes(System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.String}@)">
+	<summary>
+ include的作用就是将多个脚本源文件合并在一起进行执行，本函数会将include申明的所在行替换为目标脚本的内容
+ </summary>
+	<param name="source"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Interpreter.CheckCycleReference(System.Collections.Generic.IEnumerable{System.String})">
+	<summary>
+ 当函数返回TRUE的时候，表示有循环引用，则抛出错误
+ </summary>
+	<param name="includeList"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Interpreter.InternalProcessIncludes(System.String,System.Collections.Generic.List{System.String})">
+	<summary>
+ tokens 0 -&gt; include
+ tokens 1 
+ </summary>
+	<param name="path"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Interpreter.TryParse(Microsoft.VisualBasic.CommandLine.CommandLine,System.Int32,System.String)">
+	<summary>
+ 返回变量名和变量的赋值方法；对于方法调用，总是将得到的值赋值给一个<see cref="F:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.I_MemoryManagementDevice.CONSERVED_SYSTEM_VARIABLE">保留的系统变量</see>
+	</summary>
+	<param name="Command"></param>
+	<param name="ExtensionMethodVariable">这个参数是由<see cref="M:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Interpreter.TryParseExtensionMethodSyntax(System.String,System.Int32)"></see>函数所传递进来的</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Interpreter.InternalGetImportsCommandEntryPoint(Microsoft.VisualBasic.CommandLine.CommandLine,Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ObjectModels.ScriptCodeLine.PreExecuteTypes@)">
+	<summary>
+ 这里是处理已经导入的命令
+ </summary>
+	<param name="cmdInfo"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Interpreter.TryParseCommand(Microsoft.VisualBasic.CommandLine.CommandLine,System.String,Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ObjectModels.ScriptCodeLine.PreExecuteTypes@)">
+	<summary>
+ 对于拓展方法而言，所调用的目标拓展方法之中的第一个参数为调用目标拓展方法的对象
+ </summary>
+	<param name="cmdInfo"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Interpreter">
+	<summary>sss
+ 
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Wiki.InternalHelpSearch.GetHelpInfo(System.String)">
+	<summary>
+ 获取帮助信息
+ </summary>
+	<param name="ObjectName"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Wiki.InternalHelpSearch.InternalPrintLibrary(Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.RegistryNodes.Module)">
+	<summary>
+ 目标是一个类型库，则输出详细信息
+ </summary>
+	<param name="Module"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.Wiki.InternalHelpSearch">
+	<summary>
+ Query the help information in the local content.(通过注册表信息进行帮助信息的查找)
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.CommonExtensions.IsGenericEnumerable(System.Type)">
+	<summary>
+ 判断目标类型是否为一个Array类型
+ </summary>
+	<param name="Type"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.RegistryModuleLoader.#ctor(System.String,System.String[])">
+	<summary>
+	</summary>
+	<param name="RegistryFile">注册表的文件路径</param>
+	<param name="PreLoadAssembly">预加载的模块名称</param>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.RegistryModuleLoader.get_ModuleFromAssembly(System.String)">
+	<summary>
+ 空的Namespace属性值的Namespace对象将会被忽略
+ </summary>
+	<param name="AssemblyPath"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Scripting.ShoalShell.HybridsScripting.HybridScripting_Interop_Handler.EntryPoint.Name">
+	<summary>
+ Script name.(混合编程的脚本名称)
+ </summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Scripting.ShoalShell.HybridsScripting.HybridScripting_Interop_Handler.EntryPoint.DataConvertors">
+	<summary>
+ Basic type data convert interface.(基本数据类型的转换接口)
+ </summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Scripting.ShoalShell.HybridsScripting.HybridScripting_Interop_Handler.EntryPoint.ConservedString">
+	<summary>
+ When the <see cref="M:Microsoft.VisualBasic.Scripting.ShoalShell.HybridsScripting.HybridScripting_Interop_Handler.Evaluate(System.String)">handlers</see> can not found the data type 
+ convert method for the basically type then it will try this system preserved string type convert 
+ method to convert the data as string as default.
+ (当<see cref="F:Microsoft.VisualBasic.Scripting.ShoalShell.HybridsScripting.HybridScripting_Interop_Handler.EntryPoint.DataConvertors"></see>之中没有查找到目标类型的转换操作接口的时候，则默认使用本方法转换
+ 为字符串的格式，保留的字符串类型的转换函数)
+ </summary>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.HybridsScripting.HybridScripting_Interop_Handler.EntryPoint.IsNull">
+	<summary>
+This property indicated that the entry data which was parsing from the assembly module is valid or not.(可以使用本属性来判断目标解析数据是否可用)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.HybridsScripting.HybridScripting_Interop_Handler.AttachEntryPoint(System.String)">
+	<summary>
+ Attach the hybrid scripting environment onto the script host.
+ </summary>
+	<param name="pointName"></param>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Scripting.ShoalShell.HybridsScripting.HybridScripting_Interop_Handler.DataConverters">
+	<summary>
+ 这个对象是为<see cref="M:Microsoft.VisualBasic.Scripting.ShoalShell.HybridsScripting.HybridScripting_Interop_Handler.Evaluate(System.String)"></see>所准备的，当所传递的参数为字符串的时候，则可以根据参数名的后缀来转换为相应的数据类型
+ </summary>
+	<remarks>
+	</remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.HybridsScripting.HybridScripting_Interop_Handler.Evaluate(System.String,Microsoft.VisualBasic.CommandLine.CommandLine)">
+	<summary>
+	</summary>
+	<param name="environment">这个参数需要已经去除了第一个!标识符，会临时切换混合编程的脚本环境</param>
+	<param name="Cmdl">脚本对象名[ 参数列表]</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ObjectModels.Exceptions.CircularReferencesException">
+	<summary>
+ One or more circle reference was detected from the include list.(在多个脚本之间使用include语句产生了循环引用)
+ </summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.CommandMethodEntryPoint._InternalOverloadMethodEntryPointList">
+	<summary>
+ Shoal脚本命令的函数重载
+ </summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.CommandMethodEntryPoint._Name">
+	<summary>
+ Shoal API命令的名称
+ </summary>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.CommandMethodEntryPoint.IsOverloaded">
+	<summary>
+ 当前的这个执行入口点是否有重载的命令
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.CommandMethodEntryPoint.NonOverloadsMethod">
+	<summary>
+ 当没有函数重载的时候，会返回一个唯一值，返回，当具有重载函数的时候，本属性返回空，请使用<see cref="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.CommandMethodEntryPoint.get_MethodInfo(System.Collections.Generic.Dictionary{System.String,System.Type},System.String)"></see>方法来获取被调用的重载函数
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.CommandMethodEntryPoint.#ctor(System.String,System.Reflection.MethodInfo)">
+	<summary>
+ 共享方法
+ </summary>
+	<param name="Name"></param>
+	<param name="InitMethod">如果不知道该怎么处理这个参数，请使用Nothing</param>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.CommandMethodEntryPoint.#ctor(System.String,Microsoft.VisualBasic.CommandLine.Reflection.EntryPoints.CommandEntryPointInfo)">
+	<summary>
+ 共享方法和实例方法
+ </summary>
+	<param name="Name"></param>
+	<param name="InitEntryPoint">如果不知道该怎么处理这个参数，请使用Nothing</param>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.CommandMethodEntryPoint.HashAddMethodEntryPoint(Microsoft.VisualBasic.CommandLine.Reflection.EntryPoints.CommandEntryPointInfo)">
+	<summary>
+ 相当前的执行入口点添加一个重载函数，当当前的执行入口点之中具备有两个完全相同的函数签名的入口点的时候，新的入口点会替换掉旧的入口点
+ </summary>
+	<param name="MethodEntryPoint"></param>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.CommandMethodEntryPoint.InternalGetTypeSignatureHandles(System.Reflection.MethodInfo)">
+	<summary>
+ 获取用于支持函授重载所需要的数字签名信息
+ </summary>
+	<param name="EntryInfo"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.CommandMethodEntryPoint.get_MethodInfo(System.Collections.Generic.Dictionary{System.String,System.Type},System.String)">
+	<summary>
+ 利用参数名列表以及返回值的签名信息来获取可能被调用的重载函数
+ </summary>
+	<param name="paras">变量名列表</param>
+	<param name="Signature">返回值的签名信息，可以为空字符串</param>
+	<returns></returns>
+	<remarks>第一个参数可能为拓展方法的参数，则其可以与任意字符串进行匹配</remarks>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.CommandMethodEntryPoint.CountOfOverloadsCommand">
+	<summary>
+ 当前的这个执行入口点之中的重载的函数的反射入口点的数目
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.CommandMethodEntryPoint.NamespaceDirectlyCalled(System.Reflection.MethodInfo[])">
+	<summary>
+ 直接从命名空间之中直接调用
+ </summary>
+	<param name="MethodInfo"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.CommandMethodEntryPoint">
+	<summary>
+ 命令执行的入口点
+ </summary>
+	<remarks>
+ 重载函数的签名冲突的条件：
+ 1. 具有完全一样的参数列表，即参数名和参数类型完全一致，参数的顺序对签名冲突没有影响
+ 2. 除了满足上面的条件，两个函数之间的返回值完全一样的时候，即可认为两个函数的签名完全一样
+ </remarks>
+</member><member name="F:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.EntryPointHashTable._InternalHashDictionary">
+	<summary>
+ Key都为小写的
+ </summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.EntryPointHashTable._InternalKeys">
+	<summary>
+ Key为小写的，Value为Key的原先的值，即没有经过ToLower方法修剪的值
+ </summary>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.EntryPointHashTable.EntryPoint(System.String)">
+	<summary>
+	</summary>
+	<param name="Name">小写的</param>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.EntryPointHashTable.InternalAddEntryPoint(System.String,Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.CommandMethodEntryPoint)">
+	<summary>
+	</summary>
+	<param name="CommandName">小写的</param>
+	<param name="EntryPointInfo"></param>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.EntryPointHandlers.EntryPointHashTable">
+	<summary>
+ Imports Command, Delegate and Hybrid Scripting Delegate
+ </summary>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.DeviceDriver.DriverHandles.OutputDeviceHandle">
+	<summary>
+ 将目标变量在终端进行输出
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DeviceDriver.DriverHandles.InputDeviceHandle.#ctor(System.String)">
+	<summary>
+	</summary>
+	<param name="TypeId">
+ 类型简称，在脚本之中的使用语法为：
+ var &lt; (TypeId) $variable
+ </param>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.DeviceDriver.DriverHandles.InputDeviceHandle">
+	<summary>
+		<see cref="P:System.Attribute.TypeId"></see>参数指的是目标函数所返回的值的类型，驱动程序会自动根据函数的参数的类型来决定函数方法的调用
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.DeviceDriver.DriverHandles.IO_DeviceHandle.#ctor(System.Type)">
+	<summary>
+	</summary>
+	<param name="DataType">目标数据类型，脚本引擎会自动根据函数的数据类型自动选择文件系统的写入方式的驱动程序</param>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.DeviceDriver.DriverHandles.IO_DeviceHandle">
+	<summary>
+ Target delegate must compatible with delegate Func(Of T, String, Boolean), the first parameter in the delegate is the 
+ data type and the data to write to the file, the second parameter is the file path of the IO operation and the last bool 
+ return value indicated that the io operation success or not. please notices that, for the considerations of the data 
+ type compatible, the collection data type is recommended implement as generic enumeration interface.
+ (目标接口委托对象必须要符合以下接口类型Func(Of T, String, Boolean)，其中第一个将要写文件的数据类型，第二个参数为
+ 文件路径，最后一个参数是文件是否写入成功，请注意，对于任意的集合类型推荐使用<see cref="T:System.Collections.Generic.IEnumerable`1"></see>泛型集合)
+ </summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ObjectModels.ScriptCodeLine.VariableAssigned">
+	<summary>
+ The target varialbe for the value assignment, if this codeline is a method calling then the variable will be set to the system conserved variable $
+ </summary>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ObjectModels.ScriptCodeLine.LineFlag">
+	<summary>
+ The Goto flag property can use for identified each script code line uniquely.(每一行代码都会有一个Goto标号进行唯一标识的)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ObjectModels.ScriptCodeLine.OnErrorResumeNext">
+	<summary>
+ If the flag value is TRUE then if the error occur, and the script host is still trying to ignore the error and continute running the script file.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ObjectModels.ScriptCodeLine.ExtensionMethodVariable">
+	<summary>
+ 假若当前的命令行对象为拓展方法的话，则本属性不应该为空
+ </summary>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ObjectModels.ScriptCodeLine">
+	<summary>
+ The <see cref="T:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ObjectModels.ScriptCodeLine"></see> is the basically element of the shoal script.(脚本命令行的数据模型)
+ </summary>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ObjectModels.BracketParser.Expression.Tokens">
+	<summary>
+ 一个表达式的最简单的一个词元可能是由其他的表达式构成的
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ObjectModels.BracketParser.Expression.TokenExpression">
+	<summary>
+ 当前的词元，假若本表达式对象是最简单的表达式的话，则本属性即为本表达式的值
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ObjectModels.BracketParser.Expression">
+	<summary>
+ 一个表达式
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ObjectModels.BracketParser.TryParse(System.String,System.Char,System.Char)">
+	<summary>
+	</summary>
+	<param name="expression"></param>
+	<param name="brLeft"></param>
+	<param name="brRight"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ObjectModels.BracketParser.TryParse(System.String,System.Char,System.Char,System.Int32@,System.Collections.Generic.Stack{System.Int32}@,System.Collections.Generic.Stack{System.Int32}@,System.Int32)">
+	<summary>
+	</summary>
+	<param name="expression"></param>
+	<param name="startpos">外部调用的时候请在调用函数处设置为0</param>
+	<param name="brLeft"></param>
+	<param name="brRight"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member>
+</members>
+</doc>

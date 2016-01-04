@@ -1,0 +1,46 @@
+﻿Imports System.Text
+Imports Microsoft.VisualBasic.Scripting.ShoalShell
+
+''' <summary>
+''' 生成API模块的帮助文档
+''' </summary>
+Module [Namespace]
+
+    Public Sub GenerateDocument(repository As String, library As SPM.Nodes.Namespace())
+        For Each ns As SPM.Nodes.Namespace In library
+            Dim HTMLBuilder As New StringBuilder(My.Resources.index)
+            Dim HTML As String = HTMLDoc(repository, ns)
+            Dim path As String = $"{repository}/{ns.Namespace.NormalizePathString(False)}.html"
+
+            Call HTMLBuilder.Replace(Title, ns.Namespace)
+            Call HTMLBuilder.Replace(Doc, HTML)
+            Call HTMLBuilder.SaveTo(path, System.Text.Encoding.UTF8)
+
+            Call $"   ===> {ns.Namespace}...".__DEBUG_ECHO
+        Next
+    End Sub
+
+    Public Function HTMLDoc(repository As String, ns As SPM.Nodes.Namespace) As String
+        Dim HTMLBuilder As StringBuilder = New StringBuilder(1024)
+        Call HTMLBuilder.AppendLine($"<a href=""./index.html"">Document Library</a> > {ns.Namespace}")
+        For Each entry In ns.PartialModules
+            Dim Name As String = FileIO.FileSystem.GetFileInfo(entry.Assembly.Path).Name
+            Dim path As String = $"{repository}/{Name}/{ns.Namespace.NormalizePathString(False)}.html"
+            Call HTMLBuilder.AppendLine($"<li><a href=""./{Name}/{ns.Namespace.NormalizePathString(False)}.html"">{Name}</a></li>")
+
+            Dim innerDoc As New StringBuilder(My.Resources.index)
+            Call innerDoc.RestoreCSS
+            Call innerDoc.Replace(Doc, HTMLDoc(entry, ns.Namespace))
+            Call innerDoc.Replace(Title, ns.Namespace)
+            Call innerDoc.SaveTo(path, System.Text.Encoding.UTF8)
+        Next
+        Return HTMLBuilder.ToString
+    End Function
+
+    Public Function HTMLDoc(ns As SPM.Nodes.PartialModule, name As String) As String
+        Dim HTMLBuilder As StringBuilder = New StringBuilder(1024)
+        Call HTMLBuilder.AppendLine($"<a href=""../index.html"">Document Library</a> > <a href=""../{name}.html"">{name}</a>")
+        Call HTMLBuilder.AppendLine($"<h1>{name}</h1>")
+        Return HTMLBuilder.ToString
+    End Function
+End Module

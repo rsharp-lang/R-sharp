@@ -1,0 +1,38 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+MSHtml
+</name>
+</assembly>
+<members>
+<member name="P:MSHtml.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:MSHtml.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:MSHtml.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="M:MSHtml.HtmlDocument.RequestPage(System.String)">
+	<summary>
+ Get the html page content from a website request or a html file on the local filesystem.
+ </summary>
+	<param name="url">web http request url or a file path handle</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:MSHtml.HtmlElement.Name">
+	<summary>
+ 标签名
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member>
+</members>
+</doc>

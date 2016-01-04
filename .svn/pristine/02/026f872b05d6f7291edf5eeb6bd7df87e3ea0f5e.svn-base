@@ -1,0 +1,8 @@
+imports Framework.Extensions
+
+n <- 20 -> Sequence.Random
+$n > ./test_ran1.txt
+n <- 20 -> Sequence.Random
+$n > ./test_ran2.txt
+n <- 20 -> Sequence.Random
+$n > ./test_ran3.txt

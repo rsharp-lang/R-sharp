@@ -1,0 +1,70 @@
+On Error Resume Next
+
+die "yes!"
+die
+die "no" When $no
+
+Imports Cowsay
+
+*dd <= {
+
+  Dim n2     <- {yes -> cowsay /dead} As String
+      $n      > ./test2.txt
+     $n2      > ./ffff.txt
+  Call "ok!" -> msgbox
+}
+
+@SQL
+
+$bf << "select * from table"
+var << "select * from test_table where lower(id) = lower(\"{0}\");"  
+var <= ${"I:\Shoal\Shoal.v2\Console\bin\Debug\TestScript\HelloWorld.txt" n "yes!" /yy}
+
+Dim str       <- "Hello World!" As String            # Test variable declaration for script code compiler
+Dim TestBytes <- 128            As Byte              # Another test
+Dim Test2     <- &HOME 
+
+Call $str -> Cowsay /dead                            # Print cowsay on your console screen
+
+If {dd} {
+
+   Dim testbytes2 <= {
+       0, 
+       $testbytes, $testbytes, $testbytes, $testbytes, $testbytes, 
+       $testbytes, $testbytes, $testbytes, $testbytes, $testbytes, 
+       $testbytes, $testbytes, $testbytes} As Byte
+
+      $testbytes2 > ./test2.dat
+}
+Else {
+   Goto exx
+}
+
+gg < (image) "./test.png"
+
+For var In {1, 3, 4, $gg, 78, 87, &BIN} {
+
+    DoWhile {not $nnf} {
+
+        If {$fr} {
+            Call nn -> msgbox
+        }
+        Else {
+            Call $ff -> cowsay
+        }
+    }
+}
+
+For ls In {5 To 100 Step -1} {
+    Return &HOME
+}
+
+$testbytes > ./test.dat
+
+EXX:  Echo "execute delegate....."
+
+Call dd
+Echo ok_yes!
+Echo $n
+
+Return $yy

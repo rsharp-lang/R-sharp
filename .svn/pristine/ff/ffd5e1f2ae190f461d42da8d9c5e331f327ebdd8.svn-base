@@ -1,0 +1,771 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Microsoft.VisualBasic.DocumentFormat.Word
+</name>
+</assembly>
+<members>
+<member name="F:Microsoft.VisualBasic.DocumentFormat.Word.My.CommonExtensions._Assembly">
+ <summary>
+ 调用本模块的程序集的可执行文件的完整的文件路径
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.DocumentFormat.Word.My.CommonExtensions.ExePath">
+ <summary>
+ Get the exe file full path string.(调用本模块的程序集的可执行文件的完整的文件路径)
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.DocumentFormat.Word.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.DocumentFormat.Word.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.DocumentFormat.Word.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.DocumentFormat.Word.My.Resources.Resources.gpl">
+<summary>
+  Looks up a localized string similar to                     GNU GENERAL PUBLIC LICENSE
+                       Version 3, 29 June 2007
+
+ Copyright (C) 2007 Free Software Foundation, Inc. &lt;http://fsf.org/&gt;
+ Everyone is permitted to copy and distribute verbatim copies
+ of this license document, but changing it is not allowed.
+
+                            Preamble
+
+  The GNU General Public License is a free, copyleft license for
+software and other kinds of works.
+
+  The licenses for most software and other practical works are designed
+to take away yo [rest of string was truncated]&quot;;.
+</summary>
+</member>
+<member name="T:Microsoft.VisualBasic.DocumentFormat.Word.Extensions">
+ <summary>
+ Common extension methods library for convenient the programming job.
+ </summary>
+ <remarks></remarks>  
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.NormalizeXMLString(System.String)">
+ <summary>
+ 对Xml文件之中的特殊字符进行转义处理
+ </summary>
+ <param name="str"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.GetAttribute``1(System.Reflection.MemberInfo)">
+ <summary>
+ Get the specific type of custom attribute from a property.
+ (从一个属性对象中获取特定的自定义属性对象)
+ </summary>
+ <typeparam name="T">The type of the custom attribute.(自定义属性的类型)</typeparam>
+ <param name="Property">Target property object.(目标属性对象)</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.GetAttribute``1(System.Reflection.PropertyInfo)">
+ <summary>
+ Get the specific type of custom attribute from a property.
+ (从一个属性对象中获取特定的自定义属性对象)
+ </summary>
+ <typeparam name="T">The type of the custom attribute.(自定义属性的类型)</typeparam>
+ <param name="Property">Target property object.(目标属性对象)</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.GetAnonymousTypeList``1(System.Collections.Generic.IEnumerable{``0})">
+ <summary>
+ 使用这个方法获取得到匿名类型的列表数据集合对象
+ </summary>
+ <typeparam name="TAnonymousType"></typeparam>
+ <param name="typedef"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.StringSplit(System.String,System.String,System.Boolean)">
+ <summary>
+ This method is used to replace most calls to the Java String.split method.
+ </summary>
+ <param name="source"></param>
+ <param name="regexDelimiter"></param>
+ <param name="trimTrailingEmptyStrings"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.GetDelegateInvokeEntryPoint(System.Object)">
+ <summary>
+ 当函数返回Nothing的时候说明目标对象不是一个函数指针
+ </summary>
+ <param name="obj"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.ToMatrix``1(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{``0}})">
+ <summary>
+ 
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="collection">要求集合之中的每一列之中的数据的元素数目都相等</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.SlideWindowHandle`1">
+ <summary>
+ 滑窗操作的数据模型
+ </summary>
+ <typeparam name="T"></typeparam>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.SlideWindowHandle`1.p">
+ <summary>
+ 在创建的滑窗的队列之中当前的窗口对象的位置
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.SlideWindowHandle`1.Left">
+ <summary>
+ 当前窗口在原始的序列之中的左端起始位点
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.SlideWindowHandle`1.Length">
+ <summary>
+ 窗口长度
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.CreateSlideWindows``1(System.Collections.Generic.IEnumerable{``0},System.Int32,System.Int32)">
+ <summary>
+ Create a collection of slide Windows data for the target collection object.(创建一个滑窗集合)
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="data"></param>
+ <param name="slideWindowSize">窗口的大小</param>
+ <param name="offset">在序列之上移动的步长</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.NIL">
+ <summary>
+ Chr(0): NULL char
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.SplitCollection``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+ <summary>
+ 将目标集合之中的数据按照<paramref name="splitCount"></paramref>参数分配到子集合之中
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="collection"></param>
+ <param name="splitCount">每一个子集合之中的元素的数目</param>
+ <returns></returns>
+ <remarks></remarks>
+ 
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.Invoke(System.Diagnostics.Process)">
+ <summary>
+ 本方法会执行外部命令并等待其执行完毕，函数返回状态值
+ </summary>
+ <param name="Process"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.RandomDouble">
+ <summary>
+ Gets a random number in the region of [0,1]. (获取一个[0,1]区间之中的随机数)
+ </summary>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.GetString(System.String,System.Char)">
+ <summary>
+ 获取""或者其他字符所包围的字符串的值
+ </summary>
+ <param name="s"></param>
+ <param name="wrapper"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.SetValueMethod``1(``0@,``0)">
+ <summary>
+ Value assignment to the target variable. 
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="var"></param>
+ <param name="value"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.Free``1(``0@)">
+ <summary>
+ Free this variable pointer in the memory.
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="obj"></param>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.Pause(System.String)">
+ <summary>
+ Pause the console program.
+ </summary>
+ <param name="Prompted"></param>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.ParseDouble(System.String)">
+ <summary>
+ 使用正则表达式解析目标字符串对象之中的一个实数
+ </summary>
+ <param name="s"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.ReadUltraLargeTextFile(System.String,System.Text.Encoding)">
+ <summary>
+ 当所被读取的文本文件的大小超过了<see cref="T:System.Text.StringBuilder"></see>的上限的时候，就需要使用本方法进行读取操作了。<paramref name="Path">目标文件</paramref>必须是已经存在的文件
+ </summary>
+ <param name="Path">目标文件必须是已经存在的文件</param>
+ <param name="Encoding"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.Collection2GenericIEnumerable(System.Type)">
+ <summary>
+ 尝试将目标集合类型转换为通用的枚举类型
+ </summary>
+ <param name="Type"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.SavePackage(System.Collections.Generic.IEnumerable{System.Byte},System.String)">
+ <summary>
+ Save the binary data into the filesystem.(保存二进制数据包值文件系统)
+ </summary>
+ <param name="data"></param>
+ <param name="saveto"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.ModifyValue``1(``0,System.Action)">
+ <summary>
+ Execute a property modify method and then return the target instance object.(修改目标对象的属性之后返回目标对象)
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="obj"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.ModifyValue``1(System.Reflection.PropertyInfo,``0,System.Func{System.Object,System.Object})">
+ <summary>
+ Modify target object property value using a <paramref name="valueModifier">specific value provider</paramref> and then return original instance object.
+ (修改目标对象的属性之后返回目标对象)
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="obj"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.FlushMemory">
+ <summary>
+ Rabbish collection to free the junk memory.(垃圾回收)
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.MatrixToVector``1(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{``0}})">
+ <summary>
+ Merge the target array collection into one collection.(将目标数组的集合合并为一个数组)
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Collection"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.MatrixToUltraLargeVector``1(System.Collections.Generic.IEnumerable{``0[]})">
+ <summary>
+ Merge the target array collection into one collection.(将目标数组的集合合并为一个数组，这个方法是提供给超大的集合的，即元素的数目非常的多的，即超过了<see cref="T:System.Int32"></see>的上限值)
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Collection"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.MatrixTranspose``1(System.Collections.Generic.IEnumerable{``0[]})">
+ <summary>
+ 将矩阵之中的元素进行行列位置的互换
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="MAT"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.MatrixTransposeIgnoredDimensionAgreement``1(System.Collections.Generic.IEnumerable{``0[]})">
+ <summary>
+ 将矩阵之中的元素进行行列位置的互换，请注意，假若长度不一致的话，会按照最短的元素来转置，故而使用本函数可能会造成一些信息的丢失
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="MAT"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.Intersection(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{System.String}})">
+ <summary>
+ 求交集
+ </summary>
+ <param name="Chunkbuffer"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.StdError(System.Collections.Generic.IEnumerable{System.Double})">
+ <summary>
+ 求取该数据集的标准差
+ </summary>
+ <param name="data"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.Description(System.Enum)">
+ <summary>
+ Get the description data from a enum type value, if the target have no <see cref="T:System.ComponentModel.DescriptionAttribute"></see> attribute data 
+ then function will return the string value from the ToString() function.
+ </summary>
+ <param name="e"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.TrimNull``1(System.Collections.Generic.IEnumerable{``0})">
+ <summary>
+ Remove all of the null object in the target object collection
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Collection"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.RandomizeElements``1(System.Collections.Generic.IEnumerable{``0})">
+ <summary>
+ Return a collection with randomize element position in <paramref name="Collection">the original collection</paramref>.(从原有序序列中获取一个随机元素的序列)
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Collection"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.GetFirstValue``1(System.Collections.Generic.IEnumerable{``0})">
+ <summary>
+ Get the value of the first element, if the collection is null or empty then return nothing as default value
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Collection"></param>
+ <returns></returns>
+ <remarks></remarks>
+ 
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.CopyTo``1(``0,``0@)">
+ <summary>
+ Copy the value in <paramref name="value"></paramref> into target variable <paramref name="target"></paramref> and then return the target variable.
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="value"></param>
+ <param name="target"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.TakeRandomly``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+ <summary>
+ 随机的在目标集合中选取指定数目的子集合
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Collection"></param>
+ <param name="Counts">当目标数目大于或者等于目标集合的数目的时候，则返回目标集合</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.ToStringArray``1(System.Collections.Generic.IEnumerable{``0})">
+ <summary>
+ Convert target object type collection into a string array using the Object.ToString() interface function.
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Collection"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.Union(System.String[],System.String[])">
+ <summary>
+ Get a sub set of the string data which is contains in both collection <paramref name="strArray1"></paramref> and <paramref name="strArray2"></paramref>
+ </summary>
+ <param name="strArray1"></param>
+ <param name="strArray2"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.SwapWith``1(``0@,``0@)">
+ <summary>
+ Swap the value in the two variables.
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="obj1"></param>
+ <param name="obj2"></param>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.SwapItem``1(System.Collections.Generic.List{``0}@,``0,``0)">
+ <summary>
+ Swap the two item position in the target <paramref name="List">list</paramref>.
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="List"></param>
+ <param name="obj_1"></param>
+ <param name="obj_2"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.MoveNext(System.Int32@)">
+ <summary>
+ <paramref name="p"></paramref> plus one and then return its previous value.
+ </summary>
+ <param name="p"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.Sequence``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+ <summary>
+ 获取某一个集合的下标的集合
+ </summary>
+ <typeparam name="T">集合中的元素为任意类型的</typeparam>
+ <param name="Collection">目标集合对象</param>
+ <returns></returns>
+ <remarks></remarks>
+ 
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.Takes``1(System.Collections.Generic.IEnumerable{``0},System.Int32[],System.Int32,System.Boolean)">
+ <summary>
+ 
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Collection"></param>
+ <param name="IndexCollection">所要获取的目标对象的下表的集合</param>
+ <param name="reversedSelect">是否为反向选择</param>
+ <param name="OffSet">当进行反选的时候，本参数将不会起作用</param>
+ <returns></returns>
+ <remarks></remarks>
+ 
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.InternalReversedTakeSelected``1(System.Collections.Generic.IEnumerable{``0},System.Int32[])">
+ <summary>
+ 反选，即将所有不出现在<paramref name="indexs"></paramref>之中的元素都选取出来
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="coll"></param>
+ <param name="indexs"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.Sequence(System.Int32)">
+ <summary>
+ 产生指定数目的一个递增序列
+ </summary>
+ <param name="n">大于或者等于0的一个数，当小于0的时候会出错</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.Sequence(System.Int64)">
+ <summary>
+ 产生指定数目的一个递增序列
+ </summary>
+ <param name="n"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.Sequence(System.UInt32)">
+ <summary>
+ 产生指定数目的一个递增序列
+ </summary>
+ <param name="n"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.Append``1(System.Collections.Generic.List{``0},System.Collections.Generic.IEnumerable{``0})">
+ <summary>
+ 向一个列表对象之中批量添加一个对象的集合
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="List"></param>
+ <param name="Collection"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.ToDictionary``2(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{``0,``1}})">
+ <summary>
+ 将目标键值对对象的集合转换为一个字典对象
+ </summary>
+ <typeparam name="TKey"></typeparam>
+ <typeparam name="TValue"></typeparam>
+ <param name="Collection"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.IsNullOrEmpty``1(System.Collections.Generic.IEnumerable{``0})">
+ <summary>
+ This object collection is a null object or contains zero count items.(判断某一个对象集合是否为空)
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Collection"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.SaveTo(System.String,System.String,System.Text.Encoding)">
+ <summary>
+ Write the text file data into a file which was specific by the <paramref name="Path"></paramref> value, this function not append the new data onto the target file.
+ (将目标文本字符串写入到一个指定路径的文件之中，但是不会在文件末尾追加新的数据)
+ </summary>
+ <param name="Path"></param>
+ <param name="Text"></param>
+ <param name="Encoding"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.SaveTo(System.Collections.Generic.IEnumerable{System.String},System.String,System.Text.Encoding)">
+ <summary>
+ 将目标字符串数据全部写入到文件之中，当所写入的文件位置之上没有父文件夹存在的时候，会自动创建文件夹
+ </summary>
+ <param name="array"></param>
+ <param name="path"></param>
+ <param name="encoding"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.GetXml``1(``0)">
+ <summary>
+ 将一个类对象序列化为XML文档
+ </summary>
+ <typeparam name="T">目标对象类型必须为一个Class</typeparam>
+ <param name="obj"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.LoadXml``1(System.String,System.Text.Encoding)">
+ <summary>
+ 
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="XmlFile">XML文件的文件路径</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.Serialize``1(``0,System.String)">
+ <summary>
+ 使用二进制序列化保存一个对象
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Obj"></param>
+ <param name="path"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.Load``1(System.String)">
+ <summary>
+ 使用反二进制序列化从指定的文件之中加载一个对象
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="path"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.CreateObjectFromXml``1(System.String)">
+ <summary>
+ 使用一个XML文本内容创建一个XML映射对象
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Xml">是Xml文件的文件内容而非文件路径</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.CreateObjectFromXmlSegment``1(System.String)">
+ <summary>
+ 使用一个XML文本内容的一个片段创建一个XML映射对象
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Xml">是Xml文件的文件内容而非文件路径</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.π(System.Collections.Generic.IEnumerable{System.Double})">
+ <summary>
+ 获取一个实数集合中所有元素的积
+ </summary>
+ <param name="Elements"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.ILLEGAL_PATH_CHARACTERS_ENUMERATION">
+ <summary>
+ 枚举所有非法的路径字符
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.NormalizePathString(System.String,System.Boolean)">
+ <summary>
+ 将目标字符串之中的非法的字符替换为"_"符号以成为正确的文件名字符串
+ </summary>
+ <param name="str"></param>
+ <param name="OnlyASCII">当本参数为真的时候，仅26个字母，0-9数字和下划线_以及小数点可以被保留下来</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.Removes``1(System.Collections.Generic.List{``0}@,System.Collections.Generic.IEnumerable{``0})">
+ <summary>
+ Remove all of the element in the <paramref name="collection"></paramref> from target <paramref name="List">list</paramref>
+ </summary> 
+ <typeparam name="T"></typeparam>
+ <param name="List"></param>
+ <param name="collection"></param>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.GetValue(System.String)">
+ <summary>
+ 获取两个尖括号之间的内容
+ </summary>
+ <param name="strData"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.Get_PageContent(System.String,System.UInt32,System.Boolean)">
+ <summary>
+ Get the html page content from a website request or a html file on the local filesystem.
+ </summary>
+ <param name="url">web http request url or a file path handle</param>
+ <param name="RequestTimeOut">发生错误的时候的重试的次数</param>
+ <returns></returns>
+ <remarks></remarks>
+ 
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.Extensions.DownloadFile(System.String,System.String)">
+ <summary>
+ download the file from <paramref name="strUrl"></paramref> to <paramref name="SavedPath">local file</paramref>.
+ </summary>
+ <param name="strUrl"></param>
+ <param name="SavedPath"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.DocumentFormat.Word.RichTextFormatDocument.Rtf">
+ <summary>
+ Rich text format document object model.(带有格式描述信息的文本文档的对象模型)
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.RichTextFormatDocument.Rtf.#ctor(System.String,System.Int32,System.Drawing.Color)">
+ <summary>
+ 
+ </summary>
+ <param name="FontName">Font family name.(字体名称)</param>
+ <param name="Size">Font size.(字体大小)</param>
+ <param name="Color">Font Color.(字体颜色)</param>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.RichTextFormatDocument.Rtf.SetFormat(System.Int32,System.Int32,Microsoft.VisualBasic.DocumentFormat.Word.RichTextFormatDocument.Font)">
+ <summary>
+ Set format value to a selected region in the text document. the previous format which was exists on the target 
+ document region will be covered by the newly format <paramref name="FontStyle"></paramref>.
+ (先前的格式会被后面设置的格式所覆盖)
+ </summary>
+ <param name="start">The region start location.</param>
+ <param name="selectLength">The formated region text length.</param>
+ <param name="FontStyle">The format will be applied on the target selected region.</param>
+ <returns></returns>
+ <remarks>
+ 目标区域<paramref name="start"></paramref> -&gt; <paramref name="selectLength"></paramref>可能与某一个设置了字体的区域重合一部分，也可能完全包含有其他的多个区域
+ </remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.RichTextFormatDocument.Rtf.AppendText(System.String,Microsoft.VisualBasic.DocumentFormat.Word.RichTextFormatDocument.Font)">
+ <summary>
+ Append the target text value on to the last region of the document with the specific text format.(向文档末尾追加一段带有格式标记的文本)
+ </summary>
+ <param name="text"></param>
+ <param name="Format"></param>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.RichTextFormatDocument.Rtf.AppendLine(System.String,Microsoft.VisualBasic.DocumentFormat.Word.RichTextFormatDocument.Font)">
+ <summary>
+ 向文档末尾追加一行带有格式标记的文本
+ </summary>
+ <param name="text"></param>
+ <param name="Format"></param>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.RichTextFormatDocument.Rtf.InternalGenerateDocument">
+ <summary>
+ 生成一个含有格式描述的文本文件，即将模型数据保存为rtf文档
+ </summary>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.RichTextFormatDocument.Rtf.InternalGenerateMetaData">
+ <summary>
+ 
+ </summary>
+ <returns></returns>
+ <remarks>
+ {
+   \rtf1\ansi\ansicpg936\deff0\deflang1033\deflangfe2052
+   {
+     \fonttbl
+     {
+        \f0\fnil\fcharset0 Cambria;
+     }
+   }
+   {
+     \colortbl ;%cl_meta%;
+   }
+   {
+     \*\generator Msftedit 5.41.21.2510;
+   }
+ </remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.DocumentFormat.Word.RichTextFormatDocument.FormatedRegion.HaveParFlag">
+ <summary>
+ 是否具有分段的标识符
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.DocumentFormat.Word.RichTextFormatDocument.Font">
+ <summary>
+ Font style of the selected text region.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.DocumentFormat.Word.RichTextFormatDocument.Font.#ctor(System.Int32,System.String)">
+ <summary>
+ Normal font style
+ </summary>
+ <param name="size"></param>
+ <param name="Name"></param>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.DocumentFormat.Word.Omml.DocHtml">
+ <summary>
+ Omml: office microsoft word xml
+ </summary>
+ <remarks></remarks>
+</member>
+</members>
+</doc>

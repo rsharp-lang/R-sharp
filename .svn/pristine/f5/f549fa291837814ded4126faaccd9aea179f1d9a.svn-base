@@ -1,0 +1,1620 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+LINQ_v1.0_22.0.122.6544__a540a5d6a87b0ca91c
+</name>
+</assembly>
+<members>
+<member name="F:LINQ.My.CommonExtensions._Assembly">
+ <summary>
+ 调用本模块的程序集的可执行文件的完整的文件路径
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:LINQ.My.CommonExtensions.ExePath">
+ <summary>
+ Get the exe file full path string.(调用本模块的程序集的可执行文件的完整的文件路径)
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:LINQ.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:LINQ.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:LINQ.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+<member name="P:LINQ.My.Resources.Resources.gpl">
+<summary>
+  Looks up a localized string similar to                     GNU GENERAL PUBLIC LICENSE
+                       Version 3, 29 June 2007
+
+ Copyright (C) 2007 Free Software Foundation, Inc. &lt;http://fsf.org/&gt;
+ Everyone is permitted to copy and distribute verbatim copies
+ of this license document, but changing it is not allowed.
+
+                            Preamble
+
+  The GNU General Public License is a free, copyleft license for
+software and other kinds of works.
+
+  The licenses for most software and other practical works are designed
+to take away yo [rest of string was truncated]&quot;;.
+</summary>
+</member>
+<member name="P:LINQ.My.Resources.Resources.license">
+<summary>
+  Looks up a localized string similar to This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU  [rest of string was truncated]&quot;;.
+</summary>
+</member>
+<member name="T:LINQ.Extensions">
+ <summary>
+ Common extension methods library for convenient the programming job.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.StringSplit(System.String,System.String,System.Boolean)">
+ <summary>
+ This method is used to replace most calls to the Java String.split method.
+ </summary>
+ <param name="source"></param>
+ <param name="regexDelimiter"></param>
+ <param name="trimTrailingEmptyStrings"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.GetDelegateInvokeEntryPoint(System.Object)">
+ <summary>
+ 当函数返回Nothing的时候说明目标对象不是一个函数指针
+ </summary>
+ <param name="obj"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.ToMatrix``1(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{``0}})">
+ <summary>
+ 
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="collection">要求集合之中的每一列之中的数据的元素数目都相等</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:LINQ.Extensions.SlideWindowHandle`1.p">
+ <summary>
+ 在创建的滑窗的队列之中当前的窗口对象的位置
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:LINQ.Extensions.SlideWindowHandle`1.Left">
+ <summary>
+ 当前窗口在原始的序列之中的左端起始位点
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:LINQ.Extensions.SlideWindowHandle`1.Length">
+ <summary>
+ 窗口长度
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.CreateSlideWindows``1(System.Collections.Generic.IEnumerable{``0},System.Int32,System.Int32)">
+ <summary>
+ Create a collection of slide Windows data for the target collection object.(创建一个滑窗集合)
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="data"></param>
+ <param name="slideWindowSize">窗口的大小</param>
+ <param name="offset">在序列之上移动的步长</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="F:LINQ.Extensions.NIL">
+ <summary>
+ Chr(0): NULL char
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.SplitCollection``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+ <summary>
+ 将目标集合之中的数据按照<paramref name="splitCount"></paramref>参数分配到子集合之中
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="collection"></param>
+ <param name="splitCount">每一个子集合之中的元素的数目</param>
+ <returns></returns>
+ <remarks></remarks>
+ 
+</member>
+<member name="M:LINQ.Extensions.Invoke(System.Diagnostics.Process)">
+ <summary>
+ 本方法会执行外部命令并等待其执行完毕，函数返回状态值
+ </summary>
+ <param name="Process"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.RandomDouble">
+ <summary>
+ Gets a random number in the region of [0,1]. (获取一个[0,1]区间之中的随机数)
+ </summary>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.BaseName(System.String)">
+ <summary>
+ 获取目标文件夹的名称
+ </summary>
+ <returns></returns>
+ <remarks></remarks>
+ 
+</member>
+<member name="P:LINQ.Extensions.GPL3">
+<summary>
+  Looks up a localized string similar to                     GNU GENERAL PUBLIC LICENSE
+                       Version 3, 29 June 2007
+
+ Copyright (C) 2007 Free Software Foundation, Inc. &lt;http://fsf.org/&gt;
+ Everyone is permitted to copy and distribute verbatim copies
+ of this license document, but changing it is not allowed.
+
+                            Preamble
+
+  The GNU General Public License is a free, copyleft license for
+software and other kinds of works.
+
+  The licenses for most software and other practical works are designed
+to take away yo [rest of string was truncated]&quot;;.
+</summary>
+</member>
+<member name="M:LINQ.Extensions.GetString(System.String,System.Char)">
+ <summary>
+ 获取""或者其他字符所包围的字符串的值
+ </summary>
+ <param name="s"></param>
+ <param name="wrapper"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.SetValueMethod``1(``0@,``0)">
+ <summary>
+ Value assignment to the target variable. 
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="var"></param>
+ <param name="value"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.Pause(System.String)">
+ <summary>
+ Pause the console program.
+ </summary>
+ <param name="Prompted"></param>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.ParseDouble(System.String)">
+ <summary>
+ 使用正则表达式解析目标字符串对象之中的一个实数
+ </summary>
+ <param name="s"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.ReadUltraLargeTextFile(System.String,System.Text.Encoding)">
+ <summary>
+ 当所被读取的文本文件的大小超过了<see cref="T:System.Text.StringBuilder"></see>的上限的时候，就需要使用本方法进行读取操作了。<paramref name="Path">目标文件</paramref>必须是已经存在的文件
+ </summary>
+ <param name="Path">目标文件必须是已经存在的文件</param>
+ <param name="Encoding"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.Collection2GenericIEnumerable(System.Type)">
+ <summary>
+ 尝试将目标集合类型转换为通用的枚举类型
+ </summary>
+ <param name="Type"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.SavePackage(System.Collections.Generic.IEnumerable{System.Byte},System.String)">
+ <summary>
+ Save the binary data into the filesystem.(保存二进制数据包值文件系统)
+ </summary>
+ <param name="data"></param>
+ <param name="saveto"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.ModifyValue``1(``0,System.Action)">
+ <summary>
+ Execute a property modify method and then return the target instance object.(修改目标对象的属性之后返回目标对象)
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="obj"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.ModifyValue``1(System.Reflection.PropertyInfo,``0,System.Func{System.Object,System.Object})">
+ <summary>
+ Modify target object property value using a <paramref name="valueModifier">specific value provider</paramref> and then return original instance object.
+ (修改目标对象的属性之后返回目标对象)
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="obj"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.FlushMemory">
+ <summary>
+ Rabbish collection to free the junk memory.(垃圾回收)
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.MatrixToVector``1(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{``0}})">
+ <summary>
+ Merge the target array collection into one collection.(将目标数组的集合合并为一个数组)
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Collection"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.MatrixToUltraLargeVector``1(System.Collections.Generic.IEnumerable{``0[]})">
+ <summary>
+ Merge the target array collection into one collection.(将目标数组的集合合并为一个数组，这个方法是提供给超大的集合的，即元素的数目非常的多的，即超过了<see cref="T:System.Int32"></see>的上限值)
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Collection"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.MatrixTranspose``1(System.Collections.Generic.IEnumerable{``0[]})">
+ <summary>
+ 将矩阵之中的元素进行行列位置的互换
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="MAT"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.MatrixTransposeIgnoredDimensionAgreement``1(System.Collections.Generic.IEnumerable{``0[]})">
+ <summary>
+ 将矩阵之中的元素进行行列位置的互换，请注意，假若长度不一致的话，会按照最短的元素来转置，故而使用本函数可能会造成一些信息的丢失
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="MAT"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.Intersection(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{System.String}})">
+ <summary>
+ 求交集
+ </summary>
+ <param name="Chunkbuffer"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.Is_NA_UHandle(System.Double)">
+ <summary>
+ 判断目标实数是否为一个无穷数或者非计算的数字，产生的原因主要来自于除0运算结果或者达到了<see cref="T:System.Double"></see>的上限或者下限
+ </summary>
+ <param name="n"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.get_BooleanValue(System.String)">
+ <summary>
+ Convert the string value into the boolean value, this is useful to the text format configuration file into data model.
+ </summary>
+ <param name="strValue"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.StdError(System.Collections.Generic.IEnumerable{System.Double})">
+ <summary>
+ 求取该数据集的标准差
+ </summary>
+ <param name="data"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.CountStringTokens(System.Collections.Generic.IEnumerable{System.String},System.Boolean)">
+ <summary>
+ Count the string value numbers.(请注意，这个函数是倒序排序的)
+ </summary>
+ <param name="Collection"></param>
+ <returns></returns>
+ <remarks></remarks>
+ 
+</member>
+<member name="M:LINQ.Extensions.Description(System.Enum)">
+ <summary>
+ Get the description data from a enum type value, if the target have no <see cref="T:System.ComponentModel.DescriptionAttribute"></see> attribute data 
+ then function will return the string value from the ToString() function.
+ </summary>
+ <param name="e"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.TrimNull``1(System.Collections.Generic.IEnumerable{``0})">
+ <summary>
+ Remove all of the null object in the target object collection
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Collection"></param>
+ <returns></returns>
+ <remarks></remarks>
+ 
+</member>
+<member name="M:LINQ.Extensions.RandomizeElements``1(System.Collections.Generic.IEnumerable{``0})">
+ <summary>
+ Return a collection with randomize element position in <paramref name="Collection">the original collection</paramref>.(从原有序序列中获取一个随机元素的序列)
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Collection"></param>
+ <returns></returns>
+ <remarks></remarks>
+ 
+</member>
+<member name="M:LINQ.Extensions.CopyTo``1(``0,``0@)">
+ <summary>
+ Copy the value in <paramref name="value"></paramref> into target variable <paramref name="target"></paramref> and then return the target variable.
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="value"></param>
+ <param name="target"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.TakeRandomly``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+ <summary>
+ 随机的在目标集合中选取指定数目的子集合
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Collection"></param>
+ <param name="Counts">当目标数目大于或者等于目标集合的数目的时候，则返回目标集合</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.ToStringArray``1(System.Collections.Generic.IEnumerable{``0})">
+ <summary>
+ Convert target object type collection into a string array using the Object.ToString() interface function.
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Collection"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.Union(System.String[],System.String[])">
+ <summary>
+ Get a sub set of the string data which is contains in both collection <paramref name="strArray1"></paramref> and <paramref name="strArray2"></paramref>
+ </summary>
+ <param name="strArray1"></param>
+ <param name="strArray2"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.SwapWith``1(``0@,``0@)">
+ <summary>
+ Swap the value in the two variables.
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="obj1"></param>
+ <param name="obj2"></param>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.SwapItem``1(System.Collections.Generic.List{``0}@,``0,``0)">
+ <summary>
+ Swap the two item position in the target <paramref name="List">list</paramref>.
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="List"></param>
+ <param name="obj_1"></param>
+ <param name="obj_2"></param>
+</member>
+<member name="M:LINQ.Extensions.MoveNext(System.Int32@)">
+ <summary>
+ <paramref name="p"></paramref> plus one and then return its previous value.
+ </summary>
+ <param name="p"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.Sequence``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+ <summary>
+ 获取某一个集合的下标的集合
+ </summary>
+ <typeparam name="T">集合中的元素为任意类型的</typeparam>
+ <param name="Collection">目标集合对象</param>
+ <returns></returns>
+ <remarks></remarks>
+ 
+</member>
+<member name="M:LINQ.Extensions.Takes``1(System.Collections.Generic.IEnumerable{``0},System.Int32[],System.Int32,System.Boolean)">
+ <summary>
+ 
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Collection"></param>
+ <param name="IndexCollection">所要获取的目标对象的下表的集合</param>
+ <param name="reversedSelect">是否为反向选择</param>
+ <param name="OffSet">当进行反选的时候，本参数将不会起作用</param>
+ <returns></returns>
+ <remarks></remarks>
+ 
+</member>
+<member name="M:LINQ.Extensions.InternalReversedTakeSelected``1(System.Collections.Generic.IEnumerable{``0},System.Int32[])">
+ <summary>
+ 反选，即将所有不出现在<paramref name="indexs"></paramref>之中的元素都选取出来
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="coll"></param>
+ <param name="indexs"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.Sequence(System.Int32)">
+ <summary>
+ 产生指定数目的一个递增序列
+ </summary>
+ <param name="n"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.Sequence(System.Int64)">
+ <summary>
+ 产生指定数目的一个递增序列
+ </summary>
+ <param name="n"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.Sequence(System.UInt32)">
+ <summary>
+ 产生指定数目的一个递增序列
+ </summary>
+ <param name="n"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.Append``1(System.Collections.Generic.List{``0},System.Collections.Generic.IEnumerable{``0})">
+ <summary>
+ 向一个列表对象之中批量添加一个对象的集合
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="List"></param>
+ <param name="Collection"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.ToDictionary``2(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{``0,``1}})">
+ <summary>
+ 将目标键值对对象的集合转换为一个字典对象
+ </summary>
+ <typeparam name="TKey"></typeparam>
+ <typeparam name="TValue"></typeparam>
+ <param name="Collection"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.IsNullOrEmpty``1(System.Collections.Generic.IEnumerable{``0})">
+ <summary>
+ This object collection is a null object or contains zero count items.(判断某一个对象集合是否为空)
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Collection"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.SaveTo(System.String,System.String,System.Text.Encoding)">
+ <summary>
+ Write the text file data into a file which was specific by the <paramref name="Path"></paramref> value, this function not append the new data onto the target file.
+ (将目标文本字符串写入到一个指定路径的文件之中，但是不会在文件末尾追加新的数据)
+ </summary>
+ <param name="Path"></param>
+ <param name="Text"></param>
+ <param name="Encoding"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.SaveTo(System.Collections.Generic.IEnumerable{System.String},System.String,System.Text.Encoding)">
+ <summary>
+ 将目标字符串数据全部写入到文件之中，当所写入的文件位置之上没有父文件夹存在的时候，会自动创建文件夹
+ </summary>
+ <param name="array"></param>
+ <param name="path"></param>
+ <param name="encoding"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.GetXml``1(``0)">
+ <summary>
+ 将一个类对象序列化为XML文档
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="e"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.LoadXml``1(System.String,System.Text.Encoding)">
+ <summary>
+ 
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="XmlFile">XML文件的文件路径</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.Serialize``1(``0,System.String)">
+ <summary>
+ 使用二进制序列化保存一个对象
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Obj"></param>
+ <param name="path"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.Load``1(System.String)">
+ <summary>
+ 使用反二进制序列化从指定的文件之中加载一个对象
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="path"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.CreateObjectFromXml``1(System.String)">
+ <summary>
+ 使用一个XML文本内容创建一个XML映射对象
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Xml">是Xml文件的文件内容而非文件路径</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.CreateObjectFromXmlSegment``1(System.String)">
+ <summary>
+ 使用一个XML文本内容的一个片段创建一个XML映射对象
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="Xml">是Xml文件的文件内容而非文件路径</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.π(System.Collections.Generic.IEnumerable{System.Double})">
+ <summary>
+ 获取一个实数集合中所有元素的积
+ </summary>
+ <param name="Elements"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="F:LINQ.Extensions.ILLEGAL_PATH_CHARACTERS_ENUMERATION">
+ <summary>
+ 枚举所有非法的路径字符
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.NormalizePathString(System.String,System.Boolean)">
+ <summary>
+ 将目标字符串之中的非法的字符替换为"_"符号以成为正确的文件名字符串
+ </summary>
+ <param name="str"></param>
+ <param name="OnlyASCII">当本参数为真的时候，仅26个字母，0-9数字和下划线_以及小数点可以被保留下来</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.Removes``1(System.Collections.Generic.List{``0}@,System.Collections.Generic.IEnumerable{``0})">
+ <summary>
+ Remove all of the element in the <paramref name="collection"></paramref> from target <paramref name="List">list</paramref>
+ </summary> 
+ <typeparam name="T"></typeparam>
+ <param name="List"></param>
+ <param name="collection"></param>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.GetValue(System.String)">
+ <summary>
+ 获取两个尖括号之间的内容
+ </summary>
+ <param name="strData"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.DownloadFile(System.String,System.String)">
+ <summary>
+ download the file from <paramref name="strUrl"></paramref> to <paramref name="SavedPath">local file</paramref>.
+ </summary>
+ <param name="strUrl"></param>
+ <param name="SavedPath"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Extensions.__DEBUG_ECHO(System.String,System.Int32)">
+ <summary>
+ 向标准终端输出一些带有时间戳的调试信息
+ </summary>
+ <param name="MSG"></param>
+ <param name="Indent"></param>
+</member>
+<member name="T:LINQ.SDK_PATH">
+ <summary>
+ .NET Framework的Reference Assembly文件夹的位置
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:LINQ.SDK_PATH.PathList">
+ <summary>
+ 从高版本到低版本排列，从x64到x86排列
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:LINQ.SDK_PATH.AvaliableSDK">
+ <summary>
+ .NET Framework的Reference Assembly文件夹的位置
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:LINQ.Framework.ObjectModel.ParallelLINQ">
+ <summary>
+ 并行LINQ查询表达式的对象模型
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="T:LINQ.Framework.ObjectModel.LINQ">
+ <summary>
+ LINQ查询表达式的对象模型
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="T:LINQ.Framework.DynamicCode.VBC.DynamicCompiler">
+ <summary>
+ 编译整个LINQ语句的动态代码编译器
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:LINQ.Framework.DynamicCode.VBC.DynamicCompiler.DotNETReferenceAssembliesDir">
+ <summary>
+ 
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Framework.DynamicCode.VBC.DynamicCompiler.#ctor(LINQ.Statements.LINQStatement,System.String)">
+ <summary>
+ 
+ </summary>
+ <param name="LINQStatement"></param>
+ <param name="SDK">.NET Framework Reference Assembly文件夹的位置</param>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Framework.DynamicCode.VBC.DynamicCompiler.DeclareFunction(System.String,System.String,System.CodeDom.CodeStatementCollection)">
+ <summary>
+ Declare a function with a specific function name and return type. please notice that in this newly 
+ declare function there is always a local variable name rval using for return the value.
+ (申明一个方法，返回指定类型的数据并且具有一个特定的函数名，请注意，在这个新申明的函数之中，
+ 固定含有一个rval的局部变量用于返回数据)
+ </summary>
+ <param name="Name">Function name.(函数名)</param>
+ <param name="Type">Function return value type.(该函数的返回值类型)</param>
+ <returns>A codeDOM object model of the target function.(一个函数的CodeDom对象模型)</returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Framework.DynamicCode.DynamicInvoke.GetType(System.Reflection.Assembly,System.String)">
+ <summary>
+ 
+ </summary>
+ <param name="Assembly"></param>
+ <param name="TypeId">将要查找的目标对象</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:LINQ.Framework.TypeRegistry">
+ <summary>
+ Type registry table for loading the external LINQ entity assembly module. 
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="T:LINQ.Framework.TypeRegistry.RegistryItem">
+ <summary>
+ item in the type registry table
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:LINQ.Framework.TypeRegistry.RegistryItem.Name">
+ <summary>
+ 类型的简称或者别称，即本属性为LINQEntity自定义属性中的构造函数的参数
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:LINQ.Framework.TypeRegistry.RegistryItem.AssemblyPath">
+ <summary>
+ 建议使用相对路径，以防止移动程序的时候任然需要重新注册方可以使用
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:LINQ.Framework.TypeRegistry.RegistryItem.TypeId">
+ <summary>
+ Full type name for the target LINQ entity type.(目标LINQEntity集合中的类型全称)
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Framework.TypeRegistry.RegistryItem.op_Implicit(System.Object[])~LINQ.Framework.TypeRegistry.RegistryItem">
+ <summary>
+ 
+ </summary>
+ <param name="Obj">Name, TypeId, AssemblyPath, IsInnerType</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Framework.TypeRegistry.FindAssemblyPath(System.String)">
+ <summary>
+ 返回包含有该类型的目标模块的文件路径
+ </summary>
+ <param name="Name">LINQ Entity集合中的元素的简称或者别称，即Item中的Name属性</param>
+ <returns>If the key is not exists in this object, than the function will return a empty string.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Framework.TypeRegistry.Find(System.String)">
+ <summary>
+ Return a registry item in the table using its specific name property.
+ (返回注册表中的一个指定名称的项目)
+ </summary>
+ <param name="Name"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Framework.TypeRegistry.Register(System.String)">
+ <summary>
+ Registry the external LINQ entity assembly module in the LINQFramework
+ </summary>
+ <param name="AssemblyPath">DLL file path</param>
+ <returns></returns>
+ <remarks>查询出目标元素的类型定义并获取信息</remarks>
+</member>
+<member name="T:LINQ.Framework.ILINQCollection">
+ <summary>
+ LINQ Entity
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Framework.ILINQCollection.GetCollection(System.String)">
+ <summary>
+ Get a Collection of the target LINQ entity from file object.(从文件对象获取目标LINQ实体对象的集合)
+ </summary>
+ <param name="FilePath"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Framework.ILINQCollection.GetEntityType">
+ <summary>
+ Get the type information of the element object in the linq entity collection.
+ (获取LINQ实体集合中的元素对象的类型信息)
+ </summary>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:LINQ.Framework.Reflection.LINQEntity">
+ <summary>
+ LINQ entity type
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Framework.Reflection.LINQEntity.GetEntityType(System.Type)">
+ <summary>
+ 获取目标类型上的自定义属性中的LINQEntity类型对象中的EntityType属性值
+ </summary>
+ <param name="Type"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="F:LINQ.Framework.LQueryFramework.DefaultFile">
+ <summary>
+ LINQ查询框架的默认注册表文件的文件名
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:LINQ.Framework.LQueryFramework.ReferenceAssembly">
+ <summary>
+ 本模块的完整的文件路径
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Framework.LQueryFramework.LoadExternalModule(System.String)">
+ <summary>
+ 加载外部模块，并查询出目标类型的ILINQCollection接口类型信息
+ </summary>
+ <param name="TypeId">目标对象的类型标识符，即RegistryItem对象中的Name属性</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Framework.LQueryFramework.LoadAssembly(System.Reflection.Assembly,System.Type)">
+ <summary>
+ 查找出目标模块之中的含有指定的自定义属性的所有类型
+ </summary>
+ <param name="Assembly"></param>
+ <param name="FindEntry">目标自定义属性的类型</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Framework.LQueryFramework.GetValue(System.String,System.Object)">
+ <summary>
+ 
+ </summary>
+ <param name="PropertyName"></param>
+ <param name="Target"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:LINQ.Framework.LQueryFramework.TypeMissingExzception">
+ <summary>
+ Exception for [We could not found any registered type information from the type registry.]
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Framework.LQueryFramework.EXEC(LINQ.Statements.LINQStatement)">
+ <summary>
+ Execute a compiled LINQ statement object model to query a object-orientale database.
+ </summary>
+ <param name="Statement"></param>
+ <returns></returns>
+ <remarks>
+ Dim List As List(Of Object) = New List(Of Object)
+ 
+ For Each [Object] In LINQ.GetCollection(Statement)
+    Call SetObject([Object])
+    If True = Test() Then
+        List.Add(SelectConstruct())
+    End If
+ Next
+ Return List.ToArray
+ </remarks>
+</member>
+<member name="M:LINQ.Framework.LQueryFramework.CreateObjectModel(LINQ.Statements.LINQStatement)">
+ <summary>
+ 创建一个LINQ查询表达式的对象句柄
+ </summary>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:LINQ.Script.I_DynamicsRuntime">
+ <summary>
+ LINQ脚本查询环境
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Script.I_DynamicsRuntime.SetObject(System.String,System.Object[])">
+ <summary>
+ 
+ </summary>
+ <param name="Name"></param>
+ <param name="Collection"></param>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Script.I_DynamicsRuntime.Source(System.String)">
+ <summary>
+ 执行一个LINQ查询脚本文件
+ </summary>
+ <param name="FilePath">LINQ脚本文件的文件路径</param>
+ <returns></returns>
+ <remarks>
+ 脚本要求：
+ 
+ </remarks>
+</member>
+<member name="T:LINQ.Script.Tokens.Method">
+ <summary>
+ This statement call a known method in the LINQ Frameowrk.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="T:LINQ.Script.Tokens.ValueAssignment">
+ <summary>
+ Value assignment statement for assign the value the a variable in the LINQ script runtime.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="T:LINQ.Script.Tokens.FileIO">
+ <summary>
+ A FileIO object using for load object collection data from a specific file with a load method provide by the LINQ entity object.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="T:LINQ.Script.ScriptParser">
+ <summary>
+ A LINQ query script parser.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Program.Main">
+ <summary>
+ DO_NOTHING
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="T:LINQ.Parser.TokenType">
+ <summary>
+ Enumerates the types of tokens that can be classified by the tokenizer.
+ </summary>
+</member>
+<member name="F:LINQ.Parser.TokenType.NotAToken">
+ <summary>
+ This is reserved for the NullToken.
+ </summary>
+</member>
+<member name="F:LINQ.Parser.TokenType.Identifier">
+ <summary>
+ An identifier can be either a class or property name.  The tokenizer does 
+ not have enough information to make that distinction.
+ </summary>
+</member>
+<member name="F:LINQ.Parser.TokenType.Operator">
+ <summary>
+ An operator like + or *.
+ </summary>
+</member>
+<member name="F:LINQ.Parser.TokenType.Comma">
+ <summary>
+ A comma
+ </summary>
+</member>
+<member name="F:LINQ.Parser.TokenType.Dot">
+ <summary>
+ A dot (".").
+ </summary>
+</member>
+<member name="F:LINQ.Parser.TokenType.Primitive">
+ <summary>
+ A primitive like a quoted string, boolean value, or number.
+ </summary>
+</member>
+<member name="F:LINQ.Parser.TokenType.OpenParens">
+ <summary>
+ Open parenthesis
+ </summary>
+</member>
+<member name="F:LINQ.Parser.TokenType.CloseParens">
+ <summary>
+ Close parenthesis
+ </summary>
+</member>
+<member name="F:LINQ.Parser.TokenType.OpenBracket">
+ <summary>
+ Open bracket
+ </summary>
+</member>
+<member name="F:LINQ.Parser.TokenType.CloseBracket">
+ <summary>
+ Close bracket
+ </summary>
+</member>
+<member name="F:LINQ.Parser.TokenType.Quote">
+ <summary>
+ Double quote token, only used internally by tokenizer.
+ </summary>
+</member>
+<member name="T:LINQ.Parser.TokenPriority">
+ <summary>
+ Indicates priority in order of operations.
+ </summary>
+</member>
+<member name="F:LINQ.Parser.TokenPriority.None">
+ <summary>
+ Default
+ </summary>
+</member>
+<member name="F:LINQ.Parser.TokenPriority.Or">
+ <summary>
+ Bitwise or
+ </summary>
+</member>
+<member name="F:LINQ.Parser.TokenPriority.And">
+ <summary>
+ Bitwise and
+ </summary>
+</member>
+<member name="F:LINQ.Parser.TokenPriority.Not">
+ <summary>
+ Bitwise not
+ </summary>
+</member>
+<member name="F:LINQ.Parser.TokenPriority.Equality">
+ <summary>
+ Equality comparisons like &gt;, &lt;=, ==, etc.
+ </summary>
+</member>
+<member name="F:LINQ.Parser.TokenPriority.PlusMinus">
+ <summary>
+ Plus or minus
+ </summary>
+</member>
+<member name="F:LINQ.Parser.TokenPriority.Mod">
+ <summary>
+ Modulus
+ </summary>
+</member>
+<member name="F:LINQ.Parser.TokenPriority.MulDiv">
+ <summary>
+ Multiply or divide
+ </summary>
+</member>
+<member name="F:LINQ.Parser.TokenPriority.UnaryMinus">
+ <summary>
+ Unary minus
+ </summary>
+</member>
+<member name="T:LINQ.Parser.Parser">
+ <summary>
+ Parses expressions written in strings into CodeDom expressions.  There is a certain 
+ amount of context that the parser may need to be familiar with.  This is why the 
+ parsing methods are not exposed as static.
+ </summary>
+</member>
+<member name="P:LINQ.Parser.Parser.RecognizedTypes">
+ <summary>
+ A collection of identifiers that should be recognized as types.
+ </summary>
+</member>
+<member name="P:LINQ.Parser.Parser.Enums">
+ <summary>
+ A collection of identifiers that should be recognized as enums.
+ </summary>
+</member>
+<member name="P:LINQ.Parser.Parser.Fields">
+ <summary>
+ A collection of names of fields.
+ </summary>
+</member>
+<member name="M:LINQ.Parser.Parser.ParseExpression(System.String)">
+ <summary>
+ Parses an expression into a <see cref="T:System.CodeDom.CodeExpression"/>.
+ </summary>
+ <param name="exp">expression to parse</param>
+ <returns>CodeDom representing the expression</returns>
+</member>
+<member name="M:LINQ.Parser.Parser.ReadExpression(LINQ.Parser.Tokenizer,LINQ.Parser.TokenPriority)">
+ <summary>
+ Recursive method that reads an expression.
+ </summary>
+ <param name="t"></param>
+ <param name="priority"></param>
+ <returns></returns>
+</member>
+<member name="M:LINQ.Parser.Parser.ReadIdentifier(LINQ.Parser.Tokenizer)">
+ <summary>
+ When an identifier is encountered, it could be a number of things.  A single identifer by itself
+ is considered a variable.  The pattern identifier[.identifier]+ will consider the 
+ first identifier as a variable and the others as properties.  Any identifier that is followed
+ by an open parenthesis is considered to be a function call.  Indexes are not handled yet, but
+ should be handled in the future.  If the identifier is "this" then a this reference is used.
+ </summary>
+ <param name="t"></param>
+ <returns></returns>
+</member>
+<member name="T:LINQ.Parser.Token">
+ <summary>
+ Represents a token that is parsed out by the <see cref="T:LINQ.Parser.Tokenizer"/>.
+ </summary>
+</member>
+<member name="P:LINQ.Parser.Token.Text">
+ <summary>
+ The text that makes up the token.
+ </summary>
+</member>
+<member name="P:LINQ.Parser.Token.ParsedObject">
+ <summary>
+ If the token can be parsed into a type like an integer, this property holds that value.
+ </summary>
+</member>
+<member name="P:LINQ.Parser.Token.Type">
+ <summary>
+ Token type
+ </summary>
+</member>
+<member name="P:LINQ.Parser.Token.Priority">
+ <summary>
+ Token priority
+ </summary>
+</member>
+<member name="M:LINQ.Parser.Token.#ctor(System.String,LINQ.Parser.TokenType,LINQ.Parser.TokenPriority)">
+ <summary>
+ Constructor for tokens that are not parsed.
+ </summary>
+ <param name="text"></param>
+ <param name="type"></param>
+ <param name="priority"></param>
+</member>
+<member name="M:LINQ.Parser.Token.#ctor(System.Object,LINQ.Parser.TokenType,LINQ.Parser.TokenPriority)">
+ <summary>
+ Constructor for tokens that are parsed.
+ </summary>
+ <param name="parsedObj"></param>
+ <param name="type"></param>
+ <param name="priority"></param>
+</member>
+<member name="F:LINQ.Parser.Token.NullToken">
+ <summary>
+ The null token represents a state where the <see cref="T:LINQ.Parser.Tokenizer"/> encountered an error
+ or has not begun parsing yet.
+ </summary>
+</member>
+<member name="T:LINQ.Parser.Tokenizer">
+ <summary>
+ Divides the string into tokens.
+ </summary>
+</member>
+<member name="M:LINQ.Parser.Tokenizer.#ctor(System.String)">
+ <summary>
+ A tokenizer is always constructed on a single string.  Create one tokenizer per string.
+ </summary>
+ <param name="s">string to tokenize</param>
+</member>
+<member name="M:LINQ.Parser.Tokenizer.MoveNext">
+ <summary>
+ Moves to the next character.  If there are no more characters, then the tokenizer is
+ invalid.
+ </summary>
+</member>
+<member name="P:LINQ.Parser.Tokenizer.Current">
+ <summary>
+ Allows access to the token most recently parsed.
+ </summary>
+</member>
+<member name="P:LINQ.Parser.Tokenizer.IsInvalid">
+ <summary>
+ Indicates that there are no more characters in the string and tokenizer is finished.
+ </summary>
+</member>
+<member name="P:LINQ.Parser.Tokenizer.IsChar">
+ <summary>
+ Is the current character a letter or underscore?
+ </summary>
+</member>
+<member name="P:LINQ.Parser.Tokenizer.IsDot">
+ <summary>
+ Is the current character a dot (".")?
+ </summary>
+</member>
+<member name="P:LINQ.Parser.Tokenizer.IsComma">
+ <summary>
+ Is the current character a comma?
+ </summary>
+</member>
+<member name="P:LINQ.Parser.Tokenizer.IsNumber">
+ <summary>
+ Is the current character a number?
+ </summary>
+</member>
+<member name="P:LINQ.Parser.Tokenizer.IsSpace">
+ <summary>
+ Is the current character a whitespace character?
+ </summary>
+</member>
+<member name="P:LINQ.Parser.Tokenizer.IsOperator">
+ <summary>
+ Is the current character an operator?
+ </summary>
+</member>
+<member name="M:LINQ.Parser.Tokenizer.GetNextToken">
+ <summary>
+ Gets the next token in the string.  Reads as many characters as necessary to retrieve
+ that token.
+ </summary>
+ <returns>next token</returns>
+</member>
+<member name="M:LINQ.Parser.Tokenizer.GetString">
+ <summary>
+ Anything that starts with a character is considered a string.  This could be a 
+ primitive quoted string, a primitive expression, or an identifier
+ </summary>
+ <returns></returns>
+</member>
+<member name="M:LINQ.Parser.Tokenizer.GetNumber">
+ <summary>
+ A token that starts with a number can be an integer, a long, or a double.
+ </summary>
+ <returns></returns>
+ <remarks>
+ An integer is the default for numbers.  Numbers can also be followed by a
+ l, L, d, or D character to indicate a long or a double value respectively.
+ Any numbers containing a dot (".") are considered doubles.
+ </remarks>
+</member>
+<member name="M:LINQ.Parser.Tokenizer.GetOperator">
+ <summary>
+ Some operators take more than one character.  Also, the tokenizer is able to 
+ categorize the token's priority based on what kind of operator it is.
+ </summary>
+ <returns></returns>
+</member>
+<member name="T:LINQ.Statements.LINQStatement">
+ <summary>
+ A linq statement object model.
+ </summary>
+ <remarks>
+ From [Object [As TypeId]] 
+ In [Collection] 
+ Let [Declaration1, Declaration2, ...]
+ Where [Condition Test] 
+ Select [Object/Object Constrctor] 
+ [Distinct] 
+ [Order Statement]</remarks>
+</member>
+<member name="P:LINQ.Statements.LINQStatement.Object">
+ <summary>
+ An object element in the target query collection.(目标待查询集合之中的一个元素)
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:LINQ.Statements.LINQStatement.ConditionTest">
+ <summary>
+ Where test condition for the query.(查询所使用的Where条件测试语句)
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:LINQ.Statements.LINQStatement.Collection">
+ <summary>
+ Target query collection expression, this can be a file path or a database connection string.
+ (目标待查询集合，值可以为一个文件路径或者数据库连接字符串)
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:LINQ.Statements.LINQStatement.ReadOnlyObjects">
+ <summary>
+ A read only object collection which were construct by the LET statement token in the LINQ statement.
+ (使用Let语句所构造出来的只读对象类型的对象申明集合)
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:LINQ.Statements.LINQStatement.SelectConstruct">
+ <summary>
+ A expression for return the query result.(用于生成查询数据返回的语句)
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="F:LINQ.Statements.LINQStatement.ILINQProgram">
+ <summary>
+ 本LINQ脚本对象所编译出来的临时模块
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:LINQ.Statements.LINQStatement.TypeId">
+ <summary>
+ 获取目标LINQCollection待查询集合中的元素对象的类型标识符，以进行外部模块的动态加载
+ 与RegistryItem中的Name属性值相对应
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Statements.LINQStatement.CreateInstance">
+ <summary>
+ Create a instance for the compiled LINQ statement object model.
+ </summary>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Statements.LINQStatement.TryParse(System.String,LINQ.Framework.TypeRegistry)">
+ <summary>
+ Try to parsing a linq query script into a statement object model and compile the model into a assembly dynamic.
+ (尝试着从所输入的命令语句中解析出一个LINQ查询命令对象，并完成动态编译过程)
+ </summary>
+ <param name="StatementText"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:LINQ.Statements.Tokens.ReadOnlyObject">
+ <summary>
+ Object declared using a LET expression.(使用Let语句所声明的只读对象)
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Statements.Tokens.ReadOnlyObject.#ctor(LINQ.Statements.LINQStatement,LINQ.Parser.Parser,System.String)">
+ <summary>
+ 
+ </summary>
+ <param name="Statement">LINQ表达式</param>
+ <param name="Parser">Parser实例</param>
+ <param name="Declare">所解析出来的申明语句</param>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Statements.Tokens.ReadOnlyObject.Parser.GetLetStatements(LINQ.Statements.LINQStatement)">
+ <summary>
+ 获取Let只读对象的申明语句
+ </summary>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:LINQ.Statements.Tokens.ObjectCollection">
+ <summary>
+ 表示目标对象的数据集合的文件路径或者内存对象的引用
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:LINQ.Statements.Tokens.ObjectCollection.CollectionTypes.File">
+ <summary>
+ 目标集合类型为一个数据文件
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:LINQ.Statements.Tokens.ObjectCollection.CollectionTypes.Reference">
+ <summary>
+ 目标集合类型为一个内存对象的引用
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:LINQ.Statements.Tokens.ObjectCollection.ILINQCollection">
+ <summary>
+ ILINQCollection对象的实例
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:LINQ.Statements.Tokens.ObjectCollection.Value">
+ <summary>
+ The file io object url or a object collection reference in the LINQ Frameowrk runtime. 
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.Statements.Tokens.ObjectCollection.LoadExternalModule(LINQ.Framework.TypeRegistry.RegistryItem)">
+ <summary>
+ 加载外部模块之中的ILINQCollection类型信息
+ </summary>
+ <param name="RegistryItem"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:LINQ.Statements.Tokens.ObjectDeclaration.Name">
+ <summary>
+ 变量的名称
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:LINQ.Statements.Tokens.ObjectDeclaration.TypeId">
+ <summary>
+ 变量的类型标识符
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.CodeDOMExtension.Icon(System.String)">
+ <summary>
+ 设置所编译的应用程序的图标
+ </summary>
+ <param name="iconPath"></param>
+ <returns></returns>
+</member>
+<member name="M:LINQ.CodeDOMExtension.GenerateCode(System.CodeDom.CodeNamespace,System.String)">
+ <summary>
+ Generate the source code from the CodeDOM object model.(根据对象模型生成源代码以方便调试程序)
+ </summary>
+ <param name="NameSpace"></param>
+ <param name="CodeStyle">VisualBasic, C#</param>
+ <returns></returns>
+ <remarks>
+ You can easily convert the source code between VisualBasic and C# using this function just by makes change in statement: 
+ CodeDomProvider.GetCompilerInfo("VisualBasic").CreateProvider().GenerateCodeFromNamespace([NameSpace], sWriter, Options)
+ Modify the VisualBasic in to C#
+ </remarks>
+</member>
+<member name="M:LINQ.CodeDOMExtension.Compile(System.CodeDom.CodeNamespace,System.String[],System.String,System.String)">
+ <summary>
+ Compile the codedom object model into a binary assembly module file.(将CodeDOM对象模型编译为二进制应用程序文件)
+ </summary>
+ <param name="ObjectModel">CodeDom dynamic code object model.(目标动态代码的对象模型)</param>
+ <param name="Reference">Reference assemby file path collection.(用户代码的引用DLL文件列表)</param>
+ <param name="DotNETReferenceAssembliesDir">.NET Framework SDK</param>
+ <param name="CodeStyle">VisualBasic, C#</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.CodeDOMExtension.Compile(System.CodeDom.CodeNamespace,System.String[],System.String,System.CodeDom.Compiler.CompilerParameters,System.String)">
+ <summary>
+ Compile the codedom object model into a binary assembly module file.(将CodeDOM对象模型编译为二进制应用程序文件)
+ </summary>
+ <param name="ObjectModel">CodeDom dynamic code object model.(目标动态代码的对象模型)</param>
+ <param name="Reference">Reference assemby file path collection.(用户代码的引用DLL文件列表)</param>
+ <param name="DotNETReferenceAssembliesDir">.NET Framework SDK</param>
+ <param name="CodeStyle">VisualBasic, C#</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:LINQ.CodeDOMExtension.Compile(System.CodeDom.CodeCompileUnit,System.String[],System.String,System.String)">
+ <summary>
+ Compile the codedom object model into a binary assembly module file.(将CodeDOM对象模型编译为二进制应用程序文件)
+ </summary>
+ <param name="ObjectModel">CodeDom dynamic code object model.(目标动态代码的对象模型)</param>
+ <param name="Reference">Reference assemby file path collection.(用户代码的引用DLL文件列表)</param>
+ <param name="DotNETReferenceAssembliesDir">.NET Framework SDK</param>
+ <param name="CodeStyle">VisualBasic, C#</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:LINQ.CodeDOMExtension.ExecutableProfile">
+ <summary>
+ .exe的编译配置文件
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:LINQ.CodeDOMExtension.DllProfile">
+ <summary>
+ .Dll的编译配置文件
+ </summary>
+ <returns></returns>
+</member>
+<member name="M:LINQ.CodeDOMExtension.Compile(System.CodeDom.CodeCompileUnit,System.String[],System.String,System.CodeDom.Compiler.CompilerParameters,System.String)">
+ <summary>
+ Compile the codedom object model into a binary assembly module file.(将CodeDOM对象模型编译为二进制应用程序文件)
+ </summary>
+ <param name="ObjectModel">CodeDom dynamic code object model.(目标动态代码的对象模型)</param>
+ <param name="Reference">Reference assemby file path collection.(用户代码的引用DLL文件列表)</param>
+ <param name="DotNETReferenceAssembliesDir">.NET Framework SDK</param>
+ <param name="CodeStyle">VisualBasic, C#</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:LINQ.CodeDOMExtension.DotNETFramework">
+ <summary>
+ 基本的引用集合
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:LINQ.CodeDOMExpressions.EntryPoint">
+ <summary>
+ Public Shared Function Main(Argvs As String()) As Integer
+ </summary>
+ <returns></returns>
+</member>
+<member name="M:LINQ.CodeDOMExpressions.New(System.Type,System.CodeDom.CodeExpression[])">
+ <summary>
+ Class object instance constructor
+ </summary>
+ <param name="Type"></param>
+ <param name="parameters"></param>
+ <returns></returns>
+</member>
+<member name="M:LINQ.CodeDOMExpressions.New``1(System.Object[])">
+ <summary>
+ Class object instance constructor.
+ </summary>
+ <typeparam name="T"></typeparam>
+ <param name="parameters"></param>
+ <returns></returns>
+</member>
+<member name="M:LINQ.CodeDOMExpressions.LocalsInit(System.String,System.Type,System.Object)">
+ <summary>
+ Declare a local variable.
+ </summary>
+ <param name="Name"></param>
+ <param name="Type"></param>
+ <param name="init"></param>
+ <returns></returns>
+</member>
+<member name="M:LINQ.CodeDOMExpressions.Call(System.Type,System.String,System.Object[])">
+ <summary>
+ Call a statics function from a specific type with a known function name
+ </summary>
+ <param name="type"></param>
+ <param name="Name"></param>
+ <param name="parametersValue"></param>
+ <returns></returns>
+</member>
+<member name="M:LINQ.CodeDOMExpressions.Return(System.CodeDom.CodeExpression)">
+ <summary>
+ Returns value in a function body
+ </summary>
+ <param name="expression"></param>
+ <returns></returns>
+</member>
+<member name="M:LINQ.CodeDOMExpressions.Reference(System.Type,System.String)">
+ <summary>
+ Reference to a statics field in the specific target type
+ </summary>
+ <param name="obj"></param>
+ <param name="Name"></param>
+ <returns></returns>
+</member>
+<member name="M:LINQ.CodeDOMExpressions.Reference(System.CodeDom.CodeExpression,System.String)">
+ <summary>
+ Reference to a instance field in the specific object instance. 
+ </summary>
+ <param name="obj"></param>
+ <param name="Name"></param>
+ <returns></returns>
+</member>
+<member name="M:LINQ.CodeDOMExpressions.Value(System.Object)">
+ <summary>
+ Variable value initializer
+ </summary>
+ <param name="obj"></param>
+ <returns></returns>
+</member>
+<member name="M:LINQ.CodeDOMExpressions.LocalVariable(System.String)">
+ <summary>
+ Reference to a local variable in a function body.
+ </summary>
+ <param name="Name"></param>
+ <returns></returns>
+</member>
+<member name="M:LINQ.CodeDOMExpressions.GetValue(System.CodeDom.CodeExpression,System.Int32)">
+ <summary>
+ Gets the element value in a array object.
+ </summary>
+ <param name="Array"></param>
+ <param name="index"></param>
+ <returns></returns>
+</member>
+<member name="P:LINQ.WebResult.Title">
+ <summary>
+ Specifies the Title element of the result string. 
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:LINQ.WebResult.BriefText">
+ <summary>
+ In short description of the link produced. 
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:LINQ.WebResult.URL">
+ <summary>
+ Url that points to the Current result.
+ </summary>
+ <returns></returns>
+</member>
+</members>
+</doc>

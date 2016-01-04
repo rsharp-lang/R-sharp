@@ -1,0 +1,73 @@
+﻿---------------------------------------- 2015年3月23日 - 20:42:02 ----------------------------------------
+
+
+2015/3/23 20:42:02 - 669  [ERR][Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Objects.ObjectModels.Exceptions.ScriptRunTimeException]: 	
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+	[Shoal shell script text details]
+	
+	  call ___overloads_test() n 2569
+	  call ___overloads_test() test.string 43895435893485 any "sfhsdfhsdrwerwer ----->?>>>"
+	  
+	--------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	
+	[ERROR_LINE]
+	   ---->  call ___overloads_test() test.string 43895435893485 any "sfhsdfhsdrwerwer ----->?>>>"  ............................. line: 1
+	
+	------------------------------
+	
+	[ShellScript Memory Dump Details]
+	
+	 Imports Constants:
+	
+	  app_data     = C:\Users\WORKGROUP\AppData\Roaming\GPL3 License\ShoalShell\1.0.98.6033
+	  bin          = E:\GCModeller\GCI Project\Shoal\ShoalShell\bin\Debug\Shoal.exe
+	  desktop      = E:\Desktop
+	  home         = E:\GCModeller\GCI Project\Shoal\ShoalShell\bin\Debug
+	  my_document  = D:\Documents
+	  null         = NULL
+	  temp         = D:\TMP
+	
+	
+	Variables:
+	
+	  $  = 2147483647
+	
+	
+	[System.Exception Details Information]
+	
+	 [ERROR_LINE]
+	   ---->    ............................. line: 0
+	
+	------------------------------
+	
+	[ShellScript Memory Dump Details]
+	
+	 Imports Constants:
+	
+	  app_data     = C:\Users\WORKGROUP\AppData\Roaming\GPL3 License\ShoalShell\1.0.98.6033
+	  bin          = E:\GCModeller\GCI Project\Shoal\ShoalShell\bin\Debug\Shoal.exe
+	  desktop      = E:\Desktop
+	  home         = E:\GCModeller\GCI Project\Shoal\ShoalShell\bin\Debug
+	  my_document  = D:\Documents
+	  null         = NULL
+	  temp         = D:\TMP
+	
+	
+	Variables:
+	
+	  $  = 2147483647
+	
+	
+	[System.Exception Details Information]
+	
+	 MISSING_PARAMETER:: Could not found the required parameter "System.String s1"!
+	
+	
+	
+
+
+-------------------- END_OF_LOGGING --------------------
+
+-------------------- END_OF_LOGGING --------------------

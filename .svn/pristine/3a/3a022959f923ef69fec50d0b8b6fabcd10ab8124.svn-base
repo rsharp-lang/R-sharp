@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="utf-16"?>
+<PackageModuleDb xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <NamespaceCollection>
+    <PackageNamespace Revision="0" Namespace="Interpreter">
+      <PartialModules xmlns="http://SourceForge.net/project/shoal/spm.xlst">
+        <Description xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a" />
+        <Revision xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a">0</Revision>
+        <Assembly Version="1.3.23.0" UpdateTime="-8587617907963134752" TypeId="Microsoft.VisualBasic.CommandLine.Interpreter">
+          <FileUrl>..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll</FileUrl>
+          <Company>xie.guigang@gmail.com</Company>
+          <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.6", FrameworkDisplayName = ".NET Framework 4.6")]</FrameworkVersion>
+        </Assembly>
+        <EntryPoints Name="CreateObject">
+          <Parameters Key="Type" Value1="" Value2="System.Type" />
+          <ReturnedType>Microsoft.VisualBasic.CommandLine.Interpreter</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="rundll">
+          <Parameters Key="AssemblyPath" Value1="" Value2="System.String" />
+          <ReturnedType>Microsoft.VisualBasic.CommandLine.Interpreter</ReturnedType>
+        </EntryPoints>
+      </PartialModules>
+      <Description xmlns="http://SourceForge.net/project/shoal/spm.xlst" />
+    </PackageNamespace>
+    <PackageNamespace Url="http://gcmodeller.org" Revision="52" Namespace="CommandLine">
+      <PartialModules xmlns="http://SourceForge.net/project/shoal/spm.xlst">
+        <Description xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a" />
+        <Url xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a">http://gcmodeller.org</Url>
+        <Publisher xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a">xie.guigang@gcmodeller.org</Publisher>
+        <Revision xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a">52</Revision>
+        <Assembly Version="1.3.23.0" UpdateTime="-8587617907963134752" TypeId="Microsoft.VisualBasic.CommandLine.CommandLine">
+          <FileUrl>..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll</FileUrl>
+          <Company>xie.guigang@gmail.com</Company>
+          <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.6", FrameworkDisplayName = ".NET Framework 4.6")]</FrameworkVersion>
+        </Assembly>
+        <EntryPoints Name="args">
+          <Description>Gets the commandline object for the current program.</Description>
+          <ReturnedType>Microsoft.VisualBasic.CommandLine.CommandLine</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="IsNumeric">
+          <Parameters Key="str" Value1="" Value2="System.String" />
+          <ReturnedType>System.Boolean</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="IsPossibleBooleanSwitch">
+          <Parameters Key="obj" Value1="" Value2="System.String" />
+          <ReturnedType>System.Boolean</ReturnedType>
+        </EntryPoints>
+      </PartialModules>
+      <Publisher xmlns="http://SourceForge.net/project/shoal/spm.xlst">xie.guigang@gcmodeller.org</Publisher>
+      <Description xmlns="http://SourceForge.net/project/shoal/spm.xlst" />
+    </PackageNamespace>
+    <PackageNamespace Revision="0" Namespace="Ngen">
+      <PartialModules xmlns="http://SourceForge.net/project/shoal/spm.xlst">
+        <Description xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a" />
+        <Revision xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a">0</Revision>
+        <Assembly Version="1.3.23.0" UpdateTime="-8587617907963134752" TypeId="Microsoft.VisualBasic.NgenInstaller">
+          <FileUrl>..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll</FileUrl>
+          <Company>xie.guigang@gmail.com</Company>
+          <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.6", FrameworkDisplayName = ".NET Framework 4.6")]</FrameworkVersion>
+        </Assembly>
+        <EntryPoints Name="--install">
+          <Description>Install all of the .NET program in the current directory.</Description>
+          <ReturnedType>System.Void</ReturnedType>
+        </EntryPoints>
+      </PartialModules>
+      <Description xmlns="http://SourceForge.net/project/shoal/spm.xlst" />
+    </PackageNamespace>
+    <PackageNamespace Revision="0" Namespace="Large_Text_File">
+      <PartialModules xmlns="http://SourceForge.net/project/shoal/spm.xlst">
+        <Description xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a" />
+        <Revision xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a">0</Revision>
+        <Assembly Version="1.3.23.0" UpdateTime="-8587617907963134752" TypeId="Microsoft.VisualBasic.FileOperations">
+          <FileUrl>..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll</FileUrl>
+          <Company>xie.guigang@gmail.com</Company>
+          <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.6", FrameworkDisplayName = ".NET Framework 4.6")]</FrameworkVersion>
+        </Assembly>
+        <EntryPoints Name="partitioning">
+          <Parameters Key="data" Value1="" Value2="System.Collections.Generic.IEnumerable`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]" />
+          <ReturnedType>System.String[][]</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="Peeks">
+          <Parameters Key="path" Value1="" Value2="System.String" />
+          <Parameters Key="length" Value1="" Value2="System.Int32" />
+          <ReturnedType>System.String</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="Tails">
+          <Parameters Key="path" Value1="" Value2="System.String" />
+          <Parameters Key="length" Value1="" Value2="System.Int32" />
+          <ReturnedType>System.String</ReturnedType>
+        </EntryPoints>
+      </PartialModules>
+      <Description xmlns="http://SourceForge.net/project/shoal/spm.xlst" />
+    </PackageNamespace>
+    <PackageNamespace Revision="0" Namespace="Program.Path.Search">
+      <PartialModules xmlns="http://SourceForge.net/project/shoal/spm.xlst">
+        <Description xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a" />
+        <Revision xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a">0</Revision>
+        <Assembly Version="1.3.23.0" UpdateTime="-8587617907963134752" TypeId="Microsoft.VisualBasic.ProgramPathSearchTool">
+          <FileUrl>..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll</FileUrl>
+          <Company>xie.guigang@gmail.com</Company>
+          <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.6", FrameworkDisplayName = ".NET Framework 4.6")]</FrameworkVersion>
+        </Assembly>
+        <EntryPoints Name="Dir.Search.Program_Directory">
+          <Parameters Key="Keyword" Value1="" Value2="System.String" />
+          <Parameters Key="SpecificDrive" Value1="" Value2="System.String" />
+          <ReturnedType>System.String[]</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="File.Search.Program">
+          <Description>Invoke the search session for the program file using a specific keyword string value.</Description>
+          <Parameters Key="Dir" Value1="" Value2="System.String" />
+          <Parameters Key="Keyword" Value1="" Value2="System.String" />
+          <ReturnedType>System.String[]</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="Get.File.Path">
+          <Parameters Key="Dir" Value1="" Value2="System.String" />
+          <Parameters Key="Using.Keyword" Value1="" Value2="System.String" />
+          <Parameters Key="List.Ext" Value1="" Value2="System.String[]" />
+          <ReturnedType>System.String[]</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="get.most_appealing_path">
+          <Parameters Key="FileList" Value1="" Value2="System.Collections.Generic.IEnumerable`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]" />
+          <ReturnedType>System.String</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="load.resource_entry">
+          <Description>Load the file from a specific directory from the source parameter as the resource entry list.</Description>
+          <Parameters Key="source" Value1="" Value2="System.Collections.Generic.IEnumerable`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]" />
+          <ReturnedType>System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="Load.Resource_Entry">
+          <Description>Load the file from a specific directory from the source parameter as the resource entry list.</Description>
+          <Parameters Key="Dir.Source" Value1="The source directory which will be searchs for file." Value2="System.String" />
+          <Parameters Key="List.Ext" Value1="The list of the file extension." Value2="System.String[]" />
+          <Parameters Key="TopLevel" Value1="" Value2="System.Boolean" />
+          <ReturnedType>System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="Md5.Renamed">
+          <Parameters Key="dir" Value1="" Value2="System.String" />
+          <ReturnedType>System.Boolean</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="Path2File_Url">
+          <Parameters Key="Path" Value1="" Value2="System.String" />
+          <ReturnedType>System.String</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="search_for.scripts">
+          <Parameters Key="Dir" Value1="" Value2="System.String" />
+          <Parameters Key="Keyword" Value1="" Value2="System.String" />
+          <Parameters Key="withExtension" Value1="" Value2="System.String" />
+          <ReturnedType>System.String[]</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="source.copy">
+          <Description>Copy the file in the source list into the copyto directory, function returns the failed operation list.</Description>
+          <Parameters Key="Source" Value1="" Value2="System.Collections.Generic.IEnumerable`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]" />
+          <Parameters Key="CopyTo" Value1="" Value2="System.String" />
+          <Parameters Key="Overrides" Value1="" Value2="System.Boolean" />
+          <ReturnedType>System.String[]</ReturnedType>
+        </EntryPoints>
+      </PartialModules>
+      <Description xmlns="http://SourceForge.net/project/shoal/spm.xlst" />
+    </PackageNamespace>
+    <PackageNamespace Url="http://gcmodeller.org" Revision="8655" Namespace="Framework.Extensions">
+      <PartialModules xmlns="http://SourceForge.net/project/shoal/spm.xlst">
+        <Description xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a">The common extension methods module in this Microsoft.VisualBasic program assembly.Common extension methods library for convenient the programming job.</Description>
+        <Url xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a">http://gcmodeller.org</Url>
+        <Publisher xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a">xie.guigang@gmail.com</Publisher>
+        <Revision xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a">8655</Revision>
+        <Assembly Version="1.3.23.0" UpdateTime="-8587617907963134752" TypeId="Microsoft.VisualBasic.Extensions">
+          <FileUrl>..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll</FileUrl>
+          <Company>xie.guigang@gmail.com</Company>
+          <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.6", FrameworkDisplayName = ".NET Framework 4.6")]</FrameworkVersion>
+        </Assembly>
+        <EntryPoints Name="dir.base_name">
+          <Parameters Key="dir" Value1="" Value2="System.String" />
+          <ReturnedType>System.String</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="double.is.na">
+          <Description>Is this double type of the number is an NA type infinity number. this is major comes from the devided by ZERO.</Description>
+          <Parameters Key="n" Value1="" Value2="System.Double" />
+          <ReturnedType>System.Boolean</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="Elements.Randomize">
+          <Parameters Key="Collection" Value1="" />
+        </EntryPoints>
+        <EntryPoints Name="File.Exists">
+          <Description>Check if the target file object is exists on your file system or not.</Description>
+          <Parameters Key="path" Value1="" Value2="System.String" />
+          <ReturnedType>System.Boolean</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="File.Select">
+          <Description>Open the file open dialog to gets the file</Description>
+          <Parameters Key="ext" Value1="" Value2="System.String" />
+          <ReturnedType>System.String</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="Fuzzy_Match">
+          <Parameters Key="Query" Value1="" Value2="System.String" />
+          <Parameters Key="Subject" Value1="" Value2="System.String" />
+          <ReturnedType>System.Boolean</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="Get.Binary">
+          <Parameters Key="Date" Value1="" Value2="System.DateTime" />
+          <ReturnedType>System.Int64</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="Get.Boolean">
+          <Parameters Key="str" Value1="" Value2="System.String" />
+          <ReturnedType>System.Boolean</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="get.description">
+          <Parameters Key="value" Value1="" Value2="System.Enum" />
+          <ReturnedType>System.String</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="Get.FirstValue">
+          <Parameters Key="Collection" Value1="" />
+        </EntryPoints>
+        <EntryPoints Name="Get.Item">
+          <Parameters Key="Collection" Value1="" />
+          <Parameters Key="UniqueId" Value1="" Value2="System.String" />
+          <Parameters Key="IgnoreCase" Value1="" Value2="System.StringComparison" />
+        </EntryPoints>
+        <EntryPoints Name="get.properties">
+          <Parameters Key="type" Value1="" Value2="System.Type" />
+          <ReturnedType>System.Reflection.PropertyInfo[]</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="get_item">
+          <Parameters Key="Collection" Value1="" />
+          <Parameters Key="index" Value1="" Value2="System.Int32" />
+        </EntryPoints>
+        <EntryPoints Name="Move.Next">
+          <Parameters Key="p" Value1="" Value2="System.Int64&amp;" />
+          <ReturnedType>System.Int64</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="mv.split">
+          <Parameters Key="dir" Value1="" Value2="System.String" />
+          <Parameters Key="moveto" Value1="" Value2="System.String" />
+          <Parameters Key="split" Value1="" Value2="System.Int32" />
+          <ReturnedType>System.Int32</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="Path2Url">
+          <Description>Gets the URL type file path.</Description>
+          <Parameters Key="Path" Value1="" Value2="System.String" />
+          <ReturnedType>System.String</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="run">
+          <Description>Running the object model driver, the target object should implement the driver interface.</Description>
+          <Parameters Key="driver" Value1="" Value2="Microsoft.VisualBasic.ComponentModel.DataSourceModel.IObjectModel_Driver" />
+          <ReturnedType>System.Int32</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="Sequence.Index">
+          <Description>Gets the subscript index of a generic collection.</Description>
+          <Parameters Key="Data.Collection" Value1="" />
+          <Parameters Key="Index.OffSet" Value1="" Value2="System.Int32" />
+          <ReturnedType>System.Int32[]</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="shell">
+          <Parameters Key="CommandLine" Value1="" Value2="System.String" />
+          <ReturnedType>Microsoft.VisualBasic.CommandLine.IORedirect</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="string.count_tokens">
+          <Parameters Key="Collection" Value1="" Value2="System.Collections.Generic.IEnumerable`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]" />
+          <Parameters Key="IgnoreCase" Value1="" Value2="System.Boolean" />
+          <ReturnedType>System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]][]</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="swap">
+          <Parameters Key="obj1" Value1="" />
+          <Parameters Key="obj2" Value1="" />
+          <ReturnedType>System.Void</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="takes">
+          <Parameters Key="Collection" Value1="" />
+          <Parameters Key="IndexCollection" Value1="" Value2="System.Int32[]" />
+          <Parameters Key="OffSet" Value1="" Value2="System.Int32" />
+          <Parameters Key="reversedSelect" Value1="" Value2="System.Boolean" />
+        </EntryPoints>
+        <EntryPoints Name="trim">
+          <Parameters Key="strText" Value1="" Value2="System.String" />
+          <Parameters Key="VbCRLF_Replace" Value1="" Value2="System.String" />
+          <ReturnedType>System.String</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="trim_nullvalue">
+          <Parameters Key="Collection" Value1="" />
+        </EntryPoints>
+        <EntryPoints Name="value.Copy">
+          <Parameters Key="value" Value1="" />
+          <Parameters Key="target" Value1="" />
+        </EntryPoints>
+      </PartialModules>
+      <Publisher xmlns="http://SourceForge.net/project/shoal/spm.xlst">xie.guigang@gmail.com</Publisher>
+      <Description xmlns="http://SourceForge.net/project/shoal/spm.xlst">The common extension methods module in this Microsoft.VisualBasic program assembly.Common extension methods library for convenient the programming job.</Description>
+    </PackageNamespace>
+    <PackageNamespace Revision="0" Namespace="MMFSocket">
+      <PartialModules xmlns="http://SourceForge.net/project/shoal/spm.xlst">
+        <Description xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a">MMFProtocol socket object for the inter-process communication on the localhost, this can be using for the data exchange between two process.</Description>
+        <Revision xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a">0</Revision>
+        <Assembly Version="1.3.23.0" UpdateTime="-8587617907963134752" TypeId="Microsoft.VisualBasic.MMFProtocol.MMFSocket">
+          <FileUrl>..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll</FileUrl>
+          <Company>xie.guigang@gmail.com</Company>
+          <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.6", FrameworkDisplayName = ".NET Framework 4.6")]</FrameworkVersion>
+        </Assembly>
+        <EntryPoints Name="getMessage">
+          <Parameters Key="data" Value1="" Value2="System.Collections.Generic.IEnumerable`1[[System.Byte, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]" />
+          <Parameters Key="encoding" Value1="" Value2="System.String" />
+          <ReturnedType>System.String</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="MMFProtocol.New">
+          <Parameters Key="hostName" Value1="" Value2="System.String" />
+          <Parameters Key="handler" Value1="" Value2="System.Action`1[[System.Collections.Generic.IEnumerable`1[[System.Byte, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]" />
+          <ReturnedType>Microsoft.VisualBasic.MMFProtocol.MMFSocket</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="Print.Message">
+          <Parameters Key="data" Value1="" Value2="System.Collections.Generic.IEnumerable`1[[System.Byte, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]" />
+          <ReturnedType>System.String</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="SendMessage">
+          <Parameters Key="socket" Value1="" Value2="Microsoft.VisualBasic.MMFProtocol.MMFSocket" />
+          <Parameters Key="data" Value1="" Value2="System.Collections.Generic.IEnumerable`1[[System.Byte, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]" />
+          <ReturnedType>System.Boolean</ReturnedType>
+        </EntryPoints>
+      </PartialModules>
+      <Description xmlns="http://SourceForge.net/project/shoal/spm.xlst">MMFProtocol socket object for the inter-process communication on the localhost, this can be using for the data exchange between two process.</Description>
+    </PackageNamespace>
+    <PackageNamespace Url="http://gcmodeller.org" Revision="21" Namespace="Cowsay">
+      <PartialModules xmlns="http://SourceForge.net/project/shoal/spm.xlst">
+        <Description xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a">Cowsay tricks for showing your message more friendly.</Description>
+        <Url xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a">http://gcmodeller.org</Url>
+        <Publisher xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a">xie.guigang@live.com</Publisher>
+        <Revision xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a">21</Revision>
+        <Assembly Version="1.3.23.0" UpdateTime="-8587617907963134752" TypeId="Microsoft.VisualBasic.CowsayTricks">
+          <FileUrl>..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll</FileUrl>
+          <Company>xie.guigang@gmail.com</Company>
+          <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.6", FrameworkDisplayName = ".NET Framework 4.6")]</FrameworkVersion>
+        </Assembly>
+        <EntryPoints Name="Cowsay">
+          <Description>Show cowsay with a specific input message on your console screen. you can using /dead to change its face.</Description>
+          <Parameters Key="msg" Value1="" Value2="System.String" />
+          <Parameters Key="Dead" Value1="" Value2="System.Boolean" />
+          <ReturnedType>System.String</ReturnedType>
+        </EntryPoints>
+      </PartialModules>
+      <Publisher xmlns="http://SourceForge.net/project/shoal/spm.xlst">xie.guigang@live.com</Publisher>
+      <Description xmlns="http://SourceForge.net/project/shoal/spm.xlst">Cowsay tricks for showing your message more friendly.</Description>
+    </PackageNamespace>
+    <PackageNamespace Url="http://gcmodeller.org" Revision="569" Namespace="STDIO">
+      <PartialModules xmlns="http://SourceForge.net/project/shoal/spm.xlst">
+        <Description xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a">A standard input/output compatibility package that makes VisualBasic console program easily running on the Linux server or mac osx operating system.</Description>
+        <Url xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a">http://gcmodeller.org</Url>
+        <Publisher xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a">xie.guigang@live.com</Publisher>
+        <Revision xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a">569</Revision>
+        <Assembly Version="1.3.23.0" UpdateTime="-8587617907963134752" TypeId="Microsoft.VisualBasic.ConsoleDevice.STDIO">
+          <FileUrl>..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll</FileUrl>
+          <Company>xie.guigang@gmail.com</Company>
+          <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.6", FrameworkDisplayName = ".NET Framework 4.6")]</FrameworkVersion>
+        </Assembly>
+        <EntryPoints Name="Pause">
+          <ReturnedType>System.Int32</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="printf">
+          <Description>Output the string to the console using a specific formation.</Description>
+          <Parameters Key="s" Value1="" Value2="System.String" />
+          <Parameters Key="args" Value1="" Value2="System.String[]" />
+          <ReturnedType>System.Void</ReturnedType>
+        </EntryPoints>
+      </PartialModules>
+      <Publisher xmlns="http://SourceForge.net/project/shoal/spm.xlst">xie.guigang@live.com</Publisher>
+      <Description xmlns="http://SourceForge.net/project/shoal/spm.xlst">A standard input/output compatibility package that makes VisualBasic console program easily running on the Linux server or mac osx operating system.</Description>
+    </PackageNamespace>
+    <PackageNamespace Url="http://gcmodeller.org" Revision="58" Namespace="GDI+">
+      <PartialModules xmlns="http://SourceForge.net/project/shoal/spm.xlst">
+        <Description xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a">GDI+ GDIPlus Extensions Module to provide some useful interface.</Description>
+        <Url xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a">http://gcmodeller.org</Url>
+        <Publisher xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a">xie.guigang@gmail.com</Publisher>
+        <Revision xmlns="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a">58</Revision>
+        <Assembly Version="1.3.23.0" UpdateTime="-8587617907963134752" TypeId="Microsoft.VisualBasic.GDIPlusExtensions">
+          <FileUrl>..\Debug\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll</FileUrl>
+          <Company>xie.guigang@gmail.com</Company>
+          <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.6", FrameworkDisplayName = ".NET Framework 4.6")]</FrameworkVersion>
+        </Assembly>
+        <EntryPoints Name="GrayBitmap">
+          <Description>Create the gray color of the target image.</Description>
+          <Parameters Key="res" Value1="" Value2="System.Drawing.Image" />
+          <ReturnedType>System.Drawing.Image</ReturnedType>
+        </EntryPoints>
+        <EntryPoints Name="LoadImage">
+          <Parameters Key="path" Value1="" Value2="System.String" />
+          <ReturnedType>System.Drawing.Image</ReturnedType>
+        </EntryPoints>
+      </PartialModules>
+      <Publisher xmlns="http://SourceForge.net/project/shoal/spm.xlst">xie.guigang@gmail.com</Publisher>
+      <Description xmlns="http://SourceForge.net/project/shoal/spm.xlst">GDI+ GDIPlus Extensions Module to provide some useful interface.</Description>
+    </PackageNamespace>
+  </NamespaceCollection>
+</PackageModuleDb>

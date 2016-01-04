@@ -1,0 +1,14 @@
+System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation. ---> RDotNET.EvaluationException: Error in dwt(X, filter = "", n.levels, boundary = "", fast = FALSE) : 
+  Invalid argument value for 'boundary'
+
+   at RDotNET.REngine.Parse(String statement, StringBuilder incompleteStatement) in E:\GCModeller\GCI Project\Shoal\R.NET\R.NET\REngine.vb:line 646
+   at RDotNET.REngine.VB$StateMachine_0_Defer.MoveNext() in E:\GCModeller\GCI Project\Shoal\R.NET\R.NET\REngine.vb:line 585
+   at System.Linq.Enumerable.LastOrDefault[TSource](IEnumerable`1 source)
+   at RDotNET.REngine.Evaluate(String statement) in E:\GCModeller\GCI Project\Shoal\R.NET\R.NET\REngine.vb:line 550
+   at Test.Project.Wavelets.DWT_RInvoke(Double[] X, String filter, Int32 nlevels, String boundary, Boolean fast) in E:\GCModeller\GCI Project\Shoal\RDotNET.Extensions.ShellScriptAPI\bin\Test.Project\Wavelets.vb:line 270
+   --- End of inner exception stack trace ---
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Object[] arguments, Signature sig, Boolean constructor)
+   at System.Reflection.RuntimeMethodInfo.UnsafeInvokeInternal(Object obj, Object[] parameters, Object[] arguments)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
+   at Microsoft.VisualBasic.CommandLine.Reflection.EntryPoints.CommandEntryPointInfo.Invoke(Object[] parameters, Object target, Boolean Throw) in E:\GCModeller\GCI Project\Shoal\Microsoft.VisualBasic.Architecture.Framework\CommandLine\Reflection\EntryPoints\CommandEntryPointInfo.vb:line 109

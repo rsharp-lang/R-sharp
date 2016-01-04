@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "RDotNET.Extensions.ShellScriptAPI", "RDotNET.Extensions.ShellScriptAPI.vbproj", "{2A928B27-D8CE-4629-9711-0E792C94A85E}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ShoalShell_Core", "..\ShoalShell\Microsoft.VisualBasic.Scripting.ShoalShell\ShoalShell_Core.vbproj", "{0BE7FD44-D724-49F6-AEC0-06C80B4F5527}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Microsoft.VisualBasic.Architecture.Framework", "..\Microsoft.VisualBasic.Architecture.Framework\Microsoft.VisualBasic.Architecture.Framework.vbproj", "{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "RDotNet", "..\R.NET\RDotNet.vbproj", "{21C35138-455B-4833-9756-B2629F972A22}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Test.Project", "bin\Test.Project\Test.Project.vbproj", "{6759BEAF-0DBC-4E6E-A627-2BC987B8AC2D}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "DocumentFormat.Csv", "..\DocumentFormat.Csv\DocumentFormat.Csv.vbproj", "{B746CFD3-57AB-468C-8170-78D00A2A4463}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ShoalShell.PlugIns.Plot", "..\ShoalShell.PlugIns.Plot\ShoalShell.PlugIns.Plot.vbproj", "{28ECA1CD-4E79-4EA9-A6C8-C41F30E5C865}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2A928B27-D8CE-4629-9711-0E792C94A85E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A928B27-D8CE-4629-9711-0E792C94A85E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A928B27-D8CE-4629-9711-0E792C94A85E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A928B27-D8CE-4629-9711-0E792C94A85E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BE7FD44-D724-49F6-AEC0-06C80B4F5527}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BE7FD44-D724-49F6-AEC0-06C80B4F5527}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BE7FD44-D724-49F6-AEC0-06C80B4F5527}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BE7FD44-D724-49F6-AEC0-06C80B4F5527}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21C35138-455B-4833-9756-B2629F972A22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21C35138-455B-4833-9756-B2629F972A22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21C35138-455B-4833-9756-B2629F972A22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21C35138-455B-4833-9756-B2629F972A22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6759BEAF-0DBC-4E6E-A627-2BC987B8AC2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6759BEAF-0DBC-4E6E-A627-2BC987B8AC2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6759BEAF-0DBC-4E6E-A627-2BC987B8AC2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6759BEAF-0DBC-4E6E-A627-2BC987B8AC2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B746CFD3-57AB-468C-8170-78D00A2A4463}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B746CFD3-57AB-468C-8170-78D00A2A4463}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B746CFD3-57AB-468C-8170-78D00A2A4463}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B746CFD3-57AB-468C-8170-78D00A2A4463}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28ECA1CD-4E79-4EA9-A6C8-C41F30E5C865}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28ECA1CD-4E79-4EA9-A6C8-C41F30E5C865}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28ECA1CD-4E79-4EA9-A6C8-C41F30E5C865}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28ECA1CD-4E79-4EA9-A6C8-C41F30E5C865}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

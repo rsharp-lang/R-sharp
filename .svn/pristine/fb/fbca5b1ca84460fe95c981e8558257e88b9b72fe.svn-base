@@ -1,0 +1,132 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+PlugIn
+</name>
+</assembly>
+<members>
+<member name="M:PlugIn.PlugInEntry.LoadPlugIn(System.Windows.Forms.MenuStrip,System.String)">
+	<summary>
+ 从一个DLL文件之中加载命令
+ </summary>
+	<param name="Menu"></param>
+	<param name="AssemblyPath">Target DLL assembly file.(目标程序集模块的文件名)</param>
+	<returns>返回成功加载的命令的数目</returns>
+	<remarks></remarks>
+</member><member name="M:PlugIn.PlugInEntry.Invoke(System.Object[],System.Reflection.MethodInfo)">
+	<summary>
+	</summary>
+	<param name="Parameters">Method calling parameters object array.</param>
+	<param name="Method">Target method reflection information.</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:PlugIn.PlugInEntry.GetControls``1(System.Windows.Forms.Form)">
+	<summary>
+ 从一个指定的窗体对象之上获取一个特定类型的控件的集合
+ </summary>
+	<typeparam name="T"></typeparam>
+	<param name="Target"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:PlugIn.PlugInEntry">
+	<summary>
+ Module PlugInsMain.(目标模块，在本模块之中包含有一系列插件命令信息，本对象定义了插件在菜单之上的根菜单项目)
+ </summary>
+	<remarks></remarks>
+</member><member name="P:PlugIn.PlugInCommand.Path">
+	<summary>
+ The menu path for this plugin command.(这个插件命令的菜单路径)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:PlugIn.PlugInCommand">
+	<summary>
+ Function Main(Target As Form) As Object.(应用于目标模块中的一个函数的自定义属性，相对应于菜单中的一个项目)
+ </summary>
+	<remarks></remarks>
+</member><member name="M:PlugIn.PlugInLoader.Load">
+	<summary>
+ 加载插件命令
+ </summary>
+	<returns>返回成功加载的命令的数目</returns>
+	<remarks></remarks>
+</member><member name="M:PlugIn.PlugInLoader.GetIconLoader(System.Reflection.Assembly)">
+	<summary>
+	</summary>
+	<param name="Assembly"></param>
+	<returns>{Resource Manager Instanc, GetObject MethodInfo}</returns>
+	<remarks></remarks>
+</member><member name="M:PlugIn.PlugInLoader.AddCommand(System.Windows.Forms.ToolStripMenuItem,System.String[],System.String,System.Int32)">
+	<summary>
+ Recursive function for create the menu item for each plugin command.(递归的添加菜单项)
+ </summary>
+	<param name="MenuRoot"></param>
+	<param name="Path"></param>
+	<param name="Name"></param>
+	<param name="p"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="F:PlugIn.PlugInManager.DisabledPlugIns">
+	<summary>
+ The file path for the disabled plugin assembly module.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:PlugIn.PlugInManager.Load(System.String)">
+	<summary>
+	</summary>
+	<param name="Xml">XML文件的文件路径</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:PlugIn.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:PlugIn.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:PlugIn.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="F:PlugIn.CommandBase.Name">
+	<summary>
+ The command item name that display on the menustrip control.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:PlugIn.CommandBase.Description">
+	<summary>
+ Tooltip text or the description text.
+ </summary>
+	<remarks></remarks>
+</member><member name="P:PlugIn.CommandBase.Icon">
+	<summary>
+ The icon resource name string.(图标资源名称，当本属性值为空的时候，对应的菜单项没有图标)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="F:PlugIn.EntryFlag.EntryTypes.Dispose">
+	<summary>
+ This method is the entry point to destroy this plugin command and unload it from the target form.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:PlugIn.EntryFlag.EntryTypes.Initialize">
+	<summary>
+ Sometimes you need a initialize method to initialize your plugin.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:PlugIn.EntryFlag.EntryTypes.IconLoader">
+	<summary>
+ This method is the icon loader entry point
+ </summary>
+	<remarks></remarks>
+</member><member name="T:PlugIn.EntryFlag">
+	<summary>
+	</summary>
+</member>
+</members>
+</doc>

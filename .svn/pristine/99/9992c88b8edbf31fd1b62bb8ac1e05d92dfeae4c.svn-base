@@ -1,0 +1,37 @@
+#library ./RDotNET.Extensions.ShellScriptAPI.dll
+
+imports r.net
+
+# telling the shellscript runtime mount the R scripting entrypoints
+!r.net
+
+# integerated the R script with shellscript, if successful interacting with R, then a new text file will be make in the save directory!
+
+# test1:  r function invoke
+r << data <- read.csv("./test_.csv")
+r << write.csv(data, "./test___successfully.txt")
+
+# get the return value of the r function
+call $r -> cowsay
+
+# test2: variable setting into the r enviroment
+v <- array.new 1,2,3,4,5,6,7,8,9,10
+v <- $v -> integervector
+v2 <- array.new 1,3,4,5,6,7,8,9,4,3,2,2
+v2 <- $v2 -> integervector
+
+mat <- array.new \$v2,\$v2
+mat <- $mat -> data.frame
+
+#verify that the variable is passing into the R enviroment successfully!
+
+$mat >> mat
+r << write.csv(mat, "./matrix_test_successfully.txt")
+
+$v >> v
+v << write.csv(v, "./vector_test_successful.txt")
+
+
+call "ALL TEST OK!!!" -> msgbox title "test ok!!!"
+
+pause

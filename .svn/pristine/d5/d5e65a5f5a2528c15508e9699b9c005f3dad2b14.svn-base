@@ -1,0 +1,346 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Metro
+</name>
+</assembly>
+<members>
+<member name="F:Microsoft.VisualBasic.Forms.MetroUI.API.Dwm.WTNCA_NODRAWCAPTION">
+ <summary>
+ Do Not Draw The Caption (Text)
+ </summary>
+</member>
+<member name="F:Microsoft.VisualBasic.Forms.MetroUI.API.Dwm.WTNCA_NODRAWICON">
+ <summary>
+ Do Not Draw the Icon
+ </summary>
+</member>
+<member name="F:Microsoft.VisualBasic.Forms.MetroUI.API.Dwm.WTNCA_NOSYSMENU">
+ <summary>
+ Do Not Show the System Menu
+ </summary>
+</member>
+<member name="F:Microsoft.VisualBasic.Forms.MetroUI.API.Dwm.WTNCA_NOMIRRORHELP">
+ <summary>
+ Do Not Mirror the Question mark Symbol
+ </summary>
+</member>
+<member name="T:Microsoft.VisualBasic.Forms.MetroUI.API.Dwm.WTA_OPTIONS">
+ <summary>
+ The Options of What Attributes to Add/Remove
+ </summary>
+</member>
+<member name="T:Microsoft.VisualBasic.Forms.MetroUI.API.Dwm.WindowThemeAttributeType">
+ <summary>
+ What Type of Attributes? (Only One is Currently Defined)
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.Forms.MetroUI.API.Dwm.SetWindowThemeAttribute(System.IntPtr,Microsoft.VisualBasic.Forms.MetroUI.API.Dwm.WindowThemeAttributeType,Microsoft.VisualBasic.Forms.MetroUI.API.Dwm.WTA_OPTIONS@,System.UInt32)">
+ <summary>
+ Set The Window's Theme Attributes
+ </summary>
+ <param name="hWnd">The Handle to the Window</param>
+ <param name="wtype">What Type of Attributes</param>
+ <param name="attributes">The Attributes to Add/Remove</param>
+ <param name="size">The Size of the Attributes Struct</param>
+ <returns>If The Call Was Successful or Not</returns>
+</member>
+<member name="P:Microsoft.VisualBasic.Forms.MetroUI.API.MoveScreen.Enabled">
+ <summary>
+ Enabled this feature or not?
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.Forms.MetroUI.Form.HiWord(System.Int32)">
+ <summary>
+ Equivalent to the HiWord C Macro
+ </summary>
+ <param name="dwValue"></param>
+ <returns></returns>
+</member>
+<member name="F:Microsoft.VisualBasic.Forms.MetroUI.Form.BORDER_WIDTH">
+ <summary>
+ 使用鼠标改变窗口大小的时候所需要使用的一个用于检测的边界大小值
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.Forms.MetroUI.Form.Form1_MouseMove(System.Object,System.Windows.Forms.MouseEventArgs)">
+ <summary>
+ Calculate which direction to resize based on mouse position
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.Forms.MetroUI.UI_API.MessageBox(System.String,System.Action,System.String)">
+ <summary>
+ 工作完成之后对话框将会消失，中途取消的时候，任务还是会继续下去的
+ </summary>
+ <param name="Message"></param>
+ <param name="ProcessHandle"></param>
+ <param name="ButtonPromoting"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.Forms.MetroUI.UI_API.MessageBox(System.String,System.Action,Microsoft.VisualBasic.Forms.MetroUI.Form,System.String)">
+ <summary>
+
+ </summary>
+ <param name="Message"></param>
+ <param name="ProcessHandle"></param>
+ <param name="Mask">会形成黑影</param>
+ <param name="ButtonPromoting"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.Forms.MetroUI.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.Forms.MetroUI.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.Forms.MetroUI.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.Forms.MetroUI.My.Resources.Resources._1">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.Forms.MetroUI.My.Resources.Resources._2">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.Forms.MetroUI.My.Resources.Resources._3">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.Forms.MetroUI.My.Resources.Resources._4">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.Forms.MetroUI.My.Resources.Resources._5">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.Forms.MetroUI.My.Resources.Resources._6">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.Forms.MetroUI.My.Resources.Resources._7">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.Forms.MetroUI.My.Resources.Resources._8">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.Forms.MetroUI.My.Resources.Resources.OK">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="T:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifier">
+ <summary>
+ Non-visual component to show a notification window in the right lower
+ corner of the screen.
+ </summary>
+</member>
+<member name="E:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifier.Click">
+ <summary>
+ Event that is raised when the text in the notification window is clicked.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifier.#ctor">
+ <summary>
+ Create a new instance of the popup component.
+ </summary>
+</member>
+<member name="F:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifier.fresh_count">
+ <summary>
+ Show the notification window if it is not already visible.
+ If the window is currently disappearing, it is shown again.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifier.Hide">
+ <summary>
+ Hide the notification window.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifier.tmAnimation_Tick(System.Object,System.EventArgs)">
+ <summary>
+ Update form position and opacity to show/hide the window.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifier.tmWait_Tick(System.Object,System.EventArgs)">
+ <summary>
+ The wait timer has elapsed, start the animation to hide the window.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifier.frmPopup_MouseLeave(System.Object,System.EventArgs)">
+ <summary>
+ Start wait timer if the mouse leaves the form.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+ 
+</member>
+<member name="M:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifier.frmPopup_MouseEnter(System.Object,System.EventArgs)">
+ <summary>
+ Stop wait timer if the mouse enters the form.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifier.Dispose(System.Boolean)">
+ <summary>
+ Dispose the notification form.
+ </summary>
+ <param name="disposing"></param>
+</member>
+<member name="T:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifierForm">
+ <summary>
+ This is the form of the actual notification window.
+ </summary>
+</member>
+<member name="E:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifierForm.LinkClick">
+ <summary>
+ Event that is raised when the text is clicked.
+ </summary>
+</member>
+<member name="E:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifierForm.CloseClick">
+ <summary>
+ Event that is raised when the notification window is manually closed.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifierForm.#ctor(Microsoft.VisualBasic.Forms.MetroUI.PopupNotifier)">
+ <summary>
+ Create a new instance.
+ </summary>
+ <param name="parent__1">PopupNotifier</param>
+</member>
+<member name="M:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifierForm.PopupNotifierForm_VisibleChanged(System.Object,System.EventArgs)">
+ <summary>
+ The form is shown/hidden.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifierForm.InitializeComponent">
+ <summary>
+ Used in design mode.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifierForm.Parent">
+ <summary>
+ Gets or sets the parent control.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifierForm.AddValueMax255(System.Int32,System.Int32)">
+ <summary>
+ Add two values but do not return a value greater than 255.
+ </summary>
+ <param name="input">first value</param>
+ <param name="add">value to add</param>
+ <returns>sum of both values</returns>
+</member>
+<member name="M:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifierForm.DedValueMin0(System.Int32,System.Int32)">
+ <summary>
+ Subtract two values but do not returns a value below 0.
+ </summary>
+ <param name="input">first value</param>
+ <param name="ded">value to subtract</param>
+ <returns>first value minus second value</returns>
+</member>
+<member name="M:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifierForm.GetDarkerColor(System.Drawing.Color)">
+ <summary>
+ Returns a color which is darker than the given color.
+ </summary>
+ <param name="color">Color</param>
+ <returns>darker color</returns>
+</member>
+<member name="M:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifierForm.GetLighterColor(System.Drawing.Color)">
+ <summary>
+ Returns a color which is lighter than the given color.
+ </summary>
+ <param name="color">Color</param>
+ <returns>lighter color</returns>
+</member>
+<member name="P:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifierForm.RectContentText">
+ <summary>
+ Gets the rectangle of the content text.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifierForm.RectClose">
+ <summary>
+ gets the rectangle of the close button.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifierForm.RectOptions">
+ <summary>
+ Gets the rectangle of the options button.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifierForm.PopupNotifierForm_MouseMove(System.Object,System.Windows.Forms.MouseEventArgs)">
+ <summary>
+ Update form to display hover styles when the mouse moves over the notification form.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifierForm.PopupNotifierForm_MouseUp(System.Object,System.Windows.Forms.MouseEventArgs)">
+ <summary>
+ A mouse button has been released, check if something has been clicked.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifierForm.OptionsMenu_Closed(System.Object,System.Windows.Forms.ToolStripDropDownClosedEventArgs)">
+ <summary>
+ The options popup menu has been closed.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifierForm.DisposeGDIObjects">
+ <summary>
+ Free all GDI objects.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifierForm.PopupNotifierForm_Paint(System.Object,System.Windows.Forms.PaintEventArgs)">
+ <summary>
+ Draw the notification form.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+ 
+</member>
+<member name="M:Microsoft.VisualBasic.Forms.MetroUI.PopupNotifierForm.Dispose(System.Boolean)">
+ <summary>
+ Dispose GDI objects.
+ </summary>
+ <param name="disposing"></param>
+</member>
+</members>
+</doc>

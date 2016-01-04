@@ -1,0 +1,2 @@
+shoal -scan.plugins -dir ./ /clean
+pause

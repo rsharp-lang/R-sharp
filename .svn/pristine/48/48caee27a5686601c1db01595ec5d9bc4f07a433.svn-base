@@ -1,0 +1,24 @@
+imports system.threading
+
+<System.Int32> action(nn as System.Int32) <- * 
+{
+    sleep $nn
+    "action invoke thread test ok!" -> msgbox title 123
+	return $nn
+}
+
+call 10 -> action
+action <- *action -> begin_invoke
+"this is Main thread, and the invoked thread is running!" -> msgbox title 321 
+
+call $action -> end_invoke
+
+#	Dim Action = Sub()
+#                    Call Sleep(10*1000)
+#                    Call Msgbox("action invoke thread test ok!", MsgBoxStyle.Information, 123)
+#   End Sub
+
+#Dim Handle As ThreadingHandle = ShellScriptThreading.BeginInvoke(Action)
+#
+#Call MsgBox("this is Main thread, and the invoked thread is running!", MsgBoxStyle.Information, 321)
+#Call ShellScriptThreading.EndInvoke(Handle)

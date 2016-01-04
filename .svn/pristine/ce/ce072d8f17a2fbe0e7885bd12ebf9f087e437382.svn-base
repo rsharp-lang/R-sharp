@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-16"?>
+<Shoal.ExternalModuleRegistry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" CurrentRegister="XIEGUIGANG-PC" xmlns="Microsoft.VisualBasic.Shoal.ExternalModuleRegistry">
+  <RegisteredModules>
+    <AssemblyModule ModuleName="c2" Guid="1fe3aa00-dbaf-3119-a664-70d73240223f" UpdateTime="-8587851946424370969">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\c2.exe</AssemblyPath>
+      <Company>蓝思生物信息工程师工作站</Company>
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="circos" Guid="44182bf0-a14a-3db6-a3aa-8f12ff8d2455" UpdateTime="-8587851946486944548">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\Circos.dll</AssemblyPath>
+      <Company>蓝思生物信息工程师工作站</Company>
+      <Version>1.2.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="clustal" Guid="d25cc28d-acaf-3434-992e-34141a6c8cfc" UpdateTime="-8587851946882517173">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\ClustalOmega.dll</AssemblyPath>
+      <Company />
+      <Version>4.0.3.456</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="cytoscape.important_nodes" Guid="15a44900-b751-3933-b8cf-0937666c68ae" UpdateTime="-8587851946415550464">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\Cytoscape.dll</AssemblyPath>
+      <Company />
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="cytoscape.pfsnet" Guid="a4154a34-04d1-38ee-893f-99b5c0a73f7c" UpdateTime="-8587851946415550464">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\Cytoscape.dll</AssemblyPath>
+      <Company />
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="cytoscape" Guid="2b9db8a8-eb40-31e7-a44c-57274e1d7b28" UpdateTime="-8587851946415550464">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\Cytoscape.dll</AssemblyPath>
+      <Company />
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="path.find.dijkstra" Guid="0f95ba03-e2f1-34d6-8b72-7a7351adea1d" UpdateTime="-8587851946941960573">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\Datavisualization.Network.dll</AssemblyPath>
+      <Company />
+      <Version>1.4.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="datavisualization.network" Guid="3f987dd4-e447-3799-82f0-55659e0eb798" UpdateTime="-8587851946941960573">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\Datavisualization.Network.dll</AssemblyPath>
+      <Company />
+      <Version>1.4.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="solver.fba" Guid="0dc53019-3473-35c5-b61e-e4ba9c18eafc" UpdateTime="-8587851946407460001">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\FBA.exe</AssemblyPath>
+      <Company>LANS</Company>
+      <Version>1.1.24.3</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="gcmodeller.engine_host" Guid="9baa80a3-9e3c-3cb7-a144-fa46ffc22bcb" UpdateTime="-8587851946452522579">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\gchost.exe</AssemblyPath>
+      <Company>Lans</Company>
+      <Version>1.6.0.2</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="phenotype.regulations" Guid="939f8892-9c13-3e6f-b409-8615d89687af" UpdateTime="-8587851946398579494">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\LANS.SystemsBiology.AnalysisTools.CellPhenotype.dll</AssemblyPath>
+      <Company />
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="analysis.chipdata" Guid="5fd164a7-9d63-3cc9-bdf2-d59062b27ba2" UpdateTime="-8587851946930969945">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\LANS.SystemsBiology.AnalysisTools.ChipData.dll</AssemblyPath>
+      <Company>蓝思生物信息工程师工作站</Company>
+      <Version>3.3.5.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="operon.predict" Guid="3d4577f3-7568-3e1d-80d5-bdf7d6d3842a" UpdateTime="-8587851946930969945">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\LANS.SystemsBiology.AnalysisTools.ChipData.dll</AssemblyPath>
+      <Company>蓝思生物信息工程师工作站</Company>
+      <Version>3.3.5.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="pcc.matrix" Guid="2a8fa664-7fb6-3438-a24a-049c2a8fe1f6" UpdateTime="-8587851946930969945">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\LANS.SystemsBiology.AnalysisTools.ChipData.dll</AssemblyPath>
+      <Company>蓝思生物信息工程师工作站</Company>
+      <Version>3.3.5.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="pfsnet" Guid="f448e308-ee7c-3c40-a935-44b4754e4d14" UpdateTime="-8587851946930969945">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\LANS.SystemsBiology.AnalysisTools.ChipData.dll</AssemblyPath>
+      <Company>蓝思生物信息工程师工作站</Company>
+      <Version>3.3.5.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="network.svd" Guid="5985cd54-28ed-38ff-905d-7dfd66371ab0" UpdateTime="-8587851946930969945">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\LANS.SystemsBiology.AnalysisTools.ChipData.dll</AssemblyPath>
+      <Company>蓝思生物信息工程师工作站</Company>
+      <Version>3.3.5.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="wgcna" Guid="72ae751e-70dd-3e05-8619-0c8c289c8fa0" UpdateTime="-8587851946930969945">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\LANS.SystemsBiology.AnalysisTools.ChipData.dll</AssemblyPath>
+      <Company>蓝思生物信息工程师工作站</Company>
+      <Version>3.3.5.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="data.visualization.Chromosome_Map" Guid="153ca440-d183-3232-a851-4eec9b8bbbbe" UpdateTime="-8587851946525886775">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\LANS.SystemsBiology.AnalysisTools.DataVisualization.dll</AssemblyPath>
+      <Company>LANS</Company>
+      <Version>1.2.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="Diagram.Genetic_Clock" Guid="32f3455d-71c5-3309-b628-d6a074a25d22" UpdateTime="-8587851946525886775">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\LANS.SystemsBiology.AnalysisTools.DataVisualization.dll</AssemblyPath>
+      <Company>LANS</Company>
+      <Version>1.2.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="model.retrive_info" Guid="62618a22-e9b3-3e33-a075-fc4cf3a7da3b" UpdateTime="-8587851946534527269">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\LANS.SystemsBiology.Assembly.DocumentFormat.CsvTabular.dll</AssemblyPath>
+      <Company />
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="gcmodeller.compiler" Guid="08dcfee1-4161-3c44-b635-6f595122d642" UpdateTime="-8587851946534527269">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\LANS.SystemsBiology.Assembly.DocumentFormat.CsvTabular.dll</AssemblyPath>
+      <Company />
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="network.cytoscape_creator" Guid="4517909f-c9c3-3428-8dd9-cbc70f3d271d" UpdateTime="-8587851946534527269">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\LANS.SystemsBiology.Assembly.DocumentFormat.CsvTabular.dll</AssemblyPath>
+      <Company />
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="kegg.compiler" Guid="b1b8245e-016f-3305-8582-123f0f73278f" UpdateTime="-8587851946534527269">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\LANS.SystemsBiology.Assembly.DocumentFormat.CsvTabular.dll</AssemblyPath>
+      <Company />
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="regprecise" Guid="7bfac3c7-5341-3ef0-8bf0-e70e5176d700" UpdateTime="-8587851946600001014">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\LANS.SystemsBiology.DatabaseServices.dll</AssemblyPath>
+      <Company>蓝思生物信息工程师工作站</Company>
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="Regprecise.Bidirectional_Bh" Guid="05d45be5-4b21-373d-bd6d-561a41044622" UpdateTime="-8587851946600001014">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\LANS.SystemsBiology.DatabaseServices.dll</AssemblyPath>
+      <Company>蓝思生物信息工程师工作站</Company>
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="sabio-rk" Guid="ed13ada4-57df-309a-8097-23d688b79b1f" UpdateTime="-8587851946600001014">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\LANS.SystemsBiology.DatabaseServices.dll</AssemblyPath>
+      <Company>蓝思生物信息工程师工作站</Company>
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="mist2" Guid="a4338c83-0d68-3fbc-9a25-b44ab03db093" UpdateTime="-8587851946600001014">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\LANS.SystemsBiology.DatabaseServices.dll</AssemblyPath>
+      <Company>蓝思生物信息工程师工作站</Company>
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="string-db.api" Guid="61b28efc-8113-3cb4-b440-3fcc9a25568b" UpdateTime="-8587851946600001014">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\LANS.SystemsBiology.DatabaseServices.dll</AssemblyPath>
+      <Company>蓝思生物信息工程师工作站</Company>
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="reactome" Guid="edc28e9b-c142-3fb0-9a1c-1c0603f36038" UpdateTime="-8587851946803742668">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\LANS.SystemsBiology.DatabaseServices.Reactome.dll</AssemblyPath>
+      <Company />
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="gcmodeller.engine_kernel.experiment_system" Guid="771fb107-58ec-373a-b801-fc20ec870b79" UpdateTime="-8587851946509315827">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\LANS.SystemsBiology.GCModeller.ModellingEngine.Kernel.dll</AssemblyPath>
+      <Company>蓝思生物信息工程师工作站</Company>
+      <Version>1.4.0.45</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="GCModeller.Engine_Kernel" Guid="a580329d-caf3-3b16-87d1-e1dcedf29e58" UpdateTime="-8587851946509315827">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\LANS.SystemsBiology.GCModeller.ModellingEngine.Kernel.dll</AssemblyPath>
+      <Company>蓝思生物信息工程师工作站</Company>
+      <Version>1.4.0.45</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="ncbi.localblast" Guid="6436ae37-60bb-3f55-ba6a-8ada95c50a2b" UpdateTime="-8587851946644423555">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\LANS.SystemsBiology.NCBI.Extensions.dll</AssemblyPath>
+      <Company>LANS Engineering Workstation</Company>
+      <Version>1.4.55.5</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="expasy" Guid="ad846504-6c47-332c-a4d6-eb7249ba8634" UpdateTime="-8587851946493544925">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\LANS.SystemsBiology.Plugins.ShellScript.IO.AssemblyFile.dll</AssemblyPath>
+      <Company />
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="AssemblyFile.IO" Guid="909db974-0c46-38eb-8258-44844639e656" UpdateTime="-8587851946493544925">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\LANS.SystemsBiology.Plugins.ShellScript.IO.AssemblyFile.dll</AssemblyPath>
+      <Company />
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="kegg" Guid="c032f679-ae6b-388c-a86d-1d1aba3abd39" UpdateTime="-8587851946493544925">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\LANS.SystemsBiology.Plugins.ShellScript.IO.AssemblyFile.dll</AssemblyPath>
+      <Company />
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="metacyc.objects" Guid="4e603923-b4ac-35db-a215-699379a743d1" UpdateTime="-8587851946493544925">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\LANS.SystemsBiology.Plugins.ShellScript.IO.AssemblyFile.dll</AssemblyPath>
+      <Company />
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="assemblyfile.mist2" Guid="72bb1ce9-d679-3755-829a-68395fc7fb64" UpdateTime="-8587851946493544925">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\LANS.SystemsBiology.Plugins.ShellScript.IO.AssemblyFile.dll</AssemblyPath>
+      <Company />
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="ncbi.genbank.ptt" Guid="e473ffd7-08ec-37fe-a8f6-e5abb23b26a0" UpdateTime="-8587851946493544925">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\LANS.SystemsBiology.Plugins.ShellScript.IO.AssemblyFile.dll</AssemblyPath>
+      <Company />
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="lans.systemsbiology.webservices" Guid="027e3bfb-1072-3786-8fb9-a9e9c015d8e7" UpdateTime="-8587851946493544925">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\LANS.SystemsBiology.Plugins.ShellScript.IO.AssemblyFile.dll</AssemblyPath>
+      <Company />
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="meme.app.genome_footprints" Guid="c93c4865-751b-32fa-a3c3-bcd760fe0dbb" UpdateTime="-8587851946561308801">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\MEME.dll</AssemblyPath>
+      <Company>蓝思生物信息工程师工作站</Company>
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="meme.mast" Guid="84c7de63-cbb8-38e9-b11c-ecfe23614cb3" UpdateTime="-8587851946561308801">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\MEME.dll</AssemblyPath>
+      <Company>蓝思生物信息工程师工作站</Company>
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="meme_html.applying_analysis" Guid="a180e25f-0c5d-3e71-a20e-ea751c91fc06" UpdateTime="-8587851946561308801">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\MEME.dll</AssemblyPath>
+      <Company>蓝思生物信息工程师工作站</Company>
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="meme.meme_html" Guid="70d07def-f90b-31f4-8436-1e8b11adefe8" UpdateTime="-8587851946561308801">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\MEME.dll</AssemblyPath>
+      <Company>蓝思生物信息工程师工作站</Company>
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="meme.text" Guid="40e19a84-abf1-321d-a6b9-45bc3736233d" UpdateTime="-8587851946561308801">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\MEME.dll</AssemblyPath>
+      <Company>蓝思生物信息工程师工作站</Company>
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="meme_analysis.datapreparing" Guid="13cec348-ce37-3f5a-900b-d63f7a607214" UpdateTime="-8587851946561308801">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\MEME.dll</AssemblyPath>
+      <Company>蓝思生物信息工程师工作站</Company>
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="serials_data.analysis" Guid="37680de3-68c8-381a-8cef-631bcee8b6a1" UpdateTime="-8587851946893537804">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\Microsoft.VisualBasic.DataVisualization.DataMining.Framework.dll</AssemblyPath>
+      <Company>LANS Workstation</Company>
+      <Version>2.0.34.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="" Guid="d53afaf8-cafe-3bc4-b76f-0eacc60b566d" UpdateTime="-8587851946893537804">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\Microsoft.VisualBasic.DataVisualization.DataMining.Framework.dll</AssemblyPath>
+      <Company>LANS Workstation</Company>
+      <Version>2.0.34.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="vbmath" Guid="18de0015-fa06-3eec-8295-3123560db260" UpdateTime="-8587851860390529799">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\Microsoft.VisualBasic.Mathematical.Extensions.Shoal_HybridScripting.dll</AssemblyPath>
+      <Company />
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="dynamics.ide_plugins" Guid="076311b4-95bb-3294-b00e-9a32169caa04" UpdateTime="-8587851860387629633">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\Microsoft.VisualBasic.ShellScript.Dynamics.IDE_PlugIns.dll</AssemblyPath>
+      <Company />
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="pfam.domain.analysis" Guid="46fd45bf-a737-32f1-960c-1cd4c0a00977" UpdateTime="-8587851946630542761">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\ProteinTools.Sanger.Pfam.dll</AssemblyPath>
+      <Company />
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="More_Precise_Alignment" Guid="282beab9-2ad2-31b9-b87d-27e1cda46935" UpdateTime="-8587851946630542761">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\ProteinTools.Sanger.Pfam.dll</AssemblyPath>
+      <Company />
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="r.net" Guid="f3b5ac1b-0fa5-36f9-a659-b203e6aaf717" UpdateTime="-8587851860393559972">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\RDotNET.Extensions.ShellScriptAPI.dll</AssemblyPath>
+      <Company />
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="seqtools" Guid="e28238c4-310d-3777-bd87-e8c170dbfb4f" UpdateTime="-8587851946815473338">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\seqtools.exe</AssemblyPath>
+      <Company />
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="System.Array" Guid="a2bbd8b9-efce-378a-b3dd-0e3dba0bdb7b" UpdateTime="-8587851860401500427">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\Shoal.exe</AssemblyPath>
+      <Company />
+      <Version>1.0.55.6</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="System" Guid="81fe574b-7d55-301b-912b-dd5fbf8671e2" UpdateTime="-8587851860401500427">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\Shoal.exe</AssemblyPath>
+      <Company />
+      <Version>1.0.55.6</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="System.Threading" Guid="15100642-072d-38f8-ad40-8900bd758ff8" UpdateTime="-8587851860401500427">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\Shoal.exe</AssemblyPath>
+      <Company />
+      <Version>1.0.55.6</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="plot.device.chart" Guid="ddd16ba3-7fe0-3ac2-ac55-7fa2ad8a738c" UpdateTime="-8587851860380129204">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\ShoalShell.PlugIns.Plot.dll</AssemblyPath>
+      <Company />
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="plots.device.image" Guid="94753095-feeb-3261-9677-0e928bc83e1c" UpdateTime="-8587851860380129204">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\ShoalShell.PlugIns.Plot.dll</AssemblyPath>
+      <Company />
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="Shoal.Runtime" Guid="6941c412-73f9-3f0a-81db-2c979de060b6" UpdateTime="-8587851860376018969">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\ShoalShell.Plugins.Runtime.Environment.dll</AssemblyPath>
+      <Company />
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="smart" Guid="1f180964-d83a-3c51-87fb-bca1004b3f50" UpdateTime="-8587851946593530644">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\SMART.exe</AssemblyPath>
+      <Company>xie.guigang@gmail.com</Company>
+      <Version>1.123.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="spiderman.pqd_provider" Guid="1a58a9ab-bee4-3fce-83e6-6e6924f616cd" UpdateTime="-8587851946436661672">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\Spiderman.exe</AssemblyPath>
+      <Company>LANS</Company>
+      <Version>1.0.5435.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="spiderman" Guid="b02e1f28-77c0-399d-adae-f96064dada09" UpdateTime="-8587851946436661672">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\Spiderman.exe</AssemblyPath>
+      <Company>LANS</Company>
+      <Version>1.0.5435.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+  </RegisteredModules>
+  <ScriptingInteropEntrypoints>
+    <AssemblyModule ModuleName="VBMath" Guid="18de0015-fa06-3eec-8295-3123560db260" UpdateTime="-8587851860390529799">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\Microsoft.VisualBasic.Mathematical.Extensions.Shoal_HybridScripting.dll</AssemblyPath>
+      <Company />
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+    <AssemblyModule ModuleName="R.NET" Guid="f3b5ac1b-0fa5-36f9-a659-b203e6aaf717" UpdateTime="-8587851860393559972">
+      <AssemblyPath>E:\GCModeller\CompiledAssembly\RDotNET.Extensions.ShellScriptAPI.dll</AssemblyPath>
+      <Company />
+      <Version>1.0.0.0</Version>
+      <FrameworkVersion>[System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName = ".NET Framework 4.5")]</FrameworkVersion>
+    </AssemblyModule>
+  </ScriptingInteropEntrypoints>
+</Shoal.ExternalModuleRegistry>

@@ -1,0 +1,9 @@
+#on error resume next
+fastaobject <- $ lquery "from fasta as fasta in ".\xcc8004.fsa" where microsoft.visualbasic.instr(fasta.title,"XC_11") select fasta"
+call $ write.xml obj $fastaobject file x:\test.xml
+msg <- $ read.txt ./linq_test.txt
+call $ msgbox title 1234 message $msg
+p <- $ system file ./linq.xml argv ""
+d <- $ source -script ./source_test.txt -argv "a 123" 
+
+call $ msgbox message $a title 12333333

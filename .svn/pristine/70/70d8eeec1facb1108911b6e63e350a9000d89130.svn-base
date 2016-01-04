@@ -1,0 +1,3330 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Molk+
+</name>
+</assembly>
+<members>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.API.ControlMoverOrResizer">
+ <summary>
+ Move and Resize Controls on a Form at Runtime (With Mouse)
+ http://www.codeproject.com/Tips/709121/Move-and-Resize-Controls-on-a-Form-at-Runtime-With
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.API.ControlMoverOrResizer.#ctor(System.Windows.Forms.Control,System.Windows.Forms.Control)">
+ <summary>
+ 
+ </summary>
+ <param name="control">控件</param>
+ <param name="container">窗体</param>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.API.Gtk.SkinEngine">
+ <summary>
+ Molk+ theme skin engine which can using the gtk theme file on Linux.(Molk+版本的Gtk窗口装饰器的皮肤引擎)
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.API.Gtk.SkinEngine.ColorNeutralization(System.Drawing.Bitmap,System.Drawing.Color,System.Drawing.Color)">
+ <summary>
+ 对颜色进行中和替换
+ </summary>
+ <param name="bitmap"></param>
+ <param name="ExceptColor">本颜色的像素点将不会被中和掉，默认为白色</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.API.Gtk.File.MetaCityTheme">
+ <summary>
+ 皮肤引擎的皮肤数据存储结构
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.API.MoveScreen.Enabled">
+ <summary>
+ Enabled this feature or not?
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.API.TabLogicalModel">
+ <summary>
+ 仅涉及集合的逻辑操作，不涉及UI的修饰
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.API.TabLogicalModel.GetSize">
+ <summary>
+ 获取标签页的停靠大小
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.API.TabLogicalModel.GetLocation">
+ <summary>
+ 获取标签页的停靠位置
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.API.TabLogicalModel.CurrentTab">
+ <summary>
+ 返回标签页之中的当前的所打开的页面
+ </summary>
+ <returns></returns>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.API.TabLogicalModel.Add(System.Windows.Forms.Control,System.Boolean)">
+ <summary>
+ Dynamics add a tabpage control on the form. 
+ (函数返回Key，添加的新的标签页控件的哈希值，不能够跨线程添加控件)
+ </summary>
+ <returns></returns>
+ <param name="select">是否将该控件切换至最前面</param>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.API.TabLogicalModel.Add(Microsoft.VisualBasic.MolkPlusTheme.API.TabLogicalModel.CreateControlInvoke)">
+ <summary>
+ 使用控件的<see cref="M:System.Object.GetHashCode"/>哈希值来作为对象的查找依据
+ </summary>
+ <param name="CreateControl"></param>
+ <returns></returns>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.API.TabLogicalModel.GetHandle(System.Windows.Forms.Control)">
+ <summary>
+ 不存在则返回-1
+ </summary>
+ <param name="Control"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.API.TabLogicalModel.Select(System.Int32)">
+ <summary>
+ 句柄值不存在就返回空值
+ </summary>
+ <param name="Key"><see cref="M:System.Object.GetHashCode"/></param>
+ <returns></returns>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.API.TabLogicalModel.Select(System.Windows.Forms.Control)">
+ <summary>
+ 函数在切换了指定的控件至最前之后还会自动定位以及调整大小
+ </summary>
+ <param name="Panel">所管理的标签页控件</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.API.TabLogicalModel.Add(System.Int32,System.Windows.Forms.Control)">
+ <summary>
+ 只会想字典里面添加控件句柄，而不会将控件切换到最前面
+ </summary>
+ <param name="key"></param>
+ <param name="value"></param>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.API.TabLogicalModel.Item(System.Int32)">
+ <summary>
+ 不存在则返回空值
+ </summary>
+ <param name="key"></param>
+ <returns></returns>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.gGlowBox">
+ <summary>
+ gGlowBox is a Panel control to add glow effect to a focused child control
+ </summary>
+ <remarks>
+ v1.0.1
+ SSDiver2112 ©2012
+ </remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.gGlowBox.GlowColor">
+ <summary>
+ Get or Set the color of the Glow
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.gGlowBox.GlowOn">
+ <summary>
+ Turn the Glow effect on or off
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.gGlowGroupBox">
+ <summary>
+ Panel Control to add Glow Effect to all of the Child Controls
+ </summary>
+ <remarks>v1.0.2</remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.gGlowGroupBox.GlowColor">
+ <summary>
+ Get or Set the color of the Glow
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.gGlowGroupBox.GlowOn">
+ <summary>
+ Turn the Glow effect on or off
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.gGlowGroupBox.EffectType">
+ <summary>
+ Choose Glow or Shadow
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.ControlComponent.InputBoxShowDialog(System.Windows.Forms.Control,System.Action{System.String},System.Drawing.Point,System.Int32,System.String)">
+ <summary>
+ 
+ </summary>
+ <param name="Hook"></param>
+ <param name="InputHandle"></param>
+ <param name="Location"></param>
+ <param name="Width"></param>
+ <param name="DefaultValue">默认值，当用户没有输入任何字符串直接点击确定的时候，返回这个预设值</param>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.CYMessageBox.Show(System.String)">
+ <summary>
+ Message: Text to display in the message box.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.CYMessageBox.Show(System.String,System.String)">
+ <summary>
+ Title: Text to display in the title bar of the messagebox.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.CYMessageBox.Show(System.String,System.String,Microsoft.VisualBasic.MolkPlusTheme.MessageBox.CYButtons)">
+ <summary>
+ MButtons: Display CYButtons on the message box.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.CYMessageBox.Show(System.String,System.String,Microsoft.VisualBasic.MolkPlusTheme.MessageBox.CYButtons,Microsoft.VisualBasic.MolkPlusTheme.MessageBox.CYIcon)">
+ <summary>
+ MIcon: Display CYIcon on the message box.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.MessageBox.Show(System.String)">
+ <summary>
+ Message: Text to display in the message box.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.MessageBox.Show(System.String,System.String)">
+ <summary>
+ Title: Text to display in the title bar of the messagebox.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.MessageBox.Show(System.String,System.String,Microsoft.VisualBasic.MolkPlusTheme.MessageBox.CYButtons)">
+ <summary>
+ MButtons: Display CYButtons on the message box.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.MessageBox.Show(System.String,System.String,Microsoft.VisualBasic.MolkPlusTheme.MessageBox.CYButtons,Microsoft.VisualBasic.MolkPlusTheme.MessageBox.CYIcon)">
+ <summary>
+ MIcon: Display CYIcon on the message box.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.GDI_API.GetScreenshot(System.Windows.Forms.Form)">
+ <summary>
+ 获取目标窗口的截图，截图失败会返回空值
+ </summary>
+ <param name="Form"></param>
+ <returns></returns>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.GDI_API.GetScreenshot(System.Drawing.Rectangle)">
+ <summary>
+ 获取屏幕上面的指定区域的截图
+ </summary>
+ <param name="ScreenRECT"></param>
+ <returns></returns>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.GDI_API.GetScreenshot">
+ <summary>
+ 获取整个屏幕的截图
+ </summary>
+ <returns></returns>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.GraphicsTools">
+ <summary>
+ Provides tools for graphics processing
+ </summary>
+ <remarks>
+ 2007 José Manuel Menéndez Poo
+ Visit my blog for upgrades and other renderers - www.menendezpoo.com
+ </remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.GraphicsTools.CreateRoundRectangle(System.Drawing.Rectangle,System.Int32)">
+ <summary>
+ Creates a rounded rectangle from the specified rectangle and radius
+ </summary>
+ <param name="rectangle">Base rectangle</param>
+ <param name="radius">Radius of the corners</param>
+ <returns>Rounded rectangle as a GraphicsPath</returns>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.GraphicsTools.CreateTopRoundRectangle(System.Drawing.Rectangle,System.Int32)">
+ <summary>
+ Creates a rectangle rounded on the top
+ </summary>
+ <param name="rectangle">Base rectangle</param>
+ <param name="radius">Radius of the top corners</param>
+ <returns>Rounded rectangle (on top) as a GraphicsPath object</returns>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.GraphicsTools.CreateBottomRoundRectangle(System.Drawing.Rectangle,System.Int32)">
+ <summary>
+ Creates a rectangle rounded on the bottom
+ </summary>
+ <param name="rectangle">Base rectangle</param>
+ <param name="radius">Radius of the bottom corners</param>
+ <returns>Rounded rectangle (on bottom) as a GraphicsPath object</returns>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaColorTable">
+ <summary>
+ Provides colors used by WindowsVista style rendering
+ </summary>
+ <remarks>
+ 2007 José Manuel Menéndez Poo
+ Visit my blog for upgrades and other renderers - www.menendezpoo.com
+ </remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaColorTable.DropDownArrow">
+ <summary>
+ Gets or sets the color for the dropwown arrow
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaColorTable.ButtonFillSouthPressed">
+ <summary>
+ Gets or sets the south color of the button fill when pressed
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaColorTable.ButtonFillSouth">
+ <summary>
+ Gets or sets the south color of the button fill
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaColorTable.ButtonInnerBorderPressed">
+ <summary>
+ Gets or sets the color of the inner border when pressed
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaColorTable.Glow">
+ <summary>
+ Gets or sets the glow color
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaColorTable.ButtonFillNorth">
+ <summary>
+ Gets or sets the buttons fill color
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaColorTable.ButtonFillNorthPressed">
+ <summary>
+ Gets or sets the buttons fill color when pressed
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaColorTable.ButtonInnerBorder">
+ <summary>
+ Gets or sets the buttons inner border color
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaColorTable.ButtonBorder">
+ <summary>
+ Gets or sets the buttons border color
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaColorTable.ButtonOuterBorder">
+ <summary>
+ Gets or sets the buttons outer border color
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaColorTable.Text">
+ <summary>
+ Gets or sets the color of the text
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaColorTable.BackgroundGlow">
+ <summary>
+ Gets or sets the background glow color
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaColorTable.BackgroundBorder">
+ <summary>
+ Gets or sets the color of the background border
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaColorTable.BackgroundNorth">
+ <summary>
+ Background north part
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaColorTable.BackgroundSouth">
+ <summary>
+ Background south color
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaColorTable.GlossyEffectNorth">
+ <summary>
+ Gets ors sets the glossy effect north color
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaColorTable.GlossyEffectSouth">
+ <summary>
+ Gets or sets the glossy effect south color
+ </summary>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaRenderer">
+ <summary>
+ Renders toolstrip items using Windows Vista look and feel
+ </summary>
+ <remarks>
+ 2007 José Manuel Menéndez Poo
+ Visit my blog for upgrades and other renderers - www.menendezpoo.com
+ </remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaRenderer.CreateBottomRadialPath(System.Drawing.Rectangle)">
+ <summary>
+ Creates the glow of the buttons
+ </summary>
+ <param name="rectangle"></param>
+ <returns></returns>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaRenderer.CreateOverflowChevron(System.Drawing.Size)">
+ <summary>
+ Creates the chevron for the overflow button
+ </summary>
+ <param name="overflowButtonSize"></param>
+ <returns></returns>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaRenderer.ButtonRadius">
+ <summary>
+ Gets or sets the buttons rectangle radius
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaRenderer.ToolStripRadius">
+ <summary>
+ Gets or sets the radius of the rectangle of the hole ToolStrip
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaRenderer.BackgroundGlow">
+ <summary>
+ Gets ors sets if background glow should be rendered
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaRenderer.GlossyEffect">
+ <summary>
+ Gets or sets if glossy effect should be rendered
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaRenderer.ColorTable">
+ <summary>
+ Gets or sets the color table of the renderer
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaRenderer.InitializeToolStripMenuItem(System.Windows.Forms.ToolStripMenuItem)">
+ <summary>
+ Initializes properties for ToolStripMenuItem objects
+ </summary>
+ <param name="item"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaRenderer.GetToolStripRectangle(System.Windows.Forms.ToolStrip)">
+ <summary>
+ Gets a rounded rectangle representing the hole area of the toolstrip
+ </summary>
+ <param name="toolStrip"></param>
+ <returns></returns>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaRenderer.DrawGlossyEffect(System.Drawing.Graphics,System.Windows.Forms.ToolStrip)">
+ <summary>
+ Draws the glossy effect on the toolbar
+ </summary>
+ <param name="g"></param>
+ <param name="t"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaRenderer.DrawGlossyEffect(System.Drawing.Graphics,System.Windows.Forms.ToolStrip,System.Int32)">
+ <summary>
+ Draws the glossy effect on the toolbar
+ </summary>
+ <param name="g"></param>
+ <param name="t"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaRenderer.DrawVistaButtonBackground(System.Windows.Forms.ToolStripItemRenderEventArgs)">
+ <summary>
+ Renders the background of a button
+ </summary>
+ <param name="e"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaRenderer.DrawVistaButtonBackground(System.Drawing.Graphics,System.Drawing.Rectangle,System.Boolean,System.Boolean,System.Boolean)">
+ <summary>
+ Renders the background of a button on the specified rectangle using the specified device
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaRenderer.DrawVistaMenuBackground(System.Windows.Forms.ToolStripItemRenderEventArgs)">
+ <summary>
+ Draws the background of a menu, vista style
+ </summary>
+ <param name="e"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaRenderer.DrawVistaMenuBackground(System.Drawing.Graphics,System.Drawing.Rectangle,System.Boolean,System.Boolean)">
+ <summary>
+ Draws the background of a menu, vista style
+ </summary>
+ <param name="g"></param>
+ <param name="r"></param>
+ <param name="highlighted"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.WindowsVistaRenderer.DrawVistaMenuBorder(System.Drawing.Graphics,System.Drawing.Rectangle)">
+ <summary>
+ Draws the border of the vista menu window
+ </summary>
+ <param name="g"></param>
+ <param name="r"></param>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.ImageRotationUtilities">
+ <summary>
+ Image Rotation in .NET, Rotates an image without having to worry about cropping the edges.  
+ http://www.codeproject.com/Articles/3319/Image-Rotation-in-NET
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.ImageRotationUtilities.RotateImage(System.Drawing.Image,System.Single)">
+ <summary>
+ Creates a new Image containing the same image only rotated
+ </summary>
+ <param name="image">The <see cref="T:System.Drawing.Image"/> to rotate</param>
+ <param name="angle">The amount to rotate the image, clockwise, in degrees</param>
+ <returns>A new <see cref="T:System.Drawing.Bitmap"/> that is just large enough
+ to contain the rotated image without cutting any corners off.</returns>
+ <exception cref="T:System.ArgumentNullException">Thrown if <see cref="T:System.Drawing.Image"/> is null.</exception>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable">
+ <summary>
+ Provide Office 2007 Blue Theme colors
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.#ctor">
+ <summary>
+ Initialize a new instance of the Office2007ColorTable class.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.ButtonPressedGradientBegin">
+ <summary>
+ Gets the starting color of the gradient used when the button is pressed down.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.ButtonPressedGradientEnd">
+ <summary>
+ Gets the end color of the gradient used when the button is pressed down.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.ButtonPressedGradientMiddle">
+ <summary>
+ Gets the middle color of the gradient used when the button is pressed down.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.ButtonSelectedGradientBegin">
+ <summary>
+ Gets the starting color of the gradient used when the button is selected.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.ButtonSelectedGradientEnd">
+ <summary>
+ Gets the end color of the gradient used when the button is selected.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.ButtonSelectedGradientMiddle">
+ <summary>
+ Gets the middle color of the gradient used when the button is selected.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.ButtonSelectedHighlightBorder">
+ <summary>
+ Gets the border color to use with ButtonSelectedHighlight.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.CheckBackground">
+ <summary>
+ Gets the solid color to use when the check box is selected and gradients are being used.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.GripDark">
+ <summary>
+ Gets the color to use for shadow effects on the grip or move handle.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.GripLight">
+ <summary>
+ Gets the color to use for highlight effects on the grip or move handle.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.ImageMarginGradientBegin">
+ <summary>
+ Gets the starting color of the gradient used in the image margin of a ToolStripDropDownMenu.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.MenuBorder">
+ <summary>
+ Gets the border color or a MenuStrip.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.MenuItemPressedGradientBegin">
+ <summary>
+ Gets the starting color of the gradient used when a top-level ToolStripMenuItem is pressed down.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.MenuItemPressedGradientEnd">
+ <summary>
+ Gets the end color of the gradient used when a top-level ToolStripMenuItem is pressed down.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.MenuItemPressedGradientMiddle">
+ <summary>
+ Gets the middle color of the gradient used when a top-level ToolStripMenuItem is pressed down.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.MenuItemSelectedGradientBegin">
+ <summary>
+ Gets the starting color of the gradient used when the ToolStripMenuItem is selected.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.MenuItemSelectedGradientEnd">
+ <summary>
+ Gets the end color of the gradient used when the ToolStripMenuItem is selected.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.MenuStripGradientBegin">
+ <summary>
+ Gets the starting color of the gradient used in the MenuStrip.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.MenuStripGradientEnd">
+ <summary>
+ Gets the end color of the gradient used in the MenuStrip.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.OverflowButtonGradientBegin">
+ <summary>
+ Gets the starting color of the gradient used in the ToolStripOverflowButton.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.OverflowButtonGradientEnd">
+ <summary>
+ Gets the end color of the gradient used in the ToolStripOverflowButton.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.OverflowButtonGradientMiddle">
+ <summary>
+ Gets the middle color of the gradient used in the ToolStripOverflowButton.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.RaftingContainerGradientBegin">
+ <summary>
+ Gets the starting color of the gradient used in the ToolStripContainer.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.RaftingContainerGradientEnd">
+ <summary>
+ Gets the end color of the gradient used in the ToolStripContainer.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.SeparatorDark">
+ <summary>
+ Gets the color to use to for shadow effects on the ToolStripSeparator.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.SeparatorLight">
+ <summary>
+ Gets the color to use to for highlight effects on the ToolStripSeparator.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.StatusStripGradientBegin">
+ <summary>
+ Gets the starting color of the gradient used on the StatusStrip.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.StatusStripGradientEnd">
+ <summary>
+ Gets the end color of the gradient used on the StatusStrip.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.ToolStripBorder">
+ <summary>
+ Gets the border color to use on the bottom edge of the ToolStrip.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.ToolStripContentPanelGradientBegin">
+ <summary>
+ Gets the starting color of the gradient used in the ToolStripContentPanel.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.ToolStripContentPanelGradientEnd">
+ <summary>
+ Gets the end color of the gradient used in the ToolStripContentPanel.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.ToolStripDropDownBackground">
+ <summary>
+ Gets the solid background color of the ToolStripDropDown.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.ToolStripGradientBegin">
+ <summary>
+ Gets the starting color of the gradient used in the ToolStrip background.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.ToolStripGradientEnd">
+ <summary>
+ Gets the end color of the gradient used in the ToolStrip background.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.ToolStripGradientMiddle">
+ <summary>
+ Gets the middle color of the gradient used in the ToolStrip background.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.ToolStripPanelGradientBegin">
+ <summary>
+ Gets the starting color of the gradient used in the ToolStripPanel.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Office2007ColorTable.ToolStripPanelGradientEnd">
+ <summary>
+ Gets the end color of the gradient used in the ToolStripPanel.
+ </summary>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.UseAntiAlias">
+ <summary>
+ Set the SmoothingMode=AntiAlias until instance disposed.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.UseAntiAlias.#ctor(System.Drawing.Graphics)">
+ <summary>
+ Initialize a new instance of the UseAntiAlias class.
+ </summary>
+ <param name="g">Graphics instance.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.UseAntiAlias.Dispose">
+ <summary>
+ Revert the SmoothingMode back to original setting.
+ </summary>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.UseClearTypeGridFit">
+ <summary>
+ Set the TextRenderingHint.ClearTypeGridFit until instance disposed.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.UseClearTypeGridFit.#ctor(System.Drawing.Graphics)">
+ <summary>
+ Initialize a new instance of the UseClearTypeGridFit class.
+ </summary>
+ <param name="g">Graphics instance.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.UseClearTypeGridFit.Dispose">
+ <summary>
+ Revert the TextRenderingHint back to original setting.
+ </summary>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.UseClipping">
+ <summary>
+ Set the clipping region until instance disposed.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.UseClipping.#ctor(System.Drawing.Graphics,System.Drawing.Drawing2D.GraphicsPath)">
+ <summary>
+ Initialize a new instance of the UseClipping class.
+ </summary>
+ <param name="g">Graphics instance.</param>
+ <param name="path">Clipping path.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.UseClipping.#ctor(System.Drawing.Graphics,System.Drawing.Region)">
+ <summary>
+ Initialize a new instance of the UseClipping class.
+ </summary>
+ <param name="g">Graphics instance.</param>
+ <param name="region">Clipping region.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.UseClipping.Dispose">
+ <summary>
+ Revert clipping back to origina setting.
+ </summary>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.Office2007Renderer">
+ <summary>
+ Draw ToolStrips using the Office 2007 themed appearance.
+ 
+ ToolStripManager.Renderer = New Microsoft.VisualBasic.MolkPlusTheme.Office2007Renderer()
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Office2007Renderer.#ctor">
+ <summary>
+ Initialize a new instance of the Office2007Renderer class.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Office2007Renderer.OnRenderArrow(System.Windows.Forms.ToolStripArrowRenderEventArgs)">
+ <summary>
+ Raises the RenderArrow event. 
+ </summary>
+ <param name="e">An ToolStripArrowRenderEventArgs containing the event data.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Office2007Renderer.OnRenderButtonBackground(System.Windows.Forms.ToolStripItemRenderEventArgs)">
+ <summary>
+ Raises the RenderButtonBackground event. 
+ </summary>
+ <param name="e">An ToolStripItemRenderEventArgs containing the event data.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Office2007Renderer.OnRenderDropDownButtonBackground(System.Windows.Forms.ToolStripItemRenderEventArgs)">
+ <summary>
+ Raises the RenderDropDownButtonBackground event. 
+ </summary>
+ <param name="e">An ToolStripItemRenderEventArgs containing the event data.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Office2007Renderer.OnRenderItemCheck(System.Windows.Forms.ToolStripItemImageRenderEventArgs)">
+ <summary>
+ Raises the RenderItemCheck event. 
+ </summary>
+ <param name="e">An ToolStripItemImageRenderEventArgs containing the event data.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Office2007Renderer.OnRenderItemText(System.Windows.Forms.ToolStripItemTextRenderEventArgs)">
+ <summary>
+ Raises the RenderItemText event. 
+ </summary>
+ <param name="e">An ToolStripItemTextRenderEventArgs containing the event data.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Office2007Renderer.OnRenderItemImage(System.Windows.Forms.ToolStripItemImageRenderEventArgs)">
+ <summary>
+ Raises the RenderItemImage event. 
+ </summary>
+ <param name="e">An ToolStripItemImageRenderEventArgs containing the event data.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Office2007Renderer.OnRenderMenuItemBackground(System.Windows.Forms.ToolStripItemRenderEventArgs)">
+ <summary>
+ Raises the RenderMenuItemBackground event. 
+ </summary>
+ <param name="e">An ToolStripItemRenderEventArgs containing the event data.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Office2007Renderer.OnRenderSplitButtonBackground(System.Windows.Forms.ToolStripItemRenderEventArgs)">
+ <summary>
+ Raises the RenderSplitButtonBackground event. 
+ </summary>
+ <param name="e">An ToolStripItemRenderEventArgs containing the event data.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Office2007Renderer.OnRenderStatusStripSizingGrip(System.Windows.Forms.ToolStripRenderEventArgs)">
+ <summary>
+ Raises the RenderStatusStripSizingGrip event. 
+ </summary>
+ <param name="e">An ToolStripRenderEventArgs containing the event data.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Office2007Renderer.OnRenderToolStripContentPanelBackground(System.Windows.Forms.ToolStripContentPanelRenderEventArgs)">
+ <summary>
+ Raises the RenderToolStripContentPanelBackground event. 
+ </summary>
+ <param name="e">An ToolStripContentPanelRenderEventArgs containing the event data.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Office2007Renderer.OnRenderSeparator(System.Windows.Forms.ToolStripSeparatorRenderEventArgs)">
+ <summary>
+ Raises the RenderSeparator event. 
+ </summary>
+ <param name="e">An ToolStripSeparatorRenderEventArgs containing the event data.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Office2007Renderer.OnRenderToolStripBackground(System.Windows.Forms.ToolStripRenderEventArgs)">
+ <summary>
+ Raises the RenderToolStripBackground event. 
+ </summary>
+ <param name="e">An ToolStripRenderEventArgs containing the event data.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Office2007Renderer.OnRenderImageMargin(System.Windows.Forms.ToolStripRenderEventArgs)">
+ <summary>
+ Raises the RenderImageMargin event. 
+ </summary>
+ <param name="e">An ToolStripRenderEventArgs containing the event data.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Office2007Renderer.OnRenderToolStripBorder(System.Windows.Forms.ToolStripRenderEventArgs)">
+ <summary>
+ Raises the RenderToolStripBorder event. 
+ </summary>
+ <param name="e">An ToolStripRenderEventArgs containing the event data.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.DataPager`1.GetCurrentPages(System.Int32)">
+ <summary>
+ 函数会优先显示当前页码的后面的页数，当到达底部的时候会显示前面的页数
+ </summary>
+ <returns></returns>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Visualise.Elements.ButtonRender.RenderButton(Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.Checkbox@,System.Drawing.Size,System.Drawing.Font)">
+ <summary>
+ 假若复选按钮当作普通按钮来使用的话，可以使用这个方法来渲染。
+ 请注意这个方法不会复选控件的处理文本标签部分，仅仅处理左边的图标部分的UI
+ </summary>
+ <param name="Checkbox"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Visualise.Elements.ButtonRender.Render(System.String,System.Drawing.Size,System.Drawing.Font)">
+ <summary>
+ 
+ </summary>
+ <param name="Text"></param>
+ <param name="Size">按钮的大小</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Visualise.Elements.Checkbox.ForeColor">
+ <summary>
+ 标签字符串在普通状态下的颜色
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Visualise.Elements.Checkbox.PrelightColor">
+ <summary>
+ 标签字符串的高亮颜色
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Visualise.Elements.Checkbox.LabelMargin">
+ <summary>
+ 标签和图标之间的距离
+ </summary>
+ <returns></returns>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.Visualise.Elements.CaptionResources">
+ <summary>
+ 标题栏的视觉元素的数据包
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Visualise.Elements.CaptionResources.ControlboxButtonSize">
+ <summary>
+ The button size of the <see cref="P:Microsoft.VisualBasic.MolkPlusTheme.Visualise.Elements.CaptionResources.Minimize"/>, <see cref="P:Microsoft.VisualBasic.MolkPlusTheme.Visualise.Elements.CaptionResources.Maximum"/> and <see cref="P:Microsoft.VisualBasic.MolkPlusTheme.Visualise.Elements.CaptionResources.Close"/>
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Visualise.Elements.CaptionResources.HeightLimits">
+ <summary>
+ 标题栏的高度上限
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Visualise.Elements.CaptionResources.Molk">
+ <summary>
+ Default UI visualize style.
+ </summary>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.Visualise.Elements.MultipleTabPage">
+ <summary>
+ 请记住，使用<see cref="M:Microsoft.VisualBasic.MolkPlusTheme.Visualise.Elements.MultipleTabPage.SetupResource(Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.TabPage.MultipleTabpagePanel@)"/>方法进行主题的渲染工作要在加载标签页之前进行
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Visualise.Elements.MultipleTabPage.SeperatorBarSpacing">
+ <summary>
+ 标签页和分割线之间的距离
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Visualise.Elements.MultipleTabPage.TabSpacing">
+ <summary>
+ 标签页之间的间隔距离
+ </summary>
+ <returns></returns>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TextBox.Initialize">
+ <summary>
+ Initializes watermark properties and adds CtextBox events
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TextBox.RemoveWaterMark">
+ <summary>
+ Removes the watermark if it should
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TextBox.DrawWaterMark">
+ <summary>
+ Draws the watermark if the text length is 0
+ </summary>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.TabPage.MultipleTabpagePanel">
+ <summary>
+ 多标签页
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.TabPage.MultipleTabpagePanel.TabpageSizeModes.UIResourceAutoSize">
+ <summary>
+ 标签页的大小为资源图片的大小
+ </summary>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.TabPage.MultipleTabpagePanel.TabpageSizeModes.EvenSize">
+ <summary>
+ 宽度根据标签页的数量进行平均分配
+ </summary>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.TabPage.MultipleTabpagePanel.TabpageSizeModes.CaptionTextLengthAutoSize">
+ <summary>
+ 根据文本标题的文字长度自动调整
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.TabPage.MultipleTabpagePanel.InternalEvenSizeAndFilled">
+ <summary>
+ 宽度根据标签页的数量进行平均分配
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.TabPage.MultipleTabpagePanel.UpdatesUILayout">
+ <summary>
+ 在赋值了新的主题属性之后使用这个方法强制刷新整个控件的外观样式
+ </summary>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.TabPage.TabPage">
+ <summary>
+ Tabpage in the multiple tabpage controls collection.(标签页控件)
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="E:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.TabPage.TabPage.TabPageInactive">
+ <summary>
+ 当前的标签页失活
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="E:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.TabPage.TabPage.TabPageActive">
+ <summary>
+ 当前的标签页被激活
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="E:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.TabPage.TabPage.CloseAllTabs">
+ <summary>
+ 关闭所有的标签页（用户点击了右键菜单上面的关闭所有标签页的按钮）
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="E:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.TabPage.TabPage.CloseAllTabsButThis">
+ <summary>
+ 关闭所有的标签页但是当前标签页除外（用户点击了右键菜单上面的关闭所有标签页但是当前的标签页除外的按钮）
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="E:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.TabPage.TabPage.CloseTabPage">
+ <summary>
+ 关闭当前标签页（用户点击了右键菜单上面的关闭当前标签页的按钮）
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.TabPage.TabPage.EnableCloseButton">
+ <summary>
+ 是否允许关闭按钮起作用
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.TabPage.TabPage.CanbeClosed">
+ <summary>
+ 标签页是否可以被关闭，默认可以被关闭
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.TabPage.TabPage.OriginalUIResource">
+ <summary>
+ 
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.TabPage.TabPage.InternalUpdateUI(Microsoft.VisualBasic.MolkPlusTheme.Visualise.Elements.ButtonResource)">
+ <summary>
+ 假若是自动大小的话，会将大小设置为图片资源的大小
+ </summary>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.ITabControl`1">
+ <summary>
+ 多标签页的基本框架
+ </summary>
+ <typeparam name="T"></typeparam>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.ITabControl`1.PagesCount">
+ <summary>
+ 返回容器内的标签数目
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.ITabControl`1.InternalAddTabPage(System.String,System.Windows.Forms.Control,System.Action)">
+ <summary>
+ 添加新标签页的逻辑，在本过程之中并不包含有UI布局等细节的控制
+ </summary>
+ <param name="Name"></param>
+ <param name="TabCloseEventHandle"></param>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.ITabControl`1.RemoveTabPage(System.String,System.Action)">
+ <summary>
+ 用于处理用户鼠标点击事件的过程
+ </summary>
+ <param name="Name"></param>
+ <param name="TabCloseEventHandler"></param>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.ITabPage">
+ <summary>
+ 标签页的基本框架
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.ITabPage._Id">
+ <summary>
+ 用于标识当前的标签页对象的位置的属性值
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="E:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.ITabPage.ITabPageEx.TabPageInactive">
+ <summary>
+ 当前的标签页失活
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="E:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.ITabPage.ITabPageEx.TabPageActive">
+ <summary>
+ 当前的标签页被激活
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="E:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.ITabPage.ITabPageEx.CloseAllTabs">
+ <summary>
+ 关闭所有的标签页（用户点击了右键菜单上面的关闭所有标签页的按钮）
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="E:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.ITabPage.ITabPageEx.CloseAllTabsButThis">
+ <summary>
+ 关闭所有的标签页但是当前标签页除外（用户点击了右键菜单上面的关闭所有标签页但是当前的标签页除外的按钮）
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="E:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.ITabPage.ITabPageEx.CloseTabPage">
+ <summary>
+ 关闭当前标签页（用户点击了右键菜单上面的关闭当前标签页的按钮）
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.ITabPage.EventTabPageInactive">
+ <summary>
+ 当前的标签页失活
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.ITabPage.EventTabPageActive">
+ <summary>
+ 当前的标签页被激活
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.ITabPage.EventCloseAllTabs">
+ <summary>
+ 关闭所有的标签页（用户点击了右键菜单上面的关闭所有标签页的按钮）
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.ITabPage.EventCloseAllTabsButThis">
+ <summary>
+ 关闭所有的标签页但是当前标签页除外（用户点击了右键菜单上面的关闭所有标签页但是当前的标签页除外的按钮）
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.ITabPage.EventCloseTabPage">
+ <summary>
+ 关闭当前标签页（用户点击了右键菜单上面的关闭当前标签页的按钮）
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.ITabPage.ActiveTabPage">
+ <summary>
+ 本方法激活当前的标签页同时取消其他的标签页的激活状态，假若要仅仅更改当前标签页的激活状态，请使用Active属性
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.ITabPage.Active">
+ <summary>
+ 获取一个值来指示当前的标签页是否处于激活的状态
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.TabSwitch.TabPage">
+ <summary>
+ Tabpage in the multiple tabpage controls collection.(标签页控件)
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="E:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.TabSwitch.TabPage.TabPageInactive">
+ <summary>
+ 当前的标签页失活
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="E:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.TabSwitch.TabPage.TabPageActive">
+ <summary>
+ 当前的标签页被激活
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="E:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.TabSwitch.TabPage.CloseAllTabs">
+ <summary>
+ 关闭所有的标签页（用户点击了右键菜单上面的关闭所有标签页的按钮）
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="E:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.TabSwitch.TabPage.CloseAllTabsButThis">
+ <summary>
+ 关闭所有的标签页但是当前标签页除外（用户点击了右键菜单上面的关闭所有标签页但是当前的标签页除外的按钮）
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="E:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.TabSwitch.TabPage.CloseTabPage">
+ <summary>
+ 关闭当前标签页（用户点击了右键菜单上面的关闭当前标签页的按钮）
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.TabSwitch.TabPage.EnableCloseButton">
+ <summary>
+ 是否允许关闭按钮起作用
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.TabSwitch.TabPage.CanbeClosed">
+ <summary>
+ 标签页是否可以被关闭，默认可以被关闭
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.TabControl.TabSwitch.MultipleTabpagePanel">
+ <summary>
+ 多标签页
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.Image">
+ <summary>
+ 
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.Image.Bitmap">
+ <summary>
+ 背景图像数据的存放位置
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.Image._opacity">
+ <summary>
+ 图像控件的透明度
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.Image._tmrFadeInn">
+ <summary>
+ 图像控件渐现动画绘制线程
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.Image._tmrFadeOut">
+ <summary>
+ 图像控件渐隐动画绘制线程
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.Image.Image">
+ <summary>
+ 设置或者获取图像控件的背景图片
+ </summary>
+ <value>图像控件的背景图片</value>
+ <returns>图像控件的背景图片</returns>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.Image.Opacity">
+ <summary>
+ 在这里获取或者设置控件的透明度（0-255）
+ </summary>
+ <value>控件的透明度</value>
+ <returns>控件的透明度</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.Image.FadeIn">
+ <summary>
+ 启动控件的渐现动画的绘制线程
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.Image.FadeOut">
+ <summary>
+ 启动控件的渐隐动画的绘制线程
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.Image.OnPaint(System.Windows.Forms.PaintEventArgs)">
+ <summary>
+ 复写了控件的绘制事件，仅当使用控件的Opacity属性更改透明度的时候，会调用Invalidate()过程，发生绘制事件
+ </summary>
+ <param name="pe"></param>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.Checkbox.RatioMode">
+ <summary>
+ 单选模式，这个属性只是表示本控件不会在选中之后再次通过点击而取消选中状态，选中状态的取消需要通过外部事件来完成
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+ 
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.Checkbox.Integral">
+ <summary>
+ 复选框的文本标签是否也可以成为工作动作的一个触发点
+ </summary>
+ <returns></returns>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.Checkbox.__uiElement">
+ <summary>
+ Create a checkbox ui with text and then assign the new ui to variable [_UI]
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="E:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.Checkbox.CheckStateChanged">
+ <summary>
+ 用户使用鼠标修改了控件的状态
+ </summary>
+ <param name="Checked"></param>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.Checkbox.Checked">
+ <summary>
+ 开发者使用代码修改状态，这个操作不会触发<see cref="E:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.Checkbox.CheckStateChanged"></see>控件事件
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+ 
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.Button">
+ <summary>
+ 一个可以自定义样式的按钮控件
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.Button.UI">
+ <summary>
+ The UI style definition data for this button control.(这个按钮控件的UI样式定义数据)
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.Button.__setUIRes(Microsoft.VisualBasic.MolkPlusTheme.Visualise.Elements.ButtonResource)">
+ <summary>
+ 这个函数不会修改原始数据
+ </summary>
+ <param name="value"></param>
+ <remarks></remarks>
+</member>
+<member name="E:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.Button.ButtonClick">
+ <summary>
+ Occurs when this <see cref="T:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.Button"/> control is clicked.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.Caption.Icon">
+ <summary>
+ 可以通过设置这个属性也可以设置到父窗体的图标
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.Caption.UIThemes">
+ <summary>
+ 当前的控件主题在这里更换
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.Caption.Update">
+ <summary>
+ Updates the ui visualize of this caption bar.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Controls.Caption.ResizedLayout">
+ <summary>
+ 只在加载完UI资源的时候执行一次，其他的情况靠系统来自动排版
+ </summary>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.API.Dwm.WTNCA_NODRAWCAPTION">
+ <summary>
+ Do Not Draw The Caption (Text)
+ </summary>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.API.Dwm.WTNCA_NODRAWICON">
+ <summary>
+ Do Not Draw the Icon
+ </summary>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.API.Dwm.WTNCA_NOSYSMENU">
+ <summary>
+ Do Not Show the System Menu
+ </summary>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.API.Dwm.WTNCA_NOMIRRORHELP">
+ <summary>
+ Do Not Mirror the Question mark Symbol
+ </summary>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.API.Dwm.WTA_OPTIONS">
+ <summary>
+ The Options of What Attributes to Add/Remove
+ </summary>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.API.Dwm.WindowThemeAttributeType">
+ <summary>
+ What Type of Attributes? (Only One is Currently Defined)
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.API.Dwm.SetWindowThemeAttribute(System.IntPtr,Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.API.Dwm.WindowThemeAttributeType,Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.API.Dwm.WTA_OPTIONS@,System.UInt32)">
+ <summary>
+ Set The Window's Theme Attributes
+ </summary>
+ <param name="hWnd">The Handle to the Window</param>
+ <param name="wtype">What Type of Attributes</param>
+ <param name="attributes">The Attributes to Add/Remove</param>
+ <param name="size">The Size of the Attributes Struct</param>
+ <returns>If The Call Was Successful or Not</returns>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Form.HiWord(System.Int32)">
+ <summary>
+ Equivalent to the HiWord C Macro
+ </summary>
+ <param name="dwValue"></param>
+ <returns></returns>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Form.BORDER_WIDTH">
+ <summary>
+ 使用鼠标改变窗口大小的时候所需要使用的一个用于检测的边界大小值
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Windows.Forms.Form.Form1_MouseMove(System.Object,System.Windows.Forms.MouseEventArgs)">
+ <summary>
+ Calculate which direction to resize based on mouse position
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.ImageCorping.SourceImage">
+ <summary>
+ 属性会自动缩放原始图片和控件一致的尺寸比例
+ </summary>
+ <returns></returns>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorBox">
+ <summary>
+ Provides a interface to edit color values
+ </summary>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorBox.components">
+ <summary> 
+ Required designer variable.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorBox.Dispose(System.Boolean)">
+ <summary> 
+ Clean up any resources being used.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorBox.InitializeComponent">
+ <summary> 
+ Required method for Designer support - do not modify 
+ the contents of this method with the code editor.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorBox.DrawStyle">
+ <summary>
+ The drawstyle of the contol (Hue, Saturation, Brightness, Red, Green or Blue)
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorBox.HSL">
+ <summary>
+ The HSL color of the control, changing the HSL will automatically change the RGB color for the control.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorBox.RGB">
+ <summary>
+ The RGB color of the control, changing the RGB will automatically change the HSL color for the control.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorBox.ClearMarker">
+ <summary>
+ Redraws only the content over the marker
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorBox.DrawMarker(System.Int32,System.Int32,System.Boolean)">
+ <summary>
+ Draws the marker (circle) inside the box
+ </summary>
+ <param name="x"></param>
+ <param name="y"></param>
+ <param name="Unconditional"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorBox.DrawBorder">
+ <summary>
+ Draws the border around the control.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorBox.DrawContent">
+ <summary>
+ Evaluates the DrawStyle of the control and calls the appropriate
+ drawing function for content
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorBox.Draw_Style_Hue">
+ <summary>
+ Draws the content of the control filling in all color values with the provided Hue value.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorBox.Draw_Style_Saturation">
+ <summary>
+ Draws the content of the control filling in all color values with the provided Saturation value.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorBox.Draw_Style_Luminance">
+ <summary>
+ Draws the content of the control filling in all color values with the provided Luminance or Brightness value.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorBox.Draw_Style_Red">
+ <summary>
+ Draws the content of the control filling in all color values with the provided Red value.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorBox.Draw_Style_Green">
+ <summary>
+ Draws the content of the control filling in all color values with the provided Green value.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorBox.Draw_Style_Blue">
+ <summary>
+ Draws the content of the control filling in all color values with the provided Blue value.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorBox.Redraw_Control">
+ <summary>
+ Calls all the functions neccessary to redraw the entire control.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorBox.Reset_Marker(System.Boolean)">
+ <summary>
+ Resets the marker position of the slider to match the controls color.  Gives the option of redrawing the slider.
+ </summary>
+ <param name="Redraw">Set to true if you want the function to redraw the slider after determining the best position</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorBox.ResetHSLRGB">
+ <summary>
+ Resets the controls color (both HSL and RGB variables) based on the current marker position
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorBox.Round(System.Double)">
+ <summary>
+ Kindof self explanitory, I really need to look up the .NET function that does this.
+ </summary>
+ <param name="val">double value to be rounded to an integer</param>
+ <returns></returns>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorBox.GetColor(System.Int32,System.Int32)">
+ <summary>
+ Returns the graphed color at the x,y position on the control
+ </summary>
+ <param name="x"></param>
+ <param name="y"></param>
+ <returns></returns>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorChooser.components">
+ <summary>
+ Required designer variable.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorChooser.Dispose(System.Boolean)">
+ <summary>
+ Clean up any resources being used.
+ </summary>
+ <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorChooser.InitializeComponent">
+ <summary>
+ Required method for Designer support - do not modify
+ the contents of this method with the code editor.
+ </summary>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorChooserControl.components">
+ <summary> 
+ Required designer variable.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorChooserControl.Dispose(System.Boolean)">
+ <summary> 
+ Clean up any resources being used.
+ </summary>
+ <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorChooserControl.InitializeComponent">
+ <summary> 
+ Required method for Designer support - do not modify 
+ the contents of this method with the code editor.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorManager.SetBrightness(System.Drawing.Color,System.Double)">
+ <summary> 
+ Sets the absolute brightness of a colour 
+ </summary> 
+ <param name="c">Original colour</param> 
+ <param name="brightness">The luminance level to impose</param> 
+ <returns>an adjusted colour</returns> 
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorManager.ModifyBrightness(System.Drawing.Color,System.Double)">
+ <summary> 
+ Modifies an existing brightness level 
+ </summary> 
+ <remarks> 
+ To reduce brightness use a number smaller than 1. To increase brightness use a number larger tnan 1 
+ </remarks> 
+ <param name="c">The original colour</param> 
+ <param name="brightness">The luminance delta</param> 
+ <returns>An adjusted colour</returns> 
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorManager.SetSaturation(System.Drawing.Color,System.Double)">
+ <summary> 
+ Sets the absolute saturation level 
+ </summary> 
+ <remarks>Accepted values 0-1</remarks> 
+ <param name="c">An original colour</param> 
+ <param name="Saturation">The saturation value to impose</param> 
+ <returns>An adjusted colour</returns> 
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorManager.ModifySaturation(System.Drawing.Color,System.Double)">
+ <summary> 
+ Modifies an existing Saturation level 
+ </summary> 
+ <remarks> 
+ To reduce Saturation use a number smaller than 1. To increase Saturation use a number larger tnan 1 
+ </remarks> 
+ <param name="c">The original colour</param> 
+ <param name="Saturation">The saturation delta</param> 
+ <returns>An adjusted colour</returns> 
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorManager.SetHue(System.Drawing.Color,System.Double)">
+ <summary> 
+ Sets the absolute Hue level 
+ </summary> 
+ <remarks>Accepted values 0-1</remarks> 
+ <param name="c">An original colour</param> 
+ <param name="Hue">The Hue value to impose</param> 
+ <returns>An adjusted colour</returns> 
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorManager.ModifyHue(System.Drawing.Color,System.Double)">
+ <summary> 
+ Modifies an existing Hue level 
+ </summary> 
+ <remarks> 
+ To reduce Hue use a number smaller than 1. To increase Hue use a number larger tnan 1 
+ </remarks> 
+ <param name="c">The original colour</param> 
+ <param name="Hue">The Hue delta</param> 
+ <returns>An adjusted colour</returns> 
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorManager.HSL_to_RGB(Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorManager.HSL)">
+ <summary> 
+ Converts a colour from HSL to RGB 
+ </summary> 
+ <remarks>Adapted from the algoritm in Foley and Van-Dam</remarks> 
+ <param name="hsl">The HSL value</param> 
+ <returns>A Color structure containing the equivalent RGB values</returns> 
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorManager.RGB_to_HSL(System.Drawing.Color)">
+ <summary> 
+ Converts RGB to HSL 
+ </summary> 
+ <remarks>Takes advantage of whats already built in to .NET by using the Color.GetHue, Color.GetSaturation and Color.GetBrightness methods</remarks> 
+ <param name="c">A Color to convert</param> 
+ <returns>An HSL value</returns> 
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorManager.RGB_to_CMYK(System.Drawing.Color)">
+ <summary>
+ Converts RGB to CMYK
+ </summary>
+ <param name="c">A color to convert.</param>
+ <returns>A CMYK object</returns>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorManager.CMYK_to_RGB(Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorManager.CMYK)">
+ <summary>
+ Converts CMYK to RGB
+ </summary>
+ <param name="_cmyk">A color to convert</param>
+ <returns>A Color object</returns>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.ColorManager.Round(System.Double)">
+ <summary>
+ Custom rounding function.
+ </summary>
+ <param name="val">Value to round</param>
+ <returns>Rounded value</returns>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.CustomColorPicker.components">
+ <summary> 
+ Required designer variable.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.CustomColorPicker.Dispose(System.Boolean)">
+ <summary> 
+ Clean up any resources being used.
+ </summary>
+ <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.CustomColorPicker.InitializeComponent">
+ <summary> 
+ Required method for Designer support - do not modify 
+ the contents of this method with the code editor.
+ </summary>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.DropDownControl.components">
+ <summary> 
+ Required designer variable.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.DropDownControl.Dispose(System.Boolean)">
+ <summary> 
+ Clean up any resources being used.
+ </summary>
+ <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.DropDownControl.DropDownButtonDrawer(System.Drawing.Size,System.Int32)">
+ <summary>
+ 
+ </summary>
+ <param name="state">Normal, HighLight, Press</param>
+ <returns></returns>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.VerticalColorSlider">
+ <summary>
+ A vertical slider control that shows a range for a color property (a.k.a. Hue, Saturation, Brightness,
+ Red, Green, Blue) and sends an event when the slider is changed.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.VerticalColorSlider.Dispose(System.Boolean)">
+ <summary> 
+ Clean up any resources being used.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.VerticalColorSlider.InitializeComponent">
+ <summary> 
+ Required method for Designer support - do not modify 
+ the contents of this method with the code editor.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.VerticalColorSlider.DrawStyle">
+ <summary>
+ The drawstyle of the contol (Hue, Saturation, Brightness, Red, Green or Blue)
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.VerticalColorSlider.HSL">
+ <summary>
+ The HSL color of the control, changing the HSL will automatically change the RGB color for the control.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.VerticalColorSlider.RGB">
+ <summary>
+ The RGB color of the control, changing the RGB will automatically change the HSL color for the control.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.VerticalColorSlider.ClearSlider">
+ <summary>
+ Redraws the background over the slider area on both sides of the control
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.VerticalColorSlider.DrawSlider(System.Int32,System.Boolean)">
+ <summary>
+ Draws the slider arrows on both sides of the control.
+ </summary>
+ <param name="position">position value of the slider, lowest being at the bottom.  The range
+ is between 0 and the controls height-9.  The values will be adjusted if too large/small</param>
+ <param name="Unconditional">If Unconditional is true, the slider is drawn, otherwise some logic 
+ is performed to determine is drawing is really neccessary.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.VerticalColorSlider.DrawBorder">
+ <summary>
+ Draws the border around the control, in this case the border around the content area between
+ the slider arrows.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.VerticalColorSlider.DrawContent">
+ <summary>
+ Evaluates the DrawStyle of the control and calls the appropriate
+ drawing function for content
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.VerticalColorSlider.Draw_Style_Hue">
+ <summary>
+ Fills in the content of the control showing all values of Hue (from 0 to 360)
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.VerticalColorSlider.Draw_Style_Saturation">
+ <summary>
+ Fills in the content of the control showing all values of Saturation (0 to 100%) for the given
+ Hue and Luminance.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.VerticalColorSlider.Draw_Style_Luminance">
+ <summary>
+ Fills in the content of the control showing all values of Luminance (0 to 100%) for the given
+ Hue and Saturation.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.VerticalColorSlider.Draw_Style_Red">
+ <summary>
+ Fills in the content of the control showing all values of Red (0 to 255) for the given
+ Green and Blue.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.VerticalColorSlider.Draw_Style_Green">
+ <summary>
+ Fills in the content of the control showing all values of Green (0 to 255) for the given
+ Red and Blue.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.VerticalColorSlider.Draw_Style_Blue">
+ <summary>
+ Fills in the content of the control showing all values of Blue (0 to 255) for the given
+ Red and Green.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.VerticalColorSlider.Redraw_Control">
+ <summary>
+ Calls all the functions neccessary to redraw the entire control.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.VerticalColorSlider.Reset_Slider(System.Boolean)">
+ <summary>
+ Resets the vertical position of the slider to match the controls color.  Gives the option of redrawing the slider.
+ </summary>
+ <param name="Redraw">Set to true if you want the function to redraw the slider after determining the best position</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.VerticalColorSlider.ResetHSLRGB">
+ <summary>
+ Resets the controls color (both HSL and RGB variables) based on the current slider position
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Unity3.Controls.VerticalColorSlider.Round(System.Double)">
+ <summary>
+ Kindof self explanitory, I really need to look up the .NET function that does this.
+ </summary>
+ <param name="val">double value to be rounded to an integer</param>
+ <returns></returns>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.UserPicker.components">
+ <summary> 
+ Required designer variable.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.UserPicker.Dispose(System.Boolean)">
+ <summary> 
+ Clean up any resources being used.
+ </summary>
+ <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.UserCard">
+ <summary>
+ 一个基本的头像和用户名和小写的其他说明文本
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.UserCard.Title">
+ <summary>
+ 非选中状态只显示这个属性
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.UserCard.HighlighsColor">
+ <summary>
+ 选中的颜色
+ </summary>
+ <returns></returns>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.ListControl">
+ <summary>
+ Copyright © Faraz's Creationz 2012
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.ListControl.Clear">
+ <summary>
+ 清理掉本列表控件之中的所有入口点对象
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.ListControl.Count">
+ <summary>
+ 返回列表之中的Entry的数目
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.ListControlItem.BindDataHandle">
+ <summary>
+ 与这个入口点相关的对象标签页的哈希句柄
+ </summary>
+ <returns></returns>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.ListControlItem.PaintDrawButton(System.Drawing.Graphics)">
+ <summary>
+ 这个函数只是绘制了头像而已
+ </summary>
+ <param name="gfx"></param>
+ <example>
+
+ gfx.CompositingQuality = CompositingQuality.HighQuality
+
+ ' Album Image
+ If _InternalIconImage IsNot Nothing Then
+ Dim hh As Integer = Height * 0.9
+    gfx.DrawImage(_InternalIconImage, CInt((Height - hh) / 2), CInt((Height - hh) / 2), hh, hh)
+ Else
+    gfx.DrawImage(ImageList1.Images(0), New Point(7, 7))
+ End If
+ </example>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.NotificationBar">
+ <summary>
+ Notification Bar
+ A small and easy to use notification bar like that found in IE6+ and Firefox web browsers.
+ http://www.codeproject.com/Articles/26627/Notification-Bar
+ </summary>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.ShadowPanel">
+ <summary>
+ Transparent drop shadow in C# (GDI+)  
+ http://www.codeproject.com/Articles/19258/Transparent-drop-shadow-in-C-GDI
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.ShadowPanel.OnResize(System.EventArgs)">
+ <summary>
+ Correct resizing
+ </summary>
+ <param name="e"></param>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Ping.IPAddress">
+ <summary>
+ Ping操作的目标机器的IP地址
+ </summary>
+ <returns></returns>
+</member>
+<member name="E:Microsoft.VisualBasic.MolkPlusTheme.Ping.NetworkFailure">
+ <summary>
+ 假设网络延迟很高的话，就会触发这个事件，提示用户
+ </summary>
+ <param name="ping"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Ping.__createFramework">
+ <summary>
+ 生成5个信号格子
+ </summary>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button">
+ <summary>
+ Class for rendering button and menu item, just a little part that have supports for BlackBlue color theme.
+ </summary>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.SplitLocation">
+ <summary>
+ Enumeration to determine a split button location.
+ </summary>
+ <remarks><seealso cref="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.drawSplit(System.Drawing.Graphics,System.Drawing.Rectangle,Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.SplitLocation,System.Int32,Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme,System.Int32,System.Boolean,Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.SplitEffectLocation,System.Boolean,Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.SplitEffectLocation,System.Boolean)"/></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.SplitEffectLocation">
+ <summary>
+ Enumeration to determine where(e.g. highlited, pressed) an effect occurs.
+ </summary>
+ <remarks><seealso cref="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.drawSplit(System.Drawing.Graphics,System.Drawing.Rectangle,Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.SplitLocation,System.Int32,Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme,System.Int32,System.Boolean,Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.SplitEffectLocation,System.Boolean,Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.SplitEffectLocation,System.Boolean)"/></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.DisabledBlend(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a color blend on a disabled button.
+ </summary>
+ <param name="theme">Theme used to paint.</param>
+ <value>ColorBlend.</value>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.NormalBlend(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a color blend on a normal button.
+ </summary>
+ <param name="theme">Theme used to paint.</param>
+ <value>ColorBlend.</value>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.FocusedBlend(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a color blend on a focused button.
+ </summary>
+ <param name="theme">Theme used to paint.</param>
+ <value>ColorBlend.</value>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.HLitedBlend(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a color blend on a highlited (mouse hover) button.
+ </summary>
+ <param name="theme">Theme used to paint.</param>
+ <value>ColorBlend.</value>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.HLitedLightBlend(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a color blend on a highlited button, but mouse didn't hover on the button.
+ </summary>
+ <param name="theme">Theme used to paint.</param>
+ <value>ColorBlend.</value>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.PressedBlend(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a color blend on a pressed button.
+ </summary>
+ <param name="theme">Theme used to paint.</param>
+ <value>ColorBlend.</value>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.SelectedBlend(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a color blend on a selected button.
+ </summary>
+ <param name="theme">Theme used to paint.</param>
+ <value>ColorBlend.</value>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.SelectedHLiteBlend(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a color blend on a highlited selected button.
+ </summary>
+ <param name="theme">Theme used to paint.</param>
+ <value>ColorBlend.</value>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.NormalBorderPen(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a border pen on a normal button.
+ </summary>
+ <param name="theme">Theme used to paint.</param>
+ <value>Pen</value>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.DisabledBorderPen(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a border pen on a disabled button.
+ </summary>
+ <param name="theme">Theme used to paint.</param>
+ <value>Pen</value>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.FocusedBorderPen(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a border pen on a focused button.
+ </summary>
+ <param name="theme">Theme used to paint.</param>
+ <value>Pen</value>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.HLitedBorderPen(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a border pen on a highlited button.
+ </summary>
+ <param name="theme">Theme used to paint.</param>
+ <value>Pen</value>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.SelectedBorderPen(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a border pen on a selected button.
+ </summary>
+ <param name="theme">Theme used to paint.</param>
+ <value>Pen</value>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.NormalSeparatorPen(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a separator pen on a normal button.
+ </summary>
+ <param name="theme">Theme used to paint.</param>
+ <value>Pen</value>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.HLitedSeparatorPen(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a separator pen on a highlited button.
+ </summary>
+ <param name="theme">Theme used to paint.</param>
+ <value>Pen</value>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.SelectedSeparatorPen(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a separator pen on a selected button.
+ </summary>
+ <param name="theme">Theme used to paint.</param>
+ <value>Pen</value>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.PressedSeparatorPen(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a separator pen on a pressed button.
+ </summary>
+ <param name="theme">Theme used to paint.</param>
+ <value>Pen</value>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.NormalGlow(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a glowing color on a normal button.
+ </summary>
+ <param name="theme">Them used to paint.</param>
+ <value>Color</value>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.DisabledGlow(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a glowing color on a disabled button.
+ </summary>
+ <param name="theme">Them used to paint.</param>
+ <value>Color</value>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.FocusedGlow(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a glowing color on a focused button.
+ </summary>
+ <param name="theme">Them used to paint.</param>
+ <value>Color</value>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.HLitedGlow(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a glowing color on a highlited button.
+ </summary>
+ <param name="theme">Them used to paint.</param>
+ <value>Color</value>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.PressedGlow(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a glowing color on a pressed button.
+ </summary>
+ <param name="theme">Them used to paint.</param>
+ <value>Color</value>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.SelectedGlow(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a glowing color on a selected button.
+ </summary>
+ <param name="theme">Them used to paint.</param>
+ <value>Color</value>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.SelectedHLiteGlow(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a glowing color on a selected highlited button.
+ </summary>
+ <param name="theme">Them used to paint.</param>
+ <value>Color</value>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.draw(System.Drawing.Graphics,System.Drawing.Rectangle,Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme,System.Int32,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+ <summary>
+ Draw a button on a Graphics object.
+ </summary>
+ <param name="g">Graphics object where the button to be drawn.</param>
+ <param name="rect">Bounding rectangle of the button.</param>
+ <param name="theme">Theme used to paint.</param>
+ <param name="rounded">Rounded range of the corners of the rectangle.</param>
+ <param name="enabled">Determine whether the button is enabled.</param>
+ <param name="pressed">Determine whether the button is pressed.</param>
+ <param name="selected">Determine whether the button is selected.</param>
+ <param name="hlited">Determine whether the button is highlited.</param>
+ <param name="focused">Determine whether the button has input focus.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.drawSplit(System.Drawing.Graphics,System.Drawing.Rectangle,Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.SplitLocation,System.Int32,Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme,System.Int32,System.Boolean,Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.SplitEffectLocation,System.Boolean,Microsoft.VisualBasic.MolkPlusTheme.Renderer.Button.SplitEffectLocation,System.Boolean)">
+ <summary>
+ Draw a split button on a Graphics object.
+ </summary>
+ <param name="g">Graphics object where the button to be drawn.</param>
+ <param name="rect">Bounding rectangle of the button.</param>
+ <param name="split">Split location of the split button.</param>
+ <param name="splitSize">Size of the split.</param>
+ <param name="theme">Theme used to paint.</param>
+ <param name="rounded">Rounded range of the corners of the rectangle.</param>
+ <param name="enabled">Determine whether the button is enabled.</param>
+ <param name="pressed">Determine where the pressed state takes effect.</param>
+ <param name="selected">Determine whether the button is selected.</param>
+ <param name="hlited">Determine where the highlited state takes effect.</param>
+ <param name="focused">Determine whether the button has input focus.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.CheckBox.drawBox(System.Drawing.Graphics,System.Int32,System.Int32,System.Int32,System.Boolean,System.Boolean)">
+ <summary>
+ Draw a box of a checkbox on x, y coordinate.
+ </summary>
+ <param name="g">Graphics object where the box to be drawn.</param>
+ <param name="x">X location of the box.</param>
+ <param name="y">Y location of the box.</param>
+ <param name="size">Size of the box.</param>
+ <param name="enabled">Determine whether checkbox is enabled.</param>
+ <param name="hLited">Determine whether checkbox is highlited.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.CheckBox.drawBox(System.Drawing.Graphics,System.Drawing.Point,System.Int32,System.Boolean,System.Boolean)">
+ <summary>
+ Draw a box of a checkbox on p location.
+ </summary>
+ <param name="g">Graphics object where the box to be drawn.</param>
+ <param name="p">Location of the box.</param>
+ <param name="size">Size of the box.</param>
+ <param name="enabled">Determine whether checkbox is enabled.</param>
+ <param name="hLited">Determine whether checkbox is highlited.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.CheckBox.drawBox(System.Drawing.Graphics,System.Drawing.Rectangle,System.Int32,System.Boolean,System.Boolean)">
+ <summary>
+ Draw a box of a checkbox in the center of a rectangle.
+ </summary>
+ <param name="g">Graphics object where the box to be drawn.</param>
+ <param name="rect">Rectangle where the box to be drawn.</param>
+ <param name="size">Size of the box.</param>
+ <param name="enabled">Determine whether checkbox is enabled.</param>
+ <param name="hLited">Determine whether checkbox is highlited.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.CheckBox.drawCheck(System.Drawing.Graphics,System.Int32,System.Int32,System.Windows.Forms.CheckState,System.Int32,System.Boolean)">
+ <summary>
+ Draw a check of a checkbox on x, y coordinate.
+ </summary>
+ <param name="g">Graphics object where the check to be drawn.</param>
+ <param name="x">X location of the check.</param>
+ <param name="y">Y location of the check.</param>
+ <param name="state">State of the check.</param>
+ <param name="size">Size of the check.</param>
+ <param name="enabled">Determine whether checkbox is enabled.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.CheckBox.drawCheck(System.Drawing.Graphics,System.Drawing.Point,System.Windows.Forms.CheckState,System.Int32,System.Boolean)">
+ <summary>
+ Draw a check of a checkbox on p location.
+ </summary>
+ <param name="g">Graphics object where the check to be drawn.</param>
+ <param name="p">P location of the check.</param>
+ <param name="state">State of the check.</param>
+ <param name="size">Size of the check.</param>
+ <param name="enabled">Determine whether checkbox is enabled.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.CheckBox.drawCheck(System.Drawing.Graphics,System.Drawing.Rectangle,System.Windows.Forms.CheckState,System.Int32,System.Boolean)">
+ <summary>
+ Draw a check of a checkbox inside a rectangle.
+ </summary>
+ <param name="g">Graphics object where the check to be drawn.</param>
+ <param name="rect">Rectangle where the check to be drawn.</param>
+ <param name="state">State of the check.</param>
+ <param name="size">Size of the check.</param>
+ <param name="enabled">Determine whether checkbox is enabled.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.CheckBox.drawCheckBox(System.Drawing.Graphics,System.Int32,System.Int32,System.Windows.Forms.CheckState,System.Int32,System.Boolean,System.Boolean)">
+ <summary>
+ Draw a CheckBox on x, y coordinate.
+ </summary>
+ <param name="g">Graphics object where the CheckBox to be drawn.</param>
+ <param name="x">X location of the CheckBox.</param>
+ <param name="y">Y location of the CheckBox.</param>
+ <param name="state">CheckState of the CheckBox.</param>
+ <param name="size">Size of the CheckBox.</param>
+ <param name="enabled">Determine whether checkbox is enabled.</param>
+ <param name="hLited">Determine whether checkbox is highlited.</param>
+ <remarks>Minimum value of size is 8.</remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.CheckBox.drawCheckBox(System.Drawing.Graphics,System.Drawing.Point,System.Windows.Forms.CheckState,System.Int32,System.Boolean,System.Boolean)">
+ <summary>
+ Draw a CheckBox on p location.
+ </summary>
+ <param name="g">Graphics object where the CheckBox to be drawn.</param>
+ <param name="p">Location of the CheckBox.</param>
+ <param name="state">CheckState of the CheckBox.</param>
+ <param name="size">Size of the CheckBox.</param>
+ <param name="enabled">Determine whether checkbox is enabled.</param>
+ <param name="hLited">Determine whether checkbox is highlited.</param>
+ <remarks>Minimum value of size is 8.</remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.CheckBox.drawCheckBox(System.Drawing.Graphics,System.Drawing.Rectangle,System.Windows.Forms.CheckState,System.Int32,System.Boolean,System.Boolean)">
+ <summary>
+ Draw a CheckBox inside a rectangle.
+ </summary>
+ <param name="g">Graphics object where the CheckBox to be drawn.</param>
+ <param name="rect">Rectangle where the CheckBox to be drawn.</param>
+ <param name="state">CheckState of the CheckBox.</param>
+ <param name="size">Size of the CheckBox.</param>
+ <param name="enabled">Determine whether checkbox is enabled.</param>
+ <param name="hLited">Determine whether checkbox is highlited.</param>
+ <remarks>Minimum value of size is 8.</remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Column">
+ <summary>
+ Class for rendering column header.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Column.NormalBlend(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a color blend for a normal column.
+ </summary>
+ <param name="theme">Theme used to paint.</param>
+ <return>ColorBlend</return>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Column.SelectedBlend(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a color blend for a selected column.
+ </summary>
+ <param name="theme">Theme used to paint.</param>
+ <return>ColorBlend</return>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Column.HLitedBlend(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a color blend for a highlited column.
+ </summary>
+ <param name="theme">Theme used to paint.</param>
+ <return>ColorBlend</return>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Column.HLitedDropDownBlend(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a color blend for a highlited column's dropdown.
+ </summary>
+ <param name="theme">Theme used to paint.</param>
+ <return>ColorBlend</return>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Column.PressedBlend(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a color blend for a pressed column.
+ </summary>
+ <param name="theme">Theme used to paint.</param>
+ <return>ColorBlend</return>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Column.NormalBorderPen(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a pen for a normal column border.
+ </summary>
+ <param name="theme">Theme used to paint.</param>
+ <returns>Pen</returns>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Column.ActiveBorderPen(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a pen for an active column border.
+ </summary>
+ <param name="theme">Theme used to paint.</param>
+ <returns>Pen</returns>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme">
+ <summary>
+ Color theme used for rendering objects.
+ </summary>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ToolTipContent">
+ <summary>
+ Enumeration used to determine contents of a given tooltip parameter.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.LightingGlowPoint">
+ <summary>
+ Enumeration used to determine starting point of glowing light.
+ </summary>
+ <remarks><seelaso cref="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.getGlowingPath(System.Drawing.Rectangle,Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.LightingGlowPoint,System.Int32,System.Int32,System.Int32,System.Int32)"/></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ShadowPoint">
+ <summary>
+ Enumeration used to determine the shadow location.
+ </summary>
+ <remarks><seealso cref="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.getInnerShadowPath(System.Drawing.Rectangle,Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ShadowPoint,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)"/></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.TriangleDirection">
+ <summary>
+ Enumeration used to determine the direction of a triangle.
+ </summary>
+ <remarks><seealso cref="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.drawTriangle(System.Drawing.Graphics,System.Drawing.Point,System.Drawing.Color,System.Drawing.Color,Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.TriangleDirection,System.Int32)"/></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.roundedRectangle(System.Drawing.Rectangle,System.Int32,System.Int32,System.Int32,System.Int32)">
+ <summary>
+ Create a rounded corner rectangle.
+ </summary>
+ <param name="rect">The rectangle to be rounded.</param>
+ <param name="topLeft">Range of the top left corner from the rectangle to be rounded.</param>
+ <param name="topRight">Range of the top right corner from the rectangle to be rounded.</param>
+ <param name="bottomLeft">Range of the bottom left corner from the rectangle to be rounded.</param>
+ <param name="bottomRight">Range of the bottom right corner from the rectangle to be rounded.</param>
+ <returns>A GraphicsPath object that represent a rectangle that have its corners rounded.</returns>
+ <remarks>The <c>range</c> must be greater than or equal with zero, and must be less then or equal with a half of its rectangle's width or height.
+ If the <c>range</c> value less than zero, then its return the rect parameter.
+ If rectangle width greater than its height, then maximum value of <c>range</c> is a half of rectangle height.
+ There are optionally rounded on its four corner.</remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.getGlowingPath(System.Drawing.Rectangle,Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.LightingGlowPoint,System.Int32,System.Int32,System.Int32,System.Int32)">
+ <summary>
+ Create a lighting glow path from a rectangle.
+ </summary>
+ <returns>A GraphicsPath object that represent a lighting glow.</returns>
+ <param name="rect">The rectangle where lighting glow path to be created.</param>
+ <param name="glowPoint">One of <see cref="T:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.LightingGlowPoint">LightingGlowPoint</see> enumeration value.  Determine where the light starts.</param>
+ <param name="percentWidth">Percentage of rectangle's width used to create the path.</param>
+ <param name="percentHeight">Percentage of rectangle's height used to create the path.</param>
+ <param name="customX">X location where the light starts.  Used when glowPoint value is LightingGlowPoint.Custom.</param>
+ <param name="customY">Y location where the light starts.  Used when glowPoint value is LightingGlowPoint.Custom.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.getInnerShadowPath(System.Drawing.Rectangle,Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ShadowPoint,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+ <summary>
+ Create a GraphicsPath object represent an inner shadow of a rectangle.
+ </summary>
+ <returns>A GraphicsPath object that represent an inner shadow.</returns>
+ <param name="rect">The rectangle where shadow path to be created.</param>
+ <param name="shadow">One of <see cref="T:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ShadowPoint">ShadowPoint</see> enumeration value.  Determine the place of the shadow inside the rectangle.</param>
+ <param name="verticalRange">Shadow height, calculated from top or bottom of the rectange.</param>
+ <param name="horizontalRange">Shadow width, calculated from left or right of the rectangle.</param>
+ <param name="topLeft">Rounded range of the rectangle's top left corner.</param>
+ <param name="topRight">Rounded range of the rectangle's top right corner.</param>
+ <param name="bottomLeft">Rounded range of the rectangle's bottom left corner.</param>
+ <param name="bottomRight">Rounded range of the rectangle's bottom right corner.</param>
+ <remarks><seealso cref="T:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ShadowPoint"/></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.drawTriangle(System.Drawing.Graphics,System.Int32,System.Int32,System.Drawing.Color,System.Drawing.Color,Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.TriangleDirection,System.Int32)">
+ <summary>
+ Draw a shadowed triangle specified by x and y location, overloaded.
+ </summary>
+ <param name="g">Graphics object where the triangle to be drawn.</param>
+ <param name="x">X location of the triangle.</param>
+ <param name="y">Y location of the triangle.</param>
+ <param name="color">Color of the triangle.</param>
+ <param name="shadowColor">Shadow color of the triangle.</param>
+ <param name="direction"><see cref="T:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.TriangleDirection">TriangleDirection</see>, direction of the triangle.</param>
+ <param name="size">Size of the triangle.</param>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.drawTriangle(System.Drawing.Graphics,System.Drawing.Point,System.Drawing.Color,System.Drawing.Color,Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.TriangleDirection,System.Int32)">
+ <summary>
+ Draw a shadowed triangle specified by p point location, overloaded.
+ </summary>
+ <param name="g">Graphics object where the triangle to be drawn.</param>
+ <param name="p">Point, location of the triangle.</param>
+ <param name="color">Color of the triangle.</param>
+ <param name="shadowColor">Shadow color of the triangle.</param>
+ <param name="direction"><see cref="T:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.TriangleDirection">TriangleDirection</see>, direction of the triangle.</param>
+ <param name="size">Size of the triangle.</param>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.drawTriangle(System.Drawing.Graphics,System.Drawing.Rectangle,System.Drawing.Color,System.Drawing.Color,Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.TriangleDirection,System.Int32)">
+ <summary>
+ Draw a shadowed triangle in the center of a rectangle, overloaded.
+ </summary>
+ <param name="g">Graphics object where the triangle to be drawn.</param>
+ <param name="rect">Rectangle where the triangle to be drawn.</param>
+ <param name="color">Color of the triangle.</param>
+ <param name="shadowColor">Shadow color of the triangle.</param>
+ <param name="direction"><see cref="T:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.TriangleDirection">TriangleDirection</see>, direction of the triangle.</param>
+ <param name="size">Size of the triangle.</param>
+ <remarks></remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.getImageRectangle(System.Drawing.Image,System.Int32)">
+ <summary>
+ Get a resized bounding rectangle of an image specified by maxSize.
+ </summary>
+ <param name="img">Image to measure.</param>
+ <param name="maxSize">Maximum width or height of the result.</param>
+ <returns>A rectangle represent resized bounding of an image.</returns>
+ <remarks>If image is nothing, a (0, 0, 0, 0) rectangle returned.</remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.getImageRectangle(System.Drawing.Image,System.Drawing.Rectangle,System.Int32)">
+ <summary>
+ Get a resized bounding rectangle of an image specified by maxSize inside of a rectangle.
+ </summary>
+ <param name="img">Image to measure.</param>
+ <param name="rect">Rectangle where the result to be placed.</param>
+ <param name="maxSize">Maximum width or height of the result.</param>
+ <returns>A rectangle represent resized bounding of an image.</returns>
+ <remarks>If image is nothing, rect parameter returned.</remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.getImageRectangle(System.Drawing.Image,System.Drawing.Rectangle,System.Int32,System.Int32)">
+ <summary>
+ Get a resized bounding rectangle of an image specified by maximum width and maximum height inside of a rectangle.
+ </summary>
+ <param name="img">Image to measure.</param>
+ <param name="rect">Rectangle where the result to be placed.</param>
+ <param name="maxWidth">Maximum width of the result.</param>
+ <param name="maxHeight">Maximum height of the result.</param>
+ <returns>A rectangle represent resized bounding of an image.</returns>
+ <remarks>If image is nothing, rect parameter returned.</remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.scaleImage(System.Drawing.Image,System.Int32)">
+ <summary>
+ Resize an image to fit maximum value.
+ </summary>
+ <param name="image">Image to measure.</param>
+ <param name="max">Maximum width or height of the result.</param>
+ <returns>A size represent resized image size.</returns>
+ <remarks>If image is nothing, a (0, 0) size returned.</remarks>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.grayscaledImage(System.Drawing.Image,System.Drawing.Rectangle,System.Drawing.Graphics)">
+ <summary>
+ Draw a grayscaled image from an image inside a rectangle.
+ </summary>
+ <param name="image">Image to be drawn.</param>
+ <param name="rect">Rectangle where a grayscaled image to be drawn.</param>
+ <param name="g">Graphics object where the grayscaled image to be drawn.</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.colorFromAHSB(System.Int32,System.Single,System.Single,System.Single)">
+ <summary>
+ Get a color structure from an AHSB value
+ </summary>
+ <param name="a">Alpha value from the color.</param>
+ <param name="h">Hue value from the color.</param>
+ <param name="s">Saturation value from the color.</param>
+ <param name="b">Brightness value from the color.</param>
+ <returns>A color structure represent AHSB value.</returns>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.Renderer.ListItem">
+ <summary>
+ Class for rendering list item.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.ListItem.SelectedBlurBlend(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a color blend for selected item in a list that lost it focus input.
+ </summary>
+ <param name="theme">Them used to paint.</param>
+ <returns>ColorBlend.</returns>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.ListItem.SelectedBlend(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a color blend for selected item in focused list.
+ </summary>
+ <param name="theme">Them used to paint.</param>
+ <returns>ColorBlend.</returns>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.ListItem.SelectedHLiteBlend(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a color blend for selected and highlighted item.
+ </summary>
+ <param name="theme">Them used to paint.</param>
+ <returns>ColorBlend.</returns>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.ListItem.HLitedBlend(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a color blend for highlighted item.
+ </summary>
+ <param name="theme">Them used to paint.</param>
+ <returns>ColorBlend.</returns>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.ListItem.PressedBlend(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a color blend for pressed item.
+ </summary>
+ <param name="theme">Them used to paint.</param>
+ <returns>ColorBlend.</returns>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.ListItem.SelectedBlurBorderPen(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a border pen for selected item in a list that lost it focus input.
+ </summary>
+ <param name="theme">Theme used to paint.</param>
+ <returns>Pen.</returns>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.ListItem.SelectedBorderPen(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a border pen for selected item in a focused list.
+ </summary>
+ <param name="theme">Theme used to paint.</param>
+ <returns>Pen.</returns>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.ListItem.HLitedBorderPen(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a border pen for highlighted item in a list.
+ </summary>
+ <param name="theme">Theme used to paint.</param>
+ <returns>Pen.</returns>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.ListItem.SelectedHLiteBorderPen(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a border pen for selected and highlighted item in a list.
+ </summary>
+ <param name="theme">Theme used to paint.</param>
+ <returns>Pen.</returns>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.ListItem.PressedBorderPen(Microsoft.VisualBasic.MolkPlusTheme.Renderer.Drawing.ColorTheme)">
+ <summary>
+ Represent a border pen for pressed item in a list.
+ </summary>
+ <param name="theme">Theme used to paint.</param>
+ <returns>Pen.</returns>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.Renderer.ToolTip.Content">
+ <summary>
+ Describing the content of a tooltip information.
+ Tooltip information has 3 component, title, text, and image.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.ToolTip.TextBrush">
+ <summary>
+ A brush for drawing a string in tooltip.
+ </summary>
+ <returns>Brush.</returns>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.Renderer.ToolTip.SeparatorPen">
+ <summary>
+ A pen for drawing line separator in tooltip.
+ </summary>
+ <returns>Pen.</returns>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.ToolTip.getContent(System.String,System.String,System.Drawing.Image)">
+ <summary>
+ Get the content of the tooltip information.
+ </summary>
+ <param name="title">Tooltip title.</param>
+ <param name="text">Tooltip text.</param>
+ <param name="image">Tooltip image.</param>
+ <returns><seealso cref="T:Microsoft.VisualBasic.MolkPlusTheme.Renderer.ToolTip.Content"/></returns>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.ToolTip.containsToolTip(System.String,System.String,System.Drawing.Image)">
+ <summary>
+ Determine if a tooltip information isnot empty.
+ </summary>
+ <param name="title">Tooltip title.</param>
+ <param name="text">Tooltip text.</param>
+ <param name="img">Tooltip image.</param>
+ <returns>Boolean.</returns>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.ToolTip.measureSize(System.String,System.String,System.Drawing.Image)">
+ <summary>
+ Measure the size of a tooltip based on its contents.
+ </summary>
+ <param name="title">Tooltip title.</param>
+ <param name="text">Tooltip text.</param>
+ <param name="img">Tooltip image.</param>
+ <returns>Size.</returns>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.Renderer.ToolTip.drawToolTip(System.String,System.String,System.Drawing.Image,System.Drawing.Graphics,System.Drawing.Rectangle)">
+ <summary>
+ Draw tooltip information on a tooltip window.
+ </summary>
+ <param name="title">Tooltip title.</param>
+ <param name="text">Tooltip text.</param>
+ <param name="img">Tooltip image.</param>
+ <param name="g">Graphics object used to paint.</param>
+ <param name="rect">Bounding rectangle where tooltip information to be drawn.</param>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.ToolTip">
+ <summary>
+ Custom tooltip.
+ </summary>
+</member>
+<member name="E:Microsoft.VisualBasic.MolkPlusTheme.ToolTip.Popup">
+ <summary>
+ Event before tooltip is displayed.  This event is raised when OwnerDraw property is set to true.
+ </summary>
+</member>
+<member name="E:Microsoft.VisualBasic.MolkPlusTheme.ToolTip.Draw">
+ <summary>
+ Event when the tooltip surface is drawn.  This event is raised when OwnerDraw property is set to true.
+ </summary>
+</member>
+<member name="E:Microsoft.VisualBasic.MolkPlusTheme.ToolTip.DrawBackground">
+ <summary>
+ Event when the tooltip background is drawn.  This event is raised when OwnerDrawBackground property is set to true.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.ToolTip.#ctor(System.Windows.Forms.Control)">
+ <summary>
+ Constructor of the tooltip with an owner control specified.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.ToolTip.#ctor">
+ <summary>
+ ToolTip constructor.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.ToolTip.show(System.Windows.Forms.Control)">
+ <summary>
+ Show ToolTip with specified control.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.ToolTip.show(System.Windows.Forms.Control,System.Drawing.Point)">
+ <summary>
+ Show ToolTip with specified control and location.  The ToolTip location is relative to the control.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.ToolTip.show(System.Windows.Forms.Control,System.Drawing.Rectangle)">
+ <summary>
+ Show ToolTip with specified control and rectangle area.  This area is where the tooltip must avoid to cover.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.ToolTip.hide">
+ <summary>
+ Hide the ToolTip.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.ToolTip.AnimationSpeed">
+ <summary>
+ Specifies fade effect period when the tooltip is displayed or hiden, in milliseconds.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.ToolTip.ShowShadow">
+ <summary>
+ Show the shadow effect of the tooltip.  This property is ignored when OwnerDrawBackground property is set to true.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.ToolTip.AutoClose">
+ <summary>
+ Period of time the ToolTip is displayed, in milliseconds.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.ToolTip.EnableAutoClose">
+ <summary>
+ Automatically close the ToolTip when the specified time in AutoClose property has been passed.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.ToolTip.OwnerDraw">
+ <summary>
+ ToolTip surface will be manually drawn by your code.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.ToolTip.OwnerDrawBackground">
+ <summary>
+ ToolTip background will be manually drawn by your code.
+ If this property is set to true, the Draw and Popup event will be raised as well, 
+ and the whole ToolTip will be drawn by your code.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.ToolTip.Location">
+ <summary>
+ Determine how the ToolTip will be located.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.ToolTip.CustomLocation">
+ <summary>
+ Custom location where the ToolTip will be displayed.
+ Used when the Location property is set CustomScreen or CustomClient.
+ </summary>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.ToolTipLocation">
+ <summary>
+ Specifies the location of the tooltip will be shown.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.ProcessingBar.PercentageValue">
+ <summary>
+ 0 - 100
+ </summary>
+ <returns></returns>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.TransparentImage">
+ <summary>
+ 当显示不规则图形的时候，使用本控件提供窗体透明的效果，即本控件可以显出不规则区域的底图
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.Common.YaHei">
+ <summary>
+ Microsoft YaHei font.(微软雅黑字体)
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifier">
+ <summary>
+ Non-visual component to show a notification window in the right lower
+ corner of the screen.
+ </summary>
+</member>
+<member name="E:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifier.Click">
+ <summary>
+ Event that is raised when the text in the notification window is clicked.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifier.#ctor">
+ <summary>
+ Create a new instance of the popup component.
+ </summary>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifier.fresh_count">
+ <summary>
+ Show the notification window if it is not already visible.
+ If the window is currently disappearing, it is shown again.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifier.Hide">
+ <summary>
+ Hide the notification window.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifier.tmAnimation_Tick(System.Object,System.EventArgs)">
+ <summary>
+ Update form position and opacity to show/hide the window.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifier.tmWait_Tick(System.Object,System.EventArgs)">
+ <summary>
+ The wait timer has elapsed, start the animation to hide the window.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifier.frmPopup_MouseLeave(System.Object,System.EventArgs)">
+ <summary>
+ Start wait timer if the mouse leaves the form.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+ 
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifier.frmPopup_MouseEnter(System.Object,System.EventArgs)">
+ <summary>
+ Stop wait timer if the mouse enters the form.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifier.Dispose(System.Boolean)">
+ <summary>
+ Dispose the notification form.
+ </summary>
+ <param name="disposing"></param>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifierForm">
+ <summary>
+ This is the form of the actual notification window.
+ </summary>
+</member>
+<member name="E:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifierForm.LinkClick">
+ <summary>
+ Event that is raised when the text is clicked.
+ </summary>
+</member>
+<member name="E:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifierForm.CloseClick">
+ <summary>
+ Event that is raised when the notification window is manually closed.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifierForm.#ctor(Microsoft.VisualBasic.MolkPlusTheme.PopupNotifier)">
+ <summary>
+ Create a new instance.
+ </summary>
+ <param name="parent__1">PopupNotifier</param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifierForm.PopupNotifierForm_VisibleChanged(System.Object,System.EventArgs)">
+ <summary>
+ The form is shown/hidden.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifierForm.InitializeComponent">
+ <summary>
+ Used in design mode.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifierForm.Parent">
+ <summary>
+ Gets or sets the parent control.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifierForm.AddValueMax255(System.Int32,System.Int32)">
+ <summary>
+ Add two values but do not return a value greater than 255.
+ </summary>
+ <param name="input">first value</param>
+ <param name="add">value to add</param>
+ <returns>sum of both values</returns>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifierForm.DedValueMin0(System.Int32,System.Int32)">
+ <summary>
+ Subtract two values but do not returns a value below 0.
+ </summary>
+ <param name="input">first value</param>
+ <param name="ded">value to subtract</param>
+ <returns>first value minus second value</returns>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifierForm.GetDarkerColor(System.Drawing.Color)">
+ <summary>
+ Returns a color which is darker than the given color.
+ </summary>
+ <param name="color">Color</param>
+ <returns>darker color</returns>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifierForm.GetLighterColor(System.Drawing.Color)">
+ <summary>
+ Returns a color which is lighter than the given color.
+ </summary>
+ <param name="color">Color</param>
+ <returns>lighter color</returns>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifierForm.RectContentText">
+ <summary>
+ Gets the rectangle of the content text.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifierForm.RectClose">
+ <summary>
+ gets the rectangle of the close button.
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifierForm.RectOptions">
+ <summary>
+ Gets the rectangle of the options button.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifierForm.PopupNotifierForm_MouseMove(System.Object,System.Windows.Forms.MouseEventArgs)">
+ <summary>
+ Update form to display hover styles when the mouse moves over the notification form.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifierForm.PopupNotifierForm_MouseUp(System.Object,System.Windows.Forms.MouseEventArgs)">
+ <summary>
+ A mouse button has been released, check if something has been clicked.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifierForm.OptionsMenu_Closed(System.Object,System.Windows.Forms.ToolStripDropDownClosedEventArgs)">
+ <summary>
+ The options popup menu has been closed.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifierForm.DisposeGDIObjects">
+ <summary>
+ Free all GDI objects.
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifierForm.PopupNotifierForm_Paint(System.Object,System.Windows.Forms.PaintEventArgs)">
+ <summary>
+ Draw the notification form.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+ 
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.PopupNotifierForm.Dispose(System.Boolean)">
+ <summary>
+ Dispose GDI objects.
+ </summary>
+ <param name="disposing"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.UI_API.MessageBox(System.String,System.Action,System.Windows.Forms.Form,System.String)">
+ <summary>
+ 
+ </summary>
+ <param name="Message"></param>
+ <param name="ProcessHandle"></param>
+ <param name="Mask">会形成黑影</param>
+ <param name="ButtonPromoting"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.XPPanel.Control">
+ <summary>
+ 在<see cref="P:Microsoft.VisualBasic.MolkPlusTheme.XPPanel.Panel2"/>之中容纳的控件，设置这个控件的大小会改变本控件的宽度
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.XPPanel.Speed">
+ <summary>
+ 值越大动画越快
+ </summary>
+ <returns></returns>
+ 
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources._1">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources._2">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources._3">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources._4">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources._5">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources._515151_speech_bubble_512">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources._6">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources._7">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources._8">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.Active">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.arrow_Collapsed">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.arrow_Expanded">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.arrow_sans_down_128">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.Caption">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.Check">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.CheckPreLight">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.Close">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.close_button">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.ControlBox">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.DropDownHighLight">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.DropDownNormal">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.DropDownPress">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.gGlowBox">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.gGlowGroupBox">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.Inactive">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.InactivePrelight">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.LabelBase">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.LabelHead">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.LabelUnSelected">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.Maximum">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.Minimize">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.OK">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.ProcessingbarRes">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.ToastClose">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.tshadowdown">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.tshadowdownleft">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.tshadowdownright">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.tshadowleft">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.tshadowright">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.tshadowtop">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.tshadowtopleft">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.tshadowtopright">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.Uncheck">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.UncheckPreLight">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.My.Resources.Resources.vs10ide">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.FormHooksModernBlack.components">
+ <summary> 
+ 
+ </summary>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.ToastNotification.InvokeDisplay">
+ <summary>
+ 通过这个对象来显示打开的动画
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.ToastNotification.InvokeClose">
+ <summary>
+ 通过这个对象来显示关闭的动画
+ </summary>
+ <returns></returns>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.ToastNotification.ShowMessage(System.String)">
+ <summary>
+ 显示一行提示消息
+ </summary>
+ <param name="Message"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.BusyIndicator.DrawImageRotatedAroundCenter(System.Drawing.Graphics,System.Drawing.Point,System.Drawing.Image,System.Double)">
+ <summary>
+ Draws an image onto the given graphics object. The image is rotated by a specified angle (in radians) around its center and then drawn at the given center point.
+ </summary>
+ <param name="g"></param>
+ <param name="center"></param>
+ <param name="img"></param>
+ <param name="angle"></param>
+ <remarks></remarks>
+</member>
+<member name="T:Microsoft.VisualBasic.MolkPlusTheme.HttpInternal.HttpFileSystem">
+ <summary>
+ 不兼容IE和Edge浏览器???为什么会这样子？
+ </summary>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.HttpInternal.HttpFileSystem.#ctor(System.Int32,System.String,System.Boolean)">
+ <summary>
+ 
+ </summary>
+ <param name="port"></param>
+ <param name="root"></param>
+ <param name="nullExists"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.HttpInternal.HttpFileSystem.handleGETRequest(Microsoft.VisualBasic.MolkPlusTheme.HttpInternal.HttpProcessor)">
+ <summary>
+ 为什么不需要添加<see cref="M:Microsoft.VisualBasic.MolkPlusTheme.HttpInternal.HttpProcessor.writeSuccess(System.String)"/>方法？？？
+ </summary>
+ <param name="p"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.HttpInternal.HttpFileSystem.__handleREST(Microsoft.VisualBasic.MolkPlusTheme.HttpInternal.HttpProcessor)">
+ <summary>
+ handle the GET/POST request at here
+ </summary>
+ <param name="p"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.HttpInternal.HttpFileSystem.__transferData(Microsoft.VisualBasic.MolkPlusTheme.HttpInternal.HttpProcessor,System.String,System.Byte[])">
+ <summary>
+ 为什么不需要添加content-type说明？？
+ </summary>
+ <param name="p"></param>
+ <param name="ext"></param>
+ <param name="buf"></param>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.HttpInternal.HttpServer.Run">
+ <summary>
+ 线程会被阻塞在这里
+ </summary>
+ <returns></returns>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.HttpInternal.HttpServer.__httpProcessor(System.Net.Sockets.TcpClient)">
+ <summary>
+ New HttpProcessor(Client, Me) with {._404Page = "...."}
+ </summary>
+ <param name="client"></param>
+ <returns></returns>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.HttpInternal.HttpServer.handleGETRequest(Microsoft.VisualBasic.MolkPlusTheme.HttpInternal.HttpProcessor)">
+ <summary>
+ 
+ </summary>
+ <param name="p"></param>
+ <example>
+ 
+ If p.http_url.Equals("/Test.png") Then
+     Dim fs As Stream = File.Open("../../Test.png", FileMode.Open)
+
+     p.writeSuccess("image/png")
+     fs.CopyTo(p.outputStream.BaseStream)
+     p.outputStream.BaseStream.Flush()
+ End If
+
+  Console.WriteLine("request: {0}", p.http_url)
+ 
+  p.writeSuccess()
+  p.outputStream.WriteLine("&lt;html>&lt;body>&lt;h1>Shoal SystemsBiology Shell Language&lt;/h1>")
+  p.outputStream.WriteLine("Current Time: " &amp; DateTime.Now.ToString())
+  p.outputStream.WriteLine("url : {0}", p.http_url)
+
+  p.outputStream.WriteLine("&lt;form method=post action=/local_wiki>")
+  p.outputStream.WriteLine("&lt;input type=text name=SearchValue value=Keyword>")
+  p.outputStream.WriteLine("&lt;input type=submit name=Invoker value=""Search"">")
+  p.outputStream.WriteLine("&lt;/form>")
+ 
+ </example>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.HttpInternal.HttpProcessor.http_url">
+ <summary>
+ File location or GET/POST request arguments
+ </summary>
+ <returns></returns>
+</member>
+<member name="F:Microsoft.VisualBasic.MolkPlusTheme.HttpInternal.HttpProcessor.MAX_POST_SIZE">
+ <summary>
+ 10MB
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.HttpInternal.HttpProcessor.IsWWWRoot">
+ <summary>
+ ????url???HTTP???
+ </summary>
+ <returns></returns>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.HttpInternal.HttpProcessor.HandlePOSTRequest">
+ <summary>
+ This post data processing just reads everything into a memory stream.
+ this is fine for smallish things, but for large stuff we should really
+ hand an input stream to the request processor. However, the input stream 
+ we hand him needs to let him see the "end of the stream" at this content 
+ length, because otherwise he won't know when he's seen it all! 
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:Microsoft.VisualBasic.MolkPlusTheme.HttpInternal.HttpProcessor._404Page">
+ <summary>
+ You can customize your 404 error page at here.
+ </summary>
+ <returns></returns>
+</member>
+<member name="M:Microsoft.VisualBasic.MolkPlusTheme.HttpInternal.HttpProcessor.writeFailure(System.String)">
+ <summary>
+ 404
+ </summary>
+</member>
+</members>
+</doc>

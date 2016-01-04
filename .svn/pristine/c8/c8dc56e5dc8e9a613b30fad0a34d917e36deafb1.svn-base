@@ -1,0 +1,1572 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+	<head>
+		
+		<meta charset="utf-8">
+		<title>user32.dll</title>
+		
+		<style>::-moz-selection {
+        background: #b3d4fc;
+        text-shadow: none;
+      }
+
+      ::selection {
+        background: #b3d4fc;
+        text-shadow: none;
+      }
+
+      html {
+        padding: 30px 10px;
+        font-size: 16px;
+        line-height: 1.4;
+        color: #737373;
+        background: #f0f0f0;
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+      }
+
+      html,
+      input {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      }
+
+      body {
+        max-width: 1500px;
+        _width: 1500px;
+        padding: 30px 20px 50px;
+        border: 1px solid #b3b3b3;
+        border-radius: 4px;
+        margin: 0 auto;
+        box-shadow: 0 1px 10px #a7a7a7, inset 0 1px 0 #fff;
+        background: #fcfcfc;
+      }
+
+      h1 {
+        margin: 0 10px;
+        font-size: 35px;
+        text-align: center;
+      }
+
+      h1 span {
+        color: #bbb;
+      }
+
+      h3 {
+        margin: 1.5em 0 0.5em;
+      }
+
+      p {
+        margin: 1em 0;
+      }
+
+      ul {
+        padding: 0 0 0 40px;
+        margin: 1em 0;
+      }
+
+      .container {
+        max-width: 900px;
+        _width: 900px;
+        margin: 0 auto;
+      }
+
+      /* google search */
+
+      #goog-fixurl ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      #goog-fixurl form {
+        margin: 0;
+      }
+
+      #goog-wm-qt,
+      #goog-wm-sb {
+        border: 1px solid #bbb;
+        font-size: 16px;
+        line-height: normal;
+        vertical-align: top;
+        color: #444;
+        border-radius: 2px;
+      }
+
+      #goog-wm-qt {
+        width: 220px;
+        height: 20px;
+        padding: 5px;
+        margin: 5px 10px 0 0;
+        box-shadow: inset 0 1px 1px #ccc;
+      }
+
+      #goog-wm-sb {
+        display: inline-block;
+        height: 32px;
+        padding: 0 10px;
+        margin: 5px 0 0;
+        white-space: nowrap;
+        cursor: pointer;
+        background-color: #f5f5f5;
+        background-image: -webkit-linear-gradient(rgba(255,255,255,0), #f1f1f1);
+        background-image: -moz-linear-gradient(rgba(255,255,255,0), #f1f1f1);
+        background-image: -ms-linear-gradient(rgba(255,255,255,0), #f1f1f1);
+        background-image: -o-linear-gradient(rgba(255,255,255,0), #f1f1f1);
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        *overflow: visible;
+        *display: inline;
+        *zoom: 1;
+      }
+
+      #goog-wm-sb:hover,
+      #goog-wm-sb:focus {
+        border-color: #aaa;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+        background-color: #f8f8f8;
+      }
+
+      #goog-wm-qt:hover,
+      #goog-wm-qt:focus {
+        border-color: #105cb6;
+        outline: 0;
+        color: #222;
+      }
+
+      input::-moz-focus-inner {
+        padding: 0;
+        border: 0;
+      }</style>
+	  
+	  <body>
+	  
+	  <div class="container">
+	    
+	  <h1>Document for <strong>  user32.dll</strong> <span>:-)</span></h1>
+	  <br />
+			
+	  <script>var GOOG_FIXURL_LANG = (navigator.language || '').slice(0,2),GOOG_FIXURL_SITE = location.host;</script>
+	<!--  <script src="//linkhelp.clients.google.com/tbproxy/lh/wm/fixurl.js"></script> -->
+	  </div>
+	      	<font face="Microsoft YaHei" size="2">
+	  	  <table>
+  <tr>
+    <th align="left">	  <p><h2><font size=5><span><a href="./index.html">< Back To Index</a></span></font></h2></p>
+	<p>
+	 <table>
+	 
+	       <tr>
+    <td valign="top">Related Namespace</td>
+	<td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td>
+    <td align="left"><li><a href="./comdlg32.dll.html">comdlg32.dll</a></li>
+<li><a href="./gdi32.dll.html">gdi32.dll</a></li>
+<li><a href="./kernel32.dll.html">kernel32.dll</a></li>
+<li><a href="./shell32.dll.html">shell32.dll</a></li>
+<li><a href="./user32.dll.html">user32.dll</a></li>
+<li><a href="./winmm.dll.html">winmm.dll</a></li></td>
+  </tr>
+	 
+	  </table>
+	
+	</p>
+	</th>
+    <th></th>
+  </tr>
+  <tr>
+    <td>Package</td>
+    <td align="left"><strong>user32.dll</strong></td>
+  </tr>
+ 
+                <tr>
+    <td>HOME</td>
+    <td align="left"><a href=""></a></td>
+  </tr>
+                <tr>
+    <td>Publisher</td>
+    <td align="left">Copyright (C) 2014 Microsoft Corporation</td>
+  </tr>
+                <tr>
+    <td>Description</td>
+    <td align="left">USER32.DLL implements the Windows USER component that creates and manipulates the standard 
+                    elements of the Windows user interface, such as the desktop, windows, and menus. It thus enables programs to 
+                    implement a graphical user interface (GUI) that matches the Windows look and feel. Programs call functions from 
+                    Windows USER to perform operations such as creating and managing windows, receiving window messages 
+                    (which are mostly user input such as mouse and keyboard events, but also notifications from the operating system), 
+                    displaying text in a window, and displaying message boxes.
+                    Many of the functions in USER32.DLL call upon GDI functions exported by GDI32.DLL to do the actual rendering of the 
+                    various elements of the user interface. Some types of programs will also call GDI functions directly to perform lower-level 
+                    drawing operations within a window previously created via USER32 functions.</td>
+  </tr>
+  
+      <tr>
+    <td valign="top">Cited References</td>
+    <td align="left"></td>
+  </tr>
+  
+                  <tr>
+    <td></td>
+    <td></td>
+  </tr>
+  
+              
+  
+  </font>
+</table>
+	  <br />
+	  
+	    <table>
+		    <tr>
+    <td valign="top"><strong>Summary Contents</strong></td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+		<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+		<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+		<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+		<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+		<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+    <td><table>
+  <tr>
+    <th align="left">
+                                           <a href="#DrawEdge">DrawEdge</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#DrawStateA">DrawStateA</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#DrawTextA">DrawTextA</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#EqualRect">EqualRect</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#FillRect">FillRect</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#GetCursorPos">GetCursorPos</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#GetDC">GetDC</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#GetWindowDC">GetWindowDC</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#GetWindowRect">GetWindowRect</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#IntersectRect">IntersectRect</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#IsRectEmpty">IsRectEmpty</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#OffsetRect">OffsetRect</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#ReleaseCapture">ReleaseCapture</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#ReleaseDC">ReleaseDC</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#SendMessageA">SendMessageA</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#SetCapture">SetCapture</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#SetCursorPos">SetCursorPos</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#SetRect">SetRect</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#SetWindowsHookExA">SetWindowsHookExA</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#SubtractRect">SubtractRect</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+  <tr>
+    <th align="left">
+                                           <a href="#UnionRect">UnionRect</a> </th><td> </td><td> </td><td> </td>
+<th align="left"></th>
+</tr>
+</table>
+</td>
+  </tr>
+		</table>
+	  	  <br />
+		  <hr>
+	  	<font face="Microsoft YaHei" size="2">
+	  <p><li>
+    <p>Help for "DrawEdge":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="DrawEdge">DrawEdge</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.User32::DrawEdge
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hdc</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>qrc</strong></td>
+    <td align="left"><a href="./TypeLinks/Microsoft.VisualBasic.Win32API+RECT.html">Microsoft.VisualBasic.Win32API+RECT</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>edge</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>grfFlags</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Boolean.html">System.Boolean</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "DrawStateA":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="DrawStateA">DrawStateA</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.User32::DrawState
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hdc</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hBrush</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>lpDrawStateProc</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>lParam</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>wParam</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>n1</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>n2</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>n3</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>n4</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>un</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "DrawTextA":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="DrawTextA">DrawTextA</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.User32::DrawText
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hdc</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>lpStr</strong></td>
+    <td align="left"><a href="./TypeLinks/System.String&.html">System.String&</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>nCount</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>lpRect</strong></td>
+    <td align="left"><a href="./TypeLinks/Microsoft.VisualBasic.Win32API+RECT.html">Microsoft.VisualBasic.Win32API+RECT</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>wFormat</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "EqualRect":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="EqualRect">EqualRect</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.User32::EqualRect
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>lpRect1</strong></td>
+    <td align="left"><a href="./TypeLinks/Microsoft.VisualBasic.Win32API+RECT.html">Microsoft.VisualBasic.Win32API+RECT</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>lpRect2</strong></td>
+    <td align="left"><a href="./TypeLinks/Microsoft.VisualBasic.Win32API+RECT.html">Microsoft.VisualBasic.Win32API+RECT</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "FillRect":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="FillRect">FillRect</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.User32::FillRect
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hdc</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>lpRect</strong></td>
+    <td align="left"><a href="./TypeLinks/Microsoft.VisualBasic.Win32API+RECT.html">Microsoft.VisualBasic.Win32API+RECT</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hBrush</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "GetCursorPos":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="GetCursorPos">GetCursorPos</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.User32::GetCursorPos
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>lpPoint</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Drawing.Point.html">System.Drawing.Point</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "GetDC":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="GetDC">GetDC</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.User32::GetDC
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hwnd</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "GetWindowDC":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="GetWindowDC">GetWindowDC</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.User32::GetWindowDC
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hwnd</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "GetWindowRect":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="GetWindowRect">GetWindowRect</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.User32::GetWindowRect
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hwnd</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>lpRect</strong></td>
+    <td align="left"><a href="./TypeLinks/Microsoft.VisualBasic.Win32API+RECT.html">Microsoft.VisualBasic.Win32API+RECT</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "IntersectRect":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="IntersectRect">IntersectRect</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.User32::IntersectRect
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>lpDestRect</strong></td>
+    <td align="left"><a href="./TypeLinks/Microsoft.VisualBasic.Win32API+RECT.html">Microsoft.VisualBasic.Win32API+RECT</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>lpSrc1Rect</strong></td>
+    <td align="left"><a href="./TypeLinks/Microsoft.VisualBasic.Win32API+RECT.html">Microsoft.VisualBasic.Win32API+RECT</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>lpSrc2Rect</strong></td>
+    <td align="left"><a href="./TypeLinks/Microsoft.VisualBasic.Win32API+RECT.html">Microsoft.VisualBasic.Win32API+RECT</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "IsRectEmpty":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="IsRectEmpty">IsRectEmpty</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.User32::IsRectEmpty
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>lpRect</strong></td>
+    <td align="left"><a href="./TypeLinks/Microsoft.VisualBasic.Win32API+RECT.html">Microsoft.VisualBasic.Win32API+RECT</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "OffsetRect":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="OffsetRect">OffsetRect</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.User32::OffsetRect
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>lpRect</strong></td>
+    <td align="left"><a href="./TypeLinks/Microsoft.VisualBasic.Win32API+RECT.html">Microsoft.VisualBasic.Win32API+RECT</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>x</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>y</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "ReleaseCapture":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="ReleaseCapture">ReleaseCapture</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.User32::ReleaseCapture
+<br />Function Returns: 
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "ReleaseDC":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="ReleaseDC">ReleaseDC</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.User32::ReleaseDC
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hwnd</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hdc</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "SendMessageA":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="SendMessageA">SendMessageA</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.User32::SendMessage
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hWnd</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>wMsg</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>wParam</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>lParam</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Object.html">System.Object</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "SetCapture":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="SetCapture">SetCapture</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.User32::SetCapture
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hwnd</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "SetCursorPos":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="SetCursorPos">SetCursorPos</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.User32::SetCursorPos
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>x</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>y</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "SetRect":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="SetRect">SetRect</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.User32::SetRect
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>lpRect</strong></td>
+    <td align="left"><a href="./TypeLinks/Microsoft.VisualBasic.Win32API+RECT.html">Microsoft.VisualBasic.Win32API+RECT</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>X1</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Y1</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>X2</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>Y2</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "SetWindowsHookExA":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="SetWindowsHookExA">SetWindowsHookExA</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.User32::SetWindowsHookEx
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>idHook</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>lpfn</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>hmod</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>dwThreadId</strong></td>
+    <td align="left"><a href="./TypeLinks/System.Int32.html">System.Int32</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "SubtractRect":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="SubtractRect">SubtractRect</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.User32::SubtractRect
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>lprcDst</strong></td>
+    <td align="left"><a href="./TypeLinks/Microsoft.VisualBasic.Win32API+RECT.html">Microsoft.VisualBasic.Win32API+RECT</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>lprcSrc1</strong></td>
+    <td align="left"><a href="./TypeLinks/Microsoft.VisualBasic.Win32API+RECT.html">Microsoft.VisualBasic.Win32API+RECT</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>lprcSrc2</strong></td>
+    <td align="left"><a href="./TypeLinks/Microsoft.VisualBasic.Win32API+RECT.html">Microsoft.VisualBasic.Win32API+RECT</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+<li>
+    <p>Help for "UnionRect":</p>
+<table frame="hsides">
+  <tr>
+    <th>DocNode</th>
+    <th>Content Text</th>
+                 <th><a href="#"><strong><font size=3>[&#8593;]</font></strong></a></th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong><a name="UnionRect">UnionRect</a></strong></td>
+  </tr>
+                <tr>
+    <td>Info</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Usage</td>
+    <td></td>
+  </tr>
+                <tr>
+    <td>Example</td>
+    <td></td>
+  </tr>
+               <tr>
+    <td>API</td>
+    <td><br />
+<strong>API Prototype</strong>:  Microsoft.Win32.API_ImportsDLL.User32::UnionRect
+<br />Function Returns: 
+<br /><br />Parameters: <br />
+<table> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>lpDestRect</strong></td>
+    <td align="left"><a href="./TypeLinks/Microsoft.VisualBasic.Win32API+RECT.html">Microsoft.VisualBasic.Win32API+RECT</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>lpSrc1Rect</strong></td>
+    <td align="left"><a href="./TypeLinks/Microsoft.VisualBasic.Win32API+RECT.html">Microsoft.VisualBasic.Win32API+RECT</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr> 
+ <tr>
+                              <td align="left"></td>
+    <td align="left"><strong>lpSrc2Rect</strong></td>
+    <td align="left"><a href="./TypeLinks/Microsoft.VisualBasic.Win32API+RECT.html">Microsoft.VisualBasic.Win32API+RECT</a></td>
+<td align="left"></td>
+<td align="left"></td>
+  </tr>     
+</table></p>
+<p><strong>Returns</strong>: <a href="./TypeLinks/System.Int32.html">System.Int32</a></p>
+</td>
+  </tr>
+</table>
+<br /><p>
+</p></font>
+	  		<font face="Microsoft YaHei" size="1.5">
+		<div align="right">
+			<br />	<br />	<br />
+			<hr>
+				
+		<p>Copyright (c) <a href="http://gcmodeller.org">GCModeller Virtual Cell System</a>. 2015 All rights reserved.</p>
+		</div></font>
+	  </body>

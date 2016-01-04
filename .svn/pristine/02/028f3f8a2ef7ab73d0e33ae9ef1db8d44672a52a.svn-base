@@ -1,0 +1,198 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+RDotNET.Extensions.VisualBasic
+</name>
+</assembly>
+<members>
+<member name="T:RDotNET.Extensions.VisualBasic.IRScript">
+ <summary>
+ R脚本的数据模型对象的接口
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:RDotNET.Extensions.VisualBasic.IRScript.RScript">
+ <summary>
+ Get R Script text from this R script object build model.
+ </summary>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:RDotNET.Extensions.VisualBasic.IRScript.Requires">
+ <summary>
+ 需要加载的R的包的列表
+ </summary>
+ <returns></returns>
+</member>
+<member name="T:RDotNET.Extensions.VisualBasic.BnlearnInference">
+ <summary>
+ 使用已经建立好的计算模型，利用bnlearn包进行推测
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:RDotNET.Extensions.VisualBasic.BnlearnInference.RScript">
+ <summary>
+ cpquery返回一个数值，以证据evidence为条件下事件event的条件概率
+ </summary>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:RDotNET.Extensions.VisualBasic.BnlearnModelling`1.createNetwork(`0[])">
+ <summary>
+ 创建一个空网络，并构建好初始的网络结构
+ </summary>
+ <param name="NetworkData"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:RDotNET.Extensions.VisualBasic.NetworkParameters.ConditionalProbability.TryParse(System.String,System.Int32)">
+ <summary>
+ 
+ </summary>
+ <param name="strData"></param>
+ <returns></returns>
+ <remarks>  
+ list(node = "B", parents = "A", children = "E", prob = c(0.855072463768116, 0.0257944422284271, 0.119133094003457, 0.44468791500664, 0.221181938911023, 0.334130146082337, 0.11535895382973, 0.0949426207632773, 0.789698425406992))
+ </remarks>
+</member>
+<member name="M:RDotNET.Extensions.VisualBasic.NetworkParameters.#ctor(System.String,RDotNET.Extensions.VisualBasic.REngine)">
+ <summary>
+ 贝叶斯网络对象的变量名
+ </summary>
+ <param name="ObjectName"></param>
+ <remarks></remarks>
+</member>
+<member name="M:RDotNET.Extensions.VisualBasic.NetworkParameters.GetNetworkParameters(System.Int32)">
+ <summary>
+ Get Bayesian network parameters
+ </summary>
+ <returns></returns>
+ <remarks>
+ </remarks>
+</member>
+<member name="M:RDotNET.Extensions.VisualBasic.REngine.StartEngineServices">
+ <summary>
+ Automatically search for the path of the R system and then construct a R session for you.
+ (如果在注册表之中已经存在了R的路径的值或者你已经设置好了环境变量，则可以直接使用本函数进行初始化操作)
+ </summary>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:RDotNET.Extensions.VisualBasic.REngine.StartEngineServices(System.String)">
+ <summary>
+ Manual setup the R system path.(这个函数是在没有自动设置好环境变量的时候进行手动的环境变量设置所使用的初始化方法)
+ </summary>
+ <param name="R_HOME"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:RDotNET.Extensions.VisualBasic.REngine.Library(System.String)">
+ <summary>
+ This function equals to the function &lt;library> in R system.
+ </summary>
+ <param name="packageName"></param>
+ <returns></returns>
+</member>
+<member name="M:RDotNET.Extensions.VisualBasic.REngine.WriteLine2(System.String)">
+ <summary>
+ 获取来自于R服务器的输出，而不将结果打印于终端之上
+ </summary>
+ <param name="CommandLine"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:RDotNET.Extensions.VisualBasic.REngine.q">
+ <summary>
+ Quite the R system.
+ </summary>
+</member>
+<member name="M:RDotNET.Extensions.VisualBasic.RSystem.ServicesRunning(RDotNET.Extensions.VisualBasic.REngine)">
+ <summary>
+ Is the R engine server is running?
+ </summary>
+ <param name="REngine"></param>
+ <returns></returns>
+</member>
+<member name="M:RDotNET.Extensions.VisualBasic.RSystem.Library">
+ <summary>
+ 查看R引擎中已经安装的包
+ </summary>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:RDotNET.Extensions.VisualBasic.RSystem.Source(System.String)">
+ <summary>
+ The R engine execute a R script.(R引擎执行文件系统之中的一个R脚本)
+ </summary>
+ <param name="path"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:RDotNET.Extensions.VisualBasic.RSystem.Library(System.String)">
+ <summary>
+ Load a available R package which was installed in the R system.(加载一个可用的R包)
+ </summary>
+ <param name="packageName"></param>
+ <remarks></remarks>
+</member>
+<member name="M:RDotNET.Extensions.VisualBasic.RSystem.Cache(System.String)">
+ <summary>
+ 将当前的将本行缓存进入R引擎的内存中，但是并不进行计算，当用户调用Push命令或者WriteLine
+ 命令之后，当前所缓存的脚本行会被调用出来一同执行计算
+ </summary>
+ <param name="CommandLine"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:RDotNET.Extensions.VisualBasic.RSystem.getwd">
+ <summary>
+ Display the current working directory
+ </summary>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:RDotNET.Extensions.VisualBasic.RSystem.Push(System.String)">
+ <summary>
+ 将当前的脚本行送入R引擎之中并与之前使用Cache命令缓存下来的脚本行一同执行计算
+ </summary>
+ <param name="CommandLine"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:RDotNET.Extensions.VisualBasic.RSystem.Seq(System.Int32,System.Int32,System.Double)">
+ <summary>
+ [Sequence Generation] Generate regular sequences. seq is a standard generic with a default method.
+ </summary>
+ <param name="From">the starting and (maximal) end values of the sequence. Of length 1 unless just from is supplied as an unnamed argument.</param>
+ <param name="To">the starting and (maximal) end values of the sequence. Of length 1 unless just from is supplied as an unnamed argument.</param>
+ <param name="By">number: increment of the sequence</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:RDotNET.Extensions.VisualBasic.RSystem.RColors">
+ <summary>
+ 枚举R中所有的颜色代码
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:RDotNET.Extensions.VisualBasic.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:RDotNET.Extensions.VisualBasic.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:RDotNET.Extensions.VisualBasic.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+</members>
+</doc>

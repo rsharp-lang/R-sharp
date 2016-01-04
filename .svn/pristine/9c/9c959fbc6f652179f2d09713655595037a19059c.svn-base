@@ -1,0 +1,24 @@
+﻿
+Imports System.Text
+Imports Microsoft.VisualBasic.Scripting.ShoalShell
+''' <summary>
+''' 生成API模块的帮助文档
+''' </summary>
+Module [Namespace]
+
+    Public Sub GenerateDocument(repository As String, library As SPM.Nodes.Namespace())
+        For Each ns As SPM.Nodes.Namespace In library
+            Dim HTMLBuilder As New StringBuilder(My.Resources.index)
+            Dim HTML As String = HTMLDoc(ns)
+            Dim path As String = $"{repository}/{ns.Namespace.NormalizePathString(False)}.html"
+
+            Call HTMLBuilder.Replace("{doc}", HTML)
+            Call HTMLBuilder.SaveTo(path, System.Text.Encoding.UTF8)
+        Next
+    End Sub
+
+    Public Function HTMLDoc(ns As SPM.Nodes.Namespace) As String
+        Dim HTMLBuilder As StringBuilder = New StringBuilder(1024)
+        Return HTMLBuilder.ToString
+    End Function
+End Module

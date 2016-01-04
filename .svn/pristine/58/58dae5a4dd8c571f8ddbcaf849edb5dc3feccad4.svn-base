@@ -1,0 +1,5 @@
+v <- "\d+" <= "345;5678;84"
+call $v -> msgbox 
+
+v <- "tokens | 1" <= "ss|sf++$v+++|ddf"
+call $v -> msgbox 

@@ -1,0 +1,14 @@
+System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation. ---> System.IO.FileNotFoundException: Could not load file or assembly 'file:///E:\SIYU_DNAuction\Shared Reference\ShoalShell\bin\Debug\ShoalShell.Plugins.Win32API_v2.0_22.0.7601.121__ed1d5d0cd8c60cc9a.dll' or one of its dependencies. The system cannot find the file specified.
+   at System.Reflection.RuntimeAssembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, RuntimeAssembly locationHint, StackCrawlMark& stackMark, IntPtr pPrivHostBinder, Boolean throwOnFileNotFound, Boolean forIntrospection, Boolean suppressSecurityChecks)
+   at System.Reflection.RuntimeAssembly.InternalLoadAssemblyName(AssemblyName assemblyRef, Evidence assemblySecurity, RuntimeAssembly reqAssembly, StackCrawlMark& stackMark, IntPtr pPrivHostBinder, Boolean throwOnFileNotFound, Boolean forIntrospection, Boolean suppressSecurityChecks)
+   at System.Reflection.RuntimeAssembly.InternalLoadFrom(String assemblyFile, Evidence securityEvidence, Byte[] hashValue, AssemblyHashAlgorithm hashAlgorithm, Boolean forIntrospection, Boolean suppressSecurityChecks, StackCrawlMark& stackMark)
+   at System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   at Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.RegistryModuleLoader.get_ModuleFromAssembly(String AssemblyPath) in E:\SIYU_DNAuction\Shared Reference\Shoal\ShoalShell\Microsoft.VisualBasic.Scripting.ShoalShell\DelegateHandlers\TypeLibraryRegistry\RegistryModuleLoader.vb:line 69
+   at Microsoft.VisualBasic.Scripting.ShoalShell.DelegateHandlers.TypeLibraryRegistry.DelegateRegistry.RegisterAssemblyModule(String AssemblyPath, String AssemblyName) in E:\SIYU_DNAuction\Shared Reference\Shoal\ShoalShell\Microsoft.VisualBasic.Scripting.ShoalShell\DelegateHandlers\TypeLibraryRegistry\DelegateRegistry.vb:line 304
+   at Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.InternalCommands.Library(String assemblyPath) in E:\SIYU_DNAuction\Shared Reference\Shoal\ShoalShell\Microsoft.VisualBasic.Scripting.ShoalShell\Interpreter\InternalCommands.vb:line 338
+   --- End of inner exception stack trace ---
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Object[] arguments, Signature sig, Boolean constructor)
+   at System.Reflection.RuntimeMethodInfo.UnsafeInvokeInternal(Object obj, Object[] parameters, Object[] arguments)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
+   at Microsoft.VisualBasic.CommandLine.Reflection.EntryPoints.CommandEntryPointInfo.Invoke(Object[] parameters, Object target, Boolean Throw) in E:\SIYU_DNAuction\Shared Reference\Shoal\Microsoft.VisualBasic.Architecture.Framework\CommandLine\Reflection\EntryPoints\CommandEntryPointInfo.vb:line 139
