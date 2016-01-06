@@ -15,6 +15,7 @@ local.properties
 .classpath
 .settings/
 .loadpath
+.svn/
 
 # External tool builders
 .externalToolBuilders/
@@ -49,6 +50,7 @@ x64/
 build/
 [Bb]in/
 [Oo]bj/
+.svn/
 
 # MSTest test Results
 [Tt]est[Rr]esult*/

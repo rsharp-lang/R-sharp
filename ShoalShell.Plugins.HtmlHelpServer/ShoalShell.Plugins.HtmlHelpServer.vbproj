@@ -188,7 +188,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Microsoft.VisualBasic_Framework\DocumentFormats\MSHtml\MSHtml\DocumentFormat.HTML.vbproj">
-      <Project>{a945af12-0ade-40ff-bbb3-6965e54ad391}</Project>
+      <Project>{2dd4be80-ddc3-4767-94a7-10f1c3395716}</Project>
       <Name>DocumentFormat.HTML</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Microsoft.VisualBasic_Framework\Microsoft.VisualBasic.Architecture.Framework\+Microsoft.VisualBasic.Architecture.Framework.vbproj">
