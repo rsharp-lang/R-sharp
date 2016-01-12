@@ -28,6 +28,9 @@ local.properties
 # PDT-specific
 .buildpath
 
+*.dll
+*.exe
+*.pdb
 
 #################
 ## Visual Studio
@@ -41,6 +44,8 @@ local.properties
 *.user
 *.sln.docstates
 .svn/
+Debug/
+bin/
 
 # Build results
 
