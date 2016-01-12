@@ -15,7 +15,6 @@ local.properties
 .classpath
 .settings/
 .loadpath
-.svn/
 
 # External tool builders
 .externalToolBuilders/
@@ -41,6 +40,7 @@ local.properties
 *.suo
 *.user
 *.sln.docstates
+.svn/
 
 # Build results
 
@@ -216,10 +216,3 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
-
-# Compile binary
-.exe
-.dll
-.pdb
-.cache
-.bin
