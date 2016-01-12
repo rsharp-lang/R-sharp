@@ -1,5 +1,0 @@
- imports piechart
-
-dim   dd <= {{sample1, 5}, {sample2, 45}, {sample3, 50}}
-
-call pie {data.frame $dd}

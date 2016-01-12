@@ -1,4 +1,0 @@
-file <- "./test___successfully.txt"
-text < (string) $file
-call $text -> cowsay
-call $text -> msgbox

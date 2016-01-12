@@ -1,5 +1,0 @@
-test.string <- ghghgh
-$test.string -> length
-len <- $test.string -> length 
-
-string_length=$len -> cowsay
