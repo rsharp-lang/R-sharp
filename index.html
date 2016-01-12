@@ -21,7 +21,8 @@
 
           <h1 id="project_title">Shoal</h1>
           <h2 id="project_tagline">Shoal Shell Language for GCModeller Virtual Cell Programming</h2>
-
+            <h3 id="project_tagline"><a href="http://gcmodeller.org/library/index.html">GCModeller Programming Language</a></h2>
+            
             <section id="downloads">
               <a class="zip_download_link" href="https://github.com/SMRUCC/Shoal/zipball/master">Download this project as a .zip file</a>
               <a class="tar_download_link" href="https://github.com/SMRUCC/Shoal/tarball/master">Download this project as a tar.gz file</a>
@@ -38,9 +39,15 @@
 <p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here <a href="https://guides.github.com/features/mastering-markdown/">using GitHub Flavored Markdown</a>, select a template crafted by a designer, and publish. After your page is generated, you can check out the new <code>gh-pages</code> branch locally. If you’re using GitHub Desktop, simply sync your repository and you’ll see the new branch.</p>
 
 <h3>
-<a id="designer-templates" class="anchor" href="#designer-templates" aria-hidden="true"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+<a id="designer-templates" class="anchor" href="#designer-templates" aria-hidden="true"><span class="octicon octicon-link"></span></a>GCModeller API Documents</h3>
 
-<p>We’ve crafted some handsome templates for you to use. Go ahead and click 'Continue to layouts' to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved.</p>
+          <p>GCModeller is original written in VisualBasic.NET language, API export to the Shoal Language through the reflection attributes:
+              <li><strong>Microsoft.VisualBasic.CommandLine.Reflection.ExportAPIAttribute</strong></li>
+              <li><strong>Microsoft.VisualBasic.Scripting.MetaData.PackageNamespace</strong></li>
+              And then you can using these attributes to build your own API for shoal language on the Microsoft .NET Platform by using language VisualBasic/C#/F#.<br /><br /><strong>Microsoft.VisualBasic.Scripting.MetaData.Cite</strong> attribute can be used on your API namespace to specific which the scientific article should be cites if you would like to publish your tools package in the GCModeller library to helps other researchers.</p>
+          <p>
+              The GCModeller API for shoal language was documented on the GCModeller help library at here: <a href="http://gcmodeller.org/library/index.html">gcmodeller.org/library</a>
+          </p>
 
 <h3>
 <a id="creating-pages-manually" class="anchor" href="#creating-pages-manually" aria-hidden="true"><span class="octicon octicon-link"></span></a>Shoal Programming Features</h3>
