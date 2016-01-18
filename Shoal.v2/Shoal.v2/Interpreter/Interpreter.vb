@@ -50,7 +50,7 @@ Namespace Interpreter
         ''' <param name="path"></param>
         ''' <returns></returns>
         Private Function __parsingFile(path As String) As ShoalShell.Interpreter.LDM.SyntaxModel
-            Dim Script As String = path.Get_PageContent
+            Dim Script As String = path.GET
             Return ShoalShell.Interpreter.LDM.SyntaxModel.ScriptParser(Script, path)
         End Function
 
