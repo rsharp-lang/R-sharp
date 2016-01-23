@@ -38,7 +38,7 @@ Public Module Index
         Call innerDoc.AppendLine($"<h1>Brief Introductions</h1>
 <table>
 <tr><td>Publisher: </td><td><a href=""mailto://xie.guigang@gcmodeller.org"">xie.guigang@gcmodeller.org</a></td></tr>
-<tr><td>Version: </td><td>{GetType(Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.ScriptEngine).ModuleVersion}</td></tr>
+<tr><td>Version: </td><td>{GetType(Runtime.ScriptEngine).ModuleVersion}</td></tr>
 <tr><td>License: </td><td>
 <a href=""http://www.gnu.org/licenses/gpl-3.0.html"">GPL3</a></td></tr>
 <tr><td></td><td>
@@ -46,7 +46,7 @@ Public Module Index
 Inspired by the Microsoft bioinformatics research project MBF and recently advances in Virtual Cell technology, GCModeller was developed for solving the problem of systemsbiology not only in the discovery of the novel cellular mechanism in molecular biology, but also for more complex situation such as metagenomics and environment co-evolution. 
 GCModeller is original written in Microsoft <strong>VisualBasic</strong> language, and some module in GCModeller is hybrids programming with <strong><a href=""https://www.perl.org/"">Perl</a></strong> and <strong><a href=""https://www.r-project.org/"">R</a></strong> languages.<br /> 
 ShoalShell program is part of important runtime environment from GCModeller analysis suite which it is distributed under the GPL3 license, you can download the latest source code of shoal shell from SourceForge.net:
-<br /><li><a href=""http//SourceForge.net/projects/shoal"">SourceForge.net/projects/shoal</a></li>
+<br /><li><a href=""https://github.com/SMRUCC/Shoal"">https://github.com/SMRUCC/Shoal</a></li>
 </p>
 </td></tr>
 </table>")
