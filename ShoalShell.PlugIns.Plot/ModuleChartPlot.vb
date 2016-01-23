@@ -64,7 +64,7 @@ Public Module DataSource
     <InputDeviceHandle("imports.csv")>
     <ExportAPI("imports.csv")>
     Public Function ReadCSV_FASTLOAD(path As String) As Microsoft.VisualBasic.DocumentFormat.Csv.DocumentStream.File
-        Using pdt As Microsoft.VisualBasic.ConsoleDevice.Utility.ConsoleBusyIndicator = New ConsoleDevice.Utility.ConsoleBusyIndicator(_start:=True)
+        Using pdt As Microsoft.VisualBasic.ConsoleDevice.Utility.CBusyIndicator = New ConsoleDevice.Utility.CBusyIndicator(_start:=True)
             Call Console.WriteLine("[DEBUG] Start loading data from " & path.ToFileURL)
             Dim MAT = Microsoft.VisualBasic.DocumentFormat.Csv.DocumentStream.File.FastLoad(path)
             Return MAT
