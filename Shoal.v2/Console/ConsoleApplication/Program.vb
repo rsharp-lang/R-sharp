@@ -1,7 +1,9 @@
 ﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Settings
 Imports Microsoft.VisualBasic.ConsoleDevice.STDIO
 Imports Microsoft.VisualBasic.Scripting.ShoalShell
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Configuration
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime
 
 ''' <summary>
 ''' The shoal program main entry.
@@ -23,16 +25,17 @@ Module Program
         Get
             Return _
 <CP>LANS Shoal Shell [version {0} - {1};  {2}]
-Copyright (c) 2014 LANS SystemsBiology Engineering Workstation.
+Copyright (c) 2015 SMRUCC SystemsBiology. All Rights Reserved.
 
-Shoal was developed by:  xieguigang(xie.guigang@gmail.com)
+Shoal was developed by:  xieguigang(xie.guigang@gcmodeller.org)
+                         Miss asuka(amethyst.asuka@gcmodeller.org)
 
   "A lot of fish in a shoal, in a gigantic scientific ocean."
 
 Shoal running cross-platform(Windows7/8/10, Linux/Ubuntu, OS X), and you can hybrid scripting using shoal with R/Perl
-ShoalShell project source code is available on SourceForge via SVN command:  
+ShoalShell project source code is available on Github:  
 
-    svn checkout svn://svn.code.sf.net/p/shoal/Source/ shoal-Source.
+    https://github.com/smrucc/shoal
 
 Commands quick guide:
 
@@ -60,7 +63,7 @@ Commands quick guide:
 
   q()        - quit the shoal shell
 
-For more details help information, please visit the WIKI page on Shoal shell's SourceForge project home: sourceforge.net/projects/shoal/wiki
+For more details help information, please visit the WIKI page on Shoal shell's wiki: http://wiki.gcmodeller.org/shoal/
 
 Program files and source code was distributed under the GPL3 Licensed to "{3}", using license() command to view the license details.
 
@@ -68,37 +71,30 @@ Program files and source code was distributed under the GPL3 Licensed to "{3}", 
         End Get
     End Property
 
-    Public ReadOnly Property Configuration As Microsoft.VisualBasic.ComponentModel.Settings.Settings(Of Config) =
-        Config.Default
+    Public ReadOnly Property Configuration As Settings(Of Config) = Config.Default
 
     Public Function Main() As Integer
-        Return GetType(CLI).RunCLI(App.Command,
-                                            AddressOf Program.ExecuteScriptFile,
-                                            AddressOf Program.ExecuteEmpty)
+        Return GetType(CLI).RunCLI(App.CommandLine, AddressOf Program.ExecuteScriptFile, AddressOf Program.ExecuteEmpty)
     End Function
 
     Private Function ExecuteScriptFile(path As String, args As CommandLine.CommandLine) As Integer
-        Return Program.RunScriptFile(path, argvs:=args.ToArray)
+        Return Program.RunScriptFile(path, args:=args.ToArray)
     End Function
 
     Private Function ExecuteEmpty() As Integer
         Return Program.ScriptShellTerminal(-1, "")
     End Function
 
-    Private Function RunScriptFile(ScriptFile As String, argvs As KeyValuePair(Of String, String)()) As Integer
-        Using ScriptHost As Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.ScriptEngine =
-            New Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.ScriptEngine(Config.Default.SettingsData)
-            Return __runScriptFile(ScriptHost, ScriptFile, argvs)
+    Private Function RunScriptFile(ScriptFile As String, args As KeyValuePair(Of String, String)()) As Integer
+        Using scriptEngine As ScriptEngine = New ScriptEngine(Config.Default.SettingsData)
+            Return __runScriptFile(scriptEngine, ScriptFile, args)
         End Using
     End Function
 
-    Private Function __runScriptFile(ScriptEngine As Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.ScriptEngine,
-                                     ScriptFile As String,
-                                     argvs As KeyValuePair(Of String, String)()) As Integer
-
+    Private Function __runScriptFile(ScriptEngine As ScriptEngine, ScriptFile As String, args As KeyValuePair(Of String, String)()) As Integer
         Call ScriptEngine.Imports(GetType(InternalCommands))
 
-        For Each item In argvs
+        For Each item In args
             Call ScriptEngine.MMUDevice.WriteMemory(item.Key, item.Value)
         Next
 
@@ -146,16 +142,14 @@ Program files and source code was distributed under the GPL3 Licensed to "{3}", 
         My.Computer.FileSystem.CreateDirectory(work)
         My.Computer.FileSystem.CurrentDirectory = work
 
-        Using ScriptEngine As Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.ScriptEngine =
-            If(ListenerPort > 0,
-                New Scripting.ShoalShell.Runtime.Debugging.Debugger(DebugListenerPort:=ListenerPort, Config:=Program.Configuration.SettingsData),
-                New Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.ScriptEngine(Program.Configuration.SettingsData))
+        Using ScriptEngine As ScriptEngine = If(ListenerPort > 0,
+            New Debugging.Debugger(DebugListenerPort:=ListenerPort, Config:=Program.Configuration.SettingsData),
+            New ScriptEngine(Program.Configuration.SettingsData))
             Return __scriptShellTerminal(ScriptEngine, ListenerPort > 0)
         End Using
     End Function
 
-    Public Function __scriptShellTerminal(ScriptEngine As Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.ScriptEngine,
-                                          DebuggerMode As Boolean) As Integer
+    Public Function __scriptShellTerminal(ScriptEngine As ScriptEngine, DebuggerMode As Boolean) As Integer
         Call ScriptEngine.Imports(GetType(InternalCommands))
 
         If DebuggerMode Then
@@ -171,7 +165,7 @@ Program files and source code was distributed under the GPL3 Licensed to "{3}", 
         Return 0
     End Function
 
-    Private Sub __runTerminal(ScriptEngine As Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.ScriptEngine)
+    Private Sub __runTerminal(ScriptEngine As ScriptEngine)
         Do While True
             Dim CommandLine As String = scanf("$  ")
             If String.Equals(CommandLine, "q()", StringComparison.OrdinalIgnoreCase) Then
@@ -182,8 +176,8 @@ Program files and source code was distributed under the GPL3 Licensed to "{3}", 
         Loop
     End Sub
 
-    Private Sub __runDebugger(ScriptEngine As Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.ScriptEngine)
-        Dim Debugger = DirectCast(ScriptEngine, Scripting.ShoalShell.Runtime.Debugging.Debugger)
+    Private Sub __runDebugger(ScriptEngine As ScriptEngine)
+        Dim Debugger = DirectCast(ScriptEngine, Debugging.Debugger)
 
         Do While Not Debugger.DebuggerExit
             Call Threading.Thread.Sleep(2000)

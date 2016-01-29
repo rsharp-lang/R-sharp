@@ -2,6 +2,8 @@
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.ShoalShell
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Configuration
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.SCOM
 
 ''' <summary>
 ''' This module define the shoal commandlines for the command line interpreter.
@@ -59,8 +61,7 @@ Module CLI
             Return -1
         End If
 
-        Using ScriptHost As Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.ScriptEngine =
-            New Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.ScriptEngine(Scripting.ShoalShell.Configuration.Config.Default.SettingsData) '(ShowInitializeMessage:=False, LibraryRegistry:=Program.Configuration.TargetSettingsData.get_RegistryFile)
+        Using ScriptHost As ScriptEngine = New ScriptEngine(Config.Default.SettingsData) '(ShowInitializeMessage:=False, LibraryRegistry:=Program.Configuration.TargetSettingsData.get_RegistryFile)
             ' Call ScriptHost.Imports(GetType(InternalCommands))
             Return ScriptHost.Exec(strLine)
         End Using
@@ -99,7 +100,10 @@ Module CLI
         Info:="Scanning all of the avaliable shoal plugin modules in the specific directory and install all of them into the shoal registry.",
         Example:="-scan.plugins -dir ./ -ext *.dll")>
     Public Function ScanPlugins(args As CommandLine.CommandLine) As Integer
-        Return Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.SCOM.RuntimeEnvironment.ScanPlugins(args)
+        Call RuntimeEnvironment.ScanPlugins(args)
+
+        Dim ScriptHost As ScriptEngine = New ScriptEngine(Config.Default.SettingsData)
+        Return ScriptHost.Exec("Wiki.Http_Server::Doc.Build")
     End Function
 
     '<Command("-show_info", Info:="Print the shoal script meta data information, which was define as the macro in the script file.",

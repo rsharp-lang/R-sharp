@@ -5,11 +5,11 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{D712E0A2-8AB1-4665-B7B5-D2FCE09188AE}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <RootNamespace>ShoalShell.Plugins.HtmlHelpServer</RootNamespace>
     <AssemblyName>ShoalShell.Plugins.HtmlHelpServer</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MyType>Console</MyType>
+    <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -66,7 +66,8 @@
     <DefineConstants>API_EXPORT=1</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>ShoalShell.Plugins.HtmlHelpServer.NotificationIcon</StartupObject>
+    <StartupObject>
+    </StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

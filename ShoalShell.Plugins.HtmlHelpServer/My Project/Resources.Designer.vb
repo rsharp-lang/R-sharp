@@ -79,10 +79,7 @@ Namespace My.Resources
         '''        background: #f0f0f0;
         '''        -webkit-text-size-adjust: 100%;
         '''        -ms-text-size-adjust: 100%;
-        '''      }
-        '''
-        '''      html,
-        '''    [rest of string was truncated]&quot;;.
+        '''       [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property _404() As String
             Get
@@ -111,7 +108,7 @@ Namespace My.Resources
         '''  width: 90.063em; }
         '''
         '''meta.foundation-mq-xxlarge {
-        '''  font-family: &quot;/only screen and [rest of string was truncated]&quot;;.
+        '''  font-famil [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property foundation() As String
             Get
@@ -133,7 +130,7 @@ Namespace My.Resources
         '''software and other kinds of works.
         '''
         '''  The licenses for most software and other practical works are designed
-        '''to take away yo [rest of string was truncated]&quot;;.
+        '''to [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property gpl() As String
             Get
@@ -154,7 +151,7 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized string similar to &lt;!DOCTYPE html&gt;
         '''&lt;!-- saved from url=(0052)http://foundation.zurb.com/templates/workspace.html# --&gt;
-        '''&lt;html class=&quot; js flexbox flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionsto [rest of string was truncated]&quot;;.
+        '''&lt;html class=&quot; js flexbox flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessions [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property index() As String
             Get

@@ -21,10 +21,13 @@ Public Module Index
         Call $"Write css foundation!".__DEBUG_ECHO
         Call index.Replace("{doc}", __innerHTML(library, repository))
         Call index.Replace(Title, "GCModeller Help Library")
-        Call index.SaveTo($"{repository}/index.html", System.Text.Encoding.UTF8)
-
         Call Cite.GenerateDocument(repository, library)
         Call Type.GenerateDocument(repository, library)
+
+        Dim indexPage As String = $"{repository}/index.html"
+
+        Call index.SaveTo(indexPage, Encoding.UTF8)
+        Call $"Index page saved at {indexPage.ToFileURL}...".__DEBUG_ECHO
     End Sub
 
     ''' <summary>
