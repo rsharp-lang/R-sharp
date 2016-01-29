@@ -3,7 +3,7 @@ Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter
 
 Namespace Runtime.MMU
 
-    Public Interface IPageUnit : Inherits Microsoft.VisualBasic.ComponentModel.IAddrHandle
+    Public Interface IPageUnit : Inherits Microsoft.VisualBasic.ComponentModel.IAddressHandle
 
         ReadOnly Property PageType As IPAGE_TYPES
         ReadOnly Property Name As String

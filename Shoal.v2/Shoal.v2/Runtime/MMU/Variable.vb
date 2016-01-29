@@ -6,13 +6,13 @@ Namespace Runtime.MMU
     <Serializable> Public Class Variable
 
         Implements MMU.IPageUnit
-        Implements Microsoft.VisualBasic.ComponentModel.IAddrHandle
+        Implements Microsoft.VisualBasic.ComponentModel.IAddressHandle
 
         ''' <summary>
         ''' 内存之中的位置指针，使用 *p 来表示
         ''' </summary>
         ''' <returns></returns>
-        Public Property AddrHwnd As Long Implements IAddrHandle.AddrHwnd
+        Public Property AddrHwnd As Long Implements IAddressHandle.AddrHwnd
         Public Overridable ReadOnly Property Name As String Implements IPageUnit.Name
             Get
                 Return _Name
