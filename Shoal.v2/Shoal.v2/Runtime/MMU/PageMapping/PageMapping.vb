@@ -1,5 +1,6 @@
 ﻿Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.DataFramework
 
 Namespace Runtime.MMU.PageMapping
 
@@ -45,10 +46,10 @@ Namespace Runtime.MMU.PageMapping
             Return $"{Name} = {value} As {[TypeOf].FullName}"
         End Function
 
-        Public Function Convertable(SourceType As Type) As Boolean
-            Dim ConvertType = Me.TypeOf
-            Dim YON As Boolean = Microsoft.VisualBasic.ComponentModel.DataSourceModel.DataFramework.BasicTypesFlushs.ContainsKey(ConvertType) AndAlso
-                Microsoft.VisualBasic.ComponentModel.DataSourceModel.DataFramework.BasicTypesFlushs.ContainsKey(SourceType)
+        Public Function Convertable(sourceType As Type) As Boolean
+            Dim convertType As Type = Me.TypeOf
+            Dim YON As Boolean = BasicTypesFlushs.ContainsKey(convertType) AndAlso
+                BasicTypesFlushs.ContainsKey(sourceType)
             Return YON
         End Function
     End Class

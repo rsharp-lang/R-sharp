@@ -1,6 +1,7 @@
 ﻿Imports System.ComponentModel
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Configuration
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.HTML
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.LDM.Expressions
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.MMU
 
 Namespace Runtime
@@ -88,7 +89,7 @@ into this version of engine, for more details information please visit:  http://
         ''' <param name="Script">User input from the terminal.</param>
         ''' <returns></returns>
         Public Function Exec(Script As String) As Object
-            Dim Expr As Interpreter.LDM.Expressions.PrimaryExpression =
+            Dim Expr As PrimaryExpression =
                 ShoalShell.Interpreter.Interpreter.InternalExpressionParser(Script)
 
             If Expr.IsNonExecuteCode = True Then Return Nothing
@@ -111,7 +112,7 @@ into this version of engine, for more details information please visit:  http://
 #End If
         End Function
 
-        Private Function __execInner(Expr As Interpreter.LDM.Expressions.PrimaryExpression) As Object
+        Private Function __execInner(Expr As PrimaryExpression) As Object
             Dim value As Object = ExecuteModel.Exec(Expr)  '从终端输入的脚本需要额外的错误处理来避免崩溃
             Return value
         End Function

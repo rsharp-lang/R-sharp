@@ -24,7 +24,8 @@ Namespace Interpreter.Linker.APIHandler
         ''' </summary>
         ''' <remarks></remarks>
         Dim _OverloadAPIEntryPoints As List(Of SignedFuncEntryPoint) = New List(Of SignedFuncEntryPoint)
-        Dim _OverloadSignatureHandles As Dictionary(Of String, OverloadsSignatureHandle) = New Dictionary(Of String, OverloadsSignatureHandle)
+        Dim _OverloadSignatureHandles As Dictionary(Of String, OverloadsSignatureHandle) =
+            New Dictionary(Of String, OverloadsSignatureHandle)
 
         ''' <summary>
         ''' Shoal API命令的名称

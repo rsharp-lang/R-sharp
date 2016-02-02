@@ -1,4 +1,6 @@
-﻿Imports Microsoft.VisualBasic.ComponentModel.Settings
+﻿Imports Microsoft.VisualBasic.ComponentModel
+Imports Microsoft.VisualBasic.ComponentModel.Settings
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.SPM
 
 Namespace Configuration
 
@@ -7,8 +9,8 @@ Namespace Configuration
     ''' </summary>
     ''' 
     <Xml.Serialization.XmlType("Shoal.Configuration", [Namespace]:="http://gcmodeller.org/shoal.config")>
-    Public Class Config : Inherits Microsoft.VisualBasic.ComponentModel.ITextFile
-        Implements Microsoft.VisualBasic.ComponentModel.Settings.IProfile
+    Public Class Config : Inherits ITextFile
+        Implements IProfile
 
 #Region "Configuration storage property region"
 
@@ -113,7 +115,7 @@ Namespace Configuration
         ''' <remarks></remarks>
         Public Function GetRegistryFile() As String
             If String.IsNullOrEmpty(SPMRegistry) Then
-                Return Microsoft.VisualBasic.Scripting.ShoalShell.SPM.PackageModuleDb.DefaultFile
+                Return PackageModuleDb.DefaultFile
             Else
                 Return VisualBasic.FileIO.FileSystem.GetFileInfo(Me.SPMRegistry).FullName
             End If
@@ -129,9 +131,9 @@ Namespace Configuration
             End Get
         End Property
 
-        Public Shared ReadOnly Property [Default] As Microsoft.VisualBasic.ComponentModel.Settings.Settings(Of Config)
+        Public Shared ReadOnly Property [Default] As Settings(Of Config)
             Get
-                Return Microsoft.VisualBasic.ComponentModel.Settings.Settings(Of Config).LoadFile(XmlFile:=Config.DefaultFile)
+                Return Settings(Of Config).LoadFile(XmlFile:=Config.DefaultFile)
             End Get
         End Property
 

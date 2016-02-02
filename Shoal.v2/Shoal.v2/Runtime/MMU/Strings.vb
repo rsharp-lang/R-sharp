@@ -1,7 +1,7 @@
 ﻿Imports System.Text
 Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.Scripting.InputHandler
-
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.SCOM
 Imports Variable = System.Collections.Generic.KeyValuePair(Of String, Object)
 
 Namespace Runtime.MMU
@@ -9,9 +9,9 @@ Namespace Runtime.MMU
     ''' <summary>
     ''' 字符串服务
     ''' </summary>
-    Public Class Strings : Inherits Runtime.SCOM.RuntimeComponent
+    Public Class Strings : Inherits RuntimeComponent
 
-        Sub New(ScriptEngine As Runtime.ScriptEngine)
+        Sub New(ScriptEngine As ScriptEngine)
             Call MyBase.New(ScriptEngine)
         End Sub
 
@@ -24,45 +24,43 @@ Namespace Runtime.MMU
         ''' <param name="Expr"></param>
         ''' <returns></returns>
         Public Function Format(Expr As String) As String
-            Dim Matches = (From m As Match
-                               In Regex.Matches(Expr, Variable, RegexOptions.Multiline)
-                           Select m.Value).ToArray
-            Dim ExprBuilder As StringBuilder = New StringBuilder(Expr)
+            Dim matches As String() = Regex.Matches(Expr, Variable, RegexOptions.Multiline).ToArray
+            Dim exprBuilder As StringBuilder = New StringBuilder(Expr)
 
             For Each var As KeyValuePair(Of String, Object) In (From varRef In MyBase.ScriptEngine.MMUDevice.ImportedConstants
                                                                 Select varRef
                                                                 Order By VisualBasic.Strings.Len(varRef.Key) Descending).ToArray
-                Call ExprBuilder.Replace(var.Key, InputHandler.ToString(var.Value))
+                Call exprBuilder.Replace(var.Key, InputHandler.ToString(var.Value))
             Next
 
-            If Matches.IsNullOrEmpty Then  '没有任何匹配，说明仅仅是一个字符串常量
+            If matches.IsNullOrEmpty Then  '没有任何匹配，说明仅仅是一个字符串常量
                 Return Expr
             End If
 
-            Dim OriginalTokens = (From i As Integer In Matches.Sequence
-                                  Let strValue As String = Matches(i)
+            Dim OriginalTokens = (From i As Integer In matches.Sequence
+                                  Let strValue As String = matches(i)
                                   Where strValue.First = "\"c
                                   Select i, strValue).ToArray
-            Dim EscapeTokens As List(Of KeyValuePair(Of String, String)) = New Generic.List(Of KeyValuePair(Of String, String))
+            Dim EscapeTokens As List(Of KeyValuePair(Of String, String)) = New List(Of KeyValuePair(Of String, String))
 
-            For Each OriginalToken In OriginalTokens '先处理需要被转义的部分
-                Dim ESC As String = OriginalToken.i & "___//-$"
-                Call EscapeTokens.Add(New KeyValuePair(Of String, String)(ESC, OriginalToken.strValue))
-                Call ExprBuilder.Replace(OriginalToken.strValue, ESC)
+            For Each orinlToken In OriginalTokens '先处理需要被转义的部分
+                Dim ESC As String = orinlToken.i & "___//-$"
+                Call EscapeTokens.Add(New KeyValuePair(Of String, String)(ESC, orinlToken.strValue))
+                Call exprBuilder.Replace(orinlToken.strValue, ESC)
             Next
 
-            Dim ReplacedTokens = (From m As String In Matches Where m.First <> "\"c Select m).ToArray
+            Dim ReplacedTokens = (From m As String In matches Where m.First <> "\"c Select m).ToArray
             Dim vars = ScriptEngine.MMUDevice.Variables
 
-            For Each Token As String In ReplacedTokens
-                Call __replaceString(Token, ExprBuilder, vars)
+            For Each token As String In ReplacedTokens
+                Call __replaceString(token, exprBuilder, vars)
             Next
 
             For Each ESC In EscapeTokens   '替换回转义字符
-                Call ExprBuilder.Replace(ESC.Key, Mid(ESC.Value, 2))
+                Call exprBuilder.Replace(ESC.Key, Mid(ESC.Value, 2))
             Next
 
-            Return ExprBuilder.ToString
+            Return exprBuilder.ToString
         End Function
 
         Private Sub __replaceString(Token As String, ByRef ExprBuilder As StringBuilder, varList As KeyValuePair(Of String, Object)())

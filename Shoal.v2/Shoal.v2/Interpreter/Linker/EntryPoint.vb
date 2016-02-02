@@ -2,6 +2,7 @@
 Imports Microsoft.VisualBasic.CommandLine.Reflection.EntryPoints
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Linker.APIHandler
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.HybridsScripting
+Imports Microsoft.VisualBasic.CommandLine.Interpreter
 
 Namespace Interpreter.Linker
 
@@ -16,7 +17,7 @@ Namespace Interpreter.Linker
             Call MyBase.New(ScriptEngine)
             Call [Imports](GetType(ShoalShell.InternalExtension)) '导入内部的一些简单的常用命令
             AnonymousDelegate = New AnonymousDelegate(ScriptEngine)
-            HybridAdapter = New Runtime.HybridsScripting.InteropAdapter(ScriptEngine)
+            HybridAdapter = New InteropAdapter(ScriptEngine)
 
             For Each preLoad As String In ScriptEngine.Config.PreLoadedModules
                 Call [Imports](preLoad)
@@ -140,7 +141,7 @@ Namespace Interpreter.Linker
         End Sub
 
         Protected Function __allInstanceCommands(Type As Type) As List(Of EntryPoints.APIEntryPoint)
-            Dim InternalChunkList = Microsoft.VisualBasic.CommandLine.Interpreter.GetAllCommands(Type)
+            Dim InternalChunkList = GetAllCommands(Type)
             Dim commandAttribute As System.Type = GetType(ExportAPIAttribute)
             Dim commandsSource = (From MethodHandle As System.Reflection.MethodInfo
                                   In Type.GetMethods()

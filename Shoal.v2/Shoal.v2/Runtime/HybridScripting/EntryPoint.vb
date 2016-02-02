@@ -8,8 +8,8 @@ Namespace Runtime.HybridsScripting
         ''' Script name.(混合编程的脚本名称)
         ''' </summary>
         ''' <remarks></remarks>
-        Dim Language As ShoalShell.Runtime.HybridsScripting.LanguageEntryPoint
-        Dim Init, Evaluate, SetValue As System.Reflection.MethodInfo
+        Dim Language As LanguageEntryPoint
+        Dim Init, Evaluate, SetValue As MethodInfo
         ''' <summary>
         ''' Basic type data convert interface.(基本数据类型的转换接口)
         ''' </summary>
@@ -64,7 +64,9 @@ Namespace Runtime.HybridsScripting
         ''' <remarks></remarks>
         Public ReadOnly Property IsNull As Boolean
             Get
-                Return Language Is Nothing OrElse Evaluate Is Nothing OrElse SetValue Is Nothing
+                Return Language Is Nothing OrElse
+                    Evaluate Is Nothing OrElse
+                    SetValue Is Nothing
             End Get
         End Property
     End Structure

@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.Net
+﻿Imports Microsoft.VisualBasic.CommandLine
+Imports Microsoft.VisualBasic.Net
 Imports Microsoft.VisualBasic.Net.Protocol
 
 Namespace Runtime.Debugging
@@ -12,7 +13,7 @@ Namespace Runtime.Debugging
         Dim _DebuggerListener As Microsoft.VisualBasic.Net.TcpSynchronizationServicesSocket
         Dim _InternalMessageSender As AsynInvoke
         Dim pid As Integer
-        Dim DebuggerProcess As Microsoft.VisualBasic.CommandLine.IORedirect
+        Dim DebuggerProcess As IORedirect
         Dim LocalPort As Integer = GetFirstAvailablePort()
         Dim DebuggerStarted As Boolean = False
 
@@ -29,7 +30,7 @@ Namespace Runtime.Debugging
             Dim DebuggerArgvs As String = "/debug listener_port " & LocalPort
             If Not String.IsNullOrEmpty(WorkDir) Then DebuggerArgvs = DebuggerArgvs & " -work """ & WorkDir & """"
             Debugger = FileIO.FileSystem.GetFileInfo(Debugger).FullName
-            DebuggerProcess = New Microsoft.VisualBasic.CommandLine.IORedirect(Debugger, DebuggerArgvs, _disp_debug:=True)
+            DebuggerProcess = New IORedirect(Debugger, DebuggerArgvs, _disp_debug:=True)
             Call DebuggerProcess.Start(_DISP_DEBUG_INFO:=True)
             Call InternalWaitForDebuggerStart()
             Call (Sub() SendHelloWorld()).BeginInvoke(Nothing, Nothing)
@@ -54,9 +55,9 @@ RESTART:        _DebuggerListener = New TcpSynchronizationServicesSocket(Address
         Private Function InternalProtocol(uid As Long, request As RequestStream, remote As System.Net.IPEndPoint) As RequestStream
             Dim str As String = request.GetUTF8String
 
-            Call Console.WriteLine(Str)
+            Call Console.WriteLine(str)
 
-            Dim Message As DebuggerMessage = Str.CreateObjectFromXml(Of DebuggerMessage)(False)
+            Dim Message As DebuggerMessage = str.CreateObjectFromXml(Of DebuggerMessage)(False)
 
             If Message Is Nothing Then
                 Return NetResponse.RFC_TOKEN_INVALID
@@ -88,11 +89,12 @@ RESTART:        _DebuggerListener = New TcpSynchronizationServicesSocket(Address
         End Function
 
         Public Function SendMessage(s As String) As String
-            Return _InternalMessageSender.SendMessage(New Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Debugging.DebuggerMessage() With
-                                                      {
-                                                          .Pid = pid,
-                                                          .Message = s,
-                                                          .MessageType = DebuggerMessage.MessageTypes.OUTPUT_MESSAGE}.GetXml)
+            Dim msg As New DebuggerMessage() With {
+                .Pid = pid,
+                .Message = s,
+                .MessageType = DebuggerMessage.MessageTypes.OUTPUT_MESSAGE
+            }
+            Return _InternalMessageSender.SendMessage(msg.GetXml)
         End Function
 
 #Region "IDisposable Support"

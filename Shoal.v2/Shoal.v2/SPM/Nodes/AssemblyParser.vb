@@ -1,4 +1,9 @@
-﻿Imports Microsoft.VisualBasic.Scripting.ShoalShell.HTML
+﻿Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.HTML
+Imports Microsoft.VisualBasic.CommandLine.Interpreter
+Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Linker.APIHandler
+Imports Microsoft.VisualBasic.ComponentModel
 
 Namespace SPM.Nodes
 
@@ -19,7 +24,7 @@ Namespace SPM.Nodes
             End Try
 
             Try
-                Dim assemblyValue = SPM.Nodes.Assembly.CreateObject(Of Assembly)(Assembly)
+                Dim assemblyValue = Nodes.Assembly.CreateObject(Of Assembly)(Assembly)
                 Dim Namespaces = (From Type In Assembly.DefinedTypes '.AsParallel
                                   Let [Namespace] = __getNamespaceEntry(Type, assemblyValue)  '得到原始的部分的模块定义
                                   Where Not [Namespace] Is Nothing
@@ -43,7 +48,7 @@ Namespace SPM.Nodes
 
             Dim attrs As Object() =
                 Type.GetCustomAttributes(
-                    attributeType:=Microsoft.VisualBasic.Scripting.MetaData.PackageNamespace.TypeInfo,
+                    attributeType:=PackageNamespace.TypeInfo,
                     inherit:=False)
 
             If attrs.IsNullOrEmpty Then
@@ -52,25 +57,24 @@ Namespace SPM.Nodes
                              attributeType:=Microsoft.VisualBasic.CommandLine.Reflection.Namespace.TypeInfo,
                              inherit:=False)
                          Let nsEntry = DirectCast(ns, Microsoft.VisualBasic.CommandLine.Reflection.Namespace)
-                         Select New Scripting.MetaData.PackageNamespace(nsEntry)).ToArray
+                         Select New PackageNamespace(nsEntry)).ToArray
                 If attrs.IsNullOrEmpty Then
                     Return Nothing
                 End If
             End If
 
-            Dim nsAttr As MetaData.PackageNamespace =
-                DirectCast(attrs(Scan0), Scripting.MetaData.PackageNamespace)
+            Dim nsAttr As PackageNamespace = DirectCast(attrs(Scan0), PackageNamespace)
             Return __nsParser(Type, nsAttr, Assembly)
         End Function
 
-        Private Function __nsParser(Type As Type,
-                                    nsEntry As Scripting.MetaData.PackageNamespace,
-                                    Assembly As Assembly) As SPM.Nodes.PartialModule
-            Dim Functions = Microsoft.VisualBasic.CommandLine.Interpreter.GetAllCommands(Type, False)
+        Private Function __nsParser(type As Type,
+                                    nsEntry As PackageNamespace,
+                                    assembly As Assembly) As PartialModule
+            Dim Functions = GetAllCommands(type, False)
             Dim EntryPoints = (From Func In Functions Select __entryPointParser(Func)).ToArray
-            Dim assm As Assembly = Serialization.ShadowsCopy.ShadowsCopy(Assembly)
+            Dim assm As Assembly = Serialization.ShadowsCopy.ShadowsCopy(assembly)
             Return New PartialModule(nsEntry) With {
-                .Assembly = assm.InvokeSet(Of String)(NameOf(Assembly.TypeId), Type.FullName),
+                .Assembly = assm.InvokeSet(Of String)(NameOf(assembly.TypeId), type.FullName),
                 .EntryPoints = EntryPoints
             }
         End Function
@@ -80,26 +84,26 @@ Namespace SPM.Nodes
         ''' </summary>
         ''' <param name="[module]"></param>
         ''' <returns></returns>
-        Public Function [Imports]([module] As Type) As Interpreter.Linker.APIHandler.APIEntryPoint()
-            Dim Functions = Microsoft.VisualBasic.CommandLine.Interpreter.GetAllCommands([module], False)
+        Public Function [Imports]([module] As Type) As APIEntryPoint()
+            Dim Functions = GetAllCommands([module], False)
             Return APIParser(Functions.ToArray)
         End Function
 
-        Public Function APIParser(EntryPoints As Generic.IEnumerable(Of CommandLine.Reflection.EntryPoints.APIEntryPoint)) As Interpreter.Linker.APIHandler.APIEntryPoint()
-            Dim OverloadsGroup = (From api As CommandLine.Reflection.EntryPoints.APIEntryPoint
+        Public Function APIParser(EntryPoints As IEnumerable(Of EntryPoints.APIEntryPoint)) As APIEntryPoint()
+            Dim OverloadsGroup = (From api As EntryPoints.APIEntryPoint
                                   In EntryPoints
                                   Select api
                                   Group api By api.Name.ToLower Into Group).ToArray
             Dim __LoadedEntryPoints = (From apiGroup
                                        In OverloadsGroup
-                                       Select New Interpreter.Linker.APIHandler.APIEntryPoint(
+                                       Select New APIEntryPoint(
                                            apiGroup.Group.First.Name,
                                            apiGroup.Group.ToArray)).ToArray
             Return __LoadedEntryPoints
         End Function
 
-        Private Function __entryPointParser(Command As CommandLine.Reflection.EntryPoints.APIEntryPoint) As SPM.Nodes.EntryPointMeta
-            Return New SPM.Nodes.EntryPointMeta() With {
+        Private Function __entryPointParser(Command As EntryPoints.APIEntryPoint) As EntryPointMeta
+            Return New EntryPointMeta() With {
                 .Description = Command.Info,
                 .Name = Command.Name,
                 .ReturnedType = Command.EntryPoint.ReturnType.FullName,
@@ -107,15 +111,13 @@ Namespace SPM.Nodes
             }
         End Function
 
-        Private Function __getParameters(Method As System.Reflection.MethodInfo) As ComponentModel.TripleKeyValuesPair()
+        Private Function __getParameters(Method As System.Reflection.MethodInfo) As TripleKeyValuesPair()
             Dim parameters = Method.GetParameters
             Dim LQuery = (From p As System.Reflection.ParameterInfo
                               In parameters
-                          Let attrs = p.GetCustomAttributes(Microsoft.VisualBasic.Scripting.MetaData.Parameter.TypeInfo, True)
-                          Let attr = If(attrs.IsNullOrEmpty,
-                              New Scripting.MetaData.Parameter(p.Name),
-                              DirectCast(attrs(Scan0), Scripting.MetaData.Parameter))
-                          Select New ComponentModel.TripleKeyValuesPair With {
+                          Let attrs = p.GetCustomAttributes(Parameter.TypeInfo, True)
+                          Let attr = If(attrs.IsNullOrEmpty, New Parameter(p.Name), DirectCast(attrs(Scan0), Parameter))
+                          Select New TripleKeyValuesPair With {
                               .Key = attr.Alias,
                               .Value1 = attr.Description,
                               .Value2 = p.ParameterType.FullName}).ToArray

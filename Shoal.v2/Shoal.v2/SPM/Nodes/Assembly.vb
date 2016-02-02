@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.Scripting.ShoalShell.HTML
+﻿Imports System.Runtime.Versioning
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.HTML
 
 Namespace SPM.Nodes
 
@@ -52,7 +53,7 @@ Namespace SPM.Nodes
                                      Let value = attr.ConstructorArguments.First.Value.ToString
                                      Select value).FirstOrDefault
             Dim FrameworkVersion As String = (From attr In attrs
-                                              Where attr.AttributeType = GetType(System.Runtime.Versioning.TargetFrameworkAttribute)
+                                              Where attr.AttributeType = GetType(TargetFrameworkAttribute)
                                               Let value = attr.ToString
                                               Select value).FirstOrDefault
             Dim FileInfo = VisualBasic.FileIO.FileSystem.GetFileInfo(Assembly.Location)

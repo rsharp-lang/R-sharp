@@ -1,11 +1,15 @@
-﻿Namespace Runtime
+﻿Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.LDM
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.LDM.Expressions
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.SCOM
+
+Namespace Runtime
 
     ''' <summary>
     ''' 执行整个脚本的模块
     ''' </summary>
-    Public Class FSMMachine : Inherits Runtime.SCOM.RuntimeComponent
+    Public Class FSMMachine : Inherits RuntimeComponent
 
-        Dim Script As Interpreter.LDM.SyntaxModel
+        Dim Script As SyntaxModel
         Dim p As Integer
         Dim OnErrorResumeNext As Boolean
 
@@ -14,7 +18,7 @@
         ''' </summary>
         ''' <param name="ScriptEngine"></param>
         ''' <param name="Script"></param>
-        Sub New(ScriptEngine As ShoalShell.Runtime.ScriptEngine, Script As Interpreter.LDM.SyntaxModel)
+        Sub New(ScriptEngine As ScriptEngine, Script As SyntaxModel)
             Call MyBase.New(ScriptEngine)
             Me.Script = Script
             Me.ExecuteModel = ScriptEngine.ExecuteModel
@@ -78,11 +82,11 @@
 
             If Line.IsNonExecuteCode Then Return
 
-            If Line.ExprTypeID = Interpreter.LDM.Expressions.ExpressionTypes.OnErrorResumeNext Then
+            If Line.ExprTypeID = ExpressionTypes.OnErrorResumeNext Then
                 OnErrorResumeNext = True
 
-            ElseIf Line.ExprTypeID = Interpreter.LDM.Expressions.ExpressionTypes.Return  '退出脚本的运行并返回指定的代码
-                Dim rtvlExpr = Line.As(Of Interpreter.LDM.Expressions.Keywords.Return)
+            ElseIf Line.ExprTypeID = ExpressionTypes.Return Then  '退出脚本的运行并返回指定的代码
+                Dim rtvlExpr = Line.As(Of Keywords.Return)
                 Dim value = ExecuteModel.Exec(rtvlExpr.ValueExpression.Expression)
                 __return = True
                 ScriptEngine.MMUDevice.SystemReserved.Value = value

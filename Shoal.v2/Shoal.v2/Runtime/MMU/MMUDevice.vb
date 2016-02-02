@@ -1,13 +1,14 @@
 ﻿Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.SCOM
 
 Namespace Runtime.MMU
 
     ''' <summary>
     ''' Memory Management Unit Device.(大小写不敏感的，直接使用即可)
     ''' </summary>
-    Public Class MMUDevice : Inherits Runtime.SCOM.RuntimeComponent
+    Public Class MMUDevice : Inherits RuntimeComponent
 
-        Implements IReadOnlyDictionary(Of String, MMU.IPageUnit)
+        Implements IReadOnlyDictionary(Of String, IPageUnit)
 
         ''' <summary>
         ''' 内存设备

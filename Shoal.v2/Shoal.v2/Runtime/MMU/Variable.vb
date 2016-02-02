@@ -4,9 +4,7 @@ Imports Microsoft.VisualBasic.ComponentModel
 Namespace Runtime.MMU
 
     <Serializable> Public Class Variable
-
-        Implements MMU.IPageUnit
-        Implements Microsoft.VisualBasic.ComponentModel.IAddressHandle
+        Implements IPageUnit, IAddressHandle
 
         ''' <summary>
         ''' 内存之中的位置指针，使用 *p 来表示

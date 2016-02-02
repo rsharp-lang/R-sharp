@@ -1,4 +1,5 @@
 ﻿Imports System.Text
+Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.HTML
 
 Namespace SPM.Nodes
@@ -11,7 +12,7 @@ Namespace SPM.Nodes
 
         <Xml.Serialization.XmlAttribute> Public Property Name As String
         Public Property Description As String
-        <Xml.Serialization.XmlElement> Public Property Parameters As Microsoft.VisualBasic.ComponentModel.TripleKeyValuesPair()
+        <Xml.Serialization.XmlElement> Public Property Parameters As TripleKeyValuesPair()
         Public Property ReturnedType As String
 
         Public Overrides Function ToString() As String
@@ -44,7 +45,7 @@ Namespace SPM.Nodes
             Return ">>>>  " & Head & vbCrLf & vbCrLf & GenerateDescription()
         End Function
 
-        Public Function MatchParameters(keyword As String) As Microsoft.VisualBasic.ComponentModel.TripleKeyValuesPair()
+        Public Function MatchParameters(keyword As String) As TripleKeyValuesPair()
             If Parameters.IsNullOrEmpty Then
                 Return Nothing
             End If

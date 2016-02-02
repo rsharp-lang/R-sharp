@@ -1,5 +1,6 @@
 ﻿Imports System.Text
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.HybridsScripting
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.SPM.Nodes
 
 Namespace SPM
 
@@ -8,8 +9,8 @@ Namespace SPM
     ''' </summary>
     Public Class PackageModuleDb : Inherits ComponentModel.ITextFile
 
-        Public Property NamespaceCollection As SPM.Nodes.Namespace()
-        Public Property HybridEnvironments As SPM.Nodes.HybridEnvir()
+        Public Property NamespaceCollection As [Namespace]()
+        Public Property HybridEnvironments As HybridEnvir()
             Get
                 If __innerListEnvir Is Nothing Then
                     __innerListEnvir = New List(Of Nodes.HybridEnvir)
@@ -59,13 +60,13 @@ Namespace SPM
         End Function
 
         Public Sub Update(Environment As EntryPoint)
-            Dim LQuery As Nodes.HybridEnvir() = (From obj As Nodes.HybridEnvir
-                                                 In HybridEnvironments
-                                                 Where String.Equals(obj.Language, Environment.Language.Language, StringComparison.OrdinalIgnoreCase)
-                                                 Select obj).ToArray
+            Dim LQuery As HybridEnvir() = (From obj As HybridEnvir
+                                           In HybridEnvironments
+                                           Where String.Equals(obj.Language, Environment.Language.Language, StringComparison.OrdinalIgnoreCase)
+                                           Select obj).ToArray
 
-            Dim Node As Nodes.HybridEnvir =
-                SPM.Nodes.Assembly.CreateObject(Of SPM.Nodes.HybridEnvir)(Environment.DeclaredAssemblyType.Assembly)
+            Dim Node As HybridEnvir =
+                Assembly.CreateObject(Of HybridEnvir)(Environment.DeclaredAssemblyType.Assembly)
 
             Node.Language = Environment.Language.Language
             Node.TypeId = Environment.DeclaredAssemblyType.FullName

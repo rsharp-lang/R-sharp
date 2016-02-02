@@ -12,7 +12,7 @@
         ''' <value></value>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Overridable ReadOnly Property ScriptEngine As ShoalShell.Runtime.ScriptEngine
+        Public Overridable ReadOnly Property ScriptEngine As ScriptEngine
 
         Sub New(ScriptEngine As ShoalShell.Runtime.ScriptEngine)
             Me.ScriptEngine = ScriptEngine

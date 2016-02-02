@@ -1,4 +1,5 @@
 ﻿Imports Microsoft.VisualBasic.ComponentModel
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter
 
 Namespace Runtime.MMU.PageMapping
@@ -58,14 +59,18 @@ Namespace Runtime.MMU.PageMapping
         ''' <returns></returns>
         ''' <remarks></remarks>
         Private Shared Function __imports(Assembly As System.Reflection.TypeInfo) As DataSourceModel()
-            Dim MappingEntry = GetType(Microsoft.VisualBasic.ComponentModel.DataSourceModel.DataFrameColumnAttribute)
+            Dim MappingEntry = GetType(DataFrameColumnAttribute)
             Dim Fields As Field() = (From p As System.Reflection.FieldInfo
-                                         In Assembly.GetFields(System.Reflection.BindingFlags.NonPublic Or System.Reflection.BindingFlags.Public Or System.Reflection.BindingFlags.Static)
+                                     In Assembly.GetFields(System.Reflection.BindingFlags.NonPublic Or
+                                         System.Reflection.BindingFlags.Public Or
+                                         System.Reflection.BindingFlags.Static)
                                      Let attrs As Object() = p.GetCustomAttributes(MappingEntry, inherit:=True)
                                      Let Name As String = __getName(p.Name, attrs)
                                      Select New Field(p, Name)).ToArray
             Dim [Property] As [Property]() = (From p As System.Reflection.PropertyInfo
-                                                  In Assembly.GetProperties(System.Reflection.BindingFlags.NonPublic Or System.Reflection.BindingFlags.Public Or System.Reflection.BindingFlags.Static)
+                                              In Assembly.GetProperties(System.Reflection.BindingFlags.NonPublic Or
+                                                  System.Reflection.BindingFlags.Public Or
+                                                  System.Reflection.BindingFlags.Static)
                                               Let attrs As Object() = p.GetCustomAttributes(MappingEntry, inherit:=True)
                                               Let Name As String = __getName(p.Name, attrs)
                                               Select New [Property](p, Name)).ToArray
@@ -73,13 +78,17 @@ Namespace Runtime.MMU.PageMapping
         End Function
 
         Private Shared Function __importsExplicit(Assembly As System.Reflection.TypeInfo) As DataSourceModel()
-            Dim MappingEntry = GetType(Microsoft.VisualBasic.ComponentModel.DataSourceModel.DataFrameColumnAttribute)
-            Dim Fields As Field() = (From p In Assembly.GetFields(System.Reflection.BindingFlags.NonPublic Or System.Reflection.BindingFlags.Public Or System.Reflection.BindingFlags.Static)
+            Dim MappingEntry = GetType(DataFrameColumnAttribute)
+            Dim Fields As Field() = (From p In Assembly.GetFields(System.Reflection.BindingFlags.NonPublic Or
+                                         System.Reflection.BindingFlags.Public Or
+                                         System.Reflection.BindingFlags.Static)
                                      Let attrs As Object() = p.GetCustomAttributes(MappingEntry, inherit:=True)
                                      Where Not attrs.IsNullOrEmpty
                                      Let Name = __getName(p.Name, attrs)
                                      Select New Field(p, Name)).ToArray
-            Dim [Property] As [Property]() = (From p In Assembly.GetProperties(System.Reflection.BindingFlags.NonPublic Or System.Reflection.BindingFlags.Public Or System.Reflection.BindingFlags.Static)
+            Dim [Property] As [Property]() = (From p In Assembly.GetProperties(System.Reflection.BindingFlags.NonPublic Or
+                                                  System.Reflection.BindingFlags.Public Or
+                                                  System.Reflection.BindingFlags.Static)
                                               Let attrs As Object() = p.GetCustomAttributes(MappingEntry, inherit:=True)
                                               Where Not attrs.IsNullOrEmpty
                                               Let Name = __getName(p.Name, attrs)
@@ -90,7 +99,7 @@ Namespace Runtime.MMU.PageMapping
         Private Shared Function __getName(pName As String, attrs As Object()) As String
             If attrs.IsNullOrEmpty Then Return pName
 
-            Dim datEntry = DirectCast(attrs(Scan0), Microsoft.VisualBasic.ComponentModel.DataSourceModel.DataFrameColumnAttribute)
+            Dim datEntry = DirectCast(attrs(Scan0), DataFrameColumnAttribute)
             Dim Name = If(String.IsNullOrEmpty(datEntry.Name), pName, datEntry.Name)
             Return Name
         End Function

@@ -1,11 +1,12 @@
-﻿
+﻿Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.LDM
+
 Namespace Runtime.Debugging
 
-    Public Class ShellScriptDebuggerModel : Inherits Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.LDM.SyntaxModel
+    Public Class ShellScriptDebuggerModel : Inherits SyntaxModel
 
         Public ReadOnly Property ScriptEngine As Runtime.ScriptEngine
 
-        Sub New(LDM As Interpreter.LDM.SyntaxModel, ScriptEngine As ShoalShell.Runtime.ScriptEngine)
+        Sub New(LDM As SyntaxModel, ScriptEngine As ScriptEngine)
             Me.Expressions = LDM.Expressions
             Me.FilePath = LDM.FilePath
             Me.GotoJumpsLabel = LDM.GotoJumpsLabel

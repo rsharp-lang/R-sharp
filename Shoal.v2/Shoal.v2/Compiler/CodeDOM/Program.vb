@@ -1,20 +1,22 @@
-﻿Imports Microsoft.VisualBasic.CodeDOMExtension
+﻿Imports System.CodeDom
+Imports Microsoft.VisualBasic.CodeDOMExtension
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Configuration
 
 Namespace Compiler.CodeDOM
 
     Public Class Program
 
-        Public ReadOnly Property Assembly As System.CodeDom.CodeNamespace
-        Protected ReadOnly Program As System.CodeDom.CodeMemberMethod =
-            New System.CodeDom.CodeMemberMethod With {.Name = ScriptApp}
+        Public ReadOnly Property Assembly As CodeNamespace
+        Protected ReadOnly Program As CodeMemberMethod = New CodeMemberMethod With {
+            .Name = ScriptApp
+        }
 
         Const ScriptApp As String = "ScriptApp"
         Const __innerScriptEngine As String = "__innerScriptEngine"
 
         Sub New()
-            Assembly = New System.CodeDom.CodeNamespace("Shoal.CodeDOM.App")
-            Dim ProgramClass As New System.CodeDom.CodeTypeDeclaration(NameOf(Program))
+            Assembly = New CodeNamespace("Shoal.CodeDOM.App")
+            Dim ProgramClass As New CodeTypeDeclaration(NameOf(Program))
             Dim EntryPoint = CodeDOMExpressions.EntryPoint
             Call Assembly.Types.Add(ProgramClass)
             Call ProgramClass.Members.Add(Program)
@@ -64,13 +66,8 @@ Namespace Compiler.CodeDOM
         ''' <param name="value"></param>
         ''' <param name="typeRef"></param>
         ''' <returns></returns>
-        Private Function __castType(value As System.CodeDom.CodeExpression, typeRef As System.Type) As System.CodeDom.CodeMethodInvokeExpression
-            Return [Call](GetType(Microsoft.VisualBasic.Scripting.InputHandler),
-                             NameOf(Microsoft.VisualBasic.Scripting.CTypeDynamic),
-                             Parameters:={
-                                   value,
-                                   CodeDOMExpressions.[GetType](typeRef)
-                             })
+        Private Function __castType(value As CodeExpression, typeRef As System.Type) As CodeMethodInvokeExpression
+            Return [Call](GetType(InputHandler), NameOf(Scripting.CTypeDynamic), Parameters:={value, CodeDOMExpressions.[GetType](typeRef)})
         End Function
 
         ''' <summary>

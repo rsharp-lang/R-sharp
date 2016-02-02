@@ -1,8 +1,9 @@
-﻿Imports Microsoft.VisualBasic.Scripting.ShoalShell.HTML
+﻿Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.HTML
 
 Namespace SPM.Nodes
 
-    Public Class PartialModule : Inherits Microsoft.VisualBasic.Scripting.MetaData.PackageNamespace
+    Public Class PartialModule : Inherits PackageNamespace
         Implements HTML.IWikiHandle
 
         <Xml.Serialization.XmlElement> Public Property Assembly As Assembly
@@ -11,7 +12,7 @@ Namespace SPM.Nodes
         Public Sub New()
         End Sub
 
-        Public Sub New([Namespace] As Microsoft.VisualBasic.Scripting.MetaData.PackageNamespace)
+        Public Sub New([Namespace] As PackageNamespace)
             Me.Description = [Namespace].Description
             Me.Namespace = [Namespace].Namespace
             Me.Publisher = [Namespace].Publisher

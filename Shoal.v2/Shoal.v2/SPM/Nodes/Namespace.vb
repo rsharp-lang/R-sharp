@@ -1,4 +1,6 @@
-﻿Imports Microsoft.VisualBasic.Scripting.ShoalShell.HTML
+﻿Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.HTML
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Linker.APIHandler
 
 Namespace SPM.Nodes
 
@@ -31,7 +33,7 @@ Namespace SPM.Nodes
         ''' <returns></returns>
         ''' <remarks></remarks>
         <Xml.Serialization.XmlAttribute> Public Property [Namespace] As String
-        <Xml.Serialization.XmlAttribute> Public Property Category As Microsoft.VisualBasic.Scripting.MetaData.APICategories
+        <Xml.Serialization.XmlAttribute> Public Property Category As APICategories
 
         Public Overrides Function ToString() As String
             Return [Namespace]
@@ -46,13 +48,13 @@ Namespace SPM.Nodes
         End Function
 
         Private Sub __LoadEntryPoints()
-            Dim LQuery = (From [module] In Me.PartialModules
-                          Let assm = [module].Assembly.LoadAssembly
-                          Let EntryType = __loadTypeInfo(assm, [module].Assembly.TypeId, [module].Assembly.Path)
+            Dim LQuery = (From [module] As PartialModule In Me.PartialModules
+                          Let assm As System.Reflection.Assembly = [module].Assembly.LoadAssembly
+                          Let EntryType As Type = __loadTypeInfo(assm, [module].Assembly.TypeId, [module].Assembly.Path)
                           Select CommandLine.Interpreter.GetAllCommands(EntryType)).ToArray
-            Dim __loadedAPIList = SPM.Nodes.AssemblyParser.APIParser(LQuery.MatrixToVector)
-            Me.__LoadedEntryPoints = New SortedDictionary(Of String, Interpreter.Linker.APIHandler.APIEntryPoint)(
-                __loadedAPIList.ToDictionary(Function(api) api.Name.ToLower))
+            Dim __loadedAPIList = APIParser(LQuery.MatrixToVector)
+            Dim hash = __loadedAPIList.ToDictionary(Function(api) api.Name.ToLower)
+            Me.__loadedEntryPoints = New SortedDictionary(Of String, APIEntryPoint)(hash)
         End Sub
 
         ''' <summary>
@@ -75,27 +77,27 @@ Namespace SPM.Nodes
             Return type
         End Function
 
-        Dim __LoadedEntryPoints As SortedDictionary(Of String, Interpreter.Linker.APIHandler.APIEntryPoint)
+        Dim __loadedEntryPoints As SortedDictionary(Of String, APIEntryPoint)
 
-        <Xml.Serialization.XmlIgnore> Public ReadOnly Property API As Interpreter.Linker.APIHandler.APIEntryPoint()
+        <Xml.Serialization.XmlIgnore> Public ReadOnly Property API As APIEntryPoint()
             Get
-                If __LoadedEntryPoints Is Nothing Then
+                If __loadedEntryPoints Is Nothing Then
                     Call __LoadEntryPoints()
                 End If
 
-                Return __LoadedEntryPoints.Values.ToArray
+                Return __loadedEntryPoints.Values.ToArray
             End Get
         End Property
 
-        Public Function GetEntryPoint(Name As String) As Interpreter.Linker.APIHandler.APIEntryPoint
+        Public Function GetEntryPoint(Name As String) As APIEntryPoint
             Name = Name.ToLower
 
-            If __LoadedEntryPoints Is Nothing Then
+            If __loadedEntryPoints Is Nothing Then
                 Call __LoadEntryPoints()
             End If
 
-            If __LoadedEntryPoints.ContainsKey(Name) Then
-                Return __LoadedEntryPoints(Name)
+            If __loadedEntryPoints.ContainsKey(Name) Then
+                Return __loadedEntryPoints(Name)
             Else
                 Return Nothing
             End If

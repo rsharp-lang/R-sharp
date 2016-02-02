@@ -1,4 +1,5 @@
 ﻿Imports System.Reflection
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.SCOM
 
 Namespace Runtime.HybridsScripting
 
@@ -16,8 +17,8 @@ Namespace Runtime.HybridsScripting
     ''' <returns>是否成功</returns>
     Delegate Function SetValue(var As String, value As Object) As Boolean
 
-    Public Class InteropAdapter : Inherits ShoalShell.Runtime.SCOM.RuntimeComponent
-        Implements System.IDisposable
+    Public Class InteropAdapter : Inherits RuntimeComponent
+        Implements IDisposable
 
         ''' <summary>
         ''' 小写的键名称
@@ -102,27 +103,27 @@ Namespace Runtime.HybridsScripting
         End Function
 
         Public Function [Imports](Environment As SPM.Nodes.HybridEnvir) As Boolean
-            Dim Assembly As System.Reflection.Assembly = Environment.LoadAssembly
+            Dim assm As Assembly = Environment.LoadAssembly
 
-            If Assembly Is Nothing Then
+            If assm Is Nothing Then
                 Call $"!!! Missing Module @ {Environment.Path.ToFileURL}..".__DEBUG_ECHO
                 Return False
             End If
 
-            Dim EntryPoint = EnvironmentParser.[Imports](Assembly.GetType(Environment.TypeId))
+            Dim EntryPoint = EnvironmentParser.[Imports](assm.GetType(Environment.TypeId))
 
             If EntryPoint.IsNull Then
                 Return False
             End If
 
-            Dim Name As String = EntryPoint.Language.Language.ToLower
+            Dim name As String = EntryPoint.Language.Language.ToLower
 
-            If _Environments.ContainsKey(Name) Then
-                Call $"Script entry point ""{Name}"": { EntryPoint.TypeFullName}::{EntryPoint.Init.Name} is already mount in the shellscript".__DEBUG_ECHO
-                Call _Environments.Remove(Name)
+            If _Environments.ContainsKey(name) Then
+                Call $"Script entry point ""{name}"": { EntryPoint.TypeFullName}::{EntryPoint.Init.Name} is already mount in the shellscript".__DEBUG_ECHO
+                Call _Environments.Remove(name)
             End If
 
-            Call _Environments.Add(Name, EntryPoint)
+            Call _Environments.Add(name, EntryPoint)
             Call ScriptEngine.MMUDevice.MappingImports.Imports(EntryPoint.DeclaredAssemblyType)
 
             Return True

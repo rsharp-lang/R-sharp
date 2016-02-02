@@ -5,7 +5,7 @@ Namespace Configuration
     ''' <summary>
     ''' 配置数据的设置引擎
     ''' </summary>
-    Public Class Configuration : Inherits ComponentModel.Settings.ConfigEngine
+    Public Class Configuration : Inherits ConfigEngine
 
         Sub New(ScriptEngine As Runtime.ScriptEngine)
             Call MyBase.New(ScriptEngine.Config)

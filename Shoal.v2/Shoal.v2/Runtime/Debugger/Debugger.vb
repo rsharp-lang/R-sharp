@@ -2,6 +2,8 @@
 Imports Microsoft.VisualBasic.Net
 Imports Microsoft.VisualBasic.Net.Protocol
 Imports Microsoft.VisualBasic.Parallel
+Imports Microsoft.VisualBasic.ConsoleDevice.STDIO__
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.LDM
 
 Namespace Runtime.Debugging
 
@@ -9,19 +11,19 @@ Namespace Runtime.Debugging
     ''' 这个对象是运行于Shoal内部的，用作为调试的客户端的。当IDE启动的时候，会打开调试服务，接着通过命令行启动Shoal程序，将端口号传递给本对象，二者之间通过Tcp协议进行通信
     ''' </summary>
     ''' <remarks></remarks>
-    Public Class Debugger : Inherits ShoalShell.Runtime.ScriptEngine
-        Implements Microsoft.VisualBasic.ConsoleDevice.STDIO__.I_ConsoleDeviceHandle
+    Public Class Debugger : Inherits ScriptEngine
+        Implements I_ConsoleDeviceHandle
 
         ''' <summary>
         ''' 主动向IDE发送调试消息
         ''' </summary>
         ''' <remarks></remarks>
-        Dim TcpClient As Microsoft.VisualBasic.Net.AsynInvoke
+        Dim __tcpClient As AsynInvoke
         ''' <summary>
         ''' 监听来自于IDE的控制命令
         ''' </summary>
         ''' <remarks></remarks>
-        Dim ReadListenerServices As Microsoft.VisualBasic.Net.TcpSynchronizationServicesSocket
+        Dim ReadListenerServices As TcpSynchronizationServicesSocket
 
         Public ReadOnly Property DebuggerExit As Boolean
 
@@ -32,33 +34,33 @@ Namespace Runtime.Debugging
         ''' <param name="DebugListenerPort">IDE调试监听器<see cref="ShoalShell.Runtime.Debugging.DebuggerListener"></see>的监听端口号</param>
         Sub New(ScriptEngine As ShoalShell.Runtime.ScriptEngine, DebugListenerPort As Integer)
             Call MyBase.New(Config.Default.SettingsData)
-            TcpClient = New Net.AsynInvoke("127.0.0.1", DebugListenerPort)
+            __tcpClient = New Net.AsynInvoke("127.0.0.1", DebugListenerPort)
             Call $"Shoal debugger listeners at  127.0.0.1:{ DebugListenerPort}".__DEBUG_ECHO
-            Call Run(AddressOf InternalStartListening)
+            Call Run(AddressOf __startListen)
             Call Threading.Thread.Sleep(100)
             Call __sendMessage(ReadListenerServices.LocalPort, DebuggerMessage.MessageTypes.CTRL_DEBUGGER_INIT_INFO)
         End Sub
 
         Private Sub __sendMessage(Message As String, Type As DebuggerMessage.MessageTypes)
             Message = New DebuggerMessage() With {.Message = Message, .MessageType = Type}.GetXml
-            Call Run(Sub() Call TcpClient.SendMessage(Message))
+            Call Run(Sub() Call __tcpClient.SendMessage(Message))
         End Sub
 
         ''' <summary>
         ''' 
         ''' </summary>
         ''' <param name="Config"></param>
-        ''' <param name="DebugListenerPort">IDE调试监听器<see cref="ShoalShell.Runtime.Debugging.DebuggerListener"></see>的监听端口号</param>
+        ''' <param name="DebugListenerPort">IDE调试监听器<see cref="DebuggerListener"></see>的监听端口号</param>
         Sub New(Config As Config, DebugListenerPort As Integer)
             Call Me.New(New ScriptEngine(Config), DebugListenerPort)
         End Sub
 
-        Private Sub InternalStartListening()
+        Private Sub __startListen()
             ReadListenerServices = New TcpSynchronizationServicesSocket(AddressOf __internalProtocol, GetFirstAvailablePort)
             Try
 RESTART:        ReadListenerServices.Run()
             Catch ex As Exception
-                Call App.LogException(ex, NameOf(Debugger) & "::" & NameOf(InternalStartListening))
+                Call App.LogException(ex, NameOf(Debugger) & "::" & NameOf(__startListen))
                 GoTo RESTART
             End Try
         End Sub
@@ -66,8 +68,8 @@ RESTART:        ReadListenerServices.Run()
         Dim _InternalScriptDebugger As Runtime.Debugging.ShellScriptDebuggerModel
         Dim _RunningScript As Boolean = False
 
-        Protected Sub InternalExecuteScript(Script As Interpreter.LDM.SyntaxModel)
-            _InternalScriptDebugger = New Runtime.Debugging.ShellScriptDebuggerModel(Script, ScriptEngine:=Me)
+        Protected Sub InternalExecuteScript(Script As SyntaxModel)
+            _InternalScriptDebugger = New ShellScriptDebuggerModel(Script, ScriptEngine:=Me)
             _RunningScript = True
             _InternalScriptDebugger.Execute()
             _InternalScriptDebugger.Free()
@@ -94,8 +96,8 @@ RESTART:        ReadListenerServices.Run()
             End If
 
             If data.MessageType = DebuggerMessage.MessageTypes.CTRL_PUSH_SCRIPT Then
-                Call Console.WriteLine("[DEBUG] Execute pushed script....")
-                Call (Sub() Call InternalExecutePushedScript(data.Message)).BeginInvoke(Nothing, Nothing)
+                Call "Execute pushed script....".__DEBUG_ECHO
+                Call (Sub() Call __execuPushedScript(data.Message)).BeginInvoke(Nothing, Nothing)
 
                 If Me._RunningScript Then
                     strMessage = New DebuggerMessage() With {
@@ -111,7 +113,7 @@ RESTART:        ReadListenerServices.Run()
             Return NetResponse.RFC_NOT_FOUND
         End Function
 
-        Private Sub InternalExecutePushedScript(Script As String)
+        Private Sub __execuPushedScript(Script As String)
             Do While Me._RunningScript
                 Threading.Thread.Sleep(100)
             Loop
@@ -119,19 +121,19 @@ RESTART:        ReadListenerServices.Run()
             Call Exec(Script)
         End Sub
 
-        Public Function Read() As Integer Implements ConsoleDevice.STDIO__.I_ConsoleDeviceHandle.Read
+        Public Function Read() As Integer Implements I_ConsoleDeviceHandle.Read
             Throw New NotImplementedException
         End Function
 
-        Public Function ReadLine() As String Implements ConsoleDevice.STDIO__.I_ConsoleDeviceHandle.ReadLine
+        Public Function ReadLine() As String Implements I_ConsoleDeviceHandle.ReadLine
             Throw New NotImplementedException
         End Function
 
-        Public Sub WriteLine(s As String) Implements ConsoleDevice.STDIO__.I_ConsoleDeviceHandle.WriteLine
+        Public Sub WriteLine(s As String) Implements I_ConsoleDeviceHandle.WriteLine
             Call __sendMessage(s, DebuggerMessage.MessageTypes.OUTPUT_MESSAGE)
         End Sub
 
-        Public Sub WriteLine(s As String, ParamArray args() As String) Implements ConsoleDevice.STDIO__.I_ConsoleDeviceHandle.WriteLine
+        Public Sub WriteLine(s As String, ParamArray args() As String) Implements I_ConsoleDeviceHandle.WriteLine
             Dim Message As String = String.Format(s, args)
             Call __sendMessage(Message, DebuggerMessage.MessageTypes.OUTPUT_MESSAGE)
         End Sub
