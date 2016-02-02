@@ -107,11 +107,16 @@
     <Compile Include="HTML\IWikiHandle.vb" />
     <Compile Include="Interpreter\AnonymousDelegate.vb" />
     <Compile Include="Interpreter\Interpreter.vb" />
+    <Compile Include="Interpreter\Linker\API\Alignment\Alignments\TwoParameter.vb" />
+    <Compile Include="Interpreter\Linker\API\Alignment\Alignments\OneParameter.vb" />
+    <Compile Include="Interpreter\Linker\API\Alignment\Alignments\SpecialAlignment%28Of T%29.vb" />
+    <Compile Include="Interpreter\Linker\API\Alignment\ParamAlignments.vb" />
     <Compile Include="Interpreter\Linker\API\Arguments.vb" />
     <Compile Include="Interpreter\Linker\API\Alignment\FunctionCalls.vb" />
     <Compile Include="Interpreter\Linker\API\APIEntryPoint.vb" />
     <Compile Include="Interpreter\Linker\API\Alignment\TypeEquals.vb" />
     <Compile Include="Interpreter\Linker\API\APIInvoker.vb" />
+    <Compile Include="Interpreter\Linker\API\ParameterWithAlias.vb" />
     <Compile Include="Interpreter\Linker\API\FunctionSignature.vb" />
     <Compile Include="Interpreter\Linker\Linker.vb" />
     <Compile Include="Interpreter\Linker\EntryPoint.vb" />

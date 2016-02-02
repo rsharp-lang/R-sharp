@@ -1,4 +1,5 @@
 ﻿Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Linker.APIHandler
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Parser.Tokens
 
 Namespace Interpreter.Linker
 
@@ -12,7 +13,7 @@ Namespace Interpreter.Linker
         ''' 得到内存之中的实际引用位置
         ''' </summary>
         ''' <returns></returns>
-        Public Function GetAddress(var As ShoalShell.Interpreter.Parser.Tokens.LeftAssignedVariable) As Long
+        Public Function GetAddress(var As LeftAssignedVariable) As Long
             Dim Addr As String = var.RefEntry
             Dim Ref As Object
 

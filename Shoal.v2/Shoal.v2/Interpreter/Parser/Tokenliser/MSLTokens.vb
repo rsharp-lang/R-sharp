@@ -8,7 +8,7 @@ Namespace Interpreter.Parser.TextTokenliser
     ''' <summary>
     ''' Tokenliser working in multiline string literal mode.
     ''' </summary>
-    Public Class MSLTokens : Inherits ParserCommon.Parserbase
+    Public Class MSLTokens : Inherits Parserbase
 
         Public ReadOnly Property Comments As String
 

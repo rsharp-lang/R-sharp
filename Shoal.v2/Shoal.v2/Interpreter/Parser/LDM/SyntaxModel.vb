@@ -1,4 +1,5 @@
 ﻿Imports System.Text
+Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.LDM.Expressions
 
 Namespace Interpreter.LDM
@@ -7,7 +8,7 @@ Namespace Interpreter.LDM
     ''' This object just the data model which was generated from the script parser, didn't contains any runtime information.
     ''' (只有解析出来的词元模型，，没有包含有函数指针的句柄信息，还不能够直接运行)
     ''' </summary>
-    Public Class SyntaxModel : Inherits ComponentModel.ITextFile
+    Public Class SyntaxModel : Inherits ITextFile
 
         ''' <summary>
         ''' The script lines in the script file.

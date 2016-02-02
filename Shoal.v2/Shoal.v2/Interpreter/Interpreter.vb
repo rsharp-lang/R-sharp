@@ -1,5 +1,7 @@
-﻿
+﻿Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.LDM
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.LDM.Expressions
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.LDM.Expressions.Keywords
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Parser.TextTokenliser
 
 Namespace Interpreter
 
@@ -7,8 +9,8 @@ Namespace Interpreter
     ''' Parsing the script text into a LDM data model for the script executing. 
     ''' </summary>
     ''' <remarks>
-    ''' 命令行输入的脚本行，一般认为是完整的一行，则直接使用<see cref="ShoalShell.Interpreter.Interpreter.InternalExpressionParser(String)"/>来解析
-    ''' 从脚本文件之中输入的脚本文件可能含有Delegate函数或者多行的数组定义，则脚本文件是使用<see cref="ShoalShell.Interpreter.Parser.TextTokenliser.MSLTokens"/>来解析的
+    ''' 命令行输入的脚本行，一般认为是完整的一行，则直接使用<see cref="Interpreter.InternalExpressionParser(String)"/>来解析
+    ''' 从脚本文件之中输入的脚本文件可能含有Delegate函数或者多行的数组定义，则脚本文件是使用<see cref="MSLTokens"/>来解析的
     ''' </remarks>
     Public Class Interpreter : Inherits Runtime.SCOM.RuntimeComponent
 
@@ -23,15 +25,15 @@ Namespace Interpreter
         End Sub
 
         ''' <summary>
-        ''' 使用<see cref="ShoalShell.Interpreter.Parser.TextTokenliser.MSLTokens"/>来解析
+        ''' 使用<see cref="MSLTokens"/>来解析
         ''' </summary>
         ''' <param name="File">文件路径</param>
         ''' <returns></returns>
-        Public Function ParseFile(File As String) As ShoalShell.Interpreter.LDM.SyntaxModel
+        Public Function ParseFile(File As String) As SyntaxModel
 #If Not DEBUG Then
             Try
 #End If
-                Return __parsingFile(File)
+            Return __parsingFile(File)
 #If Not DEBUG Then
             Catch ex As Exception
                 Call App.LogException(ex, $"{NameOf(Interpreter)}::{NameOf(ParseFile)}")
@@ -49,9 +51,9 @@ Namespace Interpreter
         ''' </summary>
         ''' <param name="path"></param>
         ''' <returns></returns>
-        Private Function __parsingFile(path As String) As ShoalShell.Interpreter.LDM.SyntaxModel
+        Private Function __parsingFile(path As String) As SyntaxModel
             Dim Script As String = path.GET
-            Return ShoalShell.Interpreter.LDM.SyntaxModel.ScriptParser(Script, path)
+            Return SyntaxModel.ScriptParser(Script, path)
         End Function
 
         Public Function TryGetAPI(Name As String) As Linker.APIHandler.APIEntryPoint
@@ -63,14 +65,14 @@ Namespace Interpreter
             Call MyBase.Dispose(disposing)
         End Sub
 
-        Delegate Function Parser(Script As String) As LDM.Expressions.PrimaryExpression()
+        Delegate Function Parser(Script As String) As PrimaryExpression()
 
         ''' <summary>
         ''' 处理来自于文件之中的可能具有多行分行的脚本代码
         ''' </summary>
         ''' <param name="Script"></param>
         ''' <returns></returns>
-        Public Shared Function MSLParser(Script As String) As LDM.Expressions.PrimaryExpression()
+        Public Shared Function MSLParser(Script As String) As PrimaryExpression()
             Dim s_Data As String() = Strings.Split(Script.Replace(vbLf, ""), vbCr)
             Dim ExprQueue = New Queue(Of String)(s_Data)
             Dim Expressions As New List(Of PrimaryExpression)
@@ -88,12 +90,12 @@ Namespace Interpreter
         ''' </summary>
         ''' <param name="Line"></param>
         ''' <returns></returns>
-        Public Shared Function InternalExpressionParser(Line As String) As LDM.Expressions.PrimaryExpression
+        Public Shared Function InternalExpressionParser(Line As String) As PrimaryExpression
             If String.IsNullOrEmpty(Line) Then
-                Return LDM.Expressions.Keywords.SyntaxError.BlankCode
+                Return SyntaxError.BlankCode
             Else
 
-                Dim Parser = New ShoalShell.Interpreter.Parser.TextTokenliser.MSLTokens().Parsing(Line)
+                Dim Parser = New MSLTokens().Parsing(Line)
                 Dim Expr = SyntaxParser.Parsing(Line, Parser.Tokens, Parser.Comments)
                 Return Expr
 

@@ -1,4 +1,6 @@
-﻿Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Linker.APIHandler.Alignment.FunctionCalls
+﻿Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Linker.APIHandler.Alignment
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Linker.APIHandler.Alignment.FunctionCalls
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Exceptions
 
 Namespace Interpreter.Linker.APIHandler
 
@@ -19,9 +21,9 @@ Namespace Interpreter.Linker.APIHandler
                           Order By ref.Score Descending).ToArray
 
             If LQuery.IsNullOrEmpty Then
-                Throw New Runtime.Exceptions.MethodNotFoundException(
+                Throw New MethodNotFoundException(
                     API,
-                    (From obj In args Select New KeyValuePair(Of String, Object)(ShoalShell.Interpreter.Linker.APIHandler.Alignment.OrderReference, obj)).ToArray,
+                    (From obj In args Select New KeyValuePair(Of String, Object)(OrderReference, obj)).ToArray,
                     Nothing,
                     Nothing)
             End If
@@ -32,7 +34,7 @@ Namespace Interpreter.Linker.APIHandler
         End Function
 
         Private Function __tryInvoke(FuncDef As System.Reflection.MethodInfo, args As Object()) As ParamAlignments
-            Dim ref = APIHandler.Alignment.FunctionCalls.OrderReferenceAlignment(FuncDef.GetParameters, args)
+            Dim ref As ParamAlignments = FunctionCalls.OrderReferenceAlignment(FuncDef.GetParameters, args)
             Return ref
         End Function
     End Module

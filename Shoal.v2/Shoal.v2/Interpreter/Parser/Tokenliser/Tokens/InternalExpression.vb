@@ -1,11 +1,13 @@
-﻿Namespace Interpreter.Parser.Tokens
+﻿Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.LDM.Expressions
+
+Namespace Interpreter.Parser.Tokens
 
     ''' <summary>
     ''' 这个是参数引用之中的内部表达式，只有单行的
     ''' </summary>
     Public Class InternalExpression : Inherits Token
 
-        Public Property Expression As ShoalShell.Interpreter.LDM.Expressions.PrimaryExpression
+        Public Property Expression As PrimaryExpression
 
         ''' <summary>
         ''' 是一个表达式，需要进行计算才可以得到值
@@ -44,13 +46,13 @@
 
             If IsExpr Then
                 Expr = Mid(Expr, 2, Len(Expr) - 2)
-                Expression = ShoalShell.Interpreter.Interpreter.InternalExpressionParser(Expr)
+                Expression = Interpreter.InternalExpressionParser(Expr)
             Else
-                Expression = New ShoalShell.Interpreter.LDM.Expressions.DynamicsExpression(Expr)
+                Expression = New DynamicsExpression(Expr)
             End If
         End Sub
 
-        Sub New(Expr As String, Expression As ShoalShell.Interpreter.LDM.Expressions.PrimaryExpression)
+        Sub New(Expr As String, Expression As PrimaryExpression)
             Call MyBase.New(0, Expr)
             Me.Expression = Expression
         End Sub

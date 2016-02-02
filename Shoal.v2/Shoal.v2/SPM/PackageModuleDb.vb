@@ -1,4 +1,5 @@
 ﻿Imports System.Text
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.HybridsScripting
 
 Namespace SPM
 
@@ -57,7 +58,7 @@ Namespace SPM
             Return Me.GetXml.SaveTo(FilePath, Encoding)
         End Function
 
-        Public Sub Update(Environment As Runtime.HybridsScripting.EntryPoint)
+        Public Sub Update(Environment As EntryPoint)
             Dim LQuery As Nodes.HybridEnvir() = (From obj As Nodes.HybridEnvir
                                                  In HybridEnvironments
                                                  Where String.Equals(obj.Language, Environment.Language.Language, StringComparison.OrdinalIgnoreCase)

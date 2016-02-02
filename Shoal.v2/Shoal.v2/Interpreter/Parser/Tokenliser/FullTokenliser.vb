@@ -5,7 +5,7 @@ Namespace Interpreter.Parser.TextTokenliser
     ''' <summary>
     ''' 将表达式之中的所有词元进行完全展开
     ''' </summary>
-    Public Class FullTokenliser : Inherits ParserCommon.Parserbase
+    Public Class FullTokenliser : Inherits Parserbase
 
         Public Overrides ReadOnly Property Tokens As Token()
 

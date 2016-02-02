@@ -9,7 +9,7 @@ Namespace SPM
     ''' </summary>
     Public Class ShoalPackageMgr
 
-        Implements System.Collections.Generic.IDictionary(Of String, SPM.Nodes.Namespace)
+        Implements IDictionary(Of String, SPM.Nodes.Namespace)
         Implements System.IDisposable
 
         Dim _NamespaceHash As Dictionary(Of String, SPM.Nodes.Namespace)

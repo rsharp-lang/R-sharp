@@ -1,4 +1,7 @@
-﻿
+﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
+Imports Microsoft.VisualBasic.Scripting.MetaData
+
 Namespace Interpreter.Linker.APIHandler
 
     ''' <summary>
@@ -11,7 +14,7 @@ Namespace Interpreter.Linker.APIHandler
     ''' </remarks>
     Public Class APIEntryPoint
 
-        Implements Microsoft.VisualBasic.ComponentModel.Collection.Generic.IReadOnlyId
+        Implements IReadOnlyId
         Implements IReadOnlyList(Of SignedFuncEntryPoint)
 
 #Region "Public Property & Fields"
@@ -20,15 +23,14 @@ Namespace Interpreter.Linker.APIHandler
         ''' Shoal脚本命令的函数重载
         ''' </summary>
         ''' <remarks></remarks>
-        Dim _OverloadAPIEntryPoints As List(Of SignedFuncEntryPoint) = New Generic.List(Of SignedFuncEntryPoint)
-        Dim _OverloadSignatureHandles As Dictionary(Of String, Microsoft.VisualBasic.Scripting.MetaData.OverloadsSignatureHandle) =
-            New Dictionary(Of String, Scripting.MetaData.OverloadsSignatureHandle)
+        Dim _OverloadAPIEntryPoints As List(Of SignedFuncEntryPoint) = New List(Of SignedFuncEntryPoint)
+        Dim _OverloadSignatureHandles As Dictionary(Of String, OverloadsSignatureHandle) = New Dictionary(Of String, OverloadsSignatureHandle)
 
         ''' <summary>
         ''' Shoal API命令的名称
         ''' </summary>
         ''' <remarks></remarks>
-        Public ReadOnly Property Name As String Implements ComponentModel.Collection.Generic.IReadOnlyId.Identifier
+        Public ReadOnly Property Name As String Implements IReadOnlyId.Identifier
 
         ''' <summary>
         ''' 当前的这个执行入口点是否有重载的命令
@@ -42,7 +44,7 @@ Namespace Interpreter.Linker.APIHandler
             End Get
         End Property
 
-        Public ReadOnly Property OverloadsAPI As CommandLine.Reflection.EntryPoints.APIEntryPoint()
+        Public ReadOnly Property OverloadsAPI As EntryPoints.APIEntryPoint()
             Get
                 Return (From api In Me._OverloadAPIEntryPoints Select api.EntryPoint).ToArray
             End Get
@@ -60,9 +62,9 @@ Namespace Interpreter.Linker.APIHandler
 
             If Not InitMethod Is Nothing Then
                 Dim [SignatureHandles] = __getTypeSignatureHandles(InitMethod)
-                Dim EntryInfo As New Microsoft.VisualBasic.CommandLine.Reflection.ExportAPIAttribute(Name)
-                Dim InitEntry As Microsoft.VisualBasic.CommandLine.Reflection.EntryPoints.APIEntryPoint =
-                    New CommandLine.Reflection.EntryPoints.APIEntryPoint(Invoke:=InitMethod, attribute:=EntryInfo)
+                Dim EntryInfo As New ExportAPIAttribute(Name)
+                Dim InitEntry As EntryPoints.APIEntryPoint =
+                    New EntryPoints.APIEntryPoint(Invoke:=InitMethod, attribute:=EntryInfo)
 
                 Call _OverloadAPIEntryPoints.Add(New SignedFuncEntryPoint(InitEntry, [Handles]:=SignatureHandles))
                 Call __addSignatureHandles(SignatureHandles)
@@ -75,9 +77,8 @@ Namespace Interpreter.Linker.APIHandler
             If Not InitOverloadsMethod.IsNullOrEmpty Then
                 For Each InitMethod In InitOverloadsMethod
                     Dim [SignatureHandles] = __getTypeSignatureHandles(InitMethod)
-                    Dim EntryInfo As New Microsoft.VisualBasic.CommandLine.Reflection.ExportAPIAttribute(Name)
-                    Dim InitEntry As Microsoft.VisualBasic.CommandLine.Reflection.EntryPoints.APIEntryPoint =
-                        New CommandLine.Reflection.EntryPoints.APIEntryPoint(Invoke:=InitMethod, attribute:=EntryInfo)
+                    Dim EntryInfo As New ExportAPIAttribute(Name)
+                    Dim InitEntry As EntryPoints.APIEntryPoint = New EntryPoints.APIEntryPoint(Invoke:=InitMethod, attribute:=EntryInfo)
 
                     Call _OverloadAPIEntryPoints.Add(New SignedFuncEntryPoint(InitEntry, [Handles]:=SignatureHandles))
                     Call __addSignatureHandles(SignatureHandles)
@@ -91,7 +92,7 @@ Namespace Interpreter.Linker.APIHandler
         ''' <param name="Name"></param>
         ''' <param name="InitEntryPoint">如果不知道该怎么处理这个参数，请使用Nothing</param>
         ''' <remarks></remarks>
-        Sub New(Name As String, InitEntryPoint As Microsoft.VisualBasic.CommandLine.Reflection.EntryPoints.APIEntryPoint)
+        Sub New(Name As String, InitEntryPoint As EntryPoints.APIEntryPoint)
             Me.Name = Name
 
             If Not InitEntryPoint Is Nothing Then
@@ -101,7 +102,7 @@ Namespace Interpreter.Linker.APIHandler
             End If
         End Sub
 
-        Sub New(Name As String, APIList As Microsoft.VisualBasic.CommandLine.Reflection.EntryPoints.APIEntryPoint())
+        Sub New(Name As String, APIList As EntryPoints.APIEntryPoint())
             Me.Name = Name
 
             If Not APIList Is Nothing Then
@@ -118,10 +119,13 @@ Namespace Interpreter.Linker.APIHandler
         ''' </summary>
         ''' <param name="EntryPoint"></param>
         ''' <remarks></remarks>
-        Public Sub OverloadsAPIEntryPoint(EntryPoint As CommandLine.Reflection.EntryPoints.APIEntryPoint)
+        Public Sub OverloadsAPIEntryPoint(EntryPoint As EntryPoints.APIEntryPoint)
             Dim SignatureHandles = __getTypeSignatureHandles(EntryPoint.EntryPoint)
             Dim SignatureSignedEntryPoint = New SignedFuncEntryPoint(EntryPoint, SignatureHandles)
-            Dim LQuery = (From item In Me._OverloadAPIEntryPoints Where item.Equals(SignatureSignedEntryPoint) Select item).ToArray
+            Dim LQuery = (From p As SignedFuncEntryPoint
+                          In Me._OverloadAPIEntryPoints
+                          Where p.Equals(SignatureSignedEntryPoint)
+                          Select p).ToArray
 
             If Not LQuery.IsNullOrEmpty Then
                 Call _OverloadAPIEntryPoints.Remove(LQuery.First) '当出现了两个具有完全一样的数字签名的函数的时候，新的入口点会替换掉旧的入口点
@@ -131,7 +135,7 @@ Namespace Interpreter.Linker.APIHandler
             Call __addSignatureHandles([Handles]:=SignatureHandles)
         End Sub
 
-        Private Sub __addSignatureHandles([Handles] As Microsoft.VisualBasic.Scripting.MetaData.OverloadsSignatureHandle())
+        Private Sub __addSignatureHandles([Handles] As MetaData.OverloadsSignatureHandle())
             For Each HWND In [Handles]
                 Dim Name As String = HWND.TypeIDBrief
                 If _OverloadSignatureHandles.ContainsKey(Name) Then
@@ -147,12 +151,12 @@ Namespace Interpreter.Linker.APIHandler
         ''' <param name="EntryInfo"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Private Shared Function __getTypeSignatureHandles(EntryInfo As System.Reflection.MethodInfo) As Microsoft.VisualBasic.Scripting.MetaData.OverloadsSignatureHandle()
+        Private Shared Function __getTypeSignatureHandles(EntryInfo As System.Reflection.MethodInfo) As MetaData.OverloadsSignatureHandle()
             Dim Assembly = EntryInfo.DeclaringType
-            Dim Signature As Type = GetType(Microsoft.VisualBasic.Scripting.MetaData.OverloadsSignatureHandle)
+            Dim Signature As Type = GetType(MetaData.OverloadsSignatureHandle)
             Dim [Handles] = (From attr As Object
                                  In Assembly.GetCustomAttributes(attributeType:=Signature, inherit:=True)
-                             Select DirectCast(attr, Microsoft.VisualBasic.Scripting.MetaData.OverloadsSignatureHandle)).ToArray
+                             Select DirectCast(attr, MetaData.OverloadsSignatureHandle)).ToArray
             Return [Handles]
         End Function
 

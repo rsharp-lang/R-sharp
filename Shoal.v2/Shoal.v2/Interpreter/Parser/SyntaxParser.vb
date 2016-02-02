@@ -15,7 +15,7 @@ Namespace Interpreter
     ''' </summary>
     Public Module SyntaxParser
 
-        Public Function MSLParser(ByRef Expressions As Queue(Of String)) As ShoalShell.Interpreter.LDM.Expressions.PrimaryExpression
+        Public Function MSLParser(ByRef Expressions As Queue(Of String)) As PrimaryExpression
             Dim Parser = New Parser.TextTokenliser.MSLTokens().Parsing(Expressions.Dequeue)
 
             Do While Not Parser.FinishYet
@@ -26,7 +26,7 @@ Namespace Interpreter
 
             If Parser.IsCommentLine Then
                 Return New Comments(Parser.Comments)
-            ElseIf Parser.IsBlank
+            ElseIf Parser.IsBlank Then
                 Return New SyntaxError(NameOf(Parser.IsBlank), "")
             End If
 
@@ -41,7 +41,7 @@ Namespace Interpreter
         ''' <param name="Tokens"></param>
         ''' <param name="Comments"></param>
         ''' <returns></returns>
-        Public Function Parsing(Expression As String, Tokens As Token(), Comments As String) As ShoalShell.Interpreter.LDM.Expressions.PrimaryExpression
+        Public Function Parsing(Expression As String, Tokens As Token(), Comments As String) As PrimaryExpression
             Dim Expr As PrimaryExpression = Nothing
 
             ' 为了提高解析的性能，这里不会使用反射操作来进行解析操作的自动注册的，而是通过在下面的手工排序来得到最好的解析性能
@@ -61,31 +61,31 @@ Namespace Interpreter
             ElseIf Not TryParseCollectionOpr(Expression, Tokens).ShadowCopy(Expr) Is Nothing Then
                 Return Expr.InvokeSet(Of String)(NameOf(PrimaryExpression.Comments), value:=Comments)
 
-            ElseIf Not TryParseFileIO(Expression, Tokens).ShadowCopy(Expr) Is Nothing
+            ElseIf Not TryParseFileIO(Expression, Tokens).ShadowCopy(Expr) Is Nothing Then
                 Return Expr.InvokeSet(Of String)(NameOf(PrimaryExpression.Comments), value:=Comments)
 
-            ElseIf Not TryParseDynamicsCast(Expression, Tokens).ShadowCopy(Expr) Is Nothing
+            ElseIf Not TryParseDynamicsCast(Expression, Tokens).ShadowCopy(Expr) Is Nothing Then
                 Return Expr.InvokeSet(Of String)(NameOf(PrimaryExpression.Comments), value:=Comments)
 
-            ElseIf Not TryParseHashTable(Expression, Tokens).ShadowCopy(Expr) Is Nothing
+            ElseIf Not TryParseHashTable(Expression, Tokens).ShadowCopy(Expr) Is Nothing Then
                 Return Expr.InvokeSet(Of String)(NameOf(PrimaryExpression.Comments), value:=Comments)
 
-            ElseIf Not TryParseDieException(Expression, Tokens).ShadowCopy(Expr) Is Nothing
+            ElseIf Not TryParseDieException(Expression, Tokens).ShadowCopy(Expr) Is Nothing Then
                 Return Expr.InvokeSet(Of String)(NameOf(PrimaryExpression.Comments), value:=Comments)
 
-            ElseIf Not TryParseMemoryOpr(Expression, Tokens).ShadowCopy(Expr) Is Nothing
+            ElseIf Not TryParseMemoryOpr(Expression, Tokens).ShadowCopy(Expr) Is Nothing Then
                 Return Expr.InvokeSet(Of String)(NameOf(PrimaryExpression.Comments), value:=Comments)
 
-            ElseIf Not TryParseReturn(Expression, Tokens).ShadowCopy(Expr) Is Nothing
+            ElseIf Not TryParseReturn(Expression, Tokens).ShadowCopy(Expr) Is Nothing Then
                 Return Expr.InvokeSet(Of String)(NameOf(PrimaryExpression.Comments), value:=Comments)
 
-            ElseIf Not TryParseCd(Expression, Tokens).ShadowCopy(Expr) Is Nothing
+            ElseIf Not TryParseCd(Expression, Tokens).ShadowCopy(Expr) Is Nothing Then
                 Return Expr.InvokeSet(Of String)(NameOf(PrimaryExpression.Comments), value:=Comments)
 
-            ElseIf Not TryParseWiki(Expression, Tokens).ShadowCopy(Expr) Is Nothing
+            ElseIf Not TryParseWiki(Expression, Tokens).ShadowCopy(Expr) Is Nothing Then
                 Return Expr.InvokeSet(Of String)(NameOf(PrimaryExpression.Comments), value:=Comments)
 
-            ElseIf Not TryParseSourceSyntax(Expression, Tokens).ShadowCopy(Expr) Is Nothing
+            ElseIf Not TryParseSourceSyntax(Expression, Tokens).ShadowCopy(Expr) Is Nothing Then
                 Return Expr.InvokeSet(Of String)(NameOf(PrimaryExpression.Comments), value:=Comments)
 
             End If
@@ -93,19 +93,19 @@ Namespace Interpreter
             If Not TryParseDoUntil(Expression, Tokens).ShadowCopy(Expr) Is Nothing Then
                 Return Expr.InvokeSet(Of String)(NameOf(PrimaryExpression.Comments), value:=Comments)
 
-            ElseIf Not TryParseDoWhile(Expression, Tokens).ShadowCopy(Expr) Is Nothing
+            ElseIf Not TryParseDoWhile(Expression, Tokens).ShadowCopy(Expr) Is Nothing Then
                 Return Expr.InvokeSet(Of String)(NameOf(PrimaryExpression.Comments), value:=Comments)
 
-            ElseIf Not TryParseElse(Expression, Tokens).ShadowCopy(Expr) Is Nothing
+            ElseIf Not TryParseElse(Expression, Tokens).ShadowCopy(Expr) Is Nothing Then
                 Return Expr.InvokeSet(Of String)(NameOf(PrimaryExpression.Comments), value:=Comments)
 
-            ElseIf Not TryParseElseIf(Expression, Tokens).ShadowCopy(Expr) Is Nothing
+            ElseIf Not TryParseElseIf(Expression, Tokens).ShadowCopy(Expr) Is Nothing Then
                 Return Expr.InvokeSet(Of String)(NameOf(PrimaryExpression.Comments), value:=Comments)
 
-            ElseIf Not TryParseForLoop(Expression, Tokens).ShadowCopy(Expr) Is Nothing
+            ElseIf Not TryParseForLoop(Expression, Tokens).ShadowCopy(Expr) Is Nothing Then
                 Return Expr.InvokeSet(Of String)(NameOf(PrimaryExpression.Comments), value:=Comments)
 
-            ElseIf Not TryParseIf(Expression, Tokens).ShadowCopy(Expr) Is Nothing
+            ElseIf Not TryParseIf(Expression, Tokens).ShadowCopy(Expr) Is Nothing Then
                 Return Expr.InvokeSet(Of String)(NameOf(PrimaryExpression.Comments), value:=Comments)
 
             End If
@@ -119,22 +119,22 @@ Namespace Interpreter
             ElseIf Not TryParseImports(Expression, Tokens).ShadowCopy(Expr) Is Nothing Then
                 Return Expr.InvokeSet(Of String)(NameOf(PrimaryExpression.Comments), value:=Comments)
 
-            ElseIf Not TryParseInclude(Expression, Tokens).ShadowCopy(Expr) Is Nothing
+            ElseIf Not TryParseInclude(Expression, Tokens).ShadowCopy(Expr) Is Nothing Then
                 Return Expr.InvokeSet(Of String)(NameOf(PrimaryExpression.Comments), value:=Comments)
 
-            ElseIf Not TryParseLibrary(Expression, Tokens).ShadowCopy(Expr) Is Nothing
+            ElseIf Not TryParseLibrary(Expression, Tokens).ShadowCopy(Expr) Is Nothing Then
                 Return Expr.InvokeSet(Of String)(NameOf(PrimaryExpression.Comments), value:=Comments)
 
-            ElseIf Not TryParseGoto(Expression, Tokens).ShadowCopy(Expr) Is Nothing
+            ElseIf Not TryParseGoto(Expression, Tokens).ShadowCopy(Expr) Is Nothing Then
                 Return Expr.InvokeSet(Of String)(NameOf(PrimaryExpression.Comments), value:=Comments)
 
-            ElseIf Not TryParseOnErrorResumeNext(Expression, Tokens).ShadowCopy(Expr) Is Nothing
+            ElseIf Not TryParseOnErrorResumeNext(Expression, Tokens).ShadowCopy(Expr) Is Nothing Then
                 Return Expr.InvokeSet(Of String)(NameOf(PrimaryExpression.Comments), value:=Comments)
 
-            ElseIf Not TryParseComments(Expression, Tokens).ShadowCopy(Expr) Is Nothing
+            ElseIf Not TryParseComments(Expression, Tokens).ShadowCopy(Expr) Is Nothing Then
                 Return Expr
 
-            ElseIf Not TryParseRedirectStream(Expression, Tokens).ShadowCopy(Expr) Is Nothing
+            ElseIf Not TryParseRedirectStream(Expression, Tokens).ShadowCopy(Expr) Is Nothing Then
                 Return Expr.InvokeSet(Of String)(NameOf(PrimaryExpression.Comments), value:=Comments)
 
             ElseIf Not TryParseFunctionCalls(Expression, Tokens).ShadowCopy(Expr) Is Nothing Then

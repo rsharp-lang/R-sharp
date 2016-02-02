@@ -1,6 +1,8 @@
 ﻿Imports System.Text
+Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.LDM.Expressions
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Linker.APIHandler
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Linker.APIHandler.Alignment
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Exceptions
 
 Imports arg = System.Collections.Generic.KeyValuePair(Of String, Object)
@@ -283,8 +285,7 @@ Namespace Runtime
             Dim argsValue As arg() = Me._ArgumentsLinker.GetParameters(Expr)
             Dim OverloadsAlignments = (From MethodEntryPoint As System.Reflection.MethodInfo
                                        In methods
-                                       Let match As Alignment.FunctionCalls.ParamAlignments =
-                                           Interpreter.Linker.APIHandler.Alignment.FunctionCalls.OverloadsAlignment(MethodEntryPoint, argsValue)
+                                       Let match As ParamAlignments = OverloadsAlignment(MethodEntryPoint, argsValue)
                                        Where Not match Is Nothing
                                        Select match, MethodEntryPoint
                                        Order By match.Score Descending).ToArray
@@ -304,12 +305,11 @@ Namespace Runtime
             Return True
         End Function
 
-        Private Function __nonOverlaodsDirectInvoke(API As CommandLine.Reflection.EntryPoints.APIEntryPoint, args As Object()) As Object
+        Private Function __nonOverlaodsDirectInvoke(API As EntryPoints.APIEntryPoint, args As Object()) As Object
             Dim value As Object = API.DirectInvoke((From argValue As Object
                                                     In args
                                                     Select If(InputHandler.GetType(argValue, True).Equals(GetType(String)),
                                                         ScriptEngine.Strings.Format(InputHandler.ToString(argValue)), argValue)).ToArray, True)
-
             Return value
         End Function
 
@@ -354,7 +354,7 @@ Namespace Runtime
             End If
         End Function
 
-        Private Function __apiCall(apiEntryPoint As CommandLine.Reflection.EntryPoints.APIEntryPoint, argValues As Alignment.FunctionCalls.ParamAlignments) As Object
+        Private Function __apiCall(apiEntryPoint As EntryPoints.APIEntryPoint, argValues As ParamAlignments) As Object
             Dim args As Object() = (From argValue As Object
                                     In argValues.args
                                     Select If(InputHandler.GetType(argValue, True).Equals(GetType(String)),
@@ -364,8 +364,8 @@ Namespace Runtime
             Return value
         End Function
 
-        Public Function VariableDeclaration(Expression As Interpreter.LDM.Expressions.PrimaryExpression) As Object
-            Dim Expr = Expression.As(Of Interpreter.LDM.Expressions.VariableDeclaration)
+        Public Function VariableDeclaration(Expression As PrimaryExpression) As Object
+            Dim Expr = Expression.As(Of VariableDeclaration)
             Dim value As Object = Exec(Expr.Initializer.Expression)
             Dim refType As Type = InputHandler.GetType(Expr.Type, True)
 
@@ -377,7 +377,7 @@ Namespace Runtime
             If valType.IsArray Then
                 value = Scripting.CastArray(value, refType)
             Else
-                value = Microsoft.VisualBasic.Conversion.CTypeDynamic(value, refType)
+                value = Conversion.CTypeDynamic(value, refType)
             End If
 
             Dim p = ScriptEngine.MMUDevice.InitLocals(Expr.Name, value, Expr.Type)

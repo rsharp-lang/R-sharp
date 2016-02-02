@@ -43,42 +43,39 @@ Namespace Interpreter.Linker.APIHandler.Alignment
             Dim BaseCollection = FuncDef.GetInterfaces
             Dim InputCollection = InputParam.GetInterfaces
 
-            If Array.IndexOf(BaseCollection, GetType(System.Collections.IEnumerable)) > -1 Then
+            If Array.IndexOf(BaseCollection, GetType(IEnumerable)) = -1 Then Return False
 
-                Dim baseElements = FuncDef.GenericTypeArguments
+            Dim baseElements = FuncDef.GenericTypeArguments
 
-                If baseElements.Length = 1 Then
+            If baseElements.Length = 1 Then
 
-                    Dim inputElement = InputParam.GetElementType '是否为数组类型
-                    If inputElement Is Nothing Then
-                        If InputParam.GenericTypeArguments.IsNullOrEmpty Then
-                            Return False
-                        End If
-                        inputElement = InputParam.GenericTypeArguments.First
+                Dim inputElement = InputParam.GetElementType '是否为数组类型
+                If inputElement Is Nothing Then
+                    If InputParam.GenericTypeArguments.IsNullOrEmpty Then
+                        Return False
                     End If
+                    inputElement = InputParam.GenericTypeArguments.First
+                End If
 
-                    Dim b = TypeEquals(baseElements(Scan0), inputElement)
+                Dim b = TypeEquals(baseElements(Scan0), inputElement)
+                Return b
+
+            ElseIf baseElements.IsNullOrEmpty Then '假若函数参数是一个枚举的泛型，则可以被使用
+
+                Dim baseElement = FuncDef.GetElementType
+                Dim inputElement = InputParam.GetElementType
+
+                If baseElement Is Nothing Then
+                    Return True
+                ElseIf inputElement Is Nothing Then  '基本类型是一个数组但是输入的参数数据不是数组，则肯定不相同
+                    Return False
+                Else
+
+                    Dim b = TypeEquals(FuncDef:=baseElement, InputParam:=inputElement)
                     Return b
 
-                ElseIf baseElements.IsNullOrEmpty '假若函数参数是一个枚举的泛型，则可以被使用
-
-                    Dim baseElement = FuncDef.GetElementType
-                    Dim inputElement = InputParam.GetElementType
-
-                    If baseElement Is Nothing Then
-                        Return True
-                    ElseIf inputElement Is Nothing  '基本类型是一个数组但是输入的参数数据不是数组，则肯定不相同
-                        Return False
-                    Else
-
-                        Dim b = TypeEquals(FuncDef:=baseElement, InputParam:=inputElement)
-                        Return b
-
-                    End If
-
                 End If
-            Else
-                Return False
+
             End If
 
             Return False

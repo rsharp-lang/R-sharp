@@ -1,6 +1,7 @@
 ﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.CommandLine.Reflection.EntryPoints
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Linker.APIHandler
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.HybridsScripting
 
 Namespace Interpreter.Linker
 
@@ -8,8 +9,8 @@ Namespace Interpreter.Linker
 
         Public ReadOnly Property ImportedAPI As SortedDictionary(Of String, APIHandler.APIEntryPoint) =
             New SortedDictionary(Of String, APIHandler.APIEntryPoint)
-        Public ReadOnly Property AnonymousDelegate As ShoalShell.Interpreter.AnonymousDelegate
-        Public ReadOnly Property HybridAdapter As ShoalShell.Runtime.HybridsScripting.InteropAdapter
+        Public ReadOnly Property AnonymousDelegate As AnonymousDelegate
+        Public ReadOnly Property HybridAdapter As InteropAdapter
 
         Sub New(ScriptEngine As ShoalShell.Runtime.ScriptEngine)
             Call MyBase.New(ScriptEngine)
@@ -28,15 +29,14 @@ Namespace Interpreter.Linker
         ''' <param name="EntryPoint"></param>
         ''' <param name="execName">主要是为了方便查找函数指针的，因为后面可以直接使用这个变量而不需要再计算一遍了</param>
         ''' <returns></returns>
-        Public Function TryGetEntryPoint(
-                                        EntryPoint As ShoalShell.Interpreter.Parser.Tokens.EntryPoint,
-                                        ByRef execName As String,
-                                        ByRef execValue As Object) As APIHandler.APIEntryPoint
+        Public Function TryGetEntryPoint(EntryPoint As Parser.Tokens.EntryPoint,
+                                         ByRef execName As String,
+                                         ByRef execValue As Object) As APIHandler.APIEntryPoint
             Dim API = TryGetEntryPoint(TryGetName(EntryPoint, execValue).ShadowCopy(execName))
             Return API
         End Function
 
-        Public Function TryGetName(EntryPoint As ShoalShell.Interpreter.Parser.Tokens.EntryPoint, ByRef __execValue As Object) As String
+        Public Function TryGetName(EntryPoint As Parser.Tokens.EntryPoint, ByRef __execValue As Object) As String
             Dim value As Object =
               If(EntryPoint.Name.Expression.ExprTypeID = LDM.Expressions.ExpressionTypes.DynamicsExpression,
               EntryPoint.Name.Expression.PrimaryExpression,
@@ -132,14 +132,14 @@ Namespace Interpreter.Linker
         ''' <param name="InvokedObject"></param>
         ''' <remarks></remarks>
         Public Sub ImportsInstance(Of T As Class)(InvokedObject As T)
-            Dim Commands = (From EntryPoint As Microsoft.VisualBasic.CommandLine.Reflection.EntryPoints.APIEntryPoint
+            Dim Commands = (From EntryPoint As EntryPoints.APIEntryPoint
                             In __allInstanceCommands(InvokedObject.GetType)
                             Select EntryPoint.InvokeSet(Of Object)(NameOf(EntryPoint.InvokeOnObject), InvokedObject)).ToList '解析出命令并连接目标实例对象与函数的执行入口点
             Dim API = SPM.Nodes.AssemblyParser.APIParser(Commands)
             Call [Imports](API)
         End Sub
 
-        Protected Function __allInstanceCommands(Type As Type) As List(Of Microsoft.VisualBasic.CommandLine.Reflection.EntryPoints.APIEntryPoint)
+        Protected Function __allInstanceCommands(Type As Type) As List(Of EntryPoints.APIEntryPoint)
             Dim InternalChunkList = Microsoft.VisualBasic.CommandLine.Interpreter.GetAllCommands(Type)
             Dim commandAttribute As System.Type = GetType(ExportAPIAttribute)
             Dim commandsSource = (From MethodHandle As System.Reflection.MethodInfo

@@ -3,7 +3,7 @@
     ''' <summary>
     ''' 一个表达式对象之中的某一个单词元素
     ''' </summary>
-    Public Class Token : Inherits ShoalShell.Interpreter.MachineElement
+    Public Class Token : Inherits MachineElement
 
         Public Property DepthLevel As Integer
         ''' <summary>

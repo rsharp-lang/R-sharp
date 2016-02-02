@@ -24,11 +24,10 @@
         ''' 注释前导符号
         ''' </summary>
         Public Const COMMENTS As String = "#';%"
-
-        Public MustInherit Class Parserbase
-
-            Public MustOverride ReadOnly Property Tokens As Tokens.Token()
-
-        End Class
     End Module
+
+    Public MustInherit Class Parserbase
+
+        Public MustOverride ReadOnly Property Tokens As Tokens.Token()
+    End Class
 End Namespace
