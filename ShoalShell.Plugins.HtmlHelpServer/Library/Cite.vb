@@ -1,4 +1,6 @@
 ﻿Imports System.Text
+Imports Microsoft.VisualBasic.Linq.Extensions
+
 ''' <summary>
 ''' 生成每一个工具的引用文献的工具
 ''' </summary>

@@ -1,6 +1,7 @@
 ﻿Imports System.Reflection
 Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.SPM.Nodes
+Imports Microsoft.VisualBasic.Linq.Extensions
 
 Namespace SPM
 

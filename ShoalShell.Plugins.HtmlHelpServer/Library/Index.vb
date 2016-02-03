@@ -1,5 +1,6 @@
 ﻿Imports System.Text
 Imports Microsoft.VisualBasic.Scripting.ShoalShell
+Imports Microsoft.VisualBasic.Linq.Extensions
 
 ''' <summary>
 ''' 这个模块是用于生成本地帮助文档的工具，这个工具和Shoal脚本引擎之中的自带的帮助文档的生成工具的作用是一样的，

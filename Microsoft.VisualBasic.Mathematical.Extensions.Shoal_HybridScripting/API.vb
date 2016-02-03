@@ -3,6 +3,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.ShoalShell
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Linq.Extensions
 
 <[PackageNamespace]("VBMath",
                     Description:="This package enable Shoal language can be doing the mathematics calculation.",

@@ -64,9 +64,9 @@ Namespace My
     Friend Module MySettingsProperty
         
         <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")>  _
-        Friend ReadOnly Property Settings() As Global.LINQ.Extensions.ShoalShell.HybridScripting.My.MySettings
+        Friend ReadOnly Property Settings() As Global.LINQExtensions.ShoalShell.HybridScripting.My.MySettings
             Get
-                Return Global.LINQ.Extensions.ShoalShell.HybridScripting.My.MySettings.Default
+                Return Global.LINQExtensions.ShoalShell.HybridScripting.My.MySettings.Default
             End Get
         End Property
     End Module

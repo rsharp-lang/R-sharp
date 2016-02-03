@@ -2,17 +2,18 @@
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.HybridsScripting
 Imports Microsoft.VisualBasic.Scripting.ShoalShell
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime
+Imports Microsoft.VisualBasic.LINQ.Script
 
 <HybridsScripting.LanguageEntryPoint("LINQ", "SQL like query scripting language for the object oriented database.")>
 <[Namespace]("LINQ", Description:="SQL like query scripting language for the object oriented database.")>
 Public Module API
 
-    Dim LINQ As Global.LINQ.Script.I_DynamicsRuntime
+    Dim LINQ As I_DynamicsRuntime
 
     <ExportAPI("__Init()")>
     <HybridsScripting.EntryInterface(EntryInterface.InterfaceTypes.EntryPointInit)>
     Public Function Initialize() As Boolean
-        Global.LINQ.Extensions.ShoalShell.HybridScripting.API.LINQ = New Global.LINQ.Script.I_DynamicsRuntime
+        API.LINQ = New I_DynamicsRuntime
         Return LINQ.Initialize
     End Function
 

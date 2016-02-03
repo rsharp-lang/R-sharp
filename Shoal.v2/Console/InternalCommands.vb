@@ -1,6 +1,7 @@
 ﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports System.Drawing
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Linq.Extensions
 Imports System.Runtime.CompilerServices
 
 ''' <summary>

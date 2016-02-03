@@ -4,6 +4,7 @@ Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.LDM.Expressions
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Linker.APIHandler
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Linker.APIHandler.Alignment
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Exceptions
+Imports Microsoft.VisualBasic.Linq.Extensions
 
 Imports arg = System.Collections.Generic.KeyValuePair(Of String, Object)
 

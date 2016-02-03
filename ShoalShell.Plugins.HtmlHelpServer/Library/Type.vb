@@ -1,6 +1,7 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.HTML
+Imports Microsoft.VisualBasic.Linq.Extensions
 
 ''' <summary>
 ''' 生成数据类型的帮助文档

@@ -1,4 +1,5 @@
 ﻿Imports System.Text.RegularExpressions
+Imports Microsoft.VisualBasic.Linq.Extensions
 
 Namespace Interpreter.Parser.Tokens
 

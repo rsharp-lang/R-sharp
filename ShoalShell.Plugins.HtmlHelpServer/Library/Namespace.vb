@@ -3,6 +3,7 @@ Imports System.Text
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.ShoalShell
 Imports Microsoft.VisualBasic.DocumentFormat.HTML
+Imports Microsoft.VisualBasic.Linq.Extensions
 
 ''' <summary>
 ''' 生成API模块的帮助文档
