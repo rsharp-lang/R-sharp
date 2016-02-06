@@ -57,7 +57,7 @@ Namespace Compiler.CodeDOM
         End Sub
 
         Private Function __getConstant(Name As String) As System.CodeDom.CodeMethodInvokeExpression
-            Return [Call](Field(__innerScriptEngine), NameOf(Runtime.ScriptEngine.GetValue), Parameters:={Value(Name)})
+            Return [Call](FieldRef(__innerScriptEngine), NameOf(Runtime.ScriptEngine.GetValue), Parameters:={Value(Name)})
         End Function
 
         ''' <summary>

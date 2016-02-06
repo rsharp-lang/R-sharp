@@ -8,12 +8,12 @@ Imports Microsoft.VisualBasic.LINQ.Script
 <[Namespace]("LINQ", Description:="SQL like query scripting language for the object oriented database.")>
 Public Module API
 
-    Dim LINQ As I_DynamicsRuntime
+    Dim LINQ As DynamicsRuntime
 
     <ExportAPI("__Init()")>
     <HybridsScripting.EntryInterface(EntryInterface.InterfaceTypes.EntryPointInit)>
     Public Function Initialize() As Boolean
-        API.LINQ = New I_DynamicsRuntime
+        API.LINQ = New DynamicsRuntime
         Return LINQ.Initialize
     End Function
 
