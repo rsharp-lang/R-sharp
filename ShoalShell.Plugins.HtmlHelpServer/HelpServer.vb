@@ -21,7 +21,7 @@ Public Module HelpServer
 
     Friend Function __runServer(Optional LocalPort As Integer = 8080) As Thread
         Dim HttpServer As HttpServer = New HttpInternal.HttpFileSystem(LocalPort, App.HOME & "/html", True)
-        Dim svrThread = Run(AddressOf HttpServer.Run)
+        Dim svrThread = RunTask(AddressOf HttpServer.Run)
         Call Thread.Sleep(1000)
         Call Process.Start("http://127.0.0.1:8080")
         Return svrThread

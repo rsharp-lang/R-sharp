@@ -36,14 +36,14 @@ Namespace Runtime.Debugging
             Call MyBase.New(Config.Default.SettingsData)
             __tcpClient = New Net.AsynInvoke("127.0.0.1", DebugListenerPort)
             Call $"Shoal debugger listeners at  127.0.0.1:{ DebugListenerPort}".__DEBUG_ECHO
-            Call Run(AddressOf __startListen)
+            Call RunTask(AddressOf __startListen)
             Call Threading.Thread.Sleep(100)
             Call __sendMessage(ReadListenerServices.LocalPort, DebuggerMessage.MessageTypes.CTRL_DEBUGGER_INIT_INFO)
         End Sub
 
         Private Sub __sendMessage(Message As String, Type As DebuggerMessage.MessageTypes)
             Message = New DebuggerMessage() With {.Message = Message, .MessageType = Type}.GetXml
-            Call Run(Sub() Call __tcpClient.SendMessage(Message))
+            Call RunTask(Sub() Call __tcpClient.SendMessage(Message))
         End Sub
 
         ''' <summary>
