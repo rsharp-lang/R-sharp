@@ -17,7 +17,7 @@ Public Module Kernel32
     ''' <remarks></remarks>
     ''' 
     <ExportAPI("Sleep", Info:="Sleep pauses program execution for a certain amount of time. This is more accurate than using a do-nothing loop, waiting for a certain amount of time to pass. The function does not return a value.")>
-    Public Declare Sub Sleep Lib "kernel32.dll" (ByVal dwMilliseconds As Long)
+    Public Declare Sub Sleep Lib "kernel32.dll" ( dwMilliseconds As Long)
     <ExportAPI("GetWindowsDirectoryA")>
     Public Declare Function GetWindowsDirectory Lib "kernel32" Alias "GetWindowsDirectoryA" (lpBuffer As String, nSize As Integer) As Integer
     <ExportAPI("GetSystemDirectoryA")>

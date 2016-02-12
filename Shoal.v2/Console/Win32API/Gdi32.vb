@@ -28,7 +28,7 @@ Public Module Gdi32
     ''' <remarks></remarks>
     ''' 
     <ExportAPI("Escape", Info:="The Escape function allows applications to access capabilities of a particular device not directly available through GDI. Escape calls made by an application are translated and sent to the driver.")>
-    Public Declare Function Escape Lib "gdi32" Alias "Escape" (ByVal hdc As Long, ByVal nEscape As Long, ByVal nCount As Long, ByVal lpInData As String, lpOutData As Object) As Long
+    Public Declare Function Escape Lib "gdi32" Alias "Escape" ( hdc As Long,  nEscape As Long,  nCount As Long,  lpInData As String, lpOutData As Object) As Long
     <ExportAPI("Rectangle")>
     Public Declare Function Rectangle Lib "gdi32" (hdc As Integer, X1 As Integer, Y1 As Integer, X2 As Integer, Y2 As Integer) As Integer
     <ExportAPI("Polygon")>
