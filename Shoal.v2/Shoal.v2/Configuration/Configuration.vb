@@ -23,7 +23,7 @@ Namespace Configuration
             Return str
         End Function
 
-        Public Overrides Function Prints(data As IEnumerable(Of ProfileItem)) As String
+        Public Overloads Function Prints(data As IEnumerable(Of ProfileItem)) As String
             Dim str As String = MyBase.Prints(data)
             Call Console.WriteLine(str)
             Return str
