@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.Scripting.MetaData
+﻿Imports System.Xml.Serialization
+Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.HTML
 
 Namespace SPM.Nodes
@@ -6,8 +7,8 @@ Namespace SPM.Nodes
     Public Class PartialModule : Inherits PackageNamespace
         Implements HTML.IWikiHandle
 
-        <Xml.Serialization.XmlElement> Public Property Assembly As Assembly
-        <Xml.Serialization.XmlElement> Public Property EntryPoints As EntryPointMeta()
+        <XmlElement> Public Property Assembly As Assembly
+        <XmlElement> Public Property EntryPoints As EntryPointMeta()
 
         Public Sub New()
         End Sub

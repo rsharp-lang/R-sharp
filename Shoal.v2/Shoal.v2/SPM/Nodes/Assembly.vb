@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.Versioning
+Imports System.Xml.Serialization
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.HTML
 
 Namespace SPM.Nodes
@@ -8,18 +9,18 @@ Namespace SPM.Nodes
     ''' </summary>
     Public Class Assembly : Implements HTML.IWikiHandle
 
-        <Xml.Serialization.XmlElement("FileUrl")> Public Property Path As String
-        <Xml.Serialization.XmlAttribute> Public Property Version As String
-        <Xml.Serialization.XmlAttribute> Public Property UpdateTime As Long
-        <Xml.Serialization.XmlElement> Public Property Company As String
-        <Xml.Serialization.XmlElement> Public Property FrameworkVersion As String
+        <XmlElement("FileUrl")> Public Property Path As String
+        <XmlAttribute> Public Property Version As String
+        <XmlAttribute> Public Property UpdateTime As Long
+        <XmlElement> Public Property Company As String
+        <XmlElement> Public Property FrameworkVersion As String
         ''' <summary>
         ''' 这个属性使用于记录重复的命名空间模块之间的相互比较的
         ''' 路径可以不一样，但是这个必须要一样
         ''' </summary>
         ''' <returns></returns>
-        <Xml.Serialization.XmlAttribute> Public Property TypeId As String
-        <Xml.Serialization.XmlElement> Public Property Description As String
+        <XmlAttribute> Public Property TypeId As String
+        <XmlElement> Public Property Description As String
 
         Public Overrides Function ToString() As String
             Return $"{Path}!{TypeId}"

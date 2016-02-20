@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.ComponentModel
+﻿Imports System.Xml.Serialization
+Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.ComponentModel.Settings
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.SPM
 
@@ -8,7 +9,7 @@ Namespace Configuration
     ''' 脚本引擎的配置文件
     ''' </summary>
     ''' 
-    <Xml.Serialization.XmlType("Shoal.Configuration", [Namespace]:="http://gcmodeller.org/shoal.config")>
+    <XmlType("Shoal.Configuration", [Namespace]:="http://gcmodeller.org/shoal.config")>
     Public Class Config : Inherits ITextFile
         Implements IProfile
 

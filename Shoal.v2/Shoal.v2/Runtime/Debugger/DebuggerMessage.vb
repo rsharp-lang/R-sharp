@@ -1,10 +1,12 @@
-﻿Namespace Runtime.Debugging
+﻿Imports System.Xml.Serialization
+
+Namespace Runtime.Debugging
 
     Public Class DebuggerMessage
 
-        <Xml.Serialization.XmlText> Public Property Message As String
-        <Xml.Serialization.XmlAttribute> Public Property Pid As Integer
-        <Xml.Serialization.XmlAttribute> Public Property MessageType As MessageTypes
+        <XmlText> Public Property Message As String
+        <XmlAttribute> Public Property Pid As Integer
+        <XmlAttribute> Public Property MessageType As MessageTypes
 
         Public Enum MessageTypes
 

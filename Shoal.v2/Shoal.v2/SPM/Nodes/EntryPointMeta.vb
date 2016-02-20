@@ -1,4 +1,5 @@
 ﻿Imports System.Text
+Imports System.Xml.Serialization
 Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.HTML
 
@@ -10,9 +11,9 @@ Namespace SPM.Nodes
     ''' <remarks></remarks>
     Public Class EntryPointMeta : Implements HTML.IWikiHandle
 
-        <Xml.Serialization.XmlAttribute> Public Property Name As String
+        <XmlAttribute> Public Property Name As String
         Public Property Description As String
-        <Xml.Serialization.XmlElement> Public Property Parameters As TripleKeyValuesPair()
+        <XmlElement> Public Property Parameters As TripleKeyValuesPair()
         Public Property ReturnedType As String
 
         Public Overrides Function ToString() As String

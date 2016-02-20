@@ -1,21 +1,22 @@
-﻿Imports Microsoft.VisualBasic.Scripting.MetaData
+﻿Imports System.Xml.Serialization
+Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.HTML
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Linker.APIHandler
 
 Namespace SPM.Nodes
 
-    <Xml.Serialization.XmlType("PackageNamespace", [Namespace]:="http://SourceForge.net/project/shoal/spm.xlst")>
+    <XmlType("PackageNamespace", [Namespace]:="http://SourceForge.net/project/shoal/spm.xlst")>
     Public Class [Namespace] : Implements HTML.IWikiHandle
 
         ''' <summary>
         ''' 命名空间是可以被分隔为多个模块分别开发于不同的程序模块之中的
         ''' </summary>
         ''' <returns></returns>
-        <Xml.Serialization.XmlElement> Public Property PartialModules As PartialModule()
+        <XmlElement> Public Property PartialModules As PartialModule()
 
-        <Xml.Serialization.XmlAttribute> Public Property Url As String
+        <XmlAttribute> Public Property Url As String
         Public Property Publisher As String
-        <Xml.Serialization.XmlAttribute> Public Property Revision As Integer
+        <XmlAttribute> Public Property Revision As Integer
         Public Property Cites As String()
 
         ''' <summary>
@@ -32,8 +33,8 @@ Namespace SPM.Nodes
         ''' <value></value>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <Xml.Serialization.XmlAttribute> Public Property [Namespace] As String
-        <Xml.Serialization.XmlAttribute> Public Property Category As APICategories
+        <XmlAttribute> Public Property [Namespace] As String
+        <XmlAttribute> Public Property Category As APICategories
 
         Public Overrides Function ToString() As String
             Return [Namespace]
@@ -79,7 +80,7 @@ Namespace SPM.Nodes
 
         Dim __loadedEntryPoints As SortedDictionary(Of String, APIEntryPoint)
 
-        <Xml.Serialization.XmlIgnore> Public ReadOnly Property API As APIEntryPoint()
+        <XmlIgnore> Public ReadOnly Property API As APIEntryPoint()
             Get
                 If __loadedEntryPoints Is Nothing Then
                     Call __LoadEntryPoints()
