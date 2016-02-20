@@ -8,7 +8,7 @@ Namespace RBase.MathExtension
     ''' Density, distribution function, quantile function and random generation for the Poisson distribution with parameter lambda.
     ''' </summary>
     ''' <remarks></remarks>
-    <PackageNamespace("Poisson", Description:="Density, distribution function, quantile function and random generation for the Poisson distribution with parameter lambda.")>
+    <PackageNamespace("RBase.Math.Poisson", Description:="Density, distribution function, quantile function and random generation for the Poisson distribution with parameter lambda.")>
     Public Module Poisson
 
         ''' <summary>
@@ -49,7 +49,7 @@ Namespace RBase.MathExtension
     ''' Density, distribution function, quantile function and random generation for the normal distribution with mean equal to mean and standard deviation equal to sd.
     ''' </summary>
     ''' <remarks></remarks>
-    <[Namespace]("Normal", Description:="Density, distribution function, quantile function and random generation for the normal distribution with mean equal to mean and standard deviation equal to sd.")>
+    <[Namespace]("RBase.Math.Normal", Description:="Density, distribution function, quantile function and random generation for the normal distribution with mean equal to mean and standard deviation equal to sd.")>
     Public Module Normal
 
         ''' <summary>
@@ -66,7 +66,7 @@ Namespace RBase.MathExtension
         <ExportAPI("qnorm")>
         Public Function qnorm(p As Vector, Optional mean As Vector = NULL, Optional sd As Integer = 1, Optional lowertail As Boolean = True, Optional logp As Boolean = False) As Vector
             If Missing(mean) Then
-                mean = Vector.Zero
+                mean = Vectors.Vector.Zero
             End If
 
             Throw New NotImplementedException

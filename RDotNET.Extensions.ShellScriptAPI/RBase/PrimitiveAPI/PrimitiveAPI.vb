@@ -8,6 +8,8 @@ Namespace RBase
     ''' R function bridge to VisualBasic
     ''' </summary>
     ''' <remarks></remarks>
+    ''' 
+    <PackageNamespace("RBase.PrimitiveAPI")>
     Public Module PrimitiveAPI
 
         ''' <summary>
@@ -44,6 +46,7 @@ Namespace RBase
             Return x Is Nothing
         End Function
 
+        <ExportAPI("Stop")>
         Public Function [Stop](ex As String)
             Throw New Exception(ex)
         End Function
@@ -73,6 +76,8 @@ Namespace RBase
         ''' An attempt is made to coerce other types of inputs to warning to character vectors.
         ''' suppressWarnings evaluates its expression in a context that ignores all warnings.
         ''' </remarks>
+        ''' 
+        <ExportAPI("Warning")>
         Public Function warning(args As Generic.IEnumerable(Of Object),
                             <Parameter("call.", "logical, indicating if the call should become part of the warning message.")> Optional [Call] As Boolean = True,
                             <Parameter("immediate.", "logical, indicating if the call should be output immediately, even if getOption(""warn"") <= 0.")> Optional immediate As Boolean = False,
@@ -83,6 +88,7 @@ Namespace RBase
 
         Public Const NA As Object = Nothing
 
+        <ExportAPI("Warning")>
         Public Function warning(args As String, Optional Domain As Object = NA) As String
             Throw New NotImplementedException
         End Function
@@ -95,6 +101,7 @@ Namespace RBase
             Return New GenericVector(Of T) With {.Elements = ChunkBuffer.ToArray}
         End Function
 
+        <ExportAPI("c")>
         Public Function C(ParamArray argvs As Vector()) As Vector
             Dim ChunkBuffer = argvs(0).Elements.ToList
             For Each Vector As Vector In argvs.Skip(1)
@@ -103,6 +110,7 @@ Namespace RBase
             Return New Vector(ChunkBuffer.ToArray)
         End Function
 
+        <ExportAPI("c")>
         Public Function C(ParamArray args As Double()) As Vector
             Return New Vector(args)
         End Function
@@ -114,7 +122,11 @@ Namespace RBase
         ''' <param name="NaRM"></param>
         ''' <returns>The value is a logical vector of length one.</returns>
         ''' <remarks></remarks>
-        Public Function Any(x As BooleanVector, <Parameter("na.rm", "logical. If true NA values are removed before the result is computed.")> Optional NaRM As Boolean = False) As BooleanVector
+        ''' 
+        <ExportAPI("Any")>
+        Public Function Any(x As BooleanVector,
+                            <Parameter("na.rm", "logical. If true NA values are removed before the result is computed.")>
+                            Optional NaRM As Boolean = False) As BooleanVector
 
             If NaRM Then
 
@@ -135,7 +147,11 @@ Namespace RBase
         ''' <param name="x"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function All(x As BooleanVector, <Parameter("na.rm", "logical. If true NA values are removed before the result is computed.")> Optional NaRM As Boolean = False) As BooleanVector
+        ''' 
+        <ExportAPI("All")>
+        Public Function All(x As BooleanVector,
+                            <Parameter("na.rm", "logical. If true NA values are removed before the result is computed.")>
+                            Optional NaRM As Boolean = False) As BooleanVector
             If NaRM Then
 
             End If
@@ -182,6 +198,8 @@ Namespace RBase
         ''' <param name="LengthOut">non-negative integer: the desired length of the output vector.</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
+        ''' 
+        <ExportAPI("Rep")>
         Public Function Rep(x As Vector,
                         <Parameter("length.out", "non-negative integer: the desired length of the output vector.")> Optional LengthOut As Integer = 0) As Vector
 
@@ -201,6 +219,8 @@ Namespace RBase
         ''' <param name="LengthOut">non-negative integer: the desired length of the output vector.</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
+        ''' 
+        <ExportAPI("Rep")>
         Public Function Rep(x As BooleanVector,
                         <Parameter("length.out", "non-negative integer: the desired length of the output vector.")> Optional LengthOut As Integer = 0) As BooleanVector
 
@@ -227,10 +247,13 @@ Namespace RBase
         ''' If collapse is non-NULL, this applies also to the second, collapsing, phase, but some translation may have been done in pasting object together in the first phase.
         ''' </returns>
         ''' <remarks></remarks>
+        ''' 
+        <ExportAPI("Paste")>
         Public Function Paste(args As Generic.IEnumerable(Of String), Optional sep As String = " ") As String
             Return String.Join(sep, args)
         End Function
 
+        <ExportAPI("Paste")>
         Public Function Paste(ParamArray args As Object()) As String
             Return String.Join("", (From obj In args Select str = obj.ToString).ToArray)
         End Function
@@ -260,6 +283,7 @@ Namespace RBase
             Return LQuery
         End Function
 
+        <ExportAPI("GetOption")>
         Public Function getOption(x As String, Optional [default] As Boolean = NULL) As Boolean
             Throw New NotImplementedException
         End Function
@@ -267,6 +291,7 @@ Namespace RBase
         Public Const T As Boolean = True
         Public Const F As Boolean = False
 
+        <ExportAPI("Vector")>
         Public Function Vector() As Vector
             Return New Vector(0)
         End Function
@@ -282,6 +307,7 @@ Namespace RBase
 
         End Function
 
+        <ExportAPI("Try")>
         Public Sub [Try](expr As Action, Optional silent As Boolean = False)
 
         End Sub

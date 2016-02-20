@@ -5,8 +5,10 @@ Imports RDotNET.Extensions.RBase.Vectors
 
 Namespace RBase
 
+    <PackageNamespace("RBase.Read")>
     Public Module Read
 
+        <ExportAPI("Read.Table")>
         Public Function Table(File As String, Optional Header As Boolean = False) As DocumentStream.DataFrame
             Throw New NotImplementedException
         End Function
@@ -36,6 +38,7 @@ Namespace RBase
 
     Namespace Machine
 
+        <PackageNamespace("RBase.Machine.Double")>
         Public Module [Double]
 
             Public ReadOnly Property Eps As Double

@@ -46,7 +46,7 @@ Namespace RBase.Vectors
         ''' <value></value>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Overloads Property ElementValues(a As Vector, b As Vector) As T()
+        Public Overloads Property [GET](a As Vector, b As Vector) As T()
             Get
                 Dim x As Integer = a.Elements(0), y As Integer = b.Elements(0)
                 Dim ChunkBuffer As T() = New T(y - x - 1) {}
@@ -63,12 +63,12 @@ Namespace RBase.Vectors
             End Set
         End Property
 
-        Public Overloads Property ElementValues(a As Integer, b As Vector) As T()
+        Public Overloads Property [GET](a As Integer, b As Vector) As T()
             Get
-                Return ElementValues(New Vector({a}), b)
+                Return [GET](New Vector({a}), b)
             End Get
             Set(value As T())
-                ElementValues(New Vector({a}), b) = value
+                [GET](New Vector({a}), b) = value
             End Set
         End Property
 

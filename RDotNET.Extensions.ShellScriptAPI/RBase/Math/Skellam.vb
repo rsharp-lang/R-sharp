@@ -74,8 +74,8 @@ Wikipedia: Skellam distribution: http://en.wikipedia.org/wiki/Skellam_distributi
             If (Any(oops)) Then
                 warning("NaNs produced")
                 lambdas(oops) = Vectors.Vector.NAN
-                lambda1 = lambdas(1, Length(lambda1))
-                lambda2 = lambdas((Length(lambda1) + 1), Length(lambdas))
+                lambda1 = lambdas.GET(1, Length(lambda1))
+                lambda2 = lambdas.GET((Length(lambda1) + 1), Length(lambdas))
             End If
             '# make all args the same length (for subsetting)
             Dim lens = C(Length(x), Length(lambda1), Length(lambda2))
@@ -182,8 +182,8 @@ Wikipedia: Skellam distribution: http://en.wikipedia.org/wiki/Skellam_distributi
             If (Any(oops)) Then
                 warning("NaNs produced")
                 lambdas(oops) = Vectors.Vector.NAN
-                lambda1 = lambdas(1, Length(lambda1))
-                lambda2 = lambdas((Length(lambda1) + 1), Length(lambdas))
+                lambda1 = lambdas.GET(1, Length(lambda1))
+                lambda2 = lambdas.GET((Length(lambda1) + 1), Length(lambdas))
             End If
             '# CDF is a step function, so convert to integer values without warning
             Dim x = floor(q)
