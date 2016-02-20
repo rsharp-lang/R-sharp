@@ -26,7 +26,7 @@ Public Module Serialization
     ''' 2. 任何对象属性都会被表示为数组
     ''' </remarks>
     Public Function LoadFromStream(Of T As Class)(RData As RDotNET.SymbolicExpression) As T
-        Dim value As Object = InternalLoadFromStream(RData, GetType(T), 1)
+        Dim value As Object = __loadFromStream(RData, GetType(T), 1)
         Return DirectCast(value, T)
     End Function
 
@@ -40,7 +40,7 @@ Public Module Serialization
     ''' 
     <ExportAPI("RStream.Load")>
     Public Function LoadRStream(<Parameter("R.S4Object")> RData As RDotNET.SymbolicExpression, Type As Type) As Object
-        Dim value As Object = InternalLoadFromStream(RData, Type, 1)
+        Dim value As Object = __loadFromStream(RData, Type, 1)
         Return value
     End Function
 
@@ -59,9 +59,9 @@ Public Module Serialization
 
         For Each Slot In Mappings
             Dim RSlot As RDotNET.SymbolicExpression = RData.GetAttribute(Slot.Key.Name)
-            Dim value As Object = InternalLoadFromStream(RSlot, Slot.Value.PropertyType, DebugLevel)
+            Dim value As Object = __loadFromStream(RSlot, Slot.Value.PropertyType, DebugLevel)
 
-            Call InternalValueMapping(value, Slot.Value, obj:=obj)
+            Call __valueMapping(value, Slot.Value, obj:=obj)
         Next
 
         Return obj
@@ -75,7 +75,7 @@ Public Module Serialization
     ''' <param name="obj">对象实例</param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Private Function InternalValueMapping(value As Object, pInfo As System.Reflection.PropertyInfo, ByRef obj As Object) As Boolean
+    Private Function __valueMapping(value As Object, pInfo As System.Reflection.PropertyInfo, ByRef obj As Object) As Boolean
         Dim pTypeInfo As System.Type = pInfo.PropertyType
 
         If pTypeInfo.HasElementType Then
@@ -138,7 +138,7 @@ Public Module Serialization
     ''' <param name="TypeInfo"></param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Private Function InternalLoadFromStream(RData As RDotNET.SymbolicExpression, TypeInfo As System.Type, DebugLevel As Integer) As Object
+    Private Function __loadFromStream(RData As RDotNET.SymbolicExpression, TypeInfo As System.Type, DebugLevel As Integer) As Object
 
         Call Console.WriteLine(New String("."c, DebugLevel) & ">   " & RData.Type.ToString)
 
@@ -158,7 +158,7 @@ Public Module Serialization
             Case Internals.SymbolicExpressionType.NumericVector
                 Return RData.AsNumeric.ToArray
             Case Internals.SymbolicExpressionType.List
-                Return InternalCreateMatrix(RData, TypeInfo, DebugLevel + 1)
+                Return __createMatrix(RData, TypeInfo, DebugLevel + 1)
 
 
             Case Else
@@ -167,9 +167,9 @@ Public Module Serialization
         End Select
     End Function
 
-    Private Function InternalCreateMatrix(RData As RDotNET.SymbolicExpression, TypeInfo As System.Type, DebugLevel As Integer) As Object
+    Private Function __createMatrix(RData As RDotNET.SymbolicExpression, TypeInfo As System.Type, DebugLevel As Integer) As Object
         Dim List = RData.AsList.ToArray
-        Dim Matrix = (From vec In List Select InternalLoadFromStream(vec, TypeInfo, DebugLevel)).ToArray
+        Dim Matrix = (From vec In List Select __loadFromStream(vec, TypeInfo, DebugLevel)).ToArray
         Return Matrix
     End Function
 End Module

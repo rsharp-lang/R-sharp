@@ -11,8 +11,9 @@ Imports RDotNET.SymbolicExpressionExtension
 Imports Microsoft.VisualBasic.Scripting.ShoalShell
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.HybridsScripting
 
-<HybridsScripting.LanguageEntryPoint("R.NET", "R API interface to the shoal shell language.")>
+<LanguageEntryPoint("R.NET", "R API interface to the shoal shell language.")>
 <[PackageNamespace]("R.NET",
                     Description:="R API interface to the shoal shell language.",
                     Category:=APICategories.SoftwareTools,
@@ -24,21 +25,21 @@ Public Module API
 
 #Region "Hybrid Interfaces"
 
-    <Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.HybridsScripting.EntryInterface(HybridsScripting.EntryInterface.InterfaceTypes.EntryPointInit)>
-   <ExportAPI("_r_dotnet._init()", Info:="Automatically search for the path of the R system and then construct a R session for you.")>
+    <EntryInterface(HybridsScripting.EntryInterface.InterfaceTypes.EntryPointInit)>
+    <ExportAPI("_r_dotnet._init()", Info:="Automatically search for the path of the R system and then construct a R session for you.")>
     Public Function Init() As RDotNET.REngine
         _REngine = RDotNET.Extensions.VisualBasic.REngine.StartEngineServices
         Return REngine
     End Function
 
-    <Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.HybridsScripting.EntryInterface(HybridsScripting.EntryInterface.InterfaceTypes.Evaluate)>
+    <EntryInterface(HybridsScripting.EntryInterface.InterfaceTypes.Evaluate)>
     Public Function Evaluate(scriptLine As String) As Object
         Dim value = REngine.Evaluate(statement:=scriptLine)
         Call REngine.PrintSTDOUT()
         Return value
     End Function
 
-    <Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.HybridsScripting.EntryInterface(HybridsScripting.EntryInterface.InterfaceTypes.SetValue)>
+    <EntryInterface(HybridsScripting.EntryInterface.InterfaceTypes.SetValue)>
     Public Function SetSymbol(Variable As String, value As Object) As Boolean
         Try
             Call REngine.SetSymbol(Variable, value)
@@ -50,9 +51,11 @@ Public Module API
     End Function
 
     <ExportAPI("CType", Info:="Casting R type object into a .NET object.")>
-    Public Function TypeCast(<Parameter("R.Data", "The source result which was from the R expression.")> RData As RDotNET.SymbolicExpression,
-                             <Parameter("Cast.Type", "The System.Type schema information that will casting the R object as the .NET object.")> Type As System.Type) As Object
-        Return RDotNET.Extensions.ShellScriptAPI.Serialization.LoadRStream(RData, Type)
+    Public Function TypeCast(<Parameter("R.Data", "The source result which was from the R expression.")>
+                             RData As RDotNET.SymbolicExpression,
+                             <Parameter("Cast.Type", "The System.Type schema information that will casting the R object as the .NET object.")>
+                             Type As System.Type) As Object
+        Return Serialization.LoadRStream(RData, Type)
     End Function
 
 #End Region

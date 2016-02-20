@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{2A928B27-D8CE-4629-9711-0E792C94A85E}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>RDotNET.Extensions.ShellScriptAPI</RootNamespace>
-    <AssemblyName>RDotNET.Extensions.ShellScriptAPI</AssemblyName>
+    <RootNamespace>RDotNET.Extensions</RootNamespace>
+    <AssemblyName>RDotNET.Extensions</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
@@ -19,7 +19,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\Shoal.v2\Console\bin\Debug\</OutputPath>
-    <DocumentationFile>RDotNET.Extensions.ShellScriptAPI.xml</DocumentationFile>
+    <DocumentationFile>RDotNET.Extensions.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -28,7 +28,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>..\..\GCModeller\GCModeller\</OutputPath>
-    <DocumentationFile>RDotNET.Extensions.ShellScriptAPI.xml</DocumentationFile>
+    <DocumentationFile>RDotNET.Extensions.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -48,7 +48,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\x64\Debug\</OutputPath>
-    <DocumentationFile>RDotNET.Extensions.ShellScriptAPI.xml</DocumentationFile>
+    <DocumentationFile>RDotNET.Extensions.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -57,7 +57,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\..\GCModeller\GCModeller-x64\</OutputPath>
-    <DocumentationFile>RDotNET.Extensions.ShellScriptAPI.xml</DocumentationFile>
+    <DocumentationFile>RDotNET.Extensions.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -86,10 +86,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API.vb" />
-    <Compile Include="GraphicsDevice.vb" />
-    <Compile Include="PieChart.vb" />
-    <Compile Include="Math.vb" />
-    <Compile Include="PrimitiveAPI.vb" />
+    <Compile Include="Graphics\GraphicsDevice.vb" />
+    <Compile Include="Graphics\PieChart.vb" />
+    <Compile Include="RBase\Math\Poisson.vb" />
+    <Compile Include="RBase\Math\Math.vb" />
+    <Compile Include="RBase\PrimitiveAPI\Etc.vb" />
+    <Compile Include="RBase\PrimitiveAPI\PrimitiveAPI.vb" />
     <Compile Include="Serialization.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -106,8 +108,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Skellam.vb" />
-    <Compile Include="VECTOR.vb" />
+    <Compile Include="RBase\Math\Skellam.vb" />
+    <Compile Include="RBase\Vectors\BooleanVector.vb" />
+    <Compile Include="RBase\Vectors\GenericVector%28Of T%29.vb" />
+    <Compile Include="RBase\Vectors\VECTOR.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -150,6 +154,7 @@
       <Name>ShoalShell_Core.v2</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

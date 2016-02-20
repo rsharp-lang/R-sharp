@@ -1,54 +1,56 @@
-﻿
-Imports Microsoft.VisualBasic.CommandLine.Reflection
+﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
-''' <summary>
-''' Graphics devices for BMP, JPEG, PNG and TIFF format bitmap files. 
-''' </summary>
-''' 
-<PackageNamespace("grDevices", Description:="Graphics devices for BMP, JPEG, PNG and TIFF format bitmap files.  
+
+Namespace Graphics
+
+    ''' <summary>
+    ''' Graphics devices for BMP, JPEG, PNG and TIFF format bitmap files. 
+    ''' </summary>
+    ''' 
+    <PackageNamespace("grDevices", Description:="Graphics devices for BMP, JPEG, PNG and TIFF format bitmap files.  
 <p><strong>NOTE:  please notice that this package just generates the R language statement for write a image file from a specific plot statement.
 Once you have done the function from this namespace, then you can using the Shoal Shell hybrid scripting feature to draw the image and save to a file.
 </strong>"， Publisher:=“amethyst.asuka@gcmodeller.org”)>
-Public Module GraphicsDevice
+    Public Module GraphicsDevice
 
-    Const NA As String = "NA"
+        Const NA As String = "NA"
 
-    ''' <summary>
-    ''' Execute the statement that comes from the function <see cref="GraphicsDevice.bmp(String, String, Integer, Integer, String, Integer, String, String, String, Boolean, String)"/>,
-    ''' <see cref="GraphicsDevice.jpeg(String, String, Integer, Integer, String, Integer, Integer, String, String, String, Boolean, String)"/>,
-    ''' <see cref="GraphicsDevice.png(String, String, Integer, Integer, String, Integer, String, String, String, Boolean, String)"/>,
-    ''' <see cref="GraphicsDevice.tiff(String, String, Integer, Integer, String, Integer, String, String, String, String, Boolean, String)"/>
-    ''' </summary>
-    ''' <param name="plot"></param>
-    ''' <returns></returns>
-    ''' 
-    <ExportAPI("Write")>
-    Public Function WriteImage(plot As String) As String()
-        If API.REngine Is Nothing Then
-            Call API.Init()
-        End If
+        ''' <summary>
+        ''' Execute the statement that comes from the function <see cref="GraphicsDevice.bmp(String, String, Integer, Integer, String, Integer, String, String, String, Boolean, String)"/>,
+        ''' <see cref="GraphicsDevice.jpeg(String, String, Integer, Integer, String, Integer, Integer, String, String, String, Boolean, String)"/>,
+        ''' <see cref="GraphicsDevice.png(String, String, Integer, Integer, String, Integer, String, String, String, Boolean, String)"/>,
+        ''' <see cref="GraphicsDevice.tiff(String, String, Integer, Integer, String, Integer, String, String, String, String, Boolean, String)"/>
+        ''' </summary>
+        ''' <param name="plot"></param>
+        ''' <returns></returns>
+        ''' 
+        <ExportAPI("Write")>
+        Public Function WriteImage(plot As String) As String()
+            If API.REngine Is Nothing Then
+                Call API.Init()
+            End If
 
-        Dim STD As String() = API.REngine <= plot
-        Return STD
-    End Function
+            Dim STD As String() = API.REngine <= plot
+            Return STD
+        End Function
 
-    ''' <summary>
-    ''' 
-    ''' </summary>
-    ''' <param name="plot">画图的语句</param>
-    ''' <param name="filename">the name Of the output file, up To 511 characters. The page number Is substituted If a C Integer format Is included In the character String, As In the Default, And tilde-expansion Is performed (see path.expand). (The result must be less than 600 characters Long. See postscript For further details.) </param>
-    ''' <param name="width"></param>
-    ''' <param name="height"></param>
-    ''' <param name="units"></param>
-    ''' <param name="pointsize"></param>
-    ''' <param name="bg"></param>
-    ''' <param name="res"></param>
-    ''' <param name="family"></param>
-    ''' <param name="restoreConsole"></param>
-    ''' <returns></returns>
-    ''' 
-    <ExportAPI("bmp")>
-    Public Function bmp(plot As String,
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="plot">画图的语句</param>
+        ''' <param name="filename">the name Of the output file, up To 511 characters. The page number Is substituted If a C Integer format Is included In the character String, As In the Default, And tilde-expansion Is performed (see path.expand). (The result must be less than 600 characters Long. See postscript For further details.) </param>
+        ''' <param name="width"></param>
+        ''' <param name="height"></param>
+        ''' <param name="units"></param>
+        ''' <param name="pointsize"></param>
+        ''' <param name="bg"></param>
+        ''' <param name="res"></param>
+        ''' <param name="family"></param>
+        ''' <param name="restoreConsole"></param>
+        ''' <returns></returns>
+        ''' 
+        <ExportAPI("bmp")>
+        Public Function bmp(plot As String,
                         <Parameter("filename", "the name of the output file, up to 511 characters. The page number is substituted if a C integer format is included in the character string, as in the default, and tilde-expansion is performed (see path.expand). 
                         (The result must be less than 600 characters long. See postscript for further details.) ")> filename As String,
                         <Parameter("width", "the width of the device.")> Optional width As Integer = 480,
@@ -63,30 +65,30 @@ Public Module GraphicsDevice
                         <Parameter("restoreConsole", "See the ‘Details’ section of windows. For type == ""windows"" only.")> Optional restoreConsole As Boolean = True,
                         <Parameter("type", "Should be plotting be done using Windows GDI or cairographics?")> Optional type As String = "c(""windows"", ""cairo"")") As String
 
-        Return $"bmp(filename = ""{filename.Replace("\", "/")}"", width = {width}, height = {height}, units = ""{units}"", pointsize = {pointsize},    
+            Return $"bmp(filename = ""{filename.Replace("\", "/")}"", width = {width}, height = {height}, units = ""{units}"", pointsize = {pointsize},    
                                                                                     bg = ""{bg}"", res = {res}, family = ""{family}"", restoreConsole = {If(restoreConsole, "T", "F")}, type = {type})
             {plot}
             dev.off()"
-    End Function
+        End Function
 
-    ''' <summary>
-    ''' 
-    ''' </summary>
-    ''' <param name="plot">画图的语句</param>
-    ''' <param name="filename"></param>
-    ''' <param name="width"></param>
-    ''' <param name="height"></param>
-    ''' <param name="units"></param>
-    ''' <param name="pointsize"></param>
-    ''' <param name="quality"></param>
-    ''' <param name="bg"></param>
-    ''' <param name="res"></param>
-    ''' <param name="family"></param>
-    ''' <param name="restoreConsole"></param>
-    ''' <returns></returns>
-    ''' 
-    <ExportAPI("jpeg")>
-    Public Function jpeg(plot As String,
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="plot">画图的语句</param>
+        ''' <param name="filename"></param>
+        ''' <param name="width"></param>
+        ''' <param name="height"></param>
+        ''' <param name="units"></param>
+        ''' <param name="pointsize"></param>
+        ''' <param name="quality"></param>
+        ''' <param name="bg"></param>
+        ''' <param name="res"></param>
+        ''' <param name="family"></param>
+        ''' <param name="restoreConsole"></param>
+        ''' <returns></returns>
+        ''' 
+        <ExportAPI("jpeg")>
+        Public Function jpeg(plot As String,
                          <Parameter("filename", "the name of the output file, up to 511 characters. The page number is substituted if a C integer format is included in the character string, as in the default, and tilde-expansion is performed (see path.expand). 
                         (The result must be less than 600 characters long. See postscript for further details.) ")> filename As String,
                          <Parameter("width", "the width of the device.")> Optional width As Integer = 480,
@@ -102,32 +104,32 @@ Public Module GraphicsDevice
                          <Parameter("restoreConsole", "See the ‘Details’ section of windows. For type == ""windows"" only.")> Optional restoreConsole As Boolean = True,
                          <Parameter("type", "Should be plotting be done using Windows GDI or cairographics?")> Optional type As String = "c(""windows"", ""cairo"")") As String
 
-        Return $"jpeg(filename = ""{filename.Replace("\", "/")}"",
+            Return $"jpeg(filename = ""{filename.Replace("\", "/")}"",
      width = {width}, height = {height}, units = ""{units}"", pointsize = {pointsize},
      quality = {quality},
      bg = ""{bg}"", res = {res}, family = ""{family}"", restoreConsole = {If(restoreConsole, "T", "F")},
      type = {type})
      {plot}
      dev.off()"
-    End Function
+        End Function
 
-    ''' <summary>
-    ''' 
-    ''' </summary>
-    ''' <param name="plot">画图的语句</param>
-    ''' <param name="filename"></param>
-    ''' <param name="width"></param>
-    ''' <param name="height"></param>
-    ''' <param name="units"></param>
-    ''' <param name="pointsize"></param>
-    ''' <param name="bg"></param>
-    ''' <param name="res"></param>
-    ''' <param name="family"></param>
-    ''' <param name="restoreConsole"></param>
-    ''' <returns></returns>
-    ''' 
-    <ExportAPI("png")>
-    Public Function png(plot As String,
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="plot">画图的语句</param>
+        ''' <param name="filename"></param>
+        ''' <param name="width"></param>
+        ''' <param name="height"></param>
+        ''' <param name="units"></param>
+        ''' <param name="pointsize"></param>
+        ''' <param name="bg"></param>
+        ''' <param name="res"></param>
+        ''' <param name="family"></param>
+        ''' <param name="restoreConsole"></param>
+        ''' <returns></returns>
+        ''' 
+        <ExportAPI("png")>
+        Public Function png(plot As String,
                            <Parameter("filename", "the name of the output file, up to 511 characters. The page number is substituted if a C integer format is included in the character string, as in the default, and tilde-expansion is performed (see path.expand). 
                         (The result must be less than 600 characters long. See postscript for further details.) ")> filename As String,
                            <Parameter("width", "the width of the device.")> Optional width As Integer = 480,
@@ -142,31 +144,31 @@ Public Module GraphicsDevice
                       <Parameter("restoreConsole", "See the ‘Details’ section of windows. For type == ""windows"" only.")> Optional restoreConsole As Boolean = True,
                         <Parameter("type", "Should be plotting be done using Windows GDI or cairographics?")> Optional type As String = "c(""windows"", ""cairo"", ""cairo-png"")") As String
 
-        Return $"png(filename = ""{filename.Replace("\", "/")}"",
+            Return $"png(filename = ""{filename.Replace("\", "/")}"",
     width = {width}, height = {height}, units = ""{units}"", pointsize = {pointsize},
     bg = ""{bg}"", res = {res}, family = ""{family}"", restoreConsole = {If(restoreConsole, "T", "F")},
     type = {type})
     {plot}
     dev.off()"
-    End Function
+        End Function
 
-    ''' <summary>
-    ''' 
-    ''' </summary>
-    ''' <param name="plot">画图的语句</param>
-    ''' <param name="filename"></param>
-    ''' <param name="width"></param>
-    ''' <param name="height"></param>
-    ''' <param name="units"></param>
-    ''' <param name="pointsize"></param>
-    ''' <param name="bg"></param>
-    ''' <param name="res"></param>
-    ''' <param name="family"></param>
-    ''' <param name="restoreConsole"></param>
-    ''' <returns></returns>
-    ''' 
-    <ExportAPI("tiff")>
-    Public Function tiff(plot As String,
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="plot">画图的语句</param>
+        ''' <param name="filename"></param>
+        ''' <param name="width"></param>
+        ''' <param name="height"></param>
+        ''' <param name="units"></param>
+        ''' <param name="pointsize"></param>
+        ''' <param name="bg"></param>
+        ''' <param name="res"></param>
+        ''' <param name="family"></param>
+        ''' <param name="restoreConsole"></param>
+        ''' <returns></returns>
+        ''' 
+        <ExportAPI("tiff")>
+        Public Function tiff(plot As String,
                          <Parameter("filename", "the name of the output file, up to 511 characters. The page number is substituted if a C integer format is included in the character string, as in the default, and tilde-expansion is performed (see path.expand). 
                         (The result must be less than 600 characters long. See postscript for further details.) ")> filename As String,
                           <Parameter("width", "the width of the device.")> Optional width As Integer = 480,
@@ -182,13 +184,14 @@ Public Module GraphicsDevice
                           <Parameter("restoreConsole", "See the ‘Details’ section of windows. For type == ""windows"" only.")> Optional restoreConsole As Boolean = True,
                          <Parameter("type", "Should be plotting be done using Windows GDI or cairographics?")> Optional type As String = "c(""windows"", ""cairo"")") As String
 
-        Return $"tiff(filename = ""{filename.Replace("\", "/")}"",
+            Return $"tiff(filename = ""{filename.Replace("\", "/")}"",
      width = {width}, height = {height}, units = ""{units}"", pointsize = {pointsize},
      compression = {compression},
      bg = ""{bg}"", res = {res}, family = ""{family}"", restoreConsole = {If(restoreConsole, "T", "F")},
      type = {type})
      {plot}
      dev.off()"
-    End Function
+        End Function
 
-End Module
+    End Module
+End Namespace
