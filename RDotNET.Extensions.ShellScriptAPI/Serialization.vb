@@ -15,7 +15,7 @@ Imports RDotNET.SymbolicExpressionExtension
 Public Module Serialization
 
     ''' <summary>
-    ''' Deserialize the R object into a specific .NET object. <see cref="RDotNET.SymbolicExpression"></see>  =====> <see cref="T"></see>
+    ''' Deserialize the R object into a specific .NET object. <see cref="RDotNET.SymbolicExpression"></see>  =====> "T"
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
     ''' <param name="RData"></param>
