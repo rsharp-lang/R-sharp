@@ -1,6 +1,6 @@
 ﻿Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.Net
-Imports Microsoft.VisualBasic.Net.Protocol
+Imports Microsoft.VisualBasic.Net.Protocols
 
 Namespace Runtime.Debugging
 
@@ -10,7 +10,7 @@ Namespace Runtime.Debugging
     ''' <remarks></remarks>
     Public Class DebuggerListener : Implements System.IDisposable
 
-        Dim _DebuggerListener As Microsoft.VisualBasic.Net.TcpSynchronizationServicesSocket
+        Dim _DebuggerListener As TcpSynchronizationServicesSocket
         Dim _InternalMessageSender As AsynInvoke
         Dim pid As Integer
         Dim DebuggerProcess As IORedirect
@@ -38,7 +38,7 @@ Namespace Runtime.Debugging
 
         Private Sub InternalStartListener()
             Try
-RESTART:        _DebuggerListener = New TcpSynchronizationServicesSocket(AddressOf InternalProtocol, LocalPort)
+RESTART:        _DebuggerListener = New TcpSynchronizationServicesSocket(AddressOf __protocol, LocalPort)
                 Call _DebuggerListener.Run()
             Catch ex As Exception
                 Call Console.WriteLine(ex.ToString)
@@ -52,7 +52,7 @@ RESTART:        _DebuggerListener = New TcpSynchronizationServicesSocket(Address
             Loop
         End Sub
 
-        Private Function InternalProtocol(uid As Long, request As RequestStream, remote As System.Net.IPEndPoint) As RequestStream
+        Private Function __protocol(uid As Long, request As RequestStream, remote As System.Net.IPEndPoint) As RequestStream
             Dim str As String = request.GetUTF8String
 
             Call Console.WriteLine(str)
