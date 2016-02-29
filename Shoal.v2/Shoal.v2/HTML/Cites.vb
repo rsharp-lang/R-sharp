@@ -9,7 +9,7 @@ Namespace HTML
         Public Function GetCites(typeDef As Type) As String
             Dim cites As Cite() = Cite.GetCiteList(typeDef)
             If cites.IsNullOrEmpty Then
-                Dim ns = PackageNamespace.GetEntry(typeDef)
+                Dim ns = GetEntry(typeDef)
                 If ns Is Nothing Then
                     Return ""
                 Else
