@@ -1,4 +1,5 @@
 ﻿Imports Pavel.CodeEditor
+Imports Microsoft.VisualBasic
 
 Namespace DocumentEditor.Components
 
