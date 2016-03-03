@@ -14,7 +14,7 @@ Public Module API
     <HybridsScripting.EntryInterface(EntryInterface.InterfaceTypes.EntryPointInit)>
     Public Function Initialize() As Boolean
         API.LINQ = New DynamicsRuntime
-        Return LINQ.Initialize
+        Return True
     End Function
 
     <ExportAPI("EValuate")>
