@@ -26,6 +26,9 @@ Public Module API
     <ExportAPI("SetValue")>
     <HybridsScripting.EntryInterface(EntryInterface.InterfaceTypes.SetValue)>
     Public Function SetValue(var As String, value As Object) As Boolean
-        Return LINQ.SetVariable(var, value)
+        If TypeOf value Is IEnumerable Then
+            Call LINQ.SetObject(var, DirectCast(value, IEnumerable))
+        End If
+        Return True
     End Function
 End Module

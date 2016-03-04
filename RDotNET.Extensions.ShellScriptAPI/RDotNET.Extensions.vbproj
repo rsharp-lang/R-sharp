@@ -86,13 +86,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API.vb" />
-    <Compile Include="Graphics\GraphicsDevice.vb" />
-    <Compile Include="Graphics\PieChart.vb" />
-    <Compile Include="RBase\Math\Poisson.vb" />
-    <Compile Include="RBase\Math\Math.vb" />
-    <Compile Include="RBase\PrimitiveAPI\Etc.vb" />
-    <Compile Include="RBase\PrimitiveAPI\PrimitiveAPI.vb" />
-    <Compile Include="Serialization.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -108,10 +101,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="RBase\Math\Skellam.vb" />
-    <Compile Include="RBase\Vectors\BooleanVector.vb" />
-    <Compile Include="RBase\Vectors\GenericVector%28Of T%29.vb" />
-    <Compile Include="RBase\Vectors\VECTOR.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
