@@ -7,6 +7,7 @@ Imports System.Runtime.CompilerServices
 
 Imports RDotNET.REngineExtension
 Imports RDotNET.SymbolicExpressionExtension
+Imports RDotNET.Extensions.VisualBasic.Serialization
 
 Imports Microsoft.VisualBasic.Scripting.ShoalShell
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -55,7 +56,7 @@ Public Module API
                              RData As RDotNET.SymbolicExpression,
                              <Parameter("Cast.Type", "The System.Type schema information that will casting the R object as the .NET object.")>
                              Type As System.Type) As Object
-        Return Serialization.LoadRStream(RData, Type)
+        Return LoadRStream(RData, Type)
     End Function
 
 #End Region

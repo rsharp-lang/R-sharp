@@ -130,13 +130,13 @@
       <Project>{fecce1fd-e1d4-49e3-a668-60bb5e7aed99}</Project>
       <Name>+Microsoft.VisualBasic.Architecture.Framework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Reference SharedLib\R.NET\RDotNet.vbproj">
+    <ProjectReference Include="..\..\R.Bioinformatics\RDotNET.Extensions.VisualBasic\RDotNet.Extensions.VisualBasic.vbproj">
+      <Project>{ab6e71b0-1be2-4418-ab4b-91d5554cf5a1}</Project>
+      <Name>RDotNet.Extensions.VisualBasic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\R.Bioinformatics\RDotNET\RDotNet.vbproj">
       <Project>{21c35138-455b-4833-9756-b2629f972a22}</Project>
       <Name>RDotNet</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Reference SharedLib\RDotNET\RDotNET.Extensions.VisualBasic\RDotNET.Extensions.VisualBasic.vbproj">
-      <Project>{ab6e71b0-1be2-4418-ab4b-91d5554cf5a1}</Project>
-      <Name>RDotNET.Extensions.VisualBasic</Name>
     </ProjectReference>
     <ProjectReference Include="..\Shoal.v2\Shoal.v2\ShoalShell_Core.v2.vbproj">
       <Project>{a7cb16ff-75c6-4746-8449-86c121d723c4}</Project>
