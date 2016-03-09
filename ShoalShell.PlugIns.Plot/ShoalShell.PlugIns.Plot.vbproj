@@ -161,15 +161,15 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Microsoft.VisualBasic_Framework\DocumentFormats\DocumentFormat.Csv\DocumentFormat.Csv.vbproj">
+    <ProjectReference Include="..\..\VisualBasic_AppFramework\DocumentFormats\DocumentFormat.Csv\DocumentFormat.Csv.vbproj">
       <Project>{1d8910c2-ada2-4306-96dc-a61b494522ed}</Project>
       <Name>DocumentFormat.Csv</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Microsoft.VisualBasic_Framework\Microsoft.VisualBasic.Architecture.Framework\+Microsoft.VisualBasic.Architecture.Framework.vbproj">
+    <ProjectReference Include="..\..\VisualBasic_AppFramework\Microsoft.VisualBasic.Architecture.Framework\+Microsoft.VisualBasic.Architecture.Framework.vbproj">
       <Project>{fecce1fd-e1d4-49e3-a668-60bb5e7aed99}</Project>
       <Name>+Microsoft.VisualBasic.Architecture.Framework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Microsoft.VisualBasic_Framework\UXFramework\DataVisualization.Enterprise\Microsoft.VisualBasic.DataVisualization.Enterprise\Microsoft.VisualBasic.DataVisualization.Enterprise.vbproj">
+    <ProjectReference Include="..\..\VisualBasic_AppFramework\UXFramework\DataVisualization.Enterprise\Microsoft.VisualBasic.DataVisualization.Enterprise\Microsoft.VisualBasic.DataVisualization.Enterprise.vbproj">
       <Project>{74c47355-b2b3-4450-92a4-4eb1234ba924}</Project>
       <Name>Microsoft.VisualBasic.DataVisualization.Enterprise</Name>
     </ProjectReference>

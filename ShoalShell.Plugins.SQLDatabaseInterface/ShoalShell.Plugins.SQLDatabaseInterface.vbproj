@@ -121,17 +121,17 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Microsoft.VisualBasic_Framework\DocumentFormats\DocumentFormat.Csv\DocumentFormat.Csv.vbproj">
+    <ProjectReference Include="..\..\VisualBasic.DBI\SQLite_Interface\SQLite_Interface.vbproj">
+      <Project>{ec288ffe-8fee-4e89-88c1-cd68f92f75bc}</Project>
+      <Name>SQLite_Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\VisualBasic_AppFramework\DocumentFormats\DocumentFormat.Csv\DocumentFormat.Csv.vbproj">
       <Project>{1d8910c2-ada2-4306-96dc-a61b494522ed}</Project>
       <Name>DocumentFormat.Csv</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Microsoft.VisualBasic_Framework\Microsoft.VisualBasic.Architecture.Framework\+Microsoft.VisualBasic.Architecture.Framework.vbproj">
+    <ProjectReference Include="..\..\VisualBasic_AppFramework\Microsoft.VisualBasic.Architecture.Framework\+Microsoft.VisualBasic.Architecture.Framework.vbproj">
       <Project>{fecce1fd-e1d4-49e3-a668-60bb5e7aed99}</Project>
       <Name>+Microsoft.VisualBasic.Architecture.Framework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Reference SharedLib\SQLite_Interface\SQLite_Interface.vbproj">
-      <Project>{ec288ffe-8fee-4e89-88c1-cd68f92f75bc}</Project>
-      <Name>SQLite_Interface</Name>
     </ProjectReference>
     <ProjectReference Include="..\Shoal.v2\Shoal.v2\ShoalShell_Core.v2.vbproj">
       <Project>{a7cb16ff-75c6-4746-8449-86c121d723c4}</Project>

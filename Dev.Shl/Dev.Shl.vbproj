@@ -203,25 +203,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Microsoft.VisualBasic_Framework\Microsoft.VisualBasic.Architecture.Framework\+Microsoft.VisualBasic.Architecture.Framework.vbproj">
+    <ProjectReference Include="..\..\VisualBasic_AppFramework\Microsoft.VisualBasic.Architecture.Framework\+Microsoft.VisualBasic.Architecture.Framework.vbproj">
       <Project>{fecce1fd-e1d4-49e3-a668-60bb5e7aed99}</Project>
       <Name>+Microsoft.VisualBasic.Architecture.Framework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Microsoft.VisualBasic_Framework\PlugIns\PlugIn\PlugIn.vbproj">
-      <Project>{53975d8c-defc-40bc-8c9b-cba7a458eb55}</Project>
-      <Name>PlugIn</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Microsoft.VisualBasic_Framework\UXFramework\Molk+\Molk+\Molk+.vbproj">
+    <ProjectReference Include="..\..\VisualBasic_AppFramework\UXFramework\Molk+\Molk+\Molk+.vbproj">
       <Project>{585d1fe8-5ac2-4bff-a0c4-98245962fa9f}</Project>
       <Name>Molk+</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Reference SharedLib\UX.Framework\Pavel.CodeEditor\Pavel.CodeEditor.csproj">
-      <Project>{6dd14a85-ccfc-4774-bd26-0f5772512319}</Project>
-      <Name>Pavel.CodeEditor</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Reference SharedLib\UX.Framework\Ribbon\System.Windows.Forms.Ribbon\System.Windows.Forms.Ribbon.csproj">
-      <Project>{46a18a55-5ae8-49ce-91cd-c7421b642e7e}</Project>
-      <Name>System.Windows.Forms.Ribbon</Name>
     </ProjectReference>
     <ProjectReference Include="..\Shoal.v2\Console\ShoalShell.vbproj">
       <Project>{d71e0d55-da94-4b18-b204-252d532ee8ec}</Project>

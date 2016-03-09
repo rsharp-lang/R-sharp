@@ -121,14 +121,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Microsoft.VisualBasic.Parallel\trunk\LINQ\LINQ\LINQ.vbproj">
-      <Project>{0a9b9fa6-e12d-48fd-b979-9f021a591e69}</Project>
-      <Name>LINQ</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Microsoft.VisualBasic_Framework\Microsoft.VisualBasic.Architecture.Framework\+Microsoft.VisualBasic.Architecture.Framework.vbproj">
-      <Project>{fecce1fd-e1d4-49e3-a668-60bb5e7aed99}</Project>
-      <Name>+Microsoft.VisualBasic.Architecture.Framework</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Shoal.v2\Shoal.v2\ShoalShell_Core.v2.vbproj">
       <Project>{a7cb16ff-75c6-4746-8449-86c121d723c4}</Project>
       <Name>ShoalShell_Core.v2</Name>

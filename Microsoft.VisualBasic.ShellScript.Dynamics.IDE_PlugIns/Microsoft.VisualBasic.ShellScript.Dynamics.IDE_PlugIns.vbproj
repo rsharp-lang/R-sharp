@@ -123,11 +123,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Microsoft.VisualBasic_Framework\Microsoft.VisualBasic.Architecture.Framework\+Microsoft.VisualBasic.Architecture.Framework.vbproj">
+    <ProjectReference Include="..\..\VisualBasic_AppFramework\Microsoft.VisualBasic.Architecture.Framework\+Microsoft.VisualBasic.Architecture.Framework.vbproj">
       <Project>{fecce1fd-e1d4-49e3-a668-60bb5e7aed99}</Project>
       <Name>+Microsoft.VisualBasic.Architecture.Framework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Microsoft.VisualBasic_Framework\PlugIns\PlugIn\PlugIn.vbproj">
+    <ProjectReference Include="..\..\VisualBasic_AppFramework\PlugIns\PlugIn\PlugIn.vbproj">
       <Project>{53975d8c-defc-40bc-8c9b-cba7a458eb55}</Project>
       <Name>PlugIn</Name>
     </ProjectReference>
