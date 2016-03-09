@@ -903,7 +903,7 @@ Namespace Interpreter
                         Microsoft.VisualBasic.CommandLine.IsPossibleLogicSW(obj.Key) Then
 
                         pName = New ParameterName(ParameterName.ParameterType.BooleanSwitch,
-                                                  Microsoft.VisualBasic.CommandLine.TrimBooleanSwitchPrefix(obj.Key))
+                                                  Microsoft.VisualBasic.CommandLine.TrimParamPrefix(obj.Key))
                     Else
                         pName = New Parser.Tokens.ParameterName(
                             ShoalShell.Interpreter.Parser.Tokens.ParameterName.ParameterType.Normal, obj.Key)
@@ -943,7 +943,7 @@ Namespace Interpreter
             parameters.AddRange((From obj In params
                                  Select Name = New ParameterName(ParameterName.ParameterType.Normal, obj.Key),
                               value = New InternalExpression(obj.Value)).ToArray.ToDictionary(Function(obj) obj.Name, elementSelector:=Function(obj) obj.value))
-            BooleanSwitches = (From s As String In Parser Select CommandLine.TrimBooleanSwitchPrefix(s)).ToArray
+            BooleanSwitches = (From s As String In Parser Select CommandLine.TrimParamPrefix(s)).ToArray
         End Sub
 
 #End Region
