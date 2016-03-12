@@ -137,7 +137,7 @@ Namespace SPM
                              Where Not String.IsNullOrEmpty(tName)
                              Select tName.ToUpper, tName
                              Group By ToUpper Into Group).ToArray
-            Dim Names As String() = GroupName.ToArray(Function(ng) ng.Group.ToArray.First.tName)
+            Dim Names As String() = GroupName.ToArray(Function(ng) ng.Group.First.tName)
             Return String.Join(", ", Names)
         End Function
 
