@@ -11,8 +11,7 @@ Imports Microsoft.VisualStudio.Utilities
 Namespace VSLTK.Intellisense
 
     <Export(GetType(IIntellisenseControllerProvider)), Name("Template QuickInfo Controller"), ContentType("text")>
-    Friend Class TemplateQuickInfoControllerProvider
-        Implements IIntellisenseControllerProvider
+    Friend Class TemplateQuickInfoControllerProvider : Implements IIntellisenseControllerProvider
 
         <Import()>
         Friend Property QuickInfoBroker As IQuickInfoBroker

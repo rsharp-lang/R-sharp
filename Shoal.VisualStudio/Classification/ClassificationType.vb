@@ -4,25 +4,24 @@ Imports Microsoft.VisualStudio.Utilities
 
 Namespace OokLanguage
 
-    Friend NotInheritable Class OrdinaryClassificationDefinition
+    Module OrdinaryClassificationDefinition
 
         ''' <summary>
         ''' Defines the "ordinary" classification type.
         ''' </summary>
         <Export(GetType(ClassificationTypeDefinition)), Name("ook!")>
-        Friend Shared ookExclamation As ClassificationTypeDefinition = Nothing
+        Public ookExclamation As ClassificationTypeDefinition = Nothing
 
         ''' <summary>
         ''' Defines the "ordinary" classification type.
         ''' </summary>
         <Export(GetType(ClassificationTypeDefinition)), Name("ook?")>
-        Friend Shared ookQuestion As ClassificationTypeDefinition = Nothing
+        Public ookQuestion As ClassificationTypeDefinition = Nothing
 
         ''' <summary>
         ''' Defines the "ordinary" classification type.
         ''' </summary>
         <Export(GetType(ClassificationTypeDefinition)), Name("ook.")>
-        Friend Shared ookPeriod As ClassificationTypeDefinition = Nothing
-
-    End Class
+        Public ookPeriod As ClassificationTypeDefinition = Nothing
+    End Module
 End Namespace

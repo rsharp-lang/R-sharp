@@ -4,7 +4,10 @@ Imports Microsoft.VisualStudio.Utilities
 
 Namespace OokLanguage
 
+    ' 在这里定义语法高亮
+
 #Region "Format definitions"
+
     ''' <summary>
     ''' Defines an editor format for the OrdinaryClassification type that has a purple background
     ''' and is underlined.

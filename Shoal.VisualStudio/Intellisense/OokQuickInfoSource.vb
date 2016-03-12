@@ -8,9 +8,7 @@ Imports Microsoft.VisualStudio.Utilities
 
 Namespace OokLanguage
 
-    <Export(GetType(IQuickInfoSourceProvider)),
-    ContentType("ook!"),
-    Name("ookQuickInfo")>
+    <Export(GetType(IQuickInfoSourceProvider)), ContentType("ook!"), Name("ookQuickInfo")>
     Friend Class OokQuickInfoSourceProvider
         Implements IQuickInfoSourceProvider
 
@@ -48,10 +46,10 @@ Namespace OokLanguage
             End If
 
             For Each curTag As IMappingTagSpan(Of OokTokenTag) In _aggregator.GetTags(New SnapshotSpan(triggerPoint, triggerPoint))
-                If curTag.Tag.type = OokTokenTypes.OokExclaimation Then
+                If curTag.Tag.type = Scripting.ShoalShell.Interpreter.LDM.Expressions.ExpressionTypes.Die Then
                     Dim tagSpan = curTag.Span.GetSpans(_buffer).First()
                     applicableToSpan = _buffer.CurrentSnapshot.CreateTrackingSpan(tagSpan, SpanTrackingMode.EdgeExclusive)
-                    quickInfoContent.Add("Exclaimed Ook!")
+                    quickInfoContent.Add("Throw the exception!")
                 End If
             Next curTag
         End Sub

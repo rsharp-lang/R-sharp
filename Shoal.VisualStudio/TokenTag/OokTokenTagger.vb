@@ -2,6 +2,8 @@
 Imports Microsoft.VisualStudio.Text
 Imports Microsoft.VisualStudio.Text.Tagging
 Imports Microsoft.VisualBasic
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Parser.TextTokenliser
+Imports Microsoft.VisualBasic.Linq
 
 Namespace OokLanguage
 
@@ -19,6 +21,7 @@ Namespace OokLanguage
             _ookTypes("var") = ExpressionTypes.VariableDeclaration
             _ookTypes("dim") = ExpressionTypes.VariableDeclaration
             _ookTypes("if") = ExpressionTypes.If
+            _ookTypes("cd") = ExpressionTypes.CD
         End Sub
 
         Public Function GetTags(ByVal spans As NormalizedSnapshotSpanCollection) As IEnumerable(Of ITagSpan(Of OokTokenTag)) Implements ITagger(Of OokTokenTag).GetTags
@@ -27,7 +30,8 @@ Namespace OokLanguage
             For Each curSpan As SnapshotSpan In spans
                 Dim containingLine As ITextSnapshotLine = curSpan.Start.GetContainingLine()
                 Dim curLoc As Integer = containingLine.Start.Position
-                Dim tokens() As String = containingLine.GetText().ToLower().Split(" "c)
+                Dim Parser = New MSLTokens().Parsing(containingLine.GetText())
+                Dim tokens() As String = Parser.Tokens.ToArray(Function(x) x.GetTokenValue.ToLower)
 
                 For Each ookToken As String In tokens
                     If _ookTypes.ContainsKey(ookToken) Then

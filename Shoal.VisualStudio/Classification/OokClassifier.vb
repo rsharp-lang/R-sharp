@@ -22,7 +22,7 @@ Namespace OokLanguage
         <Export(), Name("ook!"), BaseDefinition("code")>
         Friend Shared OokContentType As ContentTypeDefinition = Nothing
 
-        <Export(), FileExtension(".ook"), ContentType("ook!")>
+        <Export(), FileExtension(".shl"), ContentType("ook!")>
         Friend Shared OokFileType As FileExtensionToContentTypeDefinition = Nothing
 
         <Import()>
@@ -40,8 +40,7 @@ Namespace OokLanguage
 
     End Class
 
-    Friend NotInheritable Class OokClassifier
-        Implements ITagger(Of ClassificationTag)
+    Friend NotInheritable Class OokClassifier : Implements ITagger(Of ClassificationTag)
 
         Private _buffer As ITextBuffer
         Private _aggregator As ITagAggregator(Of OokTokenTag)
@@ -51,9 +50,10 @@ Namespace OokLanguage
             _buffer = buffer
             _aggregator = ookTagAggregator
             _ookTypes = New Dictionary(Of ExpressionTypes, IClassificationType)
-            _ookTypes(OokTokenTypes.OokExclaimation) = typeService.GetClassificationType("ook!")
-            _ookTypes(OokTokenTypes.OokPeriod) = typeService.GetClassificationType("ook.")
-            _ookTypes(OokTokenTypes.OokQuestion) = typeService.GetClassificationType("ook?")
+            _ookTypes(ExpressionTypes.Die) = typeService.GetClassificationType("die")
+            _ookTypes(ExpressionTypes.CD) = typeService.GetClassificationType("cd")
+            _ookTypes(ExpressionTypes.If) = typeService.GetClassificationType("if")
+            _ookTypes(ExpressionTypes.GoTo) = typeService.GetClassificationType("goto")
         End Sub
 
         Public Function GetTags(ByVal spans As NormalizedSnapshotSpanCollection) As IEnumerable(Of ITagSpan(Of ClassificationTag)) Implements ITagger(Of ClassificationTag).GetTags
