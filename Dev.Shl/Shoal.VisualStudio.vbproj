@@ -116,13 +116,15 @@
     <Import Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ShoalShell.vb" />
     <Compile Include="Classification\ClassificationFormat.vb" />
     <Compile Include="Classification\ClassificationType.vb" />
     <Compile Include="Intellisense\CompletionController.vb" />
     <Compile Include="Intellisense\CompletionSource.vb" />
     <Compile Include="Intellisense\OokQuickInfoSource.vb" />
-    <Compile Include="OokTokenTag.vb" />
-    <Compile Include="OokTokenTypes.vb" />
+    <Compile Include="TokenTag\OokTokenTagger.vb" />
+    <Compile Include="TokenTag\OokTokenTagProvider.vb" />
+    <Compile Include="TokenTag\OokTokenTag.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="Classification\OokClassifier.vb" />
     <Compile Include="Intellisense\QuickInfoController.vb" />

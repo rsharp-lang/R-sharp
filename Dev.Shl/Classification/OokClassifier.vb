@@ -4,6 +4,7 @@
 Imports System
 Imports System.Collections.Generic
 Imports System.ComponentModel.Composition
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.LDM.Expressions
 Imports Microsoft.VisualStudio.Text
 Imports Microsoft.VisualStudio.Text.Classification
 Imports Microsoft.VisualStudio.Text.Editor
@@ -32,7 +33,9 @@ Namespace OokLanguage
 
         Public Function CreateTagger(Of T As ITag)(ByVal buffer As ITextBuffer) As ITagger(Of T) Implements ITaggerProvider.CreateTagger
             Dim ookTagAggregator As ITagAggregator(Of OokTokenTag) = aggregatorFactory.CreateTagAggregator(Of OokTokenTag)(buffer)
-            Return TryCast(New OokClassifier(buffer, ookTagAggregator, ClassificationTypeRegistry), ITagger(Of T))
+            Dim cls As Object = New OokClassifier(buffer, ookTagAggregator, ClassificationTypeRegistry)
+            Dim tagger As ITagger(Of T) = TryCast(cls, ITagger(Of T))
+            Return tagger
         End Function
 
     End Class
@@ -42,12 +45,12 @@ Namespace OokLanguage
 
         Private _buffer As ITextBuffer
         Private _aggregator As ITagAggregator(Of OokTokenTag)
-        Private _ookTypes As IDictionary(Of OokTokenTypes, IClassificationType)
+        Private _ookTypes As IDictionary(Of ExpressionTypes, IClassificationType)
 
         Friend Sub New(ByVal buffer As ITextBuffer, ByVal ookTagAggregator As ITagAggregator(Of OokTokenTag), ByVal typeService As IClassificationTypeRegistryService)
             _buffer = buffer
             _aggregator = ookTagAggregator
-            _ookTypes = New Dictionary(Of OokTokenTypes, IClassificationType)
+            _ookTypes = New Dictionary(Of ExpressionTypes, IClassificationType)
             _ookTypes(OokTokenTypes.OokExclaimation) = typeService.GetClassificationType("ook!")
             _ookTypes(OokTokenTypes.OokPeriod) = typeService.GetClassificationType("ook.")
             _ookTypes(OokTokenTypes.OokQuestion) = typeService.GetClassificationType("ook?")
