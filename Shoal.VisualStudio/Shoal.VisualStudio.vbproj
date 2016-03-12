@@ -134,7 +134,7 @@
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
-    <None Include="test.ook" />
+    <None Include="test.shl" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
