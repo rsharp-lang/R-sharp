@@ -1,18 +1,18 @@
-﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports RDotNET.Internals
+﻿Imports RDotNET.Internals
 Imports System.Collections
 Imports System.Collections.Generic
 Imports System.Numerics
 Imports System.Runtime.CompilerServices
-
 Imports RDotNET.REngineExtension
 Imports RDotNET.SymbolicExpressionExtension
 Imports RDotNET.Extensions.VisualBasic.Serialization
-
+Imports RDotNET.Extensions.VisualBasic
+Imports RDotNET.Extensions.VisualBasic.RSystem
 Imports Microsoft.VisualBasic.Scripting.ShoalShell
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.HybridsScripting
+Imports Microsoft.VisualBasic.CommandLine.Reflection
 
 <LanguageEntryPoint("R.NET", "R API interface to the shoal shell language.")>
 <[PackageNamespace]("R.NET",
@@ -22,21 +22,17 @@ Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.HybridsScripting
                     Url:="https://rdotnet.codeplex.com/")>
 Public Module API
 
-    Public ReadOnly Property REngine As RDotNET.Extensions.VisualBasic.REngine
-
 #Region "Hybrid Interfaces"
 
     <EntryInterface(HybridsScripting.EntryInterface.InterfaceTypes.EntryPointInit)>
     <ExportAPI("_r_dotnet._init()", Info:="Automatically search for the path of the R system and then construct a R session for you.")>
     Public Function Init() As RDotNET.REngine
-        _REngine = RDotNET.Extensions.VisualBasic.REngine.StartEngineServices
-        Return REngine
+        Return RSystem.RServer
     End Function
 
     <EntryInterface(HybridsScripting.EntryInterface.InterfaceTypes.Evaluate)>
     Public Function Evaluate(scriptLine As String) As Object
-        Dim value = REngine.Evaluate(statement:=scriptLine)
-        Call REngine.PrintSTDOUT()
+        Dim value = RSystem.RServer.Evaluate(statement:=scriptLine)
         Return value
     End Function
 
