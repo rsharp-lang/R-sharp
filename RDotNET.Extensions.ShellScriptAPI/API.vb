@@ -22,11 +22,14 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
                     Url:="https://rdotnet.codeplex.com/")>
 Public Module API
 
+    Dim REngine As REngine
+
 #Region "Hybrid Interfaces"
 
     <EntryInterface(HybridsScripting.EntryInterface.InterfaceTypes.EntryPointInit)>
     <ExportAPI("_r_dotnet._init()", Info:="Automatically search for the path of the R system and then construct a R session for you.")>
     Public Function Init() As RDotNET.REngine
+        REngine = RServer
         Return RSystem.RServer
     End Function
 
@@ -39,7 +42,7 @@ Public Module API
     <EntryInterface(HybridsScripting.EntryInterface.InterfaceTypes.SetValue)>
     Public Function SetSymbol(Variable As String, value As Object) As Boolean
         Try
-            Call REngine.SetSymbol(Variable, value)
+            Call RServer.SetSymbol(Variable, value)
         Catch ex As Exception
             Return False
         End Try
@@ -65,13 +68,7 @@ Public Module API
     <System.Runtime.CompilerServices.Extension>
     <ExportAPI("charactervector")>
     Public Function CreateCharacterVector(vector As IEnumerable(Of Object)) As CharacterVector
-        If REngine Is Nothing Then
-            Throw New ArgumentNullException()
-        End If
-        If Not REngine.IsRunning Then
-            Throw New ArgumentException()
-        End If
-        Return New CharacterVector(REngine, vector.CT(Of String))
+        Return New CharacterVector(RServer, vector.CT(Of String))
     End Function
 
     <Extension> Private Function CT(Of T)(data As Generic.IEnumerable(Of Object)) As T()
@@ -86,13 +83,7 @@ Public Module API
     <System.Runtime.CompilerServices.Extension>
     <ExportAPI("complexvector")>
     Public Function CreateComplexVector(vector As IEnumerable(Of Object)) As ComplexVector
-        If REngine Is Nothing Then
-            Throw New ArgumentNullException()
-        End If
-        If Not REngine.IsRunning Then
-            Throw New ArgumentException()
-        End If
-        Return New ComplexVector(REngine, vector.CT(Of Complex))
+        Return New ComplexVector(RServer, vector.CT(Of Complex))
     End Function
 
     ''' <summary>
