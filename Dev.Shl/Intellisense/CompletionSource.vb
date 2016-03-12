@@ -5,6 +5,7 @@ Imports Microsoft.VisualStudio.Text
 Imports Microsoft.VisualStudio.Text.Tagging
 Imports System.ComponentModel.Composition
 Imports Microsoft.VisualStudio.Utilities
+Imports Microsoft.VisualBasic
 
 Namespace OokLanguage
 

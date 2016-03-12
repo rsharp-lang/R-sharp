@@ -27,7 +27,7 @@ Namespace OokLanguage
             Dim view As IWpfTextView = AdaptersFactory.GetWpfTextView(textViewAdapter)
             Debug.Assert(view IsNot Nothing)
             Dim filter As New CommandFilter(view, CompletionBroker)
-            Dim [next] As IOleCommandTarget
+            Dim [next] As IOleCommandTarget = Nothing
             textViewAdapter.AddCommandFilter(filter, [next])
             filter.Next = [next]
         End Sub

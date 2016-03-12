@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Vsix Version="1.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2010">
-  <Identifier Id="OokLanguage..c729d6b2-f512-49ed-893d-a8f61f25db98">
-    <Name>OokLanguage</Name>
+  <Identifier Id="Shoal.VisualStudio..c729d6b2-f512-49ed-893d-a8f61f25db98">
+    <Name>Shoal.VisualStudio</Name>
     <Author>xie</Author>
     <Version>1.0</Version>
     <Description>This is a sample classifier extension to the Visual Studio Editor.</Description>
@@ -16,6 +16,6 @@
   </Identifier>
   <References />
   <Content>
-    <MefComponent>|OokLanguage|</MefComponent>
+    <MefComponent>|Shoal.VisualStudio|</MefComponent>
   </Content>
 </Vsix>

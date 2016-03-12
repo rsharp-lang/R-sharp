@@ -9,8 +9,6 @@ Namespace OokLanguage
     ''' Defines an editor format for the OrdinaryClassification type that has a purple background
     ''' and is underlined.
     ''' </summary>
-    'this should be visible to the end user
-    'set the priority to be after the default classifiers
     <Export(GetType(EditorFormatDefinition)),
     ClassificationType(ClassificationTypeNames:="ook!"),
     Name("ook!"),
@@ -33,8 +31,6 @@ Namespace OokLanguage
     ''' Defines an editor format for the OrdinaryClassification type that has a purple background
     ''' and is underlined.
     ''' </summary>
-    'this should be visible to the end user
-    'set the priority to be after the default classifiers
     <Export(GetType(EditorFormatDefinition)),
     ClassificationType(ClassificationTypeNames:="ook?"),
     Name("ook?"),
@@ -57,8 +53,6 @@ Namespace OokLanguage
     ''' Defines an editor format for the OrdinaryClassification type that has a purple background
     ''' and is underlined.
     ''' </summary>
-    'this should be visible to the end user
-    'set the priority to be after the default classifiers
     <Export(GetType(EditorFormatDefinition)),
     ClassificationType(ClassificationTypeNames:="ook."),
     Name("ook."),
