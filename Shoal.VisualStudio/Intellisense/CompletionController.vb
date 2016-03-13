@@ -23,7 +23,7 @@ Namespace OokLanguage
         <Import()>
         Private CompletionBroker As ICompletionBroker = Nothing
 
-        Public Sub VsTextViewCreated(ByVal textViewAdapter As IVsTextView) Implements IVsTextViewCreationListener.VsTextViewCreated
+        Public Sub VsTextViewCreated(textViewAdapter As IVsTextView) Implements IVsTextViewCreationListener.VsTextViewCreated
             Dim view As IWpfTextView = AdaptersFactory.GetWpfTextView(textViewAdapter)
             Debug.Assert(view IsNot Nothing)
             Dim filter As New CommandFilter(view, CompletionBroker)
@@ -39,7 +39,7 @@ Namespace OokLanguage
 
         Private _currentSession As ICompletionSession
 
-        Public Sub New(ByVal textView As IWpfTextView, ByVal broker As ICompletionBroker)
+        Public Sub New(textView As IWpfTextView, broker As ICompletionBroker)
             _currentSession = Nothing
             Me.TextView = textView
             Me.Broker = broker
@@ -50,7 +50,7 @@ Namespace OokLanguage
             Get
                 Return privateTextView
             End Get
-            Private Set(ByVal value As IWpfTextView)
+            Private Set(value As IWpfTextView)
                 privateTextView = value
             End Set
         End Property
@@ -60,17 +60,17 @@ Namespace OokLanguage
             Get
                 Return privateBroker
             End Get
-            Private Set(ByVal value As ICompletionBroker)
+            Private Set(value As ICompletionBroker)
                 privateBroker = value
             End Set
         End Property
         Public Property [Next] As IOleCommandTarget
 
-        Private Function GetTypeChar(ByVal pvaIn As IntPtr) As Char
+        Private Function GetTypeChar(pvaIn As IntPtr) As Char
             Return ChrW(CUShort(Marshal.GetObjectForNativeVariant(pvaIn)))
         End Function
 
-        Public Function Exec(ByRef pguidCmdGroup As Guid, ByVal nCmdID As UInteger, ByVal nCmdexecopt As UInteger, ByVal pvaIn As IntPtr, ByVal pvaOut As IntPtr) As Integer Implements IOleCommandTarget.Exec
+        Public Function Exec(ByRef pguidCmdGroup As Guid, nCmdID As UInteger, nCmdexecopt As UInteger, pvaIn As IntPtr, pvaOut As IntPtr) As Integer Implements IOleCommandTarget.Exec
             Dim handled As Boolean = False
             Dim hresult As Integer = VSConstants.S_OK
 
@@ -130,7 +130,7 @@ Namespace OokLanguage
             Return True
         End Function
 
-        Private Function Complete(ByVal force As Boolean) As Boolean
+        Private Function Complete(force As Boolean) As Boolean
             If _currentSession Is Nothing Then
                 Return False
             End If
@@ -164,7 +164,7 @@ Namespace OokLanguage
             Return True
         End Function
 
-        Public Function QueryStatus(ByRef pguidCmdGroup As Guid, ByVal cCmds As UInteger, ByVal prgCmds() As OLECMD, ByVal pCmdText As IntPtr) As Integer Implements IOleCommandTarget.QueryStatus
+        Public Function QueryStatus(ByRef pguidCmdGroup As Guid, cCmds As UInteger, prgCmds() As OLECMD, pCmdText As IntPtr) As Integer Implements IOleCommandTarget.QueryStatus
             If pguidCmdGroup = VSConstants.VSStd2K Then
                 Select Case CType(prgCmds(0).cmdID, VSConstants.VSStd2KCmdID)
                     Case VSConstants.VSStd2KCmdID.AUTOCOMPLETE, VSConstants.VSStd2KCmdID.COMPLETEWORD

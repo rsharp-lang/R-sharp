@@ -18,7 +18,7 @@ Namespace VSLTK.Intellisense
 
         Private _session As IQuickInfoSession
 
-        Friend Sub New(ByVal textView As ITextView, ByVal subjectBuffers As IList(Of ITextBuffer), ByVal componentContext As TemplateQuickInfoControllerProvider)
+        Friend Sub New(textView As ITextView, subjectBuffers As IList(Of ITextBuffer), componentContext As TemplateQuickInfoControllerProvider)
             _textView = textView
             _subjectBuffers = subjectBuffers
             _componentContext = componentContext
@@ -26,22 +26,22 @@ Namespace VSLTK.Intellisense
             AddHandler _textView.MouseHover, AddressOf OnTextViewMouseHover
         End Sub
 
-        Public Sub ConnectSubjectBuffer(ByVal subjectBuffer As ITextBuffer) Implements IIntellisenseController.ConnectSubjectBuffer
+        Public Sub ConnectSubjectBuffer(subjectBuffer As ITextBuffer) Implements IIntellisenseController.ConnectSubjectBuffer
 
         End Sub
 
-        Public Sub DisconnectSubjectBuffer(ByVal subjectBuffer As ITextBuffer) Implements IIntellisenseController.DisconnectSubjectBuffer
+        Public Sub DisconnectSubjectBuffer(subjectBuffer As ITextBuffer) Implements IIntellisenseController.DisconnectSubjectBuffer
 
         End Sub
 
-        Public Sub Detach(ByVal textView As ITextView) Implements IIntellisenseController.Detach
+        Public Sub Detach(textView As ITextView) Implements IIntellisenseController.Detach
             If _textView Is textView Then
                 RemoveHandler _textView.MouseHover, AddressOf OnTextViewMouseHover
                 _textView = Nothing
             End If
         End Sub
 
-        Private Sub OnTextViewMouseHover(ByVal sender As Object, ByVal e As MouseHoverEventArgs)
+        Private Sub OnTextViewMouseHover(sender As Object, e As MouseHoverEventArgs)
             Dim point? As SnapshotPoint = Me.GetMousePosition(New SnapshotPoint(_textView.TextSnapshot, e.Position))
 
             If point IsNot Nothing Then
@@ -54,10 +54,13 @@ Namespace VSLTK.Intellisense
             End If
         End Sub
 
-        Private Function GetMousePosition(ByVal topPosition As SnapshotPoint) As SnapshotPoint?
+        Private Function GetMousePosition(topPosition As SnapshotPoint) As SnapshotPoint?
             ' Map this point down to the appropriate subject buffer.
-            Return _textView.BufferGraph.MapDownToFirstMatch(topPosition, PointTrackingMode.Positive, Function(snapshot) _subjectBuffers.Contains(snapshot.TextBuffer), PositionAffinity.Predecessor)
+            Return _textView.BufferGraph.MapDownToFirstMatch(topPosition, PointTrackingMode.Positive, AddressOf __match, PositionAffinity.Predecessor)
         End Function
 
+        Private Function __match(snapshot As ITextSnapshot) As Boolean
+            Return _subjectBuffers.Contains(snapshot.TextBuffer)
+        End Function
     End Class
 End Namespace

@@ -5,6 +5,7 @@ Imports Microsoft.VisualStudio.Text
 Imports Microsoft.VisualStudio.Text.Tagging
 Imports System.ComponentModel.Composition
 Imports Microsoft.VisualStudio.Utilities
+Imports System.Runtime.InteropServices
 
 Namespace OokLanguage
 
@@ -15,7 +16,7 @@ Namespace OokLanguage
         <Import()>
         Private aggService As IBufferTagAggregatorFactoryService = Nothing
 
-        Public Function TryCreateQuickInfoSource(ByVal textBuffer As ITextBuffer) As IQuickInfoSource Implements IQuickInfoSourceProvider.TryCreateQuickInfoSource
+        Public Function TryCreateQuickInfoSource(textBuffer As ITextBuffer) As IQuickInfoSource Implements IQuickInfoSourceProvider.TryCreateQuickInfoSource
             Return New OokQuickInfoSource(textBuffer, aggService.CreateTagAggregator(Of OokTokenTag)(textBuffer))
         End Function
 
@@ -28,12 +29,12 @@ Namespace OokLanguage
         Private _buffer As ITextBuffer
         Private _disposed As Boolean = False
 
-        Public Sub New(ByVal buffer As ITextBuffer, ByVal aggregator As ITagAggregator(Of OokTokenTag))
+        Public Sub New(buffer As ITextBuffer, aggregator As ITagAggregator(Of OokTokenTag))
             _aggregator = aggregator
             _buffer = buffer
         End Sub
 
-        Public Sub AugmentQuickInfoSession(ByVal session As IQuickInfoSession, ByVal quickInfoContent As IList(Of Object), <System.Runtime.InteropServices.Out()> ByRef applicableToSpan As ITrackingSpan) Implements IQuickInfoSource.AugmentQuickInfoSession
+        Public Sub AugmentQuickInfoSession(session As IQuickInfoSession, quickInfoContent As IList(Of Object), <Out()> ByRef applicableToSpan As ITrackingSpan) Implements IQuickInfoSource.AugmentQuickInfoSession
             applicableToSpan = Nothing
 
             If _disposed Then

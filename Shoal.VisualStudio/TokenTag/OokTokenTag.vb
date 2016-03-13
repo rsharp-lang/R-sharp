@@ -5,6 +5,7 @@ Imports System
 Imports System.Collections.Generic
 Imports System.ComponentModel.Composition
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.LDM.Expressions
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Parser.Tokens
 Imports Microsoft.VisualStudio.Text
 Imports Microsoft.VisualStudio.Text.Classification
 Imports Microsoft.VisualStudio.Text.Editor
@@ -15,9 +16,9 @@ Namespace OokLanguage
 
     Public Class OokTokenTag : Implements ITag
 
-        Public Property type As ExpressionTypes
+        Public Property type As TokenTypes
 
-        Public Sub New(ByVal type As ExpressionTypes)
+        Public Sub New(type As TokenTypes)
             Me.type = type
         End Sub
 

@@ -16,7 +16,7 @@ Namespace VSLTK.Intellisense
         <Import()>
         Friend Property QuickInfoBroker As IQuickInfoBroker
 
-        Public Function TryCreateIntellisenseController(ByVal textView As ITextView, ByVal subjectBuffers As IList(Of ITextBuffer)) As IIntellisenseController Implements IIntellisenseControllerProvider.TryCreateIntellisenseController
+        Public Function TryCreateIntellisenseController(textView As ITextView, subjectBuffers As IList(Of ITextBuffer)) As IIntellisenseController Implements IIntellisenseControllerProvider.TryCreateIntellisenseController
             Return New TemplateQuickInfoController(textView, subjectBuffers, Me)
         End Function
 

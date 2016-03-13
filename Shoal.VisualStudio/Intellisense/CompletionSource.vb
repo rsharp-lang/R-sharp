@@ -15,23 +15,23 @@ Namespace OokLanguage
     Friend Class OokCompletionSourceProvider
         Implements ICompletionSourceProvider
 
-        Public Function TryCreateCompletionSource(ByVal textBuffer As ITextBuffer) As ICompletionSource Implements ICompletionSourceProvider.TryCreateCompletionSource
+        Public Function TryCreateCompletionSource(textBuffer As ITextBuffer) As ICompletionSource Implements ICompletionSourceProvider.TryCreateCompletionSource
             Return New OokCompletionSource(textBuffer)
         End Function
 
     End Class
 
-    Friend Class OokCompletionSource
+    Public Class OokCompletionSource
         Implements ICompletionSource
 
         Private _buffer As ITextBuffer
         Private _disposed As Boolean = False
 
-        Public Sub New(ByVal buffer As ITextBuffer)
+        Public Sub New(buffer As ITextBuffer)
             _buffer = buffer
         End Sub
 
-        Public Sub AugmentCompletionSession(ByVal session As ICompletionSession, ByVal completionSets As IList(Of CompletionSet)) Implements ICompletionSource.AugmentCompletionSession
+        Public Sub AugmentCompletionSession(session As ICompletionSession, completionSets As IList(Of CompletionSet)) Implements ICompletionSource.AugmentCompletionSession
             If _disposed Then
                 Throw New ObjectDisposedException("OokCompletionSource")
             End If

@@ -9,7 +9,7 @@ Namespace OokLanguage
     Friend NotInheritable Class OokTokenTagProvider
         Implements ITaggerProvider
 
-        Public Function CreateTagger(Of T As ITag)(ByVal buffer As ITextBuffer) As ITagger(Of T) Implements ITaggerProvider.CreateTagger
+        Public Function CreateTagger(Of T As ITag)(buffer As ITextBuffer) As ITagger(Of T) Implements ITaggerProvider.CreateTagger
 #Disable Warning
             Return TryCast(New OokTokenTagger(buffer), ITagger(Of T))
 #Enable Warning
