@@ -12,6 +12,12 @@
         ''' <returns></returns>
         Public Property OprTag As Char
 
+        Public Overridable ReadOnly Property TokenType As TokenTypes
+            Get
+                Return TokenTypes.Undefine
+            End Get
+        End Property
+
         Protected _TokenValue As String
 
         Public ReadOnly Property IsNullOrSpace As Boolean

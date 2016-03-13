@@ -155,6 +155,7 @@
     <Compile Include="Interpreter\Parser\Tokenliser\MSLTokens.vb" />
     <Compile Include="Interpreter\Parser\Tokenliser\FullTokenliser.vb" />
     <Compile Include="Interpreter\Parser\LDM\Expressions\FunctionCalls.vb" />
+    <Compile Include="Interpreter\Parser\Tokenliser\Tokens\TokenTypes.vb" />
     <Compile Include="Interpreter\Parser\Tokenliser\Tokens\CollectionElement.vb" />
     <Compile Include="Interpreter\Parser\Tokenliser\Tokens\ParameterName.vb" />
     <Compile Include="Interpreter\Parser\Tokenliser\Tokens\LeftAssignedVariable.vb" />

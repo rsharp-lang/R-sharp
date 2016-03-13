@@ -33,6 +33,12 @@
             End Get
         End Property
 
+        Public Overrides ReadOnly Property TokenType As TokenTypes
+            Get
+                Return TokenTypes.LeftAssignedVariable
+            End Get
+        End Property
+
         ''' <summary>
         ''' 
         ''' </summary>

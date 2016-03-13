@@ -41,6 +41,12 @@ Namespace Interpreter.Parser.Tokens
             End Get
         End Property
 
+        Public Overrides ReadOnly Property TokenType As TokenTypes
+            Get
+                Return TokenTypes.InternalExpression
+            End Get
+        End Property
+
         Sub New(Expr As String)
             Call MyBase.New(0, Expr)
 

@@ -7,6 +7,12 @@
 
         Public ReadOnly Property Name As InternalExpression
 
+        Public Overrides ReadOnly Property TokenType As TokenTypes
+            Get
+                Return TokenTypes.EntryPoint
+            End Get
+        End Property
+
         Sub New(Name As String)
             Call MyBase.New(0, Name)
             Me.Name = New InternalExpression(Name)

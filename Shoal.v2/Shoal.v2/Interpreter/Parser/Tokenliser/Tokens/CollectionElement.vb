@@ -12,6 +12,12 @@ Namespace Interpreter.Parser.Tokens
         ''' <returns></returns>
         Public Property Index As Tokens.InternalExpression
 
+        Public Overrides ReadOnly Property TokenType As TokenTypes
+            Get
+                Return TokenTypes.CollectionElement
+            End Get
+        End Property
+
         Sub New(Expression As String)
             Call MyBase.New(0, Expression)
 
@@ -19,17 +25,17 @@ Namespace Interpreter.Parser.Tokens
                 Expression = Mid(Expression, 2, Len(Expression) - 2)
             End If
 
-            Dim Index As String = Regex.Match(Expression, "\[.+\]").Value
-            Dim Array As String = If(Not String.IsNullOrEmpty(Index), Expression.Replace(Index, ""), Expression)
+            Dim index As String = Regex.Match(Expression, "\[.+\]").Value
+            Dim array As String = If(Not String.IsNullOrEmpty(index), Expression.Replace(index, ""), Expression)
 
-            Me.Array = New InternalExpression(Array)
-            Index = Mid(Index, 2, Len(Index) - 2)
+            Me.Array = New InternalExpression(array)
+            index = Mid(index, 2, Len(index) - 2)
 
-            Dim Tokens = New Parser.TextTokenliser.MSLTokens().Parsing(Index).Tokens
+            Dim Tokens = New Parser.TextTokenliser.MSLTokens().Parsing(index).Tokens
 
             If Tokens.Length = 1 Then  ' $var,  ~First,  ~Last,  &const,  
-                Me.Index = New Tokens.InternalExpression(Index)
-            ElseIf String.Equals(Tokens.First.GetTokenValue, "where", StringComparison.OrdinalIgnoreCase)
+                Me.Index = New Tokens.InternalExpression(index)
+            ElseIf String.Equals(Tokens.First.GetTokenValue, "where", StringComparison.OrdinalIgnoreCase)Then
                 Me.Index = New InternalExpression(String.Join(" ", (From t In Tokens.Skip(1) Select t.GetTokenValue.CliToken).ToArray))
             ElseIf (From t In Tokens Where t.GetTokenValue.Last = "," Select 1).ToArray.Length = Tokens.Length - 1
                 Me.Index = New InternalExpression("{" & String.Join(" ", Tokens.ToArray(Of String)([CType]:=Function(t) t.GetTokenValue)) & "}")

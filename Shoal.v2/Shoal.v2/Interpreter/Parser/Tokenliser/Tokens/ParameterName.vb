@@ -54,6 +54,12 @@
 
         Public ReadOnly Property Type As ParameterName.ParameterType
 
+        Public Overrides ReadOnly Property TokenType As TokenTypes
+            Get
+                Return TokenTypes.ParameterName
+            End Get
+        End Property
+
         ''' <summary>
         ''' 
         ''' </summary>

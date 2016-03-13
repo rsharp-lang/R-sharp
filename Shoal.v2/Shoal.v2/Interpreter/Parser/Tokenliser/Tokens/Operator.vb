@@ -50,6 +50,12 @@
 
         Public ReadOnly Property Type As [Operator].Operators
 
+        Public Overrides ReadOnly Property TokenType As TokenTypes
+            Get
+                Return TokenTypes.Operator
+            End Get
+        End Property
+
         ''' <summary>
         ''' 
         ''' </summary>
