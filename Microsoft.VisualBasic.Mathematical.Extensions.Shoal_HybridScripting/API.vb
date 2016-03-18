@@ -8,26 +8,26 @@ Imports Microsoft.VisualBasic.Linq.Extensions
 <[PackageNamespace]("VBMath",
                     Description:="This package enable Shoal language can be doing the mathematics calculation.",
                     Publisher:="xie.guigang@gmail.com")>
-<HybridsScripting.LanguageEntryPoint("VBMath", "Language feature extension of the Shoal Language.")>
+<LanguageEntryPoint("VBMath", "Language feature extension of the Shoal Language.")>
 Public Module API
 
-    <HybridsScripting.EntryInterface(EntryInterface.InterfaceTypes.EntryPointInit)>
+    <EntryInterface(EntryInterface.InterfaceTypes.EntryPointInit)>
     Public Function Initialize() As Boolean
         'Do not needs any initialization 
         Return True
     End Function
 
     <ExportAPI("Evaluate")>
-    <HybridsScripting.EntryInterface(EntryInterface.InterfaceTypes.Evaluate)>
+    <EntryInterface(EntryInterface.InterfaceTypes.Evaluate)>
     Public Function Evaluate(Script As String) As Object
         Return ScriptEngine.Shell(Script)
     End Function
 
     <ExportAPI("Set.Variable")>
-    <HybridsScripting.EntryInterface(EntryInterface.InterfaceTypes.SetValue)>
+    <EntryInterface(EntryInterface.InterfaceTypes.SetValue)>
     Public Function SetValue(var As String, value As Object) As Boolean
         Try
-            Call Mathematical.Expression.SetVariable(var, value)
+            Call Mathematical.ScriptEngine.SetVariable(var, value)
             Return True
         Catch ex As Exception
             Return False
