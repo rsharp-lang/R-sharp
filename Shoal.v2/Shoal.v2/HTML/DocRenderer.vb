@@ -1,5 +1,6 @@
 ﻿Imports System.Text
 Imports Microsoft.VisualBasic.Linq.Extensions
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.SPM.Nodes
 
 Namespace HTML
 
@@ -121,7 +122,7 @@ Namespace HTML
             Call doc.AppendLine("</p><a href=""#""><strong><font size=3>[&#8593;]</font></strong></a><hr>")
             Call doc.AppendLine("Here is the language environment that was installed in your shoal system:")
 
-            For Each language In SPMgrDb.HybridEnvironments
+            For Each language As HybridEnvir In SPMgrDb.HybridEnvironments
                 Call doc.AppendLine($"<p><li><strong>{language.Language}</strong></li>
                     <br />
                                     {If(Not String.IsNullOrEmpty(language.Description), $"{language.Description}<br />", "")} 
