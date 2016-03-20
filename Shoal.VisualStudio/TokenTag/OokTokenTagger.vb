@@ -5,6 +5,7 @@ Imports Microsoft.VisualBasic
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Parser.TextTokenliser
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Parser.Tokens
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter
 
 Namespace OokLanguage
 
@@ -22,7 +23,7 @@ Namespace OokLanguage
             For Each curSpan As SnapshotSpan In spans
                 Dim containingLine As ITextSnapshotLine = curSpan.Start.GetContainingLine()
                 Dim curLoc As Integer = containingLine.Start.Position
-                Dim Parser = New MSLTokens().Parsing(containingLine.GetText())
+                Dim Expression As PrimaryExpression = Interpreter.InternalExpressionParser(curSpan.GetText)
 
                 For Each ookToken As Token In Parser.Tokens
                     Dim value As String = ookToken.GetTokenValue

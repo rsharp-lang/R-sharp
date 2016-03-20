@@ -19,6 +19,5 @@ Namespace VSLTK.Intellisense
         Public Function TryCreateIntellisenseController(textView As ITextView, subjectBuffers As IList(Of ITextBuffer)) As IIntellisenseController Implements IIntellisenseControllerProvider.TryCreateIntellisenseController
             Return New TemplateQuickInfoController(textView, subjectBuffers, Me)
         End Function
-
     End Class
 End Namespace

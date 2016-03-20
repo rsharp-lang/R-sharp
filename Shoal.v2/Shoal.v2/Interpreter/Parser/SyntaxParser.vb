@@ -6,7 +6,9 @@ Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.LDM.Expressions.C
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.LDM.Expressions.Driver
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Compiler.CodeDOM
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.LDM.Expressions.HybridScript
+Imports Microsoft.VisualBasic.CommandLine
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Parser.Tokens.Operator
 
 Namespace Interpreter
 
@@ -320,7 +322,9 @@ Namespace Interpreter
                 Return Nothing
             End If
 
-            Return New Cd(Expression) With {.Path = New InternalExpression(Tokens(1))}
+            Return New Cd(Expression) With {
+                .Path = New InternalExpression(Tokens(1))
+            }
         End Function
 
         ''' <summary>
@@ -599,7 +603,7 @@ Namespace Interpreter
         ''' <param name="Expression"></param>
         ''' <param name="Tokens"></param>
         ''' <returns></returns>
-        Public Function TryParseLibrary(Expression As String, Tokens As Parser.Tokens.Token()) As ShoalShell.Interpreter.LDM.Expressions.Keywords.Library
+        Public Function TryParseLibrary(Expression As String, Tokens As Parser.Tokens.Token()) As Library
             If Not (String.Equals(Tokens(0).GetTokenValue, "library", StringComparison.OrdinalIgnoreCase) OrElse
                 String.Equals(Tokens(0).GetTokenValue, "install", StringComparison.OrdinalIgnoreCase)) Then
                 Return Nothing
@@ -615,7 +619,7 @@ Namespace Interpreter
         ''' <param name="expression"></param>
         ''' <param name="Tokens"></param>
         ''' <returns></returns>
-        Public Function TryParseInclude(expression As String, Tokens As Parser.Tokens.Token()) As ShoalShell.Interpreter.LDM.Expressions.Keywords.Include
+        Public Function TryParseInclude(expression As String, Tokens As Parser.Tokens.Token()) As Include
             If Tokens.Length < 2 Then
                 Return Nothing
             End If
@@ -633,7 +637,7 @@ Namespace Interpreter
         ''' <param name="expression"></param>
         ''' <param name="Tokens"></param>
         ''' <returns></returns>
-        Public Function TryParseGoto(expression As String, Tokens As Parser.Tokens.Token()) As ShoalShell.Interpreter.LDM.Expressions.ControlFlows.GOTO
+        Public Function TryParseGoto(expression As String, Tokens As Parser.Tokens.Token()) As [GOTO]
             If Not String.Equals(Tokens(0).GetTokenValue, "goto", StringComparison.OrdinalIgnoreCase) Then
                 Return Nothing
             End If
@@ -642,12 +646,18 @@ Namespace Interpreter
                 If Not String.Equals(Tokens(2).GetTokenValue, "when", StringComparison.OrdinalIgnoreCase) Then
                     Return Nothing
                 Else
-                    Return New [GOTO](expression) With {.JumpsLabel = New Parser.Tokens.InternalExpression(Tokens(1)), .ExprWhen = New Parser.Tokens.InternalExpression(Tokens(3))}
+                    Return New [GOTO](expression) With {
+                        .JumpsLabel = New Parser.Tokens.InternalExpression(Tokens(1)),
+                        .ExprWhen = New Parser.Tokens.InternalExpression(Tokens(3))
+                    }
                 End If
             End If
 
             If Tokens.Length = 2 Then
-                Return New [GOTO](expression) With {.JumpsLabel = New Parser.Tokens.InternalExpression(Tokens(1)), .ExprWhen = New Parser.Tokens.InternalExpression("TRUE")}
+                Return New [GOTO](expression) With {
+                    .JumpsLabel = New Parser.Tokens.InternalExpression(Tokens(1)),
+                    .ExprWhen = New Parser.Tokens.InternalExpression("TRUE")
+                }
             End If
 
             Return Nothing
@@ -668,7 +678,7 @@ Namespace Interpreter
             Return New LineLabel(expression) With {.Label = Label}
         End Function
 
-        Public Function TryParseVariableDeclaration(expression As String, Tokens As Parser.Tokens.Token()) As ShoalShell.Interpreter.LDM.Expressions.VariableDeclaration
+        Public Function TryParseVariableDeclaration(expression As String, Tokens As Parser.Tokens.Token()) As VariableDeclaration
             If Not (Tokens.Length = 4 OrElse Tokens.Length = 6) Then
                 Return Nothing
             End If
@@ -707,7 +717,7 @@ Namespace Interpreter
         ''' <param name="Expression"></param>
         ''' <param name="Tokens"></param>
         ''' <returns></returns>
-        Public Function TryParseDynamicsCast(Expression As String, Tokens As Parser.Tokens.Token()) As LDM.Expressions.Driver.DynamicsCast
+        Public Function TryParseDynamicsCast(Expression As String, Tokens As Parser.Tokens.Token()) As DynamicsCast
             If Tokens.Length < 4 Then
                 Return Nothing
             End If
@@ -746,7 +756,7 @@ Namespace Interpreter
         ''' <param name="expression">只是用于显示的原始脚本行</param>
         ''' <param name="Tokens">使用这个已经解析好的词元进行<see cref="LDM.Expressions.FunctionCalls"/></param>对象的生成
         ''' <returns></returns>
-        Public Function TryParseOutputHandle(expression As String, Tokens As Parser.Tokens.Token()) As ShoalShell.Interpreter.LDM.Expressions.Driver.OutDeviceRef
+        Public Function TryParseOutputHandle(expression As String, Tokens As Parser.Tokens.Token()) As OutDeviceRef
             If Not Tokens.Length = 1 Then
                 Return Nothing
             End If
@@ -766,7 +776,7 @@ Namespace Interpreter
         ''' <param name="expression">只是用于显示的原始脚本行</param>
         ''' <param name="Tokens">使用这个已经解析好的词元进行<see cref="LDM.Expressions.FunctionCalls"/></param>对象的生成
         ''' <returns></returns>
-        Public Function TryParseImports(expression As String, Tokens As Parser.Tokens.Token()) As ShoalShell.Interpreter.LDM.Expressions.Keywords.Imports
+        Public Function TryParseImports(expression As String, Tokens As Parser.Tokens.Token()) As [Imports]
             If Tokens.Length < 2 Then '只有两个单词：   Imports <Namespace>
                 Return Nothing
             End If
@@ -813,10 +823,11 @@ Namespace Interpreter
                 Tokens = {New Token(0, "$"), New Token(0, "<-")}.Join(Tokens).ToArray
             End If
 
-            Dim Expr As LDM.Expressions.FunctionCalls = New LDM.Expressions.FunctionCalls(expression) With
-                {
+            Dim Expr As LDM.Expressions.FunctionCalls =
+                New FunctionCalls(expression) With {
                     .[Operator] = New ShoalShell.Interpreter.Parser.Tokens.Operator("<-"),
-                    .LeftAssignedVariable = New ShoalShell.Interpreter.Parser.Tokens.LeftAssignedVariable(Tokens(0).GetTokenValue)}
+                    .LeftAssignedVariable = New LeftAssignedVariable(Tokens(0).GetTokenValue)
+            }
 
             '第二个元素可能是变量也可能是函数名
             '假若存在第三个元素，并且是拓展函数调用方法 -> 的话，则第二个元素为变量名
@@ -863,10 +874,9 @@ Namespace Interpreter
 
             If Index = Tokens.Length - 1 Then '函数可能只有一个参数，则参数名被省略了
                 Dim Type = If(Index = 3,
-                    ShoalShell.Interpreter.Parser.Tokens.ParameterName.ParameterType.SingleParameter,
-                    ShoalShell.Interpreter.Parser.Tokens.ParameterName.ParameterType.EXtensionSingleParameter)
-                Call hash.Add(New Parser.Tokens.ParameterName(Type, ""),
-                              New Parser.Tokens.InternalExpression(Tokens.Last))
+                    ParameterName.ParameterType.SingleParameter,
+                    ParameterName.ParameterType.EXtensionSingleParameter)
+                Call hash.Add(New ParameterName(Type, ""), New InternalExpression(Tokens.Last))
                 Return hash
             End If
 
@@ -877,7 +887,7 @@ Namespace Interpreter
                 ' 使用逗号来分隔，参数是按照函数的定义顺序来排列的
                 Do While Index < Tokens.Length - 1
 
-                    Dim pName = New Parser.Tokens.ParameterName(ShoalShell.Interpreter.Parser.Tokens.ParameterName.ParameterType.OrderReference, "")
+                    Dim pName = New Parser.Tokens.ParameterName(ParameterName.ParameterType.OrderReference, "")
                     Dim valueExpr As String = Tokens(Index.MoveNext).GetTokenValue
 
                     valueExpr = Mid(valueExpr, 1, Len(valueExpr) - 1)
@@ -888,25 +898,23 @@ Namespace Interpreter
                 Loop
 
                 Call hash.Add(New Parser.Tokens.ParameterName(
-                              ShoalShell.Interpreter.Parser.Tokens.ParameterName.ParameterType.OrderReference, ""),
+                              ParameterName.ParameterType.OrderReference, ""),
                               New Parser.Tokens.InternalExpression(Tokens.Last))
             Else
 
                 Dim valueTokens As String() = (From Token In Tokens.Skip(Index) Select Token.GetTokenValue).ToArray
-                Dim CommandLine = Microsoft.VisualBasic.CommandLine.CreateParameterValues(valueTokens, True)
+                Dim CommandLine = CreateParameterValues(valueTokens, True)
 
                 For Each obj In CommandLine
                     Dim pName As Parser.Tokens.ParameterName
 
                     If Not obj.Value Is Nothing AndAlso
                         obj.Value.GetType.Equals(GetType(Boolean)) AndAlso
-                        Microsoft.VisualBasic.CommandLine.IsPossibleLogicSW(obj.Key) Then
+                        IsPossibleLogicSW(obj.Key) Then
 
-                        pName = New ParameterName(ParameterName.ParameterType.BooleanSwitch,
-                                                  Microsoft.VisualBasic.CommandLine.TrimParamPrefix(obj.Key))
+                        pName = New ParameterName(ParameterName.ParameterType.BooleanSwitch, TrimParamPrefix(obj.Key))
                     Else
-                        pName = New Parser.Tokens.ParameterName(
-                            ShoalShell.Interpreter.Parser.Tokens.ParameterName.ParameterType.Normal, obj.Key)
+                        pName = New ParameterName(ParameterName.ParameterType.Normal, obj.Key)
                     End If
 
                     Dim pValue = New Parser.Tokens.InternalExpression(obj.Value)
@@ -920,19 +928,19 @@ Namespace Interpreter
 
         Private Function GetOperator(Tokens As Parser.Tokens.Token()) As Parser.Tokens.Operator.Operators
             If Tokens.Length <= 2 Then
-                Return ShoalShell.Interpreter.Parser.Tokens.Operator.Operators.NULL
+                Return Parser.Tokens.Operator.Operators.NULL
             End If
 
             Dim Temp = Tokens(1)
-            Dim [operator] = ShoalShell.Interpreter.Parser.Tokens.Operator.GetOperator(Temp.GetTokenValue)
+            Dim [operator] As Operators = Parser.Tokens.Operator.GetOperator(Temp.GetTokenValue)
             Return [operator]
         End Function
 
         Private Sub TryGetParameters(Tokens As Token(), ByRef parameters As Dictionary(Of ParameterName, InternalExpression), ByRef BooleanSwitches As String())
             Dim Temp As String() = (From obj In Tokens Select obj.GetTokenValue).ToArray
             Dim SingleParameter As String = ""
-            Dim Parser = Microsoft.VisualBasic.CommandLine.GetLogicSWs(Temp, SingleParameter)
-            Dim params = Microsoft.VisualBasic.CommandLine.CreateParameterValues(Temp, True)
+            Dim Parser As String() = GetLogicSWs(Temp, SingleParameter)
+            Dim params = CreateParameterValues(Temp, True)
 
             parameters = New Dictionary(Of ParameterName, InternalExpression)
 
@@ -942,8 +950,10 @@ Namespace Interpreter
 
             parameters.AddRange((From obj In params
                                  Select Name = New ParameterName(ParameterName.ParameterType.Normal, obj.Key),
-                              value = New InternalExpression(obj.Value)).ToArray.ToDictionary(Function(obj) obj.Name, elementSelector:=Function(obj) obj.value))
-            BooleanSwitches = (From s As String In Parser Select CommandLine.TrimParamPrefix(s)).ToArray
+                                     value = New InternalExpression(obj.Value)) _
+                                     .ToDictionary(Function(obj) obj.Name,
+                                                   Function(obj) obj.value))
+            BooleanSwitches = (From s As String In Parser Select TrimParamPrefix(s)).ToArray
         End Sub
 
 #End Region

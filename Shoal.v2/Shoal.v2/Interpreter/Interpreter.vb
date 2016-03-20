@@ -97,8 +97,7 @@ Namespace Interpreter
 
                 Dim Parser = New MSLTokens().Parsing(Line)
                 Dim Expr = SyntaxParser.Parsing(Line, Parser.Tokens, Parser.Comments)
-                Return Expr
-
+                Return Expr  ' 假若需要进行Tokens的类型的判断，则可以在得到表达式之后，通过表达式的类型的计算出Tokens的类型
             End If
         End Function
     End Class

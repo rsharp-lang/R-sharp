@@ -85,7 +85,7 @@ Namespace Interpreter.Linker.APIHandler
             If String.IsNullOrEmpty(ParameterSignature) Then
                 Me.ParameterSignature = "NULL" '函数不需要任何参数
             Else
-                Me.ParameterSignature = GetMd5Hash(ParameterSignature)
+                Me.ParameterSignature = SecurityString.GetMd5Hash(ParameterSignature)
             End If
 
             Me.Parameters = New ReadOnlyDictionary(Of String, ParameterWithAlias)(

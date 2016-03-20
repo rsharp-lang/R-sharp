@@ -1,6 +1,6 @@
 ﻿Namespace Interpreter.LDM.Expressions
 
-    Public MustInherit Class PrimaryExpression : Inherits ShoalShell.Interpreter.MachineElement
+    Public MustInherit Class PrimaryExpression : Inherits MachineElement
 
         ''' <summary>
         ''' <see cref="ExpressionTypes.BlankLine"/>, <see cref="ExpressionTypes.Comments"/>, 
