@@ -51,10 +51,12 @@ Namespace OokLanguage
             _buffer = buffer
             _aggregator = ookTagAggregator
             _ookTypes = New Dictionary(Of TokenTypes, IClassificationType)
-            _ookTypes(ExpressionTypes.Die) = typeService.GetClassificationType("die")
-            _ookTypes(ExpressionTypes.CD) = typeService.GetClassificationType("cd")
-            _ookTypes(ExpressionTypes.If) = typeService.GetClassificationType("if")
-            _ookTypes(ExpressionTypes.GoTo) = typeService.GetClassificationType("goto")
+            _ookTypes(TokenTypes.CollectionElement) = typeService.GetClassificationType(NameOf(TokenTypes.CollectionElement))
+            _ookTypes(TokenTypes.EntryPoint) = typeService.GetClassificationType(NameOf(TokenTypes.EntryPoint))
+            _ookTypes(TokenTypes.InternalExpression) = typeService.GetClassificationType(NameOf(TokenTypes.InternalExpression))
+            _ookTypes(TokenTypes.LeftAssignedVariable) = typeService.GetClassificationType(NameOf(TokenTypes.LeftAssignedVariable))
+            _ookTypes(TokenTypes.Operator) = typeService.GetClassificationType(NameOf(TokenTypes.Operator))
+            _ookTypes(TokenTypes.ParameterName) = typeService.GetClassificationType(NameOf(TokenTypes.ParameterName))
         End Sub
 
         Public Function GetTags(spans As NormalizedSnapshotSpanCollection) As IEnumerable(Of ITagSpan(Of ClassificationTag)) Implements ITagger(Of ClassificationTag).GetTags

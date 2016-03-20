@@ -1,4 +1,6 @@
-﻿Namespace Interpreter.LDM.Expressions
+﻿Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Parser.Tokens
+
+Namespace Interpreter.LDM.Expressions
 
     Public MustInherit Class PrimaryExpression : Inherits MachineElement
 
@@ -55,6 +57,9 @@
 
         Public Overrides Function ExceptionExpr() As String
             Return ToString()
+        End Function
+
+        Public Overridable Iterator Function GetTokens() As IEnumerable(Of Token)
         End Function
     End Class
 End Namespace

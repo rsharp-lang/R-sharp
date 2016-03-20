@@ -25,7 +25,7 @@ Namespace OokLanguage
                 Dim curLoc As Integer = containingLine.Start.Position
                 Dim Expression As PrimaryExpression = Interpreter.InternalExpressionParser(curSpan.GetText)
 
-                For Each ookToken As Token In Parser.Tokens
+                For Each ookToken As Token In Expression.GetTokens
                     Dim value As String = ookToken.GetTokenValue
                     Dim tokenSpan = New SnapshotSpan(curSpan.Snapshot, New Span(curLoc, value.Length))
                     If tokenSpan.IntersectsWith(curSpan) Then
