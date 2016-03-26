@@ -1,6 +1,7 @@
 ﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports QuartzTypeLib
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Parallel.Tasks
 
 <[PackageNamespace]("winmm.dll",
                     Description:="<pre>' ------------------------------------------------------------------------
@@ -36,12 +37,12 @@ Public Module WinMM
         Public ReadOnly Property url As String
 
         ''' <summary>
-        ''' 
+        '''
         ''' </summary>
         ''' <param name="position">当前的播放位置</param>
         Public Event Tick(position As Double)
 
-        Dim _tickThread As New Microsoft.VisualBasic.Parallel.UpdateThread(1000, AddressOf __tick)
+        Dim _tickThread As New UpdateThread(1000, AddressOf __tick)
 
         Private Sub __tick()
             RaiseEvent Tick(MediaPosition.CurrentPosition)
@@ -157,8 +158,8 @@ Public Module WinMM
         Call Device.Play()
         Return 0
     End Function
-	
-	    Public Declare Function mciGetYieldProc Lib "winmm" (mciId As Integer, ByRef pdwYieldData As Integer) As Integer
+
+    Public Declare Function mciGetYieldProc Lib "winmm" (mciId As Integer, ByRef pdwYieldData As Integer) As Integer
     Public Declare Function mciSetYieldProc Lib "winmm" (mciId As Integer, fpYieldProc As Integer, dwYieldData As Integer) As Integer
     Public Declare Function midiOutGetNumDevs Lib "winmm" () As Short
     Public Declare Function mmioInstallIOProcA Lib "winmm" Alias "mmioInstallIOProcA" (fccIOProc As String, pIOProc As Long, dwFlags As Long) As Long
