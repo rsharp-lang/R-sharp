@@ -25,7 +25,7 @@ Namespace Interpreter.Linker
         End Sub
 
         ''' <summary>
-        ''' 
+        '''
         ''' </summary>
         ''' <param name="EntryPoint"></param>
         ''' <param name="execName">主要是为了方便查找函数指针的，因为后面可以直接使用这个变量而不需要再计算一遍了</param>
@@ -87,7 +87,7 @@ Namespace Interpreter.Linker
         End Function
 
         Public Sub [Imports](apiList As APIHandler.APIEntryPoint())
-            For Each api In apiList
+            For Each api As APIHandler.APIEntryPoint In apiList
                 Call __imports(api)
             Next
         End Sub

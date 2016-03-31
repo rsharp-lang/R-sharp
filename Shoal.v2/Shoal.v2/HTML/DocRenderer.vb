@@ -239,7 +239,7 @@ Another Shoal commercial extension project ""<strong>MiMaster</strong> (pre-alph
 
             Navigation.AppendLine("<table>")
 
-            For Each API In [Namespace].API
+            For Each API As Interpreter.Linker.APIHandler.APIEntryPoint In [Namespace].API
                 Call __documents(htmlDoc, API)
                 Call Navigation.AppendLine($"  <tr>
     <th align=""left"">
