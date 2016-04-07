@@ -143,7 +143,7 @@ Module CLI
 
     <ExportAPI("--logs.show")>
     Public Function ShowLogs() As Integer
-        Dim Dir As String = App.LogErrDir
+        Dim Dir As String = App.LogErrDIR
         Call Process.Start(Dir)
         Return 0
     End Function
