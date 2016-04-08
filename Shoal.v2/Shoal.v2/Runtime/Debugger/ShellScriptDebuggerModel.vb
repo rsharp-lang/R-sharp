@@ -8,7 +8,7 @@ Namespace Runtime.Debugging
 
         Sub New(LDM As SyntaxModel, ScriptEngine As ScriptEngine)
             Me.Expressions = LDM.Expressions
-            Me.FilePath = LDM.FilePath
+            Me.FilePath = LDM.FileName
             Me.GotoJumpsLabel = LDM.GotoJumpsLabel
             Me.ScriptEngine = ScriptEngine
         End Sub

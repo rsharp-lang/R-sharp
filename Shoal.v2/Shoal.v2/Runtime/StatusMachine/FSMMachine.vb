@@ -35,7 +35,7 @@ Namespace Runtime
             Dim __executeReturn As Boolean = False
             Dim consoleTitleEnable As Boolean = ScriptEngine.Config.EnableConsoleTitle
 
-            Call ExecuteModel.Stack.Push(New Stack(Script.FilePath))
+            Call ExecuteModel.Stack.Push(New Stack(Script.FileName))
 
             Do While p <= Script.Expressions.Length - 1
 #If Not DEBUG Then  '调试的模式会不处理错误，让错误自动定位到原始的位置方便调试程序

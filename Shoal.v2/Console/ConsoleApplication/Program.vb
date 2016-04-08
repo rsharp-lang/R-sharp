@@ -158,7 +158,7 @@ Program files and source code was distributed under the GPL3 Licensed to "{3}", 
             Call __runTerminal(ScriptEngine)
         End If
 
-        Call Console.WriteLine("[MESSAGE] Auto save shoal environment variables..." & vbCrLf & "   -----> ""file:///{0}""", Program.Configuration.SettingsData.FilePath)
+        Call Console.WriteLine("[MESSAGE] Auto save shoal environment variables..." & vbCrLf & "   -----> ""file:///{0}""", Program.Configuration.SettingsData.FileName)
         Call Program.Configuration.SettingsData.Save()
         Call Console.WriteLine("[DONE!]")
 

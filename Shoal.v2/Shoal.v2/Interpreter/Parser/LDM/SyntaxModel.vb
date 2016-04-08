@@ -1,4 +1,6 @@
 ﻿Imports System.Text
+Imports System.Web.Script.Serialization
+Imports System.Xml.Serialization
 Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.LDM.Expressions
 
@@ -28,6 +30,16 @@ Namespace Interpreter.LDM
                 Return FilePath
             End Try
         End Function
+
+        <XmlIgnore> <ScriptIgnore>
+        Public Shadows Property FilePath As String
+            Get
+                Return MyBase.FilePath
+            End Get
+            Set(value As String)
+                MyBase.FilePath = value
+            End Set
+        End Property
 
         Public Shared Function Parser(Script As String, ParserInvoke As Interpreter.Parser, File As String) As LDM.Expressions.PrimaryExpression()
             Dim Expressions = ParserInvoke(Script)

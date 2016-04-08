@@ -39,8 +39,7 @@ Namespace Interpreter
                 Call App.LogException(ex, $"{NameOf(Interpreter)}::{NameOf(ParseFile)}")
 
                 Return New LDM.SyntaxModel With {
-                    .Expressions = New PrimaryExpression() {},
-                    .FilePath = NameOf(LDM.Expressions.Keywords.SyntaxError)
+                    .Expressions = New PrimaryExpression() {}
                 }
             End Try
 #End If
