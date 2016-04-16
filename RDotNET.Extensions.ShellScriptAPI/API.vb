@@ -26,20 +26,20 @@ Public Module API
 
 #Region "Hybrid Interfaces"
 
-    <EntryInterface(HybridsScripting.EntryInterface.InterfaceTypes.EntryPointInit)>
+    <EntryInterface(InterfaceTypes.EntryPointInit)>
     <ExportAPI("_r_dotnet._init()", Info:="Automatically search for the path of the R system and then construct a R session for you.")>
     Public Function Init() As RDotNET.REngine
         REngine = RServer
         Return RSystem.RServer
     End Function
 
-    <EntryInterface(HybridsScripting.EntryInterface.InterfaceTypes.Evaluate)>
+    <EntryInterface(InterfaceTypes.Evaluate)>
     Public Function Evaluate(scriptLine As String) As Object
         Dim value = RSystem.RServer.Evaluate(statement:=scriptLine)
         Return value
     End Function
 
-    <EntryInterface(HybridsScripting.EntryInterface.InterfaceTypes.SetValue)>
+    <EntryInterface(InterfaceTypes.SetValue)>
     Public Function SetSymbol(Variable As String, value As Object) As Boolean
         Try
             Call RServer.SetSymbol(Variable, value)

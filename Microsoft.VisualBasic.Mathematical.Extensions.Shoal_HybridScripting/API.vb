@@ -11,20 +11,20 @@ Imports Microsoft.VisualBasic.Linq.Extensions
 <LanguageEntryPoint("VBMath", "Language feature extension of the Shoal Language.")>
 Public Module API
 
-    <EntryInterface(EntryInterface.InterfaceTypes.EntryPointInit)>
+    <EntryInterface(InterfaceTypes.EntryPointInit)>
     Public Function Initialize() As Boolean
         'Do not needs any initialization 
         Return True
     End Function
 
     <ExportAPI("Evaluate")>
-    <EntryInterface(EntryInterface.InterfaceTypes.Evaluate)>
+    <EntryInterface(InterfaceTypes.Evaluate)>
     Public Function Evaluate(Script As String) As Object
         Return ScriptEngine.Shell(Script)
     End Function
 
     <ExportAPI("Set.Variable")>
-    <EntryInterface(EntryInterface.InterfaceTypes.SetValue)>
+    <EntryInterface(InterfaceTypes.SetValue)>
     Public Function SetValue(var As String, value As Object) As Boolean
         Try
             Call Mathematical.ScriptEngine.SetVariable(var, value)

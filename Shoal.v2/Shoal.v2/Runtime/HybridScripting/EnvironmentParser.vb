@@ -11,14 +11,14 @@ Namespace Runtime.HybridsScripting
                 Return Nothing
             End If
 
-            Dim InitEntry As System.Reflection.MethodInfo = GetEntry(assm, EntryInterface.InterfaceTypes.EntryPointInit)
-            Dim Evaluate As System.Reflection.MethodInfo = GetEntry(assm, EntryInterface.InterfaceTypes.Evaluate)
-            Dim SetValue As System.Reflection.MethodInfo = GetEntry(assm, EntryInterface.InterfaceTypes.SetValue)
+            Dim InitEntry As MethodInfo = GetEntry(assm, InterfaceTypes.EntryPointInit)
+            Dim Evaluate As MethodInfo = GetEntry(assm, InterfaceTypes.Evaluate)
+            Dim SetValue As MethodInfo = GetEntry(assm, InterfaceTypes.SetValue)
             Dim DataConvertors = GetEntries(Of DataTransform)(assm)
-            Dim ConservedString As System.Reflection.MethodInfo = (From cMethod As KeyValuePair(Of HybridsScripting.DataTransform, System.Reflection.MethodInfo)
+            Dim ConservedString As MethodInfo = (From cMethod As KeyValuePair(Of DataTransform, MethodInfo)
                                                                    In DataConvertors
-                                                                   Where cMethod.Key.ReservedStringTLTR = True
-                                                                   Select cMethod.Value).FirstOrDefault
+                                                 Where cMethod.Key.ReservedStringTLTR = True
+                                                 Select cMethod.Value).FirstOrDefault
             If Evaluate Is Nothing Then
                 Return Nothing
             Else
@@ -37,9 +37,9 @@ Namespace Runtime.HybridsScripting
             End If
         End Function
 
-        Private Function GetEntries(Of TEntryType As EntryInterface)(TypeInfo As System.Type) As KeyValuePair(Of TEntryType, MethodInfo)()
+        Private Function GetEntries(Of TEntryType As EntryInterface)(TypeInfo As Type) As KeyValuePair(Of TEntryType, MethodInfo)()
             Dim EntryType As Type = GetType(TEntryType)
-            Dim LQuery = (From LoadHandle As System.Reflection.MethodInfo
+            Dim LQuery = (From LoadHandle As MethodInfo
                           In TypeInfo.GetMethods(BindingFlags.Public Or BindingFlags.Static)
                           Let attributes As Object() = LoadHandle.GetCustomAttributes(EntryType, False)
                           Where Not attributes.IsNullOrEmpty
@@ -50,7 +50,7 @@ Namespace Runtime.HybridsScripting
             Return LQuery.MatrixToVector
         End Function
 
-        Private Function GetEntry(TypeInfo As System.Type, EntryType As EntryInterface.InterfaceTypes) As MethodInfo
+        Private Function GetEntry(TypeInfo As System.Type, EntryType As InterfaceTypes) As MethodInfo
             Dim LQuery = (From LoadHandle As MethodInfo
                           In TypeInfo.GetMethods(BindingFlags.Public Or BindingFlags.Static)
                           Let attributes As Object() = LoadHandle.GetCustomAttributes(EntryInterface.TypeInfo, False)

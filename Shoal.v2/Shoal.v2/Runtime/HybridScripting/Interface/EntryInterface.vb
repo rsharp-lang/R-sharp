@@ -9,30 +9,6 @@ Namespace Runtime.HybridsScripting
     <AttributeUsage(AttributeTargets.Method, AllowMultiple:=False, Inherited:=True)>
     Public Class EntryInterface : Inherits Attribute
 
-        ''' <summary>
-        ''' 混合编程的接口类型
-        ''' </summary>
-        ''' <remarks></remarks>
-        Public Enum InterfaceTypes
-
-            ''' <summary>
-            ''' 有些简单类型可能并不需要初始化过程，所以这一个接口现在是可选的
-            ''' </summary>
-            ''' <remarks></remarks>
-            EntryPointInit
-            ''' <summary>
-            ''' 接口类型：Public Function Evaluate(script As String) As Object
-            ''' </summary>
-            ''' <remarks></remarks>
-            Evaluate
-            ''' <summary>
-            ''' Public Function SetValue(variableName As String, value As Object) As Boolean
-            ''' </summary>
-            ''' <remarks></remarks>
-            SetValue
-            DataTransform
-        End Enum
-
         Public ReadOnly Property InterfaceType As InterfaceTypes
 
         Sub New(Type As InterfaceTypes)
@@ -43,7 +19,31 @@ Namespace Runtime.HybridsScripting
             Return _InterfaceType.ToString
         End Function
 
-        Public Shared ReadOnly Property TypeInfo As System.Type = GetType(EntryInterface)
+        Public Shared ReadOnly Property TypeInfo As Type = GetType(EntryInterface)
 
     End Class
+
+    ''' <summary>
+    ''' The hybrids programming interface description.(混合编程的接口类型)
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Enum InterfaceTypes
+
+        ''' <summary>
+        ''' 有些简单类型可能并不需要初始化过程，所以这一个接口现在是可选的
+        ''' </summary>
+        ''' <remarks></remarks>
+        EntryPointInit
+        ''' <summary>
+        ''' 接口类型：Public Function Evaluate(script As String) As Object
+        ''' </summary>
+        ''' <remarks></remarks>
+        Evaluate
+        ''' <summary>
+        ''' Public Function SetValue(variableName As String, value As Object) As Boolean
+        ''' </summary>
+        ''' <remarks></remarks>
+        SetValue
+        DataTransform
+    End Enum
 End Namespace
