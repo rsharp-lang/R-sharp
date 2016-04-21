@@ -10,7 +10,7 @@ Namespace Runtime.MMU
         ''' 内存之中的位置指针，使用 *p 来表示
         ''' </summary>
         ''' <returns></returns>
-        Public Property AddrHwnd As Long Implements IAddressHandle.AddrHwnd
+        Public Property Address As Integer Implements IAddressHandle.Address
         Public Overridable ReadOnly Property Name As String Implements IPageUnit.Name
             Get
                 Return _Name
@@ -87,7 +87,7 @@ Namespace Runtime.MMU
             Catch ex As Exception
                 value = "null"
             End Try
-            Return $"{If([ReadOnly], "[ReadOnly] ", "")}({NameOf(AddrHwnd)}-> &{AddrHwnd}) ""{Name}"" As {Type} = {value}"
+            Return $"{If([ReadOnly], "[ReadOnly] ", "")}({NameOf(Address)}-> &{Address}) ""{Name}"" As {Type} = {value}"
         End Function
 
 #Region "IDisposable Support"

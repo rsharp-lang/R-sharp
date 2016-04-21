@@ -49,7 +49,7 @@ Namespace Runtime.MMU
         Public Function View(PageUnit As MMU.IPageUnit) As String
             Dim sbr As StringBuilder = New StringBuilder(1024)
 
-            Call sbr.AppendLine($"{If(PageUnit.[ReadOnly], "[ReadOnly] ", "")}({NameOf(PageUnit.AddrHwnd)}-> &{PageUnit.AddrHwnd})")
+            Call sbr.AppendLine($"{If(PageUnit.[ReadOnly], "[ReadOnly] ", "")}({NameOf(PageUnit.Address)}-> &{PageUnit.Address})")
             Call sbr.AppendLine($"{NameOf(PageUnit.Name)}:=  {PageUnit.Name}{vbTab}{vbTab}{PageUnit.[REM]}")
             Call sbr.AppendLine($"{NameOf(PageUnit.Type)}:=  {PageUnit.Type}")
             Call sbr.AppendLine()

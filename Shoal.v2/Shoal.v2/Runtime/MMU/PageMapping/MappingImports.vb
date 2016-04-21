@@ -26,14 +26,14 @@ Namespace Runtime.MMU.PageMapping
             Dim Handle As Long
 
             If MMUDevice.PageMapping.ContainsKey(KeyFind) Then ' 已经存在一个同名的变量了，则新的会替换掉旧的
-                Handle = MMUDevice.PageMapping(KeyFind).AddrHwnd
+                Handle = MMUDevice.PageMapping(KeyFind).Address
                 Call MMUDevice.PageMapping.Remove(KeyFind)
             End If
 
             Call MMUDevice.PageMapping.Add(KeyFind, Page)
 
             If Handle > 0 Then '更新内存区块
-                Page.AddrHwnd = Handle
+                Page.Address = Handle
                 MMUDevice.MMU_CHUNKS(Handle) = Page
             Else
                 Call MMUDevice.Allocate(Page)

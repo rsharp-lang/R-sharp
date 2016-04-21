@@ -131,7 +131,7 @@ Namespace Runtime.MMU
                 End If
             End If
 
-            Return var.AddrHwnd
+            Return var.Address
         End Function
 
         ''' <summary>
@@ -191,7 +191,7 @@ Namespace Runtime.MMU
             Dim var As New Variable(Name, Type, value, False)
             Call __addInternal(KeyFind, var)
 
-            Return var.AddrHwnd
+            Return var.Address
         End Function
 
         ''' <summary>
@@ -201,7 +201,7 @@ Namespace Runtime.MMU
         Friend Sub Allocate(var As MMU.IPageUnit)
             Call __increaseMemory()
             MMU_CHUNKS(HeapSize) = var
-            var.AddrHwnd = HeapSize
+            var.Address = HeapSize
             _HeapSize += 1
         End Sub
 
