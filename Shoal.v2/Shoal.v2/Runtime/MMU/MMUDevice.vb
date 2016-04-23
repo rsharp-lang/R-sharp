@@ -219,7 +219,7 @@ Namespace Runtime.MMU
             Return Me(Name).Value
         End Function
 
-        Public Sub WriteMemory(var As Parser.Tokens.LeftAssignedVariable, value As Object)
+        Public Sub WriteMemory(var As Interpreter.Parser.Tokens.LeftAssignedVariable, value As Object)
             Dim varAddr = Linker.GetAddress(var)
             Call ScriptEngine.MMUDevice.Update(varAddr, value)
         End Sub
