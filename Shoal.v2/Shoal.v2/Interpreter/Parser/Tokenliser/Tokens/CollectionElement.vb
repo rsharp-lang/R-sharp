@@ -38,7 +38,7 @@ Namespace Interpreter.Parser.Tokens
             ElseIf String.Equals(Tokens.First.GetTokenValue, "where", StringComparison.OrdinalIgnoreCase)Then
                 Me.Index = New InternalExpression(String.Join(" ", (From t In Tokens.Skip(1) Select t.GetTokenValue.CliToken).ToArray))
             ElseIf (From t In Tokens Where t.GetTokenValue.Last = "," Select 1).ToArray.Length = Tokens.Length - 1
-                Me.Index = New InternalExpression("{" & String.Join(" ", Tokens.ToArray(Of String)([CType]:=Function(t) t.GetTokenValue)) & "}")
+                Me.Index = New InternalExpression("{" & String.Join(" ", Tokens.ToArray(Of String)([ctype]:=Function(t) t.GetTokenValue)) & "}")
             Else
                 Throw New SyntaxErrorException(Expression.CliToken & " is not a value element indexing expression!")
             End If
