@@ -8,14 +8,14 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Compiler.CodeDOM.Tokens" Collapsed="true">
-    <Position X="147" Y="4.5" Width="1.5" />
+    <Position X="145.25" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Compiler\CodeDOM\Tokens.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Compiler.VBC" Collapsed="true">
-    <Position X="148.75" Y="4.5" Width="1.5" />
+    <Position X="147" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>ABAAAAAAAAAAAAAAAAAAIAAEAAAAAAAAAAAAAAAAAEA=</HashCode>
       <FileName>Compiler\VBC.vb</FileName>
@@ -65,9 +65,9 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.LDM.Expressions.PrimaryExpression">
-    <Position X="85.5" Y="2.25" Width="2.5" />
+    <Position X="85.5" Y="2.25" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>DAAAAAAAAAAAAAAGAAAIAAAEAAAAAAAAAAAAAAAAIAA=</HashCode>
+      <HashCode>DAAAAQAAAAAAAAAGAAAIAAAEAAAAAAAAAAAAAAAAIAA=</HashCode>
       <FileName>Interpreter\Parser\LDM\Expressions\Expression.vb</FileName>
     </TypeIdentifier>
   </Class>
@@ -205,14 +205,14 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.LDM.SyntaxModel">
-    <Position X="15.5" Y="10.5" Width="5.5" />
+    <Position X="15.5" Y="31.5" Width="5.5" />
     <TypeIdentifier>
-      <HashCode>AAAgAIAAQAAAAAAEAAABAAIAQAQAAgAAAAAAAgAAhAA=</HashCode>
+      <HashCode>AAAgAIAAQAAAAAAEAAABAAIAQAQAAgAAAABAAgAAhAA=</HashCode>
       <FileName>Interpreter\Parser\LDM\SyntaxModel.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Parser.TextTokenliser.FullTokenliser" Collapsed="true">
-    <Position X="145.25" Y="2.5" Width="1.5" />
+    <Position X="0.5" Y="6.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAACAAABAAA=</HashCode>
       <FileName>Interpreter\Parser\Tokenliser\FullTokenliser.vb</FileName>
@@ -221,21 +221,21 @@
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Parser.Tokens.EntryPoint">
     <Position X="22" Y="6.75" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAQAAAAAAAAAAAAAAAAAAgA=</HashCode>
       <FileName>Interpreter\Parser\Tokenliser\Tokens\EntryPoint.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Parser.Tokens.InternalExpression">
     <Position X="25" Y="6.75" Width="3.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAEAAAAAAAAEAAAAAIAAAAAAAAAQAAAEAAACAAA=</HashCode>
+      <HashCode>AAAAAAEAAAAAAAAEAAAAAIAAAAAAAAAQAAAEAAACAgA=</HashCode>
       <FileName>Interpreter\Parser\Tokenliser\Tokens\InternalExpression.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Parser.Tokens.LeftAssignedVariable">
     <Position X="14.5" Y="6.75" Width="3" />
     <TypeIdentifier>
-      <HashCode>AACAAAAAAAAAAAAEAAAAAIAAEAAAAAgCAAAAACAAAAA=</HashCode>
+      <HashCode>AACAAAAAAAAAAAAEAAAAAIAAEAAAAAgCAAAAACAAAgA=</HashCode>
       <FileName>Interpreter\Parser\Tokenliser\Tokens\LeftAssignedVariable.vb</FileName>
     </TypeIdentifier>
   </Class>
@@ -249,12 +249,12 @@
       </Enum>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAAAIAAAAAAAAEAAAAAAAAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAIAAAAAAAAEAAAAAAAAAAAAAAAAAQAAAAAAAgA=</HashCode>
       <FileName>Interpreter\Parser\Tokenliser\Tokens\Operator.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Parser.Tokens.ParameterName">
-    <Position X="25" Y="10.5" Width="3.5" />
+    <Position X="25" Y="10.75" Width="3.5" />
     <Compartments>
       <Compartment Name="Nested Types" Collapsed="false" />
     </Compartments>
@@ -266,19 +266,19 @@
       </Enum>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAACAAAAAAAQBAEAAAAAAAAAAAAABAAAQAAAAAAAEA=</HashCode>
+      <HashCode>AAAACAAAAAAAQBAEAAAAAAAAAAAAABAAAQAAAAAAAkA=</HashCode>
       <FileName>Interpreter\Parser\Tokenliser\Tokens\ParameterName.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Parser.Tokens.Token">
     <Position X="16.5" Y="2.25" Width="3" />
     <TypeIdentifier>
-      <HashCode>DAAAABAAAAAAAAAEBAABAQAAAAAAAQQAAAAAAAAAAAE=</HashCode>
+      <HashCode>DAAAABAAAAAAAAAEBAABAQAAAAAAAQQAAAAAAAAAAgE=</HashCode>
       <FileName>Interpreter\Parser\Tokenliser\Tokens\Tokens.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.My.MySettings" Collapsed="true">
-    <Position X="152.25" Y="2.5" Width="1.5" />
+    <Position X="148.75" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAEAAAAAAAABAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
@@ -310,7 +310,7 @@
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.ScriptEngine">
     <Position X="21" Y="19.75" Width="4.25" />
     <TypeIdentifier>
-      <HashCode>AAgAAAMAIjAAAAAEAAgAAgAAAEAEAFAAAAAAAAAAIAA=</HashCode>
+      <HashCode>AAgAAAMAIjAAAAAEAAgAAggAAEAEAFAAAAAAAAAAIAA=</HashCode>
       <FileName>Runtime\ScriptEngine.vb</FileName>
     </TypeIdentifier>
   </Class>
@@ -332,7 +332,7 @@
       </Class>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>gBAAAAAAACIAAAAEAAgAIAQAAAgBAgAAAQAgAgAAAAA=</HashCode>
+      <HashCode>ABAAAAAAACIAAAAEAAgAIAQAAAgBAgACAQAgAgAAAAA=</HashCode>
       <FileName>Runtime\MMU\Variable.vb</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -346,7 +346,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.SPM.Nodes.Assembly" BaseTypeListCollapsed="true">
-    <Position X="0.5" Y="5.5" Width="3.5" />
+    <Position X="0.5" Y="11.5" Width="3.5" />
     <TypeIdentifier>
       <HashCode>IAAAAgAAACQgAQIEAAAEAEAAAAAAAgAggAAABAAAAAA=</HashCode>
       <FileName>SPM\Nodes\Assembly.vb</FileName>
@@ -370,22 +370,22 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.SPM.Nodes.PartialModule" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="147" Y="3.5" Width="1.5" />
+    <Position X="145.25" Y="3.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AIAAAgAAAAAAAAAAgAAEAAAAAgAAAIAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AIAAAgAAAABAAAAAgAAEAAAAAgAAAIAAAAAAAAAAAAA=</HashCode>
       <FileName>SPM\Nodes\PartialModule.vb</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.SPM.PackageModuleDb" Collapsed="true">
-    <Position X="145.25" Y="3.5" Width="1.5" />
+    <Position X="150.5" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>ACQEgIAAACAAAAAAAAABAAAIAABAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>SPM\PackageModuleDb.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.SPM.ShoalPackageMgr" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="150.5" Y="3.5" Width="1.5" />
+    <Position X="148.75" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>CEYIAAAAACAEBBAQGAAQBAQEAAAAAEoUAAAgAgBQIAA=</HashCode>
       <FileName>SPM\ShoalPackageMgr.vb</FileName>
@@ -401,9 +401,9 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Linker.APIHandler.SignedFuncEntryPoint" Collapsed="true">
-    <Position X="152.25" Y="3.5" Width="1.5" />
+    <Position X="150.5" Y="3.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AIAAAAEgEAAAAAAEsBAAAAIAAABAAgAAQIABAAAEAAA=</HashCode>
+      <HashCode>AIBAAAEAAAAAAAAEoAAAAAAAAABAAgAAAIABAAAEAAA=</HashCode>
       <FileName>Interpreter\Linker\API\FunctionSignature.vb</FileName>
     </TypeIdentifier>
   </Class>
@@ -415,7 +415,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Compiler.CodeDOM.Program" Collapsed="true">
-    <Position X="148.75" Y="3.5" Width="1.5" />
+    <Position X="147" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAQAgIAAAAAAEAAAAAAAAAAAAAJAAAAAAABAAAAQ=</HashCode>
       <FileName>Compiler\CodeDOM\Program.vb</FileName>
@@ -535,7 +535,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Parser.TextTokenliser.MSLTokens" Collapsed="true">
-    <Position X="150.5" Y="2.5" Width="1.5" />
+    <Position X="2.75" Y="6.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>CAAQAAAAAAQAACAAAIAAwAAAgAAAAAAACgAASAABIAg=</HashCode>
       <FileName>Interpreter\Parser\Tokenliser\MSLTokens.vb</FileName>
@@ -544,7 +544,7 @@
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Debugging.Debugger">
     <Position X="19.75" Y="26" Width="6.75" />
     <TypeIdentifier>
-      <HashCode>ABBgCAAAIAAAAAAIAAAEAAAgAAACAAABAAAAAAgAQAA=</HashCode>
+      <HashCode>ABBACAAAIAAAAAAIAAAEAAAggAACAAABAABAAAgAAAA=</HashCode>
       <FileName>Runtime\Debugger\Debugger.vb</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -552,7 +552,7 @@
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Debugging.DebuggerListener" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="145.25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAIAAAIASAAIAIAACQAAAQAAAAAAAAAQAAICgAABAA=</HashCode>
+      <HashCode>AAAIAAAIASAAIAIAACAAAAQAAAIAAAAAQAAICgAABAA=</HashCode>
       <FileName>Runtime\Debugger\DebuggerListener.vb</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -565,7 +565,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Debugging.ShellScriptDebuggerModel">
-    <Position X="16.5" Y="14.75" Width="3.75" />
+    <Position X="16.5" Y="36" Width="3.75" />
     <TypeIdentifier>
       <HashCode>IAAAAAIABAAAAAQAAAAAAAAAAAAAAAAAAEAAAAAAAAI=</HashCode>
       <FileName>Runtime\Debugger\ShellScriptDebuggerModel.vb</FileName>
@@ -653,45 +653,38 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Exceptions.DriverNotFound">
-    <Position X="28" Y="32.25" Width="5.25" />
+    <Position X="30.5" Y="32.25" Width="5.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAA=</HashCode>
       <FileName>Runtime\Exceptions\DriverNotFound.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Exceptions.MethodNotFoundException">
-    <Position X="34" Y="32.25" Width="8.75" />
+    <Position X="36.5" Y="32.25" Width="8.75" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAAAAAAAAAAAAAAAAgACAAAAAACAAAAAAAAAA=</HashCode>
       <FileName>Runtime\Exceptions\MethodNotFoundException.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Exceptions.RuntimeException">
-    <Position X="32.75" Y="29.5" Width="5.25" />
+    <Position X="34" Y="29.5" Width="5.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAA=</HashCode>
       <FileName>Runtime\Exceptions\RuntimeException.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.HybridsScripting.DataTransform">
-    <Position X="4.5" Y="15.25" Width="3.75" />
+    <Position X="15.5" Y="13.25" Width="3.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAQAAAAAAEAAAAAAAAAAAAAAAAAAAQAAAAAAA=</HashCode>
       <FileName>Runtime\HybridScripting\Interface\DataTransform.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.HybridsScripting.EntryInterface">
-    <Position X="5.25" Y="10.5" Width="2.5" />
+    <Position X="16.25" Y="10.5" Width="2.5" />
     <Compartments>
       <Compartment Name="Nested Types" Collapsed="false" />
     </Compartments>
-    <NestedTypes>
-      <Enum Name="Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.HybridsScripting.EntryInterface.InterfaceTypes">
-        <TypeIdentifier>
-          <NewMemberFileName>Runtime\HybridScripting\Interface\EntryInterface.vb</NewMemberFileName>
-        </TypeIdentifier>
-      </Enum>
-    </NestedTypes>
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAEAAAAAAAAAEAAAAAAAA=</HashCode>
       <FileName>Runtime\HybridScripting\Interface\EntryInterface.vb</FileName>
@@ -729,7 +722,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.MMU.PageMapping.MappingImports" Collapsed="true">
-    <Position X="148.75" Y="2.5" Width="1.5" />
+    <Position X="147" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAgAAAAAAAAAAAAAACAACAAAAAAAAEAAAAAAAAAQAAA=</HashCode>
       <FileName>Runtime\MMU\PageMapping\MappingImports.vb</FileName>
@@ -744,7 +737,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.SPM.Nodes.HybridEnvir">
-    <Position X="1.5" Y="10.25" Width="1.75" />
+    <Position X="1.5" Y="16.25" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>SPM\Nodes\HybridEnvir.vb</FileName>
@@ -779,7 +772,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Stack" Collapsed="true">
-    <Position X="145.25" Y="4.5" Width="1.5" />
+    <Position X="152.25" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>IgAAAAAAAAAAAAAEAAAAAAAABAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Runtime\StatusMachine\Stack.vb</FileName>
@@ -793,7 +786,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.HybridsScripting.LanguageEntryPoint" Collapsed="true">
-    <Position X="147" Y="2.5" Width="1.5" />
+    <Position X="145.25" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAACAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Runtime\HybridScripting\Interface\ScriptEntryPoint.vb</FileName>
@@ -809,8 +802,50 @@
   <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Parser.Tokens.CollectionElement">
     <Position X="7.25" Y="6.75" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAEAAAAAAgA=</HashCode>
       <FileName>Interpreter\Parser\Tokenliser\Tokens\CollectionElement.vb</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Linker.APIHandler.Alignment.OneParameter" Collapsed="true">
+    <Position X="0.5" Y="9.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAgAAA=</HashCode>
+      <FileName>Interpreter\Linker\API\Alignment\Alignments\OneParameter.vb</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Linker.APIHandler.Alignment.SpecialAlignment(Of T)" Collapsed="true">
+    <Position X="2.25" Y="8.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEAAAAQAAAAAAAAAAAAAACAAAAAAAAA=</HashCode>
+      <FileName>Interpreter\Linker\API\Alignment\Alignments\SpecialAlignment(Of T).vb</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Linker.APIHandler.Alignment.TwoParameter" Collapsed="true">
+    <Position X="3.5" Y="9.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAACAAAAAAAAA=</HashCode>
+      <FileName>Interpreter\Linker\API\Alignment\Alignments\TwoParameter.vb</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Linker.APIHandler.Alignment.ParamAlignments" Collapsed="true">
+    <Position X="152.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interpreter\Linker\API\Alignment\ParamAlignments.vb</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Parser.TextTokenliser.Parserbase" Collapsed="true">
+    <Position X="1.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAA=</HashCode>
+      <FileName>Interpreter\Parser\Tokenliser\ParserCommon.vb</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Exceptions.FunCallFailured" Collapsed="true">
+    <Position X="28.25" Y="32.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Runtime\Exceptions\MethodNotFoundException.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Struct Name="Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.HybridsScripting.EntryPoint" Collapsed="true">
@@ -818,6 +853,13 @@
     <TypeIdentifier>
       <HashCode>EAAAAAEAiAAIAgoEAAAAAgAAAAEAAAEIAAASAAAAAAA=</HashCode>
       <FileName>Runtime\HybridScripting\EntryPoint.vb</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Linker.APIHandler.ParameterWithAlias" Collapsed="true">
+    <Position X="147" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAABAAAAEAAABAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interpreter\Linker\API\ParameterWithAlias.vb</FileName>
     </TypeIdentifier>
   </Struct>
   <Interface Name="Microsoft.VisualBasic.Scripting.ShoalShell.HTML.IWikiHandle" Collapsed="true">
@@ -842,10 +884,24 @@
     </TypeIdentifier>
   </Enum>
   <Enum Name="Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.MMU.IPAGE_TYPES" Collapsed="true">
-    <Position X="147" Y="12.25" Width="1.5" />
+    <Position X="148.75" Y="12.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAABAAAAAAAAgBAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Runtime\MMU\PageUnit.vb</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Parser.Tokens.TokenTypes" Collapsed="true">
+    <Position X="150.5" Y="12.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACCAAACAAAAAAgAAAAAAAAAAAABAAAAABAAAAACA=</HashCode>
+      <FileName>Interpreter\Parser\Tokenliser\Tokens\TokenTypes.vb</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.HybridsScripting.InterfaceTypes" Collapsed="true">
+    <Position X="147" Y="12.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAgAAAAAAAAAAAgAAAAQAAAA=</HashCode>
+      <FileName>Runtime\HybridScripting\Interface\EntryInterface.vb</FileName>
     </TypeIdentifier>
   </Enum>
   <Delegate Name="Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.HybridsScripting.Evaluation" Collapsed="true">
@@ -863,34 +919,34 @@
     </TypeIdentifier>
   </Delegate>
   <Module Name="Microsoft.VisualBasic.Scripting.ShoalShell.Debugger" Collapsed="true">
-    <Position X="148.75" Y="5.75" Width="1.5" />
+    <Position X="150.5" Y="5.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
       <FileName>Debugger.vb</FileName>
     </TypeIdentifier>
   </Module>
   <Module Name="Microsoft.VisualBasic.Scripting.ShoalShell.HTML.DocRenderer" Collapsed="true">
-    <Position X="152.25" Y="5.75" Width="1.5" />
+    <Position X="145.25" Y="6.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>BAAgAAgAEAgAAEAAAQAAAAAAAAgAAQAQAAIAAAEAAEA=</HashCode>
+      <HashCode>AAAgAAgAEAgAAEAAAQAAAAAAAAgAAQAQAAIAAIEAAEA=</HashCode>
       <FileName>HTML\DocRenderer.vb</FileName>
     </TypeIdentifier>
   </Module>
   <Module Name="Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.SyntaxParser" Collapsed="true">
-    <Position X="150.5" Y="7.75" Width="1.5" />
+    <Position X="152.25" Y="7.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AIApQgJJgRBAEEhAASCAQgADAEkiCABAAAgAQoEAAAA=</HashCode>
       <FileName>Interpreter\Parser\SyntaxParser.vb</FileName>
     </TypeIdentifier>
   </Module>
   <Module Name="Microsoft.VisualBasic.Scripting.ShoalShell.My.Resources.Resources" Collapsed="true">
-    <Position X="147" Y="7.75" Width="1.5" />
+    <Position X="148.75" Y="7.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAABAAAAAAAAABEAAAAQAAAACAAAgIAAABAKA=</HashCode>
     </TypeIdentifier>
   </Module>
   <Module Name="Microsoft.VisualBasic.Scripting.ShoalShell.My.MySettingsProperty" Collapsed="true">
-    <Position X="150.5" Y="6.75" Width="1.5" />
+    <Position X="152.25" Y="6.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
@@ -903,23 +959,23 @@
     </TypeIdentifier>
   </Module>
   <Module Name="Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Linker.APIHandler.Alignment.FunctionCalls" Collapsed="true">
-    <Position X="147" Y="6.75" Width="1.5" />
+    <Position X="148.75" Y="6.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAEgAIAAEAAgAAQAAAABAAAACAAAAiAQAAAEBAA=</HashCode>
+      <HashCode>AAABAAEgAIAAEAAgCAQAAAABAAAACAAAAiAQAAAEBAA=</HashCode>
       <FileName>Interpreter\Linker\API\Alignment\FunctionCalls.vb</FileName>
     </TypeIdentifier>
   </Module>
   <Module Name="Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Linker.APIHandler.Alignment.TypeEquals" Collapsed="true">
-    <Position X="152.25" Y="7.75" Width="1.5" />
+    <Position X="145.25" Y="8.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAABAAAAEAAABAAAAAAQAAAAAAAA=</HashCode>
       <FileName>Interpreter\Linker\API\Alignment\TypeEquals.vb</FileName>
     </TypeIdentifier>
   </Module>
   <Module Name="Microsoft.VisualBasic.Scripting.ShoalShell.InternalExtension" Collapsed="true">
-    <Position X="148.75" Y="6.75" Width="1.5" />
+    <Position X="150.5" Y="6.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IAAAAAAAAgQAAAgEAAAAIAAIAAAAAAAAAICAAABAGAI=</HashCode>
+      <HashCode>IAAAAAAAAgQAAAgEAAAAIAAIAAAAIAAAAICAAABAGAI=</HashCode>
       <FileName>InternalExtension.vb</FileName>
     </TypeIdentifier>
   </Module>
@@ -931,45 +987,52 @@
     </TypeIdentifier>
   </Module>
   <Module Name="Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Parser.TextTokenliser.ParserCommon" Collapsed="true">
-    <Position X="145.25" Y="7.75" Width="1.5" />
+    <Position X="147" Y="7.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAQACCAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
       <FileName>Interpreter\Parser\Tokenliser\ParserCommon.vb</FileName>
     </TypeIdentifier>
   </Module>
   <Module Name="Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Debugging.DebuggerProtocol" Collapsed="true">
-    <Position X="150.5" Y="5.75" Width="1.5" />
+    <Position X="152.25" Y="5.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Runtime\Debugger\DebuggerProtocol.vb</FileName>
     </TypeIdentifier>
   </Module>
   <Module Name="Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.HybridsScripting.EnvironmentParser" Collapsed="true">
-    <Position X="145.25" Y="6.75" Width="1.5" />
+    <Position X="147" Y="6.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAQAAAAAAAAAAgAAAAEAAAAAAAAAAAAA=</HashCode>
       <FileName>Runtime\HybridScripting\EnvironmentParser.vb</FileName>
     </TypeIdentifier>
   </Module>
   <Module Name="Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.MMU.PageUnitView" Collapsed="true">
-    <Position X="152.25" Y="6.75" Width="1.5" />
+    <Position X="145.25" Y="7.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Runtime\MMU\PageUnit.vb</FileName>
     </TypeIdentifier>
   </Module>
   <Module Name="Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.SCOM.RuntimeEnvironment" Collapsed="true">
-    <Position X="148.75" Y="7.75" Width="1.5" />
+    <Position X="150.5" Y="7.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAEAAAAAAA=</HashCode>
       <FileName>Runtime\RuntimeEnvironment.vb</FileName>
     </TypeIdentifier>
   </Module>
   <Module Name="Microsoft.VisualBasic.Scripting.ShoalShell.HTML.TypeLinks" Collapsed="true">
-    <Position X="145.25" Y="8.75" Width="1.5" />
+    <Position X="147" Y="8.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAggAABAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAIAAAA=</HashCode>
+      <HashCode>AAAggAABAAAQAAAAAAAAAAAAAAAAQAAAAAAAAAIAAIA=</HashCode>
       <FileName>HTML\TypeLinks.vb</FileName>
+    </TypeIdentifier>
+  </Module>
+  <Module Name="Microsoft.VisualBasic.Scripting.ShoalShell.HTML.Cites" Collapsed="true">
+    <Position X="148.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>HTML\Cites.vb</FileName>
     </TypeIdentifier>
   </Module>
   <Font Name="Segoe UI" Size="9" />

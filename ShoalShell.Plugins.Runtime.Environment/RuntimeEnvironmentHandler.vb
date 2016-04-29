@@ -1,4 +1,5 @@
 ﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.SPM
 Imports Microsoft.Win32
 
 ''' <summary>
@@ -27,6 +28,7 @@ Public Module RuntimeEnvironmentHandler
             Call FileIO.FileSystem.DeleteFile(InteropPath, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.DeletePermanently)
 
         Catch ex As Exception
+            Call App.LogException(ex)
             Call Console.WriteLine(UAC_EXCEPTION)
         End Try
 
@@ -34,14 +36,13 @@ Public Module RuntimeEnvironmentHandler
     End Function
 
     <ExportAPI("Plugins.Scan")>
-    Public Function ScanPlugIns(dir As String, Optional ext As String = "*.*") As Microsoft.VisualBasic.Scripting.ShoalShell.SPM.PackageModuleDb
+    Public Function ScanPlugIns(DIR As String, Optional ext As String = "*.*") As PackageModuleDb
         ext = If(String.IsNullOrEmpty(ext), "*.*", ext)
 
-        Dim FilesForScan = FileIO.FileSystem.GetFiles(dir, FileIO.SearchOption.SearchTopLevelOnly, ext)
-        Dim SPMgrDb As Microsoft.VisualBasic.Scripting.ShoalShell.SPM.PackageModuleDb =
-            Microsoft.VisualBasic.Scripting.ShoalShell.SPM.PackageModuleDb.LoadDefault
+        Dim FilesForScan = FileIO.FileSystem.GetFiles(DIR, FileIO.SearchOption.SearchTopLevelOnly, ext)
+        Dim SPMgrDb As PackageModuleDb = PackageModuleDb.LoadDefault
 
-        Using SMgr As New Microsoft.VisualBasic.Scripting.ShoalShell.SPM.ShoalPackageMgr(SPMgrDb)
+        Using SMgr As New ShoalPackageMgr(SPMgrDb)
             For Each File As String In FilesForScan
                 Call SMgr.Imports(File)
             Next

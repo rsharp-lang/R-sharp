@@ -3,21 +3,22 @@ Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.DeviceDriver
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.DeviceDriver.DriverHandles
 Imports Microsoft.VisualBasic.DocumentFormat.Csv.Extensions
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.DocumentFormat.Csv
 
 <[PackageNamespace]("Plot.Device.Chart", Url:="http://SourceForge.net/projects/shoal")>
 Module ModuleChartPlot
 
     <ExportAPI("plot.serials")>
-    Public Function PlotChart(data As Microsoft.VisualBasic.DocumentFormat.Csv.DocumentStream.File) As Image
+    Public Function PlotChart(data As DocumentStream.File) As Image
         Using device As FormChartPlotDevice = New FormChartPlotDevice
-            Call device.Draw(Microsoft.VisualBasic.DocumentFormat.Csv.DocumentStream.DataFrame.CreateObject(data))
+            Call device.Draw(DocumentStream.DataFrame.CreateObject(data))
             Call device.ShowDialog()
             Return device.CopyChartImage
         End Using
     End Function
 
     <ExportAPI("plot.pi_chart")>
-    Public Function PlotPiChart(data As Microsoft.VisualBasic.DocumentFormat.Csv.DocumentStream.File) As Image
+    Public Function PlotPiChart(data As DocumentStream.File) As Image
         Throw New NotImplementedException
     End Function
 End Module
@@ -32,21 +33,21 @@ Public Module DataSource
 
     <InputDeviceHandle("excel")>
     <ExportAPI("Read.Excel")>
-    Public Function LoadExcel(path As String) As Dictionary(Of String, Microsoft.VisualBasic.DocumentFormat.Csv.DocumentStream.DataFrame)
-        Dim Excel = New Microsoft.VisualBasic.DocumentFormat.Csv.ExcelReader(path, True, True)
+    Public Function LoadExcel(path As String) As Dictionary(Of String, DocumentStream.DataFrame)
+        Dim Excel = New ExcelReader(path, True, True)
         Dim Tables = Excel.GetWorksheetList
-        Dim LQuery = (From Table As String In Tables Select Table, DF = Excel.GetWorksheet(Table).CreateDataReader.DataFrame).ToArray.ToDictionary(Function(item) item.Table, Function(item) item.DF)
+        Dim LQuery = (From Table As String In Tables Select Table, DF = Excel.GetWorksheet(Table).CreateDataReader.DataFrame).ToDictionary(Function(item) item.Table, Function(item) item.DF)
         Return LQuery
     End Function
 
     <ExportAPI("get.table")>
-    Public Function GetTable(Excel As Dictionary(Of String, Microsoft.VisualBasic.DocumentFormat.Csv.DocumentStream.DataFrame), Tab As String) As Microsoft.VisualBasic.DocumentFormat.Csv.DocumentStream.DataFrame
+    Public Function GetTable(Excel As Dictionary(Of String, DocumentStream.DataFrame), Tab As String) As DocumentStream.DataFrame
         Return Excel(Tab)
     End Function
 
     <ExportAPI("csv.trim")>
-    Public Function TrimData(path As String, Optional replaceAs As String = "") As Microsoft.VisualBasic.DocumentFormat.Csv.DocumentStream.File
-        Return Microsoft.VisualBasic.DocumentFormat.Csv.DocumentStream.File.Normalization(path, replaceAs)
+    Public Function TrimData(path As String, Optional replaceAs As String = "") As DocumentStream.File
+        Return DocumentStream.File.Normalization(path, replaceAs)
     End Function
 
     <InputDeviceHandle("dataframe")>
