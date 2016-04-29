@@ -1,6 +1,7 @@
 ﻿Imports System.Drawing
 Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Scripting.MetaData
 
 ''' <summary>
@@ -79,10 +80,10 @@ Public Module InternalExtension
     <ExportAPI("cowsay", Info:="A cowsay trick to print the message on the console.")>
     Public Function Cowsay(Optional msg As String = "", Optional dead As Boolean = True) As String
         If String.IsNullOrEmpty(msg) Then
-            Return CowsayTricks.Cowsay("Moo. Hi!", dead)
+            Return CowsayTricks.RunCowsay("Moo. Hi!", dead)
         End If
 
-        Return CowsayTricks.Cowsay(msg, dead)
+        Return CowsayTricks.RunCowsay(msg, dead)
     End Function
 
     <ExportAPI("cat", Info:="Read the text file data from the parameter path and then print the text data on the console.")>
