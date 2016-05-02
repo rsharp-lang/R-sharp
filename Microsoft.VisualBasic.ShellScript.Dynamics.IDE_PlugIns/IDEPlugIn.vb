@@ -1,13 +1,17 @@
-﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
+﻿Imports System.Windows.Forms
+Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.ShoalShell
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime
+Imports Microsoft.VisualBasic.Windows.Forms
+Imports Microsoft.VisualBasic.Language.UnixBash
 
 <[Namespace]("dynamics.ide_plugins")>
 Public Module IDEPlugIn
 
     Dim CommandName As String
     Dim Iconpath As String
-    Dim Target As System.Windows.Forms.ToolStripMenuItem
-    Dim _currentPath As String()
+    Dim Target As ToolStripMenuItem
+    Dim _currentPath As String
 
     <ExportAPI("plugin.set_name")>
     Public Function SetName(value As String) As String
@@ -25,9 +29,9 @@ Public Module IDEPlugIn
         Return IDEPlugIn.Iconpath
     End Function
 
-    <ExportAPI("plugin.initialize", info:="This method should be the last command that you call in the shellscript")>
+    <ExportAPI("plugin.initialize", Info:="This method should be the last command that you call in the shellscript")>
     Public Function Initialize(action As System.Action) As Boolean
-        Dim CommandEntry = PlugIn.PlugInLoader.AddCommand(Target, _currentPath, CommandName, 0)
+        Dim CommandEntry = PlugIns.MenuAPI.AddCommand(Target, _currentPath, CommandName)
         If Not String.IsNullOrEmpty(Iconpath) AndAlso FileIO.FileSystem.FileExists(Iconpath) Then CommandEntry.Image = System.Drawing.Image.FromFile(Iconpath)
         AddHandler CommandEntry.Click, Sub() Call action()       '关联命令
 
@@ -38,17 +42,16 @@ Public Module IDEPlugIn
     ''' 
     ''' </summary>
     ''' <param name="Entry">插件的载入点</param>
-    ''' <param name="pluginDir">ShellScript插件脚本的文件夹路径</param>
+    ''' <param name="pluginDIR">ShellScript插件脚本的文件夹路径</param>
     ''' <remarks></remarks>
-    Public Sub LoadScripts(Entry As System.Windows.Forms.ToolStripMenuItem, pluginDir As String)
+    Public Sub LoadScripts(Entry As ToolStripMenuItem, pluginDIR As String)
         Target = Entry
-        pluginDir = FileIO.FileSystem.GetDirectoryInfo(pluginDir).FullName
+        pluginDIR = FileIO.FileSystem.GetDirectoryInfo(pluginDIR).FullName
 
-        Using ShellScriptHost As Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.ScriptEngine = New Scripting.ShoalShell.Runtime.ScriptEngine
-            For Each ShellScript As String In FileIO.FileSystem.GetFiles(pluginDir, FileIO.SearchOption.SearchAllSubDirectories, "*.txt", "*.vbss")
-                _currentPath = ShellScript.Replace(pluginDir, "").Split(CChar("\"))
-                _currentPath = _currentPath.Take(_currentPath.Count - 1).ToArray
-                Call ShellScriptHost.Exec(ShellScript)
+        Using shoalShell As ScriptEngine = New ScriptEngine
+            For Each script As String In ls - l - r - wildcards("*.txt", "*.vbss") <= pluginDIR
+                _currentPath = script.Replace(pluginDIR, "")
+                Call shoalShell.Exec(script)
             Next
         End Using
     End Sub
