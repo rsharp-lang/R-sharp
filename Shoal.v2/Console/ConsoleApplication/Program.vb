@@ -129,11 +129,13 @@ Program files and source code was distributed under the GPL3 Licensed to "{3}", 
     Public Function ScriptShellTerminal(ListenerPort As Integer, work As String) As Integer
         Dim UserName As String = If(String.IsNullOrEmpty(My.Computer.Name), "EMPTY_USER_NAME", My.Computer.Name)
 
-        Call System.Console.WriteLine(Program.ConsoleSplashPrintPage,
-                                      My.Application.Info.Version.ToString,
-                                      STATUS_BETA,
-                                      $"{Environment.OSVersion.Platform.ToString} - {Environment.OSVersion.Version.ToString}",
-                                      UserName)
+        Console.BackgroundColor = ConsoleColor.DarkBlue
+
+        Call Console.WriteLine(Program.ConsoleSplashPrintPage,
+                               My.Application.Info.Version.ToString,
+                               STATUS_BETA,
+                               $"{Environment.OSVersion.Platform.ToString} - {Environment.OSVersion.Version.ToString}",
+                               UserName)
 
         work = If(String.IsNullOrEmpty(work),
             Program.Configuration.SettingsData.InitDirectory,
@@ -167,11 +169,17 @@ Program files and source code was distributed under the GPL3 Licensed to "{3}", 
 
     Private Sub __runTerminal(ScriptEngine As ScriptEngine)
         Do While True
-            Dim CommandLine As String = scanf("$  ")
-            If String.Equals(CommandLine, "q()", StringComparison.OrdinalIgnoreCase) Then
+
+            Console.ForegroundColor = ConsoleColor.Yellow
+
+            Dim input As String = scanf("$  ")
+
+            Console.ForegroundColor = ConsoleColor.White
+
+            If String.Equals(input, "q()", StringComparison.OrdinalIgnoreCase) Then
                 Exit Do
             Else
-                Call ScriptEngine.Exec(CommandLine)
+                Call ScriptEngine.Exec(input)
             End If
         Loop
     End Sub

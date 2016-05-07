@@ -86,10 +86,9 @@ Module CLI
             Return -2
         End If
 
-        Dim Db As Microsoft.VisualBasic.Scripting.ShoalShell.SPM.PackageModuleDb =
-            Microsoft.VisualBasic.Scripting.ShoalShell.SPM.PackageModuleDb.Load(Program.Configuration.SettingsData.GetRegistryFile)
+        Dim Db As SPM.PackageModuleDb = SPM.PackageModuleDb.Load(Program.Configuration.SettingsData.GetRegistryFile)
 
-        Using SPM As New Scripting.ShoalShell.SPM.ShoalPackageMgr(Db)
+        Using SPM As New SPM.ShoalPackageMgr(Db)
             Call SPM.Imports(Path)
         End Using
 
