@@ -24,7 +24,10 @@ Namespace Interpreter
         ''' 当切换目录之后扫描当前目录之下的所有的临时命令脚本
         ''' </summary>
         Public Sub CdTemp()
-            Dim Files = FileIO.FileSystem.CurrentDirectory.LoadSourceEntryList(ScriptEngine.Config.GetExtensionList, True)
+            Dim Files As Dictionary(Of String, String) =
+                FileIO.FileSystem.CurrentDirectory _
+               .LoadSourceEntryList(ScriptEngine.Config.GetExtensionList, True)
+
             Call _TempDelegate.Clear()
 
             If Files.IsNullOrEmpty Then
@@ -34,7 +37,8 @@ Namespace Interpreter
             Dim LQuery = (From path In Files.AsParallel
                           Let script = ___load(path.Value)
                           Where Not script Is Nothing
-                          Select path.Key.ToLower, script).ToArray
+                          Select path.Key.ToLower,
+                              script).ToArray
 
             For Each script In LQuery
                 Call _TempDelegate.Add(script.ToLower, script.script)

@@ -72,16 +72,16 @@ Namespace Interpreter
         ''' <param name="Script"></param>
         ''' <returns></returns>
         Public Shared Function MSLParser(Script As String) As PrimaryExpression()
-            Dim s_Data As String() = Strings.Split(Script.Replace(vbLf, ""), vbCr)
-            Dim ExprQueue = New Queue(Of String)(s_Data)
+            Dim lines As String() = Script.lTokens
             Dim Expressions As New List(Of PrimaryExpression)
+            Dim ExprQueue As New Queue(Of String)(lines)
 
             Do While Not ExprQueue.IsNullOrEmpty
-                Call Expressions.Add(SyntaxParser.MSLParser(ExprQueue))
+                Expressions += SyntaxParser.MSLParser(ExprQueue)
                 Expressions.Last.LineNumber = Expressions.Count
             Loop
 
-            Return Expressions.ToArray
+            Return Expressions
         End Function
 
         ''' <summary>
@@ -94,8 +94,9 @@ Namespace Interpreter
                 Return SyntaxError.BlankCode
             Else
 
-                Dim Parser = New MSLTokens().Parsing(Line)
-                Dim Expr = SyntaxParser.Parsing(Line, Parser.Tokens, Parser.Comments)
+                Dim Parser As MSLTokens = New MSLTokens().Parsing(Line)
+                Dim Expr As PrimaryExpression =
+                    SyntaxParser.Parsing(Line, Parser.Tokens, Parser.Comments)
                 Return Expr  ' 假若需要进行Tokens的类型的判断，则可以在得到表达式之后，通过表达式的类型的计算出Tokens的类型
             End If
         End Function

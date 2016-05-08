@@ -127,15 +127,16 @@ Program files and source code was distributed under the GPL3 Licensed to "{3}", 
     ''' <param name="work">空字符串表示使用配置文件之中的路径，反之使用本参数所制定的路径做出初始化路径</param>
     ''' <remarks></remarks>
     Public Function ScriptShellTerminal(ListenerPort As Integer, work As String) As Integer
-        Dim UserName As String = If(String.IsNullOrEmpty(My.Computer.Name), "EMPTY_USER_NAME", My.Computer.Name)
+        Dim usr As String = If(String.IsNullOrEmpty(My.Computer.Name), "EMPTY_USER_NAME", My.Computer.Name)
 
-        Console.BackgroundColor = ConsoleColor.DarkBlue
+        Console.BackgroundColor = ConsoleColor.DarkGray
+        Console.ForegroundColor = ConsoleColor.White
 
         Call Console.WriteLine(Program.ConsoleSplashPrintPage,
                                My.Application.Info.Version.ToString,
                                STATUS_BETA,
                                $"{Environment.OSVersion.Platform.ToString} - {Environment.OSVersion.Version.ToString}",
-                               UserName)
+                               usr)
 
         work = If(String.IsNullOrEmpty(work),
             Program.Configuration.SettingsData.InitDirectory,
@@ -169,12 +170,7 @@ Program files and source code was distributed under the GPL3 Licensed to "{3}", 
 
     Private Sub __runTerminal(ScriptEngine As ScriptEngine)
         Do While True
-
-            Console.ForegroundColor = ConsoleColor.Yellow
-
-            Dim input As String = scanf("$  ")
-
-            Console.ForegroundColor = ConsoleColor.White
+            Dim input As String = scanf("$  ", ConsoleColor.Yellow)
 
             If String.Equals(input, "q()", StringComparison.OrdinalIgnoreCase) Then
                 Exit Do

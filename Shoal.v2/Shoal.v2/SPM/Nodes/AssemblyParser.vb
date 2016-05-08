@@ -36,8 +36,10 @@ Namespace SPM.Nodes
         End Function
 
         Private Function __exHandler(ex As Exception, path As String) As PartialModule()
-            Call App.LogException($"Assembly Parsing Error:  {path.ToFileURL}".__DEBUG_ECHO, $"{NameOf(AssemblyParser)}::{NameOf(LoadAssembly)}")
+            ex = New Exception($"Assembly Parsing Error: {path.ToFileURL}", ex)
             Call App.LogException(ex, $"{NameOf(AssemblyParser)}::{NameOf(LoadAssembly)}")
+            Call ex.PrintException()
+
             Return New PartialModule() {}
         End Function
 

@@ -3,6 +3,7 @@ Imports Microsoft.VisualBasic.Scripting.ShoalShell.Configuration
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.HTML
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.LDM.Expressions
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.MMU
+Imports Microsoft.VisualBasic.Linq
 
 Namespace Runtime
 
@@ -49,9 +50,7 @@ into this version of engine, for more details information please visit:  http://
 
         Public ReadOnly Property ImportsAPI As String()
             Get
-                Return (From api In
-                            Me.Interpreter.EPMDevice.ImportedAPI
-                        Select api.Value.Name).ToArray
+                Return Interpreter.EPMDevice.ImportedAPI.ToArray(Function(api) api.Value.Name)
             End Get
         End Property
 
