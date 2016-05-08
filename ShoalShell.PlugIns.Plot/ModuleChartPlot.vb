@@ -4,6 +4,7 @@ Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.DeviceDriver.DriverHa
 Imports Microsoft.VisualBasic.DocumentFormat.Csv.Extensions
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.DocumentFormat.Csv
+Imports Microsoft.VisualBasic.Terminal.Utility
 
 <[PackageNamespace]("Plot.Device.Chart", Url:="http://SourceForge.net/projects/shoal")>
 Module ModuleChartPlot
@@ -65,7 +66,7 @@ Public Module DataSource
     <InputDeviceHandle("imports.csv")>
     <ExportAPI("imports.csv")>
     Public Function ReadCSV_FASTLOAD(path As String) As Microsoft.VisualBasic.DocumentFormat.Csv.DocumentStream.File
-        Using pdt As Microsoft.VisualBasic.ConsoleDevice.Utility.CBusyIndicator = New ConsoleDevice.Utility.CBusyIndicator(_start:=True)
+        Using pdt As New CBusyIndicator(_start:=True)
             Call Console.WriteLine("[DEBUG] Start loading data from " & path.ToFileURL)
             Dim MAT = Microsoft.VisualBasic.DocumentFormat.Csv.DocumentStream.File.FastLoad(path)
             Return MAT
