@@ -129,7 +129,7 @@ Program files and source code was distributed under the GPL3 Licensed to "{3}", 
     Public Function ScriptShellTerminal(ListenerPort As Integer, work As String) As Integer
         Dim usr As String = If(String.IsNullOrEmpty(My.Computer.Name), "EMPTY_USER_NAME", My.Computer.Name)
 
-        Console.BackgroundColor = ConsoleColor.DarkGray
+        Console.BackgroundColor = ConsoleColor.DarkCyan
         Console.ForegroundColor = ConsoleColor.White
 
         Call Console.WriteLine(Program.ConsoleSplashPrintPage,
@@ -181,7 +181,8 @@ Program files and source code was distributed under the GPL3 Licensed to "{3}", 
     End Sub
 
     Private Sub __runDebugger(ScriptEngine As ScriptEngine)
-        Dim Debugger = DirectCast(ScriptEngine, Debugging.Debugger)
+        Dim Debugger As Debugging.Debugger =
+            DirectCast(ScriptEngine, Debugging.Debugger)
 
         Do While Not Debugger.DebuggerExit
             Call Threading.Thread.Sleep(2000)

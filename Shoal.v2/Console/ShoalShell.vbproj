@@ -109,9 +109,9 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConsoleApplication\CLI.vb" />
+    <Compile Include="Console\CLI.vb" />
     <Compile Include="InternalCommands.vb" />
-    <Compile Include="ConsoleApplication\Program.vb" />
+    <Compile Include="Console\Program.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
