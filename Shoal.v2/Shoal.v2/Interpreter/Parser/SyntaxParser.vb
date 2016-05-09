@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.LDM.Expressions
+﻿Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.LDM.Expressions
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.LDM.Expressions.Keywords
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Parser.Tokens
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Parser
@@ -7,8 +8,9 @@ Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.LDM.Expressions.D
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Compiler.CodeDOM
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.LDM.Expressions.HybridScript
 Imports Microsoft.VisualBasic.CommandLine
-Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Parser.Tokens.Operator
+Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Language
 
 Namespace Interpreter
 
@@ -295,11 +297,14 @@ Namespace Interpreter
             Dim Expr = New Source(Expression) With {
                 .LeftAssigned = New LeftAssignedVariable(Tokens(Scan0).GetTokenValue),
                 .Path = New InternalExpression(args.Name),
-                .args = (From arg In args.GetValueArray
-                         Select New KeyValuePair(Of String, InternalExpression)(arg.Key, New InternalExpression(arg.Value))).ToArray
+                .args = args.GetValueArray.ToArray(AddressOf __arg)
             }
 
             Return Expr
+        End Function
+
+        Private Function __arg(arg As KeyValuePair(Of String, String)) As KeyValuePair(Of String, InternalExpression)
+            Return New KeyValuePair(Of String, InternalExpression)(arg.Key, New InternalExpression(arg.Value))
         End Function
 
         Public Function TryParseWiki(Expression As String, Tokens As Parser.Tokens.Token()) As LDM.Expressions.Keywords.Wiki
@@ -345,7 +350,7 @@ Namespace Interpreter
                 Return Nothing
             End If
 
-            Dim innerScript = __delegate(Tokens(2))
+            Dim innerScript As LDM.SyntaxModel = __delegate(Tokens(2))
             Return New [Delegate](Expression) With {
                 .FuncPointer = Tokens(0).GetTrimExpr,
                 .FuncExpr = innerScript
@@ -365,7 +370,9 @@ Namespace Interpreter
                 Return Nothing
             End If
 
-            Return New [Return](Expression) With {.ValueExpression = New InternalExpression(Tokens(1))}
+            Return New [Return](Expression) With {
+                .ValueExpression = New InternalExpression(Tokens(1))
+            }
         End Function
 
         Public Function TryParseMemoryOpr(Expression As String, Tokens As Parser.Tokens.Token()) As LDM.Expressions.Keywords.Memory
@@ -403,7 +410,7 @@ Namespace Interpreter
                     Select 1).ToArray.Length = Tokens.Length - 1 Then
 
                     '是一个集合的创建，但是没有赋值的目标对象
-                    Dim array = MakeCollection(Tokens)
+                    Dim array As InternalExpression() = MakeCollection(Tokens)
                     Return New CollectionOpr(Expression) With {
                         .Array = array,
                         .InitLeft = New LeftAssignedVariable("$"),
@@ -431,7 +438,7 @@ Namespace Interpreter
                 Type = "Object"
             End If
 
-            Dim arrayExpr = MakeCollection(Tokens(2).GetTrimExpr)
+            Dim arrayExpr As InternalExpression() = MakeCollection(Tokens(2).GetTrimExpr)
 
             Return New CollectionOpr(Expression) With {
                 .Array = arrayExpr,
@@ -459,7 +466,8 @@ Namespace Interpreter
                 If str.Last = ","c Then
                     str = Mid(str, 1, Len(str) - 1).Trim
                 End If
-                Call arrayExpr.Add(New InternalExpression(str))
+
+                arrayExpr += New InternalExpression(str)
             Next
 
             Return arrayExpr.ToArray
@@ -531,7 +539,7 @@ Namespace Interpreter
                     Message = Tokens(1).GetTokenValue
                 End If
 
-            ElseIf Tokens.Length = 2  '带有消息的
+            ElseIf Tokens.Length = 2 Then  '带有消息的
                 [When] = New InternalExpression("True")
                 Message = Tokens(1).GetTokenValue
 
@@ -541,7 +549,10 @@ Namespace Interpreter
 
             End If
 
-            Return New Die(expression) With {.ExceptionMessage = Message, .When = [When]}
+            Return New Die(expression) With {
+                .ExceptionMessage = Message,
+                .When = [When]
+            }
         End Function
 
         Public Function TryParseComments(expression As String, Tokens As Parser.Tokens.Token()) As Comments
@@ -589,7 +600,7 @@ Namespace Interpreter
             Return Nothing
         End Function
 
-        Public Function TryParseOnErrorResumeNext(expression As String, Tokens As Parser.Tokens.Token()) As ShoalShell.Interpreter.LDM.Expressions.Keywords.OnErrorResumeNext
+        Public Function TryParseOnErrorResumeNext(expression As String, Tokens As Parser.Tokens.Token()) As OnErrorResumeNext
             If OnErrorResumeNext.IsOnErrorResumeNext(Tokens) Then
                 Return New OnErrorResumeNext(expression)
             Else
@@ -628,7 +639,12 @@ Namespace Interpreter
                 Return Nothing
             End If
 
-            Return New Include(expression) With {.ExternalScripts = (From Token In Tokens.Skip(1) Select Token.GetTokenValue).ToArray}
+            Return New Include(expression) With {
+                .ExternalScripts = LinqAPI.Exec(Of String) <=
+                    From Token As Token
+                    In Tokens.Skip(1)
+                    Select Token.GetTokenValue
+                }
         End Function
 
         ''' <summary>
@@ -663,7 +679,7 @@ Namespace Interpreter
             Return Nothing
         End Function
 
-        Public Function TryParseGotoJumpsLabel(expression As String, Tokens As Parser.Tokens.Token()) As ShoalShell.Interpreter.LDM.Expressions.ControlFlows.LineLabel
+        Public Function TryParseGotoJumpsLabel(expression As String, Tokens As Parser.Tokens.Token()) As LineLabel
             If Tokens.Length <> 1 Then
                 Return Nothing
             End If
@@ -936,7 +952,7 @@ Namespace Interpreter
             Return [operator]
         End Function
 
-        Private Sub TryGetParameters(Tokens As Token(), ByRef parameters As Dictionary(Of ParameterName, InternalExpression), ByRef BooleanSwitches As String())
+        Private Sub TryGetParameters(Tokens As Token(), ByRef parameters As Dictionary(Of ParameterName, InternalExpression), ByRef bools As String())
             Dim Temp As String() = (From obj In Tokens Select obj.GetTokenValue).ToArray
             Dim SingleParameter As String = ""
             Dim Parser As String() = GetLogicSWs(Temp, SingleParameter)
@@ -953,10 +969,8 @@ Namespace Interpreter
                                      value = New InternalExpression(obj.Value)) _
                                      .ToDictionary(Function(obj) obj.Name,
                                                    Function(obj) obj.value))
-            BooleanSwitches = (From s As String In Parser Select TrimParamPrefix(s)).ToArray
+            bools = Parser.ToArray(AddressOf TrimParamPrefix)
         End Sub
-
 #End Region
-
     End Module
 End Namespace

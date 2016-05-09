@@ -78,13 +78,13 @@ Namespace Interpreter
 
             If Not success Then Return Nothing
 
-            Dim parameters = ScriptEngine.ExecuteModel.ArgumentsLinker.GetParameters(Expr)
+            Dim params = ScriptEngine.ExecuteModel.ArgumentsLinker.GetParameters(Expr)
 
-            For Each arg In parameters
+            For Each arg In params
                 Call ScriptEngine.MMUDevice.Update(arg.Key, arg.Value)
             Next
 
-            Dim value = New Runtime.FSMMachine(Me.ScriptEngine, Func).Execute
+            Dim value As Object = New Runtime.FSMMachine(Me.ScriptEngine, Func).Execute
             Return value
         End Function
 

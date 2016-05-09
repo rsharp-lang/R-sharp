@@ -13,7 +13,8 @@ Namespace Runtime.MMU.PageMapping
         End Sub
 
         Public Function [Imports]([Module] As System.Reflection.TypeInfo) As Integer
-            Dim DataSource = MappingImports.Imports([Module], False)
+            Dim DataSource As DataSourceModel() =
+                MappingImports.Imports([Module], False)
             For Each Entry As DataSourceModel In DataSource
                 Call __imports(Entry)
             Next

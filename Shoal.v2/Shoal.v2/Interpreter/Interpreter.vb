@@ -27,7 +27,10 @@ Namespace Interpreter
         ''' <summary>
         ''' 使用<see cref="MSLTokens"/>来解析
         ''' </summary>
-        ''' <param name="File">文件路径</param>
+        ''' <param name="File">
+        ''' The parser function supports both local file system url or http network file.
+        ''' (文件路径)
+        ''' </param>
         ''' <returns></returns>
         Public Function ParseFile(File As String) As SyntaxModel
 #If Not DEBUG Then

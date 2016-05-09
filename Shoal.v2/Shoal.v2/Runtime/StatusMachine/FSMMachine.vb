@@ -78,7 +78,7 @@ Namespace Runtime
         ''' </summary>
         ''' <param name="__return">是否执行了<see cref="Interpreter.LDM.Expressions.Keywords.Return"/>代码</param>
         Private Sub __execute(ByRef __return As Boolean)
-            Dim Line = Script.Expressions(p)
+            Dim Line As PrimaryExpression = Script.Expressions(p)
 
             If Line.IsNonExecuteCode Then Return
 

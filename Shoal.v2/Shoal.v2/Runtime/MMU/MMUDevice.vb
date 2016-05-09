@@ -51,7 +51,8 @@ Namespace Runtime.MMU
         End Property
 
         ''' <summary>
-        ''' 内存之中的地址总是 0; <see cref="Interpreter.LDM.Expressions.Keywords.Return"/>函数会写入返回数据到这个保留变量之中
+        ''' The pointer address of this variable in the memory is always ZERO.
+        ''' (内存之中的地址总是 0; <see cref="Interpreter.LDM.Expressions.Keywords.Return"/>函数会写入返回数据到这个保留变量之中)
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property SystemReserved As MMU.Variable
