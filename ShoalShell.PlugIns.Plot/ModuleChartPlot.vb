@@ -11,11 +11,11 @@ Module ModuleChartPlot
 
     <ExportAPI("plot.serials")>
     Public Function PlotChart(data As DocumentStream.File) As Image
-        Using device As FormChartPlotDevice = New FormChartPlotDevice
-            Call device.Draw(DocumentStream.DataFrame.CreateObject(data))
-            Call device.ShowDialog()
-            Return device.CopyChartImage
-        End Using
+        'Using device As FormChartPlotDevice = New FormChartPlotDevice
+        '    Call device.Draw(DocumentStream.DataFrame.CreateObject(data))
+        '    Call device.ShowDialog()
+        '    Return device.CopyChartImage
+        'End Using
     End Function
 
     <ExportAPI("plot.pi_chart")>
