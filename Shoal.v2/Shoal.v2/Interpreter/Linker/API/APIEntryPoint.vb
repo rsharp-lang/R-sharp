@@ -31,7 +31,7 @@ Namespace Interpreter.Linker.APIHandler
         ''' Shoal API命令的名称
         ''' </summary>
         ''' <remarks></remarks>
-        Public ReadOnly Property Name As String Implements IReadOnlyId.locusId
+        Public ReadOnly Property Name As String Implements IReadOnlyId.Identity
 
         ''' <summary>
         ''' 当前的这个执行入口点是否有重载的命令

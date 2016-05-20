@@ -1,5 +1,6 @@
 ﻿Imports System.Drawing
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Win32.Win32API
 
 <PackageNamespace("gdi32.dll",
                   Description:="GDI32.DLL exports Graphics Device Interface (GDI) functions that perform primitive drawing functions for 
@@ -28,7 +29,7 @@ Public Module Gdi32
     ''' <remarks></remarks>
     ''' 
     <ExportAPI("Escape", Info:="The Escape function allows applications to access capabilities of a particular device not directly available through GDI. Escape calls made by an application are translated and sent to the driver.")>
-    Public Declare Function Escape Lib "gdi32" Alias "Escape" ( hdc As Long,  nEscape As Long,  nCount As Long,  lpInData As String, lpOutData As Object) As Long
+    Public Declare Function Escape Lib "gdi32" Alias "Escape" (hdc As Long, nEscape As Long, nCount As Long, lpInData As String, lpOutData As Object) As Long
     <ExportAPI("Rectangle")>
     Public Declare Function Rectangle Lib "gdi32" (hdc As Integer, X1 As Integer, Y1 As Integer, X2 As Integer, Y2 As Integer) As Integer
     <ExportAPI("Polygon")>
@@ -78,7 +79,7 @@ Public Module Gdi32
     <ExportAPI("SetBkMode")>
     Public Declare Function SetBkMode Lib "gdi32" (hdc As Integer, nBkMode As Integer) As Integer
 
-	
+
     'UPGRADE_WARNING: ?? PIXELFORMATDESCRIPTOR ????????????? Public Declare ????????? ?????????:“ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?keyword="C429C3A5-5D47-4CD9-8F51-74A1616405DC"”
     Public Declare Function ChoosePixelFormat Lib "gdi32" (hdc As Integer, ByRef pPixelFormatDescriptor As PIXELFORMATDESCRIPTOR) As Integer
     'UPGRADE_WARNING: ?? BITMAPINFO ????????????? Public Declare ????????? ?????????:“ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?keyword="C429C3A5-5D47-4CD9-8F51-74A1616405DC"”
