@@ -146,7 +146,9 @@ Program files and source code was distributed under the GPL3 Licensed to "{3}", 
         My.Computer.FileSystem.CurrentDirectory = work
 
         Using ScriptEngine As ScriptEngine = If(ListenerPort > 0,
-            New Debugging.Debugger(DebugListenerPort:=ListenerPort, Config:=Program.Configuration.SettingsData),
+            New Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Debugging.Debugger(
+                DebugListenerPort:=ListenerPort, 
+                Config:=Program.Configuration.SettingsData),
             New ScriptEngine(Program.Configuration.SettingsData))
             Return __scriptShellTerminal(ScriptEngine, ListenerPort > 0)
         End Using
@@ -181,8 +183,8 @@ Program files and source code was distributed under the GPL3 Licensed to "{3}", 
     End Sub
 
     Private Sub __runDebugger(ScriptEngine As ScriptEngine)
-        Dim Debugger As Debugging.Debugger =
-            DirectCast(ScriptEngine, Debugging.Debugger)
+        Dim Debugger As Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Debugging.Debugger =
+            DirectCast(ScriptEngine, Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Debugging.Debugger)
 
         Do While Not Debugger.DebuggerExit
             Call Threading.Thread.Sleep(2000)
