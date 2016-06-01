@@ -1,5 +1,5 @@
 ﻿Imports Microsoft.VisualBasic.ComponentModel
-Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.SchemaMaps
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter
 
 Namespace Runtime.MMU.PageMapping

@@ -4,7 +4,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.ShoalShell
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.HybridsScripting
-Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.SchemaMaps
 Imports System.Data.SQLite.Linq.DataMapping.Interface
 Imports System.Data.SQLite.Linq
 
@@ -99,7 +99,7 @@ Public Module SQLite
 
     <ExportAPI("DBI.Get.TableName")>
     Public Function GetTableName(Schema As Type) As String
-        Return DataMapping.Interface.GetTableName(typeInfo:=Schema)
+        Return DataMapping.Interface.GetTableName(type:=Schema)
     End Function
 
     <ExportAPI("Table.Is_Exists")>
