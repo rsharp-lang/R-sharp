@@ -4,6 +4,7 @@ Imports Microsoft.VisualBasic.Terminal.STDIO
 Imports Microsoft.VisualBasic.Scripting.ShoalShell
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Configuration
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 
 ''' <summary>
 ''' The shoal program main entry.
@@ -85,17 +86,17 @@ Program files and source code was distributed under the GPL3 Licensed to "{3}", 
         Return Program.ScriptShellTerminal(-1, "")
     End Function
 
-    Private Function RunScriptFile(ScriptFile As String, args As KeyValuePair(Of String, String)()) As Integer
+    Private Function RunScriptFile(ScriptFile As String, args As NamedValue(Of String)()) As Integer
         Using scriptEngine As ScriptEngine = New ScriptEngine(Config.Default.SettingsData)
             Return __runScriptFile(scriptEngine, ScriptFile, args)
         End Using
     End Function
 
-    Private Function __runScriptFile(ScriptEngine As ScriptEngine, ScriptFile As String, args As KeyValuePair(Of String, String)()) As Integer
+    Private Function __runScriptFile(ScriptEngine As ScriptEngine, ScriptFile As String, args As NamedValue(Of String)()) As Integer
         Call ScriptEngine.Imports(GetType(InternalCommands))
 
         For Each item In args
-            Call ScriptEngine.MMUDevice.WriteMemory(item.Key, item.Value)
+            Call ScriptEngine.MMUDevice.WriteMemory(item.Name, item.x)
         Next
 
         Dim currentWork As String = My.Computer.FileSystem.CurrentDirectory
@@ -147,7 +148,7 @@ Program files and source code was distributed under the GPL3 Licensed to "{3}", 
 
         Using ScriptEngine As ScriptEngine = If(ListenerPort > 0,
             New Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Debugging.Debugger(
-                DebugListenerPort:=ListenerPort, 
+                DebugListenerPort:=ListenerPort,
                 Config:=Program.Configuration.SettingsData),
             New ScriptEngine(Program.Configuration.SettingsData))
             Return __scriptShellTerminal(ScriptEngine, ListenerPort > 0)

@@ -11,6 +11,7 @@ Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Parser.Tokens.Operator
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 
 Namespace Interpreter
 
@@ -303,8 +304,8 @@ Namespace Interpreter
             Return Expr
         End Function
 
-        Private Function __arg(arg As KeyValuePair(Of String, String)) As KeyValuePair(Of String, InternalExpression)
-            Return New KeyValuePair(Of String, InternalExpression)(arg.Key, New InternalExpression(arg.Value))
+        Private Function __arg(arg As NamedValue(Of String)) As KeyValuePair(Of String, InternalExpression)
+            Return New KeyValuePair(Of String, InternalExpression)(arg.Name, New InternalExpression(arg.x))
         End Function
 
         Public Function TryParseWiki(Expression As String, Tokens As Parser.Tokens.Token()) As LDM.Expressions.Keywords.Wiki
@@ -924,16 +925,16 @@ Namespace Interpreter
                 For Each obj In CommandLine
                     Dim pName As Parser.Tokens.ParameterName
 
-                    If Not obj.Value Is Nothing AndAlso
-                        obj.Value.GetType.Equals(GetType(Boolean)) AndAlso
-                        IsPossibleLogicSW(obj.Key) Then
+                    If Not obj.x Is Nothing AndAlso
+                        obj.x.GetType.Equals(GetType(Boolean)) AndAlso
+                        IsPossibleLogicSW(obj.Name) Then
 
-                        pName = New ParameterName(ParameterName.ParameterType.BooleanSwitch, TrimParamPrefix(obj.Key))
+                        pName = New ParameterName(ParameterName.ParameterType.BooleanSwitch, TrimParamPrefix(obj.Name))
                     Else
-                        pName = New ParameterName(ParameterName.ParameterType.Normal, obj.Key)
+                        pName = New ParameterName(ParameterName.ParameterType.Normal, obj.Name)
                     End If
 
-                    Dim pValue = New Parser.Tokens.InternalExpression(obj.Value)
+                    Dim pValue = New Parser.Tokens.InternalExpression(obj.x)
 
                     Call hash.Add(pName, pValue)
                 Next
@@ -965,8 +966,8 @@ Namespace Interpreter
             End If
 
             parameters.AddRange((From obj In params
-                                 Select Name = New ParameterName(ParameterName.ParameterType.Normal, obj.Key),
-                                     value = New InternalExpression(obj.Value)) _
+                                 Select Name = New ParameterName(ParameterName.ParameterType.Normal, obj.Name),
+                                     value = New InternalExpression(obj.x)) _
                                      .ToDictionary(Function(obj) obj.Name,
                                                    Function(obj) obj.value))
             bools = Parser.ToArray(AddressOf TrimParamPrefix)
