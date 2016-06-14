@@ -4,6 +4,7 @@ Imports Microsoft.VisualBasic.Net.Protocols
 Imports Microsoft.VisualBasic.Parallel
 Imports Microsoft.VisualBasic.Terminal.STDIO__
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.LDM
+Imports Microsoft.VisualBasic.Net.Http
 
 Namespace Runtime.Debugging
 
