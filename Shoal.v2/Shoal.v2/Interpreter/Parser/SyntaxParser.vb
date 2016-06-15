@@ -927,7 +927,7 @@ Namespace Interpreter
 
                     If Not obj.x Is Nothing AndAlso
                         obj.x.GetType.Equals(GetType(Boolean)) AndAlso
-                        IsPossibleLogicSW(obj.Name) Then
+                        IsPossibleLogicFlag(obj.Name) Then
 
                         pName = New ParameterName(ParameterName.ParameterType.BooleanSwitch, TrimParamPrefix(obj.Name))
                     Else

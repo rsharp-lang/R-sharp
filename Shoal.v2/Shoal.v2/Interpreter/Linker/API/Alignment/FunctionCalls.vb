@@ -121,7 +121,7 @@ Namespace Interpreter.Linker.APIHandler.Alignment
 
             Dim str As String = DirectCast(inputParam, String)
 
-            If CommandLine.IsPossibleLogicSW(str) Then
+            If CommandLine.IsPossibleLogicFlag(str) Then
                 str = CommandLine.TrimParamPrefix(str)
 
                 Return String.Equals(FuncDef.Name,  '开关还要和参数名相同
