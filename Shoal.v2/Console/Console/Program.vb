@@ -5,6 +5,7 @@ Imports Microsoft.VisualBasic.Scripting.ShoalShell
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Configuration
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Scripting
 
 ''' <summary>
 ''' The shoal program main entry.
@@ -114,8 +115,9 @@ Program files and source code was distributed under the GPL3 Licensed to "{3}", 
             Return 1
         End If
 
-        Dim i As Integer = If(Scripting.InputHandler.CanbeHandle(value.GetType, GetType(Integer)),
-            Scripting.InputHandler.CTypeDynamic(Scripting.InputHandler.ToString(value), GetType(Integer)),
+        Dim i As Integer = If(
+            InputHandler.Convertible(value.GetType, GetType(Integer)),
+            InputHandler.CTypeDynamic(InputHandler.ToString(value), GetType(Integer)),
             If(value Is Nothing, 1, 0))
 
         Return i
@@ -164,7 +166,7 @@ Program files and source code was distributed under the GPL3 Licensed to "{3}", 
             Call __runTerminal(ScriptEngine)
         End If
 
-        Call Console.WriteLine("[MESSAGE] Auto save shoal environment variables..." & vbCrLf & "   -----> ""file:///{0}""", Program.Configuration.SettingsData.FileName)
+        Call Console.WriteLine("[MESSAGE] Auto save shoal environment variables..." & vbCrLf & "   -----> ""file:///{0}""", Program.Configuration.SettingsData.FilePath)
         Call Program.Configuration.SettingsData.Save()
         Call Console.WriteLine("[DONE!]")
 

@@ -16,7 +16,10 @@ Namespace Interpreter.Linker.APIHandler.Alignment
                 If Not FuncDef.IsOptional Then
                     Return Nothing
                 Else
-                    Return New ParamAlignments With {.Score = 10, .args = {FuncDef.DefaultValue}}
+                    Return New ParamAlignments With {
+                        .Score = 10,
+                        .args = {FuncDef.DefaultValue}
+                    }
                 End If
 
             End If
@@ -47,11 +50,17 @@ Namespace Interpreter.Linker.APIHandler.Alignment
             Dim inputType As Type = valueInput.GetType
 
             If TypeEquals.TypeEquals(FuncDef.ParameterType, inputType).ShadowCopy(equalsValue) > 0 Then
-                Return New ParamAlignments With {.Score = equalsValue, .args = {valueInput}}
+                Return New ParamAlignments With {
+                    .Score = equalsValue,
+                    .args = {valueInput}
+                }
             Else
 
-                If InputHandler.CanbeHandle(inputType, FuncDef.ParameterType) Then
-                    Return New ParamAlignments With {.Score = 20, .args = {CTypeDynamic(valueInput, FuncDef.ParameterType)}}
+                If InputHandler.Convertible(inputType, FuncDef.ParameterType) Then
+                    Return New ParamAlignments With {
+                        .Score = 20,
+                        .args = {CTypeDynamic(valueInput, FuncDef.ParameterType)}
+                    }
                 Else
                     Return Nothing
                 End If

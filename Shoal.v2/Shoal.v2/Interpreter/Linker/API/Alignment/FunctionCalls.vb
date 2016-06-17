@@ -34,7 +34,7 @@ Namespace Interpreter.Linker.APIHandler.Alignment
                 score += equalsValue
                 outRef = valueInput
             Else
-                If InputHandler.CanbeHandle(inputType, paramDef) Then
+                If InputHandler.Convertible(inputType, paramDef) Then
                     score += 20
                     outRef = CTypeDynamic(valueInput, paramDef)
                 Else

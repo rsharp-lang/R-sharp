@@ -62,9 +62,10 @@ Namespace Runtime.DeviceDriver
                 End If
 
                 If Line.Entry.Value.Equals(GetType(String)) Then
-                    Call InputHandler.UpdateHandle(Line.Entry.Key,
-                                                   Line.Mounts.ReturnType,
-                                                   Function(str As String) Line.Mounts.Invoke(Nothing, {str}))
+                    Call InputHandler.CapabilityPromise(
+                        Line.Entry.Key,
+                        Line.Mounts.ReturnType,
+                        Function(s) Line.Mounts.Invoke(Nothing, {s}))
                 End If
 
                 Call _innerHwnds.Add(Line.Entry, Line.DriverHandle)

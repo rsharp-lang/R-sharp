@@ -79,7 +79,7 @@ Namespace HTML
                 CommandNameMaxLength = (From strKey As String In TempShell.Keys Select Len(strKey)).ToArray.Max
 
                 For Each ShellEntry In TempShell
-                    Call sBuilder.AppendLine(String.Format(" {0}  {1} {2}", ShellEntry.Key, New String(" "c, CommandNameMaxLength - Len(ShellEntry.Key)), ShellEntry.Value.FileName))
+                    Call sBuilder.AppendLine(String.Format(" {0}  {1} {2}", ShellEntry.Key, New String(" "c, CommandNameMaxLength - Len(ShellEntry.Key)), ShellEntry.Value.FilePath))
                 Next
             End If
 

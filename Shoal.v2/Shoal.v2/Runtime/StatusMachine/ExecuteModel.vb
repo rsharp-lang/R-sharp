@@ -1,11 +1,11 @@
 ﻿Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.FileIO.FileSystem
+Imports Microsoft.VisualBasic.Linq.Extensions
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.LDM.Expressions
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Linker.APIHandler
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Linker.APIHandler.Alignment
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.Exceptions
-Imports Microsoft.VisualBasic.Linq.Extensions
-
 Imports arg = System.Collections.Generic.KeyValuePair(Of String, Object)
 
 Namespace Runtime
@@ -606,8 +606,8 @@ Namespace Runtime
                 Call sbr.AppendLine($"There are {ScriptEngine.Interpreter.EPMDevice.AnonymousDelegate.TempDelegate.Count} script command is current directory:  {Microsoft.VisualBasic.FileIO.FileSystem.CurrentDirectory}")
                 Call sbr.AppendLine(String.Join(vbCrLf, (From obj
                                                          In ScriptEngine.Interpreter.EPMDevice.AnonymousDelegate.TempDelegate
-                                                         Let name As String = IO.Path.GetFileNameWithoutExtension(obj.Value.FileName)
-                                                         Select $" {name}  {New String(" "c, NameMaxLen - Len(name))}{Microsoft.VisualBasic.FileIO.FileSystem.GetFileInfo(obj.Value.FileName).Name }  // {obj.Value.Expressions.Length} Expressions").ToArray))
+                                                         Let name As String = IO.Path.GetFileNameWithoutExtension(obj.Value.FilePath)
+                                                         Select $" {name}  {New String(" "c, NameMaxLen - Len(name))}{GetFileInfo(obj.Value.FilePath).Name }  // {obj.Value.Expressions.Length} Expressions").ToArray))
                 Call sbr.ToString.__DEBUG_ECHO
             End If
 
