@@ -48,8 +48,9 @@ Namespace Runtime.MMU.PageMapping
 
         Public Function Convertable(sourceType As Type) As Boolean
             Dim convertType As Type = Me.TypeOf
-            Dim YON As Boolean = BasicTypesFlushs.ContainsKey(convertType) AndAlso
-                BasicTypesFlushs.ContainsKey(sourceType)
+            Dim YON As Boolean =
+                ToStrings.ContainsKey(convertType) AndAlso
+                ToStrings.ContainsKey(sourceType)
             Return YON
         End Function
     End Class
