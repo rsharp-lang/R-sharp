@@ -75,8 +75,11 @@ Namespace SPM.Nodes
             Dim Functions = GetAllCommands(type, False)
             Dim EntryPoints = (From Func In Functions Select __entryPointParser(Func)).ToArray
             Dim assm As Assembly = Serialization.ShadowsCopy.ShadowsCopy(assembly)
+
+            assm.TypeId = type.FullName
+
             Return New PartialModule(nsEntry) With {
-                .Assembly = assm.InvokeSet(Of String)(NameOf(assembly.TypeId), type.FullName),
+                .Assembly = assm,
                 .EntryPoints = EntryPoints
             }
         End Function

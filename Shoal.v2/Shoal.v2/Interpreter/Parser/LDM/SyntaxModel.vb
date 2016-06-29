@@ -65,7 +65,9 @@ Namespace Interpreter.LDM
         ''' <returns></returns>
         Public Shared Function ScriptParser(ScriptText As String, File As String) As SyntaxModel
             Dim Expressions = Interpreter.MSLParser(ScriptText).ToList
-            Return CreateObject(Expressions).InvokeSet(Of String)(NameOf(SyntaxModel.FilePath), File)
+            Dim script As SyntaxModel = CreateObject(Expressions)
+            script.FilePath = File
+            Return script
         End Function
 
         Public Overloads Shared Function CreateObject(Expressions As List(Of LDM.Expressions.PrimaryExpression)) As SyntaxModel

@@ -3,6 +3,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection.EntryPoints
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Interpreter.Linker.APIHandler
 Imports Microsoft.VisualBasic.Scripting.ShoalShell.Runtime.HybridsScripting
 Imports Microsoft.VisualBasic.CommandLine.Interpreter
+Imports Microsoft.VisualBasic.Linq
 
 Namespace Interpreter.Linker
 
@@ -133,9 +134,10 @@ Namespace Interpreter.Linker
         ''' <param name="InvokedObject"></param>
         ''' <remarks></remarks>
         Public Sub ImportsInstance(Of T As Class)(InvokedObject As T)
+            Dim setValue = New SetValue(Of EntryPoints.APIEntryPoint)().GetSet(NameOf(EntryPoints.APIEntryPoint.InvokeOnObject))
             Dim Commands = (From EntryPoint As EntryPoints.APIEntryPoint
                             In __allInstanceCommands(InvokedObject.GetType)
-                            Select EntryPoint.InvokeSet(Of Object)(NameOf(EntryPoint.InvokeOnObject), InvokedObject)).ToList '解析出命令并连接目标实例对象与函数的执行入口点
+                            Select setValue(EntryPoint, InvokedObject)).ToList '解析出命令并连接目标实例对象与函数的执行入口点
             Dim API = SPM.Nodes.AssemblyParser.APIParser(Commands)
             Call [Imports](API)
         End Sub
