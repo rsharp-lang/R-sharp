@@ -72,6 +72,7 @@ Public Module TokenIcer
                     ' 遇见了语句的结束符号
                     If c = ";"c Then
                         ' 结束当前的statement的解析
+                        newToken()
                         last = New Statement With {
                             .Tokens = tokens
                         }
@@ -101,12 +102,15 @@ Public Module TokenIcer
                         Dim childs As New List(Of Statement)
                         Call buffer.Parse(childs)
                         last = New Statement With {
-                            .Tokens = tokens,
+                            .Tokens = tokens.ToArray,
                             .Child = childs
                         }
                         tokens *= 0
-
-                        Return last
+                        If Not parent Is Nothing Then
+                            parent += last
+                        Else
+                            Return last
+                        End If
                     ElseIf c = "}"c Then
                         ' closure stack close
                         ' 结束当前的statement，相当于分号

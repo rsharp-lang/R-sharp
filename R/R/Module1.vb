@@ -6,6 +6,12 @@ var x <- ""33333333"" & 33:ToString(""F2"");
 
 if (x:Length <= 10) {
     println(x);
+    
+    test <- function(...) {
+        var gg <- ...;
+        var x  <- ...;
+        var s  <- x & global$x;        
+    }
 }
 ").ToArray _
 .GetSourceTree _
