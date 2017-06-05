@@ -21,6 +21,21 @@ Public Module TokenIcer
                                  Return False
                              End If
                          End Function
+        Dim newToken =
+            Sub()
+                ' 创建除了字符串之外的其他的token
+                If varDefInit() Then
+                    tokens += New langToken(LanguageTokens.var, "var")
+                ElseIf tmp.SequenceEqual("<-") Then
+                    tokens += New langToken(LanguageTokens.LeftAssign, "<-")
+                Else
+                    tokens += New langToken(LanguageTokens.Identifier) With {
+                        .Value = New String(tmp)
+                    }
+                End If
+
+                tmp *= 0
+            End Sub
 
         Do While Not buffer.EndRead
             Dim c As Char = +buffer
@@ -54,19 +69,7 @@ Public Module TokenIcer
                         Yield last
                     ElseIf c = " "c OrElse c = ASCII.TAB Then
                         ' 遇见了空格，结束当前的token
-                        If varDefInit() Then
-                            tokens += New langToken With {
-                                .Name = LanguageTokens.var, 
-                                .Value = "var"
-                            }
-                        Else
-                            tokens += New langToken With {
-                                .Name = LanguageTokens.Identifier,
-                                .Value = New String(tmp)
-                            }
-                        End If
-
-                        tmp *= 0
+                        newToken()
                     Else
                         tmp += c
                     End If
