@@ -23,6 +23,10 @@ Public Module TokenIcer
                          End Function
         Dim newToken =
             Sub()
+                If tmp.Count = 0 Then
+                    Return
+                End If
+
                 ' 创建除了字符串之外的其他的token
                 If varDefInit() Then
                     tokens += New langToken(LanguageTokens.var, "var")
@@ -57,6 +61,7 @@ Public Module TokenIcer
                 ' 遇见了字符串的起始的第一个双引号
                 If Not QuotOpen AndAlso c = ASCII.Quot Then
                     QuotOpen = True
+                    newToken()
                 Else
                     ' 遇见了语句的结束符号
                     If c = ";"c Then
@@ -67,6 +72,18 @@ Public Module TokenIcer
                         tokens *= 0
 
                         Yield last
+                    ElseIf c = ":"c Then
+                        ' 这是方法调用的符号
+                        newToken()
+                        tokens += New langToken(LanguageTokens.methodCall, ":")
+                    ElseIf c = "("c Then
+                        ' 新的堆栈
+                        tokens += New langToken(LanguageTokens.StackOpen, "("c)
+                    ElseIf c = ")"c Then
+                        tokens += New langToken(LanguageTokens.StackClose, ")"c)
+                    ElseIf c = "&"c Then
+                        ' 字符串拼接
+                        tokens += New langToken(LanguageTokens.StringContact, "&")
                     ElseIf c = " "c OrElse c = ASCII.TAB Then
                         ' 遇见了空格，结束当前的token
                         newToken()
@@ -91,14 +108,15 @@ Public Class Statement
     <XmlElement("tokens")>
     Public Property Tokens As langToken()
     ''' <summary>
-    ''' 堆栈
+    ''' if/for/do/function堆栈
     ''' </summary>
-    Public Property Child As Statement
+    Public Property Child As Statement()
 
 End Class
 
 Public Enum LanguageTokens
 
+    undefine
     ''' <summary>
     ''' 允许使用小数点作为变量名称的一部分
     ''' </summary>
@@ -108,10 +126,12 @@ Public Enum LanguageTokens
     ''' </summary>
     LeftAssign
     ParameterAssign
+    methodCall
     StackOpen
     StackClose
     BracketOpen
     BracketClose
+    StringContact
     ''' <summary>
     ''' Variable declare init
     ''' </summary>
