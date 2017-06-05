@@ -10,6 +10,12 @@ Public Module TokenIcer
 
     <Extension> Public Iterator Function Parse(s$) As IEnumerable(Of Statement)
         Dim buffer As New Pointer(Of Char)(Trim(s$))
+        Do While Not buffer.EndRead
+            Yield buffer.Parse(Nothing)
+        Loop
+    End Function
+
+    <Extension> Private Function Parse(buffer As Pointer(Of Char), ByRef parent As List(Of Statement)) As Statement
         Dim QuotOpen As Boolean = False
         Dim tmp As New List(Of Char)
         Dim tokens As New List(Of langToken)
@@ -71,7 +77,11 @@ Public Module TokenIcer
                         }
                         tokens *= 0
 
-                        Yield last
+                        If parent Is Nothing Then
+                            Return last
+                        Else
+                            parent += last
+                        End If
                     ElseIf c = ":"c Then
                         ' 这是方法调用的符号
                         newToken()
@@ -86,6 +96,26 @@ Public Module TokenIcer
                     ElseIf c = "&"c Then
                         ' 字符串拼接
                         tokens += New langToken(LanguageTokens.StringContact, "&")
+                    ElseIf c = "{"c Then
+                        ' closure stack open
+                        Dim childs As New List(Of Statement)
+                        Call buffer.Parse(childs)
+                        last = New Statement With {
+                            .Tokens = tokens,
+                            .Child = childs
+                        }
+                        tokens *= 0
+
+                        Return last
+                    ElseIf c = "}"c Then
+                        ' closure stack close
+                        ' 结束当前的statement，相当于分号
+                        last = New Statement With {
+                            .Tokens = tokens
+                        }
+                        tokens *= 0
+                        parent += last  ' 右花括号必定是结束堆栈 
+                        Return Nothing
                     ElseIf c = " "c OrElse c = ASCII.TAB Then
                         ' 遇见了空格，结束当前的token
                         newToken()
@@ -95,9 +125,11 @@ Public Module TokenIcer
                 End If
             End If
         Loop
+
+        Return New Statement With {.Tokens = tokens}
     End Function
 
-    <Extension> Public Function GetSourceTree(s As Statement) As String
+    <Extension> Public Function GetSourceTree(s As Statement()) As String
         Return s.GetXml
     End Function
 End Module
