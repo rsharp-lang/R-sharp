@@ -12,6 +12,12 @@ if (x:Length <= 10) {
         var x  <- ...;
         var s  <- x & global$x;        
     }
+
+    test(x = x, gg = x, s = x);
+}
+
+do while(TRUE) {
+    cat(""."");
 }
 ").ToArray _
 .GetSourceTree _
