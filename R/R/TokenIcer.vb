@@ -12,7 +12,7 @@ Public Module TokenIcer
         Dim buffer As New Pointer(Of Char)(Trim(s$))
         Dim QuotOpen As Boolean = False
         Dim tmp As New List(Of Char)
-        Dim tokens As New List(Of Token(Of LanguageTokens))
+        Dim tokens As New List(Of langToken)
         Dim last As Statement
 
         Do While Not buffer.EndRead
@@ -71,11 +71,11 @@ End Module
 Public Class Statement
 
     <XmlElement("tokens")>
-    Public Tokens As langToken()
+    Public Property Tokens As langToken()
     ''' <summary>
     ''' 堆栈
     ''' </summary>
-    Public Child As Statement
+    Public Property Child As Statement
 
 End Class
 
