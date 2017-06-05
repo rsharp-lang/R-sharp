@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.CompilerServices
+Imports System.Xml.Serialization
 Imports Microsoft.VisualBasic.Emit.Marshal
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
@@ -17,7 +18,7 @@ Public Module TokenIcer
         Do While Not buffer.EndRead
             Dim c As Char = +buffer
 
-            If QuotOpen Then
+            If QuotOpen Then ' 当前所解析的状态为字符串解析
                 If c = ASCII.Quot AndAlso Not tmp.StartEscaping Then
                     ' 当前的字符为双引号，并且不是转义状态，则结束字符串
                     tokens += New langToken With {
@@ -25,22 +26,42 @@ Public Module TokenIcer
                         .Value = New String(tmp)
                     }
                     tmp *= 0
+                    QuotOpen = False
+                Else
+                    ' 任然是字符串之中的一部分字符，则继续添加进入tmp之中
+                    tmp += c
+                End If
+            Else
+                ' 遇见了字符串的起始的第一个双引号
+                If Not QuotOpen AndAlso c = ASCII.Quot Then
+                    QuotOpen = True
+                Else
+                    ' 遇见了语句的结束符号
+                    If c = ";"c Then
+                        ' 结束当前的statement的解析
+                        last = New Statement With {
+                            .Tokens = tokens
+                        }
+                        tokens *= 0
+
+                        Yield last
+                    ElseIf c = " "c OrElse c = ASCII.TAB Then
+                        ' 遇见了空格，结束当前的token
+                        tokens += New langToken With {
+                            .Name = LanguageTokens.Identifier,
+                            .Value = New String(tmp)
+                        }
+                        tmp *= 0
+                    Else
+                        tmp += c
+                    End If
                 End If
             End If
-            If Not QuotOpen AndAlso c = ASCII.Quot Then
-                QuotOpen = True
-                Continue Do
-            End If
-            If c = ";"c Then
-                ' 结束当前的statement的解析
-                last = New Statement With {
-                    .Tokens = tokens
-                }
-                tokens *= 0
-
-                Yield last
-            End If
         Loop
+    End Function
+
+    <Extension> Public Function GetSourceTree(s As Statement) As String
+        Return s.GetXml
     End Function
 End Module
 
@@ -49,6 +70,7 @@ End Module
 ''' </summary>
 Public Class Statement
 
+    <XmlElement("tokens")>
     Public Tokens As langToken()
     ''' <summary>
     ''' 堆栈
