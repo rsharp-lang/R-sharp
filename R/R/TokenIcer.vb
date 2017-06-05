@@ -78,8 +78,10 @@ Public Module TokenIcer
                         tokens += New langToken(LanguageTokens.methodCall, ":")
                     ElseIf c = "("c Then
                         ' 新的堆栈
+                        newToken()
                         tokens += New langToken(LanguageTokens.StackOpen, "("c)
                     ElseIf c = ")"c Then
+                        newToken()
                         tokens += New langToken(LanguageTokens.StackClose, ")"c)
                     ElseIf c = "&"c Then
                         ' 字符串拼接
