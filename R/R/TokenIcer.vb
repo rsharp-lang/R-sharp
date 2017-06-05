@@ -116,7 +116,7 @@ Public Module TokenIcer
                         tokens *= 0
                         parent += last  ' 右花括号必定是结束堆栈 
                         Return Nothing
-                    ElseIf c = " "c OrElse c = ASCII.TAB Then
+                    ElseIf c = " "c OrElse c = ASCII.TAB OrElse c = ASCII.LF OrElse c = ASCII.CR Then
                         ' 遇见了空格，结束当前的token
                         newToken()
                     Else
