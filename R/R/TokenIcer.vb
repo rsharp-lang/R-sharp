@@ -14,6 +14,13 @@ Public Module TokenIcer
         Dim tmp As New List(Of Char)
         Dim tokens As New List(Of langToken)
         Dim last As Statement
+        Dim varDefInit = Function()
+                             If tokens.Count = 0 AndAlso tmp.SequenceEqual("var") Then
+                                 Return True
+                             Else
+                                 Return False
+                             End If
+                         End Function
 
         Do While Not buffer.EndRead
             Dim c As Char = +buffer
@@ -47,10 +54,18 @@ Public Module TokenIcer
                         Yield last
                     ElseIf c = " "c OrElse c = ASCII.TAB Then
                         ' 遇见了空格，结束当前的token
-                        tokens += New langToken With {
-                            .Name = LanguageTokens.Identifier,
-                            .Value = New String(tmp)
-                        }
+                        If varDefInit() Then
+                            tokens += New langToken With {
+                                .Name = LanguageTokens.var, 
+                                .Value = "var"
+                            }
+                        Else
+                            tokens += New langToken With {
+                                .Name = LanguageTokens.Identifier,
+                                .Value = New String(tmp)
+                            }
+                        End If
+
                         tmp *= 0
                     Else
                         tmp += c
@@ -94,6 +109,9 @@ Public Enum LanguageTokens
     StackClose
     BracketOpen
     BracketClose
+    ''' <summary>
+    ''' Variable declare init
+    ''' </summary>
     var
     ''' <summary>
     ''' 字符串值
