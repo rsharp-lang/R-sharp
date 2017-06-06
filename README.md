@@ -94,10 +94,21 @@ if (not me is him) {
 }
 ```
 
-Allows
+Allows user operator
 
-+-*/\%^
-is like in which
+|Operator |Description          |
+|---------|---------------------|
+|``+``    | add                 |
+|``-``    | substract           |
+|``*``    | multiply            |
+|``/``    | devide              |
+|``\``    | integer devide      |
+|``%``    | mod                 |
+|``^``    | power               |
+|``is``   | object equals       |
+|``like`` | object similarity   |
+|``in``   | collection set      |
+|``which``| index list for true |
 
 ###### Simple external calls
 
