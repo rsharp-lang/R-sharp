@@ -26,6 +26,13 @@ Public Module TokenIcer
                                  Return False
                              End If
                          End Function
+        Dim bufferEquals = Function(c As Char)
+                               If tmp.Count = 1 AndAlso tmp.First = c Then
+                                   Return True
+                               Else
+                                   Return False
+                               End If
+                           End Function
         Dim newToken =
             Sub()
                 If tmp.Count = 0 Then
@@ -95,7 +102,26 @@ Public Module TokenIcer
                         tokens += New langToken(LanguageTokens.EvalClose, ")"c)
                     ElseIf c = "&"c Then
                         ' 字符串拼接
+                        newToken()
                         tokens += New langToken(LanguageTokens.StringContact, "&")
+                    ElseIf c = ","c Then
+                        newToken()
+                        tokens += New langToken(LanguageTokens.ParameterDelimiter, ",")
+                    ElseIf c = "="c Then
+                        If bufferEquals("<"c) Then
+                            tokens += New langToken(LanguageTokens.Operator, "<=")
+                            tmp *= 0
+                        ElseIf bufferEquals("="c) Then
+                            tokens += New langToken(LanguageTokens.Operator, "==")
+                            tmp *= 0
+                        Else
+                            If tmp.Count = 0 Then
+                                ' 可能是==的第一个等号，则只添加
+                                tmp += c
+                            Else
+                                newToken()
+                            End If
+                        End If
                     ElseIf c = "{"c Then
                         ' closure stack open
                         Dim childs As New List(Of Statement)

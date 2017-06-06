@@ -2,6 +2,7 @@
 
     Sub Main()
         Call TokenIcer.Parse("
+var x <- {1, 2, 3, 4, 5};
 var x <- ""33333333"" & 33:ToString(""F2"");
 
 if (x:Length <= 10) {
@@ -16,7 +17,7 @@ if (x:Length <= 10) {
     test(x = x, gg = x, s = x);
 }
 
-do while(TRUE) {
+do while(TRUE andalso t == ""123 + 555"") {
     cat(""."");
 }
 ").ToArray _

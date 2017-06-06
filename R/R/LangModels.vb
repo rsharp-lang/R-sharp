@@ -6,11 +6,12 @@ Imports langToken = Microsoft.VisualBasic.Scripting.TokenIcer.Token(Of R.Languag
 ''' </summary>
 Public Class Statement
 
-    <XmlElement("tokens")>
+    <XmlElement("t")>
     Public Property Tokens As langToken()
     ''' <summary>
     ''' if/for/do/function堆栈
     ''' </summary>
+    <XmlArray("closure")>
     Public Property Child As Statement()
 
 End Class
@@ -30,10 +31,16 @@ Public Enum LanguageTokens
     ''' =
     ''' </summary>
     ParameterAssign
+    [Operator]
     ''' <summary>
     ''' :
     ''' </summary>
     methodCall
+    ''' <summary>
+    ''' ,
+    ''' </summary>
+    ParameterDelimiter
+
 #Region "{...}"
     StackOpen
     StackClose
