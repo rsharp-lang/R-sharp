@@ -145,6 +145,45 @@ Allows user operator
 |``in``   | collection set      |
 |``which``| index list for true |
 
+###### pipeline operator
+
+Extension caller chain in VisualBasic is also named as function pipeline
+
+```vbnet
+<Extension> Function test1(x) 
+End Function
+
+<Extension> Function test2(x, y) 
+End Function
+
+<Extension> Function test3(a) 
+End Function
+
+Dim result = "hello world!" 
+    .test1 
+	.test2(99) 
+	.test3
+```
+
+All of the R function which have at least one parameter can be using in pipeline mode, using ``|`` as the pipeline operator:
+
+```R
+test1 <- function(x) {
+}
+test2 <- function(x, y) {
+}
+test3 <- function(a) {
+}
+
+# Doing the exactly the same as VisualBasic pipeline in R language:
+var result <- "hello world!" 
+    |test1 
+	|test2(99) 
+	|test3;
+# or you can just using the R function in normal way, and it is much complicated to read:
+var result <- test3(test2(test1("hello world"), 99));
+```
+
 ###### IN operator
 
 ```R
