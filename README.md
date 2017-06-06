@@ -110,13 +110,45 @@ Allows user operator
 |``in``   | collection set      |
 |``which``| index list for true |
 
+###### IN operator
+
+```R
+# in list
+var booleans <- name in names(obj);
+# in range
+var booleans <- x in [min, max];
+```
+
+###### combine Which operator 
+
+```R
+var x <- {1, 2, 3, 4, 5};
+var indices.true <- which x in [min, max];
+```
+
 ###### Simple external calls
 
 Makes more easier for calls external command from CLI, apply a ``@`` operator on a string vector will makes an external system calls:
 
 ```R
-var exitCode <- @"/bin/GCModeller/localblast /blastp /query \"{query.fasta}\" /subject \"{COG_myva}\" /out \"{COG_myva.csv}\"";
+var [exitCode, stdout] <- @"/bin/GCModeller/localblast /blastp /query \"{query.fasta}\" /subject \"{COG_myva}\" /out \"{COG_myva.csv}\"";
 # or
 var CLI <- "/bin/GCModeller/localblast /blastp /query \"{query.fasta}\" /subject \"{COG_myva}\" /out \"{COG_myva.csv}\"";
-var exitCode <- @CLI;
+var [exitCode, stdout] <- @CLI;
+```
+
+###### Using tuple
+
+Tuple enable the R function returns multiple value at once:
+
+```R
+tuple.test <- function(a as integer, b as integer) {
+    return [a, b, a^b];
+}
+
+var [a, b, c] <- tuple.test(3, 2);
+
+if (a == 3) {
+    c = c + a + b;
+}
 ```
