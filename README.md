@@ -154,7 +154,7 @@ var booleans <- name in names(obj);
 var booleans <- x in [min, max];
 ```
 
-###### combine Which operator 
+###### combine with ``Which`` operator 
 
 ```R
 var x <- {1, 2, 3, 4, 5};
@@ -167,7 +167,8 @@ Makes more easier for calls external command from CLI, apply a ``@`` operator on
 
 ```R
 var [exitCode, stdout] <- @"/bin/GCModeller/localblast /blastp /query \"{query.fasta}\" /subject \"{COG_myva}\" /out \"{COG_myva.csv}\"";
-# or
+
+# or makes it more clear to read
 var CLI <- "/bin/GCModeller/localblast /blastp /query \"{query.fasta}\" /subject \"{COG_myva}\" /out \"{COG_myva.csv}\"";
 var [exitCode, stdout] <- @CLI;
 ```
