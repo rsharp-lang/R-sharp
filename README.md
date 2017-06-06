@@ -14,8 +14,8 @@ Variable in ``R#`` should be declared by ``var`` keyword, and its value assign i
 var s <- "12345";
 var x <- {1, 2, 3, 4, 5};
 var m <- {
-   {1, 2, 3}, 
-   {4, 5, 6}, 
+   {1, 2, 3},
+   {4, 5, 6},
    {7, 8, 9}
 };
 ```
@@ -26,8 +26,8 @@ Delcare a vector or matrix will no longer required of the ``c(...)`` function or
 Dim s = "12345"
 Dim x = {1, 2, 3, 4, 5}
 Dim m = {
-   {1, 2, 3}, 
-   {4, 5, 6}, 
+   {1, 2, 3},
+   {4, 5, 6},
    {7, 8, 9}
 }
 ```
@@ -150,5 +150,40 @@ var [a, b, c] <- tuple.test(3, 2);
 
 if (a == 3) {
     c = c + a + b;
+}
+```
+
+###### R object to tuple
+
+You can naturally convert the object as tuple value. The member in the tuple their name should matched the names in an object, so that you can doing something like this example in ``R#``:
+
+```R
+var obj <- list() with {
+    $a <- 333;
+    $b <- 999;
+}
+var [a, b] <- obj;
+```
+
+But, wait, if the property in an object is not a valid identifier name in ``R#``? Don't worried, you can using alias:
+
+```R
+var obj <- list() with {
+    $"112233+5" <- 999;
+    $x <- 1;
+}
+var [a as "112233+5", b as "x"] <- obj;
+```
+
+The tuple feature is espacially useful in operates the dataframe:
+
+```R
+var d <- data.frame(
+    a = {1,2,3},
+    b = {"a","g","y"},
+    t = {TRUE, TRUE, FALSE});
+
+for([a,b,c] in d) {
+    println("%s = %s ? (%s)", a,b,c);
 }
 ```
