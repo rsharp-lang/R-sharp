@@ -14,6 +14,12 @@ Public Class Statement
     <XmlArray("closure")>
     Public Property Child As Statement()
 
+    Public ReadOnly Property IsEmpty As Boolean
+        Get
+            Return Tokens.IsNullOrEmpty AndAlso Child.IsNullOrEmpty
+        End Get
+    End Property
+
 End Class
 
 Public Enum LanguageTokens

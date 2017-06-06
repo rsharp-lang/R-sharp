@@ -9,8 +9,12 @@ Public Module TokenIcer
 
     <Extension> Public Iterator Function Parse(s$) As IEnumerable(Of Statement)
         Dim buffer As New Pointer(Of Char)(Trim(s$))
+        Dim it As New Value(Of Statement)
+
         Do While Not buffer.EndRead
-            Yield buffer.Parse(Nothing)
+            If Not (it = buffer.Parse(Nothing)) Is Nothing AndAlso Not (+it).IsEmpty Then
+                Yield it
+            End If
         Loop
     End Function
 
@@ -139,6 +143,7 @@ Public Module TokenIcer
                     ElseIf c = "}"c Then
                         ' closure stack close
                         ' 结束当前的statement，相当于分号
+                        newToken()
                         last = New Statement With {
                             .Tokens = tokens
                         }
