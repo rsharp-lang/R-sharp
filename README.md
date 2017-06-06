@@ -160,7 +160,7 @@ End Function
 End Function
 
 Dim result = "hello world!" 
-    .test1 
+	.test1 
 	.test2(99) 
 	.test3
 ```
@@ -177,7 +177,7 @@ test3 <- function(a) {
 
 # Doing the exactly the same as VisualBasic pipeline in R language:
 var result <- "hello world!" 
-    |test1 
+	|test1 
 	|test2(99) 
 	|test3;
 # or you can just using the R function in normal way, and it is much complicated to read:
