@@ -161,6 +161,37 @@ var x <- {1, 2, 3, 4, 5};
 var indices.true <- which x in [min, max];
 ```
 
+###### ``[]`` bracket in R language
+
+Global variable:
+
+```R
+var g <- "test";
+
+test <- function(g as integer) {
+    # just like the VisualBasic language, you can using [] bracket 
+	# for eliminates the object identifier conflicts in R language.
+    # string contact of the parameter g with global variable [g]
+    return g:ToString("F2") & [g];
+}
+```
+
+Range generator:
+
+```R
+if (mz in [mz.min, mz.max]) {
+    # range generator only allows numeric type
+}
+```
+
+tuple variable:
+
+```R
+# run commandline using @ operator in R
+var prot.fasta = "/home/biostack/sample.fasta";
+var [exitCode, std_out] <- @"makeblastdb -in \"{prot.fasta}\" -dbtype prot";
+```
+
 ###### Simple external calls
 
 Makes more easier for calls external command from CLI, apply a ``@`` operator on a string vector will makes an external system calls:
@@ -215,12 +246,12 @@ The tuple feature is espacially useful in operates the dataframe:
 
 ```R
 var d <- data.frame(
-    a = {1,2,3},
-    b = {"a","g","y"},
+    a = {1, 2, 3},
+    b = {"a", "g", "y"},
     t = {TRUE, TRUE, FALSE});
 
-for([a,b,c] in d) {
-    println("%s = %s ? (%s)", a,b,c);
+for([a, b, c as "t"] in d) {
+    println("%s = %s ? (%s)", a, b, c);
 }
 
 var [a, b, booleans as "t"] <- d;
