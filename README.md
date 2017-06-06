@@ -76,9 +76,8 @@ if (x <= 10 andalso y != 99) {
 Allows you bind operator on your custom type:
 
 ```R
-var me <- list() 
-
-with me {
+# binding operator only allows in the with closure in the object declare statement
+var me <- list() with {
    %+% <- function($, other) {
    }
    %is% <- function($, other) {
