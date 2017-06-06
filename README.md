@@ -86,8 +86,8 @@ var me <- list() with {
 
 # and then using the operator
 
-var new.me  <- me + other;
-var detecte <- me is other;
+var new.me    <- me + other;
+var predicate <- me is other;
 
 if (not me is him) {
     # ......
@@ -95,6 +95,9 @@ if (not me is him) {
 ```
 
 Allows
+
++-*/\%^
+is like in which
 
 ###### Simple external calls
 
