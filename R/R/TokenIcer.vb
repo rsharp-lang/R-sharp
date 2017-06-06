@@ -1,5 +1,4 @@
 ﻿Imports System.Runtime.CompilerServices
-Imports System.Xml.Serialization
 Imports Microsoft.VisualBasic.Emit.Marshal
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
@@ -39,7 +38,7 @@ Public Module TokenIcer
                 ElseIf tmp.SequenceEqual("<-") Then
                     tokens += New langToken(LanguageTokens.LeftAssign, "<-")
                 Else
-                    tokens += New langToken(LanguageTokens.Identifier) With {
+                    tokens += New langToken(LanguageTokens.Object) With {
                         .Value = New String(tmp)
                     }
                 End If
@@ -90,10 +89,10 @@ Public Module TokenIcer
                     ElseIf c = "("c Then
                         ' 新的堆栈
                         newToken()
-                        tokens += New langToken(LanguageTokens.StackOpen, "("c)
+                        tokens += New langToken(LanguageTokens.EvalOpen, "("c)
                     ElseIf c = ")"c Then
                         newToken()
-                        tokens += New langToken(LanguageTokens.StackClose, ")"c)
+                        tokens += New langToken(LanguageTokens.EvalClose, ")"c)
                     ElseIf c = "&"c Then
                         ' 字符串拼接
                         tokens += New langToken(LanguageTokens.StringContact, "&")

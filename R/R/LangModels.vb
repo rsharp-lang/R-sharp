@@ -19,19 +19,37 @@ Public Enum LanguageTokens
 
     undefine
     ''' <summary>
-    ''' 允许使用小数点作为变量名称的一部分
+    ''' identifier, value expression, etc.(允许使用小数点作为变量名称的一部分)
     ''' </summary>
-    Identifier
+    [Object]
     ''' <summary>
     ''' &lt;-
     ''' </summary>
     LeftAssign
+    ''' <summary>
+    ''' =
+    ''' </summary>
     ParameterAssign
+    ''' <summary>
+    ''' :
+    ''' </summary>
     methodCall
+#Region "{...}"
     StackOpen
     StackClose
-    BracketOpen
-    BracketClose
+#End Region
+#Region "(...)"
+    EvalOpen
+    EvalClose
+#End Region
+#Region "[...]"
+    IndexOpen
+    IndexClose
+#End Region
+
+    ''' <summary>
+    ''' &amp;
+    ''' </summary>
     StringContact
     ''' <summary>
     ''' Variable declare init
