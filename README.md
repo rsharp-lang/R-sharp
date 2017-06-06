@@ -209,7 +209,7 @@ var g <- "test";
 
 test <- function(g as integer) {
     # just like the VisualBasic language, you can using [] bracket 
-	# for eliminates the object identifier conflicts in R language.
+    # for eliminates the object identifier conflicts in R language.
     # string contact of the parameter g with global variable [g]
     return g:ToString("F2") & [g];
 }
@@ -233,7 +233,7 @@ var [exitCode, std_out] <- @"makeblastdb -in \"{prot.fasta}\" -dbtype prot";
 
 ###### Simple external calls
 
-Makes more easier for calls external command from CLI, apply a ``@`` operator on a string vector will makes an external system calls:
+The ``R#`` language makes more easier for calling external command from CLI, apply a ``@`` operator on a string vector will makes an external system calls:
 
 ```R
 var [exitCode, stdout] <- @"/bin/GCModeller/localblast /blastp /query \"{query.fasta}\" /subject \"{COG_myva}\" /out \"{COG_myva.csv}\"";
