@@ -32,6 +32,10 @@ Dim m = {
 }
 ```
 
+###### Types
+
+
+
 ###### Get/Set value
 
 Get/Set property value keeps the same as the R language: 
@@ -39,4 +43,41 @@ Get/Set property value keeps the same as the R language:
 ```R
 var names <- dataframe[, "name"];
 dataframe[, "name"] <- new.names;
+```
+
+###### String
+
+Add new string contact and string interploate feature for ``R#``:
+
+```
+var name     <- first.name & " " & last.name;
+# or
+var my.name  <- "{first.name} {last.name}"; 
+# sprintf function is still avaliable
+var his.name <- sprintf("%s %s", first.name, last.name); 
+```
+
+###### Logical operators
+
++ and, andalso
++ or, orelse
++ not
+
+```R
+if (x <= 10 andalso y != 99) {
+    # ......
+} else if(not z is null) {
+    # ......
+}
+```
+
+###### Simple external calls
+
+Makes more easier for calls external command from CLI, apply a ``@`` operator on a string vector will makes an external system calls:
+
+```
+var exitCode <- @"/bin/GCModeller/localblast /blastp /query \"{query.fasta}\" /subject \"{COG_myva}\" /out \"{COG_myva.csv}\"";
+# or
+var CLI <- "/bin/GCModeller/localblast /blastp /query \"{query.fasta}\" /subject \"{COG_myva}\" /out \"{COG_myva.csv}\"";
+var exitCode <- @CLI;
 ```
