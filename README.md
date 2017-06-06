@@ -49,7 +49,7 @@ dataframe[, "name"] <- new.names;
 
 Add new string contact and string interploate feature for ``R#``:
 
-```
+```R
 var name     <- first.name & " " & last.name;
 # or
 var my.name  <- "{first.name} {last.name}"; 
@@ -71,11 +71,37 @@ if (x <= 10 andalso y != 99) {
 }
 ```
 
+###### Operator binding
+
+Allows you bind operator on your custom type:
+
+```R
+var me <- list() 
+
+with me {
+   %+% <- function($, other) {
+   }
+   %is% <- function($, other) {
+   }
+}
+
+# and then using the operator
+
+var new.me  <- me + other;
+var detecte <- me is other;
+
+if (not me is him) {
+    # ......
+}
+```
+
+Allows
+
 ###### Simple external calls
 
 Makes more easier for calls external command from CLI, apply a ``@`` operator on a string vector will makes an external system calls:
 
-```
+```R
 var exitCode <- @"/bin/GCModeller/localblast /blastp /query \"{query.fasta}\" /subject \"{COG_myva}\" /out \"{COG_myva.csv}\"";
 # or
 var CLI <- "/bin/GCModeller/localblast /blastp /query \"{query.fasta}\" /subject \"{COG_myva}\" /out \"{COG_myva.csv}\"";
