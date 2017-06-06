@@ -34,7 +34,26 @@ Dim m = {
 
 ###### Types
 
+``R#`` language have sevral primitive type:
 
++ ``integer``, System.Int64 vector
++ ``double``, System.Double vector
++ ``uinteger``, System.UInt64 vector
++ ``string``, System.String vector
++ ``char``, System.Char vector
++ ``boolean``, System.Boolean vector
+
+And you can declare the user type by using ``list()`` function, example like:
+
+```R
+var obj <- list();
+
+# using with for object property initialize
+var obj <- list() with {
+    $a <- 123;
+	$b <- "+++";
+}
+```
 
 ###### Get/Set value
 
@@ -186,4 +205,8 @@ var d <- data.frame(
 for([a,b,c] in d) {
     println("%s = %s ? (%s)", a,b,c);
 }
+
+var [a, b, booleans as "t"] <- d;
 ```
+
+If the tuple is applied on a for loop, then it means convert each row in dataframe as tuple, or just applied the tuple on the var declaring, then it means converts the columns in dataframe as the tuple, so that the variable in tuple is a vector with nrows of the dataframe.
