@@ -22,6 +22,10 @@ Public Class Statement
 
 End Class
 
+Public Class Main
+    Public Property program As Statement()
+End Class
+
 Public Enum LanguageTokens
 
     undefine

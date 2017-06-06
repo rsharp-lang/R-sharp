@@ -121,6 +121,12 @@ Public Module TokenIcer
                     ElseIf c = ")"c Then
                         newToken()
                         tokens += New langToken(LanguageTokens.EvalClose, ")"c)
+                    ElseIf c = "["c Then
+                        newToken()
+                        tokens += New langToken(LanguageTokens.IndexOpen, "["c)
+                    ElseIf c = "]"c Then
+                        newToken()
+                        tokens += New langToken(LanguageTokens.IndexClose, "]"c)
                     ElseIf c = "&"c Then
                         ' 字符串拼接
                         newToken()
@@ -180,7 +186,7 @@ Public Module TokenIcer
         Return New Statement With {.Tokens = tokens}
     End Function
 
-    <Extension> Public Function GetSourceTree(s As Statement()) As String
-        Return s.GetXml
+    <Extension> Public Function GetSourceTree(s As IEnumerable(Of Statement)) As String
+        Return New Main With {.program = s.ToArray}.GetXml
     End Function
 End Module
