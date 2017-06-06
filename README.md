@@ -55,6 +55,22 @@ var obj <- list() with {
 }
 ```
 
+generally, the parameter in a function is a generic type, so that a function definition like:
+
+```R
+test <- function(x) {
+}
+```
+
+can accept any type you have input. but you can using the ``param as <type>`` for limit the type as a specific type:
+
+```R
+test.integer <- function(x as integer) {
+    # the type constraint means the parameter only allow the integer vector type
+	# if the parameter is a string vector, then the interpreter will throw exceptions.
+}
+```
+
 ###### Get/Set value
 
 Get/Set property value keeps the same as the R language: 
