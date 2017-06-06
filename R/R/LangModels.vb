@@ -72,5 +72,6 @@ Public Enum LanguageTokens
     ''' 字符串值
     ''' </summary>
     [String]
+    Comment
 
 End Enum

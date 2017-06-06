@@ -20,6 +20,7 @@ Public Module TokenIcer
 
     <Extension> Private Function Parse(buffer As Pointer(Of Char), ByRef parent As List(Of Statement)) As Statement
         Dim QuotOpen As Boolean = False
+        Dim commentOpen As Boolean = False ' 当出现注释符的时候，会一直持续到遇见换行符为止
         Dim tmp As New List(Of Char)
         Dim tokens As New List(Of langToken)
         Dim last As Statement
@@ -73,10 +74,26 @@ Public Module TokenIcer
                     ' 任然是字符串之中的一部分字符，则继续添加进入tmp之中
                     tmp += c
                 End If
+            ElseIf commentOpen Then
+                If c = ASCII.CR OrElse c = ASCII.LF Then
+                    ' 遇见了换行符，则结束注释
+                    tokens += New langToken With {
+                        .Name = LanguageTokens.Comment,
+                        .Value = New String(tmp)
+                    }
+                    tmp *= 0
+                    commentOpen = False
+                Else
+                    ' 任然是注释串之中的一部分字符，则继续添加进入tmp之中
+                    tmp += c
+                End If
             Else
                 ' 遇见了字符串的起始的第一个双引号
                 If Not QuotOpen AndAlso c = ASCII.Quot Then
                     QuotOpen = True
+                    newToken()
+                ElseIf Not commentOpen AndAlso c = "#"c Then
+                    commentOpen = True
                     newToken()
                 Else
                     ' 遇见了语句的结束符号
