@@ -7,6 +7,8 @@ var d <- data.frame(
     b = {""a"", ""g"", ""y""},
     t = {TRUE, TRUE, FALSE});
 
+var gg <- a(33) + b(99, 88);
+
 # in a for loop, the tuple its member value is the cell value in dataframe
 for([a, b, c as ""t""] in d) {
     println(""%s = %s ? (%s)"", a, b, c);

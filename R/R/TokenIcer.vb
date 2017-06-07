@@ -19,7 +19,7 @@ Public Module TokenIcer
     End Function
 
     <Extension> Private Function Parse(buffer As Pointer(Of Char), ByRef parent As List(Of Statement), indexStack As Boolean) As Statement
-        Dim QuotOpen As Boolean = False
+        Dim quotOpen As Boolean = False
         Dim commentOpen As Boolean = False ' 当出现注释符的时候，会一直持续到遇见换行符为止
         Dim tmp As New List(Of Char)
         Dim tokens As New List(Of langToken)
@@ -57,11 +57,13 @@ Public Module TokenIcer
 
                 tmp *= 0
             End Sub
+        Dim closure As Statement() = Nothing
+        Dim arguments As Statement() = Nothing
 
         Do While Not buffer.EndRead
             Dim c As Char = +buffer
 
-            If QuotOpen Then ' 当前所解析的状态为字符串解析
+            If quotOpen Then ' 当前所解析的状态为字符串解析
                 If c = ASCII.Quot AndAlso Not tmp.StartEscaping Then
                     ' 当前的字符为双引号，并且不是转义状态，则结束字符串
                     tokens += New langToken With {
@@ -69,7 +71,7 @@ Public Module TokenIcer
                         .Value = New String(tmp)
                     }
                     tmp *= 0
-                    QuotOpen = False
+                    quotOpen = False
                 Else
                     ' 任然是字符串之中的一部分字符，则继续添加进入tmp之中
                     tmp += c
@@ -89,8 +91,8 @@ Public Module TokenIcer
                 End If
             Else
                 ' 遇见了字符串的起始的第一个双引号
-                If Not QuotOpen AndAlso c = ASCII.Quot Then
-                    QuotOpen = True
+                If Not quotOpen AndAlso c = ASCII.Quot Then
+                    quotOpen = True
                     newToken()
                 ElseIf Not commentOpen AndAlso c = "#"c Then
                     commentOpen = True
@@ -101,7 +103,9 @@ Public Module TokenIcer
                         ' 结束当前的statement的解析
                         newToken()
                         last = New Statement With {
-                            .Tokens = tokens
+                            .Tokens = tokens,
+                            .arguments = arguments,
+                            .closure = closure
                         }
                         tokens *= 0
 
@@ -127,32 +131,31 @@ Public Module TokenIcer
                         If c = "{"c Then
                             last = New Statement With {
                                 .Tokens = tokens.ToArray,
-                                .closure = childs
+                                .closure = childs,
+                                .arguments = arguments
                             }
+                            If Not parent Is Nothing Then
+                                parent += last
+                            Else
+                                Return last
+                            End If
                         Else
-                            last = New Statement With {
-                                .Tokens = tokens.ToArray,
-                                .arguments = childs
-                            }
+                            arguments = childs
                         End If
 
+                        ' tokens *= 0
+                    ElseIf c = ")"c OrElse c = "]"c Then
+                        ' closure stack close
+                        ' 仅结束stack，但是不像{}一样结束statement
+                        newToken()
+                        last = New Statement With {
+                            .Tokens = tokens,
+                            .closure = closure,
+                            .arguments = arguments
+                        }
                         tokens *= 0
-
-                        If Not parent Is Nothing Then
-                            parent += last
-                        Else
-                            Return last
-                        End If
-                        'ElseIf c = ")"c Then
-                        '    ' closure stack close
-                        '    ' 结束当前的statement，相当于分号
-                        '    newToken()
-                        '    last = New Statement With {
-                        '        .Tokens = tokens
-                        '    }
-                        '    tokens *= 0
-                        '    parent += last  ' 右花括号必定是结束堆栈 
-                        '    Return Nothing
+                        parent += last  ' 右花括号必定是结束堆栈 
+                        Return Nothing
                         'ElseIf c = "["c Then
                         '    ' closure stack open
                         '    Dim childs As New List(Of Statement)
@@ -179,7 +182,9 @@ Public Module TokenIcer
                     ElseIf c = ","c Then
                         newToken()
                         last = New Statement With {
-                            .Tokens = tokens
+                            .Tokens = tokens,
+                            .arguments = arguments,
+                            .closure = closure
                         }
                         tokens *= 0
                         parent += last  ' 逗号分隔只产生新的statement，但是不退栈
@@ -214,12 +219,14 @@ Public Module TokenIcer
                         '    Else
                         '        Return last
                         '    End If
-                    ElseIf c = "}"c OrElse c = "]" OrElse c = ")" Then
+                    ElseIf c = "}"c Then
                         ' closure stack close
                         ' 结束当前的statement，相当于分号
                         newToken()
                         last = New Statement With {
-                            .Tokens = tokens
+                            .Tokens = tokens,
+                            .closure = closure,
+                            .arguments = arguments
                         }
                         tokens *= 0
                         parent += last  ' 右花括号必定是结束堆栈 
