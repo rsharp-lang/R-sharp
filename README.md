@@ -49,7 +49,7 @@ Dim m = {
 |``char``           |**System.Char** vector   |
 |``boolean``        |**System.Boolean** vector|
 
-And you can declare the user type by using ``list()`` function, example like:
+Generally, the R language is not designed as an OOP language, and the R# language is not designed as an OOP lnaguge too. But you can still declare the user type by using ``list()`` function, example like:
 
 ```R
 var obj <- list();
@@ -61,14 +61,23 @@ var obj <- list() with {
 }
 ```
 
-generally, the parameter in a function is a generic type, so that a function definition like:
+Using ``with{}`` closure can makes the property initialize at the same time when you create your user type by using ``list()`` function. Just like what you does in VisualBasic: 
+
+```vbnet
+Dim obj As New <userType> With {
+    .a = 123,
+    .b = "+++"
+}
+```
+
+generally, the parameter in a function is generic type, so that a function its definition like:
 
 ```R
 test <- function(x) {
 }
 ```
 
-can accept any type you have input. but you can using the ``param as <type>`` for limit the type as a specific type:
+can accept any type you have input. but you can using the ``param as <type>`` for constraint the type to a specific type(currently the user type that produced by ``list()`` function is not supported by this type constraint feature):
 
 ```R
 test.integer <- function(x as integer) {
@@ -88,7 +97,7 @@ dataframe[, "name"] <- new.names;
 
 ###### String
 
-Add new string contact and string interploate feature for ``R#``:
+Add new string contact and string interploate feature for ``R#``, makes you more easier in the string manipulation:
 
 ```R
 var name     <- first.name & " " & last.name;
@@ -100,9 +109,11 @@ var his.name <- sprintf("%s %s", first.name, last.name);
 
 ###### Logical operators
 
-+ and, andalso
-+ or, orelse
-+ not
+The ``R#`` language using the VisualBasic logical operator system, as the ``&`` operator is conflicts with the string contact and ``|`` operator is conflicts with the pipeline operator.
+
++ ``&&`` replaced by ``and``, ``andalso``
++ ``||`` replaced by ``or``, ``orelse``
++ ``!`` replaced by ``not``
 
 ```R
 if (x <= 10 andalso y != 99) {
@@ -254,10 +265,12 @@ var [exitCode, stdout] <- @CLI;
 Tuple enable the R function returns multiple value at once:
 
 ```R
+# this R function returns multiple value by using tuple:
 tuple.test <- function(a as integer, b as integer) {
-    return [a, b, a^b];
+    return [a, b, a ^ b];
 }
 
+# and you can using tuple its member as the normal variable
 var [a, b, c] <- tuple.test(3, 2);
 
 if (a == 3) {
@@ -276,6 +289,8 @@ var obj <- list() with {
     $a <- 333;
     $b <- 999;
 }
+# the tuple its member name should match the property name in you custom object type
+# no order required in your tuple declaration: 
 var [a, b] <- obj;
 ```
 
@@ -297,10 +312,13 @@ var d <- data.frame(
     b = {"a", "g", "y"},
     t = {TRUE, TRUE, FALSE});
 
+# in a for loop, the tuple its member value is the cell value in dataframe
 for([a, b, c as "t"] in d) {
     println("%s = %s ? (%s)", a, b, c);
 }
 
+# if directly convert the dataframe as tuple, 
+# then the tuple member is value is the column value in the dataframe 
 var [a, b, booleans as "t"] <- d;
 ```
 
