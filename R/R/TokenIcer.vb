@@ -7,12 +7,12 @@ Imports langToken = Microsoft.VisualBasic.Scripting.TokenIcer.Token(Of R.Languag
 
 Public Module TokenIcer
 
-    <Extension> Public Iterator Function Parse(s$) As IEnumerable(Of Statement)
+    <Extension> Public Iterator Function Parse(s$) As IEnumerable(Of Statement(Of LanguageTokens))
         Dim buffer As New Pointer(Of Char)(Trim(s$))
-        Dim it As New Value(Of Statement)
+        Dim it As New Value(Of Statement(Of LanguageTokens))
 
         Do While Not buffer.EndRead
-            If Not (it = buffer.Parse(Nothing, False)) Is Nothing Then
+            If Not (it = buffer.Parse(Nothing)) Is Nothing Then
                 Yield it
             End If
         Loop
@@ -23,19 +23,18 @@ Public Module TokenIcer
     ''' </summary>
     ''' <param name="buffer"></param>
     ''' <param name="parent"></param>
-    ''' <param name="indexStack"></param>
     ''' <returns></returns>
     ''' <remarks>
     ''' 对于``{}``而言，其含义为当前的token的closure
     ''' 对于``()``而言，其含义为当前的token的innerStack
     ''' 对于``[]``而言，起含义为当前的token的innerStack，与``()``的含义几乎一致
     ''' </remarks>
-    <Extension> Private Function Parse(buffer As Pointer(Of Char), ByRef parent As List(Of Statement), indexStack As Boolean) As Statement
+    <Extension> Private Function Parse(buffer As Pointer(Of Char), ByRef parent As List(Of Statement(Of LanguageTokens))) As Statement(Of LanguageTokens)
         Dim quotOpen As Boolean = False
         Dim commentOpen As Boolean = False ' 当出现注释符的时候，会一直持续到遇见换行符为止
         Dim tmp As New List(Of Char)
         Dim tokens As New List(Of langToken)
-        Dim last As Statement
+        Dim last As Statement(Of LanguageTokens)
         Dim varDefInit = Function()
                              If tokens.Count = 0 AndAlso tmp.SequenceEqual("var") Then
                                  Return True
@@ -51,9 +50,9 @@ Public Module TokenIcer
                                End If
                            End Function
         Dim newToken =
-            Sub()
+            Function()
                 If tmp.Count = 0 Then
-                    Return
+                    Return Nothing
                 End If
 
                 ' 创建除了字符串之外的其他的token
@@ -68,9 +67,9 @@ Public Module TokenIcer
                 End If
 
                 tmp *= 0
-            End Sub
-        Dim closure As Statement() = Nothing
-        Dim arguments As Statement() = Nothing
+
+                Return tokens.Last
+            End Function
 
         Do While Not buffer.EndRead
             Dim c As Char = +buffer
@@ -79,7 +78,7 @@ Public Module TokenIcer
                 If c = ASCII.Quot AndAlso Not tmp.StartEscaping Then
                     ' 当前的字符为双引号，并且不是转义状态，则结束字符串
                     tokens += New langToken With {
-                        .Name = LanguageTokens.String,
+                        .name = LanguageTokens.String,
                         .Value = New String(tmp)
                     }
                     tmp *= 0
@@ -92,7 +91,7 @@ Public Module TokenIcer
                 If c = ASCII.CR OrElse c = ASCII.LF Then
                     ' 遇见了换行符，则结束注释
                     tokens += New langToken With {
-                        .Name = LanguageTokens.Comment,
+                        .name = LanguageTokens.Comment,
                         .Value = New String(tmp)
                     }
                     tmp *= 0
@@ -114,10 +113,8 @@ Public Module TokenIcer
                     If c = ";"c Then
                         ' 结束当前的statement的解析
                         newToken()
-                        last = New Statement With {
-                            .Tokens = tokens,
-                            .arguments = arguments,
-                            .closure = closure
+                        last = New Statement(Of LanguageTokens) With {
+                            .tokens = tokens
                         }
                         tokens *= 0
 
@@ -133,18 +130,20 @@ Public Module TokenIcer
                     ElseIf c = "("c OrElse c = "["c OrElse c = "{"c Then
                         ' 新的堆栈
                         ' closure stack open
-                        Dim childs As New List(Of Statement)
-                        Call buffer.Parse(childs, False)
+                        Dim childs As New List(Of Statement(Of LanguageTokens))
+
                         Call newToken()
+                        Call buffer.Parse(childs)
 
                         tokens += New langToken(LanguageTokens.ParenOpen, c)
                         tokens += New langToken(LanguageTokens.ParenClose, close(c))
 
                         If c = "{"c Then
-                            last = New Statement With {
-                                .Tokens = tokens.ToArray,
-                                .closure = childs,
-                                .arguments = arguments
+                            last = New Statement(Of LanguageTokens) With {
+                                .tokens = tokens.ToArray
+                            }
+                            tokens.Last.Closure = New Main(Of LanguageTokens) With {
+                                .program = childs
                             }
                             If Not parent Is Nothing Then
                                 parent += last
@@ -152,7 +151,7 @@ Public Module TokenIcer
                                 Return last
                             End If
                         Else
-                            arguments = childs
+                            tokens.Last.Arguments = childs
                         End If
 
                         ' tokens *= 0
@@ -160,10 +159,8 @@ Public Module TokenIcer
                         ' closure stack close
                         ' 仅结束stack，但是不像{}一样结束statement
                         newToken()
-                        last = New Statement With {
-                            .Tokens = tokens,
-                            .closure = closure,
-                            .arguments = arguments
+                        last = New Statement(Of LanguageTokens) With {
+                            .tokens = tokens
                         }
                         tokens *= 0
                         parent += last  ' 右花括号必定是结束堆栈 
@@ -193,10 +190,8 @@ Public Module TokenIcer
                         tokens += New langToken(LanguageTokens.StringContact, "&")
                     ElseIf c = ","c Then
                         newToken()
-                        last = New Statement With {
-                            .Tokens = tokens,
-                            .arguments = arguments,
-                            .closure = closure
+                        last = New Statement(Of LanguageTokens) With {
+                            .tokens = tokens
                         }
                         tokens *= 0
                         parent += last  ' 逗号分隔只产生新的statement，但是不退栈
@@ -235,10 +230,8 @@ Public Module TokenIcer
                         ' closure stack close
                         ' 结束当前的statement，相当于分号
                         newToken()
-                        last = New Statement With {
-                            .Tokens = tokens,
-                            .closure = closure,
-                            .arguments = arguments
+                        last = New Statement(Of LanguageTokens) With {
+                            .tokens = tokens
                         }
                         tokens *= 0
                         parent += last  ' 右花括号必定是结束堆栈 
@@ -253,11 +246,15 @@ Public Module TokenIcer
             End If
         Loop
 
-        Return New Statement With {.Tokens = tokens}
+        Return New Statement(Of LanguageTokens) With {
+            .tokens = tokens
+        }
     End Function
 
-    <Extension> Public Function GetSourceTree(s As IEnumerable(Of Statement)) As String
-        Return New Main With {.program = s.ToArray}.GetXml
+    <Extension> Public Function GetSourceTree(s As IEnumerable(Of Statement(Of LanguageTokens))) As String
+        Return New Main(Of LanguageTokens) With {
+            .program = s.ToArray
+        }.GetXml()
     End Function
 
     ReadOnly close As New Dictionary(Of Char, Char) From {

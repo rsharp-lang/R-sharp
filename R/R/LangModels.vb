@@ -1,27 +1,4 @@
-﻿Imports System.Xml.Serialization
-Imports Microsoft.VisualBasic.Linq
-Imports langToken = Microsoft.VisualBasic.Scripting.TokenIcer.Token(Of R.LanguageTokens)
-
-''' <summary>
-''' 
-''' </summary>
-Public Class Statement
-
-    <XmlElement("t")>
-    Public Property Tokens As langToken()
-    ''' <summary>
-    ''' if/for/do/function堆栈
-    ''' </summary>   
-    Public Property closure As Statement()
-    Public Property arguments As Statement()
-
-End Class
-
-Public Class Main
-    Public Property program As Statement()
-End Class
-
-Public Enum LanguageTokens
+﻿Public Enum LanguageTokens
 
     undefine
     ''' <summary>
