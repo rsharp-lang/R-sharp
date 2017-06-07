@@ -145,6 +145,7 @@ Public Module TokenIcer
                             tokens += New langToken(LanguageTokens.ParenClose, close(c))
                             If Not parent Is Nothing Then
                                 parent += last
+                                tokens *= 0 ' }会结束statement，故而需要将tokens清零
                             Else
                                 Return last
                             End If
@@ -152,8 +153,6 @@ Public Module TokenIcer
                             tokens.Last.Arguments = childs
                             tokens += New langToken(LanguageTokens.ParenClose, close(c))
                         End If
-
-                        ' tokens *= 0
                     ElseIf c = ")"c OrElse c = "]"c Then
                         ' closure stack close
                         ' 仅结束stack，但是不像{}一样结束statement
@@ -272,7 +271,7 @@ Public Module TokenIcer
         With src
             .tokens = src.tokens _
                 .Select(Function(t) t.Trim) _
-                .Where(Function(t) t.IsNullOrEmpty) _
+                .Where(Function(t) Not t.IsNullOrEmpty) _
                 .ToArray
             Return .ref
         End With
