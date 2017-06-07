@@ -1,22 +1,299 @@
-# Shoal
-Shoal Shell Language for GCModeller Virtual Cell Programming
+## R# language design
 
-# What is Shoal
-Shoal Shell is a kind of commandline-like scripting language for the programming in the GCModeller, it is written by master xie using Microsoft VisualBasic language. As one of the important user interfaces in the GCModeller, Shoal scripting can makes the bioinformatcis analysis in the GCModeller more easily and automation. The GCModeller API library for shoal language was documented at [gcmodeller.org/library](http://gcmodeller.org/library/index.html)
+###### Code comments
 
-The IDE for shoal language development was under progressed.
+```R
+## This is code comments, it just only allow single line comments.
+```
 
-# Developer Contacts
-* Master developer:  Mr. Xie(<xie.guigang@gcmodeller.org>)
-* Documents maintenance by Miss asuka(<amethyst.asuka@gcmodeller.org>)
+###### Variable
 
-# Developer NOTE
-Due to the reason of modular development in the GCModeller team, some of the plugin included in this project depend on other external repository in github:
+Variable in ``R#`` should be declared by ``var`` keyword, and its value assign is force using ``<-`` operator:
 
-* General Application Framework of VisualBasic
-[VisualBasic_AppFramework (https://github.com/xieguigang/VisualBasic_AppFramework)](https://github.com/xieguigang/VisualBasic_AppFramework)
+```R
+var s <- "12345";
+var x <- {1, 2, 3, 4, 5};
+var m <- {
+   {1, 2, 3},
+   {4, 5, 6},
+   {7, 8, 9}
+};
+```
 
-* Utility tools
-[Reference_SharedLib (https://github.com/xieguigang/Reference_SharedLib)](https://github.com/xieguigang/Reference_SharedLib)
+Delcare a vector or matrix will no longer required of the ``c(...)`` function or ``matrix`` function. Almost keeps the same as the VisualBasic language it does:
 
-Those repository should downloaded at the same time with this repository.
+```vbnet
+Dim s = "12345"
+Dim x = {1, 2, 3, 4, 5}
+Dim m = {
+   {1, 2, 3},
+   {4, 5, 6},
+   {7, 8, 9}
+}
+```
+
+###### Types
+
+``R#`` language have sevral primitive type:
+
++ ``integer``, System.Int64 vector
++ ``double``, System.Double vector
++ ``uinteger``, System.UInt64 vector
++ ``string``, System.String vector
++ ``char``, System.Char vector
++ ``boolean``, System.Boolean vector
+
+And you can declare the user type by using ``list()`` function, example like:
+
+```R
+var obj <- list();
+
+# using with for object property initialize
+var obj <- list() with {
+    $a <- 123;
+	$b <- "+++";
+}
+```
+
+generally, the parameter in a function is a generic type, so that a function definition like:
+
+```R
+test <- function(x) {
+}
+```
+
+can accept any type you have input. but you can using the ``param as <type>`` for limit the type as a specific type:
+
+```R
+test.integer <- function(x as integer) {
+    # the type constraint means the parameter only allow the integer vector type
+	# if the parameter is a string vector, then the interpreter will throw exceptions.
+}
+```
+
+###### Get/Set value
+
+Get/Set property value keeps the same as the R language: 
+
+```R
+var names <- dataframe[, "name"];
+dataframe[, "name"] <- new.names;
+```
+
+###### String
+
+Add new string contact and string interploate feature for ``R#``:
+
+```R
+var name     <- first.name & " " & last.name;
+# or
+var my.name  <- "{first.name} {last.name}"; 
+# sprintf function is still avaliable
+var his.name <- sprintf("%s %s", first.name, last.name); 
+```
+
+###### Logical operators
+
++ and, andalso
++ or, orelse
++ not
+
+```R
+if (x <= 10 andalso y != 99) {
+    # ......
+} else if(not z is null) {
+    # ......
+}
+```
+
+###### Operator binding
+
+Allows you bind operator on your custom type:
+
+```R
+# binding operator only allows in the with closure in the object declare statement
+var me <- list() with {
+   %+% <- function($, other) {
+   }
+   %is% <- function($, other) {
+   }
+}
+
+# and then using the operator
+
+var new.me    <- me + other;
+var predicate <- me is other;
+
+if (not me is him) {
+    # ......
+}
+```
+
+Allows user operator
+
+|Operator |Description          |
+|---------|---------------------|
+|``+``    | add                 |
+|``-``    | substract           |
+|``*``    | multiply            |
+|``/``    | devide              |
+|``\``    | integer devide      |
+|``%``    | mod                 |
+|``^``    | power               |
+|``is``   | object equals       |
+|``like`` | object similarity   |
+|``in``   | collection set      |
+|``which``| index list for true |
+
+###### pipeline operator
+
+Extension caller chain in VisualBasic is also named as function pipeline
+
+```vbnet
+<Extension> Function test1(x) 
+End Function
+
+<Extension> Function test2(x, y) 
+End Function
+
+<Extension> Function test3(a) 
+End Function
+
+Dim result = "hello world!" 
+	.test1 
+	.test2(99) 
+	.test3
+```
+
+All of the R function which have at least one parameter can be using in pipeline mode, using ``|`` as the pipeline operator:
+
+```R
+test1 <- function(x) {
+}
+test2 <- function(x, y) {
+}
+test3 <- function(a) {
+}
+
+# Doing the exactly the same as VisualBasic pipeline in R language:
+var result <- "hello world!" 
+	|test1 
+	|test2(99) 
+	|test3;
+# or you can just using the R function in normal way, and it is much complicated to read:
+var result <- test3(test2(test1("hello world"), 99));
+```
+
+###### IN operator
+
+```R
+# in list
+var booleans <- name in names(obj);
+# in range
+var booleans <- x in [min, max];
+```
+
+###### combine with ``Which`` operator 
+
+```R
+var x <- {1, 2, 3, 4, 5};
+var indices.true <- which x in [min, max];
+```
+
+###### ``[]`` bracket in R language
+
+Global variable:
+
+```R
+var g <- "test";
+
+test <- function(g as integer) {
+    # just like the VisualBasic language, you can using [] bracket 
+    # for eliminates the object identifier conflicts in R language.
+    # string contact of the parameter g with global variable [g]
+    return g:ToString("F2") & [g];
+}
+```
+
+Range generator:
+
+```R
+if (mz in [mz.min, mz.max]) {
+    # range generator only allows numeric type
+}
+```
+
+tuple variable:
+
+```R
+# run commandline using @ operator in R
+var prot.fasta = "/home/biostack/sample.fasta";
+var [exitCode, std_out] <- @"makeblastdb -in \"{prot.fasta}\" -dbtype prot";
+```
+
+###### Simple external calls
+
+The ``R#`` language makes more easier for calling external command from CLI, apply a ``@`` operator on a string vector will makes an external system calls:
+
+```R
+var [exitCode, stdout] <- @"/bin/GCModeller/localblast /blastp /query \"{query.fasta}\" /subject \"{COG_myva}\" /out \"{COG_myva.csv}\"";
+
+# or makes it more clear to read
+var CLI <- "/bin/GCModeller/localblast /blastp /query \"{query.fasta}\" /subject \"{COG_myva}\" /out \"{COG_myva.csv}\"";
+var [exitCode, stdout] <- @CLI;
+```
+
+###### Using tuple
+
+Tuple enable the R function returns multiple value at once:
+
+```R
+tuple.test <- function(a as integer, b as integer) {
+    return [a, b, a^b];
+}
+
+var [a, b, c] <- tuple.test(3, 2);
+
+if (a == 3) {
+    c = c + a + b;
+}
+```
+
+###### R object to tuple
+
+You can naturally convert the object as tuple value. The member in the tuple their name should matched the names in an object, so that you can doing something like this example in ``R#``:
+
+```R
+var obj <- list() with {
+    $a <- 333;
+    $b <- 999;
+}
+var [a, b] <- obj;
+```
+
+But, wait, if the property in an object is not a valid identifier name in ``R#``? Don't worried, you can using alias:
+
+```R
+var obj <- list() with {
+    $"112233+5" <- 999;
+    $x <- 1;
+}
+var [a as "112233+5", b as "x"] <- obj;
+```
+
+The tuple feature is espacially useful in operates the dataframe:
+
+```R
+var d <- data.frame(
+    a = {1, 2, 3},
+    b = {"a", "g", "y"},
+    t = {TRUE, TRUE, FALSE});
+
+for([a, b, c as "t"] in d) {
+    println("%s = %s ? (%s)", a, b, c);
+}
+
+var [a, b, booleans as "t"] <- d;
+```
+
+If the tuple is applied on a for loop, then it means convert each row in dataframe as tuple, or just applied the tuple on the var declaring, then it means converts the columns in dataframe as the tuple, so that the variable in tuple is a vector with nrows of the dataframe.
