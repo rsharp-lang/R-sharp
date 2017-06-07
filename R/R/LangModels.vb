@@ -1,4 +1,5 @@
 ﻿Imports System.Xml.Serialization
+Imports Microsoft.VisualBasic.Linq
 Imports langToken = Microsoft.VisualBasic.Scripting.TokenIcer.Token(Of R.LanguageTokens)
 
 ''' <summary>
@@ -10,15 +11,9 @@ Public Class Statement
     Public Property Tokens As langToken()
     ''' <summary>
     ''' if/for/do/function堆栈
-    ''' </summary>
-    <XmlArray("closure")>
-    Public Property Child As Statement()
-
-    Public ReadOnly Property IsEmpty As Boolean
-        Get
-            Return Tokens.IsNullOrEmpty AndAlso Child.IsNullOrEmpty
-        End Get
-    End Property
+    ''' </summary>   
+    Public Property closure As Statement()
+    Public Property arguments As Statement()
 
 End Class
 
@@ -51,18 +46,14 @@ Public Enum LanguageTokens
     ''' </summary>
     ParameterDelimiter
 
-#Region "{...}"
-    StackOpen
-    StackClose
-#End Region
-#Region "(...)"
-    EvalOpen
-    EvalClose
-#End Region
-#Region "[...]"
-    IndexOpen
-    IndexClose
-#End Region
+    ''' <summary>
+    ''' ([{
+    ''' </summary>
+    ParenOpen
+    ''' <summary>
+    ''' )}]
+    ''' </summary>
+    ParenClose
 
     ''' <summary>
     ''' &amp;

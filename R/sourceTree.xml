@@ -1,0 +1,1000 @@
+<?xml version="1.0" encoding="utf-16"?>
+<Main xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <program>
+    <Statement>
+      <t name="var">var</t>
+      <t name="Object">d</t>
+      <t name="LeftAssign">&lt;-</t>
+      <t name="Object">data.frame</t>
+      <t name="ParenOpen">(</t>
+      <t name="ParenClose">)</t>
+      <arguments>
+        <Statement>
+          <t name="Object">a</t>
+          <t name="Object">=</t>
+          <t name="ParenOpen">{</t>
+          <t name="ParenClose">}</t>
+          <closure>
+            <Statement>
+              <t name="Object">1</t>
+            </Statement>
+            <Statement>
+              <t name="Object">2</t>
+            </Statement>
+            <Statement>
+              <t name="Object">3</t>
+            </Statement>
+          </closure>
+        </Statement>
+        <Statement />
+        <Statement>
+          <t name="Object">b</t>
+          <t name="Object">=</t>
+          <t name="ParenOpen">{</t>
+          <t name="ParenClose">}</t>
+          <closure>
+            <Statement>
+              <t name="String">a</t>
+            </Statement>
+            <Statement>
+              <t name="String">g</t>
+            </Statement>
+            <Statement>
+              <t name="String">y</t>
+            </Statement>
+          </closure>
+        </Statement>
+        <Statement />
+        <Statement>
+          <t name="Object">t</t>
+          <t name="Object">=</t>
+          <t name="ParenOpen">{</t>
+          <t name="ParenClose">}</t>
+          <closure>
+            <Statement>
+              <t name="Object">TRUE</t>
+            </Statement>
+            <Statement>
+              <t name="Object">TRUE</t>
+            </Statement>
+            <Statement>
+              <t name="Object">FALSE</t>
+            </Statement>
+          </closure>
+        </Statement>
+        <Statement />
+      </arguments>
+    </Statement>
+    <Statement />
+    <Statement>
+      <t name="Comment"> in a for loop, the tuple its member value is the cell value in dataframe</t>
+      <t name="Object">for</t>
+      <t name="ParenOpen">(</t>
+      <t name="ParenClose">)</t>
+      <arguments>
+        <Statement>
+          <t name="ParenOpen">[</t>
+          <t name="ParenClose">]</t>
+          <arguments>
+            <Statement>
+              <t name="Object">a</t>
+            </Statement>
+            <Statement>
+              <t name="Object">b</t>
+            </Statement>
+            <Statement>
+              <t name="Object">c</t>
+              <t name="Object">as</t>
+              <t name="String">t</t>
+            </Statement>
+          </arguments>
+        </Statement>
+        <Statement>
+          <t name="Object">in</t>
+          <t name="Object">d</t>
+        </Statement>
+      </arguments>
+    </Statement>
+    <Statement>
+      <t name="ParenOpen">{</t>
+      <t name="ParenClose">}</t>
+      <closure>
+        <Statement>
+          <t name="Object">println</t>
+          <t name="ParenOpen">(</t>
+          <t name="ParenClose">)</t>
+          <arguments>
+            <Statement>
+              <t name="String">%s = %s ? (%s)</t>
+            </Statement>
+            <Statement>
+              <t name="Object">a</t>
+            </Statement>
+            <Statement>
+              <t name="Object">b</t>
+            </Statement>
+            <Statement>
+              <t name="Object">c</t>
+            </Statement>
+          </arguments>
+        </Statement>
+        <Statement />
+        <Statement />
+      </closure>
+    </Statement>
+    <Statement>
+      <t name="Comment"> if directly convert the dataframe as tuple, </t>
+      <t name="Comment"> then the tuple member is value is the column value in the dataframe </t>
+      <t name="Object">var</t>
+      <t name="ParenOpen">[</t>
+      <t name="ParenClose">]</t>
+      <arguments>
+        <Statement>
+          <t name="Object">a</t>
+        </Statement>
+        <Statement>
+          <t name="Object">b</t>
+        </Statement>
+        <Statement>
+          <t name="Object">booleans</t>
+          <t name="Object">as</t>
+          <t name="String">t</t>
+        </Statement>
+      </arguments>
+    </Statement>
+    <Statement>
+      <t name="LeftAssign">&lt;-</t>
+      <t name="Object">d</t>
+    </Statement>
+    <Statement>
+      <t name="Comment"> this R function returns multiple value by using tuple:</t>
+      <t name="Object">tuple.test</t>
+      <t name="LeftAssign">&lt;-</t>
+      <t name="Object">function</t>
+      <t name="ParenOpen">(</t>
+      <t name="ParenClose">)</t>
+      <arguments>
+        <Statement>
+          <t name="Object">a</t>
+          <t name="Object">as</t>
+          <t name="Object">integer</t>
+        </Statement>
+        <Statement>
+          <t name="Object">b</t>
+          <t name="Object">as</t>
+          <t name="Object">integer</t>
+        </Statement>
+      </arguments>
+    </Statement>
+    <Statement>
+      <t name="ParenOpen">{</t>
+      <t name="ParenClose">}</t>
+      <closure>
+        <Statement>
+          <t name="Object">return</t>
+          <t name="ParenOpen">[</t>
+          <t name="ParenClose">]</t>
+          <arguments>
+            <Statement>
+              <t name="Object">a</t>
+            </Statement>
+            <Statement>
+              <t name="Object">b</t>
+            </Statement>
+            <Statement>
+              <t name="Object">a</t>
+              <t name="Object">^</t>
+              <t name="Object">b</t>
+            </Statement>
+          </arguments>
+        </Statement>
+        <Statement />
+        <Statement />
+      </closure>
+    </Statement>
+    <Statement>
+      <t name="Comment"> and you can using tuple its member as the normal variable</t>
+      <t name="Object">var</t>
+      <t name="ParenOpen">[</t>
+      <t name="ParenClose">]</t>
+      <arguments>
+        <Statement>
+          <t name="Object">a</t>
+        </Statement>
+        <Statement>
+          <t name="Object">b</t>
+        </Statement>
+        <Statement>
+          <t name="Object">c</t>
+        </Statement>
+      </arguments>
+    </Statement>
+    <Statement>
+      <t name="LeftAssign">&lt;-</t>
+      <t name="Object">tuple.test</t>
+      <t name="ParenOpen">(</t>
+      <t name="ParenClose">)</t>
+      <arguments>
+        <Statement>
+          <t name="Object">3</t>
+        </Statement>
+        <Statement>
+          <t name="Object">2</t>
+        </Statement>
+      </arguments>
+    </Statement>
+    <Statement />
+    <Statement>
+      <t name="Object">if</t>
+      <t name="ParenOpen">(</t>
+      <t name="ParenClose">)</t>
+      <arguments>
+        <Statement>
+          <t name="Object">a</t>
+          <t name="Operator">==</t>
+          <t name="Object">3</t>
+        </Statement>
+      </arguments>
+    </Statement>
+    <Statement>
+      <t name="ParenOpen">{</t>
+      <t name="ParenClose">}</t>
+      <closure>
+        <Statement>
+          <t name="Object">c</t>
+          <t name="LeftAssign">&lt;-</t>
+          <t name="Object">c</t>
+          <t name="Object">+</t>
+          <t name="Object">a</t>
+          <t name="Object">+</t>
+          <t name="Object">b</t>
+        </Statement>
+        <Statement>
+          <t name="Comment"> or using pipeline</t>
+          <t name="Object">c</t>
+          <t name="LeftAssign">&lt;-</t>
+          <t name="ParenOpen">{</t>
+          <t name="ParenClose">}</t>
+          <closure>
+            <Statement>
+              <t name="Object">a</t>
+            </Statement>
+            <Statement>
+              <t name="Object">b</t>
+            </Statement>
+            <Statement>
+              <t name="Object">c</t>
+            </Statement>
+          </closure>
+        </Statement>
+        <Statement>
+          <t name="Object">|</t>
+          <t name="Object">sum</t>
+        </Statement>
+        <Statement />
+      </closure>
+    </Statement>
+    <Statement>
+      <t name="var">var</t>
+      <t name="Object">g</t>
+      <t name="LeftAssign">&lt;-</t>
+      <t name="String">test</t>
+    </Statement>
+    <Statement>
+      <t name="Object">test</t>
+      <t name="LeftAssign">&lt;-</t>
+      <t name="Object">function</t>
+      <t name="ParenOpen">(</t>
+      <t name="ParenClose">)</t>
+      <arguments>
+        <Statement>
+          <t name="Object">g</t>
+          <t name="Object">as</t>
+          <t name="Object">integer</t>
+        </Statement>
+      </arguments>
+    </Statement>
+    <Statement>
+      <t name="ParenOpen">{</t>
+      <t name="ParenClose">}</t>
+      <closure>
+        <Statement>
+          <t name="Comment"> just like the VisualBasic language, you can using [] bracket </t>
+          <t name="Comment"> for eliminates the object identifier conflicts in R language.</t>
+          <t name="Comment"> string contact of the parameter g with global variable [g]</t>
+          <t name="Object">return</t>
+          <t name="Object">g</t>
+          <t name="methodCall">:</t>
+          <t name="Object">ToString</t>
+          <t name="ParenOpen">(</t>
+          <t name="ParenClose">)</t>
+          <arguments>
+            <Statement>
+              <t name="String">F2</t>
+            </Statement>
+          </arguments>
+        </Statement>
+        <Statement>
+          <t name="StringContact">&amp;</t>
+          <t name="ParenOpen">[</t>
+          <t name="ParenClose">]</t>
+          <arguments>
+            <Statement>
+              <t name="Object">g</t>
+            </Statement>
+          </arguments>
+        </Statement>
+        <Statement />
+        <Statement />
+      </closure>
+    </Statement>
+    <Statement>
+      <t name="var">var</t>
+      <t name="Object">x</t>
+      <t name="LeftAssign">&lt;-</t>
+      <t name="ParenOpen">{</t>
+      <t name="ParenClose">}</t>
+      <closure>
+        <Statement>
+          <t name="Object">1</t>
+        </Statement>
+        <Statement>
+          <t name="Object">2</t>
+        </Statement>
+        <Statement>
+          <t name="Object">3</t>
+        </Statement>
+        <Statement>
+          <t name="Object">4</t>
+        </Statement>
+        <Statement>
+          <t name="Object">5</t>
+        </Statement>
+      </closure>
+    </Statement>
+    <Statement />
+    <Statement>
+      <t name="var">var</t>
+      <t name="Object">indices.true</t>
+      <t name="LeftAssign">&lt;-</t>
+      <t name="Object">which</t>
+      <t name="Object">x</t>
+      <t name="Object">in</t>
+      <t name="ParenOpen">[</t>
+      <t name="ParenClose">]</t>
+      <arguments>
+        <Statement>
+          <t name="Object">min</t>
+        </Statement>
+        <Statement>
+          <t name="Object">max</t>
+        </Statement>
+      </arguments>
+    </Statement>
+    <Statement />
+    <Statement>
+      <t name="Object">test1</t>
+      <t name="LeftAssign">&lt;-</t>
+      <t name="Object">function</t>
+      <t name="ParenOpen">(</t>
+      <t name="ParenClose">)</t>
+      <arguments>
+        <Statement>
+          <t name="Object">x</t>
+        </Statement>
+      </arguments>
+    </Statement>
+    <Statement>
+      <t name="ParenOpen">{</t>
+      <t name="ParenClose">}</t>
+      <closure>
+        <Statement />
+      </closure>
+    </Statement>
+    <Statement>
+      <t name="Object">test2</t>
+      <t name="LeftAssign">&lt;-</t>
+      <t name="Object">function</t>
+      <t name="ParenOpen">(</t>
+      <t name="ParenClose">)</t>
+      <arguments>
+        <Statement>
+          <t name="Object">x</t>
+        </Statement>
+        <Statement>
+          <t name="Object">y</t>
+        </Statement>
+      </arguments>
+    </Statement>
+    <Statement>
+      <t name="ParenOpen">{</t>
+      <t name="ParenClose">}</t>
+      <closure>
+        <Statement />
+      </closure>
+    </Statement>
+    <Statement>
+      <t name="Object">test3</t>
+      <t name="LeftAssign">&lt;-</t>
+      <t name="Object">function</t>
+      <t name="ParenOpen">(</t>
+      <t name="ParenClose">)</t>
+      <arguments>
+        <Statement>
+          <t name="Object">a</t>
+        </Statement>
+      </arguments>
+    </Statement>
+    <Statement>
+      <t name="ParenOpen">{</t>
+      <t name="ParenClose">}</t>
+      <closure>
+        <Statement />
+      </closure>
+    </Statement>
+    <Statement>
+      <t name="Comment"> Doing the exactly the same as VisualBasic pipeline in R language:</t>
+      <t name="Object">var</t>
+      <t name="Object">result</t>
+      <t name="LeftAssign">&lt;-</t>
+      <t name="String">hello world!</t>
+      <t name="Object">|test1</t>
+      <t name="Object">|test2</t>
+      <t name="ParenOpen">(</t>
+      <t name="ParenClose">)</t>
+      <arguments>
+        <Statement>
+          <t name="Object">99</t>
+        </Statement>
+      </arguments>
+    </Statement>
+    <Statement>
+      <t name="Object">|test3</t>
+    </Statement>
+    <Statement>
+      <t name="Comment"> or you can just using the R function in normal way, and it is much complicated to read:</t>
+      <t name="Object">var</t>
+      <t name="Object">result</t>
+      <t name="LeftAssign">&lt;-</t>
+      <t name="Object">test3</t>
+      <t name="ParenOpen">(</t>
+      <t name="ParenClose">)</t>
+      <arguments>
+        <Statement>
+          <t name="Object">test2</t>
+          <t name="ParenOpen">(</t>
+          <t name="ParenClose">)</t>
+          <arguments>
+            <Statement>
+              <t name="Object">test1</t>
+              <t name="ParenOpen">(</t>
+              <t name="ParenClose">)</t>
+              <arguments>
+                <Statement>
+                  <t name="String">hello world</t>
+                </Statement>
+              </arguments>
+            </Statement>
+            <Statement />
+            <Statement>
+              <t name="Object">99</t>
+            </Statement>
+          </arguments>
+        </Statement>
+        <Statement />
+      </arguments>
+    </Statement>
+    <Statement />
+    <Statement>
+      <t name="Comment"> binding operator only allows in the with closure in the object declare statement</t>
+      <t name="Object">var</t>
+      <t name="Object">me</t>
+      <t name="LeftAssign">&lt;-</t>
+      <t name="Object">list</t>
+      <t name="ParenOpen">(</t>
+      <t name="ParenClose">)</t>
+      <arguments>
+        <Statement />
+      </arguments>
+    </Statement>
+    <Statement>
+      <t name="Object">with</t>
+      <t name="ParenOpen">{</t>
+      <t name="ParenClose">}</t>
+      <closure>
+        <Statement>
+          <t name="Object">%+%</t>
+          <t name="LeftAssign">&lt;-</t>
+          <t name="Object">function</t>
+          <t name="ParenOpen">(</t>
+          <t name="ParenClose">)</t>
+          <arguments>
+            <Statement>
+              <t name="Object">$</t>
+            </Statement>
+            <Statement>
+              <t name="Object">other</t>
+            </Statement>
+          </arguments>
+        </Statement>
+        <Statement>
+          <t name="ParenOpen">{</t>
+          <t name="ParenClose">}</t>
+          <closure>
+            <Statement />
+          </closure>
+        </Statement>
+        <Statement>
+          <t name="Object">%is%</t>
+          <t name="LeftAssign">&lt;-</t>
+          <t name="Object">function</t>
+          <t name="ParenOpen">(</t>
+          <t name="ParenClose">)</t>
+          <arguments>
+            <Statement>
+              <t name="Object">$</t>
+            </Statement>
+            <Statement>
+              <t name="Object">other</t>
+            </Statement>
+          </arguments>
+        </Statement>
+        <Statement>
+          <t name="ParenOpen">{</t>
+          <t name="ParenClose">}</t>
+          <closure>
+            <Statement />
+          </closure>
+        </Statement>
+        <Statement />
+      </closure>
+    </Statement>
+    <Statement>
+      <t name="Comment"> and then using the operator</t>
+      <t name="Object">var</t>
+      <t name="Object">new.me</t>
+      <t name="LeftAssign">&lt;-</t>
+      <t name="Object">me</t>
+      <t name="Object">+</t>
+      <t name="Object">other</t>
+    </Statement>
+    <Statement>
+      <t name="var">var</t>
+      <t name="Object">predicate</t>
+      <t name="LeftAssign">&lt;-</t>
+      <t name="Object">me</t>
+      <t name="Object">is</t>
+      <t name="Object">other</t>
+    </Statement>
+    <Statement>
+      <t name="Object">if</t>
+      <t name="ParenOpen">(</t>
+      <t name="ParenClose">)</t>
+      <arguments>
+        <Statement>
+          <t name="Object">not</t>
+          <t name="Object">me</t>
+          <t name="Object">is</t>
+          <t name="Object">him</t>
+        </Statement>
+      </arguments>
+    </Statement>
+    <Statement>
+      <t name="ParenOpen">{</t>
+      <t name="ParenClose">}</t>
+      <closure>
+        <Statement>
+          <t name="Comment"> ......</t>
+        </Statement>
+      </closure>
+    </Statement>
+    <Statement>
+      <t name="Object">if</t>
+      <t name="ParenOpen">(</t>
+      <t name="ParenClose">)</t>
+      <arguments>
+        <Statement>
+          <t name="Object">x</t>
+          <t name="Operator">&lt;=</t>
+          <t name="Object">10</t>
+          <t name="Object">andalso</t>
+          <t name="Object">y</t>
+          <t name="Object">!</t>
+          <t name="Object">99</t>
+        </Statement>
+      </arguments>
+    </Statement>
+    <Statement>
+      <t name="ParenOpen">{</t>
+      <t name="ParenClose">}</t>
+      <closure>
+        <Statement>
+          <t name="Comment"> ......</t>
+        </Statement>
+      </closure>
+    </Statement>
+    <Statement>
+      <t name="Object">else</t>
+      <t name="Object">if</t>
+      <t name="ParenOpen">(</t>
+      <t name="ParenClose">)</t>
+      <arguments>
+        <Statement>
+          <t name="Object">not</t>
+          <t name="Object">z</t>
+          <t name="Object">is</t>
+          <t name="Object">null</t>
+        </Statement>
+      </arguments>
+    </Statement>
+    <Statement>
+      <t name="ParenOpen">{</t>
+      <t name="ParenClose">}</t>
+      <closure>
+        <Statement>
+          <t name="Comment"> ......</t>
+        </Statement>
+      </closure>
+    </Statement>
+    <Statement>
+      <t name="var">var</t>
+      <t name="Object">names</t>
+      <t name="LeftAssign">&lt;-</t>
+      <t name="Object">dataframe</t>
+      <t name="ParenOpen">[</t>
+      <t name="ParenClose">]</t>
+      <arguments>
+        <Statement />
+        <Statement>
+          <t name="String">name</t>
+        </Statement>
+      </arguments>
+    </Statement>
+    <Statement />
+    <Statement>
+      <t name="Object">dataframe</t>
+      <t name="ParenOpen">[</t>
+      <t name="ParenClose">]</t>
+      <arguments>
+        <Statement />
+        <Statement>
+          <t name="String">name</t>
+        </Statement>
+      </arguments>
+    </Statement>
+    <Statement>
+      <t name="LeftAssign">&lt;-</t>
+      <t name="Object">new.names</t>
+    </Statement>
+    <Statement>
+      <t name="var">var</t>
+      <t name="Object">m</t>
+      <t name="LeftAssign">&lt;-</t>
+      <t name="ParenOpen">{</t>
+      <t name="ParenClose">}</t>
+      <closure>
+        <Statement>
+          <t name="ParenOpen">{</t>
+          <t name="ParenClose">}</t>
+          <closure>
+            <Statement>
+              <t name="Object">1</t>
+            </Statement>
+            <Statement>
+              <t name="Object">2</t>
+            </Statement>
+            <Statement>
+              <t name="Object">3</t>
+            </Statement>
+          </closure>
+        </Statement>
+        <Statement />
+        <Statement>
+          <t name="ParenOpen">{</t>
+          <t name="ParenClose">}</t>
+          <closure>
+            <Statement>
+              <t name="Object">4</t>
+            </Statement>
+            <Statement>
+              <t name="Object">5</t>
+            </Statement>
+            <Statement>
+              <t name="Object">6</t>
+            </Statement>
+          </closure>
+        </Statement>
+        <Statement />
+        <Statement>
+          <t name="ParenOpen">{</t>
+          <t name="ParenClose">}</t>
+          <closure>
+            <Statement>
+              <t name="Object">7</t>
+            </Statement>
+            <Statement>
+              <t name="Object">8</t>
+            </Statement>
+            <Statement>
+              <t name="Object">9</t>
+            </Statement>
+          </closure>
+        </Statement>
+        <Statement />
+      </closure>
+    </Statement>
+    <Statement />
+    <Statement>
+      <t name="var">var</t>
+      <t name="Object">obj</t>
+      <t name="LeftAssign">&lt;-</t>
+      <t name="Object">list</t>
+      <t name="ParenOpen">(</t>
+      <t name="ParenClose">)</t>
+      <arguments>
+        <Statement />
+      </arguments>
+    </Statement>
+    <Statement />
+    <Statement>
+      <t name="Comment"> using with for object property initialize</t>
+      <t name="Object">var</t>
+      <t name="Object">obj</t>
+      <t name="LeftAssign">&lt;-</t>
+      <t name="Object">list</t>
+      <t name="ParenOpen">(</t>
+      <t name="ParenClose">)</t>
+      <arguments>
+        <Statement />
+      </arguments>
+    </Statement>
+    <Statement>
+      <t name="Object">with</t>
+      <t name="ParenOpen">{</t>
+      <t name="ParenClose">}</t>
+      <closure>
+        <Statement>
+          <t name="Object">$a</t>
+          <t name="LeftAssign">&lt;-</t>
+          <t name="Object">123</t>
+        </Statement>
+        <Statement>
+          <t name="Object">$b</t>
+          <t name="LeftAssign">&lt;-</t>
+          <t name="String">+++</t>
+        </Statement>
+        <Statement />
+      </closure>
+    </Statement>
+    <Statement>
+      <t name="Comment"> run commandline using @ operator in R</t>
+      <t name="Object">var</t>
+      <t name="Object">prot.fasta</t>
+      <t name="Object">=</t>
+      <t name="String">/home/biostack/sample.fasta</t>
+    </Statement>
+    <Statement>
+      <t name="var">var</t>
+      <t name="ParenOpen">[</t>
+      <t name="ParenClose">]</t>
+      <arguments>
+        <Statement>
+          <t name="Object">exitCode</t>
+        </Statement>
+        <Statement>
+          <t name="Object">std_out</t>
+        </Statement>
+      </arguments>
+    </Statement>
+    <Statement>
+      <t name="LeftAssign">&lt;-</t>
+      <t name="Object">@</t>
+      <t name="String">makeblastdb -in \"{prot.fasta}\" -dbtype prot</t>
+    </Statement>
+    <Statement>
+      <t name="Object">test.integer</t>
+      <t name="LeftAssign">&lt;-</t>
+      <t name="Object">function</t>
+      <t name="ParenOpen">(</t>
+      <t name="ParenClose">)</t>
+      <arguments>
+        <Statement>
+          <t name="Object">x</t>
+          <t name="Object">as</t>
+          <t name="Object">integer</t>
+        </Statement>
+      </arguments>
+    </Statement>
+    <Statement>
+      <t name="ParenOpen">{</t>
+      <t name="ParenClose">}</t>
+      <closure>
+        <Statement>
+          <t name="Comment"> the type constraint means the parameter only allow the integer vector type</t>
+          <t name="Comment"> if the parameter is a string vector, then the interpreter will throw exceptions.</t>
+        </Statement>
+      </closure>
+    </Statement>
+    <Statement>
+      <t name="var">var</t>
+      <t name="Object">name</t>
+      <t name="LeftAssign">&lt;-</t>
+      <t name="Object">first.name</t>
+      <t name="StringContact">&amp;</t>
+      <t name="String"> </t>
+      <t name="StringContact">&amp;</t>
+      <t name="Object">last.name</t>
+    </Statement>
+    <Statement>
+      <t name="var">var</t>
+      <t name="Object">x</t>
+      <t name="LeftAssign">&lt;-</t>
+      <t name="ParenOpen">{</t>
+      <t name="ParenClose">}</t>
+      <closure>
+        <Statement>
+          <t name="Object">1</t>
+        </Statement>
+        <Statement>
+          <t name="Object">2</t>
+        </Statement>
+        <Statement>
+          <t name="Object">3</t>
+        </Statement>
+        <Statement>
+          <t name="Object">4</t>
+        </Statement>
+        <Statement>
+          <t name="Object">5</t>
+        </Statement>
+      </closure>
+    </Statement>
+    <Statement />
+    <Statement>
+      <t name="var">var</t>
+      <t name="Object">x</t>
+      <t name="LeftAssign">&lt;-</t>
+      <t name="String">33333333</t>
+      <t name="StringContact">&amp;</t>
+      <t name="Object">33</t>
+      <t name="methodCall">:</t>
+      <t name="Object">ToString</t>
+      <t name="ParenOpen">(</t>
+      <t name="ParenClose">)</t>
+      <arguments>
+        <Statement>
+          <t name="String">F2</t>
+        </Statement>
+      </arguments>
+    </Statement>
+    <Statement />
+    <Statement>
+      <t name="Object">if</t>
+      <t name="ParenOpen">(</t>
+      <t name="ParenClose">)</t>
+      <arguments>
+        <Statement>
+          <t name="Object">x</t>
+          <t name="methodCall">:</t>
+          <t name="Object">Length</t>
+          <t name="Operator">&lt;=</t>
+          <t name="Object">10</t>
+        </Statement>
+      </arguments>
+    </Statement>
+    <Statement>
+      <t name="ParenOpen">{</t>
+      <t name="ParenClose">}</t>
+      <closure>
+        <Statement>
+          <t name="Object">println</t>
+          <t name="ParenOpen">(</t>
+          <t name="ParenClose">)</t>
+          <arguments>
+            <Statement>
+              <t name="Object">x</t>
+            </Statement>
+          </arguments>
+        </Statement>
+        <Statement />
+        <Statement>
+          <t name="Object">test</t>
+          <t name="LeftAssign">&lt;-</t>
+          <t name="Object">function</t>
+          <t name="ParenOpen">(</t>
+          <t name="ParenClose">)</t>
+          <arguments>
+            <Statement>
+              <t name="Object">...</t>
+            </Statement>
+          </arguments>
+        </Statement>
+        <Statement>
+          <t name="ParenOpen">{</t>
+          <t name="ParenClose">}</t>
+          <closure>
+            <Statement>
+              <t name="var">var</t>
+              <t name="Object">gg</t>
+              <t name="LeftAssign">&lt;-</t>
+              <t name="Object">...</t>
+            </Statement>
+            <Statement>
+              <t name="var">var</t>
+              <t name="Object">x</t>
+              <t name="LeftAssign">&lt;-</t>
+              <t name="Object">...</t>
+            </Statement>
+            <Statement>
+              <t name="var">var</t>
+              <t name="Object">s</t>
+              <t name="LeftAssign">&lt;-</t>
+              <t name="Object">x</t>
+              <t name="StringContact">&amp;</t>
+              <t name="Object">global$x</t>
+            </Statement>
+            <Statement />
+          </closure>
+        </Statement>
+        <Statement>
+          <t name="Object">test</t>
+          <t name="ParenOpen">(</t>
+          <t name="ParenClose">)</t>
+          <arguments>
+            <Statement>
+              <t name="Object">x</t>
+              <t name="Object">=</t>
+              <t name="Object">x</t>
+            </Statement>
+            <Statement>
+              <t name="Object">gg</t>
+              <t name="Object">=</t>
+              <t name="Object">x</t>
+            </Statement>
+            <Statement>
+              <t name="Object">s</t>
+              <t name="Object">=</t>
+              <t name="Object">x</t>
+            </Statement>
+          </arguments>
+        </Statement>
+        <Statement />
+        <Statement />
+      </closure>
+    </Statement>
+    <Statement>
+      <t name="Object">do</t>
+      <t name="Object">while</t>
+      <t name="ParenOpen">(</t>
+      <t name="ParenClose">)</t>
+      <arguments>
+        <Statement>
+          <t name="Object">TRUE</t>
+          <t name="Object">andalso</t>
+          <t name="Object">t</t>
+          <t name="Operator">==</t>
+          <t name="String">123 + 555</t>
+        </Statement>
+      </arguments>
+    </Statement>
+    <Statement>
+      <t name="ParenOpen">{</t>
+      <t name="ParenClose">}</t>
+      <closure>
+        <Statement>
+          <t name="Object">cat</t>
+          <t name="ParenOpen">(</t>
+          <t name="ParenClose">)</t>
+          <arguments>
+            <Statement>
+              <t name="String">.</t>
+            </Statement>
+          </arguments>
+        </Statement>
+        <Statement />
+        <Statement />
+      </closure>
+    </Statement>
+    <Statement />
+  </program>
+</Main>
