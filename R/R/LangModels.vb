@@ -1,38 +1,10 @@
-﻿Imports System.Xml.Serialization
-Imports langToken = Microsoft.VisualBasic.Scripting.TokenIcer.Token(Of R.LanguageTokens)
+﻿Public Enum LanguageTokens As Byte
 
-''' <summary>
-''' 
-''' </summary>
-Public Class Statement
-
-    <XmlElement("t")>
-    Public Property Tokens As langToken()
-    ''' <summary>
-    ''' if/for/do/function堆栈
-    ''' </summary>
-    <XmlArray("closure")>
-    Public Property Child As Statement()
-
-    Public ReadOnly Property IsEmpty As Boolean
-        Get
-            Return Tokens.IsNullOrEmpty AndAlso Child.IsNullOrEmpty
-        End Get
-    End Property
-
-End Class
-
-Public Class Main
-    Public Property program As Statement()
-End Class
-
-Public Enum LanguageTokens
-
-    undefine
+    undefine = 0
     ''' <summary>
     ''' identifier, value expression, etc.(允许使用小数点作为变量名称的一部分)
     ''' </summary>
-    [Object]
+    [Object] = 10
     ''' <summary>
     ''' &lt;-
     ''' </summary>
@@ -50,19 +22,19 @@ Public Enum LanguageTokens
     ''' ,
     ''' </summary>
     ParameterDelimiter
+    ''' <summary>
+    ''' |
+    ''' </summary>
+    Pipeline
 
-#Region "{...}"
-    StackOpen
-    StackClose
-#End Region
-#Region "(...)"
-    EvalOpen
-    EvalClose
-#End Region
-#Region "[...]"
-    IndexOpen
-    IndexClose
-#End Region
+    ''' <summary>
+    ''' ([{
+    ''' </summary>
+    ParenOpen
+    ''' <summary>
+    ''' )}]
+    ''' </summary>
+    ParenClose
 
     ''' <summary>
     ''' &amp;
