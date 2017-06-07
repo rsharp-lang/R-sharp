@@ -8,7 +8,7 @@ Imports langToken = Microsoft.VisualBasic.Scripting.TokenIcer.Token(Of R.Languag
 Public Module TokenIcer
 
     <Extension> Public Iterator Function Parse(s$) As IEnumerable(Of Statement(Of LanguageTokens))
-        Dim buffer As New Pointer(Of Char)(Trim(s$))
+        Dim buffer As New Pointer(Of Char)(Strings.Trim(s$))
         Dim it As New Value(Of Statement(Of LanguageTokens))
 
         Do While Not buffer.EndRead
@@ -50,9 +50,9 @@ Public Module TokenIcer
                                End If
                            End Function
         Dim newToken =
-            Function()
+            Sub()
                 If tmp.Count = 0 Then
-                    Return Nothing
+                    Return
                 End If
 
                 ' 创建除了字符串之外的其他的token
@@ -67,9 +67,7 @@ Public Module TokenIcer
                 End If
 
                 tmp *= 0
-
-                Return tokens.Last
-            End Function
+            End Sub
 
         Do While Not buffer.EndRead
             Dim c As Char = +buffer
@@ -257,8 +255,57 @@ Public Module TokenIcer
 
     <Extension> Public Function GetSourceTree(s As IEnumerable(Of Statement(Of LanguageTokens))) As String
         Return New Main(Of LanguageTokens) With {
-            .program = s.ToArray
+            .program = s.ToArray.Trim
         }.GetXml()
+    End Function
+
+    <Extension>
+    Public Function Trim(src As Statement(Of LanguageTokens)()) As Statement(Of LanguageTokens)()
+        Return src _
+            .Select(Function(s) s.Trim) _
+            .Where(Function(s) Not s.tokens.IsNullOrEmpty) _
+            .ToArray
+    End Function
+
+    <Extension>
+    Public Function Trim(src As Statement(Of LanguageTokens)) As Statement(Of LanguageTokens)
+        With src
+            .tokens = src.tokens _
+                .Select(Function(t) t.Trim) _
+                .Where(Function(t) t.IsNullOrEmpty) _
+                .ToArray
+            Return .ref
+        End With
+    End Function
+
+    <Extension>
+    Public Function Trim(t As Token(Of LanguageTokens)) As Token(Of LanguageTokens)
+        If Not t.Arguments.IsNullOrEmpty Then
+            t.Arguments = t.Arguments.Trim
+        End If
+        If Not t.Closure Is Nothing AndAlso Not t.Closure.program.IsNullOrEmpty Then
+            t.Closure.program = t.Closure.program.Trim
+        End If
+
+        Return t
+    End Function
+
+    <Extension>
+    Public Function IsNullOrEmpty(t As Token(Of LanguageTokens)) As Boolean
+        If Not t.Value.StringEmpty Then
+            Return False
+        End If
+        If Not t.UNDEFINED Then
+            Return False
+        End If
+        If Not t.Arguments.IsNullOrEmpty Then
+            Return False
+        End If
+        If Not t.Closure Is Nothing AndAlso Not t.Closure.program.IsNullOrEmpty Then
+            Return False
+        End If
+
+        Return True
     End Function
 
     ReadOnly close As New Dictionary(Of Char, Char) From {

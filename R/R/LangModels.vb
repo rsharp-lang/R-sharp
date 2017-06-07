@@ -1,10 +1,10 @@
-﻿Public Enum LanguageTokens
+﻿Public Enum LanguageTokens As Byte
 
-    undefine
+    undefine = 0
     ''' <summary>
     ''' identifier, value expression, etc.(允许使用小数点作为变量名称的一部分)
     ''' </summary>
-    [Object]
+    [Object] = 10
     ''' <summary>
     ''' &lt;-
     ''' </summary>
