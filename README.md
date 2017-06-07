@@ -1,3 +1,7 @@
+> [WARNING] This project is a work in progress and is not recommended for production use.
+
+The ``R#`` language its syntax is original derived from the ``R`` language, but with more modernized programming styles. The ``R#`` language its interpreter and .NET compiler is original writen in VisualBasic language, with native support for the .NET runtime.
+
 ## R# language design
 
 ###### Code comments
@@ -51,7 +55,7 @@ var obj <- list();
 # using with for object property initialize
 var obj <- list() with {
     $a <- 123;
-	$b <- "+++";
+    $b <- "+++";
 }
 ```
 
@@ -67,7 +71,7 @@ can accept any type you have input. but you can using the ``param as <type>`` fo
 ```R
 test.integer <- function(x as integer) {
     # the type constraint means the parameter only allow the integer vector type
-	# if the parameter is a string vector, then the interpreter will throw exceptions.
+    # if the parameter is a string vector, then the interpreter will throw exceptions.
 }
 ```
 
@@ -113,7 +117,7 @@ Allows you bind operator on your custom type:
 ```R
 # binding operator only allows in the with closure in the object declare statement
 var me <- list() with {
-   %+% <- function($, other) {
+   %+%  <- function($, other) {
    }
    %is% <- function($, other) {
    }
@@ -160,9 +164,9 @@ End Function
 End Function
 
 Dim result = "hello world!" 
-	.test1 
-	.test2(99) 
-	.test3
+    .test1 
+    .test2(99) 
+    .test3
 ```
 
 All of the R function which have at least one parameter can be using in pipeline mode, using ``|`` as the pipeline operator:
@@ -177,9 +181,9 @@ test3 <- function(a) {
 
 # Doing the exactly the same as VisualBasic pipeline in R language:
 var result <- "hello world!" 
-	|test1 
-	|test2(99) 
-	|test3;
+    |test1 
+    |test2(99) 
+    |test3;
 # or you can just using the R function in normal way, and it is much complicated to read:
 var result <- test3(test2(test1("hello world"), 99));
 ```
@@ -255,7 +259,9 @@ tuple.test <- function(a as integer, b as integer) {
 var [a, b, c] <- tuple.test(3, 2);
 
 if (a == 3) {
-    c = c + a + b;
+    c <- c + a + b;
+    # or using pipeline
+    c <- {a, b, c} | sum;
 }
 ```
 
