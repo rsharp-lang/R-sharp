@@ -136,7 +136,6 @@ Public Module TokenIcer
                         Call buffer.Parse(childs)
 
                         tokens += New langToken(LanguageTokens.ParenOpen, c)
-                        tokens += New langToken(LanguageTokens.ParenClose, close(c))
 
                         If c = "{"c Then
                             last = New Statement(Of LanguageTokens) With {
@@ -145,6 +144,7 @@ Public Module TokenIcer
                             tokens.Last.Closure = New Main(Of LanguageTokens) With {
                                 .program = childs
                             }
+                            tokens += New langToken(LanguageTokens.ParenClose, close(c))
                             If Not parent Is Nothing Then
                                 parent += last
                             Else
@@ -152,6 +152,7 @@ Public Module TokenIcer
                             End If
                         Else
                             tokens.Last.Arguments = childs
+                            tokens += New langToken(LanguageTokens.ParenClose, close(c))
                         End If
 
                         ' tokens *= 0
@@ -184,6 +185,9 @@ Public Module TokenIcer
                         'ElseIf c = "]"c Then
                         '    newToken()
                         '    tokens += New langToken(LanguageTokens.IndexClose, "]"c)
+                    ElseIf c = "|"c Then
+                        newToken()
+                        tokens += New langToken(LanguageTokens.Pipeline, "|")
                     ElseIf c = "&"c Then
                         ' 字符串拼接
                         newToken()

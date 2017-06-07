@@ -22,6 +22,10 @@
     ''' ,
     ''' </summary>
     ParameterDelimiter
+    ''' <summary>
+    ''' |
+    ''' </summary>
+    Pipeline
 
     ''' <summary>
     ''' ([{
