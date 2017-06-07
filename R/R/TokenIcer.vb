@@ -18,6 +18,18 @@ Public Module TokenIcer
         Loop
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="buffer"></param>
+    ''' <param name="parent"></param>
+    ''' <param name="indexStack"></param>
+    ''' <returns></returns>
+    ''' <remarks>
+    ''' 对于``{}``而言，其含义为当前的token的closure
+    ''' 对于``()``而言，其含义为当前的token的innerStack
+    ''' 对于``[]``而言，起含义为当前的token的innerStack，与``()``的含义几乎一致
+    ''' </remarks>
     <Extension> Private Function Parse(buffer As Pointer(Of Char), ByRef parent As List(Of Statement), indexStack As Boolean) As Statement
         Dim quotOpen As Boolean = False
         Dim commentOpen As Boolean = False ' 当出现注释符的时候，会一直持续到遇见换行符为止
