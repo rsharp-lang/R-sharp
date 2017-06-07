@@ -280,6 +280,18 @@ if (a == 3) {
 }
 ```
 
+```vbnet
+Dim tuple_test = Function(a As Integer, b As Integer)
+                     Return (a, b, a ^ b)
+                 End Function
+Dim x As (a, b, c) = tuple_test(3, 2)
+
+If x.a = 3 Then 
+    ' using pipeline
+    Dim c = {x.a, x.b, x.c}.Sum
+End If
+```
+
 ###### R object to tuple
 
 You can naturally convert the object as tuple value. The member in the tuple their name should matched the names in an object, so that you can doing something like this example in ``R#``:
