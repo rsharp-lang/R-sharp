@@ -38,14 +38,16 @@ Dim m = {
 
 ###### Types
 
-``R#`` language have sevral primitive type:
+``R#`` language have several primitive type:
 
-+ ``integer``, System.Int64 vector
-+ ``double``, System.Double vector
-+ ``uinteger``, System.UInt64 vector
-+ ``string``, System.String vector
-+ ``char``, System.Char vector
-+ ``boolean``, System.Boolean vector
+|primitive type in R|.NET type                |
+|-------------------|-------------------------|
+|``integer``        |**System.Int64** vector  |
+|``double``         |**System.Double** vector |
+|``uinteger``       |**System.UInt64** vector |
+|``string``         |**System.String** vector |
+|``char``           |**System.Char** vector   |
+|``boolean``        |**System.Boolean** vector|
 
 And you can declare the user type by using ``list()`` function, example like:
 
