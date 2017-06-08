@@ -10,6 +10,7 @@ var expand <- function() {
     s <- "{s} message from R#";
 }
 
+expand();
 println(s);
 # Hello world! message from R#
 ```
@@ -28,6 +29,7 @@ Module Program
                          s = $"{s} message from VisualBasic"
                      End Function
         ' Hello world! message from VisualBasic
+        Call expand()
         Call println(s)
     End Sub
 End Module
