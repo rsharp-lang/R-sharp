@@ -2,6 +2,12 @@
 
     Sub Main()
         Call TokenIcer.Parse("
+var m <- {
+   {1, 2, 3},
+   {4, 5, 6},
+   {7, 8, 9}
+};").GetSourceTree.SaveTo("X:\matrix.xml")
+        Call TokenIcer.Parse("
 var d <- data.frame(
     a = {1, 2, 3},
     b = {""a"", ""g"", ""y""},
@@ -20,7 +26,7 @@ var d <- data.frame(
     b = {""a"", ""g"", ""y""},
     t = {TRUE, TRUE, FALSE});
 
-var gg <- a(33) + b(99, 88);
+var gg <- a(33) + b(99, zzz.ZZ= 88);
 
 # in a for loop, the tuple its member value is the cell value in dataframe
 for([a, b, c as ""t""] in d) {

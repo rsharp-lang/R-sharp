@@ -181,11 +181,26 @@ Public Module TokenIcer
 
                         Call buffer.Parse(childs)
 
-                        last = New Statement(Of LanguageTokens) With {
-                            .tokens = tokens.ToArray
-                        }
+                        Dim matrixOpen = tokens.Count = 0
+
+                        If matrixOpen Then
+
+                            ' 可能为matrix语法
+                            tokens += New langToken(LanguageTokens.ParenOpen, "{")
+
+                        End If
+
                         tokens.Last.Closure = New Main(Of LanguageTokens) With {
                             .program = childs
+                        }
+
+                        If matrixOpen Then
+                            ' 关闭matrix
+                            tokens += New langToken(LanguageTokens.ParenClose, "}")
+                        End If
+
+                        last = New Statement(Of LanguageTokens) With {
+                            .tokens = tokens.ToArray
                         }
 
                         If Not parent Is Nothing Then

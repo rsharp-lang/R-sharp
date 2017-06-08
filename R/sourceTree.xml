@@ -5,7 +5,7 @@
       <t name="var">var</t>
       <t name="Object">d</t>
       <t name="LeftAssign">&lt;-</t>
-      <t name="Function">data.frame<Arguments><StatementOfLanguageTokens><t name="Object">a</t><t name="Object">=</t><t name="ParenOpen">{<Closure><program><StatementOfLanguageTokens><t name="Object">1</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">2</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">3</t></StatementOfLanguageTokens></program></Closure></t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">b</t><t name="Object">=</t><t name="ParenOpen">{<Closure><program><StatementOfLanguageTokens><t name="String">a</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="String">g</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="String">y</t></StatementOfLanguageTokens></program></Closure></t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">t</t><t name="Object">=</t><t name="ParenOpen">{<Closure><program><StatementOfLanguageTokens><t name="Object">TRUE</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">TRUE</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">FALSE</t></StatementOfLanguageTokens></program></Closure></t></StatementOfLanguageTokens></Arguments></t>
+      <t name="Function">data.frame<Arguments><StatementOfLanguageTokens><t name="Object">a</t><t name="ParameterAssign">=<Closure><program><StatementOfLanguageTokens><t name="Object">1</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">2</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">3</t></StatementOfLanguageTokens></program></Closure></t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">b</t><t name="ParameterAssign">=<Closure><program><StatementOfLanguageTokens><t name="String">a</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="String">g</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="String">y</t></StatementOfLanguageTokens></program></Closure></t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">t</t><t name="ParameterAssign">=<Closure><program><StatementOfLanguageTokens><t name="Object">TRUE</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">TRUE</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">FALSE</t></StatementOfLanguageTokens></program></Closure></t></StatementOfLanguageTokens></Arguments></t>
     </StatementOfLanguageTokens>
     <StatementOfLanguageTokens>
       <t name="var">var</t>
@@ -13,12 +13,11 @@
       <t name="LeftAssign">&lt;-</t>
       <t name="Function">a<Arguments><StatementOfLanguageTokens><t name="Object">33</t></StatementOfLanguageTokens></Arguments></t>
       <t name="Operator">+</t>
-      <t name="Function">b<Arguments><StatementOfLanguageTokens><t name="Object">99</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">88</t></StatementOfLanguageTokens></Arguments></t>
+      <t name="Function">b<Arguments><StatementOfLanguageTokens><t name="Object">99</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">zzz.ZZ</t><t name="ParameterAssign">=</t><t name="Object">88</t></StatementOfLanguageTokens></Arguments></t>
     </StatementOfLanguageTokens>
     <StatementOfLanguageTokens>
       <t name="Comment"> in a for loop, the tuple its member value is the cell value in dataframe</t>
-      <t name="Function">for<Arguments><StatementOfLanguageTokens><t name="ParenOpen">[<Arguments><StatementOfLanguageTokens><t name="Object">a</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">b</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">c</t><t name="Object">as</t><t name="String">t</t></StatementOfLanguageTokens></Arguments></t><t name="ParenClose">]</t><t name="Object">in</t><t name="Object">d</t></StatementOfLanguageTokens></Arguments></t>
-      <t name="ParenOpen">{<Closure><program><StatementOfLanguageTokens><t name="Function">println<Arguments><StatementOfLanguageTokens><t name="String">%s = %s ? (%s)</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">a</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">b</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">c</t></StatementOfLanguageTokens></Arguments></t></StatementOfLanguageTokens></program></Closure></t>
+      <t name="Function">for<Arguments><StatementOfLanguageTokens><t name="ParenOpen">[<Arguments><StatementOfLanguageTokens><t name="Object">a</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">b</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">c</t><t name="Object">as</t><t name="String">t</t></StatementOfLanguageTokens></Arguments></t><t name="ParenClose">]</t><t name="Object">in</t><t name="Object">d</t></StatementOfLanguageTokens></Arguments><Closure><program><StatementOfLanguageTokens><t name="Function">println<Arguments><StatementOfLanguageTokens><t name="String">%s = %s ? (%s)</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">a</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">b</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">c</t></StatementOfLanguageTokens></Arguments></t></StatementOfLanguageTokens></program></Closure></t>
     </StatementOfLanguageTokens>
     <StatementOfLanguageTokens>
       <t name="Comment"> if directly convert the dataframe as tuple, </t>
@@ -33,8 +32,7 @@
       <t name="Comment"> this R function returns multiple value by using tuple:</t>
       <t name="Object">tuple.test</t>
       <t name="LeftAssign">&lt;-</t>
-      <t name="Function">function<Arguments><StatementOfLanguageTokens><t name="Object">a</t><t name="Object">as</t><t name="Object">integer</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">b</t><t name="Object">as</t><t name="Object">integer</t></StatementOfLanguageTokens></Arguments></t>
-      <t name="ParenOpen">{<Closure><program><StatementOfLanguageTokens><t name="Object">return</t><t name="ParenOpen">[<Arguments><StatementOfLanguageTokens><t name="Object">a</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">b</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">a</t><t name="Operator">^</t><t name="Object">b</t></StatementOfLanguageTokens></Arguments></t><t name="ParenClose">]</t></StatementOfLanguageTokens></program></Closure></t>
+      <t name="Function">function<Arguments><StatementOfLanguageTokens><t name="Object">a</t><t name="Object">as</t><t name="Object">integer</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">b</t><t name="Object">as</t><t name="Object">integer</t></StatementOfLanguageTokens></Arguments><Closure><program><StatementOfLanguageTokens><t name="Object">return</t><t name="ParenOpen">[<Arguments><StatementOfLanguageTokens><t name="Object">a</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">b</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">a</t><t name="Operator">^</t><t name="Object">b</t></StatementOfLanguageTokens></Arguments></t><t name="ParenClose">]</t></StatementOfLanguageTokens></program></Closure></t>
     </StatementOfLanguageTokens>
     <StatementOfLanguageTokens>
       <t name="Comment"> and you can using tuple its member as the normal variable</t>
@@ -45,8 +43,7 @@
       <t name="Function">tuple.test<Arguments><StatementOfLanguageTokens><t name="Object">3</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">2</t></StatementOfLanguageTokens></Arguments></t>
     </StatementOfLanguageTokens>
     <StatementOfLanguageTokens>
-      <t name="Function">if<Arguments><StatementOfLanguageTokens><t name="Object">a</t><t name="Operator">==</t><t name="Object">3</t></StatementOfLanguageTokens></Arguments></t>
-      <t name="ParenOpen">{<Closure><program><StatementOfLanguageTokens><t name="Object">c</t><t name="LeftAssign">&lt;-</t><t name="Object">c</t><t name="Operator">+</t><t name="Object">a</t><t name="Operator">+</t><t name="Object">b</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Comment"> or using pipeline</t><t name="Object">c</t><t name="LeftAssign">&lt;-</t><t name="ParenOpen">{<Closure><program><StatementOfLanguageTokens><t name="Object">a</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">b</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">c</t></StatementOfLanguageTokens></program></Closure></t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Pipeline">|</t><t name="Object">sum</t></StatementOfLanguageTokens></program></Closure></t>
+      <t name="Function">if<Arguments><StatementOfLanguageTokens><t name="Object">a</t><t name="Operator">==</t><t name="Object">3</t></StatementOfLanguageTokens></Arguments><Closure><program><StatementOfLanguageTokens><t name="Object">c</t><t name="LeftAssign">&lt;-</t><t name="Object">c</t><t name="Operator">+</t><t name="Object">a</t><t name="Operator">+</t><t name="Object">b</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Comment"> or using pipeline</t><t name="Object">c</t><t name="LeftAssign">&lt;-<Closure><program><StatementOfLanguageTokens><t name="Object">a</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">b</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">c</t></StatementOfLanguageTokens></program></Closure></t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Pipeline">|</t><t name="Object">sum</t></StatementOfLanguageTokens></program></Closure></t>
     </StatementOfLanguageTokens>
     <StatementOfLanguageTokens>
       <t name="var">var</t>
@@ -57,14 +54,12 @@
     <StatementOfLanguageTokens>
       <t name="Object">test</t>
       <t name="LeftAssign">&lt;-</t>
-      <t name="Function">function<Arguments><StatementOfLanguageTokens><t name="Object">g</t><t name="Object">as</t><t name="Object">integer</t></StatementOfLanguageTokens></Arguments></t>
-      <t name="ParenOpen">{<Closure><program><StatementOfLanguageTokens><t name="Comment"> just like the VisualBasic language, you can using [] bracket </t><t name="Comment"> for eliminates the object identifier conflicts in R language.</t><t name="Comment"> string contact of the parameter g with global variable [g]</t><t name="Object">return</t><t name="Object">g</t><t name="methodCall">:</t><t name="Function">ToString<Arguments><StatementOfLanguageTokens><t name="String">F2</t></StatementOfLanguageTokens></Arguments></t><t name="StringContact">&amp;</t><t name="ParenOpen">[<Arguments><StatementOfLanguageTokens><t name="Object">g</t></StatementOfLanguageTokens></Arguments></t><t name="ParenClose">]</t></StatementOfLanguageTokens></program></Closure></t>
+      <t name="Function">function<Arguments><StatementOfLanguageTokens><t name="Object">g</t><t name="Object">as</t><t name="Object">integer</t></StatementOfLanguageTokens></Arguments><Closure><program><StatementOfLanguageTokens><t name="Comment"> just like the VisualBasic language, you can using [] bracket </t><t name="Comment"> for eliminates the object identifier conflicts in R language.</t><t name="Comment"> string contact of the parameter g with global variable [g]</t><t name="Object">return</t><t name="Object">g</t><t name="methodCall">:</t><t name="Function">ToString<Arguments><StatementOfLanguageTokens><t name="String">F2</t></StatementOfLanguageTokens></Arguments></t><t name="StringContact">&amp;</t><t name="ParenOpen">[<Arguments><StatementOfLanguageTokens><t name="Object">g</t></StatementOfLanguageTokens></Arguments></t><t name="ParenClose">]</t></StatementOfLanguageTokens></program></Closure></t>
     </StatementOfLanguageTokens>
     <StatementOfLanguageTokens>
       <t name="var">var</t>
       <t name="Object">x</t>
-      <t name="LeftAssign">&lt;-</t>
-      <t name="ParenOpen">{<Closure><program><StatementOfLanguageTokens><t name="Object">1</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">2</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">3</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">4</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">5</t></StatementOfLanguageTokens></program></Closure></t>
+      <t name="LeftAssign">&lt;-<Closure><program><StatementOfLanguageTokens><t name="Object">1</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">2</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">3</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">4</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">5</t></StatementOfLanguageTokens></program></Closure></t>
     </StatementOfLanguageTokens>
     <StatementOfLanguageTokens>
       <t name="var">var</t>
@@ -79,20 +74,17 @@
     <StatementOfLanguageTokens>
       <t name="Object">test1</t>
       <t name="LeftAssign">&lt;-</t>
-      <t name="Function">function<Arguments><StatementOfLanguageTokens><t name="Object">x</t></StatementOfLanguageTokens></Arguments></t>
-      <t name="ParenOpen">{<Closure><program /></Closure></t>
+      <t name="Function">function<Arguments><StatementOfLanguageTokens><t name="Object">x</t></StatementOfLanguageTokens></Arguments><Closure><program /></Closure></t>
     </StatementOfLanguageTokens>
     <StatementOfLanguageTokens>
       <t name="Object">test2</t>
       <t name="LeftAssign">&lt;-</t>
-      <t name="Function">function<Arguments><StatementOfLanguageTokens><t name="Object">x</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">y</t></StatementOfLanguageTokens></Arguments></t>
-      <t name="ParenOpen">{<Closure><program /></Closure></t>
+      <t name="Function">function<Arguments><StatementOfLanguageTokens><t name="Object">x</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">y</t></StatementOfLanguageTokens></Arguments><Closure><program /></Closure></t>
     </StatementOfLanguageTokens>
     <StatementOfLanguageTokens>
       <t name="Object">test3</t>
       <t name="LeftAssign">&lt;-</t>
-      <t name="Function">function<Arguments><StatementOfLanguageTokens><t name="Object">a</t></StatementOfLanguageTokens></Arguments></t>
-      <t name="ParenOpen">{<Closure><program /></Closure></t>
+      <t name="Function">function<Arguments><StatementOfLanguageTokens><t name="Object">a</t></StatementOfLanguageTokens></Arguments><Closure><program /></Closure></t>
     </StatementOfLanguageTokens>
     <StatementOfLanguageTokens>
       <t name="Comment"> Doing the exactly the same as VisualBasic pipeline in R language:</t>
@@ -120,8 +112,7 @@
       <t name="Object">me</t>
       <t name="LeftAssign">&lt;-</t>
       <t name="Function">list<Arguments /></t>
-      <t name="Object">with</t>
-      <t name="ParenOpen">{<Closure><program><StatementOfLanguageTokens><t name="Object">%</t><t name="Operator">+</t><t name="Object">%</t><t name="LeftAssign">&lt;-</t><t name="Function">function<Arguments><StatementOfLanguageTokens><t name="Object">$</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">other</t></StatementOfLanguageTokens></Arguments></t><t name="ParenOpen">{<Closure><program /></Closure></t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">%is%</t><t name="LeftAssign">&lt;-</t><t name="Function">function<Arguments><StatementOfLanguageTokens><t name="Object">$</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">other</t></StatementOfLanguageTokens></Arguments></t><t name="ParenOpen">{<Closure><program /></Closure></t></StatementOfLanguageTokens></program></Closure></t>
+      <t name="Object">with<Closure><program><StatementOfLanguageTokens><t name="Object">%</t><t name="Operator">+</t><t name="Object">%</t><t name="LeftAssign">&lt;-</t><t name="Function">function<Arguments><StatementOfLanguageTokens><t name="Object">$</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">other</t></StatementOfLanguageTokens></Arguments><Closure><program /></Closure></t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">%is%</t><t name="LeftAssign">&lt;-</t><t name="Function">function<Arguments><StatementOfLanguageTokens><t name="Object">$</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">other</t></StatementOfLanguageTokens></Arguments><Closure><program /></Closure></t></StatementOfLanguageTokens></program></Closure></t>
     </StatementOfLanguageTokens>
     <StatementOfLanguageTokens>
       <t name="Comment"> and then using the operator</t>
@@ -141,17 +132,14 @@
       <t name="Object">other</t>
     </StatementOfLanguageTokens>
     <StatementOfLanguageTokens>
-      <t name="Function">if<Arguments><StatementOfLanguageTokens><t name="Object">not</t><t name="Object">me</t><t name="Object">is</t><t name="Object">him</t></StatementOfLanguageTokens></Arguments></t>
-      <t name="ParenOpen">{<Closure><program><StatementOfLanguageTokens><t name="Comment"> ......</t></StatementOfLanguageTokens></program></Closure></t>
+      <t name="Function">if<Arguments><StatementOfLanguageTokens><t name="Object">not</t><t name="Object">me</t><t name="Object">is</t><t name="Object">him</t></StatementOfLanguageTokens></Arguments><Closure><program><StatementOfLanguageTokens><t name="Comment"> ......</t></StatementOfLanguageTokens></program></Closure></t>
     </StatementOfLanguageTokens>
     <StatementOfLanguageTokens>
-      <t name="Function">if<Arguments><StatementOfLanguageTokens><t name="Object">x</t><t name="Operator">&lt;=</t><t name="Object">10</t><t name="Object">andalso</t><t name="Object">y</t><t name="Object">!</t><t name="ParameterAssign">=</t><t name="Object">99</t></StatementOfLanguageTokens></Arguments></t>
-      <t name="ParenOpen">{<Closure><program><StatementOfLanguageTokens><t name="Comment"> ......</t></StatementOfLanguageTokens></program></Closure></t>
+      <t name="Function">if<Arguments><StatementOfLanguageTokens><t name="Object">x</t><t name="Operator">&lt;=</t><t name="Object">10</t><t name="Object">andalso</t><t name="Object">y</t><t name="Object">!</t><t name="ParameterAssign">=</t><t name="Object">99</t></StatementOfLanguageTokens></Arguments><Closure><program><StatementOfLanguageTokens><t name="Comment"> ......</t></StatementOfLanguageTokens></program></Closure></t>
     </StatementOfLanguageTokens>
     <StatementOfLanguageTokens>
       <t name="Object">else</t>
-      <t name="Function">if<Arguments><StatementOfLanguageTokens><t name="Object">not</t><t name="Object">z</t><t name="Object">is</t><t name="Object">null</t></StatementOfLanguageTokens></Arguments></t>
-      <t name="ParenOpen">{<Closure><program><StatementOfLanguageTokens><t name="Comment"> ......</t></StatementOfLanguageTokens></program></Closure></t>
+      <t name="Function">if<Arguments><StatementOfLanguageTokens><t name="Object">not</t><t name="Object">z</t><t name="Object">is</t><t name="Object">null</t></StatementOfLanguageTokens></Arguments><Closure><program><StatementOfLanguageTokens><t name="Comment"> ......</t></StatementOfLanguageTokens></program></Closure></t>
     </StatementOfLanguageTokens>
     <StatementOfLanguageTokens>
       <t name="var">var</t>
@@ -171,8 +159,7 @@
     <StatementOfLanguageTokens>
       <t name="var">var</t>
       <t name="Object">m</t>
-      <t name="LeftAssign">&lt;-</t>
-      <t name="ParenOpen">{<Closure><program><StatementOfLanguageTokens><t name="ParenOpen">{<Closure><program><StatementOfLanguageTokens><t name="Object">1</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">2</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">3</t></StatementOfLanguageTokens></program></Closure></t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="ParenOpen">{<Closure><program><StatementOfLanguageTokens><t name="Object">4</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">5</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">6</t></StatementOfLanguageTokens></program></Closure></t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="ParenOpen">{<Closure><program><StatementOfLanguageTokens><t name="Object">7</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">8</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">9</t></StatementOfLanguageTokens></program></Closure></t></StatementOfLanguageTokens></program></Closure></t>
+      <t name="LeftAssign">&lt;-<Closure><program><StatementOfLanguageTokens><t name="ParenOpen">{<Closure><program><StatementOfLanguageTokens><t name="Object">1</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">2</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">3</t></StatementOfLanguageTokens></program></Closure></t><t name="ParenClose">}</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="ParenOpen">{<Closure><program><StatementOfLanguageTokens><t name="Object">4</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">5</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">6</t></StatementOfLanguageTokens></program></Closure></t><t name="ParenClose">}</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="ParenOpen">{<Closure><program><StatementOfLanguageTokens><t name="Object">7</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">8</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">9</t></StatementOfLanguageTokens></program></Closure></t><t name="ParenClose">}</t></StatementOfLanguageTokens></program></Closure></t>
     </StatementOfLanguageTokens>
     <StatementOfLanguageTokens>
       <t name="var">var</t>
@@ -186,14 +173,13 @@
       <t name="Object">obj</t>
       <t name="LeftAssign">&lt;-</t>
       <t name="Function">list<Arguments /></t>
-      <t name="Object">with</t>
-      <t name="ParenOpen">{<Closure><program><StatementOfLanguageTokens><t name="Object">$a</t><t name="LeftAssign">&lt;-</t><t name="Object">123</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">$b</t><t name="LeftAssign">&lt;-</t><t name="String">+++</t></StatementOfLanguageTokens></program></Closure></t>
+      <t name="Object">with<Closure><program><StatementOfLanguageTokens><t name="Object">$a</t><t name="LeftAssign">&lt;-</t><t name="Object">123</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">$b</t><t name="LeftAssign">&lt;-</t><t name="String">+++</t></StatementOfLanguageTokens></program></Closure></t>
     </StatementOfLanguageTokens>
     <StatementOfLanguageTokens>
       <t name="Comment"> run commandline using @ operator in R</t>
       <t name="Object">var</t>
       <t name="Object">prot.fasta</t>
-      <t name="Object">=</t>
+      <t name="ParameterAssign">=</t>
       <t name="String">/home/biostack/sample.fasta</t>
     </StatementOfLanguageTokens>
     <StatementOfLanguageTokens>
@@ -207,8 +193,7 @@
     <StatementOfLanguageTokens>
       <t name="Object">test.integer</t>
       <t name="LeftAssign">&lt;-</t>
-      <t name="Function">function<Arguments><StatementOfLanguageTokens><t name="Object">x</t><t name="Object">as</t><t name="Object">integer</t></StatementOfLanguageTokens></Arguments></t>
-      <t name="ParenOpen">{<Closure><program><StatementOfLanguageTokens><t name="Comment"> the type constraint means the parameter only allow the integer vector type</t><t name="Comment"> if the parameter is a string vector, then the interpreter will throw exceptions.</t></StatementOfLanguageTokens></program></Closure></t>
+      <t name="Function">function<Arguments><StatementOfLanguageTokens><t name="Object">x</t><t name="Object">as</t><t name="Object">integer</t></StatementOfLanguageTokens></Arguments><Closure><program><StatementOfLanguageTokens><t name="Comment"> the type constraint means the parameter only allow the integer vector type</t><t name="Comment"> if the parameter is a string vector, then the interpreter will throw exceptions.</t></StatementOfLanguageTokens></program></Closure></t>
     </StatementOfLanguageTokens>
     <StatementOfLanguageTokens>
       <t name="var">var</t>
@@ -223,8 +208,7 @@
     <StatementOfLanguageTokens>
       <t name="var">var</t>
       <t name="Object">x</t>
-      <t name="LeftAssign">&lt;-</t>
-      <t name="ParenOpen">{<Closure><program><StatementOfLanguageTokens><t name="Object">1</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">2</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">3</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">4</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">5</t></StatementOfLanguageTokens></program></Closure></t>
+      <t name="LeftAssign">&lt;-<Closure><program><StatementOfLanguageTokens><t name="Object">1</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">2</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">3</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">4</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">5</t></StatementOfLanguageTokens></program></Closure></t>
     </StatementOfLanguageTokens>
     <StatementOfLanguageTokens>
       <t name="var">var</t>
@@ -237,13 +221,11 @@
       <t name="Function">ToString<Arguments><StatementOfLanguageTokens><t name="String">F2</t></StatementOfLanguageTokens></Arguments></t>
     </StatementOfLanguageTokens>
     <StatementOfLanguageTokens>
-      <t name="Function">if<Arguments><StatementOfLanguageTokens><t name="Object">x</t><t name="methodCall">:</t><t name="Object">Length</t><t name="Operator">&lt;=</t><t name="Object">10</t></StatementOfLanguageTokens></Arguments></t>
-      <t name="ParenOpen">{<Closure><program><StatementOfLanguageTokens><t name="Function">println<Arguments><StatementOfLanguageTokens><t name="Object">x</t></StatementOfLanguageTokens></Arguments></t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">test</t><t name="LeftAssign">&lt;-</t><t name="Function">function<Arguments><StatementOfLanguageTokens><t name="Object">...</t></StatementOfLanguageTokens></Arguments></t><t name="ParenOpen">{<Closure><program><StatementOfLanguageTokens><t name="var">var</t><t name="Object">gg</t><t name="LeftAssign">&lt;-</t><t name="Object">...</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="var">var</t><t name="Object">x</t><t name="LeftAssign">&lt;-</t><t name="Object">...</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="var">var</t><t name="Object">s</t><t name="LeftAssign">&lt;-</t><t name="Object">x</t><t name="StringContact">&amp;</t><t name="Object">global$x</t></StatementOfLanguageTokens></program></Closure></t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Function">test<Arguments><StatementOfLanguageTokens><t name="Object">x</t><t name="Object">=</t><t name="Object">x</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">gg</t><t name="Object">=</t><t name="Object">x</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">s</t><t name="Object">=</t><t name="Object">x</t></StatementOfLanguageTokens></Arguments></t></StatementOfLanguageTokens></program></Closure></t>
+      <t name="Function">if<Arguments><StatementOfLanguageTokens><t name="Object">x</t><t name="methodCall">:</t><t name="Object">Length</t><t name="Operator">&lt;=</t><t name="Object">10</t></StatementOfLanguageTokens></Arguments><Closure><program><StatementOfLanguageTokens><t name="Function">println<Arguments><StatementOfLanguageTokens><t name="Object">x</t></StatementOfLanguageTokens></Arguments></t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">test</t><t name="LeftAssign">&lt;-</t><t name="Function">function<Arguments><StatementOfLanguageTokens><t name="Object">...</t></StatementOfLanguageTokens></Arguments><Closure><program><StatementOfLanguageTokens><t name="var">var</t><t name="Object">gg</t><t name="LeftAssign">&lt;-</t><t name="Object">...</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="var">var</t><t name="Object">x</t><t name="LeftAssign">&lt;-</t><t name="Object">...</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="var">var</t><t name="Object">s</t><t name="LeftAssign">&lt;-</t><t name="Object">x</t><t name="StringContact">&amp;</t><t name="Object">global$x</t></StatementOfLanguageTokens></program></Closure></t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Function">test<Arguments><StatementOfLanguageTokens><t name="Object">x</t><t name="ParameterAssign">=</t><t name="Object">x</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">gg</t><t name="ParameterAssign">=</t><t name="Object">x</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">s</t><t name="ParameterAssign">=</t><t name="Object">x</t></StatementOfLanguageTokens></Arguments></t></StatementOfLanguageTokens></program></Closure></t>
     </StatementOfLanguageTokens>
     <StatementOfLanguageTokens>
       <t name="Object">do</t>
-      <t name="Function">while<Arguments><StatementOfLanguageTokens><t name="Object">TRUE</t><t name="Object">andalso</t><t name="Object">t</t><t name="Operator">==</t><t name="String">123 + 555</t></StatementOfLanguageTokens></Arguments></t>
-      <t name="ParenOpen">{<Closure><program><StatementOfLanguageTokens><t name="Function">cat<Arguments><StatementOfLanguageTokens><t name="String">.</t></StatementOfLanguageTokens></Arguments></t></StatementOfLanguageTokens></program></Closure></t>
+      <t name="Function">while<Arguments><StatementOfLanguageTokens><t name="Object">TRUE</t><t name="Object">andalso</t><t name="Object">t</t><t name="Operator">==</t><t name="String">123 + 555</t></StatementOfLanguageTokens></Arguments><Closure><program><StatementOfLanguageTokens><t name="Function">cat<Arguments><StatementOfLanguageTokens><t name="String">.</t></StatementOfLanguageTokens></Arguments></t></StatementOfLanguageTokens></program></Closure></t>
     </StatementOfLanguageTokens>
   </program>
 </MainOfLanguageTokens>
