@@ -72,6 +72,10 @@ Public Module TokenIcer
         Do While Not buffer.EndRead
             Dim c As Char = +buffer
 
+#If DEBUG Then
+            Call Console.Write(c)
+#End If
+
             If quotOpen Then ' 当前所解析的状态为字符串解析
                 If c = ASCII.Quot AndAlso Not tmp.StartEscaping Then
                     ' 当前的字符为双引号，并且不是转义状态，则结束字符串
@@ -125,7 +129,29 @@ Public Module TokenIcer
                         ' 这是方法调用的符号
                         newToken()
                         tokens += New langToken(LanguageTokens.methodCall, ":")
-                    ElseIf c = "("c OrElse c = "["c OrElse c = "{"c Then
+                    ElseIf c = "("c Then
+
+                        ' 新的堆栈
+                        ' closure stack open
+                        Dim childs As New List(Of Statement(Of LanguageTokens))
+
+                        Call newToken()
+                        Call buffer.Parse(childs)
+
+                        With tokens.Last
+                            If .name = LanguageTokens.Object Then
+                                ' function
+                                .name = LanguageTokens.Function
+                                .Arguments = childs
+                            Else
+                                tokens += New langToken(LanguageTokens.ParenOpen, c)
+                                tokens.Last.Arguments = childs ' 因为上一行添加了新的token，所以last已经不是原来的了，不可以引用with的last
+                                tokens += New langToken(LanguageTokens.ParenClose, close(c))
+                            End If
+                        End With
+
+                    ElseIf c = "["c Then
+
                         ' 新的堆栈
                         ' closure stack open
                         Dim childs As New List(Of Statement(Of LanguageTokens))
@@ -134,25 +160,56 @@ Public Module TokenIcer
                         Call buffer.Parse(childs)
 
                         tokens += New langToken(LanguageTokens.ParenOpen, c)
+                        tokens.Last.Arguments = childs
+                        tokens += New langToken(LanguageTokens.ParenClose, close(c))
 
-                        If c = "{"c Then
-                            last = New Statement(Of LanguageTokens) With {
-                                .tokens = tokens.ToArray
-                            }
-                            tokens.Last.Closure = New Main(Of LanguageTokens) With {
-                                .program = childs
-                            }
-                            tokens += New langToken(LanguageTokens.ParenClose, close(c))
-                            If Not parent Is Nothing Then
-                                parent += last
-                                tokens *= 0 ' }会结束statement，故而需要将tokens清零
-                            Else
-                                Return last
-                            End If
+                    ElseIf c = "{"c Then
+                        ' 新的堆栈
+                        ' closure stack open
+                        Dim childs As New List(Of Statement(Of LanguageTokens))
+
+                        If bufferEquals("=") Then
+                            Call newToken()
+
+                            With tokens.Last
+                                .name = LanguageTokens.ParameterAssign
+                            End With
                         Else
-                            tokens.Last.Arguments = childs
-                            tokens += New langToken(LanguageTokens.ParenClose, close(c))
+                            newToken() ' 因为newtoken会清空tmp缓存，而bufferEquals函数需要tmp来判断，所以newtoken不能先于bufferequals函数执行
+                            ' 因为上下文变了，所以这里的newtoken调用也不能够合并
                         End If
+
+                        Call buffer.Parse(childs)
+
+                        Dim matrixOpen = tokens.Count = 0
+
+                        If matrixOpen Then
+
+                            ' 可能为matrix语法
+                            tokens += New langToken(LanguageTokens.ParenOpen, "{")
+
+                        End If
+
+                        tokens.Last.Closure = New Main(Of LanguageTokens) With {
+                            .program = childs
+                        }
+
+                        If matrixOpen Then
+                            ' 关闭matrix
+                            tokens += New langToken(LanguageTokens.ParenClose, "}")
+                        End If
+
+                        last = New Statement(Of LanguageTokens) With {
+                            .tokens = tokens.ToArray
+                        }
+
+                        If Not parent Is Nothing Then
+                            parent += last
+                            tokens *= 0 ' }会结束statement，故而需要将tokens清零
+                        Else
+                            Return last
+                        End If
+
                     ElseIf c = ")"c OrElse c = "]"c Then
                         ' closure stack close
                         ' 仅结束stack，但是不像{}一样结束statement
@@ -189,6 +246,7 @@ Public Module TokenIcer
                         ' 字符串拼接
                         newToken()
                         tokens += New langToken(LanguageTokens.StringContact, "&")
+
                     ElseIf c = ","c Then
                         newToken()
                         last = New Statement(Of LanguageTokens) With {
@@ -209,6 +267,7 @@ Public Module TokenIcer
                                 tmp += c
                             Else
                                 newToken()
+                                tokens += New langToken(LanguageTokens.ParameterAssign, "=")
                             End If
                         End If
                         'ElseIf c = "{"c Then
@@ -239,7 +298,30 @@ Public Module TokenIcer
                         Return Nothing
                     ElseIf c = " "c OrElse c = ASCII.TAB OrElse c = ASCII.LF OrElse c = ASCII.CR Then
                         ' 遇见了空格，结束当前的token
+                        If bufferEquals("=") Then
+                            Call newToken()
+
+                            With tokens.Last
+                                .name = LanguageTokens.ParameterAssign
+                            End With
+                        Else
+                            newToken() ' 因为newtoken会清空tmp缓存，而bufferEquals函数需要tmp来判断，所以newtoken不能先于bufferequals函数执行
+                            ' 因为上下文变了，所以这里的newtoken调用也不能够合并
+                        End If
+
+                    ElseIf c = "-"c Then
+
+                        If bufferEquals("<"c) Then
+                            tmp += "-"c
+                            newToken()
+                        Else
+                            newToken() ' 这两个newtoken调用不可以合并到一起，因为他们的上下文环境变了 
+                            tokens += New langToken(LanguageTokens.Operator, c)
+                        End If
+
+                    ElseIf c = "+"c OrElse c = "*"c OrElse c = "/"c OrElse c = "\"c OrElse c = "^" OrElse c = "@"c Then
                         newToken()
+                        tokens += New langToken(LanguageTokens.Operator, c)
                     Else
                         tmp += c
                     End If
