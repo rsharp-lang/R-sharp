@@ -22,9 +22,9 @@ g <- which not x in [10:100];
 # integer [1:9] 1 2 3 4 5 6 7 8 9
 
 create.table <- function(min as integer, max as double) {
-    x <- [min:max,0.1];
-    y <- x ^ 2;
-    z <- -y;
+    var x <- [min:max,0.1];
+    var y <- x ^ 2;
+    var z <- -y;
     
     return data.frame(x, y, z);
 }
@@ -33,4 +33,8 @@ for([a as "x", b as "y", z] in create.table(1, 5)) {
     print({a, b, z} | average);
 }
 
-var [x, y, c as "z"] <- create.table(1, 5);
+var [x1, y1, c1 as "z"] <- create.table(1, 5);
+
+str(x1);
+str(y1);
+str(c1);
