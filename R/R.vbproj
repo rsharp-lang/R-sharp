@@ -69,10 +69,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Module1.vb" />
-    <Compile Include="LangModels.vb" />
+    <Compile Include="LanguageTokens.vb" />
     <Compile Include="runtime\BindVariable.vb" />
+    <Compile Include="runtime\Expression\OperatorExpression.vb" />
+    <Compile Include="runtime\Expression\FunctionExpression.vb" />
+    <Compile Include="runtime\Expression\LiteralExpression.vb" />
+    <Compile Include="runtime\Expression\PrimitiveExpression.vb" />
+    <Compile Include="runtime\TypeCodes.vb" />
     <Compile Include="runtime\Variable.vb" />
-    <Compile Include="TokenIcer.vb" />
+    <Compile Include="Interpreter\TokenIcer.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -114,6 +119,10 @@
       <Project>{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}</Project>
       <Name>+Microsoft.VisualBasic.Architecture.Framework</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="LibraryManager\" />
+    <Folder Include="StatMachine\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
