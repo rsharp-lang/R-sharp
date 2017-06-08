@@ -8,10 +8,14 @@ print(y);
 # [1] 1 2 3
 
 typeof(x);
-# [1] integer
+# integer
 
 typeof(y);
-# [1] integer
+# integer
 
 typeof(x) is typeof(y);
 # [1] TRUE
+
+var t as double <- [100:1,-0.5];
+var i as integer <- [t="g2", n=666, s=FALSE];
+# type constraint error: object type can not be convert to an integer vector
