@@ -32,3 +32,12 @@ Module Program
     End Sub
 End Module
 ```
+
+The you can using the ``R#`` compiler for compile you R script as a standard .NET program, using commandline:
+
+```bash
+"/home/xieguigang/Rsharp/rc.exe" /compile --file "/home/xieguigang/test/program.R" --out "./hello.exe"
+
+./hello.exe
+# Hello world! message from R#
+```
