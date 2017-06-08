@@ -1,7 +1,16 @@
 ﻿Module Module1
 
     Sub Main()
-        Call TokenIcer.Parse("var x as integer <- func(a=""233"") + 5 * (2+33);").GetSourceTree.SaveTo("X:\function.xml")
+        Call TokenIcer.Parse("
+var d <- data.frame(
+    a = {1, 2, 3},
+    b = {""a"", ""g"", ""y""},
+    t = {TRUE, TRUE, FALSE});").GetSourceTree.SaveTo("X:\parameters.xml")
+        Call TokenIcer.Parse("var x as integer <- {1,2,3,4,5};").GetSourceTree.SaveTo("X:\vector.xml")
+        Call TokenIcer.Parse("var x as integer <- func(a=""233"") + 5 * (2+33) * list() with {
+    $a <- 123;
+    $b <- ""hello world"";
+};").GetSourceTree.SaveTo("X:\function.xml")
 
         Pause()
 
