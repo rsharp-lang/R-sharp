@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{0C2EB77C-39F2-460D-A3F8-CE905F867637}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <StartupObject>R.Module1</StartupObject>
-    <RootNamespace>R</RootNamespace>
+    <StartupObject>SMRUCC.Rsharp.Module1</StartupObject>
+    <RootNamespace>SMRUCC.Rsharp</RootNamespace>
     <AssemblyName>R</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Console</MyType>

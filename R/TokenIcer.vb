@@ -3,7 +3,7 @@ Imports Microsoft.VisualBasic.Emit.Marshal
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports Microsoft.VisualBasic.Text
-Imports langToken = Microsoft.VisualBasic.Scripting.TokenIcer.Token(Of R.LanguageTokens)
+Imports langToken = Microsoft.VisualBasic.Scripting.TokenIcer.Token(Of SMRUCC.Rsharp.LanguageTokens)
 
 Public Module TokenIcer
 
