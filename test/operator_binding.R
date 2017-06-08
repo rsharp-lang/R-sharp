@@ -1,3 +1,5 @@
+imports "Microsoft.VisualBasic.dll";
+
 var me <- list() with {
     $name <- "xieguigang";
     $family <- {"xyz"};
@@ -18,3 +20,19 @@ str(out);
 
 me$display();
 # xieguigang has 2 families.
+
+library("Microsoft.VisualBasic.Strings");
+
+var index.string <- list() with {
+    $string <- "abcdefg";
+    
+    %in% <- function(str, $) {
+        return InStr($string, str);
+    }
+}
+
+"abcd" in index.string;
+# [1] 1
+
+"xyz" in index.string;
+# [1] 0
