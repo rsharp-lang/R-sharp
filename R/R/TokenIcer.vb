@@ -210,6 +210,7 @@ Public Module TokenIcer
                         ' 字符串拼接
                         newToken()
                         tokens += New langToken(LanguageTokens.StringContact, "&")
+
                     ElseIf c = ","c Then
                         newToken()
                         last = New Statement(Of LanguageTokens) With {
@@ -261,6 +262,9 @@ Public Module TokenIcer
                     ElseIf c = " "c OrElse c = ASCII.TAB OrElse c = ASCII.LF OrElse c = ASCII.CR Then
                         ' 遇见了空格，结束当前的token
                         newToken()
+                    ElseIf c = "+"c OrElse c = "-"c OrElse c = "*"c OrElse c = "/"c OrElse c = "\"c OrElse c = "^" OrElse c = "@"c Then
+                        newToken()
+                        tokens += New langToken(LanguageTokens.Operator, c)
                     Else
                         tmp += c
                     End If
