@@ -68,6 +68,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interpreter\SyntaxParser.vb" />
     <Compile Include="Module1.vb" />
     <Compile Include="LanguageTokens.vb" />
     <Compile Include="runtime\BindVariable.vb" />
