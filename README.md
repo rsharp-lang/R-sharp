@@ -1,6 +1,7 @@
 > [WARNING] This project is a work in progress and is not recommended for production use.
 
 ![](./design/R-sharp.png)
+> art work: http://www.clipartbest.com/clipart-di85MqodT
 
 The ``R#`` language its syntax is original derived from the ``R`` language, but with more modernized programming styles. The ``R#`` language its interpreter and .NET compiler is original writen in VisualBasic language, with native support for the .NET runtime.
 
