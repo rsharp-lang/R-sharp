@@ -25,22 +25,32 @@ Public Class BindVariable : Inherits Variable
         End Set
     End Property
 
+    ''' <summary>
+    ''' 这个变量对象在运行时环境之中的原来的位置
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property Source As String
+
     Sub New(field As FieldInfo)
+        Call Me.New(src:=field)
+
         With field
             getValue = StaticFieldGet(.DeclaringType, .Name)
             setValue = StaticFieldSet(.DeclaringType, .Name)
         End With
+    End Sub
 
-        Name = field.Name
+    Private Sub New(src As MemberInfo)
+        Name = src.Name
+        Source = src.Source
     End Sub
 
     Sub New([property] As PropertyInfo)
+        Call Me.New(src:=[property])
+
         With [property]
             getValue = StaticPropertyGet(.DeclaringType, .Name)
             setValue = StaticPropertySet(.DeclaringType, .Name)
         End With
-
-        Name = [property].Name
     End Sub
-
 End Class
