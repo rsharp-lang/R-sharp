@@ -1,6 +1,10 @@
 ﻿Module Module1
 
     Sub Main()
+        Call TokenIcer.Parse("var x as integer <- func(a=""233"");").GetSourceTree.SaveTo("X:\function.xml")
+
+        Pause()
+
         Call TokenIcer.Parse("
 var d <- data.frame(
     a = {1, 2, 3},

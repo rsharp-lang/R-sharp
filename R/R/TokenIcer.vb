@@ -125,7 +125,28 @@ Public Module TokenIcer
                         ' 这是方法调用的符号
                         newToken()
                         tokens += New langToken(LanguageTokens.methodCall, ":")
-                    ElseIf c = "("c OrElse c = "["c OrElse c = "{"c Then
+                    ElseIf c = "("c Then
+
+                        ' 新的堆栈
+                        ' closure stack open
+                        Dim childs As New List(Of Statement(Of LanguageTokens))
+
+                        Call newToken()
+                        Call buffer.Parse(childs)
+
+                        With tokens.Last
+                            If .name = LanguageTokens.Object Then
+                                ' function
+                                .name = LanguageTokens.Function
+                                .Arguments = childs
+                            Else
+                                tokens += New langToken(LanguageTokens.ParenOpen, c)
+                                tokens.Last.Arguments = childs ' 因为上一行添加了新的token，所以last已经不是原来的了，不可以引用with的last
+                                tokens += New langToken(LanguageTokens.ParenClose, close(c))
+                            End If
+                        End With
+
+                    ElseIf c = "["c OrElse c = "{"c Then
                         ' 新的堆栈
                         ' closure stack open
                         Dim childs As New List(Of Statement(Of LanguageTokens))
