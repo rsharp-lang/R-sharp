@@ -3,6 +3,8 @@ Imports Microsoft.VisualBasic.Scripting.TokenIcer
 
 Public Module SyntaxParser
 
+    Const SyntaxNotSupport$ = "The syntax is currently not support yet!"
+
     ''' <summary>
     ''' Convert the string token model as the language runtime model
     ''' </summary>
@@ -17,7 +19,8 @@ Public Module SyntaxParser
             Return expression
         End If
 
-        Throw New SyntaxErrorException("The syntax is currently not support yet!")
+        Dim source As New Exception(statement.GetXml)
+        Throw New SyntaxErrorException(SyntaxNotSupport, source)
     End Function
 
     ''' <summary>
