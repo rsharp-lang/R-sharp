@@ -262,7 +262,18 @@ Public Module TokenIcer
                     ElseIf c = " "c OrElse c = ASCII.TAB OrElse c = ASCII.LF OrElse c = ASCII.CR Then
                         ' 遇见了空格，结束当前的token
                         newToken()
-                    ElseIf c = "+"c OrElse c = "-"c OrElse c = "*"c OrElse c = "/"c OrElse c = "\"c OrElse c = "^" OrElse c = "@"c Then
+
+                    ElseIf c = "-"c Then
+
+                        If bufferEquals("<"c) Then
+                            tmp += "-"c
+                            newToken()
+                        Else
+                            newToken() ' 这两个newtoken调用不可以合并到一起，因为他们的上下文环境变了 
+                            tokens += New langToken(LanguageTokens.Operator, c)
+                        End If
+
+                    ElseIf c = "+"c OrElse c = "*"c OrElse c = "/"c OrElse c = "\"c OrElse c = "^" OrElse c = "@"c Then
                         newToken()
                         tokens += New langToken(LanguageTokens.Operator, c)
                     Else
