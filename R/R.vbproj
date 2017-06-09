@@ -72,6 +72,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interpreter\ExpressionParser\FuncCaller.vb" />
     <Compile Include="Interpreter\ExpressionParser\MetaExpression.vb" />
     <Compile Include="Module1.vb" />
     <Compile Include="Interpreter\ExpressionParser\ExecuteEngine.vb" />

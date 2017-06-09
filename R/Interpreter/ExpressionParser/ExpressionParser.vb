@@ -42,7 +42,7 @@ Module ExpressionParser
                             End If
                         Loop
 
-                        meta = New Types.MetaExpression(AddressOf func.Evaluate)
+                        meta = New MetaExpression(AddressOf func.Evaluate)
                         ' o = If(tokens.EndRead, "+"c, (+tokens).Text.First)
                         ' meta.Operator = o
                         pre = Nothing
@@ -53,11 +53,11 @@ Module ExpressionParser
                 Case ExpressionTokens.CloseStack, ExpressionTokens.CloseBracket, ExpressionTokens.Delimiter
                     Return sep ' 退出递归栈
                 Case ExpressionTokens.Number
-                    meta = New Types.MetaExpression(Val(e.Text))
+                    meta = New MetaExpression(Val(e.Text))
                 Case ExpressionTokens.undefine
 
                     Dim x As String = e.Text
-                    meta = New Types.MetaExpression(Function() getValue(x))
+                    meta = New MetaExpression(Function() getValue(x))
 
                     If tokens.EndRead Then
                         pre = Nothing
@@ -74,13 +74,13 @@ Module ExpressionParser
 
                         If Not sep.IsNullOrEmpty Then
                             If tokens.Current.Type = ExpressionTokens.Number Then
-                                meta = New Types.MetaExpression(-1 * Val((+tokens).Text))
+                                meta = New MetaExpression(-1 * Val((+tokens).Text))
                             Else
                                 Throw New SyntaxErrorException
                             End If
                         Else
                             ' 是一个负数
-                            meta = New Types.MetaExpression(0)
+                            meta = New MetaExpression(0)
                             meta.Operator = "-"c
                             Call sep.Add(meta)
                             Continue Do
@@ -95,7 +95,7 @@ Module ExpressionParser
                 o = (+tokens).Text.First  ' tokens++ 移动指针到下一个元素
 
                 If o = "!"c Then
-                    Dim stackMeta = New Types.MetaExpression(Function() Factorial(meta.LEFT, 0))
+                    Dim stackMeta = New MetaExpression(Function() Factorial(meta.LEFT, 0))
 
                     If tokens.EndRead Then
                         Call sep.Add(stackMeta)
