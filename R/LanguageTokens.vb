@@ -15,9 +15,10 @@
     ParameterAssign
     [Operator]
     ''' <summary>
-    ''' :
+    ''' 使用``:``操作符来调用``.NET``方法
+    ''' 使用``$``操作符调用自身的R#方法
     ''' </summary>
-    methodCall
+    DotNetMethodCall
     ''' <summary>
     ''' ,
     ''' </summary>
@@ -43,7 +44,7 @@
     ''' <summary>
     ''' Variable declare init
     ''' </summary>
-    var
+    Variable
     ''' <summary>
     ''' 字符串值
     ''' </summary>

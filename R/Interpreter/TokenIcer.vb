@@ -65,7 +65,7 @@ Public Module TokenIcer
 
                 ' 创建除了字符串之外的其他的token
                 If varDefInit() Then
-                    tokens += New langToken(LanguageTokens.var, "var")
+                    tokens += New langToken(LanguageTokens.Variable, "var")
                 ElseIf tmp.SequenceEqual("<-") Then
                     tokens += New langToken(LanguageTokens.LeftAssign, "<-")
                 Else
@@ -139,7 +139,7 @@ Public Module TokenIcer
 
                         ' 这是方法调用的符号
                         newToken()
-                        tokens += New langToken(LanguageTokens.methodCall, ":")
+                        tokens += New langToken(LanguageTokens.DotNetMethodCall, ":")
 
                     ElseIf c = "("c Then
 
