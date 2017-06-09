@@ -49,5 +49,5 @@
     ''' </summary>
     [String]
     Comment
-
+    [Function]
 End Enum
