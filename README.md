@@ -187,6 +187,22 @@ Dim result = "hello world!"
 
 All of the R function which have at least one parameter can be using in pipeline mode, using ``|`` as the pipeline operator:
 
+```bash
+# pipeline in linux bash
+ps -ef | grep R.exe
+```
+
+and you can do this pipeline programming in ``R#``
+
+```R
+# application foo print its content output to standard output on the console 
+# and then calling the replace function, at last capitalize all 
+# of the string result
+
+"foo = bar" | replace("foo", "bar") | capitalize
+# bar = bar
+```
+
 ```R
 test1 <- function(x) {
 }
