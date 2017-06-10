@@ -24,7 +24,7 @@ Module ExpressionParser
             e = +tokens
 
             Select Case e.Type
-                Case ExpressionTokens.OpenBracket, ExpressionTokens.OpenStack
+                Case ExpressionTokens.ParenOpen
                     If pre Is Nothing Then  ' 前面不是一个未定义的标识符，则在这里是一个括号表达式
                         meta = New MetaExpression(TryParse(tokens, getValue, evaluate, False))
                     Else
@@ -50,9 +50,9 @@ Module ExpressionParser
 
                         ' Continue Do
                     End If
-                Case ExpressionTokens.CloseStack, ExpressionTokens.CloseBracket, ExpressionTokens.Delimiter
+                Case ExpressionTokens.ParenClose, ExpressionTokens.ParameterDelimiter
                     Return sep ' 退出递归栈
-                Case ExpressionTokens.Number
+                Case ExpressionTokens.Object
                     meta = New MetaExpression(Val(e.Text))
                 Case ExpressionTokens.undefine
 
@@ -73,7 +73,7 @@ Module ExpressionParser
                     If String.Equals(e.Text, "-") Then
 
                         If Not sep.IsNullOrEmpty Then
-                            If tokens.Current.Type = ExpressionTokens.Number Then
+                            If tokens.Current.Type = ExpressionTokens.Object Then
                                 meta = New MetaExpression(-1 * Val((+tokens).Text))
                             Else
                                 Throw New SyntaxErrorException
@@ -95,7 +95,7 @@ Module ExpressionParser
                 o = (+tokens).Text.First  ' tokens++ 移动指针到下一个元素
 
                 If o = "!"c Then
-                    Dim stackMeta = New MetaExpression(Function() Factorial(meta.LEFT, 0))
+                    Dim stackMeta = New MetaExpression ' (handle:=Function() Factorial(meta.LEFT, 0))
 
                     If tokens.EndRead Then
                         Call sep.Add(stackMeta)
@@ -135,7 +135,7 @@ Module ExpressionParser
                     funcStack = True
 
                     Exit Do ' 退出递归栈
-                ElseIf IsCloseStack(o) Then
+                ElseIf isCloseStack(o) Then
                     meta.Operator = "+"c
                     Call sep.Add(meta)
                     funcStack = False
@@ -153,5 +153,13 @@ Module ExpressionParser
         Loop
 
         Return sep
+    End Function
+
+    Private Function IsOpenStack(o As Char) As Boolean
+        Throw New NotImplementedException()
+    End Function
+
+    Private Function isCloseStack(o As Char) As Boolean
+
     End Function
 End Module
