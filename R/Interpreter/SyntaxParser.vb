@@ -33,7 +33,7 @@ Public Module SyntaxParser
     Public Function TryParseObjectDeclare(statement As Statement(Of LanguageTokens), ByRef out As PrimitiveExpression) As Boolean
         Dim tokens = statement.tokens
 
-        If Not tokens.First.name = LanguageTokens.var Then
+        If Not tokens.First.name = LanguageTokens.Variable Then
             Return False
         ElseIf Not tokens(2).name = LanguageTokens.LeftAssign Then
             Return False
@@ -53,7 +53,7 @@ Public Module SyntaxParser
     Public Function TryParseTypedObjectDeclare(statement As Statement(Of LanguageTokens), ByRef out As PrimitiveExpression) As Boolean
         Dim tokens = statement.tokens
 
-        If Not tokens.First.name = LanguageTokens.var Then
+        If Not tokens.First.name = LanguageTokens.Variable Then
             Return False
         ElseIf Not tokens(2).Text = "as" Then
             Return False

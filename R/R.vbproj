@@ -72,9 +72,13 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interpreter\SyntaxParser.vb" />
+    <Compile Include="Interpreter\ExpressionParser\FuncCaller.vb" />
+    <Compile Include="Interpreter\ExpressionParser\MetaExpression.vb" />
     <Compile Include="Module1.vb" />
+    <Compile Include="Interpreter\ExpressionParser\ExecuteEngine.vb" />
+    <Compile Include="Interpreter\SyntaxParser.vb" />
     <Compile Include="LanguageTokens.vb" />
+    <Compile Include="Interpreter\ExpressionParser\ExpressionParser.vb" />
     <Compile Include="runtime\BindVariable.vb" />
     <Compile Include="runtime\Expression\OperatorExpression.vb" />
     <Compile Include="runtime\Expression\FunctionExpression.vb" />
@@ -82,6 +86,7 @@
     <Compile Include="runtime\Expression\PrimitiveExpression.vb" />
     <Compile Include="runtime\TypeCodes.vb" />
     <Compile Include="runtime\Variable.vb" />
+    <Compile Include="Interpreter\ExpressionParser\SimpleExpression.vb" />
     <Compile Include="Interpreter\TokenIcer.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
