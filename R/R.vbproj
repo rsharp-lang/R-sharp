@@ -80,6 +80,7 @@
     <Compile Include="LanguageTokens.vb" />
     <Compile Include="Interpreter\ExpressionParser\ExpressionParser.vb" />
     <Compile Include="runtime\BindVariable.vb" />
+    <Compile Include="runtime\Expression\VariableDeclareExpression.vb" />
     <Compile Include="runtime\Expression\OperatorExpression.vb" />
     <Compile Include="runtime\Expression\FunctionExpression.vb" />
     <Compile Include="runtime\Expression\LiteralExpression.vb" />
