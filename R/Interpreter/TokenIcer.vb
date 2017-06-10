@@ -234,7 +234,7 @@ Public Module TokenIcer
                         parent += last  ' 右花括号必定是结束堆栈 
 
                         Return Nothing
-                      
+
                     ElseIf c = "|"c Then
                         newToken()
                         tokens += New langToken(LanguageTokens.Pipeline, "|")
@@ -268,7 +268,7 @@ Public Module TokenIcer
                                 newToken()
                                 tokens += New langToken(LanguageTokens.ParameterAssign, "=")
                             End If
-                        End If                      
+                        End If
 
                     ElseIf c = "}"c Then
 
@@ -328,6 +328,11 @@ Public Module TokenIcer
         }.GetXml()
     End Function
 
+    ''' <summary>
+    ''' Removes the blank statements
+    ''' </summary>
+    ''' <param name="src"></param>
+    ''' <returns></returns>
     <Extension>
     Public Function Trim(src As Statement(Of LanguageTokens)()) As Statement(Of LanguageTokens)()
         Return src _
