@@ -4,6 +4,9 @@
 
         Call TokenIcer.Parse("1+2+3;").GetSourceTree.SaveTo("../design/sourceTree\math-expression.XML")
 
+
+        Pause()
+
         Call TokenIcer.Parse("
 var m <- {
    {1, 2, 3},
