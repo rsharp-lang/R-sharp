@@ -1,0 +1,1 @@
+Generally, the vector style programming in R# just enables on the R# primitive types.
