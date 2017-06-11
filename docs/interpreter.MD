@@ -278,3 +278,67 @@ if(a == b)</Trace>
   </program>
 </MainOfLanguageTokens>
 ```
+
+#### ``function`` declares statement
+
+```R
+library(System);
+
+println <- function(s, ...) {
+    s <- sprintf(s, ...);
+    Console:WriteLine(s);
+}
+```
+
+Supports of the optional parameter scripting:
+
+```R
+test <- function(a, b, c = (a + b)^2) {
+	return [a ^ 3, -b * c, c];
+}
+```
+
+#### ``for`` loop statement
+
+The R language its ``for`` loop is equals to the ``For Each`` Loop in VisualBasic:
+
+```R
+for (i in 1:50) {
+
+}
+
+for (n in [1:50, 0.1]) {
+
+}
+
+var x <- [1:50,0.01];
+
+for (d in x) {
+
+}
+```
+
+```vbnet
+For Each i In (1, 50).Range
+Next
+
+For Each n In (1, 50).Range(step:=0.1)
+Next
+
+Dim x = (1, 50).Range(0.01)
+
+For Each d In x
+Next
+```
+
+#### ``do`` loop statement
+
+```R
+do(TRUE) {
+
+}
+
+do {
+
+} while(TRUE);
+```
