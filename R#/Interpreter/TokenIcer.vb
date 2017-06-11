@@ -3,6 +3,7 @@ Imports Microsoft.VisualBasic.Emit.Marshal
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports Microsoft.VisualBasic.Text
+Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports langToken = Microsoft.VisualBasic.Scripting.TokenIcer.Token(Of SMRUCC.Rsharp.LanguageTokens)
 
 ''' <summary>
@@ -18,9 +19,11 @@ Public Module TokenIcer
     <Extension> Public Iterator Function Parse(s$) As IEnumerable(Of Statement(Of LanguageTokens))
         Dim buffer As New Pointer(Of Char)(Strings.Trim(s$))
         Dim it As New Value(Of Statement(Of LanguageTokens))
+        Dim line% ' the line number
+        Dim statementBuffer As New List(Of Char)
 
         Do While Not buffer.EndRead
-            If Not (it = buffer.Parse(Nothing)) Is Nothing Then
+            If Not (it = buffer.Parse(Nothing, line, statementBuffer)) Is Nothing Then
                 Yield it
             End If
         Loop
@@ -37,7 +40,11 @@ Public Module TokenIcer
     ''' 对于``()``而言，其含义为当前的token的innerStack
     ''' 对于``[]``而言，起含义为当前的token的innerStack，与``()``的含义几乎一致
     ''' </remarks>
-    <Extension> Private Function Parse(buffer As Pointer(Of Char), ByRef parent As List(Of Statement(Of LanguageTokens))) As Statement(Of LanguageTokens)
+    <Extension> Private Function Parse(buffer As Pointer(Of Char),
+                                       ByRef parent As List(Of Statement(Of LanguageTokens)),
+                                       ByRef line%,
+                                       ByRef statementBuffer As List(Of Char)) As Statement(Of LanguageTokens)
+
         Dim quotOpen As Boolean = False
         Dim commentOpen As Boolean = False ' 当出现注释符的时候，会一直持续到遇见换行符为止
         Dim tmp As New List(Of Char)
@@ -148,7 +155,7 @@ Public Module TokenIcer
                         Dim childs As New List(Of Statement(Of LanguageTokens))
 
                         Call newToken()
-                        Call buffer.Parse(childs)
+                        Call buffer.Parse(childs, line)
 
                         With tokens.Last
                             If .name = LanguageTokens.Object Then
@@ -169,7 +176,7 @@ Public Module TokenIcer
                         Dim childs As New List(Of Statement(Of LanguageTokens))
 
                         Call newToken()
-                        Call buffer.Parse(childs)
+                        Call buffer.Parse(childs, line)
 
                         tokens += New langToken(LanguageTokens.ParenOpen, c)
                         tokens.Last.Arguments = childs
@@ -191,7 +198,7 @@ Public Module TokenIcer
                             ' 因为上下文变了，所以这里的newtoken调用也不能够合并
                         End If
 
-                        Call buffer.Parse(childs)
+                        Call buffer.Parse(childs, line)
 
                         Dim matrixOpen = tokens.Count = 0
 
@@ -284,6 +291,10 @@ Public Module TokenIcer
                         Return Nothing
 
                     ElseIf c = " "c OrElse c = ASCII.TAB OrElse c = ASCII.LF OrElse c = ASCII.CR Then
+
+                        If c = ASCII.LF Then   ' 只使用\n来判断行号
+                            line += 1
+                        End If
 
                         ' 遇见了空格，结束当前的token
                         If bufferEquals("=") Then
