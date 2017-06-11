@@ -86,6 +86,7 @@ Public Module TokenIcer
 
         Do While Not buffer.EndRead
             Dim c As Char = +buffer
+            statementBuffer += c
 
 #If DEBUG Then
             Call Console.Write(c)
@@ -132,9 +133,14 @@ Public Module TokenIcer
                         ' 结束当前的statement的解析
                         newToken()
                         last = New Statement(Of LanguageTokens) With {
-                            .tokens = tokens
+                            .tokens = tokens,
+                            .Trace = New LineValue With {
+                                .line = line,
+                                .text = New String(statementBuffer)
+                            }
                         }
                         tokens *= 0
+                        statementBuffer *= 0
 
                         If parent Is Nothing Then
                             Return last
@@ -155,7 +161,7 @@ Public Module TokenIcer
                         Dim childs As New List(Of Statement(Of LanguageTokens))
 
                         Call newToken()
-                        Call buffer.Parse(childs, line)
+                        Call buffer.Parse(childs, line, statementBuffer)
 
                         With tokens.Last
                             If .name = LanguageTokens.Object Then
@@ -176,7 +182,7 @@ Public Module TokenIcer
                         Dim childs As New List(Of Statement(Of LanguageTokens))
 
                         Call newToken()
-                        Call buffer.Parse(childs, line)
+                        Call buffer.Parse(childs, line, statementBuffer)
 
                         tokens += New langToken(LanguageTokens.ParenOpen, c)
                         tokens.Last.Arguments = childs
@@ -198,7 +204,7 @@ Public Module TokenIcer
                             ' 因为上下文变了，所以这里的newtoken调用也不能够合并
                         End If
 
-                        Call buffer.Parse(childs, line)
+                        Call buffer.Parse(childs, line, statementBuffer)
 
                         Dim matrixOpen = tokens.Count = 0
 
@@ -219,8 +225,14 @@ Public Module TokenIcer
                         End If
 
                         last = New Statement(Of LanguageTokens) With {
-                            .tokens = tokens.ToArray
+                            .tokens = tokens.ToArray,
+                            .Trace = New LineValue With {
+                                .line = line,
+                                .text = New String(statementBuffer)
+                            }
                         }
+
+                        statementBuffer *= 0
 
                         If Not parent Is Nothing Then
                             parent += last
@@ -235,8 +247,13 @@ Public Module TokenIcer
                         ' 仅结束stack，但是不像{}一样结束statement
                         newToken()
                         last = New Statement(Of LanguageTokens) With {
-                            .tokens = tokens
+                            .tokens = tokens,
+                            .Trace = New LineValue With {
+                                .line = line,
+                                .text = New String(statementBuffer)
+                            }
                         }
+                        statementBuffer *= 0
                         tokens *= 0
                         parent += last  ' 右花括号必定是结束堆栈 
 
@@ -254,8 +271,13 @@ Public Module TokenIcer
                     ElseIf c = ","c Then
                         newToken()
                         last = New Statement(Of LanguageTokens) With {
-                            .tokens = tokens
+                            .tokens = tokens,
+                            .Trace = New LineValue With {
+                                .line = line,
+                                .text = New String(statementBuffer)
+                            }
                         }
+                        statementBuffer *= 0
                         tokens *= 0
                         parent += last  ' 逗号分隔只产生新的statement，但是不退栈
 
@@ -283,8 +305,13 @@ Public Module TokenIcer
                         ' 结束当前的statement，相当于分号
                         newToken()
                         last = New Statement(Of LanguageTokens) With {
-                            .tokens = tokens
+                            .tokens = tokens,
+                            .Trace = New LineValue With {
+                                .line = line,
+                                .text = New String(statementBuffer)
+                            }
                         }
+                        statementBuffer *= 0
                         tokens *= 0
                         parent += last  ' 右花括号必定是结束堆栈 
 
