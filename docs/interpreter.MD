@@ -4,7 +4,7 @@
 script -> [TokenIcer] -> SourceTree -> ListOf RStatements -> ExecuteMachine
 ```
 
-## Statement in R#
+## Statements in R#
 
 #### Variable Declares
 
@@ -30,6 +30,54 @@ var x &lt;- 123;</Trace>
   </program>
 </MainOfLanguageTokens>
 ```
+
+By default the R variable is generic type, but the user can constraint the variable to a specific primitive type. This type constraint feature only works on the R primitive type, which their type codes can be found in this declare:
+
+```vbnet
+''' <summary>
+''' The R# types
+''' </summary>
+Public Enum TypeCodes As Byte
+
+    ''' <summary>
+    ''' Object type in R#
+    ''' </summary>
+    [generic] = 0
+
+    ''' <summary>
+    ''' Class type in R#
+    ''' </summary>
+    [list] = 10
+
+    ''' <summary>
+    ''' <see cref="Integer"/> vector
+    ''' </summary>
+    [integer] = 100
+    ''' <summary>
+    ''' <see cref="ULong"/> vector
+    ''' </summary>
+    [uinteger]
+    ''' <summary>
+    ''' <see cref="Double"/> numeric vector
+    ''' </summary>
+    [double]
+    ''' <summary>
+    ''' <see cref="String"/> vector
+    ''' </summary>
+    [string]
+    ''' <summary>
+    ''' <see cref="Char"/> vector
+    ''' </summary>
+    [char]
+    ''' <summary>
+    ''' <see cref="Boolean"/> vector
+    ''' </summary>
+    [boolean]
+
+End Enum
+```
+
+Example:
 
 ```R
 # Type constraint variable

@@ -1,11 +1,22 @@
 ﻿''' <summary>
 ''' The R# types
 ''' </summary>
-Public Enum TypeCodes
+Public Enum TypeCodes As Byte
+
+    ''' <summary>
+    ''' Object type in R#
+    ''' </summary>
+    [generic] = 0
+
+    ''' <summary>
+    ''' Class type in R#
+    ''' </summary>
+    [list] = 10
+
     ''' <summary>
     ''' <see cref="Integer"/> vector
     ''' </summary>
-    [integer]
+    [integer] = 100
     ''' <summary>
     ''' <see cref="ULong"/> vector
     ''' </summary>
@@ -26,12 +37,5 @@ Public Enum TypeCodes
     ''' <see cref="Boolean"/> vector
     ''' </summary>
     [boolean]
-    ''' <summary>
-    ''' Class type in R#
-    ''' </summary>
-    [list]
-    ''' <summary>
-    ''' Object type in R#
-    ''' </summary>
-    [generic]
+
 End Enum
