@@ -118,3 +118,163 @@ var x as integer &lt;- {1,</Trace>
   </program>
 </MainOfLanguageTokens>
 ```
+
+#### ``if`` statement
+
+```R
+if(TRUE) {
+    # blablabla
+    println("%s is TRUE", TRUE);
+}
+```
+
+```xml
+<?xml version="1.0" encoding="utf-16"?>
+<MainOfLanguageTokens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <program>
+    <StatementOfLanguageTokens>
+      <t name="Function">
+        <Arguments>
+          <StatementOfLanguageTokens>
+            <t name="Object">TRUE</t>
+            <Trace line="1">
+if(TRUE)</Trace>
+          </StatementOfLanguageTokens>
+        </Arguments>
+        <Closure>
+          <program>
+            <StatementOfLanguageTokens>
+              <t name="Comment"> blablabla</t>
+              <t name="Function">
+                <Arguments>
+                  <StatementOfLanguageTokens>
+                    <t name="String">%s is TRUE</t>
+                    <Trace line="2"> {
+    # blablabla
+    println("%s is TRUE",</Trace>
+                  </StatementOfLanguageTokens>
+                  <StatementOfLanguageTokens>
+                    <t name="Object">TRUE</t>
+                    <Trace line="2"> TRUE)</Trace>
+                  </StatementOfLanguageTokens>
+                </Arguments>println</t>
+              <Trace line="2">;</Trace>
+            </StatementOfLanguageTokens>
+          </program>
+        </Closure>if</t>
+      <Trace line="3" />
+    </StatementOfLanguageTokens>
+  </program>
+</MainOfLanguageTokens>
+```
+
+A more complex ``if`` statement:
+
+```R
+if(a == b) {
+    println("%s is equals to %s", a, b);
+} else if(a <= b) {
+    println("%s is less than or equals to %s", a, b);
+} else {
+    println("Not sure about this.");
+}
+```
+
+```xml
+<?xml version="1.0" encoding="utf-16"?>
+<MainOfLanguageTokens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <program>
+    <StatementOfLanguageTokens>
+      <t name="Function">
+        <Arguments>
+          <StatementOfLanguageTokens>
+            <t name="Object">a</t>
+            <t name="Operator">==</t>
+            <t name="Object">b</t>
+            <Trace line="1">
+if(a == b)</Trace>
+          </StatementOfLanguageTokens>
+        </Arguments>
+        <Closure>
+          <program>
+            <StatementOfLanguageTokens>
+              <t name="Function">
+                <Arguments>
+                  <StatementOfLanguageTokens>
+                    <t name="String">%s is equals to %s</t>
+                    <Trace line="2"> {
+    println("%s is equals to %s",</Trace>
+                  </StatementOfLanguageTokens>
+                  <StatementOfLanguageTokens>
+                    <t name="Object">a</t>
+                    <Trace line="2"> a,</Trace>
+                  </StatementOfLanguageTokens>
+                  <StatementOfLanguageTokens>
+                    <t name="Object">b</t>
+                    <Trace line="2"> b)</Trace>
+                  </StatementOfLanguageTokens>
+                </Arguments>println</t>
+              <Trace line="2">;</Trace>
+            </StatementOfLanguageTokens>
+          </program>
+        </Closure>if</t>
+      <Trace line="3" />
+    </StatementOfLanguageTokens>
+    <StatementOfLanguageTokens>
+      <t name="Object">else</t>
+      <t name="Function">
+        <Arguments>
+          <StatementOfLanguageTokens>
+            <t name="Object">a</t>
+            <t name="Operator">&lt;=</t>
+            <t name="Object">b</t>
+            <Trace line="3"> else if(a &lt;= b)</Trace>
+          </StatementOfLanguageTokens>
+        </Arguments>
+        <Closure>
+          <program>
+            <StatementOfLanguageTokens>
+              <t name="Function">
+                <Arguments>
+                  <StatementOfLanguageTokens>
+                    <t name="String">%s is less than or equals to %s</t>
+                    <Trace line="4"> {
+    println("%s is less than or equals to %s",</Trace>
+                  </StatementOfLanguageTokens>
+                  <StatementOfLanguageTokens>
+                    <t name="Object">a</t>
+                    <Trace line="4"> a,</Trace>
+                  </StatementOfLanguageTokens>
+                  <StatementOfLanguageTokens>
+                    <t name="Object">b</t>
+                    <Trace line="4"> b)</Trace>
+                  </StatementOfLanguageTokens>
+                </Arguments>println</t>
+              <Trace line="4">;</Trace>
+            </StatementOfLanguageTokens>
+          </program>
+        </Closure>if</t>
+      <Trace line="5" />
+    </StatementOfLanguageTokens>
+    <StatementOfLanguageTokens>
+      <t name="Object">
+        <Closure>
+          <program>
+            <StatementOfLanguageTokens>
+              <t name="Function">
+                <Arguments>
+                  <StatementOfLanguageTokens>
+                    <t name="String">Not sure about this.</t>
+                    <Trace line="6"> else {
+    println("Not sure about this.")</Trace>
+                  </StatementOfLanguageTokens>
+                </Arguments>println</t>
+              <Trace line="6">;</Trace>
+            </StatementOfLanguageTokens>
+          </program>
+        </Closure>else</t>
+      <Trace line="7" />
+    </StatementOfLanguageTokens>
+  </program>
+</MainOfLanguageTokens>
+```
