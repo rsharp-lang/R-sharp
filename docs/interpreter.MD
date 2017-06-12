@@ -133,18 +133,26 @@ test <- function(a, b, c = [x=(a + b)^2, y=128]) {
 The R language its ``for`` loop is equals to the ``For Each`` Loop in VisualBasic:
 
 ```R
-for (i in 1:50) {
+for({variable} in {collection}) {
+    # for closure statements
+}
+```
 
+The for each example in R#:
+
+```R
+for (i in 1:50) {
+    # for each loop closure 
 }
 
 for (n in [1:50, 0.1]) {
-
-}
-
-var x <- [1:50,0.01];
-
-for (d in x) {
-
+    
+	# which it is equivalent to 
+	# var x as double <- [1:50, 0.01];
+    # 
+    # for (d as double in x) {
+    #     # for each loop closure 
+    # }
 }
 ```
 
@@ -157,18 +165,18 @@ Next
 
 Dim x = (1, 50).Range(0.01)
 
-For Each d In x
+For Each d As Double In x
 Next
 ```
 
 #### ``do`` loop statement
 
 ```R
-do(TRUE) {
-
+do({boolean_expression}) {
+    # do loop closure
 }
 
 do {
-
-} while(TRUE);
+    # do loop closure
+} while({boolean_expression});
 ```
