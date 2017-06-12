@@ -99,13 +99,18 @@ if ({bool_expression}) {
 }
 ```
 
+The function parameters, can be:
 
++ (generic type) only an object identifier name: ``{identifier}``
++ (primitive type) identifier with type constraint: ``{identifier} as {type}``
++ (parameter list) generic list parameters: ``...``
++ (optional parameter) parameter have its default value is the parameter is not specific: ``{identifier} [as {type}] = {value_expression}``
 
 Supports of the optional parameter scripting:
 
 ```R
 test <- function(a, b, c = (a + b)^2) {
-	return [a ^ 3, -b * c, c];
+    return [a ^ 3, -b * c, c];
 }
 ```
 
