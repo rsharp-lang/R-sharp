@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-16"?>
+<MainOfLanguageTokens xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <program>
+    <StatementOfLanguageTokens>
+      <t name="var">var</t>
+      <t name="Object">x</t>
+      <t name="Object">as</t>
+      <t name="Object">integer</t>
+      <t name="LeftAssign">&lt;-</t>
+      <t name="Function">func<Arguments><StatementOfLanguageTokens><t name="Object">a</t><t name="ParameterAssign">=</t><t name="String">233</t></StatementOfLanguageTokens></Arguments></t>
+      <t name="Operator">+</t>
+      <t name="Object">5</t>
+      <t name="Operator">*</t>
+      <t name="ParenOpen">(<Arguments><StatementOfLanguageTokens><t name="Object">2</t><t name="Operator">+</t><t name="Object">33</t></StatementOfLanguageTokens></Arguments></t>
+      <t name="ParenClose">)</t>
+      <t name="Operator">*</t>
+      <t name="Function">list<Arguments /></t>
+      <t name="Object">with<Closure><program><StatementOfLanguageTokens><t name="Object">$a</t><t name="LeftAssign">&lt;-</t><t name="Object">123</t></StatementOfLanguageTokens><StatementOfLanguageTokens><t name="Object">$b</t><t name="LeftAssign">&lt;-</t><t name="String">hello world</t></StatementOfLanguageTokens></program></Closure></t>
+    </StatementOfLanguageTokens>
+  </program>
+</MainOfLanguageTokens>

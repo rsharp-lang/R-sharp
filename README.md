@@ -5,6 +5,8 @@
 
 The ``R#`` language its syntax is original derived from the ``R`` language, but with more modernized programming styles. The ``R#`` language its interpreter and .NET compiler is original writen in VisualBasic language, with native support for the .NET runtime.
 
+The ``R#`` language is not designed for the general data analysis purpose, but it is specialize designed for my works in the company, implements the bioinformatics data analysis system based on the GCModeller platform, for building the bioinformatics data science stack with R and VisualBasic language.
+
 ## R# language design
 
 ###### Code comments
@@ -186,6 +188,22 @@ Dim result = "hello world!"
 ```
 
 All of the R function which have at least one parameter can be using in pipeline mode, using ``|`` as the pipeline operator:
+
+```bash
+# pipeline in linux bash
+ps -ef | grep R.exe
+```
+
+and you can do this pipeline programming in ``R#``
+
+```R
+# application foo print its content output to standard output on the console 
+# and then calling the replace function, at last capitalize all 
+# of the string result
+
+"foo = bar" | replace("foo", "bar") | capitalize
+# bar = bar
+```
 
 ```R
 test1 <- function(x) {
