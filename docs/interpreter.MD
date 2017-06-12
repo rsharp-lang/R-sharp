@@ -101,16 +101,30 @@ if ({bool_expression}) {
 
 The function parameters, can be:
 
-+ (generic type) only an object identifier name: ``{identifier}``
-+ (primitive type) identifier with type constraint: ``{identifier} as {type}``
-+ (parameter list) generic list parameters: ``...``
-+ (optional parameter) parameter have its default value is the parameter is not specific: ``{identifier} [as {type}] = {value_expression}``
+|name                    |description                                                      |syntax                                           |
+|------------------------|-----------------------------------------------------------------|-------------------------------------------------|
+|**(generic type)**      |only an object identifier name                                   |``{identifier}``                                 |
+|**(primitive type)**    |identifier with type constraint                                  |``{identifier} as {type}``                       |
+|**(parameter list)**    |generic list parameters                                          |``...``                                          |
+|**(optional parameter)**|parameter have its default value is the parameter is not specific|``{identifier} [as {type}] = {value_expression}``|
 
 Supports of the optional parameter scripting:
 
 ```R
-test <- function(a, b, c = (a + b)^2) {
-    return [a ^ 3, -b * c, c];
+{function_name} <- function(var1, var2, optional = {expression<var1, var2>}) {
+    # The expression can be any type of the value expression statement
+    # no limits to the constant value
+    # allowed the user types like: function, tuple and list class
+}
+```
+
+This optional parameter expression example as: 
+
+```R
+# The optional parameter c is a tuple type and 
+# with 2 property which are named: x and y
+test <- function(a, b, c = [x=(a + b)^2, y=128]) {
+    return [a ^ 3, -b * c.x, c.y];
 }
 ```
 
