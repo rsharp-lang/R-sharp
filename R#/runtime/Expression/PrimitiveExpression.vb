@@ -3,4 +3,7 @@
 ''' </summary>
 Public Class PrimitiveExpression
 
+    Public Overridable Function Evaluate(envir As Environment) As Object
+
+    End Function
 End Class

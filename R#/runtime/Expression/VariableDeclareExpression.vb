@@ -7,7 +7,7 @@
 ''' var s &lt;- "Hello world!";
 ''' ```
 ''' </summary>
-Public Class VariableDeclareExpression
+Public Class VariableDeclareExpression : Inherits PrimitiveExpression
 
     ''' <summary>
     ''' 左边的变量名称
