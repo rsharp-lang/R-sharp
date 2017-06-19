@@ -103,10 +103,10 @@ The function parameters, can be:
 
 |name                    |description                                                      |syntax                                           |
 |------------------------|-----------------------------------------------------------------|-------------------------------------------------|
-|**(generic type)**      |only an object identifier name                                   |``{identifier}``                                 |
-|**(primitive type)**    |identifier with type constraint                                  |``{identifier} as {type}``                       |
-|**(parameter list)**    |generic list parameters                                          |``...``                                          |
-|**(optional parameter)**|parameter have its default value is the parameter is not specific|``{identifier} [as {type}] = {value_expression}``|
+|``generic type``      |only an object identifier name                                   |``{identifier}``                                 |
+|``primitive type``    |identifier with type constraint                                  |``{identifier} as {type}``                       |
+|``parameter list``|generic list parameters                                          |``...``                                          |
+|``optional parameter``|parameter have its default value|``{identifier} [as {type}] = {value_expression}``|
 
 Supports of the optional parameter scripting:
 
@@ -147,8 +147,8 @@ for (i in 1:50) {
 
 for (n in [1:50, 0.1]) {
     
-	# which it is equivalent to 
-	# var x as double <- [1:50, 0.01];
+    # which it is equivalent to 
+    # var x as double <- [1:50, 0.01];
     # 
     # for (d as double in x) {
     #     # for each loop closure 
@@ -172,11 +172,13 @@ Next
 #### ``do`` loop statement
 
 ```R
-do({boolean_expression}) {
+# do while expression is TRUE
+do ({boolean_expression}) {
     # do loop closure
 }
 
+# do until expression becames TRUE
 do {
     # do loop closure
-} while({boolean_expression});
+} until({boolean_expression});
 ```
