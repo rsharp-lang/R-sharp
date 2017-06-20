@@ -51,6 +51,9 @@ result;
 # tuple(result)
 # $message = "Hello world!"
 # pages = 999
+
+# and of course, if you didn't want using the script return result, just call the source function:
+source("script.R", message="Hello world!", pages=999);
 ```
 
 ### From commandline
@@ -69,7 +72,7 @@ R ./script.R
 R ./script.R(message="Hello world!" pages=999);
 ```
 
-As you have notice that, the example R script have a value ``return`` statement. so did this value ``return`` statement working in a commandline mode? No, it does not. The ``return`` statement in commandline mode just partly functional in your script: break the function but did not returns the values. 
+As you have notice that, the example R script have a value ``return`` statement. So did this value ``return`` statement working in a commandline mode? No, it does not, but actually the ``return`` statement in commandline mode just partly functional in your script: break the function but did not returns the values. 
 
 If you runing your script from ``source()`` function, then this value ``return`` statement will fully functional in your script: break the function and returns the values at the same time. Using the ``source()`` function invoke your script, just like invoke a virtual ``main()`` function and get its returns value, just like the Reflection operation on a function member in VisualBasic. 
 
