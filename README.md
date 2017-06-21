@@ -17,7 +17,7 @@ The ``R#`` language is not designed for the general data analysis purpose, but i
 
 ###### Variable
 
-Variable in ``R#`` should be declared by ``var`` keyword, and its value assign is force using ``<-`` operator:
+Variable in ``R#`` should be declared by ``var`` keyword, and using ``<-`` operator for value initialize by a expression. If the variable declaration not follow by a value initialize expression, then default its value is ``NULL``:
 
 ```R
 var s <- "12345";
@@ -27,6 +27,46 @@ var m <- {
    {4, 5, 6},
    {7, 8, 9}
 };
+
+var x;
+# is equals to 
+var x <- NULL;
+```
+
+In the traditional R language, you can using both ``=`` or ``<-`` operator for value assign, all of these two operator are both OK. But in ``R#`` language these two operator have slightly difference: value asssign using ``<-`` operator means ``ByVal``, and value assign using ``=`` operator means ``ByRef``:
+
+```R
+var a <- {1, 2, 3, 4, 5};
+
+var b1, b2;
+
+b1 <- a;  # ByVal
+b2 =  a;  # ByRef
+
+a[6] = 99;
+
+b1;
+# ByVal means clone the source values, so that when the source have been change, the clone variable its value will not changed too. ByVal means values remains the same as the source:
+# [1]  1  2  3  4  5
+
+b2;
+# ByRef means reference to the source memory location pointer, so that when the source have been changed, then the reference variable will be changed too. ByRef means reference of the source memory.
+# [1]  1  2  3  4  5 99
+
+# So that if you have change the ByRef b2 its value, the source is also changed:
+b2[1] = 88;
+b2;
+# [1] 88  2  3  4  5 99
+
+a; 
+# [1] 88  2  3  4  5 99
+
+b1[2] = -10;
+b1;
+# [1]  1  -10  3  4  5
+
+a; 
+# [1] 88  2  3  4  5 99
 ```
 
 Delcare a vector or matrix will no longer required of the ``c(...)`` function or ``matrix`` function. Almost keeps the same as the VisualBasic language it does:
