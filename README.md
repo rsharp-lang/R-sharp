@@ -17,7 +17,7 @@ The ``R#`` language is not designed for the general data analysis purpose, but i
 
 ###### Variable
 
-Variable in ``R#`` should be declared by ``var`` keyword, and using ``<-`` operator for value initialize by a expression. If the variable declaration not follow by a value initialize expression, then default its value is ``NULL``:
+Variable in ``R#`` should be declared by ``var`` keyword, and using ``<-`` operator for value initialize by a expression. If the variable declaration not follow by a value initialize expression, then by default its value is set to ``NULL``:
 
 ```R
 var s <- "12345";
@@ -46,11 +46,15 @@ b2 =  a;  # ByRef
 a[6] = 99;
 
 b1;
-# ByVal means clone the source values, so that when the source have been change, the clone variable its value will not changed too. ByVal means values remains the same as the source:
+# ByVal means clone the source values, so that when the source have been change, 
+# the cloned variable its value will not changed too. 
+# ByVal means values remains the same as the source:
 # [1]  1  2  3  4  5
 
 b2;
-# ByRef means reference to the source memory location pointer, so that when the source have been changed, then the reference variable will be changed too. ByRef means reference of the source memory.
+# ByRef means reference to the source memory location pointer, 
+# so that when the source have been changed, then the reference variable will be changed too. 
+# ByRef means reference of the source memory.
 # [1]  1  2  3  4  5 99
 
 # So that if you have change the ByRef b2 its value, the source is also changed:
