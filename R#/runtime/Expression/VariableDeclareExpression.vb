@@ -20,6 +20,10 @@ Public Class VariableDeclareExpression : Inherits PrimitiveExpression
     ''' <returns></returns>
     Public ReadOnly Property Type As TypeCodes = TypeCodes.generic
 
+    Sub New(name$, type$, initialize As PrimitiveExpression)
+
+    End Sub
+
     Public Overrides Function ToString() As String
         Return $"Dim {Name} As {Type.Description} = "
     End Function
