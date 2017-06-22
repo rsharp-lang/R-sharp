@@ -7,7 +7,7 @@
 ''' }
 ''' ```
 ''' </summary>
-Public Class FunctionExpression : Inherits PrimitiveExpression
+Public Class FunctionExpression : Inherits Closure
 
     ''' <summary>
     ''' The function name
@@ -19,6 +19,22 @@ Public Class FunctionExpression : Inherits PrimitiveExpression
     ''' </summary>
     ''' <returns></returns>
     Public Property Parameters As VariableDeclareExpression()
-    Public Property Closure
+
+End Class
+
+Public Class Closure : Inherits PrimitiveExpression
+
+
+End Class
+
+Public Class ForLoop : Inherits Closure
+
+End Class
+
+Public Class IfBranch : Inherits Closure
+
+End Class
+
+Public Class DoLoop : Inherits Closure
 
 End Class
