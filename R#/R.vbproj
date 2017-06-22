@@ -78,7 +78,7 @@
     <Compile Include="Module1.vb" />
     <Compile Include="Interpreter\ExpressionParser\ExecuteEngine.vb" />
     <Compile Include="Interpreter\SyntaxParser.vb" />
-    <Compile Include="LanguageTokens.vb" />
+    <Compile Include="Interpreter\LanguageTokens.vb" />
     <Compile Include="Interpreter\ExpressionParser\ExpressionParser.vb" />
     <Compile Include="runtime\BindVariable.vb" />
     <Compile Include="runtime\Expression\VariableDeclareExpression.vb" />

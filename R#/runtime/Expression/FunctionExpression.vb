@@ -7,13 +7,18 @@
 ''' }
 ''' ```
 ''' </summary>
-Public Class FunctionExpression
+Public Class FunctionExpression : Inherits PrimitiveExpression
 
     ''' <summary>
     ''' The function name
     ''' </summary>
     ''' <returns></returns>
     Public Property Name As String
-
+    ''' <summary>
+    ''' 当存在表达式初始化的时候为可选参数，反之为必须参数
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property Parameters As VariableDeclareExpression()
+    Public Property Closure
 
 End Class
