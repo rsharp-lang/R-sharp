@@ -24,3 +24,16 @@ Public Class VariableDeclareExpression
         Return $"Dim {Name} As {Type.Description} = "
     End Function
 End Class
+
+Public Class TupleDeclareExpression : Inherits VariableDeclareExpression
+
+    Public Property Members As TupleMember()
+
+End Class
+
+Public Structure TupleMember
+
+    Dim Name$
+    Dim Alias$
+
+End Structure
