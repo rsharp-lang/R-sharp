@@ -7,7 +7,7 @@
 ''' var s &lt;- "Hello world!";
 ''' ```
 ''' </summary>
-Public Class VariableDeclareExpression
+Public Class VariableDeclareExpression : Inherits PrimitiveExpression
 
     ''' <summary>
     ''' 左边的变量名称
@@ -19,6 +19,10 @@ Public Class VariableDeclareExpression
     ''' </summary>
     ''' <returns></returns>
     Public ReadOnly Property Type As TypeCodes = TypeCodes.generic
+
+    Sub New(name$, type$, initialize As PrimitiveExpression)
+
+    End Sub
 
     Public Overrides Function ToString() As String
         Return $"Dim {Name} As {Type.Description} = "

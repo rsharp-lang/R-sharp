@@ -10,28 +10,10 @@ script -> [TokenIcer] -> SourceTree -> ListOf RStatements -> ExecuteMachine
 
 ```R
 # Generic type variable
-var x <- 123;
+var {variable_name|tuple} <- {initial_expression};
 ```
 
-```xml
-<?xml version="1.0" encoding="utf-16"?>
-<MainOfLanguageTokens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <program>
-    <StatementOfLanguageTokens>
-      <t name="Comment"> Generic type variable</t>
-      <t name="Object">var</t>
-      <t name="Object">x</t>
-      <t name="LeftAssign">&lt;-</t>
-      <t name="Object">123</t>
-      <Trace line="1">
-# Generic type variable
-var x &lt;- 123;</Trace>
-    </StatementOfLanguageTokens>
-  </program>
-</MainOfLanguageTokens>
-```
-
-By default the R variable is generic type, but the user can constraint the variable to a specific primitive type. This type constraint feature only works on the R primitive type, which their type codes can be found in this declare:
+By default the R variable is generic type, but the user can constraint the variable to a specific primitive type. This type constraint feature only works on the R primitive type(which means the type constraint will not works on the list type or tuple type in R#), which their type codes can be found in this declare:
 
 ```vbnet
 ''' <summary>
@@ -80,221 +62,69 @@ End Enum
 Example:
 
 ```R
-# Type constraint variable
-var x as integer <- {1, 2, 3};
+# R variable with primitive type constraint
+# type = {integer, uinteger, double, string, char, boolean}
+var {variable} as {type} <- {initial_expression};
 ```
 
-```xml
-<?xml version="1.0" encoding="utf-16"?>
-<MainOfLanguageTokens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <program>
-    <StatementOfLanguageTokens>
-      <t name="Comment"> Type constraint variable</t>
-      <t name="Object">var</t>
-      <t name="Object">x</t>
-      <t name="Object">as</t>
-      <t name="Object">integer</t>
-      <t name="LeftAssign">
-        <Closure>
-          <program>
-            <StatementOfLanguageTokens>
-              <t name="Object">1</t>
-              <Trace line="1">
-# Type constraint variable
-var x as integer &lt;- {1,</Trace>
-            </StatementOfLanguageTokens>
-            <StatementOfLanguageTokens>
-              <t name="Object">2</t>
-              <Trace line="1"> 2,</Trace>
-            </StatementOfLanguageTokens>
-            <StatementOfLanguageTokens>
-              <t name="Object">3</t>
-              <Trace line="1"> 3}</Trace>
-            </StatementOfLanguageTokens>
-          </program>
-        </Closure>&lt;-</t>
-      <Trace line="1" />
-    </StatementOfLanguageTokens>
-  </program>
-</MainOfLanguageTokens>
-```
-
-#### ``if`` statement
+#### ``if`` branch statement
 
 ```R
-if(TRUE) {
-    # blablabla
-    println("%s is TRUE", TRUE);
+if ({bool_expression}) {
+    # branch statements for TRUE
+} else {
+    # branch statements for FALSE
+    # branch FALSE can be optional
 }
-```
-
-```xml
-<?xml version="1.0" encoding="utf-16"?>
-<MainOfLanguageTokens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <program>
-    <StatementOfLanguageTokens>
-      <t name="Function">
-        <Arguments>
-          <StatementOfLanguageTokens>
-            <t name="Object">TRUE</t>
-            <Trace line="1">
-if(TRUE)</Trace>
-          </StatementOfLanguageTokens>
-        </Arguments>
-        <Closure>
-          <program>
-            <StatementOfLanguageTokens>
-              <t name="Comment"> blablabla</t>
-              <t name="Function">
-                <Arguments>
-                  <StatementOfLanguageTokens>
-                    <t name="String">%s is TRUE</t>
-                    <Trace line="2"> {
-    # blablabla
-    println("%s is TRUE",</Trace>
-                  </StatementOfLanguageTokens>
-                  <StatementOfLanguageTokens>
-                    <t name="Object">TRUE</t>
-                    <Trace line="2"> TRUE)</Trace>
-                  </StatementOfLanguageTokens>
-                </Arguments>println</t>
-              <Trace line="2">;</Trace>
-            </StatementOfLanguageTokens>
-          </program>
-        </Closure>if</t>
-      <Trace line="3" />
-    </StatementOfLanguageTokens>
-  </program>
-</MainOfLanguageTokens>
 ```
 
 A more complex ``if`` statement:
 
 ```R
-if(a == b) {
-    println("%s is equals to %s", a, b);
-} else if(a <= b) {
-    println("%s is less than or equals to %s", a, b);
+if ({bool_expression}) {
+    # branch statements for TRUE = {bool_expression}
+} else if ({bool_expression2}) {
+    # branch statements for TRUE = {bool_expression2}
 } else {
-    println("Not sure about this.");
+    # branch statements for FALSE
+    # branch FALSE can be optional
 }
-```
-
-```xml
-<?xml version="1.0" encoding="utf-16"?>
-<MainOfLanguageTokens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <program>
-    <StatementOfLanguageTokens>
-      <t name="Function">
-        <Arguments>
-          <StatementOfLanguageTokens>
-            <t name="Object">a</t>
-            <t name="Operator">==</t>
-            <t name="Object">b</t>
-            <Trace line="1">
-if(a == b)</Trace>
-          </StatementOfLanguageTokens>
-        </Arguments>
-        <Closure>
-          <program>
-            <StatementOfLanguageTokens>
-              <t name="Function">
-                <Arguments>
-                  <StatementOfLanguageTokens>
-                    <t name="String">%s is equals to %s</t>
-                    <Trace line="2"> {
-    println("%s is equals to %s",</Trace>
-                  </StatementOfLanguageTokens>
-                  <StatementOfLanguageTokens>
-                    <t name="Object">a</t>
-                    <Trace line="2"> a,</Trace>
-                  </StatementOfLanguageTokens>
-                  <StatementOfLanguageTokens>
-                    <t name="Object">b</t>
-                    <Trace line="2"> b)</Trace>
-                  </StatementOfLanguageTokens>
-                </Arguments>println</t>
-              <Trace line="2">;</Trace>
-            </StatementOfLanguageTokens>
-          </program>
-        </Closure>if</t>
-      <Trace line="3" />
-    </StatementOfLanguageTokens>
-    <StatementOfLanguageTokens>
-      <t name="Object">else</t>
-      <t name="Function">
-        <Arguments>
-          <StatementOfLanguageTokens>
-            <t name="Object">a</t>
-            <t name="Operator">&lt;=</t>
-            <t name="Object">b</t>
-            <Trace line="3"> else if(a &lt;= b)</Trace>
-          </StatementOfLanguageTokens>
-        </Arguments>
-        <Closure>
-          <program>
-            <StatementOfLanguageTokens>
-              <t name="Function">
-                <Arguments>
-                  <StatementOfLanguageTokens>
-                    <t name="String">%s is less than or equals to %s</t>
-                    <Trace line="4"> {
-    println("%s is less than or equals to %s",</Trace>
-                  </StatementOfLanguageTokens>
-                  <StatementOfLanguageTokens>
-                    <t name="Object">a</t>
-                    <Trace line="4"> a,</Trace>
-                  </StatementOfLanguageTokens>
-                  <StatementOfLanguageTokens>
-                    <t name="Object">b</t>
-                    <Trace line="4"> b)</Trace>
-                  </StatementOfLanguageTokens>
-                </Arguments>println</t>
-              <Trace line="4">;</Trace>
-            </StatementOfLanguageTokens>
-          </program>
-        </Closure>if</t>
-      <Trace line="5" />
-    </StatementOfLanguageTokens>
-    <StatementOfLanguageTokens>
-      <t name="Object">
-        <Closure>
-          <program>
-            <StatementOfLanguageTokens>
-              <t name="Function">
-                <Arguments>
-                  <StatementOfLanguageTokens>
-                    <t name="String">Not sure about this.</t>
-                    <Trace line="6"> else {
-    println("Not sure about this.")</Trace>
-                  </StatementOfLanguageTokens>
-                </Arguments>println</t>
-              <Trace line="6">;</Trace>
-            </StatementOfLanguageTokens>
-          </program>
-        </Closure>else</t>
-      <Trace line="7" />
-    </StatementOfLanguageTokens>
-  </program>
-</MainOfLanguageTokens>
 ```
 
 #### ``function`` declares statement
 
 ```R
-library(System);
-
-println <- function(s, ...) {
-    s <- sprintf(s, ...);
-    Console:WriteLine(s);
+{function_name} <- function(parameter1 [as {type}], [...]) {
+    # function body closure
 }
 ```
+
+The function parameters, can be:
+
+|name                    |description                                                      |syntax                                           |
+|------------------------|-----------------------------------------------------------------|-------------------------------------------------|
+|``generic type``      |only an object identifier name                                   |``{identifier}``                                 |
+|``primitive type``    |identifier with type constraint                                  |``{identifier} as {type}``                       |
+|``parameter list``|generic list parameters                                          |``...``                                          |
+|``optional parameter``|parameter have its default value|``{identifier} [as {type}] = {value_expression}``|
 
 Supports of the optional parameter scripting:
 
 ```R
-test <- function(a, b, c = (a + b)^2) {
-	return [a ^ 3, -b * c, c];
+{function_name} <- function(var1, var2, optional = {expression<var1, var2>}) {
+    # The expression can be any type of the value expression statement
+    # no limits to the constant value
+    # allowed the user types like: function, tuple and list class
+}
+```
+
+This optional parameter expression example as: 
+
+```R
+# The optional parameter c is a tuple type and 
+# with 2 property which are named: x and y
+test <- function(a, b, c = [x=(a + b)^2, y=128]) {
+    return [a ^ 3, -b * c.x, c.y];
 }
 ```
 
@@ -303,18 +133,26 @@ test <- function(a, b, c = (a + b)^2) {
 The R language its ``for`` loop is equals to the ``For Each`` Loop in VisualBasic:
 
 ```R
-for (i in 1:50) {
+for({variable} in {collection}) {
+    # for closure statements
+}
+```
 
+The for each example in R#:
+
+```R
+for (i in 1:50) {
+    # for each loop closure 
 }
 
 for (n in [1:50, 0.1]) {
-
-}
-
-var x <- [1:50,0.01];
-
-for (d in x) {
-
+    
+    # which it is equivalent to 
+    # var x as double <- [1:50, 0.01];
+    # 
+    # for (d as double in x) {
+    #     # for each loop closure 
+    # }
 }
 ```
 
@@ -327,18 +165,20 @@ Next
 
 Dim x = (1, 50).Range(0.01)
 
-For Each d In x
+For Each d As Double In x
 Next
 ```
 
 #### ``do`` loop statement
 
 ```R
-do(TRUE) {
-
+# do while expression is TRUE
+do ({boolean_expression}) {
+    # do loop closure
 }
 
+# do until expression becames TRUE
 do {
-
-} while(TRUE);
+    # do loop closure
+} until({boolean_expression});
 ```

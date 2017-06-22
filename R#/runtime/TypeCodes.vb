@@ -4,7 +4,7 @@
 Public Enum TypeCodes As Byte
 
     ''' <summary>
-    ''' Object type in R#
+    ''' Object type in R#.(使用这个类型来表示没有类型约束)
     ''' </summary>
     [generic] = 0
 
@@ -12,6 +12,10 @@ Public Enum TypeCodes As Byte
     ''' Class type in R#
     ''' </summary>
     [list] = 10
+    ''' <summary>
+    ''' 函数类型
+    ''' </summary>
+    [closure]
 
     ''' <summary>
     ''' <see cref="Integer"/> vector

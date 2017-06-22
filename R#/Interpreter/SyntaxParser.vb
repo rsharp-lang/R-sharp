@@ -13,9 +13,9 @@ Public Module SyntaxParser
     <Extension> Public Function Parse(statement As Statement(Of LanguageTokens)) As PrimitiveExpression
         Dim expression As PrimitiveExpression = Nothing
 
-        If TryParseObjectDeclare(statement, expression) Then
+        If TryParseTypedObjectDeclare(statement, expression) Then
             Return expression
-        ElseIf TryParseTypedObjectDeclare(statement, expression) Then
+        ElseIf TryParseObjectDeclare(statement, expression) Then
             Return expression
         End If
 
@@ -32,14 +32,23 @@ Public Module SyntaxParser
     ''' <returns></returns>
     Public Function TryParseObjectDeclare(statement As Statement(Of LanguageTokens), ByRef out As PrimitiveExpression) As Boolean
         Dim tokens = statement.tokens
+        Dim var$ = tokens.ElementAtOrDefault(1)?.Text  ' 变量名
 
         If Not tokens.First.name = LanguageTokens.Variable Then
             Return False
         ElseIf Not tokens(2).name = LanguageTokens.LeftAssign Then
-            Return False
+            ' var x
+            ' 这种形式的申明默认为NULL
+
+            If tokens.Length = 2 Then
+                out = New VariableDeclareExpression(var, NameOf(TypeCodes.generic), LiteralExpression.NULL)
+                Return True
+            Else
+                Return False
+            End If
         End If
 
-        Dim var$ = tokens(1).Text
+
 
     End Function
 
