@@ -32,7 +32,7 @@ Public Class BindVariable : Inherits Variable
     Public ReadOnly Property Source As String
 
     Sub New(field As FieldInfo)
-        Call Me.New(src:=field)
+        Call Me.New(src:=field, [typeOf]:=field.FieldType)
 
         With field
             getValue = StaticFieldGet(.DeclaringType, .Name)
@@ -40,13 +40,15 @@ Public Class BindVariable : Inherits Variable
         End With
     End Sub
 
-    Private Sub New(src As MemberInfo)
+    Private Sub New(src As MemberInfo, [typeOf] As Type)
+        Call MyBase.New([typeOf].GetRTypeCode)
+
         Name = src.Name
         Source = src.Source
     End Sub
 
     Sub New([property] As PropertyInfo)
-        Call Me.New(src:=[property])
+        Call Me.New(src:=[property], [typeOf]:=[property].PropertyType)
 
         With [property]
             getValue = StaticPropertyGet(.DeclaringType, .Name)
