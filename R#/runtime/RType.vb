@@ -1,9 +1,12 @@
-﻿''' <summary>
+﻿
+
+''' <summary>
 ''' Type proxy for <see cref="TypeCodes.list"/> or system primitives
 ''' </summary>
 Public Class RType
 
     Public ReadOnly Property TypeCode As TypeCodes = TypeCodes.list
+    Public ReadOnly Property FullName As String
 
     ''' <summary>
     ''' ``operator me``
@@ -32,5 +35,19 @@ Public Class RType
     ''' <returns></returns>
     Public Function GetBinaryOperator2(operator$, b As Type) As Func(Of Object, Object, Object)
 
+    End Function
+
+    ''' <summary>
+    ''' Imports the .NET type
+    ''' </summary>
+    ''' <param name="dotnet"></param>
+    ''' <returns></returns>
+    Public Shared Function [Imports](dotnet As Type) As RType
+        Dim operators = dotnet.GetMethods(publicshared)
+
+        Return New RType With {
+            ._TypeCode = dotnet.GetRTypeCode,
+            ._FullName = dotnet.FullName
+        }
     End Function
 End Class
