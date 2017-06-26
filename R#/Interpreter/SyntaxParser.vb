@@ -48,6 +48,9 @@ Public Module SyntaxParser
             End If
         End If
 
+        ' 现在剩下的就是 var x <- ..... 的形式了
+        ' 需要解析这个数学表达式
+        Dim initExpression = tokens.Skip(3).ToArray
 
 
     End Function
@@ -61,14 +64,21 @@ Public Module SyntaxParser
     ''' <returns></returns>
     Public Function TryParseTypedObjectDeclare(statement As Statement(Of LanguageTokens), ByRef out As PrimitiveExpression) As Boolean
         Dim tokens = statement.tokens
+        Dim var$ = tokens.ElementAtOrDefault(1)?.Text
 
         If Not tokens.First.name = LanguageTokens.Variable Then
             Return False
         ElseIf Not tokens(2).Text = "as" Then
+            ' 没有类型约束，则肯定不是这种类型的表达式
             Return False
+        ElseIf tokens.Length = 4 Then
+            ' var x as type
+            ' 只是申明了变量和其类型，则默认是NULL值
+            out = New VariableDeclareExpression(var, tokens(3).Text, LiteralExpression.NULL)
+            Return True
         End If
 
-        Dim var$ = tokens(1).Text
+
 
     End Function
 End Module
