@@ -1,4 +1,5 @@
 ﻿
+Imports Microsoft.VisualBasic.Scripting.TokenIcer
 ''' <summary>
 ''' 创建申明一个内存变量的表达式
 ''' 
@@ -28,3 +29,19 @@ Public Class VariableDeclareExpression : Inherits PrimitiveExpression
         Return $"Dim {Name} As {Type.Description} = "
     End Function
 End Class
+
+Public Class TupleDeclareExpression : Inherits VariableDeclareExpression
+
+    Public Property Members As TupleMember()
+
+    Sub New(members As Token(Of LanguageTokens)(), initialize As PrimitiveExpression)
+        Call MyBase.New("", "list", initialize)
+    End Sub
+End Class
+
+Public Structure TupleMember
+
+    Dim Name$
+    Dim Alias$
+
+End Structure
