@@ -42,12 +42,25 @@ Public Class Environment
                     End Function).ToDictionary
     End Sub
 
-    Public Function GetValue() As GetValue
+    Default Public Property Value(name$) As Object
+        Get
+            Return Variables(name).Value
+        End Get
+        Set(value)
+            Variables(name).Value = value
+        End Set
+    End Property
 
+    Public Function GetValue() As GetValue
+        Return Function(name$)
+                   Return Me(name)
+               End Function
     End Function
 
     Public Function Evaluate() As FunctionEvaluate
+        Return Function(funcName, args)
 
+               End Function
     End Function
 
     ''' <summary>

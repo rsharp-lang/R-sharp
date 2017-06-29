@@ -19,8 +19,7 @@ Public Module SyntaxParser
             Return expression
         End If
 
-        Dim source As New Exception(statement.GetXml)
-        Throw New SyntaxErrorException(SyntaxNotSupport, source)
+        Return New ValueExpression(statement.tokens)
     End Function
 
     ''' <summary>
