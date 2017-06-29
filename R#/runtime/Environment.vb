@@ -42,6 +42,13 @@ Public Class Environment
                     End Function).ToDictionary
     End Sub
 
+    ''' <summary>
+    ''' Construct the global environment
+    ''' </summary>
+    Friend Sub New()
+        Call Me.New(Nothing, {})
+    End Sub
+
     Default Public Property Value(name$) As Object
         Get
             Return Variables(name).Value
