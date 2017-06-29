@@ -4,6 +4,10 @@ Imports Microsoft.VisualBasic.Scripting.Abstract
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports ExpressionTokens = SMRUCC.Rsharp.LanguageTokens
 
+''' <summary>
+''' 除了函数申明，之类的语句表达式，这个模块是专门用来解析类似于数学运算的表达式的
+''' 也就是说这个模块之中解析出来的结果是具体的表达式的结构内容
+''' </summary>
 Module ExpressionParser
 
     ''' <summary>

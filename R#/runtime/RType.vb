@@ -1,9 +1,17 @@
-﻿''' <summary>
+﻿Imports System.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+
+''' <summary>
 ''' Type proxy for <see cref="TypeCodes.list"/> or system primitives
 ''' </summary>
 Public Class RType
 
     Public ReadOnly Property TypeCode As TypeCodes = TypeCodes.list
+    Public ReadOnly Property FullName As String
+
+    Dim UnaryOperators As Dictionary(Of String, MethodInfo)
+    Dim BinaryOperator1 As Dictionary(Of String, MethodInfo)
+    Dim BinaryOperator2 As Dictionary(Of String, MethodInfo)
 
     ''' <summary>
     ''' ``operator me``
@@ -32,5 +40,22 @@ Public Class RType
     ''' <returns></returns>
     Public Function GetBinaryOperator2(operator$, b As Type) As Func(Of Object, Object, Object)
 
+    End Function
+
+    ''' <summary>
+    ''' Imports the .NET type
+    ''' </summary>
+    ''' <param name="dotnet"></param>
+    ''' <returns></returns>
+    Public Shared Function [Imports](dotnet As Type) As RType
+        Dim operators = dotnet _
+            .GetMethods(PublicShared) _
+            .Where(Function(m) m.Name.StartsWith("op_")) _
+            .ToArray
+
+        Return New RType With {
+            ._TypeCode = dotnet.GetRTypeCode,
+            ._FullName = dotnet.FullName
+        }
     End Function
 End Class
