@@ -163,15 +163,29 @@ Public Module TokenIcer
                         Call newToken()
                         Call buffer.Parse(childs, line, statementBuffer)
 
+                        If tokens = 0 Then
+                            ' 没有tokens元素，则说明可能是
+                            ' (1+2) *3
+                            ' 这种类型的表达式
+
+                            tokens += New langToken(LanguageTokens.Priority, "()")
+                        End If
+
                         With tokens.Last
                             If .name = LanguageTokens.Object Then
                                 ' function
                                 .name = LanguageTokens.Function
                                 .Arguments = childs
                             Else
-                                tokens += New langToken(LanguageTokens.ParenOpen, c)
+                                If .name = LanguageTokens.Operator Then
+                                    tokens += New langToken(LanguageTokens.Priority, "()")
+                                ElseIf .name <> LanguageTokens.Priority Then
+                                    tokens += New langToken(LanguageTokens.ParenOpen, c)
+                                End If
                                 tokens.Last.Arguments = childs ' 因为上一行添加了新的token，所以last已经不是原来的了，不可以引用with的last
-                                tokens += New langToken(LanguageTokens.ParenClose, close(c))
+                                If .name <> LanguageTokens.Operator AndAlso .name <> LanguageTokens.Priority Then
+                                    tokens += New langToken(LanguageTokens.ParenClose, close(c))
+                                End If
                             End If
                         End With
 

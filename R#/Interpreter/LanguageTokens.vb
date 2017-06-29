@@ -27,7 +27,10 @@
     ''' |
     ''' </summary>
     Pipeline
-
+    ''' <summary>
+    ''' 目标括号对象是一个优先级的改变运算，而非函数调用
+    ''' </summary>
+    Priority
     ''' <summary>
     ''' ([{
     ''' </summary>

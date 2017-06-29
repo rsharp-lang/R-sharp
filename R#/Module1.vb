@@ -3,11 +3,11 @@
     Sub Main()
 
 
-        Dim result = New Interpreter().Evaluate("1+2+3;")
+        Dim result = New Interpreter().Evaluate("(1+2)*3;")
 
 
 
-        Call TokenIcer.Parse("1+2+3;").GetSourceTree.SaveTo("../design/sourceTree\math-expression.XML")
+        Call TokenIcer.Parse("(1+2)*3;").GetSourceTree.SaveTo("../design/sourceTree\math-expression.XML")
 
 
         Pause()

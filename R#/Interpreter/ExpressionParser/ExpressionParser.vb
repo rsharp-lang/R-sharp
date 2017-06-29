@@ -19,14 +19,26 @@ Module ExpressionParser
                End Function
     End Function
 
+    <Extension>
+    Public Function TryParseInternal(tokens As Pointer(Of Token(Of ExpressionTokens))) As Func(Of GetValue, FunctionEvaluate, SimpleExpression)
+        Return Function(GetValue, FunctionEvaluate)
+                   Return tokens.TryParse(GetValue, FunctionEvaluate, False)
+               End Function
+    End Function
+
+    <Extension>
+    Public Function TryParseValue(statement As Statement(Of ExpressionTokens), getValue As GetValue, evaluate As FunctionEvaluate) As ValueExpression
+        Return New Pointer(Of Token(Of ExpressionTokens))(statement.tokens).TryParse(getValue, evaluate, False)
+    End Function
+
     ''' <summary>
     ''' 这个解析器还需要考虑Stack的问题
     ''' </summary>
     ''' <param name="tokens"></param>
     ''' <returns></returns>
     <Extension> Public Function TryParse(tokens As Pointer(Of Token(Of ExpressionTokens)), getValue As GetValue, evaluate As FunctionEvaluate, ByRef funcStack As Boolean) As SimpleExpression
-        Dim sep As New SimpleExpression
-        Dim e As Token(Of ExpressionTokens)
+        Dim expression As New SimpleExpression
+        Dim t As Token(Of ExpressionTokens)
         Dim o$
         Dim pre As Token(Of ExpressionTokens) = Nothing
         Dim func As FuncCaller = Nothing
@@ -34,9 +46,34 @@ Module ExpressionParser
         Do While Not tokens.EndRead
             Dim meta As MetaExpression = Nothing
 
-            e = +tokens
+            t = +tokens
 
-            Select Case e.Type
+            Select Case t.Type
+                Case ExpressionTokens.Priority ' (1+2) *3
+                    Dim closure = t.Closure.program.First
+                    Dim value As SimpleExpression = New Pointer(Of Token(Of ExpressionTokens))(closure).TryParse(getValue, evaluate, False)
+                    meta = New MetaExpression(simple:=value)
+                Case ExpressionTokens.Function
+                    Dim name$ = t.Text
+                    Dim args = t.Arguments.Select()
+                    Dim handle = Function()
+                                     Dim params = args.Select(Function(x) x).ToArray
+                                     Dim value As Object = evaluate(name,)
+                                 End Function
+
+                    meta = New MetaExpression(handle)
+            End Select
+
+            meta.Operator = (+tokens).Text
+            expression.Add(meta)
+        Loop
+
+        Do While Not tokens.EndRead
+            Dim meta As MetaExpression = Nothing
+
+            t = +tokens
+
+            Select Case t.Type
                 Case ExpressionTokens.ParenOpen
                     If pre Is Nothing Then  ' 前面不是一个未定义的标识符，则在这里是一个括号表达式
                         meta = New MetaExpression(TryParse(tokens, getValue, evaluate, False))
@@ -44,7 +81,7 @@ Module ExpressionParser
                         Dim fstack As Boolean = True
 
                         func = New FuncCaller(pre.Text, evaluate)  ' Get function name, and then removes the last of the expression
-                        o = sep.RemoveLast().Operator
+                        o = expression.RemoveLast().Operator
 
                         Do While fstack   ' 在这里进行函数的参数列表的解析
                             Dim exp = TryParse(tokens, getValue, evaluate, fstack)
@@ -64,12 +101,12 @@ Module ExpressionParser
                         ' Continue Do
                     End If
                 Case ExpressionTokens.ParenClose, ExpressionTokens.ParameterDelimiter
-                    Return sep ' 退出递归栈
+                    Return expression ' 退出递归栈
                 Case ExpressionTokens.Object
-                    meta = New MetaExpression(Val(e.Text))
+                    meta = New MetaExpression(Val(t.Text))
                 Case ExpressionTokens.undefine
 
-                    Dim x As String = e.Text
+                    Dim x As String = t.Text
                     meta = New MetaExpression(Function() getValue(x))
 
                     If tokens.EndRead Then
@@ -78,14 +115,14 @@ Module ExpressionParser
                         If tokens.Current.name = ExpressionTokens.Operator Then
                             pre = Nothing
                         Else
-                            pre = e ' probably is a function name
+                            pre = t ' probably is a function name
                         End If
                     End If
 
                 Case ExpressionTokens.Operator
-                    If String.Equals(e.Text, "-") Then
+                    If String.Equals(t.Text, "-") Then
 
-                        If Not sep.IsNullOrEmpty Then
+                        If Not expression.IsNullOrEmpty Then
                             If tokens.Current.Type = ExpressionTokens.Object Then
                                 meta = New MetaExpression(-1 * Val((+tokens).Text))
                             Else
@@ -95,7 +132,7 @@ Module ExpressionParser
                             ' 是一个负数
                             meta = New MetaExpression(0)
                             meta.Operator = "-"
-                            Call sep.Add(meta)
+                            Call expression.Add(meta)
                             Continue Do
                         End If
                     End If
@@ -103,7 +140,7 @@ Module ExpressionParser
 
             If tokens.EndRead Then
                 meta.Operator = "+"
-                Call sep.Add(meta)
+                Call expression.Add(meta)
             Else
                 o = (+tokens).Text  ' tokens++ 移动指针到下一个元素
 
@@ -111,7 +148,7 @@ Module ExpressionParser
                     Dim stackMeta = New MetaExpression ' (handle:=Function() Factorial(meta.LEFT, 0))
 
                     If tokens.EndRead Then
-                        Call sep.Add(stackMeta)
+                        Call expression.Add(stackMeta)
                         Exit Do
                     Else
                         o = (+tokens).Text.First
@@ -125,25 +162,25 @@ Module ExpressionParser
                             'End If
                             stackMeta.Operator = "+"
                             funcStack = False  ' 已经是括号的结束了，则退出栈
-                            Call sep.Add(stackMeta)
+                            Call expression.Add(stackMeta)
                             'If Not tokens.EndRead Then
                             '    e = (-tokens)
                             'End If
-                            Return sep
+                            Return expression
                         ElseIf o = "," Then
                             meta.Operator = "+"
-                            Call sep.Add(meta)
+                            Call expression.Add(meta)
                             ' e = (-tokens)
                             Exit Do ' 退出递归栈
                         Else
                             stackMeta.Operator = o
-                            Call sep.Add(stackMeta)
+                            Call expression.Add(stackMeta)
                             Continue Do
                         End If
                     End If
                 ElseIf o = "," Then
                     meta.Operator = "+"
-                    Call sep.Add(meta)
+                    Call expression.Add(meta)
                     ' e = (-tokens)
                     funcStack = True
 
@@ -161,11 +198,11 @@ Module ExpressionParser
                 End If
 
                 meta.Operator = o
-                Call sep.Add(meta)
+                Call expression.Add(meta)
             End If
         Loop
 
-        Return sep
+        Return expression
     End Function
 
 End Module
