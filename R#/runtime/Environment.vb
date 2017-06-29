@@ -1,5 +1,6 @@
 ﻿Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Scripting.Abstract
 
 ''' <summary>
 ''' 某一个closure之中的变量环境
@@ -40,6 +41,14 @@ Public Class Environment
                         }
                     End Function).ToDictionary
     End Sub
+
+    Public Function GetValue() As GetValue
+
+    End Function
+
+    Public Function Evaluate() As FunctionEvaluate
+
+    End Function
 
     ''' <summary>
     ''' Add new variable into current stack environment.

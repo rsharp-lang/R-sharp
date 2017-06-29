@@ -1,5 +1,5 @@
-﻿
-Imports Microsoft.VisualBasic.Scripting.TokenIcer
+﻿Imports Microsoft.VisualBasic.Scripting.TokenIcer
+
 ''' <summary>
 ''' 创建申明一个内存变量的表达式
 ''' 

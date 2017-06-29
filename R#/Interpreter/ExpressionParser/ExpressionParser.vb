@@ -10,6 +10,15 @@ Imports ExpressionTokens = SMRUCC.Rsharp.LanguageTokens
 ''' </summary>
 Module ExpressionParser
 
+    <Extension>
+    Public Function TryParse(tokens As Pointer(Of Token(Of ExpressionTokens))) As Func(Of Environment, SimpleExpression)
+        Return Function(envir)
+                   With envir
+                       Return tokens.TryParse(.GetValue, .Evaluate, False)
+                   End With
+               End Function
+    End Function
+
     ''' <summary>
     ''' 这个解析器还需要考虑Stack的问题
     ''' </summary>
