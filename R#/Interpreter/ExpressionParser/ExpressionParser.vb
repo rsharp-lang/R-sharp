@@ -27,7 +27,7 @@ Module ExpressionParser
     <Extension> Public Function TryParse(tokens As Pointer(Of Token(Of ExpressionTokens)), getValue As GetValue, evaluate As FunctionEvaluate, ByRef funcStack As Boolean) As SimpleExpression
         Dim sep As New SimpleExpression
         Dim e As Token(Of ExpressionTokens)
-        Dim o As Char
+        Dim o$
         Dim pre As Token(Of ExpressionTokens) = Nothing
         Dim func As FuncCaller = Nothing
 
@@ -94,7 +94,7 @@ Module ExpressionParser
                         Else
                             ' 是一个负数
                             meta = New MetaExpression(0)
-                            meta.Operator = "-"c
+                            meta.Operator = "-"
                             Call sep.Add(meta)
                             Continue Do
                         End If
@@ -102,12 +102,12 @@ Module ExpressionParser
             End Select
 
             If tokens.EndRead Then
-                meta.Operator = "+"c
+                meta.Operator = "+"
                 Call sep.Add(meta)
             Else
-                o = (+tokens).Text.First  ' tokens++ 移动指针到下一个元素
+                o = (+tokens).Text  ' tokens++ 移动指针到下一个元素
 
-                If o = "!"c Then
+                If o = "!" Then
                     Dim stackMeta = New MetaExpression ' (handle:=Function() Factorial(meta.LEFT, 0))
 
                     If tokens.EndRead Then
@@ -115,7 +115,7 @@ Module ExpressionParser
                         Exit Do
                     Else
                         o = (+tokens).Text.First
-                        If o = ")"c Then
+                        If o = ")" Then
                             ' 2017-1-26
                             ' 在这里是因为需要结束括号，进行退栈，所以指针会往回移动
                             ' 假若在这里是函数调用的结束符号右括号的话，假若这里是表达式的最后一个位置，则可能会出错
@@ -123,15 +123,15 @@ Module ExpressionParser
                             'If Not tokens.EndRead Then
                             '    e = (-tokens)
                             'End If
-                            stackMeta.Operator = "+"c
+                            stackMeta.Operator = "+"
                             funcStack = False  ' 已经是括号的结束了，则退出栈
                             Call sep.Add(stackMeta)
                             'If Not tokens.EndRead Then
                             '    e = (-tokens)
                             'End If
                             Return sep
-                        ElseIf o = ","c Then
-                            meta.Operator = "+"c
+                        ElseIf o = "," Then
+                            meta.Operator = "+"
                             Call sep.Add(meta)
                             ' e = (-tokens)
                             Exit Do ' 退出递归栈
@@ -141,23 +141,23 @@ Module ExpressionParser
                             Continue Do
                         End If
                     End If
-                ElseIf o = ","c Then
-                    meta.Operator = "+"c
+                ElseIf o = "," Then
+                    meta.Operator = "+"
                     Call sep.Add(meta)
                     ' e = (-tokens)
                     funcStack = True
 
                     Exit Do ' 退出递归栈
-                ElseIf isCloseStack(o) Then
-                    meta.Operator = "+"c
-                    Call sep.Add(meta)
-                    funcStack = False
-                    'If funcStack AndAlso Not tokens.EndRead Then
-                    '    e = (-tokens)
-                    'End If
-                    Exit Do ' 退出递归栈
-                ElseIf IsOpenStack(o) Then
-                    e = -tokens  ' 指针回退一步
+                    'ElseIf isCloseStack(o) Then
+                    '    meta.Operator = "+"
+                    '    Call sep.Add(meta)
+                    '    funcStack = False
+                    '    'If funcStack AndAlso Not tokens.EndRead Then
+                    '    '    e = (-tokens)
+                    '    'End If
+                    '    Exit Do ' 退出递归栈
+                    'ElseIf IsOpenStack(o) Then
+                    '    e = -tokens  ' 指针回退一步
                 End If
 
                 meta.Operator = o
@@ -168,11 +168,4 @@ Module ExpressionParser
         Return sep
     End Function
 
-    Private Function IsOpenStack(o As Char) As Boolean
-        Throw New NotImplementedException()
-    End Function
-
-    Private Function isCloseStack(o As Char) As Boolean
-
-    End Function
 End Module
