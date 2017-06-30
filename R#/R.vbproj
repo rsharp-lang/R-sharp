@@ -85,11 +85,11 @@
     <Compile Include="runtime\BindVariable.vb" />
     <Compile Include="runtime\RType.vb" />
     <Compile Include="runtime\Environment.vb" />
-    <Compile Include="runtime\Expression\VariableDeclareExpression.vb" />
-    <Compile Include="runtime\Expression\OperatorExpression.vb" />
-    <Compile Include="runtime\Expression\FunctionExpression.vb" />
-    <Compile Include="runtime\Expression\LiteralExpression.vb" />
-    <Compile Include="runtime\Expression\PrimitiveExpression.vb" />
+    <Compile Include="runtime\CodeDOM\VariableDeclareExpression.vb" />
+    <Compile Include="runtime\CodeDOM\OperatorExpression.vb" />
+    <Compile Include="runtime\CodeDOM\FunctionExpression.vb" />
+    <Compile Include="runtime\CodeDOM\LiteralExpression.vb" />
+    <Compile Include="runtime\CodeDOM\PrimitiveExpression.vb" />
     <Compile Include="runtime\TypeCodes.vb" />
     <Compile Include="runtime\Variable.vb" />
     <Compile Include="Interpreter\ExpressionParser\SimpleExpression.vb" />

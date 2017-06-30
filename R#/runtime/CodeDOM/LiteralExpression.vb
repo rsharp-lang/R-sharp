@@ -1,4 +1,6 @@
-﻿Imports Microsoft.VisualBasic.Scripting.TokenIcer
+﻿Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Scripting.TokenIcer
+Imports SMRUCC.Rsharp
 
 ''' <summary>
 ''' 数字，字符串，逻辑值之类的值表达式，也可以称作为常数
@@ -15,6 +17,7 @@
 ''' ```
 ''' </summary>
 Public Class LiteralExpression : Inherits PrimitiveExpression
+    Implements Value(Of String).IValueOf
 
     ''' <summary>
     ''' ``Nothing`` in VisualBasic
@@ -22,9 +25,29 @@ Public Class LiteralExpression : Inherits PrimitiveExpression
     ''' <returns></returns>
     Public Shared ReadOnly Property NULL As New NULL
 
+    Public Property Value As String Implements Value(Of String).IValueOf.value
+    Public ReadOnly Property Type As LanguageTokens
+
     Sub New(token As Token(Of LanguageTokens))
+        Call Me.New(token.Text, token.name)
+    End Sub
+
+    Sub New(value$, type As LanguageTokens)
 
     End Sub
+
+    Public Overrides Function Evaluate(envir As Environment) As Object
+        Select Case Type
+            Case LanguageTokens.String
+                Return CObj(Value)
+            Case LanguageTokens.Numeric
+                Return Val(Value)
+            Case LanguageTokens.Boolean
+                Return Value.ParseBoolean
+            Case Else
+                Throw New InvalidExpressionException($"Expression ""{Value}"" is a unrecognized data literal!")
+        End Select
+    End Function
 End Class
 
 ''' <summary>
@@ -48,4 +71,9 @@ Public Class NULL : Inherits LiteralExpression
     Public Overrides Function Evaluate(envir As Environment) As Object
         Return Nothing
     End Function
+End Class
+
+Public Class StringLiteral : Inherits PrimitiveExpression
+
+
 End Class
