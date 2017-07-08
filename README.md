@@ -101,7 +101,11 @@ Dim m = {
 Generally, the R language is not designed as an OOP language, and the R# language is not designed as an OOP lnaguge too. But you can still declare the user type by using ``list()`` function, example like:
 
 ```R
+# it works, but too verbose
 var obj <- list();
+
+obj$a <- 123;
+obj$b <- "+++";
 
 # using with for object property initialize
 var obj <- list() with {
@@ -117,6 +121,40 @@ Dim obj As New <userType> With {
     .a = 123,
     .b = "+++"
 }
+```
+
+Using the ``with{}`` closure you can also using for dynamics add/modify property value in a more brief way:
+
+```R
+create_Foo <- function() {
+	return list() with {
+		
+		# please notice that, this operator required of the $name property in this user type
+		# But there is no name in it at all????
+		# Don't worried
+		%in% <- function($, str) {
+			return $name in str;
+		}
+	}
+}
+
+using_my_name <- function() {
+	return create_Foo() with {
+		$name <- "123";
+	}
+}
+using_selected_name <- function(names as string) {
+	return create_Foo() with {
+		$name <- names;
+	}
+}
+
+# The ``with{}`` closure which show above is equivalent to this code
+# But this code function is too verbose
+using_selected_name <- function(names as string) {
+	var o <- create_Foo();
+	o$name <- name;
+	return o;
 ```
 
 generally, the parameter in a function is generic type, so that a function its definition like:
@@ -174,7 +212,7 @@ if (x <= 10 andalso y != 99) {
 
 ###### Operator binding
 
-Allows you bind operator on your custom type:
+Allows you binding operator on your custom type in dynamics way when you create a user objec from ``list()`` function:
 
 ```R
 # binding operator only allows in the with closure in the object declare statement
@@ -395,7 +433,7 @@ for([a, b, c as "t"] in d) {
 }
 
 # if directly convert the dataframe as tuple, 
-# then the tuple member is value is the column value in the dataframe 
+# then the tuple member its value is the column value in the dataframe 
 var [a, b, booleans as "t"] <- d;
 ```
 
