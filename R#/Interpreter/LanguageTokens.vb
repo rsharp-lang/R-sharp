@@ -52,6 +52,14 @@
     ''' 字符串值
     ''' </summary>
     [String]
+    ''' <summary>
+    ''' 数值类型
+    ''' </summary>
+    Numeric
+    ''' <summary>
+    ''' 逻辑值类型
+    ''' </summary>
+    [Boolean]
     Comment
     [Function]
 End Enum
