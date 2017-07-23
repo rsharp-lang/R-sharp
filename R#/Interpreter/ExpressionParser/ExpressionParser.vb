@@ -14,21 +14,9 @@ Module ExpressionParser
     Public Function TryParse(tokens As Pointer(Of Token(Of ExpressionTokens))) As Func(Of Environment, SimpleExpression)
         Return Function(envir)
                    With envir
-                       Return tokens.TryParse(.GetValue, .Evaluate, False)
+                       Return tokens.TryParse(envir, False)
                    End With
                End Function
-    End Function
-
-    <Extension>
-    Public Function TryParseInternal(tokens As Pointer(Of Token(Of ExpressionTokens))) As Func(Of GetValue, FunctionEvaluate, SimpleExpression)
-        Return Function(GetValue, FunctionEvaluate)
-                   Return tokens.TryParse(GetValue, FunctionEvaluate, False)
-               End Function
-    End Function
-
-    <Extension>
-    Public Function TryParseValue(statement As Statement(Of ExpressionTokens), getValue As GetValue, evaluate As FunctionEvaluate) As ValueExpression
-        Return New Pointer(Of Token(Of ExpressionTokens))(statement.tokens).TryParse(getValue, evaluate, False)
     End Function
 
     ''' <summary>
@@ -36,12 +24,14 @@ Module ExpressionParser
     ''' </summary>
     ''' <param name="tokens"></param>
     ''' <returns></returns>
-    <Extension> Public Function TryParse(tokens As Pointer(Of Token(Of ExpressionTokens)), getValue As GetValue, evaluate As FunctionEvaluate, ByRef funcStack As Boolean) As SimpleExpression
+    <Extension> Public Function TryParse(tokens As Pointer(Of Token(Of ExpressionTokens)), environment As Environment, ByRef funcStack As Boolean) As SimpleExpression
         Dim expression As New SimpleExpression
         Dim t As Token(Of ExpressionTokens)
         Dim o$
         Dim pre As Token(Of ExpressionTokens) = Nothing
         Dim func As FuncCaller = Nothing
+        Dim getValue As GetValue = AddressOf environment.GetValue
+        Dim Evaluate As FunctionEvaluate = AddressOf environment.Evaluate
 
         Do While Not tokens.EndRead
             Dim meta As MetaExpression = Nothing
@@ -51,14 +41,20 @@ Module ExpressionParser
             Select Case t.Type
                 Case ExpressionTokens.Priority ' (1+2) *3
                     Dim closure = t.Closure.program.First
-                    Dim value As SimpleExpression = New Pointer(Of Token(Of ExpressionTokens))(closure).TryParse(getValue, evaluate, False)
+                    Dim value As SimpleExpression = New Pointer(Of Token(Of ExpressionTokens))(closure).TryParse(environment, False)
                     meta = New MetaExpression(simple:=value)
                 Case ExpressionTokens.Function
+
+                    ' 进行函数调用求值
                     Dim name$ = t.Text
-                    Dim args = t.Arguments.Select()
+                    ' 需要对参数进行表达式的编译，方便进行求值计算
+                    Dim args = t.Arguments.Select(Function(parm As Statement(Of ExpressionTokens))
+                                                      Return parm.Parse
+                                                  End Function)
                     Dim handle = Function()
-                                     Dim params = args.Select(Function(x) x).ToArray
-                                     Dim value As Object = evaluate(name,)
+                                     Dim params = args.Select(Function(x) x.Evaluate(environment)).ToArray
+                                     Dim value As Object = environment.Evaluate(name, args:=params)
+                                     Return value
                                  End Function
 
                     meta = New MetaExpression(handle)
@@ -76,15 +72,15 @@ Module ExpressionParser
             Select Case t.Type
                 Case ExpressionTokens.ParenOpen
                     If pre Is Nothing Then  ' 前面不是一个未定义的标识符，则在这里是一个括号表达式
-                        meta = New MetaExpression(TryParse(tokens, getValue, evaluate, False))
+                        meta = New MetaExpression(TryParse(tokens, environment, False))
                     Else
                         Dim fstack As Boolean = True
 
-                        func = New FuncCaller(pre.Text, evaluate)  ' Get function name, and then removes the last of the expression
+                        func = New FuncCaller(pre.Text, Evaluate)  ' Get function name, and then removes the last of the expression
                         o = expression.RemoveLast().Operator
 
                         Do While fstack   ' 在这里进行函数的参数列表的解析
-                            Dim exp = TryParse(tokens, getValue, evaluate, fstack)
+                            Dim exp = TryParse(tokens, environment, fstack)
                             If exp.IsNullOrEmpty Then
                                 Exit Do
                             Else
@@ -107,7 +103,7 @@ Module ExpressionParser
                 Case ExpressionTokens.undefine
 
                     Dim x As String = t.Text
-                    meta = New MetaExpression(Function() getValue(x))
+                    meta = New MetaExpression(Function() GetValue(x))
 
                     If tokens.EndRead Then
                         pre = Nothing
