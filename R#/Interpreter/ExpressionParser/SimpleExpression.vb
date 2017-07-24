@@ -71,7 +71,7 @@ Public Class SimpleExpression : Implements IEnumerable(Of MetaExpression)
             Else
                 If MetaList.Count = 1 Then
                     Dim first As MetaExpression = MetaList.First
-                    Return first.IsNumber AndAlso
+                    Return first.IsValue AndAlso
                         first.LEFT = 0R AndAlso
                         first.Operator = "+"c
                 Else

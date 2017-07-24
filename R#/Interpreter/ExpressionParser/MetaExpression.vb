@@ -63,7 +63,7 @@ Public Class MetaExpression
     ''' Does the expression value is a constant.
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property IsNumber As Boolean
+    Public ReadOnly Property IsValue As Boolean
         Get
             Return __left Is Nothing
         End Get
