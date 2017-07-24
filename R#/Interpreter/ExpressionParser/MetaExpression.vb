@@ -27,6 +27,7 @@
 #End Region
 
 Imports System.Xml.Serialization
+Imports Microsoft.VisualBasic.Scripting.Runtime
 
 ''' <summary>
 ''' 在<see cref="SimpleExpression.Calculator"></see>之中由于移位操作的需要，需要使用类对象可以修改属性的特性来进行正常的计算，所以请不要修改为Structure类型
@@ -58,6 +59,8 @@ Public Class MetaExpression
             _ReferenceDepth = 0
         End Set
     End Property
+
+    Public ReadOnly Property LeftType As TypeCodes
 
     ''' <summary>
     ''' Does the expression value is a constant.
@@ -111,8 +114,28 @@ Public Class MetaExpression
     ''' object reference value
     ''' </summary>
     ''' <param name="n"></param>
-    Sub New(n)
-        LEFT = n
+    Sub New(n$, type As LanguageTokens)
+        Select Case type
+            Case LanguageTokens.Boolean
+                LEFT = n.ParseBoolean
+                LeftType = TypeCodes.boolean
+            Case LanguageTokens.Numeric
+                LEFT = Val(n)
+                LeftType = TypeCodes.double
+            Case LanguageTokens.String
+                LEFT = n
+                LeftType = TypeCodes.string
+            Case LanguageTokens.Object
+                If n.IsPattern(Casting.RegexpDouble) Then
+                    LEFT = Val(n)
+                    LeftType = TypeCodes.double
+                Else
+                    LEFT = n
+                    LeftType = TypeCodes.generic
+                End If
+            Case Else
+                LEFT = n
+        End Select
     End Sub
 
     Sub New(handle As Func(Of Object))

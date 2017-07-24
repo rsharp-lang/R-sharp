@@ -59,7 +59,7 @@ Module ExpressionParser
 
                     meta = New MetaExpression(handle)
                 Case ExpressionTokens.Object
-                    meta = New MetaExpression(t.Value)
+                    meta = New MetaExpression(t.Value, t.Type)
             End Select
 
             If Not tokens.EndRead Then
