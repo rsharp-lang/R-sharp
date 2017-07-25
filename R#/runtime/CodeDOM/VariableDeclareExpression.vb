@@ -45,3 +45,9 @@ Public Structure TupleMember
     Dim Alias$
 
 End Structure
+
+Public Class VariableReference : Inherits PrimitiveExpression
+
+    Public Property ref As Token(Of LanguageTokens)
+
+End Class

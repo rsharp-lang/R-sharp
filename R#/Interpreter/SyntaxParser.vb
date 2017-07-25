@@ -24,6 +24,47 @@ Public Module SyntaxParser
 
     ''' <summary>
     ''' ```R
+    ''' a &lt;- b # ByVal
+    ''' a = b     # ByRef
+    ''' ```
+    ''' </summary>
+    ''' <param name="statement"></param>
+    ''' <param name="out"></param>
+    ''' <returns></returns>
+    Public Function TryParseValueAssign(statement As Statement(Of LanguageTokens), ByRef out As PrimitiveExpression) As Boolean
+        Dim tokens = statement.tokens
+        Dim isByRef As Boolean = False
+
+        If tokens.Length < 3 Then
+            Return False
+        End If
+
+        With tokens(1)
+            If Not (.Type = LanguageTokens.LeftAssign OrElse .Type = LanguageTokens.ParameterAssign) Then
+                Return False
+            End If
+
+            If Not .Type = LanguageTokens.LeftAssign Then
+                isByRef = True
+            End If
+        End With
+
+        out = New ValueAssign With {
+            .a = New VariableReference With {
+                .ref = tokens(0)
+            },
+            .b = New Statement(Of LanguageTokens) With {
+                .tokens = tokens.Skip(2).ToArray
+            }.Parse,
+            .IsByRef = isByRef,
+            .Operator = tokens(1).Text
+        }
+
+        Return True
+    End Function
+
+    ''' <summary>
+    ''' ```R
     ''' var x &lt;- "string";
     ''' ```
     ''' </summary>
