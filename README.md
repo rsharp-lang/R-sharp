@@ -107,8 +107,13 @@ var obj <- list();
 obj$a <- 123;
 obj$b <- "+++";
 
+# it also works, but this statement is not elegant when you have 
+# a lot of list property slot required to put into the obj 
+# variable. 
+var obj <- list(a = 123, b = "+++");
+
 # using with for object property initialize
-var obj <- list() with {
+var obj <- list(list = {TRUE, TRUE, TRUE, FALSE}, flag = 0) with {
     $a <- 123;
     $b <- "+++";
 }
