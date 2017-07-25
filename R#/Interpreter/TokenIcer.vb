@@ -181,7 +181,14 @@ Public Module TokenIcer
                                     tokens += New langToken(LanguageTokens.Priority, "()")
                                 ElseIf .name <> LanguageTokens.Priority Then
                                     tokens += New langToken(LanguageTokens.ParenOpen, c)
+                                ElseIf .name = LanguageTokens.Priority Then
+                                    tokens.Last.Closure = New Main(Of LanguageTokens) With {
+                                        .program = childs
+                                    }
+                                    Continue Do
                                 End If
+
+                                ' 不要将下面的代码放在Else分支中
                                 tokens.Last.Arguments = childs ' 因为上一行添加了新的token，所以last已经不是原来的了，不可以引用with的last
                                 If .name <> LanguageTokens.Operator AndAlso .name <> LanguageTokens.Priority Then
                                     tokens += New langToken(LanguageTokens.ParenClose, close(c))

@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+﻿Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.Abstract
 
@@ -13,6 +14,7 @@ Public Class Environment
     ''' </summary>
     ''' <returns></returns>
     Public ReadOnly Property Parent As Environment
+    Public ReadOnly Property Stack As String
 
     ''' <summary>
     ''' 当前的环境是否为最顶层的全局环境？
@@ -24,13 +26,22 @@ Public Class Environment
         End Get
     End Property
 
+    Default Public Property Value(name$) As Object
+        Get
+            Return Variables(name).Value
+        End Get
+        Set(value)
+            Variables(name).Value = value
+        End Set
+    End Property
+
     ''' <summary>
     ''' 每一个closure可以看作为一个函数对象
     ''' 则parent的closure和他的child closure之间相互通信，最直接的方法就是参数传递
     ''' </summary>
     ''' <param name="parent"></param>
     ''' <param name="parameters">closure函数的参数传递列表</param>
-    Sub New(parent As Environment, parameters As NamedValue(Of PrimitiveExpression)())
+    Sub New(parent As Environment, parameters As NamedValue(Of PrimitiveExpression)(), <CallerMemberName> Optional stack$ = Nothing)
         Me.Parent = parent
         Me.Variables = parameters _
             .Select(Function(expression)
@@ -40,6 +51,7 @@ Public Class Environment
                             .Value = expr.Evaluate(envir:=Me)
                         }
                     End Function).ToDictionary
+        Me.Stack = stack
     End Sub
 
     ''' <summary>
@@ -49,14 +61,13 @@ Public Class Environment
         Call Me.New(Nothing, {})
     End Sub
 
-    Default Public Property Value(name$) As Object
-        Get
-            Return Variables(name).Value
-        End Get
-        Set(value)
-            Variables(name).Value = value
-        End Set
-    End Property
+    Public Overrides Function ToString() As String
+        If IsGlobal Then
+            Return $"Global({NameOf(Environment)})"
+        Else
+            Return Parent?.ToString & "->" & Stack
+        End If
+    End Function
 
     Public Function GetValue() As GetValue
         Return Function(name$)
