@@ -22,3 +22,21 @@ Public Class BinaryOperator : Inherits OperatorExpression
     Public Property b As PrimitiveExpression
 
 End Class
+
+''' <summary>
+''' ```R
+''' a &lt;- b
+''' ```
+''' </summary>
+Public Class ValueAssign : Inherits BinaryOperator
+
+    Public Property IsByRef As Boolean = False
+
+    Public Overrides Function ToString() As String
+        If IsByRef Then
+            Return $"{a} = {b}"
+        Else
+            Return $"{a} <- {b}"
+        End If
+    End Function
+End Class
