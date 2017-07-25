@@ -1,17 +1,28 @@
 ﻿Imports System.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 
 ''' <summary>
 ''' Type proxy for <see cref="TypeCodes.list"/> or system primitives
 ''' </summary>
-Public Class RType
+Public Class RType : Implements IReadOnlyId
 
     Public ReadOnly Property TypeCode As TypeCodes = TypeCodes.list
     Public ReadOnly Property FullName As String
 
+    Public ReadOnly Property Identity As String Implements IReadOnlyId.Identity
+        Get
+            Return Me.ToString.MD5
+        End Get
+    End Property
+
     Dim UnaryOperators As Dictionary(Of String, MethodInfo)
     Dim BinaryOperator1 As Dictionary(Of String, MethodInfo)
     Dim BinaryOperator2 As Dictionary(Of String, MethodInfo)
+
+    Public Overrides Function ToString() As String
+        Return $"[{TypeCode}] {FullName}"
+    End Function
 
     ''' <summary>
     ''' ``operator me``

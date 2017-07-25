@@ -4,9 +4,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.Runtime
 
 Public Class Variable
-
-    Implements INamedValue
-    Implements Value(Of Object).IValueOf
+    Implements INamedValue, Value(Of Object).IValueOf
 
     Public Property Name As String Implements IKeyedEntity(Of String).Key
     ''' <summary>
@@ -15,6 +13,11 @@ Public Class Variable
     ''' <returns></returns>
     Public ReadOnly Property Constraint As TypeCodes
     Public Overridable Property Value As Object Implements Value(Of Object).IValueOf.value
+    ''' <summary>
+    ''' <see cref="RType.Identity"/>, key for <see cref="Environment.Types"/>
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property TypeID As String
 
     ''' <summary>
     ''' Get the type of the current object <see cref="Value"/>.
