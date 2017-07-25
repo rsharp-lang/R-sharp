@@ -54,8 +54,8 @@ Public Class FuncCaller
         Return $"{Name}({args.JoinBy(", ")})"
     End Function
 
-    Public Function Evaluate() As Double
-        Return __calls(Name, Params.ToArray(Function(x) x.Evaluate))
+    Public Function Evaluate(envir As Environment) As Double
+        Return __calls(Name, Params.ToArray(Function(x) x.Evaluate(envir)))
     End Function
 End Class
 

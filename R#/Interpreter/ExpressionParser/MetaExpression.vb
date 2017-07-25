@@ -143,8 +143,8 @@ Public Class MetaExpression
         ReferenceDepth = 1
     End Sub
 
-    Sub New(simple As SimpleExpression)
-        Call Me.New(AddressOf simple.Evaluate)
+    Sub New(simple As SimpleExpression, envir As Func(Of Environment))
+        Call Me.New(Function() simple.Evaluate(envir()))
         ReferenceDepth = simple.ReferenceDepth
     End Sub
 

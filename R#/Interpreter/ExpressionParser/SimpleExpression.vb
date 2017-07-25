@@ -122,7 +122,7 @@ Public Class SimpleExpression : Implements IEnumerable(Of MetaExpression)
     ''' (返回目标简单表达式对象的值)
     ''' </returns>
     ''' <remarks></remarks>
-    Public Function Evaluate() As Object
+    Public Function Evaluate(envir As Environment) As Object
         If Me.MetaList.Count = 0 Then
             Return 0R
         End If
@@ -132,15 +132,15 @@ Public Class SimpleExpression : Implements IEnumerable(Of MetaExpression)
         If metaList.Count = 1 Then ' When the list object only contains one element, that means this class object only stands for a number, return this number directly. 
             Return metaList.First.LEFT
         Else
-            Calculator("^", metaList)
-            Calculator("*/\%", metaList)
-            Calculator("+-", metaList)
+            Calculator("^", metaList, envir)
+            Calculator("*/\%", metaList, envir)
+            Calculator("+-", metaList, envir)
 
             Return metaList.First.LEFT
         End If
     End Function
 
-    Private Shared Sub Calculator(operators As String, ByRef metaList As List(Of MetaExpression))
+    Private Shared Sub Calculator(operators As String, ByRef metaList As List(Of MetaExpression), envir As Environment)
         Dim ct As Integer = (From mep As MetaExpression
                              In metaList
                              Where InStr(operators, mep.Operator) > 0
@@ -154,7 +154,7 @@ Public Class SimpleExpression : Implements IEnumerable(Of MetaExpression)
             ElseIf operators.IndexOf(metaList(index).Operator) <> -1 Then 'We find a meta expression element that contains target operator, then we do calculation on this element and the element next to it.  
                 M = metaList(index)  'Get current element and the element that next to him
                 mNext = metaList(index + 1)
-                x = ExecuteEngine.Evaluate(M.LEFT, mNext.LEFT, M.Operator)  'Do some calculation of type target operator 
+                x = ExecuteEngine.EvaluateBinary(envir, M.LEFT, mNext.LEFT, M.Operator)  'Do some calculation of type target operator 
                 metaList.RemoveAt(index) 'When the current element is calculated, it is no use anymore, we remove it
                 metaList(index) = New MetaExpression(x, mNext.Operator)
                 index -= 1  'Keep the reading position order

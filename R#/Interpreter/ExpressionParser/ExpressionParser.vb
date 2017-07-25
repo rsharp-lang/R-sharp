@@ -42,7 +42,7 @@ Module ExpressionParser
                 Case ExpressionTokens.Priority ' (1+2) *3
                     Dim closure = t.Closure.program.First
                     Dim value As SimpleExpression = New Pointer(Of Token(Of ExpressionTokens))(closure.tokens).TryParse(environment, False)
-                    meta = New MetaExpression(simple:=value)
+                    meta = New MetaExpression(simple:=value, envir:=Function() environment)
                 Case ExpressionTokens.Function
 
                     ' 进行函数调用求值

@@ -1,6 +1,7 @@
 ﻿Imports System.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Scripting.TokenIcer.OperatorExpression
 
 ''' <summary>
 ''' Type proxy for <see cref="TypeCodes.list"/> or system primitives
@@ -66,7 +67,14 @@ Public Class RType : Implements IReadOnlyId
 
         Return New RType With {
             ._TypeCode = dotnet.GetRTypeCode,
-            ._FullName = dotnet.FullName
+            ._FullName = dotnet.FullName,
+            .UnaryOperators = operators _
+                .Where(Function(m) m.GetParameters.Length = 1) _
+                .ToDictionary(Function(key)
+                                  Dim linqName = opName2Linq(key.Name)
+                                  Dim op$ = Linq2Symbols(linqName)
+                                  Return op
+                              End Function)
         }
     End Function
 End Class
