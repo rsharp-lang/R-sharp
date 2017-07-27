@@ -6,65 +6,67 @@ Imports Microsoft.VisualBasic.Text
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports langToken = Microsoft.VisualBasic.Scripting.TokenIcer.Token(Of SMRUCC.Rsharp.LanguageTokens)
 
-''' <summary>
-''' Convert the text data as the script model
-''' </summary>
-Public Module TokenIcer
+Namespace Interpreter
 
     ''' <summary>
-    ''' Parsing the input script text as the statement models
+    ''' Convert the text data as the script model
     ''' </summary>
-    ''' <param name="s$"></param>
-    ''' <returns></returns>
-    <Extension> Public Iterator Function Parse(s$) As IEnumerable(Of Statement(Of LanguageTokens))
-        Dim buffer As New Pointer(Of Char)(Strings.Trim(s$))
-        Dim it As New Value(Of Statement(Of LanguageTokens))
-        Dim line% ' the line number
-        Dim statementBuffer As New List(Of Char)
+    Public Module TokenIcer
 
-        Do While Not buffer.EndRead
-            If Not (it = buffer.Parse(Nothing, line, statementBuffer)) Is Nothing Then
-                Yield it
-            End If
-        Loop
-    End Function
+        ''' <summary>
+        ''' Parsing the input script text as the statement models
+        ''' </summary>
+        ''' <param name="s$"></param>
+        ''' <returns></returns>
+        <Extension> Public Iterator Function Parse(s$) As IEnumerable(Of Statement(Of LanguageTokens))
+            Dim buffer As New Pointer(Of Char)(Strings.Trim(s$))
+            Dim it As New Value(Of Statement(Of LanguageTokens))
+            Dim line% ' the line number
+            Dim statementBuffer As New List(Of Char)
 
-    ''' <summary>
-    ''' 
-    ''' </summary>
-    ''' <param name="buffer"></param>
-    ''' <param name="parent"></param>
-    ''' <returns></returns>
-    ''' <remarks>
-    ''' 对于``{}``而言，其含义为当前的token的closure
-    ''' 对于``()``而言，其含义为当前的token的innerStack
-    ''' 对于``[]``而言，起含义为当前的token的innerStack，与``()``的含义几乎一致
-    ''' </remarks>
-    <Extension> Private Function Parse(buffer As Pointer(Of Char),
+            Do While Not buffer.EndRead
+                If Not (it = buffer.Parse(Nothing, line, statementBuffer)) Is Nothing Then
+                    Yield it
+                End If
+            Loop
+        End Function
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="buffer"></param>
+        ''' <param name="parent"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' 对于``{}``而言，其含义为当前的token的closure
+        ''' 对于``()``而言，其含义为当前的token的innerStack
+        ''' 对于``[]``而言，起含义为当前的token的innerStack，与``()``的含义几乎一致
+        ''' </remarks>
+        <Extension> Private Function Parse(buffer As Pointer(Of Char),
                                        ByRef parent As List(Of Statement(Of LanguageTokens)),
                                        ByRef line%,
                                        ByRef statementBuffer As List(Of Char)) As Statement(Of LanguageTokens)
 
-        Dim quotOpen As Boolean = False
-        Dim commentOpen As Boolean = False ' 当出现注释符的时候，会一直持续到遇见换行符为止
-        Dim tmp As New List(Of Char)
-        Dim tokens As New List(Of langToken)
-        Dim last As Statement(Of LanguageTokens)
-        Dim varDefInit = Function()
-                             If tokens.Count = 0 AndAlso tmp.SequenceEqual("var") Then
-                                 Return True
-                             Else
-                                 Return False
-                             End If
-                         End Function
-        Dim bufferEquals = Function(c As Char)
-                               If tmp.Count = 1 AndAlso tmp.First = c Then
-                                   Return True
-                               Else
-                                   Return False
-                               End If
-                           End Function
-        Dim newToken =
+            Dim quotOpen As Boolean = False
+            Dim commentOpen As Boolean = False ' 当出现注释符的时候，会一直持续到遇见换行符为止
+            Dim tmp As New List(Of Char)
+            Dim tokens As New List(Of langToken)
+            Dim last As Statement(Of LanguageTokens)
+            Dim varDefInit = Function()
+                                 If tokens.Count = 0 AndAlso tmp.SequenceEqual("var") Then
+                                     Return True
+                                 Else
+                                     Return False
+                                 End If
+                             End Function
+            Dim bufferEquals = Function(c As Char)
+                                   If tmp.Count = 1 AndAlso tmp.First = c Then
+                                       Return True
+                                   Else
+                                       Return False
+                                   End If
+                               End Function
+            Dim newToken =
             Sub()
                 If tmp.Count = 0 Then
                     Return
@@ -84,181 +86,181 @@ Public Module TokenIcer
                 tmp *= 0
             End Sub
 
-        Do While Not buffer.EndRead
-            Dim c As Char = +buffer
-            statementBuffer += c
+            Do While Not buffer.EndRead
+                Dim c As Char = +buffer
+                statementBuffer += c
 
 #If DEBUG Then
-            Call Console.Write(c)
+                Call Console.Write(c)
 #End If
-            If quotOpen Then ' 当前所解析的状态为字符串解析
-                If c = ASCII.Quot AndAlso Not tmp.StartEscaping Then
-                    ' 当前的字符为双引号，并且不是转义状态，则结束字符串
-                    tokens += New langToken With {
+                If quotOpen Then ' 当前所解析的状态为字符串解析
+                    If c = ASCII.Quot AndAlso Not tmp.StartEscaping Then
+                        ' 当前的字符为双引号，并且不是转义状态，则结束字符串
+                        tokens += New langToken With {
                         .name = LanguageTokens.String,
                         .Value = New String(tmp)
                     }
-                    tmp *= 0
-                    quotOpen = False
-                Else
-                    ' 任然是字符串之中的一部分字符，则继续添加进入tmp之中
-                    tmp += c
-                End If
-            ElseIf commentOpen Then
-                If c = ASCII.CR OrElse c = ASCII.LF Then
-                    ' 遇见了换行符，则结束注释
-                    tokens += New langToken With {
+                        tmp *= 0
+                        quotOpen = False
+                    Else
+                        ' 任然是字符串之中的一部分字符，则继续添加进入tmp之中
+                        tmp += c
+                    End If
+                ElseIf commentOpen Then
+                    If c = ASCII.CR OrElse c = ASCII.LF Then
+                        ' 遇见了换行符，则结束注释
+                        tokens += New langToken With {
                         .name = LanguageTokens.Comment,
                         .Value = New String(tmp)
                     }
-                    tmp *= 0
-                    commentOpen = False
+                        tmp *= 0
+                        commentOpen = False
+                    Else
+                        ' 任然是注释串之中的一部分字符，则继续添加进入tmp之中
+                        tmp += c
+                    End If
                 Else
-                    ' 任然是注释串之中的一部分字符，则继续添加进入tmp之中
-                    tmp += c
-                End If
-            Else
-                ' 遇见了字符串的起始的第一个双引号
-                If Not quotOpen AndAlso c = ASCII.Quot Then
-                    quotOpen = True
-                    newToken()
-                ElseIf Not commentOpen AndAlso c = "#"c Then
-                    commentOpen = True
-                    newToken()
-                Else
-
-                    ' 遇见了语句的结束符号
-                    If c = ";"c Then
-
-                        ' 结束当前的statement的解析
+                    ' 遇见了字符串的起始的第一个双引号
+                    If Not quotOpen AndAlso c = ASCII.Quot Then
+                        quotOpen = True
                         newToken()
-                        last = New Statement(Of LanguageTokens) With {
+                    ElseIf Not commentOpen AndAlso c = "#"c Then
+                        commentOpen = True
+                        newToken()
+                    Else
+
+                        ' 遇见了语句的结束符号
+                        If c = ";"c Then
+
+                            ' 结束当前的statement的解析
+                            newToken()
+                            last = New Statement(Of LanguageTokens) With {
                             .tokens = tokens,
                             .Trace = New LineValue With {
                                 .line = line,
                                 .text = New String(statementBuffer)
                             }
                         }
-                        tokens *= 0
-                        statementBuffer *= 0
+                            tokens *= 0
+                            statementBuffer *= 0
 
-                        If parent Is Nothing Then
-                            Return last
-                        Else
-                            parent += last
-                        End If
-
-                    ElseIf c = ":"c Then
-
-                        ' 这是方法调用的符号
-                        newToken()
-                        tokens += New langToken(LanguageTokens.DotNetMethodCall, ":")
-
-                    ElseIf c = "("c Then
-
-                        ' 新的堆栈
-                        ' closure stack open
-                        Dim childs As New List(Of Statement(Of LanguageTokens))
-
-                        Call newToken()
-                        Call buffer.Parse(childs, line, statementBuffer)
-
-                        If tokens = 0 Then
-                            ' 没有tokens元素，则说明可能是
-                            ' (1+2) *3
-                            ' 这种类型的表达式
-
-                            tokens += New langToken(LanguageTokens.Priority, "()")
-                        End If
-
-                        With tokens.Last
-                            If .name = LanguageTokens.Object Then
-                                ' function
-                                .name = LanguageTokens.Function
-                                .Arguments = childs
+                            If parent Is Nothing Then
+                                Return last
                             Else
-                                If .name = LanguageTokens.Operator Then
-                                    tokens += New langToken(LanguageTokens.Priority, "()")
-                                ElseIf .name <> LanguageTokens.Priority Then
-                                    tokens += New langToken(LanguageTokens.ParenOpen, c)
-                                ElseIf .name = LanguageTokens.Priority Then
-                                    tokens.Last.Closure = New Main(Of LanguageTokens) With {
-                                        .program = childs
-                                    }
-                                    Continue Do
-                                End If
-
-                                ' 不要将下面的代码放在Else分支中
-                                tokens.Last.Arguments = childs ' 因为上一行添加了新的token，所以last已经不是原来的了，不可以引用with的last
-                                If .name <> LanguageTokens.Operator AndAlso .name <> LanguageTokens.Priority Then
-                                    tokens += New langToken(LanguageTokens.ParenClose, close(c))
-                                End If
+                                parent += last
                             End If
-                        End With
 
-                    ElseIf c = "["c Then
+                        ElseIf c = ":"c Then
 
-                        ' 新的堆栈
-                        ' closure stack open
-                        Dim childs As New List(Of Statement(Of LanguageTokens))
+                            ' 这是方法调用的符号
+                            newToken()
+                            tokens += New langToken(LanguageTokens.DotNetMethodCall, ":")
 
-                        Call newToken()
-                        Call buffer.Parse(childs, line, statementBuffer)
+                        ElseIf c = "("c Then
 
-                        If childs.Count = 1 Then
-                            With childs(0)
-                                If .tokens.Length = 1 AndAlso .tokens(Scan0).IsObject Then
-                                    ' 这里所解析到的是对全局变量的引用
-                                    ' [x] <- 3
-                                    ' 3 + [x]
-                                    tokens += New langToken(LanguageTokens.Object, $"[{ .tokens(Scan0).Text}]")
-                                    Continue Do
-                                End If
-                            End With
-                        End If
+                            ' 新的堆栈
+                            ' closure stack open
+                            Dim childs As New List(Of Statement(Of LanguageTokens))
 
-                        With New langToken(LanguageTokens.Tuple, "[...]")
-                            .Arguments = childs
-                            tokens += .ref
-                        End With
-
-                    ElseIf c = "{"c Then
-                        ' 新的堆栈
-                        ' closure stack open
-                        Dim childs As New List(Of Statement(Of LanguageTokens))
-
-                        If bufferEquals("=") Then
                             Call newToken()
+                            Call buffer.Parse(childs, line, statementBuffer)
+
+                            If tokens = 0 Then
+                                ' 没有tokens元素，则说明可能是
+                                ' (1+2) *3
+                                ' 这种类型的表达式
+
+                                tokens += New langToken(LanguageTokens.Priority, "()")
+                            End If
 
                             With tokens.Last
-                                .name = LanguageTokens.ParameterAssign
+                                If .name = LanguageTokens.Object Then
+                                    ' function
+                                    .name = LanguageTokens.Function
+                                    .Arguments = childs
+                                Else
+                                    If .name = LanguageTokens.Operator Then
+                                        tokens += New langToken(LanguageTokens.Priority, "()")
+                                    ElseIf .name <> LanguageTokens.Priority Then
+                                        tokens += New langToken(LanguageTokens.ParenOpen, c)
+                                    ElseIf .name = LanguageTokens.Priority Then
+                                        tokens.Last.Closure = New Main(Of LanguageTokens) With {
+                                        .program = childs
+                                    }
+                                        Continue Do
+                                    End If
+
+                                    ' 不要将下面的代码放在Else分支中
+                                    tokens.Last.Arguments = childs ' 因为上一行添加了新的token，所以last已经不是原来的了，不可以引用with的last
+                                    If .name <> LanguageTokens.Operator AndAlso .name <> LanguageTokens.Priority Then
+                                        tokens += New langToken(LanguageTokens.ParenClose, close(c))
+                                    End If
+                                End If
                             End With
-                        Else
-                            newToken() ' 因为newtoken会清空tmp缓存，而bufferEquals函数需要tmp来判断，所以newtoken不能先于bufferequals函数执行
-                            ' 因为上下文变了，所以这里的newtoken调用也不能够合并
-                        End If
 
-                        Call buffer.Parse(childs, line, statementBuffer)
+                        ElseIf c = "["c Then
 
-                        Dim matrixOpen = tokens.Count = 0
+                            ' 新的堆栈
+                            ' closure stack open
+                            Dim childs As New List(Of Statement(Of LanguageTokens))
 
-                        If matrixOpen Then
+                            Call newToken()
+                            Call buffer.Parse(childs, line, statementBuffer)
 
-                            ' 可能为matrix语法
-                            tokens += New langToken(LanguageTokens.ParenOpen, "{")
+                            If childs.Count = 1 Then
+                                With childs(0)
+                                    If .tokens.Length = 1 AndAlso .tokens(Scan0).IsObject Then
+                                        ' 这里所解析到的是对全局变量的引用
+                                        ' [x] <- 3
+                                        ' 3 + [x]
+                                        tokens += New langToken(LanguageTokens.Object, $"[{ .tokens(Scan0).Text}]")
+                                        Continue Do
+                                    End If
+                                End With
+                            End If
 
-                        End If
+                            With New langToken(LanguageTokens.Tuple, "[...]")
+                                .Arguments = childs
+                                tokens += .ref
+                            End With
 
-                        tokens.Last.Closure = New Main(Of LanguageTokens) With {
+                        ElseIf c = "{"c Then
+                            ' 新的堆栈
+                            ' closure stack open
+                            Dim childs As New List(Of Statement(Of LanguageTokens))
+
+                            If bufferEquals("=") Then
+                                Call newToken()
+
+                                With tokens.Last
+                                    .name = LanguageTokens.ParameterAssign
+                                End With
+                            Else
+                                newToken() ' 因为newtoken会清空tmp缓存，而bufferEquals函数需要tmp来判断，所以newtoken不能先于bufferequals函数执行
+                                ' 因为上下文变了，所以这里的newtoken调用也不能够合并
+                            End If
+
+                            Call buffer.Parse(childs, line, statementBuffer)
+
+                            Dim matrixOpen = tokens.Count = 0
+
+                            If matrixOpen Then
+
+                                ' 可能为matrix语法
+                                tokens += New langToken(LanguageTokens.ParenOpen, "{")
+
+                            End If
+
+                            tokens.Last.Closure = New Main(Of LanguageTokens) With {
                             .program = childs
                         }
 
-                        If matrixOpen Then
-                            ' 关闭matrix
-                            tokens += New langToken(LanguageTokens.ParenClose, "}")
-                        End If
+                            If matrixOpen Then
+                                ' 关闭matrix
+                                tokens += New langToken(LanguageTokens.ParenClose, "}")
+                            End If
 
-                        last = New Statement(Of LanguageTokens) With {
+                            last = New Statement(Of LanguageTokens) With {
                             .tokens = tokens.ToArray,
                             .Trace = New LineValue With {
                                 .line = line,
@@ -266,198 +268,199 @@ Public Module TokenIcer
                             }
                         }
 
-                        statementBuffer *= 0
+                            statementBuffer *= 0
 
-                        If Not parent Is Nothing Then
-                            parent += last
-                            tokens *= 0 ' }会结束statement，故而需要将tokens清零
-                        Else
-                            Return last
-                        End If
-
-                    ElseIf c = ")"c OrElse c = "]"c Then
-
-                        ' closure stack close
-                        ' 仅结束stack，但是不像{}一样结束statement
-                        newToken()
-                        last = New Statement(Of LanguageTokens) With {
-                            .tokens = tokens,
-                            .Trace = New LineValue With {
-                                .line = line,
-                                .text = New String(statementBuffer)
-                            }
-                        }
-                        statementBuffer *= 0
-                        tokens *= 0
-                        parent += last  ' 右花括号必定是结束堆栈 
-
-                        Return Nothing
-
-                    ElseIf c = "|"c Then
-                        newToken()
-                        tokens += New langToken(LanguageTokens.Pipeline, "|")
-
-                    ElseIf c = "&"c Then
-                        ' 字符串拼接
-                        newToken()
-                        tokens += New langToken(LanguageTokens.StringContact, "&")
-
-                    ElseIf c = ","c Then
-                        newToken()
-                        last = New Statement(Of LanguageTokens) With {
-                            .tokens = tokens,
-                            .Trace = New LineValue With {
-                                .line = line,
-                                .text = New String(statementBuffer)
-                            }
-                        }
-                        statementBuffer *= 0
-                        tokens *= 0
-                        parent += last  ' 逗号分隔只产生新的statement，但是不退栈
-
-                    ElseIf c = "="c Then
-
-                        If bufferEquals("<"c) Then
-                            tokens += New langToken(LanguageTokens.Operator, "<=")
-                            tmp *= 0
-                        ElseIf bufferEquals("="c) Then
-                            tokens += New langToken(LanguageTokens.Operator, "==")
-                            tmp *= 0
-                        Else
-                            If tmp.Count = 0 Then
-                                ' 可能是==的第一个等号，则只添加
-                                tmp += c
+                            If Not parent Is Nothing Then
+                                parent += last
+                                tokens *= 0 ' }会结束statement，故而需要将tokens清零
                             Else
-                                newToken()
-                                tokens += New langToken(LanguageTokens.ParameterAssign, "=")
+                                Return last
                             End If
-                        End If
 
-                    ElseIf c = "}"c Then
+                        ElseIf c = ")"c OrElse c = "]"c Then
 
-                        ' closure stack close
-                        ' 结束当前的statement，相当于分号
-                        newToken()
-                        last = New Statement(Of LanguageTokens) With {
+                            ' closure stack close
+                            ' 仅结束stack，但是不像{}一样结束statement
+                            newToken()
+                            last = New Statement(Of LanguageTokens) With {
                             .tokens = tokens,
                             .Trace = New LineValue With {
                                 .line = line,
                                 .text = New String(statementBuffer)
                             }
                         }
-                        statementBuffer *= 0
-                        tokens *= 0
-                        parent += last  ' 右花括号必定是结束堆栈 
+                            statementBuffer *= 0
+                            tokens *= 0
+                            parent += last  ' 右花括号必定是结束堆栈 
 
-                        Return Nothing
+                            Return Nothing
 
-                    ElseIf c = " "c OrElse c = ASCII.TAB OrElse c = ASCII.LF OrElse c = ASCII.CR Then
-
-                        If c = ASCII.LF Then   ' 只使用\n来判断行号
-                            line += 1
-                        End If
-
-                        ' 遇见了空格，结束当前的token
-                        If bufferEquals("=") Then
-                            Call newToken()
-
-                            With tokens.Last
-                                .name = LanguageTokens.ParameterAssign
-                            End With
-                        Else
-                            newToken() ' 因为newtoken会清空tmp缓存，而bufferEquals函数需要tmp来判断，所以newtoken不能先于bufferequals函数执行
-                            ' 因为上下文变了，所以这里的newtoken调用也不能够合并
-                        End If
-
-                    ElseIf c = "-"c Then
-
-                        If bufferEquals("<"c) Then
-                            tmp += "-"c
+                        ElseIf c = "|"c Then
                             newToken()
-                        Else
-                            newToken() ' 这两个newtoken调用不可以合并到一起，因为他们的上下文环境变了 
-                            tokens += New langToken(LanguageTokens.Operator, c)
-                        End If
+                            tokens += New langToken(LanguageTokens.Pipeline, "|")
 
-                    ElseIf c = "+"c OrElse c = "*"c OrElse c = "/"c OrElse c = "\"c OrElse c = "^" OrElse c = "@"c Then
-                        newToken()
-                        tokens += New langToken(LanguageTokens.Operator, c)
-                    Else
-                        tmp += c
+                        ElseIf c = "&"c Then
+                            ' 字符串拼接
+                            newToken()
+                            tokens += New langToken(LanguageTokens.StringContact, "&")
+
+                        ElseIf c = ","c Then
+                            newToken()
+                            last = New Statement(Of LanguageTokens) With {
+                            .tokens = tokens,
+                            .Trace = New LineValue With {
+                                .line = line,
+                                .text = New String(statementBuffer)
+                            }
+                        }
+                            statementBuffer *= 0
+                            tokens *= 0
+                            parent += last  ' 逗号分隔只产生新的statement，但是不退栈
+
+                        ElseIf c = "="c Then
+
+                            If bufferEquals("<"c) Then
+                                tokens += New langToken(LanguageTokens.Operator, "<=")
+                                tmp *= 0
+                            ElseIf bufferEquals("="c) Then
+                                tokens += New langToken(LanguageTokens.Operator, "==")
+                                tmp *= 0
+                            Else
+                                If tmp.Count = 0 Then
+                                    ' 可能是==的第一个等号，则只添加
+                                    tmp += c
+                                Else
+                                    newToken()
+                                    tokens += New langToken(LanguageTokens.ParameterAssign, "=")
+                                End If
+                            End If
+
+                        ElseIf c = "}"c Then
+
+                            ' closure stack close
+                            ' 结束当前的statement，相当于分号
+                            newToken()
+                            last = New Statement(Of LanguageTokens) With {
+                            .tokens = tokens,
+                            .Trace = New LineValue With {
+                                .line = line,
+                                .text = New String(statementBuffer)
+                            }
+                        }
+                            statementBuffer *= 0
+                            tokens *= 0
+                            parent += last  ' 右花括号必定是结束堆栈 
+
+                            Return Nothing
+
+                        ElseIf c = " "c OrElse c = ASCII.TAB OrElse c = ASCII.LF OrElse c = ASCII.CR Then
+
+                            If c = ASCII.LF Then   ' 只使用\n来判断行号
+                                line += 1
+                            End If
+
+                            ' 遇见了空格，结束当前的token
+                            If bufferEquals("=") Then
+                                Call newToken()
+
+                                With tokens.Last
+                                    .name = LanguageTokens.ParameterAssign
+                                End With
+                            Else
+                                newToken() ' 因为newtoken会清空tmp缓存，而bufferEquals函数需要tmp来判断，所以newtoken不能先于bufferequals函数执行
+                                ' 因为上下文变了，所以这里的newtoken调用也不能够合并
+                            End If
+
+                        ElseIf c = "-"c Then
+
+                            If bufferEquals("<"c) Then
+                                tmp += "-"c
+                                newToken()
+                            Else
+                                newToken() ' 这两个newtoken调用不可以合并到一起，因为他们的上下文环境变了 
+                                tokens += New langToken(LanguageTokens.Operator, c)
+                            End If
+
+                        ElseIf c = "+"c OrElse c = "*"c OrElse c = "/"c OrElse c = "\"c OrElse c = "^" OrElse c = "@"c Then
+                            newToken()
+                            tokens += New langToken(LanguageTokens.Operator, c)
+                        Else
+                            tmp += c
+                        End If
                     End If
                 End If
-            End If
-        Loop
+            Loop
 
-        Return New Statement(Of LanguageTokens) With {
+            Return New Statement(Of LanguageTokens) With {
             .tokens = tokens
         }
-    End Function
+        End Function
 
-    <Extension> Public Function GetSourceTree(s As IEnumerable(Of Statement(Of LanguageTokens))) As String
-        Return New Main(Of LanguageTokens) With {
+        <Extension> Public Function GetSourceTree(s As IEnumerable(Of Statement(Of LanguageTokens))) As String
+            Return New Main(Of LanguageTokens) With {
             .program = s.ToArray.Trim
         }.GetXml()
-    End Function
+        End Function
 
-    ''' <summary>
-    ''' Removes the blank statements
-    ''' </summary>
-    ''' <param name="src"></param>
-    ''' <returns></returns>
-    <Extension>
-    Public Function Trim(src As Statement(Of LanguageTokens)()) As Statement(Of LanguageTokens)()
-        Return src _
+        ''' <summary>
+        ''' Removes the blank statements
+        ''' </summary>
+        ''' <param name="src"></param>
+        ''' <returns></returns>
+        <Extension>
+        Public Function Trim(src As Statement(Of LanguageTokens)()) As Statement(Of LanguageTokens)()
+            Return src _
             .Select(Function(s) s.Trim) _
             .Where(Function(s) Not s.tokens.IsNullOrEmpty) _
             .ToArray
-    End Function
+        End Function
 
-    <Extension>
-    Public Function Trim(src As Statement(Of LanguageTokens)) As Statement(Of LanguageTokens)
-        With src
-            .tokens = src.tokens _
+        <Extension>
+        Public Function Trim(src As Statement(Of LanguageTokens)) As Statement(Of LanguageTokens)
+            With src
+                .tokens = src.tokens _
                 .Select(Function(t) t.Trim) _
                 .Where(Function(t) Not t.IsNullOrEmpty) _
                 .ToArray
-            Return .ref
-        End With
-    End Function
+                Return .ref
+            End With
+        End Function
 
-    <Extension>
-    Public Function Trim(t As Token(Of LanguageTokens)) As Token(Of LanguageTokens)
-        If Not t.Arguments.IsNullOrEmpty Then
-            t.Arguments = t.Arguments.Trim
-        End If
-        If Not t.Closure Is Nothing AndAlso Not t.Closure.program.IsNullOrEmpty Then
-            t.Closure.program = t.Closure.program.Trim
-        End If
+        <Extension>
+        Public Function Trim(t As Token(Of LanguageTokens)) As Token(Of LanguageTokens)
+            If Not t.Arguments.IsNullOrEmpty Then
+                t.Arguments = t.Arguments.Trim
+            End If
+            If Not t.Closure Is Nothing AndAlso Not t.Closure.program.IsNullOrEmpty Then
+                t.Closure.program = t.Closure.program.Trim
+            End If
 
-        Return t
-    End Function
+            Return t
+        End Function
 
-    <Extension>
-    Public Function IsNullOrEmpty(t As Token(Of LanguageTokens)) As Boolean
-        If Not t.Value.StringEmpty Then
-            Return False
-        End If
-        If Not t.UNDEFINED Then
-            Return False
-        End If
-        If Not t.Arguments.IsNullOrEmpty Then
-            Return False
-        End If
-        If Not t.Closure Is Nothing AndAlso Not t.Closure.program.IsNullOrEmpty Then
-            Return False
-        End If
+        <Extension>
+        Public Function IsNullOrEmpty(t As Token(Of LanguageTokens)) As Boolean
+            If Not t.Value.StringEmpty Then
+                Return False
+            End If
+            If Not t.UNDEFINED Then
+                Return False
+            End If
+            If Not t.Arguments.IsNullOrEmpty Then
+                Return False
+            End If
+            If Not t.Closure Is Nothing AndAlso Not t.Closure.program.IsNullOrEmpty Then
+                Return False
+            End If
 
-        Return True
-    End Function
+            Return True
+        End Function
 
-    ReadOnly close As New Dictionary(Of Char, Char) From {
+        ReadOnly close As New Dictionary(Of Char, Char) From {
         {"("c, ")"c},
         {"["c, "]"c},
         {"{"c, "}"c}
     }
 
-End Module
+    End Module
+End Namespace
