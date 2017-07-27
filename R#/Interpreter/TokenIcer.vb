@@ -43,9 +43,9 @@ Namespace Interpreter
         ''' 对于``[]``而言，起含义为当前的token的innerStack，与``()``的含义几乎一致
         ''' </remarks>
         <Extension> Private Function Parse(buffer As Pointer(Of Char),
-                                       ByRef parent As List(Of Statement(Of LanguageTokens)),
-                                       ByRef line%,
-                                       ByRef statementBuffer As List(Of Char)) As Statement(Of LanguageTokens)
+                                           ByRef parent As List(Of Statement(Of LanguageTokens)),
+                                           ByRef line%,
+                                           ByRef statementBuffer As List(Of Char)) As Statement(Of LanguageTokens)
 
             Dim quotOpen As Boolean = False
             Dim commentOpen As Boolean = False ' 当出现注释符的时候，会一直持续到遇见换行符为止
@@ -66,28 +66,28 @@ Namespace Interpreter
                                        Return False
                                    End If
                                End Function
-            Dim newToken =
-            Sub()
-                If tmp.Count = 0 Then
-                    Return
-                End If
+            Dim newToken = Sub()
+                               If tmp.Count = 0 Then
+                                   Return
+                               End If
 
-                ' 创建除了字符串之外的其他的token
-                If varDefInit() Then
-                    tokens += New langToken(LanguageTokens.Variable, "var")
-                ElseIf tmp.SequenceEqual("<-") Then
-                    tokens += New langToken(LanguageTokens.LeftAssign, "<-")
-                Else
-                    tokens += New langToken(LanguageTokens.Object) With {
-                        .Value = New String(tmp)
-                    }
-                End If
+                               ' 创建除了字符串之外的其他的token
+                               If varDefInit() Then
+                                   tokens += New langToken(LanguageTokens.Variable, "var")
+                               ElseIf tmp.SequenceEqual("<-") Then
+                                   tokens += New langToken(LanguageTokens.LeftAssign, "<-")
+                               Else
+                                   tokens += New langToken(LanguageTokens.Object) With {
+                                       .Value = New String(tmp)
+                                   }
+                               End If
 
-                tmp *= 0
-            End Sub
+                               tmp *= 0
+                           End Sub
 
             Do While Not buffer.EndRead
                 Dim c As Char = +buffer
+
                 statementBuffer += c
 
 #If DEBUG Then
@@ -97,9 +97,9 @@ Namespace Interpreter
                     If c = ASCII.Quot AndAlso Not tmp.StartEscaping Then
                         ' 当前的字符为双引号，并且不是转义状态，则结束字符串
                         tokens += New langToken With {
-                        .name = LanguageTokens.String,
-                        .Value = New String(tmp)
-                    }
+                            .name = LanguageTokens.String,
+                            .Value = New String(tmp)
+                        }
                         tmp *= 0
                         quotOpen = False
                     Else
@@ -110,9 +110,9 @@ Namespace Interpreter
                     If c = ASCII.CR OrElse c = ASCII.LF Then
                         ' 遇见了换行符，则结束注释
                         tokens += New langToken With {
-                        .name = LanguageTokens.Comment,
-                        .Value = New String(tmp)
-                    }
+                            .name = LanguageTokens.Comment,
+                            .Value = New String(tmp)
+                        }
                         tmp *= 0
                         commentOpen = False
                     Else
@@ -135,12 +135,12 @@ Namespace Interpreter
                             ' 结束当前的statement的解析
                             newToken()
                             last = New Statement(Of LanguageTokens) With {
-                            .tokens = tokens,
-                            .Trace = New LineValue With {
-                                .line = line,
-                                .text = New String(statementBuffer)
+                                .tokens = tokens,
+                                .Trace = New LineValue With {
+                                    .line = line,
+                                    .text = New String(statementBuffer)
+                                }
                             }
-                        }
                             tokens *= 0
                             statementBuffer *= 0
 
@@ -185,8 +185,8 @@ Namespace Interpreter
                                         tokens += New langToken(LanguageTokens.ParenOpen, c)
                                     ElseIf .name = LanguageTokens.Priority Then
                                         tokens.Last.Closure = New Main(Of LanguageTokens) With {
-                                        .program = childs
-                                    }
+                                            .program = childs
+                                        }
                                         Continue Do
                                     End If
 
@@ -252,8 +252,8 @@ Namespace Interpreter
                             End If
 
                             tokens.Last.Closure = New Main(Of LanguageTokens) With {
-                            .program = childs
-                        }
+                                .program = childs
+                            }
 
                             If matrixOpen Then
                                 ' 关闭matrix
@@ -261,12 +261,12 @@ Namespace Interpreter
                             End If
 
                             last = New Statement(Of LanguageTokens) With {
-                            .tokens = tokens.ToArray,
-                            .Trace = New LineValue With {
-                                .line = line,
-                                .text = New String(statementBuffer)
+                                .tokens = tokens.ToArray,
+                                .Trace = New LineValue With {
+                                    .line = line,
+                                    .text = New String(statementBuffer)
+                                }
                             }
-                        }
 
                             statementBuffer *= 0
 
@@ -283,12 +283,12 @@ Namespace Interpreter
                             ' 仅结束stack，但是不像{}一样结束statement
                             newToken()
                             last = New Statement(Of LanguageTokens) With {
-                            .tokens = tokens,
-                            .Trace = New LineValue With {
-                                .line = line,
-                                .text = New String(statementBuffer)
+                                .tokens = tokens,
+                                .Trace = New LineValue With {
+                                    .line = line,
+                                    .text = New String(statementBuffer)
+                                }
                             }
-                        }
                             statementBuffer *= 0
                             tokens *= 0
                             parent += last  ' 右花括号必定是结束堆栈 
@@ -307,12 +307,12 @@ Namespace Interpreter
                         ElseIf c = ","c Then
                             newToken()
                             last = New Statement(Of LanguageTokens) With {
-                            .tokens = tokens,
-                            .Trace = New LineValue With {
-                                .line = line,
-                                .text = New String(statementBuffer)
+                                .tokens = tokens,
+                                .Trace = New LineValue With {
+                                    .line = line,
+                                    .text = New String(statementBuffer)
+                                }
                             }
-                        }
                             statementBuffer *= 0
                             tokens *= 0
                             parent += last  ' 逗号分隔只产生新的statement，但是不退栈
@@ -341,12 +341,12 @@ Namespace Interpreter
                             ' 结束当前的statement，相当于分号
                             newToken()
                             last = New Statement(Of LanguageTokens) With {
-                            .tokens = tokens,
-                            .Trace = New LineValue With {
-                                .line = line,
-                                .text = New String(statementBuffer)
+                                .tokens = tokens,
+                                .Trace = New LineValue With {
+                                    .line = line,
+                                    .text = New String(statementBuffer)
+                                }
                             }
-                        }
                             statementBuffer *= 0
                             tokens *= 0
                             parent += last  ' 右花括号必定是结束堆栈 
@@ -392,14 +392,14 @@ Namespace Interpreter
             Loop
 
             Return New Statement(Of LanguageTokens) With {
-            .tokens = tokens
-        }
+                .tokens = tokens
+            }
         End Function
 
         <Extension> Public Function GetSourceTree(s As IEnumerable(Of Statement(Of LanguageTokens))) As String
             Return New Main(Of LanguageTokens) With {
-            .program = s.ToArray.Trim
-        }.GetXml()
+                .program = s.ToArray.Trim
+            }.GetXml()
         End Function
 
         ''' <summary>
@@ -410,18 +410,18 @@ Namespace Interpreter
         <Extension>
         Public Function Trim(src As Statement(Of LanguageTokens)()) As Statement(Of LanguageTokens)()
             Return src _
-            .Select(Function(s) s.Trim) _
-            .Where(Function(s) Not s.tokens.IsNullOrEmpty) _
-            .ToArray
+                .Select(Function(s) s.Trim) _
+                .Where(Function(s) Not s.tokens.IsNullOrEmpty) _
+                .ToArray
         End Function
 
         <Extension>
         Public Function Trim(src As Statement(Of LanguageTokens)) As Statement(Of LanguageTokens)
             With src
                 .tokens = src.tokens _
-                .Select(Function(t) t.Trim) _
-                .Where(Function(t) Not t.IsNullOrEmpty) _
-                .ToArray
+                    .Select(Function(t) t.Trim) _
+                    .Where(Function(t) Not t.IsNullOrEmpty) _
+                    .ToArray
                 Return .ref
             End With
         End Function
@@ -457,10 +457,10 @@ Namespace Interpreter
         End Function
 
         ReadOnly close As New Dictionary(Of Char, Char) From {
-        {"("c, ")"c},
-        {"["c, "]"c},
-        {"{"c, "}"c}
-    }
+            {"("c, ")"c},
+            {"["c, "]"c},
+            {"{"c, "}"c}
+        }
 
     End Module
 End Namespace
