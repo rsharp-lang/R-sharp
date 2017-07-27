@@ -76,6 +76,8 @@
     <Compile Include="Interpreter\Codes.vb" />
     <Compile Include="Interpreter\ExpressionParser\FuncCaller.vb" />
     <Compile Include="Interpreter\ExpressionParser\MetaExpression.vb" />
+    <Compile Include="LibraryManager\RPM.vb" />
+    <Compile Include="LibraryManager\Internal\base.vb" />
     <Compile Include="Module1.vb" />
     <Compile Include="Interpreter\ExpressionParser\ExecuteEngine.vb" />
     <Compile Include="Interpreter\SyntaxParser.vb" />
@@ -137,7 +139,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="LibraryManager\" />
     <Folder Include="StatMachine\" />
   </ItemGroup>
   <ItemGroup>

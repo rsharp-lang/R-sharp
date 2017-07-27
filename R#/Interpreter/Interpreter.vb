@@ -1,17 +1,37 @@
 ﻿Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports SMRUCC.Rsharp.Runtime
 
-Public Class Interpreter
+Namespace Interpreter
 
-    ''' <summary>
-    ''' 全局环境
-    ''' </summary>
-    Dim globalEnvir As New Environment
+    Public Class Interpreter
 
-    Public Function Evaluate(script$) As Object
-        Return Codes.TryParse(script).RunProgram(globalEnvir)
-    End Function
+        ''' <summary>
+        ''' 全局环境
+        ''' </summary>
+        Public ReadOnly Property globalEnvir As New Environment
 
-    Public Function Source(path$, args As IEnumerable(Of NamedValue(Of Object))) As Object
+        Public Function Evaluate(script$) As Object
+            Return Codes.TryParse(script).RunProgram(globalEnvir)
+        End Function
 
-    End Function
-End Class
+        Public Function Source(path$, args As IEnumerable(Of NamedValue(Of Object))) As Object
+
+        End Function
+
+        Shared ReadOnly interpreter As New Interpreter
+
+        Public Shared Function Evaluate(script$, ParamArray args As NamedValue(Of Object)()) As Object
+            SyncLock interpreter
+                With interpreter
+                    If Not args.IsNullOrEmpty Then
+                        For Each x In args
+                            Call .globalEnvir.Push(x.Name, x.Value, NameOf(TypeCodes.generic))
+                        Next
+                    End If
+
+                    Return .Evaluate(script)
+                End With
+            End SyncLock
+        End Function
+    End Class
+End Namespace

@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.CompilerServices
+Imports SMRUCC.Rsharp.Runtime
 
 Module Extensions
 
@@ -29,5 +30,9 @@ Module Extensions
             Case Else
                 Return TypeCodes.generic
         End Select
+    End Function
+
+    Public Function ClosureStackName(func$, script$, line%) As String
+        Return $"<{script.FileName}#{line}::{func}()>"
     End Function
 End Module

@@ -1,9 +1,14 @@
-﻿Module Module1
+﻿Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports SMRUCC.Rsharp.Interpreter
+
+Module Module1
 
     Sub Main()
 
+        '   Call Interpreter.Evaluate("3+[x];", New NamedValue(Of Object)("x", 10))
+        Call Interpreter.Interpreter.Evaluate("var [a,b] <- list(a=TRUE, b = [x]);", New NamedValue(Of Object)("x", "12344444"))
 
-        Dim result = New Interpreter().Evaluate("var [a,b] <- (1+2)*3;")
+        Dim result = New Interpreter.Interpreter().Evaluate("var [a,b] <- (1+2)*3;")
 
 
 
