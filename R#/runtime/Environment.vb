@@ -72,13 +72,13 @@ Namespace Runtime
         Sub New(parent As Environment, parameters As NamedValue(Of PrimitiveExpression)(), <CallerMemberName> Optional stack$ = Nothing)
             Me.Parent = parent
             Me.Variables = parameters _
-            .Select(Function(expression)
-                        Dim expr As PrimitiveExpression = expression.Value
-                        Return New Variable(TypeCodes.generic) With {
-                            .Name = expression.Name,
-                            .Value = expr.Evaluate(envir:=Me)
-                        }
-                    End Function).ToDictionary
+                .Select(Function(expression)
+                            Dim expr As PrimitiveExpression = expression.Value
+                            Return New Variable(TypeCodes.generic) With {
+                                .Name = expression.Name,
+                                .Value = expr.Evaluate(envir:=Me)
+                            }
+                        End Function).ToDictionary
             Me.Stack = stack
         End Sub
 
@@ -126,9 +126,10 @@ Namespace Runtime
             End If
 
             With New Variable(type.GetRTypeCode) With {
-            .Name = name,
-            .Value = value
-        }
+                .Name = name,
+                .Value = value
+            }
+
                 If Not .ConstraintValid Then
                     Throw New Exception("Value can not match the type constraint!")
                 End If

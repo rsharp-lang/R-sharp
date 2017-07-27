@@ -9,11 +9,11 @@ Namespace Library.Internal
     ''' <summary>
     ''' The R# Base Package
     ''' </summary>
-    <PackageNamespace("base",
-                      Category:=APICategories.UtilityTools,
-                      Description:="This package contains the basic functions which let R function as a language: arithmetic, input/output, basic programming support, etc. Its contents are available through inheritance from any environment.
+    <Package("base", Category:=APICategories.UtilityTools)>
+    <Description("This package contains the basic functions which let R function as a language: arithmetic, input/output, basic programming support, etc. Its contents are available through inheritance from any environment.
 
-For a complete list of functions, use ``library(help = ""base"")``.")> Public Module base
+For a complete list of functions, use ``library(help = ""base"")``.")>
+    Public Module base
 
         <ExportAPI("list")>
         <Description("Creates a R# object.")>

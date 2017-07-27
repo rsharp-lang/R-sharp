@@ -8,7 +8,7 @@ Namespace Interpreter
         ''' <summary>
         ''' 全局环境
         ''' </summary>
-        Dim globalEnvir As New Environment
+        Public ReadOnly Property globalEnvir As New Environment
 
         Public Function Evaluate(script$) As Object
             Return Codes.TryParse(script).RunProgram(globalEnvir)
