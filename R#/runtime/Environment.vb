@@ -26,12 +26,31 @@ Public Class Environment
         End Get
     End Property
 
+    ''' <summary>
+    ''' Get/set variable value
+    ''' </summary>
+    ''' <param name="name$"></param>
+    ''' <returns></returns>
+    ''' <remarks>
+    ''' If the current stack does not contains the target variable, then the program will try to find the variable in his parent
+    ''' if variable in format like [var], then it means a global or parent environment variable
+    ''' </remarks>
     Default Public Property Value(name$) As Object
         Get
-            Return Variables(name).Value
+            If Variables.ContainsKey(name) AndAlso (Not (name.First = "["c AndAlso name.Last = "]"c)) Then
+                Return Variables(name).Value
+            ElseIf Not Parent Is Nothing Then
+                Return Parent(name)
+            Else
+                Throw New EntryPointNotFoundException(name & " was not found in any stack enviroment!")
+            End If
         End Get
         Set(value)
-            Variables(name).Value = value
+            If name.First = "["c AndAlso name.Last = "]"c Then
+                Parent(name.GetStackValue("[", "]")) = value
+            Else
+                Variables(name).Value = value
+            End If
         End Set
     End Property
 
