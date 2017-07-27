@@ -26,6 +26,7 @@
 
 #End Region
 
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.Abstract
 
@@ -35,7 +36,12 @@ Imports Microsoft.VisualBasic.Scripting.Abstract
 Public Class FuncCaller
 
     Public ReadOnly Property Name As String
-    Public ReadOnly Property Params As New List(Of SimpleExpression)
+    ''' <summary>
+    ''' name属性是为了兼容: name=value这种带名称的无序参数形式
+    ''' 假若参数没有名称，则默认使用#num来表示位置
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property Params As New List(Of NamedValue(Of Func(Of Environment, SimpleExpression)))
 
     ReadOnly __calls As FunctionEvaluate
 
@@ -49,13 +55,23 @@ Public Class FuncCaller
         Me.__calls = evaluate
     End Sub
 
+    Sub New(name$, params As IEnumerable(Of NamedValue(Of Func(Of Environment, SimpleExpression))))
+        Me.Name = name
+        Me.Params = params.AsList
+    End Sub
+
     Public Overrides Function ToString() As String
         Dim args As String() = Params.ToArray(Function(x) x.ToString)
         Return $"{Name}({args.JoinBy(", ")})"
     End Function
 
     Public Function Evaluate(envir As Environment) As Double
-        Return __calls(Name, Params.ToArray(Function(x) x.Evaluate(envir)))
+        Dim params = Me.Params.Select(Function(x)
+                                          With x
+                                              Return New NamedValue(Of Object)(.Name, .Value(envir).Evaluate(envir))
+                                          End With
+                                      End Function).ToArray
+        ' Return __calls(Name, params)
     End Function
 End Class
 

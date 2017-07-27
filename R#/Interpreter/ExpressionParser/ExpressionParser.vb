@@ -1,5 +1,7 @@
 ﻿Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Marshal
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.Abstract
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports ExpressionTokens = SMRUCC.Rsharp.LanguageTokens
@@ -11,12 +13,30 @@ Imports ExpressionTokens = SMRUCC.Rsharp.LanguageTokens
 Module ExpressionParser
 
     <Extension>
+    Public Function TryParse(tokens As IEnumerable(Of Token(Of ExpressionTokens))) As Func(Of Environment, SimpleExpression)
+        Return New Pointer(Of Token(Of ExpressionTokens))(tokens).TryParse
+    End Function
+
+    <Extension>
     Public Function TryParse(tokens As Pointer(Of Token(Of ExpressionTokens))) As Func(Of Environment, SimpleExpression)
         Return Function(envir)
                    With envir
                        Return tokens.TryParse(envir, False)
                    End With
                End Function
+    End Function
+
+    <Extension> Private Function FunctionArgument(parm As Statement(Of ExpressionTokens), i%) As NamedValue(Of Func(Of Environment, SimpleExpression))
+        Dim t = parm.tokens
+        Dim name$
+
+        If t(1).Text = "=" AndAlso t(1).Type = ExpressionTokens.ParameterAssign Then
+            name = t(0).Value
+        Else
+            name = "#" & i
+        End If
+
+        Return New NamedValue(Of Func(Of Environment, SimpleExpression))(name, t.Skip(2).TryParse)
     End Function
 
     ''' <summary>
@@ -47,14 +67,13 @@ Module ExpressionParser
                     ' 进行函数调用求值
                     Dim name$ = t.Text
                     ' 需要对参数进行表达式的编译，方便进行求值计算
-                    Dim args = t.Arguments.Select(Function(parm As Statement(Of ExpressionTokens))
-                                                      Return parm.Parse
-                                                  End Function)
-                    Dim handle = Function()
-                                     Dim params = args.Select(Function(x) x.Evaluate(environment)).ToArray
-                                     Dim value As Object = environment.Evaluate(name, args:=params)
-                                     Return value
-                                 End Function
+                    Dim args As NamedValue(Of Func(Of Environment, SimpleExpression))() = t _
+                        .Arguments _
+                        .SeqIterator _
+                        .Select(Function(parm) parm.value.FunctionArgument(parm)) _
+                        .ToArray
+                    Dim calls As New FuncCaller(name, params:=args)
+                    Dim handle = Function() calls.Evaluate(environment)
 
                     meta = New MetaExpression(handle)
                 Case ExpressionTokens.Object
