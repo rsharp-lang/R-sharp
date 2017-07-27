@@ -14,4 +14,20 @@ Public Class Interpreter
     Public Function Source(path$, args As IEnumerable(Of NamedValue(Of Object))) As Object
 
     End Function
+
+    Shared ReadOnly interpreter As New Interpreter
+
+    Public Shared Function Evaluate(script$, ParamArray args As NamedValue(Of Object)()) As Object
+        SyncLock interpreter
+            With interpreter
+                If Not args.IsNullOrEmpty Then
+                    For Each x In args
+                        Call .globalEnvir.Push(x.Name, x.Value, NameOf(TypeCodes.generic))
+                    Next
+                End If
+
+                Return .Evaluate(script)
+            End With
+        End SyncLock
+    End Function
 End Class

@@ -1,8 +1,10 @@
-﻿Module Module1
+﻿Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+
+Module Module1
 
     Sub Main()
 
-        Call New Interpreter().Evaluate("3+[x];  # 3 + x(in global environment)")
+        Call Interpreter.Evaluate("3+[x];", New NamedValue(Of Object)("x", 10))
 
 
         Dim result = New Interpreter().Evaluate("var [a,b] <- (1+2)*3;")
