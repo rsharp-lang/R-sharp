@@ -69,6 +69,7 @@ Namespace Runtime
         ''' </summary>
         ''' <param name="parent"></param>
         ''' <param name="parameters">closure函数的参数传递列表</param>
+        ''' <param name="stack">每一个函数内部都会有自己的局部stack堆栈环境，这个参数就是相当于函数的名称</param>
         Sub New(parent As Environment, parameters As NamedValue(Of PrimitiveExpression)(), <CallerMemberName> Optional stack$ = Nothing)
             Me.Parent = parent
             Me.Variables = parameters _
