@@ -1,45 +1,48 @@
-﻿''' <summary>
-''' The R# types
-''' </summary>
-Public Enum TypeCodes As Byte
+﻿Namespace Runtime
 
     ''' <summary>
-    ''' Object type in R#.(使用这个类型来表示没有类型约束)
+    ''' The R# types
     ''' </summary>
-    [generic] = 0
+    Public Enum TypeCodes As Byte
 
-    ''' <summary>
-    ''' Class type in R#
-    ''' </summary>
-    [list] = 10
-    ''' <summary>
-    ''' 函数类型
-    ''' </summary>
-    [closure]
+        ''' <summary>
+        ''' Object type in R#.(使用这个类型来表示没有类型约束)
+        ''' </summary>
+        [generic] = 0
 
-    ''' <summary>
-    ''' <see cref="Integer"/> vector
-    ''' </summary>
-    [integer] = 100
-    ''' <summary>
-    ''' <see cref="ULong"/> vector
-    ''' </summary>
-    [uinteger]
-    ''' <summary>
-    ''' <see cref="Double"/> numeric vector
-    ''' </summary>
-    [double]
-    ''' <summary>
-    ''' <see cref="String"/> vector
-    ''' </summary>
-    [string]
-    ''' <summary>
-    ''' <see cref="Char"/> vector
-    ''' </summary>
-    [char]
-    ''' <summary>
-    ''' <see cref="Boolean"/> vector
-    ''' </summary>
-    [boolean]
+        ''' <summary>
+        ''' Class type in R#
+        ''' </summary>
+        [list] = 10
+        ''' <summary>
+        ''' 函数类型
+        ''' </summary>
+        [closure]
 
-End Enum
+        ''' <summary>
+        ''' <see cref="Integer"/> vector
+        ''' </summary>
+        [integer] = 100
+        ''' <summary>
+        ''' <see cref="ULong"/> vector
+        ''' </summary>
+        [uinteger]
+        ''' <summary>
+        ''' <see cref="Double"/> numeric vector
+        ''' </summary>
+        [double]
+        ''' <summary>
+        ''' <see cref="String"/> vector
+        ''' </summary>
+        [string]
+        ''' <summary>
+        ''' <see cref="Char"/> vector
+        ''' </summary>
+        [char]
+        ''' <summary>
+        ''' <see cref="Boolean"/> vector
+        ''' </summary>
+        [boolean]
+
+    End Enum
+End Namespace

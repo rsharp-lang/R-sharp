@@ -1,42 +1,45 @@
-﻿''' <summary>
-''' Logical and arithmetic expression
-''' </summary>
-Public Class OperatorExpression : Inherits PrimitiveExpression
+﻿Namespace Runtime.CodeDOM
 
-    Public Property [Operator] As String
+    ''' <summary>
+    ''' Logical and arithmetic expression
+    ''' </summary>
+    Public Class OperatorExpression : Inherits PrimitiveExpression
 
-End Class
+        Public Property [Operator] As String
 
-''' <summary>
-''' 单目运算符表达式
-''' </summary>
-Public Class UnaryOperator : Inherits OperatorExpression
+    End Class
 
-    Public Property Expression As PrimitiveExpression
+    ''' <summary>
+    ''' 单目运算符表达式
+    ''' </summary>
+    Public Class UnaryOperator : Inherits OperatorExpression
 
-End Class
+        Public Property Expression As PrimitiveExpression
 
-Public Class BinaryOperator : Inherits OperatorExpression
+    End Class
 
-    Public Property a As PrimitiveExpression
-    Public Property b As PrimitiveExpression
+    Public Class BinaryOperator : Inherits OperatorExpression
 
-End Class
+        Public Property a As PrimitiveExpression
+        Public Property b As PrimitiveExpression
 
-''' <summary>
-''' ```R
-''' a &lt;- b
-''' ```
-''' </summary>
-Public Class ValueAssign : Inherits BinaryOperator
+    End Class
 
-    Public Property IsByRef As Boolean = False
+    ''' <summary>
+    ''' ```R
+    ''' a &lt;- b
+    ''' ```
+    ''' </summary>
+    Public Class ValueAssign : Inherits BinaryOperator
 
-    Public Overrides Function ToString() As String
-        If IsByRef Then
-            Return $"{a} = {b}"
-        Else
-            Return $"{a} <- {b}"
-        End If
-    End Function
-End Class
+        Public Property IsByRef As Boolean = False
+
+        Public Overrides Function ToString() As String
+            If IsByRef Then
+                Return $"{a} = {b}"
+            Else
+                Return $"{a} <- {b}"
+            End If
+        End Function
+    End Class
+End Namespace
