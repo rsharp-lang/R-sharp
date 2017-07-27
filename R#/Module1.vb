@@ -2,6 +2,8 @@
 
     Sub Main()
 
+        Call New Interpreter().Evaluate("3+[x];  # 3 + x(in global environment)")
+
 
         Dim result = New Interpreter().Evaluate("var [a,b] <- (1+2)*3;")
 

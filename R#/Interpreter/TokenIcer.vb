@@ -205,6 +205,18 @@ Public Module TokenIcer
                         Call newToken()
                         Call buffer.Parse(childs, line, statementBuffer)
 
+                        If childs.Count = 1 Then
+                            With childs(0)
+                                If .tokens.Length = 1 AndAlso .tokens(Scan0).IsObject Then
+                                    ' 这里所解析到的是对全局变量的引用
+                                    ' [x] <- 3
+                                    ' 3 + [x]
+                                    tokens += New langToken(LanguageTokens.Object, $"[{ .tokens(Scan0).Text}]")
+                                    Continue Do
+                                End If
+                            End With
+                        End If
+
                         tokens += New langToken(LanguageTokens.ParenOpen, c)
                         tokens.Last.Arguments = childs
                         tokens += New langToken(LanguageTokens.ParenClose, close(c))
