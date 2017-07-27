@@ -1,6 +1,7 @@
 ﻿Imports Microsoft.VisualBasic.Emit.Marshal
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
-Imports SMRUCC.Rsharp
+Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.Expression
 
 ''' <summary>
 ''' The very base expression in the R# language

@@ -4,7 +4,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports Microsoft.VisualBasic.Text
 Imports Microsoft.VisualBasic.Text.Xml.Models
-Imports langToken = Microsoft.VisualBasic.Scripting.TokenIcer.Token(Of SMRUCC.Rsharp.LanguageTokens)
+Imports langToken = Microsoft.VisualBasic.Scripting.TokenIcer.Token(Of SMRUCC.Rsharp.Interpreter.LanguageTokens)
 
 Namespace Interpreter
 

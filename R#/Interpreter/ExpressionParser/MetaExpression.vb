@@ -29,130 +29,133 @@
 Imports System.Xml.Serialization
 Imports Microsoft.VisualBasic.Scripting.Runtime
 
-''' <summary>
-''' 在<see cref="SimpleExpression.Calculator"></see>之中由于移位操作的需要，需要使用类对象可以修改属性的特性来进行正常的计算，所以请不要修改为Structure类型
-''' </summary>
-''' <remarks></remarks>
-Public Class MetaExpression
+Namespace Interpreter.Expression
 
     ''' <summary>
-    ''' 因为逻辑操作符会是一个英文单词，所以在这里不再是一个char符号了
+    ''' 在<see cref="SimpleExpression.Calculator"></see>之中由于移位操作的需要，需要使用类对象可以修改属性的特性来进行正常的计算，所以请不要修改为Structure类型
     ''' </summary>
-    ''' <returns></returns>
-    <XmlAttribute> Public Property [Operator] As String
+    ''' <remarks></remarks>
+    Public Class MetaExpression
 
-    ''' <summary>
-    ''' 自动根据类型来计算出结果
-    ''' </summary>
-    ''' <returns></returns>
-    <XmlAttribute> Public Property LEFT As Object
-        Get
-            If __left Is Nothing Then
-                Return _left
-            Else
-                Return __left()
-            End If
-        End Get
-        Set(value)
-            _left = value
-            __left = Nothing
-            _ReferenceDepth = 0
-        End Set
-    End Property
+        ''' <summary>
+        ''' 因为逻辑操作符会是一个英文单词，所以在这里不再是一个char符号了
+        ''' </summary>
+        ''' <returns></returns>
+        <XmlAttribute> Public Property [Operator] As String
 
-    Public ReadOnly Property LeftType As TypeCodes
+        ''' <summary>
+        ''' 自动根据类型来计算出结果
+        ''' </summary>
+        ''' <returns></returns>
+        <XmlAttribute> Public Property LEFT As Object
+            Get
+                If __left Is Nothing Then
+                    Return _left
+                Else
+                    Return __left()
+                End If
+            End Get
+            Set(value)
+                _left = value
+                __left = Nothing
+                _ReferenceDepth = 0
+            End Set
+        End Property
 
-    ''' <summary>
-    ''' Does the expression value is a constant.
-    ''' </summary>
-    ''' <returns></returns>
-    Public ReadOnly Property IsValue As Boolean
-        Get
-            Return __left Is Nothing
-        End Get
-    End Property
+        Public ReadOnly Property LeftType As TypeCodes
 
-    ''' <summary>
-    ''' Does the expression Value comes from a lambda expression?
-    ''' </summary>
-    ''' <returns></returns>
-    Public ReadOnly Property IsExpression As Boolean
-        Get
-            Return Not __left Is Nothing
-        End Get
-    End Property
+        ''' <summary>
+        ''' Does the expression value is a constant.
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property IsValue As Boolean
+            Get
+                Return __left Is Nothing
+            End Get
+        End Property
 
-    ''' <summary>
-    ''' Value is a constant.
-    ''' </summary>
-    Dim _left As Object
-    ''' <summary>
-    ''' Value comes from a lambda expression
-    ''' </summary>
-    Dim __left As Func(Of Object)
+        ''' <summary>
+        ''' Does the expression Value comes from a lambda expression?
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property IsExpression As Boolean
+            Get
+                Return Not __left Is Nothing
+            End Get
+        End Property
 
-    ''' <summary>
-    ''' 默认是0的引用深度
-    ''' </summary>
-    ''' <returns></returns>
-    Public ReadOnly Property ReferenceDepth As Integer
+        ''' <summary>
+        ''' Value is a constant.
+        ''' </summary>
+        Dim _left As Object
+        ''' <summary>
+        ''' Value comes from a lambda expression
+        ''' </summary>
+        Dim __left As Func(Of Object)
 
-    Sub New()
-    End Sub
+        ''' <summary>
+        ''' 默认是0的引用深度
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property ReferenceDepth As Integer
 
-    ''' <summary>
-    ''' 
-    ''' </summary>
-    ''' <param name="n"></param>
-    ''' <param name="opr$">operator 操作符</param>
-    Sub New(n As Object, opr$)
-        LEFT = n
-        [Operator] = opr
-    End Sub
+        Sub New()
+        End Sub
 
-    ''' <summary>
-    ''' object reference value
-    ''' </summary>
-    ''' <param name="n"></param>
-    Sub New(n$, type As LanguageTokens)
-        Select Case type
-            Case LanguageTokens.Boolean
-                LEFT = n.ParseBoolean
-                LeftType = TypeCodes.boolean
-            Case LanguageTokens.Numeric
-                LEFT = Val(n)
-                LeftType = TypeCodes.double
-            Case LanguageTokens.String
-                LEFT = n
-                LeftType = TypeCodes.string
-            Case LanguageTokens.Object
-                If n.IsPattern(Casting.RegexpDouble) Then
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="n"></param>
+        ''' <param name="opr$">operator 操作符</param>
+        Sub New(n As Object, opr$)
+            LEFT = n
+            [Operator] = opr
+        End Sub
+
+        ''' <summary>
+        ''' object reference value
+        ''' </summary>
+        ''' <param name="n"></param>
+        Sub New(n$, type As LanguageTokens)
+            Select Case type
+                Case LanguageTokens.Boolean
+                    LEFT = n.ParseBoolean
+                    LeftType = TypeCodes.boolean
+                Case LanguageTokens.Numeric
                     LEFT = Val(n)
                     LeftType = TypeCodes.double
-                Else
+                Case LanguageTokens.String
                     LEFT = n
-                    LeftType = TypeCodes.generic
-                End If
-            Case Else
-                LEFT = n
-        End Select
-    End Sub
+                    LeftType = TypeCodes.string
+                Case LanguageTokens.Object
+                    If n.IsPattern(Casting.RegexpDouble) Then
+                        LEFT = Val(n)
+                        LeftType = TypeCodes.double
+                    Else
+                        LEFT = n
+                        LeftType = TypeCodes.generic
+                    End If
+                Case Else
+                    LEFT = n
+            End Select
+        End Sub
 
-    Sub New(handle As Func(Of Object))
-        __left = handle
-        ReferenceDepth = 1
-    End Sub
+        Sub New(handle As Func(Of Object))
+            __left = handle
+            ReferenceDepth = 1
+        End Sub
 
-    Sub New(simple As SimpleExpression, envir As Func(Of Environment))
-        Call Me.New(Function() simple.Evaluate(envir()))
-        ReferenceDepth = simple.ReferenceDepth
-    End Sub
+        Sub New(simple As SimpleExpression, envir As Func(Of Environment))
+            Call Me.New(Function() simple.Evaluate(envir()))
+            ReferenceDepth = simple.ReferenceDepth
+        End Sub
 
-    Public Overrides Function ToString() As String
-        If __left Is Nothing Then
-            Return String.Format("{0} {1}", LEFT, [Operator])
-        Else
-            Return $"{__left.ToString} {[Operator]}"
-        End If
-    End Function
-End Class
+        Public Overrides Function ToString() As String
+            If __left Is Nothing Then
+                Return String.Format("{0} {1}", LEFT, [Operator])
+            Else
+                Return $"{__left.ToString} {[Operator]}"
+            End If
+        End Function
+    End Class
+End Namespace

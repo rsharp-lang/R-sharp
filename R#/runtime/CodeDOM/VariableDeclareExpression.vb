@@ -1,5 +1,6 @@
 ﻿Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports SMRUCC.Rsharp
+Imports SMRUCC.Rsharp.Interpreter
 
 ''' <summary>
 ''' 创建申明一个内存变量的表达式
