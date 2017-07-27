@@ -17,6 +17,12 @@ Public Class Environment
     Public ReadOnly Property Stack As String
 
     ''' <summary>
+    ''' Key is <see cref="RType.Identity"/>
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property Types As New Dictionary(Of String, RType)
+
+    ''' <summary>
     ''' 当前的环境是否为最顶层的全局环境？
     ''' </summary>
     ''' <returns></returns>

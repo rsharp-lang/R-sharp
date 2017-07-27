@@ -25,7 +25,7 @@ Public Class ValueExpression : Inherits PrimitiveExpression
 
     Public Overrides Function Evaluate(envir As Environment) As Object
         With tree(envir)
-            Dim value As Object = .Evaluate()
+            Dim value As Object = .Evaluate(envir)
             Return value
         End With
     End Function

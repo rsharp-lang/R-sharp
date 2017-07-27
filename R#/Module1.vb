@@ -3,7 +3,7 @@
     Sub Main()
 
 
-        Dim result = New Interpreter().Evaluate("(1+2)*3;")
+        Dim result = New Interpreter().Evaluate("var [a,b] <- (1+2)*3;")
 
 
 
