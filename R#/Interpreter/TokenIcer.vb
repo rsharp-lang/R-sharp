@@ -217,9 +217,10 @@ Public Module TokenIcer
                             End With
                         End If
 
-                        tokens += New langToken(LanguageTokens.ParenOpen, c)
-                        tokens.Last.Arguments = childs
-                        tokens += New langToken(LanguageTokens.ParenClose, close(c))
+                        With New langToken(LanguageTokens.Tuple, "[...]")
+                            .Arguments = childs
+                            tokens += .ref
+                        End With
 
                     ElseIf c = "{"c Then
                         ' 新的堆栈

@@ -8,12 +8,12 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("R")>
-<Assembly: AssemblyDescription("")>
-<Assembly: AssemblyCompany("")>
-<Assembly: AssemblyProduct("R")>
-<Assembly: AssemblyCopyright("Copyright ©  2017")>
-<Assembly: AssemblyTrademark("")>
+<Assembly: AssemblyTitle("R# language runtime and interpreter console")>
+<Assembly: AssemblyDescription("R# language runtime and interpreter console")>
+<Assembly: AssemblyCompany("SMRUCC")>
+<Assembly: AssemblyProduct("R-sharp")>
+<Assembly: AssemblyCopyright("Copyright © xie.guigang@gcmodeller.org 2017")>
+<Assembly: AssemblyTrademark("GCModeller")>
 
 <Assembly: ComVisible(False)>
 

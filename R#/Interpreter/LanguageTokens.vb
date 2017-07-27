@@ -32,6 +32,10 @@
     ''' </summary>
     Priority
     ''' <summary>
+    ''' [...] tuple类型
+    ''' </summary>
+    Tuple
+    ''' <summary>
     ''' ([{
     ''' </summary>
     ParenOpen

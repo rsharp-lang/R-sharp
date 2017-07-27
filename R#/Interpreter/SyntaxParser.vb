@@ -91,8 +91,17 @@ Public Module SyntaxParser
         ' 现在剩下的就是 var x <- ..... 的形式了
         ' 需要解析这个数学表达式
         Dim initExpression = tokens.Skip(3).ToArray
+        Dim initialize As PrimitiveExpression = New ValueExpression(initExpression)
 
+        With tokens(1)
+            If .Type = LanguageTokens.Tuple Then
+                out = New TupleDeclareExpression(.Arguments, initialize)
+            Else
+                out = New VariableDeclareExpression(.Value, NameOf(TypeCodes.generic), initialize)
+            End If
+        End With
 
+        Return True
     End Function
 
     ''' <summary>

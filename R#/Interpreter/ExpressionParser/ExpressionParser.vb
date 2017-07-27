@@ -27,7 +27,6 @@ Module ExpressionParser
     <Extension> Public Function TryParse(tokens As Pointer(Of Token(Of ExpressionTokens)), environment As Environment, ByRef funcStack As Boolean) As SimpleExpression
         Dim expression As New SimpleExpression
         Dim t As Token(Of ExpressionTokens)
-        Dim o$
         Dim pre As Token(Of ExpressionTokens) = Nothing
         Dim func As FuncCaller = Nothing
         Dim getValue As GetValue = AddressOf environment.GetValue
