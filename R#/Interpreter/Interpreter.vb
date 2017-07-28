@@ -18,11 +18,11 @@ Namespace Interpreter
 
         End Function
 
-        Shared ReadOnly interpreter As New Interpreter
+        Public Shared ReadOnly Property Rsharp As New Interpreter
 
         Public Shared Function Evaluate(script$, ParamArray args As NamedValue(Of Object)()) As Object
-            SyncLock interpreter
-                With interpreter
+            SyncLock Rsharp
+                With Rsharp
                     If Not args.IsNullOrEmpty Then
                         For Each x In args
                             Call .globalEnvir.Push(x.Name, x.Value, NameOf(TypeCodes.generic))

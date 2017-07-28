@@ -6,6 +6,7 @@ Module Module1
     Sub Main()
 
         '   Call Interpreter.Evaluate("3+[x];", New NamedValue(Of Object)("x", 10))
+        Call Interpreter.Interpreter.Rsharp.globalEnvir.Closures.Add("list", Function(args) Library.Internal.base.list(args.Select(Function(o) DirectCast(o, NamedValue(Of Object)))))
         Call Interpreter.Interpreter.Evaluate("var [a,b] <- list(a=TRUE, b = [x]);", New NamedValue(Of Object)("x", "12344444"))
 
         Dim result = New Interpreter.Interpreter().Evaluate("var [a,b] <- (1+2)*3;")

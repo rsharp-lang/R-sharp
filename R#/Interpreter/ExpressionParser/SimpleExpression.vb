@@ -130,15 +130,20 @@ Namespace Interpreter.Expression
             End If
 
             Dim metaList As New List(Of MetaExpression)(Me.MetaList)  ' 将数据隔绝开，这样子这个表达式对象可以被重复使用
+            Dim leftValue = Function()
+                                Dim left As MetaExpression = metaList.First
+                                Dim value = left.LEFT
+                                Return value
+                            End Function
 
             If metaList.Count = 1 Then ' When the list object only contains one element, that means this class object only stands for a number, return this number directly. 
-                Return metaList.First.LEFT
+                Return leftValue()
             Else
                 Calculator("^", metaList, envir)
                 Calculator("*/\%", metaList, envir)
                 Calculator("+-", metaList, envir)
 
-                Return metaList.First.LEFT
+                Return leftValue()
             End If
         End Function
 
