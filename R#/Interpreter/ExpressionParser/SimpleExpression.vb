@@ -124,26 +124,26 @@ Namespace Interpreter.Expression
         ''' (返回目标简单表达式对象的值)
         ''' </returns>
         ''' <remarks></remarks>
-        Public Function Evaluate(envir As Environment) As Object
+        Public Function Evaluate(envir As Environment) As MetaExpression
             If Me.MetaList.Count = 0 Then
-                Return 0R
+                Return Nothing
             End If
 
             Dim metaList As New List(Of MetaExpression)(Me.MetaList)  ' 将数据隔绝开，这样子这个表达式对象可以被重复使用
-            Dim leftValue = Function()
-                                Dim left As MetaExpression = metaList.First
-                                Dim value = left.LEFT
-                                Return value
-                            End Function
+            'Dim leftValue = Function()
+            '                    Dim left As MetaExpression = metaList.First
+            '                    Dim value = left.LEFT
+            '                    Return value
+            '                End Function
 
             If metaList.Count = 1 Then ' When the list object only contains one element, that means this class object only stands for a number, return this number directly. 
-                Return leftValue()
+                Return metaList.First
             Else
                 Calculator("^", metaList, envir)
                 Calculator("*/\%", metaList, envir)
                 Calculator("+-", metaList, envir)
 
-                Return leftValue()
+                Return metaList.First
             End If
         End Function
 

@@ -2,6 +2,7 @@
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.Abstract
+Imports SMRUCC.Rsharp.Interpreter.Expression
 Imports SMRUCC.Rsharp.Runtime.CodeDOM
 
 Namespace Runtime
@@ -116,6 +117,25 @@ Namespace Runtime
             Return Function(funcName, args)
 
                    End Function
+        End Function
+
+        Public Function GetValue(x As MetaExpression) As Object
+            If x.LeftType = TypeCodes.generic Then
+                Dim o = x.LEFT
+
+                If o Is Nothing Then
+                    Return Nothing
+                ElseIf o.GetType Is GetType(String) Then
+                    ' 为变量引用
+                    Dim var$ = CStr(o)
+                    o = Me(var)
+                    Return o
+                Else
+                    Return o
+                End If
+            Else
+                Return x.LEFT
+            End If
         End Function
 
         ''' <summary>
