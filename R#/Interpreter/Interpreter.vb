@@ -3,17 +3,31 @@ Imports SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter
 
+    ''' <summary>
+    ''' The R# language interpreter
+    ''' </summary>
     Public Class Interpreter
 
         ''' <summary>
-        ''' 全局环境
+        ''' Global runtime environment.(全局环境)
         ''' </summary>
         Public ReadOnly Property globalEnvir As New Environment
 
+        ''' <summary>
+        ''' Run R# script program from text data.
+        ''' </summary>
+        ''' <param name="script$"></param>
+        ''' <returns></returns>
         Public Function Evaluate(script$) As Object
             Return Codes.TryParse(script).RunProgram(globalEnvir)
         End Function
 
+        ''' <summary>
+        ''' Run script file.
+        ''' </summary>
+        ''' <param name="path$"></param>
+        ''' <param name="args"></param>
+        ''' <returns></returns>
         Public Function Source(path$, args As IEnumerable(Of NamedValue(Of Object))) As Object
 
         End Function

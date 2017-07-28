@@ -5,8 +5,10 @@ Imports Microsoft.VisualBasic.Scripting.Runtime
 
 Namespace Runtime
 
-    Public Class Variable
-        Implements INamedValue, Value(Of Object).IValueOf
+    ''' <summary>
+    ''' The variable model in R# language
+    ''' </summary>
+    Public Class Variable : Implements INamedValue, Value(Of Object).IValueOf
 
         Public Property Name As String Implements IKeyedEntity(Of String).Key
         ''' <summary>
