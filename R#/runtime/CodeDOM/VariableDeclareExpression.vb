@@ -49,11 +49,11 @@ Namespace Runtime.CodeDOM
                 .ToArray
         End Sub
 
-        Public Overrides Function Evaluate(envir As Environment) As Object
+        Public Overrides Function Evaluate(envir As Environment) As (value As Object, Type As TypeCodes)
             Dim values = Value.Evaluate(envir)
 
-            If TypeOf values Is Dictionary(Of String, Object) Then
-                Dim table = DirectCast(values, Dictionary(Of String, Object))
+            If TypeOf values.value Is Dictionary(Of String, Object) Then
+                Dim table = DirectCast(values.value, Dictionary(Of String, Object))
 
                 For Each member As TupleMember In Members
                     Dim value As Object = member.GetValue(table)
@@ -104,7 +104,7 @@ Namespace Runtime.CodeDOM
             If table.ContainsKey(Name) Then
                 Return table(Name)
             ElseIf [Alias].StringEmpty OrElse Not table.ContainsKey([Alias]) Then
-                Throw New Exception("Tuple member is not exists in the source!")
+                Throw New Exception($"Tuple member '{Name}' is not exists in the source!")
             Else
                 Return table([Alias])
             End If

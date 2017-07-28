@@ -1,15 +1,32 @@
-﻿Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+﻿Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Interpreter
 
 Module Module1
 
     Sub Main()
 
-        '   Call Interpreter.Evaluate("3+[x];", New NamedValue(Of Object)("x", 10))
-        Call Interpreter.Interpreter.Rsharp.globalEnvir.Closures.Add("list", Function(args) Library.Internal.base.list(args))
-        Call Interpreter.Interpreter.Evaluate("var [a,b] <- list(a=TRUE, b = [x]);", New NamedValue(Of Object)("x", "12344444"))
+        Dim result As Object
 
-        Dim result = New Interpreter.Interpreter().Evaluate("var [a,b] <- (1+2)*3;")
+        With New Interpreter.Interpreter
+            '   Call Interpreter.Evaluate("3+[x];", New NamedValue(Of Object)("x", 10))
+            Call .globalEnvir.Closures.Add("list", Function(args) Library.Internal.base.list(args))
+            Call .globalEnvir.Push("x", 12344444, Runtime.TypeCodes.integer)
+            Call .globalEnvir.Push("y", -12344445, Runtime.TypeCodes.integer)
+
+            result = .Evaluate("var [a,b,D as y] <- list(a=TRUE, b = [x], y = y);")
+
+            Dim str$ = result.GetJson(True)
+
+            Call str.__DEBUG_ECHO
+
+
+            Pause()
+
+        End With
+
+
+
+        result = New Interpreter.Interpreter().Evaluate("var [a,b] <- (1+2)*3;")
 
 
 

@@ -124,26 +124,28 @@ Namespace Interpreter.Expression
         ''' (返回目标简单表达式对象的值)
         ''' </returns>
         ''' <remarks></remarks>
-        Public Function Evaluate(envir As Environment) As MetaExpression
+        Public Function Evaluate(envir As Environment) As (Value As Object, RType As TypeCodes)
             If Me.MetaList.Count = 0 Then
                 Return Nothing
             End If
 
             Dim metaList As New List(Of MetaExpression)(Me.MetaList)  ' 将数据隔绝开，这样子这个表达式对象可以被重复使用
-            'Dim leftValue = Function()
-            '                    Dim left As MetaExpression = metaList.First
-            '                    Dim value = left.LEFT
-            '                    Return value
-            '                End Function
+            Dim leftValue = Function()
+                                With metaList.First
+                                    Dim value As Object = .LEFT
+                                    Return (value, .LeftType)
+                                End With
+                            End Function
 
-            If metaList.Count = 1 Then ' When the list object only contains one element, that means this class object only stands for a number, return this number directly. 
-                Return metaList.First
+            ' When the list object only contains one element, that means this class object only stands for a number, return this number directly. 
+            If metaList.Count = 1 Then
+                Return leftValue()
             Else
                 Calculator("^", metaList, envir)
                 Calculator("*/\%", metaList, envir)
                 Calculator("+-", metaList, envir)
 
-                Return metaList.First
+                Return leftValue()
             End If
         End Function
 
@@ -157,7 +159,7 @@ Namespace Interpreter.Expression
             End If
 
             Dim M, mNext As MetaExpression
-            Dim x As Double
+            Dim x As Object
 
             For index As Integer = 0 To metaList.Count - 1  'Scan the expression object and do the calculation at the mean time
                 If ct = 0 OrElse metaList.Count = 1 Then

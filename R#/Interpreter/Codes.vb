@@ -29,7 +29,9 @@ Namespace Interpreter
 
             For Each line As Statement(Of LanguageTokens) In program
                 statement = line.Parse
-                last = statement.Evaluate(environment)
+                last = statement _
+                    .Evaluate(environment) _
+                    .value
             Next
 
             Return last

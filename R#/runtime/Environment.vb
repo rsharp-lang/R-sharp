@@ -41,6 +41,16 @@ Namespace Runtime
             End Get
         End Property
 
+        Public ReadOnly Property GlobalEnvironment As Environment
+            Get
+                If IsGlobal Then
+                    Return Me
+                Else
+                    Return Parent.GlobalEnvironment
+                End If
+            End Get
+        End Property
+
         ''' <summary>
         ''' Get/set variable value
         ''' </summary>
@@ -52,7 +62,11 @@ Namespace Runtime
         ''' </remarks>
         Default Public Property Value(name$) As Object
             Get
-                If Variables.ContainsKey(name) AndAlso (Not (name.First = "["c AndAlso name.Last = "]"c)) Then
+                If (name.First = "["c AndAlso name.Last = "]"c) Then
+                    Return GlobalEnvironment(name.GetStackValue("[", "]"))
+                End If
+
+                If Variables.ContainsKey(name) Then
                     Return Variables(name).Value
                 ElseIf Not Parent Is Nothing Then
                     Return Parent(name)
@@ -62,14 +76,12 @@ Namespace Runtime
             End Get
             Set(value)
                 If name.First = "["c AndAlso name.Last = "]"c Then
-                    Parent(name.GetStackValue("[", "]")) = value
+                    GlobalEnvironment(name.GetStackValue("[", "]")) = value
                 Else
                     Variables(name).Value = value
                 End If
             End Set
         End Property
-
-
 
         ''' <summary>
         ''' 每一个closure可以看作为一个函数对象
@@ -150,20 +162,25 @@ Namespace Runtime
         ''' <param name="type">``R#``类型约束</param>
         ''' <returns></returns>
         Public Function Push(name$, value As Object, type$) As Integer
+            Return Push(name, value, type.GetRTypeCode)
+        End Function
+
+        Const ConstraintInvalid$ = "Value can not match the type constraint!"
+
+        Public Function Push(name$, value As Object, Optional type As TypeCodes = TypeCodes.generic) As Integer
             If Variables.ContainsKey(name) Then
                 Throw New Exception($"Variable ""{name}"" is already existed, can not declare it again!")
             End If
 
-            With New Variable(type.GetRTypeCode) With {
+            With New Variable(type) With {
                 .Name = name,
                 .Value = value
             }
-
                 If Not .ConstraintValid Then
-                    Throw New Exception("Value can not match the type constraint!")
+                    Throw New Exception(ConstraintInvalid)
+                Else
+                    Call Variables.Add(.ref)
                 End If
-
-                Call Variables.Add(.ref)
 
                 ' 位置值，相当于函数指针
                 Return Variables.Count - 1
