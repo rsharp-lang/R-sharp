@@ -13,12 +13,19 @@ Namespace Runtime
         Public ReadOnly Property TypeCode As TypeCodes = TypeCodes.list
         Public ReadOnly Property FullName As String
 
+        ''' <summary>
+        ''' Using this property as the indentify key in the R# runtime <see cref="Environment"/>
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property Identity As String Implements IReadOnlyId.Identity
             Get
                 Return Me.ToString.MD5
             End Get
         End Property
 
+        ''' <summary>
+        ''' The collection of unary operators for current R# type
+        ''' </summary>
         Dim UnaryOperators As Dictionary(Of String, MethodInfo)
         Dim BinaryOperator1 As Dictionary(Of String, MethodInfo)
         Dim BinaryOperator2 As Dictionary(Of String, MethodInfo)
@@ -57,27 +64,27 @@ Namespace Runtime
         End Function
 
         ''' <summary>
-        ''' Imports the .NET type
+        ''' Imports the .NET type as R# type
         ''' </summary>
         ''' <param name="dotnet"></param>
         ''' <returns></returns>
         Public Shared Function [Imports](dotnet As Type) As RType
             Dim operators = dotnet _
-            .GetMethods(PublicShared) _
-            .Where(Function(m) m.Name.StartsWith("op_")) _
-            .ToArray
+                .GetMethods(PublicShared) _
+                .Where(Function(m) m.Name.StartsWith("op_")) _
+                .ToArray
 
             Return New RType With {
-            ._TypeCode = dotnet.GetRTypeCode,
-            ._FullName = dotnet.FullName,
-            .UnaryOperators = operators _
-                .Where(Function(m) m.GetParameters.Length = 1) _
-                .ToDictionary(Function(key)
-                                  Dim linqName = opName2Linq(key.Name)
-                                  Dim op$ = Linq2Symbols(linqName)
-                                  Return op
-                              End Function)
-        }
+                ._TypeCode = dotnet.GetRTypeCode,
+                ._FullName = dotnet.FullName,
+                .UnaryOperators = operators _
+                    .Where(Function(m) m.GetParameters.Length = 1) _
+                    .ToDictionary(Function(key)
+                                      Dim linqName = opName2Linq(key.Name)
+                                      Dim op$ = Linq2Symbols(linqName)
+                                      Return op
+                                  End Function)
+            }
         End Function
     End Class
 End Namespace

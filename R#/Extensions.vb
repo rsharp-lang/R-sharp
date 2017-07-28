@@ -1,8 +1,16 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports SMRUCC.Rsharp.Runtime
 
+''' <summary>
+''' Internal runtime extensions
+''' </summary>
 Module Extensions
 
+    ''' <summary>
+    ''' Get R type code from the type constraint expression value.
+    ''' </summary>
+    ''' <param name="type$"></param>
+    ''' <returns></returns>
     <Extension> Public Function GetRTypeCode(type$) As TypeCodes
         If type.StringEmpty Then
             Return TypeCodes.generic
@@ -11,6 +19,11 @@ Module Extensions
         Return [Enum].Parse(GetType(TypeCodes), type.ToLower)
     End Function
 
+    ''' <summary>
+    ''' DotNET type to R type code
+    ''' </summary>
+    ''' <param name="type"></param>
+    ''' <returns></returns>
     <Extension> Public Function GetRTypeCode(type As Type) As TypeCodes
         Select Case type
             Case GetType(String), GetType(String())

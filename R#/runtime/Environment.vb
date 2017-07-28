@@ -79,7 +79,8 @@ Namespace Runtime
                                 .Name = expression.Name,
                                 .Value = expr.Evaluate(envir:=Me)
                             }
-                        End Function).ToDictionary
+                        End Function) _
+                .ToDictionary
             Me.Stack = stack
         End Sub
 

@@ -71,10 +71,10 @@ Namespace Interpreter.Expression
                         Dim name$ = t.Text
                         ' 需要对参数进行表达式的编译，方便进行求值计算
                         Dim args As NamedValue(Of Func(Of Environment, SimpleExpression))() = t _
-                        .Arguments _
-                        .SeqIterator _
-                        .Select(Function(parm) parm.value.FunctionArgument(parm)) _
-                        .ToArray
+                            .Arguments _
+                            .SeqIterator _
+                            .Select(Function(parm) parm.value.FunctionArgument(parm)) _
+                            .ToArray
                         Dim calls As New FuncCaller(name, params:=args)
                         Dim handle = Function() calls.Evaluate(environment)
 

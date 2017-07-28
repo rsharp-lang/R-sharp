@@ -10,10 +10,13 @@ Namespace Library.Internal
     ''' The R# Base Package
     ''' </summary>
     <Package("base", Category:=APICategories.UtilityTools)>
-    <Description("This package contains the basic functions which let R function as a language: arithmetic, input/output, basic programming support, etc. Its contents are available through inheritance from any environment.
-
-For a complete list of functions, use ``library(help = ""base"")``.")>
+    <Description(base.describ)>
     Public Module base
+
+        Friend Const describ$ = "This package contains the basic functions which let R function as a language: arithmetic, input/output, basic programming support, etc. 
+                                 Its contents are available through inheritance from any environment.
+
+                                 For a complete list of functions, use ``library(help = ""base"")``."
 
         <ExportAPI("list")>
         <Description("Creates a R# object.")>
