@@ -1,13 +1,13 @@
 
-## R# language design
+# R# language design
 
-###### Code comments
+## Code comments
 
 ```R
 ## This is code comments, it just only allow single line comments.
 ```
 
-###### Variable
+## Variable
 
 Variable in ``R#`` should be declared by ``var`` keyword, and using ``<-`` operator for value initialize by a expression. If the variable declaration not follow by a value initialize expression, then by default its value is set to ``NULL``:
 
@@ -77,7 +77,15 @@ Dim m = {
 }
 ```
 
-###### Types
+#### Append Vector
+
+```R
+v <- append(a, b)
+## left shift means append b into vector a and then creates a new vector
+v <- a << b
+```
+
+## Types
 
 ``R#`` language have several primitive type:
 
@@ -170,7 +178,7 @@ test.integer <- function(x as integer) {
 }
 ```
 
-###### Get/Set value
+## Get/Set value
 
 Get/Set property value keeps the same as the R language: 
 
@@ -347,6 +355,19 @@ tuple variable:
 var prot.fasta = "/home/biostack/sample.fasta";
 var [exitCode, std_out] <- @"makeblastdb -in \"{prot.fasta}\" -dbtype prot";
 ```
+
+### IO operation
+
+```
+## You can using right shift operator for write data into file
+x >> [options]
+x >> path
+```
+
+The right shift write operator is based on the data type of x:
+
+1. If type of x is dataframe or matrix, then ``write.csv`` function will be called.
+2. If type of x is generic type, then save function will be called.
 
 ###### Simple external calls
 
