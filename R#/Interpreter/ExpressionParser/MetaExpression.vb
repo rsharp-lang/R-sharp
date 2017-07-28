@@ -103,6 +103,11 @@ Namespace Interpreter.Expression
         Sub New()
         End Sub
 
+        Sub New(o As Object, type As TypeCodes)
+            LEFT = o
+            LeftType = type
+        End Sub
+
         ''' <summary>
         ''' 
         ''' </summary>
@@ -132,8 +137,17 @@ Namespace Interpreter.Expression
                     If n.IsPattern(Casting.RegexpDouble) Then
                         LEFT = Val(n)
                         LeftType = TypeCodes.double
+                    ElseIf n.IsPattern(Casting.RegexInteger) Then
+                        LEFT = CInt(Val(n))
+                        LeftType = TypeCodes.integer
+                    ElseIf n = "TRUE" Then
+                        LEFT = True
+                        LeftType = TypeCodes.boolean
+                    ElseIf n = "FALSE" Then
+                        LEFT = False
+                        LeftType = TypeCodes.boolean
                     Else
-                        LEFT = n
+                        LEFT = n  ' 可能为变量引用
                         LeftType = TypeCodes.generic
                     End If
                 Case Else

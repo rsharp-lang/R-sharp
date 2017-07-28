@@ -2,6 +2,7 @@
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.Abstract
+Imports SMRUCC.Rsharp.Interpreter.Expression
 Imports SMRUCC.Rsharp.Runtime.CodeDOM
 
 Namespace Runtime
@@ -24,6 +25,11 @@ Namespace Runtime
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property Types As New Dictionary(Of String, RType)
+        ''' <summary>
+        ''' 函数
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property Closures As New Dictionary(Of String, Func(Of NamedValue(Of Object)(), Object))
 
         ''' <summary>
         ''' 当前的环境是否为最顶层的全局环境？
@@ -62,6 +68,8 @@ Namespace Runtime
                 End If
             End Set
         End Property
+
+
 
         ''' <summary>
         ''' 每一个closure可以看作为一个函数对象
@@ -109,6 +117,25 @@ Namespace Runtime
             Return Function(funcName, args)
 
                    End Function
+        End Function
+
+        Public Function GetValue(x As MetaExpression) As Object
+            If x.LeftType = TypeCodes.generic Then
+                Dim o = x.LEFT
+
+                If o Is Nothing Then
+                    Return Nothing
+                ElseIf o.GetType Is GetType(String) Then
+                    ' 为变量引用
+                    Dim var$ = CStr(o)
+                    o = Me(var)
+                    Return o
+                Else
+                    Return o
+                End If
+            Else
+                Return x.LEFT
+            End If
         End Function
 
         ''' <summary>

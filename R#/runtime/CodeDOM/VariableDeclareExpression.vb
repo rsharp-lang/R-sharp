@@ -43,14 +43,27 @@ Namespace Runtime.CodeDOM
 
         Sub New(members As Statement(Of LanguageTokens)(), initialize As PrimitiveExpression)
             Call MyBase.New("", "list", initialize)
+
             Me.Members = members _
-            .Select(Function(x) New TupleMember(x)) _
-            .ToArray
+                .Select(Function(x) New TupleMember(x)) _
+                .ToArray
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim values = Value.Evaluate(envir)
 
+            If TypeOf values Is Dictionary(Of String, Object) Then
+                Dim table = DirectCast(values, Dictionary(Of String, Object))
+
+                For Each member As TupleMember In Members
+                    Dim value As Object = member.GetValue(table)
+                    Dim var$ = member.Name
+
+                    Call envir.Push(var, value, NameOf(TypeCodes.generic))
+                Next
+            End If
+
+            Return values
         End Function
 
         Public Overrides Function ToString() As String
@@ -60,7 +73,13 @@ Namespace Runtime.CodeDOM
 
     Public Structure TupleMember
 
+        ''' <summary>
+        ''' Member name, can be the same as source name.
+        ''' </summary>
         Dim Name$
+        ''' <summary>
+        ''' source name
+        ''' </summary>
         Dim Alias$
 
         Sub New(declares As Statement(Of LanguageTokens))
@@ -75,6 +94,21 @@ Namespace Runtime.CodeDOM
                 [Alias] = t(2).Value
             End If
         End Sub
+
+        ''' <summary>
+        ''' 先使用<see cref="Name"/>进行查找，如果没有结果，则使用原始名称查找，否则抛出错误
+        ''' </summary>
+        ''' <param name="table"></param>
+        ''' <returns></returns>
+        Public Function GetValue(table As Dictionary(Of String, Object)) As Object
+            If table.ContainsKey(Name) Then
+                Return table(Name)
+            ElseIf [Alias].StringEmpty OrElse Not table.ContainsKey([Alias]) Then
+                Throw New Exception("Tuple member is not exists in the source!")
+            Else
+                Return table([Alias])
+            End If
+        End Function
 
         Public Overrides Function ToString() As String
             If [Alias].StringEmpty Then
