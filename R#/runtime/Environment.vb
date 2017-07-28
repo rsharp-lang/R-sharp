@@ -28,7 +28,7 @@ Namespace Runtime
         ''' 函数
         ''' </summary>
         ''' <returns></returns>
-        Public ReadOnly Property Closures As New Dictionary(Of String, Func(Of Object(), Object))
+        Public ReadOnly Property Closures As New Dictionary(Of String, Func(Of NamedValue(Of Object)(), Object))
 
         ''' <summary>
         ''' 当前的环境是否为最顶层的全局环境？

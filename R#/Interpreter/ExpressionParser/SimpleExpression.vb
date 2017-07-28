@@ -148,7 +148,14 @@ Namespace Interpreter.Expression
         End Function
 
         Private Shared Sub Calculator(operators As String, ByRef metaList As List(Of MetaExpression), envir As Environment)
-            Dim ct As Integer = metaList.Where(Function(mep) InStr(operators, mep.Operator) > 0).Count  'Defines a LINQ query use for select the meta element that contains target operator..Count
+            Dim ct As Integer = metaList _
+                .Where(Function(mep) InStr(operators, mep.Operator) > 0) _
+                .Count  ' Defines a LINQ query use for select the meta element that contains target operator..Count
+
+            If ct = 0 Then
+                Return
+            End If
+
             Dim M, mNext As MetaExpression
             Dim x As Double
 

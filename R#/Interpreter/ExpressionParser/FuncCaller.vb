@@ -78,13 +78,28 @@ Namespace Interpreter.Expression
             Return $"{Name}({args.JoinBy(", ")})"
         End Function
 
-        Public Function Evaluate(envir As Environment) As Double
-            Dim params = Me.Params.Select(Function(x)
-                                              With x
-                                                  Return New NamedValue(Of Object)(.Name, .Value(envir).Evaluate(envir))
-                                              End With
-                                          End Function).ToArray
-            ' Return __calls(Name, params)
+        Public Function Evaluate(envir As Environment) As Object
+            Dim params As NamedValue(Of Object)() = Me _
+                .Params _
+                .Select(Function(x)
+                            With x
+                                Return New NamedValue(Of Object)(.Name, .Value(envir).Evaluate(envir))
+                            End With
+                        End Function) _
+                .ToArray
+            Return run(params, envir)
+        End Function
+
+        Protected Overridable Function run(params As NamedValue(Of Object)(), envir As Environment) As Object
+            If Not __calls Is Nothing Then
+                Return __calls(Name, params.Select(Function(x) CObj(x)).ToArray)
+            End If
+
+            If envir.Closures.ContainsKey(Name) Then
+                Dim closure = envir.Closures(Name)
+                Dim value = closure(params)
+                Return value
+            End If
         End Function
     End Class
 
