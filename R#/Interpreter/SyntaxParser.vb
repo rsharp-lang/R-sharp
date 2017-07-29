@@ -5,6 +5,9 @@ Imports SMRUCC.Rsharp.Runtime.CodeDOM
 
 Namespace Interpreter
 
+    ''' <summary>
+    ''' Parsing language runtime model from script models
+    ''' </summary>
     Public Module SyntaxParser
 
         Const SyntaxNotSupport$ = "The syntax is currently not support yet!"

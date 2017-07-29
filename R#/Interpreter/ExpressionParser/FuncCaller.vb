@@ -83,7 +83,9 @@ Namespace Interpreter.Expression
                 .Params _
                 .Select(Function(x)
                             With x
-                                Return New NamedValue(Of MetaExpression)(.Name, .Value(envir).Evaluate(envir))
+                                Dim out = .Value(envir).Evaluate(envir)
+                                Dim value As New MetaExpression(out.Value, out.RType)
+                                Return New NamedValue(Of MetaExpression)(.Name, value)
                             End With
                         End Function) _
                 .ToArray

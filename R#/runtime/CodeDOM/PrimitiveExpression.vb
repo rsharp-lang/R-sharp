@@ -10,7 +10,7 @@ Namespace Runtime.CodeDOM
     ''' </summary>
     Public Class PrimitiveExpression
 
-        Public Overridable Function Evaluate(envir As Environment) As Object
+        Public Overridable Function Evaluate(envir As Environment) As (value As Object, Type As TypeCodes)
 
         End Function
     End Class
@@ -26,11 +26,9 @@ Namespace Runtime.CodeDOM
             tree = New Pointer(Of Token(Of LanguageTokens))(tokens).TryParse
         End Sub
 
-        Public Overrides Function Evaluate(envir As Environment) As Object
-            With tree(envir)
-                Dim value As Object = .Evaluate(envir)
-                Return value
-            End With
+        Public Overrides Function Evaluate(envir As Environment) As (value As Object, Type As TypeCodes)
+            Dim out = tree(envir).Evaluate(envir)
+            Return out
         End Function
     End Class
 End Namespace

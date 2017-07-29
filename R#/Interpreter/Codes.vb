@@ -18,7 +18,8 @@ Namespace Interpreter
         End Sub
 
         ''' <summary>
-        ''' 运行当前的这个解析出来的脚本程序
+        ''' Run this R# script code model in a specific runtime environment.
+        ''' (运行当前的这个解析出来的脚本程序)
         ''' </summary>
         ''' <param name="environment"></param>
         ''' <returns></returns>
@@ -28,12 +29,19 @@ Namespace Interpreter
 
             For Each line As Statement(Of LanguageTokens) In program
                 statement = line.Parse
-                last = statement.Evaluate(environment)
+                last = statement _
+                    .Evaluate(environment) _
+                    .value
             Next
 
             Return last
         End Function
 
+        ''' <summary>
+        ''' Parsing the R# script text as the script model.
+        ''' </summary>
+        ''' <param name="script$"></param>
+        ''' <returns></returns>
         Public Shared Function TryParse(script$) As Codes
             Return New Codes(TokenIcer.Parse(script))
         End Function

@@ -38,14 +38,14 @@ Namespace Runtime.CodeDOM
 
         End Sub
 
-        Public Overrides Function Evaluate(envir As Environment) As Object
+        Public Overrides Function Evaluate(envir As Environment) As (value As Object, Type As TypeCodes)
             Select Case Type
                 Case LanguageTokens.String
-                    Return CObj(Value)
+                    Return (Value, Type)
                 Case LanguageTokens.Numeric
-                    Return Val(Value)
+                    Return (Val(Value), Type)
                 Case LanguageTokens.Boolean
-                    Return Value.ParseBoolean
+                    Return (Value.ParseBoolean, Type)
                 Case Else
                     Throw New InvalidExpressionException($"Expression ""{Value}"" is a unrecognized data literal!")
             End Select
@@ -70,7 +70,7 @@ Namespace Runtime.CodeDOM
         ''' </summary>
         ''' <param name="envir"></param>
         ''' <returns></returns>
-        Public Overrides Function Evaluate(envir As Environment) As Object
+        Public Overrides Function Evaluate(envir As Environment) As (value As Object, Type As TypeCodes)
             Return Nothing
         End Function
     End Class
