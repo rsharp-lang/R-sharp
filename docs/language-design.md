@@ -1,13 +1,27 @@
+<!-- vscode-markdown-toc -->
+* 1. [Code comments](#Codecomments)
+* 2. [Variable](#Variable)
+		* 2.1. [Append Vector](#AppendVector)
+* 3. [Types](#Types)
+* 4. [Get/Set value](#GetSetvalue)
+	* 4.1. [IO operation](#IOoperation)
+
+<!-- vscode-markdown-toc-config
+	numbering=true
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->
+
 
 # R# language design
 
-## Code comments
+##  1. <a name='Codecomments'></a>Code comments
 
 ```R
 ## This is code comments, it just only allow single line comments.
 ```
 
-## Variable
+##  2. <a name='Variable'></a>Variable
 
 Variable in ``R#`` should be declared by ``var`` keyword, and using ``<-`` operator for value initialize by a expression. If the variable declaration not follow by a value initialize expression, then by default its value is set to ``NULL``:
 
@@ -77,7 +91,7 @@ Dim m = {
 }
 ```
 
-#### Append Vector
+####  2.1. <a name='AppendVector'></a>Append Vector
 
 ```R
 v <- append(a, b)
@@ -85,7 +99,7 @@ v <- append(a, b)
 v <- a << b
 ```
 
-## Types
+##  3. <a name='Types'></a>Types
 
 ``R#`` language have several primitive type:
 
@@ -178,7 +192,7 @@ test.integer <- function(x as integer) {
 }
 ```
 
-## Get/Set value
+##  4. <a name='GetSetvalue'></a>Get/Set value
 
 Get/Set property value keeps the same as the R language: 
 
@@ -356,7 +370,7 @@ var prot.fasta = "/home/biostack/sample.fasta";
 var [exitCode, std_out] <- @"makeblastdb -in \"{prot.fasta}\" -dbtype prot";
 ```
 
-### IO operation
+###  4.1. <a name='IOoperation'></a>IO operation
 
 ```
 ## You can using right shift operator for write data into file
