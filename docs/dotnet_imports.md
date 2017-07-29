@@ -1,6 +1,9 @@
 <!-- vscode-markdown-toc -->
 * 1. [Add .NET Assembly Reference](#Add.NETAssemblyReference)
 * 2. [Construct .NET object instance](#Construct.NETobjectinstance)
+	* 2.1. [Difference between the .NET type and R# ``list``](#Differencebetweenthe.NETtypeandRlist)
+		* 2.1.1. [Construct using difference words](#Constructusingdifferencewords)
+		* 2.1.2. [Dynamics binding operator](#Dynamicsbindingoperator)
 * 3. [Using methods in R#](#UsingmethodsinR)
 	* 3.1. [Using instant method](#Usinginstantmethod)
 	* 3.2. [Using shared method](#Usingsharedmethod)
@@ -63,6 +66,35 @@ But they are have slightly different:
 
 1. In VB.NET you can reference the type by namespace path, like ``namespace1.namespace2.type``, but the R# can not. so that which it means R# should imports the namespace at first by using ``library`` function, and then you are able to using target type.
 2. The .NET type in R# by ``library`` imports is not a package, so that it will not be registered into the R# library. If you want to using the .NET type in next time, you should imports the dll again. but the R# package will not as it have registered in the package manager, so that will not required install again.
+
+###  2.1. <a name='Differencebetweenthe.NETtypeandRlist'></a>Difference between the .NET type and R# ``list``
+
+####  2.1.1. <a name='Constructusingdifferencewords'></a>Construct using difference words
+
+```R
+# For creates a R# list, using list() function
+var x <- list(a =1, b=2, c=3) {
+    $property <- "dddddd";
+}
+
+# For creates a .NET object, using new keyword
+var x <- new NamedValue(of string) with {
+    $name <- "888888";
+    $value <- "abcd";
+}
+```
+
+####  2.1.2. <a name='Dynamicsbindingoperator'></a>Dynamics binding operator
+
+Only R# list can bind operator dynamics, this operator binding is not allowed on the .NET object, we just imports the .NET object its operators
+
+```R
+var x <- list(name = "123") with {
+    %&% <- function($, last.name as string) {
+        $name <- $name & last.name
+    }
+}
+```
 
 ##  3. <a name='UsingmethodsinR'></a>Using methods in R#
 
