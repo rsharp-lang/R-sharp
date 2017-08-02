@@ -116,8 +116,11 @@ IO::SaveTo(list, "D:/test.csv");
 
 ###  3.3. <a name='Usingextensionmethod'></a>Using extension method
 
-all of the shared method and if it has at least on parameter can be using in pipeline mode:
+All of the imported .NET shared method and R# method, and if it has at least one parameter, then it can be using in pipeline mode:
 
 ```R
 {"abc", "123"} | SaveTo("D:/test.txt");
+
+# something like in VB.NET
+# Call {"abc", "123"}.SaveTo("D:/test.txt")
 ```
