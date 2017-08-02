@@ -28,6 +28,7 @@
 
 Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.CodeDOM
 
 Namespace Interpreter.Expression
 
@@ -124,7 +125,7 @@ Namespace Interpreter.Expression
         ''' (返回目标简单表达式对象的值)
         ''' </returns>
         ''' <remarks></remarks>
-        Public Function Evaluate(envir As Environment) As (Value As Object, RType As TypeCodes)
+        Public Function Evaluate(envir As Environment) As TempValue
             If Me.MetaList.Count = 0 Then
                 Return Nothing
             End If
@@ -133,7 +134,7 @@ Namespace Interpreter.Expression
             Dim leftValue = Function()
                                 With metaList.First
                                     Dim value As Object = .LEFT
-                                    Return (value, .LeftType)
+                                    Return TempValue.Tuple(value, .LeftType)
                                 End With
                             End Function
 

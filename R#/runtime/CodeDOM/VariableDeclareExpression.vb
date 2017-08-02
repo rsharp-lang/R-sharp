@@ -49,7 +49,7 @@ Namespace Runtime.CodeDOM
                 .ToArray
         End Sub
 
-        Public Overrides Function Evaluate(envir As Environment) As (value As Object, Type As TypeCodes)
+        Public Overrides Function Evaluate(envir As Environment) As TempValue
             Dim values = Value.Evaluate(envir)
 
             If TypeOf values.value Is Dictionary(Of String, Object) Then

@@ -84,7 +84,7 @@ Namespace Interpreter.Expression
                 .Select(Function(x)
                             With x
                                 Dim out = .Value(envir).Evaluate(envir)
-                                Dim value As New MetaExpression(out.Value, out.RType)
+                                Dim value As New MetaExpression(out.value, out.type)
                                 Return New NamedValue(Of MetaExpression)(.Name, value)
                             End With
                         End Function) _
