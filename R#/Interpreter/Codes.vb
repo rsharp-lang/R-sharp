@@ -34,6 +34,8 @@ Namespace Interpreter
                     .value
             Next
 
+            Call environment.Push(".Last", last, TypeCodes.generic)
+
             Return last
         End Function
 
