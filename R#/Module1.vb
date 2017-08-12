@@ -14,6 +14,8 @@ Module Module1
             Call .globalEnvir.Push("y", -12344445, Runtime.TypeCodes.integer)
 
             result = .Evaluate("var [a,b,D as y] <- list(a=TRUE, b = [x], y = y);")
+            result = .Evaluate("var ddd as integer <- {1,2,3,4,5,6} * 99;")
+
 
             Dim str$ = result.GetJson(True)
 

@@ -13,22 +13,35 @@ Variable in ``R#`` should be declared by ``var`` keyword, and using ``<-`` opera
 
 ```R
 var s <- "12345";
-var x <- {1, 2, 3, 4, 5};
-var m <- {
+var x <- |1, 2, 3, 4, 5|;
+var matrix <-
+  [|1, 2, 3|,
+   |4, 5, 6|,
+   |7, 8, 9|];
+
+var x;
+# is equals to
+var x <- NULL;
+```
+
+Delcare a vector or matrix will no longer required of the ``c(...)`` function or ``matrix`` function. Almost keeps the same as the VisualBasic language it does:
+
+```vbnet
+Dim s = "12345"
+Dim x = {1, 2, 3, 4, 5}
+Dim m = {
    {1, 2, 3},
    {4, 5, 6},
    {7, 8, 9}
-};
-
-var x;
-# is equals to 
-var x <- NULL;
+}
 ```
+
+By default, all of the primitive types in R# is an vector, and user defined type is a single value. So that in R#, ``integer`` means an integer type vector, ``char`` means a character type vector, or string value. ``string`` type in R# is a ``character`` vector.
 
 In the traditional R language, you can using both ``=`` or ``<-`` operator for value assign, all of these two operator are both OK. But in ``R#`` language these two operator have slightly difference: value asssign using ``<-`` operator means ``ByVal``, and value assign using ``=`` operator means ``ByRef``:
 
 ```R
-var a <- {1, 2, 3, 4, 5};
+var a <- |1, 2, 3, 4, 5|;
 
 var b1, b2;
 
@@ -54,27 +67,15 @@ b2[1] = 88;
 b2;
 # [1] 88  2  3  4  5 99
 
-a; 
+a;
 # [1] 88  2  3  4  5 99
 
 b1[2] = -10;
 b1;
 # [1]  1  -10  3  4  5
 
-a; 
+a;
 # [1] 88  2  3  4  5 99
-```
-
-Delcare a vector or matrix will no longer required of the ``c(...)`` function or ``matrix`` function. Almost keeps the same as the VisualBasic language it does:
-
-```vbnet
-Dim s = "12345"
-Dim x = {1, 2, 3, 4, 5}
-Dim m = {
-   {1, 2, 3},
-   {4, 5, 6},
-   {7, 8, 9}
-}
 ```
 
 ###### Types
@@ -125,7 +126,7 @@ Using the ``with{}`` closure you can also using for dynamics add/modify property
 ```R
 create_Foo <- function() {
 	return list() with {
-		
+
 		# please notice that, this operator required of the $name property in this user type
 		# But there is no name in it at all????
 		# Don't worried
@@ -280,8 +281,11 @@ and you can do this pipeline programming in ``R#``
 # and then calling the replace function, at last capitalize all 
 # of the string result
 
-"foo = bar" | replace("foo", "bar") | capitalize
-# bar = bar
+"foo = bar" 
+|replace("foo", "bar") 
+|capitalize
+
+# BAR = BAR
 ```
 
 ```R
@@ -297,11 +301,40 @@ var result <- "hello world!"
     |test1 
     |test2(99) 
     |test3;
-# or you can just using the R function in normal way, and it is much complicated to read:
+    
+# or you can just using the R function in normal way, and it is too much complicated to read:
 var result <- test3(test2(test1("hello world"), 99));
 ```
 
+Note: The R# pipeline syntax, require all of the pipeline content should be in different lines:
+
+```R
+# This is the correct pipeline syntax in R#
+# Pipeline in multiple line mode will makes your code comment more elegant, and more easy to understand
+list(a=123, b= TRUE, c="123")
+|rep(10)                      # replicate 10 times of the value from list functiuon
+|rbind                        # rbind these replicated values as a dataframe
+|write.csv(file="./abc.csv")  # save the resulted data frame as csv file
+
+# Invalid syntax example
+# The R# interpreter can not recognized it as the pipeline if all of the operations in the same line:
+list(a=123, b= TRUE, c="123")|rep(10)|rbind|write.csv(file="./abc.csv")
+```
+
+In VisualBasic, the function pipeline required user imports all of the namespace for the extension function. But in R# function this is not reuqired, and you can reference the package namespace in your R function pipeline, example as:
+
+```R
+# assume we have two function with the same naming: func1, but in different namespace, so we can apply these two function in pipeline mode, like
+
+foo_value
+|namespace.1::func1    # using the func1 in namespace.1 
+|namespace.2::func2    # using the func1 in namespace.2
+;
+```
+
 ###### IN operator
+
+The ``in`` operator means element in the target collection? returns a boolean vector for indicate yes or no.
 
 ```R
 # in list
@@ -312,8 +345,10 @@ var booleans <- x in [min, max];
 
 ###### combine with ``Which`` operator 
 
+The ``which`` operator gets the index of the value ``TRUE`` in a boolean vector:
+
 ```R
-var x <- {1, 2, 3, 4, 5};
+var x <- |1, 2, 3, 4, 5|;
 var indices.true <- which x in [min, max];
 ```
 
