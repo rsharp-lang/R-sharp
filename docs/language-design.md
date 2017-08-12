@@ -1,13 +1,38 @@
+<!-- vscode-markdown-toc -->
+* 1. [Code comments](#Codecomments)
+* 2. [Variable](#Variable)
+		* 2.1. [Append Vector](#AppendVector)
+* 3. [Types](#Types)
+* 4. [Get/Set value](#GetSetvalue)
+* 5. [String](#String)
+* 6. [Operators in R#](#OperatorsinR)
+	* 6.1. [Logical operators](#Logicaloperators)
+	* 6.2. [Dynamics Operator Binding](#DynamicsOperatorBinding)
+	* 6.3. [pipeline operator](#pipelineoperator)
+	* 6.4. [IN operator](#INoperator)
+		* 6.4.1. [combine with ``Which`` operator](#combinewithWhichoperator)
+* 7. [``[]`` bracket in R language](#bracketinRlanguage)
+* 8. [IO operation](#IOoperation)
+	* 8.1. [Simple external calls](#Simpleexternalcalls)
+* 9. [Using tuple](#Usingtuple)
+	* 9.1. [R object to tuple](#Robjecttotuple)
 
-## R# language design
+<!-- vscode-markdown-toc-config
+	numbering=true
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->
 
-###### Code comments
+
+# R# language design
+
+##  1. <a name='Codecomments'></a>Code comments
 
 ```R
 ## This is code comments, it just only allow single line comments.
 ```
 
-###### Variable
+##  2. <a name='Variable'></a>Variable
 
 Variable in ``R#`` should be declared by ``var`` keyword, and using ``<-`` operator for value initialize by a expression. If the variable declaration not follow by a value initialize expression, then by default its value is set to ``NULL``:
 
@@ -79,6 +104,16 @@ a;
 ```
 
 ###### Types
+
+####  2.1. <a name='AppendVector'></a>Append Vector
+
+```R
+v <- append(a, b)
+## left shift means append b into vector a and then creates a new vector
+v <- a << b
+```
+
+##  3. <a name='Types'></a>Types
 
 ``R#`` language have several primitive type:
 
@@ -171,7 +206,7 @@ test.integer <- function(x as integer) {
 }
 ```
 
-###### Get/Set value
+##  4. <a name='GetSetvalue'></a>Get/Set value
 
 Get/Set property value keeps the same as the R language: 
 
@@ -180,7 +215,7 @@ var names <- dataframe[, "name"];
 dataframe[, "name"] <- new.names;
 ```
 
-###### String
+##  5. <a name='String'></a>String
 
 Add new string contact and string interploate feature for ``R#``, makes you more easier in the string manipulation:
 
@@ -192,7 +227,9 @@ var my.name  <- "{first.name} {last.name}";
 var his.name <- sprintf("%s %s", first.name, last.name); 
 ```
 
-###### Logical operators
+##  6. <a name='OperatorsinR'></a>Operators in R#
+
+###  6.1. <a name='Logicaloperators'></a>Logical operators
 
 The ``R#`` language using the VisualBasic logical operator system, as the ``&`` operator is conflicts with the string contact and ``|`` operator is conflicts with the pipeline operator.
 
@@ -208,7 +245,7 @@ if (x <= 10 andalso y != 99) {
 }
 ```
 
-###### Operator binding
+###  6.2. <a name='DynamicsOperatorBinding'></a>Dynamics Operator Binding
 
 Allows you binding operator on your custom type in dynamics way when you create a user objec from ``list()`` function:
 
@@ -247,7 +284,7 @@ Allows user operator
 |``in``   | collection set      |
 |``which``| index list for true |
 
-###### pipeline operator
+###  6.3. <a name='pipelineoperator'></a>pipeline operator
 
 Extension caller chain in VisualBasic is also named as function pipeline
 
@@ -334,6 +371,8 @@ foo_value
 
 ###### IN operator
 
+###  6.4. <a name='INoperator'></a>IN operator
+
 The ``in`` operator means element in the target collection? returns a boolean vector for indicate yes or no.
 
 ```R
@@ -343,7 +382,7 @@ var booleans <- name in names(obj);
 var booleans <- x in [min, max];
 ```
 
-###### combine with ``Which`` operator 
+####  6.4.1. <a name='combinewithWhichoperator'></a>combine with ``Which`` operator 
 
 The ``which`` operator gets the index of the value ``TRUE`` in a boolean vector:
 
@@ -352,7 +391,7 @@ var x <- |1, 2, 3, 4, 5|;
 var indices.true <- which x in [min, max];
 ```
 
-###### ``[]`` bracket in R language
+##  7. <a name='bracketinRlanguage'></a>``[]`` bracket in R language
 
 Global variable:
 
@@ -383,7 +422,20 @@ var prot.fasta = "/home/biostack/sample.fasta";
 var [exitCode, std_out] <- @"makeblastdb -in \"{prot.fasta}\" -dbtype prot";
 ```
 
-###### Simple external calls
+##  8. <a name='IOoperation'></a>IO operation
+
+```
+## You can using right shift operator for write data into file
+x >> [options]
+x >> path
+```
+
+The right shift write operator is based on the data type of x:
+
+1. If type of x is dataframe or matrix, then ``write.csv`` function will be called.
+2. If type of x is generic type, then save function will be called.
+
+###  8.1. <a name='Simpleexternalcalls'></a>Simple external calls
 
 The ``R#`` language makes more easier for calling external command from CLI, apply a ``@`` operator on a string vector will makes an external system calls:
 
@@ -395,7 +447,7 @@ var CLI <- "/bin/GCModeller/localblast /blastp /query \"{query.fasta}\" /subject
 var [exitCode, stdout] <- @CLI;
 ```
 
-###### Using tuple
+##  9. <a name='Usingtuple'></a>Using tuple
 
 Tuple enable the R function returns multiple value at once:
 
@@ -427,7 +479,7 @@ If x.a = 3 Then
 End If
 ```
 
-###### R object to tuple
+###  9.1. <a name='Robjecttotuple'></a>R object to tuple
 
 You can naturally convert the object as tuple value. The member in the tuple their name should matched the names in an object, so that you can doing something like this example in ``R#``:
 

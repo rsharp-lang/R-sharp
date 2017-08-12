@@ -1,33 +1,34 @@
-﻿#Region "Microsoft.VisualBasic::d431891b508f7c76f2af19e8249b51c8, ..\sciBASIC#\Data_science\Mathematical\Math\Scripting\Arithmetic.Expression\SimpleExpression.vb"
+﻿#Region "Microsoft.VisualBasic::2ddc59135585a28255463e57ab2e654d, ..\R-sharp\R#\Interpreter\ExpressionParser\SimpleExpression.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xieguigang (xie.guigang@live.com)
-'       xie (genetics@smrucc.org)
-' 
-' Copyright (c) 2016 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xieguigang (xie.guigang@live.com)
+    '       xie (genetics@smrucc.org)
+    ' 
+    ' Copyright (c) 2016 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 #End Region
 
 Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.CodeDOM
 
 Namespace Interpreter.Expression
 
@@ -124,7 +125,7 @@ Namespace Interpreter.Expression
         ''' (返回目标简单表达式对象的值)
         ''' </returns>
         ''' <remarks></remarks>
-        Public Function Evaluate(envir As Environment) As (Value As Object, RType As TypeCodes)
+        Public Function Evaluate(envir As Environment) As TempValue
             If Me.MetaList.Count = 0 Then
                 Return Nothing
             End If
@@ -133,7 +134,7 @@ Namespace Interpreter.Expression
             Dim leftValue = Function()
                                 With metaList.First
                                     Dim value As Object = .LEFT
-                                    Return (value, .LeftType)
+                                    Return TempValue.Tuple(value, .LeftType)
                                 End With
                             End Function
 

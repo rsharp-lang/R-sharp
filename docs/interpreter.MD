@@ -1,12 +1,26 @@
+<!-- vscode-markdown-toc -->
+* 1. [Statements in R#](#StatementsinR)
+		* 1.1. [Variable Declares](#VariableDeclares)
+		* 1.2. [``if`` branch statement](#ifbranchstatement)
+		* 1.3. [``function`` declares statement](#functiondeclaresstatement)
+		* 1.4. [``for`` loop statement](#forloopstatement)
+		* 1.5. [``do`` loop statement](#doloopstatement)
+
+<!-- vscode-markdown-toc-config
+	numbering=true
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->
+
 # How the interpreter works?
 
 ```
 script -> [TokenIcer] -> SourceTree -> ListOf RStatements -> ExecuteMachine
 ```
 
-## Statements in R#
+##  1. <a name='StatementsinR'></a>Statements in R#
 
-#### Variable Declares
+####  1.1. <a name='VariableDeclares'></a>Variable Declares
 
 ```R
 # Generic type variable
@@ -67,7 +81,7 @@ Example:
 var {variable} as {type} <- {initial_expression};
 ```
 
-#### ``if`` branch statement
+####  1.2. <a name='ifbranchstatement'></a>``if`` branch statement
 
 ```R
 if ({bool_expression}) {
@@ -91,7 +105,7 @@ if ({bool_expression}) {
 }
 ```
 
-#### ``function`` declares statement
+####  1.3. <a name='functiondeclaresstatement'></a>``function`` declares statement
 
 ```R
 {function_name} <- function(parameter1 [as {type}], [...]) {
@@ -128,7 +142,7 @@ test <- function(a, b, c = [x=(a + b)^2, y=128]) {
 }
 ```
 
-#### ``for`` loop statement
+####  1.4. <a name='forloopstatement'></a>``for`` loop statement
 
 The R language its ``for`` loop is equals to the ``For Each`` Loop in VisualBasic:
 
@@ -169,7 +183,7 @@ For Each d As Double In x
 Next
 ```
 
-#### ``do`` loop statement
+####  1.5. <a name='doloopstatement'></a>``do`` loop statement
 
 ```R
 # do while expression is TRUE

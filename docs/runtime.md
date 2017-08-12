@@ -1,3 +1,14 @@
+<!-- vscode-markdown-toc -->
+* 1. [Running a R# script](#RunningaRscript)
+	* 1.1. [From ``source()``](#Fromsource)
+	* 1.2. [From commandline](#Fromcommandline)
+
+<!-- vscode-markdown-toc-config
+	numbering=true
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->
+
 # The R# runtime
 
 In R# language, each source script is run in a function closure mode, which means each R# script just like a program statement in a virtual function which its named ``Main``, and this function have a parameter list which user can read the arguments from commandline.
@@ -9,7 +20,7 @@ main <- function(...) {
 }
 ```
 
-## Running a R# script
+##  1. <a name='RunningaRscript'></a>Running a R# script
 
 For example, assume that we have a R# script like:
 
@@ -22,7 +33,7 @@ printf("[%s] got %s pages.", message, pages);
 return [message, pages]; 
 ```
 
-### From ``source()``
+###  1.1. <a name='Fromsource'></a>From ``source()``
 
 ```R
 source <- function(path, ...) {
@@ -56,7 +67,7 @@ result;
 source("script.R", message="Hello world!", pages=999);
 ```
 
-### From commandline
+###  1.2. <a name='Fromcommandline'></a>From commandline
 
 You also can running the R# script directly from commandline, example as running a R# script from bash shell:
 

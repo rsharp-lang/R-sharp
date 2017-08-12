@@ -1,4 +1,32 @@
-﻿Imports Microsoft.VisualBasic.Language
+﻿#Region "Microsoft.VisualBasic::731eee7d952897c32e0fd08832757a87, ..\R-sharp\R#\runtime\CodeDOM\LiteralExpression.vb"
+
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xieguigang (xie.guigang@live.com)
+    '       xie (genetics@smrucc.org)
+    ' 
+    ' Copyright (c) 2016 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+#End Region
+
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports SMRUCC.Rsharp.Interpreter
 
@@ -38,14 +66,14 @@ Namespace Runtime.CodeDOM
 
         End Sub
 
-        Public Overrides Function Evaluate(envir As Environment) As (value As Object, Type As TypeCodes)
+        Public Overrides Function Evaluate(envir As Environment) As TempValue
             Select Case Type
                 Case LanguageTokens.String
-                    Return (Value, Type)
+                    Return TempValue.Tuple(Value, Type)
                 Case LanguageTokens.Numeric
-                    Return (Val(Value), Type)
+                    Return TempValue.Tuple(Val(Value), Type)
                 Case LanguageTokens.Boolean
-                    Return (Value.ParseBoolean, Type)
+                    Return TempValue.Tuple(Value.ParseBoolean, Type)
                 Case Else
                     Throw New InvalidExpressionException($"Expression ""{Value}"" is a unrecognized data literal!")
             End Select
@@ -70,7 +98,7 @@ Namespace Runtime.CodeDOM
         ''' </summary>
         ''' <param name="envir"></param>
         ''' <returns></returns>
-        Public Overrides Function Evaluate(envir As Environment) As (value As Object, Type As TypeCodes)
+        Public Overrides Function Evaluate(envir As Environment) As TempValue
             Return Nothing
         End Function
     End Class
