@@ -351,9 +351,18 @@ list(a=123, b= TRUE, c="123")
 |rep(10)                      # replicate 10 times of the value from list functiuon
 |rbind                        # rbind these replicated values as a dataframe
 |write.csv(file="./abc.csv")  # save the resulted data frame as csv file
+;
+
+# The pipeline example is equals to these code in R:
+x <- list(a=123, b= TRUE, c="123");
+x <- rep(x, 10);
+x <- rbind(x);
+x <- write.csv(x, file="./abc.csv");
 
 # Invalid syntax example
 # The R# interpreter can not recognized it as the pipeline if all of the operations in the same line:
+# And it is not so easy to add code comments for each function calls if all of the function are 
+# in same line:
 list(a=123, b= TRUE, c="123")|rep(10)|rbind|write.csv(file="./abc.csv")
 ```
 
