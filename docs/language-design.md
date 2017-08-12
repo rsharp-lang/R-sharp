@@ -297,9 +297,9 @@ End Function
 <Extension> Function test3(a) 
 End Function
 
-Dim result = "hello world!" 
-    .test1 
-    .test2(99) 
+Dim result = "hello world!" _
+    .test1 _ 
+    .test2(99) _ 
     .test3
 ```
 
@@ -342,14 +342,14 @@ var result <- "hello world!"
 var result <- test3(test2(test1("hello world"), 99));
 ```
 
-Note: The R# pipeline syntax, require all of the pipeline content should be in different lines:
+Note: Unlike the unix bash pipeline, operations can be keeps in the sample line, the R# pipeline syntax, require all of the pipeline content should be in different lines:
 
 ```R
 # This is the correct pipeline syntax in R#
 # Pipeline in multiple line mode will makes your code comment more elegant, and more easy to understand
 list(a=123, b= TRUE, c="123")
 |rep(10)                      # replicate 10 times of the value from list functiuon
-|rbind                        # rbind these replicated values as a dataframe
+|rbind()                      # rbind these replicated values as a dataframe
 |write.csv(file="./abc.csv")  # save the resulted data frame as csv file
 ;
 
@@ -360,27 +360,27 @@ x <- rbind(x);
 x <- write.csv(x, file="./abc.csv");
 
 # Invalid syntax example
-# The R# interpreter can not recognized it as the pipeline if all of the operations in the same line:
+# The R# interpreter can not recognized it as the pipeline, if all of the pipeline operation in the same line.
 # And it is not so easy to add code comments for each function calls if all of the function are 
 # in same line:
-list(a=123, b= TRUE, c="123")|rep(10)|rbind|write.csv(file="./abc.csv")
+list(a=123, b= TRUE, c="123")|rep(10)|rbind|write.csv(file="./abc.csv");
 ```
 
 In VisualBasic, the function pipeline required user imports all of the namespace for the extension function. But in R# function this is not reuqired, and you can reference the package namespace in your R function pipeline, example as:
 
 ```R
-# assume we have two function with the same naming: func1, but in different namespace
+# assume we have two function with the same name: func1, but in different namespace
 # so we can apply these two function in pipeline mode, like
 
 foo_value
-|namespace.1::func1    # using the func1 in namespace.1 
-|namespace.2::func2    # using the func1 in namespace.2
+|namespace.1::func1()    # using the func1 in namespace.1 
+|namespace.2::func1()    # using the func1 in namespace.2
 ;
 ```
 
 ###  6.4. <a name='INoperator'></a>IN operator
 
-The ``in`` operator means element in the target collection? returns a boolean vector for indicate yes or no.
+The ``in`` operator means does the element in the target collection? returns a boolean vector for indicate exists or not exists.
 
 ```R
 # in list
