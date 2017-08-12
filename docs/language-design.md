@@ -23,7 +23,6 @@
 	/vscode-markdown-toc-config -->
 <!-- /vscode-markdown-toc -->
 
-
 # R# language design
 
 ##  1. <a name='Codecomments'></a>Code comments
@@ -103,9 +102,9 @@ a;
 # [1] 88  2  3  4  5 99
 ```
 
-###### Types
-
 ####  2.1. <a name='AppendVector'></a>Append Vector
+
+You can using ``append()`` function for append a vector in R language, and in R# you can using both ``append()`` function and left shift ``<<`` operator for append a vector:
 
 ```R
 v <- append(a, b)
@@ -115,7 +114,7 @@ v <- a << b
 
 ##  3. <a name='Types'></a>Types
 
-``R#`` language have several primitive type:
+``R#`` language have several primitive type, **by default all of them are vector type**:
 
 |primitive type in R|.NET type                |
 |-------------------|-------------------------|
@@ -136,12 +135,12 @@ obj$a <- 123;
 obj$b <- "+++";
 
 # it also works, but this statement is not elegant when you have 
-# a lot of list property slot required to put into the obj 
-# variable. 
+# a lot of list property slot required to put into the R# list object
+# variable.
 var obj <- list(a = 123, b = "+++");
 
 # using with for object property initialize
-var obj <- list(list = {TRUE, TRUE, TRUE, FALSE}, flag = 0) with {
+var obj <- list(list = |TRUE, TRUE, TRUE, FALSE|, flag = 0) with {
     $a <- 123;
     $b <- "+++";
 }
@@ -190,7 +189,7 @@ using_selected_name <- function(names as string) {
 	return o;
 ```
 
-generally, the parameter in a function is generic type, so that a function its definition like:
+generally, the parameter in a R# function is generic type, so that a function its definition like:
 
 ```R
 test <- function(x) {
@@ -361,15 +360,14 @@ list(a=123, b= TRUE, c="123")|rep(10)|rbind|write.csv(file="./abc.csv")
 In VisualBasic, the function pipeline required user imports all of the namespace for the extension function. But in R# function this is not reuqired, and you can reference the package namespace in your R function pipeline, example as:
 
 ```R
-# assume we have two function with the same naming: func1, but in different namespace, so we can apply these two function in pipeline mode, like
+# assume we have two function with the same naming: func1, but in different namespace
+# so we can apply these two function in pipeline mode, like
 
 foo_value
 |namespace.1::func1    # using the func1 in namespace.1 
 |namespace.2::func2    # using the func1 in namespace.2
 ;
 ```
-
-###### IN operator
 
 ###  6.4. <a name='INoperator'></a>IN operator
 
