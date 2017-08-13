@@ -27,7 +27,7 @@
 #End Region
 
 Imports Microsoft.VisualBasic.Serialization.JSON
-Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.Language
 
 Module Module1
 

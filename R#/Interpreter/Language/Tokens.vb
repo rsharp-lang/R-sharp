@@ -28,6 +28,9 @@
 
 Namespace Interpreter.Language
 
+    ''' <summary>
+    ''' The R# language tokens
+    ''' </summary>
     Public Enum Tokens As Byte
 
         undefine = 0

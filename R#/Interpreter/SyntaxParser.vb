@@ -28,8 +28,10 @@
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
+Imports SMRUCC.Rsharp.Interpreter.Language
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.CodeDOM
+Imports RSharpLang = SMRUCC.Rsharp.Interpreter.Language.Tokens
 
 Namespace Interpreter
 
@@ -75,11 +77,11 @@ Namespace Interpreter
             End If
 
             With tokens(1)
-                If Not (.Type = Global.SMRUCC.Rsharp.Interpreter.Tokens.LeftAssign OrElse .Type = Global.SMRUCC.Rsharp.Interpreter.Tokens.ParameterAssign) Then
+                If Not (.Type = RSharpLang.LeftAssign OrElse .Type = RSharpLang.ParameterAssign) Then
                     Return False
                 End If
 
-                If Not .Type = Global.SMRUCC.Rsharp.Interpreter.Tokens.LeftAssign Then
+                If Not .Type = RSharpLang.LeftAssign Then
                     isByRef = True
                 End If
             End With
@@ -109,9 +111,9 @@ Namespace Interpreter
             Dim tokens = statement.tokens
             Dim var$ = tokens.ElementAtOrDefault(1)?.Text  ' 变量名
 
-            If Not tokens.First.name = Global.SMRUCC.Rsharp.Interpreter.Tokens.Variable Then
+            If Not tokens.First.name = RSharpLang.Variable Then
                 Return False
-            ElseIf Not tokens(2).name = Global.SMRUCC.Rsharp.Interpreter.Tokens.LeftAssign Then
+            ElseIf Not tokens(2).name = RSharpLang.LeftAssign Then
                 ' var x
                 ' 这种形式的申明默认为NULL
 
@@ -129,7 +131,7 @@ Namespace Interpreter
             Dim initialize As PrimitiveExpression = New ValueExpression(initExpression)
 
             With tokens(1)
-                If .Type = Global.SMRUCC.Rsharp.Interpreter.Tokens.Tuple Then
+                If .Type = RSharpLang.Tuple Then
                     out = New TupleDeclareExpression(.Arguments, initialize)
                 Else
                     out = New VariableDeclareExpression(.Value, NameOf(TypeCodes.generic), initialize)
@@ -150,7 +152,7 @@ Namespace Interpreter
             Dim tokens = statement.tokens
             Dim var$ = tokens.ElementAtOrDefault(1)?.Text
 
-            If Not tokens.First.name = Global.SMRUCC.Rsharp.Interpreter.Tokens.Variable Then
+            If Not tokens.First.name = RSharpLang.Variable Then
                 Return False
             ElseIf Not tokens(2).Text = "as" Then
                 ' 没有类型约束，则肯定不是这种类型的表达式

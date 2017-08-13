@@ -27,10 +27,12 @@
 #End Region
 
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
-Imports SMRUCC.Rsharp.Runtime.CodeDOM
+Imports SMRUCC.Rsharp.Interpreter.Language
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.CodeDOM
+Imports RSharpLang = SMRUCC.Rsharp.Interpreter.Language.Tokens
 
-Namespace Interpreter
+Namespace Interpreter.Language
 
     ''' <summary>
     ''' The R# script code model
@@ -75,5 +77,19 @@ Namespace Interpreter
         Public Shared Function TryParse(script$) As Codes
             Return New Codes(TokenIcer.Parse(script))
         End Function
+    End Class
+
+    Public Class Token : Inherits Token(Of RSharpLang)
+
+        Sub New()
+        End Sub
+
+        Sub New(type As RSharpLang, text$)
+            Call MyBase.New(type, text)
+        End Sub
+
+        Sub New(type As RSharpLang)
+            Call MyBase.New(type)
+        End Sub
     End Class
 End Namespace

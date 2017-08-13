@@ -27,6 +27,7 @@
 #End Region
 
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports SMRUCC.Rsharp.Interpreter.Language
 Imports SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter

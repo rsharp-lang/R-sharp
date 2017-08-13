@@ -29,8 +29,8 @@
 Imports Microsoft.VisualBasic.Emit.Marshal
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
-Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.Expression
+Imports SMRUCC.Rsharp.Interpreter.Language
 
 Namespace Runtime.CodeDOM
 

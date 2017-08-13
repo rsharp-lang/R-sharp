@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interpreter\Interpreter.vb" />
+    <Compile Include="Interpreter\Language\Token.vb" />
     <Compile Include="Interpreter\Language\Codes.vb" />
     <Compile Include="Interpreter\ExpressionParser\FuncCaller.vb" />
     <Compile Include="Interpreter\ExpressionParser\MetaExpression.vb" />

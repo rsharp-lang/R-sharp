@@ -32,9 +32,10 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports Microsoft.VisualBasic.Text
 Imports Microsoft.VisualBasic.Text.Xml.Models
-Imports langToken = Microsoft.VisualBasic.Scripting.TokenIcer.Token(Of SMRUCC.Rsharp.Interpreter.Tokens)
+Imports SMRUCC.Rsharp.Interpreter.Language
+Imports RSharpLang = SMRUCC.Rsharp.Interpreter.Language.Tokens
 
-Namespace Interpreter
+Namespace Interpreter.Language
 
     ''' <summary>
     ''' Convert the text data as the script model
@@ -78,7 +79,7 @@ Namespace Interpreter
             Dim quotOpen As Boolean = False
             Dim commentOpen As Boolean = False ' 当出现注释符的时候，会一直持续到遇见换行符为止
             Dim tmp As New List(Of Char)
-            Dim tokens As New List(Of langToken)
+            Dim tokens As New List(Of Token)
             Dim last As Statement(Of Tokens)
             Dim varDefInit = Function()
                                  If tokens.Count = 0 AndAlso tmp.SequenceEqual("var") Then
@@ -101,11 +102,11 @@ Namespace Interpreter
 
                                ' 创建除了字符串之外的其他的token
                                If varDefInit() Then
-                                   tokens += New langToken(Rsharp.Interpreter.Tokens.Variable, "var")
+                                   tokens += New Token(RSharpLang.Variable, "var")
                                ElseIf tmp.SequenceEqual("<-") Then
-                                   tokens += New langToken(Rsharp.Interpreter.Tokens.LeftAssign, "<-")
+                                   tokens += New Token(RSharpLang.LeftAssign, "<-")
                                Else
-                                   tokens += New langToken(Rsharp.Interpreter.Tokens.Object) With {
+                                   tokens += New Token(RSharpLang.Object) With {
                                        .Value = New String(tmp)
                                    }
                                End If
@@ -124,8 +125,8 @@ Namespace Interpreter
                 If quotOpen Then ' 当前所解析的状态为字符串解析
                     If c = ASCII.Quot AndAlso Not tmp.StartEscaping Then
                         ' 当前的字符为双引号，并且不是转义状态，则结束字符串
-                        tokens += New langToken With {
-                            .name = Rsharp.Interpreter.Tokens.String,
+                        tokens += New Token With {
+                            .name = RSharpLang.String,
                             .Value = New String(tmp)
                         }
                         tmp *= 0
@@ -137,8 +138,8 @@ Namespace Interpreter
                 ElseIf commentOpen Then
                     If c = ASCII.CR OrElse c = ASCII.LF Then
                         ' 遇见了换行符，则结束注释
-                        tokens += New langToken With {
-                            .name = Rsharp.Interpreter.Tokens.Comment,
+                        tokens += New Token With {
+                            .name = RSharpLang.Comment,
                             .Value = New String(tmp)
                         }
                         tmp *= 0
@@ -182,7 +183,7 @@ Namespace Interpreter
 
                             ' 这是方法调用的符号
                             newToken()
-                            tokens += New langToken(Rsharp.Interpreter.Tokens.DotNetMethodCall, ":")
+                            tokens += New Token(RSharpLang.DotNetMethodCall, ":")
 
                         ElseIf c = "("c Then
 
@@ -198,20 +199,20 @@ Namespace Interpreter
                                 ' (1+2) *3
                                 ' 这种类型的表达式
 
-                                tokens += New langToken(Rsharp.Interpreter.Tokens.Priority, "()")
+                                tokens += New Token(RSharpLang.Priority, "()")
                             End If
 
                             With tokens.Last
-                                If .name = Global.SMRUCC.Rsharp.Interpreter.Tokens.Object Then
+                                If .name = RSharpLang.Object Then
                                     ' function
-                                    .name = Rsharp.Interpreter.Tokens.Function
+                                    .name = RSharpLang.Function
                                     .Arguments = childs
                                 Else
-                                    If .name = Global.SMRUCC.Rsharp.Interpreter.Tokens.Operator Then
-                                        tokens += New langToken(Rsharp.Interpreter.Tokens.Priority, "()")
-                                    ElseIf .name <> Rsharp.Interpreter.Tokens.Priority Then
-                                        tokens += New langToken(Rsharp.Interpreter.Tokens.ParenOpen, c)
-                                    ElseIf .name = Global.SMRUCC.Rsharp.Interpreter.Tokens.Priority Then
+                                    If .name = RSharpLang.Operator Then
+                                        tokens += New Token(RSharpLang.Priority, "()")
+                                    ElseIf .name <> Rsharplang.Priority Then
+                                        tokens += New Token(RSharpLang.ParenOpen, c)
+                                    ElseIf .name = Rsharplang.Priority Then
                                         tokens.Last.Closure = New Main(Of Tokens) With {
                                             .program = childs
                                         }
@@ -220,8 +221,8 @@ Namespace Interpreter
 
                                     ' 不要将下面的代码放在Else分支中
                                     tokens.Last.Arguments = childs ' 因为上一行添加了新的token，所以last已经不是原来的了，不可以引用with的last
-                                    If .name <> Rsharp.Interpreter.Tokens.Operator AndAlso .name <> Rsharp.Interpreter.Tokens.Priority Then
-                                        tokens += New langToken(Rsharp.Interpreter.Tokens.ParenClose, close(c))
+                                    If .name <> RSharpLang.Operator AndAlso .name <> RSharpLang.Priority Then
+                                        tokens += New Token(RSharpLang.ParenClose, close(c))
                                     End If
                                 End If
                             End With
@@ -241,13 +242,13 @@ Namespace Interpreter
                                         ' 这里所解析到的是对全局变量的引用
                                         ' [x] <- 3
                                         ' 3 + [x]
-                                        tokens += New langToken(Rsharp.Interpreter.Tokens.Object, $"[{ .tokens(Scan0).Text}]")
+                                        tokens += New Token(RSharpLang.Object, $"[{ .tokens(Scan0).Text}]")
                                         Continue Do
                                     End If
                                 End With
                             End If
 
-                            With New langToken(Rsharp.Interpreter.Tokens.Tuple, "[...]")
+                            With New Token(RSharpLang.Tuple, "[...]")
                                 .Arguments = childs
                                 tokens += .ref
                             End With
@@ -261,7 +262,7 @@ Namespace Interpreter
                                 Call newToken()
 
                                 With tokens.Last
-                                    .name = Rsharp.Interpreter.Tokens.ParameterAssign
+                                    .name = RSharpLang.ParameterAssign
                                 End With
                             Else
                                 newToken() ' 因为newtoken会清空tmp缓存，而bufferEquals函数需要tmp来判断，所以newtoken不能先于bufferequals函数执行
@@ -275,7 +276,7 @@ Namespace Interpreter
                             If matrixOpen Then
 
                                 ' 可能为matrix语法
-                                tokens += New langToken(Rsharp.Interpreter.Tokens.ParenOpen, "{")
+                                tokens += New Token(RSharpLang.ParenOpen, "{")
 
                             End If
 
@@ -285,7 +286,7 @@ Namespace Interpreter
 
                             If matrixOpen Then
                                 ' 关闭matrix
-                                tokens += New langToken(Rsharp.Interpreter.Tokens.ParenClose, "}")
+                                tokens += New Token(RSharpLang.ParenClose, "}")
                             End If
 
                             last = New Statement(Of Tokens) With {
@@ -325,12 +326,12 @@ Namespace Interpreter
 
                         ElseIf c = "|"c Then
                             newToken()
-                            tokens += New langToken(Rsharp.Interpreter.Tokens.Pipeline, "|")
+                            tokens += New Token(RSharpLang.Pipeline, "|")
 
                         ElseIf c = "&"c Then
                             ' 字符串拼接
                             newToken()
-                            tokens += New langToken(Rsharp.Interpreter.Tokens.StringContact, "&")
+                            tokens += New Token(RSharpLang.StringContact, "&")
 
                         ElseIf c = ","c Then
                             newToken()
@@ -348,10 +349,10 @@ Namespace Interpreter
                         ElseIf c = "="c Then
 
                             If bufferEquals("<"c) Then
-                                tokens += New langToken(Rsharp.Interpreter.Tokens.Operator, "<=")
+                                tokens += New Token(RSharpLang.Operator, "<=")
                                 tmp *= 0
                             ElseIf bufferEquals("="c) Then
-                                tokens += New langToken(Rsharp.Interpreter.Tokens.Operator, "==")
+                                tokens += New Token(RSharpLang.Operator, "==")
                                 tmp *= 0
                             Else
                                 If tmp.Count = 0 Then
@@ -359,7 +360,7 @@ Namespace Interpreter
                                     tmp += c
                                 Else
                                     newToken()
-                                    tokens += New langToken(Rsharp.Interpreter.Tokens.ParameterAssign, "=")
+                                    tokens += New Token(RSharpLang.ParameterAssign, "=")
                                 End If
                             End If
 
@@ -392,7 +393,7 @@ Namespace Interpreter
                                 Call newToken()
 
                                 With tokens.Last
-                                    .name = Rsharp.Interpreter.Tokens.ParameterAssign
+                                    .name = RSharpLang.ParameterAssign
                                 End With
                             Else
                                 newToken() ' 因为newtoken会清空tmp缓存，而bufferEquals函数需要tmp来判断，所以newtoken不能先于bufferequals函数执行
@@ -406,12 +407,12 @@ Namespace Interpreter
                                 newToken()
                             Else
                                 newToken() ' 这两个newtoken调用不可以合并到一起，因为他们的上下文环境变了 
-                                tokens += New langToken(Rsharp.Interpreter.Tokens.Operator, c)
+                                tokens += New Token(RSharpLang.Operator, c)
                             End If
 
                         ElseIf c = "+"c OrElse c = "*"c OrElse c = "/"c OrElse c = "\"c OrElse c = "^" OrElse c = "@"c Then
                             newToken()
-                            tokens += New langToken(Rsharp.Interpreter.Tokens.Operator, c)
+                            tokens += New Token(RSharpLang.Operator, c)
                         Else
                             tmp += c
                         End If
