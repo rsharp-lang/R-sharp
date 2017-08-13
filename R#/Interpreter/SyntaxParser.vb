@@ -45,7 +45,7 @@ Namespace Interpreter
         ''' </summary>
         ''' <param name="statement"></param>
         ''' <returns></returns>
-        <Extension> Public Function Parse(statement As Statement(Of LanguageTokens)) As PrimitiveExpression
+        <Extension> Public Function Parse(statement As Statement(Of Tokens)) As PrimitiveExpression
             Dim expression As PrimitiveExpression = Nothing
 
             If TryParseTypedObjectDeclare(statement, expression) Then
@@ -66,7 +66,7 @@ Namespace Interpreter
         ''' <param name="statement"></param>
         ''' <param name="out"></param>
         ''' <returns></returns>
-        Public Function TryParseValueAssign(statement As Statement(Of LanguageTokens), ByRef out As PrimitiveExpression) As Boolean
+        Public Function TryParseValueAssign(statement As Statement(Of Tokens), ByRef out As PrimitiveExpression) As Boolean
             Dim tokens = statement.tokens
             Dim isByRef As Boolean = False
 
@@ -75,11 +75,11 @@ Namespace Interpreter
             End If
 
             With tokens(1)
-                If Not (.Type = LanguageTokens.LeftAssign OrElse .Type = LanguageTokens.ParameterAssign) Then
+                If Not (.Type = Global.SMRUCC.Rsharp.Interpreter.Tokens.LeftAssign OrElse .Type = Global.SMRUCC.Rsharp.Interpreter.Tokens.ParameterAssign) Then
                     Return False
                 End If
 
-                If Not .Type = LanguageTokens.LeftAssign Then
+                If Not .Type = Global.SMRUCC.Rsharp.Interpreter.Tokens.LeftAssign Then
                     isByRef = True
                 End If
             End With
@@ -88,7 +88,7 @@ Namespace Interpreter
                 .a = New VariableReference With {
                     .ref = tokens(0)
                 },
-                .b = New Statement(Of LanguageTokens) With {
+                .b = New Statement(Of Tokens) With {
                     .tokens = tokens.Skip(2).ToArray
                 }.Parse,
                 .IsByRef = isByRef,
@@ -105,13 +105,13 @@ Namespace Interpreter
         ''' </summary>
         ''' <param name="statement"></param>
         ''' <returns></returns>
-        Public Function TryParseObjectDeclare(statement As Statement(Of LanguageTokens), ByRef out As PrimitiveExpression) As Boolean
+        Public Function TryParseObjectDeclare(statement As Statement(Of Tokens), ByRef out As PrimitiveExpression) As Boolean
             Dim tokens = statement.tokens
             Dim var$ = tokens.ElementAtOrDefault(1)?.Text  ' 变量名
 
-            If Not tokens.First.name = LanguageTokens.Variable Then
+            If Not tokens.First.name = Global.SMRUCC.Rsharp.Interpreter.Tokens.Variable Then
                 Return False
-            ElseIf Not tokens(2).name = LanguageTokens.LeftAssign Then
+            ElseIf Not tokens(2).name = Global.SMRUCC.Rsharp.Interpreter.Tokens.LeftAssign Then
                 ' var x
                 ' 这种形式的申明默认为NULL
 
@@ -129,7 +129,7 @@ Namespace Interpreter
             Dim initialize As PrimitiveExpression = New ValueExpression(initExpression)
 
             With tokens(1)
-                If .Type = LanguageTokens.Tuple Then
+                If .Type = Global.SMRUCC.Rsharp.Interpreter.Tokens.Tuple Then
                     out = New TupleDeclareExpression(.Arguments, initialize)
                 Else
                     out = New VariableDeclareExpression(.Value, NameOf(TypeCodes.generic), initialize)
@@ -146,11 +146,11 @@ Namespace Interpreter
         ''' </summary>
         ''' <param name="statement"></param>
         ''' <returns></returns>
-        Public Function TryParseTypedObjectDeclare(statement As Statement(Of LanguageTokens), ByRef out As PrimitiveExpression) As Boolean
+        Public Function TryParseTypedObjectDeclare(statement As Statement(Of Tokens), ByRef out As PrimitiveExpression) As Boolean
             Dim tokens = statement.tokens
             Dim var$ = tokens.ElementAtOrDefault(1)?.Text
 
-            If Not tokens.First.name = LanguageTokens.Variable Then
+            If Not tokens.First.name = Global.SMRUCC.Rsharp.Interpreter.Tokens.Variable Then
                 Return False
             ElseIf Not tokens(2).Text = "as" Then
                 ' 没有类型约束，则肯定不是这种类型的表达式

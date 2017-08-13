@@ -73,7 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interpreter\Interpreter.vb" />
-    <Compile Include="Interpreter\Codes.vb" />
+    <Compile Include="Interpreter\Language\Codes.vb" />
     <Compile Include="Interpreter\ExpressionParser\FuncCaller.vb" />
     <Compile Include="Interpreter\ExpressionParser\MetaExpression.vb" />
     <Compile Include="LibraryManager\RPM.vb" />
@@ -81,7 +81,7 @@
     <Compile Include="Module1.vb" />
     <Compile Include="Interpreter\ExpressionParser\ExecuteEngine.vb" />
     <Compile Include="Interpreter\SyntaxParser.vb" />
-    <Compile Include="Interpreter\LanguageTokens.vb" />
+    <Compile Include="Interpreter\Language\Tokens.vb" />
     <Compile Include="Interpreter\ExpressionParser\ExpressionParser.vb" />
     <Compile Include="Extensions.vb" />
     <Compile Include="runtime\BindVariable.vb" />
@@ -101,7 +101,7 @@
     <Compile Include="runtime\TypeCodes.vb" />
     <Compile Include="runtime\Variable.vb" />
     <Compile Include="Interpreter\ExpressionParser\SimpleExpression.vb" />
-    <Compile Include="Interpreter\TokenIcer.vb" />
+    <Compile Include="Interpreter\Language\TokenIcer.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>

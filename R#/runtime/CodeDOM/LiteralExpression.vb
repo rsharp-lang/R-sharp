@@ -56,23 +56,23 @@ Namespace Runtime.CodeDOM
         Public Shared ReadOnly Property NULL As New NULL
 
         Public Property Value As String Implements Value(Of String).IValueOf.value
-        Public ReadOnly Property Type As LanguageTokens
+        Public ReadOnly Property Type As Tokens
 
-        Sub New(token As Token(Of LanguageTokens))
+        Sub New(token As Token(Of Tokens))
             Call Me.New(token.Text, token.name)
         End Sub
 
-        Sub New(value$, type As LanguageTokens)
+        Sub New(value$, type As Tokens)
 
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As TempValue
             Select Case Type
-                Case LanguageTokens.String
+                Case Tokens.String
                     Return TempValue.Tuple(Value, Type)
-                Case LanguageTokens.Numeric
+                Case Tokens.Numeric
                     Return TempValue.Tuple(Val(Value), Type)
-                Case LanguageTokens.Boolean
+                Case Tokens.Boolean
                     Return TempValue.Tuple(Value.ParseBoolean, Type)
                 Case Else
                     Throw New InvalidExpressionException($"Expression ""{Value}"" is a unrecognized data literal!")
@@ -86,7 +86,7 @@ Namespace Runtime.CodeDOM
     Public Class NULL : Inherits LiteralExpression
 
         Sub New()
-            Call MyBase.New(New Token(Of LanguageTokens)(LanguageTokens.Object, "NULL"))
+            Call MyBase.New(New Token(Of Tokens)(Tokens.Object, "NULL"))
         End Sub
 
         Public Overrides Function ToString() As String

@@ -69,7 +69,7 @@ Namespace Runtime.CodeDOM
 
         Public Property Members As TupleMember()
 
-        Sub New(members As Statement(Of LanguageTokens)(), initialize As PrimitiveExpression)
+        Sub New(members As Statement(Of Tokens)(), initialize As PrimitiveExpression)
             Call MyBase.New("", "list", initialize)
 
             Me.Members = members _
@@ -110,7 +110,7 @@ Namespace Runtime.CodeDOM
         ''' </summary>
         Dim Alias$
 
-        Sub New(declares As Statement(Of LanguageTokens))
+        Sub New(declares As Statement(Of Tokens))
             Dim t = declares.tokens
 
             If t.Length = 1 Then
@@ -149,7 +149,7 @@ Namespace Runtime.CodeDOM
 
     Public Class VariableReference : Inherits PrimitiveExpression
 
-        Public Property ref As Token(Of LanguageTokens)
+        Public Property ref As Token(Of Tokens)
 
     End Class
 End Namespace

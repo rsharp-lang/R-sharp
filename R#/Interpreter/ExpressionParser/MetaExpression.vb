@@ -122,18 +122,18 @@ Namespace Interpreter.Expression
         ''' object reference value
         ''' </summary>
         ''' <param name="n"></param>
-        Sub New(n$, type As LanguageTokens)
+        Sub New(n$, type As Tokens)
             Select Case type
-                Case LanguageTokens.Boolean
+                Case Tokens.Boolean
                     LEFT = n.ParseBoolean
                     LeftType = TypeCodes.boolean
-                Case LanguageTokens.Numeric
+                Case Tokens.Numeric
                     LEFT = Val(n)
                     LeftType = TypeCodes.double
-                Case LanguageTokens.String
+                Case Tokens.String
                     LEFT = n
                     LeftType = TypeCodes.string
-                Case LanguageTokens.Object
+                Case Tokens.Object
                     If n.IsPattern(Casting.RegexpDouble) Then
                         LEFT = Val(n)
                         LeftType = TypeCodes.double

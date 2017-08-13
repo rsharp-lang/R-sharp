@@ -32,7 +32,7 @@ Imports Microsoft.VisualBasic.Emit.Marshal
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.Abstract
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
-Imports ExpressionToken = SMRUCC.Rsharp.Interpreter.LanguageTokens
+Imports ExpressionToken = SMRUCC.Rsharp.Interpreter.Tokens
 Imports SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.Expression

@@ -35,13 +35,13 @@ Namespace Interpreter
     ''' <summary>
     ''' The R# script code model
     ''' </summary>
-    Public Class Codes : Inherits Main(Of LanguageTokens)
+    Public Class Codes : Inherits Main(Of Tokens)
 
-        Sub New(main As Main(Of LanguageTokens))
+        Sub New(main As Main(Of Tokens))
             Me.program = main.program
         End Sub
 
-        Sub New(script As IEnumerable(Of Statement(Of LanguageTokens)))
+        Sub New(script As IEnumerable(Of Statement(Of Tokens)))
             Me.program = script.ToArray.Trim
         End Sub
 
@@ -55,7 +55,7 @@ Namespace Interpreter
             Dim last As Object = Nothing
             Dim statement As PrimitiveExpression
 
-            For Each line As Statement(Of LanguageTokens) In program
+            For Each line As Statement(Of Tokens) In program
                 statement = line.Parse
                 last = statement _
                     .Evaluate(environment) _

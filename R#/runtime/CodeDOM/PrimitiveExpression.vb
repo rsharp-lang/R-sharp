@@ -68,8 +68,8 @@ Namespace Runtime.CodeDOM
 
         ReadOnly tree As Func(Of Environment, SimpleExpression)
 
-        Sub New(tokens As IEnumerable(Of Token(Of LanguageTokens)))
-            tree = New Pointer(Of Token(Of LanguageTokens))(tokens).TryParse
+        Sub New(tokens As IEnumerable(Of Token(Of Tokens)))
+            tree = New Pointer(Of Token(Of Tokens))(tokens).TryParse
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As TempValue
