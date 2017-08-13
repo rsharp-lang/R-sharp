@@ -1,28 +1,28 @@
 ﻿#Region "Microsoft.VisualBasic::cee83d98a00abd3a49e6fcd2ff0ac40d, ..\R-sharp\R#\Interpreter\TokenIcer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xieguigang (xie.guigang@live.com)
-    '       xie (genetics@smrucc.org)
-    ' 
-    ' Copyright (c) 2016 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xieguigang (xie.guigang@live.com)
+'       xie (genetics@smrucc.org)
+' 
+' Copyright (c) 2016 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 #End Region
 
@@ -72,7 +72,7 @@ Namespace Interpreter.Language
         ''' 对于``[]``而言，起含义为当前的token的innerStack，与``()``的含义几乎一致
         ''' </remarks>
         <Extension> Private Function Parse(buffer As Pointer(Of Char),
-                                           ByRef parent As List(Of Statement(Of Tokens)),
+                                           ByRef parent As List(Of Statement(Of RSharpLang)),
                                            ByRef line%,
                                            ByRef statementBuffer As List(Of Char)) As Statement(Of Tokens)
 
@@ -80,7 +80,7 @@ Namespace Interpreter.Language
             Dim commentOpen As Boolean = False ' 当出现注释符的时候，会一直持续到遇见换行符为止
             Dim tmp As New List(Of Char)
             Dim tokens As New List(Of Token)
-            Dim last As Statement(Of Tokens)
+            Dim last As Statement(Of RSharpLang)
             Dim varDefInit = Function()
                                  If tokens.Count = 0 AndAlso tmp.SequenceEqual("var") Then
                                      Return True
@@ -159,263 +159,266 @@ Namespace Interpreter.Language
                     Else
 
                         ' 遇见了语句的结束符号
-                        If c = ";"c Then
+                        Select Case c
 
-                            ' 结束当前的statement的解析
-                            newToken()
-                            last = New Statement(Of Tokens) With {
-                                .tokens = tokens,
-                                .Trace = New LineValue With {
-                                    .line = line,
-                                    .text = New String(statementBuffer)
-                                }
-                            }
-                            tokens *= 0
-                            statementBuffer *= 0
+                            Case ";"c
 
-                            If parent Is Nothing Then
-                                Return last
-                            Else
-                                parent += last
-                            End If
-
-                        ElseIf c = ":"c Then
-
-                            ' 这是方法调用的符号
-                            newToken()
-                            tokens += New Token(RSharpLang.DotNetMethodCall, ":")
-
-                        ElseIf c = "("c Then
-
-                            ' 新的堆栈
-                            ' closure stack open
-                            Dim childs As New List(Of Statement(Of Tokens))
-
-                            Call newToken()
-                            Call buffer.Parse(childs, line, statementBuffer)
-
-                            If tokens = 0 Then
-                                ' 没有tokens元素，则说明可能是
-                                ' (1+2) *3
-                                ' 这种类型的表达式
-
-                                tokens += New Token(RSharpLang.Priority, "()")
-                            End If
-
-                            With tokens.Last
-                                If .name = RSharpLang.Object Then
-                                    ' function
-                                    .name = RSharpLang.Function
-                                    .Arguments = childs
-                                Else
-                                    If .name = RSharpLang.Operator Then
-                                        tokens += New Token(RSharpLang.Priority, "()")
-                                    ElseIf .name <> Rsharplang.Priority Then
-                                        tokens += New Token(RSharpLang.ParenOpen, c)
-                                    ElseIf .name = Rsharplang.Priority Then
-                                        tokens.Last.Closure = New Main(Of Tokens) With {
-                                            .program = childs
-                                        }
-                                        Continue Do
-                                    End If
-
-                                    ' 不要将下面的代码放在Else分支中
-                                    tokens.Last.Arguments = childs ' 因为上一行添加了新的token，所以last已经不是原来的了，不可以引用with的last
-                                    If .name <> RSharpLang.Operator AndAlso .name <> RSharpLang.Priority Then
-                                        tokens += New Token(RSharpLang.ParenClose, close(c))
-                                    End If
-                                End If
-                            End With
-
-                        ElseIf c = "["c Then
-
-                            ' 新的堆栈
-                            ' closure stack open
-                            Dim childs As New List(Of Statement(Of Tokens))
-
-                            Call newToken()
-                            Call buffer.Parse(childs, line, statementBuffer)
-
-                            If childs.Count = 1 Then
-                                With childs(0)
-                                    If .tokens.Length = 1 AndAlso .tokens(Scan0).IsObject Then
-                                        ' 这里所解析到的是对全局变量的引用
-                                        ' [x] <- 3
-                                        ' 3 + [x]
-                                        tokens += New Token(RSharpLang.Object, $"[{ .tokens(Scan0).Text}]")
-                                        Continue Do
-                                    End If
-                                End With
-                            End If
-
-                            With New Token(RSharpLang.Tuple, "[...]")
-                                .Arguments = childs
-                                tokens += .ref
-                            End With
-
-                        ElseIf c = "{"c Then
-                            ' 新的堆栈
-                            ' closure stack open
-                            Dim childs As New List(Of Statement(Of Tokens))
-
-                            If bufferEquals("=") Then
-                                Call newToken()
-
-                                With tokens.Last
-                                    .name = RSharpLang.ParameterAssign
-                                End With
-                            Else
-                                newToken() ' 因为newtoken会清空tmp缓存，而bufferEquals函数需要tmp来判断，所以newtoken不能先于bufferequals函数执行
-                                ' 因为上下文变了，所以这里的newtoken调用也不能够合并
-                            End If
-
-                            Call buffer.Parse(childs, line, statementBuffer)
-
-                            Dim matrixOpen = tokens.Count = 0
-
-                            If matrixOpen Then
-
-                                ' 可能为matrix语法
-                                tokens += New Token(RSharpLang.ParenOpen, "{")
-
-                            End If
-
-                            tokens.Last.Closure = New Main(Of Tokens) With {
-                                .program = childs
-                            }
-
-                            If matrixOpen Then
-                                ' 关闭matrix
-                                tokens += New Token(RSharpLang.ParenClose, "}")
-                            End If
-
-                            last = New Statement(Of Tokens) With {
-                                .tokens = tokens.ToArray,
-                                .Trace = New LineValue With {
-                                    .line = line,
-                                    .text = New String(statementBuffer)
-                                }
-                            }
-
-                            statementBuffer *= 0
-
-                            If Not parent Is Nothing Then
-                                parent += last
-                                tokens *= 0 ' }会结束statement，故而需要将tokens清零
-                            Else
-                                Return last
-                            End If
-
-                        ElseIf c = ")"c OrElse c = "]"c Then
-
-                            ' closure stack close
-                            ' 仅结束stack，但是不像{}一样结束statement
-                            newToken()
-                            last = New Statement(Of Tokens) With {
-                                .tokens = tokens,
-                                .Trace = New LineValue With {
-                                    .line = line,
-                                    .text = New String(statementBuffer)
-                                }
-                            }
-                            statementBuffer *= 0
-                            tokens *= 0
-                            parent += last  ' 右花括号必定是结束堆栈 
-
-                            Return Nothing
-
-                        ElseIf c = "|"c Then
-                            newToken()
-                            tokens += New Token(RSharpLang.Pipeline, "|")
-
-                        ElseIf c = "&"c Then
-                            ' 字符串拼接
-                            newToken()
-                            tokens += New Token(RSharpLang.StringContact, "&")
-
-                        ElseIf c = ","c Then
-                            newToken()
-                            last = New Statement(Of Tokens) With {
-                                .tokens = tokens,
-                                .Trace = New LineValue With {
-                                    .line = line,
-                                    .text = New String(statementBuffer)
-                                }
-                            }
-                            statementBuffer *= 0
-                            tokens *= 0
-                            parent += last  ' 逗号分隔只产生新的statement，但是不退栈
-
-                        ElseIf c = "="c Then
-
-                            If bufferEquals("<"c) Then
-                                tokens += New Token(RSharpLang.Operator, "<=")
-                                tmp *= 0
-                            ElseIf bufferEquals("="c) Then
-                                tokens += New Token(RSharpLang.Operator, "==")
-                                tmp *= 0
-                            Else
-                                If tmp.Count = 0 Then
-                                    ' 可能是==的第一个等号，则只添加
-                                    tmp += c
-                                Else
-                                    newToken()
-                                    tokens += New Token(RSharpLang.ParameterAssign, "=")
-                                End If
-                            End If
-
-                        ElseIf c = "}"c Then
-
-                            ' closure stack close
-                            ' 结束当前的statement，相当于分号
-                            newToken()
-                            last = New Statement(Of Tokens) With {
-                                .tokens = tokens,
-                                .Trace = New LineValue With {
-                                    .line = line,
-                                    .text = New String(statementBuffer)
-                                }
-                            }
-                            statementBuffer *= 0
-                            tokens *= 0
-                            parent += last  ' 右花括号必定是结束堆栈 
-
-                            Return Nothing
-
-                        ElseIf c = " "c OrElse c = ASCII.TAB OrElse c = ASCII.LF OrElse c = ASCII.CR Then
-
-                            If c = ASCII.LF Then   ' 只使用\n来判断行号
-                                line += 1
-                            End If
-
-                            ' 遇见了空格，结束当前的token
-                            If bufferEquals("=") Then
-                                Call newToken()
-
-                                With tokens.Last
-                                    .name = RSharpLang.ParameterAssign
-                                End With
-                            Else
-                                newToken() ' 因为newtoken会清空tmp缓存，而bufferEquals函数需要tmp来判断，所以newtoken不能先于bufferequals函数执行
-                                ' 因为上下文变了，所以这里的newtoken调用也不能够合并
-                            End If
-
-                        ElseIf c = "-"c Then
-
-                            If bufferEquals("<"c) Then
-                                tmp += "-"c
+                                ' 结束当前的statement的解析
                                 newToken()
-                            Else
-                                newToken() ' 这两个newtoken调用不可以合并到一起，因为他们的上下文环境变了 
-                                tokens += New Token(RSharpLang.Operator, c)
-                            End If
+                                last = New Statement(Of Tokens) With {
+                                    .tokens = tokens,
+                                    .Trace = New LineValue With {
+                                        .line = line,
+                                        .text = New String(statementBuffer)
+                                    }
+                                }
+                                tokens *= 0
+                                statementBuffer *= 0
 
-                        ElseIf c = "+"c OrElse c = "*"c OrElse c = "/"c OrElse c = "\"c OrElse c = "^" OrElse c = "@"c Then
-                            newToken()
-                            tokens += New Token(RSharpLang.Operator, c)
-                        Else
-                            tmp += c
-                        End If
+                                If parent Is Nothing Then
+                                    Return last
+                                Else
+                                    parent += last
+                                End If
+
+                            Case ":"c
+
+                                ' 这是方法调用的符号
+                                newToken()
+                                tokens += New Token(RSharpLang.DotNetMethodCall, ":")
+
+                            Case "("c
+
+                                ' 新的堆栈
+                                ' closure stack open
+                                Dim childs As New List(Of Statement(Of Tokens))
+
+                                Call newToken()
+                                Call buffer.Parse(childs, line, statementBuffer)
+
+                                If tokens = 0 Then
+                                    ' 没有tokens元素，则说明可能是
+                                    ' (1+2) *3
+                                    ' 这种类型的表达式
+
+                                    tokens += New Token(RSharpLang.Priority, "()")
+                                End If
+
+                                With tokens.Last
+                                    If .name = RSharpLang.Object Then
+                                        ' function
+                                        .name = RSharpLang.Function
+                                        .Arguments = childs
+                                    Else
+                                        If .name = RSharpLang.Operator Then
+                                            tokens += New Token(RSharpLang.Priority, "()")
+                                        ElseIf .name <> RSharpLang.Priority Then
+                                            tokens += New Token(RSharpLang.ParenOpen, c)
+                                        ElseIf .name = RSharpLang.Priority Then
+                                            tokens.Last.Closure = New Main(Of Tokens) With {
+                                                .program = childs
+                                            }
+                                            Continue Do
+                                        End If
+
+                                        ' 不要将下面的代码放在Else分支中
+                                        tokens.Last.Arguments = childs ' 因为上一行添加了新的token，所以last已经不是原来的了，不可以引用with的last
+                                        If .name <> RSharpLang.Operator AndAlso .name <> RSharpLang.Priority Then
+                                            tokens += New Token(RSharpLang.ParenClose, close(c))
+                                        End If
+                                    End If
+                                End With
+
+                            Case "["c
+
+                                ' 新的堆栈
+                                ' closure stack open
+                                Dim childs As New List(Of Statement(Of Tokens))
+
+                                Call newToken()
+                                Call buffer.Parse(childs, line, statementBuffer)
+
+                                If childs.Count = 1 Then
+                                    With childs(0)
+                                        If .tokens.Length = 1 AndAlso .tokens(Scan0).IsObject Then
+                                            ' 这里所解析到的是对全局变量的引用
+                                            ' [x] <- 3
+                                            ' 3 + [x]
+                                            tokens += New Token(RSharpLang.Object, $"[{ .tokens(Scan0).Text}]")
+                                            Continue Do
+                                        End If
+                                    End With
+                                End If
+
+                                With New Token(RSharpLang.Tuple, "[...]")
+                                    .Arguments = childs
+                                    tokens += .ref
+                                End With
+
+                            Case "{"c
+                                ' 新的堆栈
+                                ' closure stack open
+                                Dim childs As New List(Of Statement(Of Tokens))
+
+                                If bufferEquals("=") Then
+                                    Call newToken()
+
+                                    With tokens.Last
+                                        .name = RSharpLang.ParameterAssign
+                                    End With
+                                Else
+                                    newToken() ' 因为newtoken会清空tmp缓存，而bufferEquals函数需要tmp来判断，所以newtoken不能先于bufferequals函数执行
+                                    ' 因为上下文变了，所以这里的newtoken调用也不能够合并
+                                End If
+
+                                Call buffer.Parse(childs, line, statementBuffer)
+
+                                Dim matrixOpen = tokens.Count = 0
+
+                                If matrixOpen Then
+
+                                    ' 可能为matrix语法
+                                    tokens += New Token(RSharpLang.ParenOpen, "{")
+
+                                End If
+
+                                tokens.Last.Closure = New Main(Of Tokens) With {
+                                    .program = childs
+                                }
+
+                                If matrixOpen Then
+                                    ' 关闭matrix
+                                    tokens += New Token(RSharpLang.ParenClose, "}")
+                                End If
+
+                                last = New Statement(Of Tokens) With {
+                                    .tokens = tokens.ToArray,
+                                    .Trace = New LineValue With {
+                                        .line = line,
+                                        .text = New String(statementBuffer)
+                                    }
+                                }
+
+                                statementBuffer *= 0
+
+                                If Not parent Is Nothing Then
+                                    parent += last
+                                    tokens *= 0 ' }会结束statement，故而需要将tokens清零
+                                Else
+                                    Return last
+                                End If
+
+                            Case ")"c, "]"c
+
+                                ' closure stack close
+                                ' 仅结束stack，但是不像{}一样结束statement
+                                newToken()
+                                last = New Statement(Of Tokens) With {
+                                    .tokens = tokens,
+                                    .Trace = New LineValue With {
+                                        .line = line,
+                                        .text = New String(statementBuffer)
+                                    }
+                                }
+                                statementBuffer *= 0
+                                tokens *= 0
+                                parent += last  ' 右花括号必定是结束堆栈 
+
+                                Return Nothing
+
+                            Case "|"c
+                                newToken()
+                                tokens += New Token(RSharpLang.Pipeline, "|")
+
+                            Case "&"c
+                                ' 字符串拼接
+                                newToken()
+                                tokens += New Token(RSharpLang.StringContact, "&")
+
+                            Case ","c
+                                newToken()
+                                last = New Statement(Of Tokens) With {
+                                    .tokens = tokens,
+                                    .Trace = New LineValue With {
+                                        .line = line,
+                                        .text = New String(statementBuffer)
+                                    }
+                                }
+                                statementBuffer *= 0
+                                tokens *= 0
+                                parent += last  ' 逗号分隔只产生新的statement，但是不退栈
+
+                            Case "="c
+
+                                If bufferEquals("<"c) Then
+                                    tokens += New Token(RSharpLang.Operator, "<=")
+                                    tmp *= 0
+                                ElseIf bufferEquals("="c) Then
+                                    tokens += New Token(RSharpLang.Operator, "==")
+                                    tmp *= 0
+                                Else
+                                    If tmp.Count = 0 Then
+                                        ' 可能是==的第一个等号，则只添加
+                                        tmp += c
+                                    Else
+                                        newToken()
+                                        tokens += New Token(RSharpLang.ParameterAssign, "=")
+                                    End If
+                                End If
+
+                            Case "}"c
+
+                                ' closure stack close
+                                ' 结束当前的statement，相当于分号
+                                newToken()
+                                last = New Statement(Of Tokens) With {
+                                    .tokens = tokens,
+                                    .Trace = New LineValue With {
+                                        .line = line,
+                                        .text = New String(statementBuffer)
+                                    }
+                                }
+                                statementBuffer *= 0
+                                tokens *= 0
+                                parent += last  ' 右花括号必定是结束堆栈 
+
+                                Return Nothing
+
+                            Case " "c, ASCII.TAB, ASCII.LF, ASCII.CR
+
+                                If c = ASCII.LF Then   ' 只使用\n来判断行号
+                                    line += 1
+                                End If
+
+                                ' 遇见了空格，结束当前的token
+                                If bufferEquals("=") Then
+                                    Call newToken()
+
+                                    With tokens.Last
+                                        .name = RSharpLang.ParameterAssign
+                                    End With
+                                Else
+                                    newToken() ' 因为newtoken会清空tmp缓存，而bufferEquals函数需要tmp来判断，所以newtoken不能先于bufferequals函数执行
+                                    ' 因为上下文变了，所以这里的newtoken调用也不能够合并
+                                End If
+
+                            Case "-"c
+
+                                If bufferEquals("<"c) Then
+                                    tmp += "-"c
+                                    newToken()
+                                Else
+                                    newToken() ' 这两个newtoken调用不可以合并到一起，因为他们的上下文环境变了 
+                                    tokens += New Token(RSharpLang.Operator, c)
+                                End If
+
+                            Case "+"c, "*"c, "/"c, "\"c, "^", "@"c
+                                newToken()
+                                tokens += New Token(RSharpLang.Operator, c)
+
+                            Case Else
+                                tmp += c
+                        End Select
                     End If
                 End If
             Loop
