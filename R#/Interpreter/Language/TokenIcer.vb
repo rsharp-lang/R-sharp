@@ -327,6 +327,31 @@ Namespace Interpreter.Language
                                 Return Nothing
 
                             Case "|"c
+
+                                ' 1. pipeline operator
+                                '
+                                ' # pipeline operator should be the first character on the line, 
+                                ' # and the last character of this line should be the symbol ')', indicate the current pipeline function invokes.
+                                ' object
+                                ' |func1()
+                                ' |func2()
+                                ' ;
+                                '
+                                ' 2. vector declare
+                                ' 
+                                ' # should includes more than one identifier, and delimiter using ',' symbol
+                                ' |x,y,z|
+                                '
+                                ' 3. abs function
+                                '
+                                ' # just allow one identifier, x can be numeric, integer vector
+                                ' |x|
+                                '
+                                ' 4. vector mod
+                                '
+                                ' # just allow one identifier, x can be numeric, integer, character factor vector
+                                ' ||x||
+
                                 newToken()
                                 tokens += New Token(RSharpLang.Pipeline, "|")
 
