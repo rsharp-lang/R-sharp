@@ -69,6 +69,10 @@ Namespace Interpreter.Language
         ''' </summary>
         Tuple
         ''' <summary>
+        ''' |...| 向量的申明语句
+        ''' </summary>
+        VectorDeclare
+        ''' <summary>
         ''' ([{
         ''' </summary>
         ParenOpen

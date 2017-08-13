@@ -51,14 +51,51 @@ Namespace Interpreter.Language
             Dim buffer As New Pointer(Of Char)(Strings.Trim(s$))
             Dim it As New Value(Of Statement(Of Tokens))
             Dim line% ' the line number
-            Dim statementBuffer As New List(Of Char)
+            Dim args As ParserArgs = ParserArgs.[New]
 
             Do While Not buffer.EndRead
-                If Not (it = buffer.Parse(Nothing, line, statementBuffer)) Is Nothing Then
+                If Not (it = buffer.Parse(Nothing, line, args)) Is Nothing Then
                     Yield it
                 End If
             Loop
         End Function
+
+        Private Structure ParserArgs
+
+            Dim PiplineOpen As Boolean
+            Dim VerticalBarOpen As Boolean
+            Dim statementBuffer As List(Of Char)
+            Dim VectorNormOpen As Boolean
+
+            Sub New(args As ParserArgs)
+                With args
+                    PiplineOpen = .PiplineOpen
+                    VectorNormOpen = .VectorNormOpen
+                    VerticalBarOpen = .VerticalBarOpen
+                    statementBuffer = .statementBuffer
+                End With
+            End Sub
+
+            Public Function OpenVectorNorm() As ParserArgs
+                Return New ParserArgs(args:=Me) With {
+                    .VectorNormOpen = True
+                }
+            End Function
+
+            Public Function OpenVerticalBar() As ParserArgs
+                Return New ParserArgs(args:=Me) With {
+                    .VerticalBarOpen = True
+                }
+            End Function
+
+            Public Shared Function [New]() As ParserArgs
+                Return New ParserArgs With {
+                    .statementBuffer = New List(Of Char),
+                    .VerticalBarOpen = False,
+                    .PiplineOpen = False
+                }
+            End Function
+        End Structure
 
         ''' <summary>
         ''' 
@@ -74,7 +111,7 @@ Namespace Interpreter.Language
         <Extension> Private Function Parse(buffer As Pointer(Of Char),
                                            ByRef parent As List(Of Statement(Of RSharpLang)),
                                            ByRef line%,
-                                           ByRef statementBuffer As List(Of Char)) As Statement(Of Tokens)
+                                           ByRef args As ParserArgs) As Statement(Of Tokens)
 
             Dim quotOpen As Boolean = False
             Dim commentOpen As Boolean = False ' 当出现注释符的时候，会一直持续到遇见换行符为止
@@ -117,7 +154,7 @@ Namespace Interpreter.Language
             Do While Not buffer.EndRead
                 Dim c As Char = +buffer
 
-                statementBuffer += c
+                args.statementBuffer += c
 
 #If DEBUG Then
                 Call Console.Write(c)
@@ -169,11 +206,11 @@ Namespace Interpreter.Language
                                     .tokens = tokens,
                                     .Trace = New LineValue With {
                                         .line = line,
-                                        .text = New String(statementBuffer)
+                                        .text = New String(args.statementBuffer)
                                     }
                                 }
                                 tokens *= 0
-                                statementBuffer *= 0
+                                args.statementBuffer *= 0
 
                                 If parent Is Nothing Then
                                     Return last
@@ -194,7 +231,7 @@ Namespace Interpreter.Language
                                 Dim childs As New List(Of Statement(Of Tokens))
 
                                 Call newToken()
-                                Call buffer.Parse(childs, line, statementBuffer)
+                                Call buffer.Parse(childs, line, args)
 
                                 If tokens = 0 Then
                                     ' 没有tokens元素，则说明可能是
@@ -236,7 +273,7 @@ Namespace Interpreter.Language
                                 Dim childs As New List(Of Statement(Of Tokens))
 
                                 Call newToken()
-                                Call buffer.Parse(childs, line, statementBuffer)
+                                Call buffer.Parse(childs, line, args)
 
                                 If childs.Count = 1 Then
                                     With childs(0)
@@ -271,7 +308,7 @@ Namespace Interpreter.Language
                                     ' 因为上下文变了，所以这里的newtoken调用也不能够合并
                                 End If
 
-                                Call buffer.Parse(childs, line, statementBuffer)
+                                Call buffer.Parse(childs, line, args)
 
                                 Dim matrixOpen = tokens.Count = 0
 
@@ -295,11 +332,11 @@ Namespace Interpreter.Language
                                     .tokens = tokens.ToArray,
                                     .Trace = New LineValue With {
                                         .line = line,
-                                        .text = New String(statementBuffer)
+                                        .text = New String(args.statementBuffer)
                                     }
                                 }
 
-                                statementBuffer *= 0
+                                args.statementBuffer *= 0
 
                                 If Not parent Is Nothing Then
                                     parent += last
@@ -317,10 +354,10 @@ Namespace Interpreter.Language
                                     .tokens = tokens,
                                     .Trace = New LineValue With {
                                         .line = line,
-                                        .text = New String(statementBuffer)
+                                        .text = New String(args.statementBuffer)
                                     }
                                 }
-                                statementBuffer *= 0
+                                args.statementBuffer *= 0
                                 tokens *= 0
                                 parent += last  ' 右花括号必定是结束堆栈 
 
@@ -342,18 +379,59 @@ Namespace Interpreter.Language
                                 ' # should includes more than one identifier, and delimiter using ',' symbol
                                 ' |x,y,z|
                                 '
+                                ' # allows multiple line, probably this syntax would makes the code looks weird, 
+                                ' # but this will makes the code comment more easier
+                                ' var x as integer <- |
+                                '   x,   # value from ....
+                                '   y,   # using for ...
+                                '   z
+                                ' |;
+                                '
                                 ' 3. abs function
                                 '
                                 ' # just allow one identifier, x can be numeric, integer vector
                                 ' |x|
                                 '
-                                ' 4. vector mod
+                                ' 4. the norm of the vector x
                                 '
                                 ' # just allow one identifier, x can be numeric, integer, character factor vector
                                 ' ||x||
 
-                                newToken()
-                                tokens += New Token(RSharpLang.Pipeline, "|")
+                                Call newToken()
+
+                                If tokens = 1 AndAlso Not args.VerticalBarOpen Then
+                                    ' 只有一个元素，并且没有打开 | 栈，则可能是管道操作
+                                    Dim pipArgs As New ParserArgs With {
+                                        .statementBuffer = New List(Of Char),
+                                        .PiplineOpen = True
+                                    }
+                                ElseIf tokens = 0 AndAlso args.VerticalBarOpen = True Then
+                                    '  已经打开了 | 栈，并且目前又遇到了 | 栈，则可能是||x||求向量的模
+                                    args = args.OpenVectorNorm
+                                ElseIf tokens > 0 AndAlso Not args.VectorNormOpen AndAlso args.VerticalBarOpen Then
+                                    ' tokens 不是0个或者1个，而是又很多个，则可能是向量的申明的结束标志
+                                    last = New Statement(Of Tokens) With {
+                                        .tokens = tokens,
+                                        .Trace = New LineValue With {
+                                            .line = line,
+                                            .text = New String(args.statementBuffer)
+                                        }
+                                    }
+                                    parent += last
+
+                                    Return Nothing
+
+                                Else
+                                    ' 打开 | 栈
+                                    Dim childs As New List(Of Statement(Of Tokens))
+
+                                    Call buffer.Parse(childs, line, args.OpenVerticalBar)
+
+                                    With New Token(RSharpLang.VectorDeclare, "|...|")
+                                        .Arguments = childs
+                                        tokens += .ref
+                                    End With
+                                End If
 
                             Case "&"c
                                 ' 字符串拼接
@@ -366,10 +444,10 @@ Namespace Interpreter.Language
                                     .tokens = tokens,
                                     .Trace = New LineValue With {
                                         .line = line,
-                                        .text = New String(statementBuffer)
+                                        .text = New String(args.statementBuffer)
                                     }
                                 }
-                                statementBuffer *= 0
+                                args.statementBuffer *= 0
                                 tokens *= 0
                                 parent += last  ' 逗号分隔只产生新的statement，但是不退栈
 
@@ -400,10 +478,10 @@ Namespace Interpreter.Language
                                     .tokens = tokens,
                                     .Trace = New LineValue With {
                                         .line = line,
-                                        .text = New String(statementBuffer)
+                                        .text = New String(args.statementBuffer)
                                     }
                                 }
-                                statementBuffer *= 0
+                                args.statementBuffer *= 0
                                 tokens *= 0
                                 parent += last  ' 右花括号必定是结束堆栈 
 
