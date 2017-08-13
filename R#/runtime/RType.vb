@@ -101,17 +101,19 @@ Namespace Runtime
                 .GetMethods(PublicShared) _
                 .Where(Function(m) m.Name.StartsWith("op_")) _
                 .ToArray
+            Dim unarys = operators _
+                .Where(Function(m) m.GetParameters.Length = 1) _
+                .ToDictionary(Function(key)
+                                  Dim linqName = opName2Linq(key.Name)
+                                  Dim op$ = Linq2Symbols(linqName)
+                                  Return op
+                              End Function)
+            Dim binarys = operators.Where(Function(m) m.GetParameters.Length = 2).GroupBy(Function(m) m.Name)
 
             Return New RType With {
                 ._TypeCode = dotnet.GetRTypeCode,
                 ._FullName = dotnet.FullName,
-                .UnaryOperators = operators _
-                    .Where(Function(m) m.GetParameters.Length = 1) _
-                    .ToDictionary(Function(key)
-                                      Dim linqName = opName2Linq(key.Name)
-                                      Dim op$ = Linq2Symbols(linqName)
-                                      Return op
-                                  End Function)
+                .UnaryOperators = unarys
             }
         End Function
     End Class

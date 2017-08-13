@@ -33,6 +33,8 @@ Module Module1
 
     Sub Main()
 
+        Dim dbl As New Runtime.PrimitiveTypes.numeric
+
         Dim result As Object
 
         With New Interpreter.Interpreter
