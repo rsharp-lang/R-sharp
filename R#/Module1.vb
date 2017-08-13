@@ -43,8 +43,8 @@ Module Module1
             Call .globalEnvir.Push("x", 12344444, Runtime.TypeCodes.integer)
             Call .globalEnvir.Push("y", -12344445, Runtime.TypeCodes.integer)
 
-            result = .Evaluate("var [a,b,D as y] <- list(a=TRUE, b = [x], y = y);")
-            result = .Evaluate("var ddd as integer <- |1,2| * 99;")
+            ' result = .Evaluate("var [a,b,D as y] <- list(a=TRUE, b = [x], y = y);")
+            result = .Evaluate("var ddd as integer <- |1,2| * (|y| + ||x||);  # vector |1,2| multiply the sum vector that produced by abs value of vector y add numeric value vector norm result ||x||.")
 
 
             Dim str$ = result.GetJson(True)

@@ -66,6 +66,7 @@ Namespace Interpreter.Language
             Dim VerticalBarOpen As Boolean
             Dim statementBuffer As List(Of Char)
             Dim VectorNormOpen As Boolean
+            Dim AbsClose As Boolean
 
             Sub New(args As ParserArgs)
                 With args
@@ -75,6 +76,12 @@ Namespace Interpreter.Language
                     statementBuffer = .statementBuffer
                 End With
             End Sub
+
+            Public Function CloseAbs() As ParserArgs
+                Return New ParserArgs(args:=Me) With {
+                    .AbsClose = True
+                }
+            End Function
 
             Public Function OpenVectorNorm() As ParserArgs
                 Return New ParserArgs(args:=Me) With {
@@ -406,9 +413,43 @@ Namespace Interpreter.Language
                                         .PiplineOpen = True
                                     }
                                 ElseIf tokens = 0 AndAlso args.VerticalBarOpen = True Then
+
                                     '  已经打开了 | 栈，并且目前又遇到了 | 栈，则可能是||x||求向量的模
-                                    args = args.OpenVectorNorm
-                                ElseIf tokens > 0 AndAlso Not args.VectorNormOpen AndAlso args.VerticalBarOpen Then
+                                    Dim childs As New List(Of Statement(Of Tokens))
+                                    Dim internalArgs As ParserArgs = args.OpenVectorNorm
+
+                                    Call buffer.Parse(childs, line, internalArgs)
+
+                                    ' 解析完栈之后，生成token
+                                    With New Token(RSharpLang.VectorNorm, "||x||")
+                                        .Arguments = childs
+                                        tokens += .ref
+                                    End With
+
+                                ElseIf tokens = 1 AndAlso args.VectorNormOpen Then
+
+                                    ' 查看后面的一个符号是不是都是 |？因为在循环的开始对c进行赋值的时候已经步进了一个字符，所以直接取当前字符即可
+                                    If buffer.Current = "|"c Then
+
+                                        last = New Statement(Of Tokens) With {
+                                            .tokens = tokens,
+                                            .Trace = New LineValue With {
+                                                .line = line,
+                                                .text = New String(args.statementBuffer)
+                                            }
+                                        }
+                                        parent += last
+                                        c = +buffer ' 必须要将最后的这个 | 给移除掉，否则后面会再次错误的进入 | 栈的
+
+                                        Return Nothing
+
+                                    Else
+                                        ' 语法错误
+                                        Throw New SyntaxErrorException
+                                    End If
+
+                                ElseIf Not parent.IsNullOrEmpty AndAlso Not args.VectorNormOpen AndAlso args.VerticalBarOpen Then
+
                                     ' tokens 不是0个或者1个，而是又很多个，则可能是向量的申明的结束标志
                                     last = New Statement(Of Tokens) With {
                                         .tokens = tokens,
@@ -421,16 +462,44 @@ Namespace Interpreter.Language
 
                                     Return Nothing
 
+                                ElseIf tokens = 1 AndAlso Not args.VectorNormOpen AndAlso args.VerticalBarOpen Then
+
+                                    ' tokens 只有一个元素，则是绝对值的运算的结束符 |x|
+                                    last = New Statement(Of Tokens) With {
+                                        .tokens = tokens,
+                                        .Trace = New LineValue With {
+                                            .line = line,
+                                            .text = New String(args.statementBuffer)
+                                        }
+                                    }
+                                    args = args.CloseAbs
+                                    parent += last
+
+                                    Return Nothing
+
                                 Else
                                     ' 打开 | 栈
                                     Dim childs As New List(Of Statement(Of Tokens))
+                                    Dim internalArgs As ParserArgs = args.OpenVerticalBar
 
-                                    Call buffer.Parse(childs, line, args.OpenVerticalBar)
+                                    Call buffer.Parse(childs, line, internalArgs)
 
-                                    With New Token(RSharpLang.VectorDeclare, "|...|")
-                                        .Arguments = childs
-                                        tokens += .ref
-                                    End With
+                                    ' 解析完栈之后，生成token
+                                    If internalArgs.AbsClose Then
+
+                                        With New Token(RSharpLang.AbsVector, "|x|")
+                                            .Arguments = childs
+                                            tokens += .ref
+                                        End With
+
+                                    Else
+
+                                        With New Token(RSharpLang.VectorDeclare, "|...|")
+                                            .Arguments = childs
+                                            tokens += .ref
+                                        End With
+
+                                    End If
                                 End If
 
                             Case "&"c

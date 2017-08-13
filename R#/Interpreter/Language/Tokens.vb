@@ -73,6 +73,14 @@ Namespace Interpreter.Language
         ''' </summary>
         VectorDeclare
         ''' <summary>
+        ''' |x| 求取数值向量的绝对值
+        ''' </summary>
+        AbsVector
+        ''' <summary>
+        ''' ||x|| 求取向量的模
+        ''' </summary>
+        VectorNorm
+        ''' <summary>
         ''' ([{
         ''' </summary>
         ParenOpen
