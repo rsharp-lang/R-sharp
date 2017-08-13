@@ -187,6 +187,7 @@ using_selected_name <- function(names as string) {
 	var o <- create_Foo();
 	o$name <- name;
 	return o;
+}
 ```
 
 generally, the parameter in a R# function is generic type, so that a function its definition like:
@@ -221,7 +222,7 @@ Add new string contact and string interploate feature for ``R#``, makes you more
 ```R
 var name     <- first.name & " " & last.name;
 # or
-var my.name  <- "{first.name} {last.name}"; 
+var my.name  <- "$first.name $last.name"; 
 # sprintf function is still avaliable
 var his.name <- sprintf("%s %s", first.name, last.name); 
 ```
@@ -386,6 +387,7 @@ The ``in`` operator means does the element in the target collection? returns a b
 # in list
 var booleans <- name in names(obj);
 # in range
+# means x >= min and x <= max
 var booleans <- x in [min, max];
 ```
 
