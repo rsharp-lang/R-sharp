@@ -275,6 +275,30 @@ Namespace Interpreter.Language
 
                             Case "["c
 
+                                ' 1. global variable reference
+                                '
+                                ' # Only allows one identifier
+                                ' [x]; # means the variable in the parent environment
+                                '  x;  # means the variable in the current environment
+                                '
+                                ' 2. tuple declare
+                                '
+                                ' # should contains at least two identifier
+                                ' [x,y];
+                                ' [[x], y];    # global variable can be reference by using [...]
+                                '
+                                ' 3. matrix declare
+                                ' 
+                                ' # all of the elements in the [...] bracket should be vector declare expression
+                                ' # identifier not allowed, as the syntax may conflicts with the tuple declare
+                                ' # allowes split into multiple line, this will makes the code comment more easier and elgant 
+                                ' [
+                                '    |x,y,z|,   # code comment goes here
+                                '    |a,b,c|,
+                                '    |i,j,k|    # index
+                                ' ]
+                                '
+
                                 ' 新的堆栈
                                 ' closure stack open
                                 Dim childs As New List(Of Statement(Of Tokens))
@@ -300,6 +324,52 @@ Namespace Interpreter.Language
                                 End With
 
                             Case "{"c
+
+                                ' {...} closure is a kind of expression which can produce values, 
+                                ' not only a statement collection
+                                ' 
+                                ' return keyword only apply on the function closure
+                                ' if the code branch its last statement is a value expression, then the value produced by that 
+                                ' Expression will be the value that produce by current {...} closure
+                                '
+                                ' so that the function closure have two ways to produce the value:
+                                ' 1. using return keyword
+                                ' 2. using value expression
+                                '
+                                ' for/if/try...catch can not using return keyword, so that they just using 
+                                ' Value Expression for produce the closure value.
+                                ' if a return keyword located in the for/if/try...catch closure, that means 
+                                ' early breaks of the function closure And returns Value as the value that 
+                                ' produced by the function closure.
+                                '
+                                ' # example of produce value by {...} closure
+                                ' var x <- function() {
+                                '     return -1;
+                                ' }
+                                '
+                                ' x();  # produce value by function closure
+                                '
+                                ' # produce value by if closure
+                                ' var switchValue <- if (assert()) {
+                                '     truevalue;
+                                ' } else {
+                                '     falseValue;
+                                ' }
+                                '
+                                ' # produce value by try... catch exception handler closure
+                                ' var possibleError <- try {
+                                '     run_function();
+                                ' } catch(e) {
+                                '     exception_returns;
+                                ' }
+                                '
+                                ' # produce a numeric vector by for loop closure???
+                                ' var f <- for (x in 1:100) {
+                                '     x ^ 2;
+                                ' }
+                                '
+                                '
+
                                 ' 新的堆栈
                                 ' closure stack open
                                 Dim childs As New List(Of Statement(Of Tokens))
@@ -375,7 +445,8 @@ Namespace Interpreter.Language
                                 ' 1. pipeline operator
                                 '
                                 ' # pipeline operator should be the first character on the line, 
-                                ' # and the last character of this line should be the symbol ')', indicate the current pipeline function invokes.
+                                ' # and the last character of this line should be the symbol ')', indicate the 
+                                ' # current pipeline function invokes.
                                 ' object
                                 ' |func1()
                                 ' |func2()
