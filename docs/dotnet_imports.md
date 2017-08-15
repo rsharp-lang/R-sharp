@@ -34,10 +34,10 @@ library("System.Drawing");
 
 # pipene for R# language read a network graph model and then visualize as png image
 Network::Load("./test.network/")
-    |GraphModel
-    |doForceLayout
-    |visualize(bg="lightblue")
-    |SaveTo("./test.png");
+|GraphModel()
+|doForceLayout()
+|visualize(bg="lightblue")
+|SaveTo("./test.png");
 ```
 
 NOTE: 
@@ -119,7 +119,8 @@ IO::SaveTo(list, "D:/test.csv");
 All of the imported .NET shared method and R# method, and if it has at least one parameter, then it can be using in pipeline mode:
 
 ```R
-{"abc", "123"} | SaveTo("D:/test.txt");
+|"abc", "123"|
+|SaveTo("D:/test.txt");
 
 # something like in VB.NET
 # Call {"abc", "123"}.SaveTo("D:/test.txt")
