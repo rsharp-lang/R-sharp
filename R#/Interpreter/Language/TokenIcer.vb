@@ -227,9 +227,28 @@ Namespace Interpreter.Language
 
                             Case ":"c
 
+                                ' 1. shared method from .NET imports
+                                '
+                                ' <type_namespace>::method.name()
+                                '
+                                ' 2. using .NET object method
+                                '
+                                ' obj:method.name()
+                                '
+                                ' 3. reference R slot
+                                '
+                                ' obj$property
+                                '
+
                                 ' 这是方法调用的符号
                                 newToken()
-                                tokens += New Token(RSharpLang.DotNetMethodCall, ":")
+
+                                If buffer.Current = ":"c Then
+                                    c = +buffer
+                                    tokens += New Token(RSharpLang.DotNetSharedAPI, "::")
+                                Else
+                                    tokens += New Token(RSharpLang.DotNetMethodCall, ":")
+                                End If
 
                             Case "("c
 

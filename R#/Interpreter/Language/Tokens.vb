@@ -53,6 +53,10 @@ Namespace Interpreter.Language
         ''' </summary>
         DotNetMethodCall
         ''' <summary>
+        ''' 使用``::``来调用.NET的静态API，例如定义在VB.NET的标准模块之中的函数方法
+        ''' </summary>
+        DotNetSharedAPI
+        ''' <summary>
         ''' ,
         ''' </summary>
         ParameterDelimiter
