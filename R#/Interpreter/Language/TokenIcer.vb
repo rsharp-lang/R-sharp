@@ -139,24 +139,28 @@ Namespace Interpreter.Language
                                        Return False
                                    End If
                                End Function
-            Dim newToken = Sub()
-                               If tmp.Count = 0 Then
-                                   Return
-                               End If
+            Dim createNewToken = _
+ _
+                Sub()
+                    If tmp = 0 Then Return
 
-                               ' 创建除了字符串之外的其他的token
-                               If varDefInit() Then
-                                   tokens += New Token(RSharpLang.Variable, "var")
-                               ElseIf tmp.SequenceEqual("<-") Then
-                                   tokens += New Token(RSharpLang.LeftAssign, "<-")
-                               Else
-                                   tokens += New Token(RSharpLang.Object) With {
-                                       .Value = New String(tmp)
-                                   }
-                               End If
+                    ' 创建除了字符串之外的其他的token
+                    If varDefInit() Then
+                        tokens += New Token(RSharpLang.Variable, "var")
+                    ElseIf tmp = "<-" Then
+                        tokens += New Token(RSharpLang.LeftAssign, "<-")
+                    ElseIf tmp = "TRUE" OrElse tmp = "FALSE" OrElse tmp = "true" OrElse tmp = "false" Then
+                        tokens += New Token(RSharpLang.Boolean) With {
+                            .Value = New String(tmp)
+                        }
+                    Else
+                        tokens += New Token(RSharpLang.Object) With {
+                            .Value = New String(tmp)
+                        }
+                    End If
 
-                               tmp *= 0
-                           End Sub
+                    tmp *= 0
+                End Sub
 
             Do While Not buffer.EndRead
                 Dim c As Char = +buffer
@@ -196,10 +200,10 @@ Namespace Interpreter.Language
                     ' 遇见了字符串的起始的第一个双引号
                     If Not quotOpen AndAlso c = ASCII.Quot Then
                         quotOpen = True
-                        newToken()
+                        createNewToken()
                     ElseIf Not commentOpen AndAlso c = "#"c Then
                         commentOpen = True
-                        newToken()
+                        createNewToken()
                     Else
 
                         ' 遇见了语句的结束符号
@@ -208,7 +212,7 @@ Namespace Interpreter.Language
                             Case ";"c
 
                                 ' 结束当前的statement的解析
-                                newToken()
+                                createNewToken()
                                 last = New Statement(Of Tokens) With {
                                     .tokens = tokens,
                                     .Trace = New LineValue With {
@@ -227,9 +231,28 @@ Namespace Interpreter.Language
 
                             Case ":"c
 
+                                ' 1. shared method from .NET imports
+                                '
+                                ' <type_namespace>::method.name()
+                                '
+                                ' 2. using .NET object method
+                                '
+                                ' obj:method.name()
+                                '
+                                ' 3. reference R slot
+                                '
+                                ' obj$property
+                                '
+
                                 ' 这是方法调用的符号
-                                newToken()
-                                tokens += New Token(RSharpLang.DotNetMethodCall, ":")
+                                createNewToken()
+
+                                If buffer.Current = ":"c Then
+                                    c = +buffer
+                                    tokens += New Token(RSharpLang.DotNetSharedAPI, "::")
+                                Else
+                                    tokens += New Token(RSharpLang.DotNetMethodCall, ":")
+                                End If
 
                             Case "("c
 
@@ -237,7 +260,7 @@ Namespace Interpreter.Language
                                 ' closure stack open
                                 Dim childs As New List(Of Statement(Of Tokens))
 
-                                Call newToken()
+                                Call createNewToken()
                                 Call buffer.Parse(childs, line, args)
 
                                 If tokens = 0 Then
@@ -303,7 +326,7 @@ Namespace Interpreter.Language
                                 ' closure stack open
                                 Dim childs As New List(Of Statement(Of Tokens))
 
-                                Call newToken()
+                                Call createNewToken()
                                 Call buffer.Parse(childs, line, args)
 
                                 If childs.Count = 1 Then
@@ -375,13 +398,13 @@ Namespace Interpreter.Language
                                 Dim childs As New List(Of Statement(Of Tokens))
 
                                 If bufferEquals("=") Then
-                                    Call newToken()
+                                    Call createNewToken()
 
                                     With tokens.Last
                                         .name = RSharpLang.ParameterAssign
                                     End With
                                 Else
-                                    newToken() ' 因为newtoken会清空tmp缓存，而bufferEquals函数需要tmp来判断，所以newtoken不能先于bufferequals函数执行
+                                    createNewToken() ' 因为newtoken会清空tmp缓存，而bufferEquals函数需要tmp来判断，所以newtoken不能先于bufferequals函数执行
                                     ' 因为上下文变了，所以这里的newtoken调用也不能够合并
                                 End If
 
@@ -426,7 +449,7 @@ Namespace Interpreter.Language
 
                                 ' closure stack close
                                 ' 仅结束stack，但是不像{}一样结束statement
-                                newToken()
+                                createNewToken()
                                 last = New Statement(Of Tokens) With {
                                     .tokens = tokens,
                                     .Trace = New LineValue With {
@@ -475,7 +498,7 @@ Namespace Interpreter.Language
                                 ' # just allow one identifier, x can be numeric, integer, character factor vector
                                 ' ||x||
 
-                                Call newToken()
+                                Call createNewToken()
 
                                 If tokens = 1 AndAlso Not args.VerticalBarOpen Then
                                     ' 只有一个元素，并且没有打开 | 栈，则可能是管道操作
@@ -575,11 +598,11 @@ Namespace Interpreter.Language
 
                             Case "&"c
                                 ' 字符串拼接
-                                newToken()
+                                createNewToken()
                                 tokens += New Token(RSharpLang.StringContact, "&")
 
                             Case ","c
-                                newToken()
+                                createNewToken()
                                 last = New Statement(Of Tokens) With {
                                     .tokens = tokens,
                                     .Trace = New LineValue With {
@@ -604,7 +627,7 @@ Namespace Interpreter.Language
                                         ' 可能是==的第一个等号，则只添加
                                         tmp += c
                                     Else
-                                        newToken()
+                                        createNewToken()
                                         tokens += New Token(RSharpLang.ParameterAssign, "=")
                                     End If
                                 End If
@@ -613,7 +636,7 @@ Namespace Interpreter.Language
 
                                 ' closure stack close
                                 ' 结束当前的statement，相当于分号
-                                newToken()
+                                createNewToken()
                                 last = New Statement(Of Tokens) With {
                                     .tokens = tokens,
                                     .Trace = New LineValue With {
@@ -635,13 +658,13 @@ Namespace Interpreter.Language
 
                                 ' 遇见了空格，结束当前的token
                                 If bufferEquals("=") Then
-                                    Call newToken()
+                                    Call createNewToken()
 
                                     With tokens.Last
                                         .name = RSharpLang.ParameterAssign
                                     End With
                                 Else
-                                    newToken() ' 因为newtoken会清空tmp缓存，而bufferEquals函数需要tmp来判断，所以newtoken不能先于bufferequals函数执行
+                                    createNewToken() ' 因为newtoken会清空tmp缓存，而bufferEquals函数需要tmp来判断，所以newtoken不能先于bufferequals函数执行
                                     ' 因为上下文变了，所以这里的newtoken调用也不能够合并
                                 End If
 
@@ -649,17 +672,19 @@ Namespace Interpreter.Language
 
                                 If bufferEquals("<"c) Then
                                     tmp += "-"c
-                                    newToken()
+                                    createNewToken()
                                 Else
-                                    newToken() ' 这两个newtoken调用不可以合并到一起，因为他们的上下文环境变了 
+                                    createNewToken() ' 这两个newtoken调用不可以合并到一起，因为他们的上下文环境变了 
                                     tokens += New Token(RSharpLang.Operator, c)
                                 End If
 
                             Case "+"c, "*"c, "/"c, "\"c, "^", "@"c
-                                newToken()
+                                createNewToken()
                                 tokens += New Token(RSharpLang.Operator, c)
 
                             Case Else
+
+                                ' identifier, number values
                                 tmp += c
                         End Select
                     End If

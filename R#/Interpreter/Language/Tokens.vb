@@ -53,15 +53,19 @@ Namespace Interpreter.Language
         ''' </summary>
         DotNetMethodCall
         ''' <summary>
+        ''' 使用``::``来调用.NET的静态API，例如定义在VB.NET的标准模块之中的函数方法
+        ''' </summary>
+        DotNetSharedAPI
+        ''' <summary>
         ''' ,
         ''' </summary>
-        ParameterDelimiter
+        ParamDelimiter
         ''' <summary>
         ''' |
         ''' </summary>
         Pipeline
         ''' <summary>
-        ''' 目标括号对象是一个优先级的改变运算，而非函数调用
+        ''' 目标括号对象是一个优先级的改变运算，而非函数调用 ``(...)``
         ''' </summary>
         Priority
         ''' <summary>
@@ -90,7 +94,7 @@ Namespace Interpreter.Language
         ParenClose
 
         ''' <summary>
-        ''' &amp;
+        ''' ``&amp;``
         ''' </summary>
         StringContact
         ''' <summary>

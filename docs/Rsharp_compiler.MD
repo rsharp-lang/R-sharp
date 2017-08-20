@@ -7,7 +7,7 @@ example R script file:
 
 var s as string <- "Hello world!";
 var expand <- function() {
-    s <- "{s} message from R#";
+    s <- "$s message from R#";
 }
 
 expand();
