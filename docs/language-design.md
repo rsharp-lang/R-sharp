@@ -417,8 +417,10 @@ test <- function(g as integer) {
 
 Range generator:
 
+``[min:max,step]``
+
 ```R
-if (mz in [mz.min, mz.max]) {
+if (mz in [mz.min:mz.max]) {
     # range generator only allows numeric type
 }
 ```
@@ -428,7 +430,7 @@ tuple variable:
 ```R
 # run commandline using @ operator in R
 var prot.fasta = "/home/biostack/sample.fasta";
-var [exitCode, std_out] <- @"makeblastdb -in \"{prot.fasta}\" -dbtype prot";
+var [exitCode, std_out] <- @'makeblastdb -in "{prot.fasta}" -dbtype prot';
 ```
 
 ##  8. <a name='IOoperation'></a>IO operation
@@ -449,10 +451,10 @@ The right shift write operator is based on the data type of x:
 The ``R#`` language makes more easier for calling external command from CLI, apply a ``@`` operator on a string vector will makes an external system calls:
 
 ```R
-var [exitCode, stdout] <- @"/bin/GCModeller/localblast /blastp /query \"{query.fasta}\" /subject \"{COG_myva}\" /out \"{COG_myva.csv}\"";
+var [exitCode, stdout] <- @'/bin/GCModeller/localblast /blastp /query "{query.fasta}" /subject "{COG_myva}" /out "{COG_myva.csv}"';
 
 # or makes it more clear to read
-var CLI <- "/bin/GCModeller/localblast /blastp /query \"{query.fasta}\" /subject \"{COG_myva}\" /out \"{COG_myva.csv}\"";
+var CLI <- '/bin/GCModeller/localblast /blastp /query "{query.fasta}" /subject "{COG_myva}" /out "{COG_myva.csv}"';
 var [exitCode, stdout] <- @CLI;
 ```
 
@@ -472,7 +474,9 @@ var [a, b, c] <- tuple.test(3, 2);
 if (a == 3) {
     c <- c + a + b;
     # or using pipeline
-    c <- {a, b, c} | sum;
+    c <- |a, b, c|
+         |sum()
+	 ;
 }
 ```
 
@@ -516,9 +520,9 @@ The tuple feature is espacially useful in operates the dataframe:
 
 ```R
 var d <- data.frame(
-    a = {1, 2, 3},
-    b = {"a", "g", "y"},
-    t = {TRUE, TRUE, FALSE});
+    a = |1, 2, 3|,
+    b = |"a", "g", "y"|,
+    t = |TRUE, TRUE, FALSE|);
 
 # in a for loop, the tuple its member value is the cell value in dataframe
 for([a, b, c as "t"] in d) {
