@@ -163,7 +163,7 @@ Namespace Interpreter.Language
                 End Sub
 
             Do While Not buffer.EndRead
-                Dim c As Char = +buffer
+                Dim c As Char = ++buffer
 
                 args.statementBuffer += c
 
@@ -248,7 +248,7 @@ Namespace Interpreter.Language
                                 createNewToken()
 
                                 If buffer.Current = ":"c Then
-                                    c = +buffer
+                                    c = ++buffer
                                     tokens += New Token(RSharpLang.DotNetSharedAPI, "::")
                                 Else
                                     tokens += New Token(RSharpLang.DotNetMethodCall, ":")
@@ -533,7 +533,7 @@ Namespace Interpreter.Language
                                             }
                                         }
                                         parent += last
-                                        c = +buffer ' 必须要将最后的这个 | 给移除掉，否则后面会再次错误的进入 | 栈的
+                                        c = ++buffer ' 必须要将最后的这个 | 给移除掉，否则后面会再次错误的进入 | 栈的
 
                                         Return Nothing
 

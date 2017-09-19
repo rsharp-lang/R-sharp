@@ -112,7 +112,7 @@ Namespace Interpreter.Expression
                 End Select
 
                 If Not tokens.EndRead Then
-                    meta.Operator = (+tokens).Text
+                    meta.Operator = (++tokens).Text
                 Else
                     meta.Operator = "+"
                 End If
