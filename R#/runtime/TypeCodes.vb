@@ -72,5 +72,9 @@ Namespace Runtime
         ''' </summary>
         [boolean]
 
+        ''' <summary>
+        ''' Object reference
+        ''' </summary>
+        ref
     End Enum
 End Namespace

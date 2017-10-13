@@ -53,6 +53,8 @@ Namespace Runtime
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property Types As New Dictionary(Of String, RType)
+        Public ReadOnly Property PrimitiveTypes As New Dictionary(Of TypeCodes, RType)
+
         ''' <summary>
         ''' 函数
         ''' </summary>
@@ -64,6 +66,7 @@ Namespace Runtime
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property IsGlobal As Boolean
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
                 Return Parent Is Nothing
             End Get
@@ -88,25 +91,25 @@ Namespace Runtime
         ''' If the current stack does not contains the target variable, then the program will try to find the variable in his parent
         ''' if variable in format like [var], then it means a global or parent environment variable
         ''' </remarks>
-        Default Public Property Value(name$) As Object
+        Default Public Property Value(name$) As Variable
             Get
                 If (name.First = "["c AndAlso name.Last = "]"c) Then
                     Return GlobalEnvironment(name.GetStackValue("[", "]"))
                 End If
 
                 If Variables.ContainsKey(name) Then
-                    Return Variables(name).Value
+                    Return Variables(name)
                 ElseIf Not Parent Is Nothing Then
                     Return Parent(name)
                 Else
                     Throw New EntryPointNotFoundException(name & " was not found in any stack enviroment!")
                 End If
             End Get
-            Set(value)
+            Set(value As Variable)
                 If name.First = "["c AndAlso name.Last = "]"c Then
                     GlobalEnvironment(name.GetStackValue("[", "]")) = value
                 Else
-                    Variables(name).Value = value
+                    Variables(name) = value
                 End If
             End Set
         End Property
@@ -130,6 +133,21 @@ Namespace Runtime
                         End Function) _
                 .ToDictionary
             Me.Stack = stack
+
+            ' imports PrimitiveTypes
+            PrimitiveTypes(TypeCodes.char) = New PrimitiveTypes.character
+            PrimitiveTypes(TypeCodes.integer) = New PrimitiveTypes.integer
+            PrimitiveTypes(TypeCodes.boolean) = New PrimitiveTypes.logical
+            PrimitiveTypes(TypeCodes.double) = New PrimitiveTypes.numeric
+            PrimitiveTypes(TypeCodes.string) = New PrimitiveTypes.string
+            PrimitiveTypes(TypeCodes.uinteger) = New PrimitiveTypes.uinteger
+
+            Call [Imports](PrimitiveTypes(TypeCodes.boolean))
+            Call [Imports](PrimitiveTypes(TypeCodes.char))
+            Call [Imports](PrimitiveTypes(TypeCodes.double))
+            Call [Imports](PrimitiveTypes(TypeCodes.integer))
+            Call [Imports](PrimitiveTypes(TypeCodes.string))
+            Call [Imports](PrimitiveTypes(TypeCodes.uinteger))
         End Sub
 
         ''' <summary>
@@ -159,22 +177,31 @@ Namespace Runtime
                    End Function
         End Function
 
-        Public Function GetValue(x As MetaExpression) As Object
-            If x.LeftType = TypeCodes.generic Then
+        Public Function GetValue(x As MetaExpression) As Variable
+            If x.LeftType = TypeCodes.ref Then
                 Dim o = x.LEFT
 
                 If o Is Nothing Then
                     Return Nothing
+
                 ElseIf o.GetType Is GetType(String) Then
+
                     ' 为变量引用
-                    Dim var$ = CStr(o)
-                    o = Me(var)
-                    Return o
+                    Dim ref$ = CStr(o)
+                    Dim var As Variable = Me(ref)
+
+                    Return var
                 Else
-                    Return o
+
+                    Throw New InvalidExpressionException
                 End If
             Else
-                Return x.LEFT
+
+                ' temp variable
+                Return New Variable(x.LeftType) With {
+                    .Name = App.NextTempName,
+                    .Value = x.LEFT
+                }
             End If
         End Function
 
@@ -194,6 +221,10 @@ Namespace Runtime
         End Function
 
         Const ConstraintInvalid$ = "Value can not match the type constraint!"
+
+        Public Sub [Imports](type As RType)
+            Types(type.Identity) = type
+        End Sub
 
         Public Function Push(name$, value As Object, Optional type As TypeCodes = TypeCodes.generic) As Integer
             If Variables.ContainsKey(name) Then

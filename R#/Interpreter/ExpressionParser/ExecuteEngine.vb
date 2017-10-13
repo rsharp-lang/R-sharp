@@ -46,6 +46,12 @@ Namespace Interpreter.Expression
 
         End Function
 
+        <Extension> Public Function EvaluateBinary(envir As Environment, left As MetaExpression, right As MetaExpression, operator$) As Object
+            Dim a = envir.GetValue(left)
+            Dim b = envir.GetValue(right)
+
+        End Function
+
         <Extension> Public Function EvaluateUnary(envir As Environment, x As Variable, operator$) As Object
             Dim type As RType = envir.Types(x.TypeID)
             Dim method = type.GetUnaryOperator([operator])

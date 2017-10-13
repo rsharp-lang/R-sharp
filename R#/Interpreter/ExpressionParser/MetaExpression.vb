@@ -124,17 +124,23 @@ Namespace Interpreter.Expression
         ''' </summary>
         ''' <param name="n"></param>
         Sub New(n$, type As Tokens)
+
             Select Case type
+
                 Case Tokens.Boolean
                     LEFT = n.ParseBoolean
                     LeftType = TypeCodes.boolean
+
                 Case Tokens.Numeric
                     LEFT = Val(n)
                     LeftType = TypeCodes.double
+
                 Case Tokens.String
                     LEFT = n
                     LeftType = TypeCodes.string
+
                 Case Tokens.Object
+
                     If n.IsPattern(Casting.RegexpDouble) Then
                         LEFT = Val(n)
                         LeftType = TypeCodes.double
@@ -148,10 +154,15 @@ Namespace Interpreter.Expression
                         LEFT = False
                         LeftType = TypeCodes.boolean
                     Else
-                        LEFT = n  ' 可能为变量引用
-                        LeftType = TypeCodes.generic
+
+                        ' 可能为变量引用
+                        LEFT = n
+                        LeftType = TypeCodes.ref
+
                     End If
+
                 Case Else
+
                     LEFT = n
             End Select
         End Sub

@@ -130,7 +130,8 @@ Namespace Interpreter.Expression
                 Return Nothing
             End If
 
-            Dim metaList As New List(Of MetaExpression)(Me.MetaList)  ' 将数据隔绝开，这样子这个表达式对象可以被重复使用
+            ' 将数据隔绝开，这样子这个表达式对象可以被重复使用
+            Dim metaList As New List(Of MetaExpression)(Me.MetaList)
             Dim leftValue = Function()
                                 With metaList.First
                                     Dim value As Object = .LEFT
@@ -138,7 +139,8 @@ Namespace Interpreter.Expression
                                 End With
                             End Function
 
-            ' When the list object only contains one element, that means this class object only stands for a number, return this number directly. 
+            ' When the list object only contains one element, that means this class object 
+            ' only stands For a number, return this number directly. 
             If metaList.Count = 1 Then
                 Return leftValue()
             Else
@@ -150,30 +152,54 @@ Namespace Interpreter.Expression
             End If
         End Function
 
-        Private Shared Sub Calculator(operators As String, ByRef metaList As List(Of MetaExpression), envir As Environment)
-            Dim ct As Integer = metaList _
-                .Where(Function(mep) InStr(operators, mep.Operator) > 0) _
-                .Count  ' Defines a LINQ query use for select the meta element that contains target operator..Count
+        Private Shared Sub Calculator(operators$, ByRef tokenList As List(Of MetaExpression), envir As Environment)
 
-            If ct = 0 Then
+            ' Defines a LINQ query use for select the meta element that 
+            ' Contains target operator..Count
+            Dim countOp% = tokenList _
+                .Where(Function(mep) InStr(operators, mep.Operator) > 0) _
+                .Count
+
+            If countOp = 0 Then
                 Return
             End If
 
-            Dim M, mNext As MetaExpression
+            Dim left, right As MetaExpression
             Dim x As Object
 
-            For index As Integer = 0 To metaList.Count - 1  'Scan the expression object and do the calculation at the mean time
-                If ct = 0 OrElse metaList.Count = 1 Then
-                    Return      'No more calculation could be done since there is only one number in the expression, break at this situation.
-                ElseIf operators.IndexOf(metaList(index).Operator) <> -1 Then 'We find a meta expression element that contains target operator, then we do calculation on this element and the element next to it.  
-                    M = metaList(index)  'Get current element and the element that next to him
-                    mNext = metaList(index + 1)
-                    x = ExecuteEngine.EvaluateBinary(envir, M.LEFT, mNext.LEFT, M.Operator)  'Do some calculation of type target operator 
-                    metaList.RemoveAt(index) 'When the current element is calculated, it is no use anymore, we remove it
-                    metaList(index) = New MetaExpression(x, mNext.Operator)
-                    index -= 1  'Keep the reading position order
+            ' Scan the expression object and do the calculation at the mean time
+            For index As Integer = 0 To tokenList.Count - 1
 
-                    ct -= 1  'If the target operator is position at the front side of the expression, using this flag will make the for loop exit when all of the target operator is calculated to improve the performance as no needs to scan all of the expression at this situation. 
+                ' No more calculation could be done since there is only 
+                ' one Number In the expression, break at this situation.
+                If countOp = 0 OrElse tokenList.Count = 1 Then
+                    Return
+
+                ElseIf operators.IndexOf(tokenList(index).Operator) <> -1 Then
+
+                    ' We find a meta expression element that contains target operator, then 
+                    ' we do calculation on this element and the element next to it.  
+
+                    ' Get current element and the element that next to him
+                    left = tokenList(index)
+                    right = tokenList(index + 1)
+
+                    ' Do some calculation of type target operator 
+                    x = ExecuteEngine.EvaluateBinary(envir, left, right, left.Operator)
+
+                    ' When the current element is calculated, it is no use anymore, 
+                    ' we Remove it
+                    tokenList.RemoveAt(index)
+                    tokenList(index) = New MetaExpression(x, right.Operator)
+
+                    ' Keep the reading position order
+                    index -= 1
+
+                    ' If the target operator is position at the front side of the expression, 
+                    ' Using this flag will make the For Loop Exit When all Of the target 
+                    ' Operator Is calculated To improve the performance As no needs To scan 
+                    ' All Of the expression at this situation. 
+                    countOp -= 1
                 End If
             Next
         End Sub
@@ -183,15 +209,6 @@ Namespace Interpreter.Expression
             Call MetaList.RemoveLast
             Return last
         End Function
-
-        '''' <summary>
-        '''' Using the default math script expression engine.
-        '''' </summary>
-        '''' <param name="s"></param>
-        '''' <returns></returns>
-        'Public Shared Function Evaluate(s As String) As Double
-        '    Return SimpleParser.TryParse(s).Evaluate
-        'End Function
 
         Public Iterator Function GetEnumerator() As IEnumerator(Of MetaExpression) Implements IEnumerable(Of MetaExpression).GetEnumerator
             For Each x As MetaExpression In MetaList
