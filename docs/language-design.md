@@ -433,6 +433,41 @@ var prot.fasta = "/home/biostack/sample.fasta";
 var [exitCode, std_out] <- @'makeblastdb -in "{prot.fasta}" -dbtype prot';
 ```
 
+``list`` element accessor:
+
+The R# list element accessor is different with the R language, example as R language:
+
+```R
+l <- list(a = 11, b = 22, c = TRUE);
+
+l[["a"]];
+# [1] 11
+
+l[[1]];
+# [1] 11
+```
+
+R# try to make it more simple, example as:
+
+```R
+l <- list(a = 11, b = 22, c = TRUE) with {
+	$"1" <- |3, 4, 5, 6|;
+};
+
+# access list element by name
+l["a"];
+# [1] 11
+
+l["1"];
+# [4] 3 4 5 6
+
+# access list element by index
+l[%1%];
+# [1] 11
+```
+
+Please notice that the term ``"1"`` is totaly differently with ``%1%``, as the term ``"1"`` means accessor by property name, and the term ``%1%`` means accessor by vector element index.
+
 ##  8. <a name='IOoperation'></a>IO operation
 
 ```
@@ -444,7 +479,7 @@ x >> path
 The right shift write operator is based on the data type of x:
 
 1. If type of x is dataframe or matrix, then ``write.csv`` function will be called.
-2. If type of x is generic type, then save function will be called.
+2. If type of x is generic type, then ``save`` function will be called.
 
 ###  8.1. <a name='Simpleexternalcalls'></a>Simple external calls
 
@@ -529,9 +564,22 @@ for([a, b, c as "t"] in d) {
     println("%s = %s ? (%s)", a, b, c);
 }
 
+# 1 = a ? (TRUE)
+# 2 = g ? (TRUE)
+# 3 = y ? (FALSE) 
+
 # if directly convert the dataframe as tuple, 
 # then the tuple member its value is the column value in the dataframe 
 var [a, b, booleans as "t"] <- d;
+
+a;
+# [3] 1 2 3
+
+b;
+# [3] "a" "g" "y"
+
+booleans;
+# [3] TRUE TRUE FALSE
 ```
 
 If the tuple is applied on a for loop, then it means convert each row in dataframe as tuple, or just applied the tuple on the var declaring, then it means converts the columns in dataframe as the tuple, so that the variable in tuple is a vector with nrows of the dataframe.
