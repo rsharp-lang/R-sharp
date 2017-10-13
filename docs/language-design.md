@@ -435,6 +435,20 @@ var [exitCode, std_out] <- @'makeblastdb -in "{prot.fasta}" -dbtype prot';
 
 ``list`` element accessor:
 
+The R# list element accessor is different with the R language, example as R language:
+
+```R
+l <- list(a = 11, b = 22, c = TRUE);
+
+l[["a"]];
+# [1] 11
+
+l[[1]];
+# [1] 11
+```
+
+R# try to make it more simple, example as:
+
 ```R
 l <- list(a = 11, b = 22, c = TRUE) with {
 	$"1" <- |3, 4, 5, 6|;
