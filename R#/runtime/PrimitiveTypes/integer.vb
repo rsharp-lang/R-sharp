@@ -14,8 +14,6 @@ Namespace Runtime.PrimitiveTypes
 
         End Sub
 
-        Public Shared Function op_Add(x As Object, y As Object) As IEnumerable(Of Object)
 
-        End Function
     End Class
 End Namespace

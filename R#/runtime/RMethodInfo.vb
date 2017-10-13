@@ -1,5 +1,6 @@
 ﻿Imports System.Globalization
 Imports System.Reflection
+Imports System.Runtime.CompilerServices
 
 Namespace Runtime
 
@@ -15,12 +16,23 @@ Namespace Runtime
         Public Overrides ReadOnly Property DeclaringType As Type
         Public Overrides ReadOnly Property ReflectedType As Type
 
+        Dim args As ParameterInfo()
+        Dim api As Func(Of Object, Object, Object)
+
+        Sub New(args As RParameterInfo(), api As Func(Of Object, Object, Object), <CallerMemberName> Optional name$ = Nothing)
+            Me.Name = name
+            Me.api = api
+            Me.args = args _
+                .Select(Function(a) DirectCast(a, ParameterInfo)) _
+                .ToArray
+        End Sub
+
         Public Overrides Function GetBaseDefinition() As MethodInfo
             Return Nothing
         End Function
 
         Public Overrides Function GetParameters() As ParameterInfo()
-            Throw New NotImplementedException()
+            Return args
         End Function
 
         Public Overrides Function GetMethodImplementationFlags() As MethodImplAttributes
@@ -37,7 +49,7 @@ Namespace Runtime
         ''' <param name="culture"></param>
         ''' <returns></returns>
         Public Overrides Function Invoke(obj As Object, invokeAttr As BindingFlags, binder As Binder, parameters() As Object, culture As CultureInfo) As Object
-
+            Return api(parameters(0), parameters(1))
         End Function
 
         Public Overrides Function GetCustomAttributes(inherit As Boolean) As Object()
@@ -51,5 +63,38 @@ Namespace Runtime
         Public Overrides Function IsDefined(attributeType As Type, inherit As Boolean) As Boolean
             Return True
         End Function
+    End Class
+
+    Public Class RParameterInfo : Inherits ParameterInfo
+
+        Public Overrides ReadOnly Property ParameterType As Type
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
+            Get
+                Return _type
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property Name As String
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
+            Get
+                Return _name
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property Position As Integer
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
+            Get
+                Return _pos
+            End Get
+        End Property
+
+        ReadOnly _pos%, _name$
+        ReadOnly _type As Type
+
+        Sub New(name$, type As Type, pos%)
+            _pos = pos
+            _name = name
+            _type = type
+        End Sub
     End Class
 End Namespace
