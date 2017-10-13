@@ -49,6 +49,10 @@ Namespace Interpreter.Expression
         <Extension> Public Function EvaluateBinary(envir As Environment, left As MetaExpression, right As MetaExpression, operator$) As Object
             Dim a = envir.GetValue(left)
             Dim b = envir.GetValue(right)
+            Dim typeA As RType = envir.Types(a.TypeID)
+            Dim typeB As RType = envir.Types(b.TypeID)
+
+            ' find operator based on the type schema
 
         End Function
 

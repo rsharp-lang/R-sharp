@@ -141,6 +141,7 @@ Namespace Runtime
             PrimitiveTypes(TypeCodes.double) = New PrimitiveTypes.numeric
             PrimitiveTypes(TypeCodes.string) = New PrimitiveTypes.string
             PrimitiveTypes(TypeCodes.uinteger) = New PrimitiveTypes.uinteger
+            PrimitiveTypes(TypeCodes.list) = New PrimitiveTypes.list
 
             Call [Imports](PrimitiveTypes(TypeCodes.boolean))
             Call [Imports](PrimitiveTypes(TypeCodes.char))
@@ -148,6 +149,7 @@ Namespace Runtime
             Call [Imports](PrimitiveTypes(TypeCodes.integer))
             Call [Imports](PrimitiveTypes(TypeCodes.string))
             Call [Imports](PrimitiveTypes(TypeCodes.uinteger))
+            Call [Imports](PrimitiveTypes(TypeCodes.list))
         End Sub
 
         ''' <summary>
@@ -226,9 +228,18 @@ Namespace Runtime
             Types(type.Identity) = type
         End Sub
 
+        Const AlreadyExists$ = "Variable ""{0}"" is already existed, can not declare it again!"
+
+        ''' <summary>
+        ''' Variable declare
+        ''' </summary>
+        ''' <param name="name$"></param>
+        ''' <param name="value"></param>
+        ''' <param name="type"></param>
+        ''' <returns></returns>
         Public Function Push(name$, value As Object, Optional type As TypeCodes = TypeCodes.generic) As Integer
             If Variables.ContainsKey(name) Then
-                Throw New Exception($"Variable ""{name}"" is already existed, can not declare it again!")
+                Throw New Exception(String.Format(AlreadyExists, name))
             End If
 
             With New Variable(type) With {

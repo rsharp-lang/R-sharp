@@ -87,6 +87,7 @@
     <Compile Include="Interpreter\ExpressionParser\ExpressionParser.vb" />
     <Compile Include="Extensions.vb" />
     <Compile Include="runtime\BindVariable.vb" />
+    <Compile Include="runtime\PrimitiveTypes\list.vb" />
     <Compile Include="runtime\PrimitiveTypes\numeric.vb" />
     <Compile Include="runtime\PrimitiveTypes\string.vb" />
     <Compile Include="runtime\PrimitiveTypes\uinteger.vb" />

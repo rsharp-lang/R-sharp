@@ -37,20 +37,31 @@ Namespace Runtime
         ''' Object type in R#.(使用这个类型来表示没有类型约束)
         ''' </summary>
         [generic] = 0
-
-        ''' <summary>
-        ''' Class type in R#
-        ''' </summary>
-        [list] = 10
         ''' <summary>
         ''' 函数类型
         ''' </summary>
         [closure]
+        ''' <summary>
+        ''' Object reference
+        ''' </summary>
+        ref
 
+#Region "PrimitiveTypes"
+
+        ''' <summary>
+        ''' Class type in R#
+        ''' </summary>
+        ''' <remarks>
+        ''' The R# list is the Dictionary type in VB.NET
+        ''' 
+        ''' R#之中的list类型就是.NET之中的字典类型，对于所有的list类型的R对象而言，
+        ''' 尽管他们的属性的数量和名称不相同，但是都是list字典类型
+        ''' </remarks>
+        [list] = 100
         ''' <summary>
         ''' <see cref="Integer"/> vector
         ''' </summary>
-        [integer] = 100
+        [integer]
         ''' <summary>
         ''' <see cref="ULong"/> vector
         ''' </summary>
@@ -71,10 +82,6 @@ Namespace Runtime
         ''' <see cref="Boolean"/> vector
         ''' </summary>
         [boolean]
-
-        ''' <summary>
-        ''' Object reference
-        ''' </summary>
-        ref
+#End Region
     End Enum
 End Namespace

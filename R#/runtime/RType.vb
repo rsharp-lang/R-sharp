@@ -40,18 +40,11 @@ Namespace Runtime
     Public Class RType : Implements IReadOnlyId
 
         Public ReadOnly Property TypeCode As TypeCodes = TypeCodes.list
-        Public ReadOnly Property FullName As String
-
         ''' <summary>
         ''' Using this property as the indentify key in the R# runtime <see cref="Environment"/>
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property Identity As String Implements IReadOnlyId.Identity
-            <MethodImpl(MethodImplOptions.AggressiveInlining)>
-            Get
-                Return Me.ToString.MD5
-            End Get
-        End Property
 
         ''' <summary>
         ''' The collection of unary operators for current R# type
@@ -60,14 +53,19 @@ Namespace Runtime
         Protected BinaryOperator1 As Dictionary(Of String, MethodInfo)
         Protected BinaryOperator2 As Dictionary(Of String, MethodInfo)
 
+        ''' <summary>
+        ''' Should be unique: <see cref="Type.FullName"/>
+        ''' </summary>
+        ''' <param name="code"></param>
+        ''' <param name="name$"></param>
         Sub New(code As TypeCodes, name$)
             TypeCode = code
-            FullName = name
+            Identity = name
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function ToString() As String
-            Return $"[{TypeCode}] {FullName}"
+            Return $"[{TypeCode}] {Identity}"
         End Function
 
         ''' <summary>
