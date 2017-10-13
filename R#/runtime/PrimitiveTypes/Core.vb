@@ -53,6 +53,12 @@ Namespace Runtime.PrimitiveTypes
             End With
         End Function
 
+        Public ReadOnly op_Add As Func(Of Object, Object, Object) = Function(x, y) x + y
+        Public ReadOnly op_Minus As Func(Of Object, Object, Object) = Function(x, y) x - y
+        Public ReadOnly op_Multiply As Func(Of Object, Object, Object) = Function(x, y) x * y
+        Public ReadOnly op_Divided As Func(Of Object, Object, Object) = Function(x, y) x / y
+        Public ReadOnly op_Mod As Func(Of Object, Object, Object) = Function(x, y) x Mod y
+
         ''' <summary>
         ''' Generic binary operator core for numeric type.
         ''' </summary>
