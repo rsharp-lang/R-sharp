@@ -37,23 +37,19 @@ Namespace Interpreter.Expression
         ''' Operator expression evaluate
         ''' </summary>
         ''' <param name="left"></param>
-        ''' <param name="[next]"></param>
+        ''' <param name="right"></param>
         ''' <param name="operator$"></param>
         ''' <returns></returns>
-        <Extension> Public Function EvaluateBinary(envir As Environment, left As Variable, [next] As Variable, operator$) As Object
-            Dim ta As RType = envir.Types(left.TypeID)
-            Dim tb As RType = envir.Types([next].TypeID)
-
-        End Function
-
-        <Extension> Public Function EvaluateBinary(envir As Environment, left As MetaExpression, right As MetaExpression, operator$) As Object
-            Dim a = envir.GetValue(left)
-            Dim b = envir.GetValue(right)
-            Dim typeA As RType = envir.Types(a.TypeID)
-            Dim typeB As RType = envir.Types(b.TypeID)
+        <Extension> Public Function EvaluateBinary(envir As Environment, left As Variable, right As Variable, operator$) As Object
+            Dim typeA As RType = envir.Types(left.TypeID)
+            Dim typeB As RType = envir.Types(right.TypeID)
 
             ' find operator based on the type schema
+        End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <Extension> Public Function EvaluateBinary(envir As Environment, left As MetaExpression, right As MetaExpression, operator$) As Object
+            Return envir.EvaluateBinary(envir.GetValue(left), envir.GetValue(right), [operator])
         End Function
 
         <Extension> Public Function EvaluateUnary(envir As Environment, x As Variable, operator$) As Object

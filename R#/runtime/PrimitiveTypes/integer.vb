@@ -7,6 +7,7 @@
 
         Sub New()
             Call MyBase.New(TypeCodes.integer, GetType(Integer).FullName)
+            Call MyBase.[New]()
         End Sub
     End Class
 End Namespace

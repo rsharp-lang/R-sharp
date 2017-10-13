@@ -35,7 +35,7 @@ Imports Microsoft.VisualBasic.Scripting.TokenIcer.OperatorExpression
 Namespace Runtime
 
     ''' <summary>
-    ''' Type proxy for <see cref="TypeCodes.list"/> or system primitives
+    ''' Type proxy for <see cref="TypeCodes.generic"/>(.NET type) or system primitives(vector/list/matrix)
     ''' </summary>
     Public Class RType : Implements IReadOnlyId
 
@@ -50,8 +50,21 @@ Namespace Runtime
         ''' The collection of unary operators for current R# type
         ''' </summary>
         Protected UnaryOperators As Dictionary(Of String, MethodInfo)
+
+        ''' <summary>
+        ''' me op other
+        ''' </summary>
         Protected BinaryOperator1 As Dictionary(Of String, MethodInfo)
+        ''' <summary>
+        ''' other op me
+        ''' </summary>
         Protected BinaryOperator2 As Dictionary(Of String, MethodInfo)
+
+        Protected Sub [New]()
+            UnaryOperators = New Dictionary(Of String, MethodInfo)
+            BinaryOperator1 = New Dictionary(Of String, MethodInfo)
+            BinaryOperator2 = New Dictionary(Of String, MethodInfo)
+        End Sub
 
         ''' <summary>
         ''' Should be unique: <see cref="Type.FullName"/>
