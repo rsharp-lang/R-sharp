@@ -56,9 +56,9 @@ Namespace Runtime
         ''' <summary>
         ''' The collection of unary operators for current R# type
         ''' </summary>
-        Dim UnaryOperators As Dictionary(Of String, MethodInfo)
-        Dim BinaryOperator1 As Dictionary(Of String, MethodInfo)
-        Dim BinaryOperator2 As Dictionary(Of String, MethodInfo)
+        Protected UnaryOperators As Dictionary(Of String, MethodInfo)
+        Protected BinaryOperator1 As Dictionary(Of String, MethodInfo)
+        Protected BinaryOperator2 As Dictionary(Of String, MethodInfo)
 
         Sub New(code As TypeCodes, name$)
             TypeCode = code
@@ -104,6 +104,11 @@ Namespace Runtime
         ''' </summary>
         ''' <param name="dotnet"></param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' 对于基础类型PrimitiveType而言，由于有些操作符是和语法相关的，所以并没有在<see cref="Type"/>之中定义有这些操作符
+        ''' 故而使用这个函数直接导入时不会存在这些操作符的
+        ''' 所以对于PrimitiveType而言，需要单独定义一个继承此<see cref="RType"/>的继承类型来单独的导入他们的操作符
+        ''' </remarks>
         Public Shared Function [Imports](dotnet As Type) As RType
             Dim operators = dotnet _
                 .GetMethods(PublicShared) _
@@ -116,7 +121,9 @@ Namespace Runtime
                                   Dim op$ = Linq2Symbols(linqName)
                                   Return op
                               End Function)
-            Dim binarys = operators.Where(Function(m) m.GetParameters.Length = 2).GroupBy(Function(m) m.Name)
+            Dim binarys = operators _
+                .Where(Function(m) m.GetParameters.Length = 2) _
+                .GroupBy(Function(m) m.Name)
             Dim code As TypeCodes = dotnet.GetRTypeCode
 
             Return New RType(code, dotnet.FullName) With {
