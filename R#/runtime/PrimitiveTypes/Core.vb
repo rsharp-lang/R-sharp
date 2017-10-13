@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.Emit.Delegates
+﻿Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 
 Namespace Runtime.PrimitiveTypes
@@ -53,31 +54,25 @@ Namespace Runtime.PrimitiveTypes
         End Function
 
         ''' <summary>
-        ''' Generic ``+`` operator for numeric type
+        ''' Generic binary operator core for numeric type.
         ''' </summary>
         ''' <typeparam name="TX"></typeparam>
         ''' <typeparam name="TY"></typeparam>
         ''' <typeparam name="TOut"></typeparam>
         ''' <param name="x"></param>
         ''' <param name="y"></param>
+        ''' <param name="[do]"></param>
         ''' <returns></returns>
-        Public Function Add(Of TX As IComparable(Of TX), TY As IComparable(Of TY), TOut)(x, y) As IEnumerable(Of TOut)
-            ' add with 0
-            If x Is Nothing Then
-                Return y
-            ElseIf y Is Nothing Then
-                Return x
-            End If
-
+        Public Function BinaryCoreInternal(Of TX As IComparable(Of TX), TY As IComparable(Of TY), TOut)(x As Object, y As Object, [do] As Func(Of Object, Object, Object)) As IEnumerable(Of TOut)
             Dim xtype As Type = x.GetType
             Dim ytype As Type = y.GetType
 
             If xtype Is TypeDefine(Of TX).GetSingleType Then
 
                 If ytype Is TypeDefine(Of TY).GetSingleType Then
-                    Return {DirectCast(x + y, TOut)}
+                    Return {DirectCast([do](x, y), TOut)}
                 ElseIf ytype.ImplementsInterface(TypeDefine(Of TY).GetCollectionType) Then
-                    Return DirectCast(y, IEnumerable(Of TY)).Select(Function(yi) DirectCast(x + yi, TOut))
+                    Return DirectCast(y, IEnumerable(Of TY)).Select(Function(yi) DirectCast([do](x, yi), TOut))
                 Else
                     Throw New InvalidCastException(ytype.FullName)
                 End If
@@ -85,7 +80,7 @@ Namespace Runtime.PrimitiveTypes
             ElseIf xtype.ImplementsInterface(TypeDefine(Of TX).GetCollectionType) Then
 
                 If ytype Is TypeDefine(Of TY).GetSingleType Then
-                    Return DirectCast(x, IEnumerable(Of TX)).Select(Function(xi) DirectCast(xi + y, TOut))
+                    Return DirectCast(x, IEnumerable(Of TX)).Select(Function(xi) DirectCast([do](xi, y), TOut))
                 ElseIf ytype.ImplementsInterface(TypeDefine(Of TY).GetCollectionType) Then
 
                     Dim xlist = DirectCast(x, IEnumerable(Of TX)).ToArray
@@ -97,7 +92,7 @@ Namespace Runtime.PrimitiveTypes
                         Return xlist _
                             .SeqIterator _
                             .Select(Function(xi)
-                                        Return DirectCast(CObj(xi.value) + CObj(ylist(xi)), TOut)
+                                        Return DirectCast([do](CObj(xi.value), CObj(ylist(xi))), TOut)
                                     End Function)
                     End If
                 Else
@@ -107,6 +102,41 @@ Namespace Runtime.PrimitiveTypes
             Else
                 Throw New InvalidCastException(xtype.FullName)
             End If
+        End Function
+
+        ''' <summary>
+        ''' Generic ``+`` operator for numeric type
+        ''' </summary>
+        ''' <typeparam name="TX"></typeparam>
+        ''' <typeparam name="TY"></typeparam>
+        ''' <typeparam name="TOut"></typeparam>
+        ''' <param name="x"></param>
+        ''' <param name="y"></param>
+        ''' <returns></returns>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function Add(Of TX As IComparable(Of TX), TY As IComparable(Of TY), TOut)(x, y) As IEnumerable(Of TOut)
+            Return BinaryCoreInternal(Of TX, TY, TOut)(x, y, Function(a, b) a + b)
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function Minus(Of TX As IComparable(Of TX), TY As IComparable(Of TY), TOut)(x, y) As IEnumerable(Of TOut)
+            Return BinaryCoreInternal(Of TX, TY, TOut)(x, y, Function(a, b) a - b)
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function Multiply(Of TX As IComparable(Of TX), TY As IComparable(Of TY), TOut)(x, y) As IEnumerable(Of TOut)
+            Return BinaryCoreInternal(Of TX, TY, TOut)(x, y, Function(a, b) a * b)
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function Divide(Of TX As IComparable(Of TX), TY As IComparable(Of TY), TOut)(x, y) As IEnumerable(Of TOut)
+            Return BinaryCoreInternal(Of TX, TY, TOut)(x, y, Function(a, b) a / b)
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function [Module](Of TX As IComparable(Of TX), TY As IComparable(Of TY), TOut)(x, y) As IEnumerable(Of TOut)
+            Return BinaryCoreInternal(Of TX, TY, TOut)(x, y, Function(a, b) a Mod b)
         End Function
     End Module
 End Namespace
