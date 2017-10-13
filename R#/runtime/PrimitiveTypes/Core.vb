@@ -71,8 +71,12 @@ Namespace Runtime.PrimitiveTypes
 
                 If ytype Is TypeDefine(Of TY).GetSingleType Then
                     Return {DirectCast([do](x, y), TOut)}
+
                 ElseIf ytype.ImplementsInterface(TypeDefine(Of TY).GetCollectionType) Then
-                    Return DirectCast(y, IEnumerable(Of TY)).Select(Function(yi) DirectCast([do](x, yi), TOut))
+                    Return DirectCast(y, IEnumerable(Of TY)) _
+                        .Select(Function(yi) DirectCast([do](x, yi), TOut)) _
+                        .ToArray
+
                 Else
                     Throw New InvalidCastException(ytype.FullName)
                 End If
@@ -80,20 +84,34 @@ Namespace Runtime.PrimitiveTypes
             ElseIf xtype.ImplementsInterface(TypeDefine(Of TX).GetCollectionType) Then
 
                 If ytype Is TypeDefine(Of TY).GetSingleType Then
-                    Return DirectCast(x, IEnumerable(Of TX)).Select(Function(xi) DirectCast([do](xi, y), TOut))
+                    Return DirectCast(x, IEnumerable(Of TX)) _
+                        .Select(Function(xi) DirectCast([do](xi, y), TOut)) _
+                        .ToArray
+
                 ElseIf ytype.ImplementsInterface(TypeDefine(Of TY).GetCollectionType) Then
 
                     Dim xlist = DirectCast(x, IEnumerable(Of TX)).ToArray
                     Dim ylist = DirectCast(y, IEnumerable(Of TY)).ToArray
 
-                    If xlist.Length <> ylist.Length Then
-                        Throw New InvalidOperationException("Vector length between the X and Y should be equals!")
-                    Else
+                    If xlist.Length = 1 Then
+                        x = xlist(0)
+                        Return DirectCast(y, IEnumerable(Of TY)) _
+                            .Select(Function(yi) DirectCast([do](x, yi), TOut)) _
+                            .ToArray
+                    ElseIf ylist.Length = 1 Then
+                        y = ylist(0)
+                        Return DirectCast(x, IEnumerable(Of TX)) _
+                            .Select(Function(xi) DirectCast([do](xi, y), TOut)) _
+                            .ToArray
+                    ElseIf xlist.Length = ylist.Length Then
                         Return xlist _
                             .SeqIterator _
                             .Select(Function(xi)
                                         Return DirectCast([do](CObj(xi.value), CObj(ylist(xi))), TOut)
-                                    End Function)
+                                    End Function) _
+                            .ToArray
+                    Else
+                        Throw New InvalidOperationException("Vector length between the X and Y should be equals!")
                     End If
                 Else
                     Throw New InvalidCastException(ytype.FullName)

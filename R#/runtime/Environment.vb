@@ -1,28 +1,28 @@
 ﻿#Region "Microsoft.VisualBasic::4dab7ebab2296f80fa34a6e23718add1, ..\R-sharp\R#\runtime\Environment.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xieguigang (xie.guigang@live.com)
-    '       xie (genetics@smrucc.org)
-    ' 
-    ' Copyright (c) 2016 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xieguigang (xie.guigang@live.com)
+'       xie (genetics@smrucc.org)
+' 
+' Copyright (c) 2016 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 #End Region
 
@@ -32,6 +32,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.Abstract
 Imports SMRUCC.Rsharp.Interpreter.Expression
 Imports SMRUCC.Rsharp.Runtime.CodeDOM
+Imports SMRUCC.Rsharp.Runtime.PrimitiveTypes
 
 Namespace Runtime
 
@@ -175,7 +176,7 @@ Namespace Runtime
 
         Public Function Evaluate() As FunctionEvaluate
             Return Function(funcName, args)
-
+                       Throw New NotImplementedException
                    End Function
         End Function
 
@@ -199,11 +200,21 @@ Namespace Runtime
                 End If
             Else
 
-                ' temp variable
-                Return New Variable(x.LeftType) With {
-                    .Name = App.NextTempName,
-                    .Value = x.LEFT
-                }
+                Dim value = x.LEFT
+
+                If value IsNot Nothing AndAlso value.GetType Is Core.TypeDefine(Of TempValue).GetSingleType Then
+                    Dim temp = DirectCast(value, TempValue)
+                    Return New Variable(temp.type) With {
+                        .Name = App.NextTempName,
+                        .Value = temp.value
+                    }
+                Else
+                    ' temp variable
+                    Return New Variable(x.LeftType) With {
+                        .Name = App.NextTempName,
+                        .Value = value
+                    }
+                End If
             End If
         End Function
 
@@ -227,6 +238,16 @@ Namespace Runtime
         Public Sub [Imports](type As RType)
             Types(type.Identity) = type
         End Sub
+
+        Public Function RType(var As Variable) As RType
+            If var.TypeCode.IsPrimitive Then
+                ' all of the primitive type in R# language is vector type
+                Dim base As Type = var.TypeCode.DotNETtype
+                Return Types(base.FullName)
+            Else
+                Return Types(var.TypeID)
+            End If
+        End Function
 
         Const AlreadyExists$ = "Variable ""{0}"" is already existed, can not declare it again!"
 

@@ -92,7 +92,14 @@ Namespace Interpreter.Expression
 
                     Case ExpressionToken.Priority ' (1+2) *3
 
-                        Dim closure = t.Closure.program.First
+                        Dim closure As Statement(Of ExpressionToken)
+
+                        If t.IsClosure Then
+                            closure = t.Closure.program.First
+                        Else
+                            closure = t.Arguments.First
+                        End If
+
                         Dim value As SimpleExpression = New Pointer(Of Token(Of ExpressionToken))(closure.tokens).TryParse(environment, False)
                         meta = New MetaExpression(simple:=value, envir:=Function() environment)
 

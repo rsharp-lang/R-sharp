@@ -43,8 +43,8 @@ Namespace Interpreter.Expression
         ''' <param name="operator$"></param>
         ''' <returns></returns>
         <Extension> Public Function EvaluateBinary(envir As Environment, left As Variable, right As Variable, operator$) As Object
-            Dim typeA As RType = envir.Types(left.TypeID)
-            Dim typeB As RType = envir.Types(right.TypeID)
+            Dim typeA As RType = envir.RType(left)
+            Dim typeB As RType = envir.RType(right)
             Dim op_method As New Value(Of MethodInfo)
 
             ' find operator based on the type schema

@@ -41,10 +41,10 @@ Module Module1
             '   Call Interpreter.Evaluate("3+[x];", New NamedValue(Of Object)("x", 10))
             Call .globalEnvir.Closures.Add("list", Function(args) Library.Internal.base.list(args))
             Call .globalEnvir.Push("x", 12344444, TypeCodes.integer)
-            Call .globalEnvir.Push("y", -12344445, TypeCodes.integer)
+            Call .globalEnvir.Push("y", -12344449, TypeCodes.integer)
+            Call .globalEnvir.Push("Z", {-10, 110}, TypeCodes.integer)
 
-
-            result = .Evaluate("x+y;")
+            result = .Evaluate("Z + (x+y)*2;")
 
             ' result = .Evaluate("var [a,b,D as y] <- list(a=TRUE, b = [x], y = y);")
             result = .Evaluate("var ddd as integer <- |1,2| * (|y| + ||x||);  # vector |1,2| multiply the sum vector that produced by abs value of vector y add numeric value vector norm result ||x||.")
