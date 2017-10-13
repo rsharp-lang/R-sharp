@@ -433,6 +433,27 @@ var prot.fasta = "/home/biostack/sample.fasta";
 var [exitCode, std_out] <- @'makeblastdb -in "{prot.fasta}" -dbtype prot';
 ```
 
+``list`` element accessor:
+
+```R
+l <- list(a = 11, b = 22, c = TRUE) with {
+	$"1" <- |3, 4, 5, 6|;
+};
+
+# access list element by name
+l["a"];
+# [1] 11
+
+l["1"];
+# [4] 3 4 5 6
+
+# access list element by index
+l[%1%];
+# [1] 11
+```
+
+Please notice that the term ``"1"`` is totaly differently with ``%1%``, as the term ``"1"`` means accessor by property name, and the term ``%1%`` means accessor by vector element index.
+
 ##  8. <a name='IOoperation'></a>IO operation
 
 ```
