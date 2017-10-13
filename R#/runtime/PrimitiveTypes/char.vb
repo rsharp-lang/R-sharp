@@ -6,7 +6,7 @@
     Public Class character : Inherits RType
 
         Sub New()
-            Call MyBase.New(TypeCodes.char, GetType(Char).FullName)
+            Call MyBase.New(TypeCodes.char, GetType(Char))
         End Sub
     End Class
 End Namespace

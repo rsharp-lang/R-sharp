@@ -9,7 +9,7 @@ Namespace Runtime.PrimitiveTypes
     Public Class [integer] : Inherits RType
 
         Sub New()
-            Call MyBase.New(TypeCodes.integer, GetType(Integer).FullName)
+            Call MyBase.New(TypeCodes.integer, GetType(Integer))
             Call MyBase.[New]()
 
             BinaryOperator1("+") = New BinaryOperator("+", [integer].Add)

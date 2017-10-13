@@ -6,7 +6,7 @@
     Public Class logical : Inherits RType
 
         Sub New()
-            Call MyBase.New(TypeCodes.boolean, GetType(Boolean).FullName)
+            Call MyBase.New(TypeCodes.boolean, GetType(Boolean))
         End Sub
     End Class
 End Namespace

@@ -30,6 +30,7 @@ Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports Microsoft.VisualBasic.Scripting.TokenIcer.OperatorExpression
 
@@ -46,6 +47,7 @@ Namespace Runtime
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property Identity As String Implements IReadOnlyId.Identity
+        Public ReadOnly Property BaseType As Type
 
         ''' <summary>
         ''' The collection of unary operators for current R# type
@@ -71,10 +73,10 @@ Namespace Runtime
         ''' Should be unique: <see cref="Type.FullName"/>
         ''' </summary>
         ''' <param name="code"></param>
-        ''' <param name="name$"></param>
-        Sub New(code As TypeCodes, name$)
+        Sub New(code As TypeCodes, base As Type)
             TypeCode = code
-            Identity = name
+            Identity = base.Name
+            BaseType = base
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
@@ -97,8 +99,8 @@ Namespace Runtime
         ''' <param name="operator$"></param>
         ''' <param name="a"></param>
         ''' <returns></returns>
-        Public Function GetBinaryOperator2(operator$, a As RType) As Func(Of Object, Object, Object)
-
+        Public Function GetBinaryOperator2(operator$, a As RType) As MethodInfo
+            Return BinaryOperator2([operator]).MatchLeft(a.BaseType)
         End Function
 
         ''' <summary>
@@ -107,8 +109,8 @@ Namespace Runtime
         ''' <param name="operator$"></param>
         ''' <param name="b"></param>
         ''' <returns></returns>
-        Public Function GetBinaryOperator1(operator$, b As RType) As Func(Of Object, Object, Object)
-
+        Public Function GetBinaryOperator1(operator$, b As RType) As MethodInfo
+            Return BinaryOperator1([operator]).MatchRight(b.BaseType)
         End Function
 
         ''' <summary>
@@ -138,7 +140,7 @@ Namespace Runtime
                 .GroupBy(Function(m) m.Name)
             Dim code As TypeCodes = dotnet.GetRTypeCode
 
-            Return New RType(code, dotnet.FullName) With {
+            Return New RType(code, dotnet) With {
                 .UnaryOperators = unarys
             }
         End Function
