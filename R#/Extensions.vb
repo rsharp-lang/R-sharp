@@ -34,6 +34,12 @@ Imports SMRUCC.Rsharp.Runtime
 ''' </summary>
 Module Extensions
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    <Extension>
+    Public Function Argv(type As Type, name$, i%) As RParameterInfo
+        Return New RParameterInfo(name, type, pos:=i)
+    End Function
+
     Public Function EnsurePrimitiveVector(obj) As Object
 
     End Function

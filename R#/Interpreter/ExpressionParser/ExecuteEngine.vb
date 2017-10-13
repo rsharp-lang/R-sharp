@@ -45,6 +45,17 @@ Namespace Interpreter.Expression
             Dim typeB As RType = envir.Types(right.TypeID)
 
             ' find operator based on the type schema
+            Dim op = typeA.GetBinaryOperator1([operator], typeB)
+
+            If op Is Nothing Then
+                op = typeB.GetBinaryOperator2([operator], typeA)
+            End If
+
+            If op Is Nothing Then
+                Throw New InvalidOperationException($"Operator between type {typeA} and {typeB} is undefined!")
+            Else
+                Return op(left.Value, right.Value)
+            End If
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>

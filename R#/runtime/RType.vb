@@ -97,7 +97,7 @@ Namespace Runtime
         ''' <param name="operator$"></param>
         ''' <param name="a"></param>
         ''' <returns></returns>
-        Public Function GetBinaryOperator1(operator$, a As Type) As Func(Of Object, Object, Object)
+        Public Function GetBinaryOperator2(operator$, a As RType) As Func(Of Object, Object, Object)
 
         End Function
 
@@ -107,7 +107,7 @@ Namespace Runtime
         ''' <param name="operator$"></param>
         ''' <param name="b"></param>
         ''' <returns></returns>
-        Public Function GetBinaryOperator2(operator$, b As Type) As Func(Of Object, Object, Object)
+        Public Function GetBinaryOperator1(operator$, b As RType) As Func(Of Object, Object, Object)
 
         End Function
 
