@@ -117,6 +117,10 @@ Namespace Interpreter.Expression
         Sub New(n As Object, opr$)
             LEFT = n
             [Operator] = opr
+
+            If Not n Is Nothing Then
+                LeftType = n.GetType.GetRTypeCode
+            End If
         End Sub
 
         ''' <summary>

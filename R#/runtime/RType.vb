@@ -75,7 +75,7 @@ Namespace Runtime
         ''' <param name="code"></param>
         Sub New(code As TypeCodes, base As Type)
             TypeCode = code
-            Identity = base.Name
+            Identity = base.FullName
             BaseType = base
         End Sub
 

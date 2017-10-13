@@ -16,7 +16,7 @@ Namespace Runtime.PrimitiveTypes
         End Sub
 
         Public Shared Function Add() As RMethodInfo()
-            Dim ii As New RMethodInfo({GetType([integer]).Argv("x", 0), GetType([integer]).Argv("y", 1)}, Function(x, y) Core.Add(Of Integer, Integer, Integer)(x, y), "+")
+            Dim ii As New RMethodInfo({GetType(Integer).Argv("x", 0), GetType(Integer).Argv("y", 1)}, Function(x, y) Core.Add(Of Integer, Integer, Integer)(x, y), "+")
 
             Return {ii}
         End Function
