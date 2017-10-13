@@ -30,6 +30,7 @@ Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports Microsoft.VisualBasic.Scripting.TokenIcer.OperatorExpression
 
 Namespace Runtime
@@ -54,16 +55,16 @@ Namespace Runtime
         ''' <summary>
         ''' me op other
         ''' </summary>
-        Protected BinaryOperator1 As Dictionary(Of String, MethodInfo)
+        Protected BinaryOperator1 As Dictionary(Of String, BinaryOperator)
         ''' <summary>
         ''' other op me
         ''' </summary>
-        Protected BinaryOperator2 As Dictionary(Of String, MethodInfo)
+        Protected BinaryOperator2 As Dictionary(Of String, BinaryOperator)
 
         Protected Sub [New]()
             UnaryOperators = New Dictionary(Of String, MethodInfo)
-            BinaryOperator1 = New Dictionary(Of String, MethodInfo)
-            BinaryOperator2 = New Dictionary(Of String, MethodInfo)
+            BinaryOperator1 = New Dictionary(Of String, BinaryOperator)
+            BinaryOperator2 = New Dictionary(Of String, BinaryOperator)
         End Sub
 
         ''' <summary>
