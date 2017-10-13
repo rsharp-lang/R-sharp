@@ -34,9 +34,9 @@ Imports SMRUCC.Rsharp.Runtime
 ''' </summary>
 Module Extensions
 
-    'Public Function ValueTuple(value As Object, type As TypeCodes) As (Value As Object, RType As TypeCodes)
+    Public Function EnsurePrimitiveVector(obj) As Object
 
-    'End Function
+    End Function
 
     ''' <summary>
     ''' Get R type code from the type constraint expression value.
