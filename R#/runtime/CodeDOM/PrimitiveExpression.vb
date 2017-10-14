@@ -55,10 +55,12 @@ Namespace Runtime.CodeDOM
     ''' <summary>
     ''' The very base expression in the R# language
     ''' </summary>
-    Public Class PrimitiveExpression
+    Public MustInherit Class PrimitiveExpression
 
-        Public Overridable Function Evaluate(envir As Environment) As TempValue
+        Public MustOverride Function Evaluate(envir As Environment) As TempValue
 
+        Public Overrides Function ToString() As String
+            Return "R# Expression"
         End Function
     End Class
 

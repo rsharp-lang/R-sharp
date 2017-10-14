@@ -31,7 +31,7 @@ Namespace Runtime.CodeDOM
     ''' <summary>
     ''' Logical and arithmetic expression
     ''' </summary>
-    Public Class OperatorExpression : Inherits PrimitiveExpression
+    Public MustInherit Class OperatorExpression : Inherits PrimitiveExpression
 
         Public Property [Operator] As String
 
@@ -44,6 +44,9 @@ Namespace Runtime.CodeDOM
 
         Public Property Expression As PrimitiveExpression
 
+        Public Overrides Function Evaluate(envir As Environment) As TempValue
+            Throw New NotImplementedException()
+        End Function
     End Class
 
     Public Class BinaryOperator : Inherits OperatorExpression
@@ -51,6 +54,9 @@ Namespace Runtime.CodeDOM
         Public Property a As PrimitiveExpression
         Public Property b As PrimitiveExpression
 
+        Public Overrides Function Evaluate(envir As Environment) As TempValue
+            Throw New NotImplementedException()
+        End Function
     End Class
 
     ''' <summary>
@@ -61,6 +67,21 @@ Namespace Runtime.CodeDOM
     Public Class ValueAssign : Inherits BinaryOperator
 
         Public Property IsByRef As Boolean = False
+
+        Public Overrides Function Evaluate(envir As Environment) As TempValue
+            ' a是对变量的引用
+            ' b是变量表达式
+            Dim var As Variable = DirectCast(a, VariableReference).Evaluate(envir).value
+            Dim value = b.Evaluate(envir)
+
+            var.Value = value
+
+            If var.ConstraintValid Then
+                Throw New InvalidCastException
+            Else
+                Return value
+            End If
+        End Function
 
         Public Overrides Function ToString() As String
             If IsByRef Then

@@ -56,6 +56,10 @@ Namespace Interpreter
                 Return expression
             End If
 
+            If TryParseValueAssign(statement, expression) Then
+                Return expression
+            End If
+
             Return New ValueExpression(statement.tokens)
         End Function
 

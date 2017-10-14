@@ -105,6 +105,8 @@ Namespace Runtime.CodeDOM
 
     Public Class StringLiteral : Inherits PrimitiveExpression
 
-
+        Public Overrides Function Evaluate(envir As Environment) As TempValue
+            Throw New NotImplementedException()
+        End Function
     End Class
 End Namespace

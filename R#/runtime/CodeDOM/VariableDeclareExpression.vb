@@ -159,5 +159,15 @@ Namespace Runtime.CodeDOM
 
         Public Property ref As Token(Of Tokens)
 
+        Public Overrides Function Evaluate(envir As Environment) As TempValue
+            Return New TempValue With {
+                .type = TypeCodes.ref,
+                .value = envir(ref.Text)
+            }
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return "ref " & ref.Text
+        End Function
     End Class
 End Namespace
