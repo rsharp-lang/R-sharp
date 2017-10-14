@@ -162,10 +162,16 @@ Namespace Interpreter
                 ' 只是申明了变量和其类型，则默认是NULL值
                 out = New VariableDeclareExpression(var, tokens(3).Text, LiteralExpression.NULL)
                 Return True
+            Else
+                ' var x as type <- [expression...]
+                ' var x as type = 4
+                ' <- = 1
+                ' skip 5 in total?
+                Dim value = tokens.Skip(4 + 1).ToArray
+                Dim type$ = tokens(3).Text
+                out = New VariableDeclareExpression(var, type, New ValueExpression(value))
+                Return True
             End If
-
-
-
         End Function
     End Module
 End Namespace
