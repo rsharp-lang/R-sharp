@@ -30,6 +30,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.CodeDOM
+Imports SMRUCC.Rsharp.Runtime.PrimitiveTypes
 
 Namespace Interpreter.Expression
 
@@ -140,6 +141,8 @@ Namespace Interpreter.Expression
                                     If .LeftType = TypeCodes.ref Then
                                         Dim var = envir(CStrSafe(value))
                                         Return TempValue.Tuple(var.Value, var.TypeCode)
+                                    ElseIf Not value Is Nothing AndAlso value.GetType Is Core.TypeDefine(Of TempValue).GetSingleType Then
+                                        Return DirectCast(value, TempValue)
                                     Else
                                         Return TempValue.Tuple(value, .LeftType)
                                     End If
