@@ -64,7 +64,7 @@ Namespace Interpreter.Language
                     .value
             Next
 
-            Call environment.Push(".Last", last, TypeCodes.generic)
+            environment(".Last").Value = last
 
             Return last
         End Function

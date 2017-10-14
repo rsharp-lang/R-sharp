@@ -42,6 +42,12 @@ Namespace Interpreter
         ''' </summary>
         Public ReadOnly Property globalEnvir As New Environment
 
+        Public Const LastVariableName$ = ".Last"
+
+        Sub New()
+            Call globalEnvir.Push(LastVariableName, Nothing, TypeCodes.generic)
+        End Sub
+
         ''' <summary>
         ''' Run R# script program from text data.
         ''' </summary>

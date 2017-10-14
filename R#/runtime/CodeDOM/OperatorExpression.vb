@@ -74,9 +74,9 @@ Namespace Runtime.CodeDOM
             Dim var As Variable = DirectCast(a, VariableReference).Evaluate(envir).value
             Dim value = b.Evaluate(envir)
 
-            var.Value = value
+            var.Value = value.value
 
-            If var.ConstraintValid Then
+            If Not var.ConstraintValid Then
                 Throw New InvalidCastException
             Else
                 Return value
