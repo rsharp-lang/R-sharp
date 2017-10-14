@@ -167,7 +167,8 @@ Namespace Interpreter.Expression
                         meta = New MetaExpression(Function()
                                                       Dim value = ref.Evaluate(environment)
                                                       Dim numerics = DirectCast(value.value, Variable).ToVector
-                                                      Dim norm# = Math.Sqrt(Aggregate x As Object In numerics Into Sum(Val(x) ^ 2))
+                                                      Dim mod# = Aggregate x As Object In numerics Into Sum(Val(x) ^ 2)
+                                                      Dim norm# = Math.Sqrt([mod])
 
                                                       ' 经过计算之后都会被便作为double数值类型
                                                       Return TempValue.Tuple(norm, TypeCodes.double)

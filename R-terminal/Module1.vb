@@ -51,8 +51,8 @@ Module Module1
             result = .Evaluate("v <- Z + (x+y)*2;")
             result = .Evaluate("var b as boolean <- t;")
 
-
-            result = .Evaluate("var ddd as integer <- |1,2| * (|y| + ||x||);  # vector |1,2| multiply the sum vector that produced by abs value of vector y add numeric value vector norm result ||x||.")
+            result = .Evaluate("var vector.test as double <- |1,2| * (|v| + ||Z||);  # vector |1,2| multiply the sum vector that produced by abs value of vector y add numeric value vector norm result ||x||.")
+            result = .Evaluate("var norm.test <- ||Z||;")
 
 
             Call Console.WriteLine()

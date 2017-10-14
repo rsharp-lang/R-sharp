@@ -53,6 +53,26 @@ Namespace Runtime.PrimitiveTypes
             End With
         End Function
 
+        Public Function BuildMethodInfo(Of TX As IComparable(Of TX),
+                                           TY As IComparable(Of TY), TOut)(
+                                         [do] As Func(Of Object, Object, Object),
+                                         castX As Func(Of Object, Object),
+                                         castY As Func(Of Object, Object),
+                                         <CallerMemberName>
+                                         Optional name$ = Nothing) As RMethodInfo
+            Dim operatorCall = [do]
+
+            If Not castX Is Nothing Then
+                operatorCall = Function(x, y) Core.BinaryCoreInternal(Of TX, TY, TOut)(castX(x), y, [do])
+            ElseIf Not castY Is Nothing Then
+                operatorCall = Function(x, y) Core.BinaryCoreInternal(Of TX, TY, TOut)(x, castY(y), [do])
+            Else
+                operatorCall = Function(x, y) Core.BinaryCoreInternal(Of TX, TY, TOut)(x, y, [do])
+            End If
+
+            Return New RMethodInfo({GetType(TX).Argv("x", 0), GetType(TY).Argv("y", 1)}, operatorCall, name)
+        End Function
+
         Public ReadOnly op_Add As Func(Of Object, Object, Object) = Function(x, y) x + y
         Public ReadOnly op_Minus As Func(Of Object, Object, Object) = Function(x, y) x - y
         Public ReadOnly op_Multiply As Func(Of Object, Object, Object) = Function(x, y) x * y

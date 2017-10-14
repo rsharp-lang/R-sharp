@@ -166,7 +166,7 @@ Namespace Interpreter.Language
                 Dim c As Char = ++buffer
 
                 args.statementBuffer += c
-
+#Const DEBUG = False
 #If DEBUG Then
                 Call Console.Write(c)
 #End If
