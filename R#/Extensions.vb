@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3c97841394f2cf0fe31595e5f13b7a01, ..\R-sharp\R#\Extensions.vb"
+﻿#Region "Microsoft.VisualBasic::569e71dbd7a54933f9cf74059576487b, ..\R-sharp\R#\Extensions.vb"
 
     ' Author:
     ' 
@@ -122,4 +122,3 @@ Module Extensions
         Return $"<{script.FileName}#{line}::{func}()>"
     End Function
 End Module
-
