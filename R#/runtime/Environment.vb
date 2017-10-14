@@ -156,6 +156,8 @@ Namespace Runtime
         ''' <summary>
         ''' Construct the global environment
         ''' </summary>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Friend Sub New()
             Call Me.New(Nothing, {})
         End Sub
@@ -168,12 +170,14 @@ Namespace Runtime
             End If
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function GetValue() As GetValue
             Return Function(name$)
                        Return Me(name)
                    End Function
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function Evaluate() As FunctionEvaluate
             Return Function(funcName, args)
                        Throw New NotImplementedException
@@ -229,12 +233,15 @@ Namespace Runtime
         ''' <param name="value"></param>
         ''' <param name="type">``R#``类型约束</param>
         ''' <returns></returns>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function Push(name$, value As Object, type$) As Integer
             Return Push(name, value, type.GetRTypeCode)
         End Function
 
-        Const ConstraintInvalid$ = "Value can not match the type constraint!"
+        Const ConstraintInvalid$ = "Value can not match the type constraint!!! ({0} <--> {1})"
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Sub [Imports](type As RType)
             Types(type.Identity) = type
         End Sub
@@ -268,7 +275,7 @@ Namespace Runtime
                 .Value = value
             }
                 If Not .ConstraintValid Then
-                    Throw New Exception(ConstraintInvalid)
+                    Throw New Exception(String.Format(ConstraintInvalid, .TypeCode, type))
                 Else
                     Call Variables.Add(.ref)
                 End If

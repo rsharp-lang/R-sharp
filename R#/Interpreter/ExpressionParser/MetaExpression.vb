@@ -145,20 +145,25 @@ Namespace Interpreter.Expression
 
                 Case Tokens.Object
 
-                    If n.IsPattern(Casting.RegexpDouble) Then
-                        LEFT = Val(n)
-                        LeftType = TypeCodes.double
-                    ElseIf n.IsPattern(Casting.RegexInteger) Then
+                    ' integer需要优先于Double判断，否则程序会一直判断数值为double类型的，
+                    ' 即使输入的文件参数只包含有整数部分
+                    If n.IsPattern(Casting.RegexInteger) Then
                         LEFT = CInt(Val(n))
                         LeftType = TypeCodes.integer
+
+                    ElseIf n.IsPattern(Casting.RegexpDouble) Then
+                        LEFT = Val(n)
+                        LeftType = TypeCodes.double
+
                     ElseIf n = "TRUE" Then
                         LEFT = True
                         LeftType = TypeCodes.boolean
+
                     ElseIf n = "FALSE" Then
                         LEFT = False
                         LeftType = TypeCodes.boolean
-                    Else
 
+                    Else
                         ' 可能为变量引用
                         LEFT = n
                         LeftType = TypeCodes.ref
