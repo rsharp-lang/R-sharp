@@ -30,7 +30,9 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.Runtime
+Imports SMRUCC.Rsharp.Runtime.PrimitiveTypes
 
 Namespace Runtime
 
@@ -84,6 +86,16 @@ Namespace Runtime
             End Get
         End Property
 
+        Public ReadOnly Property Length As Integer
+            Get
+                If TypeCode.IsPrimitive Then
+                    Return ToVector.Length
+                Else
+                    Return 1
+                End If
+            End Get
+        End Property
+
         ''' <summary>
         ''' 当前的变量值的类型代码是否满足类型约束条件
         ''' </summary>
@@ -105,7 +117,40 @@ Namespace Runtime
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function ToString() As String
-            Return $"Dim {Name} As ({TypeCode}){Me.TypeOf.FullName} = {CStrSafe(Value)}"
+            Dim value = ToVector()
+            Dim str$
+
+            If value.Length = 1 Then
+                str = CStrSafe(value(Scan0))
+            Else
+                str = value.Select(Function(x) CStrSafe(x)).JoinBy(", ")
+                str = $"[{str}]"
+            End If
+
+            Return $"Dim {Name} As ({TypeCode}){Me.TypeOf.FullName} = {str}"
+        End Function
+
+        Public Function ToVector() As Object()
+            If TypeCode.IsPrimitive Then
+
+                Select Case [TypeOf]
+
+                    Case Core.TypeDefine(Of Integer).GetSingleType,
+                         Core.TypeDefine(Of Double).GetSingleType,
+                         Core.TypeDefine(Of Boolean).GetSingleType,
+                         Core.TypeDefine(Of ULong).GetSingleType,
+                         Core.TypeDefine(Of Char).GetSingleType,
+                         Core.TypeDefine(Of String).GetSingleType
+
+                        Return {Value}
+
+                    Case Else
+                        Return DirectCast(Value, IEnumerable).ToArray(Of Object)
+
+                End Select
+            Else
+                Return {Value}
+            End If
         End Function
     End Class
 End Namespace
