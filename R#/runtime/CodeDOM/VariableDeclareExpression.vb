@@ -157,17 +157,28 @@ Namespace Runtime.CodeDOM
 
     Public Class VariableReference : Inherits PrimitiveExpression
 
-        Public Property ref As Token(Of Tokens)
+        Public Property ref As String
+
+        Sub New()
+        End Sub
+
+        Sub New(ref As Token(Of Tokens))
+            Me.ref = ref.Text
+        End Sub
+
+        Sub New(var$)
+            Me.ref = var
+        End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As TempValue
             Return New TempValue With {
                 .type = TypeCodes.ref,
-                .value = envir(ref.Text)
+                .value = envir(ref)
             }
         End Function
 
         Public Overrides Function ToString() As String
-            Return "ref " & ref.Text
+            Return "ref " & ref
         End Function
     End Class
 End Namespace

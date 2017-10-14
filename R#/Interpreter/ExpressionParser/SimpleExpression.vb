@@ -133,7 +133,7 @@ Namespace Interpreter.Expression
 
             ' 将数据隔绝开，这样子这个表达式对象可以被重复使用
             Dim metaList As New List(Of MetaExpression)(Me.MetaList)
-            Dim leftValue = Function()
+            Dim leftValue = Function() As TempValue
                                 With metaList.First
                                     Dim value As Object = .LEFT
 
@@ -151,15 +151,15 @@ Namespace Interpreter.Expression
             If metaList.Count = 1 Then
                 Return leftValue()
             Else
-                Calculator("^", metaList, envir)
-                Calculator("*/\%", metaList, envir)
-                Calculator("+-", metaList, envir)
+                CalculatorInternal("^", metaList, envir)
+                CalculatorInternal("*/\%", metaList, envir)
+                CalculatorInternal("+-", metaList, envir)
 
                 Return leftValue()
             End If
         End Function
 
-        Private Shared Sub Calculator(operators$, ByRef tokenList As List(Of MetaExpression), envir As Environment)
+        Private Shared Sub CalculatorInternal(operators$, ByRef tokenList As List(Of MetaExpression), envir As Environment)
 
             ' Defines a LINQ query use for select the meta element that 
             ' Contains target operator..Count

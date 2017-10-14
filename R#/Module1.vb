@@ -49,6 +49,10 @@ Module Module1
             result = .Evaluate("v <- Z + (x+y)*2;")
             result = .Evaluate("var b as boolean <- t;")
 
+
+            result = .Evaluate("var ddd as integer <- |1,2| * (|y| + ||x||);  # vector |1,2| multiply the sum vector that produced by abs value of vector y add numeric value vector norm result ||x||.")
+
+
             Call Console.WriteLine()
             Call Console.WriteLine()
             Call .PrintMemory(Console.Out)
@@ -57,8 +61,6 @@ Module Module1
 
             Pause()
             ' result = .Evaluate("var [a,b,D as y] <- list(a=TRUE, b = [x], y = y);")
-            result = .Evaluate("var ddd as integer <- |1,2| * (|y| + ||x||);  # vector |1,2| multiply the sum vector that produced by abs value of vector y add numeric value vector norm result ||x||.")
-
 
             Dim str$ = result.GetJson(True)
 

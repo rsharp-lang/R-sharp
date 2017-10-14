@@ -90,11 +90,8 @@ Namespace Interpreter
                 End If
             End With
 
-            out = New ValueAssign With {
-                .a = New VariableReference With {
-                    .ref = tokens(0)
-                },
-                .b = New Statement(Of Tokens) With {
+            out = New ValueAssign(tokens(0).Text) With {
+                .right = New Statement(Of Tokens) With {
                     .tokens = tokens.Skip(2).ToArray
                 }.Parse,
                 .IsByRef = isByRef,

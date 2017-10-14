@@ -80,7 +80,8 @@ Namespace Runtime.CodeDOM
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As TempValue
-            Dim tree As SimpleExpression = New Pointer(Of Token(Of Tokens))(tokens).TryParse(envir, False)
+            Dim buffer As New Pointer(Of Token(Of Tokens))(tokens)
+            Dim tree As SimpleExpression = buffer.TryParse(envir, False)
             Dim out = tree.Evaluate(envir)
             Return out
         End Function

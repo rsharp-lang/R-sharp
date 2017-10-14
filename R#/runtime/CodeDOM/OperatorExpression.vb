@@ -51,8 +51,8 @@ Namespace Runtime.CodeDOM
 
     Public Class BinaryOperator : Inherits OperatorExpression
 
-        Public Property a As PrimitiveExpression
-        Public Property b As PrimitiveExpression
+        Public Property left As PrimitiveExpression
+        Public Property right As PrimitiveExpression
 
         Public Overrides Function Evaluate(envir As Environment) As TempValue
             Throw New NotImplementedException()
@@ -68,11 +68,18 @@ Namespace Runtime.CodeDOM
 
         Public Property IsByRef As Boolean = False
 
+        Sub New()
+        End Sub
+
+        Sub New(var$)
+            left = New VariableReference(var)
+        End Sub
+
         Public Overrides Function Evaluate(envir As Environment) As TempValue
             ' a是对变量的引用
             ' b是变量表达式
-            Dim var As Variable = DirectCast(a, VariableReference).Evaluate(envir).value
-            Dim value = b.Evaluate(envir)
+            Dim var As Variable = DirectCast(left, VariableReference).Evaluate(envir).value
+            Dim value = right.Evaluate(envir)
 
             var.Value = value.value
 
@@ -85,9 +92,9 @@ Namespace Runtime.CodeDOM
 
         Public Overrides Function ToString() As String
             If IsByRef Then
-                Return $"{a} = {b}"
+                Return $"{left} = {right}"
             Else
-                Return $"{a} <- {b}"
+                Return $"{left} <- {right}"
             End If
         End Function
     End Class

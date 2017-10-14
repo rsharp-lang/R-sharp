@@ -34,7 +34,7 @@ Imports SMRUCC.Rsharp.Runtime
 Namespace Interpreter.Expression
 
     ''' <summary>
-    ''' 在<see cref="SimpleExpression.Calculator"></see>之中由于移位操作的需要，需要使用类对象可以修改属性的特性来进行正常的计算，所以请不要修改为Structure类型
+    ''' 在<see cref="SimpleExpression.CalculatorInternal"></see>之中由于移位操作的需要，需要使用类对象可以修改属性的特性来进行正常的计算，所以请不要修改为Structure类型
     ''' </summary>
     ''' <remarks></remarks>
     Public Class MetaExpression
