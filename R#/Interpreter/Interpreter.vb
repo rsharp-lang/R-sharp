@@ -39,7 +39,7 @@ Namespace Interpreter
     ''' <summary>
     ''' The R# language interpreter
     ''' </summary>
-    Public Class Interpreter
+    Public Class RInterpreter
 
         ''' <summary>
         ''' Global runtime environment.(全局环境)
@@ -94,7 +94,7 @@ Namespace Interpreter
 
         End Function
 
-        Public Shared ReadOnly Property Rsharp As New Interpreter
+        Public Shared ReadOnly Property Rsharp As New RInterpreter
 
         Public Shared Function Evaluate(script$, ParamArray args As NamedValue(Of Object)()) As Object
             SyncLock Rsharp

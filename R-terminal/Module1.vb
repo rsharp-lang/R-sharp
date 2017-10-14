@@ -26,20 +26,22 @@
 
 #End Region
 
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.Language
+Imports SMRUCC.Rsharp.Library.Internal
 Imports SMRUCC.Rsharp.Runtime
 
 Module Module1
 
     Sub Main()
 
-        Dim dbl As New Runtime.PrimitiveTypes.numeric
+        Dim dbl As New PrimitiveTypes.numeric
 
         Dim result As Object
 
-        With New Interpreter.Interpreter
+        With New RInterpreter
             '   Call Interpreter.Evaluate("3+[x];", New NamedValue(Of Object)("x", 10))
-            Call .globalEnvir.Closures.Add("list", Function(args) Library.Internal.base.list(args))
+            Call .globalEnvir.Closures.Add("list", Function(args) base.list(args))
             Call .globalEnvir.Push("x", 12344444, TypeCodes.integer)
             Call .globalEnvir.Push("y", -12344449, TypeCodes.integer)
             Call .globalEnvir.Push("Z", {-10, 110}, TypeCodes.integer)
@@ -55,6 +57,8 @@ Module Module1
 
             Call Console.WriteLine()
             Call Console.WriteLine()
+
+
             Call .PrintMemory(Console.Out)
 
 
@@ -73,7 +77,7 @@ Module Module1
 
 
 
-        result = New Interpreter.Interpreter().Evaluate("var [a,b] <- (1+2)*3;")
+        result = New RInterpreter().Evaluate("var [a,b] <- (1+2)*3;")
 
 
 
