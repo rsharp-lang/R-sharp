@@ -137,7 +137,7 @@ Namespace Interpreter.Expression
                                             .Select(Function(x) x.Evaluate(environment)) _
                                             .ToArray
 
-                                        Return v
+                                        Return v.Vector
                                     End Function
 
                         meta = New MetaExpression(value)
@@ -169,7 +169,8 @@ Namespace Interpreter.Expression
                                                       Dim numerics = DirectCast(value.value, Variable).ToVector
                                                       Dim norm# = Math.Sqrt(Aggregate x As Object In numerics Into Sum(Val(x) ^ 2))
 
-                                                      Return norm
+                                                      ' 经过计算之后都会被便作为double数值类型
+                                                      Return TempValue.Tuple(norm, TypeCodes.double)
                                                   End Function)
 
                     Case Else
@@ -188,6 +189,45 @@ Namespace Interpreter.Expression
             Loop
 
             Return expression
+        End Function
+
+        <Extension>
+        Private Function Vector(values As TempValue()) As Object
+            Dim allTypes = values _
+                .Select(Function(x) x.type) _
+                .Distinct _
+                .ToArray
+
+            If allTypes.Length = 1 Then
+                With allTypes(Scan0)
+                    If .IsPrimitive Then
+
+                        Dim type = .DotNETtype
+                        Dim vec As Array = Array.CreateInstance(type, values.Length)
+
+                        For i As Integer = 0 To values.Length - 1
+                            Call vec.SetValue(values(i).value, i)
+                        Next
+
+                        Return New TempValue With {
+                            .value = vec,
+                            .type = allTypes(0)
+                        }
+                    Else
+                        Return New TempValue With {
+                            .value = values.Select(Function(x) x.value).ToArray,
+                            .type = allTypes(0)
+                        }
+                    End If
+                End With
+            Else
+                Return New TempValue With {
+                    .type = TypeCodes.generic,
+                    .value = values _
+                        .Select(Function(x) x.value) _
+                        .ToArray
+                }
+            End If
         End Function
     End Module
 End Namespace
