@@ -43,11 +43,19 @@ Module Module1
             Call .globalEnvir.Push("x", 12344444, TypeCodes.integer)
             Call .globalEnvir.Push("y", -12344449, TypeCodes.integer)
             Call .globalEnvir.Push("Z", {-10, 110}, TypeCodes.integer)
-
+            Call .globalEnvir.Push("t", True, TypeCodes.boolean)
 
             result = .Evaluate("var v as integer <- 123;")
             result = .Evaluate("v <- Z + (x+y)*2;")
+            result = .Evaluate("var b as boolean <- t;")
 
+            Call Console.WriteLine()
+            Call Console.WriteLine()
+            Call .PrintMemory(Console.Out)
+
+
+
+            Pause()
             ' result = .Evaluate("var [a,b,D as y] <- list(a=TRUE, b = [x], y = y);")
             result = .Evaluate("var ddd as integer <- |1,2| * (|y| + ||x||);  # vector |1,2| multiply the sum vector that produced by abs value of vector y add numeric value vector norm result ||x||.")
 

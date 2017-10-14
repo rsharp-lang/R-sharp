@@ -1,34 +1,38 @@
 ﻿#Region "Microsoft.VisualBasic::89941403c327204fdc0636aa5773a8f2, ..\R-sharp\R#\Interpreter\Interpreter.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xieguigang (xie.guigang@live.com)
-    '       xie (genetics@smrucc.org)
-    ' 
-    ' Copyright (c) 2016 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xieguigang (xie.guigang@live.com)
+'       xie (genetics@smrucc.org)
+' 
+' Copyright (c) 2016 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 #End Region
 
+Imports System.IO
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports SMRUCC.Rsharp.Interpreter.Language
 Imports SMRUCC.Rsharp.Runtime
+Imports Microsoft.VisualBasic.Scripting.Runtime
+Imports Microsoft.VisualBasic.ApplicationServices.Terminal
+Imports Microsoft.VisualBasic.Language
 
 Namespace Interpreter
 
@@ -46,6 +50,29 @@ Namespace Interpreter
 
         Sub New()
             Call globalEnvir.Push(LastVariableName, Nothing, TypeCodes.generic)
+        End Sub
+
+        Public Sub PrintMemory(Optional dev As TextWriter = Nothing)
+            Dim table$()() = globalEnvir _
+                .Variables _
+                .Values _
+                .Select(Function(v)
+                            Dim vector = v.ToVector
+                            Dim value$ = vector _
+                                .Select(Function(x) CStrSafe(x)) _
+                                .JoinBy(", ")
+
+                            Return {
+                                v.Name,
+                                v.TypeCode.ToString & $" ({v.TypeOf.FullName})",
+                                $"[{vector.Length}] {value}"
+                            }
+                        End Function) _
+                .ToArray
+
+            With dev Or Console.Out.AsDefault
+                Call table.Print(dev:= .ref, distance:=3)
+            End With
         End Sub
 
         ''' <summary>
