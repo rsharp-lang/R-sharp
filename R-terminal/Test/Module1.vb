@@ -53,7 +53,8 @@ Module Module1
 
             result = .Evaluate("var vector.test as double <- |1,2| * (|v| + ||Z||);  # vector |1,2| multiply the sum vector that produced by abs value of vector y add numeric value vector norm result ||x||.")
             result = .Evaluate("var norm.test <- ||Z||;")
-
+            result = .Evaluate("var abs.test <- |Z|;")
+            result = .Evaluate("var logical.vector as boolean <- |TRUE, TRUE, TRUE, FALSE, FALSE, FALSE|;")
 
             Call Console.WriteLine()
             Call Console.WriteLine()

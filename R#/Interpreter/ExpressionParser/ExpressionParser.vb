@@ -174,6 +174,10 @@ Namespace Interpreter.Expression
                                                       Return TempValue.Tuple(norm, TypeCodes.double)
                                                   End Function)
 
+                    Case ExpressionToken.Boolean
+
+                        meta = New MetaExpression(t.Text.ParseBoolean, TypeCodes.boolean)
+
                     Case Else
 
                         Throw New NotImplementedException(t.Type)
