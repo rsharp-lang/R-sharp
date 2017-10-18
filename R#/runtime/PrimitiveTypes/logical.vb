@@ -35,6 +35,9 @@ Namespace Runtime.PrimitiveTypes
 
         Sub New()
             Call MyBase.New(TypeCodes.boolean, GetType(Boolean))
+            Call MyBase.[New]()
+
+            MyBase.UnaryOperators("not") = Core.BuildMethodInfo(Of Boolean, Boolean)(Function(b) Not b, "not")
         End Sub
 
         Public Overrides Function ToString() As String

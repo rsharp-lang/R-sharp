@@ -33,6 +33,9 @@ Imports SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.Expression
 
+    ''' <summary>
+    ''' Execute engine for operators
+    ''' </summary>
     Public Module ExecuteEngine
 
         ''' <summary>
@@ -67,15 +70,14 @@ Namespace Interpreter.Expression
         End Function
 
         <Extension> Public Function EvaluateUnary(envir As Environment, x As Variable, operator$) As Object
-            Dim type As RType = envir.Types(x.TypeID)
+            Dim type As RType = envir.RType(x)
             Dim method = type.GetUnaryOperator([operator])
 
             If method Is Nothing Then
                 Throw New NotImplementedException($"Operator '{[operator]}' is not defined!")
+            Else
+                Return method.Invoke(Nothing, BindingFlags.Static, Nothing, {x.Value, Nothing}, Nothing)
             End If
-
-            Dim result As Object = method(x.Value)
-            Return result
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>

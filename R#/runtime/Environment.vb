@@ -50,7 +50,7 @@ Namespace Runtime
         Public ReadOnly Property Stack As String
 
         ''' <summary>
-        ''' Key is <see cref="RType.Identity"/>
+        ''' Key is <see cref="RType.Identity"/>.(不推荐直接使用这个属性来获取类型值，而是应该通过<see cref="RType"/>来获取)
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property Types As New Dictionary(Of String, RType)
