@@ -57,6 +57,9 @@ Module Module1
             result = .Evaluate("var logical.vector as boolean <- |TRUE, TRUE, TRUE, FALSE, FALSE, FALSE|;")
             result = .Evaluate("var not.test <- not logical.vector;")
             result = .Evaluate("var and.test <- logical.vector and TRUE;")
+            result = .Evaluate("var or.test <- logical.vector or TRUE;")
+            result = .Evaluate("var not.test2 <- not or.test;")
+            result = .Evaluate("var or.test2 <- (logical.vector or FALSE) * 10;")
 
             Call Console.WriteLine()
             Call Console.WriteLine()
