@@ -1,3 +1,5 @@
+# Using DotNET library 
+
 <!-- vscode-markdown-toc -->
 * 1. [Add .NET Assembly Reference](#Add.NETAssemblyReference)
 * 2. [Construct .NET object instance](#Construct.NETobjectinstance)
@@ -14,6 +16,8 @@
 	autoSave=true
 	/vscode-markdown-toc-config -->
 <!-- /vscode-markdown-toc -->
+
+The R# language is original writen in VB.NET language, and it have the ability of using .NET library natively.
 
 ##  1. <a name='Add.NETAssemblyReference'></a>Add .NET Assembly Reference
 
@@ -37,7 +41,8 @@ Network::Load("./test.network/")
 |GraphModel()
 |doForceLayout()
 |visualize(bg="lightblue")
-|SaveTo("./test.png");
+|SaveTo("./test.png")
+;
 ```
 
 NOTE: 
@@ -73,6 +78,8 @@ But they are have slightly different:
 
 ```R
 # For creates a R# list, using list() function
+# In fact, all of the list type in R# language is the Dictionary(Of String, Object) collection type.
+# The R# list property is the Key in the dictionary.
 var x <- list(a =1, b=2, c=3) {
     $property <- "dddddd";
 }

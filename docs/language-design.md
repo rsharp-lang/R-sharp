@@ -1,3 +1,5 @@
+# R# language design
+
 <!-- vscode-markdown-toc -->
 * 1. [Code comments](#Codecomments)
 * 2. [Variable](#Variable)
@@ -23,8 +25,6 @@
 	autoSave=true
 	/vscode-markdown-toc-config -->
 <!-- /vscode-markdown-toc -->
-
-# R# language design
 
 ##  1. <a name='Codecomments'></a>Code comments
 
