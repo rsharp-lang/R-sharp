@@ -107,6 +107,34 @@ Namespace Runtime.PrimitiveTypes
         Public ReadOnly op_Divided As Func(Of Object, Object, Object) = Function(x, y) x / y
         Public ReadOnly op_Mod As Func(Of Object, Object, Object) = Function(x, y) x Mod y
 
+        Public Function BuildMethodInfo(Of T As IComparable(Of T), TOut)([do] As Func(Of Object, Object), <CallerMemberName> Optional name$ = Nothing) As RMethodInfo
+            ' 单目运算符只需要有一个参数，所以y是无用的
+            Dim operatorCall = Function(x, y) Core.UnaryCoreInternal(Of T, TOut)(x, [do])
+            Return New RMethodInfo({GetType(T).Argv("x", 0), GetType(TOut).Argv("out", 1)}, operatorCall, name)
+        End Function
+
+        ''' <summary>
+        ''' Generic unary operator core for primitive type.
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <typeparam name="TOut"></typeparam>
+        ''' <param name="x"></param>
+        ''' <param name="[do]"></param>
+        ''' <returns></returns>
+        Public Function UnaryCoreInternal(Of T As IComparable(Of T), TOut)(x As Object, [do] As Func(Of Object, Object)) As IEnumerable(Of TOut)
+            Dim type As Type = x.GetType
+
+            If type Is TypeDefine(Of T).GetSingleType Then
+                Return {DirectCast([do](x), TOut)}
+            ElseIf type.ImplementsInterface(TypeDefine(Of T).GetCollectionType) Then
+                Return DirectCast(x, IEnumerable(Of T)) _
+                    .Select(Function(o) DirectCast([do](o), TOut)) _
+                    .ToArray
+            Else
+                Throw New InvalidCastException(type.FullName)
+            End If
+        End Function
+
         ''' <summary>
         ''' Generic binary operator core for numeric type.
         ''' </summary>
