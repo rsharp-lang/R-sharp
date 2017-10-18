@@ -284,6 +284,32 @@ Allows user operator
 |``in``   | collection set      |
 |``which``| index list for true |
 
+#### User operator
+
+In the R language, you can define a user operator, example like:
+
+```R
+`%NOT_IS%` <- function(x, y) x != y;
+ 
+1 %NOT_IS% 1
+# [1] FALSE
+
+1 %NOT_IS% 2
+# [1] TRUE
+```
+
+This user operator declare just enabled on the binary operator, and the unary operator does not. but in R# language, you can also enable the unary operator, example like:
+
+```R
+`%pp%` <- function(x) (x + 10)^2;
+
+var y as integer <- 10;
+var x <- %pp% y;
+
+x;
+# [1] 400
+```
+
 ###  6.3. <a name='pipelineoperator'></a>pipeline operator
 
 Extension caller chain in VisualBasic is also named as function pipeline
@@ -334,10 +360,13 @@ test3 <- function(a) {
 }
 
 # Doing the exactly the same as VisualBasic pipeline in R language:
-var result <- "hello world!" 
-    |test1 
-    |test2(99) 
-    |test3;
+var result <- 
+
+"hello world!" 
+|test1() 
+|test2(99) 
+|test3()
+;
     
 # or you can just using the R function in normal way, and it is too much complicated to read:
 var result <- test3(test2(test1("hello world"), 99));
@@ -520,8 +549,8 @@ The tuple feature is espacially useful in operates the dataframe:
 
 ```R
 var d <- data.frame(
-    a = |1, 2, 3|,
-    b = |"a", "g", "y"|,
+    a = |   1,    2,     3|,
+    b = | "a",  "g",   "y"|,
     t = |TRUE, TRUE, FALSE|);
 
 # in a for loop, the tuple its member value is the cell value in dataframe
