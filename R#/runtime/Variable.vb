@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::98c3497b8813511c4b698848efe7bb13, ..\R-sharp\R#\runtime\Variable.vb"
+﻿#Region "Microsoft.VisualBasic::a78fb049295dd02c50484d78e0298ac5, ..\R-sharp\R#\runtime\Variable.vb"
 
     ' Author:
     ' 
@@ -26,10 +26,13 @@
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.Runtime
+Imports SMRUCC.Rsharp.Runtime.PrimitiveTypes
 
 Namespace Runtime
 
@@ -39,17 +42,24 @@ Namespace Runtime
     Public Class Variable : Implements INamedValue, Value(Of Object).IValueOf
 
         Public Property Name As String Implements IKeyedEntity(Of String).Key
+        Public Overridable Property Value As Object Implements Value(Of Object).IValueOf.Value
+
         ''' <summary>
         ''' 当前的这个变量被约束的类型
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property Constraint As TypeCodes
-        Public Overridable Property Value As Object Implements Value(Of Object).IValueOf.value
+
         ''' <summary>
         ''' <see cref="RType.Identity"/>, key for <see cref="Environment.Types"/>
         ''' </summary>
         ''' <returns></returns>
-        Public Property TypeID As String
+        Public ReadOnly Property TypeID As String
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
+            Get
+                Return [TypeOf].FullName
+            End Get
+        End Property
 
         ''' <summary>
         ''' Get the type of the current object <see cref="Value"/>.
@@ -70,8 +80,19 @@ Namespace Runtime
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property TypeCode As TypeCodes
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
                 Return Me.TypeOf.GetRTypeCode
+            End Get
+        End Property
+
+        Public ReadOnly Property Length As Integer
+            Get
+                If TypeCode.IsPrimitive Then
+                    Return ToVector.Length
+                Else
+                    Return 1
+                End If
             End Get
         End Property
 
@@ -89,12 +110,47 @@ Namespace Runtime
             End Get
         End Property
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Sub New(constraint As TypeCodes)
             Me.Constraint = constraint
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function ToString() As String
-            Return $"Dim {Name} As ({TypeCode}){Me.TypeOf.FullName} = {CStrSafe(Value)}"
+            Dim value = ToVector()
+            Dim str$
+
+            If value.Length = 1 Then
+                str = CStrSafe(value(Scan0))
+            Else
+                str = value.Select(Function(x) CStrSafe(x)).JoinBy(", ")
+                str = $"[{str}]"
+            End If
+
+            Return $"Dim {Name} As ({TypeCode}){Me.TypeOf.FullName} = {str}"
+        End Function
+
+        Public Function ToVector() As Object()
+            If TypeCode.IsPrimitive Then
+
+                Select Case [TypeOf]
+
+                    Case Core.TypeDefine(Of Integer).GetSingleType,
+                         Core.TypeDefine(Of Double).GetSingleType,
+                         Core.TypeDefine(Of Boolean).GetSingleType,
+                         Core.TypeDefine(Of ULong).GetSingleType,
+                         Core.TypeDefine(Of Char).GetSingleType,
+                         Core.TypeDefine(Of String).GetSingleType
+
+                        Return {Value}
+
+                    Case Else
+                        Return DirectCast(Value, IEnumerable).ToArray(Of Object)
+
+                End Select
+            Else
+                Return {Value}
+            End If
         End Function
     End Class
 End Namespace

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e38a68ca34c93293e81e832cde335d3b, ..\R-sharp\R#\runtime\CodeDOM\OperatorExpression.vb"
+﻿#Region "Microsoft.VisualBasic::38b618c254dd4f21c44dd1d32146c1d5, ..\R-sharp\R#\runtime\CodeDOM\OperatorExpression.vb"
 
     ' Author:
     ' 
@@ -31,7 +31,7 @@ Namespace Runtime.CodeDOM
     ''' <summary>
     ''' Logical and arithmetic expression
     ''' </summary>
-    Public Class OperatorExpression : Inherits PrimitiveExpression
+    Public MustInherit Class OperatorExpression : Inherits PrimitiveExpression
 
         Public Property [Operator] As String
 
@@ -44,13 +44,19 @@ Namespace Runtime.CodeDOM
 
         Public Property Expression As PrimitiveExpression
 
+        Public Overrides Function Evaluate(envir As Environment) As TempValue
+            Throw New NotImplementedException()
+        End Function
     End Class
 
     Public Class BinaryOperator : Inherits OperatorExpression
 
-        Public Property a As PrimitiveExpression
-        Public Property b As PrimitiveExpression
+        Public Property left As PrimitiveExpression
+        Public Property right As PrimitiveExpression
 
+        Public Overrides Function Evaluate(envir As Environment) As TempValue
+            Throw New NotImplementedException()
+        End Function
     End Class
 
     ''' <summary>
@@ -62,11 +68,33 @@ Namespace Runtime.CodeDOM
 
         Public Property IsByRef As Boolean = False
 
+        Sub New()
+        End Sub
+
+        Sub New(var$)
+            left = New VariableReference(var)
+        End Sub
+
+        Public Overrides Function Evaluate(envir As Environment) As TempValue
+            ' a是对变量的引用
+            ' b是变量表达式
+            Dim var As Variable = DirectCast(left, VariableReference).Evaluate(envir).value
+            Dim value = right.Evaluate(envir)
+
+            var.Value = value.value
+
+            If Not var.ConstraintValid Then
+                Throw New InvalidCastException
+            Else
+                Return value
+            End If
+        End Function
+
         Public Overrides Function ToString() As String
             If IsByRef Then
-                Return $"{a} = {b}"
+                Return $"{left} = {right}"
             Else
-                Return $"{a} <- {b}"
+                Return $"{left} <- {right}"
             End If
         End Function
     End Class

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0deed29022d285ba1b62c1b4f0f81e7a, ..\R-sharp\R#\runtime\RType.vb"
+﻿#Region "Microsoft.VisualBasic::59a56a1f2013f42b17167420259ce242, ..\R-sharp\R#\runtime\RType.vb"
 
     ' Author:
     ' 
@@ -27,39 +27,60 @@
 #End Region
 
 Imports System.Reflection
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports Microsoft.VisualBasic.Scripting.TokenIcer.OperatorExpression
 
 Namespace Runtime
 
     ''' <summary>
-    ''' Type proxy for <see cref="TypeCodes.list"/> or system primitives
+    ''' Type proxy for <see cref="TypeCodes.generic"/>(.NET type) or system primitives(vector/list/matrix)
     ''' </summary>
     Public Class RType : Implements IReadOnlyId
 
         Public ReadOnly Property TypeCode As TypeCodes = TypeCodes.list
-        Public ReadOnly Property FullName As String
-
         ''' <summary>
         ''' Using this property as the indentify key in the R# runtime <see cref="Environment"/>
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property Identity As String Implements IReadOnlyId.Identity
-            Get
-                Return Me.ToString.MD5
-            End Get
-        End Property
+        Public ReadOnly Property BaseType As Type
 
         ''' <summary>
         ''' The collection of unary operators for current R# type
         ''' </summary>
-        Dim UnaryOperators As Dictionary(Of String, MethodInfo)
-        Dim BinaryOperator1 As Dictionary(Of String, MethodInfo)
-        Dim BinaryOperator2 As Dictionary(Of String, MethodInfo)
+        Protected UnaryOperators As Dictionary(Of String, MethodInfo)
 
+        ''' <summary>
+        ''' me op other
+        ''' </summary>
+        Protected BinaryOperator1 As Dictionary(Of String, BinaryOperator)
+        ''' <summary>
+        ''' other op me
+        ''' </summary>
+        Protected BinaryOperator2 As Dictionary(Of String, BinaryOperator)
+
+        Protected Sub [New]()
+            UnaryOperators = New Dictionary(Of String, MethodInfo)
+            BinaryOperator1 = New Dictionary(Of String, BinaryOperator)
+            BinaryOperator2 = New Dictionary(Of String, BinaryOperator)
+        End Sub
+
+        ''' <summary>
+        ''' Should be unique: <see cref="Type.FullName"/>
+        ''' </summary>
+        ''' <param name="code"></param>
+        Sub New(code As TypeCodes, base As Type)
+            TypeCode = code
+            Identity = base.FullName
+            BaseType = base
+        End Sub
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function ToString() As String
-            Return $"[{TypeCode}] {FullName}"
+            Return $"[{TypeCode}] {Identity}"
         End Function
 
         ''' <summary>
@@ -77,8 +98,8 @@ Namespace Runtime
         ''' <param name="operator$"></param>
         ''' <param name="a"></param>
         ''' <returns></returns>
-        Public Function GetBinaryOperator1(operator$, a As Type) As Func(Of Object, Object, Object)
-
+        Public Function GetBinaryOperator2(operator$, a As RType) As MethodInfo
+            Return BinaryOperator2([operator]).MatchLeft(a.BaseType)
         End Function
 
         ''' <summary>
@@ -87,8 +108,8 @@ Namespace Runtime
         ''' <param name="operator$"></param>
         ''' <param name="b"></param>
         ''' <returns></returns>
-        Public Function GetBinaryOperator2(operator$, b As Type) As Func(Of Object, Object, Object)
-
+        Public Function GetBinaryOperator1(operator$, b As RType) As MethodInfo
+            Return BinaryOperator1([operator]).MatchRight(b.BaseType)
         End Function
 
         ''' <summary>
@@ -96,6 +117,11 @@ Namespace Runtime
         ''' </summary>
         ''' <param name="dotnet"></param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' 对于基础类型PrimitiveType而言，由于有些操作符是和语法相关的，所以并没有在<see cref="Type"/>之中定义有这些操作符
+        ''' 故而使用这个函数直接导入时不会存在这些操作符的
+        ''' 所以对于PrimitiveType而言，需要单独定义一个继承此<see cref="RType"/>的继承类型来单独的导入他们的操作符
+        ''' </remarks>
         Public Shared Function [Imports](dotnet As Type) As RType
             Dim operators = dotnet _
                 .GetMethods(PublicShared) _
@@ -108,11 +134,12 @@ Namespace Runtime
                                   Dim op$ = Linq2Symbols(linqName)
                                   Return op
                               End Function)
-            Dim binarys = operators.Where(Function(m) m.GetParameters.Length = 2).GroupBy(Function(m) m.Name)
+            Dim binarys = operators _
+                .Where(Function(m) m.GetParameters.Length = 2) _
+                .GroupBy(Function(m) m.Name)
+            Dim code As TypeCodes = dotnet.GetRTypeCode
 
-            Return New RType With {
-                ._TypeCode = dotnet.GetRTypeCode,
-                ._FullName = dotnet.FullName,
+            Return New RType(code, dotnet) With {
                 .UnaryOperators = unarys
             }
         End Function

@@ -5,12 +5,13 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{0C2EB77C-39F2-460D-A3F8-CE905F867637}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <StartupObject>SMRUCC.Rsharp.Module1</StartupObject>
+    <OutputType>Library</OutputType>
+    <StartupObject>
+    </StartupObject>
     <RootNamespace>SMRUCC.Rsharp</RootNamespace>
     <AssemblyName>R</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MyType>Console</MyType>
+    <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
@@ -80,13 +81,15 @@
     <Compile Include="Interpreter\ExpressionParser\MetaExpression.vb" />
     <Compile Include="LibraryManager\RPM.vb" />
     <Compile Include="LibraryManager\Internal\base.vb" />
-    <Compile Include="Module1.vb" />
     <Compile Include="Interpreter\ExpressionParser\ExecuteEngine.vb" />
     <Compile Include="Interpreter\SyntaxParser.vb" />
     <Compile Include="Interpreter\Language\Tokens.vb" />
     <Compile Include="Interpreter\ExpressionParser\ExpressionParser.vb" />
     <Compile Include="Extensions.vb" />
     <Compile Include="runtime\BindVariable.vb" />
+    <Compile Include="runtime\PrimitiveTypes\Core.vb" />
+    <Compile Include="runtime\RMethodInfo.vb" />
+    <Compile Include="runtime\PrimitiveTypes\list.vb" />
     <Compile Include="runtime\PrimitiveTypes\numeric.vb" />
     <Compile Include="runtime\PrimitiveTypes\string.vb" />
     <Compile Include="runtime\PrimitiveTypes\uinteger.vb" />

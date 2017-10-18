@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e3da8b9f3a8595616b077bbc7224ae44, ..\R-sharp\R-base\base.vb"
+﻿#Region "Microsoft.VisualBasic::5b94e75c3eab1a26aebcc4976f50dd01, ..\R-sharp\R-terminal\CLI\CLI.vb"
 
     ' Author:
     ' 
@@ -26,17 +26,6 @@
 
 #End Region
 
-Imports System.ComponentModel
-Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.Data.csv.IO
-Imports Microsoft.VisualBasic.Scripting.MetaData
-Imports csv = Microsoft.VisualBasic.Data.csv.IO.File
-Imports Microsoft.VisualBasic.Text
-Imports System.Text
-
-<Package("base")>
-<Description("")>
-Public Module base
-
+Module CLI
 
 End Module

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5e62672aa006fa2fd020f64d120117f3, ..\R-sharp\R#\Interpreter\ExpressionParser\ExecuteEngine.vb"
+﻿#Region "Microsoft.VisualBasic::8a6b83a8128c550ec318fce6bf84a3da, ..\R-sharp\R#\Interpreter\ExpressionParser\ExecuteEngine.vb"
 
     ' Author:
     ' 
@@ -26,7 +26,9 @@
 
 #End Region
 
+Imports System.Reflection
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.Expression
@@ -37,13 +39,31 @@ Namespace Interpreter.Expression
         ''' Operator expression evaluate
         ''' </summary>
         ''' <param name="left"></param>
-        ''' <param name="[next]"></param>
+        ''' <param name="right"></param>
         ''' <param name="operator$"></param>
         ''' <returns></returns>
-        <Extension> Public Function EvaluateBinary(envir As Environment, left As Variable, [next] As Variable, operator$) As Object
-            Dim ta As RType = envir.Types(left.TypeID)
-            Dim tb As RType = envir.Types([next].TypeID)
+        <Extension> Public Function EvaluateBinary(envir As Environment, left As Variable, right As Variable, operator$) As Object
+            Dim typeA As RType = envir.RType(left)
+            Dim typeB As RType = envir.RType(right)
+            Dim op_method As New Value(Of MethodInfo)
 
+            ' find operator based on the type schema
+            If (op_method = typeA.GetBinaryOperator1([operator], typeB)) Is Nothing Then
+                op_method = typeB.GetBinaryOperator2([operator], typeA)
+            End If
+
+            With op_method?.Value
+                If .IsNothing Then
+                    Throw New InvalidOperationException($"Operator `{[operator]}` between type {typeA} and {typeB} is undefined!")
+                Else
+                    Return .Invoke(Nothing, BindingFlags.Static, Nothing, {left.Value, right.Value}, Nothing)
+                End If
+            End With
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <Extension> Public Function EvaluateBinary(envir As Environment, left As MetaExpression, right As MetaExpression, operator$) As Object
+            Return envir.EvaluateBinary(envir.GetValue(left), envir.GetValue(right), [operator])
         End Function
 
         <Extension> Public Function EvaluateUnary(envir As Environment, x As Variable, operator$) As Object

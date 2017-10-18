@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::39a7a0e8af804abe19bc8125ae9684eb, ..\R-sharp\R#\runtime\CodeDOM\VariableDeclareExpression.vb"
+﻿#Region "Microsoft.VisualBasic::31ad75c0f85e6b35476f165ce8637372, ..\R-sharp\R#\runtime\CodeDOM\VariableDeclareExpression.vb"
 
     ' Author:
     ' 
@@ -26,6 +26,7 @@
 
 #End Region
 
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Interpreter.Language
@@ -60,8 +61,15 @@ Namespace Runtime.CodeDOM
             Me.Value = initialize
         End Sub
 
+        Public Overrides Function Evaluate(envir As Environment) As TempValue
+            With Value.Evaluate(envir)
+                Call envir.Push(Name, .value, Type)
+                Return .ref
+            End With
+        End Function
+
         Public Overrides Function ToString() As String
-            Return $"Dim {Name} As {Type.Description} = "
+            Return $"Dim {Name} As {Type.Description} = {Value}"
         End Function
     End Class
 
@@ -149,7 +157,28 @@ Namespace Runtime.CodeDOM
 
     Public Class VariableReference : Inherits PrimitiveExpression
 
-        Public Property ref As Token(Of Tokens)
+        Public Property ref As String
 
+        Sub New()
+        End Sub
+
+        Sub New(ref As Token(Of Tokens))
+            Me.ref = ref.Text
+        End Sub
+
+        Sub New(var$)
+            Me.ref = var
+        End Sub
+
+        Public Overrides Function Evaluate(envir As Environment) As TempValue
+            Return New TempValue With {
+                .type = TypeCodes.ref,
+                .value = envir(ref)
+            }
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return "ref " & ref
+        End Function
     End Class
 End Namespace

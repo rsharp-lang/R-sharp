@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e3da8b9f3a8595616b077bbc7224ae44, ..\R-sharp\R-base\base.vb"
+﻿#Region "Microsoft.VisualBasic::22d1f04228b30697f755ca03bff7e74f, ..\R-sharp\R-terminal\Test\SourceTrees.vb"
 
     ' Author:
     ' 
@@ -26,17 +26,35 @@
 
 #End Region
 
-Imports System.ComponentModel
-Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.Data.csv.IO
-Imports Microsoft.VisualBasic.Scripting.MetaData
-Imports csv = Microsoft.VisualBasic.Data.csv.IO.File
-Imports Microsoft.VisualBasic.Text
-Imports System.Text
+Imports SMRUCC.Rsharp.Interpreter.Language
 
-<Package("base")>
-<Description("")>
-Public Module base
+Module SourceTrees
 
+    Sub Main()
+        Console.WriteLine(TokenIcer.Parse("
+# Generic type variable
+var x <- 123;").GetSourceTree)
 
+        Console.WriteLine(TokenIcer.Parse("
+# Type constraint variable
+var x as integer <- {1, 2, 3};").GetSourceTree)
+
+        Console.WriteLine(TokenIcer.Parse("
+if(TRUE) {
+    # blablabla
+    println(""%s is TRUE"", TRUE);
+}").GetSourceTree)
+
+        Console.WriteLine(TokenIcer.Parse("
+if(a == b) {
+    println(""%s is equals to %s"", a, b);
+} else if(a <= b) {
+    println(""%s is less than or equals to %s"", a, b);
+} else {
+    println(""Not sure about this."");
+}
+").GetSourceTree)
+
+        Pause()
+    End Sub
 End Module

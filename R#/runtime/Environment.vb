@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4dab7ebab2296f80fa34a6e23718add1, ..\R-sharp\R#\runtime\Environment.vb"
+﻿#Region "Microsoft.VisualBasic::727f8122a975ccd4a3e424ed3f227893, ..\R-sharp\R#\runtime\Environment.vb"
 
     ' Author:
     ' 
@@ -32,6 +32,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.Abstract
 Imports SMRUCC.Rsharp.Interpreter.Expression
 Imports SMRUCC.Rsharp.Runtime.CodeDOM
+Imports SMRUCC.Rsharp.Runtime.PrimitiveTypes
 
 Namespace Runtime
 
@@ -53,6 +54,8 @@ Namespace Runtime
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property Types As New Dictionary(Of String, RType)
+        Public ReadOnly Property PrimitiveTypes As New Dictionary(Of TypeCodes, RType)
+
         ''' <summary>
         ''' 函数
         ''' </summary>
@@ -64,6 +67,7 @@ Namespace Runtime
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property IsGlobal As Boolean
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
                 Return Parent Is Nothing
             End Get
@@ -88,25 +92,25 @@ Namespace Runtime
         ''' If the current stack does not contains the target variable, then the program will try to find the variable in his parent
         ''' if variable in format like [var], then it means a global or parent environment variable
         ''' </remarks>
-        Default Public Property Value(name$) As Object
+        Default Public Property Value(name$) As Variable
             Get
                 If (name.First = "["c AndAlso name.Last = "]"c) Then
                     Return GlobalEnvironment(name.GetStackValue("[", "]"))
                 End If
 
                 If Variables.ContainsKey(name) Then
-                    Return Variables(name).Value
+                    Return Variables(name)
                 ElseIf Not Parent Is Nothing Then
                     Return Parent(name)
                 Else
                     Throw New EntryPointNotFoundException(name & " was not found in any stack enviroment!")
                 End If
             End Get
-            Set(value)
+            Set(value As Variable)
                 If name.First = "["c AndAlso name.Last = "]"c Then
                     GlobalEnvironment(name.GetStackValue("[", "]")) = value
                 Else
-                    Variables(name).Value = value
+                    Variables(name) = value
                 End If
             End Set
         End Property
@@ -130,11 +134,30 @@ Namespace Runtime
                         End Function) _
                 .ToDictionary
             Me.Stack = stack
+
+            ' imports PrimitiveTypes
+            PrimitiveTypes(TypeCodes.char) = New PrimitiveTypes.character
+            PrimitiveTypes(TypeCodes.integer) = New PrimitiveTypes.integer
+            PrimitiveTypes(TypeCodes.boolean) = New PrimitiveTypes.logical
+            PrimitiveTypes(TypeCodes.double) = New PrimitiveTypes.numeric
+            PrimitiveTypes(TypeCodes.string) = New PrimitiveTypes.string
+            PrimitiveTypes(TypeCodes.uinteger) = New PrimitiveTypes.uinteger
+            PrimitiveTypes(TypeCodes.list) = New PrimitiveTypes.list
+
+            Call [Imports](PrimitiveTypes(TypeCodes.boolean))
+            Call [Imports](PrimitiveTypes(TypeCodes.char))
+            Call [Imports](PrimitiveTypes(TypeCodes.double))
+            Call [Imports](PrimitiveTypes(TypeCodes.integer))
+            Call [Imports](PrimitiveTypes(TypeCodes.string))
+            Call [Imports](PrimitiveTypes(TypeCodes.uinteger))
+            Call [Imports](PrimitiveTypes(TypeCodes.list))
         End Sub
 
         ''' <summary>
         ''' Construct the global environment
         ''' </summary>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Friend Sub New()
             Call Me.New(Nothing, {})
         End Sub
@@ -147,34 +170,55 @@ Namespace Runtime
             End If
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function GetValue() As GetValue
             Return Function(name$)
                        Return Me(name)
                    End Function
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function Evaluate() As FunctionEvaluate
             Return Function(funcName, args)
-
+                       Throw New NotImplementedException
                    End Function
         End Function
 
-        Public Function GetValue(x As MetaExpression) As Object
-            If x.LeftType = TypeCodes.generic Then
+        Public Function GetValue(x As MetaExpression) As Variable
+            If x.LeftType = TypeCodes.ref Then
                 Dim o = x.LEFT
 
                 If o Is Nothing Then
                     Return Nothing
+
                 ElseIf o.GetType Is GetType(String) Then
+
                     ' 为变量引用
-                    Dim var$ = CStr(o)
-                    o = Me(var)
-                    Return o
+                    Dim ref$ = CStr(o)
+                    Dim var As Variable = Me(ref)
+
+                    Return var
                 Else
-                    Return o
+
+                    Throw New InvalidExpressionException
                 End If
             Else
-                Return x.LEFT
+
+                Dim value = x.LEFT
+
+                If value IsNot Nothing AndAlso value.GetType Is Core.TypeDefine(Of TempValue).GetSingleType Then
+                    Dim temp = DirectCast(value, TempValue)
+                    Return New Variable(temp.type) With {
+                        .Name = App.NextTempName,
+                        .Value = temp.value
+                    }
+                Else
+                    ' temp variable
+                    Return New Variable(x.LeftType) With {
+                        .Name = App.NextTempName,
+                        .Value = value
+                    }
+                End If
             End If
         End Function
 
@@ -189,15 +233,41 @@ Namespace Runtime
         ''' <param name="value"></param>
         ''' <param name="type">``R#``类型约束</param>
         ''' <returns></returns>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function Push(name$, value As Object, type$) As Integer
             Return Push(name, value, type.GetRTypeCode)
         End Function
 
-        Const ConstraintInvalid$ = "Value can not match the type constraint!"
+        Const ConstraintInvalid$ = "Value can not match the type constraint!!! ({0} <--> {1})"
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Sub [Imports](type As RType)
+            Types(type.Identity) = type
+        End Sub
+
+        Public Function RType(var As Variable) As RType
+            If var.TypeCode.IsPrimitive Then
+                ' all of the primitive type in R# language is vector type
+                Dim base As Type = var.TypeCode.DotNETtype
+                Return Types(base.FullName)
+            Else
+                Return Types(var.TypeID)
+            End If
+        End Function
+
+        Const AlreadyExists$ = "Variable ""{0}"" is already existed, can not declare it again!"
+
+        ''' <summary>
+        ''' Variable declare
+        ''' </summary>
+        ''' <param name="name$"></param>
+        ''' <param name="value"></param>
+        ''' <param name="type"></param>
+        ''' <returns></returns>
         Public Function Push(name$, value As Object, Optional type As TypeCodes = TypeCodes.generic) As Integer
             If Variables.ContainsKey(name) Then
-                Throw New Exception($"Variable ""{name}"" is already existed, can not declare it again!")
+                Throw New Exception(String.Format(AlreadyExists, name))
             End If
 
             With New Variable(type) With {
@@ -205,7 +275,7 @@ Namespace Runtime
                 .Value = value
             }
                 If Not .ConstraintValid Then
-                    Throw New Exception(ConstraintInvalid)
+                    Throw New Exception(String.Format(ConstraintInvalid, .TypeCode, type))
                 Else
                     Call Variables.Add(.ref)
                 End If

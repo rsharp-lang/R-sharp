@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::89941403c327204fdc0636aa5773a8f2, ..\R-sharp\R#\Interpreter\Interpreter.vb"
+﻿#Region "Microsoft.VisualBasic::7c6f46e1b0c7d22ed8b7da4466d53aab, ..\R-sharp\R#\Interpreter\Interpreter.vb"
 
     ' Author:
     ' 
@@ -26,7 +26,11 @@
 
 #End Region
 
+Imports System.IO
+Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Interpreter.Language
 Imports SMRUCC.Rsharp.Runtime
 
@@ -35,12 +39,41 @@ Namespace Interpreter
     ''' <summary>
     ''' The R# language interpreter
     ''' </summary>
-    Public Class Interpreter
+    Public Class RInterpreter
 
         ''' <summary>
         ''' Global runtime environment.(全局环境)
         ''' </summary>
         Public ReadOnly Property globalEnvir As New Environment
+
+        Public Const LastVariableName$ = ".Last"
+
+        Sub New()
+            Call globalEnvir.Push(LastVariableName, Nothing, TypeCodes.generic)
+        End Sub
+
+        Public Sub PrintMemory(Optional dev As TextWriter = Nothing)
+            Dim table$()() = globalEnvir _
+                .Variables _
+                .Values _
+                .Select(Function(v)
+                            Dim vector = v.ToVector
+                            Dim value$ = vector _
+                                .Select(Function(x) CStrSafe(x)) _
+                                .JoinBy(", ")
+
+                            Return {
+                                v.Name,
+                                v.TypeCode.ToString & $" ({v.TypeOf.FullName})",
+                                $"[{vector.Length}] {value}"
+                            }
+                        End Function) _
+                .ToArray
+
+            With dev Or Console.Out.AsDefault
+                Call table.Print(dev:= .ref, distance:=3)
+            End With
+        End Sub
 
         ''' <summary>
         ''' Run R# script program from text data.
@@ -61,7 +94,7 @@ Namespace Interpreter
 
         End Function
 
-        Public Shared ReadOnly Property Rsharp As New Interpreter
+        Public Shared ReadOnly Property Rsharp As New RInterpreter
 
         Public Shared Function Evaluate(script$, ParamArray args As NamedValue(Of Object)()) As Object
             SyncLock Rsharp

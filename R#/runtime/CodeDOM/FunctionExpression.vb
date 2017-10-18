@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::94bc2d7bb257f377e4d08a8ebfa19592, ..\R-sharp\R#\runtime\CodeDOM\FunctionExpression.vb"
+﻿#Region "Microsoft.VisualBasic::afed2280313fafd2b09b391814ac9784, ..\R-sharp\R#\runtime\CodeDOM\FunctionExpression.vb"
 
     ' Author:
     ' 
@@ -50,22 +50,33 @@ Namespace Runtime.CodeDOM
         ''' <returns></returns>
         Public Property Parameters As VariableDeclareExpression()
 
+        Public Overrides Function Evaluate(envir As Environment) As TempValue
+            Throw New NotImplementedException()
+        End Function
     End Class
 
-    Public Class Closure : Inherits PrimitiveExpression
-
+    Public MustInherit Class Closure : Inherits PrimitiveExpression
 
     End Class
 
     Public Class ForLoop : Inherits Closure
 
+        Public Overrides Function Evaluate(envir As Environment) As TempValue
+            Throw New NotImplementedException()
+        End Function
     End Class
 
     Public Class IfBranch : Inherits Closure
 
+        Public Overrides Function Evaluate(envir As Environment) As TempValue
+            Throw New NotImplementedException()
+        End Function
     End Class
 
     Public Class DoLoop : Inherits Closure
 
+        Public Overrides Function Evaluate(envir As Environment) As TempValue
+            Throw New NotImplementedException()
+        End Function
     End Class
 End Namespace

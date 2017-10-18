@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::eab8bca22550e0a49151772957b81983, ..\R-sharp\R#\Module1.vb"
+﻿#Region "Microsoft.VisualBasic::511440c6e120f34eb00b7cfde50fba6a, ..\R-sharp\R-terminal\Test\Module1.vb"
 
     ' Author:
     ' 
@@ -26,26 +26,45 @@
 
 #End Region
 
-Imports Microsoft.VisualBasic.Serialization.JSON
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.Language
+Imports SMRUCC.Rsharp.Library.Internal
+Imports SMRUCC.Rsharp.Runtime
 
 Module Module1
 
     Sub Main()
 
-        Dim dbl As New Runtime.PrimitiveTypes.numeric
+        Dim dbl As New PrimitiveTypes.numeric
 
         Dim result As Object
 
-        With New Interpreter.Interpreter
+        With New RInterpreter
             '   Call Interpreter.Evaluate("3+[x];", New NamedValue(Of Object)("x", 10))
-            Call .globalEnvir.Closures.Add("list", Function(args) Library.Internal.base.list(args))
-            Call .globalEnvir.Push("x", 12344444, Runtime.TypeCodes.integer)
-            Call .globalEnvir.Push("y", -12344445, Runtime.TypeCodes.integer)
+            Call .globalEnvir.Closures.Add("list", Function(args) base.list(args))
+            Call .globalEnvir.Push("x", 12344444, TypeCodes.integer)
+            Call .globalEnvir.Push("y", -12344449, TypeCodes.integer)
+            Call .globalEnvir.Push("Z", {-10, 110}, TypeCodes.integer)
+            Call .globalEnvir.Push("t", True, TypeCodes.boolean)
 
+            result = .Evaluate("var v as integer <- 123;")
+            result = .Evaluate("v <- Z + (x+y)*2;")
+            result = .Evaluate("var b as boolean <- t;")
+
+            result = .Evaluate("var vector.test as double <- |1,2| * (|v| + ||Z||);  # vector |1,2| multiply the sum vector that produced by abs value of vector y add numeric value vector norm result ||x||.")
+            result = .Evaluate("var norm.test <- ||Z||;")
+
+
+            Call Console.WriteLine()
+            Call Console.WriteLine()
+
+
+            Call .PrintMemory(Console.Out)
+
+
+
+            Pause()
             ' result = .Evaluate("var [a,b,D as y] <- list(a=TRUE, b = [x], y = y);")
-            result = .Evaluate("var ddd as integer <- |1,2| * (|y| + ||x||);  # vector |1,2| multiply the sum vector that produced by abs value of vector y add numeric value vector norm result ||x||.")
-
 
             Dim str$ = result.GetJson(True)
 
@@ -58,7 +77,7 @@ Module Module1
 
 
 
-        result = New Interpreter.Interpreter().Evaluate("var [a,b] <- (1+2)*3;")
+        result = New RInterpreter().Evaluate("var [a,b] <- (1+2)*3;")
 
 
 
@@ -217,4 +236,3 @@ do while(TRUE andalso t == ""123 + 555"") {
 .SaveTo("../design/\sourceTree.xml")
     End Sub
 End Module
-

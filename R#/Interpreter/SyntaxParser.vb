@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::55241ccaf7fb0c1ecfb528b0d274b6d3, ..\R-sharp\R#\Interpreter\SyntaxParser.vb"
+﻿#Region "Microsoft.VisualBasic::6ec1e299bf9c61538a60351a9014f653, ..\R-sharp\R#\Interpreter\SyntaxParser.vb"
 
     ' Author:
     ' 
@@ -56,6 +56,10 @@ Namespace Interpreter
                 Return expression
             End If
 
+            If TryParseValueAssign(statement, expression) Then
+                Return expression
+            End If
+
             Return New ValueExpression(statement.tokens)
         End Function
 
@@ -86,11 +90,8 @@ Namespace Interpreter
                 End If
             End With
 
-            out = New ValueAssign With {
-                .a = New VariableReference With {
-                    .ref = tokens(0)
-                },
-                .b = New Statement(Of Tokens) With {
+            out = New ValueAssign(tokens(0).Text) With {
+                .right = New Statement(Of Tokens) With {
                     .tokens = tokens.Skip(2).ToArray
                 }.Parse,
                 .IsByRef = isByRef,
@@ -162,10 +163,16 @@ Namespace Interpreter
                 ' 只是申明了变量和其类型，则默认是NULL值
                 out = New VariableDeclareExpression(var, tokens(3).Text, LiteralExpression.NULL)
                 Return True
+            Else
+                ' var x as type <- [expression...]
+                ' var x as type = 4
+                ' <- = 1
+                ' skip 5 in total?
+                Dim value = tokens.Skip(4 + 1).ToArray
+                Dim type$ = tokens(3).Text
+                out = New VariableDeclareExpression(var, type, New ValueExpression(value))
+                Return True
             End If
-
-
-
         End Function
     End Module
 End Namespace

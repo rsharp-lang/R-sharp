@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::359c84b31cc758d86aea43cc413213a2, ..\R-sharp\R#\Interpreter\ExpressionParser\MetaExpression.vb"
+﻿#Region "Microsoft.VisualBasic::026d64ce81f69423612b3f4d2db8bade, ..\R-sharp\R#\Interpreter\ExpressionParser\MetaExpression.vb"
 
     ' Author:
     ' 
@@ -34,7 +34,7 @@ Imports SMRUCC.Rsharp.Runtime
 Namespace Interpreter.Expression
 
     ''' <summary>
-    ''' 在<see cref="SimpleExpression.Calculator"></see>之中由于移位操作的需要，需要使用类对象可以修改属性的特性来进行正常的计算，所以请不要修改为Structure类型
+    ''' 在<see cref="SimpleExpression.CalculatorInternal"></see>之中由于移位操作的需要，需要使用类对象可以修改属性的特性来进行正常的计算，所以请不要修改为Structure类型
     ''' </summary>
     ''' <remarks></remarks>
     Public Class MetaExpression
@@ -117,6 +117,10 @@ Namespace Interpreter.Expression
         Sub New(n As Object, opr$)
             LEFT = n
             [Operator] = opr
+
+            If Not n Is Nothing Then
+                LeftType = n.GetType.GetRTypeCode
+            End If
         End Sub
 
         ''' <summary>
@@ -124,34 +128,50 @@ Namespace Interpreter.Expression
         ''' </summary>
         ''' <param name="n"></param>
         Sub New(n$, type As Tokens)
+
             Select Case type
+
                 Case Tokens.Boolean
                     LEFT = n.ParseBoolean
                     LeftType = TypeCodes.boolean
+
                 Case Tokens.Numeric
                     LEFT = Val(n)
                     LeftType = TypeCodes.double
+
                 Case Tokens.String
                     LEFT = n
                     LeftType = TypeCodes.string
+
                 Case Tokens.Object
-                    If n.IsPattern(Casting.RegexpDouble) Then
-                        LEFT = Val(n)
-                        LeftType = TypeCodes.double
-                    ElseIf n.IsPattern(Casting.RegexInteger) Then
+
+                    ' integer需要优先于Double判断，否则程序会一直判断数值为double类型的，
+                    ' 即使输入的文件参数只包含有整数部分
+                    If n.IsPattern(Casting.RegexInteger) Then
                         LEFT = CInt(Val(n))
                         LeftType = TypeCodes.integer
+
+                    ElseIf n.IsPattern(Casting.RegexpDouble) Then
+                        LEFT = Val(n)
+                        LeftType = TypeCodes.double
+
                     ElseIf n = "TRUE" Then
                         LEFT = True
                         LeftType = TypeCodes.boolean
+
                     ElseIf n = "FALSE" Then
                         LEFT = False
                         LeftType = TypeCodes.boolean
+
                     Else
-                        LEFT = n  ' 可能为变量引用
-                        LeftType = TypeCodes.generic
+                        ' 可能为变量引用
+                        LEFT = n
+                        LeftType = TypeCodes.ref
+
                     End If
+
                 Case Else
+
                     LEFT = n
             End Select
         End Sub

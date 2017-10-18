@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::109dde6ef5e42e2a27a36544a025d47f, ..\R-sharp\R#\Test\SourceTrees.vb"
+﻿#Region "Microsoft.VisualBasic::69fe05aa48e673f63f4378f95184f422, ..\R-sharp\R#\runtime\PrimitiveTypes\list.vb"
 
     ' Author:
     ' 
@@ -26,36 +26,16 @@
 
 #End Region
 
-Imports SMRUCC.Rsharp
+Namespace Runtime.PrimitiveTypes
 
-Module SourceTrees
+    Public Class list : Inherits RType
 
-    Sub Main()
-        Console.WriteLine(TokenIcer.Parse("
-# Generic type variable
-var x <- 123;").GetSourceTree)
+        Sub New()
+            Call MyBase.New(TypeCodes.list, GetType(Dictionary(Of String, Object)))
+        End Sub
 
-        Console.WriteLine(TokenIcer.Parse("
-# Type constraint variable
-var x as integer <- {1, 2, 3};").GetSourceTree)
-
-        Console.WriteLine(TokenIcer.Parse("
-if(TRUE) {
-    # blablabla
-    println(""%s is TRUE"", TRUE);
-}").GetSourceTree)
-
-        Console.WriteLine(TokenIcer.Parse("
-if(a == b) {
-    println(""%s is equals to %s"", a, b);
-} else if(a <= b) {
-    println(""%s is less than or equals to %s"", a, b);
-} else {
-    println(""Not sure about this."");
-}
-").GetSourceTree)
-
-        Pause()
-    End Sub
-End Module
-
+        Public Overrides Function ToString() As String
+            Return "R# list"
+        End Function
+    End Class
+End Namespace
