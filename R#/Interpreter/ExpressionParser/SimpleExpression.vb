@@ -154,20 +154,20 @@ Namespace Interpreter.Expression
             If metaList.Count = 1 Then
                 Return leftValue()
             Else
-                CalculatorInternal("^", metaList, envir)
-                CalculatorInternal("*/\%", metaList, envir)
-                CalculatorInternal("+-", metaList, envir)
+                CalculatorInternal({"^"}, metaList, envir)
+                CalculatorInternal({"*", "/", "\", "%"}, metaList, envir)
+                CalculatorInternal({"+", "-"}, metaList, envir)
+                CalculatorInternal({"and", "or"}, metaList, envir)
 
                 Return leftValue()
             End If
         End Function
 
-        Private Shared Sub CalculatorInternal(operators$, ByRef tokenList As List(Of MetaExpression), envir As Environment)
-
+        Private Shared Sub CalculatorInternal(operators$(), ByRef tokenList As List(Of MetaExpression), envir As Environment)
             ' Defines a LINQ query use for select the meta element that 
             ' Contains target operator..Count
             Dim countOp% = tokenList _
-                .Where(Function(mep) InStr(operators, mep.Operator) > 0) _
+                .Where(Function(mep) operators.IndexOf(mep.Operator) > -1) _
                 .Count
 
             If countOp = 0 Then

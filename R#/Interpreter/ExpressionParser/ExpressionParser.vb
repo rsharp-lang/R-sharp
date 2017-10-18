@@ -209,7 +209,9 @@ Namespace Interpreter.Expression
                 If Not tokenBuffer.EndRead Then
                     meta.Operator = (++tokenBuffer).Text
                 Else
-                    meta.Operator = "+"
+                    ' 2017-10-18
+                    ' 在计算表达式的时候这里使用+运算符可能会出问题，现在改为一个复杂的字符串来防止bug出现
+                    meta.Operator = "$$$$ END_OF_EXPRESSION $$$$"
                 End If
 
                 Call expression.Add(meta)
