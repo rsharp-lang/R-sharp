@@ -8,6 +8,7 @@
 * 6. [Operators in R#](#OperatorsinR)
 	* 6.1. [Logical operators](#Logicaloperators)
 	* 6.2. [Dynamics Operator Binding](#DynamicsOperatorBinding)
+		* 6.2.1. [User operator](#Useroperator)
 	* 6.3. [pipeline operator](#pipelineoperator)
 	* 6.4. [IN operator](#INoperator)
 		* 6.4.1. [combine with ``Which`` operator](#combinewithWhichoperator)
@@ -284,7 +285,7 @@ Allows user operator
 |``in``   | collection set      |
 |``which``| index list for true |
 
-#### User operator
+####  6.2.1. <a name='Useroperator'></a>User operator
 
 In the R language, you can define a user operator, example like:
 
@@ -499,7 +500,7 @@ Please notice that the term ``"1"`` is totaly differently with ``%1%``, as the t
 
 ##  8. <a name='IOoperation'></a>IO operation
 
-```
+```R
 ## You can using right shift operator for write data into file
 x >> [options]
 x >> path
