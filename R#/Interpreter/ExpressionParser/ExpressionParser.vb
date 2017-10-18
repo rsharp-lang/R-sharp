@@ -124,7 +124,27 @@ Namespace Interpreter.Expression
 
                     Case ExpressionToken.Object
 
-                        meta = New MetaExpression(t.Value, t.Type)
+                        If t.Text.TextEquals("not") Then
+                            ' 如果下一个对象不是操作符，这说明这个元素可能是not操作符
+                            If tokenBuffer.Current.Type <> ExpressionToken.Operator Then
+                                ' 因为metaExpression是应用于双目运算符的
+                                ' 所以在这里单目运算符需要转换为lambda表达式
+                                Dim value = ++tokenBuffer
+                                Dim expr = Function()
+                                               Return environment.EvaluateUnary(New MetaExpression(value.Value, value.Type), t.Text)
+                                           End Function
+
+                                meta = New MetaExpression(expr)
+
+                            Else
+
+                                ' 这个not是一个变量
+                                meta = New MetaExpression(t.Value, t.Type)
+
+                            End If
+                        Else
+                            meta = New MetaExpression(t.Value, t.Type)
+                        End If
 
                     Case ExpressionToken.VectorDeclare
 
@@ -167,7 +187,9 @@ Namespace Interpreter.Expression
                         meta = New MetaExpression(Function()
                                                       Dim value = ref.Evaluate(environment)
                                                       Dim numerics = DirectCast(value.value, Variable).ToVector
-                                                      Dim mod# = Aggregate x As Object In numerics Into Sum(Val(x) ^ 2)
+                                                      Dim mod# = Aggregate x As Object
+                                                                 In numerics
+                                                                 Into Sum(Val(x) ^ 2)
                                                       Dim norm# = Math.Sqrt([mod])
 
                                                       ' 经过计算之后都会被便作为double数值类型

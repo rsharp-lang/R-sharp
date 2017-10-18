@@ -103,7 +103,7 @@ Namespace Runtime.CodeDOM
         End Function
 
         Public Overrides Function ToString() As String
-            Return $"Dim [{Members.JoinBy(", ")}] As System.Tuple = "
+            Return $"Dim [{Members.JoinBy(", ")}] As System.Tuple = {Value}"
         End Function
     End Class
 

@@ -77,5 +77,10 @@ Namespace Interpreter.Expression
             Dim result As Object = method(x.Value)
             Return result
         End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <Extension> Public Function EvaluateUnary(envir As Environment, x As MetaExpression, operator$) As Object
+            Return envir.EvaluateUnary(envir.GetValue(x), [operator])
+        End Function
     End Module
 End Namespace

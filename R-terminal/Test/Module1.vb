@@ -55,6 +55,7 @@ Module Module1
             result = .Evaluate("var norm.test <- ||Z||;")
             result = .Evaluate("var abs.test <- |Z|;")
             result = .Evaluate("var logical.vector as boolean <- |TRUE, TRUE, TRUE, FALSE, FALSE, FALSE|;")
+            result = .Evaluate("var not.test <- not logical.vector;")
 
             Call Console.WriteLine()
             Call Console.WriteLine()
