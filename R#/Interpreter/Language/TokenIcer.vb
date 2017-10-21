@@ -263,12 +263,29 @@ Namespace Interpreter.Language
                                 Call createNewToken()
                                 Call buffer.Parse(childs, line, args)
 
+                                ' (1+2) * 3
+                                ' don't have any tokens
+
+                                ' 3 * (1+2)
+                                ' the last token is an operator
+
+                                ' x <- (1+2)
+                                ' x = (1+2)
+                                ' the last token is a value assign
+
                                 If tokens = 0 Then
                                     ' 没有tokens元素，则说明可能是
                                     ' (1+2) *3
                                     ' 这种类型的表达式
 
                                     tokens += New Token(RSharpLang.Priority, "()")
+                                Else
+
+                                    With tokens.Last
+                                        If .Equals(RSharpLang.LeftAssign) OrElse .Equals(RSharpLang.Operator) OrElse .Equals(RSharpLang.ParameterAssign) Then
+                                            tokens += New Token(RSharpLang.Priority, "()")
+                                        End If
+                                    End With
                                 End If
 
                                 With tokens.Last
