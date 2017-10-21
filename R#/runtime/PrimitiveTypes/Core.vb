@@ -1,33 +1,35 @@
 ﻿#Region "Microsoft.VisualBasic::2d7ea93915c1f4ab13f5ca55b6bcae49, ..\R-sharp\R#\runtime\PrimitiveTypes\Core.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xieguigang (xie.guigang@live.com)
-    '       xie (genetics@smrucc.org)
-    ' 
-    ' Copyright (c) 2016 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xieguigang (xie.guigang@live.com)
+'       xie (genetics@smrucc.org)
+' 
+' Copyright (c) 2016 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 #End Region
 
+Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 
 Namespace Runtime.PrimitiveTypes
@@ -41,19 +43,23 @@ Namespace Runtime.PrimitiveTypes
 
             Shared singleType, collectionType As Type
 
-            Public Shared Function GetSingleType() As Type
-                If singleType Is Nothing Then
-                    singleType = GetType(T)
-                End If
-                Return singleType
-            End Function
+            Public Shared ReadOnly Property BaseType() As Type
+                Get
+                    If singleType Is Nothing Then
+                        singleType = GetType(T)
+                    End If
+                    Return singleType
+                End Get
+            End Property
 
-            Public Shared Function GetCollectionType() As Type
-                If collectionType Is Nothing Then
-                    collectionType = GetType(IEnumerable(Of T))
-                End If
-                Return collectionType
-            End Function
+            Public Shared ReadOnly Property EnumerableType() As Type
+                Get
+                    If collectionType Is Nothing Then
+                        collectionType = GetType(IEnumerable(Of T))
+                    End If
+                    Return collectionType
+                End Get
+            End Property
         End Class
 
         ''' <summary>
@@ -70,9 +76,9 @@ Namespace Runtime.PrimitiveTypes
                 Else
                     Dim type As Type = x.GetType
 
-                    If type Is TypeDefine(Of T).GetSingleType Then
+                    If type Is TypeDefine(Of T).BaseType Then
                         Return { .IndexOf(DirectCast(x, T)) > -1}
-                    ElseIf type.ImplementsInterface(TypeDefine(Of T).GetCollectionType) Then
+                    ElseIf type.ImplementInterface(TypeDefine(Of T).EnumerableType) Then
                         Return DirectCast(x, IEnumerable(Of T)).Select(Function(n) .IndexOf(n) > -1)
                     Else
                         Throw New InvalidOperationException(type.FullName)
@@ -81,11 +87,28 @@ Namespace Runtime.PrimitiveTypes
             End With
         End Function
 
+        ''' <summary>
+        ''' Build R# language reflection <see cref="MethodInfo"/>
+        ''' </summary>
+        ''' <typeparam name="TX"></typeparam>
+        ''' <typeparam name="TY"></typeparam>
+        ''' <typeparam name="TOut"></typeparam>
+        ''' <param name="[do]"></param>
+        ''' <param name="castX"></param>
+        ''' <param name="castY"></param>
+        ''' <param name="fakeX">
+        ''' 假若X参数为Boolean逻辑值类型，而目标的运算对象却是Integer的四则运算，故而需要先转换Boolean为Integer类型，但是经过转换之后获得的结果为Integer数组，很明显和Boolean的类型申明不符合，所以需要使用这个参数来指定一个假定类型
+        ''' </param>
+        ''' <param name="fakeY"></param>
+        ''' <param name="name$"></param>
+        ''' <returns></returns>
         Public Function BuildMethodInfo(Of TX As IComparable(Of TX),
                                            TY As IComparable(Of TY), TOut)(
                                          [do] As Func(Of Object, Object, Object),
                                          castX As Func(Of Object, Object),
                                          castY As Func(Of Object, Object),
+                                         Optional fakeX As Type = Nothing,
+                                         Optional fakeY As Type = Nothing,
                                          <CallerMemberName>
                                          Optional name$ = Nothing) As RMethodInfo
             Dim operatorCall = [do]
@@ -98,7 +121,11 @@ Namespace Runtime.PrimitiveTypes
                 operatorCall = Function(x, y) Core.BinaryCoreInternal(Of TX, TY, TOut)(x, y, [do])
             End If
 
-            Return New RMethodInfo({GetType(TX).Argv("x", 0), GetType(TY).Argv("y", 1)}, operatorCall, name)
+            ' using fake type or get type from generic type parameter if fake type is nothing
+            fakeX = fakeX Or GetType(TX).AsDefault
+            fakeY = fakeY Or GetType(TY).AsDefault
+
+            Return New RMethodInfo({fakeX.Argv("x", 0), fakeY.Argv("y", 1)}, operatorCall, name)
         End Function
 
         Public ReadOnly op_Add As Func(Of Object, Object, Object) = Function(x, y) x + y
@@ -124,9 +151,9 @@ Namespace Runtime.PrimitiveTypes
         Public Function UnaryCoreInternal(Of T As IComparable(Of T), TOut)(x As Object, [do] As Func(Of Object, Object)) As IEnumerable(Of TOut)
             Dim type As Type = x.GetType
 
-            If type Is TypeDefine(Of T).GetSingleType Then
+            If type Is TypeDefine(Of T).BaseType Then
                 Return {DirectCast([do](x), TOut)}
-            ElseIf type.ImplementsInterface(TypeDefine(Of T).GetCollectionType) Then
+            ElseIf type.ImplementInterface(TypeDefine(Of T).EnumerableType) Then
                 Return DirectCast(x, IEnumerable(Of T)) _
                     .Select(Function(o) DirectCast([do](o), TOut)) _
                     .ToArray
@@ -136,7 +163,7 @@ Namespace Runtime.PrimitiveTypes
         End Function
 
         ''' <summary>
-        ''' Generic binary operator core for numeric type.
+        ''' [Vector core] Generic binary operator core for numeric type.
         ''' </summary>
         ''' <typeparam name="TX"></typeparam>
         ''' <typeparam name="TY"></typeparam>
@@ -149,12 +176,12 @@ Namespace Runtime.PrimitiveTypes
             Dim xtype As Type = x.GetType
             Dim ytype As Type = y.GetType
 
-            If xtype Is TypeDefine(Of TX).GetSingleType Then
+            If xtype Is TypeDefine(Of TX).BaseType Then
 
-                If ytype Is TypeDefine(Of TY).GetSingleType Then
+                If ytype Is TypeDefine(Of TY).BaseType Then
                     Return {DirectCast([do](x, y), TOut)}
 
-                ElseIf ytype.ImplementsInterface(TypeDefine(Of TY).GetCollectionType) Then
+                ElseIf ytype.ImplementInterface(TypeDefine(Of TY).EnumerableType) Then
                     Return DirectCast(y, IEnumerable(Of TY)) _
                         .Select(Function(yi) DirectCast([do](x, yi), TOut)) _
                         .ToArray
@@ -163,14 +190,14 @@ Namespace Runtime.PrimitiveTypes
                     Throw New InvalidCastException(ytype.FullName)
                 End If
 
-            ElseIf xtype.ImplementsInterface(TypeDefine(Of TX).GetCollectionType) Then
+            ElseIf xtype.ImplementInterface(TypeDefine(Of TX).EnumerableType) Then
 
-                If ytype Is TypeDefine(Of TY).GetSingleType Then
+                If ytype Is TypeDefine(Of TY).BaseType Then
                     Return DirectCast(x, IEnumerable(Of TX)) _
                         .Select(Function(xi) DirectCast([do](xi, y), TOut)) _
                         .ToArray
 
-                ElseIf ytype.ImplementsInterface(TypeDefine(Of TY).GetCollectionType) Then
+                ElseIf ytype.ImplementInterface(TypeDefine(Of TY).EnumerableType) Then
 
                     Dim xlist = DirectCast(x, IEnumerable(Of TX)).ToArray
                     Dim ylist = DirectCast(y, IEnumerable(Of TY)).ToArray

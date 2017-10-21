@@ -61,8 +61,8 @@ Namespace Runtime.PrimitiveTypes
         Public Shared Function BuildIntegerMethodInfo2(op As Func(Of Object, Object, Object), <CallerMemberName> Optional name$ = Nothing) As RMethodInfo()
             Dim ii = BuildMethodInfo(Of Integer, Integer, Integer)(op, Nothing, Nothing)
             Dim id = BuildMethodInfo(Of Double, Integer, Double)(op, Nothing, Nothing)
-            Dim ib = BuildMethodInfo(Of Boolean, Integer, Integer)(op, Function(x) DirectCast(x, IEnumerable(Of Boolean)).Select(Function(b) If(b, 1, 0)).ToArray, Nothing)
-            Dim ic = BuildMethodInfo(Of Char, Integer, Integer)(op, Function(x) DirectCast(x, IEnumerable(Of Char)).CodeArray, Nothing)
+            Dim ib = BuildMethodInfo(Of Integer, Integer, Integer)(op, Function(x) DirectCast(x, IEnumerable(Of Boolean)).Select(Function(b) If(b, 1, 0)).ToArray, Nothing, fakeX:=GetType(Boolean))
+            Dim ic = BuildMethodInfo(Of Integer, Integer, Integer)(op, Function(x) DirectCast(x, IEnumerable(Of Char)).CodeArray, Nothing, fakeX:=GetType(Char))
             Dim iu = BuildMethodInfo(Of ULong, Integer, Integer)(op, Nothing, Nothing)
 
             Return {ii, id, ib, ic, iu}
@@ -71,8 +71,8 @@ Namespace Runtime.PrimitiveTypes
         Public Shared Function BuildIntegerMethodInfo1(op As Func(Of Object, Object, Object), <CallerMemberName> Optional name$ = Nothing) As RMethodInfo()
             Dim ii = BuildMethodInfo(Of Integer, Integer, Integer)(op, Nothing, Nothing)
             Dim id = BuildMethodInfo(Of Integer, Double, Double)(op, Nothing, Nothing)
-            Dim ib = BuildMethodInfo(Of Integer, Boolean, Integer)(op, Nothing, Function(y) DirectCast(y, IEnumerable(Of Boolean)).Select(Function(b) If(b, 1, 0)).ToArray)
-            Dim ic = BuildMethodInfo(Of Integer, Char, Integer)(op, Nothing, Function(y) DirectCast(y, IEnumerable(Of Char)).CodeArray)
+            Dim ib = BuildMethodInfo(Of Integer, Integer, Integer)(op, Nothing, Function(y) DirectCast(y, IEnumerable(Of Boolean)).Select(Function(b) If(b, 1, 0)).ToArray, fakeY:=GetType(Boolean))
+            Dim ic = BuildMethodInfo(Of Integer, Integer, Integer)(op, Nothing, Function(y) DirectCast(y, IEnumerable(Of Char)).CodeArray, fakeY:=GetType(Char))
             Dim iu = BuildMethodInfo(Of Integer, ULong, Integer)(op, Nothing, Nothing)
 
             Return {ii, id, ib, ic, iu}

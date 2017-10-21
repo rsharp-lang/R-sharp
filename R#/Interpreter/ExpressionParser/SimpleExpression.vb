@@ -141,7 +141,7 @@ Namespace Interpreter.Expression
                                     If .LeftType = TypeCodes.ref Then
                                         Dim var = envir(CStrSafe(value))
                                         Return TempValue.Tuple(var.Value, var.TypeCode)
-                                    ElseIf Not value Is Nothing AndAlso value.GetType Is Core.TypeDefine(Of TempValue).GetSingleType Then
+                                    ElseIf Not value Is Nothing AndAlso value.GetType Is Core.TypeDefine(Of TempValue).BaseType Then
                                         Return DirectCast(value, TempValue)
                                     Else
                                         Return TempValue.Tuple(value, .LeftType)

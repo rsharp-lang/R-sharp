@@ -135,12 +135,12 @@ Namespace Runtime
 
                 Select Case [TypeOf]
 
-                    Case Core.TypeDefine(Of Integer).GetSingleType,
-                         Core.TypeDefine(Of Double).GetSingleType,
-                         Core.TypeDefine(Of Boolean).GetSingleType,
-                         Core.TypeDefine(Of ULong).GetSingleType,
-                         Core.TypeDefine(Of Char).GetSingleType,
-                         Core.TypeDefine(Of String).GetSingleType
+                    Case Core.TypeDefine(Of Integer).BaseType,
+                         Core.TypeDefine(Of Double).BaseType,
+                         Core.TypeDefine(Of Boolean).BaseType,
+                         Core.TypeDefine(Of ULong).BaseType,
+                         Core.TypeDefine(Of Char).BaseType,
+                         Core.TypeDefine(Of String).BaseType
 
                         Return {Value}
 

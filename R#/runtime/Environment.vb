@@ -206,7 +206,7 @@ Namespace Runtime
 
                 Dim value = x.LEFT
 
-                If value IsNot Nothing AndAlso value.GetType Is Core.TypeDefine(Of TempValue).GetSingleType Then
+                If value IsNot Nothing AndAlso value.GetType Is Core.TypeDefine(Of TempValue).BaseType Then
                     Dim temp = DirectCast(value, TempValue)
                     Return New Variable(temp.type) With {
                         .Name = App.NextTempName,

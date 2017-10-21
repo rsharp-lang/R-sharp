@@ -107,7 +107,11 @@ Namespace Runtime
         ''' <param name="a"></param>
         ''' <returns></returns>
         Public Function GetBinaryOperator2(operator$, a As RType) As MethodInfo
-            Return BinaryOperator2([operator]).MatchLeft(a.BaseType)
+            If Not BinaryOperator2.ContainsKey([operator]) Then
+                Return Nothing
+            Else
+                Return BinaryOperator2([operator]).MatchLeft(a.BaseType)
+            End If
         End Function
 
         ''' <summary>
@@ -117,7 +121,11 @@ Namespace Runtime
         ''' <param name="b"></param>
         ''' <returns></returns>
         Public Function GetBinaryOperator1(operator$, b As RType) As MethodInfo
-            Return BinaryOperator1([operator]).MatchRight(b.BaseType)
+            If Not BinaryOperator1.ContainsKey([operator]) Then
+                Return Nothing
+            Else
+                Return BinaryOperator1([operator]).MatchRight(b.BaseType)
+            End If
         End Function
 
         ''' <summary>

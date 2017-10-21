@@ -281,7 +281,7 @@ Namespace Interpreter.Language
                                     tokens += New Token(RSharpLang.Priority, "()")
                                 Else
 
-                                    With tokens.Last
+                                    With tokens.Last.Type
                                         If .Equals(RSharpLang.LeftAssign) OrElse .Equals(RSharpLang.Operator) OrElse .Equals(RSharpLang.ParameterAssign) Then
                                             tokens += New Token(RSharpLang.Priority, "()")
                                         End If
