@@ -38,28 +38,24 @@ Namespace Runtime.PrimitiveTypes
 
         Friend NotInheritable Class TypeDefine(Of T)
 
+            ''' <summary>
+            ''' The vector based type
+            ''' </summary>
+            ''' <returns></returns>
+            Public Shared ReadOnly Property BaseType() As Type
+            ''' <summary>
+            ''' The vector type
+            ''' </summary>
+            ''' <returns></returns>
+            Public Shared ReadOnly Property EnumerableType() As Type
+
             Private Sub New()
             End Sub
 
-            Shared singleType, collectionType As Type
-
-            Public Shared ReadOnly Property BaseType() As Type
-                Get
-                    If singleType Is Nothing Then
-                        singleType = GetType(T)
-                    End If
-                    Return singleType
-                End Get
-            End Property
-
-            Public Shared ReadOnly Property EnumerableType() As Type
-                Get
-                    If collectionType Is Nothing Then
-                        collectionType = GetType(IEnumerable(Of T))
-                    End If
-                    Return collectionType
-                End Get
-            End Property
+            Shared Sub New()
+                BaseType = GetType(T)
+                EnumerableType = GetType(IEnumerable(Of T))
+            End Sub
         End Class
 
         ''' <summary>
@@ -182,6 +178,7 @@ Namespace Runtime.PrimitiveTypes
                     Return {DirectCast([do](x, y), TOut)}
 
                 ElseIf ytype.ImplementInterface(TypeDefine(Of TY).EnumerableType) Then
+
                     Return DirectCast(y, IEnumerable(Of TY)) _
                         .Select(Function(yi) DirectCast([do](x, yi), TOut)) _
                         .ToArray
