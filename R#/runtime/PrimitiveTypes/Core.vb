@@ -66,19 +66,22 @@ Namespace Runtime.PrimitiveTypes
         ''' <param name="collection"></param>
         ''' <returns></returns>
         Public Function op_In(Of T)(x As Object, collection As IEnumerable(Of T)) As IEnumerable(Of Boolean)
-            With collection.AsList
-                If x Is Nothing Then
-                    Return {}
-                Else
-                    Dim type As Type = x.GetType
 
-                    If type Is TypeDefine(Of T).BaseType Then
-                        Return { .IndexOf(DirectCast(x, T)) > -1}
-                    ElseIf type.ImplementInterface(TypeDefine(Of T).EnumerableType) Then
-                        Return DirectCast(x, IEnumerable(Of T)).Select(Function(n) .IndexOf(n) > -1)
-                    Else
-                        Throw New InvalidOperationException(type.FullName)
-                    End If
+            If x Is Nothing Then
+                Return {}
+            End If
+
+            Dim type As Type = x.GetType
+
+            With collection.AsList
+                If type Is TypeDefine(Of T).BaseType Then
+                    Return { .IndexOf(DirectCast(x, T)) > -1}
+
+                ElseIf type.ImplementInterface(TypeDefine(Of T).EnumerableType) Then
+                    Return DirectCast(x, IEnumerable(Of T)).Select(Function(n) .IndexOf(n) > -1)
+
+                Else
+                    Throw New InvalidOperationException(type.FullName)
                 End If
             End With
         End Function
@@ -93,7 +96,9 @@ Namespace Runtime.PrimitiveTypes
         ''' <param name="castX"></param>
         ''' <param name="castY"></param>
         ''' <param name="fakeX">
-        ''' 假若X参数为Boolean逻辑值类型，而目标的运算对象却是Integer的四则运算，故而需要先转换Boolean为Integer类型，但是经过转换之后获得的结果为Integer数组，很明显和Boolean的类型申明不符合，所以需要使用这个参数来指定一个假定类型
+        ''' 假若X参数为Boolean逻辑值类型，而目标的运算对象却是Integer的四则运算，故而需要先转换Boolean为Integer类型，
+        ''' 但是经过转换之后获得的结果为Integer数组，很明显和Boolean的类型申明不符合，所以需要使用这个参数来指定一个
+        ''' 假定类型
         ''' </param>
         ''' <param name="fakeY"></param>
         ''' <param name="name$"></param>
@@ -130,6 +135,14 @@ Namespace Runtime.PrimitiveTypes
         Public ReadOnly op_Divided As Func(Of Object, Object, Object) = Function(x, y) x / y
         Public ReadOnly op_Mod As Func(Of Object, Object, Object) = Function(x, y) x Mod y
 
+        ''' <summary>
+        ''' Build <see cref="MethodInfo"/> for unary operator in R# language
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <typeparam name="TOut"></typeparam>
+        ''' <param name="[do]"></param>
+        ''' <param name="name$"></param>
+        ''' <returns></returns>
         Public Function BuildMethodInfo(Of T As IComparable(Of T), TOut)([do] As Func(Of Object, Object), <CallerMemberName> Optional name$ = Nothing) As RMethodInfo
             ' 单目运算符只需要有一个参数，所以y是无用的
             Dim operatorCall = Function(x, y) Core.UnaryCoreInternal(Of T, TOut)(x, [do])

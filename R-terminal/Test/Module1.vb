@@ -68,6 +68,8 @@ Module Module1
             Call .PrintMemory(Console.Out)
 
 
+            result = .Evaluate("var f <- function(x) { x ^2; }")
+            result = .Evaluate("var f2 <- function(x,y) x+y;")
 
             Pause()
             ' result = .Evaluate("var [a,b,D as y] <- list(a=TRUE, b = [x], y = y);")

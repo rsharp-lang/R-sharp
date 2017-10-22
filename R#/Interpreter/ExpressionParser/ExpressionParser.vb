@@ -111,16 +111,35 @@ Namespace Interpreter.Expression
 
                         ' 进行函数调用求值
                         Dim name$ = t.Text
-                        ' 需要对参数进行表达式的编译，方便进行求值计算
-                        Dim args As NamedValue(Of Func(Of Environment, SimpleExpression))() = t _
-                            .Arguments _
-                            .SeqIterator _
-                            .Select(Function(parm) parm.value.FunctionArgument(parm)) _
-                            .ToArray
-                        Dim calls As New FuncCaller(name, params:=args)
-                        Dim handle = Function() calls.Evaluate(environment)
 
-                        meta = New MetaExpression(handle)
+                        ' 假若目标t的closure不为空，并且name为function的话，说明为函数申明
+                        ' 反之为函数调用
+
+                        If name = "function" AndAlso Not t.Closure.program.IsNullOrEmpty Then
+
+                            ' 函数申明
+                            ' function(x,y, ...) {...}
+                            Dim parameters = t.Arguments
+                            Dim body = t.Closure
+
+
+                        Else
+
+                            ' 函数调用
+                            ' func(x=1, y=2, ...)
+
+                            ' 需要对参数进行表达式的编译，方便进行求值计算
+                            Dim args As NamedValue(Of Func(Of Environment, SimpleExpression))() = t _
+                                .Arguments _
+                                .SeqIterator _
+                                .Select(Function(parm) parm.value.FunctionArgument(parm)) _
+                                .ToArray
+                            Dim calls As New FuncCaller(name, params:=args)
+                            Dim handle = Function() calls.Evaluate(environment)
+
+                            meta = New MetaExpression(handle)
+
+                        End If
 
                     Case ExpressionToken.Object
 
