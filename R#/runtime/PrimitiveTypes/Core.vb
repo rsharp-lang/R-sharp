@@ -36,6 +36,7 @@ Namespace Runtime.PrimitiveTypes
 
     Module Core
 
+''' Type Cache
         Friend NotInheritable Class TypeDefine(Of T)
 
             ''' <summary>
@@ -143,8 +144,8 @@ Namespace Runtime.PrimitiveTypes
             End If
 
             ' using fake type or get type from generic type parameter if fake type is nothing
-            fakeX = fakeX Or GetType(TX).AsDefault
-            fakeY = fakeY Or GetType(TY).AsDefault
+                                                fakeX = fakeX Or TypeDefine(Of TX).BaseType.AsDefault
+                                                fakeY = fakeY Or TypeDefine(Of TY).BaseType.AsDefault
 
             Return New RMethodInfo({fakeX.Argv("x", 0), fakeY.Argv("y", 1)}, operatorCall, name)
         End Function
@@ -166,7 +167,7 @@ Namespace Runtime.PrimitiveTypes
         Public Function BuildMethodInfo(Of T As IComparable(Of T), TOut)([do] As Func(Of Object, Object), <CallerMemberName> Optional name$ = Nothing) As RMethodInfo
             ' 单目运算符只需要有一个参数，所以y是无用的
             Dim operatorCall = Function(x, y) Core.UnaryCoreInternal(Of T, TOut)(x, [do])
-            Return New RMethodInfo({GetType(T).Argv("x", 0), GetType(TOut).Argv("out", 1)}, operatorCall, name)
+                                                                                Return New RMethodInfo({TypeDefine(Of T).Argv("x", 0), TypeDefine(Of TOut).Argv("out", 1)}, operatorCall, name)
         End Function
 
         ''' <summary>
