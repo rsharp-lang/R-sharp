@@ -36,7 +36,7 @@ Namespace Runtime.PrimitiveTypes
 
     Module Core
 
-''' Type Cache
+        ''' Type Cache
         Friend NotInheritable Class TypeDefine(Of T)
 
             ''' <summary>
@@ -75,32 +75,33 @@ Namespace Runtime.PrimitiveTypes
             Dim type As Type = x.GetType
 
             With collection.AsList
-        
+
                 If type Is TypeDefine(Of T).BaseType Then
-            
-            ' Just one element in x, using list indexof is faster than using hash table
+
+                    ' Just one element in x, using list indexof is faster than using hash table
                     Return { .IndexOf(DirectCast(x, T)) > -1}
 
                 ElseIf type.ImplementInterface(TypeDefine(Of T).EnumerableType) Then
-            
-            ' This can be optimised by using hash table if the x and collection are both a large collection. 
-            Dim xVector = DirectCast(x, IEnumerable(Of T)).ToArray
-            
-            If x.Vector.Length > 500 AndAlso .Count > 1000 Then
-                
-                ' Using hash table optimised for large n*m situation          
-                Dim yVector = .AsHashSet()
-                Return xVector _
-                .Select(Function(n) yVector.HasKey(n)) _
-                        .ToArray
-                
-            Else
+
+                    ' This can be optimised by using hash table if the x and collection are both a large collection. 
+                    Dim xVector = DirectCast(x, IEnumerable(Of T)).ToArray
+
+                    If x.Vector.Length > 500 AndAlso .Count > 1000 Then
+
+                        ' Using hash table optimised for large n*m situation          
+                        With .AsHashSet()
+                            Return xVector _
+                                .Select(Function(n) .HasKey(n)) _
+                                .ToArray
+                        End With
+                    Else
+
                         Return xVector _
-                        .Select(Function(n) .IndexOf(n) > -1) _
-                        .ToArray
-                                
+                            .Select(Function(n) .IndexOf(n) > -1) _
+                            .ToArray
+
                     End If
-                        
+
                 Else
                     Throw New InvalidOperationException(type.FullName)
                 End If
@@ -144,8 +145,8 @@ Namespace Runtime.PrimitiveTypes
             End If
 
             ' using fake type or get type from generic type parameter if fake type is nothing
-                                                fakeX = fakeX Or TypeDefine(Of TX).BaseType.AsDefault
-                                                fakeY = fakeY Or TypeDefine(Of TY).BaseType.AsDefault
+            fakeX = fakeX Or TypeDefine(Of TX).BaseType.AsDefault
+            fakeY = fakeY Or TypeDefine(Of TY).BaseType.AsDefault
 
             Return New RMethodInfo({fakeX.Argv("x", 0), fakeY.Argv("y", 1)}, operatorCall, name)
         End Function
@@ -161,13 +162,17 @@ Namespace Runtime.PrimitiveTypes
         ''' </summary>
         ''' <typeparam name="T"></typeparam>
         ''' <typeparam name="TOut"></typeparam>
-        ''' <param name="[do]"></param>
+        ''' <param name="[do]">单目运算符只需要有一个参数，所以y是无用的</param>
         ''' <param name="name$"></param>
         ''' <returns></returns>
         Public Function BuildMethodInfo(Of T As IComparable(Of T), TOut)([do] As Func(Of Object, Object), <CallerMemberName> Optional name$ = Nothing) As RMethodInfo
-            ' 单目运算符只需要有一个参数，所以y是无用的
-            Dim operatorCall = Function(x, y) Core.UnaryCoreInternal(Of T, TOut)(x, [do])
-                                                                                Return New RMethodInfo({TypeDefine(Of T).Argv("x", 0), TypeDefine(Of TOut).Argv("out", 1)}, operatorCall, name)
+            Return New RMethodInfo(
+                {
+                    TypeDefine(Of T).BaseType.Argv("x", 0),
+                    TypeDefine(Of TOut).BaseType.Argv("out", 1)
+                },
+                api:=Function(x, y) Core.UnaryCoreInternal(Of T, TOut)(x, [do]),
+                name:=name)
         End Function
 
         ''' <summary>
