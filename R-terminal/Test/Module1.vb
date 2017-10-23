@@ -35,6 +35,8 @@ Module Module1
 
     Sub Main()
 
+        Call Module2.BenchmarkTest()
+
         Dim dbl As New PrimitiveTypes.numeric
 
         Dim result As Object

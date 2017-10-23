@@ -34,9 +34,9 @@ Imports Microsoft.VisualBasic.Linq
 
 Namespace Runtime.PrimitiveTypes
 
-    Module Core
+    Public Module Core
 
-        Friend NotInheritable Class TypeDefine(Of T)
+        Public NotInheritable Class TypeDefine(Of T)
 
             ''' <summary>
             ''' The vector based type
