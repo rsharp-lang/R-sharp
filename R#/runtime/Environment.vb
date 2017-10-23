@@ -47,6 +47,10 @@ Namespace Runtime
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property Parent As Environment
+        ''' <summary>
+        ''' The name of this current stack closure
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property Stack As String
 
         ''' <summary>
@@ -123,17 +127,30 @@ Namespace Runtime
         ''' <param name="parameters">closure函数的参数传递列表</param>
         ''' <param name="stack">每一个函数内部都会有自己的局部stack堆栈环境，这个参数就是相当于函数的名称</param>
         Sub New(parent As Environment, parameters As NamedValue(Of PrimitiveExpression)(), <CallerMemberName> Optional stack$ = Nothing)
-            Me.Parent = parent
-            Me.Variables = parameters _
+            Call Me.New(
+                parent,
+                parameters _
                 .Select(Function(expression)
                             Dim expr As PrimitiveExpression = expression.Value
-                            Return New Variable(TypeCodes.generic) With {
+                            Return New NamedValue(Of TempValue) With {
                                 .Name = expression.Name,
-                                .Value = expr.Evaluate(envir:=Me)
+                                .Value = expr.Evaluate(envir:=parent)
+                            }
+                        End Function) _
+                .ToArray, stack)
+        End Sub
+
+        Sub New(parent As Environment, parameters As NamedValue(Of TempValue)(), stack$)
+            Me.Parent = parent
+            Me.Stack = stack
+            Me.Variables = parameters _
+                .Select(Function(arg)
+                            Return New Variable(arg.Value.type) With {
+                                .Name = arg.Name,
+                                .Value = arg.Value.value
                             }
                         End Function) _
                 .ToDictionary
-            Me.Stack = stack
 
             ' imports PrimitiveTypes
             PrimitiveTypes(TypeCodes.char) = New PrimitiveTypes.character

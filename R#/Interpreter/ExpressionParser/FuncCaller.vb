@@ -101,7 +101,7 @@ Namespace Interpreter.Expression
                 Dim closure = envir.Closures(Name)
                 Dim args = params _
                     .Select(Function(x)
-                                Return New NamedValue(Of Object) With {
+                                Return New NamedValue(Of Variable) With {
                                     .Name = x.Name,
                                     .Value = envir.GetValue(x.Value)
                                 }
