@@ -219,6 +219,20 @@ Namespace Interpreter.Expression
 
                         meta = New MetaExpression(t.Text.ParseBoolean, TypeCodes.boolean)
 
+                    Case ExpressionToken.Operator
+
+                        ' 负数
+                        If t.Text = "-" Then
+
+                            With ++tokenBuffer
+                                Dim exp As SimpleExpression = New MetaExpression(.Value, .Type)
+                                meta = New MetaExpression(Function() -exp.Evaluate(environment).value)
+                            End With
+                        Else
+                            ' 如果是其他类型的操作符，则肯定是语法错误了
+                            Throw New NotImplementedException(t.Type)
+                        End If
+
                     Case Else
 
                         Throw New NotImplementedException(t.Type)
