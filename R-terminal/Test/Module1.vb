@@ -42,10 +42,13 @@ Module Module1
         With New RInterpreter
             '   Call Interpreter.Evaluate("3+[x];", New NamedValue(Of Object)("x", 10))
             Call .globalEnvir.Closures.Add("list", Function(args) base.list(args))
+
             Call .globalEnvir.Push("x", 12344444, TypeCodes.integer)
             Call .globalEnvir.Push("y", -12344449, TypeCodes.integer)
             Call .globalEnvir.Push("Z", {-10, 110}, TypeCodes.integer)
             Call .globalEnvir.Push("t", True, TypeCodes.boolean)
+
+            result = .Evaluate("var [t.a as a,t.b as b, t.c as y] <- list(a=not TRUE, b = [x] ^ -3 , y = |y , 555, 9|);")
 
             result = .Evaluate("var v as integer <- 123;")
             result = .Evaluate("v <- Z + (x+y)*2;")
@@ -72,7 +75,6 @@ Module Module1
             result = .Evaluate("var f2 <- function(x,y) x+y;")
 
             Pause()
-            ' result = .Evaluate("var [a,b,D as y] <- list(a=TRUE, b = [x], y = y);")
 
             Dim str$ = result.GetJson(True)
 
