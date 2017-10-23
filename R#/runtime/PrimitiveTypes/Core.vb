@@ -74,7 +74,10 @@ Namespace Runtime.PrimitiveTypes
             Dim type As Type = x.GetType
 
             With collection.AsList
+        
                 If type Is TypeDefine(Of T).BaseType Then
+            
+            ' Just one element in x, using list indexof is faster than using hash table
                     Return { .IndexOf(DirectCast(x, T)) > -1}
 
                 ElseIf type.ImplementInterface(TypeDefine(Of T).EnumerableType) Then
@@ -83,10 +86,18 @@ Namespace Runtime.PrimitiveTypes
             Dim xVector = DirectCast(x, IEnumerable(Of T)).ToArray
             
             If x.Vector.Length > 500 AndAlso .Count > 1000 Then
-                ' Using hash table
+                
+                ' Using hash table optimised for large n*m situation          
+                Dim yVector = .AsHashSet()
+                Return xVector _
+                .Select(Function(n) yVector.HasKey(n)) _
+                        .ToArray
                 
             Else
-                    Return .Select(Function(n) .IndexOf(n) > -1)
+                        Return xVector _
+                        .Select(Function(n) .IndexOf(n) > -1) _
+                        .ToArray
+                                
                     End If
                         
                 Else
