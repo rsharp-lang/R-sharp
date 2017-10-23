@@ -42,13 +42,11 @@ Namespace Runtime.PrimitiveTypes
             ''' <summary>
             ''' The vector based type
             ''' </summary>
-            ''' <returns></returns>
-            Public Shared ReadOnly Property BaseType() As Type
+            Public Shared ReadOnly BaseType As Type
             ''' <summary>
-            ''' The vector type
+            ''' The abstract vector type
             ''' </summary>
-            ''' <returns></returns>
-            Public Shared ReadOnly Property EnumerableType() As Type
+            Public Shared ReadOnly EnumerableType As Type
 
             Private Sub New()
             End Sub
@@ -156,6 +154,7 @@ Namespace Runtime.PrimitiveTypes
         Public ReadOnly op_Multiply As Func(Of Object, Object, Object) = Function(x, y) x * y
         Public ReadOnly op_Divided As Func(Of Object, Object, Object) = Function(x, y) x / y
         Public ReadOnly op_Mod As Func(Of Object, Object, Object) = Function(x, y) x Mod y
+        Public ReadOnly op_Power As Func(Of Object, Object, Object) = Function(x, y) CDbl(x) ^ CDbl(y)
 
         ''' <summary>
         ''' Build <see cref="MethodInfo"/> for unary operator in R# language

@@ -46,12 +46,14 @@ Namespace Runtime.PrimitiveTypes
             BinaryOperator1("*") = New BinaryOperator("*", [integer].BuildIntegerMethodInfo1(op_Multiply, "*"))
             BinaryOperator1("/") = New BinaryOperator("/", [integer].BuildIntegerMethodInfo1(op_Divided, "/"))
             BinaryOperator1("%") = New BinaryOperator("%", [integer].BuildIntegerMethodInfo1(op_Mod, "%"))
+            BinaryOperator1("^") = New BinaryOperator("^", [integer].BuildIntegerMethodInfo1(op_Power, "^"))
 
             BinaryOperator2("+") = New BinaryOperator("+", [integer].BuildIntegerMethodInfo2(op_Add, "+"))
             BinaryOperator2("-") = New BinaryOperator("-", [integer].BuildIntegerMethodInfo2(op_Minus, "-"))
             BinaryOperator2("*") = New BinaryOperator("*", [integer].BuildIntegerMethodInfo2(op_Multiply, "*"))
             BinaryOperator2("/") = New BinaryOperator("/", [integer].BuildIntegerMethodInfo2(op_Divided, "/"))
             BinaryOperator2("%") = New BinaryOperator("%", [integer].BuildIntegerMethodInfo2(op_Mod, "%"))
+            BinaryOperator2("^") = New BinaryOperator("^", [integer].BuildIntegerMethodInfo2(op_Power, "^"))
         End Sub
 
         Public Overrides Function ToString() As String
