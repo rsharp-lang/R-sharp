@@ -76,7 +76,7 @@ switch(value_expression) {
 
 All of the primitive closure will using the last value expression in the closure code as the return value of that closure, example as:
 
-```
+```R
 # The if closure can using the last value expression last_value or last_value2 
 # as its returns value based on the condition logical_condition.
 var value <- if(logical_condition) {
@@ -99,7 +99,7 @@ var valueOrNULL <- if(logical_condition) {
 
 All of the loop control will produce a value collection, for example:
 
-```
+```R
 # The syntax maybe looks weired, but it is legal in R#
 var sum.list <- for(x in 1:5) {
     x + 99;
@@ -126,16 +126,59 @@ user.closure <- function(args) {
 
 #### Function declare
 
+**Please remenber that there is no real function in R# language!** The function in R# language is a kind of user defined closure that can produced values as other value expression. All of the function that you declard is kind of variable value, so that there is no function overloads in R# language, because the function variable with same name will overrides each other, the function declare in R# is a procedure of variable value assign.
+
 ```R
-# allow function overloads
-function funcName(args) {
-
-}
-
+# This is how you are doing a function declare:
 # variable form not allows overloads
 var funcName <- function(args) {
 
 }
+
+# variable value assign
+var x <- 123;
+x;
+# [1] 123
+
+x <- FALSE;
+x;
+# [1] FALSE
+
+# function declare just a variable value assign procedure, 
+# so that, there is no function overloads in R# language.
+var func <- function(args) {
+    # ...
+}
+func;
+# function(args) {
+#    # ...
+# }
+# <environment: .globalEnvir::func>
+
+# variable func its value was overrides by new closure value
+func <- function(x, y) { x+y; }
+func;
+# function(x, y) {
+#    x + y;    
+# }
+# <environment: .globalEnvir::func>
+
+# func is a normal variable in generic type, 
+# so that it can be function closure or vector.
+func <- |TRUE, FALSE, FALSE|;
+func;
+# [3] TRUE FALSE FALSE
+```
+
+> Why not allowed function overloads:
+> 1. function is a kind of data type in R# (closure type).
+> 2. Unlike VisualBasic language, R# is not a kind of strong type language, so that function overloads will makes user confused when they are calling a function that may have different version which is distinct from parameter type.
+
+But you can declare function with the same name in different R# namespace, and then use these function by add namespace prefix, example like:
+
+```R
+var x <- namespace1::function1();
+var y <- namespace2::function2(x);
 ```
 
 #### The main closure
