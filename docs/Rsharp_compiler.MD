@@ -1,4 +1,4 @@
-By default, one ``R#`` script equivalent to a small program in sub **main**, like:
+By default, one ``R#`` script equivalent to a small program in function **main**, like:
 
 example R script file:
 
@@ -43,3 +43,15 @@ The you can using the ``R#`` compiler for compile you R script as a standard .NE
 ./hello.exe
 # Hello world! message from R#
 ```
+
+## How it works?
+
+```
+R# script -> Syntax Tree -> VisualBasic CodeDOM -> .NET assembly
+```
+
+### Solving name conflicts
+
+### Solving closure value
+
+### 
