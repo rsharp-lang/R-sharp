@@ -1,6 +1,6 @@
 > [WARNING] This project is a work in progress and is not recommended for production use.
 
-<img src="./design/R-sharp.png" width="450px" />
+<img src="./language-design/images/R-sharp.png" width="450px" />
 
 > Art work: http://www.clipartbest.com/clipart-di85MqodT
 
