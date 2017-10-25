@@ -1,4 +1,25 @@
-## Value Expression
+# R# Closure Expression
+
+<!-- vscode-markdown-toc -->
+* 1. [Value Expression](#ValueExpression)
+* 2. [Closure Expression](#ClosureExpression)
+	* 2.1. [Primitive closure](#Primitiveclosure)
+		* 2.1.1. [Branch control](#Branchcontrol)
+		* 2.1.2. [Loop control](#Loopcontrol)
+	* 2.2. [Primitive Closure as Value Expression](#PrimitiveClosureasValueExpression)
+		* 2.2.1. [Notice on the loop control](#Noticeontheloopcontrol)
+		* 2.2.2. [Loop and operator](#Loopandoperator)
+	* 2.3. [User closure](#Userclosure)
+		* 2.3.1. [Function declare](#Functiondeclare)
+		* 2.3.2. [The main closure](#Themainclosure)
+
+<!-- vscode-markdown-toc-config
+	numbering=true
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->
+
+##  1. <a name='ValueExpression'></a>Value Expression
 
 The value expression is the very basic element in R# language: almost every word that you input will produce values, example like:
 
@@ -11,15 +32,15 @@ var x as integer <- 55;
 
 There is a kind of special value expression in R# language: **closure expression**.
 
-## Closure Expression
+##  2. <a name='ClosureExpression'></a>Closure Expression
 
 There are two kind of closure expression in R# language: primitive closure and user closure(function).
 
-### Primitive closure
+###  2.1. <a name='Primitiveclosure'></a>Primitive closure
 
 The primitive closure make up the basic flow control, like: ``if...elseif...else``, ``try...catch``, ``switch...case``, ``for``, ``repeat`` and ``do...while``. 
 
-#### Branch control
+####  2.1.1. <a name='Branchcontrol'></a>Branch control
 
 ##### ``if...elseif...else``
 
@@ -64,7 +85,7 @@ switch(value_expression) {
 }
 ```
 
-#### Loop control
+####  2.1.2. <a name='Loopcontrol'></a>Loop control
 
 ##### ``for``
 
@@ -72,7 +93,7 @@ switch(value_expression) {
 
 ##### ``do...while``
 
-### Primitive Closure as Value Expression
+###  2.2. <a name='PrimitiveClosureasValueExpression'></a>Primitive Closure as Value Expression
 
 All of the primitive closure will using the last value expression in the closure code as the return value of that closure, example as:
 
@@ -95,7 +116,7 @@ var valueOrNULL <- if(logical_condition) {
 }
 ```
 
-#### Notice on the loop control
+####  2.2.1. <a name='Noticeontheloopcontrol'></a>Notice on the loop control
 
 All of the loop control will produce a value collection, for example:
 
@@ -172,11 +193,11 @@ sum.list;
 # NULL
 ```
 
-#### Loop and operator
+####  2.2.2. <a name='Loopandoperator'></a>Loop and operator
 
 As the loop closure is a kind of 
 
-### User closure
+###  2.3. <a name='Userclosure'></a>User closure
 
 The user closure just have one type: user function, example like:
 
@@ -186,7 +207,7 @@ user.closure <- function(args) {
 }
 ```
 
-#### Function declare
+####  2.3.1. <a name='Functiondeclare'></a>Function declare
 
 **Please remenber that there is no real function in R# language!** The function in R# language is a kind of user defined closure that can produced values as other value expression. All of the function that you declard is kind of variable value, so that there is no function overloads in R# language, because the function variable with same name will overrides each other, the function declare in R# is a procedure of variable value assign.
 
@@ -243,7 +264,7 @@ var x <- namespace1::function1();
 var y <- namespace2::function2(x);
 ```
 
-#### The main closure
+####  2.3.2. <a name='Themainclosure'></a>The main closure
 
 Every R# script is a very large implicit function: main.
 
