@@ -101,7 +101,7 @@ All of the loop control will produce a value collection, for example:
 
 ```R
 # The syntax maybe looks weired, but it is legal in R#
-var sum.list <- for(x in 1:5) {
+var sum.list as integer <- for(x in 1:5) {
     x + 99;
 }
 
@@ -112,7 +112,69 @@ for (x in 1:5) {
 }
 
 var sum.list as integer <- .Last;
+
+sum.list;
+# [5] 100 101 102 103 104
 ```
+
+As we have known that all of the loop closure will produce a value collection, so that please be carefull when you are using a possible infinite loop control like ``repeat`` and ``do...while``. As the infinite loop may break your computer's memory and exhaust a lot of memory for stores the closure values that produced from each loop iteration. 
+
+```R
+# This infinite loop will fill up your computer's memory, and shutdown your system.
+repeat {
+
+    NULL;
+}
+
+var nothing <- .Last;
+```
+
+If you don't want the loop control closure produced values, then you can using the ``suppress`` option:
+
+```R
+options(suppress = TRUE);
+
+# So that this infinite loop just stuck you program at here, 
+# and your computer's memory will not be fill up.
+repeat {
+
+    NULL;
+}
+```
+
+Or you can just apply ``suppress`` in separate infinite loop, as the ``options()`` will disable the value produce in the current environment and current environment's child stack.
+
+```R
+var sum.list as integer <- for(x in 1:5) {
+    x + 99;
+    suppress;
+}
+
+sum.list;
+# NULL
+
+var i as integer = 0;
+
+sum.list <- repeat {
+
+    if (i < 10) {
+        i +=1;
+    } else {
+        break;
+    }
+
+    i ^ 2;
+
+    suppress;
+}
+
+sum.list;
+# NULL
+```
+
+#### Loop and operator
+
+As the loop closure is a kind of 
 
 ### User closure
 
