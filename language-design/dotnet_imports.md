@@ -84,7 +84,8 @@ library("Microsoft.VisualBasic.Data.visualize.Network.Visualizer");
 library("Microsoft.VisualBasic.Imaging");
 library("System.Drawing");
 
-# pipene for R# language read a network graph model and then visualize as png image
+# pipeline for R# language read a network graph model and 
+# then visualize as png image
 Network::Load("./test.network/")
 |GraphModel()
 |doForceLayout()
