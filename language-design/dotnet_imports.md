@@ -24,10 +24,58 @@ The R# language is original writen in VB.NET language, and it have the ability o
 You can dynamics add the ``.NET`` assembly reference by using the ``imports`` operator
 
 ```R
-# imports a dll file means dynamics load the this .NET assembly into the R# library manager
+# imports a dll file means dynamics load the this .NET assembly 
+# into the R# library manager
 # But the assembly will not registered into the library
 imports "Microsoft.VisualBasic.Data.visualize.Network.Visualizer.dll";
 ```
+
+You can using a string variable for dynamics load library
+
+```R
+# Example that dll file a.dll and b.dll both contains an API function 
+# in the same namespace location:
+#
+# a.dll!namespace::func1
+# b.dll!namespace::func1
+#
+# so that, you can
+
+var a.dll as string <- "./a.dll";
+var b.dll as string <- "./b.dll";
+
+`%||%` <- function(ver1, ver2) if (opt["version"] == "a") ver1 else ver2;
+	
+var library.dll as string <- a.ll %||% b.dll;
+
+# Dynamics load library based on the configuration
+# without change your R# script code.
+imports library.dll;
+
+# For imports selected component, you can using selector
+#
+# If the library.dll contains namespace1 and namespace2, 
+# then you can just imports the components from 
+# namesapce1 by using
+imports "namespace1" from library.dll;
+
+# By default R# is imports all of the components from the library.dll
+# So that imports library.dll is equals to:
+imports * from library.dll;
+``` 
+
+Probably sometimes, the .NET namespace that too long for write in your R# script, so that you can using ``imports...as`` for the root namespace alias:
+
+```R
+var a.dll as string <- "./a.dll";
+var b.dll as string <- "./b.dll";
+
+`%||%` <- function(ver1, ver2) if (opt["version"] == "a") ver1 else ver2;
+
+imports * as nlp from a.ll %||% b.dll;
+
+var tokens as string <- nlp::tokenlizer(input.txt);
+``` 
 
 and then you can using the .NET API by using ``library`` API imports directly:
 
