@@ -74,7 +74,9 @@ Namespace Interpreter.Expression
         End Sub
 
         Public Overrides Function ToString() As String
-            Dim args As String() = Params.ToArray(Function(x) x.ToString)
+            Dim args As String() = Params _
+                .Select(Function(x) x.ToString) _
+                .ToArray
             Return $"{Name}({args.JoinBy(", ")})"
         End Function
 
@@ -101,7 +103,7 @@ Namespace Interpreter.Expression
                 Dim closure = envir.Closures(Name)
                 Dim args = params _
                     .Select(Function(x)
-                                Return New NamedValue(Of Variable) With {
+                                Return New NamedValue(Of Object) With {
                                     .Name = x.Name,
                                     .Value = envir.GetValue(x.Value)
                                 }
