@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::31ffaef4b226f2112ebe0e4b26d6e230, ..\R-sharp\R#\runtime\PrimitiveTypes\integer.vb"
+﻿#Region "Microsoft.VisualBasic::de76dd0dbe448a9a99b152ac3e0b2d52, ..\R-sharp\R#\runtime\PrimitiveTypes\integer.vb"
 
     ' Author:
     ' 
