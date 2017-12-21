@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "R", "R#\R.vbproj", "{0C2EB77C-39F2-460D-A3F8-CE905F867637}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "+Microsoft.VisualBasic.Architecture.Framework", "..\runtime\sciBASIC#\Microsoft.VisualBasic.Architecture.Framework\+Microsoft.VisualBasic.Architecture.Framework.vbproj", "{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "47-dotnet_Microsoft.VisualBasic", "..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\47-dotnet_Microsoft.VisualBasic.vbproj", "{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "R", "R", "{D8B65EE7-3052-4B20-8E88-D9415B8A81CD}"
 EndProject
@@ -168,12 +168,12 @@ Global
 		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.Release|x64.Build.0 = Release|x64
 		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.Release|x86.ActiveCfg = Release|x86
 		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.Release|x86.Build.0 = Release|x86
-		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.Release2|Any CPU.ActiveCfg = Release2|Any CPU
-		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.Release2|Any CPU.Build.0 = Release2|Any CPU
-		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.Release2|x64.ActiveCfg = Release2|x64
-		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.Release2|x64.Build.0 = Release2|x64
-		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.Release2|x86.ActiveCfg = Release2|x86
-		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.Release2|x86.Build.0 = Release2|x86
+		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.Release2|Any CPU.ActiveCfg = Release|Any CPU
+		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.Release2|Any CPU.Build.0 = Release|Any CPU
+		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.Release2|x64.ActiveCfg = Release|x64
+		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.Release2|x64.Build.0 = Release|x64
+		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.Release2|x86.ActiveCfg = Release|x86
+		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.Release2|x86.Build.0 = Release|x86
 		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.sciBASIC.NET-test-release|Any CPU.ActiveCfg = sciBASIC.NET-test-release|Any CPU
 		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.sciBASIC.NET-test-release|Any CPU.Build.0 = sciBASIC.NET-test-release|Any CPU
 		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.sciBASIC.NET-test-release|x64.ActiveCfg = sciBASIC.NET-test-release|x64
