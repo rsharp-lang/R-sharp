@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4503654216a356223a8e8c5b0de1edce, ..\R-sharp\R-terminal\Test\Module2.vb"
+﻿#Region "Microsoft.VisualBasic::5cd1eafc7b666be0ba2f83c559c8e98c, ..\R-sharp\R-terminal\Test\Module2.vb"
 
     ' Author:
     ' 
@@ -6,7 +6,7 @@
     '       xieguigang (xie.guigang@live.com)
     '       xie (genetics@smrucc.org)
     ' 
-    ' Copyright (c) 2016 GPL3 Licensed
+    ' Copyright (c) 2018 GPL3 Licensed
     ' 
     ' 
     ' GNU GENERAL PUBLIC LICENSE (GPL3)
@@ -49,4 +49,3 @@ Module Module2
         Pause()
     End Sub
 End Module
-
