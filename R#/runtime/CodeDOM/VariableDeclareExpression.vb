@@ -1,15 +1,16 @@
-﻿#Region "Microsoft.VisualBasic::b62d52dc4bfce0a2377dfb730b227d86, ..\R-sharp\R#\runtime\CodeDOM\VariableDeclareExpression.vb"
+﻿#Region "Microsoft.VisualBasic::b62d52dc4bfce0a2377dfb730b227d86, R#\runtime\CodeDOM\VariableDeclareExpression.vb"
 
     ' Author:
     ' 
     '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xieguigang (xie.guigang@live.com)
     '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
     ' 
     ' Copyright (c) 2018 GPL3 Licensed
     ' 
     ' 
     ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
     ' 
     ' This program is free software: you can redistribute it and/or modify
     ' it under the terms of the GNU General Public License as published by
@@ -23,6 +24,45 @@
     ' 
     ' You should have received a copy of the GNU General Public License
     ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+
+    ' /********************************************************************************/
+
+    ' Summaries:
+
+    '     Class VariableDeclareExpression
+    ' 
+    '         Properties: Name, Type, Value
+    ' 
+    '         Function: Evaluate, ToString
+    ' 
+    '         Sub: New
+    ' 
+    '     Class TupleDeclareExpression
+    ' 
+    '         Properties: Members
+    ' 
+    '         Function: Evaluate, ToString
+    ' 
+    '         Sub: New
+    ' 
+    '     Structure TupleMember
+    ' 
+    '         Function: GetValue, ToString
+    ' 
+    '         Sub: New
+    ' 
+    '     Class VariableReference
+    ' 
+    '         Properties: ref
+    ' 
+    '         Function: Evaluate, ToString
+    ' 
+    '         Sub: (+3 Overloads) New
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -64,7 +104,7 @@ Namespace Runtime.CodeDOM
         Public Overrides Function Evaluate(envir As Environment) As TempValue
             With Value.Evaluate(envir)
                 Call envir.Push(Name, .value, Type)
-                Return .ref
+                Return .ByRef
             End With
         End Function
 

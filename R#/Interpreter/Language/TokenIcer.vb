@@ -1,15 +1,16 @@
-﻿#Region "Microsoft.VisualBasic::7fb2f56a68ce3d12e834bf3432bae640, ..\R-sharp\R#\Interpreter\Language\TokenIcer.vb"
+﻿#Region "Microsoft.VisualBasic::7fb2f56a68ce3d12e834bf3432bae640, R#\Interpreter\Language\TokenIcer.vb"
 
     ' Author:
     ' 
     '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xieguigang (xie.guigang@live.com)
     '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
     ' 
     ' Copyright (c) 2018 GPL3 Licensed
     ' 
     ' 
     ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
     ' 
     ' This program is free software: you can redistribute it and/or modify
     ' it under the terms of the GNU General Public License as published by
@@ -23,6 +24,26 @@
     ' 
     ' You should have received a copy of the GNU General Public License
     ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+
+    ' /********************************************************************************/
+
+    ' Summaries:
+
+    '     Module TokenIcer
+    ' 
+    '         Function: IsNullOrEmpty, (+3 Overloads) Trim
+    '         Structure ParserArgs
+    ' 
+    '             Function: [New], CloseAbs, OpenVectorNorm, OpenVerticalBar
+    ' 
+    '             Sub: New
+    ' 
+    ' 
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -360,7 +381,7 @@ Namespace Interpreter.Language
 
                                 With New Token(RSharpLang.Tuple, "[...]")
                                     .Arguments = childs
-                                    tokens += .ref
+                                    tokens += .ByRef
                                 End With
 
                             Case "{"c
@@ -534,7 +555,7 @@ Namespace Interpreter.Language
                                     ' 解析完栈之后，生成token
                                     With New Token(RSharpLang.VectorNorm, "||x||")
                                         .Arguments = childs
-                                        tokens += .ref
+                                        tokens += .ByRef
                                     End With
 
                                 ElseIf tokens = 1 AndAlso args.VectorNormOpen Then
@@ -600,14 +621,14 @@ Namespace Interpreter.Language
 
                                         With New Token(RSharpLang.AbsVector, "|x|")
                                             .Arguments = childs
-                                            tokens += .ref
+                                            tokens += .ByRef
                                         End With
 
                                     Else
 
                                         With New Token(RSharpLang.VectorDeclare, "|...|")
                                             .Arguments = childs
-                                            tokens += .ref
+                                            tokens += .ByRef
                                         End With
 
                                     End If
@@ -739,7 +760,7 @@ Namespace Interpreter.Language
                     .Select(Function(t) t.Trim) _
                     .Where(Function(t) Not t.IsNullOrEmpty) _
                     .ToArray
-                Return .ref
+                Return .ByRef
             End With
         End Function
 

@@ -1,15 +1,16 @@
-﻿#Region "Microsoft.VisualBasic::7c6f46e1b0c7d22ed8b7da4466d53aab, ..\R-sharp\R#\Interpreter\Interpreter.vb"
+﻿#Region "Microsoft.VisualBasic::7c6f46e1b0c7d22ed8b7da4466d53aab, R#\Interpreter\Interpreter.vb"
 
     ' Author:
     ' 
     '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xieguigang (xie.guigang@live.com)
     '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
     ' 
     ' Copyright (c) 2018 GPL3 Licensed
     ' 
     ' 
     ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
     ' 
     ' This program is free software: you can redistribute it and/or modify
     ' it under the terms of the GNU General Public License as published by
@@ -23,6 +24,23 @@
     ' 
     ' You should have received a copy of the GNU General Public License
     ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+
+    ' /********************************************************************************/
+
+    ' Summaries:
+
+    '     Class RInterpreter
+    ' 
+    '         Properties: globalEnvir, Rsharp
+    ' 
+    '         Function: (+2 Overloads) Evaluate, Source
+    ' 
+    '         Sub: New, PrintMemory
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -71,7 +89,7 @@ Namespace Interpreter
                 .ToArray
 
             With dev Or Console.Out.AsDefault
-                Call table.Print(dev:= .ref, distance:=3)
+                Call table.Print(dev:= .ByRef, distance:=3)
             End With
         End Sub
 

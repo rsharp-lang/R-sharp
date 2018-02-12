@@ -1,15 +1,16 @@
-﻿#Region "Microsoft.VisualBasic::6d8bc7b5d20b22a3c3d4ebbbe8767a6d, ..\R-sharp\R#\Interpreter\Language\Codes.vb"
+﻿#Region "Microsoft.VisualBasic::6d8bc7b5d20b22a3c3d4ebbbe8767a6d, R#\Interpreter\Language\Codes.vb"
 
     ' Author:
     ' 
     '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xieguigang (xie.guigang@live.com)
     '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
     ' 
     ' Copyright (c) 2018 GPL3 Licensed
     ' 
     ' 
     ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
     ' 
     ' This program is free software: you can redistribute it and/or modify
     ' it under the terms of the GNU General Public License as published by
@@ -23,6 +24,25 @@
     ' 
     ' You should have received a copy of the GNU General Public License
     ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+
+    ' /********************************************************************************/
+
+    ' Summaries:
+
+    '     Class Codes
+    ' 
+    '         Function: RunProgram, TryParse
+    ' 
+    '         Sub: (+2 Overloads) New
+    ' 
+    '     Class Token
+    ' 
+    '         Sub: (+3 Overloads) New
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

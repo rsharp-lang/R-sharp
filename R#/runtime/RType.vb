@@ -1,15 +1,16 @@
-﻿#Region "Microsoft.VisualBasic::97a0ad815f173104f2a0ddd96c41dd38, ..\R-sharp\R#\runtime\RType.vb"
+﻿#Region "Microsoft.VisualBasic::97a0ad815f173104f2a0ddd96c41dd38, R#\runtime\RType.vb"
 
     ' Author:
     ' 
     '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xieguigang (xie.guigang@live.com)
     '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
     ' 
     ' Copyright (c) 2018 GPL3 Licensed
     ' 
     ' 
     ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
     ' 
     ' This program is free software: you can redistribute it and/or modify
     ' it under the terms of the GNU General Public License as published by
@@ -23,6 +24,23 @@
     ' 
     ' You should have received a copy of the GNU General Public License
     ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+
+    ' /********************************************************************************/
+
+    ' Summaries:
+
+    '     Class RType
+    ' 
+    '         Properties: BaseType, Identity, TypeCode
+    ' 
+    '         Function: [Imports], GetBinaryOperator1, GetBinaryOperator2, GetUnaryOperator, ToString
+    ' 
+    '         Sub: [New], New
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -92,8 +110,8 @@ Namespace Runtime
         ''' <returns></returns>
         Public Function GetUnaryOperator(operator$) As MethodInfo
             With LCase([operator])
-                If UnaryOperators.ContainsKey(.ref) Then
-                    Return UnaryOperators(.ref)
+                If UnaryOperators.ContainsKey(.ByRef) Then
+                    Return UnaryOperators(.ByRef)
                 Else
                     Return Nothing
                 End If
