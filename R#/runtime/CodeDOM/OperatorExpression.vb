@@ -51,9 +51,8 @@
     ' 
     '         Properties: IsByRef
     ' 
+    '         Constructor: (+2 Overloads) Sub New
     '         Function: Evaluate, ToString
-    ' 
-    '         Sub: (+2 Overloads) New
     ' 
     ' 
     ' /********************************************************************************/

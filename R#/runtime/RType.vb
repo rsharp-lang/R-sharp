@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::97a0ad815f173104f2a0ddd96c41dd38, R#\runtime\RType.vb"
+﻿#Region "Microsoft.VisualBasic::2dd8ea48d8b433cb9436a972639196a6, R#\runtime\RType.vb"
 
     ' Author:
     ' 
@@ -35,9 +35,11 @@
     ' 
     '         Properties: BaseType, Identity, TypeCode
     ' 
+    '         Constructor: (+1 Overloads) Sub New
+    ' 
     '         Function: [Imports], GetBinaryOperator1, GetBinaryOperator2, GetUnaryOperator, ToString
     ' 
-    '         Sub: [New], New
+    '         Sub: [New]
     ' 
     ' 
     ' /********************************************************************************/

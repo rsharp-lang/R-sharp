@@ -35,7 +35,7 @@
     ' 
     '         Properties: Source, Value
     ' 
-    '         Sub: (+3 Overloads) New
+    '         Constructor: (+3 Overloads) Sub New
     ' 
     ' 
     ' /********************************************************************************/

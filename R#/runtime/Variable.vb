@@ -36,9 +36,8 @@
     '         Properties: [TypeOf], Constraint, ConstraintValid, Length, Name
     '                     TypeCode, TypeID, Value
     ' 
+    '         Constructor: (+1 Overloads) Sub New
     '         Function: ToString, ToVector
-    ' 
-    '         Sub: New
     ' 
     ' 
     ' /********************************************************************************/

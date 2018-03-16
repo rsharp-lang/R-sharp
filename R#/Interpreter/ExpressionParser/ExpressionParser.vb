@@ -33,7 +33,7 @@
 
     '     Module ExpressionParser
     ' 
-    '         Function: (+2 Overloads) TryParse, Vector
+    '         Function: FunctionArgument, (+3 Overloads) TryParse, Vector
     ' 
     ' 
     ' /********************************************************************************/

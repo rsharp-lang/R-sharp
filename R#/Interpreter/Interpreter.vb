@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7c6f46e1b0c7d22ed8b7da4466d53aab, R#\Interpreter\Interpreter.vb"
+﻿#Region "Microsoft.VisualBasic::e97cb4464072ef39b44a03e0b22ce5ad, R#\Interpreter\Interpreter.vb"
 
     ' Author:
     ' 
@@ -35,9 +35,11 @@
     ' 
     '         Properties: globalEnvir, Rsharp
     ' 
+    '         Constructor: (+1 Overloads) Sub New
+    ' 
     '         Function: (+2 Overloads) Evaluate, Source
     ' 
-    '         Sub: New, PrintMemory
+    '         Sub: PrintMemory
     ' 
     ' 
     ' /********************************************************************************/

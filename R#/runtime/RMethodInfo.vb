@@ -36,16 +36,15 @@
     '         Properties: Attributes, DeclaringType, MethodHandle, Name, ReflectedType
     '                     ReturnTypeCustomAttributes
     ' 
+    '         Constructor: (+1 Overloads) Sub New
     '         Function: GetBaseDefinition, (+2 Overloads) GetCustomAttributes, GetMethodImplementationFlags, GetParameters, Invoke
     '                   IsDefined
-    ' 
-    '         Sub: New
     ' 
     '     Class RParameterInfo
     ' 
     '         Properties: Name, ParameterType, Position
     ' 
-    '         Sub: New
+    '         Constructor: (+1 Overloads) Sub New
     ' 
     ' 
     ' /********************************************************************************/

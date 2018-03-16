@@ -33,7 +33,8 @@
 
     ' Module Extensions
     ' 
-    '     Function: Argv, ClosureStackName, DotNETtype, EnsurePrimitiveVector, IsPrimitive
+    '     Function: Argv, ClosureStackName, DotNETtype, EnsurePrimitiveVector, (+2 Overloads) GetRTypeCode
+    '               IsPrimitive
     ' 
     ' /********************************************************************************/
 

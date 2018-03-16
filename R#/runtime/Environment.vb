@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::45bbe371b71f040c293f05c137491597, R#\runtime\Environment.vb"
+﻿#Region "Microsoft.VisualBasic::c4d45e45046fe1b34f6273c574dd6ed5, R#\runtime\Environment.vb"
 
     ' Author:
     ' 
@@ -36,9 +36,11 @@
     '         Properties: Closures, GlobalEnvironment, IsGlobal, Parent, PrimitiveTypes
     '                     Stack, Types, Variables
     ' 
+    '         Constructor: (+3 Overloads) Sub New
+    ' 
     '         Function: Evaluate, (+2 Overloads) GetValue, (+2 Overloads) Push, RType, ToString
     ' 
-    '         Sub: [Imports], (+3 Overloads) New
+    '         Sub: [Imports]
     ' 
     ' 
     ' /********************************************************************************/

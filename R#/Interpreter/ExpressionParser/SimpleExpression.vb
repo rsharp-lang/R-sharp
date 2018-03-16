@@ -35,9 +35,11 @@
     ' 
     '         Properties: IsNullOrEmpty, LastOperator, ReferenceDepth
     ' 
+    '         Constructor: (+2 Overloads) Sub New
+    ' 
     '         Function: Evaluate, GetEnumerator, IEnumerable_GetEnumerator, RemoveLast, ToString
     ' 
-    '         Sub: (+2 Overloads) Add, CalculatorInternal, (+2 Overloads) New
+    '         Sub: (+2 Overloads) Add, CalculatorInternal
     ' 
     ' 
     ' /********************************************************************************/

@@ -35,23 +35,21 @@
     ' 
     '         Properties: Name, Params
     ' 
+    '         Constructor: (+2 Overloads) Sub New
     '         Function: Evaluate, run, ToString
-    ' 
-    '         Sub: (+2 Overloads) New
     ' 
     '     Class DotNETOverloadsFunction
     ' 
+    '         Constructor: (+1 Overloads) Sub New
     '         Function: ToString
-    ' 
-    '         Sub: New
     ' 
     '     Class DotNetClosure
     ' 
-    '         Sub: New
+    '         Constructor: (+1 Overloads) Sub New
     ' 
     '     Class RSharpClosure
     ' 
-    '         Sub: New
+    '         Constructor: (+1 Overloads) Sub New
     ' 
     ' 
     ' /********************************************************************************/

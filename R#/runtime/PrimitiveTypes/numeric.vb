@@ -33,9 +33,8 @@
 
     '     Class numeric
     ' 
+    '         Constructor: (+1 Overloads) Sub New
     '         Function: BuildIntegerMethodInfo1, BuildIntegerMethodInfo2, ToString
-    ' 
-    '         Sub: New
     ' 
     ' 
     ' /********************************************************************************/

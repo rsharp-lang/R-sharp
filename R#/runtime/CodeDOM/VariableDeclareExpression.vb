@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b62d52dc4bfce0a2377dfb730b227d86, R#\runtime\CodeDOM\VariableDeclareExpression.vb"
+﻿#Region "Microsoft.VisualBasic::12a457b7d6535e735cd82695a0c267dc, R#\runtime\CodeDOM\VariableDeclareExpression.vb"
 
     ' Author:
     ' 
@@ -35,31 +35,27 @@
     ' 
     '         Properties: Name, Type, Value
     ' 
+    '         Constructor: (+1 Overloads) Sub New
     '         Function: Evaluate, ToString
-    ' 
-    '         Sub: New
     ' 
     '     Class TupleDeclareExpression
     ' 
     '         Properties: Members
     ' 
+    '         Constructor: (+1 Overloads) Sub New
     '         Function: Evaluate, ToString
-    ' 
-    '         Sub: New
     ' 
     '     Structure TupleMember
     ' 
+    '         Constructor: (+1 Overloads) Sub New
     '         Function: GetValue, ToString
-    ' 
-    '         Sub: New
     ' 
     '     Class VariableReference
     ' 
     '         Properties: ref
     ' 
+    '         Constructor: (+3 Overloads) Sub New
     '         Function: Evaluate, ToString
-    ' 
-    '         Sub: (+3 Overloads) New
     ' 
     ' 
     ' /********************************************************************************/

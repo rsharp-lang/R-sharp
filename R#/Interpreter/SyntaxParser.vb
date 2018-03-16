@@ -33,7 +33,7 @@
 
     '     Module SyntaxParser
     ' 
-    '         Function: TryParseObjectDeclare, TryParseTypedObjectDeclare, TryParseValueAssign
+    '         Function: Parse, TryParseObjectDeclare, TryParseTypedObjectDeclare, TryParseValueAssign
     ' 
     ' 
     ' /********************************************************************************/

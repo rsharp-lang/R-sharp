@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7fb2f56a68ce3d12e834bf3432bae640, R#\Interpreter\Language\TokenIcer.vb"
+﻿#Region "Microsoft.VisualBasic::f5d19c8abc10c67172bff87b95e61aa4, R#\Interpreter\Language\TokenIcer.vb"
 
     ' Author:
     ' 
@@ -33,12 +33,11 @@
 
     '     Module TokenIcer
     ' 
-    '         Function: IsNullOrEmpty, (+3 Overloads) Trim
+    '         Function: GetSourceTree, IsNullOrEmpty, (+2 Overloads) Parse, (+3 Overloads) Trim
     '         Structure ParserArgs
     ' 
+    '             Constructor: (+1 Overloads) Sub New
     '             Function: [New], CloseAbs, OpenVectorNorm, OpenVerticalBar
-    ' 
-    '             Sub: New
     ' 
     ' 
     ' 

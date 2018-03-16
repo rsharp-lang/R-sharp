@@ -33,13 +33,12 @@
 
     '     Class Codes
     ' 
+    '         Constructor: (+2 Overloads) Sub New
     '         Function: RunProgram, TryParse
-    ' 
-    '         Sub: (+2 Overloads) New
     ' 
     '     Class Token
     ' 
-    '         Sub: (+3 Overloads) New
+    '         Constructor: (+3 Overloads) Sub New
     ' 
     ' 
     ' /********************************************************************************/

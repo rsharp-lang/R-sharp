@@ -35,15 +35,13 @@
     ' 
     '         Properties: NULL, Type, Value
     ' 
+    '         Constructor: (+2 Overloads) Sub New
     '         Function: Evaluate
-    ' 
-    '         Sub: (+2 Overloads) New
     ' 
     '     Class NULL
     ' 
+    '         Constructor: (+1 Overloads) Sub New
     '         Function: Evaluate, ToString
-    ' 
-    '         Sub: New
     ' 
     '     Class StringLiteral
     ' 

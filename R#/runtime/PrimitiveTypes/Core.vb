@@ -37,7 +37,7 @@
     '                   Minus, Multiply, op_In, UnaryCoreInternal
     '         Class TypeDefine
     ' 
-    '             Sub: (+2 Overloads) New
+    '             Constructor: (+2 Overloads) Sub New
     ' 
     ' 
     ' 

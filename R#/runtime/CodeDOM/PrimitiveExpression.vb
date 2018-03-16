@@ -41,9 +41,8 @@
     ' 
     '     Class ValueExpression
     ' 
+    '         Constructor: (+1 Overloads) Sub New
     '         Function: Evaluate, ToString
-    ' 
-    '         Sub: New
     ' 
     ' 
     ' /********************************************************************************/
