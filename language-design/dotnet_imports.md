@@ -17,7 +17,7 @@
 	/vscode-markdown-toc-config -->
 <!-- /vscode-markdown-toc -->
 
-The R# language is original writen in VB.NET language, and it have the ability of using .NET library natively.
+The ``R#`` language is original writen in VB.NET language, and it have the ability of using .NET library natively.
 
 ##  1. <a name='Add.NETAssemblyReference'></a>Add .NET Assembly Reference
 
@@ -51,20 +51,26 @@ var library.dll as string <- a.ll %||% b.dll;
 # Dynamics load library based on the configuration
 # without change your R# script code.
 imports library.dll;
+```
 
-# For imports selected component, you can using selector
-#
-# If the library.dll contains namespace1 and namespace2, 
-# then you can just imports the components from 
-# namesapce1 by using
+For imports selected component, you can using selector. If the library.dll contains namespace1 and namespace2, then you can just imports the components from namesapce1 by using:
+
+```R
+# imports one namespace
 imports "namespace1" from library.dll;
 
-# By default R# is imports all of the components from the library.dll
-# So that imports library.dll is equals to:
+# imports multiple namespace
+imports "namespace1", "namespace2" from library.dll
+```
+
+By default ``R#`` is imports all of the components from the ``library.dll``, So that the statement ``imports library.dll`` is equals to:
+
+```R
+# imports all components from dll library
 imports * from library.dll;
 ``` 
 
-Probably sometimes, the .NET namespace that too long for write in your R# script, so that you can using ``imports...as`` for the root namespace alias:
+Probably sometimes, the .NET namespace that too long for write in your ``R#`` script, so that you can using ``imports...as`` for the root namespace alias:
 
 ```R
 var a.dll as string <- "./a.dll";
@@ -106,13 +112,15 @@ Construct a .NET object instance almost keeps the same as the VB.NET it does:
 
 ```R
 var x <- new type(args) with {
-    $property = ...;
+    $property1 = ...;
+	$property2 = ...;
 }
 ``` 
 
 ```vbnet
 Dim x As New type(args) With {
-    .property = ...
+    .property1 = ...,
+	.property2 = ...
 }
 ```
 
@@ -156,7 +164,7 @@ var x <- list(name = "123") with {
 
 ###  3.1. <a name='Usinginstantmethod'></a>Using instant method
 
-Using the .NET object its instant method in R language is invoke by ``:`` operator:
+Using the .NET object its instant method in ``R#`` language is invoke by ``:`` operator:
 
 ```R
 var display as string <- 98.76:ToString("F4");
