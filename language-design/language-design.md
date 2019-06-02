@@ -116,7 +116,10 @@ v <- append(a, b)
 v <- a << b
 ```
 
-NOTE: As the ``R#`` language is not designed for general programming, the most usaged of ``R#`` language is used for cli/data scripting in GCModeller, so ``<<`` and ``>>`` this two bit shift operator in VB.NET language is no longer means for bit operation any more. The ``<<`` operator is usually used for array push liked operation in ``R#`` language; And the ``>>`` operator is usually used for data file save operation.
+NOTE: As the ``R#`` language is not designed for general programming, the most usaged of ``R#`` language is used for cli/data scripting inside GCModeller environment, so ``<<`` and ``>>`` these two bit shift operator in VB.NET language is no longer means for bit operation any more in ``R#`` language. 
+
++ The ``<<`` operator is usually used for array push liked operation in ``R#`` language; 
++ And the ``>>`` operator is usually used for data file save operation.
 
 ##  3. <a name='Types'></a>Types
 
@@ -135,7 +138,7 @@ Generally, the R language is not designed as an OOP language, and the R# languag
 
 ```R
 # it works, but too verbose
-var obj <- list();
+local obj <- list();
 
 obj$a <- 123;
 obj$b <- "+++";
@@ -511,10 +514,32 @@ x >> [options]
 x >> path
 ```
 
-The right shift write operator is based on the data type of x:
+The right shift write operator is based on the data type of object ``x``:
 
-1. If type of x is dataframe or matrix, then ``write.csv`` function will be called.
-2. If type of x is generic type, then ``save`` function will be called.
+1. If type of ``x`` is a dataframe or matrix, then ``write.csv``/``write.table`` function will be called.
+2. If type of ``x`` is generic type, then ``save`` function will be called.
+3. If type of ``x`` is vector of the primitive types, then the data it will be saved as ``json``/``txt``/``csv`` file.
+
+> The file format is depends on the file extension shuffix, and this feature is only works for ``rule 1`` and ``rule 3``, ``rule 2`` for generic type is only can be saved in ``rda`` binary file.
+
+Example as:
+
+```R
+local vector = |1,2,3,4,5,6|
+
+vector >> "./index.json"
+vector >> "./index.csv"
+vector >> "./index.txt"
+
+local matrix = 
+    [|1,2,3|,
+     |4,5,6|,
+     |8,8,8|]
+
+colnames(matrix) <- |"A","B","C"|
+matrix >> "./matrix.csv" # A csv file will be generated.
+matrix >> "./matrix.txt" # A tsv file will be generated.
+```
 
 ###  8.1. <a name='Simpleexternalcalls'></a>Simple external calls
 
