@@ -39,7 +39,8 @@ Variable in ``R#`` should be declared by a ``local``/``global`` keyword, and usi
 ```R
 local s <- "12345";
 local x <- |1, 2, 3, 4, 5|;
-local matrix <-
+
+global matrix <-
   [|1, 2, 3|,
    |4, 5, 6|,
    |7, 8, 9|];
@@ -49,8 +50,43 @@ local x;
 local x <- NULL;
 ```
 
-> + ``local`` keyword is only allowed appears in a closure(function/if/loop, etc) body
-> + ``global`` keyword is not allowed used in any closure body for variable decalred.
+> + ``local`` keyword is allowed appears in a closure(function/if/loop, etc) body or top level scope
+> + ``global`` keyword is not allowed used in any closure body for variable decalred, ``global`` is only allowed used in top level scope.
+> + If a variable in a top level scope is declared as ``local``, then it will not accessable in a function closure body, but if/loop closure will works.
+> + If a variable in a top level scope is declared as ``global``, then it can be access in any scope, for access such global variable in a function body, use ``[]`` wrap the variable name to mark it as global.
+
+```R
+# An example about variable declare/access
+
+# This is the top level scope
+# both local/global are working
+
+# local x only can be accessed in current top level scope
+local x <- 9;
+
+test1 <- function() {
+    # object x not found error
+    return x;
+}
+
+# global y can be accessed at everywhere
+global y <- TRUE;
+
+test2 <- function() {
+    # success
+    return y;
+}
+
+test3 <- function() {
+    local y <- |888,888,88|;
+
+    # print a local variable y
+    print(y);
+    # print a global variable y
+    print([y]);
+}
+
+```
 
 Delcare a vector or matrix will no longer required of the ``c(...)`` function or ``matrix`` function. Almost keeps the same as the VisualBasic language it does:
 
