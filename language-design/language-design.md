@@ -423,10 +423,10 @@ The ``in`` operator means does the element in the target collection? returns a b
 
 ```R
 # in list
-var booleans <- name in names(obj);
+local booleans <- name in names(obj);
 # in range
 # means x >= min and x <= max
-var booleans <- x in [min, max];
+local booleans <- x in [min, max];
 ```
 
 ####  6.4.1. <a name='combinewithWhichoperator'></a>combine with ``Which`` operator 
@@ -434,8 +434,8 @@ var booleans <- x in [min, max];
 The ``which`` operator gets the index of the value ``TRUE`` in a boolean vector:
 
 ```R
-var x <- |1, 2, 3, 4, 5|;
-var indices.true <- which x in [min, max];
+local x <- |1, 2, 3, 4, 5|;
+local indices.true <- which x in [min, max];
 ```
 
 ##  7. <a name='bracketinRlanguage'></a>``[]`` bracket in R language
@@ -467,8 +467,8 @@ tuple variable:
 
 ```R
 # run commandline using @ operator in R
-var prot.fasta = "/home/biostack/sample.fasta";
-var [exitCode, std_out] <- @'makeblastdb -in "{prot.fasta}" -dbtype prot';
+local prot.fasta = "/home/biostack/sample.fasta";
+local [exitCode, std_out] <- @'makeblastdb -in "{prot.fasta}" -dbtype prot';
 ```
 
 ``list`` element accessor:
@@ -500,7 +500,7 @@ l["1"];
 # [4] 3 4 5 6
 
 # access list element by index
-l[%1%];
+l[&1];
 # [1] 11
 ```
 
@@ -564,7 +564,7 @@ tuple.test <- function(a as integer, b as integer) {
 }
 
 # and you can using tuple its member as the normal variable
-var [a, b, c] <- tuple.test(3, 2);
+local [a, b, c] <- tuple.test(3, 2);
 
 if (a == 3) {
     c <- c + a + b;
