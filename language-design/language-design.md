@@ -34,20 +34,23 @@
 
 ##  2. <a name='Variable'></a>Variable
 
-Variable in ``R#`` should be declared by ``var`` keyword, and using ``<-`` operator for value initialize by a expression. If the variable declaration not follow by a value initialize expression, then by default its value is set to ``NULL``:
+Variable in ``R#`` should be declared by a ``local``/``global`` keyword, and using ``<-`` or ``=`` operator for value initialize by a expression. If the variable declaration not follow by a value initialize expression, then by default its value is set to ``NULL``:
 
 ```R
-var s <- "12345";
-var x <- |1, 2, 3, 4, 5|;
-var matrix <-
+local s <- "12345";
+local x <- |1, 2, 3, 4, 5|;
+local matrix <-
   [|1, 2, 3|,
    |4, 5, 6|,
    |7, 8, 9|];
 
-var x;
+local x;
 # is equals to
-var x <- NULL;
+local x <- NULL;
 ```
+
+> + ``local`` keyword is only allowed appears in a closure(function/if/loop, etc) body
+> + ``global`` keyword is not allowed used in any closure body for variable decalred.
 
 Delcare a vector or matrix will no longer required of the ``c(...)`` function or ``matrix`` function. Almost keeps the same as the VisualBasic language it does:
 
@@ -66,9 +69,9 @@ By default, all of the primitive types in R# is an vector, and user defined type
 In the traditional R language, you can using both ``=`` or ``<-`` operator for value assign, all of these two operator are both OK. But in ``R#`` language these two operator have slightly difference: value asssign using ``<-`` operator means ``ByVal``, and value assign using ``=`` operator means ``ByRef``:
 
 ```R
-var a <- |1, 2, 3, 4, 5|;
+local a <- |1, 2, 3, 4, 5|;
 
-var b1, b2;
+local b1, b2;
 
 b1 <- a;  # ByVal
 b2 =  a;  # ByRef
@@ -112,6 +115,8 @@ v <- append(a, b)
 ## left shift means append b into vector a and then creates a new vector
 v <- a << b
 ```
+
+NOTE: As the ``R#`` language is not designed for general programming, the most usaged of ``R#`` language is used for cli/data scripting in GCModeller, so ``<<`` and ``>>`` this two bit shift operator in VB.NET language is no longer means for bit operation any more. The ``<<`` operator is usually used for array push liked operation in ``R#`` language; And the ``>>`` operator is usually used for data file save operation.
 
 ##  3. <a name='Types'></a>Types
 
