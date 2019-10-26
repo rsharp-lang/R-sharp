@@ -1,5 +1,5 @@
-var x <- 123;         # integer vector only have one element
-var y <- {1, 2, 3};   # integer vector have 3 elements
+let x as integer = 999;  # integer vector only have one element
+let y = [1, 2, 3];       # integer vector have 3 elements
 
 print(x);
 # [1] 123
@@ -16,11 +16,12 @@ typeof(y);
 typeof(x) is typeof(y);
 # [1] TRUE
 
-var t as double <- [100:1,-0.5];
-var i as integer <- [t="g2", n=666, s=FALSE];
-# type constraint error: object type can not be convert to an integer vector
+let t as double  = [100:1, -0.5];
 
-test.global <- function(x) {
+# type constraint error: object type can not be convert to an integer vector
+let i as integer = [t="g2", n=666, s=FALSE];
+
+declare function test.global(x) {
     return x + [x];  
 }
 
