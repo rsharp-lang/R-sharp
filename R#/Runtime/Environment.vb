@@ -17,6 +17,7 @@ Namespace Runtime
         ''' <returns></returns>
         Public ReadOnly Property stackTag As String
         Public ReadOnly Property variables As Dictionary(Of Variable)
+        Public ReadOnly Property types As Dictionary(Of String, RType)
 
         ''' <summary>
         ''' 当前的环境是否为最顶层的全局环境？

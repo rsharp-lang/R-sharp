@@ -97,6 +97,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Runtime\Expression.vb" />
+    <Compile Include="Runtime\RType.vb" />
     <Compile Include="Runtime\Extensions.vb" />
     <Compile Include="Runtime\Environment.vb" />
     <Compile Include="Runtime\Variable.vb" />
