@@ -1,6 +1,5 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
-Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 
 Namespace Runtime
@@ -52,16 +51,12 @@ Namespace Runtime
         ''' </remarks>
         Default Public Property value(name As String) As Variable
             Get
-                If (name.First = "["c AndAlso name.Last = "]"c) Then
-                    Return GlobalEnvironment(name.GetStackValue("[", "]"))
-                End If
+                Dim symbol As Variable = FindSymbol(name)
 
-                If variables.ContainsKey(name) Then
-                    Return variables(name)
-                ElseIf Not parent Is Nothing Then
-                    Return parent(name)
-                Else
+                If symbol Is Nothing Then
                     Throw New EntryPointNotFoundException(name & " was not found in any stack enviroment!")
+                Else
+                    Return symbol
                 End If
             End Get
             Set(value As Variable)
@@ -85,6 +80,25 @@ Namespace Runtime
             Me.parent = parent
             Me.stackTag = stackTag
         End Sub
+
+        ''' <summary>
+        ''' 这个函数查找失败的时候只会返回空值
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <returns></returns>
+        Public Function FindSymbol(name As String) As Variable
+            If (name.First = "["c AndAlso name.Last = "]"c) Then
+                Return GlobalEnvironment.FindSymbol(name.GetStackValue("[", "]"))
+            End If
+
+            If variables.ContainsKey(name) Then
+                Return variables(name)
+            ElseIf Not parent Is Nothing Then
+                Return parent.FindSymbol(name)
+            Else
+                Return Nothing
+            End If
+        End Function
 
         ''' <summary>
         ''' Variable declare

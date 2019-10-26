@@ -23,7 +23,13 @@ Namespace Interpreter.ExecuteEngine
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Throw New NotImplementedException()
+            Dim paramVals As Object() = parameters _
+                .Select(Function(a) a.Evaluate(envir)) _
+                .ToArray
+            Dim funcVar As Variable = envir(funcName)
+            Dim func As RMethodInfo = funcVar.value
+
+            Return func.Invoke(paramVals)
         End Function
     End Class
 End Namespace

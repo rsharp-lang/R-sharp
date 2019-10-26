@@ -11,7 +11,10 @@ Namespace Runtime
                 value = {DirectCast(value, T)}
             ElseIf valueType Is GetType(Object()) Then
                 value = DirectCast(value, Object()) _
-                    .Select(Function(o) DirectCast(o, T)) _
+                    .Select(Function(o)
+                                o = DirectCast(o, Array).GetValue(Scan0)
+                                Return DirectCast(o, T)
+                            End Function) _
                     .ToArray
             Else
                 value = DirectCast(value, IEnumerable(Of T)).ToArray
