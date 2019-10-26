@@ -144,20 +144,28 @@ Namespace Runtime
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function ToString() As String
-            Dim value = ToVector()
+            Return $"Dim {name} As ({typeCode}){Me.typeof.FullName} = {GetValueViewString(Me)}"
+        End Function
+
+        Public Shared Function GetValueViewString(var As Variable) As String
+            Dim value = var.ToVector()
             Dim str$
 
             If value.Length = 1 Then
                 str = CStrSafe(value(Scan0))
             Else
-                str = value.Select(Function(x) CStrSafe(x)).JoinBy(", ")
+                str = Iterator Function() As IEnumerable(Of String)
+                          For Each x As Object In value.AsQueryable
+                              Yield CStrSafe(x)
+                          Next
+                      End Function().JoinBy(", ")
                 str = $"[{str}]"
             End If
 
-            Return $"Dim {name} As ({typeCode}){Me.typeof.FullName} = {str}"
+            Return str
         End Function
 
-        Public Function ToVector() As Object()
+        Public Function ToVector() As Array
             If typeCode.IsPrimitive Then
                 Return DirectCast(value, Array)
             Else

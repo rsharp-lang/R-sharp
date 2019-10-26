@@ -1,5 +1,9 @@
-﻿Imports System.Runtime.CompilerServices
+﻿Imports System.IO
+Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Runtime
 
@@ -16,6 +20,26 @@ Namespace Interpreter
 
         Sub New()
             Call globalEnvir.Push(LastVariableName, Nothing, TypeCodes.generic)
+        End Sub
+
+        Public Sub PrintMemory(Optional dev As TextWriter = Nothing)
+            Dim table$()() = globalEnvir _
+                .variables _
+                .Values _
+                .Select(Function(v)
+                            Dim value$ = Variable.GetValueViewString(v)
+
+                            Return {
+                                v.name,
+                                v.typeCode.ToString & $" ({v.typeof.FullName})",
+                                $"[{v.length}] {value}"
+                            }
+                        End Function) _
+                .ToArray
+
+            With dev Or Console.Out.AsDefault
+                Call table.Print(dev:= .ByRef, distance:=3)
+            End With
         End Sub
 
         ''' <summary>

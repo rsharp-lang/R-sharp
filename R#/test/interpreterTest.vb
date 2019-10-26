@@ -14,6 +14,7 @@ Module interpreterTest
 
         Call R.Evaluate("x <- length(x):(33+99),1.5;")
 
+        Call R.PrintMemory()
 
         Pause()
     End Sub
