@@ -57,7 +57,8 @@ Namespace Language.TokenIcer
                         Case TokenType.comma,
                              TokenType.open,
                              TokenType.close,
-                             TokenType.terminator
+                             TokenType.terminator,
+                             TokenType.operator
 
                             With populateToken()
                                 If Not .IsNothing Then
@@ -94,7 +95,7 @@ Namespace Language.TokenIcer
             Return token
         End Function
 
-        ReadOnly delimiter As Index(Of Char) = {" "c, ASCII.TAB, ASCII.CR, ASCII.LF}
+        ReadOnly delimiter As Index(Of Char) = {" "c, ASCII.TAB, ASCII.CR, ASCII.LF, "="c}
         ReadOnly open As Index(Of Char) = {"[", "{", "("}
         ReadOnly close As Index(Of Char) = {"]", "}", ")"}
 
@@ -147,6 +148,9 @@ Namespace Language.TokenIcer
             ElseIf c Like delimiter Then
                 ' token delimiter
                 If buffer > 0 Then
+                    Return populateToken()
+                Else
+                    buffer += c
                     Return populateToken()
                 End If
             Else

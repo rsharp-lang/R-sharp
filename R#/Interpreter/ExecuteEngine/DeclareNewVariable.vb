@@ -8,8 +8,9 @@ Namespace Interpreter.ExecuteEngine
     Public Class DeclareNewVariable : Inherits Expression
 
         Dim name As String
-        Dim type As TypeCodes
         Dim value As Expression
+
+        Public Overrides ReadOnly Property type As TypeCodes
 
         Sub New(code As Token())
             ' 0   1    2   3    4 5
