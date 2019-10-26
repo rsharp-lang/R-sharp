@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interpreter\ExecuteEngine\BinaryExpression.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\IfBranch.vb" />
     <Compile Include="Interpreter\ExecuteEngine\CodeComment.vb" />
     <Compile Include="Interpreter\ExecuteEngine\FunctionInvoke.vb" />
     <Compile Include="Interpreter\ExecuteEngine\SequenceLiteral.vb" />

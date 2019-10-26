@@ -30,7 +30,7 @@ Namespace Interpreter.ExecuteEngine
 
                 Select Case keyword
                     Case "let" : Return New DeclareNewVariable(code)
-                    Case "if"
+                    Case "if" : Return New IfBranch(code)
 
                     Case Else
                         Throw New SyntaxErrorException
