@@ -163,9 +163,10 @@ Namespace Language
             End If
 
             Select Case text
-                Case ":>", "+", "-", "*", "=", "/"
+                Case ":>", "+", "-", "*", "=", "/", ">", "<", "~", "<=", ">=", "!", "<-"
                     Return New Token With {.name = TokenType.operator, .text = text}
-                Case "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string", "const"
+                Case "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string", "const", "imports", "require",
+                     "if", "else", "for", "loop", "while"
                     Return New Token With {.name = TokenType.keyword, .text = text}
                 Case "true", "false", "yes", "no"
                     Return New Token With {.name = TokenType.booleanLiteral, .text = text}

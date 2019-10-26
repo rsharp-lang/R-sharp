@@ -17,6 +17,19 @@ let z as integer = [1,2,3,4,5];
 let flags = [yes, yes, yes, false, false, false];
 
 const abc = ""abc: 'aaa', \""yes\n\n"";
+const values = imports ""./vector.R"";
+
+declare function addWith (x as double, y  as double) {
+    return x + y;
+}
+
+let abc.size = if (len(abc) > x) {
+    999;
+} else {
+    888;
+}
+
+x <- addWith(y, abc.size) :> addWith(z);
 
 "
         Dim tokens = New Scanner(script).GetTokens.ToArray
