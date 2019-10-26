@@ -12,7 +12,7 @@ Namespace Interpreter
         ''' </summary>
         Public ReadOnly Property globalEnvir As New Environment
 
-        Public Const LastVariableName$ = ".Last"
+        Public Const LastVariableName$ = "$"
 
         Sub New()
             Call globalEnvir.Push(LastVariableName, Nothing, TypeCodes.generic)
@@ -26,7 +26,13 @@ Namespace Interpreter
         ''' 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function Evaluate(script As String) As Object
-            Return Code.ParseScript(script).RunProgram(globalEnvir)
+            Dim result As Object = Code.ParseScript(script).RunProgram(globalEnvir)
+            Dim last As Variable = globalEnvir(LastVariableName)
+
+            ' set last variable in current environment
+            last.value = result
+
+            Return result
         End Function
 
         Public Shared ReadOnly Property Rsharp As New RInterpreter

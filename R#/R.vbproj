@@ -75,6 +75,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interpreter\ExecuteEngine\SymbolReference.vb" />
     <Compile Include="Interpreter\ExecuteEngine\VectorLiteral.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Literal.vb" />
     <Compile Include="Interpreter\ExecuteEngine\DeclareNewVariable.vb" />

@@ -17,7 +17,10 @@ Namespace Interpreter.ExecuteEngine
         Public MustOverride Function Evaluate(envir As Environment) As Object
 
         Shared ReadOnly literalTypes As Index(Of TokenType) = {
-            TokenType.stringLiteral
+            TokenType.stringLiteral,
+            TokenType.booleanLiteral,
+            TokenType.integerLiteral,
+            TokenType.numberLiteral
         }
 
         Public Shared Function CreateExpression(code As Token()) As Expression
@@ -29,8 +32,16 @@ Namespace Interpreter.ExecuteEngine
                     Case Else
                         Throw New SyntaxErrorException
                 End Select
-            ElseIf code.Length = 1 AndAlso code(Scan0).name Like literalTypes Then
-                Return New Literal(code(Scan0))
+            ElseIf code.Length = 1 Then
+                Dim item As Token = code(Scan0)
+
+                If item.name Like literalTypes Then
+                    Return New Literal(item)
+                ElseIf item.name = TokenType.identifier Then
+                    Return New SymbolReference(item)
+                Else
+                    Throw New NotImplementedException
+                End If
             ElseIf code(Scan0).name = TokenType.open Then
                 Dim openSymbol = code(Scan0).text
 

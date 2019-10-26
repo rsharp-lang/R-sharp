@@ -23,7 +23,9 @@ Namespace Interpreter.ExecuteEngine
                 End If
             Next
 
-            Me.values = values
+            ' 还会剩余最后一个元素
+            ' 所以在这里需要加上
+            Me.values = values + Expression.CreateExpression(buffer)
             Me.type = values _
                 .GroupBy(Function(exp) exp.type) _
                 .OrderByDescending(Function(g) g.Count) _

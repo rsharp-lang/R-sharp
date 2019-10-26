@@ -17,7 +17,7 @@ Namespace Interpreter.ExecuteEngine
                     value = token.text.ParseBoolean
                 Case TokenType.integerLiteral
                     type = TypeCodes.integer
-                    value = token.text.ParseInteger
+                    value = CLng(token.text.ParseInteger)
                 Case TokenType.numberLiteral
                     type = TypeCodes.double
                     value = token.text.ParseDouble

@@ -5,8 +5,14 @@ Namespace Runtime
     <HideModuleName> Module Extensions
 
         Friend Function asVector(Of T)(value As Object) As Object
-            If value.GetType Is GetType(T) Then
+            Dim valueType As Type = value.GetType
+
+            If valueType Is GetType(T) Then
                 value = {value}
+            ElseIf valueType Is GetType(Object()) Then
+                value = DirectCast(value, Object()) _
+                    .Select(Function(o) DirectCast(o, T)) _
+                    .ToArray
             Else
                 value = DirectCast(value, IEnumerable(Of T)).ToArray
             End If

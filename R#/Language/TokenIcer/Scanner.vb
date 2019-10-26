@@ -4,6 +4,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports Microsoft.VisualBasic.Text
 Imports Microsoft.VisualBasic.Text.Parser
+Imports SMRUCC.Rsharp.Interpreter
 
 Namespace Language.TokenIcer
 
@@ -177,6 +178,8 @@ Namespace Language.TokenIcer
             End If
 
             Select Case text
+                Case RInterpreter.LastVariableName
+                    Return New Token With {.name = TokenType.identifier, .text = text}
                 Case ":>", "+", "-", "*", "=", "/", ">", "<", "~", "<=", ">=", "!", "<-"
                     Return New Token With {.name = TokenType.operator, .text = text}
                 Case "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string", "const", "imports", "require",
