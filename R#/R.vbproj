@@ -76,6 +76,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interpreter\ExecuteEngine\BinaryExpression.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\FunctionInvoke.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\SequenceLiteral.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ValueAssign.vb" />
     <Compile Include="Interpreter\ExecuteEngine\SymbolReference.vb" />
     <Compile Include="Interpreter\ExecuteEngine\VectorLiteral.vb" />

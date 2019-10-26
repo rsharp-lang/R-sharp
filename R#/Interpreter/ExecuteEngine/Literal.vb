@@ -29,6 +29,11 @@ Namespace Interpreter.ExecuteEngine
             End Select
         End Sub
 
+        Sub New(value As Integer)
+            Me.type = TypeCodes.integer
+            Me.value = CLng(value)
+        End Sub
+
         Public Overrides Function Evaluate(envir As Environment) As Object
             Return value
         End Function

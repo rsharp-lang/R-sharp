@@ -10,7 +10,7 @@ Module interpreterTest
         Call R.Evaluate("let y as integer = $;")
         Call R.Evaluate("let flags  as boolean = [true, true, true, false];")
 
-        Call R.Evaluate("x <- 1:99,1.5;")
+        Call R.Evaluate("x <- length(x):(33+99),1.5;")
         Call R.Evaluate("let str as  string =`hello world!`;")
 
 

@@ -151,6 +151,8 @@ Namespace Language.TokenIcer
                 Return New Token With {.name = TokenType.terminator, .text = ";"}
             ElseIf c = ":"c Then
                 Return New Token With {.name = TokenType.comma, .text = ":"}
+            ElseIf c = "+"c OrElse c = "*"c OrElse c = "/"c OrElse c = "%"c OrElse c = "^"c Then
+                Return New Token With {.name = TokenType.operator, .text = c}
             ElseIf c Like delimiter Then
                 ' token delimiter
                 If buffer > 0 Then
