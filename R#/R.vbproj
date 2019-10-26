@@ -75,7 +75,10 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interpreter\Extensions.vb" />
+    <Compile Include="Interpreter\Program.vb" />
     <Compile Include="Interpreter\RInterpreter.vb" />
+    <Compile Include="Language\Code.vb" />
     <Compile Include="Language\TokenIcer\Token.vb" />
     <Compile Include="Language\TokenIcer\Scanner.vb" />
     <Compile Include="Language\TokenType.vb" />
