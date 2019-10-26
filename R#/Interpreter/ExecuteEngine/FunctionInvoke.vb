@@ -26,10 +26,16 @@ Namespace Interpreter.ExecuteEngine
             Dim paramVals As Object() = parameters _
                 .Select(Function(a) a.Evaluate(envir)) _
                 .ToArray
-            Dim funcVar As Variable = envir(funcName)
-            Dim func As RMethodInfo = funcVar.value
+            ' 当前环境中的函数符号的优先度要高于
+            ' 系统环境下的函数符号
+            Dim funcVar As Variable = envir.FindSymbol(funcName)
 
-            Return func.Invoke(paramVals)
+            If funcVar Is Nothing Then
+                ' 可能是一个系统的内置函数
+                Throw New NotImplementedException
+            Else
+                Return DirectCast(funcVar.value, RMethodInfo).Invoke(envir, paramVals)
+            End If
         End Function
     End Class
 End Namespace
