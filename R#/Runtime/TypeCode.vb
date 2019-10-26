@@ -53,9 +53,14 @@ Namespace Runtime
     Public Enum TypeCodes As Byte
 
         ''' <summary>
+        ''' Unknown or invalid
+        ''' </summary>
+        NA = 0
+
+        ''' <summary>
         ''' Object type in R#.(使用这个类型来表示没有类型约束)
         ''' </summary>
-        [generic] = 0
+        [generic] = 1
         ''' <summary>
         ''' 函数类型
         ''' </summary>

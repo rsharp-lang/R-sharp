@@ -17,7 +17,9 @@ Namespace Interpreter.ExecuteEngine
             ' let var [as type [= ...]]
             name = code(1).text
 
-            If code(2).name = TokenType.keyword AndAlso code(2).text = "as" Then
+            If code.Length = 2 Then
+                type = TypeCodes.generic
+            ElseIf code(2).name = TokenType.keyword AndAlso code(2).text = "as" Then
                 type = code(3).text.GetRTypeCode
 
                 If code.Length > 4 AndAlso
@@ -31,7 +33,7 @@ Namespace Interpreter.ExecuteEngine
 
                 If code.Length > 2 AndAlso
                    code(2).name = TokenType.operator AndAlso
-                   code(2).text = "=" Then
+                  (code(2).text = "=" OrElse code(2).text = "<-") Then
 
                     Call code.Skip(3).DoCall(AddressOf getInitializeValue)
                 End If

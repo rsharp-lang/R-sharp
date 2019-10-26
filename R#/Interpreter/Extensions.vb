@@ -21,7 +21,12 @@ Namespace Interpreter
         <Extension>
         Public Iterator Function GetExpressions(code As Token()) As IEnumerable(Of Expression)
             For Each block In code.Split(Function(t) t.name = TokenType.terminator)
-                Yield Expression.CreateExpression(block)
+                If block.Length = 1 AndAlso block(Scan0).name = TokenType.comment Then
+                    ' skip code comments
+                    ' do nothing
+                Else
+                    Yield Expression.CreateExpression(block)
+                End If
             Next
         End Function
     End Module

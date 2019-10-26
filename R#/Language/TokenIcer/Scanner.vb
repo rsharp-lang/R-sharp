@@ -71,6 +71,14 @@ Namespace Language.TokenIcer
                     Yield finalizeToken(token, start)
                 End If
             Loop
+
+            If buffer > 0 Then
+                With populateToken()
+                    If Not .IsNothing Then
+                        Yield .DoCall(Function(t) finalizeToken(t, start))
+                    End If
+                End With
+            End If
         End Function
 
         ''' <summary>
@@ -168,6 +176,10 @@ Namespace Language.TokenIcer
             Return Nothing
         End Function
 
+        ''' <summary>
+        ''' 这个函数的调用会将<see cref="buffer"/>清空
+        ''' </summary>
+        ''' <returns></returns>
         Private Function populateToken() As Token
             Dim text As String
 
@@ -179,6 +191,8 @@ Namespace Language.TokenIcer
 
             If text.Trim(" "c, ASCII.TAB) = "" Then
                 Return Nothing
+            ElseIf escape.comment AndAlso text.First = "#"c Then
+                Return New Token With {.name = TokenType.comment, .text = text}
             End If
 
             Select Case text

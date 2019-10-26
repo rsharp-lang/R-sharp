@@ -6,12 +6,24 @@ Namespace Interpreter.ExecuteEngine
 
         Public Overrides ReadOnly Property type As TypeCodes
 
-        Sub New()
+        Dim left, right As Expression
+        Dim [operator] As String
 
+        Sub New(left As Expression, right As Expression, op$)
+            Me.left = left
+            Me.right = right
+            Me.operator = op
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Throw New NotImplementedException()
+            Dim a As Object = left.Evaluate(envir)
+            Dim b As Object = right.Evaluate(envir)
+
+            Throw New NotImplementedException
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return $"{left} {[operator]} {right}"
         End Function
     End Class
 End Namespace
