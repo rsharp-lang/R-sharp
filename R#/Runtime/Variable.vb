@@ -67,7 +67,7 @@ Namespace Runtime
         Public ReadOnly Property constraint As TypeCodes
 
         ''' <summary>
-        ''' <see cref="RType.Identity"/>, key for <see cref="Environment.Types"/>
+        ''' <see cref="RType.Identity"/>, key for <see cref="System.Environment.Types"/>
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property typeId As String

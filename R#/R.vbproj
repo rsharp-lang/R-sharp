@@ -75,6 +75,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interpreter\RInterpreter.vb" />
     <Compile Include="Language\TokenIcer\Token.vb" />
     <Compile Include="Language\TokenIcer\Scanner.vb" />
     <Compile Include="Language\TokenType.vb" />
@@ -94,6 +95,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Runtime\Extensions.vb" />
+    <Compile Include="Runtime\Environment.vb" />
     <Compile Include="Runtime\Variable.vb" />
     <Compile Include="Runtime\TypeCode.vb" />
   </ItemGroup>
@@ -123,8 +125,6 @@
       <Name>+Microsoft.VisualBasic.Architecture.Framework</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Interpreter\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
