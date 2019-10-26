@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.CompilerServices
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
@@ -20,7 +21,15 @@ Namespace Interpreter
         <Extension>
         Public Iterator Function GetExpressions(code As Token()) As IEnumerable(Of Expression)
             For Each block In code.Split(Function(t) t.name = TokenType.terminator)
-                Yield New Expression(code)
+                If block(Scan0).name = TokenType.keyword Then
+                    Dim keyword As String = block(Scan0).text
+
+                    Select Case keyword
+                        Case "let" : Yield New DeclareNewVariable(block)
+                        Case Else
+                            Throw New SyntaxErrorException
+                    End Select
+                End If
             Next
         End Function
     End Module
