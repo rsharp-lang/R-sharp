@@ -122,7 +122,10 @@ Namespace Language.TokenIcer
                         ' end string escape
                         Return New Token With {
                             .name = TokenType.stringLiteral,
-                            .text = buffer.PopAll.CharString
+                            .text = buffer _
+                                .PopAll _
+                                .CharString _
+                                .GetStackValue(escape.stringEscape, escape.stringEscape)
                         }
                     Else
                         buffer += c
