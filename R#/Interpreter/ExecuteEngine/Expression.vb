@@ -45,18 +45,7 @@ Namespace Interpreter.ExecuteEngine
                 End If
             End If
 
-            If code(Scan0).name = TokenType.open Then
-                Dim openSymbol = code(Scan0).text
-
-                If openSymbol = "[" Then
-                    Return code.Skip(1) _
-                        .Take(code.Length - 2) _
-                        .ToArray _
-                        .DoCall(Function(v) New VectorLiteral(v))
-                Else
-                    Throw New NotImplementedException
-                End If
-            ElseIf code(Scan0).name = TokenType.identifier Then
+            If code(Scan0).name = TokenType.identifier Then
                 If code(1).name = TokenType.operator Then
                     If code(1).text = "=" OrElse code(1).text = "<-" Then
                         Return New ValueAssign(code)
@@ -68,34 +57,7 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Private Shared Function CreateTree(tokens As Token()) As Expression
-            Dim blocks As New List(Of Token())
-            Dim buf As New List(Of Token)
-            Dim stack As New Stack(Of Token)
-
-            ' 使用最顶层的comma进行分割
-            For Each t As Token In tokens
-                Dim add As Boolean = True
-
-                If t.name = TokenType.open Then
-                    stack.Push(t)
-                ElseIf t.name = TokenType.close Then
-                    stack.Pop()
-                ElseIf t.name = TokenType.comma Then
-                    If stack.Count = 0 Then
-                        ' 这个是最顶层的分割
-                        blocks += buf.PopAll
-                        blocks += {t}
-
-                        add = False
-                    End If
-                End If
-
-                If add Then
-                    buf += t
-                End If
-            Next
-
-            blocks += buf.ToArray
+            Dim blocks As List(Of Token()) = tokens.SplitByTopLevelDelimiter(TokenType.comma)
 
             If blocks = 1 Then
                 ' 是一个复杂的表达式
@@ -109,34 +71,7 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Private Shared Function ParseBinaryExpression(tokens As Token()) As Expression
-            Dim blocks As New List(Of Token())
-            Dim buf As New List(Of Token)
-            Dim stack As New Stack(Of Token)
-
-            ' 按照最顶层的operator进行分割
-            For Each t As Token In tokens
-                Dim add As Boolean = True
-
-                If t.name = TokenType.open Then
-                    stack.Push(t)
-                ElseIf t.name = TokenType.close Then
-                    stack.Pop()
-                ElseIf t.name = TokenType.operator Then
-                    If stack.Count = 0 Then
-                        ' 这个是最顶层的分割
-                        blocks += buf.PopAll
-                        blocks += {t}
-
-                        add = False
-                    End If
-                End If
-
-                If add Then
-                    buf += t
-                End If
-            Next
-
-            blocks += buf.ToArray
+            Dim blocks As List(Of Token()) = tokens.SplitByTopLevelDelimiter(TokenType.operator)
 
             If blocks = 1 Then
                 ' 简单的表达式
