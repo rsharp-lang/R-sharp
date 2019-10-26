@@ -11,6 +11,10 @@ Module interpreterTest
         Pause()
     End Sub
 
+    Sub tupleTest()
+        Call R.Evaluate("let [a,b,c] = [12,3,6];")
+    End Sub
+
     Sub branchTest()
         Call R.Evaluate("let x = 99;")
         Call R.Evaluate("x <- if (x > 10) {
