@@ -75,6 +75,16 @@ Namespace Runtime
         Const AlreadyExists$ = "Variable ""{0}"" is already existed, can not declare it again!"
         Const ConstraintInvalid$ = "Value can not match the type constraint!!! ({0} <--> {1})"
 
+        Sub New()
+            variables = New Dictionary(Of Variable)
+            types = New Dictionary(Of String, RType)
+        End Sub
+
+        Sub New(parent As Environment, stackTag$)
+            Me.parent = parent
+            Me.stackTag = stackTag
+        End Sub
+
         ''' <summary>
         ''' Variable declare
         ''' </summary>
