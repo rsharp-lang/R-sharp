@@ -3,7 +3,6 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
-Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Runtime
 
