@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.ComponentModel.Collection
+﻿Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
@@ -42,7 +43,9 @@ Namespace Interpreter.ExecuteEngine
                 Else
                     Throw New NotImplementedException
                 End If
-            ElseIf code(Scan0).name = TokenType.open Then
+            End If
+
+            If code(Scan0).name = TokenType.open Then
                 Dim openSymbol = code(Scan0).text
 
                 If openSymbol = "[" Then
@@ -53,7 +56,24 @@ Namespace Interpreter.ExecuteEngine
                 Else
                     Throw New NotImplementedException
                 End If
+            ElseIf code(Scan0).name = TokenType.identifier Then
+                If code(1).name = TokenType.operator Then
+                    If code(1).text = "=" OrElse code(1).text = "<-" Then
+                        Return New ValueAssign(code)
+                    End If
+                End If
             End If
+
+            Return code.DoCall(AddressOf CreateTree)
+        End Function
+
+        Private Shared Function CreateTree(tokens As Token()) As Expression
+            Dim blocks As New List(Of Token())
+            Dim buf As New List(Of Token)
+
+            For Each t As Token In tokens
+
+            Next
 
             Throw New NotImplementedException
         End Function
