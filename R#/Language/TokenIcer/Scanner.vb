@@ -5,7 +5,7 @@ Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports Microsoft.VisualBasic.Text
 Imports Microsoft.VisualBasic.Text.Parser
 
-Namespace Language
+Namespace Language.TokenIcer
 
     ''' <summary>
     ''' The token scanner

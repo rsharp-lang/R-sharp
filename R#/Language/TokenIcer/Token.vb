@@ -1,6 +1,6 @@
 ﻿Imports Microsoft.VisualBasic.Scripting.TokenIcer
 
-Namespace Language
+Namespace Language.TokenIcer
 
     Public Class Token : Inherits CodeToken(Of TokenType)
 
