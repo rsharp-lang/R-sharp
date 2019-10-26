@@ -17,7 +17,7 @@ Namespace Interpreter.ExecuteEngine
             name = code(1).text
 
             If code(2).name = TokenType.keyword AndAlso code(2).text = "as" Then
-                type = code(2).text.GetRTypeCode
+                type = code(3).text.GetRTypeCode
 
                 If code.Length > 4 AndAlso
                    code(4).name = TokenType.operator AndAlso
@@ -38,7 +38,7 @@ Namespace Interpreter.ExecuteEngine
         End Sub
 
         Private Sub getInitializeValue(code As IEnumerable(Of Token))
-
+            value = Expression.CreateExpression(code.ToArray)
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
