@@ -14,7 +14,7 @@ Namespace Interpreter.ExecuteEngine
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Return envir(symbol)
+            Return envir(symbol).value
         End Function
     End Class
 End Namespace

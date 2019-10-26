@@ -8,7 +8,7 @@ Module interpreterTest
 
         Call R.Evaluate("let x as integer = [999, 888, 777, 666];")
         Call R.Evaluate("let y as integer = $;")
-
+        Call R.Evaluate("let flags  as boolean = [true, true, true, false];")
 
         Call R.Evaluate("x <- 1:99,1.5;")
         Call R.Evaluate("let str as  string =`hello world!`;")
