@@ -42,7 +42,17 @@ Namespace Interpreter.ExecuteEngine
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Throw New NotImplementedException()
+            Dim value As Object
+
+            If Me.value Is Nothing Then
+                value = Nothing
+            Else
+                value = Me.value.Evaluate(envir)
+            End If
+
+            Call envir.Push(name, value, type)
+
+            Return value
         End Function
     End Class
 End Namespace
