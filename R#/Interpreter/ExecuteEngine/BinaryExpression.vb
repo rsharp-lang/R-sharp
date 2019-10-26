@@ -1,4 +1,5 @@
-﻿Imports SMRUCC.Rsharp.Runtime
+﻿Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine
 
@@ -15,9 +16,29 @@ Namespace Interpreter.ExecuteEngine
             Me.operator = op
         End Sub
 
+        Shared ReadOnly integers As Index(Of Type) = {
+            GetType(Integer), GetType(Integer()),
+            GetType(Long), GetType(Long())
+        }
+
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim a As Object = left.Evaluate(envir)
             Dim b As Object = right.Evaluate(envir)
+            Dim ta = a.GetType
+            Dim tb = b.GetType
+
+            If ta Like integers Then
+                If tb Like integers Then
+                    Select Case [operator]
+                        Case "+" : Return Runtime.Core.Add(Of Long, Long, Long)(a, b).ToArray
+                        Case "-" : Return Runtime.Core.Minus(Of Long, Long, Long)(a, b).ToArray
+                        Case "*" : Return Runtime.Core.Multiply(Of Long, Long, Long)(a, b).ToArray
+                        Case "/" : Return Runtime.Core.Divide(Of Long, Long, Double)(a, b).ToArray
+                        Case "^" : Return Runtime.Core.Power(Of Long, Long, Long)(a, b).ToArray
+                    End Select
+
+                End If
+            End If
 
             Throw New NotImplementedException
         End Function

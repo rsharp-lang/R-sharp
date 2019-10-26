@@ -107,6 +107,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Interpreter\ExecuteEngine\Expression.vb" />
+    <Compile Include="Runtime\Core.vb" />
     <Compile Include="Runtime\RType.vb" />
     <Compile Include="Runtime\Extensions.vb" />
     <Compile Include="Runtime\Environment.vb" />

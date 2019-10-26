@@ -122,7 +122,7 @@ Namespace Runtime
         ''' 应该是确保这个变量值是非空的
         ''' </param>
         ''' <returns></returns>
-        Private Function asRVector(type As TypeCodes, value As Object) As Object
+        Friend Shared Function asRVector(type As TypeCodes, value As Object) As Object
             If type = TypeCodes.generic Then
                 ' 没有定义as type做类型约束的时候
                 ' 会需要通过值来推断

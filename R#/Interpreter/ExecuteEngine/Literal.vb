@@ -1,4 +1,5 @@
-﻿Imports SMRUCC.Rsharp.Language
+﻿Imports System.Runtime.CompilerServices
+Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 
@@ -34,8 +35,9 @@ Namespace Interpreter.ExecuteEngine
             Me.value = CLng(value)
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Return value
+            Return Environment.asRVector(TypeCodes.generic, value)
         End Function
 
         Public Overrides Function ToString() As String

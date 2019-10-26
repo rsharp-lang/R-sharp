@@ -8,7 +8,7 @@ Namespace Runtime
             Dim valueType As Type = value.GetType
 
             If valueType Is GetType(T) Then
-                value = {value}
+                value = {DirectCast(value, T)}
             ElseIf valueType Is GetType(Object()) Then
                 value = DirectCast(value, Object()) _
                     .Select(Function(o) DirectCast(o, T)) _
