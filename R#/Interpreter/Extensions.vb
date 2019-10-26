@@ -21,15 +21,7 @@ Namespace Interpreter
         <Extension>
         Public Iterator Function GetExpressions(code As Token()) As IEnumerable(Of Expression)
             For Each block In code.Split(Function(t) t.name = TokenType.terminator)
-                If block(Scan0).name = TokenType.keyword Then
-                    Dim keyword As String = block(Scan0).text
-
-                    Select Case keyword
-                        Case "let" : Yield New DeclareNewVariable(block)
-                        Case Else
-                            Throw New SyntaxErrorException
-                    End Select
-                End If
+                Yield Expression.CreateExpression(block)
             Next
         End Function
     End Module
