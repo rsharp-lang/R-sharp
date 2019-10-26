@@ -1,4 +1,5 @@
 ﻿Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
@@ -28,8 +29,19 @@ Namespace Interpreter.ExecuteEngine
                     Case Else
                         Throw New SyntaxErrorException
                 End Select
-            ElseIf code.Length = 1 AndAlso code(0).name Like literalTypes Then
-                Return New Literal(code(0))
+            ElseIf code.Length = 1 AndAlso code(Scan0).name Like literalTypes Then
+                Return New Literal(code(Scan0))
+            ElseIf code(Scan0).name = TokenType.open Then
+                Dim openSymbol = code(Scan0).text
+
+                If openSymbol = "[" Then
+                    Return code.Skip(1) _
+                        .Take(code.Length - 2) _
+                        .ToArray _
+                        .DoCall(Function(v) New VectorLiteral(v))
+                Else
+                    Throw New NotImplementedException
+                End If
             End If
 
             Throw New NotImplementedException
