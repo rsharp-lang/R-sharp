@@ -56,7 +56,8 @@ Namespace Language.TokenIcer
                         ' 这三个类型的符号都是带有token分割的功能的
                         Case TokenType.comma,
                              TokenType.open,
-                             TokenType.close
+                             TokenType.close,
+                             TokenType.terminator
 
                             With populateToken()
                                 If Not .IsNothing Then
@@ -93,7 +94,7 @@ Namespace Language.TokenIcer
             Return token
         End Function
 
-        ReadOnly delimiter As Index(Of Char) = {" "c, ASCII.TAB, ASCII.CR, ASCII.LF, ";"c}
+        ReadOnly delimiter As Index(Of Char) = {" "c, ASCII.TAB, ASCII.CR, ASCII.LF}
         ReadOnly open As Index(Of Char) = {"[", "{", "("}
         ReadOnly close As Index(Of Char) = {"]", "}", ")"}
 
@@ -141,6 +142,8 @@ Namespace Language.TokenIcer
                 Return New Token With {.name = TokenType.close, .text = c}
             ElseIf c = ","c Then
                 Return New Token With {.name = TokenType.comma, .text = ","}
+            ElseIf c = ";"c Then
+                Return New Token With {.name = TokenType.terminator, .text = ","}
             ElseIf c Like delimiter Then
                 ' token delimiter
                 If buffer > 0 Then

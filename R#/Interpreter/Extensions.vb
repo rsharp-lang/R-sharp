@@ -18,7 +18,9 @@ Namespace Interpreter
 
         <Extension>
         Public Iterator Function GetExpressions(code As Token()) As IEnumerable(Of Expression)
+            For Each token As Token In code
 
+            Next
         End Function
     End Module
 End Namespace
