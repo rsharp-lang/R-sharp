@@ -159,6 +159,11 @@ Namespace Runtime
                               Yield CStrSafe(x)
                           Next
                       End Function().JoinBy(", ")
+
+                If str.Length > 64 Then
+                    str = Mid(str, 1, 60) & "..."
+                End If
+
                 str = $"[{str}]"
             End If
 

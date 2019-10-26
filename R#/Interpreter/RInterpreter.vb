@@ -3,6 +3,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Runtime
 
@@ -28,14 +29,21 @@ Namespace Interpreter
 
                             Return {
                                 v.name,
-                                v.typeCode.ToString & $" ({v.typeof.FullName})",
+                                v.typeCode.ToString,
+                                v.typeof.FullName,
                                 $"[{v.length}] {value}"
                             }
                         End Function) _
                 .ToArray
 
             With dev Or Console.Out.AsDefault
-                Call table.Print(dev:= .ByRef, distance:=3)
+                Call .DoCall(Sub(device)
+                                 Call table.PrintTable(
+                                    dev:=device,
+                                    leftMargin:=3,
+                                    title:={"name", "mode", "typeof", "value"}
+                                 )
+                             End Sub)
             End With
         End Sub
 
