@@ -1,9 +1,9 @@
 ﻿Namespace Language
 
-    Public Enum TokenType
+    Public Enum TokenType As Byte
         invalid
+        newLine
 
-        [string]
         comment
         ''' <summary>
         ''' 类似于在VisualBasic中的自定义属性的注解语法
@@ -12,7 +12,11 @@
         identifier
         keyword
         [operator]
-        literal
+
+        stringLiteral
+        numberLiteral
+        booleanLiteral
+
         ''' <summary>
         ''' 左边的括号与大括号
         ''' </summary>

@@ -75,6 +75,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Language\Token.vb" />
     <Compile Include="Language\SyntaxScanner.vb" />
     <Compile Include="Language\TokenType.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
