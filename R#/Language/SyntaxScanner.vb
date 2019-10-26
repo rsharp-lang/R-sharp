@@ -1,5 +1,6 @@
 ﻿Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports Microsoft.VisualBasic.Text
 Imports Microsoft.VisualBasic.Text.Parser
@@ -51,9 +52,18 @@ Namespace Language
 
             Do While Not code
                 If Not (token = walkChar(++code)) Is Nothing Then
-                    If token.Value.name = TokenType.comma Then
-                        Yield finalizeToken(populateToken, start)
-                    End If
+                    Select Case token.Value.name
+                        ' 这三个类型的符号都是带有token分割的功能的
+                        Case TokenType.comma,
+                             TokenType.open,
+                             TokenType.close
+
+                            With populateToken()
+                                If Not .IsNothing Then
+                                    Yield .DoCall(Function(t) finalizeToken(t, start))
+                                End If
+                            End With
+                    End Select
 
                     Yield finalizeToken(token, start)
                 End If
@@ -103,14 +113,17 @@ Namespace Language
                 End If
             ElseIf escape.string Then
                 If c = escape.stringEscape Then
-                    If lastCharIsEscapeSplash Then
+                    ' 在这里不可以将 buffer += c 放在前面
+                    ' 否则下面的lastCharIsEscapeSplash会因为添加了一个字符串符号之后失效
+                    If Not lastCharIsEscapeSplash Then
                         buffer += c
-                    Else
                         ' end string escape
                         Return New Token With {
                             .name = TokenType.stringLiteral,
                             .text = buffer.PopAll.CharString
                         }
+                    Else
+                        buffer += c
                     End If
                 Else
                     buffer += c
@@ -141,10 +154,16 @@ Namespace Language
         End Function
 
         Private Function populateToken() As Token
-            Dim text As String = buffer.PopAll.CharString
+            Dim text As String
+
+            If buffer = 0 Then
+                Return Nothing
+            Else
+                text = buffer.PopAll.CharString
+            End If
 
             Select Case text
-                Case ":>", "+", "-", "*", "="
+                Case ":>", "+", "-", "*", "=", "/"
                     Return New Token With {.name = TokenType.operator, .text = text}
                 Case "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string", "const"
                     Return New Token With {.name = TokenType.keyword, .text = text}
@@ -153,6 +172,8 @@ Namespace Language
                 Case Else
                     If text.IsPattern("\d+") Then
                         Return New Token With {.name = TokenType.integerLiteral, .text = text}
+                    ElseIf text.IsPattern(NumericPattern) Then
+                        Return New Token With {.name = TokenType.numberLiteral, .text = text}
                     ElseIf text.IsPattern("[a-z_][a-z0-9\.]*") Then
                         Return New Token With {.name = TokenType.identifier, .text = text}
                     End If
