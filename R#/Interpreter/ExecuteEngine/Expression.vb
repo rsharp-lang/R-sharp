@@ -77,7 +77,17 @@ Namespace Interpreter.ExecuteEngine
                 ' 简单的表达式
                 If tokens(Scan0).name = TokenType.identifier AndAlso tokens(1).name = TokenType.open Then
                     Return New FunctionInvoke(tokens)
+                ElseIf tokens(Scan0).name = TokenType.open Then
+                    Dim openSymbol = tokens(Scan0).text
+
+                    If openSymbol = "[" Then
+                        Return New VectorLiteral(tokens)
+                    Else
+                        Throw New NotImplementedException
+                    End If
                 End If
+            Else
+
             End If
 
             Throw New NotImplementedException
