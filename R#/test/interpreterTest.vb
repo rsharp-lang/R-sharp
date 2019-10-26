@@ -6,6 +6,23 @@ Module interpreterTest
 
     Sub Main()
 
+        Call branchTest()
+
+        Pause()
+    End Sub
+
+    Sub branchTest()
+        Call R.Evaluate("let x = 99;")
+        Call R.Evaluate("x <- if (x > 10) {
+TRUE;
+} else {
+FALSE;
+}")
+
+        Pause()
+    End Sub
+
+    Sub declareTest()
         Call R.Evaluate("let a = 1+2*3+5^6; # code comments")
         Call R.Evaluate("let x as integer = [999, 888, 777, 666]  ;")
         Call R.Evaluate("let y as integer = $;")

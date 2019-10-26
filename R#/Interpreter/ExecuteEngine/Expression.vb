@@ -30,6 +30,8 @@ Namespace Interpreter.ExecuteEngine
 
                 Select Case keyword
                     Case "let" : Return New DeclareNewVariable(code)
+                    Case "if"
+
                     Case Else
                         Throw New SyntaxErrorException
                 End Select

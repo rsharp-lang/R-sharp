@@ -189,7 +189,7 @@ Namespace Language.TokenIcer
                 text = buffer.PopAll.CharString
             End If
 
-            If text.Trim(" "c, ASCII.TAB) = "" Then
+            If text.Trim(" "c, ASCII.TAB) = "" OrElse text = vbCr OrElse text = vbLf Then
                 Return Nothing
             ElseIf escape.comment AndAlso text.First = "#"c Then
                 Return New Token With {.name = TokenType.comment, .text = text}
