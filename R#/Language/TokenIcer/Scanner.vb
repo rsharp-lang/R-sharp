@@ -172,6 +172,10 @@ Namespace Language.TokenIcer
                 text = buffer.PopAll.CharString
             End If
 
+            If text.Trim(" "c, ASCII.TAB) = "" Then
+                Return Nothing
+            End If
+
             Select Case text
                 Case ":>", "+", "-", "*", "=", "/", ">", "<", "~", "<=", ">=", "!", "<-"
                     Return New Token With {.name = TokenType.operator, .text = text}

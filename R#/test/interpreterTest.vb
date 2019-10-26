@@ -6,7 +6,7 @@ Module interpreterTest
 
     Sub Main()
 
-        Call R.Evaluate("let str =`hello world!`;")
+        Call R.Evaluate("let str as  string =`hello world!`;")
 
         Call R.Evaluate("let x as integer = [999, 888, 777, 666];")
 
