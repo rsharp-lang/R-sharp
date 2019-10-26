@@ -4,6 +4,16 @@ Namespace Runtime
 
     <HideModuleName> Module Extensions
 
+        Friend Function getFirst(value As Object) As Object
+            Dim valueType As Type = value.GetType
+
+            If valueType.IsInheritsFrom(GetType(Array)) Then
+                Return DirectCast(value, Array).GetValue(Scan0)
+            Else
+                Return value
+            End If
+        End Function
+
         Friend Function asVector(Of T)(value As Object) As Object
             Dim valueType As Type = value.GetType
 

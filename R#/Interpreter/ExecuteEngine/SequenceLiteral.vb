@@ -38,18 +38,18 @@ Namespace Interpreter.ExecuteEngine
                                                  Return False
                                              End If
                                          End Function) Then
-                Dim start As Double = init
-                Dim steps As Double = offset
-                Dim ends As Double = stops
+                Dim start As Double = Runtime.getFirst(init)
+                Dim steps As Double = Runtime.getFirst(offset)
+                Dim ends As Double = Runtime.getFirst(stops)
 
                 Do While start <= ends
                     seq += start
                     start += steps
                 Loop
             Else
-                Dim start As Long = init
-                Dim steps As Long = offset
-                Dim ends As Integer = stops
+                Dim start As Long = Runtime.getFirst(init)
+                Dim steps As Long = Runtime.getFirst(offset)
+                Dim ends As Integer = Runtime.getFirst(stops)
 
                 Do While start <= ends
                     seq += start
