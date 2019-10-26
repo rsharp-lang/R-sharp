@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.Language
+﻿Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports Microsoft.VisualBasic.Text
 Imports Microsoft.VisualBasic.Text.Parser
@@ -41,7 +42,7 @@ Namespace Language
         End Property
 
         Sub New(source As String)
-            Me.code = source
+            Me.code = source.SolveStream
         End Sub
 
         Public Iterator Function GetTokens() As IEnumerable(Of Token)
@@ -50,6 +51,10 @@ Namespace Language
 
             Do While Not code
                 If Not (token = walkChar(++code)) Is Nothing Then
+                    If token.Value.name = TokenType.comma Then
+                        Yield finalizeToken(populateToken, start)
+                    End If
+
                     Yield finalizeToken(token, start)
                 End If
             Loop
@@ -77,6 +82,10 @@ Namespace Language
 
             Return token
         End Function
+
+        ReadOnly delimiter As Index(Of Char) = {" "c, ASCII.TAB, ASCII.CR, ASCII.LF, ";"c}
+        ReadOnly open As Index(Of Char) = {"[", "{", "("}
+        ReadOnly close As Index(Of Char) = {"]", "}", ")"}
 
         Private Function walkChar(c As Char) As Token
             If c = ASCII.LF Then
@@ -113,7 +122,13 @@ Namespace Language
                 escape.string = True
                 escape.stringEscape = c
                 buffer += c
-            ElseIf c = " "c OrElse c = ASCII.TAB Then
+            ElseIf c Like open Then
+                Return New Token With {.name = TokenType.open, .text = c}
+            ElseIf c Like close Then
+                Return New Token With {.name = TokenType.close, .text = c}
+            ElseIf c = ","c Then
+                Return New Token With {.name = TokenType.comma, .text = ","}
+            ElseIf c Like delimiter Then
                 ' token delimiter
                 If buffer > 0 Then
                     Return populateToken()
@@ -129,13 +144,18 @@ Namespace Language
             Dim text As String = buffer.PopAll.CharString
 
             Select Case text
-                Case ":>", "*", "="
+                Case ":>", "+", "-", "*", "="
                     Return New Token With {.name = TokenType.operator, .text = text}
-                Case "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string"
+                Case "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string", "const"
                     Return New Token With {.name = TokenType.keyword, .text = text}
                 Case "true", "false", "yes", "no"
                     Return New Token With {.name = TokenType.booleanLiteral, .text = text}
                 Case Else
+                    If text.IsPattern("\d+") Then
+                        Return New Token With {.name = TokenType.integerLiteral, .text = text}
+                    ElseIf text.IsPattern("[a-z_][a-z0-9\.]*") Then
+                        Return New Token With {.name = TokenType.identifier, .text = text}
+                    End If
 #If DEBUG Then
                     Throw New NotImplementedException(text)
 #Else

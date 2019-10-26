@@ -10,11 +10,13 @@
         ''' </summary>
         annotation
         identifier
+        comma
         keyword
         [operator]
 
         stringLiteral
         numberLiteral
+        integerLiteral
         booleanLiteral
 
         ''' <summary>
