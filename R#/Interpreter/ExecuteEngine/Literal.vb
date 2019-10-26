@@ -32,5 +32,9 @@ Namespace Interpreter.ExecuteEngine
         Public Overrides Function Evaluate(envir As Environment) As Object
             Return value
         End Function
+
+        Public Overrides Function ToString() As String
+            Return value.ToString
+        End Function
     End Class
 End Namespace

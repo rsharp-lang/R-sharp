@@ -4,6 +4,16 @@ Namespace Runtime
 
     <HideModuleName> Module Extensions
 
+        Friend Function asVector(Of T)(value As Object) As Object
+            If value.GetType Is GetType(T) Then
+                value = {value}
+            Else
+                value = DirectCast(value, IEnumerable(Of T)).ToArray
+            End If
+
+            Return value
+        End Function
+
         ''' <summary>
         ''' Get R type code from the type constraint expression value.
         ''' </summary>
@@ -51,6 +61,19 @@ Namespace Runtime
                     Return TypeCodes.list
                 Case Else
                     Return TypeCodes.generic
+            End Select
+        End Function
+
+        Public Function [GetType](type As TypeCodes) As Type
+            Select Case type
+                Case TypeCodes.boolean : Return GetType(Boolean())
+                Case TypeCodes.char : Return GetType(String())
+                Case TypeCodes.double : Return GetType(Double())
+                Case TypeCodes.integer : Return GetType(Long())
+                Case TypeCodes.list : Return GetType(Dictionary(Of String, Object))
+                Case TypeCodes.string : Return GetType(String())
+                Case Else
+                    Throw New InvalidCastException(type.Description)
             End Select
         End Function
 

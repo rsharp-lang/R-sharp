@@ -58,6 +58,12 @@ Namespace Runtime
     Public Class Variable : Implements INamedValue, Value(Of Object).IValueOf
 
         Public Property name As String Implements IKeyedEntity(Of String).Key
+
+        ''' <summary>
+        ''' 变量值对于基础类型而言，都是以数组的形式存储的
+        ''' 非基础类型则为其值本身
+        ''' </summary>
+        ''' <returns></returns>
         Public Overridable Property value As Object Implements Value(Of Object).IValueOf.Value
 
         ''' <summary>
@@ -83,10 +89,14 @@ Namespace Runtime
         ''' <returns></returns>
         Public Overloads ReadOnly Property [typeof] As Type
             Get
-                If value Is Nothing Then
-                    Return GetType(Object)
+                If constraint <> TypeCodes.generic Then
+                    Return Runtime.GetType(constraint)
                 Else
-                    Return value.GetType
+                    If value Is Nothing Then
+                        Return GetType(Object)
+                    Else
+                        Return value.GetType
+                    End If
                 End If
             End Get
         End Property
@@ -105,7 +115,7 @@ Namespace Runtime
         Public ReadOnly Property length As Integer
             Get
                 If typeCode.IsPrimitive Then
-                    Return ToVector.Length
+                    Return DirectCast(value, Array).Length
                 Else
                     Return 1
                 End If
@@ -148,7 +158,11 @@ Namespace Runtime
         End Function
 
         Public Function ToVector() As Object()
-
+            If typeCode.IsPrimitive Then
+                Return DirectCast(value, Array)
+            Else
+                Return {value}
+            End If
         End Function
     End Class
 End Namespace

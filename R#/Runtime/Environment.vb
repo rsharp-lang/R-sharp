@@ -1,5 +1,6 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 
 Namespace Runtime
@@ -92,9 +93,11 @@ Namespace Runtime
         ''' <param name="value"></param>
         ''' <param name="type"></param>
         ''' <returns></returns>
-        Public Function Push(name$, value As Object, Optional type As TypeCodes = TypeCodes.generic) As Integer
+        Public Function Push(name$, value As Object, Optional type As TypeCodes = TypeCodes.generic) As Object
             If variables.ContainsKey(name) Then
                 Throw New Exception(String.Format(AlreadyExists, name))
+            ElseIf Not value Is Nothing Then
+                value = asRVector(type, value)
             End If
 
             With New Variable(type) With {
@@ -107,9 +110,43 @@ Namespace Runtime
                     Call .DoCall(AddressOf variables.Add)
                 End If
 
-                ' 位置值，相当于函数指针
-                Return variables.Count - 1
+                Return value
             End With
+        End Function
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="type"></param>
+        ''' <param name="value">
+        ''' 应该是确保这个变量值是非空的
+        ''' </param>
+        ''' <returns></returns>
+        Private Function asRVector(type As TypeCodes, value As Object) As Object
+            If type = TypeCodes.generic Then
+                ' 没有定义as type做类型约束的时候
+                ' 会需要通过值来推断
+                type = value.GetType.GetRTypeCode
+            End If
+
+            Select Case type
+                Case TypeCodes.boolean
+                    value = Runtime.asVector(Of Boolean)(value)
+                Case TypeCodes.char
+                    If value.GetType Is GetType(Char) Then
+                        value = {value.ToString}
+                    Else
+                        value = {DirectCast(value, IEnumerable(Of Char)).CharString}
+                    End If
+                Case TypeCodes.double
+                    value = Runtime.asVector(Of Double)(value)
+                Case TypeCodes.integer
+                    value = Runtime.asVector(Of Long)(value)
+                Case TypeCodes.string
+                    value = Runtime.asVector(Of String)(value)
+            End Select
+
+            Return value
         End Function
 
         Public Overrides Function ToString() As String

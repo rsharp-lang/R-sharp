@@ -51,9 +51,11 @@ Namespace Interpreter.ExecuteEngine
                 value = Me.value.Evaluate(envir)
             End If
 
-            Call envir.Push(name, value, type)
+            Return envir.Push(name, value, type)
+        End Function
 
-            Return value
+        Public Overrides Function ToString() As String
+            Return $"Dim {name} As {type.Description} = {value.ToString}"
         End Function
     End Class
 End Namespace
