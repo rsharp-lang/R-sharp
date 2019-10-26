@@ -34,7 +34,10 @@ x <- addWith(y, abc.size) :> addWith(z);
 "
         Dim tokens = New Scanner(script).GetTokens.ToArray
 
-        Call New XmlList(Of Token) With {.items = tokens}.GetXml.SaveTo("./declares.Xml")
+        Call New XmlList(Of Token) With {
+            .items = tokens
+        }.GetXml _
+         .SaveTo("./declares.Xml")
 
         Pause()
     End Sub

@@ -93,6 +93,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Runtime\Extensions.vb" />
+    <Compile Include="Runtime\Variable.vb" />
+    <Compile Include="Runtime\TypeCode.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
