@@ -39,6 +39,38 @@ Namespace Runtime
             End Get
         End Property
 
+        ''' <summary>
+        ''' Get/set variable value
+        ''' </summary>
+        ''' <param name="name$"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' If the current stack does not contains the target variable, then the program will try to find the variable in his parent
+        ''' if variable in format like [var], then it means a global or parent environment variable
+        ''' </remarks>
+        Default Public Property value(name As String) As Variable
+            Get
+                If (name.First = "["c AndAlso name.Last = "]"c) Then
+                    Return GlobalEnvironment(name.GetStackValue("[", "]"))
+                End If
+
+                If variables.ContainsKey(name) Then
+                    Return variables(name)
+                ElseIf Not parent Is Nothing Then
+                    Return parent(name)
+                Else
+                    Throw New EntryPointNotFoundException(name & " was not found in any stack enviroment!")
+                End If
+            End Get
+            Set(value As Variable)
+                If name.First = "["c AndAlso name.Last = "]"c Then
+                    GlobalEnvironment(name.GetStackValue("[", "]")) = value
+                Else
+                    variables(name) = value
+                End If
+            End Set
+        End Property
+
         Const AlreadyExists$ = "Variable ""{0}"" is already existed, can not declare it again!"
         Const ConstraintInvalid$ = "Value can not match the type constraint!!! ({0} <--> {1})"
 
