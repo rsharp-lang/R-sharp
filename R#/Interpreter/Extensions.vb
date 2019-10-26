@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.CompilerServices
+Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 
@@ -18,8 +19,8 @@ Namespace Interpreter
 
         <Extension>
         Public Iterator Function GetExpressions(code As Token()) As IEnumerable(Of Expression)
-            For Each token As Token In code
-
+            For Each block In code.Split(Function(t) t.name = TokenType.terminator)
+                Yield New Expression(code)
             Next
         End Function
     End Module
