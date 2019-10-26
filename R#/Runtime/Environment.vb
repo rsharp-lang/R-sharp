@@ -4,7 +4,10 @@ Imports Microsoft.VisualBasic.Linq
 
 Namespace Runtime
 
-    Public Class Environment
+    ''' <summary>
+    ''' 在一个环境对象容器之中，所有的对象都是以变量来表示的
+    ''' </summary>
+    Public Class Environment : Implements IEnumerable(Of Variable)
 
         ''' <summary>
         ''' 最顶层的closure环境的parent是空值来的
@@ -169,6 +172,16 @@ Namespace Runtime
             Else
                 Return parent?.ToString & "->" & stackTag
             End If
+        End Function
+
+        Public Iterator Function GetEnumerator() As IEnumerator(Of Variable) Implements IEnumerable(Of Variable).GetEnumerator
+            For Each var As Variable In variables.Values
+                Yield var
+            Next
+        End Function
+
+        Private Iterator Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
+            Yield GetEnumerator()
         End Function
     End Class
 End Namespace

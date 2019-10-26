@@ -24,8 +24,6 @@ Namespace Interpreter
 
         Public Sub PrintMemory(Optional dev As TextWriter = Nothing)
             Dim table$()() = globalEnvir _
-                .variables _
-                .Values _
                 .Select(Function(v)
                             Dim value$ = Variable.GetValueViewString(v)
 
