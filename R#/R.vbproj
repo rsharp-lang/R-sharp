@@ -50,7 +50,8 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>R#.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -74,39 +75,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interpreter\Interpreter.vb" />
-    <Compile Include="Interpreter\Language\Token.vb" />
-    <Compile Include="Interpreter\Language\Codes.vb" />
-    <Compile Include="Interpreter\ExpressionParser\FuncCaller.vb" />
-    <Compile Include="Interpreter\ExpressionParser\MetaExpression.vb" />
-    <Compile Include="LibraryManager\RPM.vb" />
-    <Compile Include="LibraryManager\Internal\base.vb" />
-    <Compile Include="Interpreter\ExpressionParser\ExecuteEngine.vb" />
-    <Compile Include="Interpreter\SyntaxParser.vb" />
-    <Compile Include="Interpreter\Language\Tokens.vb" />
-    <Compile Include="Interpreter\ExpressionParser\ExpressionParser.vb" />
-    <Compile Include="Extensions.vb" />
-    <Compile Include="runtime\BindVariable.vb" />
-    <Compile Include="runtime\PrimitiveTypes\Core.vb" />
-    <Compile Include="runtime\RMethodInfo.vb" />
-    <Compile Include="runtime\PrimitiveTypes\list.vb" />
-    <Compile Include="runtime\PrimitiveTypes\numeric.vb" />
-    <Compile Include="runtime\PrimitiveTypes\string.vb" />
-    <Compile Include="runtime\PrimitiveTypes\uinteger.vb" />
-    <Compile Include="runtime\PrimitiveTypes\logical.vb" />
-    <Compile Include="runtime\PrimitiveTypes\char.vb" />
-    <Compile Include="runtime\PrimitiveTypes\integer.vb" />
-    <Compile Include="runtime\RType.vb" />
-    <Compile Include="runtime\Environment.vb" />
-    <Compile Include="runtime\CodeDOM\VariableDeclareExpression.vb" />
-    <Compile Include="runtime\CodeDOM\OperatorExpression.vb" />
-    <Compile Include="runtime\CodeDOM\FunctionExpression.vb" />
-    <Compile Include="runtime\CodeDOM\LiteralExpression.vb" />
-    <Compile Include="runtime\CodeDOM\PrimitiveExpression.vb" />
-    <Compile Include="runtime\TypeCodes.vb" />
-    <Compile Include="runtime\Variable.vb" />
-    <Compile Include="Interpreter\ExpressionParser\SimpleExpression.vb" />
-    <Compile Include="Interpreter\Language\TokenIcer.vb" />
+    <Compile Include="Language\SyntaxScanner.vb" />
+    <Compile Include="Language\TokenType.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -150,10 +120,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="StatMachine\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="R#.ico" />
+    <Folder Include="Interpreter\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
