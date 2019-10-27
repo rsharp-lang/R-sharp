@@ -28,7 +28,6 @@ TRUE;
 } else {
 FALSE;
 }")
-
         Pause()
     End Sub
 

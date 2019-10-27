@@ -17,6 +17,10 @@
         comma
         keyword
         [operator]
+        ''' <summary>
+        ''' 字符串插值语法，与javascript脚本之中的字符串插值保持一致
+        ''' </summary>
+        stringInterpolation
 
         stringLiteral
         numberLiteral

@@ -97,7 +97,7 @@ Namespace Language.TokenIcer
 
             If token.name = TokenType.comment Then
                 escape.comment = False
-            ElseIf token.name = TokenType.stringLiteral Then
+            ElseIf token.name = TokenType.stringLiteral OrElse token.name = TokenType.stringInterpolation Then
                 escape.string = False
             End If
 
@@ -127,10 +127,13 @@ Namespace Language.TokenIcer
                     ' 在这里不可以将 buffer += c 放在前面
                     ' 否则下面的lastCharIsEscapeSplash会因为添加了一个字符串符号之后失效
                     If Not lastCharIsEscapeSplash Then
+                        Dim expressionType = If(escape.stringEscape = "`"c, TokenType.stringInterpolation, TokenType.stringLiteral)
+
+                        ' add last string quote symbol
                         buffer += c
                         ' end string escape
                         Return New Token With {
-                            .name = TokenType.stringLiteral,
+                            .name = expressionType,
                             .text = buffer _
                                 .PopAll _
                                 .CharString _
