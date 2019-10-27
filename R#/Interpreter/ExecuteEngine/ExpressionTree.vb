@@ -15,9 +15,6 @@ Namespace Interpreter.ExecuteEngine
             If blocks = 1 Then
                 ' 是一个复杂的表达式
                 Return blocks(Scan0).ParseExpressionTree
-            ElseIf blocks(1)(Scan0).text = ":" Then
-                ' is a sequence generator syntax
-                Return New SequenceLiteral(blocks(Scan0), blocks(2), blocks.ElementAtOrDefault(4))
             Else
                 Throw New NotImplementedException
             End If
@@ -38,6 +35,12 @@ Namespace Interpreter.ExecuteEngine
             End If
 
             If blocks = 1 Then
+                Dim complexSequence = tokens.SplitByTopLevelDelimiter(TokenType.sequence)
+
+                If complexSequence.Count = 3 OrElse complexSequence.Count = 5 Then
+                    Return New SequenceLiteral(complexSequence(0), complexSequence(2), complexSequence.ElementAtOrDefault(4))
+                End If
+
                 ' 简单的表达式
                 If tokens(Scan0).name = TokenType.identifier AndAlso tokens(1).name = TokenType.open Then
                     Return New FunctionInvoke(tokens)
@@ -60,8 +63,6 @@ Namespace Interpreter.ExecuteEngine
                     End If
                 ElseIf tokens(Scan0).name = TokenType.stringInterpolation Then
                     Return New StringInterpolation(tokens(Scan0))
-                ElseIf tokens(1).name = TokenType.sequence Then
-                    Return New SequenceLiteral(tokens(Scan0), tokens(2), tokens.ElementAtOrDefault(4))
                 End If
             Else
                 Return ParseBinaryExpression(blocks)
