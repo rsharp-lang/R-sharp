@@ -75,16 +75,16 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interpreter\ExecuteEngine\BinaryExpression.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\IfBranch.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\CodeComment.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\FunctionInvoke.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\SequenceLiteral.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ValueAssign.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\SymbolReference.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\VectorLiteral.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\Literal.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\DeclareNewVariable.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\BinaryExpression.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\IfBranch.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CodeComment.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\FunctionInvoke.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\SequenceLiteral.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\ValueAssign.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\SymbolReference.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\VectorLiteral.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Literal.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DeclareNewVariable.vb" />
     <Compile Include="Interpreter\Extensions.vb" />
     <Compile Include="Interpreter\Program.vb" />
     <Compile Include="Interpreter\RInterpreter.vb" />

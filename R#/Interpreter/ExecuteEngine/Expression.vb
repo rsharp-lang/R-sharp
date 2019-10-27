@@ -25,6 +25,8 @@ Namespace Interpreter.ExecuteEngine
         }
 
         Public Shared Function CreateExpression(code As Token()) As Expression
+            Dim blocks = code.SplitByTopLevelDelimiter(TokenType.operator, includeKeyword:=True)
+
             If code(Scan0).name = TokenType.keyword Then
                 Dim keyword As String = code(Scan0).text
 
