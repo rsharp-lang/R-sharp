@@ -18,6 +18,8 @@ Module interpreterTest
         Call R.Evaluate("let word = 'world';")
         Call R.Evaluate("let s = `Hello ${word}!` & "" ok"";")
         Call R.Evaluate("print(s);")
+        Call R.Evaluate("print([1,2,3,4,5]);")
+        Call R.Evaluate("print( 1:30  );")
         Call R.PrintMemory()
 
         Pause()

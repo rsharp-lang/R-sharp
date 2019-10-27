@@ -114,7 +114,7 @@ Namespace Runtime
 
         Public ReadOnly Property length As Integer
             Get
-                If typeCode.IsPrimitive Then
+                If typeCode.IsPrimitive AndAlso value.GetType.IsInheritsFrom(GetType(Array)) Then
                     Return DirectCast(value, Array).Length
                 Else
                     Return 1
@@ -171,7 +171,7 @@ Namespace Runtime
         End Function
 
         Public Function ToVector() As Array
-            If typeCode.IsPrimitive Then
+            If typeCode.IsPrimitive AndAlso value.GetType.IsInheritsFrom(GetType(Array)) Then
                 Return DirectCast(value, Array)
             Else
                 Return {value}
