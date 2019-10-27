@@ -43,8 +43,12 @@ Namespace Language.TokenIcer
             End Get
         End Property
 
-        Sub New(source As String)
-            Me.code = source.SolveStream
+        Sub New(source As [Variant](Of String, CharPtr))
+            If source Like GetType(String) Then
+                Me.code = source.TryCast(Of String).SolveStream
+            Else
+                Me.code = source.TryCast(Of CharPtr)
+            End If
         End Sub
 
         Public Iterator Function GetTokens() As IEnumerable(Of Token)
@@ -201,7 +205,7 @@ Namespace Language.TokenIcer
             Select Case text
                 Case RInterpreter.LastVariableName
                     Return New Token With {.name = TokenType.identifier, .text = text}
-                Case ":>", "+", "-", "*", "=", "/", ">", "<", "~", "<=", ">=", "!", "<-"
+                Case ":>", "+", "-", "*", "=", "/", ">", "<", "~", "<=", ">=", "!", "<-", "&&", "&"
                     Return New Token With {.name = TokenType.operator, .text = text}
                 Case "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string", "const", "imports", "require",
                      "if", "else", "for", "loop", "while"

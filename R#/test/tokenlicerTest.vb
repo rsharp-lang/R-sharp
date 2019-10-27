@@ -4,7 +4,14 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 Module tokenlicerTest
 
     Sub Main()
+        Call stringParser()
         Call declareTest()
+
+        Pause()
+    End Sub
+
+    Sub stringParser()
+        Dim stringExpression = New StringInterpolation().GetTokens("Hello ${""world"" & '!'}!! Test expression: 1+1= ${1+1} ${1+1 < x} < x;").ToArray
 
         Pause()
     End Sub
