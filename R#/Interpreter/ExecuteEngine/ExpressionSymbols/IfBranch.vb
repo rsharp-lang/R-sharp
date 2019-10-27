@@ -11,8 +11,8 @@ Namespace Interpreter.ExecuteEngine
         Dim trueClosure As Expression
         Dim elseClosure As Expression
 
-        Sub New(tokens As Token())
-
+        Sub New(tokens As List(Of Token()))
+            Throw New NotImplementedException
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object

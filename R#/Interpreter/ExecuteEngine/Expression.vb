@@ -42,8 +42,8 @@ Namespace Interpreter.ExecuteEngine
                     Case Else
                         Throw New SyntaxErrorException
                 End Select
-            ElseIf code.Length = 1 Then
-                Dim item As Token = code(Scan0)
+            ElseIf code.Count = 1 Then
+                Dim item As Token = code(Scan0)(Scan0)
 
                 If item.name Like literalTypes Then
                     Return New Literal(item)
@@ -54,9 +54,11 @@ Namespace Interpreter.ExecuteEngine
                 End If
             End If
 
-            If code(Scan0).name = TokenType.identifier Then
-                If code(1).name = TokenType.operator Then
-                    If code(1).text = "=" OrElse code(1).text = "<-" Then
+            If code(Scan0).isIdentifier Then
+                If code(1).isOperator Then
+                    Dim opText$ = code(1)(Scan0).text
+
+                    If opText = "=" OrElse opText = "<-" Then
                         Return New ValueAssign(code)
                     End If
                 End If

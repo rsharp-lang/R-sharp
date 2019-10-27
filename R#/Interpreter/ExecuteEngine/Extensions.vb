@@ -9,6 +9,15 @@ Namespace Interpreter.ExecuteEngine
     Module Extensions
 
         <Extension>
+        Public Function isIdentifier(tokens As Token()) As Boolean
+            If tokens.Length = 1 AndAlso tokens(Scan0).name = TokenType.identifier Then
+                Return True
+            Else
+                Return False
+            End If
+        End Function
+
+        <Extension>
         Public Function isKeyword(tokens As Token(), Optional keyword$ = Nothing) As Boolean
             If tokens.Length = 1 AndAlso tokens(Scan0).name = TokenType.keyword Then
                 If Not keyword.StringEmpty Then

@@ -19,7 +19,7 @@ Namespace Interpreter.ExecuteEngine
         Sub New(code As List(Of Token()))
             ' 0   1    2   3    4 5
             ' let var [as type [= ...]]
-            Call getNames(code(1))
+            names = getNames(code(1))
 
             If code.Count = 2 Then
                 type = TypeCodes.generic
@@ -38,9 +38,9 @@ Namespace Interpreter.ExecuteEngine
             End If
         End Sub
 
-        Private Sub getNames(code As Token())
+        Friend Shared Function getNames(code As Token()) As String()
             If code.Length > 1 Then
-                names = code.Skip(1) _
+                Return code.Skip(1) _
                     .Take(code.Length - 2) _
                     .Where(Function(token) Not token.name = TokenType.comma) _
                     .Select(Function(symbol)
@@ -52,9 +52,9 @@ Namespace Interpreter.ExecuteEngine
                             End Function) _
                     .ToArray
             Else
-                names = {code(Scan0).text}
+                Return {code(Scan0).text}
             End If
-        End Sub
+        End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Private Sub getInitializeValue(code As IEnumerable(Of Token()))
