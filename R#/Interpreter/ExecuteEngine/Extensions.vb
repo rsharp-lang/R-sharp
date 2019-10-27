@@ -18,9 +18,13 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         <Extension>
-        Public Function isLiteral(tokens As Token()) As Boolean
+        Public Function isLiteral(tokens As Token(), Optional type As TokenType = TokenType.invalid) As Boolean
             If tokens.Length = 1 AndAlso tokens(Scan0).name Like Expression.literalTypes Then
-                Return True
+                If type <> TokenType.invalid Then
+                    Return tokens(Scan0).name = type
+                Else
+                    Return True
+                End If
             Else
                 Return False
             End If

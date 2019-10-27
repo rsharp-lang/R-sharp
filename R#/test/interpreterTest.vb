@@ -5,10 +5,18 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call stringInterpolateTest()
         Call declareTest()
         Call tupleTest()
 
         Call branchTest()
+
+        Pause()
+    End Sub
+
+    Sub stringInterpolateTest()
+        Call R.Evaluate("let word = 'world';")
+        Call R.Evaluate("let s = `Hello ${word}!` & "" ok"";")
 
         Pause()
     End Sub

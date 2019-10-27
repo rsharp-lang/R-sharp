@@ -25,7 +25,17 @@ Namespace Interpreter.ExecuteEngine
 
         <Extension>
         Private Function ParseExpressionTree(tokens As Token()) As Expression
-            Dim blocks As List(Of Token()) = tokens.SplitByTopLevelDelimiter(TokenType.operator)
+            Dim blocks As List(Of Token())
+
+            If tokens.Length = 1 Then
+                If tokens(Scan0).name = TokenType.stringInterpolation Then
+                    Return New StringInterpolation(tokens(Scan0))
+                Else
+                    blocks = New List(Of Token()) From {tokens}
+                End If
+            Else
+                blocks = tokens.SplitByTopLevelDelimiter(TokenType.operator)
+            End If
 
             If blocks = 1 Then
                 ' 简单的表达式
@@ -48,6 +58,8 @@ Namespace Interpreter.ExecuteEngine
                         ' 是一个可以产生值的closure
                         Throw New NotImplementedException
                     End If
+                ElseIf tokens(Scan0).name = TokenType.stringInterpolation Then
+                    Return New StringInterpolation(tokens(Scan0))
                 End If
             Else
                 Return ParseBinaryExpression(blocks)
