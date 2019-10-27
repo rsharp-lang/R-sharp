@@ -5,9 +5,8 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
-
-        Call declareTest()
         Call tupleTest()
+        Call declareTest()
         Call branchTest()
 
         Pause()
@@ -15,6 +14,9 @@ Module interpreterTest
 
     Sub tupleTest()
         Call R.Evaluate("let [a,b,c] = [12,3,6];")
+        Call R.PrintMemory()
+
+        Pause()
     End Sub
 
     Sub branchTest()

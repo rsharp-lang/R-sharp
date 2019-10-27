@@ -74,7 +74,27 @@ Namespace Interpreter.ExecuteEngine
                 Return envir.Push(names(Scan0), value, type)
             Else
                 ' tuple
-                Throw New NotImplementedException
+                If value.GetType.IsInheritsFrom(GetType(Array)) Then
+                    Dim vector As Array = value
+
+                    If vector.Length = 1 Then
+                        ' all set with one value
+                        For Each name As String In names
+                            Call envir.Push(name, value)
+                        Next
+                    ElseIf vector.Length = names.Length Then
+                        ' declare one by one
+                        For i As Integer = 0 To vector.Length - 1
+                            Call envir.Push(names(i), vector.GetValue(i))
+                        Next
+                    Else
+                        Throw New SyntaxErrorException
+                    End If
+                Else
+                    Throw New NotImplementedException
+                End If
+
+                Return value
             End If
         End Function
 
