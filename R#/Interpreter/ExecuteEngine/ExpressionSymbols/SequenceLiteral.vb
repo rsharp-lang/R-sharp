@@ -18,6 +18,8 @@ Namespace Interpreter.ExecuteEngine
 
             If steps.IsNullOrEmpty Then
                 Me.steps = New Literal(1)
+            ElseIf steps.isLiteral Then
+                Me.steps = New Literal(steps(Scan0))
             Else
                 Me.steps = Expression.CreateExpression(steps)
             End If
