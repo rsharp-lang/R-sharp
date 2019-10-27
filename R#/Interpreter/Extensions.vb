@@ -13,7 +13,7 @@ Namespace Interpreter
         <Extension>
         Public Function RunProgram(code As Token(), envir As Environment) As Object
             Dim program As New Program With {
-               .expressionQueue = code.GetExpressions.ToArray
+               .execQueue = code.GetExpressions.ToArray
             }
 
             Return program.Execute(envir)

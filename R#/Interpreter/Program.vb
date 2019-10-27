@@ -5,7 +5,7 @@ Namespace Interpreter
 
     Public Class Program
 
-        Public Property expressionQueue As Expression()
+        Public Property execQueue As Expression()
 
         Sub New()
         End Sub
@@ -13,7 +13,7 @@ Namespace Interpreter
         Public Function Execute(envir As Environment) As Object
             Dim last As Object = Nothing
 
-            For Each expression As Expression In expressionQueue
+            For Each expression As Expression In execQueue
                 last = expression.Evaluate(envir)
             Next
 
