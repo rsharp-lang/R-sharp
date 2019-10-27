@@ -21,7 +21,9 @@ Namespace Interpreter.ExecuteEngine
             parameters = params _
                 .SplitByTopLevelDelimiter(TokenType.comma) _
                 .Where(Function(t) Not t.isComma) _
-                .Select(Function(param) Expression.CreateExpression(param)) _
+                .Select(Function(param)
+                            Return Expression.CreateExpression(param)
+                        End Function) _
                 .ToArray
         End Sub
 

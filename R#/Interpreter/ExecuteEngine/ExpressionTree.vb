@@ -60,6 +60,8 @@ Namespace Interpreter.ExecuteEngine
                     End If
                 ElseIf tokens(Scan0).name = TokenType.stringInterpolation Then
                     Return New StringInterpolation(tokens(Scan0))
+                ElseIf tokens(1).name = TokenType.sequence Then
+                    Return New SequenceLiteral(tokens(Scan0), tokens(2), tokens.ElementAtOrDefault(4))
                 End If
             Else
                 Return ParseBinaryExpression(blocks)

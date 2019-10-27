@@ -1,4 +1,5 @@
 ﻿Imports Microsoft.VisualBasic.Language
+Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 
@@ -11,6 +12,19 @@ Namespace Interpreter.ExecuteEngine
         Dim from As Expression
         Dim [to] As Expression
         Dim steps As Expression
+
+        Sub New(from As Token, [to] As Token, steps As Token)
+            Me.from = Expression.CreateExpression({from})
+            Me.to = Expression.CreateExpression({[to]})
+
+            If steps Is Nothing Then
+                Me.steps = New Literal(1)
+            ElseIf steps.name = TokenType.numberLiteral OrElse steps.name = TokenType.integerLiteral Then
+                Me.steps = New Literal(steps)
+            Else
+                Me.steps = Expression.CreateExpression({steps})
+            End If
+        End Sub
 
         Sub New(from As Token(), [to] As Token(), steps As Token())
             Me.from = Expression.CreateExpression(from)

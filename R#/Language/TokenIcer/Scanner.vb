@@ -63,7 +63,8 @@ Namespace Language.TokenIcer
                              TokenType.open,
                              TokenType.close,
                              TokenType.terminator,
-                             TokenType.operator
+                             TokenType.operator,
+                             TokenType.sequence
 
                             With populateToken()
                                 If Not .IsNothing Then
@@ -165,7 +166,7 @@ Namespace Language.TokenIcer
             ElseIf c = ";"c Then
                 Return New Token With {.name = TokenType.terminator, .text = ";"}
             ElseIf c = ":"c Then
-                Return New Token With {.name = TokenType.comma, .text = ":"}
+                Return New Token With {.name = TokenType.sequence, .text = ":"}
             ElseIf c = "+"c OrElse c = "*"c OrElse c = "/"c OrElse c = "%"c OrElse c = "^"c Then
                 Return New Token With {.name = TokenType.operator, .text = c}
             ElseIf c Like delimiter Then
