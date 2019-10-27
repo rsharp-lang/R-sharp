@@ -2,6 +2,7 @@
 Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Language
 Imports Microsoft.VisualBasic.Linq
+Imports System.Runtime.CompilerServices
 
 Namespace Interpreter.ExecuteEngine
 
@@ -55,7 +56,8 @@ Namespace Interpreter.ExecuteEngine
 
         ReadOnly operatorPriority As String() = {"^", "*/", "+-"}
 
-        Private Function ParseBinaryExpression(tokenBlocks As List(Of Token())) As Expression
+        <Extension>
+        Public Function ParseBinaryExpression(tokenBlocks As List(Of Token())) As Expression
             Dim buf As New List(Of [Variant](Of Expression, String))
             Dim oplist As New List(Of String)
 

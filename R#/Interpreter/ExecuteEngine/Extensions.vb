@@ -9,6 +9,15 @@ Namespace Interpreter.ExecuteEngine
     Module Extensions
 
         <Extension>
+        Public Function isLiteral(tokens As Token()) As Boolean
+            If tokens.Length = 1 AndAlso tokens(Scan0).name Like Expression.literalTypes Then
+                Return True
+            Else
+                Return False
+            End If
+        End Function
+
+        <Extension>
         Public Function isIdentifier(tokens As Token()) As Boolean
             If tokens.Length = 1 AndAlso tokens(Scan0).name = TokenType.identifier Then
                 Return True

@@ -5,6 +5,8 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+
+        Call declareTest()
         Call tupleTest()
         Call branchTest()
 
@@ -32,8 +34,8 @@ FALSE;
         Call R.Evaluate("let y as integer = $;")
         Call R.Evaluate("let flags  as boolean = [true, true, true, false];")
         Call R.Evaluate("let str as  string =[`hello world!`, 'This program is running on R# scripting engine!', ""And, this is a string value.""]; # declares a string vector")
-
-        Call R.Evaluate("x <- length(x):(33+99),1.5;")
+        Call R.Evaluate("let z as double;")
+        Call R.Evaluate("z <-   1+  length(x):(1+99),  2.5   ;")
 
         Call R.PrintMemory()
 

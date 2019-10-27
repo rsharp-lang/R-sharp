@@ -1,6 +1,7 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
@@ -17,7 +18,7 @@ Namespace Interpreter.ExecuteEngine
 
         Public MustOverride Function Evaluate(envir As Environment) As Object
 
-        Shared ReadOnly literalTypes As Index(Of TokenType) = {
+        Friend Shared ReadOnly literalTypes As Index(Of TokenType) = {
             TokenType.stringLiteral,
             TokenType.booleanLiteral,
             TokenType.integerLiteral,
@@ -43,12 +44,12 @@ Namespace Interpreter.ExecuteEngine
                         Throw New SyntaxErrorException
                 End Select
             ElseIf code.Count = 1 Then
-                Dim item As Token = code(Scan0)(Scan0)
+                Dim item As Token() = code(Scan0)
 
-                If item.name Like literalTypes Then
-                    Return New Literal(item)
-                ElseIf item.name = TokenType.identifier Then
-                    Return New SymbolReference(item)
+                If item.isLiteral Then
+                    Return New Literal(item(Scan0))
+                ElseIf item.isIdentifier Then
+                    Return New SymbolReference(item(Scan0))
                 Else
                     Return code(Scan0).DoCall(AddressOf CreateTree)
                 End If
@@ -64,8 +65,7 @@ Namespace Interpreter.ExecuteEngine
                 End If
             End If
 
-            Throw New NotImplementedException
-            ' Return code.DoCall(AddressOf CreateTree)
+            Return code.ParseBinaryExpression
         End Function
     End Class
 End Namespace
