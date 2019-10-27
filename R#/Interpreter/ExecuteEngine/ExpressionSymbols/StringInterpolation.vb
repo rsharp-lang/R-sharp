@@ -35,13 +35,13 @@ Namespace Interpreter.ExecuteEngine
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim strings As New List(Of String)
+            Dim current As Array = Runtime.asVector(Of String)(stringParts(Scan0).Evaluate(envir))
 
-            For Each part As Expression In stringParts
-                strings += Scripting.ToString(part.Evaluate(envir), "")
+            For Each part As Expression In stringParts.Skip(1)
+                current = BinaryExpression.DoStringJoin(current, part.Evaluate(envir))
             Next
 
-            Return strings.JoinBy("")
+            Return current
         End Function
     End Class
 End Namespace

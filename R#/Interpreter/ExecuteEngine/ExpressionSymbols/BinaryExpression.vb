@@ -47,13 +47,20 @@ Namespace Interpreter.ExecuteEngine
                 End If
             ElseIf ta Is GetType(String) OrElse tb Is GetType(String) Then
                 If [operator] = "&" Then
-                    Return Scripting.ToString(a, "") & Scripting.ToString(b, "")
+                    Return DoStringJoin(a, b)
                 Else
                     Throw New InvalidExpressionException
                 End If
             End If
 
             Throw New NotImplementedException
+        End Function
+
+        Public Shared Function DoStringJoin(a As Object, b As Object) As String()
+            Dim va = (From element In Runtime.asVector(Of Object)(a).AsQueryable Select Scripting.ToString(element, "NULL")).ToArray
+            Dim vb = (From element In Runtime.asVector(Of Object)(b).AsQueryable Select Scripting.ToString(element, "NULL")).ToArray
+
+            Return Runtime.Core.BinaryCoreInternal(Of String, String, String)(va, vb, Function(x, y) x & y).ToArray
         End Function
 
         Public Overrides Function ToString() As String

@@ -14,12 +14,18 @@ Namespace Runtime
             End If
         End Function
 
-        Friend Function asVector(Of T)(value As Object) As Object
+        ''' <summary>
+        ''' 这个函数会确保返回的输出值都是一个数组
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="value"></param>
+        ''' <returns></returns>
+        Friend Function asVector(Of T)(value As Object) As Array
             Dim valueType As Type = value.GetType
 
             If valueType Is GetType(T) Then
                 Return {DirectCast(value, T)}
-            ElseIf valueType Is GetType(Object()) Then
+            ElseIf valueType.IsInheritsFrom(GetType(Array)) Then
                 If DirectCast(value, Object()) _
                     .All(Function(i)
                              If Not i.GetType.IsInheritsFrom(GetType(Array)) Then
@@ -31,7 +37,7 @@ Namespace Runtime
 
                     value = DirectCast(value, Object()) _
                         .Select(Function(o)
-                                    If Not o.GetType Is GetType(T) Then
+                                    If (Not o.GetType Is GetType(T)) AndAlso o.GetType.IsInheritsFrom(GetType(Array)) Then
                                         o = DirectCast(o, Array).GetValue(Scan0)
                                     End If
 
@@ -43,8 +49,10 @@ Namespace Runtime
                 Return value
             ElseIf valueType Is GetType(T()) Then
                 Return value
-            Else
+            ElseIf valueType.IsInheritsFrom(GetType(IEnumerable(Of T))) Then
                 Return DirectCast(value, IEnumerable(Of T)).ToArray
+            Else
+                Return {value}
             End If
         End Function
 
