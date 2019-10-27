@@ -45,6 +45,12 @@ Namespace Interpreter.ExecuteEngine
                         Case "^" : Return Runtime.Core.Power(Of Long, Double, Double)(a, b).ToArray
                     End Select
                 End If
+            ElseIf ta Is GetType(String) OrElse tb Is GetType(String) Then
+                If [operator] = "&" Then
+                    Return Scripting.ToString(a, "") & Scripting.ToString(b, "")
+                Else
+                    Throw New InvalidExpressionException
+                End If
             End If
 
             Throw New NotImplementedException

@@ -27,7 +27,7 @@ Namespace Interpreter.ExecuteEngine
                 If part.isLiteral(TokenType.stringLiteral) Then
                     parts += New Literal(part(Scan0))
                 Else
-                    parts += Expression.CreateExpression(part)
+                    parts += Expression.CreateExpression(part.Skip(1).Take(part.Length - 2).ToArray)
                 End If
             Next
 
@@ -35,7 +35,13 @@ Namespace Interpreter.ExecuteEngine
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Throw New NotImplementedException()
+            Dim strings As New List(Of String)
+
+            For Each part As Expression In stringParts
+                strings += Scripting.ToString(part.Evaluate(envir), "")
+            Next
+
+            Return strings.JoinBy("")
         End Function
     End Class
 End Namespace

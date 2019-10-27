@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\BinaryExpression.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\ClosureExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\StringInterpolation.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\IfBranch.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CodeComment.vb" />

@@ -17,6 +17,8 @@ Module interpreterTest
     Sub stringInterpolateTest()
         Call R.Evaluate("let word = 'world';")
         Call R.Evaluate("let s = `Hello ${word}!` & "" ok"";")
+        Call R.Evaluate("print(s);")
+        Call R.PrintMemory()
 
         Pause()
     End Sub

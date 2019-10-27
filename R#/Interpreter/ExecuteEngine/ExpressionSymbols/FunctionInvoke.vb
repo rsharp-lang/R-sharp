@@ -53,6 +53,18 @@ Namespace Interpreter.ExecuteEngine
                     Else
                         Return Math.Round(CDbl(x), decimals)
                     End If
+                Case "print"
+                    Dim x = paramVals(Scan0)
+
+                    If x.GetType.IsInheritsFrom(GetType(Array)) Then
+                        Dim xVec As Array = DirectCast(x, Array)
+
+                        Call Console.WriteLine($"[{xVec.Length}] " & (From element As Object In xVec.AsQueryable Select Scripting.ToString(element, "")).JoinBy(vbTab))
+                    Else
+                        Call Console.WriteLine("[1] " & Scripting.ToString(x, ""))
+                    End If
+
+                    Return x
             End Select
 
             Throw New NotImplementedException

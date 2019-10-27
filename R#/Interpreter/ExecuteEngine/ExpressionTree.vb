@@ -68,7 +68,7 @@ Namespace Interpreter.ExecuteEngine
             Throw New NotImplementedException
         End Function
 
-        ReadOnly operatorPriority As String() = {"^", "*/", "+-"}
+        ReadOnly operatorPriority As String() = {"^", "*/", "+-", "&|", "!"}
 
         <Extension>
         Public Function ParseBinaryExpression(tokenBlocks As List(Of Token())) As Expression
