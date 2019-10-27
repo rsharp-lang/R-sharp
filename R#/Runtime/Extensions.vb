@@ -18,7 +18,7 @@ Namespace Runtime
             Dim valueType As Type = value.GetType
 
             If valueType Is GetType(T) Then
-                value = {DirectCast(value, T)}
+                Return {DirectCast(value, T)}
             ElseIf valueType Is GetType(Object()) Then
                 If DirectCast(value, Object()) _
                     .All(Function(i)
@@ -39,11 +39,13 @@ Namespace Runtime
                                 End Function) _
                         .ToArray
                 End If
-            Else
-                value = DirectCast(value, IEnumerable(Of T)).ToArray
-            End If
 
-            Return value
+                Return value
+            ElseIf valueType Is GetType(T()) Then
+                Return value
+            Else
+                Return DirectCast(value, IEnumerable(Of T)).ToArray
+            End If
         End Function
 
         ''' <summary>

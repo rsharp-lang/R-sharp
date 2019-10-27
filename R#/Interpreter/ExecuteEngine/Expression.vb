@@ -51,7 +51,7 @@ Namespace Interpreter.ExecuteEngine
                 ElseIf item.isIdentifier Then
                     Return New SymbolReference(item(Scan0))
                 Else
-                    Return code(Scan0).DoCall(AddressOf CreateTree)
+                    Return code(Scan0).CreateTree
                 End If
             End If
 

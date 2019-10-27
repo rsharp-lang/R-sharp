@@ -5,8 +5,9 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
-        Call tupleTest()
         Call declareTest()
+        Call tupleTest()
+
         Call branchTest()
 
         Pause()
@@ -33,8 +34,8 @@ FALSE;
 
     Sub declareTest()
         Call R.Evaluate("let a = 1+2*3+5^6; # code comments")
-        Call R.Evaluate("let x as integer = [999, 888, 777, 666]  ;")
-        Call R.Evaluate("let y as integer = $;")
+        Call R.Evaluate("let x as double = [999, 888, 777, 666] / 5.3 ;")
+        Call R.Evaluate("let y = round($, 0) ;")
         Call R.Evaluate("let flags  as boolean = [true, true, true, false];")
         Call R.Evaluate("let str as  string =[`hello world!`, 'This program is running on R# scripting engine!', ""And, this is a string value.""]; # declares a string vector")
         Call R.Evaluate("let z as double;")

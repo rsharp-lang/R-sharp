@@ -8,12 +8,13 @@ Namespace Interpreter.ExecuteEngine
 
     Module ExpressionTree
 
+        <Extension>
         Public Function CreateTree(tokens As Token()) As Expression
             Dim blocks As List(Of Token()) = tokens.SplitByTopLevelDelimiter(TokenType.comma)
 
             If blocks = 1 Then
                 ' 是一个复杂的表达式
-                Return blocks(Scan0).DoCall(AddressOf ParseExpressionTree)
+                Return blocks(Scan0).ParseExpressionTree
             ElseIf blocks(1)(Scan0).text = ":" Then
                 ' is a sequence generator syntax
                 Return New SequenceLiteral(blocks(Scan0), blocks(2), blocks.ElementAtOrDefault(4))
@@ -22,6 +23,7 @@ Namespace Interpreter.ExecuteEngine
             End If
         End Function
 
+        <Extension>
         Private Function ParseExpressionTree(tokens As Token()) As Expression
             Dim blocks As List(Of Token()) = tokens.SplitByTopLevelDelimiter(TokenType.operator)
 

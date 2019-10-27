@@ -12,12 +12,15 @@ Namespace Interpreter.ExecuteEngine
         Dim parameters As Expression()
 
         Sub New(tokens As Token())
-            funcName = tokens(Scan0).text
-            parameters = tokens _
+            Dim params = tokens _
                 .Skip(2) _
                 .Take(tokens.Length - 3) _
-                .ToArray _
+                .ToArray
+
+            funcName = tokens(Scan0).text
+            parameters = params _
                 .SplitByTopLevelDelimiter(TokenType.comma) _
+                .Where(Function(t) Not t.isComma) _
                 .Select(Function(param) Expression.CreateExpression(param)) _
                 .ToArray
         End Sub
@@ -41,6 +44,15 @@ Namespace Interpreter.ExecuteEngine
         Private Shared Function invokeInternals(envir As Environment, funcName$, paramVals As Object()) As Object
             Select Case funcName
                 Case "length" : Return DirectCast(paramVals(Scan0), Array).Length
+                Case "round"
+                    Dim x = paramVals(Scan0)
+                    Dim decimals As Integer = Runtime.getFirst(paramVals(1))
+
+                    If x.GetType.IsInheritsFrom(GetType(Array)) Then
+                        Return (From element As Object In DirectCast(x, Array).AsQueryable Select Math.Round(CDbl(element), decimals)).ToArray
+                    Else
+                        Return Math.Round(CDbl(x), decimals)
+                    End If
             End Select
 
             Throw New NotImplementedException
