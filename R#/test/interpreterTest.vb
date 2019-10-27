@@ -13,7 +13,8 @@ Module interpreterTest
     End Sub
 
     Sub tupleTest()
-        Call R.Evaluate("let [a,b,c] = [12,3,6];")
+        Call R.Evaluate("let [x, y] = [[99, 66], 88];")
+        Call R.Evaluate("let [a,b,c, d] = [12,3,6, x / 3.3];")
         Call R.PrintMemory()
 
         Pause()

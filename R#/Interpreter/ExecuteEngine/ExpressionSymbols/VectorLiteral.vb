@@ -36,9 +36,12 @@ Namespace Interpreter.ExecuteEngine
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Return values _
+            Dim vector = values _
                 .Select(Function(exp) exp.Evaluate(envir)) _
                 .ToArray
+            Dim result As Array = Environment.asRVector(type, vector)
+
+            Return result
         End Function
     End Class
 End Namespace

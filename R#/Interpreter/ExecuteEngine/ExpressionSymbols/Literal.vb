@@ -37,7 +37,8 @@ Namespace Interpreter.ExecuteEngine
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Return Environment.asRVector(TypeCodes.generic, value)
+            ' Return Environment.asRVector(TypeCodes.generic, value)
+            Return value
         End Function
 
         Public Overrides Function ToString() As String

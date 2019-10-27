@@ -20,12 +20,25 @@ Namespace Runtime
             If valueType Is GetType(T) Then
                 value = {DirectCast(value, T)}
             ElseIf valueType Is GetType(Object()) Then
-                value = DirectCast(value, Object()) _
-                    .Select(Function(o)
-                                o = DirectCast(o, Array).GetValue(Scan0)
-                                Return DirectCast(o, T)
-                            End Function) _
-                    .ToArray
+                If DirectCast(value, Object()) _
+                    .All(Function(i)
+                             If Not i.GetType.IsInheritsFrom(GetType(Array)) Then
+                                 Return True
+                             Else
+                                 Return DirectCast(i, Array).Length = 1
+                             End If
+                         End Function) Then
+
+                    value = DirectCast(value, Object()) _
+                        .Select(Function(o)
+                                    If Not o.GetType Is GetType(T) Then
+                                        o = DirectCast(o, Array).GetValue(Scan0)
+                                    End If
+
+                                    Return DirectCast(o, T)
+                                End Function) _
+                        .ToArray
+                End If
             Else
                 value = DirectCast(value, IEnumerable(Of T)).ToArray
             End If
