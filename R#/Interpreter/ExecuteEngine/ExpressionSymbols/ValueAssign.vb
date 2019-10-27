@@ -46,6 +46,9 @@ Namespace Interpreter.ExecuteEngine
                     Next
                 ElseIf array.Length = targetSymbols.Length Then
                     ' one by one
+                    For i As Integer = 0 To array.Length - 1
+                        Call assignSymbol(envir(targetSymbols(i)), array.GetValue(i))
+                    Next
                 Else
                     ' 数量不对
                     Throw New InvalidCastException

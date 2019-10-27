@@ -50,7 +50,7 @@ Namespace Interpreter.ExecuteEngine
                 ElseIf item.name = TokenType.identifier Then
                     Return New SymbolReference(item)
                 Else
-                    Throw New NotImplementedException
+                    Return code(Scan0).DoCall(AddressOf CreateTree)
                 End If
             End If
 
@@ -64,7 +64,8 @@ Namespace Interpreter.ExecuteEngine
                 End If
             End If
 
-            Return code.DoCall(AddressOf CreateTree)
+            Throw New NotImplementedException
+            ' Return code.DoCall(AddressOf CreateTree)
         End Function
     End Class
 End Namespace
