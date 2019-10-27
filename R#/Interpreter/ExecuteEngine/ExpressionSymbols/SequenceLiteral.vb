@@ -27,7 +27,6 @@ Namespace Interpreter.ExecuteEngine
             Dim init = from.Evaluate(envir)
             Dim stops = [to].Evaluate(envir)
             Dim offset = steps.Evaluate(envir)
-            Dim seq As New List(Of Object)
 
             If {init, stops, offset}.Any(Function(num)
                                              Dim ntype As Type = num.GetType
@@ -41,23 +40,27 @@ Namespace Interpreter.ExecuteEngine
                 Dim start As Double = Runtime.getFirst(init)
                 Dim steps As Double = Runtime.getFirst(offset)
                 Dim ends As Double = Runtime.getFirst(stops)
+                Dim seq As New List(Of Double)
 
                 Do While start <= ends
                     seq += start
                     start += steps
                 Loop
+
+                Return seq.ToArray
             Else
                 Dim start As Long = Runtime.getFirst(init)
                 Dim steps As Long = Runtime.getFirst(offset)
                 Dim ends As Integer = Runtime.getFirst(stops)
+                Dim seq As New List(Of Long)
 
                 Do While start <= ends
                     seq += start
                     start += steps
                 Loop
-            End If
 
-            Return seq.ToArray
+                Return seq.ToArray
+            End If
         End Function
     End Class
 End Namespace
