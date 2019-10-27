@@ -31,9 +31,9 @@ Namespace Interpreter.ExecuteEngine
                 .DoCall(AddressOf CreateExpression)
         End Function
 
-        Private Shared Function CreateExpression(code As List(Of Token())) As Expression
-            If code(Scan0).name = TokenType.keyword Then
-                Dim keyword As String = code(Scan0).text
+        Friend Shared Function CreateExpression(code As List(Of Token())) As Expression
+            If code(Scan0).isKeyword Then
+                Dim keyword As String = code(Scan0)(Scan0).text
 
                 Select Case keyword
                     Case "let" : Return New DeclareNewVariable(code)

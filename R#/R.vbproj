@@ -86,7 +86,7 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Literal.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DeclareNewVariable.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionTree.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\Module1.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Extensions.vb" />
     <Compile Include="Interpreter\Extensions.vb" />
     <Compile Include="Interpreter\Program.vb" />
     <Compile Include="Interpreter\RInterpreter.vb" />
