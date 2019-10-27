@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Linq
 
 Namespace Runtime
 
@@ -26,7 +27,8 @@ Namespace Runtime
             If valueType Is GetType(T) Then
                 Return {DirectCast(value, T)}
             ElseIf valueType.IsInheritsFrom(GetType(Array)) Then
-                If DirectCast(value, Object()) _
+                If DirectCast(value, Array) _
+                    .AsEnumerable _
                     .All(Function(i)
                              If Not i.GetType.IsInheritsFrom(GetType(Array)) Then
                                  Return True
@@ -35,7 +37,8 @@ Namespace Runtime
                              End If
                          End Function) Then
 
-                    value = DirectCast(value, Object()) _
+                    value = DirectCast(value, Array) _
+                        .AsEnumerable _
                         .Select(Function(o)
                                     If (Not o.GetType Is GetType(T)) AndAlso o.GetType.IsInheritsFrom(GetType(Array)) Then
                                         o = DirectCast(o, Array).GetValue(Scan0)
