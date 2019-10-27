@@ -11,7 +11,8 @@ Module tokenlicerTest
     End Sub
 
     Sub stringParser()
-        Dim stringExpression = New StringInterpolation().GetTokens("Hello ${""world"" & '!'}!! Test expression: 1+1= ${1+1} ${1+1 < x} < x;").ToArray
+        Dim stringExpression = StringInterpolation.ParseTokens("Hello ${""world"" & '!'}!! Test expression: 1+1= ${1+1} ${1+1 < x} < x;")
+        Dim str2 = StringInterpolation.ParseTokens("Another string ${ `expression is ${1+1} ? ` } + escape test \${this is not a ${'expression'}}")
 
         Pause()
     End Sub

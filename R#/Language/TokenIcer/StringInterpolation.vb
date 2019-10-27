@@ -1,5 +1,6 @@
 ﻿Imports Microsoft.VisualBasic.Text.Parser
 Imports Microsoft.VisualBasic.Language
+Imports System.Runtime.CompilerServices
 
 Namespace Language.TokenIcer
 
@@ -41,7 +42,7 @@ Namespace Language.TokenIcer
                         If t.name = TokenType.open AndAlso t.text = "{" Then
                             Call stack.Push(t)
                         ElseIf t.name = TokenType.close AndAlso t.text = "}" Then
-                            Call stack.Pop
+                            Call stack.Pop()
                         End If
 
                         Yield t
@@ -80,5 +81,9 @@ Namespace Language.TokenIcer
             Return Nothing
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Overloads Shared Function ParseTokens(expression As String) As Token()
+            Return New StringInterpolation().GetTokens(expression).ToArray
+        End Function
     End Class
 End Namespace
