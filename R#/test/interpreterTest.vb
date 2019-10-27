@@ -15,7 +15,7 @@ Module interpreterTest
     End Sub
 
     Sub stringInterpolateTest()
-        Call R.Evaluate("print( (1 + 3):30:5  );")
+        Call R.Evaluate("print( ((1 + 3):30:5 ) * 5 );")
 
         Call R.Evaluate("let word = 'world';")
         Call R.Evaluate("let s = `Hello ${word}!` & "" ok"";")
