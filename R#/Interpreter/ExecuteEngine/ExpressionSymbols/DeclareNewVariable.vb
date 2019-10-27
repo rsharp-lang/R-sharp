@@ -91,7 +91,10 @@ Namespace Interpreter.ExecuteEngine
                         Throw New SyntaxErrorException
                     End If
                 Else
-                    Throw New NotImplementedException
+                    ' all set with one value
+                    For Each name As String In names
+                        Call envir.Push(name, value)
+                    Next
                 End If
 
                 Return value

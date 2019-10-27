@@ -201,6 +201,8 @@ Namespace Language.TokenIcer
                 Return Nothing
             ElseIf escape.comment AndAlso text.First = "#"c Then
                 Return New Token With {.name = TokenType.comment, .text = text}
+            Else
+                text = text.Trim
             End If
 
             Select Case text
@@ -211,14 +213,14 @@ Namespace Language.TokenIcer
                 Case "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string", "const", "imports", "require",
                      "if", "else", "for", "loop", "while"
                     Return New Token With {.name = TokenType.keyword, .text = text}
-                Case "true", "false", "yes", "no"
+                Case "true", "false", "yes", "no", "T", "F", "TRUE", "FALSE"
                     Return New Token With {.name = TokenType.booleanLiteral, .text = text}
                 Case Else
                     If text.IsPattern("\d+") Then
                         Return New Token With {.name = TokenType.integerLiteral, .text = text}
-                    ElseIf text.IsPattern(NumericPattern) Then
+                    ElseIf text.IsNumeric Then
                         Return New Token With {.name = TokenType.numberLiteral, .text = text}
-                    ElseIf text.IsPattern("[a-z_][a-z0-9\.]*") Then
+                    ElseIf text.IsPattern("([a-z])|([a-z]([a-z0-9_\.])*)") Then
                         Return New Token With {.name = TokenType.identifier, .text = text}
                     End If
 #If DEBUG Then

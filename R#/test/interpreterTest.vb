@@ -5,12 +5,11 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
-        Call declareTest()
-
-        Call stringInterpolateTest()
 
         Call tupleTest()
 
+        Call declareTest()
+        Call stringInterpolateTest()
         Call branchTest()
 
         Pause()
@@ -33,6 +32,8 @@ Module interpreterTest
     Sub tupleTest()
         Call R.Evaluate("let [x, y] = [[99, 66], 88];")
         Call R.Evaluate("let [a,b,c, d] = [12,3,6, x / 3.3];")
+        Call R.Evaluate("let [e,f,g,h,i,j,k] = FALSE;")
+
         Call R.PrintMemory()
 
         Pause()
