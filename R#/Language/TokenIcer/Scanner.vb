@@ -21,7 +21,7 @@ Namespace Language.TokenIcer
         ''' </summary>
         Dim lineNumber As Integer = 1
 
-        Private Class Escapes
+        Friend Class Escapes
 
             Friend comment, [string] As Boolean
             Friend stringEscape As Char
