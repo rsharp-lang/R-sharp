@@ -75,7 +75,7 @@ Namespace Interpreter.ExecuteEngine
                 Call DeclareNewVariable.PushNames(var.names, value, var.type, envir)
             Next
 
-            Throw New NotImplementedException
+            Return body.Execute(envir)
         End Function
 
         Public Overrides Function Evaluate(envir As Environment) As Object
