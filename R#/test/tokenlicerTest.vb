@@ -13,7 +13,7 @@ Module tokenlicerTest
 
     Sub declareFunctionTest()
         Dim script = "
-let echo as function(text as string) {
+let user.echo as function(text as string) {
     print(`Hello ${text}!`);
 }
 "
