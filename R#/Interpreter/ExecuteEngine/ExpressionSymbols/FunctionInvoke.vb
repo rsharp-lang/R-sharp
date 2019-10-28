@@ -85,26 +85,7 @@ Namespace Interpreter.ExecuteEngine
                         Return Math.Round(CDbl(x), decimals)
                     End If
                 Case "print"
-                    Dim x = paramVals(Scan0)
-                    Dim valueType As Type = x.GetType
-                    Dim isString As Boolean = valueType Is GetType(String) OrElse valueType Is GetType(String())
-                    Dim toString = Function(o As Object) As String
-                                       If isString Then
-                                           Return $"""{Scripting.ToString(o, "NULL")}"""
-                                       Else
-                                           Return Scripting.ToString(o, "NULL")
-                                       End If
-                                   End Function
-
-                    If x.GetType.IsInheritsFrom(GetType(Array)) Then
-                        Dim xVec As Array = DirectCast(x, Array)
-
-                        Call Console.WriteLine($"[{xVec.Length}] " & (From element As Object In xVec.AsQueryable Select toString(element)).JoinBy(vbTab))
-                    Else
-                        Call Console.WriteLine("[1] " & toString(x))
-                    End If
-
-                    Return x
+                    Return Internal.print(paramVals(Scan0))
             End Select
 
             Throw New NotImplementedException
