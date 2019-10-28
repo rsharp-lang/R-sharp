@@ -1,6 +1,6 @@
 imports "Microsoft.VisualBasic.dll";
 
-var me <- list() with {
+let me = list() with {
     $name <- "xieguigang";
     $family <- {"xyz"};
     $display <- function() {
@@ -13,7 +13,7 @@ var me <- list() with {
     }
 }
 
-var out as string <- me + "abc";
+let out as string = me + "abc";
 
 str(out);
 # string [1:2] "xyz" "abc"
