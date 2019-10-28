@@ -18,7 +18,7 @@ let echo as function(words) {
 }
 
 # and then invoke function via pipeline operator
-word :> echo();
+word :> echo;
 # [3] "Hello world!" "Hello R# user!" "Hello GCModeller user!"
 ```
 
@@ -35,7 +35,7 @@ Call R.Evaluate("
         print( `Hello ${ words }!` );
     }
 
-    word :> echo();
+    word :> echo;
 ")
 
 ' or assign variable
