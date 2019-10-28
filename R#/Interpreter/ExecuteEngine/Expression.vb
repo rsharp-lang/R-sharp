@@ -27,13 +27,13 @@ Namespace Interpreter.ExecuteEngine
         }
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Shared Function CreateExpression(code As Token()) As Expression
+        Public Shared Function CreateExpression(code As IEnumerable(Of Token)) As Expression
             Return code _
                 .SplitByTopLevelDelimiter(TokenType.operator, includeKeyword:=True) _
-                .DoCall(AddressOf CreateExpression)
+                .DoCall(AddressOf ParseExpression)
         End Function
 
-        Friend Shared Function CreateExpression(code As List(Of Token())) As Expression
+        Friend Shared Function ParseExpression(code As List(Of Token())) As Expression
             If code(Scan0).isKeyword Then
                 Dim keyword As String = code(Scan0)(Scan0).text
 
@@ -45,7 +45,7 @@ Namespace Interpreter.ExecuteEngine
                             Return New DeclareNewVariable(code)
                         End If
                     Case "if" : Return New IfBranch(code)
-
+                    Case "return" : Return New ReturnValue(code.Skip(1).IteratesALL)
                     Case Else
                         Throw New SyntaxErrorException
                 End Select

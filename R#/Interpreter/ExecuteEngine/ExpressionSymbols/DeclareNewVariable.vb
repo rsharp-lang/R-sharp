@@ -65,7 +65,7 @@ Namespace Interpreter.ExecuteEngine
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Private Sub getInitializeValue(code As IEnumerable(Of Token()))
             hasInitializeExpression = True
-            value = Expression.CreateExpression(code.AsList)
+            value = Expression.ParseExpression(code.AsList)
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object

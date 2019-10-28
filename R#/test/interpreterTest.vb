@@ -21,8 +21,22 @@ let user.echo as function(text as string = ['world', 'R# programmer'], callerNam
     print(`Hello ${text}!`);
 }
 "
+        Call R.Evaluate("let x = [1,2,3];")
         Call R.Evaluate(script)
         Call R.Evaluate("user.echo();")
+        Call R.Evaluate("user.echo(`NO. ${x}`);")
+
+        Call R.Evaluate("
+let addWith as function(x, y = 1) {
+return x + y;
+}
+
+")
+
+        Call R.Evaluate("let z = addWith(1 , [99,999,9999,99999]);")
+
+
+        Call R.PrintMemory()
 
         Pause()
     End Sub

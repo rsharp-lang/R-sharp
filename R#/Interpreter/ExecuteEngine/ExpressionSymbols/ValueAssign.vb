@@ -19,7 +19,7 @@ Namespace Interpreter.ExecuteEngine
         Sub New(tokens As List(Of Token()))
             targetSymbols = DeclareNewVariable.getNames(tokens(Scan0))
             isByRef = tokens(Scan0)(Scan0).text = "="
-            value = tokens.Skip(2).AsList.DoCall(AddressOf Expression.CreateExpression)
+            value = tokens.Skip(2).AsList.DoCall(AddressOf Expression.ParseExpression)
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
