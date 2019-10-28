@@ -29,6 +29,7 @@ let user.echo as function(text as string = ['world', 'R# programmer'], callerNam
         Call R.Evaluate("
 let addWith as function(x, y = 1) {
 return x + y;
+return 999;
 }
 
 ")

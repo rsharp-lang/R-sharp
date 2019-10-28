@@ -19,7 +19,10 @@ Namespace Interpreter
             Return program.Execute(envir)
         End Function
 
-        ReadOnly ignores As Index(Of TokenType) = {TokenType.comment, TokenType.terminator}
+        ReadOnly ignores As Index(Of TokenType) = {
+            TokenType.comment,
+            TokenType.terminator
+        }
 
         <Extension>
         Public Iterator Function GetExpressions(code As Token()) As IEnumerable(Of Expression)
