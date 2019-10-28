@@ -16,6 +16,12 @@ Namespace Interpreter
         ''' </summary>
         Public ReadOnly Property globalEnvir As New Environment
 
+        Default Public ReadOnly Property GetValue(name As String) As Object
+            Get
+                Return globalEnvir(name).value
+            End Get
+        End Property
+
         Public Const LastVariableName$ = "$"
 
         Sub New()
@@ -46,6 +52,27 @@ Namespace Interpreter
                              End Sub)
             End With
         End Sub
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Sub Add(name$, value As Object, Optional type As TypeCodes = TypeCodes.generic)
+            Call globalEnvir.Push(name, value, type)
+        End Sub
+
+        Public Sub Add(name$, closure As [Delegate])
+            Throw New NotImplementedException
+        End Sub
+
+        Public Function Invoke(funcName$, ParamArray args As Object()) As Object
+            Dim symbol = globalEnvir.FindSymbol(funcName)
+
+            If symbol Is Nothing Then
+                Throw New EntryPointNotFoundException($"No object named '{funcName}' could be found in global environment!")
+            ElseIf symbol.typeCode <> TypeCodes.closure Then
+                Throw New InvalidProgramException($"Object '{funcName}' is not a function!")
+            End If
+
+            Throw New NotImplementedException
+        End Function
 
         ''' <summary>
         ''' Run R# script program from text data.
