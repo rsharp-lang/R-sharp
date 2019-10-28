@@ -22,6 +22,7 @@ let user.echo as function(text as string = ['world', 'R# programmer'], callerNam
 }
 "
         Call R.Evaluate(script)
+        Call R.Evaluate("user.echo();")
 
         Pause()
     End Sub

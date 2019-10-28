@@ -27,6 +27,10 @@ Namespace Interpreter.ExecuteEngine
                 .ToArray
         End Sub
 
+        Public Overrides Function ToString() As String
+            Return $"Call {funcName}({parameters.JoinBy(", ")})"
+        End Function
+
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim paramVals As Object() = parameters _
                 .Select(Function(a) a.Evaluate(envir)) _
@@ -38,7 +42,11 @@ Namespace Interpreter.ExecuteEngine
             If funcVar Is Nothing Then
                 ' 可能是一个系统的内置函数
                 Return invokeInternals(envir, funcName, paramVals)
+            ElseIf funcVar.value.GetType Is GetType(DeclareNewFunction) Then
+                ' invoke method create from R# script
+                Return DirectCast(funcVar.value, DeclareNewFunction).Invoke(envir, paramVals)
             Else
+                ' invoke .NET method
                 Return DirectCast(funcVar.value, RMethodInfo).Invoke(envir, paramVals)
             End If
         End Function

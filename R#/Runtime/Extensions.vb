@@ -104,6 +104,8 @@ Namespace Runtime
                     Return TypeCodes.boolean
                 Case GetType(Dictionary(Of String, Object)), GetType(Dictionary(Of String, Object)())
                     Return TypeCodes.list
+                Case GetType([Delegate])
+                    Return TypeCodes.closure
                 Case Else
                     Return TypeCodes.generic
             End Select
@@ -117,6 +119,7 @@ Namespace Runtime
                 Case TypeCodes.integer : Return GetType(Long())
                 Case TypeCodes.list : Return GetType(Dictionary(Of String, Object))
                 Case TypeCodes.string : Return GetType(String())
+                Case TypeCodes.closure : Return GetType([Delegate])
                 Case Else
                     Throw New InvalidCastException(type.Description)
             End Select

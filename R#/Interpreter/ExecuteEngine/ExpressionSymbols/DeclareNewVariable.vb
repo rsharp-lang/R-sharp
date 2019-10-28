@@ -12,8 +12,9 @@ Namespace Interpreter.ExecuteEngine
         ''' <summary>
         ''' 对于tuple类型，会存在多个变量
         ''' </summary>
-        Dim names As String()
-        Dim value As Expression
+        Friend names As String()
+        Friend value As Expression
+        Friend hasInitializeExpression As Boolean = False
 
         Public Overrides ReadOnly Property type As TypeCodes
 
@@ -63,6 +64,7 @@ Namespace Interpreter.ExecuteEngine
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Private Sub getInitializeValue(code As IEnumerable(Of Token()))
+            hasInitializeExpression = True
             value = Expression.CreateExpression(code.AsList)
         End Sub
 
@@ -75,36 +77,44 @@ Namespace Interpreter.ExecuteEngine
                 value = Me.value.Evaluate(envir)
             End If
 
+            Call PushNames(names, value, type, envir)
+
+            Return value
+        End Function
+
+        Friend Shared Sub PushNames(names$(), value As Object, type As TypeCodes, envir As Environment)
             If names.Length = 1 Then
-                Return envir.Push(names(Scan0), value, type)
+                Call envir.Push(names(Scan0), value, type)
             Else
                 ' tuple
-                If value.GetType.IsInheritsFrom(GetType(Array)) Then
-                    Dim vector As Array = value
+                Call PushTuple(names, value, type, envir)
+            End If
+        End Sub
 
-                    If vector.Length = 1 Then
-                        ' all set with one value
-                        For Each name As String In names
-                            Call envir.Push(name, value)
-                        Next
-                    ElseIf vector.Length = names.Length Then
-                        ' declare one by one
-                        For i As Integer = 0 To vector.Length - 1
-                            Call envir.Push(names(i), vector.GetValue(i))
-                        Next
-                    Else
-                        Throw New SyntaxErrorException
-                    End If
-                Else
+        Private Shared Sub PushTuple(names$(), value As Object, type As TypeCodes, envir As Environment)
+            If value.GetType.IsInheritsFrom(GetType(Array)) Then
+                Dim vector As Array = value
+
+                If vector.Length = 1 Then
                     ' all set with one value
                     For Each name As String In names
                         Call envir.Push(name, value)
                     Next
+                ElseIf vector.Length = names.Length Then
+                    ' declare one by one
+                    For i As Integer = 0 To vector.Length - 1
+                        Call envir.Push(names(i), vector.GetValue(i))
+                    Next
+                Else
+                    Throw New SyntaxErrorException
                 End If
-
-                Return value
+            Else
+                ' all set with one value
+                For Each name As String In names
+                    Call envir.Push(name, value)
+                Next
             End If
-        End Function
+        End Sub
 
         Public Overrides Function ToString() As String
             If names.Length > 1 Then

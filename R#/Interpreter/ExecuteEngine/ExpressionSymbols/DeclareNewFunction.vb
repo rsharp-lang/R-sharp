@@ -1,4 +1,5 @@
 ﻿Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
@@ -50,8 +51,39 @@ Namespace Interpreter.ExecuteEngine
             }
         End Sub
 
+        Public Function Invoke(envir As Environment, params As Object()) As Object
+            Dim var As DeclareNewVariable
+            Dim value As Object
+
+            envir = New Environment(envir, funcName)
+
+            ' initialize environment
+            For i As Integer = 0 To Me.params.Length - 1
+                var = Me.params(i)
+
+                If i >= params.Length Then
+                    ' missing, use default value
+                    If var.hasInitializeExpression Then
+                        value = var.value.Evaluate(envir)
+                    Else
+                        Throw New MissingFieldException(var.names.GetJson)
+                    End If
+                Else
+                    value = params(i)
+                End If
+
+                Call DeclareNewVariable.PushNames(var.names, value, var.type, envir)
+            Next
+
+            Throw New NotImplementedException
+        End Function
+
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Throw New NotImplementedException()
+            Return envir.Push(funcName, Me, TypeCodes.closure)
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return $"declare function '${funcName}'"
         End Function
     End Class
 End Namespace

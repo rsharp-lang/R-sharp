@@ -80,6 +80,8 @@ Namespace Runtime
         End Sub
 
         Sub New(parent As Environment, stackTag$)
+            Call Me.New()
+
             Me.parent = parent
             Me.stackTag = stackTag
         End Sub
@@ -170,7 +172,7 @@ Namespace Runtime
             If isGlobal Then
                 Return $"Global({NameOf(Environment)})"
             Else
-                Return parent?.ToString & "->" & stackTag
+                Return parent?.ToString & " :> " & stackTag
             End If
         End Function
 
