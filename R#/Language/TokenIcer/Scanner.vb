@@ -220,7 +220,7 @@ Namespace Language.TokenIcer
                         Return New Token With {.name = TokenType.integerLiteral, .text = text}
                     ElseIf text.IsNumeric Then
                         Return New Token With {.name = TokenType.numberLiteral, .text = text}
-                    ElseIf text.IsPattern("[a-z][a-z0-9_\.]+") Then
+                    ElseIf text.IsPattern("[a-z][a-z0-9_\.]*") Then
                         Return New Token With {.name = TokenType.identifier, .text = text}
                     End If
 #If DEBUG Then

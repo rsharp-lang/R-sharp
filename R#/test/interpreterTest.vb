@@ -5,12 +5,23 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
-
+        Call declareFunctionTest()
         Call tupleTest()
 
         Call declareTest()
         Call stringInterpolateTest()
         Call branchTest()
+
+        Pause()
+    End Sub
+
+    Sub declareFunctionTest()
+        Dim script = "
+let user.echo as function(text as string) {
+    print(`Hello ${text}!`);
+}
+"
+        Call R.Evaluate(script)
 
         Pause()
     End Sub

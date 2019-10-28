@@ -37,7 +37,12 @@ Namespace Interpreter.ExecuteEngine
                 Dim keyword As String = code(Scan0)(Scan0).text
 
                 Select Case keyword
-                    Case "let" : Return New DeclareNewVariable(code)
+                    Case "let"
+                        If code > 4 AndAlso code(3).isKeyword("function") Then
+                            Return New DeclareNewFunction(code)
+                        Else
+                            Return New DeclareNewVariable(code)
+                        End If
                     Case "if" : Return New IfBranch(code)
 
                     Case Else
