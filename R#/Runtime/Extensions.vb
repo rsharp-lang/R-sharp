@@ -28,7 +28,7 @@ Namespace Runtime
                 Return {DirectCast(value, T)}
             ElseIf valueType.IsInheritsFrom(GetType(Array)) Then
                 If DirectCast(value, Array) _
-                    .AsEnumerable _
+                    .AsObjectEnumerator _
                     .All(Function(i)
                              If Not i.GetType.IsInheritsFrom(GetType(Array)) Then
                                  Return True
@@ -38,7 +38,7 @@ Namespace Runtime
                          End Function) Then
 
                     value = DirectCast(value, Array) _
-                        .AsEnumerable _
+                        .AsObjectEnumerator _
                         .Select(Function(o)
                                     If (Not o.GetType Is GetType(T)) AndAlso o.GetType.IsInheritsFrom(GetType(Array)) Then
                                         o = DirectCast(o, Array).GetValue(Scan0)
