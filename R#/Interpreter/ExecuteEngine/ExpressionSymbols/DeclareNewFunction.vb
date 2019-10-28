@@ -29,10 +29,6 @@ Namespace Interpreter.ExecuteEngine
             Call getExecBody(bodyPart)
         End Sub
 
-        Shared ReadOnly [let] As New List(Of Token) From {
-            New Token With {.name = TokenType.keyword, .text = "let"}
-        }
-
         Private Sub getParameters(tokens As Token())
             Dim parts = tokens.SplitByTopLevelDelimiter(TokenType.comma) _
                 .Where(Function(t) Not t.isComma) _
@@ -40,13 +36,18 @@ Namespace Interpreter.ExecuteEngine
 
             params = parts _
                 .Select(Function(t)
+                            Dim [let] As New List(Of Token) From {
+                                New Token With {.name = TokenType.keyword, .text = "let"}
+                            }
                             Return New DeclareNewVariable([let] + t)
                         End Function) _
                 .ToArray
         End Sub
 
         Private Sub getExecBody(tokens As Token())
-            Throw New NotImplementedException
+            body = New Program With {
+               .execQueue = tokens.GetExpressions.ToArray
+            }
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object

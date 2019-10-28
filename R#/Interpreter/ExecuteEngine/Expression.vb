@@ -22,7 +22,8 @@ Namespace Interpreter.ExecuteEngine
             TokenType.stringLiteral,
             TokenType.booleanLiteral,
             TokenType.integerLiteral,
-            TokenType.numberLiteral
+            TokenType.numberLiteral,
+            TokenType.missingLiteral
         }
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
