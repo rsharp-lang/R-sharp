@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0C2EB77C-39F2-460D-A3F8-CE905F867637}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <StartupObject>
-    </StartupObject>
-    <RootNamespace>SMRUCC.Rsharp</RootNamespace>
-    <AssemblyName>R</AssemblyName>
+    <ProjectGuid>{8EBB91DB-E04B-44F0-AA58-6A7527552A03}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <StartupObject>test.interpreterTest</StartupObject>
+    <RootNamespace>test</RootNamespace>
+    <AssemblyName>test</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MyType>Windows</MyType>
+    <MyType>Console</MyType>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFrameworkProfile />
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -22,10 +21,9 @@
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>./bin</OutputPath>
-    <DocumentationFile>R.xml</DocumentationFile>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>test.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,8 +31,8 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
-    <OutputPath>./bin</OutputPath>
-    <DocumentationFile>R.xml</DocumentationFile>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>test.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -48,10 +46,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <OptionInfer>On</OptionInfer>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -75,28 +69,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\BinaryExpression.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\ClosureExpression.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\StringInterpolation.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\IfBranch.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CodeComment.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\FunctionInvoke.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\SequenceLiteral.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\ValueAssign.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\SymbolReference.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\VectorLiteral.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Literal.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DeclareNewVariable.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionTree.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\Extensions.vb" />
-    <Compile Include="Interpreter\Extensions.vb" />
-    <Compile Include="Interpreter\Program.vb" />
-    <Compile Include="Interpreter\RInterpreter.vb" />
-    <Compile Include="Language\Code.vb" />
-    <Compile Include="Language\TokenIcer\StringInterpolation.vb" />
-    <Compile Include="Language\TokenIcer\Token.vb" />
-    <Compile Include="Language\TokenIcer\Scanner.vb" />
-    <Compile Include="Language\TokenType.vb" />
+    <Compile Include="interpreterTest.vb" />
+    <Compile Include="tokenlicerTest.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -112,14 +86,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Interpreter\ExecuteEngine\Expression.vb" />
-    <Compile Include="Runtime\Components\RMethodInfo.vb" />
-    <Compile Include="Runtime\Core.vb" />
-    <Compile Include="Runtime\Components\RType.vb" />
-    <Compile Include="Runtime\Extensions.vb" />
-    <Compile Include="Runtime\Environment.vb" />
-    <Compile Include="Runtime\Variable.vb" />
-    <Compile Include="Runtime\TypeCode.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -142,11 +108,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\47-dotnet_Microsoft.VisualBasic.vbproj">
-      <Project>{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}</Project>
-      <Name>+Microsoft.VisualBasic.Architecture.Framework</Name>
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\47-dotnet_Microsoft.VisualBasic.vbproj">
+      <Project>{fecce1fd-e1d4-49e3-a668-60bb5e7aed99}</Project>
+      <Name>47-dotnet_Microsoft.VisualBasic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\R.vbproj">
+      <Project>{0c2eb77c-39f2-460d-a3f8-ce905f867637}</Project>
+      <Name>R</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
