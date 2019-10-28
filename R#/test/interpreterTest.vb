@@ -35,7 +35,7 @@ return 999;
 ")
 
         Call R.Evaluate("let z = addWith(1 , [99,999,9999,99999]);")
-
+        Call R.Evaluate("print(z / 11);")
 
         Call R.PrintMemory()
 
