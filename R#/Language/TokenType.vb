@@ -23,6 +23,10 @@
         ''' </summary>
         stringInterpolation
 
+        ''' <summary>
+        ''' NULL, NA, Inf
+        ''' </summary>
+        missingLiteral
         stringLiteral
         numberLiteral
         integerLiteral

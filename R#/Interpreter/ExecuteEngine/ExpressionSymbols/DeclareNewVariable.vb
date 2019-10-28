@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
@@ -36,6 +37,10 @@ Namespace Interpreter.ExecuteEngine
                     Call code.Skip(3).DoCall(AddressOf getInitializeValue)
                 End If
             End If
+        End Sub
+
+        Sub New(code As List(Of Token))
+            Call Me.New(code.Splitbytopleveldelimiter(TokenType.operator, includeKeyword:=True))
         End Sub
 
         Friend Shared Function getNames(code As Token()) As String()

@@ -17,7 +17,7 @@ Module interpreterTest
 
     Sub declareFunctionTest()
         Dim script = "
-let user.echo as function(text as string) {
+let user.echo as function(text as string = ['world', 'R# programmer'], callerName = NULL) {
     print(`Hello ${text}!`);
 }
 "

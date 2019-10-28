@@ -54,7 +54,6 @@ Namespace Interpreter.ExecuteEngine
                         Return tokens _
                             .Skip(1) _
                             .Take(tokens.Length - 2) _
-                            .ToArray _
                             .SplitByTopLevelDelimiter(TokenType.operator) _
                             .DoCall(AddressOf ParseBinaryExpression)
                     ElseIf openSymbol = "{" Then

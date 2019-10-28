@@ -210,6 +210,8 @@ Namespace Language.TokenIcer
                     Return New Token With {.name = TokenType.identifier, .text = text}
                 Case ":>", "+", "-", "*", "=", "/", ">", "<", "~", "<=", ">=", "!", "<-", "&&", "&"
                     Return New Token With {.name = TokenType.operator, .text = text}
+                Case "NULL", "NA", "Inf"
+                    Return New Token With {.name = TokenType.missingLiteral, .text = text}
                 Case "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string", "const", "imports", "require",
                      "if", "else", "for", "loop", "while"
                     Return New Token With {.name = TokenType.keyword, .text = text}
