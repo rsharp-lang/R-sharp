@@ -4,8 +4,20 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 Module tokenlicerTest
 
     Sub Main()
+        Call declareFunctionTest()
         Call stringParser()
         Call declareTest()
+
+        Pause()
+    End Sub
+
+    Sub declareFunctionTest()
+        Dim script = "
+let echo as function(text as string) {
+    print(`Hello ${text}!`);
+}
+"
+        Dim tokens = New Scanner(script).GetTokens.ToArray
 
         Pause()
     End Sub
