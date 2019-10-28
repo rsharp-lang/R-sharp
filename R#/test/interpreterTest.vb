@@ -5,12 +5,21 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call listTest()
+
         Call declareFunctionTest()
         Call tupleTest()
 
         Call declareTest()
         Call stringInterpolateTest()
         Call branchTest()
+
+        Pause()
+    End Sub
+
+    Sub listTest()
+        Call R.Evaluate("let l = list([FALSE, TRUE, FALSE],  a = 123, b = 999, c = TRUE);")
+        Call R.Evaluate("print(l);")
 
         Pause()
     End Sub

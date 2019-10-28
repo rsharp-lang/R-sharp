@@ -12,9 +12,9 @@ Namespace Interpreter.ExecuteEngine
         ''' 可能是对tuple做赋值
         ''' 所以应该是多个变量名称
         ''' </summary>
-        Dim targetSymbols As String()
-        Dim isByRef As Boolean
-        Dim value As Expression
+        Friend targetSymbols As String()
+        Friend isByRef As Boolean
+        Friend value As Expression
 
         Sub New(tokens As List(Of Token()))
             targetSymbols = DeclareNewVariable.getNames(tokens(Scan0))
@@ -33,6 +33,14 @@ Namespace Interpreter.ExecuteEngine
             End If
 
             Return value
+        End Function
+
+        Public Overrides Function ToString() As String
+            If targetSymbols.Length = 1 Then
+                Return $"{targetSymbols(0)} <- {value.ToString}"
+            Else
+                Return $"[{targetSymbols.JoinBy(", ")}] <- {value.ToString}"
+            End If
         End Function
 
         Private Sub assignTuples(envir As Environment, value As Object)

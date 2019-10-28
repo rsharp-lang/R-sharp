@@ -1,6 +1,7 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 
 Namespace Runtime
 
@@ -103,6 +104,13 @@ Namespace Runtime
             Else
                 Return Nothing
             End If
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function Evaluate(exec As Expression()) As Object()
+            Return exec _
+                .Select(Function(a) a.Evaluate(Me)) _
+                .ToArray
         End Function
 
         ''' <summary>
