@@ -35,6 +35,12 @@ Namespace Interpreter.ExecuteEngine
                         Case "*" : Return Runtime.Core.Multiply(Of Long, Long, Long)(a, b).ToArray
                         Case "/" : Return Runtime.Core.Divide(Of Long, Long, Double)(a, b).ToArray
                         Case "^" : Return Runtime.Core.Power(Of Long, Long, Double)(a, b).ToArray
+                        Case ">" : Return Runtime.Core.BinaryCoreInternal(Of Long, Long, Boolean)(a, b, Function(x, y) x > y).ToArray
+                        Case "<" : Return Runtime.Core.BinaryCoreInternal(Of Long, Long, Boolean)(a, b, Function(x, y) x < y).ToArray
+                        Case "!=" : Return Runtime.Core.BinaryCoreInternal(Of Long, Long, Boolean)(a, b, Function(x, y) x <> y).ToArray
+                        Case "==" : Return Runtime.Core.BinaryCoreInternal(Of Long, Long, Boolean)(a, b, Function(x, y) x = y).ToArray
+                        Case ">=" : Return Runtime.Core.BinaryCoreInternal(Of Long, Long, Boolean)(a, b, Function(x, y) x >= y).ToArray
+                        Case "<=" : Return Runtime.Core.BinaryCoreInternal(Of Long, Long, Boolean)(a, b, Function(x, y) x <= y).ToArray
                     End Select
                 ElseIf tb Is GetType(Double) OrElse tb Is GetType(Double()) Then
                     Select Case [operator]

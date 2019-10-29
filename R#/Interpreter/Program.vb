@@ -30,7 +30,8 @@ Namespace Interpreter
                     ' return keyword will break the function
                     Exit For
                 ElseIf last.GetType Is GetType(IfBranch.IfPromise) Then
-                    Call envir.ifPromise.Add(last)
+                    envir.ifPromise.Add(last)
+                    last = DirectCast(last, IfBranch.IfPromise).Value
                 End If
             Next
 

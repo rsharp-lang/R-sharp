@@ -157,10 +157,10 @@ return 999;
 
     Sub branchTest()
         Call R.Evaluate("let x = 99;")
-        Call R.Evaluate("x <- if (x > 10) {
-TRUE;
+        Call R.Evaluate("x <- if (x > 100) {
+print(TRUE);
 } else {
-FALSE;
+print( 'This is false result');
 }
 
 print(x);

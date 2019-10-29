@@ -25,6 +25,10 @@ Namespace Interpreter.ExecuteEngine
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim value As Object = Me.value.Evaluate(envir)
 
+            If value.GetType Is GetType(IfBranch.IfPromise) Then
+                Return value
+            End If
+
             If targetSymbols.Length = 1 Then
                 Call assignSymbol(envir(targetSymbols(Scan0)), value)
             Else
