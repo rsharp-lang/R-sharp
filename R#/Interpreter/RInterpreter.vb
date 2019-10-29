@@ -104,17 +104,12 @@ Namespace Interpreter
                 .JoinBy(" -> ")
             Dim i As i32 = 1
             Dim backup = Console.ForegroundColor
-            Dim msgText$
-
-            msgText = $" Error in {execRoutine}"
 
             Console.ForegroundColor = ConsoleColor.Red
-            Console.WriteLine(msgText & New String(" "c, Console.WindowWidth - msgText.Length - 1))
+            Console.WriteLine($" Error in {execRoutine}")
 
             For Each msg As String In message
-                msgText = $"  {++i}. {msg}"
-
-                Console.WriteLine(msgText & New String(" "c, Console.WindowWidth - msgText.Length - 1))
+                Console.WriteLine($"  {++i}. {msg}")
             Next
 
             Console.ForegroundColor = backup

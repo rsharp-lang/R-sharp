@@ -23,6 +23,12 @@ Namespace Interpreter.ExecuteEngine
             End Sub
 
             Public Function DoValueAssign(envir As Environment) As Object
+                ' 没有变量需要进行closure的返回值设置
+                ' 则跳过
+                If assignTo Is Nothing Then
+                    Return Value
+                End If
+
                 Select Case assignTo.GetType
                     Case GetType(ValueAssign)
                         Return DirectCast(assignTo, ValueAssign).DoValueAssign(envir, Value)

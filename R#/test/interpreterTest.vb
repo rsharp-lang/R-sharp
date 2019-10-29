@@ -5,8 +5,9 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
-        Call branchTest()
         Call exceptionHandler()
+
+        Call branchTest()
         Call forLoopTest()
 
         Call logicalTest()
@@ -76,8 +77,13 @@ let tryStop as function(message = 'default exception message') {
     let internalCalls as function() {
         let anotherInternalCalls as function() {
 
-            for(i in 1) {
-                stop(message);
+            for(i in [1,2,5,9,9,6]) {
+
+                if (i > 8) {
+                    stop(message);
+                } else {
+                       print(`value of i=${  i}...`);
+                }
             }
 
         }
