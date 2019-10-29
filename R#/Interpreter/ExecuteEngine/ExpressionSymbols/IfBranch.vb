@@ -15,11 +15,21 @@ Namespace Interpreter.ExecuteEngine
 
             Public ReadOnly Property Result As Boolean
             Public ReadOnly Property Value As Object
+            Public Property assignTo As Expression
 
             Sub New(value As Object, result As Boolean)
                 Me.Value = value
                 Me.Result = result
             End Sub
+
+            Public Function DoValueAssign(envir As Environment) As Object
+                Select Case assignTo.GetType
+                    Case GetType(ValueAssign)
+                        Return DirectCast(assignTo, ValueAssign).DoValueAssign(envir, Value)
+                    Case Else
+                        Throw New NotImplementedException
+                End Select
+            End Function
         End Class
 
         Sub New(tokens As IEnumerable(Of Token))

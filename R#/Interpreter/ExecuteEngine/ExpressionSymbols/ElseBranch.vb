@@ -29,11 +29,19 @@ Namespace Interpreter.ExecuteEngine
             If envir.ifPromise = 0 Then
                 Throw New SyntaxErrorException
             Else
+                Dim last As IfBranch.IfPromise
+
                 If envir.ifPromise.Last.Result = True Then
-                    Return envir.ifPromise.Pop
+                    last = envir.ifPromise.Pop
                 Else
-                    Return New IfBranch.IfPromise(closure.Invoke(envir, {}), False)
+                    last = New IfBranch.IfPromise(closure.Invoke(envir, {}), False) With {
+                        .assignTo = envir.ifPromise.Last.assignTo
+                    }
                 End If
+
+                Call last.DoValueAssign(envir)
+
+                Return last
             End If
         End Function
     End Class

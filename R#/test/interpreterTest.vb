@@ -156,14 +156,22 @@ return 999;
     End Sub
 
     Sub branchTest()
-        Call R.Evaluate("let x = 99;")
-        Call R.Evaluate("x <- if (x > 100) {
-print(TRUE);
+        Call R.Evaluate("
+
+let x = 99;
+
+print(`value of the x='${x}'`);
+
+x <- if (x > 100) {
+
+
+[TRUE, FALSE, TRUE];
+
 } else {
 print( 'This is false result');
 }
 
-print(x);
+print(`value of the x='${x}'`);
 ")
         Pause()
     End Sub

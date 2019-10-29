@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.Linq
+﻿Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 
@@ -22,10 +23,14 @@ Namespace Interpreter.ExecuteEngine
             value = tokens.Skip(2).AsList.DoCall(AddressOf Expression.ParseExpression)
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim value As Object = Me.value.Evaluate(envir)
+            Return DoValueAssign(envir, value.Evaluate(envir))
+        End Function
 
+        Public Function DoValueAssign(envir As Environment, value As Object) As Object
             If value.GetType Is GetType(IfBranch.IfPromise) Then
+                DirectCast(value, IfBranch.IfPromise).assignTo = Me
                 Return value
             End If
 
