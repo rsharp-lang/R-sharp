@@ -5,6 +5,7 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call logicalTest()
         Call boolTest()
         Call exceptionHandler()
 
@@ -16,6 +17,15 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
         Call branchTest()
+
+        Pause()
+    End Sub
+
+    Sub logicalTest()
+        Call R.Evaluate("print('a' & 'bc')")
+        Call R.Evaluate("print(FALSE && [FALSE, TRUE, TRUE, FALSE])")
+        Call R.Evaluate("print(FALSE || [FALSE, TRUE, TRUE, FALSE])")
+        Call R.PrintMemory()
 
         Pause()
     End Sub

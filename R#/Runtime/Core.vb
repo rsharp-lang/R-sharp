@@ -47,6 +47,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 
@@ -77,6 +78,37 @@ Namespace Runtime
                 enumerable = GetType(IEnumerable(Of T))
             End Sub
         End Class
+
+        ReadOnly numericTypes As Index(Of Type) = {GetType(Integer), GetType(Long), GetType(Double), GetType(Single)}
+
+        Public Function asLogical(x As Object) As Boolean()
+            If x Is Nothing Then
+                Return {False}
+            End If
+
+            Dim vector As Array = Runtime.asVector(Of Object)(x)
+            Dim type As Type = vector.GetValue(Scan0).GetType
+
+            If type Is GetType(Boolean) Then
+                Return vector.AsObjectEnumerator _
+                    .Select(Function(b) DirectCast(b, Boolean)) _
+                    .ToArray
+            ElseIf type Like numericTypes Then
+                Return vector.AsObjectEnumerator _
+                    .Select(Function(num) CBool(num <> 0)) _
+                    .ToArray
+            ElseIf type Is GetType(String) Then
+                Return vector.AsObjectEnumerator _
+                    .Select(Function(o)
+                                Return Not DirectCast(o, String).StringEmpty
+                            End Function) _
+                    .ToArray
+            Else
+                Return vector.AsObjectEnumerator _
+                    .Select(Function(o) Not o Is Nothing) _
+                    .ToArray
+            End If
+        End Function
 
         ''' <summary>
         ''' The ``In`` operator

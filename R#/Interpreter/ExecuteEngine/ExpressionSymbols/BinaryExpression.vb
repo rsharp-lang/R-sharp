@@ -51,6 +51,25 @@ Namespace Interpreter.ExecuteEngine
                 Else
                     Throw New InvalidExpressionException
                 End If
+            Else
+
+                If [operator] = "||" OrElse [operator] = "&&" Then
+                    Dim op As Func(Of Object, Object, Object)
+
+                    If [operator] = "||" Then
+                        op = Function(x, y) x Or y
+                    Else
+                        op = Function(x, y) x And y
+                    End If
+
+                    Return Runtime.Core _
+                        .BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
+                            x:=Core.asLogical(a),
+                            y:=Core.asLogical(b),
+                            [do]:=op
+                        ).ToArray
+                End If
+
             End If
 
             Throw New NotImplementedException
