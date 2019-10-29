@@ -5,11 +5,11 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call exceptionHandler()
         Call forLoopTest()
 
         Call logicalTest()
         Call boolTest()
-        Call exceptionHandler()
 
         Call listTest()
 

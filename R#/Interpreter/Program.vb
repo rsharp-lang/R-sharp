@@ -20,6 +20,7 @@ Namespace Interpreter
                 If last.GetType Is GetType(Message) Then
                     If DirectCast(last, Message).MessageLevel = MSG_TYPES.ERR Then
                         ' how to throw error?
+                        Return last
                     ElseIf DirectCast(last, Message).MessageLevel = MSG_TYPES.DEBUG Then
                     ElseIf DirectCast(last, Message).MessageLevel = MSG_TYPES.WRN Then
                     Else

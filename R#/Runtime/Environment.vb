@@ -71,6 +71,7 @@ Namespace Runtime
             types = New Dictionary(Of String, RType)
             parent = Nothing
             GlobalEnvironment = Me
+            stackTag = "<globalEnvironment>"
         End Sub
 
         Sub New(parent As Environment, stackTag$)

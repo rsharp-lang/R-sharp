@@ -1,4 +1,5 @@
-﻿Imports SMRUCC.Rsharp.Language
+﻿Imports Microsoft.VisualBasic.Scripting.TokenIcer
+Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 
@@ -10,6 +11,7 @@ Namespace Interpreter.ExecuteEngine
 
         Dim funcName As String
         Dim parameters As Expression()
+        Dim span As CodeSpan
 
         Sub New(tokens As Token())
             Dim params = tokens _
@@ -18,6 +20,7 @@ Namespace Interpreter.ExecuteEngine
                 .ToArray
 
             funcName = tokens(Scan0).text
+            span = tokens(Scan0).span
             parameters = params _
                 .SplitByTopLevelDelimiter(TokenType.comma) _
                 .Where(Function(t) Not t.isComma) _
