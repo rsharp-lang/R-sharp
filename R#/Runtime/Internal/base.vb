@@ -1,9 +1,29 @@
-﻿Namespace Runtime.Internal
+﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports Microsoft.VisualBasic.Language
+
+Namespace Runtime.Internal
 
     Public Module base
 
-        Public Function [stop](message As String) As Object
+        Public Function [stop](message$(), envir As Environment) As Object
+            Dim frames As New List(Of StackFrame)
+            Dim parent As Environment = envir
 
+            Do While Not parent Is Nothing
+                frames += New StackFrame With {
+                    .Method = New Method With {
+                        .Method = parent.stackTag
+                    }
+                }
+                parent = parent.parent
+            Loop
+
+            Return New Message With {
+                .Message = message,
+                .MessageLevel = MSG_TYPES.ERR,
+                .StackTrace = frames
+            }
         End Function
 
         Public Function print(x As Object) As Object

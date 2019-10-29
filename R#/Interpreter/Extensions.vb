@@ -42,7 +42,10 @@ Namespace Interpreter
                 Else
                     ' have some bugs about
                     ' handles closure
-                    Dim parts = block.SplitByTopLevelDelimiter(TokenType.close,, "}").Split(2)
+                    Dim parts() = block _
+                        .Where(Function(t) Not t.name = TokenType.comment) _
+                        .SplitByTopLevelDelimiter(TokenType.close,, "}") _
+                        .Split(2)
                     Dim expr As Expression
 
                     For Each joinBlock In parts

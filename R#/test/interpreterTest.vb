@@ -22,11 +22,21 @@ Module interpreterTest
 
     Sub exceptionHandler()
         Call R.Evaluate("
+
 let tryStop as function(message = 'default exception message') {
-    stop(message);
+    let internalCalls as function() {
+        let anotherInternalCalls as function() {
+            stop(message);
+        }
+
+        anotherInternalCalls();
+    }
+    
+    internalCalls();
 } 
 
-tryStop();
+# tryStop();
+tryStop(['A','B','C']);
 ")
 
         Pause()
