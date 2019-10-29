@@ -77,9 +77,9 @@ let tryStop as function(message = 'default exception message') {
     let internalCalls as function() {
         let anotherInternalCalls as function() {
 
-            for(i in [1,2,5,9,9,6]) {
+            for(i in [110,20,50,11,9,6]) {
 
-                if (i > 8) {
+                if (i <= 10) {
                     stop(message);
                 } else {
                        print(`value of i=${  i}...`);
