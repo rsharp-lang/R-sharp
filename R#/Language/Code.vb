@@ -12,10 +12,21 @@ Namespace Language
         End Function
 
         <Extension>
-        Friend Function SplitByTopLevelDelimiter(tokens As IEnumerable(Of Token), delimiter As TokenType, Optional includeKeyword As Boolean = False) As List(Of Token())
+        Friend Function SplitByTopLevelDelimiter(tokens As IEnumerable(Of Token), delimiter As TokenType,
+                                                 Optional includeKeyword As Boolean = False,
+                                                 Optional tokenText$ = Nothing) As List(Of Token())
             Dim blocks As New List(Of Token())
             Dim buf As New List(Of Token)
             Dim stack As New Stack(Of Token)
+            Dim isDelimiter As Func(Of Token, Boolean)
+
+            If tokenText Is Nothing Then
+                isDelimiter = Function(t) t.name = delimiter
+            Else
+                isDelimiter = Function(t)
+                                  Return t.name = delimiter AndAlso t.text = tokenText
+                              End Function
+            End If
 
             ' 使用最顶层的comma进行分割
             For Each t As Token In tokens
@@ -27,7 +38,7 @@ Namespace Language
                     stack.Pop()
                 End If
 
-                If t.name = delimiter OrElse (includeKeyword AndAlso t.name = TokenType.keyword) Then
+                If isDelimiter(t) OrElse (includeKeyword AndAlso t.name = TokenType.keyword) Then
                     If stack.Count = 0 Then
                         ' 这个是最顶层的分割
                         If buf > 0 Then

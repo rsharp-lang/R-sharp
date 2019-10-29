@@ -1,4 +1,5 @@
-﻿Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter
@@ -16,8 +17,16 @@ Namespace Interpreter
             For Each expression As Expression In execQueue
                 last = expression.Evaluate(envir)
 
-                ' return keyword will break the function
-                If TypeOf expression Is ReturnValue Then
+                If last.GetType Is GetType(Message) Then
+                    If DirectCast(last, Message).MessageLevel = MSG_TYPES.ERR Then
+                        ' how to throw error?
+                    ElseIf DirectCast(last, Message).MessageLevel = MSG_TYPES.DEBUG Then
+                    ElseIf DirectCast(last, Message).MessageLevel = MSG_TYPES.WRN Then
+                    Else
+
+                    End If
+                ElseIf TypeOf expression Is ReturnValue Then
+                    ' return keyword will break the function
                     Exit For
                 End If
             Next

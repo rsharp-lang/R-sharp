@@ -86,6 +86,8 @@ Namespace Interpreter.ExecuteEngine
                     End If
                 Case "print"
                     Return Internal.print(paramVals(Scan0))
+                Case "stop"
+                    Return Internal.stop(paramVals(Scan0), envir)
             End Select
 
             Throw New NotImplementedException

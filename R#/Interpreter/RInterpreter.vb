@@ -15,6 +15,7 @@ Namespace Interpreter
         ''' Global runtime environment.(全局环境)
         ''' </summary>
         Public ReadOnly Property globalEnvir As New Environment
+        Public ReadOnly Property warnings As New List(Of Message)
 
         Default Public ReadOnly Property GetValue(name As String) As Object
             Get

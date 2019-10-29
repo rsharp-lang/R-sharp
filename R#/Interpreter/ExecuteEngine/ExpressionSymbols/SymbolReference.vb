@@ -16,5 +16,9 @@ Namespace Interpreter.ExecuteEngine
         Public Overrides Function Evaluate(envir As Environment) As Object
             Return envir(symbol).value
         End Function
+
+        Public Overrides Function ToString() As String
+            Return $"&{symbol}"
+        End Function
     End Class
 End Namespace

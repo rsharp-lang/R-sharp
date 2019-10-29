@@ -22,6 +22,7 @@ Namespace Runtime
         Public ReadOnly Property stackTag As String
         Public ReadOnly Property variables As Dictionary(Of Variable)
         Public ReadOnly Property types As Dictionary(Of String, RType)
+        Public ReadOnly Property GlobalEnvironment As Environment
 
         ''' <summary>
         ''' 当前的环境是否为最顶层的全局环境？
@@ -31,16 +32,6 @@ Namespace Runtime
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
                 Return parent Is Nothing
-            End Get
-        End Property
-
-        Public ReadOnly Property GlobalEnvironment As Environment
-            Get
-                If isGlobal Then
-                    Return Me
-                Else
-                    Return parent.GlobalEnvironment
-                End If
             End Get
         End Property
 
@@ -78,6 +69,8 @@ Namespace Runtime
         Sub New()
             variables = New Dictionary(Of Variable)
             types = New Dictionary(Of String, RType)
+            parent = Nothing
+            GlobalEnvironment = Me
         End Sub
 
         Sub New(parent As Environment, stackTag$)
@@ -85,6 +78,7 @@ Namespace Runtime
 
             Me.parent = parent
             Me.stackTag = stackTag
+            Me.GlobalEnvironment = parent.GlobalEnvironment
         End Sub
 
         ''' <summary>
