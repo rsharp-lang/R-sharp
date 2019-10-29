@@ -113,6 +113,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Interpreter\ExecuteEngine\Expression.vb" />
+    <Compile Include="Runtime\Components\Message.vb" />
     <Compile Include="Runtime\Components\RMethodInfo.vb" />
     <Compile Include="Runtime\Core.vb" />
     <Compile Include="Runtime\Components\RType.vb" />
