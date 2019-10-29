@@ -46,7 +46,7 @@ Namespace Interpreter.ExecuteEngine
                         .GetExpressions _
                         .ToArray
                 },
-                .funcName = "for",
+                .funcName = "forloop_internal",
                 .params = {}
             }
         End Sub
@@ -75,7 +75,7 @@ Namespace Interpreter.ExecuteEngine
                     names:=variables,
                     value:=value,
                     type:=TypeCodes.generic,
-                    envir:=New Environment(envir, $"for<{++i}>")
+                    envir:=New Environment(envir, $"for__[{++i}]")
                 )
 
                 Yield body.Invoke(closure, {})
