@@ -71,6 +71,7 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         ReadOnly operatorPriority As String() = {"^", "*/", "+-"}
+        ReadOnly comparisonOperators As String() = {"<", ">", "<=", ">=", "==", "!=", "in", "like"}
         ReadOnly logicalOperators As String() = {"&&", "||", "!"}
 
         <Extension>
@@ -92,6 +93,9 @@ Namespace Interpreter.ExecuteEngine
 
             ' 然后处理字符串操作符
             Call buf.processOperators(oplist, {"&"}, test:=Function(op, o) op = o)
+
+            ' 之后处理比较操作符
+            Call buf.processOperators(oplist, comparisonOperators, test:=Function(op, o) op = o)
 
             ' 最后处理逻辑操作符
             Call buf.processOperators(oplist, logicalOperators, test:=Function(op, o) op = o)
