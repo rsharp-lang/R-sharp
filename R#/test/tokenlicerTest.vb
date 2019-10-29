@@ -4,9 +4,18 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 Module tokenlicerTest
 
     Sub Main()
+        Call operatorTest()
         Call declareFunctionTest()
         Call stringParser()
         Call declareTest()
+
+        Pause()
+    End Sub
+
+    Sub operatorTest()
+        Dim script = "g <-! ((a + b %6^2) >= 33 ) && (FASLE || true);"
+
+        Dim tokens = New Scanner(script).GetTokens.ToArray
 
         Pause()
     End Sub

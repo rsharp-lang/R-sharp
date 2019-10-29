@@ -113,6 +113,21 @@ Namespace Language.TokenIcer
         ReadOnly open As Index(Of Char) = {"[", "{", "("}
         ReadOnly close As Index(Of Char) = {"]", "}", ")"}
 
+        ''' <summary>
+        ''' 这里的操作符都是需要多个字符构成的，例如
+        ''' 
+        ''' + &lt;- 
+        ''' + &lt;=
+        ''' + &lt;&lt;
+        ''' + :>
+        ''' + =>
+        ''' + &amp;&amp;
+        ''' + ||
+        ''' </summary>
+        ReadOnly longOperatorHead As Index(Of Char) = {"<"c, ">"c, "&"c, "|"c, ":"c}
+        ReadOnly longOperatorTail As Index(Of Char) = {"<"c, "="c, "-"c, "&"c, "|"c, ">"c}
+        ReadOnly longOperators As Index(Of Char) = {"<=", "<-", "&&", "||", ":>", "<<", "=>"}
+
         Private Function walkChar(c As Char) As Token
             If c = ASCII.LF Then
                 lineNumber += 1
@@ -157,6 +172,10 @@ Namespace Language.TokenIcer
                 escape.string = True
                 escape.stringEscape = c
                 buffer += c
+
+            ElseIf c Like longOperatorHead Then
+                Return populateToken(bufferNext:=c)
+
             ElseIf c Like open Then
                 Return New Token With {.name = TokenType.open, .text = c}
             ElseIf c Like close Then
@@ -187,14 +206,39 @@ Namespace Language.TokenIcer
         ''' <summary>
         ''' 这个函数的调用会将<see cref="buffer"/>清空
         ''' </summary>
+        ''' <param name="bufferNext">
+        ''' 这个参数是为了诸如 || 或者 &lt;- 此类需要两个字符构成的操作符的解析而设定的
+        ''' 当这个参数不是空的时候，会在清空buffer之后将这个字符添加进入buffer，解决双字符的操作符的解析的问题
+        ''' </param>
         ''' <returns></returns>
-        Private Function populateToken() As Token
+        Private Function populateToken(Optional bufferNext As Char? = Nothing) As Token
             Dim text As String
 
             If buffer = 0 Then
                 Return Nothing
             Else
-                text = buffer.PopAll.CharString
+                If Not bufferNext Is Nothing Then
+                    If buffer = 1 Then
+                        Dim c As Char = buffer(Scan0)
+                        Dim t As Char = bufferNext
+
+                        text = c & t
+
+                        If text Like longOperators Then
+                            buffer *= 0
+
+                            Return New Token With {
+                                .name = TokenType.operator,
+                                .text = text
+                            }
+                        End If
+                    End If
+
+                    text = buffer.PopAll.CharString
+                    buffer += bufferNext.Value
+                Else
+                    text = buffer.PopAll.CharString
+                End If
             End If
 
             If text.Trim(" "c, ASCII.TAB) = "" OrElse text = vbCr OrElse text = vbLf Then
@@ -208,11 +252,12 @@ Namespace Language.TokenIcer
             Select Case text
                 Case RInterpreter.LastVariableName
                     Return New Token With {.name = TokenType.identifier, .text = text}
-                Case ":>", "+", "-", "*", "=", "/", ">", "<", "~", "<=", ">=", "!", "<-", "&&", "&"
+                Case ":>", "+", "-", "*", "=", "/", ">", "<", "~", "<=", ">=", "!", "<-", "&&", "&", "||"
                     Return New Token With {.name = TokenType.operator, .text = text}
                 Case "NULL", "NA", "Inf"
                     Return New Token With {.name = TokenType.missingLiteral, .text = text}
-                Case "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string", "const", "imports", "require",
+                Case "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string",
+                     "const", "imports", "require",
                      "if", "else", "for", "loop", "while"
                     Return New Token With {.name = TokenType.keyword, .text = text}
                 Case "true", "false", "yes", "no", "T", "F", "TRUE", "FALSE"
