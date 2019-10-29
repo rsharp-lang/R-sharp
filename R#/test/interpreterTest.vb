@@ -5,7 +5,7 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
-
+        Call boolTest()
         Call exceptionHandler()
 
         Call listTest()
@@ -16,6 +16,19 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
         Call branchTest()
+
+        Pause()
+    End Sub
+
+    Sub boolTest()
+        Call R.Evaluate("
+let b as boolean = [✔, false, false, ✔];
+
+print(b);
+print(✔);
+print(true);
+")
+        Call R.PrintMemory()
 
         Pause()
     End Sub
