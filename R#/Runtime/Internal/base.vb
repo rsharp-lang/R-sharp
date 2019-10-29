@@ -2,6 +2,10 @@
 
     Public Module base
 
+        Public Function [stop](message As String) As Object
+
+        End Function
+
         Public Function print(x As Object) As Object
             Call base.printInternal(x, "")
             Return x
@@ -20,8 +24,9 @@
 
             If x.GetType.IsInheritsFrom(GetType(Array)) Then
                 Dim xVec As Array = DirectCast(x, Array)
+                Dim stringVec = From element As Object In xVec.AsQueryable Select toString(element)
 
-                Call Console.WriteLine($"[{xVec.Length}] " & (From element As Object In xVec.AsQueryable Select toString(element)).JoinBy(vbTab))
+                Call Console.WriteLine($"[{xVec.Length}] " & stringVec.JoinBy(vbTab))
             ElseIf x.GetType Is GetType(Dictionary(Of String, Object)) Then
                 For Each slot In DirectCast(x, Dictionary(Of String, Object))
                     Dim key$ = slot.Key

@@ -5,6 +5,9 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+
+        Call exceptionHandler()
+
         Call listTest()
 
         Call declareFunctionTest()
@@ -13,6 +16,18 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
         Call branchTest()
+
+        Pause()
+    End Sub
+
+    Sub exceptionHandler()
+        Call R.Evaluate("
+let tryStop as function(message = 'default exception message') {
+    stop(message);
+} 
+
+tryStop();
+")
 
         Pause()
     End Sub
