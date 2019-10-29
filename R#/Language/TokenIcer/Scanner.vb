@@ -217,6 +217,8 @@ Namespace Language.TokenIcer
                     Return New Token With {.name = TokenType.keyword, .text = text}
                 Case "true", "false", "yes", "no", "T", "F", "TRUE", "FALSE"
                     Return New Token With {.name = TokenType.booleanLiteral, .text = text}
+                Case "✔"
+                    Return New Token With {.name = TokenType.booleanLiteral, .text = "true"}
                 Case Else
                     If text.IsPattern("\d+") Then
                         Return New Token With {.name = TokenType.integerLiteral, .text = text}
