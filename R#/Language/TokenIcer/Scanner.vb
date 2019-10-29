@@ -123,10 +123,10 @@ Namespace Language.TokenIcer
         ''' + =>
         ''' + &amp;&amp;
         ''' + ||
+        ''' + ==
         ''' </summary>
-        ReadOnly longOperatorHead As Index(Of Char) = {"<"c, ">"c, "&"c, "|"c, ":"c}
-        ReadOnly longOperatorTail As Index(Of Char) = {"<"c, "="c, "-"c, "&"c, "|"c, ">"c}
-        ReadOnly longOperators As Index(Of Char) = {"<=", "<-", "&&", "||", ":>", "<<", "=>"}
+        ReadOnly longOperatorParts As Index(Of Char) = {"<"c, ">"c, "&"c, "|"c, ":"c, "="c, "-"c, "+"c}
+        ReadOnly longOperators As Index(Of Char) = {"<=", "<-", "&&", "||", ":>", "<<", "=>", ">=", "==", "++", "--"}
 
         Private Function walkChar(c As Char) As Token
             If c = ASCII.LF Then
@@ -173,7 +173,7 @@ Namespace Language.TokenIcer
                 escape.stringEscape = c
                 buffer += c
 
-            ElseIf c Like longOperatorHead Then
+            ElseIf c Like longOperatorParts Then
                 Return populateToken(bufferNext:=c)
 
             ElseIf c Like open Then
@@ -186,7 +186,7 @@ Namespace Language.TokenIcer
                 Return New Token With {.name = TokenType.terminator, .text = ";"}
             ElseIf c = ":"c Then
                 Return New Token With {.name = TokenType.sequence, .text = ":"}
-            ElseIf c = "+"c OrElse c = "*"c OrElse c = "/"c OrElse c = "%"c OrElse c = "^"c Then
+            ElseIf c = "+"c OrElse c = "*"c OrElse c = "/"c OrElse c = "%"c OrElse c = "^"c OrElse c = "!"c Then
                 Return New Token With {.name = TokenType.operator, .text = c}
             ElseIf c Like delimiter Then
                 ' token delimiter
@@ -215,6 +215,10 @@ Namespace Language.TokenIcer
             Dim text As String
 
             If buffer = 0 Then
+                If Not bufferNext Is Nothing Then
+                    Call buffer.Add(bufferNext)
+                End If
+
                 Return Nothing
             Else
                 If Not bufferNext Is Nothing Then
@@ -231,6 +235,8 @@ Namespace Language.TokenIcer
                                 .name = TokenType.operator,
                                 .text = text
                             }
+                        Else
+
                         End If
                     End If
 
