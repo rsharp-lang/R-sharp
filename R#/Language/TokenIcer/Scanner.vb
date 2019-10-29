@@ -210,6 +210,8 @@ Namespace Language.TokenIcer
                     Return New Token With {.name = TokenType.identifier, .text = text}
                 Case ":>", "+", "-", "*", "=", "/", ">", "<", "~", "<=", ">=", "!", "<-", "&&", "&"
                     Return New Token With {.name = TokenType.operator, .text = text}
+                Case "NULL", "NA", "Inf"
+                    Return New Token With {.name = TokenType.missingLiteral, .text = text}
                 Case "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string", "const", "imports", "require",
                      "if", "else", "for", "loop", "while"
                     Return New Token With {.name = TokenType.keyword, .text = text}
@@ -220,7 +222,7 @@ Namespace Language.TokenIcer
                         Return New Token With {.name = TokenType.integerLiteral, .text = text}
                     ElseIf text.IsNumeric Then
                         Return New Token With {.name = TokenType.numberLiteral, .text = text}
-                    ElseIf text.IsPattern("([a-z])|([a-z]([a-z0-9_\.])*)") Then
+                    ElseIf text.IsPattern("[a-z][a-z0-9_\.]*") Then
                         Return New Token With {.name = TokenType.identifier, .text = text}
                     End If
 #If DEBUG Then

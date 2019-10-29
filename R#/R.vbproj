@@ -76,6 +76,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\BinaryExpression.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\ReturnValue.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DeclareNewFunction.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\ClosureExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\StringInterpolation.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\IfBranch.vb" />
@@ -119,6 +121,7 @@
     <Compile Include="Runtime\Components\RType.vb" />
     <Compile Include="Runtime\Extensions.vb" />
     <Compile Include="Runtime\Environment.vb" />
+    <Compile Include="Runtime\Internal\base.vb" />
     <Compile Include="Runtime\Variable.vb" />
     <Compile Include="Runtime\TypeCode.vb" />
   </ItemGroup>

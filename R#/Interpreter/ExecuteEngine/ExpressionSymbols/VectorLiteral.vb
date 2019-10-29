@@ -1,8 +1,8 @@
-﻿Imports SMRUCC.Rsharp.Language
+﻿Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
-Imports Microsoft.VisualBasic.Language
-Imports Microsoft.VisualBasic.Linq
 
 Namespace Interpreter.ExecuteEngine
 
@@ -13,9 +13,9 @@ Namespace Interpreter.ExecuteEngine
         ReadOnly values As Expression()
 
         Sub New(tokens As Token())
-            Dim blocks = tokens.Skip(1) _
+            Dim blocks As List(Of Token()) = tokens _
+                .Skip(1) _
                 .Take(tokens.Length - 2) _
-                .ToArray _
                 .SplitByTopLevelDelimiter(TokenType.comma)
             Dim values As New List(Of Expression)
 

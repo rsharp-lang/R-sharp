@@ -1,6 +1,7 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 
 Namespace Runtime
 
@@ -80,6 +81,8 @@ Namespace Runtime
         End Sub
 
         Sub New(parent As Environment, stackTag$)
+            Call Me.New()
+
             Me.parent = parent
             Me.stackTag = stackTag
         End Sub
@@ -101,6 +104,13 @@ Namespace Runtime
             Else
                 Return Nothing
             End If
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function Evaluate(exec As Expression()) As Object()
+            Return exec _
+                .Select(Function(a) a.Evaluate(Me)) _
+                .ToArray
         End Function
 
         ''' <summary>
@@ -170,7 +180,7 @@ Namespace Runtime
             If isGlobal Then
                 Return $"Global({NameOf(Environment)})"
             Else
-                Return parent?.ToString & "->" & stackTag
+                Return parent?.ToString & " :> " & stackTag
             End If
         End Function
 

@@ -5,12 +5,48 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call listTest()
 
+        Call declareFunctionTest()
         Call tupleTest()
 
         Call declareTest()
         Call stringInterpolateTest()
         Call branchTest()
+
+        Pause()
+    End Sub
+
+    Sub listTest()
+        Call R.Evaluate("let l = list([FALSE, TRUE, FALSE],  a = 123, b = 999, c = TRUE, d = list(aaa = FALSE, ccc = ['a','b','c'])  );")
+        Call R.Evaluate("print(l);")
+
+        Pause()
+    End Sub
+
+    Sub declareFunctionTest()
+        Dim script = "
+let user.echo as function(text as string = ['world', 'R# programmer'], callerName = NULL) {
+    print(`Hello ${text}!`);
+}
+"
+        Call R.Evaluate("let x = [1,2,3];")
+        Call R.Evaluate(script)
+        Call R.Evaluate("user.echo();")
+        Call R.Evaluate("user.echo(`NO. ${x}`);")
+
+        Call R.Evaluate("
+let addWith as function(x, y = 1) {
+return x + y;
+return 999;
+}
+
+")
+
+        Call R.Evaluate("let z = addWith(1 , [99,999,9999,99999]);")
+        Call R.Evaluate("print(z / 11);")
+
+        Call R.PrintMemory()
 
         Pause()
     End Sub

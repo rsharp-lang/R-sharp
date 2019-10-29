@@ -15,6 +15,11 @@ Namespace Interpreter
 
             For Each expression As Expression In execQueue
                 last = expression.Evaluate(envir)
+
+                ' return keyword will break the function
+                If TypeOf expression Is ReturnValue Then
+                    Exit For
+                End If
             Next
 
             Return last

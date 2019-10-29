@@ -1,8 +1,8 @@
-﻿Imports SMRUCC.Rsharp.Language.TokenIcer
+﻿Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Language
-Imports SMRUCC.Rsharp.Language
 Imports Microsoft.VisualBasic.Linq
-Imports System.Runtime.CompilerServices
+Imports SMRUCC.Rsharp.Language
+Imports SMRUCC.Rsharp.Language.TokenIcer
 
 Namespace Interpreter.ExecuteEngine
 
@@ -54,7 +54,6 @@ Namespace Interpreter.ExecuteEngine
                         Return tokens _
                             .Skip(1) _
                             .Take(tokens.Length - 2) _
-                            .ToArray _
                             .SplitByTopLevelDelimiter(TokenType.operator) _
                             .DoCall(AddressOf ParseBinaryExpression)
                     ElseIf openSymbol = "{" Then

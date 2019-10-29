@@ -25,6 +25,17 @@ Namespace Interpreter.ExecuteEngine
                 Case TokenType.stringLiteral
                     type = TypeCodes.string
                     value = token.text
+                Case TokenType.missingLiteral
+                    type = TypeCodes.generic
+
+                    Select Case token.text
+                        Case "NULL" : value = Nothing
+                        Case "NA" : value = GetType(Void)
+                        Case "Inf" : value = Double.PositiveInfinity
+                        Case Else
+                            Throw New SyntaxErrorException
+                    End Select
+
                 Case Else
                     Throw New InvalidExpressionException(token.ToString)
             End Select
