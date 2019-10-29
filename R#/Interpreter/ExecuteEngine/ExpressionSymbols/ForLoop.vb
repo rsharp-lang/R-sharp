@@ -52,7 +52,17 @@ Namespace Interpreter.ExecuteEngine
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Return envir.DoCall(AddressOf exec).ToArray
+            Dim result As New List(Of Object)
+
+            For Each item As Object In envir.DoCall(AddressOf exec)
+                If Program.isException(item) Then
+                    Return item
+                Else
+                    result += item
+                End If
+            Next
+
+            Return result.ToArray
         End Function
 
         Private Iterator Function exec(envir As Environment) As IEnumerable(Of Object)

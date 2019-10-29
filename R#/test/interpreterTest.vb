@@ -74,7 +74,11 @@ let tryStop as function(message = 'default exception message') {
 
     let internalCalls as function() {
         let anotherInternalCalls as function() {
-            stop(message);
+
+            for(i in 1) {
+                stop(message);
+            }
+
         }
 
         anotherInternalCalls();

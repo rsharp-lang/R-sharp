@@ -34,5 +34,15 @@ Namespace Interpreter
 
             Return last
         End Function
+
+        Friend Shared Function isException(result As Object) As Boolean
+            If result Is Nothing Then
+                Return False
+            ElseIf result.GetType Is GetType(Message) Then
+                Return DirectCast(result, Message).MessageLevel = MSG_TYPES.ERR
+            Else
+                Return False
+            End If
+        End Function
     End Class
 End Namespace
