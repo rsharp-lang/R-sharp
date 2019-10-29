@@ -5,6 +5,8 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call forLoopTest()
+
         Call logicalTest()
         Call boolTest()
         Call exceptionHandler()
@@ -17,6 +19,26 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
         Call branchTest()
+
+        Pause()
+    End Sub
+
+    Sub forLoopTest()
+        Call R.Evaluate("
+
+let seq as integer = [1,2,3,4,5,6,7,8,9];
+
+seq <- (seq + 1) - 1;
+
+let vec as string = for(x in seq) {
+    print(`${x} => ${ x ^ 2}`);
+}
+
+print(`Math result: ${vec}`);
+
+")
+
+        Call R.PrintMemory()
 
         Pause()
     End Sub

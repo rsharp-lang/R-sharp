@@ -14,9 +14,12 @@ Namespace Interpreter.ExecuteEngine
             End Get
         End Property
 
-        Dim funcName$
-        Dim params As DeclareNewVariable()
-        Dim body As Program
+        Friend funcName$
+        Friend params As DeclareNewVariable()
+        Friend body As Program
+
+        Sub New()
+        End Sub
 
         Sub New(code As List(Of Token()))
             Dim [declare] = code(4)

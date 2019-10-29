@@ -44,6 +44,9 @@ Namespace Interpreter.ExecuteEngine
             Call Me.New(code.Splitbytopleveldelimiter(TokenType.operator, includeKeyword:=True))
         End Sub
 
+        Sub New()
+        End Sub
+
         Friend Shared Function getNames(code As Token()) As String()
             If code.Length > 1 Then
                 Return code.Skip(1) _
@@ -82,14 +85,16 @@ Namespace Interpreter.ExecuteEngine
             Return value
         End Function
 
-        Friend Shared Sub PushNames(names$(), value As Object, type As TypeCodes, envir As Environment)
+        Friend Shared Function PushNames(names$(), value As Object, type As TypeCodes, envir As Environment) As Environment
             If names.Length = 1 Then
                 Call envir.Push(names(Scan0), value, type)
             Else
                 ' tuple
                 Call PushTuple(names, value, type, envir)
             End If
-        End Sub
+
+            Return envir
+        End Function
 
         Private Shared Sub PushTuple(names$(), value As Object, type As TypeCodes, envir As Environment)
             If value.GetType.IsInheritsFrom(GetType(Array)) Then

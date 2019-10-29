@@ -264,7 +264,8 @@ Namespace Language.TokenIcer
                     Return New Token With {.name = TokenType.missingLiteral, .text = text}
                 Case "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string",
                      "const", "imports", "require",
-                     "if", "else", "for", "loop", "while"
+                     "if", "else", "for", "loop", "while",
+                     "in", "like", "which"
                     Return New Token With {.name = TokenType.keyword, .text = text}
                 Case "true", "false", "yes", "no", "T", "F", "TRUE", "FALSE"
                     Return New Token With {.name = TokenType.booleanLiteral, .text = text}

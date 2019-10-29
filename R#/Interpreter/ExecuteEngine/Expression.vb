@@ -46,6 +46,7 @@ Namespace Interpreter.ExecuteEngine
                         End If
                     Case "if" : Return New IfBranch(code)
                     Case "return" : Return New ReturnValue(code.Skip(1).IteratesALL)
+                    Case "for" : Return New ForLoop(code.Skip(1).IteratesALL)
                     Case Else
                         Throw New SyntaxErrorException
                 End Select

@@ -72,6 +72,13 @@ Namespace Interpreter.ExecuteEngine
             End If
         End Function
 
+        ''' <summary>
+        ''' Invoke the runtime internal functions
+        ''' </summary>
+        ''' <param name="envir"></param>
+        ''' <param name="funcName$"></param>
+        ''' <param name="paramVals"></param>
+        ''' <returns></returns>
         Private Shared Function invokeInternals(envir As Environment, funcName$, paramVals As Object()) As Object
             Select Case funcName
                 Case "length" : Return DirectCast(paramVals(Scan0), Array).Length
