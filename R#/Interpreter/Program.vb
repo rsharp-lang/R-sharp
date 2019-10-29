@@ -29,6 +29,8 @@ Namespace Interpreter
                 ElseIf TypeOf expression Is ReturnValue Then
                     ' return keyword will break the function
                     Exit For
+                ElseIf last.GetType Is GetType(IfBranch.IfPromise) Then
+                    Call envir.ifPromise.Add(last)
                 End If
             Next
 

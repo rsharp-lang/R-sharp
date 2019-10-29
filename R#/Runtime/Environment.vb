@@ -1,5 +1,6 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 
@@ -23,6 +24,8 @@ Namespace Runtime
         Public ReadOnly Property variables As Dictionary(Of Variable)
         Public ReadOnly Property types As Dictionary(Of String, RType)
         Public ReadOnly Property GlobalEnvironment As Environment
+
+        Friend ReadOnly ifPromise As New List(Of IfBranch.IfPromise)
 
         ''' <summary>
         ''' 当前的环境是否为最顶层的全局环境？

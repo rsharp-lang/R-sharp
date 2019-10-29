@@ -11,6 +11,17 @@ Namespace Interpreter.ExecuteEngine
         Dim ifTest As Expression
         Dim trueClosure As DeclareNewFunction
 
+        Friend Class IfPromise
+
+            Public ReadOnly Property Result As Boolean
+            Public ReadOnly Property Value As Object
+
+            Sub New(value As Object, result As Boolean)
+                Me.Value = value
+                Me.Result = result
+            End Sub
+        End Class
+
         Sub New(tokens As IEnumerable(Of Token))
             Dim blocks = tokens.SplitByTopLevelDelimiter(TokenType.close)
 
@@ -30,9 +41,9 @@ Namespace Interpreter.ExecuteEngine
             Dim test As Boolean = Runtime.getFirst(ifTest.Evaluate(envir))
 
             If test Then
-                Return trueClosure.Evaluate(envir)
+                Return New IfPromise(trueClosure.Invoke(envir, {}), True)
             Else
-                Return False
+                Return New IfPromise(Nothing, False)
             End If
         End Function
     End Class
