@@ -5,6 +5,7 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call branchTest()
         Call exceptionHandler()
         Call forLoopTest()
 
@@ -18,7 +19,7 @@ Module interpreterTest
 
         Call declareTest()
         Call stringInterpolateTest()
-        Call branchTest()
+
 
         Pause()
     End Sub
@@ -160,7 +161,10 @@ return 999;
 TRUE;
 } else {
 FALSE;
-}")
+}
+
+print(x);
+")
         Pause()
     End Sub
 

@@ -44,7 +44,7 @@ Namespace Interpreter.ExecuteEngine
                         Else
                             Return New DeclareNewVariable(code)
                         End If
-                    Case "if" : Return New IfBranch(code)
+                    Case "if" : Return New IfBranch(code.Skip(1).IteratesALL)
                     Case "return" : Return New ReturnValue(code.Skip(1).IteratesALL)
                     Case "for" : Return New ForLoop(code.Skip(1).IteratesALL)
                     Case Else
