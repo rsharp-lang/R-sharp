@@ -69,6 +69,9 @@ print(true);
         Call R.Evaluate("
 
 let tryStop as function(message = 'default exception message') {
+
+    print('start exception stack trace test');
+
     let internalCalls as function() {
         let anotherInternalCalls as function() {
             stop(message);
@@ -78,10 +81,12 @@ let tryStop as function(message = 'default exception message') {
     }
     
     internalCalls();
+
+    print('this message will never print on screen');
 } 
 
 # tryStop();
-tryStop(['A','B','C']);
+tryStop(['This','is','an','exception', 'test']);
 ")
 
         Pause()
