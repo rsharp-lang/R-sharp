@@ -85,15 +85,19 @@ Namespace Interpreter
         ''' <summary>
         ''' Run R# script program from text data.
         ''' </summary>
-        ''' <param name="script$"></param>
+        ''' <param name="script">The script text</param>
         ''' <returns></returns>
         ''' 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function Evaluate(script As String) As Object
+            Return RunInternal(script, "[script_text]", {})
+        End Function
+
+        Private Function RunInternal(script$, source$, arguments As NamedValue(Of Object)()) As Object
             Dim result As Object = Code.ParseScript(script).RunProgram(globalEnvir)
             Dim last As Variable = globalEnvir(lastVariableName)
 
-            If result.GetType Is GetType(Message) AndAlso DirectCast(result, Message).MessageLevel = MSG_TYPES.ERR Then
+            If Program.isException(result) Then
                 result = printErrorInternal(message:=result)
             Else
                 ' set last variable in current environment
@@ -101,6 +105,16 @@ Namespace Interpreter
             End If
 
             Return result
+        End Function
+
+        ''' <summary>
+        ''' Run R# script program from a given script file 
+        ''' </summary>
+        ''' <param name="filepath">The script file path.</param>
+        ''' <param name="arguments"></param>
+        ''' <returns></returns>
+        Public Function Source(filepath$, ParamArray arguments As NamedValue(Of Object)()) As Object
+
         End Function
 
         Private Function printErrorInternal(message As Message) As Object

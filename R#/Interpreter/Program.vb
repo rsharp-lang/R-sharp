@@ -19,7 +19,7 @@ Namespace Interpreter
             For Each expression As Expression In execQueue
                 last = expression.Evaluate(envir)
 
-                If last.GetType Is GetType(Message) Then
+                If Not last Is Nothing AndAlso last.GetType Is GetType(Message) Then
                     If DirectCast(last, Message).MessageLevel = MSG_TYPES.ERR Then
                         ' how to throw error?
                         Return last
