@@ -68,7 +68,7 @@ Namespace Runtime.Internal
                     End If
 
                     Call Console.WriteLine(key)
-                    Call base.printInternal(slot.Value, key & "$")
+                    Call base.printInternal(slot.Value, key)
                     Call Console.WriteLine()
                 Next
             Else
