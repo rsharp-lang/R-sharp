@@ -1,5 +1,6 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 
 Namespace Runtime
 
@@ -103,7 +104,7 @@ Namespace Runtime
                     Return TypeCodes.boolean
                 Case GetType(Dictionary(Of String, Object)), GetType(Dictionary(Of String, Object)())
                     Return TypeCodes.list
-                Case GetType([Delegate])
+                Case GetType(RMethodInfo), GetType(DeclareNewFunction)
                     Return TypeCodes.closure
                 Case Else
                     Return TypeCodes.generic

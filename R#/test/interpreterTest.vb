@@ -1,10 +1,14 @@
 ﻿Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Runtime
 
 Module interpreterTest
 
     Dim R As New RInterpreter
 
     Sub Main()
+
+        Call invokeTest()
+
         Call exceptionHandler()
 
         Call branchTest()
@@ -21,6 +25,15 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub invokeTest()
+        Call R.Add("x", {"hello", "world"}, TypeCodes.string)
+        Call R.Add("debug", Function(o) Internal.print(o))
+
+        Call R.Invoke("debug", R!x)
 
         Pause()
     End Sub

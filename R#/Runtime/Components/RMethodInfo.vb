@@ -22,6 +22,10 @@
 
             Return result
         End Function
+
+        Public Overrides Function ToString() As String
+            Return $"Dim {name} As {api.ToString}"
+        End Function
     End Class
 
     Public Interface RFunction
