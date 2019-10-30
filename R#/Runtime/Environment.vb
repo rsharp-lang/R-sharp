@@ -85,6 +85,12 @@ Namespace Runtime
             Me.GlobalEnvironment = parent.GlobalEnvironment
         End Sub
 
+        Public Sub Clear()
+            Call variables.Clear()
+            Call types.Clear()
+            Call ifPromise.Clear()
+        End Sub
+
         ''' <summary>
         ''' 这个函数查找失败的时候只会返回空值
         ''' </summary>
