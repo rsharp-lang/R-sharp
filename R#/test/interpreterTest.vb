@@ -5,8 +5,13 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
-        Call boolTest()
         Call exceptionHandler()
+
+        Call branchTest()
+        Call forLoopTest()
+
+        Call logicalTest()
+        Call boolTest()
 
         Call listTest()
 
@@ -15,7 +20,36 @@ Module interpreterTest
 
         Call declareTest()
         Call stringInterpolateTest()
-        Call branchTest()
+
+
+        Pause()
+    End Sub
+
+    Sub forLoopTest()
+        Call R.Evaluate("
+
+let seq as integer = [1,2,3,4,5,6,7,8,9];
+
+seq <- (seq + 1) - 1;
+
+let vec as string = for(x in seq) {
+    print(`${x} => ${ x ^ 2}`);
+}
+
+print(`Math result: ${vec}`);
+
+")
+
+        Call R.PrintMemory()
+
+        Pause()
+    End Sub
+
+    Sub logicalTest()
+        Call R.Evaluate("print('a' & 'bc')")
+        Call R.Evaluate("print(FALSE && [FALSE, TRUE, TRUE, FALSE])")
+        Call R.Evaluate("print(FALSE || [FALSE, TRUE, TRUE, FALSE])")
+        Call R.PrintMemory()
 
         Pause()
     End Sub
@@ -37,19 +71,33 @@ print(true);
         Call R.Evaluate("
 
 let tryStop as function(message = 'default exception message') {
+
+    print('start exception stack trace test');
+
     let internalCalls as function() {
         let anotherInternalCalls as function() {
-            stop(message);
+
+            for(i in [110,20,50,11,9,6]) {
+
+                if (i <= 10) {
+                    stop(message);
+                } else {
+                       print(`value of i=${  i}...`);
+                }
+            }
+
         }
 
         anotherInternalCalls();
     }
     
     internalCalls();
+
+    print('this message will never print on screen');
 } 
 
 # tryStop();
-tryStop(['A','B','C']);
+tryStop(['This','is','an','exception', 'test']);
 ")
 
         Pause()
@@ -114,12 +162,23 @@ return 999;
     End Sub
 
     Sub branchTest()
-        Call R.Evaluate("let x = 99;")
-        Call R.Evaluate("x <- if (x > 10) {
-TRUE;
+        Call R.Evaluate("
+
+let x = 99;
+
+print(`value of the x='${x}'`);
+
+x <- if (x > 100) {
+
+
+[TRUE, FALSE, TRUE];
+
 } else {
-FALSE;
-}")
+print( 'This is false result');
+}
+
+print(`value of the x='${x}'`);
+")
         Pause()
     End Sub
 

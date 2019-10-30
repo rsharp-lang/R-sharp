@@ -113,6 +113,21 @@ Namespace Language.TokenIcer
         ReadOnly open As Index(Of Char) = {"[", "{", "("}
         ReadOnly close As Index(Of Char) = {"]", "}", ")"}
 
+        ''' <summary>
+        ''' 这里的操作符都是需要多个字符构成的，例如
+        ''' 
+        ''' + &lt;- 
+        ''' + &lt;=
+        ''' + &lt;&lt;
+        ''' + :>
+        ''' + =>
+        ''' + &amp;&amp;
+        ''' + ||
+        ''' + ==
+        ''' </summary>
+        ReadOnly longOperatorParts As Index(Of Char) = {"<"c, ">"c, "&"c, "|"c, ":"c, "="c, "-"c, "+"c}
+        ReadOnly longOperators As Index(Of Char) = {"<=", "<-", "&&", "||", ":>", "<<", "=>", ">=", "==", "++", "--"}
+
         Private Function walkChar(c As Char) As Token
             If c = ASCII.LF Then
                 lineNumber += 1
@@ -157,6 +172,10 @@ Namespace Language.TokenIcer
                 escape.string = True
                 escape.stringEscape = c
                 buffer += c
+
+            ElseIf c Like longOperatorParts Then
+                Return populateToken(bufferNext:=c)
+
             ElseIf c Like open Then
                 Return New Token With {.name = TokenType.open, .text = c}
             ElseIf c Like close Then
@@ -167,7 +186,7 @@ Namespace Language.TokenIcer
                 Return New Token With {.name = TokenType.terminator, .text = ";"}
             ElseIf c = ":"c Then
                 Return New Token With {.name = TokenType.sequence, .text = ":"}
-            ElseIf c = "+"c OrElse c = "*"c OrElse c = "/"c OrElse c = "%"c OrElse c = "^"c Then
+            ElseIf c = "+"c OrElse c = "*"c OrElse c = "/"c OrElse c = "%"c OrElse c = "^"c OrElse c = "!"c Then
                 Return New Token With {.name = TokenType.operator, .text = c}
             ElseIf c Like delimiter Then
                 ' token delimiter
@@ -187,14 +206,45 @@ Namespace Language.TokenIcer
         ''' <summary>
         ''' 这个函数的调用会将<see cref="buffer"/>清空
         ''' </summary>
+        ''' <param name="bufferNext">
+        ''' 这个参数是为了诸如 || 或者 &lt;- 此类需要两个字符构成的操作符的解析而设定的
+        ''' 当这个参数不是空的时候，会在清空buffer之后将这个字符添加进入buffer，解决双字符的操作符的解析的问题
+        ''' </param>
         ''' <returns></returns>
-        Private Function populateToken() As Token
+        Private Function populateToken(Optional bufferNext As Char? = Nothing) As Token
             Dim text As String
 
             If buffer = 0 Then
+                If Not bufferNext Is Nothing Then
+                    Call buffer.Add(bufferNext)
+                End If
+
                 Return Nothing
             Else
-                text = buffer.PopAll.CharString
+                If Not bufferNext Is Nothing Then
+                    If buffer = 1 Then
+                        Dim c As Char = buffer(Scan0)
+                        Dim t As Char = bufferNext
+
+                        text = c & t
+
+                        If text Like longOperators Then
+                            buffer *= 0
+
+                            Return New Token With {
+                                .name = TokenType.operator,
+                                .text = text
+                            }
+                        Else
+
+                        End If
+                    End If
+
+                    text = buffer.PopAll.CharString
+                    buffer += bufferNext.Value
+                Else
+                    text = buffer.PopAll.CharString
+                End If
             End If
 
             If text.Trim(" "c, ASCII.TAB) = "" OrElse text = vbCr OrElse text = vbLf Then
@@ -208,12 +258,14 @@ Namespace Language.TokenIcer
             Select Case text
                 Case RInterpreter.LastVariableName
                     Return New Token With {.name = TokenType.identifier, .text = text}
-                Case ":>", "+", "-", "*", "=", "/", ">", "<", "~", "<=", ">=", "!", "<-", "&&", "&"
+                Case ":>", "+", "-", "*", "=", "/", ">", "<", "~", "<=", ">=", "!", "<-", "&&", "&", "||"
                     Return New Token With {.name = TokenType.operator, .text = text}
                 Case "NULL", "NA", "Inf"
                     Return New Token With {.name = TokenType.missingLiteral, .text = text}
-                Case "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string", "const", "imports", "require",
-                     "if", "else", "for", "loop", "while"
+                Case "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string",
+                     "const", "imports", "require",
+                     "if", "else", "for", "loop", "while",
+                     "in", "like", "which"
                     Return New Token With {.name = TokenType.keyword, .text = text}
                 Case "true", "false", "yes", "no", "T", "F", "TRUE", "FALSE"
                     Return New Token With {.name = TokenType.booleanLiteral, .text = text}

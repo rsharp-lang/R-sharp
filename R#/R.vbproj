@@ -76,6 +76,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\BinaryExpression.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\ElseBranch.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\ForLoop.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\ReturnValue.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DeclareNewFunction.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\ClosureExpression.vb" />

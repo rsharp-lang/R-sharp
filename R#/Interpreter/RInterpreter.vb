@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
@@ -86,10 +87,34 @@ Namespace Interpreter
             Dim result As Object = Code.ParseScript(script).RunProgram(globalEnvir)
             Dim last As Variable = globalEnvir(LastVariableName)
 
-            ' set last variable in current environment
-            last.value = result
+            If result.GetType Is GetType(Message) AndAlso DirectCast(result, Message).MessageLevel = MSG_TYPES.ERR Then
+                result = printErrorInternal(message:=result)
+            Else
+                ' set last variable in current environment
+                last.value = result
+            End If
 
             Return result
+        End Function
+
+        Private Function printErrorInternal(message As Message) As Object
+            Dim execRoutine$ = message.EnvironmentStack _
+                .Reverse _
+                .Select(Function(frame) frame.Method.Method) _
+                .JoinBy(" -> ")
+            Dim i As i32 = 1
+            Dim backup = Console.ForegroundColor
+
+            Console.ForegroundColor = ConsoleColor.Red
+            Console.WriteLine($" Error in {execRoutine}")
+
+            For Each msg As String In message
+                Console.WriteLine($"  {++i}. {msg}")
+            Next
+
+            Console.ForegroundColor = backup
+
+            Return Nothing
         End Function
 
         Public Shared ReadOnly Property Rsharp As New RInterpreter

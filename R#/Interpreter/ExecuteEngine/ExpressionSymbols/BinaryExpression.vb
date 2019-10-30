@@ -35,6 +35,12 @@ Namespace Interpreter.ExecuteEngine
                         Case "*" : Return Runtime.Core.Multiply(Of Long, Long, Long)(a, b).ToArray
                         Case "/" : Return Runtime.Core.Divide(Of Long, Long, Double)(a, b).ToArray
                         Case "^" : Return Runtime.Core.Power(Of Long, Long, Double)(a, b).ToArray
+                        Case ">" : Return Runtime.Core.BinaryCoreInternal(Of Long, Long, Boolean)(a, b, Function(x, y) x > y).ToArray
+                        Case "<" : Return Runtime.Core.BinaryCoreInternal(Of Long, Long, Boolean)(a, b, Function(x, y) x < y).ToArray
+                        Case "!=" : Return Runtime.Core.BinaryCoreInternal(Of Long, Long, Boolean)(a, b, Function(x, y) x <> y).ToArray
+                        Case "==" : Return Runtime.Core.BinaryCoreInternal(Of Long, Long, Boolean)(a, b, Function(x, y) x = y).ToArray
+                        Case ">=" : Return Runtime.Core.BinaryCoreInternal(Of Long, Long, Boolean)(a, b, Function(x, y) x >= y).ToArray
+                        Case "<=" : Return Runtime.Core.BinaryCoreInternal(Of Long, Long, Boolean)(a, b, Function(x, y) x <= y).ToArray
                     End Select
                 ElseIf tb Is GetType(Double) OrElse tb Is GetType(Double()) Then
                     Select Case [operator]
@@ -51,6 +57,25 @@ Namespace Interpreter.ExecuteEngine
                 Else
                     Throw New InvalidExpressionException
                 End If
+            Else
+
+                If [operator] = "||" OrElse [operator] = "&&" Then
+                    Dim op As Func(Of Object, Object, Object)
+
+                    If [operator] = "||" Then
+                        op = Function(x, y) x Or y
+                    Else
+                        op = Function(x, y) x And y
+                    End If
+
+                    Return Runtime.Core _
+                        .BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
+                            x:=Core.asLogical(a),
+                            y:=Core.asLogical(b),
+                            [do]:=op
+                        ).ToArray
+                End If
+
             End If
 
             Throw New NotImplementedException

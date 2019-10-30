@@ -1,12 +1,13 @@
 ﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.Language
+Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 
 Namespace Runtime.Internal
 
     Public Module base
 
-        Public Function [stop](message$(), envir As Environment) As Object
+        Public Function [stop](message$(), envir As Environment) As Message
             Dim frames As New List(Of StackFrame)
             Dim parent As Environment = envir
 
@@ -22,7 +23,8 @@ Namespace Runtime.Internal
             Return New Message With {
                 .Message = message,
                 .MessageLevel = MSG_TYPES.ERR,
-                .StackTrace = frames
+                .EnvironmentStack = frames,
+                .Trace = devtools.ExceptionData.GetCurrentStackTrace
             }
         End Function
 

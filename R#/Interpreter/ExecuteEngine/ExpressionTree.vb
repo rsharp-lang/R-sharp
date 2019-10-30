@@ -70,7 +70,9 @@ Namespace Interpreter.ExecuteEngine
             Throw New NotImplementedException
         End Function
 
-        ReadOnly operatorPriority As String() = {"^", "*/", "+-", "&|", "!"}
+        ReadOnly operatorPriority As String() = {"^", "*/", "+-"}
+        ReadOnly comparisonOperators As String() = {"<", ">", "<=", ">=", "==", "!=", "in", "like"}
+        ReadOnly logicalOperators As String() = {"&&", "||", "!"}
 
         <Extension>
         Public Function ParseBinaryExpression(tokenBlocks As List(Of Token())) As Expression
@@ -86,14 +88,43 @@ Namespace Interpreter.ExecuteEngine
                 End If
             Next
 
-            ' 按照操作符的优先度进行构建
-            For Each op As String In operatorPriority
-                Dim nop As Integer = oplist.Where(Function(o) op.IndexOf(o) > -1).Count
+            ' 算数操作符以及字符串操作符按照操作符的优先度进行构建
+            Call buf.processOperators(oplist, operatorPriority, test:=Function(op, o) op.IndexOf(o) > -1)
+
+            ' 然后处理字符串操作符
+            Call buf.processOperators(oplist, {"&"}, test:=Function(op, o) op = o)
+
+            ' 之后处理比较操作符
+            Call buf.processOperators(oplist, comparisonOperators, test:=Function(op, o) op = o)
+
+            ' 最后处理逻辑操作符
+            Call buf.processOperators(oplist, logicalOperators, test:=Function(op, o) op = o)
+
+            If buf > 1 Then
+                Throw New SyntaxErrorException
+            Else
+                Return buf(Scan0)
+            End If
+        End Function
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="buf"></param>
+        ''' <param name="oplist"></param>
+        ''' <param name="operators$"></param>
+        ''' <param name="test">test(op, o)</param>
+        <Extension>
+        Private Sub processOperators(buf As List(Of [Variant](Of Expression, String)), oplist As List(Of String), operators$(), test As Func(Of String, String, Boolean))
+            For Each op As String In operators
+                Dim nop As Integer = oplist _
+                    .AsEnumerable _
+                    .Count(Function(o) test(op, o))
 
                 ' 从左往右计算
                 For i As Integer = 0 To nop - 1
                     For j As Integer = 0 To buf.Count - 1
-                        If buf(j) Like GetType(String) AndAlso op.IndexOf(buf(j).VB) > -1 Then
+                        If buf(j) Like GetType(String) AndAlso test(op, buf(j).VB) Then
                             ' j-1 and j+1
                             Dim a = buf(j - 1)
                             Dim b = buf(j + 1)
@@ -107,12 +138,6 @@ Namespace Interpreter.ExecuteEngine
                     Next
                 Next
             Next
-
-            If buf > 1 Then
-                Throw New SyntaxErrorException
-            Else
-                Return buf(Scan0)
-            End If
-        End Function
+        End Sub
     End Module
 End Namespace
