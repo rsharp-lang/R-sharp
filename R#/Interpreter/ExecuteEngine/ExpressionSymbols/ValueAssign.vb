@@ -36,7 +36,7 @@ Namespace Interpreter.ExecuteEngine
             End If
 
             If targetSymbols.Length = 1 Then
-                Call assignSymbol(envir.FindSymbol(targetSymbols(Scan0)), targetSymbols(Scan0), value)
+                Call assignSymbol(envir, targetSymbols(Scan0), value)
             Else
                 ' assign tuples
                 Call assignTuples(envir, value)
@@ -87,13 +87,7 @@ Namespace Interpreter.ExecuteEngine
             Dim target As Variable = envir.FindSymbol(symbolName)
 
             If target Is Nothing Then
-                Dim message As String() = {
-                    $"Symbol '{symbolName}' not found in environment stack: [{envir.ToString}]",
-                    "Environemnt: " & envir.ToString,
-                    "symbol: " & symbolName
-                }
-
-                Return Internal.stop(message, envir)
+                Return Message.SymbolNotFound(envir, symbolName, TypeCodes.generic)
             End If
 
             If isByRef Then

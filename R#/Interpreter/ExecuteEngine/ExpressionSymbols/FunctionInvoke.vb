@@ -98,15 +98,9 @@ Namespace Interpreter.ExecuteEngine
                     Return Internal.print(paramVals(Scan0))
                 Case "stop"
                     Return Internal.stop(paramVals(Scan0), envir)
+                Case Else
+                    Return Message.SymbolNotFound(envir, funcName, TypeCodes.closure)
             End Select
-
-            Dim exception As String() = {
-                $"Could not found any invokable symbol '{funcName}' in environment stack: [{envir.ToString}]",
-                "environment: " & envir.ToString,
-                "symbol: " & funcName
-            }
-
-            Return Internal.stop(exception, envir)
         End Function
     End Class
 End Namespace
