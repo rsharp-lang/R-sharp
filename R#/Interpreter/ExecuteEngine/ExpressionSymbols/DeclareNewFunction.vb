@@ -15,10 +15,13 @@ Namespace Interpreter.ExecuteEngine
             End Get
         End Property
 
-        Public ReadOnly Property funcName As String Implements RFunction.name
+        Public Property funcName As String Implements RFunction.name
 
-        Dim params As DeclareNewVariable()
-        Dim body As Program
+        Friend params As DeclareNewVariable()
+        Friend body As Program
+
+        Sub New()
+        End Sub
 
         Sub New(code As List(Of Token()))
             Dim [declare] = code(4)
