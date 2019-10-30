@@ -54,31 +54,31 @@ Namespace Interpreter.ExecuteEngine
             body = New ClosureExpression(tokens)
         End Sub
 
-        Public Function Invoke(envir As Environment, params As Object()) As Object Implements RFunction.Invoke
-            Dim var As DeclareNewVariable
-            Dim value As Object
+        Public Function Invoke(parent As Environment, params As Object()) As Object Implements RFunction.Invoke
+            Using envir As New Environment(parent, funcName)
+                Dim var As DeclareNewVariable
+                Dim value As Object
 
-            envir = New Environment(envir, funcName)
+                ' initialize environment
+                For i As Integer = 0 To Me.params.Length - 1
+                    var = Me.params(i)
 
-            ' initialize environment
-            For i As Integer = 0 To Me.params.Length - 1
-                var = Me.params(i)
-
-                If i >= params.Length Then
-                    ' missing, use default value
-                    If var.hasInitializeExpression Then
-                        value = var.value.Evaluate(envir)
+                    If i >= params.Length Then
+                        ' missing, use default value
+                        If var.hasInitializeExpression Then
+                            value = var.value.Evaluate(envir)
+                        Else
+                            Throw New MissingFieldException(var.names.GetJson)
+                        End If
                     Else
-                        Throw New MissingFieldException(var.names.GetJson)
+                        value = params(i)
                     End If
-                Else
-                    value = params(i)
-                End If
 
-                Call DeclareNewVariable.PushNames(var.names, value, var.type, envir)
-            Next
+                    Call DeclareNewVariable.PushNames(var.names, value, var.type, envir)
+                Next
 
-            Return body.Evaluate(envir)
+                Return body.Evaluate(envir)
+            End Using
         End Function
 
         Public Overrides Function Evaluate(envir As Environment) As Object
