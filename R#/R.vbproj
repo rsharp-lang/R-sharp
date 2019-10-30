@@ -76,13 +76,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\BinaryExpression.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\ElseBranch.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\ForLoop.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ElseBranch.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ForLoop.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\ReturnValue.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DeclareNewFunction.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\ClosureExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\StringInterpolation.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\IfBranch.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\IfBranch.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CodeComment.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\FunctionInvoke.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\SequenceLiteral.vb" />

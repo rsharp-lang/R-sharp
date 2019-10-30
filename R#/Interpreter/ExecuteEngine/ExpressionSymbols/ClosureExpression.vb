@@ -8,6 +8,10 @@ Namespace Interpreter.ExecuteEngine
     Public Class ClosureExpression : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
+            Get
+                Return TypeCodes.closure
+            End Get
+        End Property
 
         Sub New()
 
