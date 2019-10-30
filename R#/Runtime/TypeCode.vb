@@ -95,10 +95,6 @@ Namespace Runtime
         ''' </summary>
         [string]
         ''' <summary>
-        ''' <see cref="Char"/> vector
-        ''' </summary>
-        [char]
-        ''' <summary>
         ''' <see cref="Boolean"/> vector
         ''' </summary>
         [boolean]

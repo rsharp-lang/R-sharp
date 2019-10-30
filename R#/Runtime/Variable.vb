@@ -89,14 +89,14 @@ Namespace Runtime
         ''' <returns></returns>
         Public Overloads ReadOnly Property [typeof] As Type
             Get
-                If constraint <> TypeCodes.generic Then
+                If value Is Nothing Then
+                    Return GetType(Object)
+                ElseIf constraint = TypeCodes.closure Then
+                    Return value.GetType
+                ElseIf constraint <> TypeCodes.generic Then
                     Return Runtime.GetType(constraint)
                 Else
-                    If value Is Nothing Then
-                        Return GetType(Object)
-                    Else
-                        Return value.GetType
-                    End If
+                    Return value.GetType
                 End If
             End Get
         End Property

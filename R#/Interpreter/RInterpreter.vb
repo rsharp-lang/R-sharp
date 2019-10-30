@@ -1,8 +1,10 @@
 ﻿Imports System.IO
+Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Language
@@ -24,10 +26,10 @@ Namespace Interpreter
             End Get
         End Property
 
-        Public Const LastVariableName$ = "$"
+        Public Const lastVariableName$ = "$"
 
         Sub New()
-            Call globalEnvir.Push(LastVariableName, Nothing, TypeCodes.generic)
+            Call globalEnvir.Push(lastVariableName, Nothing, TypeCodes.generic)
         End Sub
 
         Public Sub PrintMemory(Optional dev As TextWriter = Nothing)
@@ -44,7 +46,7 @@ Namespace Interpreter
                         End Function) _
                 .ToArray
 
-            With dev Or Console.Out.AsDefault
+            With dev Or App.StdOut
                 Call .DoCall(Sub(device)
                                  Call table.PrintTable(
                                     dev:=device,
@@ -61,7 +63,11 @@ Namespace Interpreter
         End Sub
 
         Public Sub Add(name$, closure As [Delegate])
-            Throw New NotImplementedException
+            globalEnvir.Push(name, New RMethodInfo(name, closure), TypeCodes.closure)
+        End Sub
+
+        Public Sub Add(name$, closure As MethodInfo)
+            globalEnvir.Push(name, New RMethodInfo(name, closure), TypeCodes.closure)
         End Sub
 
         Public Function Invoke(funcName$, ParamArray args As Object()) As Object
@@ -69,11 +75,11 @@ Namespace Interpreter
 
             If symbol Is Nothing Then
                 Throw New EntryPointNotFoundException($"No object named '{funcName}' could be found in global environment!")
-            ElseIf symbol.typeCode <> TypeCodes.closure Then
+            ElseIf symbol.typeCode <> TypeCodes.closure OrElse Not symbol.typeof.ImplementInterface(GetType(RFunction)) Then
                 Throw New InvalidProgramException($"Object '{funcName}' is not a function!")
             End If
 
-            Throw New NotImplementedException
+            Return DirectCast(symbol.value, RFunction).Invoke(globalEnvir, args)
         End Function
 
         ''' <summary>
@@ -85,7 +91,7 @@ Namespace Interpreter
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function Evaluate(script As String) As Object
             Dim result As Object = Code.ParseScript(script).RunProgram(globalEnvir)
-            Dim last As Variable = globalEnvir(LastVariableName)
+            Dim last As Variable = globalEnvir(lastVariableName)
 
             If result.GetType Is GetType(Message) AndAlso DirectCast(result, Message).MessageLevel = MSG_TYPES.ERR Then
                 result = printErrorInternal(message:=result)

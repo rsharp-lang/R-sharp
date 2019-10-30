@@ -1,12 +1,14 @@
-﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+﻿Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter
 
     Public Class Program
 
-        Public Property execQueue As Expression()
+        Dim execQueue As Expression()
 
         Sub New()
         End Sub
@@ -38,6 +40,16 @@ Namespace Interpreter
             Return last
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Friend Shared Function CreateProgram(tokens As IEnumerable(Of Token)) As Program
+            Return New Program With {
+                .execQueue = tokens.ToArray _
+                    .GetExpressions _
+                    .ToArray
+            }
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Friend Shared Function isException(result As Object) As Boolean
             If result Is Nothing Then
                 Return False
