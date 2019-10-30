@@ -6,6 +6,8 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call testScript()
+
         Call symbolNotFoundTest()
         Call StackTest()
 
@@ -27,6 +29,10 @@ Module interpreterTest
 
 
         Pause()
+    End Sub
+
+    Sub testScript()
+        Call R.Evaluate("E:\GCModeller\src\R-sharp\tutorials\declare_variable.R".ReadAllText)
     End Sub
 
     Sub invokeTest()
