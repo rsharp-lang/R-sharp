@@ -32,7 +32,10 @@ Module interpreterTest
     End Sub
 
     Sub testScript()
+        Call R.Evaluate("1:2")
+        Call R.PrintMemory()
         Call R.Evaluate("E:\GCModeller\src\R-sharp\tutorials\declare_variable.R".ReadAllText)
+        Call R.PrintMemory()
     End Sub
 
     Sub invokeTest()

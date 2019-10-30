@@ -63,14 +63,17 @@ Namespace Language.TokenIcer
                              TokenType.open,
                              TokenType.close,
                              TokenType.terminator,
-                             TokenType.operator,
-                             TokenType.sequence
+                             TokenType.operator
 
-                            With populateToken()
-                                If Not .IsNothing Then
-                                    Yield .DoCall(Function(t) finalizeToken(t, start))
-                                End If
-                            End With
+                            Dim symbol = token.Value.text
+
+                            If symbol.Length = 1 AndAlso Not symbol Like longOperatorParts Then
+                                With populateToken()
+                                    If Not .IsNothing Then
+                                        Yield .DoCall(Function(t) finalizeToken(t, start))
+                                    End If
+                                End With
+                            End If
                     End Select
 
                     Yield finalizeToken(token, start)
@@ -126,7 +129,7 @@ Namespace Language.TokenIcer
         ''' + ==
         ''' </summary>
         ReadOnly longOperatorParts As Index(Of Char) = {"<"c, ">"c, "&"c, "|"c, ":"c, "="c, "-"c, "+"c}
-        ReadOnly longOperators As Index(Of Char) = {"<=", "<-", "&&", "||", ":>", "<<", "=>", ">=", "==", "++", "--"}
+        ReadOnly longOperators As Index(Of String) = {"<=", "<-", "&&", "||", ":>", "<<", "=>", ">=", "==", "++", "--"}
 
         Private Function walkChar(c As Char) As Token
             If c = ASCII.LF Then
@@ -197,7 +200,11 @@ Namespace Language.TokenIcer
                     Return populateToken()
                 End If
             Else
-                buffer += c
+                If buffer = 1 AndAlso buffer(Scan0) Like longOperatorParts Then
+                    Return populateToken(bufferNext:=c)
+                Else
+                    buffer += c
+                End If
             End If
 
             Return Nothing
@@ -260,6 +267,8 @@ Namespace Language.TokenIcer
                     Return New Token With {.name = TokenType.identifier, .text = text}
                 Case ":>", "+", "-", "*", "=", "/", ">", "<", "~", "<=", ">=", "!", "<-", "&&", "&", "||"
                     Return New Token With {.name = TokenType.operator, .text = text}
+                Case ":"
+                    Return New Token With {.name = TokenType.sequence, .text = text}
                 Case "NULL", "NA", "Inf"
                     Return New Token With {.name = TokenType.missingLiteral, .text = text}
                 Case "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string",
