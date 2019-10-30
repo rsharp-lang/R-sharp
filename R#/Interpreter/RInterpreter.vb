@@ -90,12 +90,29 @@ Namespace Interpreter
         ''' 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function Evaluate(script As String) As Object
-            Return RunInternal(script, "[script_text]", {})
+            Return RunInternal(script, Nothing, {})
+        End Function
+
+        Private Function InitializeEnvironment(source$, arguments As NamedValue(Of Object)()) As Environment
+            Dim envir As Environment
+
+            If source Is Nothing Then
+                envir = globalEnvir
+            Else
+                envir = New Environment(globalEnvir, source)
+            End If
+
+            For Each var As NamedValue(Of Object) In arguments
+                Call envir.Push(var.Name, var.Value)
+            Next
+
+            Return envir
         End Function
 
         Private Function RunInternal(script$, source$, arguments As NamedValue(Of Object)()) As Object
+            Dim globalEnvir As Environment = InitializeEnvironment(source, arguments)
             Dim result As Object = Code.ParseScript(script).RunProgram(globalEnvir)
-            Dim last As Variable = globalEnvir(lastVariableName)
+            Dim last As Variable = Me.globalEnvir(lastVariableName)
 
             If Program.isException(result) Then
                 result = printErrorInternal(message:=result)
@@ -113,8 +130,10 @@ Namespace Interpreter
         ''' <param name="filepath">The script file path.</param>
         ''' <param name="arguments"></param>
         ''' <returns></returns>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function Source(filepath$, ParamArray arguments As NamedValue(Of Object)()) As Object
-
+            Return RunInternal(filepath.ReadAllText, filepath.ToFileURL, arguments)
         End Function
 
         Private Function printErrorInternal(message As Message) As Object
