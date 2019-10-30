@@ -3,6 +3,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Language
@@ -61,7 +62,7 @@ Namespace Interpreter
         End Sub
 
         Public Sub Add(name$, closure As [Delegate])
-            Throw New NotImplementedException
+            globalEnvir.Push(name, New RMethodInfo(name, closure), TypeCodes.closure)
         End Sub
 
         Public Function Invoke(funcName$, ParamArray args As Object()) As Object
@@ -69,11 +70,11 @@ Namespace Interpreter
 
             If symbol Is Nothing Then
                 Throw New EntryPointNotFoundException($"No object named '{funcName}' could be found in global environment!")
-            ElseIf symbol.typeCode <> TypeCodes.closure Then
+            ElseIf symbol.typeCode <> TypeCodes.closure OrElse Not symbol.typeof.ImplementInterface(GetType(RFunction)) Then
                 Throw New InvalidProgramException($"Object '{funcName}' is not a function!")
             End If
 
-            Throw New NotImplementedException
+            Return DirectCast(symbol.value, RFunction).Invoke(globalEnvir, args)
         End Function
 
         ''' <summary>
