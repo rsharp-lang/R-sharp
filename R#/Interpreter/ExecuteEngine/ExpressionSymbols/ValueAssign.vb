@@ -35,14 +35,20 @@ Namespace Interpreter.ExecuteEngine
                 Return value
             End If
 
+            Dim message As Message
+
             If targetSymbols.Length = 1 Then
-                Call assignSymbol(envir, targetSymbols(Scan0), value)
+                message = assignSymbol(envir, targetSymbols(Scan0), value)
             Else
                 ' assign tuples
-                Call assignTuples(envir, value)
+                message = assignTuples(envir, value)
             End If
 
-            Return value
+            If message Is Nothing Then
+                Return value
+            Else
+                Return message
+            End If
         End Function
 
         Public Overrides Function ToString() As String
