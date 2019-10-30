@@ -1,4 +1,6 @@
-﻿Namespace Runtime
+﻿Imports System.Reflection
+
+Namespace Runtime
 
     Public Class RMethodInfo : Implements RFunction
 
@@ -12,6 +14,13 @@
         Sub New(name$, closure As [Delegate])
             Me.name = name
             Me.api = closure
+        End Sub
+
+        Sub New(name$, closure As MethodInfo)
+            Me.name = name
+            Me.api = Function(params As Object())
+                         Return closure.Invoke(Nothing, params)
+                     End Function
         End Sub
 
         Public Function Invoke(envir As Environment, arguments As Object()) As Object Implements RFunction.Invoke

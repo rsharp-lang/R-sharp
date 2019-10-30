@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
@@ -62,6 +63,10 @@ Namespace Interpreter
         End Sub
 
         Public Sub Add(name$, closure As [Delegate])
+            globalEnvir.Push(name, New RMethodInfo(name, closure), TypeCodes.closure)
+        End Sub
+
+        Public Sub Add(name$, closure As MethodInfo)
             globalEnvir.Push(name, New RMethodInfo(name, closure), TypeCodes.closure)
         End Sub
 
