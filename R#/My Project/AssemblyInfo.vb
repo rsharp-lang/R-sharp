@@ -11,9 +11,9 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyTitle("R# language runtime and interpreter console")>
 <Assembly: AssemblyDescription("R# language runtime and interpreter console")>
 <Assembly: AssemblyCompany("SMRUCC")>
-<Assembly: AssemblyProduct("R-sharp")>
-<Assembly: AssemblyCopyright("Copyright © xie.guigang@gcmodeller.org 2017")>
-<Assembly: AssemblyTrademark("GCModeller")>
+<Assembly: AssemblyProduct("GCModeller")>
+<Assembly: AssemblyCopyright("Copyright © xie.guigang@gcmodeller.org 2019")>
+<Assembly: AssemblyTrademark("R#")>
 
 <Assembly: ComVisible(False)>
 
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")>
 
-<Assembly: AssemblyVersion("1.0.0.0")>
-<Assembly: AssemblyFileVersion("1.0.0.0")>
+<Assembly: AssemblyVersion("2.333.*")>
+<Assembly: AssemblyFileVersion("2.12.*")>
