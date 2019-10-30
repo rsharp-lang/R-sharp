@@ -8,6 +8,10 @@ Namespace Runtime.Internal
     Public Module base
 
         Public Function [stop](message$(), envir As Environment) As Message
+            Return createMessageInternal(message, envir, level:=MSG_TYPES.ERR)
+        End Function
+
+        Private Function createMessageInternal(messages$(), envir As Environment, level As MSG_TYPES) As Message
             Dim frames As New List(Of StackFrame)
             Dim parent As Environment = envir
 
@@ -21,11 +25,15 @@ Namespace Runtime.Internal
             Loop
 
             Return New Message With {
-                .Message = message,
-                .MessageLevel = MSG_TYPES.ERR,
+                .Message = messages,
+                .MessageLevel = level,
                 .EnvironmentStack = frames,
                 .Trace = devtools.ExceptionData.GetCurrentStackTrace
             }
+        End Function
+
+        Public Function warning(message$(), envir As Environment) As Message
+            Return createMessageInternal(message, envir, level:=MSG_TYPES.WRN)
         End Function
 
         Public Function print(x As Object) As Object
