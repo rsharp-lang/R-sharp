@@ -12,7 +12,8 @@ let y as integer = 1:13;
 
 # value assign
 x <- y;
-s <- `integer value of y is ${y}`;
+str <- `integer value of y is ${y}`;
 
 print(x);
 print(y);
+print(str);

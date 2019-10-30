@@ -128,7 +128,10 @@ Namespace Runtime
         ''' <returns></returns>
         Public ReadOnly Property constraintValid As Boolean
             Get
-                If constraint = TypeCodes.generic Then
+                If value Is Nothing Then
+                    ' nothing 可以转换为任意数据类型
+                    Return True
+                ElseIf constraint = TypeCodes.generic Then
                     ' 没有类型约束，则肯定是有效的
                     Return True
                 Else
