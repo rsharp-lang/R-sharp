@@ -5,6 +5,7 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call symbolNotFoundTest()
         Call StackTest()
 
         Call exceptionHandler()
@@ -45,6 +46,15 @@ print(`Math result: ${vec}`);
         Call R.PrintMemory()
 
         Pause()
+    End Sub
+
+    Sub symbolNotFoundTest()
+        R.Evaluate("
+
+# x is not declared
+x <- 999;
+
+")
     End Sub
 
     Sub logicalTest()

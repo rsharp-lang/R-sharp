@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
@@ -35,7 +36,7 @@ Namespace Interpreter.ExecuteEngine
             End If
 
             If targetSymbols.Length = 1 Then
-                Call assignSymbol(envir(targetSymbols(Scan0)), value)
+                Call assignSymbol(envir.FindSymbol(targetSymbols(Scan0)), targetSymbols(Scan0), value)
             Else
                 ' assign tuples
                 Call assignTuples(envir, value)
@@ -52,19 +53,24 @@ Namespace Interpreter.ExecuteEngine
             End If
         End Function
 
-        Private Sub assignTuples(envir As Environment, value As Object)
+        Private Function assignTuples(envir As Environment, value As Object) As Message
             If value.GetType.IsInheritsFrom(GetType(Array)) Then
                 Dim array As Array = value
+                Dim message As New Value(Of Message)
 
                 If array.Length = 1 Then
                     ' all assign the same value result
                     For Each name As String In targetSymbols
-                        Call assignSymbol(envir(name), value)
+                        If Not (message = assignSymbol(envir, name, value)) Is Nothing Then
+                            Return message
+                        End If
                     Next
                 ElseIf array.Length = targetSymbols.Length Then
                     ' one by one
                     For i As Integer = 0 To array.Length - 1
-                        Call assignSymbol(envir(targetSymbols(i)), array.GetValue(i))
+                        If Not (message = assignSymbol(envir, targetSymbols(i), array.GetValue(i))) Is Nothing Then
+                            Return message
+                        End If
                     Next
                 Else
                     ' 数量不对
@@ -73,9 +79,23 @@ Namespace Interpreter.ExecuteEngine
             Else
                 Throw New NotImplementedException
             End If
-        End Sub
 
-        Private Sub assignSymbol(target As Variable, value As Object)
+            Return Nothing
+        End Function
+
+        Private Function assignSymbol(envir As Environment, symbolName$, value As Object) As Message
+            Dim target As Variable = envir.FindSymbol(symbolName)
+
+            If target Is Nothing Then
+                Dim message As String() = {
+                    $"Symbol '{symbolName}' not found in environment stack: [{envir.ToString}]",
+                    "Environemnt: " & envir.ToString,
+                    "symbol: " & symbolName
+                }
+
+                Return Internal.stop(message, envir)
+            End If
+
             If isByRef Then
                 target.value = value
             Else
@@ -85,6 +105,8 @@ Namespace Interpreter.ExecuteEngine
                     target.value = value
                 End If
             End If
-        End Sub
+
+            Return Nothing
+        End Function
     End Class
 End Namespace
