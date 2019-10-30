@@ -5,6 +5,8 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call StackTest()
+
         Call exceptionHandler()
 
         Call branchTest()
@@ -63,6 +65,28 @@ print(✔);
 print(true);
 ")
         Call R.PrintMemory()
+
+        Pause()
+    End Sub
+
+    Sub StackTest()
+        Call R.Evaluate("
+
+let internal as function() {
+
+    let innerPrivate as function() {
+        print('This function could not be invoked by code outside the [internal] closure stack!');
+    }
+
+    print('declare a new function inside the [internal] closure stack.');
+    print(innerPrivate);
+}
+
+internal();
+
+innerPrivate();
+
+")
 
         Pause()
     End Sub
