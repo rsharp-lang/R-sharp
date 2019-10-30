@@ -25,10 +25,10 @@ Namespace Interpreter
             End Get
         End Property
 
-        Public Const LastVariableName$ = "$"
+        Public Const lastVariableName$ = "$"
 
         Sub New()
-            Call globalEnvir.Push(LastVariableName, Nothing, TypeCodes.generic)
+            Call globalEnvir.Push(lastVariableName, Nothing, TypeCodes.generic)
         End Sub
 
         Public Sub PrintMemory(Optional dev As TextWriter = Nothing)
@@ -45,7 +45,7 @@ Namespace Interpreter
                         End Function) _
                 .ToArray
 
-            With dev Or Console.Out.AsDefault
+            With dev Or App.StdOut
                 Call .DoCall(Sub(device)
                                  Call table.PrintTable(
                                     dev:=device,
@@ -86,7 +86,7 @@ Namespace Interpreter
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function Evaluate(script As String) As Object
             Dim result As Object = Code.ParseScript(script).RunProgram(globalEnvir)
-            Dim last As Variable = globalEnvir(LastVariableName)
+            Dim last As Variable = globalEnvir(lastVariableName)
 
             If result.GetType Is GetType(Message) AndAlso DirectCast(result, Message).MessageLevel = MSG_TYPES.ERR Then
                 result = printErrorInternal(message:=result)

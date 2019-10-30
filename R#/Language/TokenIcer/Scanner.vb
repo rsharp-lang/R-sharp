@@ -256,7 +256,7 @@ Namespace Language.TokenIcer
             End If
 
             Select Case text
-                Case RInterpreter.LastVariableName
+                Case RInterpreter.lastVariableName
                     Return New Token With {.name = TokenType.identifier, .text = text}
                 Case ":>", "+", "-", "*", "=", "/", ">", "<", "~", "<=", ">=", "!", "<-", "&&", "&", "||"
                     Return New Token With {.name = TokenType.operator, .text = text}

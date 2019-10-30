@@ -7,18 +7,18 @@
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property name As String Implements RFunction.name
-        Public ReadOnly Property method As [Delegate]
+        Public ReadOnly Property api As [Delegate]
 
         Sub New(name$, closure As [Delegate])
             Me.name = name
-            Me.method = closure
+            Me.api = closure
         End Sub
 
         Public Function Invoke(envir As Environment, arguments As Object()) As Object Implements RFunction.Invoke
             Dim result As Object
 
-            envir = New Environment(envir, stackTag:=Me.name)
-            result = method.Method.Invoke(method.Target, arguments)
+            envir = New Environment(envir, stackTag:=name)
+            result = api.Method.Invoke(api.Target, arguments)
 
             Return result
         End Function
