@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{3A35AC34-F313-4F72-89E9-EACCA217BC8D}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <StartupObject>Rterm.Module1</StartupObject>
+    <StartupObject>Rterm.Program</StartupObject>
     <RootNamespace>Rterm</RootNamespace>
     <AssemblyName>Rterm</AssemblyName>
     <FileAlignment>512</FileAlignment>
@@ -73,10 +73,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CLI\CLI.vb" />
-    <Compile Include="Test\Module1.vb" />
+    <Compile Include="Terminal.vb" />
     <Compile Include="Program.vb" />
-    <Compile Include="Test\Module2.vb" />
-    <Compile Include="Test\SourceTrees.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
