@@ -1,4 +1,6 @@
-﻿Imports SMRUCC.Rsharp.Runtime
+﻿Imports System.Runtime.CompilerServices
+Imports SMRUCC.Rsharp.Language.TokenIcer
+Imports SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine
 
@@ -13,12 +15,20 @@ Namespace Interpreter.ExecuteEngine
             End Get
         End Property
 
-        Sub New()
+        Dim program As Program
 
+        Sub New(tokens As IEnumerable(Of Token))
+            program = Program.CreateProgram(tokens)
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Throw New NotImplementedException()
+            Return program.Execute(envir)
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Shared Function ParseExpressionTree(tokens As IEnumerable(Of Token)) As ClosureExpression
+            Return New ClosureExpression(tokens)
         End Function
     End Class
 End Namespace

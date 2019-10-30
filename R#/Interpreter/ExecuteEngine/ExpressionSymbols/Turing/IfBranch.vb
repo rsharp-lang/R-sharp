@@ -1,4 +1,5 @@
-﻿Imports SMRUCC.Rsharp.Language
+﻿Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 
@@ -45,11 +46,9 @@ Namespace Interpreter.ExecuteEngine
             trueClosure = New DeclareNewFunction With {
                 .funcName = "if_closure_internal",
                 .params = {},
-                .body = New Program With {
-                    .execQueue = blocks(2).Skip(1).ToArray _
-                        .GetExpressions _
-                        .ToArray
-                }
+                .body = blocks(2) _
+                    .Skip(1) _
+                    .DoCall(AddressOf ClosureExpression.ParseExpressionTree)
             }
         End Sub
 

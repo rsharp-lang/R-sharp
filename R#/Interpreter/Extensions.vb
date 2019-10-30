@@ -13,13 +13,7 @@ Namespace Interpreter
 
         <Extension>
         Public Function RunProgram(code As Token(), envir As Environment) As Object
-            Dim program As New Program With {
-               .execQueue = code _
-                   .GetExpressions _
-                   .ToArray
-            }
-
-            Return program.Execute(envir)
+            Return Program.CreateProgram(code).Execute(envir)
         End Function
 
         ReadOnly ignores As Index(Of TokenType) = {

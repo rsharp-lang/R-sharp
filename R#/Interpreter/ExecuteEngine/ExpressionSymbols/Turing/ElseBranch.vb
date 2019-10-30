@@ -1,4 +1,5 @@
-﻿Imports SMRUCC.Rsharp.Language.TokenIcer
+﻿Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine
@@ -15,11 +16,10 @@ Namespace Interpreter.ExecuteEngine
 
         Sub New(code As Token())
             closure = New DeclareNewFunction With {
-                .body = New Program With {
-                    .execQueue = code.Skip(1).Take(code.Length - 2).ToArray _
-                        .GetExpressions _
-                        .ToArray
-                },
+                .body = code _
+                    .Skip(1) _
+                    .Take(code.Length - 2) _
+                    .DoCall(AddressOf ClosureExpression.ParseExpressionTree),
                 .funcName = "else_branch_internal",
                 .params = {}
             }

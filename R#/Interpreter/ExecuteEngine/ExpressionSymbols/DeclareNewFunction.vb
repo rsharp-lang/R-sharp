@@ -18,7 +18,7 @@ Namespace Interpreter.ExecuteEngine
         Public Property funcName As String Implements RFunction.name
 
         Friend params As DeclareNewVariable()
-        Friend body As Program
+        Friend body As ClosureExpression
 
         Sub New()
         End Sub
@@ -51,9 +51,7 @@ Namespace Interpreter.ExecuteEngine
         End Sub
 
         Private Sub getExecBody(tokens As Token())
-            body = New Program With {
-               .execQueue = tokens.GetExpressions.ToArray
-            }
+            body = New ClosureExpression(tokens)
         End Sub
 
         Public Function Invoke(envir As Environment, params As Object()) As Object Implements RFunction.Invoke
@@ -80,7 +78,7 @@ Namespace Interpreter.ExecuteEngine
                 Call DeclareNewVariable.PushNames(var.names, value, var.type, envir)
             Next
 
-            Return body.Execute(envir)
+            Return body.Evaluate(envir)
         End Function
 
         Public Overrides Function Evaluate(envir As Environment) As Object

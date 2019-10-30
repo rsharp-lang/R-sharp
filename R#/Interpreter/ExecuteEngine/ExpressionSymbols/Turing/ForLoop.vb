@@ -41,11 +41,9 @@ Namespace Interpreter.ExecuteEngine
 
             Me.sequence = Expression.CreateExpression([loop](2))
             Me.body = New DeclareNewFunction With {
-                .body = New Program With {
-                    .execQueue = blocks(2).Skip(1).ToArray _
-                        .GetExpressions _
-                        .ToArray
-                },
+                .body = blocks(2) _
+                    .Skip(1) _
+                    .DoCall(AddressOf ClosureExpression.ParseExpressionTree),
                 .funcName = "forloop_internal",
                 .params = {}
             }
