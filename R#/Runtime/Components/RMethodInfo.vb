@@ -22,10 +22,10 @@ Namespace Runtime
             Me.parameters = closure.Method.DoCall(AddressOf parseParameters)
         End Sub
 
-        Sub New(name$, closure As MethodInfo)
+        Sub New(name$, closure As MethodInfo, target As Object)
             Me.name = name
             Me.api = Function(params As Object())
-                         Return closure.Invoke(Nothing, params)
+                         Return closure.Invoke(target, params)
                      End Function
             Me.returns = New RType(closure.ReturnType)
             Me.parameters = closure.DoCall(AddressOf parseParameters)

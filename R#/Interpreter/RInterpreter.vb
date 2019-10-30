@@ -66,8 +66,8 @@ Namespace Interpreter
             globalEnvir.Push(name, New RMethodInfo(name, closure), TypeCodes.closure)
         End Sub
 
-        Public Sub Add(name$, closure As MethodInfo)
-            globalEnvir.Push(name, New RMethodInfo(name, closure), TypeCodes.closure)
+        Public Sub Add(name$, closure As MethodInfo, Optional target As Object = Nothing)
+            globalEnvir.Push(name, New RMethodInfo(name, closure, target), TypeCodes.closure)
         End Sub
 
         Public Function Invoke(funcName$, ParamArray args As Object()) As Object
