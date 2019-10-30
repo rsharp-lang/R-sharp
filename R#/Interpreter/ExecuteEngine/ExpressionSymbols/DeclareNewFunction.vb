@@ -7,6 +7,7 @@ Imports SMRUCC.Rsharp.Runtime
 Namespace Interpreter.ExecuteEngine
 
     Public Class DeclareNewFunction : Inherits Expression
+        Implements RFunction
 
         Public Overrides ReadOnly Property type As TypeCodes
             Get
@@ -14,7 +15,8 @@ Namespace Interpreter.ExecuteEngine
             End Get
         End Property
 
-        Dim funcName$
+        Public ReadOnly Property funcName As String Implements RFunction.name
+
         Dim params As DeclareNewVariable()
         Dim body As Program
 
@@ -51,7 +53,7 @@ Namespace Interpreter.ExecuteEngine
             }
         End Sub
 
-        Public Function Invoke(envir As Environment, params As Object()) As Object
+        Public Function Invoke(envir As Environment, params As Object()) As Object Implements RFunction.Invoke
             Dim var As DeclareNewVariable
             Dim value As Object
 
