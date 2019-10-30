@@ -77,7 +77,6 @@ Namespace Runtime
         <Extension>
         Public Function IsPrimitive(type As TypeCodes) As Boolean
             Return type = TypeCodes.boolean OrElse
-                   type = TypeCodes.char OrElse
                    type = TypeCodes.double OrElse
                    type = TypeCodes.integer OrElse
                    type = TypeCodes.list OrElse
@@ -99,7 +98,7 @@ Namespace Runtime
                 Case GetType(Double), GetType(Double())
                     Return TypeCodes.double
                 Case GetType(Char), GetType(Char())
-                    Return TypeCodes.char
+                    Return TypeCodes.string
                 Case GetType(Boolean), GetType(Boolean())
                     Return TypeCodes.boolean
                 Case GetType(Dictionary(Of String, Object)), GetType(Dictionary(Of String, Object)())
@@ -114,7 +113,6 @@ Namespace Runtime
         Public Function [GetType](type As TypeCodes) As Type
             Select Case type
                 Case TypeCodes.boolean : Return GetType(Boolean())
-                Case TypeCodes.char : Return GetType(String())
                 Case TypeCodes.double : Return GetType(Double())
                 Case TypeCodes.integer : Return GetType(Long())
                 Case TypeCodes.list : Return GetType(Dictionary(Of String, Object))

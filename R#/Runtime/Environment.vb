@@ -157,12 +157,6 @@ Namespace Runtime
             Select Case type
                 Case TypeCodes.boolean
                     value = Runtime.asVector(Of Boolean)(value)
-                Case TypeCodes.char
-                    If value.GetType Is GetType(Char) Then
-                        value = {value.ToString}
-                    Else
-                        value = {DirectCast(value, IEnumerable(Of Char)).CharString}
-                    End If
                 Case TypeCodes.double
                     value = Runtime.asVector(Of Double)(value)
                 Case TypeCodes.integer
