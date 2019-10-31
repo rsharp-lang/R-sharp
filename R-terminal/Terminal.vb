@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Terminal
 Imports SMRUCC.Rsharp.Interpreter
@@ -19,6 +20,9 @@ Module Terminal
                 If Not RProgram.isException(result) Then
                     If program.Count = 1 AndAlso program.isSimplePrintCall Then
                         ' do nothing
+                        If DirectCast(program.First, FunctionInvoke).funcName = "cat" Then
+                            Call Console.WriteLine()
+                        End If
                     Else
                         Call Internal.base.print(result)
                     End If
@@ -36,8 +40,10 @@ Type 'q()' to quit R.
         Return 0
     End Function
 
+    ReadOnly echo As Index(Of String) = {"print", "cat", "echo"}
+
     <Extension>
     Private Function isSimplePrintCall(program As RProgram) As Boolean
-        Return TypeOf program.First Is FunctionInvoke AndAlso DirectCast(program.First, FunctionInvoke).funcName = "print"
+        Return TypeOf program.First Is FunctionInvoke AndAlso DirectCast(program.First, FunctionInvoke).funcName Like echo
     End Function
 End Module
