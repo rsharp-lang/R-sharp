@@ -129,7 +129,7 @@ Namespace Runtime
         ''' <returns></returns>
         Public Function Push(name$, value As Object, Optional type As TypeCodes = TypeCodes.generic) As Object
             If variables.ContainsKey(name) Then
-                Throw New Exception(String.Format(AlreadyExists, name))
+                Return Internal.stop({String.Format(AlreadyExists, name)}, Me)
             ElseIf Not value Is Nothing Then
                 value = asRVector(type, value)
             End If
