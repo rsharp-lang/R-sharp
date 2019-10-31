@@ -1,4 +1,5 @@
-﻿Imports SMRUCC.Rsharp.Language.TokenIcer
+﻿Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine
@@ -44,7 +45,13 @@ Namespace Interpreter.ExecuteEngine
 
         Public Function Invoke(parent As Environment, arguments() As Object) As Object Implements RFunction.Invoke
             Using envir As New Environment(parent, name)
-
+                Return DeclareNewVariable _
+                    .PushNames(names:=parameter.names,
+                               value:=arguments(Scan0),
+                               type:=TypeCodes.generic,
+                               envir:=envir
+                    ) _
+                    .DoCall(AddressOf closure.Evaluate)
             End Using
         End Function
     End Class
