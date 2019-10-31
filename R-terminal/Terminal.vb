@@ -29,7 +29,9 @@ Module Terminal
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 ")
-        Call New Shell(ps1, exec).Run()
+        Call New Shell(ps1, exec) With {
+            .Quite = "q()"
+        }.Run()
 
         Return 0
     End Function
