@@ -1,6 +1,7 @@
 ﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 
@@ -48,7 +49,8 @@ Namespace Runtime.Internal
             Dim strs = Runtime.asVector(Of Object)(values) _
                 .AsObjectEnumerator _
                 .Select(Function(o) Scripting.ToString(o, "")) _
-                .JoinBy(sep)
+                .JoinBy(sep) _
+                .DoCall(AddressOf sprintf)
 
             If Not file.StringEmpty Then
                 Call strs.SaveTo(file)
