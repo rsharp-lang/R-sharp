@@ -62,6 +62,9 @@ Namespace Interpreter.ExecuteEngine
                 Else
                     Return code(Scan0).CreateTree
                 End If
+            ElseIf code > 2 AndAlso code(Scan0).isIdentifier AndAlso code(1).isOperator("->", "=>") Then
+                ' is a lambda function
+                Return New DeclareLambdaFunction(code.IteratesALL)
             End If
 
             If code(Scan0).isIdentifier Then

@@ -119,6 +119,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\BinaryExpression.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DeclareLambdaFunction.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ElseBranch.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ForLoop.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\ReturnValue.vb" />

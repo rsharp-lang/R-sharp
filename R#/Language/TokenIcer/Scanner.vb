@@ -129,7 +129,7 @@ Namespace Language.TokenIcer
         ''' + ==
         ''' </summary>
         ReadOnly longOperatorParts As Index(Of Char) = {"<"c, ">"c, "&"c, "|"c, ":"c, "="c, "-"c, "+"c}
-        ReadOnly longOperators As Index(Of String) = {"<=", "<-", "&&", "||", ":>", "<<", "=>", ">=", "==", "++", "--"}
+        ReadOnly longOperators As Index(Of String) = {"<=", "<-", "&&", "||", ":>", "<<", "->", "=>", ">=", "==", "++", "--"}
 
         Private Function walkChar(c As Char) As Token
             If c = ASCII.LF Then

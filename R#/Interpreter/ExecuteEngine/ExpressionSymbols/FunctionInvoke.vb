@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.Scripting.TokenIcer
+﻿Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
@@ -98,6 +99,14 @@ Namespace Interpreter.ExecuteEngine
                     Return Internal.print(paramVals(Scan0))
                 Case "stop"
                     Return Internal.stop(paramVals(Scan0), envir)
+                Case "lapply"
+                    If paramVals.ElementAtOrDefault(1) Is Nothing Then
+                        Return Internal.stop({"Missing apply function!"}, envir)
+                    ElseIf Not paramVals(1).GetType.ImplementInterface(GetType(RFunction)) Then
+                        Return Internal.stop({"Target is not a function!"}, envir)
+                    End If
+
+                    Return Internal.lapply(paramVals(Scan0), paramVals(1), envir)
                 Case Else
                     Return Message.SymbolNotFound(envir, funcName, TypeCodes.closure)
             End Select

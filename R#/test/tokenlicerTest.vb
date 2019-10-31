@@ -4,11 +4,20 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 Module tokenlicerTest
 
     Sub Main()
+        Call lambdaTest()
+
         Call sequnceTest()
         Call operatorTest()
         Call declareFunctionTest()
         Call stringParser()
         Call declareTest()
+
+        Pause()
+    End Sub
+
+    Sub lambdaTest()
+        Dim tokens = New Scanner("lapply(l, x -> x * 100)").GetTokens.ToArray
+
 
         Pause()
     End Sub
