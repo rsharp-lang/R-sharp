@@ -16,6 +16,25 @@ Namespace Runtime
             End If
         End Function
 
+        Friend Function asVector(value As Object, type As Type) As Array
+            Dim arrayType As Type = type.MakeArrayType
+            Dim valueType As Type
+
+            If value Is Nothing Then
+                Return Nothing
+            Else
+                valueType = value.GetType
+            End If
+
+            If Not valueType Is arrayType Then
+                Dim array As Array = Array.CreateInstance(type, 1)
+                array.SetValue(value, Scan0)
+                Return array
+            Else
+                Return value
+            End If
+        End Function
+
         ''' <summary>
         ''' 这个函数会确保返回的输出值都是一个数组
         ''' </summary>

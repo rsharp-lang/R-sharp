@@ -6,8 +6,10 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call testScript()
 
-        Call invokeTest()
+        Call symbolNotFoundTest()
+        Call StackTest()
 
         Call exceptionHandler()
 
@@ -25,6 +27,15 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub testScript()
+        Call R.Evaluate("1:12")
+        Call R.PrintMemory()
+        Call R.Evaluate("E:\GCModeller\src\R-sharp\tutorials\declare_variable.R".ReadAllText)
+        Call R.PrintMemory()
 
         Pause()
     End Sub
@@ -58,6 +69,15 @@ print(`Math result: ${vec}`);
         Pause()
     End Sub
 
+    Sub symbolNotFoundTest()
+        R.Evaluate("
+
+# x is not declared
+x <- 999;
+
+")
+    End Sub
+
     Sub logicalTest()
         Call R.Evaluate("print('a' & 'bc')")
         Call R.Evaluate("print(FALSE && [FALSE, TRUE, TRUE, FALSE])")
@@ -76,6 +96,28 @@ print(✔);
 print(true);
 ")
         Call R.PrintMemory()
+
+        Pause()
+    End Sub
+
+    Sub StackTest()
+        Call R.Evaluate("
+
+let internal as function() {
+
+    let innerPrivate as function() {
+        print('This function could not be invoked by code outside the [internal] closure stack!');
+    }
+
+    print('declare a new function inside the [internal] closure stack.');
+    print(innerPrivate);
+}
+
+internal();
+
+innerPrivate();
+
+")
 
         Pause()
     End Sub

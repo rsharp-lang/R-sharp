@@ -19,21 +19,25 @@ Namespace Interpreter
             For Each expression As Expression In execQueue
                 last = expression.Evaluate(envir)
 
-                If last.GetType Is GetType(Message) Then
-                    If DirectCast(last, Message).MessageLevel = MSG_TYPES.ERR Then
-                        ' how to throw error?
-                        Return last
-                    ElseIf DirectCast(last, Message).MessageLevel = MSG_TYPES.DEBUG Then
-                    ElseIf DirectCast(last, Message).MessageLevel = MSG_TYPES.WRN Then
-                    Else
-
-                    End If
-                ElseIf TypeOf expression Is ReturnValue Then
+                If TypeOf expression Is ReturnValue Then
                     ' return keyword will break the function
                     Exit For
-                ElseIf last.GetType Is GetType(IfBranch.IfPromise) Then
-                    envir.ifPromise.Add(last)
-                    last = DirectCast(last, IfBranch.IfPromise).Value
+                End If
+
+                If Not last Is Nothing Then
+                    If last.GetType Is GetType(Message) Then
+                        If DirectCast(last, Message).MessageLevel = MSG_TYPES.ERR Then
+                            ' how to throw error?
+                            Return last
+                        ElseIf DirectCast(last, Message).MessageLevel = MSG_TYPES.DEBUG Then
+                        ElseIf DirectCast(last, Message).MessageLevel = MSG_TYPES.WRN Then
+                        Else
+
+                        End If
+                    ElseIf last.GetType Is GetType(IfBranch.IfPromise) Then
+                        envir.ifPromise.Add(last)
+                        last = DirectCast(last, IfBranch.IfPromise).Value
+                    End If
                 End If
             Next
 

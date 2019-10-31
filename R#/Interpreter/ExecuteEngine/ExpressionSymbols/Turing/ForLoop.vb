@@ -65,18 +65,18 @@ Namespace Interpreter.ExecuteEngine
 
         Private Iterator Function exec(envir As Environment) As IEnumerable(Of Object)
             Dim isTuple As Boolean = variables.Length > 1
-            Dim closure As Environment
             Dim i As i32 = 1
 
             For Each value As Object In Runtime.asVector(Of Object)(sequence.Evaluate(envir))
-                closure = DeclareNewVariable.PushNames(
+                Using closure = DeclareNewVariable.PushNames(
                     names:=variables,
                     value:=value,
                     type:=TypeCodes.generic,
                     envir:=New Environment(envir, $"for__[{++i}]")
                 )
 
-                Yield body.Invoke(closure, {})
+                    Yield body.Invoke(closure, {})
+                End Using
             Next
         End Function
     End Class

@@ -4,10 +4,20 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 Module tokenlicerTest
 
     Sub Main()
+        Call sequnceTest()
         Call operatorTest()
         Call declareFunctionTest()
         Call stringParser()
         Call declareTest()
+
+        Pause()
+    End Sub
+
+    Sub sequnceTest()
+        Dim tokens = New Scanner("1 && 2").GetTokens.ToArray
+        Dim tokens3 = New Scanner("1:22").GetTokens.ToArray
+        Dim tokens2 = New Scanner("99*(1+2/3^8) % 5:6").GetTokens.ToArray
+
 
         Pause()
     End Sub

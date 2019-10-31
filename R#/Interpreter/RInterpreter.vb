@@ -1,7 +1,6 @@
 ﻿Imports System.IO
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
-Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -66,8 +65,8 @@ Namespace Interpreter
             globalEnvir.Push(name, New RMethodInfo(name, closure), TypeCodes.closure)
         End Sub
 
-        Public Sub Add(name$, closure As MethodInfo)
-            globalEnvir.Push(name, New RMethodInfo(name, closure), TypeCodes.closure)
+        Public Sub Add(name$, closure As MethodInfo, Optional target As Object = Nothing)
+            globalEnvir.Push(name, New RMethodInfo(name, closure, target), TypeCodes.closure)
         End Sub
 
         Public Function Invoke(funcName$, ParamArray args As Object()) As Object
@@ -85,15 +84,36 @@ Namespace Interpreter
         ''' <summary>
         ''' Run R# script program from text data.
         ''' </summary>
-        ''' <param name="script$"></param>
+        ''' <param name="script">The script text</param>
         ''' <returns></returns>
         ''' 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function Evaluate(script As String) As Object
-            Dim result As Object = Code.ParseScript(script).RunProgram(globalEnvir)
-            Dim last As Variable = globalEnvir(lastVariableName)
+            Return RunInternal(script, Nothing, {})
+        End Function
 
-            If result.GetType Is GetType(Message) AndAlso DirectCast(result, Message).MessageLevel = MSG_TYPES.ERR Then
+        Private Function InitializeEnvironment(source$, arguments As NamedValue(Of Object)()) As Environment
+            Dim envir As Environment
+
+            If source Is Nothing Then
+                envir = globalEnvir
+            Else
+                envir = New Environment(globalEnvir, source)
+            End If
+
+            For Each var As NamedValue(Of Object) In arguments
+                Call envir.Push(var.Name, var.Value)
+            Next
+
+            Return envir
+        End Function
+
+        Private Function RunInternal(script$, source$, arguments As NamedValue(Of Object)()) As Object
+            Dim globalEnvir As Environment = InitializeEnvironment(source, arguments)
+            Dim result As Object = Code.ParseScript(script).RunProgram(globalEnvir)
+            Dim last As Variable = Me.globalEnvir(lastVariableName)
+
+            If Program.isException(result) Then
                 result = printErrorInternal(message:=result)
             Else
                 ' set last variable in current environment
@@ -101,6 +121,18 @@ Namespace Interpreter
             End If
 
             Return result
+        End Function
+
+        ''' <summary>
+        ''' Run R# script program from a given script file 
+        ''' </summary>
+        ''' <param name="filepath">The script file path.</param>
+        ''' <param name="arguments"></param>
+        ''' <returns></returns>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function Source(filepath$, ParamArray arguments As NamedValue(Of Object)()) As Object
+            Return RunInternal(filepath.ReadAllText, filepath.ToFileURL, arguments)
         End Function
 
         Private Function printErrorInternal(message As Message) As Object

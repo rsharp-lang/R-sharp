@@ -99,6 +99,8 @@ Namespace Interpreter.ExecuteEngine
                     Return Internal.print(paramVals(Scan0))
                 Case "stop"
                     Return Internal.stop(paramVals(Scan0), envir)
+                Case Else
+                    Return Message.SymbolNotFound(envir, funcName, TypeCodes.closure)
                 Case "lapply"
                     If paramVals.ElementAtOrDefault(1) Is Nothing Then
                         Return Internal.stop({"Missing apply function!"}, envir)
@@ -108,8 +110,6 @@ Namespace Interpreter.ExecuteEngine
 
                     Return Internal.lapply(paramVals(Scan0), paramVals(1), envir)
             End Select
-
-            Throw New NotImplementedException
         End Function
     End Class
 End Namespace
