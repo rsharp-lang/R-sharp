@@ -115,6 +115,12 @@ Namespace Interpreter.ExecuteEngine
                         Return Internal.stop({"Target is not a function!"}, envir)
                     End If
 
+                    If Program.isException(paramVals(Scan0)) Then
+                        Return paramVals(Scan0)
+                    ElseIf Program.isException(paramVals(1)) Then
+                        Return paramVals(1)
+                    End If
+
                     Return Internal.lapply(paramVals(Scan0), paramVals(1), envir)
                 Case Else
                     Return Message.SymbolNotFound(envir, funcName, TypeCodes.closure)

@@ -27,6 +27,12 @@ Namespace Interpreter.ExecuteEngine
             Dim ta = a.GetType
             Dim tb = b.GetType
 
+            If Program.isException(a) Then
+                Return a
+            ElseIf Program.isException(b) Then
+                Return b
+            End If
+
             If ta Like integers Then
                 If tb Like integers Then
                     Select Case [operator]

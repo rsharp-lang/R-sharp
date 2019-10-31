@@ -53,7 +53,9 @@ Namespace Runtime
                 Dim symbol As Variable = FindSymbol(name)
 
                 If symbol Is Nothing Then
-                    Throw New EntryPointNotFoundException(name & " was not found in any stack enviroment!")
+                    Return New Variable With {
+                        .value = Message.SymbolNotFound(Me, name, TypeCodes.generic)
+                    }
                 Else
                     Return symbol
                 End If

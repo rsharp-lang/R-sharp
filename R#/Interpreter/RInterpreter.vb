@@ -116,11 +116,11 @@ Namespace Interpreter
         Private Function finalizeResult(result As Object) As Object
             Dim last As Variable = Me.globalEnvir(lastVariableName)
 
+            ' set last variable in current environment
+            last.value = result
+
             If Program.isException(result) Then
-                result = printErrorInternal(message:=result)
-            Else
-                ' set last variable in current environment
-                last.value = result
+                Call printErrorInternal(message:=result)
             End If
 
             Return result

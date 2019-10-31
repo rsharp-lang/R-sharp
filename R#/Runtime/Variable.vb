@@ -141,7 +141,7 @@ Namespace Runtime
         End Property
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Sub New(constraint As TypeCodes)
+        Sub New(Optional constraint As TypeCodes = TypeCodes.generic)
             Me.constraint = constraint
         End Sub
 
