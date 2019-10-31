@@ -33,6 +33,7 @@ Module interpreterTest
     End Sub
 
     Sub lambdaTest()
+        Call R.Evaluate("let add <- [x,y] => x+y;")
         Call R.Evaluate("x -> x +333")
     End Sub
 

@@ -26,11 +26,16 @@ Namespace Interpreter.ExecuteEngine
         ''' 只允许拥有一个参数，并且只允许出现一行代码
         ''' </summary>
         ''' <param name="tokens"></param>
-        Sub New(tokens As IEnumerable(Of Token))
+        Sub New(tokens As List(Of Token()))
             With tokens.ToArray
-                name = "[lambda: " & .Select(Function(t) t.text).JoinBy(" ") & "]"
+                name = .IteratesALL _
+                       .Select(Function(t) t.text) _
+                       .JoinBy(" ") _
+                       .DoCall(Function(exp)
+                                   Return "[lambda: " & exp & "]"
+                               End Function)
                 parameter = New DeclareNewVariable(tokens(Scan0))
-                closure = ClosureExpression.ParseExpressionTree(.Skip(2))
+                closure = ClosureExpression.ParseExpressionTree(.Skip(2).IteratesALL)
             End With
         End Sub
 

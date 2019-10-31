@@ -9,6 +9,27 @@ Namespace Interpreter.ExecuteEngine
     Module Extensions
 
         <Extension>
+        Public Function isTuple(tokens As Token()) As Boolean
+            If tokens(Scan0).name <> TokenType.open OrElse tokens.Last.name <> TokenType.close Then
+                Return False
+            End If
+
+            For i As Integer = 1 To tokens.Length - 2
+                If i Mod 2 = 0 Then
+                    If Not tokens(i).name = TokenType.comma Then
+                        Return False
+                    End If
+                Else
+                    If Not tokens(i).name = TokenType.identifier Then
+                        Return False
+                    End If
+                End If
+            Next
+
+            Return True
+        End Function
+
+        <Extension>
         Public Function isComma(tokens As Token()) As Boolean
             If tokens.Length = 1 AndAlso tokens(Scan0).name = TokenType.comma Then
                 Return True

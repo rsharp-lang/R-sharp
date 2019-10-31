@@ -41,11 +41,11 @@ Namespace Interpreter.ExecuteEngine
         End Sub
 
         Sub New(code As List(Of Token))
-            Call Me.New(code.Splitbytopleveldelimiter(TokenType.operator, includeKeyword:=True))
+            Call Me.New(code:=code.Splitbytopleveldelimiter(TokenType.operator, includeKeyword:=True))
         End Sub
 
-        Sub New(singleToken As Token)
-            names = {singleToken.text}
+        Sub New(singleToken As Token())
+            names = getNames(singleToken)
             type = TypeCodes.generic
             hasInitializeExpression = False
             value = Nothing
