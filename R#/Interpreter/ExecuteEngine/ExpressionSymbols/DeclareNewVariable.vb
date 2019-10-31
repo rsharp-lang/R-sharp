@@ -44,6 +44,13 @@ Namespace Interpreter.ExecuteEngine
             Call Me.New(code.Splitbytopleveldelimiter(TokenType.operator, includeKeyword:=True))
         End Sub
 
+        Sub New(singleToken As Token)
+            names = {singleToken.text}
+            type = TypeCodes.generic
+            hasInitializeExpression = False
+            value = Nothing
+        End Sub
+
         Sub New()
         End Sub
 
