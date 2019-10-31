@@ -78,7 +78,7 @@ Namespace Interpreter.ExecuteEngine
                 End If
             ElseIf funcVar.value.GetType Like runtimeFuncs Then
                 ' invoke method create from R# script
-                Return DirectCast(funcVar.value, DeclareNewFunction).Invoke(envir, envir.Evaluate(parameters))
+                Return DirectCast(funcVar.value, RFunction).Invoke(envir, envir.Evaluate(parameters))
             Else
                 ' invoke .NET method
                 Return DirectCast(funcVar.value, RMethodInfo).Invoke(envir, envir.Evaluate(parameters))
