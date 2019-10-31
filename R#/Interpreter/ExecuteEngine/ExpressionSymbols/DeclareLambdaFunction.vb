@@ -54,5 +54,9 @@ Namespace Interpreter.ExecuteEngine
                     .DoCall(AddressOf closure.Evaluate)
             End Using
         End Function
+
+        Public Overrides Function ToString() As String
+            Return name
+        End Function
     End Class
 End Namespace

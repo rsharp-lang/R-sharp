@@ -6,6 +6,7 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call lambdaTest()
         Call testScript()
 
         Call symbolNotFoundTest()
@@ -29,6 +30,10 @@ Module interpreterTest
 
 
         Pause()
+    End Sub
+
+    Sub lambdaTest()
+        Call R.Evaluate("x -> x +333")
     End Sub
 
     Sub testScript()
