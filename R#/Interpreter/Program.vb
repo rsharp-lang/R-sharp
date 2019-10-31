@@ -1,5 +1,6 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
@@ -62,6 +63,13 @@ Namespace Interpreter
             Else
                 Return False
             End If
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Shared Function BuildProgram(scriptText As String) As Program
+            Return New Scanner(scriptText) _
+                .GetTokens _
+                .DoCall(AddressOf CreateProgram)
         End Function
     End Class
 End Namespace

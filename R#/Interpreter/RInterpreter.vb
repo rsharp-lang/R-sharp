@@ -92,6 +92,11 @@ Namespace Interpreter
             Return RunInternal(script, Nothing, {})
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function Run(program As Program) As Object
+            Return finalizeResult(program.Execute(globalEnvir))
+        End Function
+
         Private Function InitializeEnvironment(source$, arguments As NamedValue(Of Object)()) As Environment
             Dim envir As Environment
 
@@ -108,9 +113,7 @@ Namespace Interpreter
             Return envir
         End Function
 
-        Private Function RunInternal(script$, source$, arguments As NamedValue(Of Object)()) As Object
-            Dim globalEnvir As Environment = InitializeEnvironment(source, arguments)
-            Dim result As Object = Code.ParseScript(script).RunProgram(globalEnvir)
+        Private Function finalizeResult(result As Object) As Object
             Dim last As Variable = Me.globalEnvir(lastVariableName)
 
             If Program.isException(result) Then
@@ -121,6 +124,13 @@ Namespace Interpreter
             End If
 
             Return result
+        End Function
+
+        Private Function RunInternal(script$, source$, arguments As NamedValue(Of Object)()) As Object
+            Dim globalEnvir As Environment = InitializeEnvironment(source, arguments)
+            Dim result As Object = Code.ParseScript(script).RunProgram(globalEnvir)
+
+            Return finalizeResult(result)
         End Function
 
         ''' <summary>
