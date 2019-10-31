@@ -1,10 +1,14 @@
 ﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 
 Namespace Runtime.Internal
 
+    ''' <summary>
+    ''' 在这个模块之中仅包含有最基本的数据操作函数
+    ''' </summary>
     Public Module base
 
         Public Function [stop](message$(), envir As Environment) As Message
@@ -67,5 +71,27 @@ Namespace Runtime.Internal
                 Call Console.WriteLine("[1] " & toString(x))
             End If
         End Sub
+
+        Public Function lapply(sequence As Object, apply As RFunction, envir As Environment) As Object
+            If sequence.GetType Is GetType(Dictionary(Of String, Object)) Then
+                Return DirectCast(sequence, Dictionary(Of String, Object)) _
+                    .ToDictionary(Function(d) d.Key,
+                                  Function(d)
+                                      Return apply.Invoke(envir, {d.Value})
+                                  End Function)
+            Else
+                Return Runtime.asVector(Of Object)(sequence) _
+                    .AsObjectEnumerator _
+                    .SeqIterator _
+                    .ToDictionary(Function(i) $"[[{i.i}]]",
+                                  Function(d)
+                                      Return apply.Invoke(envir, {d.value})
+                                  End Function)
+            End If
+        End Function
+
+        Public Function sapply(sequence As Object, apply As RFunction, envir As Environment) As Object
+            Throw New NotImplementedException
+        End Function
     End Module
 End Namespace
