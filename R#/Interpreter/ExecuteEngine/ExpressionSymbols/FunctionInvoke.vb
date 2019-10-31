@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.Emit.Delegates
+﻿Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
@@ -35,6 +36,14 @@ Namespace Interpreter.ExecuteEngine
             Return $"Call {funcName}({parameters.JoinBy(", ")})"
         End Function
 
+        ''' <summary>
+        ''' These function create from script text in runtime
+        ''' </summary>
+        ReadOnly runtimeFuncs As Index(Of Type) = {
+            GetType(DeclareNewFunction),
+            GetType(DeclareLambdaFunction)
+        }
+
         Public Overrides Function Evaluate(envir As Environment) As Object
             ' 当前环境中的函数符号的优先度要高于
             ' 系统环境下的函数符号
@@ -67,7 +76,7 @@ Namespace Interpreter.ExecuteEngine
                 Else
                     Return invokeInternals(envir, funcName, envir.Evaluate(parameters))
                 End If
-            ElseIf funcVar.value.GetType Is GetType(DeclareNewFunction) Then
+            ElseIf funcVar.value.GetType Like runtimeFuncs Then
                 ' invoke method create from R# script
                 Return DirectCast(funcVar.value, DeclareNewFunction).Invoke(envir, envir.Evaluate(parameters))
             Else
