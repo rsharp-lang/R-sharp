@@ -6,6 +6,7 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call iifTest()
         Call lambdaTest()
         Call testScript()
 
@@ -28,6 +29,12 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub iifTest()
+        Call R.Evaluate("x > 0 ? 999 : 777")
 
         Pause()
     End Sub
