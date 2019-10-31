@@ -7,7 +7,7 @@ Imports SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter
 
-    Public Class Program
+    Public Class Program : Implements IEnumerable(Of Expression)
 
         Dim execQueue As Expression()
 
@@ -55,7 +55,7 @@ Namespace Interpreter
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Friend Shared Function isException(result As Object) As Boolean
+        Public Shared Function isException(result As Object) As Boolean
             If result Is Nothing Then
                 Return False
             ElseIf result.GetType Is GetType(Message) Then
@@ -70,6 +70,16 @@ Namespace Interpreter
             Return New Scanner(scriptText) _
                 .GetTokens _
                 .DoCall(AddressOf CreateProgram)
+        End Function
+
+        Public Iterator Function GetEnumerator() As IEnumerator(Of Expression) Implements IEnumerable(Of Expression).GetEnumerator
+            For Each line As Expression In execQueue
+                Yield line
+            Next
+        End Function
+
+        Private Iterator Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
+            Yield GetEnumerator()
         End Function
     End Class
 End Namespace

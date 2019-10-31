@@ -9,8 +9,8 @@ Namespace Interpreter.ExecuteEngine
     Public Class FunctionInvoke : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
+        Public ReadOnly Property funcName As String
 
-        Dim funcName As String
         Dim parameters As Expression()
         Dim span As CodeSpan
 
