@@ -25,6 +25,7 @@ Namespace Runtime
         Public ReadOnly Property stackTag As String
         Public ReadOnly Property variables As Dictionary(Of Variable)
         Public ReadOnly Property types As Dictionary(Of String, RType)
+        Public ReadOnly Property messages As New List(Of Message)
         Public ReadOnly Property GlobalEnvironment As Environment
 
         Friend ReadOnly ifPromise As New List(Of IfBranch.IfPromise)
@@ -93,6 +94,7 @@ Namespace Runtime
             Call variables.Clear()
             Call types.Clear()
             Call ifPromise.Clear()
+            Call messages.Clear()
         End Sub
 
         ''' <summary>
@@ -204,6 +206,12 @@ Namespace Runtime
             If Not disposedValue Then
                 If disposing Then
                     ' TODO: dispose managed state (managed objects).
+                    If Not parent Is Nothing Then
+                        ' 将当前环境中所产生的诸如警告消息之类的信息
+                        ' 传递到顶层的全局环境之中
+                        Call parent.messages.AddRange(messages)
+                    End If
+
                     Call Clear()
                 End If
 
