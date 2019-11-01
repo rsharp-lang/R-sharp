@@ -50,7 +50,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.Runtime
 
-Namespace Runtime
+Namespace Runtime.Components
 
     ''' <summary>
     ''' The variable model in R# language

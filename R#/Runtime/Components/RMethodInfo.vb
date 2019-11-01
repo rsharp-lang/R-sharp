@@ -2,7 +2,7 @@
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 
-Namespace Runtime
+Namespace Runtime.Components
 
     Public Class RMethodInfo : Implements RFunction
 

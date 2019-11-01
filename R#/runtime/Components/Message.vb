@@ -1,7 +1,7 @@
 ﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 
-Namespace Runtime
+Namespace Runtime.Components
 
     ''' <summary>
     ''' The warning message and exception message

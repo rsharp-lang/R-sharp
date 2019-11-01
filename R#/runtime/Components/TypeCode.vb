@@ -45,7 +45,7 @@
 
 #End Region
 
-Namespace Runtime
+Namespace Runtime.Components
 
     ''' <summary>
     ''' The R# types

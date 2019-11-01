@@ -1,4 +1,4 @@
-﻿Namespace Runtime
+﻿Namespace Runtime.Components
 
     Public Class RType
 
