@@ -171,8 +171,8 @@
     <Compile Include="Runtime\Internal\base.vb" />
     <Compile Include="Runtime\Internal\objects\dataframe.vb" />
     <Compile Include="Runtime\Internal\objects\list.vb" />
-    <Compile Include="Runtime\Variable.vb" />
-    <Compile Include="Runtime\TypeCode.vb" />
+    <Compile Include="Runtime\Components\Variable.vb" />
+    <Compile Include="Runtime\Components\TypeCode.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
