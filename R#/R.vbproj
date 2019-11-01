@@ -169,6 +169,8 @@
     <Compile Include="Runtime\Extensions.vb" />
     <Compile Include="Runtime\Environment.vb" />
     <Compile Include="Runtime\Internal\base.vb" />
+    <Compile Include="Runtime\Internal\Models\dataframe.vb" />
+    <Compile Include="Runtime\Internal\Models\list.vb" />
     <Compile Include="Runtime\Variable.vb" />
     <Compile Include="Runtime\TypeCode.vb" />
   </ItemGroup>
