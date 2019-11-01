@@ -4,6 +4,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Interpreter.ExecuteEngine
 
@@ -41,7 +42,7 @@ Namespace Interpreter.ExecuteEngine
         End Sub
 
         Sub New(code As List(Of Token))
-            Call Me.New(code:=code.Splitbytopleveldelimiter(TokenType.operator, includeKeyword:=True))
+            Call Me.New(code:=code.SplitByTopLevelDelimiter(TokenType.operator, includeKeyword:=True))
         End Sub
 
         Sub New(singleToken As Token())
