@@ -131,6 +131,7 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CodeComment.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\FunctionInvoke.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SequenceLiteral.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\IIfExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\ValueAssign.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolReference.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\VectorLiteral.vb" />

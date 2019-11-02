@@ -37,6 +37,8 @@ Namespace Runtime.Internal
                     Return Internal.print(paramVals(Scan0))
                 Case "stop"
                     Return Internal.stop(paramVals(Scan0), envir)
+                Case "warning"
+                    Return Internal.warning(paramVals(Scan0), envir)
                 Case "cat"
                     Return Internal.cat(paramVals(Scan0), paramVals.ElementAtOrDefault(1), paramVals.ElementAtOrDefault(2, " "))
                 Case "lapply"
