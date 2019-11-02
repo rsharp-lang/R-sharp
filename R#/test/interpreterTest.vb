@@ -1,5 +1,6 @@
 ﻿Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 
 Module interpreterTest
 

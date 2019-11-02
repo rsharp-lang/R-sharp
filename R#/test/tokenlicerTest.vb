@@ -4,6 +4,8 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 Module tokenlicerTest
 
     Sub Main()
+        Call pipelineTest()
+
         Call lambdaTest()
 
         Call sequnceTest()
@@ -11,6 +13,13 @@ Module tokenlicerTest
         Call declareFunctionTest()
         Call stringParser()
         Call declareTest()
+
+        Pause()
+    End Sub
+
+    Sub pipelineTest()
+        Dim tokens = New Scanner("a :> b").GetTokens.ToArray
+
 
         Pause()
     End Sub
