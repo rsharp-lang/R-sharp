@@ -53,13 +53,13 @@ Namespace Runtime.Components
                     If Not Me.parameters(i).Description.ParseBoolean Then
                         Return Internal.stop({$"Missing parameter value for '{Me.parameters(i).Name}'!", "function: " & name, "environment: " & envir.ToString}, envir)
                     Else
-                        parameters += Me.parameters(i).Value.default
+                        parameters.Add(Me.parameters(i).Value.default)
                     End If
                 Else
                     If Me.parameters(i).Value.type.isArray Then
-                        parameters += CObj(Runtime.asVector(arguments(i), Me.parameters(i).Value.type.raw.GetElementType))
+                        parameters.Add(CObj(Runtime.asVector(arguments(i), Me.parameters(i).Value.type.raw.GetElementType)))
                     Else
-                        parameters += Runtime.getFirst(arguments(i))
+                        parameters.Add(Runtime.getFirst(arguments(i)))
                     End If
                 End If
             Next

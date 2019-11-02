@@ -88,6 +88,9 @@ Namespace Interpreter.ExecuteEngine
                 End If
             Next
 
+            ' pipeline操作符是优先度最高的
+            Call buf.processPipeline(oplist)
+
             ' 算数操作符以及字符串操作符按照操作符的优先度进行构建
             Call buf.processOperators(oplist, operatorPriority, test:=Function(op, o) op.IndexOf(o) > -1)
 
@@ -97,7 +100,7 @@ Namespace Interpreter.ExecuteEngine
             ' 之后处理比较操作符
             Call buf.processOperators(oplist, comparisonOperators, test:=Function(op, o) op = o)
 
-            ' 之后处理逻辑操作符
+            ' 最后处理逻辑操作符
             Call buf.processOperators(oplist, logicalOperators, test:=Function(op, o) op = o)
 
             If buf > 1 Then

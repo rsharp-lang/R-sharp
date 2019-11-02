@@ -22,6 +22,11 @@ Namespace Interpreter.ExecuteEngine
             GetType(Long), GetType(Long())
         }
 
+        Shared ReadOnly floats As Index(Of Type) = {
+            GetType(Single), GetType(Single()),
+            GetType(Double), GetType(Double())
+        }
+
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim a As Object = left.Evaluate(envir)
             Dim b As Object = right.Evaluate(envir)
@@ -58,6 +63,17 @@ Namespace Interpreter.ExecuteEngine
                         Case "^" : Return Runtime.Core.Power(Of Long, Double, Double)(a, b).ToArray
                     End Select
                 End If
+            ElseIf ta Like floats Then
+                If tb Like integers Then
+
+                    Select Case [operator]
+                        Case "*" : Return Runtime.Core.Multiply(Of Double, Long, Double)(a, b).ToArray
+                    End Select
+                ElseIf tb Like floats Then
+                    Select Case [operator]
+                        Case "+" : Return Runtime.Core.Add(Of Double, Double, Double)(a, b).ToArray
+                    End Select
+                End If
             ElseIf ta Is GetType(String) OrElse tb Is GetType(String) Then
                 If [operator] = "&" Then
                     Return DoStringJoin(a, b)
@@ -85,7 +101,7 @@ Namespace Interpreter.ExecuteEngine
 
             End If
 
-            Throw New NotImplementedException
+            Throw New NotImplementedException($"<{ta.FullName}> {[operator]} <{tb.FullName}>")
         End Function
 
         Public Shared Function DoStringJoin(a As Object, b As Object) As String()

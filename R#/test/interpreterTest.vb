@@ -40,7 +40,9 @@ Module interpreterTest
                                Return x + z + y + 2
                            End Function)
 
-        Call R.Evaluate("((1+2)^4 * 88) :> add2(500,1) + 9")
+        Call R.Evaluate(" print( ((1+2)^4 * 88) :> add2(500,1) + 9^2)")
+        Call R.Evaluate("print('# Compares with normal function invoke style:')")
+        Call R.Evaluate("print( add2((1+2)^4 * 88 ,500,1) + 9^2)")
 
         Pause()
     End Sub
