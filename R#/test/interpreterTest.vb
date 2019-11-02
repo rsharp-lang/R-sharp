@@ -7,6 +7,7 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call linqTest()
         Call pipelineTest()
         Call iifTest()
         Call lambdaTest()
