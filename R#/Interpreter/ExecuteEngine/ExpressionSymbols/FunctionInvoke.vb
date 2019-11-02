@@ -11,10 +11,19 @@ Namespace Interpreter.ExecuteEngine
     Public Class FunctionInvoke : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
+            Get
+                Return TypeCodes.generic
+            End Get
+        End Property
+
+        ''' <summary>
+        ''' The source location of current function invoke calls
+        ''' </summary>
+        Dim span As CodeSpan
+
         Public ReadOnly Property funcName As String
 
-        Dim parameters As Expression()
-        Dim span As CodeSpan
+        Friend ReadOnly parameters As List(Of Expression)
 
         Sub New(tokens As Token())
             Dim params = tokens _
@@ -30,7 +39,17 @@ Namespace Interpreter.ExecuteEngine
                 .Select(Function(param)
                             Return Expression.CreateExpression(param)
                         End Function) _
-                .ToArray
+                .ToList
+        End Sub
+
+        ''' <summary>
+        ''' Use for create pipeline calls from identifier target
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <param name="parameter"></param>
+        Sub New(name As String, parameter As Expression)
+            funcName = name
+            parameters = New List(Of Expression) From {parameter}
         End Sub
 
         Public Overrides Function ToString() As String
@@ -58,7 +77,7 @@ Namespace Interpreter.ExecuteEngine
                     Dim key As String
                     Dim value As Object
 
-                    For i As Integer = 0 To parameters.Length - 1
+                    For i As Integer = 0 To parameters.Count - 1
                         slot = parameters(i)
 
                         If TypeOf slot Is ValueAssign Then

@@ -107,6 +107,42 @@ Namespace Interpreter.ExecuteEngine
             End If
         End Function
 
+        <Extension>
+        Private Sub processPipeline(buf As List(Of [Variant](Of Expression, String)), oplist As List(Of String))
+            If buf = 1 Then
+                Return
+            End If
+
+            Dim nop = oplist.AsEnumerable.Count(Function(op) op = ":>")
+            Dim pip As FunctionInvoke
+
+            ' 从左往右计算
+            For i As Integer = 0 To nop - 1
+                For j As Integer = 0 To buf.Count - 1
+                    If buf(j) Like GetType(String) AndAlso ":>" = buf(j).VB Then
+                        ' j-1 and j+1
+                        Dim a = buf(j - 1) ' parameter
+                        Dim b = buf(j + 1) ' function invoke
+
+
+                        If TypeOf b.VA Is FunctionInvoke Then
+                            pip = b.VA
+                            pip.parameters.Insert(Scan0, a.VA)
+                        ElseIf TypeOf b.VA Is SymbolReference Then
+                            pip = New FunctionInvoke(DirectCast(b.VA, SymbolReference).symbol, a.VA)
+                        Else
+                            Throw New SyntaxErrorException
+                        End If
+
+                        Call buf.RemoveRange(j - 1, 3)
+                        Call buf.Insert(j - 1, pip)
+
+                        Exit For
+                    End If
+                Next
+            Next
+        End Sub
+
         ''' <summary>
         ''' 
         ''' </summary>

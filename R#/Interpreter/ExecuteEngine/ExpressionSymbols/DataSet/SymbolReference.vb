@@ -8,7 +8,7 @@ Namespace Interpreter.ExecuteEngine
 
         Public Overrides ReadOnly Property type As TypeCodes
 
-        Dim symbol As String
+        Public ReadOnly Property symbol As String
 
         Sub New(symbol As Token)
             Me.symbol = symbol.text
