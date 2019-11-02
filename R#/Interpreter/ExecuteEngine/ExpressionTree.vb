@@ -97,8 +97,11 @@ Namespace Interpreter.ExecuteEngine
             ' 之后处理比较操作符
             Call buf.processOperators(oplist, comparisonOperators, test:=Function(op, o) op = o)
 
-            ' 最后处理逻辑操作符
+            ' 之后处理逻辑操作符
             Call buf.processOperators(oplist, logicalOperators, test:=Function(op, o) op = o)
+
+            ' 最后处理pipeline符号
+            Call buf.processOperators(oplist, {":>"}, test:=Function(op, o) op = o)
 
             If buf > 1 Then
                 Throw New SyntaxErrorException
@@ -106,6 +109,8 @@ Namespace Interpreter.ExecuteEngine
                 Return buf(Scan0)
             End If
         End Function
+
+
 
         ''' <summary>
         ''' 
@@ -116,6 +121,10 @@ Namespace Interpreter.ExecuteEngine
         ''' <param name="test">test(op, o)</param>
         <Extension>
         Private Sub processOperators(buf As List(Of [Variant](Of Expression, String)), oplist As List(Of String), operators$(), test As Func(Of String, String, Boolean))
+            If buf = 1 Then
+                Return
+            End If
+
             For Each op As String In operators
                 Dim nop As Integer = oplist _
                     .AsEnumerable _

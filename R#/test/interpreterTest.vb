@@ -7,6 +7,7 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call pipelineTest()
         Call iifTest()
         Call lambdaTest()
         Call testScript()
@@ -30,6 +31,12 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub pipelineTest()
+        Call R.Evaluate("[1,2,3,45] :> print")
 
         Pause()
     End Sub
