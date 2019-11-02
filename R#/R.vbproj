@@ -170,6 +170,7 @@
     <Compile Include="Runtime\Extensions.vb" />
     <Compile Include="Runtime\Environment.vb" />
     <Compile Include="Runtime\Internal\base.vb" />
+    <Compile Include="Runtime\Internal\invoke.vb" />
     <Compile Include="Runtime\Internal\objects\vector.vb" />
     <Compile Include="Runtime\Internal\objects\linq.vb" />
     <Compile Include="Runtime\Internal\objects\dataframe.vb" />
