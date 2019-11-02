@@ -42,7 +42,7 @@ Namespace Interpreter.ExecuteEngine
                 End If
 
                 ' 简单的表达式
-                If tokens(Scan0).name = TokenType.identifier AndAlso tokens(1).name = TokenType.open Then
+                If tokens.isFunctionInvoke Then
                     Return New FunctionInvoke(tokens)
                 ElseIf tokens(Scan0).name = TokenType.open Then
                     Dim openSymbol = tokens(Scan0).text
