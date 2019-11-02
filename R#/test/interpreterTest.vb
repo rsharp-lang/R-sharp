@@ -35,6 +35,12 @@ Module interpreterTest
         Pause()
     End Sub
 
+    Sub linqTest()
+        Call R.Evaluate("from x as double in [1,2,3,4] where x < 2 order by x distinct select x^2;")
+
+        Call Pause()
+    End Sub
+
     Sub pipelineTest()
         Call R.Add("add2", Function(x, y, z)
                                Return x + z + y + 2

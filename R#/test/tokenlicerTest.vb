@@ -4,6 +4,7 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 Module tokenlicerTest
 
     Sub Main()
+        Call linqQueryTest()
         Call pipelineTest()
 
         Call lambdaTest()
@@ -13,6 +14,12 @@ Module tokenlicerTest
         Call declareFunctionTest()
         Call stringParser()
         Call declareTest()
+
+        Pause()
+    End Sub
+
+    Sub linqQueryTest()
+        Dim tokens = New Scanner("a <- from x as double in [1,2,3,4] where x < 2 order by x distinct select x^2;").GetTokens.ToArray
 
         Pause()
     End Sub
