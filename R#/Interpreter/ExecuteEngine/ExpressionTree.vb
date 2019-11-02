@@ -100,17 +100,12 @@ Namespace Interpreter.ExecuteEngine
             ' 之后处理逻辑操作符
             Call buf.processOperators(oplist, logicalOperators, test:=Function(op, o) op = o)
 
-            ' 最后处理pipeline符号
-            Call buf.processOperators(oplist, {":>"}, test:=Function(op, o) op = o)
-
             If buf > 1 Then
                 Throw New SyntaxErrorException
             Else
                 Return buf(Scan0)
             End If
         End Function
-
-
 
         ''' <summary>
         ''' 

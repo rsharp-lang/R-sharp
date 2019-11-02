@@ -36,7 +36,11 @@ Module interpreterTest
     End Sub
 
     Sub pipelineTest()
-        Call R.Evaluate("[1,2,3,45] :> print")
+        Call R.Add("add2", Function(x, y, z)
+                               Return x + z + y + 2
+                           End Function)
+
+        Call R.Evaluate("((1+2)^4 * 88) :> add2(500,1) + 9")
 
         Pause()
     End Sub
