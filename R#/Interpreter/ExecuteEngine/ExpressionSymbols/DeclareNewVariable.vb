@@ -131,9 +131,9 @@ Namespace Interpreter.ExecuteEngine
 
         Public Overrides Function ToString() As String
             If names.Length > 1 Then
-                Return $"Dim [{names.JoinBy(", ")}] As {type.Description} = {value.ToString}"
+                Return $"Dim [{names.JoinBy(", ")}] As {type.Description} = {Scripting.ToString(value, "NULL")}"
             Else
-                Return $"Dim {names(Scan0)} As {type.Description} = {value.ToString}"
+                Return $"Dim {names(Scan0)} As {type.Description} = {Scripting.ToString(value, "NULL")}"
             End If
         End Function
     End Class
