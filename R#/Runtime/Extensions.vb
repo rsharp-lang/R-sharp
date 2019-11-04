@@ -5,7 +5,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Runtime
 
-    <HideModuleName> Module Extensions
+    <HideModuleName> Public Module Extensions
 
         Friend Function getFirst(value As Object) As Object
             Dim valueType As Type = value.GetType
@@ -17,7 +17,7 @@ Namespace Runtime
             End If
         End Function
 
-        Friend Function asVector(value As Object, type As Type) As Array
+        Public Function asVector(value As Object, type As Type) As Array
             Dim arrayType As Type = type.MakeArrayType
             Dim valueType As Type
 
