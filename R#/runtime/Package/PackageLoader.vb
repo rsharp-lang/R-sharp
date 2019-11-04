@@ -1,12 +1,18 @@
 ﻿Imports System.Reflection
-Imports Microsoft.VisualBasic.Scripting.MetaData
-Imports Microsoft.VisualBasic.Language.UnixBash
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Language.UnixBash
+Imports Microsoft.VisualBasic.Scripting.MetaData
 
 Namespace Runtime.Package
 
     Public Module PackageLoader
 
+        ''' <summary>
+        ''' 应该是只会加载静态方法
+        ''' </summary>
+        ''' <param name="dll$"></param>
+        ''' <param name="strict"></param>
+        ''' <returns></returns>
         <Extension>
         Public Iterator Function ParsePackages(dll$, Optional strict As Boolean = True) As IEnumerable(Of Package)
             Dim types As Type() = Assembly.LoadFrom(dll.GetFullPath).GetTypes
@@ -29,7 +35,13 @@ Namespace Runtime.Package
             Next
         End Function
 
-        Public Iterator Function ScanAssembly(directory As String, Optional strict As Boolean = True) As IEnumerable(Of Package)
+        ''' <summary>
+        ''' Scan the given directory and parse package from dll files.
+        ''' </summary>
+        ''' <param name="directory"></param>
+        ''' <param name="strict"></param>
+        ''' <returns></returns>
+        Public Iterator Function ScanDllFiles(directory As String, Optional strict As Boolean = True) As IEnumerable(Of Package)
             For Each dll As String In ls - l - r - "*.dll" <= directory
                 For Each package As Package In dll.ParsePackages(strict)
                     Yield package
