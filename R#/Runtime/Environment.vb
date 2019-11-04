@@ -117,7 +117,7 @@ Namespace Runtime
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Function Evaluate(exec As Expression()) As Object()
+        Public Function Evaluate(exec As IEnumerable(Of Expression)) As Object()
             Return exec _
                 .Select(Function(a) a.Evaluate(Me)) _
                 .ToArray

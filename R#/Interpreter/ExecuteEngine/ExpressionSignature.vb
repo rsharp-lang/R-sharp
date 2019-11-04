@@ -4,10 +4,34 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 
 Namespace Interpreter.ExecuteEngine
 
+    ''' <summary>
+    ''' ExpressionSignature
+    ''' </summary>
     <HideModuleName>
     <Extension>
-    Module Extensions
+    Module ExpressionSignature
 
+        ''' <summary>
+        ''' XXX(YYY)
+        ''' </summary>
+        ''' <param name="tokens"></param>
+        ''' <returns></returns>
+        <Extension>
+        Public Function isFunctionInvoke(tokens As Token()) As Boolean
+            If Not tokens(Scan0).name = TokenType.identifier Then
+                Return False
+            ElseIf Not tokens(1).name = TokenType.open OrElse Not tokens.Last.name = TokenType.close Then
+                Return False
+            Else
+                Return True
+            End If
+        End Function
+
+        ''' <summary>
+        ''' [x,y,z]
+        ''' </summary>
+        ''' <param name="tokens"></param>
+        ''' <returns></returns>
         <Extension>
         Public Function isTuple(tokens As Token()) As Boolean
             If tokens(Scan0).name <> TokenType.open OrElse tokens.Last.name <> TokenType.close Then
@@ -29,6 +53,11 @@ Namespace Interpreter.ExecuteEngine
             Return True
         End Function
 
+        ''' <summary>
+        ''' ,
+        ''' </summary>
+        ''' <param name="tokens"></param>
+        ''' <returns></returns>
         <Extension>
         Public Function isComma(tokens As Token()) As Boolean
             If tokens.Length = 1 AndAlso tokens(Scan0).name = TokenType.comma Then
@@ -38,6 +67,12 @@ Namespace Interpreter.ExecuteEngine
             End If
         End Function
 
+        ''' <summary>
+        ''' XXX
+        ''' </summary>
+        ''' <param name="tokens"></param>
+        ''' <param name="type"></param>
+        ''' <returns></returns>
         <Extension>
         Public Function isLiteral(tokens As Token(), Optional type As TokenType = TokenType.invalid) As Boolean
             If tokens.Length = 1 AndAlso tokens(Scan0).name Like Expression.literalTypes Then
@@ -51,6 +86,11 @@ Namespace Interpreter.ExecuteEngine
             End If
         End Function
 
+        ''' <summary>
+        ''' XXX
+        ''' </summary>
+        ''' <param name="tokens"></param>
+        ''' <returns></returns>
         <Extension>
         Public Function isIdentifier(tokens As Token()) As Boolean
             If tokens.Length = 1 AndAlso tokens(Scan0).name = TokenType.identifier Then
@@ -60,6 +100,12 @@ Namespace Interpreter.ExecuteEngine
             End If
         End Function
 
+        ''' <summary>
+        ''' XXX
+        ''' </summary>
+        ''' <param name="tokens"></param>
+        ''' <param name="keyword$"></param>
+        ''' <returns></returns>
         <Extension>
         Public Function isKeyword(tokens As Token(), Optional keyword$ = Nothing) As Boolean
             If tokens.Length = 1 AndAlso tokens(Scan0).name = TokenType.keyword Then
@@ -73,6 +119,12 @@ Namespace Interpreter.ExecuteEngine
             End If
         End Function
 
+        ''' <summary>
+        ''' *
+        ''' </summary>
+        ''' <param name="tokens"></param>
+        ''' <param name="operators"></param>
+        ''' <returns></returns>
         <Extension>
         Public Function isOperator(tokens As Token(), ParamArray operators As String()) As Boolean
             If tokens.Length = 1 AndAlso tokens(Scan0).name = TokenType.operator Then

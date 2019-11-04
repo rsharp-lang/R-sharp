@@ -44,5 +44,9 @@ Namespace Interpreter.ExecuteEngine
 
             Return result
         End Function
+
+        Public Overrides Function ToString() As String
+            Return $"[{values.JoinBy(", ")}]"
+        End Function
     End Class
 End Namespace

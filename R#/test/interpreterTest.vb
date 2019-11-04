@@ -1,11 +1,14 @@
 ﻿Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 
 Module interpreterTest
 
     Dim R As New RInterpreter
 
     Sub Main()
+        Call linqTest()
+        Call pipelineTest()
         Call iifTest()
         Call lambdaTest()
         Call testScript()
@@ -29,6 +32,24 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub linqTest()
+        Call R.Evaluate("from x as double in [1,2,3,4] let y = randf() where x < 2 order by y distinct select [y, x^2];")
+
+        Call Pause()
+    End Sub
+
+    Sub pipelineTest()
+        Call R.Add("add2", Function(x, y, z)
+                               Return x + z + y + 2
+                           End Function)
+
+        Call R.Evaluate(" print( ((1+2)^4 * 88) :> add2(500,1) + 9^2)")
+        Call R.Evaluate("print('# Compares with normal function invoke style:')")
+        Call R.Evaluate("print( add2((1+2)^4 * 88 ,500,1) + 9^2)")
 
         Pause()
     End Sub

@@ -1,5 +1,4 @@
 ﻿Imports Microsoft.VisualBasic.ComponentModel.Collection
-Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
@@ -11,10 +10,19 @@ Namespace Interpreter.ExecuteEngine
     Public Class FunctionInvoke : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
+            Get
+                Return TypeCodes.generic
+            End Get
+        End Property
+
+        ''' <summary>
+        ''' The source location of current function invoke calls
+        ''' </summary>
+        Dim span As CodeSpan
+
         Public ReadOnly Property funcName As String
 
-        Dim parameters As Expression()
-        Dim span As CodeSpan
+        Friend ReadOnly parameters As List(Of Expression)
 
         Sub New(tokens As Token())
             Dim params = tokens _
@@ -30,7 +38,17 @@ Namespace Interpreter.ExecuteEngine
                 .Select(Function(param)
                             Return Expression.CreateExpression(param)
                         End Function) _
-                .ToArray
+                .ToList
+        End Sub
+
+        ''' <summary>
+        ''' Use for create pipeline calls from identifier target
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <param name="parameter"></param>
+        Sub New(name As String, parameter As Expression)
+            funcName = name
+            parameters = New List(Of Expression) From {parameter}
         End Sub
 
         Public Overrides Function ToString() As String
@@ -58,7 +76,7 @@ Namespace Interpreter.ExecuteEngine
                     Dim key As String
                     Dim value As Object
 
-                    For i As Integer = 0 To parameters.Length - 1
+                    For i As Integer = 0 To parameters.Count - 1
                         slot = parameters(i)
 
                         If TypeOf slot Is ValueAssign Then
@@ -75,7 +93,7 @@ Namespace Interpreter.ExecuteEngine
 
                     Return list
                 Else
-                    Return invokeInternals(envir, funcName, envir.Evaluate(parameters))
+                    Return Runtime.Internal.invokeInternals(envir, funcName, envir.Evaluate(parameters))
                 End If
             ElseIf funcVar.value.GetType Like runtimeFuncs Then
                 ' invoke method create from R# script
@@ -84,50 +102,6 @@ Namespace Interpreter.ExecuteEngine
                 ' invoke .NET method
                 Return DirectCast(funcVar.value, RMethodInfo).Invoke(envir, envir.Evaluate(parameters))
             End If
-        End Function
-
-        ''' <summary>
-        ''' Invoke the runtime internal functions
-        ''' </summary>
-        ''' <param name="envir"></param>
-        ''' <param name="funcName$"></param>
-        ''' <param name="paramVals"></param>
-        ''' <returns></returns>
-        Private Shared Function invokeInternals(envir As Environment, funcName$, paramVals As Object()) As Object
-            Select Case funcName
-                Case "length" : Return DirectCast(paramVals(Scan0), Array).Length
-                Case "round"
-                    Dim x = paramVals(Scan0)
-                    Dim decimals As Integer = Runtime.getFirst(paramVals(1))
-
-                    If x.GetType.IsInheritsFrom(GetType(Array)) Then
-                        Return (From element As Object In DirectCast(x, Array).AsQueryable Select Math.Round(CDbl(element), decimals)).ToArray
-                    Else
-                        Return Math.Round(CDbl(x), decimals)
-                    End If
-                Case "print"
-                    Return Internal.print(paramVals(Scan0))
-                Case "stop"
-                    Return Internal.stop(paramVals(Scan0), envir)
-                Case "cat"
-                    Return Internal.cat(paramVals(Scan0), paramVals.ElementAtOrDefault(1), paramVals.ElementAtOrDefault(2, " "))
-                Case "lapply"
-                    If paramVals.ElementAtOrDefault(1) Is Nothing Then
-                        Return Internal.stop({"Missing apply function!"}, envir)
-                    ElseIf Not paramVals(1).GetType.ImplementInterface(GetType(RFunction)) Then
-                        Return Internal.stop({"Target is not a function!"}, envir)
-                    End If
-
-                    If Program.isException(paramVals(Scan0)) Then
-                        Return paramVals(Scan0)
-                    ElseIf Program.isException(paramVals(1)) Then
-                        Return paramVals(1)
-                    End If
-
-                    Return Internal.lapply(paramVals(Scan0), paramVals(1), envir)
-                Case Else
-                    Return Message.SymbolNotFound(envir, funcName, TypeCodes.closure)
-            End Select
         End Function
     End Class
 End Namespace

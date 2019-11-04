@@ -129,7 +129,8 @@ Namespace Interpreter
 
         Private Function RunInternal(script$, source$, arguments As NamedValue(Of Object)()) As Object
             Dim globalEnvir As Environment = InitializeEnvironment(source, arguments)
-            Dim result As Object = Code.ParseScript(script).RunProgram(globalEnvir)
+            Dim program As Program = Code.ParseScript(script).DoCall(AddressOf Program.CreateProgram)
+            Dim result As Object = program.Execute(globalEnvir)
 
             Return finalizeResult(result)
         End Function

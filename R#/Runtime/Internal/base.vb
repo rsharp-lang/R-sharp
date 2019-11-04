@@ -13,6 +13,15 @@ Namespace Runtime.Internal
     ''' </summary>
     Public Module base
 
+        Public Function names([object] As Object, namelist As Object) As Object
+            If namelist Is Nothing OrElse Runtime.asVector(Of Object)(namelist).Length = 0 Then
+                ' get names
+            Else
+                ' set names
+
+            End If
+        End Function
+
         Public Function [stop](message As Object, envir As Environment) As Message
             Return createMessageInternal(message, envir, level:=MSG_TYPES.ERR)
         End Function

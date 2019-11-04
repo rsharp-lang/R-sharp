@@ -42,7 +42,7 @@ Namespace Interpreter.ExecuteEngine
                 End If
 
                 ' 简单的表达式
-                If tokens(Scan0).name = TokenType.identifier AndAlso tokens(1).name = TokenType.open Then
+                If tokens.isFunctionInvoke Then
                     Return New FunctionInvoke(tokens)
                 ElseIf tokens(Scan0).name = TokenType.open Then
                     Dim openSymbol = tokens(Scan0).text
@@ -88,6 +88,9 @@ Namespace Interpreter.ExecuteEngine
                 End If
             Next
 
+            ' pipeline操作符是优先度最高的
+            Call buf.processPipeline(oplist)
+
             ' 算数操作符以及字符串操作符按照操作符的优先度进行构建
             Call buf.processOperators(oplist, operatorPriority, test:=Function(op, o) op.IndexOf(o) > -1)
 
@@ -107,6 +110,42 @@ Namespace Interpreter.ExecuteEngine
             End If
         End Function
 
+        <Extension>
+        Private Sub processPipeline(buf As List(Of [Variant](Of Expression, String)), oplist As List(Of String))
+            If buf = 1 Then
+                Return
+            End If
+
+            Dim nop = oplist.AsEnumerable.Count(Function(op) op = ":>")
+            Dim pip As FunctionInvoke
+
+            ' 从左往右计算
+            For i As Integer = 0 To nop - 1
+                For j As Integer = 0 To buf.Count - 1
+                    If buf(j) Like GetType(String) AndAlso ":>" = buf(j).VB Then
+                        ' j-1 and j+1
+                        Dim a = buf(j - 1) ' parameter
+                        Dim b = buf(j + 1) ' function invoke
+
+
+                        If TypeOf b.VA Is FunctionInvoke Then
+                            pip = b.VA
+                            pip.parameters.Insert(Scan0, a.VA)
+                        ElseIf TypeOf b.VA Is SymbolReference Then
+                            pip = New FunctionInvoke(DirectCast(b.VA, SymbolReference).symbol, a.VA)
+                        Else
+                            Throw New SyntaxErrorException
+                        End If
+
+                        Call buf.RemoveRange(j - 1, 3)
+                        Call buf.Insert(j - 1, pip)
+
+                        Exit For
+                    End If
+                Next
+            Next
+        End Sub
+
         ''' <summary>
         ''' 
         ''' </summary>
@@ -116,6 +155,10 @@ Namespace Interpreter.ExecuteEngine
         ''' <param name="test">test(op, o)</param>
         <Extension>
         Private Sub processOperators(buf As List(Of [Variant](Of Expression, String)), oplist As List(Of String), operators$(), test As Func(Of String, String, Boolean))
+            If buf = 1 Then
+                Return
+            End If
+
             For Each op As String In operators
                 Dim nop As Integer = oplist _
                     .AsEnumerable _

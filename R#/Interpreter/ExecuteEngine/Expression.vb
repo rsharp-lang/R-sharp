@@ -50,6 +50,7 @@ Namespace Interpreter.ExecuteEngine
                     Case "elseif" : Return New ElseIfBranch(code.Skip(1).IteratesALL)
                     Case "return" : Return New ReturnValue(code.Skip(1).IteratesALL)
                     Case "for" : Return New ForLoop(code.Skip(1).IteratesALL)
+                    Case "from" : Return New LinqExpression(code)
                     Case Else
                         Throw New SyntaxErrorException
                 End Select
