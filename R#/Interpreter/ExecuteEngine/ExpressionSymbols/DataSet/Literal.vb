@@ -80,7 +80,11 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Public Overrides Function ToString() As String
-            Return value.ToString
+            If value Is Nothing Then
+                Return "NULL"
+            Else
+                Return value.ToString
+            End If
         End Function
     End Class
 End Namespace

@@ -14,6 +14,10 @@ Namespace Interpreter.ExecuteEngine
             Me.symbol = symbol.text
         End Sub
 
+        Sub New(symbol As String)
+            Me.symbol = symbol
+        End Sub
+
         Public Overrides Function Evaluate(envir As Environment) As Object
             Return envir(symbol).value
         End Function

@@ -22,5 +22,9 @@ Namespace Interpreter.ExecuteEngine
         Public Overrides Function Evaluate(envir As Environment) As Object
             Return Me.value.Evaluate(envir)
         End Function
+
+        Public Overrides Function ToString() As String
+            Return $"return {value.ToString}"
+        End Function
     End Class
 End Namespace

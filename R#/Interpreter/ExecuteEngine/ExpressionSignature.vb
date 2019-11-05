@@ -104,6 +104,25 @@ Namespace Interpreter.ExecuteEngine
         ''' <summary>
         ''' XXX
         ''' </summary>
+        ''' <param name="token"></param>
+        ''' <param name="keyword"></param>
+        ''' <returns></returns>
+        <Extension>
+        Public Function isKeyword(token As Token, Optional keyword$ = Nothing) As Boolean
+            If token.name = TokenType.keyword Then
+                If Not keyword.StringEmpty Then
+                    Return token.text = keyword
+                Else
+                    Return True
+                End If
+            Else
+                Return False
+            End If
+        End Function
+
+        ''' <summary>
+        ''' XXX
+        ''' </summary>
         ''' <param name="tokens"></param>
         ''' <param name="keyword$"></param>
         ''' <returns></returns>
@@ -128,7 +147,7 @@ Namespace Interpreter.ExecuteEngine
         ''' <returns></returns>
         <Extension>
         Public Function isOneOfKeywords(tokens As Token(), ParamArray keywords$()) As Boolean
-            If keywords.Length = 0 Then
+            If keywords.Length = 0 OrElse tokens.IsNullOrEmpty Then
                 Return False
             End If
 

@@ -31,7 +31,7 @@ Namespace Interpreter.ExecuteEngine
         ''' <summary>
         ''' select
         ''' </summary>
-        Dim projection As ClosureExpression
+        Dim projection As Expression
 
         Dim output As ClosureExpression
 
@@ -85,7 +85,7 @@ Namespace Interpreter.ExecuteEngine
                         Case "let"
                             buffer += token
 
-                            Do While Not p.Current.isOneOfKeywords(linqKeywordDelimiters)
+                            Do While Not p.EndRead AndAlso Not p.Current.isOneOfKeywords(linqKeywordDelimiters)
                                 buffer += ++p
                             Loop
 
@@ -97,46 +97,64 @@ Namespace Interpreter.ExecuteEngine
                                         End Function)
                             program += New ValueAssign(declares.Last.names, declares.Last.value)
                         Case "where"
-                            Do While Not p.Current.isOneOfKeywords(linqKeywordDelimiters)
+                            Do While Not p.EndRead AndAlso Not p.Current.isOneOfKeywords(linqKeywordDelimiters)
                                 buffer += ++p
                             Loop
 
-                            expression = buffer.IteratesALL.DoCall(AddressOf Expression.CreateExpression)
+                            expression = buffer _
+                                .IteratesALL _
+                                .DoCall(AddressOf Expression.CreateExpression)
                             program += New IfBranch(expression, {New ReturnValue(Literal.NULL)})
                         Case "distinct"
+                            output += New FunctionInvoke("unique", New SymbolReference("$"))
                         Case "order"
                             ' order by xxx asc
-                            Do While Not p.Current.isOneOfKeywords(linqKeywordDelimiters)
+                            Do While Not p.EndRead AndAlso Not p.Current.isOneOfKeywords(linqKeywordDelimiters)
                                 buffer += ++p
                             Loop
 
-                            token = buffer _
-                                .Take(buffer.Count - 1) _
-                                .IteratesALL _
-                                .ToArray
+                            token = buffer.IteratesALL.ToArray
+
+                            If Not token(Scan0).isKeyword("by") Then
+                                Throw New SyntaxErrorException
+                            End If
 
                             ' skip first by keyword
                             expression = token _
                                 .Skip(1) _
+                                .Take(token.Length - 2) _
                                 .DoCall(AddressOf Expression.CreateExpression)
-                            output += New FunctionInvoke("sort", expression, New Literal(buffer.Last.isKeyword("descending")))
+                            output += New FunctionInvoke("sort", expression, New Literal(token.Last.isKeyword("descending")))
                         Case "select"
-                            Do While Not p.Current.isOneOfKeywords(linqKeywordDelimiters)
+                            If Not projection Is Nothing Then
+                                Throw New SyntaxErrorException("Only allows one project function!")
+                            End If
+
+                            Do While Not p.EndRead AndAlso Not p.Current.isOneOfKeywords(linqKeywordDelimiters)
                                 buffer += ++p
                             Loop
+
+                            projection = Expression.CreateExpression(buffer.IteratesALL)
                         Case "group"
-                            Do While Not p.Current.isOneOfKeywords(linqKeywordDelimiters)
+                            Do While Not p.EndRead AndAlso Not p.Current.isOneOfKeywords(linqKeywordDelimiters)
                                 buffer += ++p
                             Loop
+
+                            Throw New NotImplementedException
                         Case Else
                             Throw New SyntaxErrorException
                     End Select
                 End If
             Loop
+
+            Me.program = program.ToArray
+            Me.output = output.ToArray
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Return From x In {} Select x Order By x Ascending Order By x Descending
+
+
+            Throw New NotImplementedException
         End Function
     End Class
 End Namespace
