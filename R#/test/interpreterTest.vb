@@ -38,15 +38,14 @@ Module interpreterTest
 
     Sub linqTest()
         Call R.Evaluate("
-let zzz <- from x as double in list(A =5,B =1, C=2,D =3,E =4) 
+let x = 8;
+let zzz <- from x as double in list(skip = x, A =5,B =1, C=2,D =3,E =4) 
            let y as double = x+6
-           where x <= 2 
+           where x <= 5 
            let z = x + 5
            select [AA = z,BB = y, x^2];
-           # order by y acesding
-           # distinct ;
-
-print(zzz)
+		   
+print(zzz);
 ")
 
         Call Pause()

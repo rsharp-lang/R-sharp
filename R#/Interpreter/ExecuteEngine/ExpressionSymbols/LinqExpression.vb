@@ -175,11 +175,14 @@ Namespace Interpreter.ExecuteEngine
             Dim from As String() = locals(Scan0).names
             Dim key$
 
+            ' 20191105
+            ' 序列的产生需要放在变量申明之前
+            ' 否则linq表达式中的与外部环境中的同名变量会导致NULL错误出现
+            sequence = Me.sequence.Evaluate(envir)
+
             For Each local As DeclareNewVariable In locals
                 Call local.Evaluate(envir)
             Next
-
-            sequence = Me.sequence.Evaluate(envir)
 
             If sequence.GetType Is GetType(Dictionary(Of String, Object)) Then
                 sequence = DirectCast(sequence, Dictionary(Of String, Object)).ToArray
