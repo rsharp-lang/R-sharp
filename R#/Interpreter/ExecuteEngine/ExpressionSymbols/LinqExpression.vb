@@ -164,8 +164,9 @@ Namespace Interpreter.ExecuteEngine
         Public Overrides Function Evaluate(parent As Environment) As Object
             Dim envir As New Environment(parent, "linq_closure")
             Dim sequence As Array
-            Dim result As New List(Of Object)
+            Dim result As New Dictionary(Of String, Object)
             Dim from As String() = locals(Scan0).names
+            Dim key$
 
             For Each local As DeclareNewVariable In locals
                 Call local.Evaluate(envir)
@@ -173,7 +174,16 @@ Namespace Interpreter.ExecuteEngine
 
             sequence = Runtime.asVector(Of Object)(Me.sequence.Evaluate(envir))
 
-            For Each item As Object In sequence
+            For i As Integer = 0 To sequence.Length - 1
+                Dim item = sequence.GetValue(i)
+
+                If TypeOf item Is KeyValuePair(Of String, Object) Then
+                    key = DirectCast(item, KeyValuePair(Of String, Object)).Key
+                    item = DirectCast(item, KeyValuePair(Of String, Object)).Value
+                Else
+                    key = i + 1
+                End If
+
                 ' from xxx in sequence
                 ValueAssign.doValueAssign(envir, from, False, item)
                 ' run program
@@ -182,14 +192,14 @@ Namespace Interpreter.ExecuteEngine
                 If Not item Is Nothing AndAlso item.GetType Is GetType(IfBranch.IfPromise) Then
                     Continue For
                 Else
-                    result += projection.Evaluate(envir)
+                    result.Add(key, projection.Evaluate(envir))
                 End If
             Next
 
             If output.isEmpty Then
-                Return result.ToArray
+                Return result
             Else
-                envir.Push("$", result.ToArray)
+                envir.Push("$", result)
 
                 Return output.Evaluate(envir)
             End If
