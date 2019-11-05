@@ -26,7 +26,6 @@ Namespace Interpreter.ExecuteEngine
         ''' from
         ''' </summary>
         Dim variable As DeclareNewVariable
-        Dim declares As New List(Of DeclareNewVariable)
         Dim program As ClosureExpression
         ''' <summary>
         ''' select
@@ -89,13 +88,14 @@ Namespace Interpreter.ExecuteEngine
                                 buffer += ++p
                             Loop
 
-                            declares += buffer _
+                            Dim declares = buffer _
                                 .IteratesALL _
                                 .SplitByTopLevelDelimiter(TokenType.operator, True) _
                                 .DoCall(Function(blocks)
                                             Return New DeclareNewVariable(blocks)
                                         End Function)
-                            program += New ValueAssign(declares.Last.names, declares.Last.value)
+                            program += declares
+                            program += New ValueAssign(declares.names, declares.value)
                         Case "where"
                             Do While Not p.EndRead AndAlso Not p.Current.isOneOfKeywords(linqKeywordDelimiters)
                                 buffer += ++p
@@ -151,8 +151,22 @@ Namespace Interpreter.ExecuteEngine
             Me.output = output.ToArray
         End Sub
 
-        Public Overrides Function Evaluate(envir As Environment) As Object
+        Public Overrides Function Evaluate(parent As Environment) As Object
+            Dim envir As Environment = New Environment(parent, "linq_closure")
+            Dim sequence As Array
+            Dim result As New List(Of Object)
 
+            Call variable.Evaluate(envir)
+
+            sequence = Runtime.asVector(Of Object)(Me.sequence.Evaluate(envir))
+
+            For Each item As Object In sequence
+                ' from xxx in sequence
+                Call ValueAssign.doValueAssign(envir, variable.names, False, item)
+                ' run program
+                Call program.Evaluate(envir)
+
+            Next
 
             Throw New NotImplementedException
         End Function

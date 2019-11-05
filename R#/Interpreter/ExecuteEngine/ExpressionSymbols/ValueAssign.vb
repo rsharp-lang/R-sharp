@@ -39,15 +39,19 @@ Namespace Interpreter.ExecuteEngine
             If value.GetType Is GetType(IfBranch.IfPromise) Then
                 DirectCast(value, IfBranch.IfPromise).assignTo = Me
                 Return value
+            Else
+                Return doValueAssign(envir, targetSymbols, isByRef, value)
             End If
+        End Function
 
+        Friend Shared Function doValueAssign(envir As Environment, targetSymbols$(), isByRef As Boolean, value As Object) As Object
             Dim message As Message
 
             If targetSymbols.Length = 1 Then
-                message = assignSymbol(envir, targetSymbols(Scan0), value)
+                message = assignSymbol(envir, targetSymbols(Scan0), isByRef, value)
             Else
                 ' assign tuples
-                message = assignTuples(envir, value)
+                message = assignTuples(envir, targetSymbols, isByRef, value)
             End If
 
             If message Is Nothing Then
@@ -65,7 +69,7 @@ Namespace Interpreter.ExecuteEngine
             End If
         End Function
 
-        Private Function assignTuples(envir As Environment, value As Object) As Message
+        Private Shared Function assignTuples(envir As Environment, targetSymbols$(), isByRef As Boolean, value As Object) As Message
             If value.GetType.IsInheritsFrom(GetType(Array)) Then
                 Dim array As Array = value
                 Dim message As New Value(Of Message)
@@ -73,14 +77,14 @@ Namespace Interpreter.ExecuteEngine
                 If array.Length = 1 Then
                     ' all assign the same value result
                     For Each name As String In targetSymbols
-                        If Not (message = assignSymbol(envir, name, value)) Is Nothing Then
+                        If Not (message = assignSymbol(envir, name, isByRef, value)) Is Nothing Then
                             Return message
                         End If
                     Next
                 ElseIf array.Length = targetSymbols.Length Then
                     ' one by one
                     For i As Integer = 0 To array.Length - 1
-                        If Not (message = assignSymbol(envir, targetSymbols(i), array.GetValue(i))) Is Nothing Then
+                        If Not (message = assignSymbol(envir, targetSymbols(i), isByRef, array.GetValue(i))) Is Nothing Then
                             Return message
                         End If
                     Next
@@ -95,7 +99,7 @@ Namespace Interpreter.ExecuteEngine
             Return Nothing
         End Function
 
-        Private Function assignSymbol(envir As Environment, symbolName$, value As Object) As Message
+        Private Shared Function assignSymbol(envir As Environment, symbolName$, isByRef As Boolean, value As Object) As Message
             Dim target As Variable = envir.FindSymbol(symbolName)
 
             If target Is Nothing Then
