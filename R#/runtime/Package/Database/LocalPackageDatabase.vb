@@ -23,6 +23,13 @@ Namespace Runtime.Package
 
         Public Shared ReadOnly Property localDb As String = App.LocalData & "/packages.xml"
 
+        Public Shared Function EmptyRepository() As LocalPackageDatabase
+            Return New LocalPackageDatabase With {
+                .packages = {},
+                .system = GetType(LocalPackageDatabase).Assembly.FromAssembly
+            }
+        End Function
+
         Public Shared Function Build(repository As String) As LocalPackageDatabase
             Dim packages As PackageLoaderEntry() = PackageLoader _
                 .ScanDllFiles(directory:=repository) _
