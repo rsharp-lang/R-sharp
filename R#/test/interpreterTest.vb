@@ -37,7 +37,17 @@ Module interpreterTest
     End Sub
 
     Sub linqTest()
-        Call R.Evaluate("from x as double in [1,2,3,4] let y = randf() where x < 2 order by y distinct select [y, x^2];")
+        Call R.Evaluate("
+let zzz <- from x as double in [1,2,3,4] 
+           let y as double = randf() 
+           where x < 2 
+           let z = x + 5
+           order by y acesding
+           distinct 
+           select [z, y, x^2];
+
+print(zzz)
+")
 
         Call Pause()
     End Sub

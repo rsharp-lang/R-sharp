@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 
@@ -114,6 +115,25 @@ Namespace Interpreter.ExecuteEngine
                 Else
                     Return True
                 End If
+            Else
+                Return False
+            End If
+        End Function
+
+        ''' <summary>
+        ''' XXX
+        ''' </summary>
+        ''' <param name="tokens"></param>
+        ''' <param name="keywords"></param>
+        ''' <returns></returns>
+        <Extension>
+        Public Function isOneOfKeywords(tokens As Token(), ParamArray keywords$()) As Boolean
+            If keywords.Length = 0 Then
+                Return False
+            End If
+
+            If tokens.Length = 1 AndAlso tokens(Scan0).name = TokenType.keyword Then
+                Return keywords.IndexOf(tokens(Scan0).text) > -1
             Else
                 Return False
             End If

@@ -53,6 +53,15 @@ Namespace Interpreter.ExecuteEngine
             }
         End Sub
 
+        Sub New(ifTest As Expression, trueClosure As ClosureExpression)
+            Me.ifTest = ifTest
+            Me.trueClosure = New DeclareNewFunction With {
+                .funcName = "if_closure_internal",
+                .params = {},
+                .body = trueClosure
+            }
+        End Sub
+
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim test As Boolean = Runtime.getFirst(ifTest.Evaluate(envir))
 

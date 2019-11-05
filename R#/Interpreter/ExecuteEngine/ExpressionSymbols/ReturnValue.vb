@@ -15,6 +15,10 @@ Namespace Interpreter.ExecuteEngine
             Me.value = Expression.CreateExpression(value)
         End Sub
 
+        Sub New(value As Expression)
+            Me.value = value
+        End Sub
+
         Public Overrides Function Evaluate(envir As Environment) As Object
             Return Me.value.Evaluate(envir)
         End Function

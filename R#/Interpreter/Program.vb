@@ -10,7 +10,7 @@ Namespace Interpreter
 
     Public Class Program : Implements IEnumerable(Of Expression)
 
-        Dim execQueue As Expression()
+        Friend execQueue As Expression()
 
         Sub New()
         End Sub

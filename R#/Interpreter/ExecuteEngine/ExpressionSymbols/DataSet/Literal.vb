@@ -12,6 +12,15 @@ Namespace Interpreter.ExecuteEngine
 
         Dim value As Object
 
+        Public Shared ReadOnly Property NULL As Literal
+            Get
+                Return New Literal With {.value = Nothing}
+            End Get
+        End Property
+
+        Sub New()
+        End Sub
+
         Sub New(token As Token)
             Select Case token.name
                 Case TokenType.booleanLiteral

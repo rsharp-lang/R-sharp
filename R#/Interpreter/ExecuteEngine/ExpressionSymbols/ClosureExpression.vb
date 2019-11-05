@@ -22,6 +22,10 @@ Namespace Interpreter.ExecuteEngine
             program = Program.CreateProgram(tokens)
         End Sub
 
+        Sub New(code As Expression())
+            program = New Program With {.execQueue = code}
+        End Sub
+
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function Evaluate(envir As Environment) As Object
             Return program.Execute(envir)
@@ -31,5 +35,10 @@ Namespace Interpreter.ExecuteEngine
         Public Shared Function ParseExpressionTree(tokens As IEnumerable(Of Token)) As ClosureExpression
             Return New ClosureExpression(tokens)
         End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Shared Widening Operator CType(code As Expression()) As ClosureExpression
+            Return New ClosureExpression(code)
+        End Operator
     End Class
 End Namespace

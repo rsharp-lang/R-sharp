@@ -25,6 +25,11 @@ Namespace Interpreter.ExecuteEngine
             value = tokens.Skip(2).AsList.DoCall(AddressOf Expression.ParseExpression)
         End Sub
 
+        Sub New(targetSymbols$(), value As Expression)
+            Me.targetSymbols = targetSymbols
+            Me.value = value
+        End Sub
+
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function Evaluate(envir As Environment) As Object
             Return DoValueAssign(envir, value.Evaluate(envir))
