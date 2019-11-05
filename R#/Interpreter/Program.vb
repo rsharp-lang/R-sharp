@@ -23,7 +23,7 @@ Namespace Interpreter
 
                 If TypeOf expression Is ReturnValue Then
                     ' return keyword will break the function
-                    Exit For
+                    last = New ReturnValue(New Literal With {.value = last})
                 End If
 
                 If Not last Is Nothing Then
@@ -39,6 +39,12 @@ Namespace Interpreter
                     ElseIf last.GetType Is GetType(IfBranch.IfPromise) Then
                         envir.ifPromise.Add(last)
                         last = DirectCast(last, IfBranch.IfPromise).Value
+
+                        If envir.ifPromise.Last.Result Then
+                            If Not last Is Nothing AndAlso last.GetType Is GetType(ReturnValue) Then
+                                Exit For
+                            End If
+                        End If
                     End If
                 End If
             Next

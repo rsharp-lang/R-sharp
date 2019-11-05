@@ -110,6 +110,13 @@ Namespace Interpreter.ExecuteEngine
                             expression = buffer _
                                 .IteratesALL _
                                 .DoCall(AddressOf Expression.CreateExpression)
+                            ' 需要取反才可以正常执行中断语句
+                            ' 例如 where 5 < 2
+                            ' if test的结果为false
+                            ' 则当前迭代循环需要跳过
+                            ' 即执行trueclosure部分
+                            ' 或者添加一个else closure
+                            expression = New BinaryExpression(expression, Literal.FALSE, "==")
                             program += New IfBranch(expression, {New ReturnValue(Literal.NULL)})
                         Case "distinct"
                             output += New FunctionInvoke("unique", New SymbolReference("$"))
@@ -163,7 +170,7 @@ Namespace Interpreter.ExecuteEngine
 
         Public Overrides Function Evaluate(parent As Environment) As Object
             Dim envir As New Environment(parent, "linq_closure")
-            Dim sequence As Array
+            Dim sequence As Object
             Dim result As New Dictionary(Of String, Object)
             Dim from As String() = locals(Scan0).names
             Dim key$
@@ -172,7 +179,13 @@ Namespace Interpreter.ExecuteEngine
                 Call local.Evaluate(envir)
             Next
 
-            sequence = Runtime.asVector(Of Object)(Me.sequence.Evaluate(envir))
+            sequence = Me.sequence.Evaluate(envir)
+
+            If sequence.GetType Is GetType(Dictionary(Of String, Object)) Then
+                sequence = DirectCast(sequence, Dictionary(Of String, Object)).ToArray
+            Else
+                sequence = Runtime.asVector(Of Object)(sequence)
+            End If
 
             For i As Integer = 0 To sequence.Length - 1
                 Dim item = sequence.GetValue(i)
@@ -189,7 +202,7 @@ Namespace Interpreter.ExecuteEngine
                 ' run program
                 item = program.Evaluate(envir)
 
-                If Not item Is Nothing AndAlso item.GetType Is GetType(IfBranch.IfPromise) Then
+                If Not item Is Nothing AndAlso item.GetType Is GetType(ReturnValue) Then
                     Continue For
                 Else
                     result.Add(key, projection.Evaluate(envir))

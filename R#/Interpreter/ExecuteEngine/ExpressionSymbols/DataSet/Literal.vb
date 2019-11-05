@@ -10,7 +10,7 @@ Namespace Interpreter.ExecuteEngine
 
         Public Overrides ReadOnly Property type As TypeCodes
 
-        Dim value As Object
+        Friend value As Object
 
         Public Shared ReadOnly Property NULL As Literal
             Get

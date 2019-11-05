@@ -27,6 +27,11 @@ Namespace Interpreter.ExecuteEngine
             GetType(Double), GetType(Double())
         }
 
+        Shared ReadOnly logicals As Index(Of Type) = {
+            GetType(Boolean),
+            GetType(Boolean())
+        }
+
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim a As Object = left.Evaluate(envir)
             Dim b As Object = right.Evaluate(envir)
@@ -97,6 +102,23 @@ Namespace Interpreter.ExecuteEngine
                             y:=Core.asLogical(b),
                             [do]:=op
                         ).ToArray
+                End If
+
+                If ta Like logicals AndAlso tb Like logicals Then
+                    Select Case [operator]
+                        Case "=="
+                            Return Runtime.Core.BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
+                                x:=Runtime.asVector(Of Boolean)(a),
+                                y:=Runtime.asVector(Of Boolean)(b),
+                                [do]:=Function(x, y) x = y
+                            ).ToArray
+                        Case "!="
+                            Return Runtime.Core.BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
+                                x:=Runtime.asVector(Of Boolean)(a),
+                                y:=Runtime.asVector(Of Boolean)(b),
+                                [do]:=Function(x, y) x <> y
+                            ).ToArray
+                    End Select
                 End If
 
             End If
