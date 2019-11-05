@@ -40,6 +40,7 @@
 #End Region
 
 Imports System.ComponentModel
+Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language
@@ -72,6 +73,7 @@ Module CLI
         Next
 
         localdb.packages = packageIndex.Values.ToArray
+        localdb.system = GetType(LocalPackageDatabase).Assembly.FromAssembly
 
         Return localdb _
             .GetXml _
