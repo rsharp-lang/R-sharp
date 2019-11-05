@@ -38,6 +38,24 @@ Namespace Runtime.Package
         Sub New()
         End Sub
 
+        Public Function GetLoader() As Package
+            Dim loader As Type = [module].GetType
+            Dim info As New PackageAttribute([namespace]) With {
+                .Category = category,
+                .Cites = cites,
+                .Description = description,
+                .Publisher = publisher,
+                .Revision = revision,
+                .Url = url
+            }
+
+            Return New Package(info, package:=loader)
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return [namespace]
+        End Function
+
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function FromLoaderInfo(info As Package) As PackageLoaderEntry
             Return New PackageLoaderEntry With {

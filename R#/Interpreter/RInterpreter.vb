@@ -9,6 +9,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Package
 
 Namespace Interpreter
 
@@ -19,6 +20,7 @@ Namespace Interpreter
         ''' </summary>
         Public ReadOnly Property globalEnvir As New Environment
         Public ReadOnly Property warnings As New List(Of Message)
+        Public ReadOnly Property packages As LocalPackageDatabase
 
         Default Public ReadOnly Property GetValue(name As String) As Object
             Get
