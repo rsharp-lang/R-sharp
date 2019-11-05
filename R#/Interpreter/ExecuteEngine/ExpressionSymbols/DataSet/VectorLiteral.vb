@@ -45,6 +45,10 @@ Namespace Interpreter.ExecuteEngine
             Return result
         End Function
 
+        Public Function ToArray() As Expression()
+            Return values.ToArray
+        End Function
+
         Public Overrides Function ToString() As String
             Return $"[{values.JoinBy(", ")}]"
         End Function

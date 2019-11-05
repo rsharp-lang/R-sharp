@@ -141,6 +141,10 @@ Namespace Interpreter.ExecuteEngine
                             Loop
 
                             projection = Expression.CreateExpression(buffer.IteratesALL)
+
+                            If TypeOf projection Is VectorLiteral Then
+                                projection = New FunctionInvoke("list", DirectCast(projection, VectorLiteral).ToArray)
+                            End If
                         Case "group"
                             Do While Not p.EndRead AndAlso Not p.Current.isOneOfKeywords(linqKeywordDelimiters)
                                 buffer += ++p
@@ -181,8 +185,6 @@ Namespace Interpreter.ExecuteEngine
                     result += projection.Evaluate(envir)
                 End If
             Next
-
-
 
             If output.isEmpty Then
                 Return result.ToArray
