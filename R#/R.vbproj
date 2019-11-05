@@ -163,6 +163,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Interpreter\ExecuteEngine\Expression.vb" />
+    <Compile Include="Runtime\Package\Database\LocalPackageDatabase.vb" />
+    <Compile Include="Runtime\Package\Database\PackageLoaderEntry.vb" />
     <Compile Include="Runtime\Package\PackageManager.vb" />
     <Compile Include="Runtime\Package\Package.vb" />
     <Compile Include="Runtime\Package\ImportsPackage.vb" />
