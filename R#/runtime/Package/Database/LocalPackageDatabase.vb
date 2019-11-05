@@ -9,6 +9,7 @@ Namespace Runtime.Package
     Public Class LocalPackageDatabase : Inherits XmlDataModel
         Implements IList(Of PackageLoaderEntry)
 
+        <XmlAttribute>
         Public Property numOfpackages As Integer Implements IList(Of PackageLoaderEntry).size
             Get
                 Return packages.SafeQuery.Count
@@ -19,7 +20,9 @@ Namespace Runtime.Package
         End Property
 
         <XmlElement> Public Property system As AssemblyInfo
-        <XmlElement> Public Property packages As PackageLoaderEntry()
+
+        <XmlArray>
+        Public Property packages As PackageLoaderEntry()
 
         Public Shared ReadOnly Property localDb As String = App.LocalData & "/packages.xml"
 

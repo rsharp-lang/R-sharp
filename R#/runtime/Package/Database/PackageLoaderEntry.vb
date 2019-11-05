@@ -4,6 +4,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 
 Namespace Runtime.Package
 
+    <XmlType("package")>
     Public Class PackageLoaderEntry
 
         <XmlAttribute>
