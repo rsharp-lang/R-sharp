@@ -18,6 +18,18 @@ Namespace Interpreter.ExecuteEngine
             End Get
         End Property
 
+        Public Shared ReadOnly Property [TRUE] As Literal
+            Get
+                Return New Literal(True)
+            End Get
+        End Property
+
+        Public Shared ReadOnly Property [FALSE] As Literal
+            Get
+                Return New Literal(False)
+            End Get
+        End Property
+
         Sub New()
         End Sub
 
@@ -49,6 +61,11 @@ Namespace Interpreter.ExecuteEngine
                 Case Else
                     Throw New InvalidExpressionException(token.ToString)
             End Select
+        End Sub
+
+        Sub New(value As Boolean)
+            Me.type = TypeCodes.boolean
+            Me.value = value
         End Sub
 
         Sub New(value As Integer)

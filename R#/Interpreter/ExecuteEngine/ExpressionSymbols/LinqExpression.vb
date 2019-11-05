@@ -64,10 +64,17 @@ Namespace Interpreter.ExecuteEngine
                 .IteratesALL _
                 .SplitByTopLevelDelimiter(TokenType.keyword)
 
+            Call New Pointer(Of Token())(tokens).DoCall(AddressOf doParseLINQProgram)
+        End Sub
+
+        Shared ReadOnly linqKeywordDelimiters As String() = {"where", "distinct", "select", "order", "group", "let"}
+
+        Private Sub doParseLINQProgram(p As Pointer(Of Token()))
             Dim buffer As New List(Of Token())
-            Dim p As New Pointer(Of Token())(tokens)
             Dim token As Token()
             Dim program As New List(Of Expression)
+            Dim expression As Expression
+            Dim output As New List(Of Expression)
 
             Do While Not p.EndRead
                 buffer *= 0
@@ -78,30 +85,47 @@ Namespace Interpreter.ExecuteEngine
                         Case "let"
                             buffer += token
 
-                            Do While Not p.Current.isOneOfKeywords("where", "distinct", "select", "order", "group")
+                            Do While Not p.Current.isOneOfKeywords(linqKeywordDelimiters)
                                 buffer += ++p
                             Loop
 
-                            declares += New DeclareNewVariable(buffer.IteratesALL.SplitByTopLevelDelimiter(TokenType.operator, True))
+                            declares += buffer _
+                                .IteratesALL _
+                                .SplitByTopLevelDelimiter(TokenType.operator, True) _
+                                .DoCall(Function(blocks)
+                                            Return New DeclareNewVariable(blocks)
+                                        End Function)
                             program += New ValueAssign(declares.Last.names, declares.Last.value)
                         Case "where"
-                            Do While Not p.Current.isOneOfKeywords("where", "distinct", "select", "order", "group")
+                            Do While Not p.Current.isOneOfKeywords(linqKeywordDelimiters)
                                 buffer += ++p
                             Loop
 
-                            program += New IfBranch(Expression.CreateExpression(buffer), {New ReturnValue(Literal.NULL)})
+                            expression = buffer.IteratesALL.DoCall(AddressOf Expression.CreateExpression)
+                            program += New IfBranch(expression, {New ReturnValue(Literal.NULL)})
                         Case "distinct"
                         Case "order"
                             ' order by xxx asc
-                            Do While Not p.Current.isOneOfKeywords("where", "distinct", "select", "order", "group")
+                            Do While Not p.Current.isOneOfKeywords(linqKeywordDelimiters)
                                 buffer += ++p
                             Loop
+
+                            token = buffer _
+                                .Take(buffer.Count - 1) _
+                                .IteratesALL _
+                                .ToArray
+
+                            ' skip first by keyword
+                            expression = token _
+                                .Skip(1) _
+                                .DoCall(AddressOf Expression.CreateExpression)
+                            output += New FunctionInvoke("sort", expression, New Literal(buffer.Last.isKeyword("descending")))
                         Case "select"
-                            Do While Not p.Current.isOneOfKeywords("where", "distinct", "select", "order", "group")
+                            Do While Not p.Current.isOneOfKeywords(linqKeywordDelimiters)
                                 buffer += ++p
                             Loop
                         Case "group"
-                            Do While Not p.Current.isOneOfKeywords("where", "distinct", "select", "order", "group")
+                            Do While Not p.Current.isOneOfKeywords(linqKeywordDelimiters)
                                 buffer += ++p
                             Loop
                         Case Else

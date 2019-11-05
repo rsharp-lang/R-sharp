@@ -44,11 +44,11 @@ Namespace Interpreter.ExecuteEngine
         ''' <summary>
         ''' Use for create pipeline calls from identifier target
         ''' </summary>
-        ''' <param name="name"></param>
-        ''' <param name="parameter"></param>
-        Sub New(name As String, parameter As Expression)
-            funcName = name
-            parameters = New List(Of Expression) From {parameter}
+        ''' <param name="funcName"></param>
+        ''' <param name="parameters"></param>
+        Sub New(funcName$, ParamArray parameters As Expression())
+            Me.funcName = funcName
+            Me.parameters = parameters.ToList
         End Sub
 
         Public Overrides Function ToString() As String
