@@ -182,9 +182,15 @@ Namespace Interpreter.ExecuteEngine
                 End If
             Next
 
-            envir.Push("$", result.ToArray)
 
-            Return output.Evaluate(envir)
+
+            If output.isEmpty Then
+                Return result.ToArray
+            Else
+                envir.Push("$", result.ToArray)
+
+                Return output.Evaluate(envir)
+            End If
         End Function
     End Class
 End Namespace

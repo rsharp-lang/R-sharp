@@ -16,6 +16,12 @@ Namespace Interpreter.ExecuteEngine
             End Get
         End Property
 
+        Public ReadOnly Property isEmpty As Boolean
+            Get
+                Return program.execQueue.IsNullOrEmpty
+            End Get
+        End Property
+
         Dim program As Program
 
         Sub New(tokens As IEnumerable(Of Token))
