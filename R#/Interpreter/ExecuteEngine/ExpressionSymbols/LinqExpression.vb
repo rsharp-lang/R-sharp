@@ -166,9 +166,16 @@ Namespace Interpreter.ExecuteEngine
                 ' run program
                 Call program.Evaluate(envir)
 
+                If Not item Is Nothing AndAlso item.GetType Is GetType(IfBranch.IfPromise) Then
+                    Continue For
+                Else
+                    result += projection.Evaluate(item)
+                End If
             Next
 
-            Throw New NotImplementedException
+            envir.Push("$", result.ToArray)
+
+            Return output.Evaluate(envir)
         End Function
     End Class
 End Namespace
