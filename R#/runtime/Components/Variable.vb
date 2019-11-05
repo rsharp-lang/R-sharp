@@ -155,11 +155,11 @@ Namespace Runtime.Components
             Dim str$
 
             If value.Length = 1 Then
-                str = CStrSafe(value(Scan0))
+                str = CStrSafe(value(Scan0), [default]:="NULL")
             Else
                 str = Iterator Function() As IEnumerable(Of String)
                           For Each x As Object In value.AsQueryable
-                              Yield CStrSafe(x)
+                              Yield CStrSafe(x, [default]:="NULL")
                           Next
                       End Function().JoinBy(", ")
 
@@ -174,7 +174,9 @@ Namespace Runtime.Components
         End Function
 
         Public Function ToVector() As Array
-            If typeCode.IsPrimitive AndAlso value.GetType.IsInheritsFrom(GetType(Array)) Then
+            If value Is Nothing Then
+                Return {Nothing}
+            ElseIf typeCode.IsPrimitive AndAlso value.GetType.IsInheritsFrom(GetType(Array)) Then
                 Return DirectCast(value, Array)
             Else
                 Return {value}

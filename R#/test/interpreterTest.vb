@@ -39,12 +39,12 @@ Module interpreterTest
     Sub linqTest()
         Call R.Evaluate("
 let zzz <- from x as double in [1,2,3,4] 
-           let y as double = randf() 
-           where x < 2 
+           let y as double = x+6
+           where x <= 2 
            let z = x + 5
-           order by y acesding
-           distinct 
            select [z, y, x^2];
+           # order by y acesding
+           # distinct ;
 
 print(zzz)
 ")

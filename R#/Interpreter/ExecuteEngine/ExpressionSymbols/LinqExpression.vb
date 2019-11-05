@@ -23,9 +23,13 @@ Namespace Interpreter.ExecuteEngine
         ''' </summary>
         Dim sequence As Expression
         ''' <summary>
-        ''' from
+        ''' from/let
         ''' </summary>
-        Dim variable As DeclareNewVariable
+        ''' <remarks>
+        ''' 第一个元素是from申明的
+        ''' 剩余的元素都是let语句申明的
+        ''' </remarks>
+        Dim locals As New List(Of DeclareNewVariable)
         Dim program As ClosureExpression
         ''' <summary>
         ''' select
@@ -51,7 +55,7 @@ Namespace Interpreter.ExecuteEngine
                 Throw New SyntaxErrorException
             Else
                 i += 2
-                variable = New DeclareNewVariable With {
+                locals = New DeclareNewVariable With {
                     .names = variables.ToArray,
                     .hasInitializeExpression = False,
                     .value = Nothing
@@ -94,8 +98,10 @@ Namespace Interpreter.ExecuteEngine
                                 .DoCall(Function(blocks)
                                             Return New DeclareNewVariable(blocks)
                                         End Function)
-                            program += declares
+
                             program += New ValueAssign(declares.names, declares.value)
+                            locals += declares
+                            declares.value = Nothing
                         Case "where"
                             Do While Not p.EndRead AndAlso Not p.Current.isOneOfKeywords(linqKeywordDelimiters)
                                 buffer += ++p
@@ -152,24 +158,27 @@ Namespace Interpreter.ExecuteEngine
         End Sub
 
         Public Overrides Function Evaluate(parent As Environment) As Object
-            Dim envir As Environment = New Environment(parent, "linq_closure")
+            Dim envir As New Environment(parent, "linq_closure")
             Dim sequence As Array
             Dim result As New List(Of Object)
+            Dim from As String() = locals(Scan0).names
 
-            Call variable.Evaluate(envir)
+            For Each local As DeclareNewVariable In locals
+                Call local.Evaluate(envir)
+            Next
 
             sequence = Runtime.asVector(Of Object)(Me.sequence.Evaluate(envir))
 
             For Each item As Object In sequence
                 ' from xxx in sequence
-                Call ValueAssign.doValueAssign(envir, variable.names, False, item)
+                ValueAssign.doValueAssign(envir, from, False, item)
                 ' run program
-                Call program.Evaluate(envir)
+                item = program.Evaluate(envir)
 
                 If Not item Is Nothing AndAlso item.GetType Is GetType(IfBranch.IfPromise) Then
                     Continue For
                 Else
-                    result += projection.Evaluate(item)
+                    result += projection.Evaluate(envir)
                 End If
             Next
 

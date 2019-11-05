@@ -46,6 +46,10 @@ Namespace Interpreter
             Return last
         End Function
 
+        Public Overrides Function ToString() As String
+            Return execQueue.Select(Function(exp) exp.ToString & ";").JoinBy(vbCrLf)
+        End Function
+
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Friend Shared Function CreateProgram(tokens As IEnumerable(Of Token)) As Program
             Return New Program With {

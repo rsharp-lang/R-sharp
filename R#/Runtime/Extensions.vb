@@ -44,8 +44,9 @@ Namespace Runtime
         ''' <returns></returns>
         Friend Function asVector(Of T)(value As Object) As Array
             Dim valueType As Type = value.GetType
+            Dim typeofT As Type = GetType(T)
 
-            If valueType Is GetType(T) Then
+            If valueType Is typeofT Then
                 Return {DirectCast(value, T)}
             ElseIf valueType.IsInheritsFrom(GetType(Array)) Then
                 If DirectCast(value, Array) _
@@ -61,8 +62,14 @@ Namespace Runtime
                     value = DirectCast(value, Array) _
                         .AsObjectEnumerator _
                         .Select(Function(o)
-                                    If (Not o.GetType Is GetType(T)) AndAlso o.GetType.IsInheritsFrom(GetType(Array)) Then
-                                        o = DirectCast(o, Array).GetValue(Scan0)
+                                    If Not o.GetType Is typeofT Then
+                                        If o.GetType.IsInheritsFrom(GetType(Array)) Then
+                                            o = DirectCast(o, Array).GetValue(Scan0)
+                                        End If
+                                    End If
+                                    If Not o.GetType Is typeofT Then
+                                        ' 进行一些类型转换
+                                        o = Conversion.CTypeDynamic(o, typeofT)
                                     End If
 
                                     Return DirectCast(o, T)
