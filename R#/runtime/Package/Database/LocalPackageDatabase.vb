@@ -24,6 +24,20 @@ Namespace Runtime.Package
         <XmlArray>
         Public Property packages As PackageLoaderEntry()
 
+        Public Function FindPackage(packageName As String) As Package
+            Dim entry As PackageLoaderEntry = packages _
+                .Where(Function(pkg)
+                           Return pkg.namespace = packageName
+                       End Function) _
+                .FirstOrDefault()
+
+            If entry Is Nothing Then
+                Return Nothing
+            Else
+                Return entry.GetLoader
+            End If
+        End Function
+
         Public Shared ReadOnly Property localDb As String = App.LocalData & "/packages.xml"
 
         Public Shared Function EmptyRepository() As LocalPackageDatabase

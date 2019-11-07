@@ -5,13 +5,14 @@ Imports Microsoft.VisualBasic.Terminal
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Package
 Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
 Module Terminal
 
     Public Function RunTerminal() As Integer
         Dim ps1 As New PS1("> ")
-        Dim R As New RInterpreter
+        Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(LocalPackageDatabase.localDb)
         Dim exec As Action(Of String) =
             Sub(script)
                 Dim program As RProgram = RProgram.BuildProgram(script)
@@ -33,6 +34,9 @@ Module Terminal
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 ")
+        Call R.LoadLibrary("base")
+        Call R.LoadLibrary("utils")
+
         Call New Shell(ps1, exec) With {
             .Quite = "q()"
         }.Run()

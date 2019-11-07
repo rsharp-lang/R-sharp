@@ -59,6 +59,17 @@ Namespace Interpreter
             End With
         End Sub
 
+        Public Sub LoadLibrary(packageName As String)
+            Dim package = packages.FindPackage(packageName)
+
+            Call Console.WriteLine($"Loading required package: {packageName}")
+
+            If package Is Nothing Then
+            Else
+                Call ImportsPackage.ImportsStatic(globalEnvir, package.package)
+            End If
+        End Sub
+
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Sub Add(name$, value As Object, Optional type As TypeCodes = TypeCodes.generic)
             Call globalEnvir.Push(name, value, type)
@@ -189,6 +200,12 @@ Namespace Interpreter
                     Return .Evaluate(script)
                 End With
             End SyncLock
+        End Function
+
+        Public Shared Function FromEnvironmentConfiguration(configs As String) As RInterpreter
+            Return New RInterpreter With {
+                ._packages = configs.LoadXml(Of LocalPackageDatabase)
+            }
         End Function
     End Class
 End Namespace
