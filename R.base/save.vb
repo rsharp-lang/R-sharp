@@ -5,6 +5,8 @@ Imports Microsoft.VisualBasic.Data.IO.netCDF
 Imports Microsoft.VisualBasic.Data.IO.netCDF.Components
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Net.Http
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports cdfAttribute = Microsoft.VisualBasic.Data.IO.netCDF.Components.attribute
@@ -15,6 +17,14 @@ Partial Module base
         If Not file.FileExists Then
             Return Internal.stop({"Disk file is unavailable...", file.GetFullPath}, envir)
         End If
+
+        Dim tmp = App.GetAppSysTempFile(".cdf", App.PID, prefix:=RandomASCIIString(8, True))
+
+        Call UnZip.ImprovedExtractToDirectory(file, tmp, Overwrite.Always, True)
+
+        Using reader As New netCDFReader(tmp & "/R#.Data")
+
+        End Using
     End Function
 
     ''' <summary>
@@ -53,7 +63,7 @@ Partial Module base
         End If
 
         ' 先保存为cdf文件
-        Dim tmp As String = App.GetAppSysTempFile(".cdf", App.PID, prefix:=RandomASCIIString(5, True)).TrimSuffix & "/RData"
+        Dim tmp As String = App.GetAppSysTempFile(".cdf", App.PID, prefix:=RandomASCIIString(5, True)).TrimSuffix & "/R#.Data"
         Dim value As CDFData
         Dim maxChartSize As Integer = 2048
         Dim length As cdfAttribute
@@ -70,7 +80,12 @@ Partial Module base
                      Dimension.Short,
                      Dimension.Text(maxChartSize))
 
-            For Each obj As NamedValue(Of Object) In objList
+            Dim Robjects As New NamedValue(Of Object) With {
+                .Name = "R#.objects",
+                .Value = objList.Keys.GetJson.Base64String
+            }
+
+            For Each obj As NamedValue(Of Object) In objList.JoinIterates(Robjects)
                 Dim vector As Array = Runtime.asVector(Of Object)(obj.Value)
                 Dim elTypes = vector.AsObjectEnumerator _
                     .Select(Function(o) o.GetType) _
