@@ -4,6 +4,7 @@ Imports Microsoft.VisualBasic.Data.IO.netCDF.Components
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports cdfAttribute = Microsoft.VisualBasic.Data.IO.netCDF.Components.attribute
 
 Partial Module base
@@ -21,7 +22,7 @@ Partial Module base
     ''' <param name="file"></param>
     ''' <param name="envir"></param>
     ''' <returns></returns>
-    Public Function save(objects As Object, file$, envir As Environment) As Object
+    Public Function save(<RListObjectArgument> objects As Object, file$, envir As Environment) As Object
         If file.StringEmpty Then
             Return Internal.stop("'file' must be specified!", envir)
         ElseIf objects Is Nothing Then

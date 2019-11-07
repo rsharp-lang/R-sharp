@@ -163,6 +163,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Interpreter\ExecuteEngine\Expression.vb" />
+    <Compile Include="Runtime\Components\RFunction.vb" />
     <Compile Include="Runtime\Components\Interop\RInteropAttribute.vb" />
     <Compile Include="Runtime\Components\Interop\RMethodArgument.vb" />
     <Compile Include="Runtime\Components\InvokeParameter.vb" />

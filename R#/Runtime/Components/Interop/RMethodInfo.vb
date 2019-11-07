@@ -31,10 +31,9 @@ Namespace Runtime.Components
         End Sub
 
         Private Shared Function parseParameters(method As MethodInfo) As RMethodArgument()
-            Return method.GetParameters _
-                .Select(Function(p)
-
-                        End Function) _
+            Return method _
+                .GetParameters _
+                .Select(AddressOf RMethodArgument.ParseArgument) _
                 .ToArray
         End Function
 
@@ -68,22 +67,4 @@ Namespace Runtime.Components
             Return $"Dim {name} As {api.ToString}"
         End Function
     End Class
-
-    Public Interface RFunction
-
-        ''' <summary>
-        ''' 函数名
-        ''' </summary>
-        ''' <returns></returns>
-        ReadOnly Property name As String
-
-        ''' <summary>
-        ''' 执行当前的这个函数对象然后获取得到结果值
-        ''' </summary>
-        ''' <param name="envir"></param>
-        ''' <param name="arguments"></param>
-        ''' <returns></returns>
-        Function Invoke(envir As Environment, arguments As InvokeParameter()) As Object
-
-    End Interface
 End Namespace
