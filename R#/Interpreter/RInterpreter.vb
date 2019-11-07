@@ -204,7 +204,7 @@ Namespace Interpreter
 
         Public Shared Function FromEnvironmentConfiguration(configs As String) As RInterpreter
             Return New RInterpreter With {
-                ._packages = configs.LoadXml(Of LocalPackageDatabase)
+                ._packages = LocalPackageDatabase.Load(database:=configs)
             }
         End Function
     End Class

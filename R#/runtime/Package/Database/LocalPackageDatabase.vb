@@ -47,6 +47,14 @@ Namespace Runtime.Package
             }
         End Function
 
+        Public Shared Function Load(database As String) As LocalPackageDatabase
+            If database.FileLength < 100 Then
+                Return EmptyRepository()
+            Else
+                Return database.LoadXml(Of LocalPackageDatabase)
+            End If
+        End Function
+
         Public Shared Function Build(repository As String) As LocalPackageDatabase
             Dim packages As PackageLoaderEntry() = PackageLoader _
                 .ScanDllFiles(directory:=repository) _
