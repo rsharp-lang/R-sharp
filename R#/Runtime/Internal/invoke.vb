@@ -21,7 +21,7 @@ Namespace Runtime.Internal
         ''' <param name="funcName$"></param>
         ''' <param name="paramVals"></param>
         ''' <returns></returns>
-        Public Function invokeInternals(envir As Environment, funcName$, paramVals As Object()) As Object
+        Public Function invokeInternals(envir As Environment, funcName$, paramVals As InvokeParameter()) As Object
             Select Case funcName
                 Case "length" : Return DirectCast(paramVals(Scan0), Array).Length
                 Case "round"

@@ -43,7 +43,7 @@ Namespace Runtime.Components
                 .ToArray
         End Function
 
-        Public Function Invoke(envir As Environment, arguments As Object()) As Object Implements RFunction.Invoke
+        Public Function Invoke(envir As Environment, arguments As InvokeParameter()) As Object Implements RFunction.Invoke
             Dim result As Object
             Dim parameters As New List(Of Object)
 
@@ -88,7 +88,7 @@ Namespace Runtime.Components
         ''' <param name="envir"></param>
         ''' <param name="arguments"></param>
         ''' <returns></returns>
-        Function Invoke(envir As Environment, arguments As Object()) As Object
+        Function Invoke(envir As Environment, arguments As InvokeParameter()) As Object
 
     End Interface
 End Namespace
