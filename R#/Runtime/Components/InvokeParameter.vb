@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 
 Namespace Runtime.Components
@@ -57,6 +58,22 @@ Namespace Runtime.Components
                             }
                         End Function) _
                 .ToArray
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Shared Function CreateArguments(envir As Environment, arguments As IEnumerable(Of InvokeParameter)) As Dictionary(Of String, Object)
+            Return arguments _
+                .SeqIterator _
+                .ToDictionary(Function(a)
+                                  If a.value.haveSymbolName Then
+                                      Return a.value.name
+                                  Else
+                                      Return "$" & a.i
+                                  End If
+                              End Function,
+                              Function(a)
+                                  Return a.value.Evaluate(envir)
+                              End Function)
         End Function
     End Class
 End Namespace

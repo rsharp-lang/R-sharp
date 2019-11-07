@@ -37,30 +37,42 @@ Namespace Runtime.Components
                 .ToArray
         End Function
 
-        Public Function Invoke(envir As Environment, arguments As InvokeParameter()) As Object Implements RFunction.Invoke
+        Public Function Invoke(envir As Environment, params As InvokeParameter()) As Object Implements RFunction.Invoke
             Dim result As Object
             Dim parameters As New List(Of Object)
+            Dim arguments As Dictionary(Of String, Object) = InvokeParameter.CreateArguments(envir, params)
+            Dim arg As RMethodArgument
 
             For i As Integer = 0 To Me.parameters.Length - 1
-                If i >= arguments.Length Then
+                arg = Me.parameters(i)
+
+                If arguments.ContainsKey(arg.name) Then
+                    parameters.Add(getValue(arg, arguments(arg.name)))
+                ElseIf i >= params.Length Then
                     ' default value
-                    If Not Me.parameters(i).Description.ParseBoolean Then
+                    If arg.type.raw Is GetType(Environment) Then
+                        parameters.Add(envir)
+                    ElseIf Not Me.parameters(i).isOptional Then
                         Return Internal.stop({$"Missing parameter value for '{Me.parameters(i).name}'!", "function: " & name, "environment: " & envir.ToString}, envir)
                     Else
-                        parameters.Add(Me.parameters(i).Value.default)
+                        parameters.Add(Me.parameters(i).default)
                     End If
                 Else
-                    If Me.parameters(i).Value.type.isArray Then
-                        parameters.Add(CObj(Runtime.asVector(arguments(i), Me.parameters(i).Value.type.raw.GetElementType)))
-                    Else
-                        parameters.Add(Runtime.getFirst(arguments(i)))
-                    End If
+                    parameters.Add(getValue(arg, arguments("$" & i)))
                 End If
             Next
 
             result = api.Method.Invoke(api.Target, parameters.ToArray)
 
             Return result
+        End Function
+
+        Private Shared Function getValue(arg As RMethodArgument, value As Object) As Object
+            If arg.type.isArray Then
+                Return CObj(Runtime.asVector(value, arg.type.raw.GetElementType))
+            Else
+                Return Runtime.getFirst(value)
+            End If
         End Function
 
         Public Overrides Function ToString() As String

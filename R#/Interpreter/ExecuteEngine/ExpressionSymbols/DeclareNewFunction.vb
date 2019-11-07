@@ -60,18 +60,7 @@ Namespace Interpreter.ExecuteEngine
             Using envir As New Environment(parent, funcName)
                 Dim var As DeclareNewVariable
                 Dim value As Object
-                Dim arguments As Dictionary(Of String, Object) = params _
-                    .SeqIterator _
-                    .ToDictionary(Function(a)
-                                      If a.value.haveSymbolName Then
-                                          Return a.value.name
-                                      Else
-                                          Return "$" & a.i
-                                      End If
-                                  End Function,
-                                  Function(a)
-                                      Return a.value.Evaluate(envir)
-                                  End Function)
+                Dim arguments As Dictionary(Of String, Object) = InvokeParameter.CreateArguments(envir, params)
 
                 ' initialize environment
                 For i As Integer = 0 To Me.params.Length - 1
