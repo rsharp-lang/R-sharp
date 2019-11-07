@@ -35,7 +35,13 @@ Namespace Runtime.Components
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function Evaluate(envir As Environment) As Object
-            Return value.Evaluate(envir)
+            If value Is Nothing Then
+                Return Nothing
+            ElseIf Not TypeOf value Is ValueAssign Then
+                Return value.Evaluate(envir)
+            Else
+                Return DirectCast(value, ValueAssign).value.Evaluate(envir)
+            End If
         End Function
 
         Public Overrides Function ToString() As String
