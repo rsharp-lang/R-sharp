@@ -1,9 +1,23 @@
 ﻿Imports System.Reflection
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 
 Namespace Runtime.Components
+
+    Friend Class MethodInvoke
+
+        Public method As MethodInfo
+        Public target As Object
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function Invoke(parameters As Object()) As Object
+            Return method.Invoke(target, parameters)
+        End Function
+
+    End Class
 
     Public Class RMethodInfo : Implements RFunction
 
@@ -12,10 +26,18 @@ Namespace Runtime.Components
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property name As String Implements RFunction.name
-        Public ReadOnly Property api As [Delegate]
         Public ReadOnly Property returns As RType
         Public ReadOnly Property parameters As RMethodArgument()
 
+        ReadOnly api As [Variant](Of MethodInvoke, [Delegate])
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <param name="closure">
+        ''' Runtime generated .NET method
+        ''' </param>
         Sub New(name$, closure As [Delegate])
             Me.name = name
             Me.api = closure
@@ -23,11 +45,15 @@ Namespace Runtime.Components
             Me.parameters = closure.Method.DoCall(AddressOf parseParameters)
         End Sub
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <param name="closure"><see cref="MethodInfo"/> from parsing .NET dll module file.</param>
+        ''' <param name="target"></param>
         Sub New(name$, closure As MethodInfo, target As Object)
             Me.name = name
-            Me.api = Function(params As Object())
-                         Return closure.Invoke(target, params)
-                     End Function
+            Me.api = New MethodInvoke With {.method = closure, .target = target}
             Me.returns = New RType(closure.ReturnType)
             Me.parameters = closure.DoCall(AddressOf parseParameters)
         End Sub
@@ -54,7 +80,13 @@ Namespace Runtime.Components
                 End If
             Next
 
-            Dim result As Object = api.Method.Invoke(api.Target, parameters.ToArray)
+            Dim result As Object
+
+            If api Like GetType(MethodInvoke) Then
+                result = api.TryCast(Of MethodInvoke).Invoke(parameters)
+            Else
+                result = api.VB.Method.Invoke(Nothing, parameters.ToArray)
+            End If
 
             Return result
         End Function
@@ -80,6 +112,7 @@ Namespace Runtime.Components
             i = Me.parameters _
                 .First(Function(a) a.isObjectList).name _
                 .DoCall(Function(a)
+                            Call declareArguments.Remove(a)
                             Return declareNameIndex.IndexOf(a)
                         End Function)
             parameterVals(i) = listObject.ToArray
