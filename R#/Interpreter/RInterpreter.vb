@@ -60,7 +60,14 @@ Namespace Interpreter
         End Sub
 
         Public Sub LoadLibrary(packageName As String)
+            Dim package = packages.FindPackage(packageName)
 
+            Call Console.WriteLine($"Loading required package: {packageName}")
+
+            If package Is Nothing Then
+            Else
+                Call ImportsPackage.ImportsStatic(globalEnvir, package.package)
+            End If
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
