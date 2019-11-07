@@ -1,10 +1,11 @@
 ﻿Imports System.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 
 Namespace Runtime.Components
 
-    Public Class RMethodArgument
+    Public Class RMethodArgument : Implements INamedValue
 
-        Public Property name As String
+        Public Property name As String Implements INamedValue.Key
         Public Property type As RType
         Public Property [default] As Object
         Public Property isOptional As Boolean
