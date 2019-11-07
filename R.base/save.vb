@@ -53,7 +53,7 @@ Partial Module base
         End If
 
         ' 先保存为cdf文件
-        Dim tmp As String = App.GetAppSysTempFile(".cdf", App.PID, prefix:=RandomASCIIString(5, True))
+        Dim tmp As String = App.GetAppSysTempFile(".cdf", App.PID, prefix:=RandomASCIIString(5, True)).TrimSuffix & "/RData"
         Dim value As CDFData
         Dim maxChartSize As Integer = 2048
         Dim length As cdfAttribute
