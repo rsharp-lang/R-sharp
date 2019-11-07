@@ -17,6 +17,12 @@ Namespace Interpreter.ExecuteEngine
         ''' <returns></returns>
         Public MustOverride ReadOnly Property type As TypeCodes
 
+        Public ReadOnly Property expressionName As String
+            Get
+                Return MyClass.GetType.Name
+            End Get
+        End Property
+
         Public MustOverride Function Evaluate(envir As Environment) As Object
 
         Friend Shared ReadOnly literalTypes As Index(Of TokenType) = {

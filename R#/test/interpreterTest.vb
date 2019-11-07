@@ -7,6 +7,8 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call parameterTest()
+
         Call linqTest()
         Call pipelineTest()
         Call iifTest()
@@ -32,6 +34,15 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub parameterTest()
+        Call R.Evaluate("let div as function(a,b) {
+    a / b
+}")
+        Call R.Evaluate("div(b = 99, a = 1)")
 
         Pause()
     End Sub
