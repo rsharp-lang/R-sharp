@@ -42,7 +42,10 @@ Module interpreterTest
         Call R.Evaluate("let div as function(a,b) {
     a / b
 }")
-        Call R.Evaluate("div(b = 99, a = 1)")
+        Call R.Evaluate("print(div(b = 99, a = 1))")
+        Call R.Evaluate("print(div(a = 1, b = 99))")
+        Call R.Evaluate("print(div(1,99))")
+        Call R.Evaluate("print(div(99,1))")
 
         Pause()
     End Sub

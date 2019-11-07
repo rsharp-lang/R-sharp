@@ -87,7 +87,7 @@ Namespace Interpreter.ExecuteEngine
                             Throw New MissingFieldException(var.names.GetJson)
                         End If
                     Else
-                        value = arguments("$" & i).Evaluate(envir)
+                        value = arguments("$" & i)
                     End If
 
                     Call DeclareNewVariable.PushNames(var.names, value, var.type, envir)
