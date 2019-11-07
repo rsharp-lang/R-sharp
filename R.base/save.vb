@@ -1,4 +1,6 @@
-﻿Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+﻿Imports System.IO.Compression
+Imports Microsoft.VisualBasic.ApplicationServices.Zip
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.IO.netCDF
 Imports Microsoft.VisualBasic.Data.IO.netCDF.Components
 Imports Microsoft.VisualBasic.Language
@@ -87,6 +89,9 @@ Partial Module base
                 cdf.AddVariable(obj.Name, value, {cdf.getDimension(elTypes.FullName)}, {length})
             Next
         End Using
+
+        ' copy to target file
+        Call ZipLib.FileArchive(tmp, file, ArchiveAction.Replace, Overwrite.Always, CompressionLevel.Fastest)
 
         Return objList.Keys.ToArray
     End Function
