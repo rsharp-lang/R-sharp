@@ -42,7 +42,7 @@ Namespace Runtime
         ''' <typeparam name="T"></typeparam>
         ''' <param name="value"></param>
         ''' <returns></returns>
-        Friend Function asVector(Of T)(value As Object) As Array
+        Public Function asVector(Of T)(value As Object) As Array
             Dim valueType As Type = value.GetType
             Dim typeofT As Type = GetType(T)
 

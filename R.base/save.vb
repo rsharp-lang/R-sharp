@@ -39,12 +39,19 @@ Partial Module base
                     .Value = item.Value
                 }
             Next
+        ElseIf type Is GetType(InvokeParameter()) Then
+            For Each item As InvokeParameter In DirectCast(objects, InvokeParameter())
+                objList += New NamedValue(Of Object) With {
+                    .Name = item.name,
+                    .Value = item.Evaluate(envir)
+                }
+            Next
         Else
             Throw New NotImplementedException
         End If
 
         ' 先保存为cdf文件
-        Dim tmp As String = App.GetAppSysTempFile
+        Dim tmp As String = App.GetAppSysTempFile(".cdf", App.PID, prefix:=RandomASCIIString(5, True))
         Dim value As CDFData
         Dim maxChartSize As Integer = 2048
         Dim length As cdfAttribute
@@ -62,7 +69,7 @@ Partial Module base
                      Dimension.Text(maxChartSize))
 
             For Each obj As NamedValue(Of Object) In objList
-                Dim vector As Array = Runtime.asVector(obj.Value, GetType(Object))
+                Dim vector As Array = Runtime.asVector(Of Object)(obj.Value)
                 Dim elTypes = vector.AsObjectEnumerator _
                     .Select(Function(o) o.GetType) _
                     .GroupBy(Function(t) t.FullName) _
