@@ -1,4 +1,5 @@
 ﻿Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
@@ -59,12 +60,26 @@ Namespace Interpreter.ExecuteEngine
             Using envir As New Environment(parent, funcName)
                 Dim var As DeclareNewVariable
                 Dim value As Object
+                Dim arguments As Dictionary(Of String, Object) = params _
+                    .SeqIterator _
+                    .ToDictionary(Function(a)
+                                      If a.value.haveSymbolName Then
+                                          Return a.value.name
+                                      Else
+                                          Return "$" & a.i
+                                      End If
+                                  End Function,
+                                  Function(a)
+                                      Return a.value.Evaluate(envir)
+                                  End Function)
 
                 ' initialize environment
                 For i As Integer = 0 To Me.params.Length - 1
                     var = Me.params(i)
 
-                    If i >= params.Length Then
+                    If arguments.ContainsKey(var.names(Scan0)) Then
+                        value = arguments(var.names(Scan0))
+                    ElseIf i >= params.Length Then
                         ' missing, use default value
                         If var.hasInitializeExpression Then
                             value = var.value.Evaluate(envir)
@@ -72,7 +87,7 @@ Namespace Interpreter.ExecuteEngine
                             Throw New MissingFieldException(var.names.GetJson)
                         End If
                     Else
-                        value = params(i).Evaluate(envir)
+                        value = arguments("$" & i).Evaluate(envir)
                     End If
 
                     Call DeclareNewVariable.PushNames(var.names, value, var.type, envir)

@@ -13,12 +13,27 @@ Namespace Runtime.Components
                     Return ""
                 ElseIf TypeOf value Is SymbolReference Then
                     Return DirectCast(value, SymbolReference).symbol
+                ElseIf TypeOf value Is ValueAssign Then
+                    Return DirectCast(value, ValueAssign).targetSymbols(Scan0)
                 Else
                     Return value.ToString
                 End If
             End Get
         End Property
 
+        Public ReadOnly Property haveSymbolName As Boolean
+            Get
+                If value Is Nothing Then
+                    Return False
+                ElseIf (TypeOf value Is SymbolReference OrElse TypeOf value Is ValueAssign) Then
+                    Return True
+                Else
+                    Return False
+                End If
+            End Get
+        End Property
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function Evaluate(envir As Environment) As Object
             Return value.Evaluate(envir)
         End Function
@@ -29,7 +44,13 @@ Namespace Runtime.Components
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function Create(expressions As IEnumerable(Of Expression)) As InvokeParameter()
-            Return expressions.Select(Function(e) New InvokeParameter With {.value = e}).ToArray
+            Return expressions _
+                .Select(Function(e)
+                            Return New InvokeParameter With {
+                                .value = e
+                            }
+                        End Function) _
+                .ToArray
         End Function
     End Class
 End Namespace
