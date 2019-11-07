@@ -1,4 +1,4 @@
-let x = 1:100
+let x = 1:100;
 let word = ["world", "R#"];
 
 

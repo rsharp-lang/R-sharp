@@ -1,5 +1,4 @@
 ﻿Imports System.Reflection
-Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 
 Namespace Runtime.Components
@@ -13,7 +12,7 @@ Namespace Runtime.Components
         Public ReadOnly Property name As String Implements RFunction.name
         Public ReadOnly Property api As [Delegate]
         Public ReadOnly Property returns As RType
-        Public ReadOnly Property parameters As NamedValue(Of (type As RType, [default] As Object))()
+        Public ReadOnly Property parameters As RMethodArgument()
 
         Sub New(name$, closure As [Delegate])
             Me.name = name
@@ -31,14 +30,10 @@ Namespace Runtime.Components
             Me.parameters = closure.DoCall(AddressOf parseParameters)
         End Sub
 
-        Private Shared Function parseParameters(method As MethodInfo) As NamedValue(Of (RType, Object))()
+        Private Shared Function parseParameters(method As MethodInfo) As RMethodArgument()
             Return method.GetParameters _
                 .Select(Function(p)
-                            Return New NamedValue(Of (RType, Object)) With {
-                                .Name = p.Name,
-                                .Value = (New RType(p.ParameterType), p.DefaultValue),
-                                .Description = p.HasDefaultValue
-                            }
+
                         End Function) _
                 .ToArray
         End Function
@@ -51,7 +46,7 @@ Namespace Runtime.Components
                 If i >= arguments.Length Then
                     ' default value
                     If Not Me.parameters(i).Description.ParseBoolean Then
-                        Return Internal.stop({$"Missing parameter value for '{Me.parameters(i).Name}'!", "function: " & name, "environment: " & envir.ToString}, envir)
+                        Return Internal.stop({$"Missing parameter value for '{Me.parameters(i).name}'!", "function: " & name, "environment: " & envir.ToString}, envir)
                     Else
                         parameters.Add(Me.parameters(i).Value.default)
                     End If

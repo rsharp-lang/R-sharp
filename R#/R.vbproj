@@ -163,6 +163,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Interpreter\ExecuteEngine\Expression.vb" />
+    <Compile Include="Runtime\Components\Interop\RInteropAttribute.vb" />
+    <Compile Include="Runtime\Components\Interop\RMethodArgument.vb" />
     <Compile Include="Runtime\Components\InvokeParameter.vb" />
     <Compile Include="Runtime\Package\Database\LocalPackageDatabase.vb" />
     <Compile Include="Runtime\Package\Database\PackageLoaderEntry.vb" />
@@ -170,9 +172,9 @@
     <Compile Include="Runtime\Package\Package.vb" />
     <Compile Include="Runtime\Package\ImportsPackage.vb" />
     <Compile Include="Runtime\Components\Message.vb" />
-    <Compile Include="Runtime\Components\RMethodInfo.vb" />
+    <Compile Include="Runtime\Components\Interop\RMethodInfo.vb" />
     <Compile Include="Runtime\Core.vb" />
-    <Compile Include="Runtime\Components\RType.vb" />
+    <Compile Include="Runtime\Components\Interop\RType.vb" />
     <Compile Include="Runtime\Extensions.vb" />
     <Compile Include="Runtime\Environment.vb" />
     <Compile Include="Runtime\Internal\base.vb" />

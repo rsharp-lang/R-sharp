@@ -65,7 +65,8 @@ Module Program
             Call R.Add(arg.Name, arg.Value, TypeCodes.generic)
         Next
 
-        Dim result = R.Evaluate(filepath.ReadAllText)
+        Dim scriptText$ = filepath.ReadAllText
+        Dim result As Object = R.Evaluate(scriptText)
 
         If Not result Is Nothing AndAlso result.GetType Is GetType(Message) Then
             Return DirectCast(result, Message).MessageLevel
