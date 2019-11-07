@@ -1,6 +1,10 @@
-﻿Imports Microsoft.VisualBasic.Emit.Delegates
+﻿Imports System.Reflection
+Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports Microsoft.VisualBasic.Language.C
 
 Namespace Runtime.Internal
 
@@ -14,6 +18,30 @@ Namespace Runtime.Internal
 
         End Sub
 
+        Public Function Rlist(envir As Environment, parameters As List(Of Expression)) As Object
+            Dim list As New Dictionary(Of String, Object)
+            Dim slot As Expression
+            Dim key As String
+            Dim value As Object
+
+            For i As Integer = 0 To parameters.Count - 1
+                slot = parameters(i)
+
+                If TypeOf slot Is ValueAssign Then
+                    ' 不支持tuple
+                    key = DirectCast(slot, ValueAssign).targetSymbols(Scan0)
+                    value = DirectCast(slot, ValueAssign).value.Evaluate(envir)
+                Else
+                    key = i + 1
+                    value = slot.Evaluate(envir)
+                End If
+
+                Call list.Add(key, value)
+            Next
+
+            Return list
+        End Function
+
         ''' <summary>
         ''' Invoke the runtime internal functions
         ''' </summary>
@@ -21,11 +49,12 @@ Namespace Runtime.Internal
         ''' <param name="funcName$"></param>
         ''' <param name="paramVals"></param>
         ''' <returns></returns>
-        Public Function invokeInternals(envir As Environment, funcName$, paramVals As InvokeParameter()) As Object
+        Public Function invokeInternals(envir As Environment, funcName$, paramVals As Object()) As Object
             Select Case funcName
-                Case "length" : Return DirectCast(paramVals(Scan0), Array).Length
+                Case "length"
+                    Return DirectCast(paramVals(Scan0), Array).Length
                 Case "round"
-                    Dim x = paramVals(Scan0)
+                    Dim x As Object = paramVals(Scan0)
                     Dim decimals As Integer = Runtime.getFirst(paramVals(1))
 
                     If x.GetType.IsInheritsFrom(GetType(Array)) Then
@@ -55,6 +84,25 @@ Namespace Runtime.Internal
                     End If
 
                     Return Internal.lapply(paramVals(Scan0), paramVals(1), envir)
+                Case "require"
+                    Dim libraryNames As String() = paramVals _
+                        .Select(AddressOf Scripting.ToString) _
+                        .ToArray
+
+                    Throw New NotImplementedException
+
+                Case "sprintf"
+                    Dim format As Array = Runtime.asVector(Of String)(paramVals(Scan0))
+                    Dim arguments = paramVals.Skip(1).ToArray
+                    Dim sprintf As Func(Of String, Object(), String) = AddressOf CLangStringFormatProvider.sprintf
+                    Dim result As String() = format _
+                        .AsObjectEnumerator _
+                        .Select(Function(str)
+                                    Return sprintf(Scripting.ToString(str, "NULL"), arguments)
+                                End Function) _
+                        .ToArray
+
+                    Return result
                 Case Else
                     Return Message.SymbolNotFound(envir, funcName, TypeCodes.closure)
             End Select

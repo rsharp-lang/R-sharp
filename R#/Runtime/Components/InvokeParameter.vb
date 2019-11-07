@@ -1,4 +1,5 @@
-﻿Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+﻿Imports System.Runtime.CompilerServices
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 
 Namespace Runtime.Components
 
@@ -24,6 +25,11 @@ Namespace Runtime.Components
 
         Public Overrides Function ToString() As String
             Return name
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Shared Function Create(expressions As IEnumerable(Of Expression)) As InvokeParameter()
+            Return expressions.Select(Function(e) New InvokeParameter With {.value = e}).ToArray
         End Function
     End Class
 End Namespace

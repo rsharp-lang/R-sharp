@@ -55,7 +55,7 @@ Namespace Interpreter.ExecuteEngine
             body = New ClosureExpression(tokens)
         End Sub
 
-        Public Function Invoke(parent As Environment, params As Object()) As Object Implements RFunction.Invoke
+        Public Function Invoke(parent As Environment, params As InvokeParameter()) As Object Implements RFunction.Invoke
             Using envir As New Environment(parent, funcName)
                 Dim var As DeclareNewVariable
                 Dim value As Object
@@ -72,7 +72,7 @@ Namespace Interpreter.ExecuteEngine
                             Throw New MissingFieldException(var.names.GetJson)
                         End If
                     Else
-                        value = params(i)
+                        value = params(i).Evaluate(envir)
                     End If
 
                     Call DeclareNewVariable.PushNames(var.names, value, var.type, envir)

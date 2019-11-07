@@ -71,36 +71,16 @@ Namespace Interpreter.ExecuteEngine
             If funcVar Is Nothing Then
                 ' 可能是一个系统的内置函数
                 If funcName = "list" Then
-                    Dim list As New Dictionary(Of String, Object)
-                    Dim slot As Expression
-                    Dim key As String
-                    Dim value As Object
-
-                    For i As Integer = 0 To parameters.Count - 1
-                        slot = parameters(i)
-
-                        If TypeOf slot Is ValueAssign Then
-                            ' 不支持tuple
-                            key = DirectCast(slot, ValueAssign).targetSymbols(Scan0)
-                            value = DirectCast(slot, ValueAssign).value.Evaluate(envir)
-                        Else
-                            key = i + 1
-                            value = slot.Evaluate(envir)
-                        End If
-
-                        Call list.Add(key, value)
-                    Next
-
-                    Return list
+                    Return Runtime.Internal.Rlist(envir, parameters)
                 Else
                     Return Runtime.Internal.invokeInternals(envir, funcName, envir.Evaluate(parameters))
                 End If
             ElseIf funcVar.value.GetType Like runtimeFuncs Then
                 ' invoke method create from R# script
-                Return DirectCast(funcVar.value, RFunction).Invoke(envir, envir.Evaluate(parameters))
+                Return DirectCast(funcVar.value, RFunction).Invoke(envir, InvokeParameter.Create(parameters))
             Else
                 ' invoke .NET method
-                Return DirectCast(funcVar.value, RMethodInfo).Invoke(envir, envir.Evaluate(parameters))
+                Return DirectCast(funcVar.value, RMethodInfo).Invoke(envir, InvokeParameter.Create(parameters))
             End If
         End Function
     End Class

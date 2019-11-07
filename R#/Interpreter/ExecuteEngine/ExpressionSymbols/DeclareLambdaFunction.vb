@@ -49,11 +49,11 @@ Namespace Interpreter.ExecuteEngine
             Return Me
         End Function
 
-        Public Function Invoke(parent As Environment, arguments() As Object) As Object Implements RFunction.Invoke
+        Public Function Invoke(parent As Environment, arguments() As InvokeParameter) As Object Implements RFunction.Invoke
             Using envir As New Environment(parent, name)
                 Return DeclareNewVariable _
                     .PushNames(names:=parameter.names,
-                               value:=arguments(Scan0),
+                               value:=arguments(Scan0).Evaluate(envir),
                                type:=TypeCodes.generic,
                                envir:=envir
                     ) _
