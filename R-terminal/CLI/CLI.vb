@@ -55,12 +55,10 @@ Module CLI
     Public Function Install(args As CommandLine) As Integer
         Dim module$ = args <= "/module"
         Dim verboseMode As Boolean = args("--verbose")
-        Dim localdb As LocalPackageDatabase
+        Dim localdb As LocalPackageDatabase = LocalPackageDatabase.LoadDefaultFile
 
-        If LocalPackageDatabase.localDb.FileLength > 10 Then
-            localdb = LocalPackageDatabase.localDb.LoadXml(Of LocalPackageDatabase)
-        Else
-            localdb = LocalPackageDatabase.EmptyRepository
+        If [module].StringEmpty Then
+            Return "Missing '/module' argument!".PrintException
         End If
 
         Dim packageIndex = localdb.packages.ToDictionary(Function(pkg) pkg.namespace)
@@ -70,6 +68,8 @@ Module CLI
                 ' 新的package信息会覆盖掉旧的package信息
                 packageIndex(.namespace) = .ByRef
             End With
+
+            Call $"load: {pkg.info.Namespace}".__INFO_ECHO
         Next
 
         localdb.packages = packageIndex.Values.ToArray

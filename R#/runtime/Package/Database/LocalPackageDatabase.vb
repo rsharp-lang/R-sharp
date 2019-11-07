@@ -1,4 +1,5 @@
-﻿Imports System.Xml.Serialization
+﻿Imports System.Runtime.CompilerServices
+Imports System.Xml.Serialization
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.Linq
@@ -53,6 +54,11 @@ Namespace Runtime.Package
             Else
                 Return database.LoadXml(Of LocalPackageDatabase)
             End If
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Shared Function LoadDefaultFile() As LocalPackageDatabase
+            Return Load(localDb)
         End Function
 
         Public Shared Function Build(repository As String) As LocalPackageDatabase
