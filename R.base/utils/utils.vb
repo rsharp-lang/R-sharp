@@ -1,6 +1,7 @@
 ﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Runtime
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.dataframe
 
 <Package("utils", Category:=APICategories.UtilityTools, Description:="")>
