@@ -1,5 +1,7 @@
-﻿Imports System.IO.Compression
+﻿Imports System.ComponentModel
+Imports System.IO.Compression
 Imports Microsoft.VisualBasic.ApplicationServices.Zip
+Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.IO.netCDF
 Imports Microsoft.VisualBasic.Data.IO.netCDF.Components
@@ -34,6 +36,12 @@ Partial Module base
     ''' <param name="file"></param>
     ''' <param name="envir"></param>
     ''' <returns></returns>
+    ''' 
+    <ExportAPI("save")>
+    <Description("writes an external representation of R objects to the specified file. The objects can be read back from the file at a later date by using the function load or attach (or data in some cases).")>
+    <Argument("objects", False, CLITypes.Undefined, AcceptTypes:={GetType(String())}, Description:="the names of the objects to be saved (as symbols or character strings).")>
+    <Argument("file", False, CLITypes.File, Description:="a (writable binary-mode) connection or the name of the file where the data will be saved (when tilde expansion is done). Must be a file name for save.image or version = 1.")>
+    <Argument("envir", True, CLITypes.File, Description:="environment to search for objects to be saved.")>
     Public Function save(<RListObjectArgument> objects As Object, file$, envir As Environment) As Object
         If file.StringEmpty Then
             Return Internal.stop("'file' must be specified!", envir)
