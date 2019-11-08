@@ -48,6 +48,7 @@ Partial Module base
                         .name = name,
                         .value = Nothing
                     }
+                    envir.variables.Add(name, var)
                 End If
 
                 If value.cdfDataType = CDFDataTypes.CHAR Then
