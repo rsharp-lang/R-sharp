@@ -28,7 +28,15 @@ Partial Module base
         Call UnZip.ImprovedExtractToDirectory(file, tmp, Overwrite.Always, True)
 
         Using reader As New netCDFReader(tmp & "/R#.Data")
+            Dim objectNames = reader.getDataVariable("R#.objects") _
+                .chars _
+                .DecodeBase64 _
+                .LoadJSON(Of String())
+            Dim numOfObjects As Integer = reader("numOfObjects")
 
+            If objectNames.Length <> numOfObjects Then
+                Return Internal.stop({"Invalid file format!", "file=" & file}, envir)
+            End If
         End Using
     End Function
 
