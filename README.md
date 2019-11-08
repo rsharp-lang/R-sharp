@@ -10,6 +10,14 @@ The ``R#`` language its syntax is original derived from the ``R`` language, but 
 
 The ``R#`` language is not designed for the general data analysis purpose, but it is specialize designed for my works in the company, implements the bioinformatics data analysis system based on the GCModeller platform, for building the bioinformatics data science stack with R and VisualBasic language.
 
+#### Directory structure
+
++ [``R#``](./R#) The R# language core runtime and scripting engine
++ [``R.base``](./R.base) The fundation library in R# scripting system
++ [``R-terminal``](./R-terminal) The R# shell program  
+
+#### Demo R# code
+
 ```R
 # declare a variable
 let word as string = ['world', 'R# user', 'GCModeller user'];
