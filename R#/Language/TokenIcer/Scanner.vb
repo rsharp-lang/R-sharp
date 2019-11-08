@@ -171,10 +171,23 @@ Namespace Language.TokenIcer
             ElseIf c = "#"c AndAlso buffer = 0 Then
                 escape.comment = True
                 buffer += c
+            ElseIf c = "#"c Then
+
+                Dim token As Token = populateToken(Nothing)
+
+                escape.comment = True
+                buffer += c
+
+                Return token
+
             ElseIf c = "'"c OrElse c = """"c OrElse c = "`" Then
+                Dim token As Token = populateToken(Nothing)
+
                 escape.string = True
                 escape.stringEscape = c
                 buffer += c
+
+                Return token
 
             ElseIf c Like longOperatorParts Then
                 Return populateToken(bufferNext:=c)

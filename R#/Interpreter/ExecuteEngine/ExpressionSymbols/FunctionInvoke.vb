@@ -73,6 +73,8 @@ Namespace Interpreter.ExecuteEngine
                 ' 可能是一个系统的内置函数
                 If funcName = "list" Then
                     Return Runtime.Internal.Rlist(envir, parameters)
+                ElseIf funcName = "data.frame" Then
+                    Return Runtime.Internal.Rdataframe(envir, parameters)
                 Else
                     Return Runtime.Internal.invokeInternals(envir, funcName, envir.Evaluate(parameters))
                 End If

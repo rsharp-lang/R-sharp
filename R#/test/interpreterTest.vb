@@ -7,6 +7,7 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call dataframeTest()
         Call parameterTest()
 
         Call linqTest()
@@ -34,6 +35,13 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub dataframeTest()
+        Call R.Evaluate("let d <- data.frame(a = [1,2,3,4,5], b= F, xx='ABCDEFG')")
+        Call R.Evaluate("print(d)")
 
         Pause()
     End Sub

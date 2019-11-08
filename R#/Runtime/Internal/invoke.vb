@@ -18,6 +18,10 @@ Namespace Runtime.Internal
 
         End Sub
 
+        Public Function Rdataframe(envir As Environment, parameters As List(Of Expression)) As Object
+
+        End Function
+
         Public Function Rlist(envir As Environment, parameters As List(Of Expression)) As Object
             Dim list As New Dictionary(Of String, Object)
             Dim slot As Expression
