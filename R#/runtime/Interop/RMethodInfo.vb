@@ -144,6 +144,8 @@ Namespace Runtime.Interop
 
         Private Iterator Function createNormalArguments(envir As Environment, arguments As Dictionary(Of String, Object)) As IEnumerable(Of Object)
             Dim arg As RMethodArgument
+            Dim keys As String() = arguments.Keys.ToArray
+            Dim nameKey As String
 
             For i As Integer = 0 To Me.parameters.Length - 1
                 arg = Me.parameters(i)
@@ -160,7 +162,13 @@ Namespace Runtime.Interop
                         Yield arg.default
                     End If
                 Else
-                    Yield getValue(arg, arguments("$" & i))
+                    nameKey = $"${i}"
+
+                    If arguments.ContainsKey(nameKey) Then
+                        Yield getValue(arg, arguments(nameKey))
+                    Else
+                        Yield getValue(arg, arguments(keys(i)))
+                    End If
                 End If
             Next
         End Function
