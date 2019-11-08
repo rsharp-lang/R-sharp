@@ -1,4 +1,4 @@
-﻿Namespace Runtime.Components
+﻿Namespace Runtime.Interop
 
     <AttributeUsage(AttributeTargets.All, AllowMultiple:=False, Inherited:=True)>
     Public Class RInteropAttribute : Inherits Attribute

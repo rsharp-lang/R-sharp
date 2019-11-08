@@ -1,4 +1,6 @@
-﻿Namespace Runtime.Components
+﻿Imports SMRUCC.Rsharp.Runtime.Components
+
+Namespace Runtime.Interop
 
     Public Class RType
 

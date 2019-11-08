@@ -4,8 +4,9 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports SMRUCC.Rsharp.Runtime.Components
 
-Namespace Runtime.Components
+Namespace Runtime.Interop
 
     Friend Class MethodInvoke
 

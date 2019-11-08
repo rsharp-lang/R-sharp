@@ -1,7 +1,7 @@
 ﻿Imports System.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 
-Namespace Runtime.Components
+Namespace Runtime.Interop
 
     Public Class RMethodArgument : Implements INamedValue
 
