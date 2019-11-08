@@ -101,7 +101,7 @@ Partial Module base
 
             Dim Robjects As New NamedValue(Of Object) With {
                 .Name = "R#.objects",
-                .Value = objList.Keys.GetJson.Base64String
+                .Value = objList.Keys.ToArray
             }
 
             For Each obj As NamedValue(Of Object) In objList.JoinIterates(Robjects)
@@ -114,7 +114,18 @@ Partial Module base
                     .First _
                     .First
 
-                value = (CObj(vector), elTypes.GetCDFTypeCode)
+                If elTypes Is GetType(String) Then
+                    value = New CDFData With {
+                        .chars = vector _
+                            .AsObjectEnumerator _
+                            .Select(AddressOf Scripting.ToString) _
+                            .GetJson _
+                            .Base64String
+                    }
+                Else
+                    value = (CObj(vector), elTypes.GetCDFTypeCode)
+                End If
+
                 length = New cdfAttribute With {
                     .name = "lengthOf",
                     .type = CDFDataTypes.INT,
