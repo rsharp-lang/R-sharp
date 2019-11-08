@@ -1,5 +1,6 @@
 ﻿Imports System.ComponentModel
 Imports System.IO.Compression
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Zip
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
@@ -13,6 +14,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports cdfAttribute = Microsoft.VisualBasic.Data.IO.netCDF.Components.attribute
+Imports RVariable = SMRUCC.Rsharp.Runtime.Components.Variable
 
 Partial Module base
 
@@ -28,16 +30,41 @@ Partial Module base
         Call UnZip.ImprovedExtractToDirectory(file, tmp, Overwrite.Always, True)
 
         Using reader As New netCDFReader(tmp & "/R#.Data")
-            Dim objectNames = reader.getDataVariable("R#.objects") _
-                .chars _
-                .DecodeBase64 _
-                .LoadJSON(Of String())
+            Dim objectNames = reader.getDataVariable("R#.objects").decodeStringVector
             Dim numOfObjects As Integer = reader("numOfObjects")
+            Dim value As CDFData
+            Dim var As RVariable
 
             If objectNames.Length <> numOfObjects Then
                 Return Internal.stop({"Invalid file format!", "file=" & file}, envir)
             End If
+
+            For Each name As String In objectNames
+                value = reader.getDataVariable(name)
+                var = envir.FindSymbol(name)
+
+                If var Is Nothing Then
+                    var = New RVariable With {
+                        .name = name,
+                        .value = Nothing
+                    }
+                End If
+
+                If value.cdfDataType = CDFDataTypes.CHAR Then
+                    var.value = value.decodeStringVector
+                Else
+                    var.value = value.genericValue
+                End If
+            Next
+
+            Return objectNames
         End Using
+    End Function
+
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    <Extension>
+    Private Function decodeStringVector(value As CDFData) As Object
+        Return value.chars.DecodeBase64.LoadJSON(Of String())
     End Function
 
     ''' <summary>
