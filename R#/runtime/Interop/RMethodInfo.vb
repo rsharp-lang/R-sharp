@@ -135,7 +135,7 @@ Namespace Runtime.Interop
 
             If declareArguments.Count > 0 Then
                 Return {
-                    Internal.stop({$"Missing parameters value for '{declareArguments.Keys.GetJson}'!", "function: " & name, "environment: " & envir.ToString}, envir)
+                     missingParameter(declareArguments.Values.First, envir)
                 }
             Else
                 Return parameterVals
@@ -157,7 +157,7 @@ Namespace Runtime.Interop
                     If arg.type.raw Is GetType(Environment) Then
                         Yield envir
                     ElseIf Not arg.isOptional Then
-                        Yield Internal.stop({$"Missing parameter value for '{arg.name}'!", "function: " & name, "environment: " & envir.ToString}, envir)
+                        Yield missingParameter(arg, envir)
                     Else
                         Yield arg.default
                     End If
@@ -171,6 +171,18 @@ Namespace Runtime.Interop
                     End If
                 End If
             Next
+        End Function
+
+        Private Function missingParameter(arg As RMethodArgument, envir As Environment) As Object
+            Dim messages$() = {
+                $"Missing parameter value for '{arg.name}'!",
+                $"parameter: {arg.name}",
+                $"type: {arg.type.raw.FullName}",
+                $"function: {name}",
+                $"environment: {envir.ToString}"
+            }
+
+            Return Internal.stop(messages, envir)
         End Function
 
         Private Shared Function getValue(arg As RMethodArgument, value As Object) As Object
