@@ -1,5 +1,6 @@
 ﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
@@ -106,12 +107,12 @@ Namespace Runtime.Internal
                                End If
                            End Function
 
-            If x.GetType.IsInheritsFrom(GetType(Array)) Then
+            If valueType.IsInheritsFrom(GetType(Array)) Then
                 Dim xVec As Array = DirectCast(x, Array)
                 Dim stringVec = From element As Object In xVec.AsQueryable Select toString(element)
 
                 Call Console.WriteLine($"[{xVec.Length}] " & stringVec.JoinBy(vbTab))
-            ElseIf x.GetType Is GetType(Dictionary(Of String, Object)) Then
+            ElseIf valueType Is GetType(Dictionary(Of String, Object)) Then
                 For Each slot In DirectCast(x, Dictionary(Of String, Object))
                     Dim key$ = slot.Key
 
@@ -125,6 +126,8 @@ Namespace Runtime.Internal
                     Call base.printInternal(slot.Value, key)
                     Call Console.WriteLine()
                 Next
+            ElseIf valueType Is GetType(dataframe) Then
+                Call DirectCast(x, dataframe).GetTable.Print(addBorder:=False).DoCall(AddressOf Console.WriteLine)
             Else
                 Call Console.WriteLine("[1] " & toString(x))
             End If
