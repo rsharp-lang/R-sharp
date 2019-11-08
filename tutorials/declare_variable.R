@@ -17,3 +17,6 @@ str <- `integer value of y is ${y}`;
 print(x);
 print(y);
 print(str);
+
+# get variable by name
+print(get("x"));
