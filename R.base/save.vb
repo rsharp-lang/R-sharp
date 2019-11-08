@@ -11,6 +11,7 @@ Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports cdfAttribute = Microsoft.VisualBasic.Data.IO.netCDF.Components.attribute
 
 Partial Module base
