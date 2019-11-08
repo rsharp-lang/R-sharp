@@ -13,6 +13,25 @@ Namespace Runtime.Internal
     ''' </summary>
     Public Module base
 
+        Public Function [get](x As Object, envir As Environment) As Object
+            Dim name As String = Runtime.asVector(Of Object)(x) _
+                .DoCall(Function(o)
+                            Return Scripting.ToString(Runtime.getFirst(o), null:=Nothing)
+                        End Function)
+
+            If name.StringEmpty Then
+                Return Internal.stop("NULL value provided for object name!", envir)
+            End If
+
+            Dim symbol As Variable = envir.FindSymbol(name)
+
+            If symbol Is Nothing Then
+                Return Message.SymbolNotFound(envir, name, TypeCodes.generic)
+            Else
+                Return symbol.value
+            End If
+        End Function
+
         Public Function names([object] As Object, namelist As Object) As Object
             If namelist Is Nothing OrElse Runtime.asVector(Of Object)(namelist).Length = 0 Then
                 ' get names

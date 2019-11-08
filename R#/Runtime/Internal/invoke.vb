@@ -62,6 +62,8 @@ Namespace Runtime.Internal
                     Else
                         Return Math.Round(CDbl(x), decimals)
                     End If
+                Case "get"
+                    Return base.get(paramVals(Scan0), envir)
                 Case "print"
                     Return Internal.print(paramVals(Scan0))
                 Case "stop"

@@ -15,6 +15,8 @@ Imports cdfAttribute = Microsoft.VisualBasic.Data.IO.netCDF.Components.attribute
 
 Partial Module base
 
+    <ExportAPI("load")>
+    <Description("Reload datasets written with the function save.")>
     Public Function load(file As String, envir As Environment) As Object
         If Not file.FileExists Then
             Return Internal.stop({"Disk file is unavailable...", file.GetFullPath}, envir)
