@@ -7,6 +7,12 @@ Namespace Runtime.Package
         Public Property info As PackageAttribute
         Public Property package As Type
 
+        Public ReadOnly Property [namespace] As String
+            Get
+                Return info.Namespace
+            End Get
+        End Property
+
         Sub New(info As PackageAttribute, package As Type)
             Me.info = info
             Me.package = package

@@ -23,9 +23,16 @@ Namespace Runtime.Package
                         End Function) _
                 .ToArray
             Dim [global] = envir.GlobalEnvironment
+            Dim symbol As Variable
 
             For Each api As RMethodInfo In Rmethods
-                Call [global].Push(api.name, api, TypeCodes.closure)
+                symbol = [global].FindSymbol(api.name)
+
+                If symbol Is Nothing Then
+                    [global].Push(api.name, api, TypeCodes.closure)
+                Else
+                    symbol.value = api
+                End If
             Next
         End Sub
 

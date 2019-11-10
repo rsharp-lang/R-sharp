@@ -49,6 +49,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.Runtime
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Components
 
