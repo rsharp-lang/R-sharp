@@ -115,12 +115,12 @@ print(zzz);
     End Sub
 
     Sub invokeTest()
-        Call R.Add("x", {"hello", "world"}, TypeCodes.string)
-        Call R.Add("debug", Function(o) Internal.print(o))
+        'Call R.Add("x", {"hello", "world"}, TypeCodes.string)
+        'Call R.Add("debug", closure:=Function(o) Internal.print(o))
 
-        Call R.Invoke("debug", R!x)
+        'Call R.Invoke("debug", R!x)
 
-        Pause()
+        'Pause()
     End Sub
 
     Sub forLoopTest()

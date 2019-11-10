@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+﻿Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -44,12 +45,37 @@ Namespace Runtime.Internal
         End Function
 
         Public Function [stop](message As Object, envir As Environment) As Message
-            Return createMessageInternal(message, envir, level:=MSG_TYPES.ERR)
+            If Not message Is Nothing AndAlso message.GetType.IsInheritsFrom(GetType(Exception)) Then
+                Return DirectCast(message, Exception).createDotNetExceptionMessage(envir)
+            Else
+                Return base.createMessageInternal(message, envir, level:=MSG_TYPES.ERR)
+            End If
         End Function
 
-        Private Function createMessageInternal(messages As Object, envir As Environment, level As MSG_TYPES) As Message
+        <Extension>
+        Private Function createDotNetExceptionMessage(ex As Exception, envir As Environment) As Message
+            Dim messages As New List(Of String)
+            Dim exception As Exception = ex
+
+            Do While Not ex Is Nothing
+                messages += ex.GetType.Name & ": " & ex.Message
+                ex = ex.InnerException
+            Loop
+
+            ' add stack info for display
+            messages += "stackFrames: " & vbCrLf & exception.StackTrace
+
+            Return New Message With {
+                .Message = messages,
+                .EnvironmentStack = envir.getEnvironmentStack,
+                .MessageLevel = MSG_TYPES.ERR,
+                .Trace = devtools.ExceptionData.GetCurrentStackTrace
+            }
+        End Function
+
+        <Extension>
+        Private Function getEnvironmentStack(parent As Environment) As StackFrame()
             Dim frames As New List(Of StackFrame)
-            Dim parent As Environment = envir
 
             Do While Not parent Is Nothing
                 frames += New StackFrame With {
@@ -60,6 +86,10 @@ Namespace Runtime.Internal
                 parent = parent.parent
             Loop
 
+            Return frames
+        End Function
+
+        Private Function createMessageInternal(messages As Object, envir As Environment, level As MSG_TYPES) As Message
             Return New Message With {
                 .Message = Runtime.asVector(Of Object)(messages) _
                     .AsObjectEnumerator _
@@ -67,7 +97,7 @@ Namespace Runtime.Internal
                     .Select(Function(o) Scripting.ToString(o, "NULL")) _
                     .ToArray,
                 .MessageLevel = level,
-                .EnvironmentStack = frames,
+                .EnvironmentStack = envir.getEnvironmentStack,
                 .Trace = devtools.ExceptionData.GetCurrentStackTrace
             }
         End Function
@@ -92,9 +122,13 @@ Namespace Runtime.Internal
             Return strs
         End Function
 
-        Public Function print(x As Object) As Object
+        Public Function print(x As Object, envir As Environment) As Object
             If Not x Is Nothing AndAlso x.GetType.ImplementInterface(GetType(RPrint)) Then
-                Call Console.WriteLine(DirectCast(x, RPrint).GetPrintContent)
+                Try
+                    Call Console.WriteLine(DirectCast(x, RPrint).GetPrintContent)
+                Catch ex As Exception
+                    Return Internal.stop(ex, envir)
+                End Try
             Else
                 Call base.printInternal(x, "")
             End If
