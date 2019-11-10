@@ -43,6 +43,7 @@ Module interpreterTest
     Sub ImportsDll()
         Call R.Evaluate("imports 'VBMath' from 'Microsoft.VisualBasic.Framework_v47_dotnet_8da45dcd8060cc9a.dll'")
         Call R.Evaluate(" print( RMS([1,2,3,4,5,6,7,8,9,10], (1:10) * 5))")
+        Call R.Evaluate("print(RMS)")
 
         Pause()
     End Sub
