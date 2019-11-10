@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -29,9 +30,20 @@ Namespace Runtime
             End If
 
             If Not valueType Is arrayType Then
-                Dim array As Array = Array.CreateInstance(type, 1)
-                array.SetValue(value, Scan0)
-                Return array
+                If valueType.IsArray Then
+                    Dim array As Array = Array.CreateInstance(type, DirectCast(value, Array).Length)
+                    Dim src As Array = value
+
+                    For i As Integer = 0 To array.Length - 1
+                        array.SetValue(CTypeDynamic(src.GetValue(i), type), i)
+                    Next
+
+                    Return array
+                Else
+                    Dim array As Array = Array.CreateInstance(type, 1)
+                    array.SetValue(CTypeDynamic(value, type), Scan0)
+                    Return array
+                End If
             Else
                 Return value
             End If
