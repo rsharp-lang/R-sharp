@@ -27,7 +27,7 @@ The value expression is the very basic element in R# language: almost every word
 # This statement will produce value 55 with integer type
 # The value that produce by this statement will stored in 
 # a system preserved variable ``.Last``
-var x as integer <- 55;
+let x as integer <- 55;
 ```
 
 There is a kind of special value expression in R# language: **closure expression**.
@@ -38,7 +38,7 @@ There are two kind of closure expression in R# language: primitive closure and u
 
 ###  2.1. <a name='Primitiveclosure'></a>Primitive closure
 
-The primitive closure make up the basic flow control, like: ``if...elseif...else``, ``try...catch``, ``switch...case``, ``for``, ``repeat`` and ``do...while``. 
+The primitive closure make up the basic flow control, like: ``if...else if...else``, ``try...catch``, ``switch...case``, ``for``, ``repeat`` and ``do...while``. 
 
 ####  2.1.1. <a name='Branchcontrol'></a>Branch control
 
@@ -47,7 +47,7 @@ The primitive closure make up the basic flow control, like: ``if...elseif...else
 ```R
 if (logical_condition) {
     for_true();
-} elseif (logical_condition) {
+} else if (logical_condition) {
     for_true();
 } else {
     for_false();
@@ -66,7 +66,7 @@ try {
 
 ##### ``switch...case``
 
-The ``switch...case`` is very similar to the ``if...elseif...else``:
+The ``switch...case`` is very similar to the ``if...else if...else``:
 
 ```R
 switch(value_expression) {
@@ -100,7 +100,7 @@ All of the primitive closure will using the last value expression in the closure
 ```R
 # The if closure can using the last value expression last_value or last_value2 
 # as its returns value based on the condition logical_condition.
-var value <- if(logical_condition) {
+let value <- if(logical_condition) {
     # blablabla ...
     last_value;
 } else {
@@ -110,7 +110,7 @@ var value <- if(logical_condition) {
 
 # so if a if closure just have one condition?
 # the false branch will return NULL as default if it is not presented:
-var valueOrNULL <- if(logical_condition) {
+let valueOrNULL <- if(logical_condition) {
     # blablabla ...
     last_value;
 }
@@ -122,7 +122,7 @@ All of the loop control will produce a value collection, for example:
 
 ```R
 # The syntax maybe looks weired, but it is legal in R#
-var sum.list as integer <- for(x in 1:5) {
+let sum.list as integer <- for(x in 1:5) {
     x + 99;
 }
 
@@ -132,7 +132,7 @@ for (x in 1:5) {
     x + 99;
 }
 
-var sum.list as integer <- .Last;
+let sum.list as integer <- .Last;
 
 sum.list;
 # [5] 100 101 102 103 104
@@ -147,7 +147,7 @@ repeat {
     NULL;
 }
 
-var nothing <- .Last;
+let nothing <- .Last;
 ```
 
 If you don't want the loop control closure produced values, then you can using the ``suppress`` option:
@@ -166,7 +166,7 @@ repeat {
 Or you can just apply ``suppress`` in separate infinite loop, as the ``options()`` will disable the value produce in the current environment and current environment's child stack.
 
 ```R
-var sum.list as integer <- for(x in 1:5) {
+let sum.list as integer <- for(x in 1:5) {
     x + 99;
     suppress;
 }
@@ -174,7 +174,7 @@ var sum.list as integer <- for(x in 1:5) {
 sum.list;
 # NULL
 
-var i as integer = 0;
+let i as integer = 0;
 
 sum.list <- repeat {
 
@@ -202,7 +202,7 @@ As the loop closure is a kind of
 The user closure just have one type: user function, example like:
 
 ```R
-user.closure <- function(args) {
+let user.closure as function(args) {
 
 }
 ```
@@ -214,12 +214,12 @@ user.closure <- function(args) {
 ```R
 # This is how you are doing a function declare:
 # variable form not allows overloads
-var funcName <- function(args) {
+let funcName as function(args) {
 
 }
 
 # variable value assign
-var x <- 123;
+let x <- 123;
 x;
 # [1] 123
 
@@ -229,7 +229,7 @@ x;
 
 # function declare just a variable value assign procedure, 
 # so that, there is no function overloads in R# language.
-var func <- function(args) {
+let func as function(args) {
     # ...
 }
 func;
@@ -248,7 +248,7 @@ func;
 
 # func is a normal variable in generic type, 
 # so that it can be function closure or vector.
-func <- |TRUE, FALSE, FALSE|;
+func <- [TRUE, FALSE, FALSE];
 func;
 # [3] TRUE FALSE FALSE
 ```
@@ -260,8 +260,8 @@ func;
 But you can declare function with the same name in different R# namespace, and then use these function by add namespace prefix, example like:
 
 ```R
-var x <- namespace1::function1();
-var y <- namespace2::function2(x);
+let x <- namespace1::function1();
+let y <- namespace2::function2(x);
 ```
 
 ####  2.3.2. <a name='Themainclosure'></a>The main closure
