@@ -59,7 +59,9 @@ Namespace Runtime.Interop
         End Sub
 
         Public Function GetPrintContent() As String Implements RPrint.GetPrintContent
-            Throw New NotImplementedException()
+            Return $"let {name} as function({parameters.JoinBy(", ")}) {{
+    return call R#.interop_{name}(...);
+}}"
         End Function
 
         Private Shared Function parseParameters(method As MethodInfo) As RMethodArgument()

@@ -18,5 +18,9 @@ Namespace Runtime.Interop
             Me.raw = raw
             Me.isArray = raw.IsInheritsFrom(GetType(Array))
         End Sub
+
+        Public Overrides Function ToString() As String
+            Return $"<{mode.Description}> {raw.Name}"
+        End Function
     End Class
 End Namespace
