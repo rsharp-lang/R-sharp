@@ -7,6 +7,7 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call ImportsDll()
         Call dataframeTest()
         Call parameterTest()
 
@@ -35,6 +36,13 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub ImportsDll()
+        Call R.Evaluate("imports 'VBMath' from 'Microsoft.VisualBasic.Framework_v47_dotnet_8da45dcd8060cc9a.dll'")
+        Call R.Evaluate("RMS([1,2,3,4,5,6,7,8,9,10])")
 
         Pause()
     End Sub
