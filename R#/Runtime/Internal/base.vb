@@ -1,6 +1,7 @@
 ﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
@@ -92,7 +93,12 @@ Namespace Runtime.Internal
         End Function
 
         Public Function print(x As Object) As Object
-            Call base.printInternal(x, "")
+            If Not x Is Nothing AndAlso x.GetType.ImplementInterface(GetType(RPrint)) Then
+                Call Console.WriteLine(DirectCast(x, RPrint).GetPrintContent)
+            Else
+                Call base.printInternal(x, "")
+            End If
+
             Return x
         End Function
 

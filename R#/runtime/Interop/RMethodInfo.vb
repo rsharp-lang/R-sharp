@@ -3,7 +3,6 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Runtime.Interop
@@ -20,7 +19,7 @@ Namespace Runtime.Interop
 
     End Class
 
-    Public Class RMethodInfo : Implements RFunction
+    Public Class RMethodInfo : Implements RFunction, RPrint
 
         ''' <summary>
         ''' The function name
@@ -58,6 +57,10 @@ Namespace Runtime.Interop
             Me.returns = New RType(closure.ReturnType)
             Me.parameters = closure.DoCall(AddressOf parseParameters)
         End Sub
+
+        Public Function GetPrintContent() As String Implements RPrint.GetPrintContent
+            Throw New NotImplementedException()
+        End Function
 
         Private Shared Function parseParameters(method As MethodInfo) As RMethodArgument()
             Return method _
