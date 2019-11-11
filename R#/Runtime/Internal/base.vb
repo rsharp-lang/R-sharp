@@ -13,6 +13,22 @@ Namespace Runtime.Internal
     ''' </summary>
     Public Module base
 
+        ''' <summary>
+        ''' ###### Options Settings
+        ''' 
+        ''' Allow the user to set and examine a variety of global options which 
+        ''' affect the way in which R computes and displays its results.
+        ''' </summary>
+        ''' <param name="opts">
+        ''' any options can be defined, using name = value. However, only the ones below are used in base R.
+        ''' Options can also be passed by giving a Single unnamed argument which Is a named list.
+        ''' </param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
+        Public Function options(opts As Object, envir As Environment) As Object
+
+        End Function
+
         Public Function [get](x As Object, envir As Environment) As Object
             Dim name As String = Runtime.asVector(Of Object)(x) _
                 .DoCall(Function(o)
