@@ -177,6 +177,8 @@ Namespace Runtime.Internal
                 Catch ex As Exception
                     Return Internal.stop(ex, envir)
                 End Try
+            ElseIf x.GetType Is GetType(Message) Then
+                Return x
             ElseIf x.GetType Is GetType(list) Then
                 Call base.printInternal(DirectCast(x, list).slots, "")
             Else
