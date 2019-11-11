@@ -25,7 +25,7 @@ Module Terminal
                             Call Console.WriteLine()
                         End If
                     Else
-                        Call Internal.base.print(result)
+                        Call Internal.base.print(result, R.globalEnvir)
                     End If
                 End If
             End Sub
