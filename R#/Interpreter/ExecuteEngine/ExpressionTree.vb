@@ -104,6 +104,10 @@ Namespace Interpreter.ExecuteEngine
             Call buf.processOperators(oplist, logicalOperators, test:=Function(op, o) op = o)
 
             If buf > 1 Then
+                If buf.isByrefCall Then
+                    Return New ByRefFunctionCall(buf(Scan0), buf(2))
+                End If
+
                 Throw New SyntaxErrorException
             Else
                 Return buf(Scan0)

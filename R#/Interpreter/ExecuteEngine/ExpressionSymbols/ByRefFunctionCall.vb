@@ -15,10 +15,10 @@ Namespace Interpreter.ExecuteEngine
         ReadOnly target As Expression
         ReadOnly value As Expression
 
-        Sub New(invoke As Token(), value As Token())
-            Dim target As FunctionInvoke = Expression.CreateExpression(invoke)
+        Sub New(invoke As Expression, value As Expression)
+            Dim target As FunctionInvoke = invoke
 
-            Me.value = Expression.CreateExpression(value)
+            Me.value = value
             Me.funcName = target.funcName
             Me.target = target.parameters(Scan0)
         End Sub

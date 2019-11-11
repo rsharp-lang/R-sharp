@@ -1,4 +1,5 @@
 ﻿Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Runtime.Internal
@@ -33,6 +34,10 @@ Namespace Runtime.Internal
             slots = newSlots
 
             Return names
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return getNames.GetJson
         End Function
     End Class
 End Namespace
