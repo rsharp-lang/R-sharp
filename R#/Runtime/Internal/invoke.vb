@@ -52,7 +52,7 @@ Namespace Runtime.Internal
                 Call list.Add(key, value)
             Next
 
-            Return list
+            Return New list With {.slots = list}
         End Function
 
         ''' <summary>

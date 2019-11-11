@@ -7,6 +7,8 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call namesTest()
+
         Call optionsTest()
 
         Call ImportsDll()
@@ -38,6 +40,18 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub namesTest()
+        Call R.Evaluate("let l <- list(a=1,b='FFFF', c=F,d=[T,T])")
+        Call R.Evaluate("print(l)")
+        Call R.Evaluate("print(names(l))")
+        Call R.Evaluate("names(l) <- ['Q','A','W','S']")
+        Call R.Evaluate("print(l)")
+        Call R.Evaluate("names(l) <- NULL")
+        Call R.Evaluate("print(l)")
 
         Pause()
     End Sub
