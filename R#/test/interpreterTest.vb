@@ -7,6 +7,7 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call namespaceTest()
         Call namesTest()
 
         Call optionsTest()
@@ -40,6 +41,12 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub namespaceTest()
+        Call R.Evaluate("base::load('D:\GCModeller\src\R-sharp\tutorials\io\R#save.rda') +8")
 
         Pause()
     End Sub

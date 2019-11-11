@@ -16,6 +16,19 @@ Namespace Interpreter.ExecuteEngine
         ReadOnly valueAssigns As Index(Of String) = {"<-", "="}
 
         <Extension>
+        Public Function isNamespaceReferenceCall(tokens As List(Of [Variant](Of Expression, String))) As Boolean
+            If Not tokens(1) Like GetType(String) OrElse Not tokens(1).TryCast(Of String) = "::" Then
+                Return False
+            ElseIf Not tokens(2) Like GetType(FunctionInvoke) Then
+                Return False
+            ElseIf Not tokens(Scan0) Like GetType(SymbolReference) Then
+                Return False
+            Else
+                Return True
+            End If
+        End Function
+
+        <Extension>
         Public Function isByrefCall(tokens As List(Of [Variant](Of Expression, String))) As Boolean
             If Not tokens(Scan0) Like GetType(FunctionInvoke) Then
                 Return False
