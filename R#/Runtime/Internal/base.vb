@@ -7,6 +7,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 
 Namespace Runtime.Internal
@@ -24,6 +25,32 @@ Namespace Runtime.Internal
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function all(test As Object) As Object
             Return Runtime.asLogical(test).All(Function(b) b = True)
+        End Function
+
+        ''' <summary>
+        ''' ###### Options Settings
+        ''' 
+        ''' Allow the user to set and examine a variety of global options which 
+        ''' affect the way in which R computes and displays its results.
+        ''' </summary>
+        ''' <param name="opts">
+        ''' any options can be defined, using name = value. However, only the ones below are used in base R.
+        ''' Options can also be passed by giving a Single unnamed argument which Is a named list.
+        ''' </param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
+        Public Function options(opts As Object, envir As Environment) As Object
+            Dim configs As Options = envir.GlobalEnvironment.options
+
+            For Each value In DirectCast(opts, Dictionary(Of String, Object))
+                Try
+                    configs.setOption(value.Key, value.Value)
+                Catch ex As Exception
+                    Return Internal.stop(ex, envir)
+                End Try
+            Next
+
+            Return opts
         End Function
 
         Public Function [get](x As Object, envir As Environment) As Object
@@ -45,15 +72,34 @@ Namespace Runtime.Internal
             End If
         End Function
 
-        Public Function names([object] As Object, namelist As Object) As Object
+        Public Function names([object] As Object, namelist As Object, envir As Environment) As Object
             If namelist Is Nothing OrElse Runtime.asVector(Of Object)(namelist).Length = 0 Then
                 ' get names
+                Select Case [object].GetType
+                    Case GetType(list), GetType(dataframe)
+                        Return DirectCast([object], RNames).getNames
+                    Case Else
+                        Return Internal.stop("unsupported!", envir)
+                End Select
             Else
                 ' set names
-
+                Select Case [object].GetType
+                    Case GetType(list), GetType(dataframe)
+                        Return DirectCast([object], RNames).setNames(namelist, envir)
+                    Case Else
+                        Return Internal.stop("unsupported!", envir)
+                End Select
             End If
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="message">
+        ''' <see cref="String"/> array or <see cref="Exception"/>
+        ''' </param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         Public Function [stop](message As Object, envir As Environment) As Message
             If Not message Is Nothing AndAlso message.GetType.IsInheritsFrom(GetType(Exception)) Then
                 Return DirectCast(message, Exception).createDotNetExceptionMessage(envir)
@@ -84,7 +130,7 @@ Namespace Runtime.Internal
         End Function
 
         <Extension>
-        Private Function getEnvironmentStack(parent As Environment) As StackFrame()
+        Friend Function getEnvironmentStack(parent As Environment) As StackFrame()
             Dim frames As New List(Of StackFrame)
 
             Do While Not parent Is Nothing
@@ -133,12 +179,18 @@ Namespace Runtime.Internal
         End Function
 
         Public Function print(x As Object, envir As Environment) As Object
-            If Not x Is Nothing AndAlso x.GetType.ImplementInterface(GetType(RPrint)) Then
+            If x Is Nothing Then
+                Call Console.WriteLine("[1] NULL")
+            ElseIf x.GetType.ImplementInterface(GetType(RPrint)) Then
                 Try
                     Call Console.WriteLine(DirectCast(x, RPrint).GetPrintContent)
                 Catch ex As Exception
                     Return Internal.stop(ex, envir)
                 End Try
+            ElseIf x.GetType Is GetType(Message) Then
+                Return x
+            ElseIf x.GetType Is GetType(list) Then
+                Call base.printInternal(DirectCast(x, list).slots, "")
             Else
                 Call base.printInternal(x, "")
             End If

@@ -43,6 +43,7 @@ Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 Imports SMRUCC.Rsharp.Runtime.Package
 
 Module Program
@@ -56,7 +57,7 @@ Module Program
     End Function
 
     Private Function RunScript(filepath$, args As CommandLine) As Integer
-        Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(LocalPackageDatabase.localDb)
+        Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(LocalPackageDatabase.localDb, ConfigFile.localConfigs)
 
         Call R.LoadLibrary("base")
         Call R.LoadLibrary("utils")

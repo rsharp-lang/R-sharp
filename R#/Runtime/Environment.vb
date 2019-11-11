@@ -27,7 +27,7 @@ Namespace Runtime
         Public ReadOnly Property variables As Dictionary(Of Variable)
         Public ReadOnly Property types As Dictionary(Of String, RType)
         Public ReadOnly Property messages As New List(Of Message)
-        Public ReadOnly Property GlobalEnvironment As Environment
+        Public ReadOnly Property GlobalEnvironment As GlobalEnvironment
 
         Friend ReadOnly ifPromise As New List(Of IfBranch.IfPromise)
 
@@ -38,7 +38,7 @@ Namespace Runtime
         Public ReadOnly Property isGlobal As Boolean
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
-                Return parent Is Nothing
+                Return parent Is Nothing AndAlso TypeOf Me Is GlobalEnvironment
             End Get
         End Property
 

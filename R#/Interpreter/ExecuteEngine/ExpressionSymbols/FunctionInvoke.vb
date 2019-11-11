@@ -23,6 +23,12 @@ Namespace Interpreter.ExecuteEngine
 
         Public ReadOnly Property funcName As String
 
+        ''' <summary>
+        ''' The namespace reference
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property [namespace] As String
+
         Friend ReadOnly parameters As List(Of Expression)
 
         Sub New(tokens As Token())
@@ -53,7 +59,11 @@ Namespace Interpreter.ExecuteEngine
         End Sub
 
         Public Overrides Function ToString() As String
-            Return $"Call {funcName}({parameters.JoinBy(", ")})"
+            If [namespace].StringEmpty Then
+                Return $"Call {funcName}({parameters.JoinBy(", ")})"
+            Else
+                Return $"Call {[namespace]}::{funcName}({parameters.JoinBy(", ")})"
+            End If
         End Function
 
         ''' <summary>
@@ -73,6 +83,8 @@ Namespace Interpreter.ExecuteEngine
                 ' 可能是一个系统的内置函数
                 If funcName = "list" Then
                     Return Runtime.Internal.Rlist(envir, parameters)
+                ElseIf funcName = "options" Then
+                    Return Runtime.Internal.options(Runtime.Internal.Rlist(envir, parameters), envir)
                 ElseIf funcName = "data.frame" Then
                     Return Runtime.Internal.Rdataframe(envir, parameters)
                 Else

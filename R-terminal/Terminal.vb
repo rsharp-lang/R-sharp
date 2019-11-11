@@ -5,6 +5,7 @@ Imports Microsoft.VisualBasic.Terminal
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 Imports SMRUCC.Rsharp.Runtime.Package
 Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
@@ -12,7 +13,7 @@ Module Terminal
 
     Public Function RunTerminal() As Integer
         Dim ps1 As New PS1("> ")
-        Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(LocalPackageDatabase.localDb)
+        Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(LocalPackageDatabase.localDb, ConfigFile.localConfigs)
         Dim exec As Action(Of String) =
             Sub(script)
                 Dim program As RProgram = RProgram.BuildProgram(script)
@@ -25,7 +26,7 @@ Module Terminal
                             Call Console.WriteLine()
                         End If
                     Else
-                        Call Internal.base.print(result)
+                        Call Internal.base.print(result, R.globalEnvir)
                     End If
                 End If
             End Sub

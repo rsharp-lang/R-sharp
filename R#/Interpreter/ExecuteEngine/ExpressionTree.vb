@@ -88,6 +88,8 @@ Namespace Interpreter.ExecuteEngine
                 End If
             Next
 
+            Call buf.processNamespaceReference(oplist)
+
             ' pipeline操作符是优先度最高的
             Call buf.processPipeline(oplist)
 
@@ -104,11 +106,56 @@ Namespace Interpreter.ExecuteEngine
             Call buf.processOperators(oplist, logicalOperators, test:=Function(op, o) op = o)
 
             If buf > 1 Then
+                If buf.isByrefCall Then
+                    Return New ByRefFunctionCall(buf(Scan0), buf(2))
+                ElseIf buf.isNamespaceReferenceCall Then
+                    Dim calls As FunctionInvoke = buf(2).TryCast(Of Expression)
+                    Dim [namespace] As Expression = buf(Scan0).TryCast(Of Expression)
+
+                    Throw New NotImplementedException
+                End If
+
                 Throw New SyntaxErrorException
             Else
                 Return buf(Scan0)
             End If
         End Function
+
+        <Extension>
+        Private Sub processNamespaceReference(buf As List(Of [Variant](Of Expression, String)), oplist As List(Of String))
+            If buf = 1 Then
+                Return
+            End If
+
+            Dim nop = oplist.AsEnumerable.Count(Function(op) op = "::")
+            Dim refCalls As FunctionInvoke
+
+            ' 从左往右计算
+            For i As Integer = 0 To nop - 1
+                For j As Integer = 0 To buf.Count - 1
+                    If buf(j) Like GetType(String) AndAlso "::" = buf(j).VB Then
+                        ' j-1 and j+1
+                        Dim a = buf(j - 1) ' namespace
+                        Dim b = buf(j + 1) ' function invoke
+
+                        If TypeOf b.VA Is FunctionInvoke Then
+                            refCalls = b.VA
+                        ElseIf TypeOf b.VA Is SymbolReference Then
+                            refCalls = New FunctionInvoke(DirectCast(b.VA, SymbolReference).symbol, a.VA)
+                        Else
+                            Throw New SyntaxErrorException
+                        End If
+
+                        refCalls.namespace = a.TryCast(Of SymbolReference).symbol
+
+                        Call buf.RemoveRange(j - 1, 3)
+                        Call buf.Insert(j - 1, refCalls)
+
+                        Exit For
+                    End If
+                Next
+            Next
+        End Sub
 
         <Extension>
         Private Sub processPipeline(buf As List(Of [Variant](Of Expression, String)), oplist As List(Of String))

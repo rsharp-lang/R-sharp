@@ -10,6 +10,11 @@ Module interpreterTest
 
         Call inTest()
 
+        Call namespaceTest()
+        Call namesTest()
+
+        Call optionsTest()
+
         Call ImportsDll()
         Call dataframeTest()
         Call parameterTest()
@@ -39,6 +44,30 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub namespaceTest()
+        Call R.Evaluate("base::load('D:\GCModeller\src\R-sharp\tutorials\io\R#save.rda') +8")
+
+        Pause()
+    End Sub
+
+    Sub namesTest()
+        Call R.Evaluate("let l <- list(a=1,b='FFFF', c=F,d=[T,T])")
+        Call R.Evaluate("print(l)")
+        Call R.Evaluate("print(names(l))")
+        Call R.Evaluate("names(l) <- ['Q','A','W','S']")
+        Call R.Evaluate("print(l)")
+        Call R.Evaluate("names(l) <- NULL")
+        Call R.Evaluate("print(l)")
+
+        Pause()
+    End Sub
+
+    Sub optionsTest()
+        Call R.Evaluate("options(a=1,bb=2,cc=3, q=TRUE);")
 
         Pause()
     End Sub

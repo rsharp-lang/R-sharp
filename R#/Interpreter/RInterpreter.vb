@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -9,6 +10,8 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Configuration
+Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Package
 
@@ -19,9 +22,8 @@ Namespace Interpreter
         ''' <summary>
         ''' Global runtime environment.(全局环境)
         ''' </summary>
-        Public ReadOnly Property globalEnvir As New Environment
+        Public ReadOnly Property globalEnvir As GlobalEnvironment
         Public ReadOnly Property warnings As New List(Of Message)
-        Public ReadOnly Property packages As LocalPackageDatabase
 
         Default Public ReadOnly Property GetValue(name As String) As Object
             Get
@@ -32,7 +34,11 @@ Namespace Interpreter
         Public Const lastVariableName$ = "$"
 
         Sub New()
-            Call globalEnvir.Push(lastVariableName, Nothing, TypeCodes.generic)
+            Dim localRepo As LocalPackageDatabase = LocalPackageDatabase.LoadDefaultFile
+            Dim envirConf As New Options(ConfigFile.localConfigs)
+
+            globalEnvir = New GlobalEnvironment(localRepo, envirConf)
+            globalEnvir.Push(lastVariableName, Nothing, TypeCodes.generic)
         End Sub
 
         Public Sub PrintMemory(Optional dev As TextWriter = Nothing)
@@ -61,11 +67,19 @@ Namespace Interpreter
         End Sub
 
         Public Sub LoadLibrary(packageName As String)
-            Dim package = packages.FindPackage(packageName)
+            Dim package As Package = globalEnvir.packages.FindPackage(packageName)
 
             Call Console.WriteLine($"Loading required package: {packageName}")
 
             If package Is Nothing Then
+                Call printErrorInternal(New Message With {
+                      .EnvironmentStack = globalEnvir.getEnvironmentStack,
+                      .MessageLevel = MSG_TYPES.ERR,
+                      .Message = {
+                          $"there is no package called ‘{packageName}’",
+                          $"package: {packageName}"
+                      }
+                })
             Else
                 Call ImportsPackage.ImportsStatic(globalEnvir, package.package)
             End If
@@ -203,9 +217,12 @@ Namespace Interpreter
             End SyncLock
         End Function
 
-        Public Shared Function FromEnvironmentConfiguration(configs As String) As RInterpreter
+        Public Shared Function FromEnvironmentConfiguration(repo$, configs$) As RInterpreter
+            Dim localPackageRepo As LocalPackageDatabase = LocalPackageDatabase.Load(database:=repo)
+            Dim options As New Options(configs)
+
             Return New RInterpreter With {
-                ._packages = LocalPackageDatabase.Load(database:=configs)
+                ._globalEnvir = New GlobalEnvironment(localPackageRepo, options)
             }
         End Function
     End Class
