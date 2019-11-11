@@ -7,6 +7,9 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+
+        Call inTest()
+
         Call ImportsDll()
         Call dataframeTest()
         Call parameterTest()
@@ -36,6 +39,13 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub inTest()
+        Call R.Evaluate("print( 55 in [1,55,7])")
+        Call R.Evaluate("print(99 in 3)")
 
         Pause()
     End Sub

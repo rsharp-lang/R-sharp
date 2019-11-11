@@ -16,6 +16,16 @@ Namespace Runtime.Internal
     ''' </summary>
     Public Module base
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function any(test As Object) As Object
+            Return Runtime.asLogical(test).Any(Function(b) b = True)
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function all(test As Object) As Object
+            Return Runtime.asLogical(test).All(Function(b) b = True)
+        End Function
+
         Public Function [get](x As Object, envir As Environment) As Object
             Dim name As String = Runtime.asVector(Of Object)(x) _
                 .DoCall(Function(o)

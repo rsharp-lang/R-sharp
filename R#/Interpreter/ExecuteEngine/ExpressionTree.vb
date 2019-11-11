@@ -171,7 +171,13 @@ Namespace Interpreter.ExecuteEngine
                             ' j-1 and j+1
                             Dim a = buf(j - 1)
                             Dim b = buf(j + 1)
-                            Dim be As New BinaryExpression(a, b, buf(j).VB)
+                            Dim be As Expression
+
+                            If buf(j).VB = "in" Then
+                                be = New FunctionInvoke("any", New BinaryExpression(a, b, "=="))
+                            Else
+                                be = New BinaryExpression(a, b, buf(j).VB)
+                            End If
 
                             Call buf.RemoveRange(j - 1, 3)
                             Call buf.Insert(j - 1, be)

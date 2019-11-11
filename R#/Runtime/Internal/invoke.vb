@@ -64,8 +64,9 @@ Namespace Runtime.Internal
         ''' <returns></returns>
         Public Function invokeInternals(envir As Environment, funcName$, paramVals As Object()) As Object
             Select Case funcName
-                Case "length"
-                    Return DirectCast(paramVals(Scan0), Array).Length
+                Case "any" : Return base.any(paramVals(Scan0))
+                Case "all" : Return base.all(paramVals(Scan0))
+                Case "length" : Return DirectCast(paramVals(Scan0), Array).Length
                 Case "round"
                     Dim x As Object = paramVals(Scan0)
                     Dim decimals As Integer = Runtime.getFirst(paramVals(1))
