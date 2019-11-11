@@ -1,4 +1,4 @@
-﻿Namespace Runtime.Components
+﻿Namespace Runtime.Components.Interface
 
     Public Interface RPrint
 

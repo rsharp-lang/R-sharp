@@ -8,6 +8,7 @@ Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Configuration
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 
 Namespace Runtime.Internal
