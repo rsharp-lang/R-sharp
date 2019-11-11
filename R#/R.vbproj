@@ -164,6 +164,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Interpreter\ExecuteEngine\Expression.vb" />
+    <Compile Include="Runtime\Components\Config\Options.vb" />
+    <Compile Include="Runtime\Components\Config\ConfigFile.vb" />
     <Compile Include="Runtime\Components\Interface\RPrint.vb" />
     <Compile Include="Runtime\Components\Interface\RFunction.vb" />
     <Compile Include="Runtime\Interop\RInteropAttribute.vb" />
