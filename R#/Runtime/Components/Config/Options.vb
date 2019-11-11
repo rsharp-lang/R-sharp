@@ -12,5 +12,13 @@ Namespace Runtime.Components.Configuration
             Me.file = configs
         End Sub
 
+        Public Function getOption(opt As String) As String
+
+        End Function
+
+        Public Function setOption(opt$, value$) As String
+
+        End Function
+
     End Class
 End Namespace
