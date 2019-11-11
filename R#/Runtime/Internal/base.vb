@@ -43,7 +43,7 @@ Namespace Runtime.Internal
         Public Function options(opts As Object, envir As Environment) As Object
             Dim configs As Options = envir.GlobalEnvironment.options
 
-            For Each value In DirectCast(opts, Dictionary(Of String, Object))
+            For Each value In DirectCast(opts, list).slots
                 Try
                     configs.setOption(value.Key, value.Value)
                 Catch ex As Exception

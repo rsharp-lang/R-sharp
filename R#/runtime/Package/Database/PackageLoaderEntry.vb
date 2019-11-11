@@ -39,8 +39,8 @@ Namespace Runtime.Package
         Sub New()
         End Sub
 
-        Public Function GetLoader() As Package
-            Dim loader As Type = [module].GetType
+        Public Function GetLoader(ByRef exception As Exception) As Package
+            Dim loader As Type = [module].GetType(throwEx:=False, getException:=exception)
             Dim info As New PackageAttribute([namespace]) With {
                 .Category = category,
                 .Cites = cites,
@@ -50,7 +50,11 @@ Namespace Runtime.Package
                 .Url = url
             }
 
-            Return New Package(info, package:=loader)
+            If loader Is Nothing Then
+                Return Nothing
+            Else
+                Return New Package(info, package:=loader)
+            End If
         End Function
 
         Public Overrides Function ToString() As String

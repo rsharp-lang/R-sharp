@@ -24,7 +24,7 @@ Namespace Runtime.Package
         <XmlArray>
         Public Property packages As PackageLoaderEntry()
 
-        Public Function FindPackage(packageName As String) As Package
+        Public Function FindPackage(packageName As String, ByRef exception As Exception) As Package
             Dim entry As PackageLoaderEntry = packages _
                 .Where(Function(pkg)
                            Return pkg.namespace = packageName
@@ -34,7 +34,7 @@ Namespace Runtime.Package
             If entry Is Nothing Then
                 Return Nothing
             Else
-                Return entry.GetLoader
+                Return entry.GetLoader(exception)
             End If
         End Function
 

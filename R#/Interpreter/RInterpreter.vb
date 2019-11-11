@@ -73,7 +73,8 @@ Namespace Interpreter
         End Sub
 
         Public Sub LoadLibrary(packageName As String)
-            Dim package As Package = globalEnvir.packages.FindPackage(packageName)
+            Dim exception As Exception = Nothing
+            Dim package As Package = globalEnvir.packages.FindPackage(packageName, exception)
 
             Call Console.WriteLine($"Loading required package: {packageName}")
 

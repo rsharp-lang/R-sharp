@@ -8,18 +8,6 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 
 Namespace Runtime.Interop
 
-    Friend Class MethodInvoke
-
-        Public method As MethodInfo
-        Public target As Object
-
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Function Invoke(parameters As Object()) As Object
-            Return method.Invoke(target, parameters)
-        End Function
-
-    End Class
-
     Public Class RMethodInfo : Implements RFunction, RPrint
 
         ''' <summary>
