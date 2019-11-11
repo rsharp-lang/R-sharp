@@ -1,5 +1,4 @@
-﻿Imports System.Runtime.CompilerServices
-Imports System.Xml.Serialization
+﻿Imports System.Xml.Serialization
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.Linq

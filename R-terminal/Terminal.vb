@@ -6,7 +6,6 @@ Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components.Configuration
-Imports SMRUCC.Rsharp.Runtime.Package
 Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
 Module Terminal
