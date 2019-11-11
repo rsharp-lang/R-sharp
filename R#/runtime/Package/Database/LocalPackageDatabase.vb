@@ -56,11 +56,6 @@ Namespace Runtime.Package
             End If
         End Function
 
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Shared Function LoadDefaultFile() As LocalPackageDatabase
-            Return Load(localDb)
-        End Function
-
         Public Shared Function Build(repository As String) As LocalPackageDatabase
             Dim packages As PackageLoaderEntry() = PackageLoader _
                 .ScanDllFiles(directory:=repository) _

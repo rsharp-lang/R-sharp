@@ -45,6 +45,7 @@ Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 Imports SMRUCC.Rsharp.Runtime.Package
 
 Module CLI
@@ -55,7 +56,8 @@ Module CLI
     Public Function Install(args As CommandLine) As Integer
         Dim module$ = args <= "/module"
         Dim verboseMode As Boolean = args("--verbose")
-        Dim localdb As LocalPackageDatabase = LocalPackageDatabase.LoadDefaultFile
+        Dim config As New Options(ConfigFile.localConfigs)
+        Dim localdb As LocalPackageDatabase = LocalPackageDatabase.Load(config.lib)
 
         If [module].StringEmpty Then
             Return "Missing '/module' argument!".PrintException
