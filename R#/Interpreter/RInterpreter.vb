@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -10,6 +11,7 @@ Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Configuration
+Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Package
 
@@ -33,7 +35,7 @@ Namespace Interpreter
 
         Sub New()
             Dim localRepo As LocalPackageDatabase = LocalPackageDatabase.LoadDefaultFile
-            Dim envirConf As New Options(ConfigFile.Load(ConfigFile.localConfigs))
+            Dim envirConf As New Options(ConfigFile.localConfigs)
 
             globalEnvir = New GlobalEnvironment(localRepo, envirConf)
             globalEnvir.Push(lastVariableName, Nothing, TypeCodes.generic)
@@ -70,6 +72,14 @@ Namespace Interpreter
             Call Console.WriteLine($"Loading required package: {packageName}")
 
             If package Is Nothing Then
+                Call printErrorInternal(New Message With {
+                      .EnvironmentStack = globalEnvir.getEnvironmentStack,
+                      .MessageLevel = MSG_TYPES.ERR,
+                      .Message = {
+                          $"there is no package called ‘{packageName}’",
+                          $"package: {packageName}"
+                      }
+                })
             Else
                 Call ImportsPackage.ImportsStatic(globalEnvir, package.package)
             End If
@@ -209,7 +219,7 @@ Namespace Interpreter
 
         Public Shared Function FromEnvironmentConfiguration(repo$, configs$) As RInterpreter
             Dim localPackageRepo As LocalPackageDatabase = LocalPackageDatabase.Load(database:=repo)
-            Dim options As New Options(ConfigFile.Load(configs))
+            Dim options As New Options(configs)
 
             Return New RInterpreter With {
                 ._globalEnvir = New GlobalEnvironment(localPackageRepo, options)

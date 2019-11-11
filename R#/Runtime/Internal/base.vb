@@ -60,6 +60,14 @@ Namespace Runtime.Internal
             End If
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="message">
+        ''' <see cref="String"/> array or <see cref="Exception"/>
+        ''' </param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         Public Function [stop](message As Object, envir As Environment) As Message
             If Not message Is Nothing AndAlso message.GetType.IsInheritsFrom(GetType(Exception)) Then
                 Return DirectCast(message, Exception).createDotNetExceptionMessage(envir)
@@ -90,7 +98,7 @@ Namespace Runtime.Internal
         End Function
 
         <Extension>
-        Private Function getEnvironmentStack(parent As Environment) As StackFrame()
+        Friend Function getEnvironmentStack(parent As Environment) As StackFrame()
             Dim frames As New List(Of StackFrame)
 
             Do While Not parent Is Nothing
