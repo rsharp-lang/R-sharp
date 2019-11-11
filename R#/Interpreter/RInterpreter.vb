@@ -79,14 +79,14 @@ Namespace Interpreter
             Call Console.WriteLine($"Loading required package: {packageName}")
 
             If package Is Nothing Then
-                Call printErrorInternal(New Message With {
-                      .EnvironmentStack = globalEnvir.getEnvironmentStack,
-                      .MessageLevel = MSG_TYPES.ERR,
-                      .Message = {
-                          $"there is no package called ‘{packageName}’",
-                          $"package: {packageName}"
-                      }
-                })
+                Dim message As Message = Internal.stop(exception, globalEnvir)
+
+                message.Message = {
+                    $"there is no package called ‘{packageName}’",
+                    $"package: {packageName}"
+                }.Join(message.Message)
+
+                Call printErrorInternal(message)
             Else
                 Call ImportsPackage.ImportsStatic(globalEnvir, package.package)
             End If
