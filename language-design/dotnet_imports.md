@@ -41,12 +41,12 @@ You can using a string variable for dynamics load library
 #
 # so that, you can
 
-var a.dll as string <- "./a.dll";
-var b.dll as string <- "./b.dll";
+let a.dll as string <- "./a.dll";
+let b.dll as string <- "./b.dll";
 
 `%||%` <- function(ver1, ver2) if (opt["version"] == "a") ver1 else ver2;
 	
-var library.dll as string <- a.ll %||% b.dll;
+let library.dll as string <- a.ll %||% b.dll;
 
 # Dynamics load library based on the configuration
 # without change your R# script code.
@@ -73,8 +73,8 @@ imports * from library.dll;
 Probably sometimes, the .NET namespace that too long for write in your ``R#`` script, so that you can using ``imports...as`` for the root namespace alias:
 
 ```R
-var a.dll as string <- "./a.dll";
-var b.dll as string <- "./b.dll";
+let a.dll as string <- "./a.dll";
+let b.dll as string <- "./b.dll";
 
 `%||%` <- function(ver1, ver2) if (opt["version"] == "a") ver1 else ver2;
 

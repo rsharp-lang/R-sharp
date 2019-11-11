@@ -7,6 +7,8 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call ImportsDll()
+        Call dataframeTest()
         Call parameterTest()
 
         Call linqTest()
@@ -34,6 +36,21 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub ImportsDll()
+        Call R.Evaluate("imports 'VBMath' from 'Microsoft.VisualBasic.Framework_v47_dotnet_8da45dcd8060cc9a.dll'")
+        Call R.Evaluate(" print( RMS([1,2,3,4,5,6,7,8,9,10], (1:10) * 5))")
+        Call R.Evaluate("print(RMS)")
+
+        Pause()
+    End Sub
+
+    Sub dataframeTest()
+        Call R.Evaluate("let d <- data.frame(a = [1,2,3,4,5], b= F, xx='ABCDEFG')")
+        Call R.Evaluate("print(d)")
 
         Pause()
     End Sub
@@ -98,12 +115,12 @@ print(zzz);
     End Sub
 
     Sub invokeTest()
-        Call R.Add("x", {"hello", "world"}, TypeCodes.string)
-        Call R.Add("debug", Function(o) Internal.print(o))
+        'Call R.Add("x", {"hello", "world"}, TypeCodes.string)
+        'Call R.Add("debug", closure:=Function(o) Internal.print(o))
 
-        Call R.Invoke("debug", R!x)
+        'Call R.Invoke("debug", R!x)
 
-        Pause()
+        'Pause()
     End Sub
 
     Sub forLoopTest()

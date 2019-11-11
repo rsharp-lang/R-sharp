@@ -18,6 +18,19 @@ Namespace Runtime.Internal
 
         End Sub
 
+        Public Function Rdataframe(envir As Environment, parameters As List(Of Expression)) As Object
+            Dim dataframe As New dataframe With {
+                .columns = InvokeParameter _
+                    .CreateArguments(envir, InvokeParameter.Create(parameters)) _
+                    .ToDictionary(Function(a) a.Key,
+                                  Function(a)
+                                      Return Runtime.asVector(Of Double)(a.Value)
+                                  End Function)
+            }
+
+            Return dataframe
+        End Function
+
         Public Function Rlist(envir As Environment, parameters As List(Of Expression)) As Object
             Dim list As New Dictionary(Of String, Object)
             Dim slot As Expression
@@ -65,7 +78,7 @@ Namespace Runtime.Internal
                 Case "get"
                     Return base.get(paramVals(Scan0), envir)
                 Case "print"
-                    Return Internal.print(paramVals(Scan0))
+                    Return Internal.print(paramVals(Scan0), envir)
                 Case "stop"
                     Return Internal.stop(paramVals(Scan0), envir)
                 Case "warning"

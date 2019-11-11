@@ -3,7 +3,6 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Runtime.Interop
@@ -20,7 +19,7 @@ Namespace Runtime.Interop
 
     End Class
 
-    Public Class RMethodInfo : Implements RFunction
+    Public Class RMethodInfo : Implements RFunction, RPrint
 
         ''' <summary>
         ''' The function name
@@ -58,6 +57,12 @@ Namespace Runtime.Interop
             Me.returns = New RType(closure.ReturnType)
             Me.parameters = closure.DoCall(AddressOf parseParameters)
         End Sub
+
+        Public Function GetPrintContent() As String Implements RPrint.GetPrintContent
+            Return $"let {name} as function({parameters.JoinBy(", ")}) {{
+    return call R#.interop_{name}(...);
+}}"
+        End Function
 
         Private Shared Function parseParameters(method As MethodInfo) As RMethodArgument()
             Return method _
@@ -135,7 +140,7 @@ Namespace Runtime.Interop
 
             If declareArguments.Count > 0 Then
                 Return {
-                    Internal.stop({$"Missing parameters value for '{declareArguments.Keys.GetJson}'!", "function: " & name, "environment: " & envir.ToString}, envir)
+                     missingParameter(declareArguments.Values.First, envir)
                 }
             Else
                 Return parameterVals
@@ -157,7 +162,7 @@ Namespace Runtime.Interop
                     If arg.type.raw Is GetType(Environment) Then
                         Yield envir
                     ElseIf Not arg.isOptional Then
-                        Yield Internal.stop({$"Missing parameter value for '{arg.name}'!", "function: " & name, "environment: " & envir.ToString}, envir)
+                        Yield missingParameter(arg, envir)
                     Else
                         Yield arg.default
                     End If
@@ -171,6 +176,18 @@ Namespace Runtime.Interop
                     End If
                 End If
             Next
+        End Function
+
+        Private Function missingParameter(arg As RMethodArgument, envir As Environment) As Object
+            Dim messages$() = {
+                $"Missing parameter value for '{arg.name}'!",
+                $"parameter: {arg.name}",
+                $"type: {arg.type.raw.FullName}",
+                $"function: {name}",
+                $"environment: {envir.ToString}"
+            }
+
+            Return Internal.stop(messages, envir)
         End Function
 
         Private Shared Function getValue(arg As RMethodArgument, value As Object) As Object
