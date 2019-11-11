@@ -7,6 +7,8 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call optionsTest()
+
         Call ImportsDll()
         Call dataframeTest()
         Call parameterTest()
@@ -36,6 +38,12 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub optionsTest()
+        Call R.Evaluate("options(a=1,bb=2,cc=3, q=TRUE);")
 
         Pause()
     End Sub

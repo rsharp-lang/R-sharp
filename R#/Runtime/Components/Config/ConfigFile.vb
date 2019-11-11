@@ -11,6 +11,14 @@ Namespace Runtime.Components.Configuration
 
         <XmlAttribute>
         Public Property size As Integer Implements IList(Of NamedValue).size
+            Get
+                Return config.Length
+            End Get
+            Set(value As Integer)
+                ' readonly
+                ' do nothing
+            End Set
+        End Property
 
         <XmlElement> Public Property system As AssemblyInfo
         <XmlElement> Public Property config As NamedValue()

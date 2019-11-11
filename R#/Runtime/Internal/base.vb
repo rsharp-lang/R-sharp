@@ -7,6 +7,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 
 Namespace Runtime.Internal
@@ -29,7 +30,17 @@ Namespace Runtime.Internal
         ''' <param name="envir"></param>
         ''' <returns></returns>
         Public Function options(opts As Object, envir As Environment) As Object
+            Dim configs As Options = envir.GlobalEnvironment.options
 
+            For Each value In DirectCast(opts, Dictionary(Of String, Object))
+                Try
+                    configs.setOption(value.Key, value.Value)
+                Catch ex As Exception
+                    Return Internal.stop(ex, envir)
+                End Try
+            Next
+
+            Return opts
         End Function
 
         Public Function [get](x As Object, envir As Environment) As Object
