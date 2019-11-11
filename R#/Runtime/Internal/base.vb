@@ -169,12 +169,16 @@ Namespace Runtime.Internal
         End Function
 
         Public Function print(x As Object, envir As Environment) As Object
-            If Not x Is Nothing AndAlso x.GetType.ImplementInterface(GetType(RPrint)) Then
+            If x Is Nothing Then
+                Call Console.WriteLine("[1] NULL")
+            ElseIf x.GetType.ImplementInterface(GetType(RPrint)) Then
                 Try
                     Call Console.WriteLine(DirectCast(x, RPrint).GetPrintContent)
                 Catch ex As Exception
                     Return Internal.stop(ex, envir)
                 End Try
+            ElseIf x.GetType Is GetType(list) Then
+                Call base.printInternal(DirectCast(x, list).slots, "")
             Else
                 Call base.printInternal(x, "")
             End If
