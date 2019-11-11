@@ -79,7 +79,7 @@ Module CLI
 
         Return localdb _
             .GetXml _
-            .SaveTo(LocalPackageDatabase.localDb) _
+            .SaveTo(config.lib) _
             .CLICode
     End Function
 End Module

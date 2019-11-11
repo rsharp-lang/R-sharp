@@ -33,9 +33,14 @@ Namespace Interpreter
 
         Public Const lastVariableName$ = "$"
 
-        Sub New()
-            Dim localRepo As LocalPackageDatabase = LocalPackageDatabase.LoadDefaultFile
-            Dim envirConf As New Options(ConfigFile.localConfigs)
+        Sub New(Optional envirConf As Options = Nothing)
+            Dim localRepo As LocalPackageDatabase
+
+            If envirConf Is Nothing Then
+                envirConf = New Options(ConfigFile.localConfigs)
+            End If
+
+            localRepo = LocalPackageDatabase.Load(envirConf.lib)
 
             globalEnvir = New GlobalEnvironment(localRepo, envirConf)
             globalEnvir.Push(lastVariableName, Nothing, TypeCodes.generic)
@@ -217,13 +222,8 @@ Namespace Interpreter
             End SyncLock
         End Function
 
-        Public Shared Function FromEnvironmentConfiguration(repo$, configs$) As RInterpreter
-            Dim localPackageRepo As LocalPackageDatabase = LocalPackageDatabase.Load(database:=repo)
-            Dim options As New Options(configs)
-
-            Return New RInterpreter With {
-                ._globalEnvir = New GlobalEnvironment(localPackageRepo, options)
-            }
+        Public Shared Function FromEnvironmentConfiguration(configs As String) As RInterpreter
+            Return New RInterpreter(New Options(configs))
         End Function
     End Class
 End Namespace

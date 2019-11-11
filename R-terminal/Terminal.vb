@@ -13,7 +13,7 @@ Module Terminal
 
     Public Function RunTerminal() As Integer
         Dim ps1 As New PS1("> ")
-        Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(LocalPackageDatabase.localDb, ConfigFile.localConfigs)
+        Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
         Dim exec As Action(Of String) =
             Sub(script)
                 Dim program As RProgram = RProgram.BuildProgram(script)
