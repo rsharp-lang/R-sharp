@@ -65,6 +65,7 @@ Namespace Runtime.Internal
         Public Function names([object] As Object, namelist As Object) As Object
             If namelist Is Nothing OrElse Runtime.asVector(Of Object)(namelist).Length = 0 Then
                 ' get names
+
             Else
                 ' set names
 

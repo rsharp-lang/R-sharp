@@ -164,6 +164,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Interpreter\ExecuteEngine\Expression.vb" />
+    <Compile Include="Runtime\Components\Interface\RNames.vb" />
     <Compile Include="Runtime\GlobalEnvironment.vb" />
     <Compile Include="Runtime\Components\Config\Options.vb" />
     <Compile Include="Runtime\Components\Config\ConfigFile.vb" />
