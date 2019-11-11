@@ -1,5 +1,7 @@
-﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+﻿Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports Microsoft.VisualBasic.Linq
 
 Namespace Runtime.Components
 
@@ -40,6 +42,16 @@ Namespace Runtime.Components
             }
 
             Return Internal.stop(messages, envir)
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Shared Function SyntaxNotImplemented(envir As Environment, operation$) As Message
+            Return {
+                "The specific syntax is not yet implemented...",
+                "operation: " & operation
+            }.DoCall(Function(msg)
+                         Return Internal.stop(msg, envir)
+                     End Function)
         End Function
     End Class
 End Namespace

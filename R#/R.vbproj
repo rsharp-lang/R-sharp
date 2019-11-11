@@ -119,6 +119,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\BinaryExpression.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\ByRefFunctionCall.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Imports.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\LinqExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DeclareLambdaFunction.vb" />
