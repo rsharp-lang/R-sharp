@@ -1,5 +1,4 @@
 ﻿Imports System.Runtime.CompilerServices
-Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -10,7 +9,13 @@ Namespace Runtime
     <HideModuleName> Public Module Extensions
 
         Friend Function getFirst(value As Object) As Object
-            Dim valueType As Type = value.GetType
+            Dim valueType As Type
+
+            If value Is Nothing Then
+                Return Nothing
+            Else
+                valueType = value.GetType
+            End If
 
             If valueType.IsInheritsFrom(GetType(Array)) Then
                 Return DirectCast(value, Array).GetValue(Scan0)
@@ -100,6 +105,12 @@ Namespace Runtime
             End If
         End Function
 
+        ReadOnly parseTypecode As Dictionary(Of String, TypeCodes) = Enums(Of TypeCodes) _
+            .ToDictionary(Function(e) e.Description.ToLower,
+                          Function(code)
+                              Return code
+                          End Function)
+
         ''' <summary>
         ''' Get R type code from the type constraint expression value.
         ''' </summary>
@@ -109,8 +120,11 @@ Namespace Runtime
         Public Function GetRTypeCode(type As String) As TypeCodes
             If type.StringEmpty Then
                 Return TypeCodes.generic
+            ElseIf parseTypecode.ContainsKey(type) Then
+                Return parseTypecode(type)
             Else
-                Return [Enum].Parse(GetType(TypeCodes), type.ToLower)
+                ' .NET type
+                Return TypeCodes.ref
             End If
         End Function
 

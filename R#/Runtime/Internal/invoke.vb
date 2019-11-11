@@ -76,6 +76,21 @@ Namespace Runtime.Internal
                     Else
                         Return Math.Round(CDbl(x), decimals)
                     End If
+                Case "getOption"
+                    Dim name$ = Scripting.ToString(Runtime.getFirst(paramVals.ElementAtOrDefault(Scan0)), Nothing)
+                    Dim defaultVal$ = Scripting.ToString(paramVals.ElementAtOrDefault(1))
+
+                    If name.StringEmpty Then
+                        Return Internal.stop({
+                            $"missing parameter 'name' for function {funcName}",
+                            $"parameter: name",
+                            $"function: {funcName}"
+                        }, envir)
+                    Else
+                        Return envir.GlobalEnvironment _
+                            .options _
+                            .getOption(name, defaultVal)
+                    End If
                 Case "names"
                     Return base.names(paramVals(Scan0), Nothing, envir)
                 Case "get"
