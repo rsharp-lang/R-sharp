@@ -27,6 +27,8 @@ Namespace Interpreter.ExecuteEngine
             If tokens.Length = 1 Then
                 If tokens(Scan0).name = TokenType.stringInterpolation Then
                     Return New StringInterpolation(tokens(Scan0))
+                ElseIf tokens(Scan0).name = TokenType.cliShellInvoke Then
+                    Return New CommandLine(tokens(Scan0))
                 Else
                     blocks = New List(Of Token()) From {tokens}
                 End If

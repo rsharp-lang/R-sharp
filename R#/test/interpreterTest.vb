@@ -7,6 +7,7 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call cliTest()
 
         Call inTest()
 
@@ -49,7 +50,8 @@ Module interpreterTest
     End Sub
 
     Sub cliTest()
-        Call R.Evaluate("let std_out <- @'E:\GCModeller\GCModeller\bin\eggHTS.exe'")
+        Call R.Evaluate("let app as string = 'eggHTS'")
+        Call R.Evaluate("let std_out <- @`E:\GCModeller\GCModeller\bin\${app}.exe`")
         Call R.Evaluate("print(std_out)")
 
         Pause()
