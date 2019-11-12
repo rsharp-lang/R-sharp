@@ -48,6 +48,13 @@ Module interpreterTest
         Pause()
     End Sub
 
+    Sub cliTest()
+        Call R.Evaluate("let std_out <- @'E:\GCModeller\GCModeller\bin\eggHTS.exe'")
+        Call R.Evaluate("print(std_out)")
+
+        Pause()
+    End Sub
+
     Sub namespaceTest()
         Call R.Evaluate("base::load('D:\GCModeller\src\R-sharp\tutorials\io\R#save.rda') +8")
 

@@ -150,10 +150,18 @@ Namespace Language.TokenIcer
                     ' 在这里不可以将 buffer += c 放在前面
                     ' 否则下面的lastCharIsEscapeSplash会因为添加了一个字符串符号之后失效
                     If Not lastCharIsEscapeSplash Then
-                        Dim expressionType = If(escape.stringEscape = "`"c, TokenType.stringInterpolation, TokenType.stringLiteral)
+                        Dim expressionType As TokenType
 
                         ' add last string quote symbol
                         buffer += c
+
+                        If buffer(Scan0) = "@"c Then
+                            ' cli shell invoke
+                            expressionType = TokenType.cliShellInvoke
+                        Else
+                            expressionType = If(escape.stringEscape = "`"c, TokenType.stringInterpolation, TokenType.stringLiteral)
+                        End If
+
                         ' end string escape
                         Return New Token With {
                             .name = expressionType,
@@ -264,6 +272,8 @@ Namespace Language.TokenIcer
 
                     text = buffer.PopAll.CharString
                     buffer += bufferNext.Value
+                ElseIf buffer = 1 AndAlso buffer(Scan0) = "@"c Then
+                    Return Nothing
                 Else
                     text = buffer.PopAll.CharString
                 End If
