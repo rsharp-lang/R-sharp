@@ -190,7 +190,6 @@
     <Compile Include="Runtime\Internal\base.vb" />
     <Compile Include="Runtime\Internal\invoke.vb" />
     <Compile Include="Runtime\Internal\objects\vector.vb" />
-    <Compile Include="Runtime\Internal\objects\linq.vb" />
     <Compile Include="Runtime\Internal\objects\dataframe.vb" />
     <Compile Include="Runtime\Internal\objects\list.vb" />
     <Compile Include="Runtime\Components\Variable.vb" />
