@@ -7,6 +7,7 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call nameAccessorTest()
         Call cliTest()
 
         Call inTest()
@@ -47,6 +48,11 @@ Module interpreterTest
 
 
         Pause()
+    End Sub
+
+    Sub nameAccessorTest()
+        Call R.Evaluate("let l <- list(a = 1, b = FALSE)")
+        Call R.Evaluate("l$a")
     End Sub
 
     Sub cliTest()

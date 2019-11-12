@@ -212,7 +212,7 @@ Namespace Language.TokenIcer
                 Return New Token With {.name = TokenType.iif, .text = "?"}
             ElseIf c = ":"c Then
                 Return New Token With {.name = TokenType.sequence, .text = ":"}
-            ElseIf c = "+"c OrElse c = "*"c OrElse c = "/"c OrElse c = "%"c OrElse c = "^"c OrElse c = "!"c Then
+            ElseIf c = "$"c OrElse c = "+"c OrElse c = "*"c OrElse c = "/"c OrElse c = "%"c OrElse c = "^"c OrElse c = "!"c Then
                 Return New Token With {.name = TokenType.operator, .text = c}
             ElseIf c Like delimiter Then
                 ' token delimiter
