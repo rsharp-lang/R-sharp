@@ -51,7 +51,7 @@ Module interpreterTest
 
     Sub cliTest()
         Call R.Evaluate("let app as string = 'eggHTS'")
-        Call R.Evaluate("let std_out <- @`E:\GCModeller\GCModeller\bin\${app}.exe`")
+        Call R.Evaluate("let std_out <- @`E:/GCModeller/GCModeller/bin/${app}.exe`")
         Call R.Evaluate("print(std_out)")
 
         Pause()
