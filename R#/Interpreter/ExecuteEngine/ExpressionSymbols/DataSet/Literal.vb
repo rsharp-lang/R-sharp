@@ -44,7 +44,7 @@ Namespace Interpreter.ExecuteEngine
                 Case TokenType.numberLiteral
                     type = TypeCodes.double
                     value = token.text.ParseDouble
-                Case TokenType.stringLiteral
+                Case TokenType.stringLiteral, TokenType.cliShellInvoke
                     type = TypeCodes.string
                     value = token.text
                 Case TokenType.missingLiteral

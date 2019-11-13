@@ -4,6 +4,9 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 Module tokenlicerTest
 
     Sub Main()
+
+        Call cliInvoke()
+
         Call stringValueAssign()
         Call linqQueryTest()
         Call pipelineTest()
@@ -15,6 +18,12 @@ Module tokenlicerTest
         Call declareFunctionTest()
         Call stringParser()
         Call declareTest()
+
+        Pause()
+    End Sub
+
+    Sub cliInvoke()
+        Dim tokens = New Scanner("@'E'").GetTokens.ToArray
 
         Pause()
     End Sub

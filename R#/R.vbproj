@@ -120,6 +120,7 @@
   <ItemGroup>
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\BinaryExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\ByRefFunctionCall.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CommandLine.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Imports.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\LinqExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DeclareLambdaFunction.vb" />
@@ -189,7 +190,6 @@
     <Compile Include="Runtime\Internal\base.vb" />
     <Compile Include="Runtime\Internal\invoke.vb" />
     <Compile Include="Runtime\Internal\objects\vector.vb" />
-    <Compile Include="Runtime\Internal\objects\linq.vb" />
     <Compile Include="Runtime\Internal\objects\dataframe.vb" />
     <Compile Include="Runtime\Internal\objects\list.vb" />
     <Compile Include="Runtime\Components\Variable.vb" />

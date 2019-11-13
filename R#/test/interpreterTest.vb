@@ -7,6 +7,8 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call nameAccessorTest()
+        Call cliTest()
 
         Call inTest()
 
@@ -44,6 +46,19 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub nameAccessorTest()
+        Call R.Evaluate("let l <- list(a = 1, b = FALSE)")
+        Call R.Evaluate("l$a")
+    End Sub
+
+    Sub cliTest()
+        Call R.Evaluate("let app as string = 'eggHTS'")
+        Call R.Evaluate("let std_out <- @`E:/GCModeller/GCModeller/bin/${app}.exe`")
+        Call R.Evaluate("print(std_out)")
 
         Pause()
     End Sub
