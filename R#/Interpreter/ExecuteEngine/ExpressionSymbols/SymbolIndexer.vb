@@ -1,8 +1,10 @@
-﻿Imports Microsoft.VisualBasic.Linq
+﻿Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Language
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 
 Namespace Interpreter.ExecuteEngine
 
@@ -44,12 +46,27 @@ Namespace Interpreter.ExecuteEngine
                     $"Attempt to select less than one element in get1index",
                     $"expression: {symbol}[[{index}]]"
                 }, envir)
+            ElseIf sequence Is Nothing OrElse sequence.Length = 0 Then
+                Return Nothing
             End If
 
             If nameIndex Then
+                If Not sequence.GetType.ImplementInterface(GetType(RNameIndex)) Then
+                    Return Internal.stop("Target object can not be indexed by name!", envir)
+                ElseIf indexer.Length = 1 Then
+                    Return DirectCast(sequence, RNameIndex).getByName(Scripting.ToString(indexer.GetValue(Scan0)))
+                Else
+                    Return DirectCast(sequence, RNameIndex).getByName(Runtime.asVector(Of String)(indexer))
+                End If
             Else
                 ' by element index
-
+                If Not sequence.GetType.ImplementInterface(GetType(RIndex)) Then
+                    Return Internal.stop("Target object can not be indexed!", envir)
+                ElseIf indexer.Length = 1 Then
+                    Return DirectCast(sequence, RIndex).getByIndex(CInt(indexer.GetValue(Scan0)))
+                Else
+                    Return DirectCast(sequence, RIndex).getByIndex(Runtime.asVector(Of Integer)(indexer))
+                End If
             End If
         End Function
     End Class

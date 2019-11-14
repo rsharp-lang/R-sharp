@@ -78,8 +78,6 @@ Namespace Interpreter.ExecuteEngine
         ReadOnly comparisonOperators As String() = {"<", ">", "<=", ">=", "==", "!=", "in", "like"}
         ReadOnly logicalOperators As String() = {"&&", "||", "!"}
 
-
-
         <Extension>
         Public Function ParseBinaryExpression(tokenBlocks As List(Of Token())) As Expression
             Dim buf As New List(Of [Variant](Of Expression, String))
