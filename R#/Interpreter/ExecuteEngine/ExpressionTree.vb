@@ -94,7 +94,7 @@ Namespace Interpreter.ExecuteEngine
                 End If
             Next
 
-
+            Call buf.processNameMemberReference(oplist)
 
             Call buf.processNamespaceReference(oplist)
 
@@ -129,13 +129,14 @@ Namespace Interpreter.ExecuteEngine
             End If
         End Function
 
+        <Extension>
         Private Sub processNameMemberReference(buf As List(Of [Variant](Of Expression, String)), oplist As List(Of String))
             Call buf.genericSymbolOperatorProcessor(
                 oplist:=oplist,
                 opSymbol:="$",
                 expression:=Function(a, b)
-                                Dim symbolRef As Expression
-
+                                Dim symbolRef As New SymbolIndexer(a, b)
+                                Return symbolRef
                             End Function)
         End Sub
 

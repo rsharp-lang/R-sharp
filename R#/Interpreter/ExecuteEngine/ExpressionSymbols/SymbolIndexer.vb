@@ -29,12 +29,27 @@ Namespace Interpreter.ExecuteEngine
             index = Expression.CreateExpression(tokens)
         End Sub
 
+        Sub New(symbol As Expression, byName As Expression)
+            Me.symbol = symbol
+            Me.index = byName
+            Me.nameIndex = True
+        End Sub
+
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim sequence = Runtime.asVector(Of Object)(symbol.Evaluate(envir))
             Dim indexer = Runtime.asVector(Of Object)(index.Evaluate(envir))
 
             If indexer.Length = 0 Then
-                Return Internal.stop("", envir)
+                Return Internal.stop({
+                    $"Attempt to select less than one element in get1index",
+                    $"expression: {symbol}[[{index}]]"
+                }, envir)
+            End If
+
+            If nameIndex Then
+            Else
+                ' by element index
+
             End If
         End Function
     End Class
