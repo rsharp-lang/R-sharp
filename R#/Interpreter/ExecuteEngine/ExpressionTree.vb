@@ -76,6 +76,8 @@ Namespace Interpreter.ExecuteEngine
         ReadOnly comparisonOperators As String() = {"<", ">", "<=", ">=", "==", "!=", "in", "like"}
         ReadOnly logicalOperators As String() = {"&&", "||", "!"}
 
+
+
         <Extension>
         Public Function ParseBinaryExpression(tokenBlocks As List(Of Token())) As Expression
             Dim buf As New List(Of [Variant](Of Expression, String))
@@ -89,6 +91,8 @@ Namespace Interpreter.ExecuteEngine
                     Call oplist.Add(buf.Last.VB)
                 End If
             Next
+
+
 
             Call buf.processNamespaceReference(oplist)
 
@@ -123,71 +127,84 @@ Namespace Interpreter.ExecuteEngine
             End If
         End Function
 
-        <Extension>
-        Private Sub processNamespaceReference(buf As List(Of [Variant](Of Expression, String)), oplist As List(Of String))
-            If buf = 1 Then
-                Return
-            End If
+        Private Sub processNameMemberReference(buf As List(Of [Variant](Of Expression, String)), oplist As List(Of String))
+            Call buf.genericSymbolOperatorProcessor(
+                oplist:=oplist,
+                opSymbol:="$",
+                expression:=Function(a, b)
+                                Dim symbolRef As Expression
 
-            Dim nop = oplist.AsEnumerable.Count(Function(op) op = "::")
-            Dim refCalls As FunctionInvoke
-
-            ' 从左往右计算
-            For i As Integer = 0 To nop - 1
-                For j As Integer = 0 To buf.Count - 1
-                    If buf(j) Like GetType(String) AndAlso "::" = buf(j).VB Then
-                        ' j-1 and j+1
-                        Dim a = buf(j - 1) ' namespace
-                        Dim b = buf(j + 1) ' function invoke
-
-                        If TypeOf b.VA Is FunctionInvoke Then
-                            refCalls = b.VA
-                        ElseIf TypeOf b.VA Is SymbolReference Then
-                            refCalls = New FunctionInvoke(DirectCast(b.VA, SymbolReference).symbol, a.VA)
-                        Else
-                            Throw New SyntaxErrorException
-                        End If
-
-                        refCalls.namespace = a.TryCast(Of SymbolReference).symbol
-
-                        Call buf.RemoveRange(j - 1, 3)
-                        Call buf.Insert(j - 1, refCalls)
-
-                        Exit For
-                    End If
-                Next
-            Next
+                            End Function)
         End Sub
 
         <Extension>
+        Private Sub processNamespaceReference(buf As List(Of [Variant](Of Expression, String)), oplist As List(Of String))
+            Call buf.genericSymbolOperatorProcessor(
+                oplist:=oplist,
+                opSymbol:="::",
+                expression:=Function(a, b)
+                                Dim refCalls As FunctionInvoke
+
+                                If TypeOf b.VA Is FunctionInvoke Then
+                                    refCalls = b.VA
+                                ElseIf TypeOf b.VA Is SymbolReference Then
+                                    refCalls = New FunctionInvoke(DirectCast(b.VA, SymbolReference).symbol, a.VA)
+                                Else
+                                    Throw New SyntaxErrorException
+                                End If
+
+                                refCalls.namespace = a.TryCast(Of SymbolReference).symbol
+
+                                Return refCalls
+                            End Function)
+        End Sub
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <Extension>
         Private Sub processPipeline(buf As List(Of [Variant](Of Expression, String)), oplist As List(Of String))
+            Call buf.genericSymbolOperatorProcessor(
+                oplist:=oplist,
+                opSymbol:=":>",
+                expression:=Function(a, b)
+                                Dim pip As FunctionInvoke
+
+                                If TypeOf b.VA Is FunctionInvoke Then
+                                    pip = b.VA
+                                    pip.parameters.Insert(Scan0, a.VA)
+                                ElseIf TypeOf b.VA Is SymbolReference Then
+                                    pip = New FunctionInvoke(DirectCast(b.VA, SymbolReference).symbol, a.VA)
+                                Else
+                                    Throw New SyntaxErrorException
+                                End If
+
+                                Return pip
+                            End Function)
+        End Sub
+
+        <Extension>
+        Private Sub genericSymbolOperatorProcessor(buf As List(Of [Variant](Of Expression, String)),
+                                                   oplist As List(Of String),
+                                                   opSymbol$,
+                                                   expression As Func(Of [Variant](Of Expression, String), [Variant](Of Expression, String), Expression))
             If buf = 1 Then
                 Return
             End If
 
-            Dim nop = oplist.AsEnumerable.Count(Function(op) op = ":>")
-            Dim pip As FunctionInvoke
+            Dim nop As Integer = oplist _
+                .AsEnumerable _
+                .Count(Function(op) op = opSymbol)
 
             ' 从左往右计算
             For i As Integer = 0 To nop - 1
                 For j As Integer = 0 To buf.Count - 1
-                    If buf(j) Like GetType(String) AndAlso ":>" = buf(j).VB Then
+                    If buf(j) Like GetType(String) AndAlso opSymbol = buf(j).VB Then
                         ' j-1 and j+1
                         Dim a = buf(j - 1) ' parameter
                         Dim b = buf(j + 1) ' function invoke
-
-
-                        If TypeOf b.VA Is FunctionInvoke Then
-                            pip = b.VA
-                            pip.parameters.Insert(Scan0, a.VA)
-                        ElseIf TypeOf b.VA Is SymbolReference Then
-                            pip = New FunctionInvoke(DirectCast(b.VA, SymbolReference).symbol, a.VA)
-                        Else
-                            Throw New SyntaxErrorException
-                        End If
+                        Dim exp As Expression = expression(a, b)
 
                         Call buf.RemoveRange(j - 1, 3)
-                        Call buf.Insert(j - 1, pip)
+                        Call buf.Insert(j - 1, exp)
 
                         Exit For
                     End If

@@ -52,7 +52,7 @@ Module interpreterTest
 
     Sub nameAccessorTest()
         Call R.Evaluate("let l <- list(a = 1, b = FALSE)")
-        Call R.Evaluate("l$a")
+        Call R.Evaluate("l$a+2")
     End Sub
 
     Sub cliTest()
