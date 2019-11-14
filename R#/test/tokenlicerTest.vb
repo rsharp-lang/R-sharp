@@ -4,7 +4,7 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 Module tokenlicerTest
 
     Sub Main()
-
+        Call elementIndexer()
         Call cliInvoke()
 
         Call stringValueAssign()
@@ -21,6 +21,14 @@ Module tokenlicerTest
 
         Pause()
     End Sub
+
+    Sub elementIndexer()
+
+        Dim tokens = New Scanner("A[b+1]").GetTokens.ToArray
+
+        Pause()
+    End Sub
+
 
     Sub cliInvoke()
         Dim tokens = New Scanner("@'E'").GetTokens.ToArray

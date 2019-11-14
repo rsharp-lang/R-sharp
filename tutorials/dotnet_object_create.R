@@ -1,0 +1,1 @@
+let a as new System.Drawing.Rectangle()

@@ -46,6 +46,8 @@ Namespace Interpreter.ExecuteEngine
                 ' 简单的表达式
                 If tokens.isFunctionInvoke Then
                     Return New FunctionInvoke(tokens)
+                ElseIf tokens.isSymbolIndexer Then
+                    Return New SymbolIndexer(tokens)
                 ElseIf tokens(Scan0).name = TokenType.open Then
                     Dim openSymbol = tokens(Scan0).text
 

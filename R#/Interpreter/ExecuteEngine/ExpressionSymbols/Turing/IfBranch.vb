@@ -1,8 +1,11 @@
-﻿Imports Microsoft.VisualBasic.Linq
+﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal
+Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 
 Namespace Interpreter.ExecuteEngine
 
@@ -63,9 +66,20 @@ Namespace Interpreter.ExecuteEngine
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim test As Boolean = Runtime.getFirst(ifTest.Evaluate(envir))
+            Dim test As Object = ifTest.Evaluate(envir)
 
-            If test Then
+            If test Is Nothing Then
+                Return New Message With {
+                    .Message = {
+                        $"missing value where TRUE/FALSE needed"
+                    },
+                    .MessageLevel = MSG_TYPES.ERR,
+                    .EnvironmentStack = envir.getEnvironmentStack,
+                    .Trace = devtools.ExceptionData.GetCurrentStackTrace
+                }
+            End If
+
+            If True = Runtime.asLogical(test)(Scan0) Then
                 Return New IfPromise(trueClosure.Invoke(envir, {}), True)
             Else
                 Return New IfPromise(Nothing, False)

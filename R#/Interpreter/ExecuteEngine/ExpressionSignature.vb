@@ -50,7 +50,18 @@ Namespace Interpreter.ExecuteEngine
         Public Function isFunctionInvoke(tokens As Token()) As Boolean
             If Not tokens(Scan0).name = TokenType.identifier Then
                 Return False
-            ElseIf Not tokens(1).name = TokenType.open OrElse Not tokens.Last.name = TokenType.close Then
+            ElseIf Not tokens(1) = (TokenType.open, "(") OrElse Not tokens.Last = (TokenType.close, ")") Then
+                Return False
+            Else
+                Return True
+            End If
+        End Function
+
+        <Extension>
+        Public Function isSymbolIndexer(tokens As Token()) As Boolean
+            If Not tokens(Scan0).name = TokenType.identifier Then
+                Return False
+            ElseIf Not tokens(1) = (TokenType.open, "[") OrElse Not tokens.Last = (TokenType.close, "]") Then
                 Return False
             Else
                 Return True

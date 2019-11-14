@@ -26,6 +26,10 @@ Namespace Runtime
         Public ReadOnly Property stackTag As String
         Public ReadOnly Property variables As Dictionary(Of Variable)
         Public ReadOnly Property types As Dictionary(Of String, RType)
+        ''' <summary>
+        ''' 主要是存储警告消息
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property messages As New List(Of Message)
         Public ReadOnly Property GlobalEnvironment As GlobalEnvironment
 
