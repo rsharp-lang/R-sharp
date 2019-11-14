@@ -133,7 +133,16 @@ Namespace Interpreter.ExecuteEngine
                 oplist:=oplist,
                 opSymbol:="$",
                 expression:=Function(a, b)
-                                Dim symbolRef As New SymbolIndexer(a, b)
+                                Dim nameSymbol As String
+
+                                If b.GetUnderlyingType Is GetType(SymbolReference) Then
+                                    nameSymbol = DirectCast(b.VA, SymbolReference).symbol
+                                Else
+                                    nameSymbol = DirectCast(b.VA, Literal).value
+                                End If
+
+                                Dim symbolRef As New SymbolIndexer(a.VA, nameSymbol)
+
                                 Return symbolRef
                             End Function)
         End Sub

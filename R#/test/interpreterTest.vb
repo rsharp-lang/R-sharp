@@ -7,7 +7,7 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
-        Call elementIndexerTest()
+        '    Call elementIndexerTest()
         Call nameAccessorTest()
         Call cliTest()
 
