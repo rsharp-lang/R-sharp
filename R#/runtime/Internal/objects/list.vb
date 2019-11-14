@@ -4,7 +4,7 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 
 Namespace Runtime.Internal
 
-    Public Class list : Implements RNames
+    Public Class list : Implements RNames, RIndex
 
         Public Property slots As Dictionary(Of String, Object)
 
@@ -38,6 +38,22 @@ Namespace Runtime.Internal
 
         Public Overrides Function ToString() As String
             Return getNames.GetJson
+        End Function
+
+        Public Function getByIndex(i As Integer) As Object Implements RIndex.getByIndex
+            Throw New NotImplementedException()
+        End Function
+
+        Public Function getByIndex(i() As Integer) As Object() Implements RIndex.getByIndex
+            Throw New NotImplementedException()
+        End Function
+
+        Public Function setByIndex(i As Integer, value As Object) As Object Implements RIndex.setByIndex
+            Throw New NotImplementedException()
+        End Function
+
+        Public Function setByindex(i() As Integer, value As Array) As Object Implements RIndex.setByindex
+            Throw New NotImplementedException()
         End Function
     End Class
 End Namespace
