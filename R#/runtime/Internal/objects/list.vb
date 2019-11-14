@@ -86,7 +86,7 @@ Namespace Runtime.Internal
                 If names.Length <> value.Length Then
                     Return Internal.stop({
                         $"Number of items to replace is not equals to replacement length!",
-                        $"length(index): {i.Length}",
+                        $"length(names): {names.Length}",
                         $"length(value): {value.Length}"
                     }, envir)
                 End If
