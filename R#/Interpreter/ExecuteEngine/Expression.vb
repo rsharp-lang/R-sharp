@@ -69,7 +69,7 @@ Namespace Interpreter.ExecuteEngine
                 ElseIf item.isIdentifier Then
                     Return New SymbolReference(item(Scan0))
                 Else
-                    Return code(Scan0).CreateTree
+                    Return item.CreateTree
                 End If
             ElseIf code > 2 AndAlso (code(Scan0).isIdentifier OrElse code(Scan0).isTuple) AndAlso code(1).isOperator("->", "=>") Then
                 ' is a lambda function

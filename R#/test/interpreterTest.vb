@@ -7,6 +7,7 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call elementIndexerTest()
         Call nameAccessorTest()
         Call cliTest()
 
@@ -46,6 +47,15 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub elementIndexerTest()
+        Call R.Evaluate("let a = [1,2,3,4,5]")
+        Call R.Evaluate("let B = 3")
+        Call R.Evaluate("let c = a[B + 2]")
+        Call R.PrintMemory()
 
         Pause()
     End Sub
