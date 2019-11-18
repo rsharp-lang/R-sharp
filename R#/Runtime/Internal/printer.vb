@@ -20,9 +20,12 @@ Namespace Runtime.Internal
         Friend Sub printInternal(x As Object, listPrefix$)
             Dim valueType As Type = x.GetType
             Dim isString As Boolean = valueType Is GetType(String) OrElse valueType Is GetType(String())
+            Dim elementType As Type = valueType.GetElementType
             Dim toString = Function(o As Object) As String
                                If isString Then
                                    Return $"""{Scripting.ToString(o, "NULL")}"""
+                               ElseIf Not elementType Is Nothing AndAlso RtoString.ContainsKey(elementType) Then
+                                   Return RtoString(elementType)(o)
                                Else
                                    Return Scripting.ToString(o, "NULL")
                                End If
