@@ -191,50 +191,13 @@ Namespace Runtime.Internal
             ElseIf x.GetType Is GetType(Message) Then
                 Return x
             ElseIf x.GetType Is GetType(list) Then
-                Call base.printInternal(DirectCast(x, list).slots, "")
+                Call printer.printInternal(DirectCast(x, list).slots, "")
             Else
-                Call base.printInternal(x, "")
+                Call printer.printInternal(x, "")
             End If
 
             Return x
         End Function
-
-        Private Sub printInternal(x As Object, listPrefix$)
-            Dim valueType As Type = x.GetType
-            Dim isString As Boolean = valueType Is GetType(String) OrElse valueType Is GetType(String())
-            Dim toString = Function(o As Object) As String
-                               If isString Then
-                                   Return $"""{Scripting.ToString(o, "NULL")}"""
-                               Else
-                                   Return Scripting.ToString(o, "NULL")
-                               End If
-                           End Function
-
-            If valueType.IsInheritsFrom(GetType(Array)) Then
-                Dim xVec As Array = DirectCast(x, Array)
-                Dim stringVec = From element As Object In xVec.AsQueryable Select toString(element)
-
-                Call Console.WriteLine($"[{xVec.Length}] " & stringVec.JoinBy(vbTab))
-            ElseIf valueType Is GetType(Dictionary(Of String, Object)) Then
-                For Each slot In DirectCast(x, Dictionary(Of String, Object))
-                    Dim key$ = slot.Key
-
-                    If key.IsPattern("\d+") Then
-                        key = $"{listPrefix}[[{slot.Key}]]"
-                    Else
-                        key = $"{listPrefix}${slot.Key}"
-                    End If
-
-                    Call Console.WriteLine(key)
-                    Call base.printInternal(slot.Value, key)
-                    Call Console.WriteLine()
-                Next
-            ElseIf valueType Is GetType(dataframe) Then
-                Call DirectCast(x, dataframe).GetTable.Print(addBorder:=False).DoCall(AddressOf Console.WriteLine)
-            Else
-                Call Console.WriteLine("[1] " & toString(x))
-            End If
-        End Sub
 
         Public Function lapply(sequence As Object, apply As RFunction, envir As Environment) As Object
             If sequence.GetType Is GetType(Dictionary(Of String, Object)) Then
