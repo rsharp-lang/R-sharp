@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
+﻿Imports System.Drawing
+Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime.Internal
@@ -83,9 +84,12 @@ Public Module grDevices
     Public Function rgb(red As Integer,
                         green As Integer,
                         blue As Integer,
-                        alpha As Integer,
+                        Optional alpha As Integer = 255,
                         Optional names As String() = Nothing,
                         Optional maxColorValue As Integer = 1) As vector
 
+        Return New vector With {
+            .data = {Color.FromArgb(alpha, red, green, blue)}
+        }
     End Function
 End Module
