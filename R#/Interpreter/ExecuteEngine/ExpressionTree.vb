@@ -119,6 +119,9 @@ Namespace Interpreter.ExecuteEngine
                     Dim [namespace] As Expression = buf(Scan0).TryCast(Of Expression)
 
                     Throw New NotImplementedException
+                ElseIf buf = 3 AndAlso buf(1) Like GetType(String) AndAlso buf(1).TryCast(Of String) Like ExpressionSignature.valueAssignOperatorSymbols Then
+                    ' set value by name
+                    Throw New NotImplementedException
                 End If
 
                 Throw New SyntaxErrorException

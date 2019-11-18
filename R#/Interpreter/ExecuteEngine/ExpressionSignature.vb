@@ -13,7 +13,7 @@ Namespace Interpreter.ExecuteEngine
     <Extension>
     Module ExpressionSignature
 
-        ReadOnly valueAssigns As Index(Of String) = {"<-", "="}
+        Friend ReadOnly valueAssignOperatorSymbols As Index(Of String) = {"<-", "="}
 
         <Extension>
         Public Function isNamespaceReferenceCall(tokens As List(Of [Variant](Of Expression, String))) As Boolean
@@ -32,7 +32,7 @@ Namespace Interpreter.ExecuteEngine
         Public Function isByrefCall(tokens As List(Of [Variant](Of Expression, String))) As Boolean
             If Not tokens(Scan0) Like GetType(FunctionInvoke) Then
                 Return False
-            ElseIf Not tokens(1) Like GetType(String) OrElse Not tokens(1).TryCast(Of String) Like valueAssigns Then
+            ElseIf Not tokens(1) Like GetType(String) OrElse Not tokens(1).TryCast(Of String) Like valueAssignOperatorSymbols Then
                 Return False
             ElseIf Not tokens >= 3 Then
                 Return False
