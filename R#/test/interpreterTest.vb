@@ -70,7 +70,11 @@ Module interpreterTest
 
     Sub nameAccessorTest()
         Call R.Evaluate("let l <- list(a = 1, b = FALSE)")
-        Call R.Evaluate("l$a+2")
+        Call R.Evaluate("print(l$a+2)")
+        Call R.Evaluate("l$b <- [99,88,77,66,55,44]+99")
+        Call R.Evaluate("l$b")
+
+        Pause()
     End Sub
 
     Sub cliTest()

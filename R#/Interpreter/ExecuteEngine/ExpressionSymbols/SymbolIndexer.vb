@@ -26,7 +26,10 @@ Namespace Interpreter.ExecuteEngine
 
             If tokens(Scan0) = (TokenType.open, "[") AndAlso tokens.Last = (TokenType.close, "]") Then
                 nameIndex = True
-                tokens = tokens.Skip(2).Take(tokens.Length - 3).ToArray
+                tokens = tokens _
+                    .Skip(2) _
+                    .Take(tokens.Length - 3) _
+                    .ToArray
             End If
 
             index = Expression.CreateExpression(tokens)

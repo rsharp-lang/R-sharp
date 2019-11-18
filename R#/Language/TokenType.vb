@@ -1,5 +1,8 @@
 ﻿Namespace Language
 
+    ''' <summary>
+    ''' Language syntax token types
+    ''' </summary>
     Public Enum TokenType As Byte
         invalid
         newLine
