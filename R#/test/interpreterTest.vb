@@ -7,6 +7,8 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call whichTest()
+
         '    Call elementIndexerTest()
         Call nameAccessorTest()
         Call cliTest()
@@ -51,10 +53,16 @@ Module interpreterTest
         Pause()
     End Sub
 
+    Sub whichTest()
+        Call R.Evaluate("let x = [1,3,5,7,9,10,16,32,64]")
+        Call R.Evaluate("5+ which x % 5 == 0")
+    End Sub
+
     Sub elementIndexerTest()
         Call R.Evaluate("let a = [1,2,3,4,5]")
         Call R.Evaluate("let B = 3")
         Call R.Evaluate("let c = a[B + 2]")
+        Call R.Evaluate("a[8] <- 99999")
         Call R.PrintMemory()
 
         Pause()
