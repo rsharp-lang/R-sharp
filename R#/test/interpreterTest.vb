@@ -53,6 +53,10 @@ Module interpreterTest
         Pause()
     End Sub
 
+    Sub genericTest()
+
+    End Sub
+
     Sub whichTest()
         Call R.Evaluate("let x = [1,3,5,7,9,10,16,32,64]")
         Call R.Evaluate("5+ which x % 5 == 0")

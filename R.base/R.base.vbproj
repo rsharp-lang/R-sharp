@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="base.vb" />
+    <Compile Include="grDevices.vb" />
     <Compile Include="utils\utils.vb" />
     <Compile Include="save.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
