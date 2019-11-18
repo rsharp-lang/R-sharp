@@ -100,6 +100,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -173,6 +174,7 @@
     <Compile Include="Runtime\Components\Config\ConfigFile.vb" />
     <Compile Include="Runtime\Components\Interface\RPrint.vb" />
     <Compile Include="Runtime\Components\Interface\RFunction.vb" />
+    <Compile Include="Runtime\Internal\printer.vb" />
     <Compile Include="Runtime\Interop\MethodInvoke.vb" />
     <Compile Include="Runtime\Interop\RInteropAttribute.vb" />
     <Compile Include="Runtime\Interop\RMethodArgument.vb" />
