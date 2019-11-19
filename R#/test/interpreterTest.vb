@@ -54,8 +54,8 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
-        Call closureTest()
-        Call whichTest()
+        'Call closureTest()
+        ' Call whichTest()
 
         '    Call elementIndexerTest()
         Call nameAccessorTest()
