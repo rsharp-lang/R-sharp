@@ -112,7 +112,7 @@ Namespace Interpreter.ExecuteEngine
         ''' <param name="funcVar"></param>
         ''' <param name="parameters"></param>
         Sub New(funcVar As Expression, ParamArray parameters As Expression())
-            Me.funcName = funcName
+            Me.funcName = funcVar
             Me.parameters = parameters.ToList
         End Sub
 
