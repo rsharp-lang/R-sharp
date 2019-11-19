@@ -57,29 +57,16 @@ Module CLI
         Dim module$ = args <= "/module"
         Dim verboseMode As Boolean = args("--verbose")
         Dim config As New Options(ConfigFile.localConfigs)
-        Dim localdb As LocalPackageDatabase = LocalPackageDatabase.Load(config.lib)
 
         If [module].StringEmpty Then
             Return "Missing '/module' argument!".PrintException
+        Else
+            Dim pkgMgr As New PackageManager(config)
+
+            Call pkgMgr.InstallLocals(dllFile:=[module])
+            Call pkgMgr.Flush()
         End If
 
-        Dim packageIndex = localdb.packages.ToDictionary(Function(pkg) pkg.namespace)
-
-        For Each pkg As Package In PackageLoader.ParsePackages([module])
-            With PackageLoaderEntry.FromLoaderInfo(pkg)
-                ' 新的package信息会覆盖掉旧的package信息
-                packageIndex(.namespace) = .ByRef
-            End With
-
-            Call $"load: {pkg.info.Namespace}".__INFO_ECHO
-        Next
-
-        localdb.packages = packageIndex.Values.ToArray
-        localdb.system = GetType(LocalPackageDatabase).Assembly.FromAssembly
-
-        Return localdb _
-            .GetXml _
-            .SaveTo(config.lib) _
-            .CLICode
+        Return 0
     End Function
 End Module

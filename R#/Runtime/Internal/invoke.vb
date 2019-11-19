@@ -123,6 +123,12 @@ Namespace Runtime.Internal
                         .ToArray
 
                     Throw New NotImplementedException
+                Case "install.packages"
+                    Dim libraryNames As String() = paramVals _
+                        .Select(AddressOf Scripting.ToString) _
+                        .ToArray
+
+                    Return utils.installPackages(libraryNames, envir)
 
                 Case "sprintf"
                     Dim format As Array = Runtime.asVector(Of String)(paramVals(Scan0))

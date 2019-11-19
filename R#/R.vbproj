@@ -195,6 +195,7 @@
     <Compile Include="Runtime\Components\Config\ConfigFile.vb" />
     <Compile Include="Runtime\Components\Interface\RPrint.vb" />
     <Compile Include="Runtime\Components\Interface\RFunction.vb" />
+    <Compile Include="Runtime\Internal\utils.vb" />
     <Compile Include="Runtime\Internal\printer.vb" />
     <Compile Include="Runtime\Interop\MethodInvoke.vb" />
     <Compile Include="Runtime\Interop\RInteropAttribute.vb" />

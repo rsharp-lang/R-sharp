@@ -13,6 +13,10 @@ Namespace Runtime.Components.Configuration
         ReadOnly file As ConfigFile
         ReadOnly configValues As Dictionary(Of String, String)
 
+        ''' <summary>
+        ''' Package library repository file path.
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property [lib] As String
             Get
                 Return getOption(NameOf([lib]), [default]:=LocalPackageDatabase.localDb)
