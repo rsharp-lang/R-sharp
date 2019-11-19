@@ -1,5 +1,6 @@
 ﻿Imports System.Reflection
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -13,6 +14,8 @@ Namespace Runtime.Package
 
         <Extension>
         Public Sub ImportsStatic(envir As Environment, package As Type)
+            Dim [global] As GlobalEnvironment = envir.GlobalEnvironment
+            Dim docs As ProjectType = [global].packageDocs.GetAnnotations(package)
             Dim methods = package.GetMethods(BindingFlags.Public Or BindingFlags.Static)
             Dim Rmethods = methods _
                 .Select(Function(m)
@@ -22,7 +25,6 @@ Namespace Runtime.Package
                             Return New RMethodInfo(name, m, Nothing)
                         End Function) _
                 .ToArray
-            Dim [global] = envir.GlobalEnvironment
             Dim symbol As Variable
 
             For Each api As RMethodInfo In Rmethods
@@ -47,7 +49,7 @@ Namespace Runtime.Package
                             Return New RMethodInfo(name, m, target)
                         End Function) _
                 .ToArray
-            Dim [global] = envir.GlobalEnvironment
+            Dim [global] As GlobalEnvironment = envir.GlobalEnvironment
 
             For Each api As RMethodInfo In Rmethods
                 Call [global].Push(api.name, api, TypeCodes.closure)

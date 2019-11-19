@@ -10,6 +10,7 @@ Namespace Runtime
 
         Public ReadOnly Property options As Options
         Public ReadOnly Property packages As LocalPackageDatabase
+        Public ReadOnly Property packageDocs As New AnnotationDocs
 
         Sub New(packages As LocalPackageDatabase, options As Options)
             Me.packages = packages
