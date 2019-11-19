@@ -102,7 +102,7 @@ Namespace Runtime.Internal
         ''' <param name="envir"></param>
         ''' <returns></returns>
         Public Function [stop](message As Object, envir As Environment) As Message
-            If Not message Is Nothing AndAlso message.GetType.IsInheritsFrom(GetType(Exception)) Then
+            If Not message Is Nothing AndAlso message.GetType.IsInheritsFrom(GetType(Exception), strict:=False) Then
                 Return DirectCast(message, Exception).createDotNetExceptionMessage(envir)
             Else
                 Return base.createMessageInternal(message, envir, level:=MSG_TYPES.ERR)
@@ -120,7 +120,11 @@ Namespace Runtime.Internal
             Loop
 
             ' add stack info for display
-            messages += "stackFrames: " & vbCrLf & exception.StackTrace
+            If exception.StackTrace.StringEmpty Then
+                messages += "stackFrames: " & vbCrLf & "none"
+            Else
+                messages += "stackFrames: " & vbCrLf & exception.StackTrace
+            End If
 
             Return New Message With {
                 .Message = messages,

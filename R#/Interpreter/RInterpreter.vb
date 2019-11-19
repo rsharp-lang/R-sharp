@@ -79,7 +79,7 @@ Namespace Interpreter
             Call Console.WriteLine($"Loading required package: {packageName}")
 
             If package Is Nothing Then
-                Dim message As Message = Internal.stop(exception, globalEnvir)
+                Dim message As Message = Internal.stop(If(exception, New Exception("No packages installed...")), globalEnvir)
 
                 message.Message = {
                     $"there is no package called ‘{packageName}’",
