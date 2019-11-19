@@ -73,6 +73,8 @@ Namespace Interpreter.ExecuteEngine
                     Return New StringInterpolation(tokens(Scan0))
                 ElseIf tokens(Scan0).name = TokenType.cliShellInvoke Then
                     Return New CommandLine(tokens(Scan0))
+                ElseIf tokens(Scan0) = (TokenType.operator, "$") Then
+                    Return New SymbolReference("$")
                 Else
                     blocks = New List(Of Token()) From {tokens}
                 End If

@@ -54,6 +54,8 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call lastSymbolTest()
+
         Call closureTest()
         ' Call whichTest()
 
@@ -97,6 +99,15 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub lastSymbolTest()
+        Call R.Evaluate("function(x) {
+    x ^ 3
+}")
+        Call R.Evaluate("print($([3,2,6,5]))")
 
         Pause()
     End Sub
