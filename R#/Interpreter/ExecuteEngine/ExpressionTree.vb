@@ -121,7 +121,7 @@ Namespace Interpreter.ExecuteEngine
                     Throw New NotImplementedException
                 ElseIf buf = 3 AndAlso buf(1) Like GetType(String) AndAlso buf(1).TryCast(Of String) Like ExpressionSignature.valueAssignOperatorSymbols Then
                     ' set value by name
-                    Throw New NotImplementedException
+                    Return New MemberValueAssign(buf(Scan0), buf(2))
                 End If
 
                 Throw New SyntaxErrorException

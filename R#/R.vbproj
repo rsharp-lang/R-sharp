@@ -142,6 +142,7 @@
   <ItemGroup>
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\BinaryExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\ByRefFunctionCall.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\MemberValueAssign.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\SymbolIndexer.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CommandLine.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Imports.vb" />

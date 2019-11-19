@@ -13,12 +13,13 @@ Namespace Interpreter.ExecuteEngine
 
         Public Overrides ReadOnly Property type As TypeCodes
 
-        Dim index As Expression
-        Dim symbol As Expression
+        Friend ReadOnly index As Expression
+        Friend ReadOnly symbol As Expression
+
         ''' <summary>
         ''' X[[name]]
         ''' </summary>
-        Dim nameIndex As Boolean = False
+        Friend ReadOnly nameIndex As Boolean = False
 
         Sub New(tokens As Token())
             symbol = {tokens(Scan0)}.DoCall(AddressOf Expression.CreateExpression)
@@ -27,8 +28,8 @@ Namespace Interpreter.ExecuteEngine
             If tokens(Scan0) = (TokenType.open, "[") AndAlso tokens.Last = (TokenType.close, "]") Then
                 nameIndex = True
                 tokens = tokens _
-                    .Skip(2) _
-                    .Take(tokens.Length - 3) _
+                    .Skip(1) _
+                    .Take(tokens.Length - 2) _
                     .ToArray
             End If
 

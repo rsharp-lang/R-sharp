@@ -7,7 +7,7 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
-        Call whichTest()
+        '  Call whichTest()
 
         '    Call elementIndexerTest()
         Call nameAccessorTest()
@@ -75,8 +75,10 @@ Module interpreterTest
     Sub nameAccessorTest()
         Call R.Evaluate("let l <- list(a = 1, b = FALSE)")
         Call R.Evaluate("print(l$a+2)")
+        Call R.Evaluate("print(l$b)")
+        Call R.Evaluate("print(l[['b']])")
         Call R.Evaluate("l$b <- [99,88,77,66,55,44]+99")
-        Call R.Evaluate("l$b")
+        Call R.Evaluate("print(l$b)")
 
         Pause()
     End Sub
