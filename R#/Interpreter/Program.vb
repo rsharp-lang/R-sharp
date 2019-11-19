@@ -1,44 +1,44 @@
 ﻿#Region "Microsoft.VisualBasic::67f4b7a744aacdbf981bc9c582b12886, R#\Interpreter\Program.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class Program
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: BuildProgram, CreateProgram, Execute, GetEnumerator, IEnumerable_GetEnumerator
-    '                   isException, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class Program
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: BuildProgram, CreateProgram, Execute, GetEnumerator, IEnumerable_GetEnumerator
+'                   isException, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -61,37 +61,55 @@ Namespace Interpreter
 
         Public Function Execute(envir As Environment) As Object
             Dim last As Object = Nothing
+            Dim breakLoop As Boolean = False
 
             For Each expression As Expression In execQueue
-                last = expression.Evaluate(envir)
+                last = ExecuteCodeLine(expression, envir, breakLoop)
 
-                If TypeOf expression Is ReturnValue Then
-                    ' return keyword will break the function
-                    last = New ReturnValue(New Literal With {.value = last})
+                If breakLoop Then
+                    Exit For
                 End If
+            Next
 
-                If Not last Is Nothing Then
-                    If last.GetType Is GetType(Message) Then
-                        If DirectCast(last, Message).MessageLevel = MSG_TYPES.ERR Then
-                            ' how to throw error?
-                            Return last
-                        ElseIf DirectCast(last, Message).MessageLevel = MSG_TYPES.DEBUG Then
-                        ElseIf DirectCast(last, Message).MessageLevel = MSG_TYPES.WRN Then
-                        Else
+            Return last
+        End Function
 
-                        End If
-                    ElseIf last.GetType Is GetType(IfBranch.IfPromise) Then
-                        envir.ifPromise.Add(last)
-                        last = DirectCast(last, IfBranch.IfPromise).Value
+        ''' <summary>
+        ''' For execute lambda function
+        ''' </summary>
+        ''' <param name="expression"></param>
+        ''' <param name="envir"></param>
+        ''' <param name="breakLoop"></param>
+        ''' <returns></returns>
+        Public Shared Function ExecuteCodeLine(expression As Expression, envir As Environment, Optional ByRef breakLoop As Boolean = False) As Object
+            Dim last = expression.Evaluate(envir)
 
-                        If envir.ifPromise.Last.Result Then
-                            If Not last Is Nothing AndAlso last.GetType Is GetType(ReturnValue) Then
-                                Exit For
-                            End If
+            If TypeOf expression Is ReturnValue Then
+                ' return keyword will break the function
+                last = New ReturnValue(New Literal With {.value = last})
+            End If
+
+            If Not last Is Nothing Then
+                If last.GetType Is GetType(Message) Then
+                    If DirectCast(last, Message).MessageLevel = MSG_TYPES.ERR Then
+                        ' how to throw error?
+                        Return last
+                    ElseIf DirectCast(last, Message).MessageLevel = MSG_TYPES.DEBUG Then
+                    ElseIf DirectCast(last, Message).MessageLevel = MSG_TYPES.WRN Then
+                    Else
+
+                    End If
+                ElseIf last.GetType Is GetType(IfBranch.IfPromise) Then
+                    envir.ifPromise.Add(last)
+                    last = DirectCast(last, IfBranch.IfPromise).Value
+
+                    If envir.ifPromise.Last.Result Then
+                        If Not last Is Nothing AndAlso last.GetType Is GetType(ReturnValue) Then
+                            breakLoop = True
                         End If
                     End If
                 End If
-            Next
+            End If
 
             Return last
         End Function

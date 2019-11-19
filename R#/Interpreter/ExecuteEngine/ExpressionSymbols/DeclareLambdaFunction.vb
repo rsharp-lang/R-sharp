@@ -55,6 +55,10 @@ Namespace Interpreter.ExecuteEngine
     ''' 只允许简单的表达式出现在这里
     ''' 并且参数也只允许出现一个
     ''' </summary>
+    ''' <remarks>
+    ''' lambda函数与普通函数相比，lambda函数是没有environment的
+    ''' 所以lambda函数会更加的轻量化
+    ''' </remarks>
     Public Class DeclareLambdaFunction : Inherits Expression
         Implements RFunction
 
@@ -67,7 +71,7 @@ Namespace Interpreter.ExecuteEngine
         Public ReadOnly Property name As String Implements RFunction.name
 
         Dim parameter As DeclareNewVariable
-        Dim closure As ClosureExpression
+        Dim closure As Expression
 
         ''' <summary>
         ''' 只允许拥有一个参数，并且只允许出现一行代码
@@ -82,7 +86,7 @@ Namespace Interpreter.ExecuteEngine
                                    Return "[lambda: " & exp & "]"
                                End Function)
                 parameter = New DeclareNewVariable(tokens(Scan0))
-                closure = ClosureExpression.ParseExpressionTree(.Skip(2).IteratesALL)
+                closure = Expression.CreateExpression(.Skip(2).IteratesALL)
             End With
         End Sub
 
