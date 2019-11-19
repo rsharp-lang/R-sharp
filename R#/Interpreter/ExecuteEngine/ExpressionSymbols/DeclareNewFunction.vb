@@ -140,7 +140,7 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Public Overrides Function ToString() As String
-            Return $"declare function '${funcName}'"
+            Return $"declare function '${funcName}'({params.Select(AddressOf DeclareNewVariable.getParameterView).JoinBy(", ")})"
         End Function
     End Class
 End Namespace

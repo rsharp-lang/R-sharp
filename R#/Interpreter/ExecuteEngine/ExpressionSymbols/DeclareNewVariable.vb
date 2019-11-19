@@ -62,6 +62,9 @@ Namespace Interpreter.ExecuteEngine
         ''' 对于tuple类型，会存在多个变量
         ''' </summary>
         Friend names As String()
+        ''' <summary>
+        ''' 初始值
+        ''' </summary>
         Friend value As Expression
         Friend hasInitializeExpression As Boolean = False
 
@@ -182,6 +185,23 @@ Namespace Interpreter.ExecuteEngine
                 Return $"Dim [{names.JoinBy(", ")}] As {type.Description} = {Scripting.ToString(value, "NULL")}"
             Else
                 Return $"Dim {names(Scan0)} As {type.Description} = {Scripting.ToString(value, "NULL")}"
+            End If
+        End Function
+
+        Friend Shared Function getParameterView(declares As DeclareNewVariable) As String
+            Dim a$
+
+            If declares.names.Length = 1 Then
+                a = declares.names(Scan0)
+            Else
+                a = declares.names.JoinBy(", ")
+                a = $"[{a}]"
+            End If
+
+            If declares.hasInitializeExpression Then
+                Return $"{a} = {declares.value}"
+            Else
+                Return a
             End If
         End Function
     End Class
