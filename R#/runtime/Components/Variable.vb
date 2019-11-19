@@ -1,46 +1,46 @@
-﻿#Region "Microsoft.VisualBasic::c8557442b7b7073631b2e04ac447c9b1, R#\runtime\Variable.vb"
+﻿#Region "Microsoft.VisualBasic::bffa17d36095f03e3a392bafdc65ac1e, R#\Runtime\Components\Variable.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class Variable
-' 
-'         Properties: [TypeOf], Constraint, ConstraintValid, Length, Name
-'                     TypeCode, TypeID, Value
-' 
-'         Constructor: (+1 Overloads) Sub New
-'         Function: ToString, ToVector
-' 
-' 
-' /********************************************************************************/
+    '     Class Variable
+    ' 
+    '         Properties: [typeof], constraint, constraintValid, length, name
+    '                     typeCode, typeId, value
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    '         Function: GetValueViewString, ToString, ToVector
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
