@@ -85,9 +85,9 @@ Namespace Interpreter.ExecuteEngine
         ''' </summary>
         ''' <param name="symbol"></param>
         ''' <param name="byName"></param>
-        Sub New(symbol As Expression, byName As String)
+        Sub New(symbol As Expression, byName As Expression)
             Me.symbol = symbol
-            Me.index = New Literal(byName)
+            Me.index = byName
             Me.nameIndex = True
         End Sub
 

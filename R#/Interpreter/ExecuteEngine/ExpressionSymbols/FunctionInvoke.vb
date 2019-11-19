@@ -43,6 +43,7 @@
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports SMRUCC.Rsharp.Language
@@ -99,8 +100,19 @@ Namespace Interpreter.ExecuteEngine
         ''' </summary>
         ''' <param name="funcName"></param>
         ''' <param name="parameters"></param>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Sub New(funcName$, ParamArray parameters As Expression())
-            Me.funcName = New Literal(funcName)
+            Call Me.New(New Literal(funcName), parameters)
+        End Sub
+
+        ''' <summary>
+        ''' Use for create pipeline calls from identifier target
+        ''' </summary>
+        ''' <param name="funcVar"></param>
+        ''' <param name="parameters"></param>
+        Sub New(funcVar As Expression, ParamArray parameters As Expression())
+            Me.funcName = funcName
             Me.parameters = parameters.ToList
         End Sub
 

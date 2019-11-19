@@ -188,13 +188,16 @@ Namespace Interpreter.ExecuteEngine
                                 ElseIf typeofName Is GetType(Literal) Then
                                     nameSymbol = DirectCast(b.VA, Literal).value
                                 ElseIf typeofName Is GetType(FunctionInvoke) Then
-                                    Throw New NotImplementedException
+                                    Dim invoke As FunctionInvoke = b
+                                    Dim funcVar As New SymbolIndexer(a.VA, invoke.funcName)
+
+                                    Return New FunctionInvoke(funcVar, invoke.parameters.ToArray)
                                 Else
                                     Throw New NotImplementedException
                                 End If
 
-                                Dim symbolRef As New SymbolIndexer(a.VA, nameSymbol)
-
+                                ' a$b symbol reference
+                                Dim symbolRef As New SymbolIndexer(a.VA, New Literal(nameSymbol))
                                 Return symbolRef
                             End Function)
         End Sub
