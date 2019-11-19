@@ -15,7 +15,7 @@ Namespace Runtime.Package
         <Extension>
         Public Sub ImportsStatic(envir As Environment, package As Type)
             Dim [global] As GlobalEnvironment = envir.GlobalEnvironment
-            Dim docs As ProjectType = [global].packageDocs.GetAnnotations(package)
+            Dim docs As ProjectType = [global].packages.packageDocs.GetAnnotations(package)
             Dim methods = package.GetMethods(BindingFlags.Public Or BindingFlags.Static)
             Dim Rmethods = methods _
                 .Select(Function(m)

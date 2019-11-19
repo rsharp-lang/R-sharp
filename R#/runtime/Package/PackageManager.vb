@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.ApplicationServices.Development
+﻿Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 
@@ -9,10 +10,17 @@ Namespace Runtime.Package
         ReadOnly pkgDb As LocalPackageDatabase
         ReadOnly config As Options
 
+        Public ReadOnly Property packageDocs As New AnnotationDocs
+
         Sub New(config As Options)
             Me.pkgDb = LocalPackageDatabase.Load(config.lib)
             Me.config = config
         End Sub
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function FindPackage(packageName As String, ByRef exception As Exception) As Package
+            Return pkgDb.FindPackage(packageName, exception)
+        End Function
 
         Public Function InstallLocals(dllFile As String) As String()
             Dim packageIndex = pkgDb.packages.ToDictionary(Function(pkg) pkg.namespace)

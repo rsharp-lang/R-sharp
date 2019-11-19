@@ -35,15 +35,11 @@ Namespace Interpreter
         Public Const lastVariableName$ = "$"
 
         Sub New(Optional envirConf As Options = Nothing)
-            Dim localRepo As LocalPackageDatabase
-
             If envirConf Is Nothing Then
                 envirConf = New Options(ConfigFile.localConfigs)
             End If
 
-            localRepo = LocalPackageDatabase.Load(envirConf.lib)
-
-            globalEnvir = New GlobalEnvironment(localRepo, envirConf)
+            globalEnvir = New GlobalEnvironment(envirConf)
             globalEnvir.Push(lastVariableName, Nothing, TypeCodes.generic)
         End Sub
 

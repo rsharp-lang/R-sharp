@@ -9,12 +9,11 @@ Namespace Runtime
     Public Class GlobalEnvironment : Inherits Environment
 
         Public ReadOnly Property options As Options
-        Public ReadOnly Property packages As LocalPackageDatabase
-        Public ReadOnly Property packageDocs As New AnnotationDocs
+        Public ReadOnly Property packages As PackageManager
 
-        Sub New(packages As LocalPackageDatabase, options As Options)
-            Me.packages = packages
+        Sub New(options As Options)
             Me.options = options
+            Me.packages = New PackageManager(options)
         End Sub
 
     End Class
