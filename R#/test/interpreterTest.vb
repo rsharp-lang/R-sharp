@@ -103,6 +103,14 @@ Module interpreterTest
         Pause()
     End Sub
 
+    Sub closureEnvironmentTest()
+        Call R.Evaluate("let x as function(y) {
+    let a <- y
+}")
+
+        Pause()
+    End Sub
+
     Sub lastSymbolTest()
         Call R.Evaluate("function(x) {
     x ^ 3
