@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0bf9adeb611abff75157721f8d466d9f, R#\Runtime\Components\Interface\RFunction.vb"
+﻿#Region "Microsoft.VisualBasic::32e0cd57227bf70c7ee1bd0cefe0a3e0, R#\Runtime\Internal\utils.vb"
 
     ' Author:
     ' 
@@ -31,34 +31,38 @@
 
     ' Summaries:
 
-    '     Interface RFunction
+    '     Module utils
     ' 
-    '         Properties: name
-    ' 
-    '         Function: Invoke
+    '         Function: installPackages
     ' 
     ' 
     ' /********************************************************************************/
 
 #End Region
 
-Namespace Runtime.Components.Interface
+Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Runtime.Package
+Imports Microsoft.VisualBasic.Language
 
-    Public Interface RFunction
+Namespace Runtime.Internal
 
-        ''' <summary>
-        ''' 函数名
-        ''' </summary>
-        ''' <returns></returns>
-        ReadOnly Property name As String
+    Module utils
 
         ''' <summary>
-        ''' 执行当前的这个函数对象然后获取得到结果值
+        ''' 
         ''' </summary>
+        ''' <param name="packages">The dll file name</param>
         ''' <param name="envir"></param>
-        ''' <param name="arguments"></param>
         ''' <returns></returns>
-        Function Invoke(envir As Environment, arguments As InvokeParameter()) As Object
+        Public Function installPackages(packages As String(), envir As Environment) As Object
+            Dim pkgMgr As PackageManager = envir.GlobalEnvironment.packages
+            Dim namespaces As New List(Of String)
 
-    End Interface
+            For Each pkgName As String In packages.SafeQuery
+                namespaces += pkgMgr.InstallLocals(pkgName)
+            Next
+
+            Return namespaces.ToArray
+        End Function
+    End Module
 End Namespace

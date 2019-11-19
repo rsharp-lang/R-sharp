@@ -1,7 +1,50 @@
-﻿Imports System.Runtime.CompilerServices
+﻿#Region "Microsoft.VisualBasic::f2871917fdb327e513228145b18aa5cd, R#\Runtime\Internal\base.vb"
+
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+
+    ' /********************************************************************************/
+
+    ' Summaries:
+
+    '     Module base
+    ' 
+    '         Function: [get], [stop], all, any, cat
+    '                   createDotNetExceptionMessage, createMessageInternal, getEnvironmentStack, lapply, names
+    '                   options, print, sapply, warning
+    ' 
+    ' 
+    ' /********************************************************************************/
+
+#End Region
+
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
-Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.C
@@ -102,7 +145,7 @@ Namespace Runtime.Internal
         ''' <param name="envir"></param>
         ''' <returns></returns>
         Public Function [stop](message As Object, envir As Environment) As Message
-            If Not message Is Nothing AndAlso message.GetType.IsInheritsFrom(GetType(Exception)) Then
+            If Not message Is Nothing AndAlso message.GetType.IsInheritsFrom(GetType(Exception), strict:=False) Then
                 Return DirectCast(message, Exception).createDotNetExceptionMessage(envir)
             Else
                 Return base.createMessageInternal(message, envir, level:=MSG_TYPES.ERR)
@@ -120,7 +163,11 @@ Namespace Runtime.Internal
             Loop
 
             ' add stack info for display
-            messages += "stackFrames: " & vbCrLf & exception.StackTrace
+            If exception.StackTrace.StringEmpty Then
+                messages += "stackFrames: " & vbCrLf & "none"
+            Else
+                messages += "stackFrames: " & vbCrLf & exception.StackTrace
+            End If
 
             Return New Message With {
                 .Message = messages,

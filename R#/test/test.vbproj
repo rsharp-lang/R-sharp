@@ -93,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="interpreterTest.vb" />
+    <Compile Include="docTest.vb" />
     <Compile Include="tokenlicerTest.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">

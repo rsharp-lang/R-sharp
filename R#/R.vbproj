@@ -196,11 +196,13 @@
     <Compile Include="Runtime\Components\Config\ConfigFile.vb" />
     <Compile Include="Runtime\Components\Interface\RPrint.vb" />
     <Compile Include="Runtime\Components\Interface\RFunction.vb" />
+    <Compile Include="Runtime\Internal\utils.vb" />
     <Compile Include="Runtime\Internal\printer.vb" />
     <Compile Include="Runtime\Interop\MethodInvoke.vb" />
     <Compile Include="Runtime\Interop\RInteropAttribute.vb" />
     <Compile Include="Runtime\Interop\RMethodArgument.vb" />
     <Compile Include="Runtime\Components\InvokeParameter.vb" />
+    <Compile Include="Runtime\Package\AnnotationDocs.vb" />
     <Compile Include="Runtime\Package\Database\LocalPackageDatabase.vb" />
     <Compile Include="Runtime\Package\Database\PackageLoaderEntry.vb" />
     <Compile Include="Runtime\Package\PackageManager.vb" />

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0bf9adeb611abff75157721f8d466d9f, R#\Runtime\Components\Interface\RFunction.vb"
+﻿#Region "Microsoft.VisualBasic::ca8bf5697306c1c009e1cac6e0801263, R#\test\docTest.vb"
 
     ' Author:
     ' 
@@ -31,34 +31,23 @@
 
     ' Summaries:
 
-    '     Interface RFunction
+    ' Module docTest
     ' 
-    '         Properties: name
-    ' 
-    '         Function: Invoke
-    ' 
+    '     Sub: Main
     ' 
     ' /********************************************************************************/
 
 #End Region
 
-Namespace Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Package
 
-    Public Interface RFunction
+Module docTest
 
-        ''' <summary>
-        ''' 函数名
-        ''' </summary>
-        ''' <returns></returns>
-        ReadOnly Property name As String
+    Sub Main()
+        Dim doc As New AnnotationDocs
+        Dim result = doc.GetAnnotations(GetType(LICENSE))
 
-        ''' <summary>
-        ''' 执行当前的这个函数对象然后获取得到结果值
-        ''' </summary>
-        ''' <param name="envir"></param>
-        ''' <param name="arguments"></param>
-        ''' <returns></returns>
-        Function Invoke(envir As Environment, arguments As InvokeParameter()) As Object
+        Pause()
+    End Sub
+End Module
 
-    End Interface
-End Namespace

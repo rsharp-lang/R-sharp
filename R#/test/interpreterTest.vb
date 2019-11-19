@@ -1,4 +1,51 @@
-﻿Imports SMRUCC.Rsharp.Interpreter
+﻿#Region "Microsoft.VisualBasic::32ef0474b8c69cc9ccc136b8d916972b, R#\test\interpreterTest.vb"
+
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+
+' /********************************************************************************/
+
+' Summaries:
+
+' Module interpreterTest
+' 
+'     Sub: boolTest, branchTest, cliTest, dataframeTest, declareFunctionTest
+'          declareTest, elementIndexerTest, exceptionHandler, forLoopTest, genericTest
+'          iifTest, ImportsDll, inTest, invokeTest, lambdaTest
+'          linqTest, listTest, logicalTest, Main, nameAccessorTest
+'          namespaceTest, namesTest, optionsTest, parameterTest, pipelineTest
+'          StackTest, stringInterpolateTest, symbolNotFoundTest, testScript, tupleTest
+'          whichTest
+' 
+' /********************************************************************************/
+
+#End Region
+
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 
@@ -7,7 +54,8 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
-        '  Call whichTest()
+        Call closureTest()
+        Call whichTest()
 
         '    Call elementIndexerTest()
         Call nameAccessorTest()
@@ -51,6 +99,57 @@ Module interpreterTest
 
 
         Pause()
+    End Sub
+
+    Sub closureTest()
+
+        Call R.Evaluate("
+let closure as function() {
+
+    let x as integer = 999;
+
+    let setX as function(value) {
+        x = value;
+    }
+
+    let getX as function() {
+        x;
+    }
+
+    list(getX = getX, setX = setX);
+}
+")
+        Call R.Evaluate("let holder = closure();")
+        Call R.Evaluate("print(holder$getX());")
+        Call R.Evaluate("holder$setX([123,233,333])")
+        Call R.Evaluate("print(holder$getX());")
+
+    End Sub
+
+    Sub moduleTest()
+        Call R.Evaluate("
+# The entire script file is a module
+module test1;
+
+let println as function(s) {
+    print(s);
+}
+")
+        Call R.Evaluate("'This is the string print content!' :> test1::println")
+
+        Call R.Evaluate("# a module block
+module test2
+
+let println as function(s) {
+    print(`print from test2 module: ${s}`);
+}
+
+end module
+
+test2::println('123');
+test1::println('123');
+
+")
     End Sub
 
     Sub genericTest()
@@ -407,3 +506,4 @@ print(`value of the x='${x}'`);
         Pause()
     End Sub
 End Module
+

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0bf9adeb611abff75157721f8d466d9f, R#\Runtime\Components\Interface\RFunction.vb"
+﻿#Region "Microsoft.VisualBasic::d180788d5a181bef2894fed9a6e1df18, R#\Runtime\Package\AnnotationDocs.vb"
 
     ' Author:
     ' 
@@ -31,34 +31,43 @@
 
     ' Summaries:
 
-    '     Interface RFunction
+    '     Class AnnotationDocs
     ' 
-    '         Properties: name
-    ' 
-    '         Function: Invoke
+    '         Function: GetAnnotations
     ' 
     ' 
     ' /********************************************************************************/
 
 #End Region
 
-Namespace Runtime.Components.Interface
+Imports System.Reflection
+Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 
-    Public Interface RFunction
+Namespace Runtime.Package
 
-        ''' <summary>
-        ''' 函数名
-        ''' </summary>
-        ''' <returns></returns>
-        ReadOnly Property name As String
+    ''' <summary>
+    ''' Parser of the <see cref="Project"/> assembly
+    ''' </summary>
+    Public Class AnnotationDocs
 
-        ''' <summary>
-        ''' 执行当前的这个函数对象然后获取得到结果值
-        ''' </summary>
-        ''' <param name="envir"></param>
-        ''' <param name="arguments"></param>
-        ''' <returns></returns>
-        Function Invoke(envir As Environment, arguments As InvokeParameter()) As Object
+        ReadOnly projects As New Dictionary(Of String, Project)
 
-    End Interface
+        Public Function GetAnnotations(package As Type) As ProjectType
+            Dim assembly As Assembly = package.Assembly
+            Dim project As Project
+            Dim projectKey As String = assembly.ToString
+            Dim docXml As String = assembly.Location.TrimSuffix & ".xml"
+            Dim type As ProjectType
+
+            If Not projects.ContainsKey(projectKey) Then
+                projects(projectKey) = ProjectSpace.CreateDocProject(docXml)
+            End If
+
+            project = projects(projectKey)
+            type = project.GetType(package.FullName)
+
+            Return type
+        End Function
+
+    End Class
 End Namespace

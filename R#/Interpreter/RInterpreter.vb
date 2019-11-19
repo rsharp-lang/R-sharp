@@ -1,4 +1,53 @@
-﻿Imports System.IO
+﻿#Region "Microsoft.VisualBasic::60b55f4ce76fa2d6a4d8d1795f9705f1, R#\Interpreter\RInterpreter.vb"
+
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+
+    ' /********************************************************************************/
+
+    ' Summaries:
+
+    '     Class RInterpreter
+    ' 
+    '         Properties: globalEnvir, Rsharp, warnings
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    ' 
+    '         Function: (+2 Overloads) Evaluate, finalizeResult, FromEnvironmentConfiguration, InitializeEnvironment, Invoke
+    '                   printErrorInternal, Run, RunInternal, Source
+    ' 
+    '         Sub: (+3 Overloads) Add, LoadLibrary, PrintMemory
+    ' 
+    ' 
+    ' /********************************************************************************/
+
+#End Region
+
+Imports System.IO
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
@@ -35,15 +84,11 @@ Namespace Interpreter
         Public Const lastVariableName$ = "$"
 
         Sub New(Optional envirConf As Options = Nothing)
-            Dim localRepo As LocalPackageDatabase
-
             If envirConf Is Nothing Then
                 envirConf = New Options(ConfigFile.localConfigs)
             End If
 
-            localRepo = LocalPackageDatabase.Load(envirConf.lib)
-
-            globalEnvir = New GlobalEnvironment(localRepo, envirConf)
+            globalEnvir = New GlobalEnvironment(envirConf)
             globalEnvir.Push(lastVariableName, Nothing, TypeCodes.generic)
         End Sub
 
@@ -79,7 +124,7 @@ Namespace Interpreter
             Call Console.WriteLine($"Loading required package: {packageName}")
 
             If package Is Nothing Then
-                Dim message As Message = Internal.stop(exception, globalEnvir)
+                Dim message As Message = Internal.stop(If(exception, New Exception("No packages installed...")), globalEnvir)
 
                 message.Message = {
                     $"there is no package called ‘{packageName}’",
