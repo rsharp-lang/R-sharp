@@ -138,7 +138,15 @@ Namespace Interpreter.ExecuteEngine
             Dim funcVar As RFunction
 
             If TypeOf funcName Is Literal Then
-                funcVar = envir.FindSymbol(DirectCast(funcName, Literal).ToString)?.value
+                Dim symbol = envir.FindSymbol(DirectCast(funcName, Literal).ToString)?.value
+
+                If symbol Is Nothing Then
+                    funcVar = Nothing
+                ElseIf symbol.GetType Is GetType(Internal.envir) Then
+                    funcVar = DirectCast(symbol, Internal.envir).declare
+                Else
+                    funcVar = symbol
+                End If
             Else
                 funcVar = funcName.Evaluate(envir)
             End If

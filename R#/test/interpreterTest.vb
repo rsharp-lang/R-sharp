@@ -54,6 +54,8 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call closureEnvironmentTest()
+
         Call lastSymbolTest()
 
         Call closureTest()
@@ -105,8 +107,14 @@ Module interpreterTest
 
     Sub closureEnvironmentTest()
         Call R.Evaluate("let x as function(y) {
-    let a <- y
+    let a <- y;
+
+    function() {
+        a ^ 2
+    }
 }")
+        Call R.Evaluate("let inner = x(3)")
+        Call R.Evaluate("print(inner())")
 
         Pause()
     End Sub
