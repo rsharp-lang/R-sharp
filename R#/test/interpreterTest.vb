@@ -54,6 +54,7 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call closureTest()
         Call whichTest()
 
         '    Call elementIndexerTest()
@@ -98,6 +99,57 @@ Module interpreterTest
 
 
         Pause()
+    End Sub
+
+    Sub closureTest()
+
+        Call R.Evaluate("
+let closure as function() {
+
+    let x as integer = 999;
+
+    let setX as function(value) {
+        x = value;
+    }
+
+    let getX as function() {
+        x;
+    }
+
+    list(getX = getX, setX = setX);
+}
+")
+        Call R.Evaluate("let holder = closure();")
+        Call R.Evaluate("print(holder$getX());")
+        Call R.Evaluate("holder$setX([123,233,333])")
+        Call R.Evaluate("print(holder$getX());")
+
+    End Sub
+
+    Sub moduleTest()
+        Call R.Evaluate("
+# The entire script file is a module
+module test1;
+
+let println as function(s) {
+    print(s);
+}
+")
+        Call R.Evaluate("'This is the string print content!' :> test1::println")
+
+        Call R.Evaluate("# a module block
+module test2
+
+let println as function(s) {
+    print(`print from test2 module: ${s}`);
+}
+
+end module
+
+test2::println('123');
+test1::println('123');
+
+")
     End Sub
 
     Sub genericTest()

@@ -129,6 +129,10 @@ Namespace Interpreter.ExecuteEngine
             Return value
         End Function
 
+        ''' <summary>
+        ''' Get string representation of the literal object value
+        ''' </summary>
+        ''' <returns></returns>
         Public Overrides Function ToString() As String
             If value Is Nothing Then
                 Return "NULL"

@@ -181,11 +181,16 @@ Namespace Interpreter.ExecuteEngine
                 opSymbol:="$",
                 expression:=Function(a, b)
                                 Dim nameSymbol As String
+                                Dim typeofName As Type = b.GetUnderlyingType
 
-                                If b.GetUnderlyingType Is GetType(SymbolReference) Then
+                                If typeofName Is GetType(SymbolReference) Then
                                     nameSymbol = DirectCast(b.VA, SymbolReference).symbol
-                                Else
+                                ElseIf typeofName Is GetType(Literal) Then
                                     nameSymbol = DirectCast(b.VA, Literal).value
+                                ElseIf typeofName Is GetType(FunctionInvoke) Then
+                                    Throw New NotImplementedException
+                                Else
+                                    Throw New NotImplementedException
                                 End If
 
                                 Dim symbolRef As New SymbolIndexer(a.VA, nameSymbol)

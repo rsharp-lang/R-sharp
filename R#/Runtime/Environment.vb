@@ -133,7 +133,7 @@ Namespace Runtime
             variables = New Dictionary(Of Variable)
             types = New Dictionary(Of String, RType)
             parent = Nothing
-            GlobalEnvironment = Me
+            GlobalEnvironment = Nothing
             stackTag = "<globalEnvironment>"
         End Sub
 
