@@ -135,10 +135,10 @@ Namespace Interpreter.ExecuteEngine
         Public Overrides Function Evaluate(envir As Environment) As Object
             ' 当前环境中的函数符号的优先度要高于
             ' 系统环境下的函数符号
-            Dim funcVar As Variable
+            Dim funcVar As RFunction
 
             If TypeOf funcName Is Literal Then
-                funcVar = envir.FindSymbol(DirectCast(funcName, Literal).ToString)
+                funcVar = envir.FindSymbol(DirectCast(funcName, Literal).ToString)?.value
             Else
                 funcVar = funcName.Evaluate(envir)
             End If
@@ -146,12 +146,12 @@ Namespace Interpreter.ExecuteEngine
             If funcVar Is Nothing AndAlso TypeOf funcName Is Literal Then
                 ' 可能是一个系统的内置函数
                 Return invokeRInternal(DirectCast(funcName, Literal).ToString, envir)
-            ElseIf funcVar.value.GetType Like runtimeFuncs Then
+            ElseIf funcVar.GetType Like runtimeFuncs Then
                 ' invoke method create from R# script
-                Return DirectCast(funcVar.value, RFunction).Invoke(envir, InvokeParameter.Create(parameters))
+                Return DirectCast(funcVar, RFunction).Invoke(envir, InvokeParameter.Create(parameters))
             Else
                 ' invoke .NET method
-                Return DirectCast(funcVar.value, RMethodInfo).Invoke(envir, InvokeParameter.Create(parameters))
+                Return DirectCast(funcVar, RMethodInfo).Invoke(envir, InvokeParameter.Create(parameters))
             End If
         End Function
 

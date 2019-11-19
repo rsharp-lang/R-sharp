@@ -124,6 +124,7 @@ let closure as function() {
         Call R.Evaluate("holder$setX([123,233,333])")
         Call R.Evaluate("print(holder$getX());")
 
+        Pause()
     End Sub
 
     Sub moduleTest()
