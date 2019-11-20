@@ -202,7 +202,7 @@ Namespace Runtime
                     Return TypeCodes.boolean
                 Case GetType(Dictionary(Of String, Object)), GetType(Dictionary(Of String, Object)())
                     Return TypeCodes.list
-                Case GetType(RMethodInfo), GetType(DeclareNewFunction), GetType(envir)
+                Case GetType(RMethodInfo), GetType(DeclareNewFunction) ', GetType(envir)
                     Return TypeCodes.closure
                 Case Else
                     Return TypeCodes.generic

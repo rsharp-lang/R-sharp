@@ -107,13 +107,16 @@ Module interpreterTest
 
     Sub closureEnvironmentTest()
         Call R.Evaluate("let x as function(y) {
-    let a <- y;
+    let a <- y-1;
 
     function() {
+        a <- a+1;
         a ^ 2
     }
 }")
         Call R.Evaluate("let inner = x(3)")
+        Call R.Evaluate("print(inner())")
+        Call R.Evaluate("print(inner())")
         Call R.Evaluate("print(inner())")
 
         Pause()
