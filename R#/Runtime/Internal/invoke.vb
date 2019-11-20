@@ -102,6 +102,23 @@ Namespace Runtime.Internal
             Return New list With {.slots = list}
         End Function
 
+        Friend Function missingParameter(funcName$, paramName$, envir As Environment) As Message
+            Return Internal.stop({
+                $"missing parameter '{paramName}' for function {funcName}",
+                $"parameter: {paramName}",
+                $"function: {funcName}"
+            }, envir)
+        End Function
+
+        Friend Function invalidParameter(message$, funcName$, paramName$, envir As Environment) As Message
+            Return Internal.stop({
+                $"invalid parameter value of '{paramName}' for function {funcName}",
+                $"details: {message}",
+                $"parameter: {paramName}",
+                $"function: {funcName}"
+            }, envir)
+        End Function
+
         ''' <summary>
         ''' Invoke the runtime internal functions
         ''' </summary>
@@ -128,11 +145,7 @@ Namespace Runtime.Internal
                     Dim defaultVal$ = Scripting.ToString(paramVals.ElementAtOrDefault(1))
 
                     If name.StringEmpty Then
-                        Return Internal.stop({
-                            $"missing parameter 'name' for function {funcName}",
-                            $"parameter: name",
-                            $"function: {funcName}"
-                        }, envir)
+                        Return invoke.missingParameter(funcName, "name", envir)
                     Else
                         Return envir.GlobalEnvironment _
                             .options _
@@ -176,7 +189,6 @@ Namespace Runtime.Internal
                         .ToArray
 
                     Return utils.installPackages(libraryNames, envir)
-
                 Case "sprintf"
                     Dim format As Array = Runtime.asVector(Of String)(paramVals(Scan0))
                     Dim arguments = paramVals.Skip(1).ToArray
@@ -189,6 +201,21 @@ Namespace Runtime.Internal
                         .ToArray
 
                     Return result
+                Case "getwd"
+                    Return App.CurrentDirectory
+                Case "setwd"
+                    Dim dir As String() = Runtime.asVector(Of String)(paramVals(Scan0))
+
+                    If dir.Length = 0 Then
+                        Return invoke.missingParameter(funcName, "dir", envir)
+                    ElseIf dir(Scan0).StringEmpty Then
+                        Return invoke.invalidParameter("cannot change working directory due to the reason of NULL value provided!", funcName, "dir", envir)
+                    Else
+                        App.CurrentDirectory = dir(Scan0)
+                    End If
+
+                    Return App.CurrentDirectory
+
                 Case Else
                     Return Message.SymbolNotFound(envir, funcName, TypeCodes.closure)
             End Select

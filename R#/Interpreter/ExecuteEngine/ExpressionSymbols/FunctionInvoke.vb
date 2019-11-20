@@ -142,8 +142,8 @@ Namespace Interpreter.ExecuteEngine
 
                 If symbol Is Nothing Then
                     funcVar = Nothing
-                ElseIf symbol.GetType Is GetType(Internal.envir) Then
-                    funcVar = DirectCast(symbol, Internal.envir).declare
+                    'ElseIf symbol.GetType Is GetType(Internal.envir) Then
+                    '    funcVar = DirectCast(symbol, Internal.envir).declare
                 Else
                     funcVar = symbol
                 End If

@@ -54,10 +54,16 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
-Imports SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine
 
+    ''' <summary>
+    ''' 普通的函数定义模型
+    ''' 
+    ''' 普通的函数与lambda函数<see cref="DeclareLambdaFunction"/>在结构上是一致的，
+    ''' 但是有一个区别就是lambda函数<see cref="DeclareLambdaFunction"/>是没有<see cref="Environment"/>的，
+    ''' 所以lambda函数会更加的轻量化，不容易产生内存溢出的问题
+    ''' </summary>
     Public Class DeclareNewFunction : Inherits Expression
         Implements RFunction
 
@@ -71,6 +77,10 @@ Namespace Interpreter.ExecuteEngine
 
         Friend params As DeclareNewVariable()
         Friend body As ClosureExpression
+        ''' <summary>
+        ''' The environment of current function closure
+        ''' </summary>
+        Friend envir As Environment
 
         Sub New()
         End Sub
@@ -107,8 +117,6 @@ Namespace Interpreter.ExecuteEngine
         End Sub
 
         Public Function Invoke(parent As Environment, params As InvokeParameter()) As Object Implements RFunction.Invoke
-            Dim closure As envir = parent.FindSymbol(funcName).value
-            Dim envir As Environment = closure.envir
             Dim var As DeclareNewVariable
             Dim value As Object
             Dim arguments As Dictionary(Of String, Object) = InvokeParameter.CreateArguments(envir, params)
@@ -137,9 +145,8 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim closure As New envir(New Environment(envir, funcName), body, Me)
-            Dim result = envir.Push(funcName, closure, TypeCodes.closure)
-
+            Dim result = envir.Push(funcName, Me, TypeCodes.closure)
+            Me.envir = New Environment(envir, funcName)
             Return result
         End Function
 
