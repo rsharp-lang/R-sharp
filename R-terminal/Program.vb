@@ -60,6 +60,7 @@ Module Program
 
         Call R.LoadLibrary("base")
         Call R.LoadLibrary("utils")
+        Call R.LoadLibrary("grDevices")
 
         For Each arg As NamedValue(Of String) In args.ToArgumentVector
             Call R.Add(arg.Name, arg.Value, TypeCodes.generic)
