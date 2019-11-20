@@ -214,7 +214,7 @@ Namespace Runtime.Internal
                         App.CurrentDirectory = dir(Scan0)
                     End If
 
-                    Return dir(Scan0)
+                    Return App.CurrentDirectory
 
                 Case Else
                     Return Message.SymbolNotFound(envir, funcName, TypeCodes.closure)
