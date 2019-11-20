@@ -113,6 +113,7 @@ Module interpreterTest
 }")
         Call R.Evaluate("let none = suppress ex();")
         Call R.Evaluate("print(none);")
+        Call R.Evaluate("none = ex();")
 
         Pause()
     End Sub
