@@ -54,6 +54,7 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call lambdaTest()
         Call suppressTest()
 
         Call closureEnvironmentTest()
@@ -81,7 +82,6 @@ Module interpreterTest
         Call linqTest()
         Call pipelineTest()
         Call iifTest()
-        Call lambdaTest()
         Call testScript()
 
         Call symbolNotFoundTest()
@@ -326,8 +326,15 @@ print(zzz);
     End Sub
 
     Sub lambdaTest()
+        Call R.Evaluate("let pop5 = [] -> 5")
+        Call R.Evaluate("print(pop5)")
+        Call R.Evaluate("print(pop5()^2)")
         Call R.Evaluate("let add <- [x,y] => x+y;")
-        Call R.Evaluate("x -> x +333")
+        Call R.Evaluate("print(x -> x +333)")
+        Call R.Evaluate("print(add([5,5]))")
+        Call R.Evaluate("print(add)")
+
+        Pause()
     End Sub
 
     Sub testScript()

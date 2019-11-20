@@ -101,13 +101,18 @@ Namespace Interpreter.ExecuteEngine
 
         Public Function Invoke(parent As Environment, arguments() As InvokeParameter) As Object Implements RFunction.Invoke
             Using envir As New Environment(parent, name)
-                Return DeclareNewVariable _
-                    .PushNames(names:=parameter.names,
-                               value:=arguments(Scan0).Evaluate(envir),
-                               type:=TypeCodes.generic,
-                               envir:=envir
-                    ) _
-                    .DoCall(AddressOf closure.Evaluate)
+                If parameter.names.Length = 0 Then
+                    ' lambda function with no parameter
+                    Return closure.Evaluate(envir)
+                Else
+                    Return DeclareNewVariable _
+                        .PushNames(names:=parameter.names,
+                                   value:=arguments(Scan0).Evaluate(envir),
+                                   type:=TypeCodes.generic,
+                                   envir:=envir
+                        ) _
+                        .DoCall(AddressOf closure.Evaluate)
+                End If
             End Using
         End Function
 
