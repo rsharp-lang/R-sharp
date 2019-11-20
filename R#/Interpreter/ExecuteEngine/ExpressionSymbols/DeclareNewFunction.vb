@@ -57,6 +57,13 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 
 Namespace Interpreter.ExecuteEngine
 
+    ''' <summary>
+    ''' 普通的函数定义模型
+    ''' 
+    ''' 普通的函数与lambda函数<see cref="DeclareLambdaFunction"/>在结构上是一致的，
+    ''' 但是有一个区别就是lambda函数<see cref="DeclareLambdaFunction"/>是没有<see cref="Environment"/>的，
+    ''' 所以lambda函数会更加的轻量化，不容易产生内存溢出的问题
+    ''' </summary>
     Public Class DeclareNewFunction : Inherits Expression
         Implements RFunction
 
