@@ -1,4 +1,5 @@
-﻿Imports SMRUCC.Rsharp.Runtime
+﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Interpreter.ExecuteEngine
@@ -16,7 +17,9 @@ Namespace Interpreter.ExecuteEngine
             Dim result As Object = expression.Evaluate(envir)
 
             If Not result Is Nothing AndAlso result.GetType Is GetType(Message) Then
-                envir.GlobalEnvironment.messages.Add(result)
+                Dim message As Message = result
+                message.MessageLevel = MSG_TYPES.WRN
+                envir.globalEnvironment.messages.Add(message)
                 Return Nothing
             Else
                 Return result
