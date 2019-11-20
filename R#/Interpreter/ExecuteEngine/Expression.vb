@@ -148,6 +148,7 @@ Namespace Interpreter.ExecuteEngine
                 Dim tuple = code(Scan0).Skip(1) _
                     .Take(code(Scan0).Length - 2) _
                     .SplitByTopLevelDelimiter(TokenType.comma) _
+                    .Where(Function(t) Not t.isComma) _
                     .Select(AddressOf Expression.CreateExpression) _
                     .ToArray
                 Dim value = code(2)

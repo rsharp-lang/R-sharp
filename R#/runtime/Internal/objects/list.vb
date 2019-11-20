@@ -53,6 +53,12 @@ Namespace Runtime.Internal
 
         Public Property slots As Dictionary(Of String, Object)
 
+        Public ReadOnly Property length As Integer
+            Get
+                Return slots.Count
+            End Get
+        End Property
+
         Public Function getNames() As String() Implements RNames.getNames
             Return slots.Keys.ToArray
         End Function

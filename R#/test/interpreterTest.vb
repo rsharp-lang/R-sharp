@@ -520,7 +520,11 @@ return 999;
         Call R.Evaluate("let [x, y] = [[99, 66], 88];")
         Call R.Evaluate("let [a,b,c, d] = [12,3,6, x / 3.3];")
         Call R.Evaluate("let [e,f,g,h,i,j,k] = FALSE;")
+
+        Call R.Evaluate("print(x); print(a)")
+
         Call R.Evaluate("[x , a] <- list(55555, FALSE)")
+        Call R.Evaluate("print(x); print(a)")
 
         Call R.PrintMemory()
 
