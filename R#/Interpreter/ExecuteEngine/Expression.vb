@@ -110,6 +110,13 @@ Namespace Interpreter.ExecuteEngine
                         code = ({[let], name, [as]}) + code
 
                         Return New DeclareNewFunction(code)
+                    Case "suppress"
+                        Dim evaluate As Expression = code _
+                            .Skip(1) _
+                            .IteratesALL _
+                            .DoCall(AddressOf Expression.CreateExpression)
+
+                        Return New Suppress(evaluate)
                     Case Else
                         Throw New SyntaxErrorException
                 End Select
