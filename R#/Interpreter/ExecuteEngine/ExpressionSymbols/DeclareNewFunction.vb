@@ -144,7 +144,7 @@ Namespace Interpreter.ExecuteEngine
                 If var.names.Any(AddressOf envir.variables.ContainsKey) Then
                     ' 只检查自己的环境中的变量
                     ' 因为函数参数是只属于自己的环境之中的符号
-                    Throw New NotImplementedException
+                    Call ValueAssign.doValueAssign(envir, var.names.Select(Function(name) New Literal(name)).ToArray, True, value)
                 Else
                     ' 不存在，则插入新的
                     Call DeclareNewVariable.PushNames(var.names, value, var.type, envir)

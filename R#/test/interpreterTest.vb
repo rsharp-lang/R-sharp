@@ -54,8 +54,8 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
-        Call tupleTest()
         Call closureTest()
+        Call tupleTest()
 
         Call lambdaTest()
         Call suppressTest()
