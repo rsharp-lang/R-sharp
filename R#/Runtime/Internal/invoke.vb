@@ -176,7 +176,6 @@ Namespace Runtime.Internal
                         .ToArray
 
                     Return utils.installPackages(libraryNames, envir)
-
                 Case "sprintf"
                     Dim format As Array = Runtime.asVector(Of String)(paramVals(Scan0))
                     Dim arguments = paramVals.Skip(1).ToArray

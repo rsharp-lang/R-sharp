@@ -62,6 +62,8 @@ Namespace Runtime.Internal
                 namespaces += pkgMgr.InstallLocals(pkgName)
             Next
 
+            Call pkgMgr.Flush()
+
             Return namespaces.ToArray
         End Function
     End Module
