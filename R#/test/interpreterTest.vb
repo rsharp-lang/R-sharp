@@ -54,6 +54,8 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call suppressTest()
+
         Call closureEnvironmentTest()
 
         Call lastSymbolTest()
@@ -103,6 +105,14 @@ Module interpreterTest
 
 
         Pause()
+    End Sub
+
+    Sub suppressTest()
+        Call R.Evaluate("let ex as function() {
+    stop('just create a new exception!');
+}")
+        Call R.Evaluate("let none = suppress ex();")
+        Call R.Evaluate("print(none);")
     End Sub
 
     Sub closureEnvironmentTest()
