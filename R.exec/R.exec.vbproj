@@ -105,7 +105,10 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JumpPoints.vb" />
+    <Compile Include="File\Expression.vb" />
+    <Compile Include="File\JumpPoints.vb" />
+    <Compile Include="Compiler.vb" />
+    <Compile Include="Loader.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
