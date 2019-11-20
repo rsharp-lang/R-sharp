@@ -17,8 +17,14 @@ let closure as function() {
 }
 
 let holder = closure();
+
+# 999
 print(holder$getX());
+
 holder$setX([123,233,333]);
+# 123 233 333
 print(holder$getX());
+
 print(holder$setX('123 AAAAA'));
+# 123 AAAAA
 print(holder$getX());
