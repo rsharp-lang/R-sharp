@@ -59,7 +59,9 @@ Namespace Runtime.Components
                 ElseIf TypeOf value Is SymbolReference Then
                     Return DirectCast(value, SymbolReference).symbol
                 ElseIf TypeOf value Is ValueAssign Then
-                    Return DirectCast(value, ValueAssign).targetSymbols(Scan0)
+                    Return DirectCast(value, ValueAssign) _
+                        .targetSymbols(Scan0) _
+                        .DoCall(AddressOf ValueAssign.GetSymbol)
                 Else
                     Return value.ToString
                 End If

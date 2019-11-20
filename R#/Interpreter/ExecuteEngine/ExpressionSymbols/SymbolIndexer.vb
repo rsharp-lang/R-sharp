@@ -54,6 +54,9 @@ Imports SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine
 
+    ''' <summary>
+    ''' X$name或者X[[name]]
+    ''' </summary>
     Public Class SymbolIndexer : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes

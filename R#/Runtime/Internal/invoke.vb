@@ -89,7 +89,9 @@ Namespace Runtime.Internal
 
                 If TypeOf slot Is ValueAssign Then
                     ' 不支持tuple
-                    key = DirectCast(slot, ValueAssign).targetSymbols(Scan0)
+                    key = DirectCast(slot, ValueAssign) _
+                        .targetSymbols(Scan0) _
+                        .DoCall(AddressOf ValueAssign.GetSymbol)
                     value = DirectCast(slot, ValueAssign).value.Evaluate(envir)
                 Else
                     key = i + 1

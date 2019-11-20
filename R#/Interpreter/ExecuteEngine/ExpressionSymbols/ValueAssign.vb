@@ -64,18 +64,35 @@ Namespace Interpreter.ExecuteEngine
         ''' 可能是对tuple做赋值
         ''' 所以应该是多个变量名称
         ''' </summary>
-        Friend targetSymbols As String()
+        Friend targetSymbols As Expression()
         Friend isByRef As Boolean
         Friend value As Expression
 
+        Public ReadOnly Property symbolSize As Integer
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
+            Get
+                Return targetSymbols.Length
+            End Get
+        End Property
+
         Sub New(tokens As List(Of Token()))
-            targetSymbols = DeclareNewVariable.getNames(tokens(Scan0))
+            targetSymbols = DeclareNewVariable _
+                .getNames(tokens(Scan0)) _
+                .Select(Function(name) New Literal(name)) _
+                .ToArray
             isByRef = tokens(Scan0)(Scan0).text = "="
             value = tokens.Skip(2).AsList.DoCall(AddressOf Expression.ParseExpression)
         End Sub
 
         Sub New(targetSymbols$(), value As Expression)
-            Me.targetSymbols = targetSymbols
+            Me.targetSymbols = targetSymbols _
+                .Select(Function(name) New Literal(name)) _
+                .ToArray
+            Me.value = value
+        End Sub
+
+        Sub New(target As Expression(), value As Expression)
+            Me.targetSymbols = target
             Me.value = value
         End Sub
 
@@ -93,7 +110,7 @@ Namespace Interpreter.ExecuteEngine
             End If
         End Function
 
-        Friend Shared Function doValueAssign(envir As Environment, targetSymbols$(), isByRef As Boolean, value As Object) As Object
+        Friend Shared Function doValueAssign(envir As Environment, targetSymbols As Expression(), isByRef As Boolean, value As Object) As Object
             Dim message As Message
 
             If targetSymbols.Length = 1 Then
@@ -111,21 +128,21 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Public Overrides Function ToString() As String
-            If targetSymbols.Length = 1 Then
+            If symbolSize = 1 Then
                 Return $"{targetSymbols(0)} <- {value.ToString}"
             Else
                 Return $"[{targetSymbols.JoinBy(", ")}] <- {value.ToString}"
             End If
         End Function
 
-        Private Shared Function assignTuples(envir As Environment, targetSymbols$(), isByRef As Boolean, value As Object) As Message
+        Private Shared Function assignTuples(envir As Environment, targetSymbols As Expression(), isByRef As Boolean, value As Object) As Message
             If value.GetType.IsInheritsFrom(GetType(Array)) Then
                 Dim array As Array = value
                 Dim message As New Value(Of Message)
 
                 If array.Length = 1 Then
                     ' all assign the same value result
-                    For Each name As String In targetSymbols
+                    For Each name As Expression In targetSymbols
                         If Not (message = assignSymbol(envir, name, isByRef, value)) Is Nothing Then
                             Return message
                         End If
@@ -148,11 +165,33 @@ Namespace Interpreter.ExecuteEngine
             Return Nothing
         End Function
 
-        Private Shared Function assignSymbol(envir As Environment, symbolName$, isByRef As Boolean, value As Object) As Message
-            Dim target As Variable = envir.FindSymbol(symbolName)
+        Friend Shared Function GetSymbol(symbolName As Expression) As String
+            Select Case symbolName.GetType
+                Case GetType(Literal)
+                    Return DirectCast(symbolName, Literal).value
+                Case GetType(SymbolReference)
+                    Return DirectCast(symbolName, SymbolReference).symbol
+                Case Else
+                    Throw New InvalidExpressionException
+            End Select
+        End Function
+
+        Private Shared Function assignSymbol(envir As Environment, symbolName As Expression, isByRef As Boolean, value As Object) As Message
+            Dim target As Variable = Nothing
+
+            Select Case symbolName.GetType
+                Case GetType(Literal)
+                    target = envir.FindSymbol(DirectCast(symbolName, Literal).value)
+                Case GetType(SymbolReference)
+                    target = envir.FindSymbol(DirectCast(symbolName, SymbolReference).symbol)
+                Case GetType(SymbolIndexer)
+                    Throw New NotImplementedException
+                Case Else
+                    Throw New InvalidExpressionException
+            End Select
 
             If target Is Nothing Then
-                Return Message.SymbolNotFound(envir, symbolName, TypeCodes.generic)
+                Return Message.SymbolNotFound(envir, symbolName.ToString, TypeCodes.generic)
             End If
 
             If isByRef Then

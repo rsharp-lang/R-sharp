@@ -54,6 +54,9 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call tupleTest()
+        Call closureTest()
+
         Call lambdaTest()
         Call suppressTest()
 
@@ -61,7 +64,7 @@ Module interpreterTest
 
         Call lastSymbolTest()
 
-        Call closureTest()
+
         ' Call whichTest()
 
         '    Call elementIndexerTest()
@@ -98,7 +101,6 @@ Module interpreterTest
         Call listTest()
 
         Call declareFunctionTest()
-        Call tupleTest()
 
         Call declareTest()
         Call stringInterpolateTest()
@@ -165,6 +167,8 @@ let closure as function() {
         Call R.Evaluate("let holder = closure();")
         Call R.Evaluate("print(holder$getX());")
         Call R.Evaluate("holder$setX([123,233,333])")
+        Call R.Evaluate("print(holder$getX());")
+        Call R.Evaluate("print(holder$setX('123 AAAAA'));")
         Call R.Evaluate("print(holder$getX());")
 
         Pause()
@@ -516,6 +520,7 @@ return 999;
         Call R.Evaluate("let [x, y] = [[99, 66], 88];")
         Call R.Evaluate("let [a,b,c, d] = [12,3,6, x / 3.3];")
         Call R.Evaluate("let [e,f,g,h,i,j,k] = FALSE;")
+        Call R.Evaluate("[x , a] <- list(55555, FALSE)")
 
         Call R.PrintMemory()
 

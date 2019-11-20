@@ -143,6 +143,16 @@ Namespace Interpreter.ExecuteEngine
                         Return New ValueAssign(code)
                     End If
                 End If
+            ElseIf code(1).isOperator("=", "<-") Then
+                ' tuple value assign
+                Dim tuple = code(Scan0).Skip(1) _
+                    .Take(code(Scan0).Length - 2) _
+                    .SplitByTopLevelDelimiter(TokenType.comma) _
+                    .Select(AddressOf Expression.CreateExpression) _
+                    .ToArray
+                Dim value = code(2)
+
+                Return New ValueAssign(tuple, Expression.CreateExpression(value))
             ElseIf code = 2 Then
                 If code(Scan0).Length = 1 AndAlso code(Scan0)(Scan0) = (TokenType.operator, "$") Then
                     Return New FunctionInvoke(code.IteratesALL.ToArray)
