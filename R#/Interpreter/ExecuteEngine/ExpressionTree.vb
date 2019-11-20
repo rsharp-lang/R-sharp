@@ -73,6 +73,8 @@ Namespace Interpreter.ExecuteEngine
                     Return New StringInterpolation(tokens(Scan0))
                 ElseIf tokens(Scan0).name = TokenType.cliShellInvoke Then
                     Return New CommandLine(tokens(Scan0))
+                ElseIf tokens(Scan0) = (TokenType.operator, "$") Then
+                    Return New SymbolReference("$")
                 Else
                     blocks = New List(Of Token()) From {tokens}
                 End If
@@ -165,7 +167,7 @@ Namespace Interpreter.ExecuteEngine
                     Throw New NotImplementedException
                 ElseIf buf = 3 AndAlso buf(1) Like GetType(String) AndAlso buf(1).TryCast(Of String) Like ExpressionSignature.valueAssignOperatorSymbols Then
                     ' set value by name
-                    Throw New NotImplementedException
+                    Return New MemberValueAssign(buf(Scan0), buf(2))
                 End If
 
                 Throw New SyntaxErrorException
@@ -181,15 +183,23 @@ Namespace Interpreter.ExecuteEngine
                 opSymbol:="$",
                 expression:=Function(a, b)
                                 Dim nameSymbol As String
+                                Dim typeofName As Type = b.GetUnderlyingType
 
-                                If b.GetUnderlyingType Is GetType(SymbolReference) Then
+                                If typeofName Is GetType(SymbolReference) Then
                                     nameSymbol = DirectCast(b.VA, SymbolReference).symbol
-                                Else
+                                ElseIf typeofName Is GetType(Literal) Then
                                     nameSymbol = DirectCast(b.VA, Literal).value
+                                ElseIf typeofName Is GetType(FunctionInvoke) Then
+                                    Dim invoke As FunctionInvoke = b
+                                    Dim funcVar As New SymbolIndexer(a.VA, invoke.funcName)
+
+                                    Return New FunctionInvoke(funcVar, invoke.parameters.ToArray)
+                                Else
+                                    Throw New NotImplementedException
                                 End If
 
-                                Dim symbolRef As New SymbolIndexer(a.VA, nameSymbol)
-
+                                ' a$b symbol reference
+                                Dim symbolRef As New SymbolIndexer(a.VA, New Literal(nameSymbol))
                                 Return symbolRef
                             End Function)
         End Sub

@@ -125,10 +125,13 @@ Namespace Interpreter.ExecuteEngine
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function Evaluate(envir As Environment) As Object
-            ' Return Environment.asRVector(TypeCodes.generic, value)
             Return value
         End Function
 
+        ''' <summary>
+        ''' Get string representation of the literal object value
+        ''' </summary>
+        ''' <returns></returns>
         Public Overrides Function ToString() As String
             If value Is Nothing Then
                 Return "NULL"
@@ -136,5 +139,15 @@ Namespace Interpreter.ExecuteEngine
                 Return value.ToString
             End If
         End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Overloads Shared Operator =(exp As Literal, literal As String) As Boolean
+            Return DirectCast(exp.value, String) = literal
+        End Operator
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Overloads Shared Operator <>(exp As Literal, literal As String) As Boolean
+            Return Not exp = literal
+        End Operator
     End Class
 End Namespace

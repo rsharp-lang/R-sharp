@@ -62,7 +62,9 @@ Module Terminal
                 If Not RProgram.isException(result) Then
                     If program.Count = 1 AndAlso program.isSimplePrintCall Then
                         ' do nothing
-                        If DirectCast(program.First, FunctionInvoke).funcName = "cat" Then
+                        Dim funcName As Literal = DirectCast(program.First, FunctionInvoke).funcName
+
+                        If funcName = "cat" Then
                             Call Console.WriteLine()
                         End If
                     Else
@@ -77,6 +79,7 @@ Type 'q()' to quit R.
 ")
         Call R.LoadLibrary("base")
         Call R.LoadLibrary("utils")
+        Call R.LoadLibrary("grDevices")
 
         Call New Shell(ps1, exec) With {
             .Quite = "q()"
@@ -89,7 +92,17 @@ Type 'q()' to quit R.
 
     <Extension>
     Private Function isSimplePrintCall(program As RProgram) As Boolean
-        Return TypeOf program.First Is FunctionInvoke AndAlso DirectCast(program.First, FunctionInvoke).funcName Like echo
+        If Not TypeOf program.First Is FunctionInvoke Then
+            Return False
+        End If
+
+        Dim funcName = DirectCast(program.First, FunctionInvoke).funcName
+
+        If Not TypeOf funcName Is Literal Then
+            Return False
+        Else
+            Return DirectCast(funcName, Literal).ToString Like echo
+        End If
     End Function
 End Module
 
