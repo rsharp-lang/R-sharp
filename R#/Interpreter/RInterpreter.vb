@@ -50,7 +50,6 @@
 Imports System.IO
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
-Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -61,7 +60,6 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
-Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Package
 
@@ -131,7 +129,7 @@ Namespace Interpreter
                     $"package: {packageName}"
                 }.Join(message.Message)
 
-                Call printErrorInternal(message)
+                Call printMessageInternal(message)
             Else
                 Call ImportsPackage.ImportsStatic(globalEnvir, package.package)
             End If
@@ -201,7 +199,13 @@ Namespace Interpreter
             last.value = result
 
             If Program.isException(result) Then
-                Call printErrorInternal(message:=result)
+                Call printMessageInternal(message:=result)
+            End If
+
+            If globalEnvir.messages > 0 Then
+                For Each message As Message In globalEnvir.messages
+                    Call message.DoCall(AddressOf printMessageInternal)
+                Next
             End If
 
             Return result
@@ -225,26 +229,6 @@ Namespace Interpreter
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function Source(filepath$, ParamArray arguments As NamedValue(Of Object)()) As Object
             Return RunInternal(filepath.ReadAllText, filepath.ToFileURL, arguments)
-        End Function
-
-        Private Function printErrorInternal(message As Message) As Object
-            Dim execRoutine$ = message.EnvironmentStack _
-                .Reverse _
-                .Select(Function(frame) frame.Method.Method) _
-                .JoinBy(" -> ")
-            Dim i As i32 = 1
-            Dim backup = Console.ForegroundColor
-
-            Console.ForegroundColor = ConsoleColor.Red
-            Console.WriteLine($" Error in {execRoutine}")
-
-            For Each msg As String In message
-                Console.WriteLine($"  {++i}. {msg}")
-            Next
-
-            Console.ForegroundColor = backup
-
-            Return Nothing
         End Function
 
         Public Shared ReadOnly Property Rsharp As New RInterpreter

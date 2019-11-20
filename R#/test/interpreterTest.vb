@@ -113,6 +113,8 @@ Module interpreterTest
 }")
         Call R.Evaluate("let none = suppress ex();")
         Call R.Evaluate("print(none);")
+
+        Pause()
     End Sub
 
     Sub closureEnvironmentTest()
