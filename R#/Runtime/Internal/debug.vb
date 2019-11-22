@@ -1,4 +1,5 @@
 ﻿Imports Microsoft.VisualBasic.My
+Imports Microsoft.VisualBasic.Text
 
 Namespace Runtime.Internal
 
@@ -21,7 +22,7 @@ Namespace Runtime.Internal
         Public Shared Sub write(message$, Optional color As ConsoleColor = ConsoleColor.White)
             If verbose Then
                 Call VBDebugger.WaitOutput()
-                Call Log4VB.Print(message, color)
+                Call Log4VB.Print(message & ASCII.LF, color)
             End If
         End Sub
 
