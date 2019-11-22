@@ -1,3 +1,3 @@
 require(grDevices);
 
-rgb(1,1,1);
+print(rgb(1,1,1));
