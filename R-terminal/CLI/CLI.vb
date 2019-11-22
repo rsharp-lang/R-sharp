@@ -43,6 +43,7 @@ Imports System.ComponentModel
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports R.exec
+Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 Imports SMRUCC.Rsharp.Runtime.Package
 
@@ -53,8 +54,11 @@ Module CLI
     <Usage("--install.packages /module <*.dll> [--verbose]")>
     Public Function Install(args As CommandLine) As Integer
         Dim module$ = args <= "/module"
-        Dim verboseMode As Boolean = args("--verbose")
         Dim config As New Options(ConfigFile.localConfigs)
+
+        Internal.debug.verbose = args("--verbose")
+        Internal.debug.write($"load config file: {ConfigFile.localConfigs}")
+        Internal.debug.write($"load package registry: {config.lib}")
 
         If [module].StringEmpty Then
             Return "Missing '/module' argument!".PrintException
