@@ -1,47 +1,48 @@
 ﻿#Region "Microsoft.VisualBasic::c076e6cd3d7ca06bbaeef7e0492c7951, R#\Runtime\Internal\printer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module printer
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Sub: printInternal
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module printer
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Sub: printInternal
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Drawing
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Linq
@@ -57,50 +58,76 @@ Namespace Runtime.Internal
         ReadOnly RtoString As New Dictionary(Of Type, IStringBuilder)
 
         Sub New()
-            RtoString(GetType(Color)) = Function(c) DirectCast(c, Color).ToHtmlColor
+            RtoString(GetType(Color)) = Function(c) DirectCast(c, Color).ToHtmlColor.ToLower
         End Sub
 
         Friend Sub printInternal(x As Object, listPrefix$)
             Dim valueType As Type = x.GetType
-            Dim isString As Boolean = valueType Is GetType(String) OrElse valueType Is GetType(String())
-            Dim elementType As Type = valueType.GetElementType
-            Dim toString = Function(o As Object) As String
-                               If isString Then
-                                   Return $"""{Scripting.ToString(o, "NULL")}"""
-                               ElseIf Not elementType Is Nothing AndAlso RtoString.ContainsKey(elementType) Then
-                                   Return RtoString(elementType)(o)
-                               Else
-                                   Return Scripting.ToString(o, "NULL")
-                               End If
-                           End Function
 
             If valueType.IsInheritsFrom(GetType(Array)) Then
-                Dim xVec As Array = DirectCast(x, Array)
-                Dim stringVec = From element As Object In xVec.AsQueryable Select toString(element)
-
-                Call Console.WriteLine($"[{xVec.Length}] " & stringVec.JoinBy(vbTab))
+                Call DirectCast(x, Array).printArray()
+            ElseIf valueType Is GetType(vector) Then
+                Call DirectCast(x, vector).data.printArray()
             ElseIf valueType Is GetType(Dictionary(Of String, Object)) Then
-                For Each slot In DirectCast(x, Dictionary(Of String, Object))
-                    Dim key$ = slot.Key
-
-                    If key.IsPattern("\d+") Then
-                        key = $"{listPrefix}[[{slot.Key}]]"
-                    Else
-                        key = $"{listPrefix}${slot.Key}"
-                    End If
-
-                    Call Console.WriteLine(key)
-                    Call printer.printInternal(slot.Value, key)
-                    Call Console.WriteLine()
-                Next
+                Call DirectCast(x, Dictionary(Of String, Object)).printList(listPrefix)
             ElseIf valueType Is GetType(dataframe) Then
                 Call DirectCast(x, dataframe) _
                     .GetTable _
                     .Print(addBorder:=False) _
                     .DoCall(AddressOf Console.WriteLine)
             Else
-                Call Console.WriteLine("[1] " & toString(x))
+                Call Console.WriteLine("[1] " & printer.ValueToString(x))
             End If
+        End Sub
+
+        <Extension>
+        Private Sub printList(list As Dictionary(Of String, Object), listPrefix$)
+            For Each slot As KeyValuePair(Of String, Object) In list
+                Dim key$ = slot.Key
+
+                If key.IsPattern("\d+") Then
+                    key = $"{listPrefix}[[{slot.Key}]]"
+                Else
+                    key = $"{listPrefix}${slot.Key}"
+                End If
+
+                Call Console.WriteLine(key)
+                Call printer.printInternal(slot.Value, key)
+                Call Console.WriteLine()
+            Next
+        End Sub
+
+        <Extension>
+        Private Function ValueToString(x As Object) As String
+            Return printer.ToString(x.GetType)(x)
+        End Function
+
+        <Extension>
+        Private Function ToString(elementType As Type) As IStringBuilder
+            If RtoString.ContainsKey(elementType) Then
+                Return RtoString(elementType)
+            ElseIf elementType Is GetType(String) Then
+                Return Function(o) As String
+                           If o Is Nothing Then
+                               Return "NULL"
+                           Else
+                               Return $"""{o}"""
+                           End If
+                       End Function
+            Else
+                Return Function(obj) Scripting.ToString(obj, "NULL")
+            End If
+        End Function
+
+        <Extension>
+        Private Sub printArray(xvec As Array)
+            Dim elementType As Type = xvec.GetType.GetElementType
+            Dim toString As IStringBuilder = printer.ToString(elementType)
+            Dim stringVec = From element As Object
+                            In xvec.AsQueryable
+                            Select toString(element)
+
+            Call Console.WriteLine($"[{xvec.Length}] " & stringVec.JoinBy(vbTab))
         End Sub
     End Module
 End Namespace
