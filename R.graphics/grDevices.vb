@@ -51,7 +51,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal
 <Package("grDevices", Category:=APICategories.UtilityTools)>
 Public Module grDevices
 
-    Dim devlist As New List(Of IGraphics)
+    Dim devlist As New Dictionary(Of Integer, IGraphics)
     Dim curDev As IGraphics
 
     ''' <summary>
@@ -72,7 +72,7 @@ Public Module grDevices
     ''' <returns></returns>
     <ExportAPI("dev.cur")>
     Public Function devCur() As Integer
-
+        Return curDev.GetHashCode
     End Function
 
     ''' <summary>
