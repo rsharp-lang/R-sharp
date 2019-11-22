@@ -42,8 +42,10 @@
 
 #End Region
 
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 Imports SMRUCC.Rsharp.Runtime.Package
+Imports RPkg = SMRUCC.Rsharp.Runtime.Package.Package
 
 Namespace Runtime
 
@@ -61,5 +63,26 @@ Namespace Runtime
             Me.global = Me
         End Sub
 
+        Public Function LoadLibrary(packageName As String) As Message
+            Dim exception As Exception = Nothing
+            Dim package As RPkg = packages.FindPackage(packageName, exception)
+
+            Call Console.WriteLine($"Loading required package: {packageName}")
+
+            If package Is Nothing Then
+                Dim message As Message = Internal.stop(If(exception, New Exception("No packages installed...")), Me)
+
+                message.Message = {
+                    $"there is no package called ‘{packageName}’",
+                    $"package: {packageName}"
+                }.Join(message.Message)
+
+                Return message
+            Else
+                Call ImportsPackage.ImportsStatic(Me, package.package)
+            End If
+
+            Return Nothing
+        End Function
     End Class
 End Namespace

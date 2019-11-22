@@ -116,22 +116,10 @@ Namespace Interpreter
         End Sub
 
         Public Sub LoadLibrary(packageName As String)
-            Dim exception As Exception = Nothing
-            Dim package As Package = globalEnvir.packages.FindPackage(packageName, exception)
+            Dim result As Message = globalEnvir.LoadLibrary(packageName)
 
-            Call Console.WriteLine($"Loading required package: {packageName}")
-
-            If package Is Nothing Then
-                Dim message As Message = Internal.stop(If(exception, New Exception("No packages installed...")), globalEnvir)
-
-                message.Message = {
-                    $"there is no package called ‘{packageName}’",
-                    $"package: {packageName}"
-                }.Join(message.Message)
-
-                Call printMessageInternal(message)
-            Else
-                Call ImportsPackage.ImportsStatic(globalEnvir, package.package)
+            If Not result Is Nothing Then
+                Call Interpreter.printMessageInternal(result)
             End If
         End Sub
 
