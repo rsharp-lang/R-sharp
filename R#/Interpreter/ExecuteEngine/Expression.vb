@@ -117,6 +117,8 @@ Namespace Interpreter.ExecuteEngine
                             .DoCall(AddressOf Expression.CreateExpression)
 
                         Return New Suppress(evaluate)
+                    Case "require"
+
                     Case Else
                         Throw New SyntaxErrorException
                 End Select

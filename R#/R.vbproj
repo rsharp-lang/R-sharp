@@ -146,7 +146,7 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\MemberValueAssign.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\SymbolIndexer.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CommandLine.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Imports.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Packages\Imports.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\LinqExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DeclareLambdaFunction.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ElseBranch.vb" />
