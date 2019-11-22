@@ -118,7 +118,13 @@ Namespace Interpreter.ExecuteEngine
 
                         Return New Suppress(evaluate)
                     Case "require"
-
+                        Return code(1) _
+                            .Skip(1) _
+                            .Take(code(1).Length - 2) _
+                            .ToArray _
+                            .DoCall(Function(tokens)
+                                        Return New Require(tokens)
+                                    End Function)
                     Case Else
                         Throw New SyntaxErrorException
                 End Select
