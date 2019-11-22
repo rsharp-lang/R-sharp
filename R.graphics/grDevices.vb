@@ -72,7 +72,11 @@ Public Module grDevices
     ''' <returns></returns>
     <ExportAPI("dev.cur")>
     Public Function devCur() As Integer
-        Return curDev.GetHashCode
+        If curDev Is Nothing Then
+            Return -1
+        Else
+            Return curDev.GetHashCode
+        End If
     End Function
 
     ''' <summary>
