@@ -61,7 +61,6 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports SMRUCC.Rsharp.Runtime.Package
 
 Namespace Interpreter
 
@@ -86,7 +85,7 @@ Namespace Interpreter
                 envirConf = New Options(ConfigFile.localConfigs)
             End If
 
-            globalEnvir = New GlobalEnvironment(envirConf)
+            globalEnvir = New GlobalEnvironment(Me, envirConf)
             globalEnvir.Push(lastVariableName, Nothing, TypeCodes.generic)
         End Sub
 
