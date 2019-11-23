@@ -172,6 +172,23 @@ Namespace Interpreter.ExecuteEngine
                 If code(Scan0).Length = 1 AndAlso code(Scan0)(Scan0) = (TokenType.operator, "$") Then
                     Return New FunctionInvoke(code.IteratesALL.ToArray)
                 End If
+            ElseIf code = 3 Then
+                If code.isSequenceSyntax Then
+                    Dim seq = code(Scan0).SplitByTopLevelDelimiter(TokenType.sequence)
+                    Dim from = seq(Scan0)
+                    Dim [to] = seq(2)
+                    Dim steps As Token() = Nothing
+
+                    If code > 1 Then
+                        If code(1).isKeyword("step") Then
+                            steps = code(2)
+                        Else
+                            Throw New SyntaxErrorException
+                        End If
+                    End If
+
+                    Return New SequenceLiteral(from, [to], steps)
+                End If
             End If
 
             Return code.ParseBinaryExpression

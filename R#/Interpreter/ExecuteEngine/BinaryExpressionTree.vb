@@ -45,7 +45,7 @@ Namespace Interpreter.ExecuteEngine
             Call buf.processOperators(oplist, logicalOperators, test:=Function(op, o) op = o)
 
             If buf > 1 Then
-                If buf.isByrefCall Then
+                If buf.isByRefCall Then
                     Return New ByRefFunctionCall(buf(Scan0), buf(2))
                 ElseIf buf.isNamespaceReferenceCall Then
                     Dim calls As FunctionInvoke = buf(2).TryCast(Of Expression)

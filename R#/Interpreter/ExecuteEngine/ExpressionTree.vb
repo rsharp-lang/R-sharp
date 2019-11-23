@@ -83,12 +83,6 @@ Namespace Interpreter.ExecuteEngine
             End If
 
             If blocks = 1 Then
-                Dim complexSequence = tokens.SplitByTopLevelDelimiter(TokenType.sequence)
-
-                If complexSequence.Count = 3 OrElse complexSequence.Count = 5 Then
-                    Return New SequenceLiteral(complexSequence(0), complexSequence(2), complexSequence.ElementAtOrDefault(4))
-                End If
-
                 ' 简单的表达式
                 If tokens.isFunctionInvoke Then
                     Return New FunctionInvoke(tokens)
