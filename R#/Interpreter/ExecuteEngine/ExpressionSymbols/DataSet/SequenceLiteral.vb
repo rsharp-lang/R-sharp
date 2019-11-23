@@ -90,11 +90,11 @@ Namespace Interpreter.ExecuteEngine
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Private Shared Function isIntegerSequence(init As Object, stops As Object, offset As Object) As Boolean
-            Return New Object() {init, stops, offset} _
+            Return Not New Object() {init, stops, offset} _
                 .Any(Function(num)
                          Dim ntype As Type = num.GetType
 
-                         If ntype Is GetType(Double) OrElse ntype Is GetType(Double()) Then
+                         If ntype Like BinaryExpression.floats Then
                              Return True
                          Else
                              Return False

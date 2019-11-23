@@ -112,7 +112,8 @@ Module interpreterTest
     End Sub
 
     Sub sequenceGeneratorTest()
-        Call R.Evaluate("1:100 step 0.5")
+        Call R.Evaluate("let x <- 1:100 step 0.5")
+        Call R.Evaluate("print(x)")
 
         Pause()
     End Sub
