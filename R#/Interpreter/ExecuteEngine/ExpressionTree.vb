@@ -57,10 +57,29 @@ Namespace Interpreter.ExecuteEngine
             Dim blocks As List(Of Token()) = tokens.SplitByTopLevelDelimiter(TokenType.comma)
 
             If blocks = 1 Then
-                ' 是一个复杂的表达式
-                Return blocks(Scan0).ParseExpressionTree
+                Dim exp As Expression = blocks(Scan0).simpleSequence
+
+                If Not exp Is Nothing Then
+                    Return exp
+                Else
+                    ' 是一个复杂的表达式
+                    Return blocks(Scan0).ParseExpressionTree
+                End If
             Else
                 Throw New NotImplementedException
+            End If
+        End Function
+
+        <Extension>
+        Private Function simpleSequence(tokens As Token()) As SequenceLiteral
+            Dim blocks = tokens.SplitByTopLevelDelimiter(TokenType.sequence)
+
+            If blocks = 3 Then
+                Return New SequenceLiteral(blocks(Scan0), blocks(2), Nothing)
+            ElseIf blocks = 5 Then
+                Return New SequenceLiteral(blocks(Scan0), blocks(2), blocks.ElementAtOrDefault(4))
+            Else
+                Return Nothing
             End If
         End Function
 
