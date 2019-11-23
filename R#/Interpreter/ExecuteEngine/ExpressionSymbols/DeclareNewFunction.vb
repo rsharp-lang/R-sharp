@@ -120,6 +120,7 @@ Namespace Interpreter.ExecuteEngine
             Dim var As DeclareNewVariable
             Dim value As Object
             Dim arguments As Dictionary(Of String, Object)
+            Dim envir As Environment = Me.envir
 
             If envir Is Nothing Then
                 envir = parent
