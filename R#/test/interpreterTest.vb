@@ -325,7 +325,7 @@ print(zzz);
     End Sub
 
     Sub iifTest()
-        Call R.Evaluate("1 > 0 ? 999 : 777")
+        Call R.Evaluate("print(1 > 0 ? 999 : 777)")
 
         Pause()
     End Sub
