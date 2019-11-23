@@ -42,7 +42,10 @@
 Imports System.Drawing
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Imaging
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
@@ -126,16 +129,54 @@ Public Module grDevices
     ''' NA values are Not allowed For any Of red, blue, green Or alpha.
     ''' </remarks>
     <ExportAPI("rgb")>
-    Public Function rgb(red As Integer,
-                        green As Integer,
-                        blue As Integer,
-                        Optional alpha As Integer = 255,
+    Public Function rgb(red As Integer(),
+                        green As Integer(),
+                        blue As Integer(),
+                        Optional alpha As Integer() = Nothing,
                         Optional names As String() = Nothing,
-                        Optional maxColorValue As Integer = 1) As vector
+                        Optional maxColorValue As Integer = 1,
+                        Optional envir As Environment = Nothing) As vector
 
-        Return New vector With {
-            .data = {Color.FromArgb(alpha, red, green, blue)}
+        If alpha.IsNullOrEmpty Then
+            alpha = {255}
+        ElseIf {red, green, blue}.Any(Function(bytes) bytes.IsNullOrEmpty) Then
+            Return Nothing
+        End If
+
+        Dim populate As Func(Of IEnumerable(Of Color)) =
+            Iterator Function() As IEnumerable(Of Color)
+                Dim counts As i32 = Scan0
+
+                For Each r As Integer In red
+                    For Each g As Integer In green
+                        For Each b As Integer In blue
+                            For Each a As Integer In alpha
+                                If ++counts = maxColorValue Then
+                                    GoTo break
+                                Else
+                                    Yield Color.FromArgb(a, r, g, b)
+                                End If
+                            Next
+                        Next
+                    Next
+                Next
+break:
+                ' exit iterator loops
+            End Function
+        Dim colors As New vector With {
+            .data = populate().ToArray
         }
+        Dim result As Object = Nothing
+
+        If Not names.IsNullOrEmpty Then
+            result = colors.setNames(names, envir)
+        End If
+
+        If Not result Is Nothing AndAlso result.GetType Is GetType(Message) Then
+            Return result
+        Else
+            Return colors
+        End If
     End Function
 End Module
 
