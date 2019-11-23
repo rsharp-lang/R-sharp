@@ -136,7 +136,13 @@ Namespace Interpreter.ExecuteEngine
                 ElseIf item.isIdentifier Then
                     Return New SymbolReference(item(Scan0))
                 Else
-                    Return item.CreateTree
+                    Dim ifelse = item.ifElseTriple
+
+                    If ifelse.ifelse Is Nothing Then
+                        Return item.CreateTree
+                    Else
+                        Return New IIfExpression(ifelse.test, ifelse.ifelse)
+                    End If
                 End If
             ElseIf code > 2 AndAlso (code(Scan0).isIdentifier OrElse code(Scan0).isTuple) AndAlso code(1).isOperator("->", "=>") Then
                 ' is a lambda function
