@@ -89,6 +89,16 @@ Namespace Runtime.Internal
         End Function
 
         ''' <summary>
+        ''' 运行外部脚本
+        ''' </summary>
+        ''' <param name="path"></param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
+        Public Function source(path As String, envir As Environment) As Object
+            Return envir.globalEnvironment.Rscript.Source(path,)
+        End Function
+
+        ''' <summary>
         ''' ###### Options Settings
         ''' 
         ''' Allow the user to set and examine a variety of global options which 
