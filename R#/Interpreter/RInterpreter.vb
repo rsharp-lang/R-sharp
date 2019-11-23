@@ -207,7 +207,8 @@ Namespace Interpreter
         End Function
 
         ''' <summary>
-        ''' Run R# script program from a given script file 
+        ''' Run R# script program from a given script file.
+        ''' (运行脚本的时候调用的是<see cref="globalEnvir"/>全局环境)
         ''' </summary>
         ''' <param name="filepath">The script file path.</param>
         ''' <param name="arguments"></param>

@@ -155,6 +155,14 @@ Namespace Runtime.Internal
                     End If
                 Case "names"
                     Return base.names(paramVals(Scan0), Nothing, envir)
+                Case "source"
+                    If paramVals.IsNullOrEmpty Then
+                        Return invoke.missingParameter("source", "file", envir)
+                    Else
+                        Dim file As String = Scripting.ToString(Runtime.getFirst(paramVals(Scan0)))
+                        ' run external script
+                        Return base.source(file,, envir)
+                    End If
                 Case "get"
                     Return base.get(paramVals(Scan0), envir)
                 Case "print"

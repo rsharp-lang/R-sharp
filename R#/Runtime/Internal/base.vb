@@ -45,13 +45,16 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 
 Namespace Runtime.Internal
@@ -94,8 +97,13 @@ Namespace Runtime.Internal
         ''' <param name="path"></param>
         ''' <param name="envir"></param>
         ''' <returns></returns>
-        Public Function source(path As String, envir As Environment) As Object
-            Return envir.globalEnvironment.Rscript.Source(path,)
+        Public Function source(path As String, Optional arguments As Object = Nothing, Optional envir As Environment = Nothing) As Object
+            Dim args As NamedValue(Of Object)() = RListObjectArgumentAttribute _
+                .getObjectList(arguments, envir) _
+                .ToArray
+            Dim R As RInterpreter = envir.globalEnvironment.Rscript
+
+            Return R.Source(path, args)
         End Function
 
         ''' <summary>

@@ -134,10 +134,13 @@ Partial Module base
         Dim value As CDFData
         Dim maxChartSize As Integer = 2048
         Dim length As cdfAttribute
+        Dim objList As NamedValue(Of Object)() = RListObjectArgumentAttribute _
+            .getObjectList(objects, envir) _
+            .ToArray
 
         Using cdf As CDFWriter = New CDFWriter(tmp).GlobalAttributes(
             New cdfAttribute With {.name = "program", .type = CDFDataTypes.CHAR, .value = "SMRUCC/R#"},
-            New cdfAttribute With {.name = "numOfObjects", .type = CDFDataTypes.INT, .value = objList.Count},
+            New cdfAttribute With {.name = "numOfObjects", .type = CDFDataTypes.INT, .value = objList.Length},
             New cdfAttribute With {.name = "maxCharSize", .type = CDFDataTypes.INT, .value = maxChartSize}
         ).Dimensions(Dimension.Byte,
                      Dimension.Double,
