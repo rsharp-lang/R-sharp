@@ -132,7 +132,7 @@ Namespace Runtime.Internal
             Select Case funcName
                 Case "any" : Return base.any(paramVals(Scan0))
                 Case "all" : Return base.all(paramVals(Scan0))
-                Case "length" : Return DirectCast(paramVals(Scan0), Array).Length
+                Case "length" : Return base.length(paramVals(Scan0))
                 Case "round"
                     Dim x As Object = paramVals(Scan0)
                     Dim decimals As Integer = Runtime.getFirst(paramVals(1))

@@ -52,6 +52,11 @@ Namespace Runtime.Internal
     Public Class vector : Implements RNames, RIndex
 
         Public Property data As Array
+        Public ReadOnly Property length As Integer Implements RIndex.length
+            Get
+                Return data.Length
+            End Get
+        End Property
 
         Dim names As String()
         Dim nameIndex As Index(Of String)

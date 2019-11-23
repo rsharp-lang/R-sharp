@@ -61,6 +61,23 @@ Namespace Runtime.Internal
     ''' </summary>
     Public Module base
 
+        ''' <summary>
+        ''' Get vector length
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
+        Public Function length(x As Object) As Integer
+            If x Is Nothing Then
+                Return 0
+            ElseIf x.GetType.IsArray Then
+                Return DirectCast(x, Array).Length
+            ElseIf x.GetType.ImplementInterface(GetType(RIndex)) Then
+                Return DirectCast(x, RIndex).length
+            Else
+                Return 1
+            End If
+        End Function
+
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function any(test As Object) As Object
             Return Runtime.asLogical(test).Any(Function(b) b = True)
@@ -84,7 +101,7 @@ Namespace Runtime.Internal
         ''' <param name="envir"></param>
         ''' <returns></returns>
         Public Function options(opts As Object, envir As Environment) As Object
-            Dim configs As Options = envir.GlobalEnvironment.options
+            Dim configs As Options = envir.globalEnvironment.options
 
             For Each value In DirectCast(opts, list).slots
                 Try
