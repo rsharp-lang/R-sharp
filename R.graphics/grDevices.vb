@@ -151,7 +151,7 @@ Public Module grDevices
                     For Each g As Integer In green
                         For Each b As Integer In blue
                             For Each a As Integer In alpha
-                                If ++counts = maxColorValue Then
+                                If maxColorValue > 0 AndAlso ++counts = maxColorValue Then
                                     GoTo break
                                 Else
                                     Yield Color.FromArgb(a, r, g, b)
