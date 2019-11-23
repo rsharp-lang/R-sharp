@@ -54,6 +54,7 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call iifTest()
         Call closureTest()
         Call tupleTest()
 
@@ -84,7 +85,7 @@ Module interpreterTest
 
         Call linqTest()
         Call pipelineTest()
-        Call iifTest()
+
         Call testScript()
 
         Call symbolNotFoundTest()
@@ -324,7 +325,7 @@ print(zzz);
     End Sub
 
     Sub iifTest()
-        Call R.Evaluate("x > 0 ? 999 : 777")
+        Call R.Evaluate("print(1 > 0 ? 999 : 777)")
 
         Pause()
     End Sub

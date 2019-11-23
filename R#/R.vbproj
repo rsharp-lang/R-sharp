@@ -168,6 +168,7 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DeclareNewVariable.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionTree.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSignature.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\BinaryExpressionTree.vb" />
     <Compile Include="Interpreter\Extensions.vb" />
     <Compile Include="Interpreter\Program.vb" />
     <Compile Include="Interpreter\RInterpreter.vb" />
