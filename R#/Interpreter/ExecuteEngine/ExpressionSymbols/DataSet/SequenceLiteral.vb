@@ -126,5 +126,9 @@ Namespace Interpreter.ExecuteEngine
                 Return seq.ToArray
             End If
         End Function
+
+        Public Overrides Function ToString() As String
+            Return $"{from}:{[to]} step {steps}"
+        End Function
     End Class
 End Namespace
