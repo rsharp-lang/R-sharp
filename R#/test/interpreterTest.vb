@@ -54,6 +54,7 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call sequenceGeneratorTest()
         Call iifTest()
         Call closureTest()
         Call tupleTest()
@@ -106,6 +107,12 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub sequenceGeneratorTest()
+        Call R.Evaluate("1:100 step 0.5")
 
         Pause()
     End Sub

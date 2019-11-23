@@ -183,7 +183,7 @@ Namespace Language.TokenIcer
         ReadOnly shortOperators As Index(Of Char) = {"$"c, "+"c, "*"c, "/"c, "%"c, "^"c, "!"c}
         ReadOnly keywords As Index(Of String) = {
             "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string",
-            "const", "imports", "require",
+            "const", "imports", "require", "library",
             "if", "else", "for", "loop", "while", "repeat", "step",
             "in", "like", "which", "from", "where", "order", "by", "distinct", "select",
             "ascending", "descending",
