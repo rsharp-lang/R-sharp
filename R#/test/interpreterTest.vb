@@ -54,6 +54,7 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call forLoop2()
         Call sequenceGeneratorTest()
         Call iifTest()
         Call closureTest()
@@ -382,6 +383,17 @@ print(zzz);
         'Call R.Invoke("debug", R!x)
 
         'Pause()
+    End Sub
+
+    Sub forLoop2()
+        Call R.Evaluate("
+
+for(x in 1:5 step 0.5) {
+	print(`x -> ${x}`);
+}
+")
+
+        Pause()
     End Sub
 
     Sub forLoopTest()

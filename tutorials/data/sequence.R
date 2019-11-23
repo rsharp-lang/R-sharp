@@ -11,3 +11,7 @@ print(1:10 step 0.5);
 
 print('A numeric sequence with step 1.0');
 print(1.0:10.0);
+
+for(x in 1:5 step 0.5) {
+	print(`x -> ${x}`);
+}
