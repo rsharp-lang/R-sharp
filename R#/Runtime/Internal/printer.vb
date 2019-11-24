@@ -53,12 +53,21 @@ Namespace Runtime.Internal
     ''' <summary>
     ''' R# console nice print supports.
     ''' </summary>
-    Module printer
+    Public Module printer
 
         ReadOnly RtoString As New Dictionary(Of Type, IStringBuilder)
 
         Sub New()
             RtoString(GetType(Color)) = Function(c) DirectCast(c, Color).ToHtmlColor.ToLower
+        End Sub
+
+        ''' <summary>
+        ''' <see cref="Object"/> -> <see cref="String"/>
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="formatter"></param>
+        Public Sub AttachConsoleFormatter(Of T)(formatter As IStringBuilder)
+            RtoString(GetType(T)) = formatter
         End Sub
 
         Friend Sub printInternal(x As Object, listPrefix$)
