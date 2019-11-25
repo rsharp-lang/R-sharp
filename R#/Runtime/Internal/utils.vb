@@ -40,9 +40,7 @@
 
 #End Region
 
-Imports System.Reflection
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Package
@@ -89,22 +87,6 @@ Namespace Runtime.Internal
         Public Function GetInstalledPackages(envir As Environment) As Object
 
 
-        End Function
-
-        ''' <summary>
-        ''' A utils function for print user defined structure and class object instance. 
-        ''' </summary>
-        ''' <param name="obj">
-        ''' The object class is ensure that not nothing!
-        ''' </param>
-        ''' <returns></returns>
-        ''' <remarks>
-        ''' All of the  method is non generic, and the property without arguments!
-        ''' </remarks>
-        Public Function printClass(obj As Object) As String
-            Dim type As Type = obj.GetType
-            Dim properties As PropertyInfo() = type.GetProperties(PublicProperty).Where(Function(p) p.GetIndexParameters.IsNullOrEmpty).ToArray
-            Dim methods As MethodInfo() = type.GetMethods(PublicProperty).Where(Function(m) Not m.ContainsGenericParameters).ToArray
         End Function
     End Module
 End Namespace

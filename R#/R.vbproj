@@ -200,8 +200,9 @@
     <Compile Include="Runtime\Components\Interface\RPrint.vb" />
     <Compile Include="Runtime\Components\Interface\RFunction.vb" />
     <Compile Include="Runtime\Internal\debug.vb" />
+    <Compile Include="Runtime\Internal\printer\classPrinter.vb" />
     <Compile Include="Runtime\Internal\utils.vb" />
-    <Compile Include="Runtime\Internal\printer.vb" />
+    <Compile Include="Runtime\Internal\printer\printer.vb" />
     <Compile Include="Runtime\Interop\MethodInvoke.vb" />
     <Compile Include="Runtime\Interop\RInteropAttribute.vb" />
     <Compile Include="Runtime\Interop\RMethodArgument.vb" />
