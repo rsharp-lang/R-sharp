@@ -41,12 +41,11 @@
 #End Region
 
 Imports System.Reflection
+Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Package
-Imports Microsoft.VisualBasic.Language
-Imports Microsoft.VisualBasic.CommandLine.Reflection
 
 Namespace Runtime.Internal
 
