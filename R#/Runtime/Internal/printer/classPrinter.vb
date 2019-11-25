@@ -22,8 +22,8 @@ Namespace Runtime.Internal
         ''' </remarks>
         Public Function printClass(obj As Object) As String
             Dim type As Type = obj.GetType
-            Dim properties As PropertyInfo() = type.GetProperties.ToArray
-            Dim methods As MethodInfo() = type.GetMethods.ToArray
+            Dim properties As PropertyInfo() = type.getObjProperties.ToArray
+            Dim methods As MethodInfo() = type.getObjMethods.ToArray
             Dim sb As New StringBuilder
 
             Call sb.AppendLine($"namespace: {type.Namespace}")
@@ -64,7 +64,7 @@ Namespace Runtime.Internal
 
         <Extension>
         Private Function getMemberValueString([property] As PropertyInfo, obj As Object) As String
-            Dim value As Object = [property].GetValue(obj)
+            Dim value As Object = [property].GetValue(obj, Nothing)
             Dim type As Type = [property].PropertyType
 
             If value Is Nothing Then
@@ -84,7 +84,7 @@ Namespace Runtime.Internal
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
-        Private Function getMethods(type As Type) As IEnumerable(Of MethodInfo)
+        Private Function getObjMethods(type As Type) As IEnumerable(Of MethodInfo)
             Return type _
                 .GetMethods(PublicProperty) _
                 .Where(Function(m)
@@ -94,7 +94,7 @@ Namespace Runtime.Internal
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
-        Private Function getProperties(type As Type) As IEnumerable(Of PropertyInfo)
+        Private Function getObjProperties(type As Type) As IEnumerable(Of PropertyInfo)
             Return type _
                 .GetProperties(PublicProperty) _
                 .Where(Function(p)
