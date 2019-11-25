@@ -3,6 +3,7 @@ Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Runtime.Internal
 
@@ -31,19 +32,34 @@ Namespace Runtime.Internal
             Call sb.AppendLine($" {properties.Length} properties")
 
             Dim valueStr$
+            Dim typeCode$
 
             For Each [property] As PropertyInfo In properties
-                Call sb.AppendLine($"  ${[property].Name} as {[property].PropertyType.GetRTypeCode} = {Scripting.ToString([property].GetValue(obj))}")
+                valueStr = [property].getMemberValueString(obj)
+                typeCode = [property].PropertyType.getTypeDisplay
+
+                Call sb.AppendLine($"  ${[property].Name} as {typeCode}: {valueStr}")
             Next
 
             Call sb.AppendLine()
             Call sb.AppendLine($" {methods.Length} methods")
 
             For Each method As MethodInfo In methods
-                Call sb.AppendLine($"  -> {method.Name}")
+                Call sb.AppendLine($"  &{method.Name} -> {method.ReturnType.getTypeDisplay}")
             Next
 
             Return sb.ToString
+        End Function
+
+        <Extension>
+        Private Function getTypeDisplay(type As Type) As String
+            Dim code As TypeCodes = type.GetRTypeCode
+
+            If code = TypeCodes.generic Then
+                Return type.Name
+            Else
+                Return type.Description
+            End If
         End Function
 
         <Extension>
@@ -60,7 +76,9 @@ Namespace Runtime.Internal
             Dim valStr As String = Scripting.ToString(value, "NULL")
 
             If valStr Is Nothing Then
-
+                Return "<unavailable>"
+            Else
+                Return valStr
             End If
         End Function
 
