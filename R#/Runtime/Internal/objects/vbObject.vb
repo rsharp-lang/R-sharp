@@ -16,8 +16,12 @@ Namespace Runtime.Internal
             type = New RType(obj.GetType)
         End Sub
 
+        Public Function getNames() As String() Implements IReflector.getNames
+            Return type.getNames
+        End Function
+
         ''' <summary>
-        ''' Get property value by name
+        ''' Get property value/method reference by name
         ''' </summary>
         ''' <param name="name"></param>
         ''' <returns></returns>
@@ -34,10 +38,24 @@ Namespace Runtime.Internal
             Throw New NotImplementedException()
         End Function
 
+        ''' <summary>
+        ''' set property value by name
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <param name="value"></param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         Public Function setByName(name As String, value As Object, envir As Environment) As Object Implements RNameIndex.setByName
             Throw New NotImplementedException()
         End Function
 
+        ''' <summary>
+        ''' set properties values by given name list
+        ''' </summary>
+        ''' <param name="names"></param>
+        ''' <param name="value"></param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         Public Function setByName(names() As String, value As Array, envir As Environment) As Object Implements RNameIndex.setByName
             Throw New NotImplementedException()
         End Function
