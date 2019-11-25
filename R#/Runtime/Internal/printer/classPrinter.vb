@@ -25,7 +25,21 @@ Namespace Runtime.Internal
             Dim methods As MethodInfo() = type.GetMethods.ToArray
             Dim sb As New StringBuilder
 
+            Call sb.AppendLine($"namespace: {type.Namespace}")
+            Call sb.AppendLine($"instance of '{type.Name}'")
+            Call sb.AppendLine()
+            Call sb.AppendLine($" {properties.Length} properties")
 
+            For Each [property] As PropertyInfo In properties
+                Call sb.AppendLine($"  ${[property].Name}")
+            Next
+
+            Call sb.AppendLine()
+            Call sb.AppendLine($" {methods.Length} methods")
+
+            For Each method As MethodInfo In methods
+                Call sb.AppendLine($"  -> {method.Name}")
+            Next
 
             Return sb.ToString
         End Function
