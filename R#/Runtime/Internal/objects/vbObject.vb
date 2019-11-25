@@ -1,4 +1,5 @@
-﻿Imports SMRUCC.Rsharp.Runtime.Components.Interface
+﻿Imports System.Reflection
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal
@@ -11,9 +12,19 @@ Namespace Runtime.Internal
         Public ReadOnly Property target As Object
         Public ReadOnly Property type As RType
 
+        Dim properties As Dictionary(Of String, PropertyInfo)
+        Dim methods As Dictionary(Of String, RMethodInfo)
+
         Sub New(obj As Object)
             target = obj
             type = New RType(obj.GetType)
+            properties = type.raw.getObjProperties.ToDictionary(Function(p) p.Name)
+            methods = type.raw _
+                .getObjMethods _
+                .ToDictionary(Function(m) m.Name,
+                              Function(m)
+                                  Return New RMethodInfo(m.Name, m, target)
+                              End Function)
         End Sub
 
         Public Function getNames() As String() Implements IReflector.getNames
@@ -26,7 +37,13 @@ Namespace Runtime.Internal
         ''' <param name="name"></param>
         ''' <returns></returns>
         Public Function getByName(name As String) As Object Implements RNameIndex.getByName
-            Throw New NotImplementedException()
+            If properties.ContainsKey(name) Then
+                Return properties(name).GetValue(target)
+            ElseIf methods.ContainsKey(name) Then
+                Return methods(name)
+            Else
+                Return Nothing
+            End If
         End Function
 
         ''' <summary>
@@ -35,7 +52,7 @@ Namespace Runtime.Internal
         ''' <param name="names"></param>
         ''' <returns></returns>
         Public Function getByName(names() As String) As Object Implements RNameIndex.getByName
-            Throw New NotImplementedException()
+            Return names.Select(AddressOf getByName).ToArray
         End Function
 
         ''' <summary>
@@ -46,7 +63,17 @@ Namespace Runtime.Internal
         ''' <param name="envir"></param>
         ''' <returns></returns>
         Public Function setByName(name As String, value As Object, envir As Environment) As Object Implements RNameIndex.setByName
-            Throw New NotImplementedException()
+            If properties.ContainsKey(name) Then
+                If properties(name).CanWrite Then
+                    properties(name).SetValue(target, value)
+                Else
+                    Return Internal.stop($"Target property '{name}' is not writeable!", envir)
+                End If
+            Else
+                Return Internal.stop($"Missing property '{name}'", envir)
+            End If
+
+            Return value
         End Function
 
         ''' <summary>
@@ -57,7 +84,7 @@ Namespace Runtime.Internal
         ''' <param name="envir"></param>
         ''' <returns></returns>
         Public Function setByName(names() As String, value As Array, envir As Environment) As Object Implements RNameIndex.setByName
-            Throw New NotImplementedException()
+            Return Internal.stop(New InvalidProgramException, envir)
         End Function
     End Class
 End Namespace
