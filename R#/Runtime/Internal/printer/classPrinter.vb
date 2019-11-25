@@ -35,12 +35,15 @@ Namespace Runtime.Internal
 
             Dim valueStr$
             Dim typeCode$
+            Dim rw$
 
             For Each [property] As PropertyInfo In properties
                 valueStr = [property].getMemberValueString(obj)
                 typeCode = [property].PropertyType.getTypeDisplay
+                rw = If([property].CanRead, "r", "")
+                rw = If([property].CanWrite, If(rw.Length = 0, "w", rw & "/w"), rw)
 
-                Call sb.AppendLine($"  ${[property].Name} as {typeCode}: {valueStr}")
+                Call sb.AppendLine($"  ${[property].Name} [{rw}] as {typeCode}: {valueStr}")
             Next
 
             Call sb.AppendLine()
