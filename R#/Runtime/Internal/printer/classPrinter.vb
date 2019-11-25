@@ -30,8 +30,10 @@ Namespace Runtime.Internal
             Call sb.AppendLine()
             Call sb.AppendLine($" {properties.Length} properties")
 
+            Dim valueStr$
+
             For Each [property] As PropertyInfo In properties
-                Call sb.AppendLine($"  ${[property].Name}")
+                Call sb.AppendLine($"  ${[property].Name} as {[property].PropertyType.GetRTypeCode} = {Scripting.ToString([property].GetValue(obj))}")
             Next
 
             Call sb.AppendLine()
@@ -42,6 +44,24 @@ Namespace Runtime.Internal
             Next
 
             Return sb.ToString
+        End Function
+
+        <Extension>
+        Private Function getMemberValueString([property] As PropertyInfo, obj As Object) As String
+            Dim value As Object = [property].GetValue(obj)
+            Dim type As Type = [property].PropertyType
+
+            If value Is Nothing Then
+                Return "NULL"
+            ElseIf DataFramework.IsPrimitive(type) Then
+                Return value.ToString
+            End If
+
+            Dim valStr As String = Scripting.ToString(value, "NULL")
+
+            If valStr Is Nothing Then
+
+            End If
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
