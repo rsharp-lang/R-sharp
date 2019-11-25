@@ -106,8 +106,13 @@ Namespace Runtime.Internal
             Next
         End Sub
 
+        ''' <summary>
+        ''' Debugger test api of <see cref="ToString(Type)"/>
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
         <Extension>
-        Private Function ValueToString(x As Object) As String
+        Public Function ValueToString(x As Object) As String
             Return printer.ToString(x.GetType)(x)
         End Function
 
@@ -123,8 +128,12 @@ Namespace Runtime.Internal
                                Return $"""{o}"""
                            End If
                        End Function
+            ElseIf Not elementType.Namespace.StartsWith("System.") Then
+                Return AddressOf classPrinter.printClass
+            ElseIf elementType = GetType(Boolean) Then
+                Return Function(b) b.ToString.ToUpper
             Else
-                Return Function(obj) Scripting.ToString(obj, "NULL")
+                Return Function(obj) Scripting.ToString(obj, "NULL", True)
             End If
         End Function
 

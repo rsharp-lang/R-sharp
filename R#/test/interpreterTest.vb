@@ -48,12 +48,15 @@
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal
 
 Module interpreterTest
 
     Dim R As New RInterpreter
 
     Sub Main()
+        Call printClassTest()
+
         Call forLoop2()
         Call sequenceGeneratorTest()
         Call iifTest()
@@ -108,6 +111,14 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub printClassTest()
+        Dim [class] As Object = New SMRUCC.Rsharp.Runtime.Environment
+
+        Call Console.WriteLine(printer.ValueToString([class]))
 
         Pause()
     End Sub
