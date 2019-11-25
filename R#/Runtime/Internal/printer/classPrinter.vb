@@ -7,6 +7,9 @@ Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Runtime.Internal
 
+    ''' <summary>
+    ''' Console print formatter for non System user class type
+    ''' </summary>
     Public Module classPrinter
 
         ''' <summary>
@@ -87,7 +90,9 @@ Namespace Runtime.Internal
             Return type _
                 .GetMethods(PublicProperty) _
                 .Where(Function(m)
-                           Return Not m.ContainsGenericParameters
+                           Return Not m.ContainsGenericParameters AndAlso
+                                      m.GetCustomAttribute(GetType(CompilerGeneratedAttribute)) Is Nothing AndAlso
+                                  Not m.Attributes.HasFlag(MethodAttributes.SpecialName)
                        End Function)
         End Function
 
