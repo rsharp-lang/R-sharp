@@ -43,8 +43,10 @@
 
 #End Region
 
+Imports System.Reflection
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Runtime.Interop
 
@@ -65,7 +67,19 @@ Namespace Runtime.Interop
         Sub New(raw As Type)
             Me.raw = raw
             Me.isArray = raw.IsInheritsFrom(GetType(Array))
+            Me.names = populateNames _
+                .Distinct _
+                .ToArray
         End Sub
+
+        Private Iterator Function populateNames() As IEnumerable(Of String)
+            For Each m As MethodInfo In raw.getObjMethods
+                Yield m.Name
+            Next
+            For Each p As PropertyInfo In raw.getObjProperties
+                Yield p.Name
+            Next
+        End Function
 
         Public Overrides Function ToString() As String
             Return $"<{mode.Description}> {raw.Name}"

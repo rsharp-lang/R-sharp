@@ -50,6 +50,9 @@
 
 Namespace Runtime.Components.Interface
 
+    ''' <summary>
+    ''' The reflection operation helper in R# language runtime
+    ''' </summary>
     Public Interface IReflector
 
         Function getNames() As String()
