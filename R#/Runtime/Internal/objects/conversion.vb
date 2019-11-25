@@ -1,6 +1,6 @@
 ﻿Namespace Runtime.Internal
 
-    Module conversion
+    Module RConversion
 
         Public Function asObject(obj As Object) As Object
             If obj Is Nothing Then
