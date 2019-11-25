@@ -16,10 +16,20 @@ Namespace Runtime.Internal
             type = New RType(obj.GetType)
         End Sub
 
+        ''' <summary>
+        ''' Get property value by name
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <returns></returns>
         Public Function getByName(name As String) As Object Implements RNameIndex.getByName
             Throw New NotImplementedException()
         End Function
 
+        ''' <summary>
+        ''' Get properties value collection by a given name list
+        ''' </summary>
+        ''' <param name="names"></param>
+        ''' <returns></returns>
         Public Function getByName(names() As String) As Object Implements RNameIndex.getByName
             Throw New NotImplementedException()
         End Function
