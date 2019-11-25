@@ -45,6 +45,8 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Package
+Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.CommandLine.Reflection
 
 Namespace Runtime.Internal
 
@@ -57,14 +59,37 @@ Namespace Runtime.Internal
         ''' <param name="envir"></param>
         ''' <returns></returns>
         Public Function installPackages(packages As String(), envir As Environment) As Object
-            Dim pkgMgr As PackageManager = envir.GlobalEnvironment.packages
+            Dim pkgMgr As PackageManager = envir.globalEnvironment.packages
             Dim namespaces As New List(Of String)
 
             For Each pkgName As String In packages.SafeQuery
                 namespaces += pkgMgr.InstallLocals(pkgName)
             Next
 
+            Call pkgMgr.Flush()
+
             Return namespaces.ToArray
+        End Function
+
+        ''' <summary>
+        ''' ## Find Installed Packages
+        ''' 
+        ''' Find (or retrieve) details of all packages installed in the specified libraries.
+        ''' 
+        ''' ``installed.packages`` scans the ‘DESCRIPTION’ files of each package found along 
+        ''' ``lib.loc`` and returns a matrix of package names, library paths and version numbers.
+        '''
+        ''' The information found Is cached (by library) For the R session And specified fields argument, 
+        ''' And updated only If the top-level library directory has been altered, 
+        ''' For example by installing Or removing a package. If the cached information becomes confused, 
+        ''' it can be refreshed by running ``installed.packages(noCache = True)``.
+        ''' </summary>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
+        <ExportAPI("installed.packages")>
+        Public Function GetInstalledPackages(envir As Environment) As Object
+
+
         End Function
 
         ''' <summary>

@@ -81,9 +81,15 @@ Namespace Runtime
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property messages As New List(Of Message)
-        Public ReadOnly Property GlobalEnvironment As GlobalEnvironment
+
+        Public ReadOnly Property globalEnvironment As GlobalEnvironment
+            Get
+                Return [global]
+            End Get
+        End Property
 
         Friend ReadOnly ifPromise As New List(Of IfBranch.IfPromise)
+        Friend [global] As GlobalEnvironment
 
         ''' <summary>
         ''' 当前的环境是否为最顶层的全局环境？
@@ -133,7 +139,7 @@ Namespace Runtime
             variables = New Dictionary(Of Variable)
             types = New Dictionary(Of String, RType)
             parent = Nothing
-            GlobalEnvironment = Nothing
+            [global] = Nothing
             stackTag = "<globalEnvironment>"
         End Sub
 
@@ -142,7 +148,7 @@ Namespace Runtime
 
             Me.parent = parent
             Me.stackTag = stackTag
-            Me.GlobalEnvironment = parent.GlobalEnvironment
+            Me.global = parent.globalEnvironment
         End Sub
 
         Public Sub Clear()

@@ -60,6 +60,31 @@ Namespace Interpreter.ExecuteEngine
         Friend ReadOnly valueAssignOperatorSymbols As Index(Of String) = {"<-", "="}
 
         <Extension>
+        Public Function isSequenceSyntax(tokens As List(Of Token())) As Boolean
+            Return tokens(Scan0).SplitByTopLevelDelimiter(TokenType.sequence) > 1
+        End Function
+
+        <Extension>
+        Public Function ifElseTriple(tokens As Token()) As (test As Token(), ifelse As List(Of Token()))
+            Dim blocks = tokens.SplitByTopLevelDelimiter(TokenType.iif)
+
+            If blocks = 1 Then
+                Return Nothing
+            ElseIf blocks > 3 Then
+                Return Nothing
+            End If
+
+            Dim test = blocks(Scan0)
+            Dim ifelse = blocks(2).SplitByTopLevelDelimiter(TokenType.sequence)
+
+            If Not ifelse = 3 Then
+                Return Nothing
+            Else
+                Return (test, ifelse)
+            End If
+        End Function
+
+        <Extension>
         Public Function isNamespaceReferenceCall(tokens As List(Of [Variant](Of Expression, String))) As Boolean
             If Not tokens(1) Like GetType(String) OrElse Not tokens(1).TryCast(Of String) = "::" Then
                 Return False
@@ -73,7 +98,7 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         <Extension>
-        Public Function isByrefCall(tokens As List(Of [Variant](Of Expression, String))) As Boolean
+        Public Function isByRefCall(tokens As List(Of [Variant](Of Expression, String))) As Boolean
             If Not tokens(Scan0) Like GetType(FunctionInvoke) Then
                 Return False
             ElseIf Not tokens(1) Like GetType(String) OrElse Not tokens(1).TryCast(Of String) Like valueAssignOperatorSymbols Then

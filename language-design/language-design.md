@@ -256,8 +256,27 @@ test.integer <- function(x as integer) {
 Get/Set property value keeps the same as the R language: 
 
 ```R
-var names <- dataframe[, "name"];
+let names <- dataframe[, "name"];
+let new.names <- ["a", "b", "c"];
+
 dataframe[, "name"] <- new.names;
+```
+
+## Function and lambda function
+
+For declare a function, use
+
+```R
+let add as function(a, b) {
+    a + b;
+}
+```
+
+If your function is simply enough, and didn't modify the environment, example like didn't have operation of variable value assignment. Then you should consider use the lambda function.
+The lambda function is more light weight and elegant than the normal function. The lambda function just allows one expression in its body, and only allows one parameter.
+
+```R
+let add.lambda = [a,b] -> a+b;
 ```
 
 ##  5. <a name='String'></a>String
@@ -265,11 +284,12 @@ dataframe[, "name"] <- new.names;
 Add new string contact and string interploate feature for ``R#``, makes you more easier in the string manipulation:
 
 ```R
-var name     <- first.name & " " & last.name;
-# or
-var my.name  <- "$first.name $last.name"; 
+let first.name <- "a";
+let last.name  <- "b";
+
+let my.name  <- `${first.name} ${last.name}`; 
 # sprintf function is still avaliable
-var his.name <- sprintf("%s %s", first.name, last.name); 
+let his.name <- sprintf("%s %s", first.name, last.name); 
 ```
 
 ##  6. <a name='OperatorsinR'></a>Operators in R#
@@ -503,8 +523,8 @@ tuple variable:
 
 ```R
 # run commandline using @ operator in R
-local prot.fasta = "/home/biostack/sample.fasta";
-local [exitCode, std_out] <- @'makeblastdb -in "{prot.fasta}" -dbtype prot';
+let prot.fasta = "/home/biostack/sample.fasta";
+let [exitCode, std_out] <- @`makeblastdb -in "${prot.fasta}" -dbtype prot`;
 ```
 
 ``list`` element accessor:
@@ -595,12 +615,12 @@ Tuple enable the R function returns multiple value at once:
 
 ```R
 # this R function returns multiple value by using tuple:
-tuple.test <- function(a as integer, b as integer) {
-    return [a, b, a ^ b];
+let tuple.test as function(a as integer, b as integer) {
+    [a, b, a ^ b];
 }
 
 # and you can using tuple its member as the normal variable
-local [a, b, c] <- tuple.test(3, 2);
+let [a, b, c] <- tuple.test(3, 2);
 
 if (a == 3) {
     c <- c + a + b;

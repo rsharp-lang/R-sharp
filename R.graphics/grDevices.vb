@@ -1,48 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::d5a71e164bb342f7b88b8c45484af9f8, R.base\grDevices.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module grDevices
-    ' 
-    '     Function: devCur, devOff, rgb
-    ' 
-    ' /********************************************************************************/
+' Module grDevices
+' 
+'     Function: devCur, devOff, rgb
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Drawing
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Imaging
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
@@ -51,7 +54,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal
 <Package("grDevices", Category:=APICategories.UtilityTools)>
 Public Module grDevices
 
-    Dim devlist As New List(Of IGraphics)
+    Dim devlist As New Dictionary(Of Integer, IGraphics)
     Dim curDev As IGraphics
 
     ''' <summary>
@@ -72,7 +75,11 @@ Public Module grDevices
     ''' <returns></returns>
     <ExportAPI("dev.cur")>
     Public Function devCur() As Integer
-
+        If curDev Is Nothing Then
+            Return -1
+        Else
+            Return curDev.GetHashCode
+        End If
     End Function
 
     ''' <summary>
@@ -122,16 +129,54 @@ Public Module grDevices
     ''' NA values are Not allowed For any Of red, blue, green Or alpha.
     ''' </remarks>
     <ExportAPI("rgb")>
-    Public Function rgb(red As Integer,
-                        green As Integer,
-                        blue As Integer,
-                        Optional alpha As Integer = 255,
+    Public Function rgb(red As Integer(),
+                        green As Integer(),
+                        blue As Integer(),
+                        Optional alpha As Integer() = Nothing,
                         Optional names As String() = Nothing,
-                        Optional maxColorValue As Integer = 1) As vector
+                        Optional maxColorValue As Integer = 1,
+                        Optional envir As Environment = Nothing) As vector
 
-        Return New vector With {
-            .data = {Color.FromArgb(alpha, red, green, blue)}
+        If alpha.IsNullOrEmpty Then
+            alpha = {255}
+        ElseIf {red, green, blue}.Any(Function(bytes) bytes.IsNullOrEmpty) Then
+            Return Nothing
+        End If
+
+        Dim populate As Func(Of IEnumerable(Of Color)) =
+            Iterator Function() As IEnumerable(Of Color)
+                Dim counts As i32 = Scan0
+
+                For Each r As Integer In red
+                    For Each g As Integer In green
+                        For Each b As Integer In blue
+                            For Each a As Integer In alpha
+                                If maxColorValue > 0 AndAlso ++counts = maxColorValue Then
+                                    GoTo break
+                                Else
+                                    Yield Color.FromArgb(a, r, g, b)
+                                End If
+                            Next
+                        Next
+                    Next
+                Next
+break:
+                ' exit iterator loops
+            End Function
+        Dim colors As New vector With {
+            .data = populate().ToArray
         }
+        Dim result As Object = Nothing
+
+        If Not names.IsNullOrEmpty Then
+            result = colors.setNames(names, envir)
+        End If
+
+        If Not result Is Nothing AndAlso result.GetType Is GetType(Message) Then
+            Return result
+        Else
+            Return colors
+        End If
     End Function
 End Module
 

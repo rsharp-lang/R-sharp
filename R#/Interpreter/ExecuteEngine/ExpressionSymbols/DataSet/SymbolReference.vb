@@ -49,10 +49,17 @@ Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Interpreter.ExecuteEngine
 
+    ''' <summary>
+    ''' 符号引用
+    ''' </summary>
     Public Class SymbolReference : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
 
+        ''' <summary>
+        ''' 目标变量名
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property symbol As String
 
         Sub New(symbol As Token)

@@ -89,5 +89,9 @@ Namespace Interpreter.ExecuteEngine
 
             Return current
         End Function
+
+        Public Overrides Function ToString() As String
+            Return stringParts.JoinBy(" & ")
+        End Function
     End Class
 End Namespace

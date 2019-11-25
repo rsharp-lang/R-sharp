@@ -58,6 +58,8 @@ Namespace Runtime.Components.Interface
 
     Public Interface RIndex
 
+        ReadOnly Property length As Integer
+
         Function getByIndex(i As Integer) As Object
         Function getByIndex(i As Integer()) As Object()
         Function setByIndex(i As Integer, value As Object, envir As Environment) As Object

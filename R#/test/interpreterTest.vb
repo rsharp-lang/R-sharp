@@ -1,47 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::32ef0474b8c69cc9ccc136b8d916972b, R#\test\interpreterTest.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module interpreterTest
-    ' 
-    '     Sub: boolTest, branchTest, cliTest, dataframeTest, declareFunctionTest
-    '          declareTest, elementIndexerTest, exceptionHandler, forLoopTest, genericTest
-    '          iifTest, ImportsDll, inTest, invokeTest, lambdaTest
-    '          linqTest, listTest, logicalTest, Main, nameAccessorTest
-    '          namespaceTest, namesTest, optionsTest, parameterTest, pipelineTest
-    '          StackTest, stringInterpolateTest, symbolNotFoundTest, testScript, tupleTest
-    '          whichTest
-    ' 
-    ' /********************************************************************************/
+' Module interpreterTest
+' 
+'     Sub: boolTest, branchTest, cliTest, dataframeTest, declareFunctionTest
+'          declareTest, elementIndexerTest, exceptionHandler, forLoopTest, genericTest
+'          iifTest, ImportsDll, inTest, invokeTest, lambdaTest
+'          linqTest, listTest, logicalTest, Main, nameAccessorTest
+'          namespaceTest, namesTest, optionsTest, parameterTest, pipelineTest
+'          StackTest, stringInterpolateTest, symbolNotFoundTest, testScript, tupleTest
+'          whichTest
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -54,8 +54,21 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call forLoop2()
+        Call sequenceGeneratorTest()
+        Call iifTest()
         Call closureTest()
-        Call whichTest()
+        Call tupleTest()
+
+        Call lambdaTest()
+        Call suppressTest()
+
+        Call closureEnvironmentTest()
+
+        Call lastSymbolTest()
+
+
+        ' Call whichTest()
 
         '    Call elementIndexerTest()
         Call nameAccessorTest()
@@ -74,8 +87,7 @@ Module interpreterTest
 
         Call linqTest()
         Call pipelineTest()
-        Call iifTest()
-        Call lambdaTest()
+
         Call testScript()
 
         Call symbolNotFoundTest()
@@ -92,11 +104,70 @@ Module interpreterTest
         Call listTest()
 
         Call declareFunctionTest()
-        Call tupleTest()
 
         Call declareTest()
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub sequenceGeneratorTest()
+        Call R.Evaluate("let x <- 1:100 step 0.5")
+        Call R.Evaluate("print(x)")
+        Call R.Evaluate("
+# The numeric sequence generator demo
+
+print('An integer sequence');
+print(1:10);
+
+print('An integer sequence with offset 5');
+print(1:100 step 5);
+
+print('A numeric sequence with step 0.5');
+print(1:10 step 0.5);
+
+print('A numeric sequence with step 1.0');
+print(1.0:10.0);
+
+")
+
+        Pause()
+    End Sub
+
+    Sub suppressTest()
+        Call R.Evaluate("let ex as function() {
+    stop('just create a new exception!');
+}")
+        Call R.Evaluate("let none = suppress ex();")
+        Call R.Evaluate("print(none);")
+        Call R.Evaluate("none = ex();")
+
+        Pause()
+    End Sub
+
+    Sub closureEnvironmentTest()
+        Call R.Evaluate("let x as function(y) {
+    let a <- y-1;
+
+    function() {
+        a <- a+1;
+        a ^ 2
+    }
+}")
+        Call R.Evaluate("let inner = x(3)")
+        Call R.Evaluate("print(inner())")
+        Call R.Evaluate("print(inner())")
+        Call R.Evaluate("print(inner())")
+
+        Pause()
+    End Sub
+
+    Sub lastSymbolTest()
+        Call R.Evaluate("function(x) {
+    x ^ 3
+}")
+        Call R.Evaluate("print($([3,2,6,5]))")
 
         Pause()
     End Sub
@@ -123,7 +194,10 @@ let closure as function() {
         Call R.Evaluate("print(holder$getX());")
         Call R.Evaluate("holder$setX([123,233,333])")
         Call R.Evaluate("print(holder$getX());")
+        Call R.Evaluate("print(holder$setX('123 AAAAA'));")
+        Call R.Evaluate("print(holder$getX());")
 
+        Pause()
     End Sub
 
     Sub moduleTest()
@@ -174,8 +248,10 @@ test1::println('123');
     Sub nameAccessorTest()
         Call R.Evaluate("let l <- list(a = 1, b = FALSE)")
         Call R.Evaluate("print(l$a+2)")
+        Call R.Evaluate("print(l$b)")
+        Call R.Evaluate("print(l[['b']])")
         Call R.Evaluate("l$b <- [99,88,77,66,55,44]+99")
-        Call R.Evaluate("l$b")
+        Call R.Evaluate("print(l$b)")
 
         Pause()
     End Sub
@@ -274,14 +350,21 @@ print(zzz);
     End Sub
 
     Sub iifTest()
-        Call R.Evaluate("x > 0 ? 999 : 777")
+        Call R.Evaluate("print(1 > 0 ? 999 : 777)")
 
         Pause()
     End Sub
 
     Sub lambdaTest()
+        Call R.Evaluate("let pop5 = [] -> 5")
+        Call R.Evaluate("print(pop5)")
+        Call R.Evaluate("print(pop5()^2)")
         Call R.Evaluate("let add <- [x,y] => x+y;")
-        Call R.Evaluate("x -> x +333")
+        Call R.Evaluate("print(x -> x +333)")
+        Call R.Evaluate("print(add([5,5]))")
+        Call R.Evaluate("print(add)")
+
+        Pause()
     End Sub
 
     Sub testScript()
@@ -300,6 +383,17 @@ print(zzz);
         'Call R.Invoke("debug", R!x)
 
         'Pause()
+    End Sub
+
+    Sub forLoop2()
+        Call R.Evaluate("
+
+for(x in 1:5 step 0.5) {
+	print(`x -> ${x}`);
+}
+")
+
+        Pause()
     End Sub
 
     Sub forLoopTest()
@@ -463,6 +557,11 @@ return 999;
         Call R.Evaluate("let [x, y] = [[99, 66], 88];")
         Call R.Evaluate("let [a,b,c, d] = [12,3,6, x / 3.3];")
         Call R.Evaluate("let [e,f,g,h,i,j,k] = FALSE;")
+
+        Call R.Evaluate("print(x); print(a)")
+
+        Call R.Evaluate("[x , a] <- list(55555, FALSE)")
+        Call R.Evaluate("print(x); print(a)")
 
         Call R.PrintMemory()
 

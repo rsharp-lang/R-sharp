@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::62b42060d0ad168b922926daafee3de9, R#\Interpreter\ExecuteEngine\ExpressionSymbols\ValueAssign.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class ValueAssign
-    ' 
-    '         Properties: type
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: assignSymbol, assignTuples, doValueAssign, DoValueAssign, Evaluate
-    '                   ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class ValueAssign
+' 
+'         Properties: type
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: assignSymbol, assignTuples, doValueAssign, DoValueAssign, Evaluate
+'                   ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -50,9 +50,13 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine
 
+    ''' <summary>
+    ''' Set variable or tuple
+    ''' </summary>
     Public Class ValueAssign : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
@@ -61,18 +65,35 @@ Namespace Interpreter.ExecuteEngine
         ''' 可能是对tuple做赋值
         ''' 所以应该是多个变量名称
         ''' </summary>
-        Friend targetSymbols As String()
+        Friend targetSymbols As Expression()
         Friend isByRef As Boolean
         Friend value As Expression
 
+        Public ReadOnly Property symbolSize As Integer
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
+            Get
+                Return targetSymbols.Length
+            End Get
+        End Property
+
         Sub New(tokens As List(Of Token()))
-            targetSymbols = DeclareNewVariable.getNames(tokens(Scan0))
+            targetSymbols = DeclareNewVariable _
+                .getNames(tokens(Scan0)) _
+                .Select(Function(name) New Literal(name)) _
+                .ToArray
             isByRef = tokens(Scan0)(Scan0).text = "="
             value = tokens.Skip(2).AsList.DoCall(AddressOf Expression.ParseExpression)
         End Sub
 
         Sub New(targetSymbols$(), value As Expression)
-            Me.targetSymbols = targetSymbols
+            Me.targetSymbols = targetSymbols _
+                .Select(Function(name) New Literal(name)) _
+                .ToArray
+            Me.value = value
+        End Sub
+
+        Sub New(target As Expression(), value As Expression)
+            Me.targetSymbols = target
             Me.value = value
         End Sub
 
@@ -90,7 +111,7 @@ Namespace Interpreter.ExecuteEngine
             End If
         End Function
 
-        Friend Shared Function doValueAssign(envir As Environment, targetSymbols$(), isByRef As Boolean, value As Object) As Object
+        Friend Shared Function doValueAssign(envir As Environment, targetSymbols As Expression(), isByRef As Boolean, value As Object) As Object
             Dim message As Message
 
             If targetSymbols.Length = 1 Then
@@ -108,21 +129,21 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Public Overrides Function ToString() As String
-            If targetSymbols.Length = 1 Then
+            If symbolSize = 1 Then
                 Return $"{targetSymbols(0)} <- {value.ToString}"
             Else
                 Return $"[{targetSymbols.JoinBy(", ")}] <- {value.ToString}"
             End If
         End Function
 
-        Private Shared Function assignTuples(envir As Environment, targetSymbols$(), isByRef As Boolean, value As Object) As Message
+        Private Shared Function assignTuples(envir As Environment, targetSymbols As Expression(), isByRef As Boolean, value As Object) As Message
             If value.GetType.IsInheritsFrom(GetType(Array)) Then
                 Dim array As Array = value
                 Dim message As New Value(Of Message)
 
                 If array.Length = 1 Then
                     ' all assign the same value result
-                    For Each name As String In targetSymbols
+                    For Each name As Expression In targetSymbols
                         If Not (message = assignSymbol(envir, name, isByRef, value)) Is Nothing Then
                             Return message
                         End If
@@ -138,6 +159,36 @@ Namespace Interpreter.ExecuteEngine
                     ' 数量不对
                     Throw New InvalidCastException
                 End If
+            ElseIf value.GetType Is GetType(list) Then
+                Dim list As list = value
+                Dim message As New Value(Of Message)
+
+                If list.Length = 1 Then
+                    ' 设置tuple的值的时候
+                    ' list必须要有相同的元素数量
+                    Return Internal.stop("Number of list element is not identical to the tuple elements...", envir)
+                ElseIf list.Length = targetSymbols.Length Then
+                    Dim name$
+
+                    ' one by one
+                    For i As Integer = 0 To list.length - 1
+                        name = GetSymbol(targetSymbols(i))
+
+                        If list.slots.ContainsKey(name) Then
+                            value = list.slots(name)
+                        Else
+                            ' R中的元素下标都是从1开始的
+                            value = list.slots($"{i + 1}")
+                        End If
+
+                        If Not (message = assignSymbol(envir, targetSymbols(i), isByRef, value)) Is Nothing Then
+                            Return message
+                        End If
+                    Next
+                Else
+                    ' 数量不对
+                    Throw New InvalidCastException
+                End If
             Else
                 Throw New NotImplementedException
             End If
@@ -145,11 +196,33 @@ Namespace Interpreter.ExecuteEngine
             Return Nothing
         End Function
 
-        Private Shared Function assignSymbol(envir As Environment, symbolName$, isByRef As Boolean, value As Object) As Message
-            Dim target As Variable = envir.FindSymbol(symbolName)
+        Friend Shared Function GetSymbol(symbolName As Expression) As String
+            Select Case symbolName.GetType
+                Case GetType(Literal)
+                    Return DirectCast(symbolName, Literal).value
+                Case GetType(SymbolReference)
+                    Return DirectCast(symbolName, SymbolReference).symbol
+                Case Else
+                    Throw New InvalidExpressionException
+            End Select
+        End Function
+
+        Private Shared Function assignSymbol(envir As Environment, symbolName As Expression, isByRef As Boolean, value As Object) As Message
+            Dim target As Variable = Nothing
+
+            Select Case symbolName.GetType
+                Case GetType(Literal)
+                    target = envir.FindSymbol(DirectCast(symbolName, Literal).value)
+                Case GetType(SymbolReference)
+                    target = envir.FindSymbol(DirectCast(symbolName, SymbolReference).symbol)
+                Case GetType(SymbolIndexer)
+                    Throw New NotImplementedException
+                Case Else
+                    Throw New InvalidExpressionException
+            End Select
 
             If target Is Nothing Then
-                Return Message.SymbolNotFound(envir, symbolName, TypeCodes.generic)
+                Return Message.SymbolNotFound(envir, symbolName.ToString, TypeCodes.generic)
             End If
 
             If isByRef Then

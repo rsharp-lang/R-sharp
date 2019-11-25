@@ -1,44 +1,44 @@
 ﻿#Region "Microsoft.VisualBasic::bf71e38c21adcfaa52166e3e6bca66bf, R#\Interpreter\ExecuteEngine\Expression.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class Expression
-    ' 
-    '         Properties: expressionName
-    ' 
-    '         Function: CreateExpression, ParseExpression
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class Expression
+' 
+'         Properties: expressionName
+' 
+'         Function: CreateExpression, ParseExpression
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -102,10 +102,33 @@ Namespace Interpreter.ExecuteEngine
                     Case "for" : Return New ForLoop(code.Skip(1).IteratesALL)
                     Case "from" : Return New LinqExpression(code)
                     Case "imports" : Return New [Imports](code)
+                    Case "function"
+                        Dim [let] = New Token() {New Token(TokenType.keyword, "let")}
+                        Dim name = New Token() {New Token(TokenType.identifier, "<$anonymous>")}
+                        Dim [as] = New Token() {New Token(TokenType.keyword, "as")}
+
+                        code = ({[let], name, [as]}) + code
+
+                        Return New DeclareNewFunction(code)
+                    Case "suppress"
+                        Dim evaluate As Expression = code _
+                            .Skip(1) _
+                            .IteratesALL _
+                            .DoCall(AddressOf Expression.CreateExpression)
+
+                        Return New Suppress(evaluate)
+                    Case "require"
+                        Return code(1) _
+                            .Skip(1) _
+                            .Take(code(1).Length - 2) _
+                            .ToArray _
+                            .DoCall(Function(tokens)
+                                        Return New Require(tokens)
+                                    End Function)
                     Case Else
                         Throw New SyntaxErrorException
                 End Select
-            ElseIf code.Count = 1 Then
+            ElseIf code = 1 Then
                 Dim item As Token() = code(Scan0)
 
                 If item.isLiteral Then
@@ -113,7 +136,13 @@ Namespace Interpreter.ExecuteEngine
                 ElseIf item.isIdentifier Then
                     Return New SymbolReference(item(Scan0))
                 Else
-                    Return item.CreateTree
+                    Dim ifelse = item.ifElseTriple
+
+                    If ifelse.ifelse Is Nothing Then
+                        Return item.CreateTree
+                    Else
+                        Return New IIfExpression(ifelse.test, ifelse.ifelse)
+                    End If
                 End If
             ElseIf code > 2 AndAlso (code(Scan0).isIdentifier OrElse code(Scan0).isTuple) AndAlso code(1).isOperator("->", "=>") Then
                 ' is a lambda function
@@ -127,6 +156,38 @@ Namespace Interpreter.ExecuteEngine
                     If opText = "=" OrElse opText = "<-" Then
                         Return New ValueAssign(code)
                     End If
+                End If
+            ElseIf code(1).isOperator("=", "<-") Then
+                ' tuple value assign
+                Dim tuple = code(Scan0).Skip(1) _
+                    .Take(code(Scan0).Length - 2) _
+                    .SplitByTopLevelDelimiter(TokenType.comma) _
+                    .Where(Function(t) Not t.isComma) _
+                    .Select(AddressOf Expression.CreateExpression) _
+                    .ToArray
+                Dim value = code(2)
+
+                Return New ValueAssign(tuple, Expression.CreateExpression(value))
+            ElseIf code = 2 Then
+                If code(Scan0).Length = 1 AndAlso code(Scan0)(Scan0) = (TokenType.operator, "$") Then
+                    Return New FunctionInvoke(code.IteratesALL.ToArray)
+                End If
+            ElseIf code = 3 Then
+                If code.isSequenceSyntax Then
+                    Dim seq = code(Scan0).SplitByTopLevelDelimiter(TokenType.sequence)
+                    Dim from = seq(Scan0)
+                    Dim [to] = seq(2)
+                    Dim steps As Token() = Nothing
+
+                    If code > 1 Then
+                        If code(1).isKeyword("step") Then
+                            steps = code(2)
+                        Else
+                            Throw New SyntaxErrorException
+                        End If
+                    End If
+
+                    Return New SequenceLiteral(from, [to], steps)
                 End If
             End If
 

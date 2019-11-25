@@ -1,57 +1,60 @@
 ﻿#Region "Microsoft.VisualBasic::f2871917fdb327e513228145b18aa5cd, R#\Runtime\Internal\base.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module base
-    ' 
-    '         Function: [get], [stop], all, any, cat
-    '                   createDotNetExceptionMessage, createMessageInternal, getEnvironmentStack, lapply, names
-    '                   options, print, sapply, warning
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module base
+' 
+'         Function: [get], [stop], all, any, cat
+'                   createDotNetExceptionMessage, createMessageInternal, getEnvironmentStack, lapply, names
+'                   options, print, sapply, warning
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 
 Namespace Runtime.Internal
@@ -61,6 +64,23 @@ Namespace Runtime.Internal
     ''' </summary>
     Public Module base
 
+        ''' <summary>
+        ''' Get vector length
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
+        Public Function length(x As Object) As Integer
+            If x Is Nothing Then
+                Return 0
+            ElseIf x.GetType.IsArray Then
+                Return DirectCast(x, Array).Length
+            ElseIf x.GetType.ImplementInterface(GetType(RIndex)) Then
+                Return DirectCast(x, RIndex).length
+            Else
+                Return 1
+            End If
+        End Function
+
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function any(test As Object) As Object
             Return Runtime.asLogical(test).Any(Function(b) b = True)
@@ -69,6 +89,21 @@ Namespace Runtime.Internal
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function all(test As Object) As Object
             Return Runtime.asLogical(test).All(Function(b) b = True)
+        End Function
+
+        ''' <summary>
+        ''' 运行外部脚本
+        ''' </summary>
+        ''' <param name="path"></param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
+        Public Function source(path As String, Optional arguments As Object = Nothing, Optional envir As Environment = Nothing) As Object
+            Dim args As NamedValue(Of Object)() = RListObjectArgumentAttribute _
+                .getObjectList(arguments, envir) _
+                .ToArray
+            Dim R As RInterpreter = envir.globalEnvironment.Rscript
+
+            Return R.Source(path, args)
         End Function
 
         ''' <summary>
@@ -84,7 +119,7 @@ Namespace Runtime.Internal
         ''' <param name="envir"></param>
         ''' <returns></returns>
         Public Function options(opts As Object, envir As Environment) As Object
-            Dim configs As Options = envir.GlobalEnvironment.options
+            Dim configs As Options = envir.globalEnvironment.options
 
             For Each value In DirectCast(opts, list).slots
                 Try
@@ -164,7 +199,7 @@ Namespace Runtime.Internal
 
             ' add stack info for display
             If exception.StackTrace.StringEmpty Then
-                messages += "stackFrames: " & vbCrLf & "none"
+                messages += "stackFrames: none"
             Else
                 messages += "stackFrames: " & vbCrLf & exception.StackTrace
             End If

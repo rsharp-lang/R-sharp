@@ -85,7 +85,7 @@ Namespace Interpreter.ExecuteEngine
                     .ToArray
             End If
 
-            Me.sequence = Expression.CreateExpression([loop](2))
+            Me.sequence = Expression.CreateExpression([loop].Skip(2).IteratesALL)
             Me.body = New DeclareNewFunction With {
                 .body = blocks(2) _
                     .Skip(1) _
@@ -112,8 +112,9 @@ Namespace Interpreter.ExecuteEngine
         Private Iterator Function exec(envir As Environment) As IEnumerable(Of Object)
             Dim isTuple As Boolean = variables.Length > 1
             Dim i As i32 = 1
+            Dim data As Array = Runtime.asVector(Of Object)(sequence.Evaluate(envir))
 
-            For Each value As Object In Runtime.asVector(Of Object)(sequence.Evaluate(envir))
+            For Each value As Object In data
                 Using closure = DeclareNewVariable.PushNames(
                     names:=variables,
                     value:=value,

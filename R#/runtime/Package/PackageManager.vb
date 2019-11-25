@@ -70,6 +70,11 @@ Namespace Runtime.Package
             Return pkgDb.FindPackage(packageName, exception)
         End Function
 
+        ''' <summary>
+        ''' 在调用了这个函数进行包模块的安装之后，需要调用<see cref="Flush()"/>函数更新数据库才可以完成安装
+        ''' </summary>
+        ''' <param name="dllFile"></param>
+        ''' <returns></returns>
         Public Function InstallLocals(dllFile As String) As String()
             Dim packageIndex = pkgDb.packages.ToDictionary(Function(pkg) pkg.namespace)
             Dim names As New List(Of String)
@@ -90,6 +95,9 @@ Namespace Runtime.Package
             Return names.ToArray
         End Function
 
+        ''' <summary>
+        ''' 将程序包数据库更新到硬盘文件之上
+        ''' </summary>
         Public Sub Flush()
             Call pkgDb.GetXml.SaveTo(config.lib)
         End Sub
