@@ -123,6 +123,8 @@ Namespace Runtime.Internal
                                Return $"""{o}"""
                            End If
                        End Function
+            ElseIf Not elementType.Namespace.StartsWith("System.") Then
+                Return AddressOf classPrinter.printClass
             Else
                 Return Function(obj) Scripting.ToString(obj, "NULL")
             End If
