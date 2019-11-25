@@ -26,8 +26,7 @@ Namespace Runtime.Internal
             Dim methods As MethodInfo() = type.getObjMethods.ToArray
             Dim sb As New StringBuilder
 
-            Call sb.AppendLine($"namespace: {type.Namespace}")
-            Call sb.AppendLine($"instance of '{type.Name}'")
+            Call sb.AppendLine($"instance of '{type.Name}' from namespace: {type.Namespace}")
             Call sb.AppendLine()
             Call sb.AppendLine($" {properties.Length} properties")
 
@@ -73,7 +72,7 @@ Namespace Runtime.Internal
                 Return value.ToString
             End If
 
-            Dim valStr As String = Scripting.ToString(value, "NULL")
+            Dim valStr As String = Scripting.ToString(value, "NULL", True)
 
             If valStr Is Nothing Then
                 Return "<unavailable>"
