@@ -127,6 +127,9 @@ Module interpreterTest
         Call R.Evaluate("print(x$Evaluate)")
         Call R.Evaluate("print(x$FindSymbol('x'))")
 
+        Call R.Evaluate("let f64 = as.object(1.9996558452233554785544455555555)")
+        Call R.Evaluate("print(names(f64))")
+
         Pause()
     End Sub
 

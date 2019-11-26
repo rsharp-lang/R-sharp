@@ -206,6 +206,7 @@
     <Compile Include="Runtime\Internal\objects\vbObject.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\utils.vb" />
     <Compile Include="Runtime\Internal\printer\printer.vb" />
+    <Compile Include="Runtime\Interop\RMethodOverloads.vb" />
     <Compile Include="Runtime\Interop\MethodInvoke.vb" />
     <Compile Include="Runtime\Interop\RInteropAttribute.vb" />
     <Compile Include="Runtime\Interop\RMethodArgument.vb" />
