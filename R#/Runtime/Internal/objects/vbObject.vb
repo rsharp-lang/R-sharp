@@ -22,6 +22,12 @@ Namespace Runtime.Internal
             properties = type.raw.getObjProperties.ToDictionary(Function(p) p.Name)
             methods = type.raw _
                 .getObjMethods _
+                .GroupBy(Function(m) m.Name) _
+                .Select(Function(g)
+                            Return g _
+                                .OrderByDescending(Function(m) m.GetParameters.Length) _
+                                .First
+                        End Function) _
                 .ToDictionary(Function(m) m.Name,
                               Function(m)
                                   Return New RMethodInfo(m.Name, m, target)
