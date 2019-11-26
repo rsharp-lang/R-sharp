@@ -1,4 +1,5 @@
 ﻿Imports System.Reflection
+Imports System.Runtime.CompilerServices
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
 
@@ -27,6 +28,7 @@ Namespace Runtime.Internal
                               End Function)
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function getNames() As String() Implements IReflector.getNames
             Return type.getNames
         End Function
@@ -51,6 +53,8 @@ Namespace Runtime.Internal
         ''' </summary>
         ''' <param name="names"></param>
         ''' <returns></returns>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function getByName(names() As String) As Object Implements RNameIndex.getByName
             Return names.Select(AddressOf getByName).ToArray
         End Function
@@ -83,8 +87,15 @@ Namespace Runtime.Internal
         ''' <param name="value"></param>
         ''' <param name="envir"></param>
         ''' <returns></returns>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function setByName(names() As String, value As Array, envir As Environment) As Object Implements RNameIndex.setByName
             Return Internal.stop(New InvalidProgramException, envir)
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Overrides Function ToString() As String
+            Return target.ToString
         End Function
     End Class
 End Namespace
