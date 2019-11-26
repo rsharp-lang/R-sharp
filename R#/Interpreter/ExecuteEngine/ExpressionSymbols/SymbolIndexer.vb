@@ -106,7 +106,7 @@ Namespace Interpreter.ExecuteEngine
                 }, envir)
             ElseIf sequence Is Nothing OrElse sequence.Length = 0 Then
                 Return Nothing
-            ElseIf sequence.Length = 1 AndAlso sequence.GetValue(Scan0).GetType Is GetType(list) Then
+            ElseIf sequence.Length = 1 AndAlso sequence.GetValue(Scan0).GetType.ImplementInterface(GetType(IReflector)) Then
                 sequence = sequence.GetValue(Scan0)
             End If
 

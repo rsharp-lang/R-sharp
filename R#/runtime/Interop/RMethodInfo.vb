@@ -99,6 +99,7 @@ Namespace Runtime.Interop
 }}"
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Private Shared Function parseParameters(method As MethodInfo) As RMethodArgument()
             Return method _
                 .GetParameters _

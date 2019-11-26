@@ -1,50 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::882d2b9df0dfdc45689e4359814d8d4c, R#\Runtime\Internal\invoke.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Delegate Function
-    ' 
-    ' 
-    '     Module invoke
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: invokeInternals, Rdataframe, Rlist
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Delegate Function
+' 
+' 
+'     Module invoke
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: invokeInternals, Rdataframe, Rlist
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
@@ -52,17 +53,31 @@ Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 
 Namespace Runtime.Internal
 
-    Delegate Function RFuncInvoke(envir As Environment, funcName$, paramVals As Object()) As Object
-
+    ''' <summary>
+    ''' The R internal function invoke helper module
+    ''' </summary>
     Module invoke
 
-        ReadOnly index As New Dictionary(Of String, RFuncInvoke)
+        ''' <summary>
+        ''' 内部函数索引
+        ''' </summary>
+        ReadOnly index As New Dictionary(Of String, RInternalFuncInvoke)
 
         Sub New()
+            Call RConversion.pushEnvir()
+            Call base.pushEnvir()
+        End Sub
 
+        ''' <summary>
+        ''' Add internal invoke handle
+        ''' </summary>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Friend Sub add(handle As RInternalFuncInvoke)
+            index(handle.funcName) = handle
         End Sub
 
         Public Function Rdataframe(envir As Environment, parameters As List(Of Expression)) As Object
@@ -129,6 +144,10 @@ Namespace Runtime.Internal
         ''' <param name="paramVals"></param>
         ''' <returns></returns>
         Public Function invokeInternals(envir As Environment, funcName$, paramVals As Object()) As Object
+            If index.ContainsKey(funcName) Then
+                Return index(funcName).invoke(envir, paramVals)
+            End If
+
             Select Case funcName
                 Case "any" : Return base.any(paramVals(Scan0))
                 Case "all" : Return base.all(paramVals(Scan0))
@@ -149,7 +168,7 @@ Namespace Runtime.Internal
                     If name.StringEmpty Then
                         Return invoke.missingParameter(funcName, "name", envir)
                     Else
-                        Return envir.GlobalEnvironment _
+                        Return envir.globalEnvironment _
                             .options _
                             .getOption(name, defaultVal)
                     End If

@@ -89,7 +89,7 @@ Namespace Runtime.Internal
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
-        Private Function getObjMethods(type As Type) As IEnumerable(Of MethodInfo)
+        Friend Function getObjMethods(type As Type) As IEnumerable(Of MethodInfo)
             Return type _
                 .GetMethods(PublicProperty) _
                 .Where(Function(m)
@@ -101,7 +101,7 @@ Namespace Runtime.Internal
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
-        Private Function getObjProperties(type As Type) As IEnumerable(Of PropertyInfo)
+        Friend Function getObjProperties(type As Type) As IEnumerable(Of PropertyInfo)
             Return type _
                 .GetProperties(PublicProperty) _
                 .Where(Function(p)

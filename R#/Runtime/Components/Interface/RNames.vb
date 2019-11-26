@@ -50,9 +50,16 @@
 
 Namespace Runtime.Components.Interface
 
-    Public Interface RNames
+    ''' <summary>
+    ''' The reflection operation helper in R# language runtime
+    ''' </summary>
+    Public Interface IReflector
 
         Function getNames() As String()
+    End Interface
+
+    Public Interface RNames : Inherits IReflector
+
         Function setNames(names As String(), envir As Environment) As Object
     End Interface
 
@@ -67,7 +74,7 @@ Namespace Runtime.Components.Interface
 
     End Interface
 
-    Public Interface RNameIndex
+    Public Interface RNameIndex : Inherits IReflector
 
         Function getByName(name As String) As Object
         Function getByName(names As String()) As Object

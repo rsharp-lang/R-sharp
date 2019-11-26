@@ -55,6 +55,8 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call objClasstest()
+
         Call printClassTest()
 
         Call forLoop2()
@@ -111,6 +113,22 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub objClasstest()
+        Call R.Evaluate("let x <- as.object(globalenv())")
+        Call R.Evaluate("print(names(x))")
+        Call R.Evaluate("let intptr <- x$GetHashCode()")
+        Call R.Evaluate("print(intptr)")
+        Call R.Evaluate("print(x$isGlobal)")
+        Call R.Evaluate("print(x$ToString())")
+        Call R.Evaluate("print(x$Evaluate)")
+        Call R.Evaluate("print(x$FindSymbol('x'))")
+
+        Call R.Evaluate("let f64 = as.object(1.9996558452233554785544455555555)")
+        Call R.Evaluate("print(names(f64))")
 
         Pause()
     End Sub
