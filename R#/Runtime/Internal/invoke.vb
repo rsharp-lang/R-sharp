@@ -56,6 +56,9 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 
 Namespace Runtime.Internal
 
+    ''' <summary>
+    ''' The R internal function invoke helper module
+    ''' </summary>
     Module invoke
 
         ''' <summary>
@@ -131,6 +134,10 @@ Namespace Runtime.Internal
         ''' <param name="paramVals"></param>
         ''' <returns></returns>
         Public Function invokeInternals(envir As Environment, funcName$, paramVals As Object()) As Object
+            If index.ContainsKey(funcName) Then
+                Return index(funcName).invoke(envir, paramVals)
+            End If
+
             Select Case funcName
                 Case "any" : Return base.any(paramVals(Scan0))
                 Case "all" : Return base.all(paramVals(Scan0))
