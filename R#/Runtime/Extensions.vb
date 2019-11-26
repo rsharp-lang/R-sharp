@@ -52,6 +52,11 @@ Namespace Runtime
 
     <HideModuleName> Public Module Extensions
 
+        ''' <summary>
+        ''' Get first element in the input <paramref name="value"/> sequence
+        ''' </summary>
+        ''' <param name="value"></param>
+        ''' <returns></returns>
         Friend Function getFirst(value As Object) As Object
             Dim valueType As Type
 
@@ -68,6 +73,12 @@ Namespace Runtime
             End If
         End Function
 
+        ''' <summary>
+        ''' Ensure that the input <paramref name="value"/> object is a sequence. 
+        ''' </summary>
+        ''' <param name="value"></param>
+        ''' <param name="type"></param>
+        ''' <returns></returns>
         Public Function asVector(value As Object, type As Type) As Array
             Dim arrayType As Type = type.MakeArrayType
             Dim valueType As Type
@@ -149,6 +160,9 @@ Namespace Runtime
             End If
         End Function
 
+        ''' <summary>
+        ''' Converts the input string text to value <see cref="TypeCodes"/>
+        ''' </summary>
         ReadOnly parseTypecode As Dictionary(Of String, TypeCodes) = Enums(Of TypeCodes) _
             .ToDictionary(Function(e) e.Description.ToLower,
                           Function(code)
@@ -172,6 +186,11 @@ Namespace Runtime
             End If
         End Function
 
+        ''' <summary>
+        ''' It is R# primitive type?
+        ''' </summary>
+        ''' <param name="type"></param>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
         Public Function IsPrimitive(type As TypeCodes) As Boolean
@@ -183,7 +202,7 @@ Namespace Runtime
         End Function
 
         ''' <summary>
-        ''' DotNET type to R type code
+        ''' VB.NET type to R type code mapping
         ''' </summary>
         ''' <param name="type"></param>
         ''' <returns></returns>
@@ -209,6 +228,11 @@ Namespace Runtime
             End Select
         End Function
 
+        ''' <summary>
+        ''' Mapping R# <see cref="TypeCodes"/> to VB.NET type
+        ''' </summary>
+        ''' <param name="type"></param>
+        ''' <returns></returns>
         Public Function [GetType](type As TypeCodes) As Type
             Select Case type
                 Case TypeCodes.boolean : Return GetType(Boolean())
@@ -222,6 +246,16 @@ Namespace Runtime
             End Select
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="func$"></param>
+        ''' <param name="script$"></param>
+        ''' <param name="line%"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' How to keeps the script path reference?
+        ''' </remarks>
         Public Function ClosureStackName(func$, script$, line%) As String
             Return $"<{script.FileName}#{line}::{func}()>"
         End Function
