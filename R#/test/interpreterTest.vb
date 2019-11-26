@@ -122,6 +122,10 @@ Module interpreterTest
         Call R.Evaluate("print(names(x))")
         Call R.Evaluate("let intptr <- x$GetHashCode()")
         Call R.Evaluate("print(intptr)")
+        Call R.Evaluate("print(x$isGlobal)")
+        Call R.Evaluate("print(x$ToString())")
+        Call R.Evaluate("print(x$Evaluate)")
+        Call R.Evaluate("print(x$FindSymbol('x'))")
 
         Pause()
     End Sub
