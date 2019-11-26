@@ -54,6 +54,9 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 
 Namespace Runtime.Interop
 
+    ''' <summary>
+    ''' Use for R# package method
+    ''' </summary>
     Public Class RMethodInfo : Implements RFunction, RPrint
 
         ''' <summary>
@@ -175,9 +178,7 @@ Namespace Runtime.Interop
             End If
 
             If declareArguments.Count > 0 Then
-                Return {
-                     missingParameter(declareArguments.Values.First, envir)
-                }
+                Return {missingParameter(declareArguments.Values.First, envir, name)}
             Else
                 Return parameterVals
             End If
@@ -198,7 +199,7 @@ Namespace Runtime.Interop
                     If arg.type.raw Is GetType(Environment) Then
                         Yield envir
                     ElseIf Not arg.isOptional Then
-                        Yield missingParameter(arg, envir)
+                        Yield missingParameter(arg, envir, name)
                     Else
                         Yield arg.default
                     End If
@@ -214,7 +215,7 @@ Namespace Runtime.Interop
             Next
         End Function
 
-        Private Function missingParameter(arg As RMethodArgument, envir As Environment) As Object
+        Private Shared Function missingParameter(arg As RMethodArgument, envir As Environment, name$) As Object
             Dim messages$() = {
                 $"Missing parameter value for '{arg.name}'!",
                 $"parameter: {arg.name}",
