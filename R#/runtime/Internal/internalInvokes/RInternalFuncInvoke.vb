@@ -25,18 +25,27 @@ Namespace Runtime.Internal.Invokes
 
     Public Class GenericInternalInvoke : Inherits RInternalFuncInvoke
 
-        Public Overrides ReadOnly Property funcName As String
-
         ReadOnly handle As Func(Of Environment, Object(), Object)
+
+        Public Overrides ReadOnly Property funcName As String
 
         Sub New(name$, invoke As Func(Of Object, Object))
             funcName = name
             handle = Function(envir, params) invoke(params(Scan0))
         End Sub
 
+        Sub New(name$, internal As Func(Of Environment, Object(), Object))
+            funcName = name
+            handle = internal
+        End Sub
+
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function invoke(envir As Environment, paramVals() As Object) As Object
             Return handle(envir, paramVals)
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return funcName
         End Function
     End Class
 End Namespace
