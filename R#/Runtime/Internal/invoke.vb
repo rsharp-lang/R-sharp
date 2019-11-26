@@ -68,6 +68,8 @@ Namespace Runtime.Internal
         ReadOnly index As New Dictionary(Of String, RInternalFuncInvoke)
 
         Sub New()
+            Call RConversion.pushEnvir()
+            Call base.pushEnvir()
         End Sub
 
         ''' <summary>

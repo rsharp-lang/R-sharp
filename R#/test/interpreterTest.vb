@@ -55,6 +55,8 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call objClasstest()
+
         Call printClassTest()
 
         Call forLoop2()
@@ -111,6 +113,13 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub objClasstest()
+        Call R.Evaluate("let x <- as.object(globalenv())")
+        Call R.Evaluate("print(names(x))")
 
         Pause()
     End Sub

@@ -69,6 +69,10 @@ Namespace Runtime.Internal
             Call Internal.invoke.add(globalenv)
         End Sub
 
+        Friend Sub pushEnvir()
+            ' do nothing
+        End Sub
+
         Private Function globalenv() As GenericInternalInvoke
             Return New GenericInternalInvoke(NameOf(globalenv), Function(env, params) env.globalEnvironment)
         End Function
@@ -166,6 +170,8 @@ Namespace Runtime.Internal
                 Select Case [object].GetType
                     Case GetType(list), GetType(dataframe)
                         Return DirectCast([object], RNames).getNames
+                    Case GetType(vbObject)
+                        Return DirectCast([object], vbObject).getNames
                     Case Else
                         Return Internal.stop("unsupported!", envir)
                 End Select

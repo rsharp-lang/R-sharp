@@ -8,6 +8,10 @@ Namespace Runtime.Internal
             Call Internal.invoke.add(New GenericInternalInvoke("as.object", AddressOf asObject))
         End Sub
 
+        Friend Sub pushEnvir()
+            ' do nothing
+        End Sub
+
         Public Function asObject(obj As Object) As Object
             If obj Is Nothing Then
                 Return Nothing
