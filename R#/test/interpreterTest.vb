@@ -120,6 +120,8 @@ Module interpreterTest
     Sub objClasstest()
         Call R.Evaluate("let x <- as.object(globalenv())")
         Call R.Evaluate("print(names(x))")
+        Call R.Evaluate("let intptr <- x$GetHashCode()")
+        Call R.Evaluate("print(intptr)")
 
         Pause()
     End Sub
