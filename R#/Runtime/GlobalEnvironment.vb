@@ -42,8 +42,11 @@
 
 #End Region
 
+Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 Imports SMRUCC.Rsharp.Runtime.Package
+Imports RPkg = SMRUCC.Rsharp.Runtime.Package.Package
 
 Namespace Runtime
 
@@ -54,12 +57,35 @@ Namespace Runtime
 
         Public ReadOnly Property options As Options
         Public ReadOnly Property packages As PackageManager
+        Public ReadOnly Property Rscript As RInterpreter
 
-        Sub New(options As Options)
+        Sub New(scriptHost As RInterpreter, options As Options)
             Me.options = options
             Me.packages = New PackageManager(options)
             Me.global = Me
+            Me.Rscript = scriptHost
         End Sub
 
+        Public Function LoadLibrary(packageName As String) As Message
+            Dim exception As Exception = Nothing
+            Dim package As RPkg = packages.FindPackage(packageName, exception)
+
+            Call Console.WriteLine($"Loading required package: {packageName}")
+
+            If package Is Nothing Then
+                Dim message As Message = Internal.stop(If(exception, New Exception("No packages installed...")), Me)
+
+                message.Message = {
+                    $"there is no package called ‘{packageName}’",
+                    $"package: {packageName}"
+                }.Join(message.Message)
+
+                Return message
+            Else
+                Call ImportsPackage.ImportsStatic(Me, package.package)
+            End If
+
+            Return Nothing
+        End Function
     End Class
 End Namespace

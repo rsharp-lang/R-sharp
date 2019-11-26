@@ -62,17 +62,17 @@ Namespace Interpreter.ExecuteEngine
             Me.operator = op
         End Sub
 
-        Shared ReadOnly integers As Index(Of Type) = {
+        Friend Shared ReadOnly integers As Index(Of Type) = {
             GetType(Integer), GetType(Integer()),
             GetType(Long), GetType(Long())
         }
 
-        Shared ReadOnly floats As Index(Of Type) = {
+        Friend Shared ReadOnly floats As Index(Of Type) = {
             GetType(Single), GetType(Single()),
             GetType(Double), GetType(Double())
         }
 
-        Shared ReadOnly logicals As Index(Of Type) = {
+        Friend Shared ReadOnly logicals As Index(Of Type) = {
             GetType(Boolean),
             GetType(Boolean())
         }

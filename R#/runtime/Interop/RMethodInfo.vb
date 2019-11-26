@@ -227,10 +227,12 @@ Namespace Runtime.Interop
 
         Private Shared Function getValue(arg As RMethodArgument, value As Object) As Object
             If arg.type.isArray Then
-                Return CObj(Runtime.asVector(value, arg.type.raw.GetElementType))
+                value = CObj(Runtime.asVector(value, arg.type.raw.GetElementType))
             Else
-                Return Runtime.getFirst(value)
+                value = Runtime.getFirst(value)
             End If
+
+            Return Conversion.CTypeDynamic(value, arg.type.raw)
         End Function
 
         Public Overrides Function ToString() As String

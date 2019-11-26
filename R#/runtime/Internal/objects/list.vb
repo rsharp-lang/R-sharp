@@ -53,7 +53,7 @@ Namespace Runtime.Internal
 
         Public Property slots As Dictionary(Of String, Object)
 
-        Public ReadOnly Property length As Integer
+        Public ReadOnly Property length As Integer Implements RIndex.length
             Get
                 Return slots.Count
             End Get

@@ -48,12 +48,18 @@
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal
 
 Module interpreterTest
 
     Dim R As New RInterpreter
 
     Sub Main()
+        Call printClassTest()
+
+        Call forLoop2()
+        Call sequenceGeneratorTest()
+        Call iifTest()
         Call closureTest()
         Call tupleTest()
 
@@ -84,7 +90,7 @@ Module interpreterTest
 
         Call linqTest()
         Call pipelineTest()
-        Call iifTest()
+
         Call testScript()
 
         Call symbolNotFoundTest()
@@ -105,6 +111,37 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub printClassTest()
+        Dim [class] As Object = New SMRUCC.Rsharp.Runtime.Environment
+
+        Call Console.WriteLine(printer.ValueToString([class]))
+
+        Pause()
+    End Sub
+
+    Sub sequenceGeneratorTest()
+        Call R.Evaluate("let x <- 1:100 step 0.5")
+        Call R.Evaluate("print(x)")
+        Call R.Evaluate("
+# The numeric sequence generator demo
+
+print('An integer sequence');
+print(1:10);
+
+print('An integer sequence with offset 5');
+print(1:100 step 5);
+
+print('A numeric sequence with step 0.5');
+print(1:10 step 0.5);
+
+print('A numeric sequence with step 1.0');
+print(1.0:10.0);
+
+")
 
         Pause()
     End Sub
@@ -324,7 +361,7 @@ print(zzz);
     End Sub
 
     Sub iifTest()
-        Call R.Evaluate("x > 0 ? 999 : 777")
+        Call R.Evaluate("print(1 > 0 ? 999 : 777)")
 
         Pause()
     End Sub
@@ -357,6 +394,17 @@ print(zzz);
         'Call R.Invoke("debug", R!x)
 
         'Pause()
+    End Sub
+
+    Sub forLoop2()
+        Call R.Evaluate("
+
+for(x in 1:5 step 0.5) {
+	print(`x -> ${x}`);
+}
+")
+
+        Pause()
     End Sub
 
     Sub forLoopTest()

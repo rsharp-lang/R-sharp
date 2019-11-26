@@ -154,7 +154,7 @@ Namespace Runtime.Internal
             Select Case funcName
                 Case "any" : Return base.any(paramVals(Scan0))
                 Case "all" : Return base.all(paramVals(Scan0))
-                Case "length" : Return DirectCast(paramVals(Scan0), Array).Length
+                Case "length" : Return base.length(paramVals(Scan0))
                 Case "round"
                     Dim x As Object = paramVals(Scan0)
                     Dim decimals As Integer = Runtime.getFirst(paramVals(1))
@@ -177,6 +177,14 @@ Namespace Runtime.Internal
                     End If
                 Case "names"
                     Return base.names(paramVals(Scan0), Nothing, envir)
+                Case "source"
+                    If paramVals.IsNullOrEmpty Then
+                        Return invoke.missingParameter("source", "file", envir)
+                    Else
+                        Dim file As String = Scripting.ToString(Runtime.getFirst(paramVals(Scan0)))
+                        ' run external script
+                        Return base.source(file,, envir)
+                    End If
                 Case "get"
                     Return base.get(paramVals(Scan0), envir)
                 Case "print"

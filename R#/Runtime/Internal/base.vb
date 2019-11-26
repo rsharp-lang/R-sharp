@@ -45,13 +45,16 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 
 Namespace Runtime.Internal
@@ -61,6 +64,23 @@ Namespace Runtime.Internal
     ''' </summary>
     Public Module base
 
+        ''' <summary>
+        ''' Get vector length
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
+        Public Function length(x As Object) As Integer
+            If x Is Nothing Then
+                Return 0
+            ElseIf x.GetType.IsArray Then
+                Return DirectCast(x, Array).Length
+            ElseIf x.GetType.ImplementInterface(GetType(RIndex)) Then
+                Return DirectCast(x, RIndex).length
+            Else
+                Return 1
+            End If
+        End Function
+
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function any(test As Object) As Object
             Return Runtime.asLogical(test).Any(Function(b) b = True)
@@ -69,6 +89,21 @@ Namespace Runtime.Internal
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function all(test As Object) As Object
             Return Runtime.asLogical(test).All(Function(b) b = True)
+        End Function
+
+        ''' <summary>
+        ''' 运行外部脚本
+        ''' </summary>
+        ''' <param name="path"></param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
+        Public Function source(path As String, Optional arguments As Object = Nothing, Optional envir As Environment = Nothing) As Object
+            Dim args As NamedValue(Of Object)() = RListObjectArgumentAttribute _
+                .getObjectList(arguments, envir) _
+                .ToArray
+            Dim R As RInterpreter = envir.globalEnvironment.Rscript
+
+            Return R.Source(path, args)
         End Function
 
         ''' <summary>
@@ -84,7 +119,7 @@ Namespace Runtime.Internal
         ''' <param name="envir"></param>
         ''' <returns></returns>
         Public Function options(opts As Object, envir As Environment) As Object
-            Dim configs As Options = envir.GlobalEnvironment.options
+            Dim configs As Options = envir.globalEnvironment.options
 
             For Each value In DirectCast(opts, list).slots
                 Try

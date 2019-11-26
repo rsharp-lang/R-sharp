@@ -117,6 +117,14 @@ Namespace Interpreter.ExecuteEngine
                             .DoCall(AddressOf Expression.CreateExpression)
 
                         Return New Suppress(evaluate)
+                    Case "require"
+                        Return code(1) _
+                            .Skip(1) _
+                            .Take(code(1).Length - 2) _
+                            .ToArray _
+                            .DoCall(Function(tokens)
+                                        Return New Require(tokens)
+                                    End Function)
                     Case Else
                         Throw New SyntaxErrorException
                 End Select
@@ -128,7 +136,13 @@ Namespace Interpreter.ExecuteEngine
                 ElseIf item.isIdentifier Then
                     Return New SymbolReference(item(Scan0))
                 Else
-                    Return item.CreateTree
+                    Dim ifelse = item.ifElseTriple
+
+                    If ifelse.ifelse Is Nothing Then
+                        Return item.CreateTree
+                    Else
+                        Return New IIfExpression(ifelse.test, ifelse.ifelse)
+                    End If
                 End If
             ElseIf code > 2 AndAlso (code(Scan0).isIdentifier OrElse code(Scan0).isTuple) AndAlso code(1).isOperator("->", "=>") Then
                 ' is a lambda function
@@ -157,6 +171,23 @@ Namespace Interpreter.ExecuteEngine
             ElseIf code = 2 Then
                 If code(Scan0).Length = 1 AndAlso code(Scan0)(Scan0) = (TokenType.operator, "$") Then
                     Return New FunctionInvoke(code.IteratesALL.ToArray)
+                End If
+            ElseIf code = 3 Then
+                If code.isSequenceSyntax Then
+                    Dim seq = code(Scan0).SplitByTopLevelDelimiter(TokenType.sequence)
+                    Dim from = seq(Scan0)
+                    Dim [to] = seq(2)
+                    Dim steps As Token() = Nothing
+
+                    If code > 1 Then
+                        If code(1).isKeyword("step") Then
+                            steps = code(2)
+                        Else
+                            Throw New SyntaxErrorException
+                        End If
+                    End If
+
+                    Return New SequenceLiteral(from, [to], steps)
                 End If
             End If
 

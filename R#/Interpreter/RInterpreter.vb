@@ -61,7 +61,6 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports SMRUCC.Rsharp.Runtime.Package
 
 Namespace Interpreter
 
@@ -86,7 +85,7 @@ Namespace Interpreter
                 envirConf = New Options(ConfigFile.localConfigs)
             End If
 
-            globalEnvir = New GlobalEnvironment(envirConf)
+            globalEnvir = New GlobalEnvironment(Me, envirConf)
             globalEnvir.Push(lastVariableName, Nothing, TypeCodes.generic)
         End Sub
 
@@ -116,22 +115,10 @@ Namespace Interpreter
         End Sub
 
         Public Sub LoadLibrary(packageName As String)
-            Dim exception As Exception = Nothing
-            Dim package As Package = globalEnvir.packages.FindPackage(packageName, exception)
+            Dim result As Message = globalEnvir.LoadLibrary(packageName)
 
-            Call Console.WriteLine($"Loading required package: {packageName}")
-
-            If package Is Nothing Then
-                Dim message As Message = Internal.stop(If(exception, New Exception("No packages installed...")), globalEnvir)
-
-                message.Message = {
-                    $"there is no package called ‘{packageName}’",
-                    $"package: {packageName}"
-                }.Join(message.Message)
-
-                Call printMessageInternal(message)
-            Else
-                Call ImportsPackage.ImportsStatic(globalEnvir, package.package)
+            If Not result Is Nothing Then
+                Call Interpreter.printMessageInternal(result)
             End If
         End Sub
 
@@ -220,7 +207,8 @@ Namespace Interpreter
         End Function
 
         ''' <summary>
-        ''' Run R# script program from a given script file 
+        ''' Run R# script program from a given script file.
+        ''' (运行脚本的时候调用的是<see cref="globalEnvir"/>全局环境)
         ''' </summary>
         ''' <param name="filepath">The script file path.</param>
         ''' <param name="arguments"></param>

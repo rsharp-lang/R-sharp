@@ -142,11 +142,12 @@
   <ItemGroup>
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\BinaryExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\ByRefFunctionCall.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Package\Require.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Suppress.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\MemberValueAssign.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\SymbolIndexer.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CommandLine.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Imports.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Package\Imports.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\LinqExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DeclareLambdaFunction.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ElseBranch.vb" />
@@ -167,6 +168,7 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DeclareNewVariable.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionTree.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSignature.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\BinaryExpressionTree.vb" />
     <Compile Include="Interpreter\Extensions.vb" />
     <Compile Include="Interpreter\Program.vb" />
     <Compile Include="Interpreter\RInterpreter.vb" />
@@ -197,8 +199,12 @@
     <Compile Include="Runtime\Components\Config\ConfigFile.vb" />
     <Compile Include="Runtime\Components\Interface\RPrint.vb" />
     <Compile Include="Runtime\Components\Interface\RFunction.vb" />
+    <Compile Include="Runtime\Internal\debug.vb" />
+    <Compile Include="Runtime\Internal\objects\conversion.vb" />
+    <Compile Include="Runtime\Internal\printer\classPrinter.vb" />
+    <Compile Include="Runtime\Internal\objects\vbObject.vb" />
     <Compile Include="Runtime\Internal\utils.vb" />
-    <Compile Include="Runtime\Internal\printer.vb" />
+    <Compile Include="Runtime\Internal\printer\printer.vb" />
     <Compile Include="Runtime\Interop\MethodInvoke.vb" />
     <Compile Include="Runtime\Interop\RInteropAttribute.vb" />
     <Compile Include="Runtime\Interop\RMethodArgument.vb" />

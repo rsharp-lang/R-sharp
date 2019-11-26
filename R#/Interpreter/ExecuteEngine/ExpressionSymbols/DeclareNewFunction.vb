@@ -119,7 +119,14 @@ Namespace Interpreter.ExecuteEngine
         Public Function Invoke(parent As Environment, params As InvokeParameter()) As Object Implements RFunction.Invoke
             Dim var As DeclareNewVariable
             Dim value As Object
-            Dim arguments As Dictionary(Of String, Object) = InvokeParameter.CreateArguments(envir, params)
+            Dim arguments As Dictionary(Of String, Object)
+            Dim envir As Environment = Me.envir
+
+            If envir Is Nothing Then
+                envir = parent
+            End If
+
+            arguments = InvokeParameter.CreateArguments(envir, params)
 
             ' initialize environment
             For i As Integer = 0 To Me.params.Length - 1
@@ -144,7 +151,11 @@ Namespace Interpreter.ExecuteEngine
                 If var.names.Any(AddressOf envir.variables.ContainsKey) Then
                     ' 只检查自己的环境中的变量
                     ' 因为函数参数是只属于自己的环境之中的符号
-                    Call ValueAssign.doValueAssign(envir, var.names.Select(Function(name) New Literal(name)).ToArray, True, value)
+                    Dim names As Literal() = var.names _
+                        .Select(Function(name) New Literal(name)) _
+                        .ToArray
+
+                    Call ValueAssign.doValueAssign(envir, names, True, value)
                 Else
                     ' 不存在，则插入新的
                     Call DeclareNewVariable.PushNames(var.names, value, var.type, envir)

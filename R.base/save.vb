@@ -129,36 +129,18 @@ Partial Module base
             Return Internal.stop("'object' is nothing!", envir)
         End If
 
-        Dim objList As New List(Of NamedValue(Of Object))
-        Dim type As Type = objects.GetType
-
-        If type Is GetType(Dictionary(Of String, Object)) Then
-            For Each item In DirectCast(objects, Dictionary(Of String, Object))
-                objList += New NamedValue(Of Object) With {
-                    .Name = item.Key,
-                    .Value = item.Value
-                }
-            Next
-        ElseIf type Is GetType(InvokeParameter()) Then
-            For Each item As InvokeParameter In DirectCast(objects, InvokeParameter())
-                objList += New NamedValue(Of Object) With {
-                    .Name = item.name,
-                    .Value = item.Evaluate(envir)
-                }
-            Next
-        Else
-            Throw New NotImplementedException
-        End If
-
         ' 先保存为cdf文件
         Dim tmp As String = App.GetAppSysTempFile(".cdf", App.PID, prefix:=RandomASCIIString(5, True)).TrimSuffix & "/R#.Data"
         Dim value As CDFData
         Dim maxChartSize As Integer = 2048
         Dim length As cdfAttribute
+        Dim objList As NamedValue(Of Object)() = RListObjectArgumentAttribute _
+            .getObjectList(objects, envir) _
+            .ToArray
 
         Using cdf As CDFWriter = New CDFWriter(tmp).GlobalAttributes(
             New cdfAttribute With {.name = "program", .type = CDFDataTypes.CHAR, .value = "SMRUCC/R#"},
-            New cdfAttribute With {.name = "numOfObjects", .type = CDFDataTypes.INT, .value = objList.Count},
+            New cdfAttribute With {.name = "numOfObjects", .type = CDFDataTypes.INT, .value = objList.Length},
             New cdfAttribute With {.name = "maxCharSize", .type = CDFDataTypes.INT, .value = maxChartSize}
         ).Dimensions(Dimension.Byte,
                      Dimension.Double,

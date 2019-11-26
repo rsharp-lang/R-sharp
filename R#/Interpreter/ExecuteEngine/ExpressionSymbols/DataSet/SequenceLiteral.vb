@@ -1,48 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::d28e8de3cc8c48e4f42f440323587aea, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SequenceLiteral.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class SequenceLiteral
-    ' 
-    '         Properties: type
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: Evaluate
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class SequenceLiteral
+' 
+'         Properties: type
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: Evaluate
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
@@ -51,7 +52,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Interpreter.ExecuteEngine
 
-    ' from:to:steps
+    ' from:to step diff
 
     Public Class SequenceLiteral : Inherits Expression
 
@@ -87,20 +88,26 @@ Namespace Interpreter.ExecuteEngine
             End If
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Private Shared Function isIntegerSequence(init As Object, stops As Object, offset As Object) As Boolean
+            Return Not New Object() {init, stops, offset} _
+                .Any(Function(num)
+                         Dim ntype As Type = num.GetType
+
+                         If ntype Like BinaryExpression.floats Then
+                             Return True
+                         Else
+                             Return False
+                         End If
+                     End Function)
+        End Function
+
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim init = from.Evaluate(envir)
             Dim stops = [to].Evaluate(envir)
             Dim offset = steps.Evaluate(envir)
 
-            If {init, stops, offset}.Any(Function(num)
-                                             Dim ntype As Type = num.GetType
-
-                                             If ntype Is GetType(Double) OrElse ntype Is GetType(Double()) Then
-                                                 Return True
-                                             Else
-                                                 Return False
-                                             End If
-                                         End Function) Then
+            If Not isIntegerSequence(init, stops, offset) Then
                 Dim start As Double = Runtime.getFirst(init)
                 Dim steps As Double = Runtime.getFirst(offset)
                 Dim ends As Double = Runtime.getFirst(stops)
@@ -125,6 +132,10 @@ Namespace Interpreter.ExecuteEngine
 
                 Return seq.ToArray
             End If
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return $"{from}:{[to]} step {steps}"
         End Function
     End Class
 End Namespace

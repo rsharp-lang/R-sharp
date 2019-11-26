@@ -1,50 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::f9ccaca6e9f825153d8203d0202fa20c, R#\Language\TokenIcer\Scanner.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class Scanner
-    ' 
-    '         Properties: lastCharIsEscapeSplash
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: finalizeToken, GetTokens, populateToken, walkChar
-    '         Class Escapes
-    ' 
-    '             Function: ToString
-    ' 
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class Scanner
+' 
+'         Properties: lastCharIsEscapeSplash
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: finalizeToken, GetTokens, populateToken, walkChar
+'         Class Escapes
+' 
+'             Function: ToString
+' 
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -180,6 +180,15 @@ Namespace Language.TokenIcer
         ''' </summary>
         ReadOnly longOperatorParts As Index(Of Char) = {"<"c, ">"c, "&"c, "|"c, ":"c, "="c, "-"c, "+"c}
         ReadOnly longOperators As Index(Of String) = {"<=", "<-", "&&", "||", ":>", "::", "<<", "->", "=>", ">=", "==", "++", "--"}
+        ReadOnly shortOperators As Index(Of Char) = {"$"c, "+"c, "*"c, "/"c, "%"c, "^"c, "!"c}
+        ReadOnly keywords As Index(Of String) = {
+            "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string",
+            "const", "imports", "require", "library",
+            "if", "else", "for", "loop", "while", "repeat", "step",
+            "in", "like", "which", "from", "where", "order", "by", "distinct", "select",
+            "ascending", "descending",
+            "suppress"
+        }
 
         Private Function walkChar(c As Char) As Token
             If c = ASCII.LF Then
@@ -262,7 +271,7 @@ Namespace Language.TokenIcer
                 Return New Token With {.name = TokenType.iif, .text = "?"}
             ElseIf c = ":"c Then
                 Return New Token With {.name = TokenType.sequence, .text = ":"}
-            ElseIf c = "$"c OrElse c = "+"c OrElse c = "*"c OrElse c = "/"c OrElse c = "%"c OrElse c = "^"c OrElse c = "!"c Then
+            ElseIf c Like shortOperators Then
                 Return New Token With {.name = TokenType.operator, .text = c}
             ElseIf c Like delimiter Then
                 ' token delimiter
@@ -337,6 +346,13 @@ Namespace Language.TokenIcer
                 text = text.Trim
             End If
 
+            If text Like keywords Then
+                Return New Token With {
+                    .name = TokenType.keyword,
+                    .text = text
+                }
+            End If
+
             Select Case text
                 Case RInterpreter.lastVariableName
                     Return New Token With {.name = TokenType.identifier, .text = text}
@@ -346,12 +362,6 @@ Namespace Language.TokenIcer
                     Return New Token With {.name = TokenType.sequence, .text = text}
                 Case "NULL", "NA", "Inf"
                     Return New Token With {.name = TokenType.missingLiteral, .text = text}
-                Case "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string",
-                     "const", "imports", "require",
-                     "if", "else", "for", "loop", "while",
-                     "in", "like", "which", "from", "where", "order", "by", "distinct", "select",
-                     "ascending", "descending", "suppress"
-                    Return New Token With {.name = TokenType.keyword, .text = text}
                 Case "true", "false", "yes", "no", "T", "F", "TRUE", "FALSE"
                     Return New Token With {.name = TokenType.booleanLiteral, .text = text}
                 Case "✔"
