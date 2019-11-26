@@ -1,6 +1,12 @@
-﻿Namespace Runtime.Internal
+﻿Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+
+Namespace Runtime.Internal
 
     Module RConversion
+
+        Sub New()
+            Call Internal.invoke.add(New GenericInternalInvoke("as.object", AddressOf asObject))
+        End Sub
 
         Public Function asObject(obj As Object) As Object
             If obj Is Nothing Then

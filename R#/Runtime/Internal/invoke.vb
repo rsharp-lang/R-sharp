@@ -45,6 +45,7 @@
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
@@ -67,7 +68,14 @@ Namespace Runtime.Internal
         ReadOnly index As New Dictionary(Of String, RInternalFuncInvoke)
 
         Sub New()
+        End Sub
 
+        ''' <summary>
+        ''' Add internal invoke handle
+        ''' </summary>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Friend Sub add(handle As RInternalFuncInvoke)
+            index(handle.funcName) = handle
         End Sub
 
         Public Function Rdataframe(envir As Environment, parameters As List(Of Expression)) As Object

@@ -1,4 +1,6 @@
-﻿Namespace Runtime.Internal.Invokes
+﻿Imports System.Runtime.CompilerServices
+
+Namespace Runtime.Internal.Invokes
 
     ''' <summary>
     ''' 内部函数的调用接口
@@ -19,5 +21,22 @@
         ''' <returns></returns>
         Public MustOverride Function invoke(envir As Environment, paramVals As Object()) As Object
 
+    End Class
+
+    Public Class GenericInternalInvoke : Inherits RInternalFuncInvoke
+
+        Public Overrides ReadOnly Property funcName As String
+
+        ReadOnly handle As Func(Of Environment, Object(), Object)
+
+        Sub New(name$, invoke As Func(Of Object, Object))
+            funcName = name
+            handle = Function(envir, params) invoke(params(Scan0))
+        End Sub
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Overrides Function invoke(envir As Environment, paramVals() As Object) As Object
+            Return handle(envir, paramVals)
+        End Function
     End Class
 End Namespace
