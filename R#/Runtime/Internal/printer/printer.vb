@@ -128,7 +128,7 @@ Namespace Runtime.Internal
                                Return $"""{o}"""
                            End If
                        End Function
-            ElseIf Not elementType.Namespace.StartsWith("System.") Then
+            ElseIf Not (elementType.Namespace.StartsWith("System.") OrElse elementType.Namespace = "System") Then
                 Return AddressOf classPrinter.printClass
             ElseIf elementType = GetType(Boolean) Then
                 Return Function(b) b.ToString.ToUpper
