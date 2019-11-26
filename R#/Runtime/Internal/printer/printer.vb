@@ -74,7 +74,16 @@ Namespace Runtime.Internal
             Dim valueType As Type = x.GetType
 
             If valueType.IsInheritsFrom(GetType(Array)) Then
-                Call DirectCast(x, Array).printArray()
+                With DirectCast(x, Array)
+                    If .Length > 1 Then
+                        Call .printArray()
+                    Else
+                        x = .GetValue(Scan0)
+                        ' get the first value and then print its
+                        ' text value onto console
+                        GoTo printSingleElement
+                    End If
+                End With
             ElseIf valueType Is GetType(vector) Then
                 Call DirectCast(x, vector).data.printArray()
             ElseIf valueType Is GetType(Dictionary(Of String, Object)) Then
@@ -85,6 +94,7 @@ Namespace Runtime.Internal
                     .Print(addBorder:=False) _
                     .DoCall(AddressOf Console.WriteLine)
             Else
+printSingleElement:
                 Call Console.WriteLine("[1] " & printer.ValueToString(x))
             End If
         End Sub
