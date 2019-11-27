@@ -288,6 +288,10 @@ test1::println('123');
         Pause()
     End Sub
 
+    Sub commandLineArgumentTest()
+        Call R.Evaluate("print(?'--in')")
+    End Sub
+
     Sub cliTest()
         Call R.Evaluate("let app as string = 'eggHTS'")
         Call R.Evaluate("let std_out <- @`E:/GCModeller/GCModeller/bin/${app}.exe`")
