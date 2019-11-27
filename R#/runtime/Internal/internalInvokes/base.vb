@@ -67,11 +67,34 @@ Namespace Runtime.Internal
 
         Sub New()
             Call Internal.invoke.add(globalenv)
+            Call Internal.invoke.add(isEmpty)
         End Sub
 
         Friend Sub pushEnvir()
             ' do nothing
         End Sub
+
+        Private Function isEmpty() As GenericInternalInvoke
+            Return New GenericInternalInvoke(
+                name:="is.empty",
+                invoke:=Function(o) As Object
+                            If o Is Nothing Then
+                                Return True
+                            Else
+                                Dim type As Type = o.GetType
+
+                                If type Is GetType(String) Then
+                                    Return DirectCast(o, String).StringEmpty(False)
+                                ElseIf type.IsArray Then
+                                    Return DirectCast(o, Array).Length = 0
+                                ElseIf type.ImplementInterface(GetType(RIndex)) Then
+                                    Return DirectCast(o, RIndex).length = 0
+                                Else
+                                    Return False
+                                End If
+                            End If
+                        End Function)
+        End Function
 
         Private Function globalenv() As GenericInternalInvoke
             Return New GenericInternalInvoke(NameOf(globalenv), Function(env, params) env.globalEnvironment)
