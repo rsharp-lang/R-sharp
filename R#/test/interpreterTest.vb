@@ -55,6 +55,7 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call missingSymbolInStringInterpolate()
         Call sourceScripttest()
         Call commandLineArgumentTest()
         Call objClasstest()
@@ -115,6 +116,12 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub missingSymbolInStringInterpolate()
+        Call R.Evaluate("`test ${xxx} symbol not found `")
 
         Pause()
     End Sub
@@ -261,7 +268,9 @@ test1::println('123');
     End Sub
 
     Sub sourceScripttest()
-        Call R.Source("D:\GCModeller\src\R-sharp\tutorials\lambda.R")
+        ' Call R.Source("D:\GCModeller\src\R-sharp\tutorials\lambda.R")
+        Call R.Source("D:\GCModeller\src\R-sharp\tutorials\data\forloop.R")
+
         Pause()
     End Sub
 

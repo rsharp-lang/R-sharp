@@ -82,9 +82,19 @@ Namespace Interpreter.ExecuteEngine
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim current As Array = Runtime.asVector(Of String)(stringParts(Scan0).Evaluate(envir))
+            Dim [next] As Object
 
             For Each part As Expression In stringParts.Skip(1)
-                current = BinaryExpression.DoStringJoin(current, part.Evaluate(envir))
+                [next] = part.Evaluate(envir)
+
+                If Program.isException([next]) Then
+                    Return [next]
+                Else
+                    current = BinaryExpression.DoStringJoin(
+                        a:=current,
+                        b:=[next]
+                    )
+                End If
             Next
 
             Return current
