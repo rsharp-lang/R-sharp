@@ -150,7 +150,7 @@ Namespace Interpreter.ExecuteEngine
                         Return New IIfExpression(ifelse.test, ifelse.ifelse)
                     End If
                 End If
-            ElseIf code > 2 AndAlso (code(Scan0).isIdentifier OrElse code(Scan0).isTuple) AndAlso code(1).isOperator("->", "=>") Then
+            ElseIf code.isLambdaFunction Then
                 ' is a lambda function
                 Return New DeclareLambdaFunction(code)
             End If
