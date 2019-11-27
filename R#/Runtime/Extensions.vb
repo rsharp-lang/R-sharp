@@ -67,7 +67,13 @@ Namespace Runtime
             End If
 
             If valueType.IsInheritsFrom(GetType(Array)) Then
-                Return DirectCast(value, Array).GetValue(Scan0)
+                With DirectCast(value, Array)
+                    If .Length = 0 Then
+                        Return Nothing
+                    Else
+                        Return .GetValue(Scan0)
+                    End If
+                End With
             Else
                 Return value
             End If
