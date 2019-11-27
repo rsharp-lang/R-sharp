@@ -116,7 +116,12 @@ Namespace Runtime.Interop
             If Me.parameters.Any(Function(a) a.isObjectList) Then
                 parameters = createObjectListArguments(envir, params).ToArray
             Else
-                parameters = createNormalArguments(envir, InvokeParameter.CreateArguments(envir, params)).ToArray
+                parameters = InvokeParameter _
+                    .CreateArguments(envir, params) _
+                    .DoCall(Function(args)
+                                Return createNormalArguments(envir, args)
+                            End Function) _
+                    .ToArray
             End If
 
             For Each arg In parameters
