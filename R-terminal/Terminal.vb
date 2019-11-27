@@ -53,20 +53,21 @@ Module Terminal
 
     Dim R As RInterpreter
 
-    Public Function RunTerminal() As Integer
-        Dim ps1 As New PS1("> ")
-
+    Sub New()
         Call Console.WriteLine("Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 ")
+    End Sub
+
+    Public Function RunTerminal() As Integer
         R = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
 
         Call R.LoadLibrary("base")
         Call R.LoadLibrary("utils")
         Call R.LoadLibrary("grDevices")
 
-        Call New Shell(ps1, AddressOf doRunScript) With {
+        Call New Shell(New PS1("> "), AddressOf doRunScript) With {
             .Quite = "q()"
         }.Run()
 
@@ -88,12 +89,18 @@ Type 'q()' to quit R.
             If funcName = "cat" Then
                 Call Console.WriteLine()
             End If
-        Else
+        ElseIf Not program.isValueAssign Then
             Call Internal.base.print(result, R.globalEnvir)
         End If
     End Sub
 
     ReadOnly echo As Index(Of String) = {"print", "cat", "echo"}
+
+    <Extension>
+    Private Function isValueAssign(program As RProgram) As Boolean
+        ' 如果是赋值表达式的话，也不会在终端上打印结果值
+        Return TypeOf program.Last Is ValueAssign
+    End Function
 
     <Extension>
     Private Function isSimplePrintCall(program As RProgram) As Boolean

@@ -60,6 +60,10 @@ Namespace Interpreter.ExecuteEngine
     Public Class ValueAssign : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
+            Get
+                Return value.type
+            End Get
+        End Property
 
         ''' <summary>
         ''' 可能是对tuple做赋值
