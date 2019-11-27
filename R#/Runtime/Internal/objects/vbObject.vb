@@ -107,7 +107,13 @@ Namespace Runtime.Internal
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function ToString() As String
-            Return target.ToString
+            If target Is Nothing Then
+                Return "NULL"
+            ElseIf printer.RtoString.ContainsKey(target.GetType) Then
+                Return printer.RtoString(target.GetType)(target)
+            Else
+                Return target.ToString
+            End If
         End Function
     End Class
 End Namespace

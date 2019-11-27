@@ -55,7 +55,7 @@ Namespace Runtime.Internal
     ''' </summary>
     Public Module printer
 
-        ReadOnly RtoString As New Dictionary(Of Type, IStringBuilder)
+        Friend ReadOnly RtoString As New Dictionary(Of Type, IStringBuilder)
 
         Sub New()
             RtoString(GetType(Color)) = Function(c) DirectCast(c, Color).ToHtmlColor.ToLower
