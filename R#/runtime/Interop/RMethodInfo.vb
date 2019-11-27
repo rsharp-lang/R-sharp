@@ -189,6 +189,13 @@ Namespace Runtime.Interop
             Dim keys As String() = arguments.Keys.ToArray
             Dim nameKey As String
 
+            For Each value As Object In arguments.Values
+                If Not value Is Nothing AndAlso value.GetType Is GetType(Message) Then
+                    Yield value
+                    Return
+                End If
+            Next
+
             For i As Integer = 0 To Me.parameters.Length - 1
                 arg = Me.parameters(i)
 
