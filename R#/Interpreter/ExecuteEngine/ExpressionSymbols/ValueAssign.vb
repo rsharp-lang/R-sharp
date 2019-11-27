@@ -103,7 +103,7 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Public Function DoValueAssign(envir As Environment, value As Object) As Object
-            If value.GetType Is GetType(IfBranch.IfPromise) Then
+            If Not value Is Nothing AndAlso value.GetType Is GetType(IfBranch.IfPromise) Then
                 DirectCast(value, IfBranch.IfPromise).assignTo = Me
                 Return value
             Else
@@ -136,59 +136,96 @@ Namespace Interpreter.ExecuteEngine
             End If
         End Function
 
+        Private Shared Function setFromVector(envir As Environment, targetSymbols As Expression(), isByRef As Boolean, value As Object)
+            Dim message As New Value(Of Message)
+            Dim array As Array
+
+            If value.GetType Is GetType(vector) Then
+                array = DirectCast(value, vector).data
+            Else
+                array = value
+            End If
+
+            If array.Length = 1 Then
+                ' all assign the same value result
+                For Each name As Expression In targetSymbols
+                    If Not (message = assignSymbol(envir, name, isByRef, value)) Is Nothing Then
+                        Return message
+                    End If
+                Next
+            ElseIf array.Length = targetSymbols.Length Then
+                ' one by one
+                For i As Integer = 0 To array.Length - 1
+                    If Not (message = assignSymbol(envir, targetSymbols(i), isByRef, array.GetValue(i))) Is Nothing Then
+                        Return message
+                    End If
+                Next
+            Else
+                ' 数量不对
+                Throw New InvalidCastException
+            End If
+
+            Return Nothing
+        End Function
+
+        Private Shared Function setFromObjectList(envir As Environment, targetSymbols As Expression(), isByRef As Boolean, value As Object)
+            Dim list As list = value
+            Dim message As New Value(Of Message)
+
+            If list.length = 1 Then
+                ' 设置tuple的值的时候
+                ' list必须要有相同的元素数量
+                Return Internal.stop("Number of list element is not identical to the tuple elements...", envir)
+            ElseIf list.length = targetSymbols.Length Then
+                Dim name$
+
+                ' one by one
+                For i As Integer = 0 To list.length - 1
+                    name = GetSymbol(targetSymbols(i))
+
+                    If list.slots.ContainsKey(name) Then
+                        value = list.slots(name)
+                    Else
+                        ' R中的元素下标都是从1开始的
+                        value = list.slots($"{i + 1}")
+                    End If
+
+                    If Not (message = assignSymbol(envir, targetSymbols(i), isByRef, value)) Is Nothing Then
+                        Return message
+                    End If
+                Next
+            Else
+                ' 数量不对
+                Throw New InvalidCastException
+            End If
+
+            Return Nothing
+        End Function
+
         Private Shared Function assignTuples(envir As Environment, targetSymbols As Expression(), isByRef As Boolean, value As Object) As Message
-            If value.GetType.IsInheritsFrom(GetType(Array)) Then
-                Dim array As Array = value
-                Dim message As New Value(Of Message)
+            Dim message As New Value(Of Message)
+            Dim type As Type
 
-                If array.Length = 1 Then
-                    ' all assign the same value result
-                    For Each name As Expression In targetSymbols
-                        If Not (message = assignSymbol(envir, name, isByRef, value)) Is Nothing Then
-                            Return message
-                        End If
-                    Next
-                ElseIf array.Length = targetSymbols.Length Then
-                    ' one by one
-                    For i As Integer = 0 To array.Length - 1
-                        If Not (message = assignSymbol(envir, targetSymbols(i), isByRef, array.GetValue(i))) Is Nothing Then
-                            Return message
-                        End If
-                    Next
-                Else
-                    ' 数量不对
-                    Throw New InvalidCastException
-                End If
-            ElseIf value.GetType Is GetType(list) Then
-                Dim list As list = value
-                Dim message As New Value(Of Message)
+            If value Is Nothing Then
+                ' all assign the same value result
+                ' literal NULL
+                For Each name As Expression In targetSymbols
+                    If Not (message = assignSymbol(envir, name, isByRef, value)) Is Nothing Then
+                        Return message
+                    End If
+                Next
 
-                If list.Length = 1 Then
-                    ' 设置tuple的值的时候
-                    ' list必须要有相同的元素数量
-                    Return Internal.stop("Number of list element is not identical to the tuple elements...", envir)
-                ElseIf list.Length = targetSymbols.Length Then
-                    Dim name$
+                Return Nothing
+            Else
+                type = value.GetType
+            End If
 
-                    ' one by one
-                    For i As Integer = 0 To list.length - 1
-                        name = GetSymbol(targetSymbols(i))
+            If type.IsInheritsFrom(GetType(Array)) OrElse type Is GetType(vector) Then
+                Return setFromVector(envir, targetSymbols, isByRef, value)
 
-                        If list.slots.ContainsKey(name) Then
-                            value = list.slots(name)
-                        Else
-                            ' R中的元素下标都是从1开始的
-                            value = list.slots($"{i + 1}")
-                        End If
+            ElseIf type Is GetType(list) Then
+                Return setFromObjectList(envir, targetSymbols, isByRef, value)
 
-                        If Not (message = assignSymbol(envir, targetSymbols(i), isByRef, value)) Is Nothing Then
-                            Return message
-                        End If
-                    Next
-                Else
-                    ' 数量不对
-                    Throw New InvalidCastException
-                End If
             Else
                 Throw New NotImplementedException
             End If
@@ -228,7 +265,7 @@ Namespace Interpreter.ExecuteEngine
             If isByRef Then
                 target.value = value
             Else
-                If value.GetType.IsInheritsFrom(GetType(Array)) Then
+                If Not value Is Nothing AndAlso value.GetType.IsInheritsFrom(GetType(Array)) Then
                     target.value = DirectCast(value, Array).Clone
                 Else
                     target.value = value
