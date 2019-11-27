@@ -51,42 +51,47 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
 Module Terminal
 
+    Dim R As RInterpreter
+
     Public Function RunTerminal() As Integer
         Dim ps1 As New PS1("> ")
-        Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
-        Dim exec As Action(Of String) =
-            Sub(script)
-                Dim program As RProgram = RProgram.BuildProgram(script)
-                Dim result = R.Run(program)
-
-                If Not RProgram.isException(result) Then
-                    If program.Count = 1 AndAlso program.isSimplePrintCall Then
-                        ' do nothing
-                        Dim funcName As Literal = DirectCast(program.First, FunctionInvoke).funcName
-
-                        If funcName = "cat" Then
-                            Call Console.WriteLine()
-                        End If
-                    Else
-                        Call Internal.base.print(result, R.globalEnvir)
-                    End If
-                End If
-            End Sub
 
         Call Console.WriteLine("Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 ")
+        R = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
+
         Call R.LoadLibrary("base")
         Call R.LoadLibrary("utils")
         Call R.LoadLibrary("grDevices")
 
-        Call New Shell(ps1, exec) With {
+        Call New Shell(ps1, AddressOf doRunScript) With {
             .Quite = "q()"
         }.Run()
 
         Return 0
     End Function
+
+    Private Sub doRunScript(script As String)
+        Dim program As RProgram = RProgram.BuildProgram(script)
+        Dim result = R.Run(program)
+
+        If RProgram.isException(result) Then
+            Return
+        End If
+
+        If program.Count = 1 AndAlso program.isSimplePrintCall Then
+            ' do nothing
+            Dim funcName As Literal = DirectCast(program.First, FunctionInvoke).funcName
+
+            If funcName = "cat" Then
+                Call Console.WriteLine()
+            End If
+        Else
+            Call Internal.base.print(result, R.globalEnvir)
+        End If
+    End Sub
 
     ReadOnly echo As Index(Of String) = {"print", "cat", "echo"}
 
@@ -96,7 +101,7 @@ Type 'q()' to quit R.
             Return False
         End If
 
-        Dim funcName = DirectCast(program.First, FunctionInvoke).funcName
+        Dim funcName As Expression = DirectCast(program.First, FunctionInvoke).funcName
 
         If Not TypeOf funcName Is Literal Then
             Return False
