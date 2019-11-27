@@ -290,7 +290,11 @@ test1::println('123');
     End Sub
 
     Sub commandLineArgumentTest()
+        Call R.Evaluate("(5 > 9) ? 'A' : (?'--in') ")
+        Call R.Evaluate("print($)")
         Call R.Evaluate("print(?'--in')")
+
+        Pause()
     End Sub
 
     Sub cliTest()
