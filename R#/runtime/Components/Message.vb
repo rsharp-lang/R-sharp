@@ -54,13 +54,17 @@ Namespace Runtime.Components
     ''' </summary>
     Public Class Message : Implements IEnumerable(Of String)
 
-        Public Property Message As String()
-        Public Property MessageLevel As MSG_TYPES
-        Public Property EnvironmentStack As StackFrame()
-        Public Property Trace As StackFrame()
+        Public Property message As String()
+        Public Property level As MSG_TYPES
+        Public Property environmentStack As StackFrame()
+        Public Property trace As StackFrame()
+
+        Public Overrides Function ToString() As String
+            Return $"[{level.Description}] {message(Scan0)}"
+        End Function
 
         Public Iterator Function GetEnumerator() As IEnumerator(Of String) Implements IEnumerable(Of String).GetEnumerator
-            For Each msg As String In Message
+            For Each msg As String In message
                 Yield msg
             Next
         End Function
@@ -93,6 +97,16 @@ Namespace Runtime.Components
             Return {
                 "The specific syntax is not yet implemented...",
                 "operation: " & operation
+            }.DoCall(Function(msg)
+                         Return Internal.stop(msg, envir)
+                     End Function)
+        End Function
+
+        Public Shared Function InCompatibleType(require As Type, given As Type, envir As Environment, Optional message$ = "The given type is incompatible with the required type!") As Message
+            Return {
+                message,
+                "required: " & require.FullName,
+                "given: " & given.FullName
             }.DoCall(Function(msg)
                          Return Internal.stop(msg, envir)
                      End Function)

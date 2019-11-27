@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::9829bfcff09dbc045dcd4c03afec8198, R#\Runtime\Interop\RMethodInfo.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class RMethodInfo
-    ' 
-    '         Properties: name, parameters, returns
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: createNormalArguments, createObjectListArguments, GetPrintContent, getValue, Invoke
-    '                   missingParameter, parseParameters, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class RMethodInfo
+' 
+'         Properties: name, parameters, returns
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: createNormalArguments, createObjectListArguments, GetPrintContent, getValue, Invoke
+'                   missingParameter, parseParameters, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -51,6 +51,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Runtime.Interop
 
@@ -116,7 +117,12 @@ Namespace Runtime.Interop
             If Me.parameters.Any(Function(a) a.isObjectList) Then
                 parameters = createObjectListArguments(envir, params).ToArray
             Else
-                parameters = createNormalArguments(envir, InvokeParameter.CreateArguments(envir, params)).ToArray
+                parameters = InvokeParameter _
+                    .CreateArguments(envir, params) _
+                    .DoCall(Function(args)
+                                Return createNormalArguments(envir, args)
+                            End Function) _
+                    .ToArray
             End If
 
             For Each arg In parameters
@@ -189,6 +195,13 @@ Namespace Runtime.Interop
             Dim keys As String() = arguments.Keys.ToArray
             Dim nameKey As String
 
+            For Each value As Object In arguments.Values
+                If Not value Is Nothing AndAlso value.GetType Is GetType(Message) Then
+                    Yield value
+                    Return
+                End If
+            Next
+
             For i As Integer = 0 To Me.parameters.Length - 1
                 arg = Me.parameters(i)
 
@@ -230,8 +243,12 @@ Namespace Runtime.Interop
         Private Shared Function getValue(arg As RMethodArgument, value As Object) As Object
             If arg.type.isArray Then
                 value = CObj(Runtime.asVector(value, arg.type.raw.GetElementType))
-            Else
+            ElseIf Not arg.isRequireRawVector Then
                 value = Runtime.getFirst(value)
+            End If
+
+            If Not value Is Nothing AndAlso value.GetType Is GetType(vbObject) Then
+                value = DirectCast(value, vbObject).target
             End If
 
             Return Conversion.CTypeDynamic(value, arg.type.raw)

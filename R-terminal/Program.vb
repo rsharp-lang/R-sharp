@@ -63,14 +63,14 @@ Module Program
         Call R.LoadLibrary("grDevices")
 
         For Each arg As NamedValue(Of String) In args.ToArgumentVector
-            Call R.Add(arg.Name, arg.Value, TypeCodes.generic)
+            Call R.Add(CommandLine.TrimNamePrefix(arg.Name), arg.Value, TypeCodes.generic)
         Next
 
         Dim scriptText$ = filepath.ReadAllText
         Dim result As Object = R.Evaluate(scriptText)
 
         If Not result Is Nothing AndAlso result.GetType Is GetType(Message) Then
-            Return DirectCast(result, Message).MessageLevel
+            Return DirectCast(result, Message).level
         Else
             Return 0
         End If

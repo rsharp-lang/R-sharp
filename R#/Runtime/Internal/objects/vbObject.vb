@@ -96,7 +96,13 @@ Namespace Runtime.Internal
         ''' 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function setByName(names() As String, value As Array, envir As Environment) As Object Implements RNameIndex.setByName
-            Return Internal.stop(New InvalidProgramException, envir)
+            If names.Length = 0 Then
+                Return Nothing
+            ElseIf names.Length = 1 Then
+                Return setByName(names(Scan0), Runtime.getFirst(value), envir)
+            Else
+                Return Internal.stop(New InvalidProgramException("You can not set multiple property for one VisualBasic.NET class object at once!"), envir)
+            End If
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>

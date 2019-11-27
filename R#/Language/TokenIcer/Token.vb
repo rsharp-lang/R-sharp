@@ -73,5 +73,13 @@ Namespace Language.TokenIcer
         Public Shared Widening Operator CType(type As TokenType) As Token
             Return New Token(type)
         End Operator
+
+        Public Overloads Shared Operator =(token As Token, type As TokenType) As Boolean
+            Return token.name = type
+        End Operator
+
+        Public Overloads Shared Operator <>(token As Token, type As TokenType) As Boolean
+            Return Not token = type
+        End Operator
     End Class
 End Namespace

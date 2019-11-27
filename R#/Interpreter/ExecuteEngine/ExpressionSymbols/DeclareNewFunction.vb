@@ -126,7 +126,9 @@ Namespace Interpreter.ExecuteEngine
                 envir = parent
             End If
 
-            arguments = InvokeParameter.CreateArguments(envir, params)
+            ' function parameter should be evaluate 
+            ' from the parent environment.
+            arguments = InvokeParameter.CreateArguments(parent, params)
 
             ' initialize environment
             For i As Integer = 0 To Me.params.Length - 1

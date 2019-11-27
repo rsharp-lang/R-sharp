@@ -139,9 +139,15 @@ Namespace Interpreter.ExecuteEngine
                 value = Me.value.Evaluate(envir)
             End If
 
-            Call PushNames(names, value, type, envir)
+            If Program.isException(value) Then
+                Return value
+            Else
+                ' add new symbol into the given environment stack
+                ' and then returns the value result
+                Call PushNames(names, value, type, envir)
 
-            Return value
+                Return value
+            End If
         End Function
 
         Friend Shared Function PushNames(names$(), value As Object, type As TypeCodes, envir As Environment) As Environment

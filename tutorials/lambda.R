@@ -4,8 +4,10 @@
 
 # verbose
 let add1 as function(x) {
-	x+1;
+	`x+1 = ${x+1}`;
 }
+
+print(add1(99));
 
 let seed as integer = 0;
 

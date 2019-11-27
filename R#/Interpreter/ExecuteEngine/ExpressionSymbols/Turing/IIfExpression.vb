@@ -66,7 +66,8 @@ Namespace Interpreter.ExecuteEngine
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim test As Boolean = Runtime.asLogical(Runtime.getFirst(ifTest.Evaluate(envir)))(Scan0)
+            Dim ifTestResult = ifTest.Evaluate(envir)
+            Dim test As Boolean = Runtime.asLogical(ifTestResult)(Scan0)
 
             If test = True Then
                 Return trueResult.Evaluate(envir)

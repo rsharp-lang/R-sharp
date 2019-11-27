@@ -67,11 +67,64 @@ Namespace Runtime.Internal
 
         Sub New()
             Call Internal.invoke.add(globalenv)
+            Call Internal.invoke.add(isEmpty)
         End Sub
 
         Friend Sub pushEnvir()
             ' do nothing
         End Sub
+
+        Private Function isEmpty() As GenericInternalInvoke
+            Return New GenericInternalInvoke(
+                name:="is.empty",
+                invoke:=Function(o) As Object
+                            Return isEmpty(o)
+                        End Function)
+        End Function
+
+        Private Function isEmpty(o As Object) As Object
+            If o Is Nothing Then
+                Return True
+            End If
+
+            Dim type As Type = o.GetType
+
+            If type Is GetType(String) Then
+                Return DirectCast(o, String).StringEmpty(False)
+            ElseIf type Is GetType(String()) Then
+                With DirectCast(o, String())
+                    If .Length > 1 Then
+                        Return False
+                    ElseIf .Length = 0 OrElse .First.StringEmpty(False) Then
+                        Return True
+                    Else
+                        Return False
+                    End If
+                End With
+            ElseIf type.IsArray Then
+                With DirectCast(o, Array)
+                    If .Length = 0 Then
+                        Return True
+                    ElseIf .Length = 1 Then
+                        Dim first As Object = .GetValue(Scan0)
+
+                        If first Is Nothing Then
+                            Return True
+                        ElseIf first.GetType Is GetType(String) Then
+                            Return DirectCast(first, String).StringEmpty(False)
+                        Else
+                            Return False
+                        End If
+                    Else
+                        Return False
+                    End If
+                End With
+            ElseIf type.ImplementInterface(GetType(RIndex)) Then
+                Return DirectCast(o, RIndex).length = 0
+            Else
+                Return False
+            End If
+        End Function
 
         Private Function globalenv() As GenericInternalInvoke
             Return New GenericInternalInvoke(NameOf(globalenv), Function(env, params) env.globalEnvironment)
@@ -220,10 +273,10 @@ Namespace Runtime.Internal
             End If
 
             Return New Message With {
-                .Message = messages,
-                .EnvironmentStack = envir.getEnvironmentStack,
-                .MessageLevel = MSG_TYPES.ERR,
-                .Trace = devtools.ExceptionData.GetCurrentStackTrace
+                .message = messages,
+                .environmentStack = envir.getEnvironmentStack,
+                .level = MSG_TYPES.ERR,
+                .trace = devtools.ExceptionData.GetCurrentStackTrace
             }
         End Function
 
@@ -245,14 +298,14 @@ Namespace Runtime.Internal
 
         Private Function createMessageInternal(messages As Object, envir As Environment, level As MSG_TYPES) As Message
             Return New Message With {
-                .Message = Runtime.asVector(Of Object)(messages) _
+                .message = Runtime.asVector(Of Object)(messages) _
                     .AsObjectEnumerator _
                     .SafeQuery _
                     .Select(Function(o) Scripting.ToString(o, "NULL")) _
                     .ToArray,
-                .MessageLevel = level,
-                .EnvironmentStack = envir.getEnvironmentStack,
-                .Trace = devtools.ExceptionData.GetCurrentStackTrace
+                .level = level,
+                .environmentStack = envir.getEnvironmentStack,
+                .trace = devtools.ExceptionData.GetCurrentStackTrace
             }
         End Function
 
@@ -278,7 +331,7 @@ Namespace Runtime.Internal
 
         Public Function print(x As Object, envir As Environment) As Object
             If x Is Nothing Then
-                Call Console.WriteLine("[1] NULL")
+                Call Console.WriteLine("NULL")
             ElseIf x.GetType.ImplementInterface(GetType(RPrint)) Then
                 Try
                     Call Console.WriteLine(DirectCast(x, RPrint).GetPrintContent)

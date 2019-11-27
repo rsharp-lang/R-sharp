@@ -187,7 +187,8 @@ Namespace Language.TokenIcer
             "if", "else", "for", "loop", "while", "repeat", "step",
             "in", "like", "which", "from", "where", "order", "by", "distinct", "select",
             "ascending", "descending",
-            "suppress"
+            "suppress",
+            "typeof", "modeof"
         }
 
         Private Function walkChar(c As Char) As Token

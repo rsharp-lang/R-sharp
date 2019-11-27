@@ -75,10 +75,10 @@ Namespace Runtime
             If package Is Nothing Then
                 Dim message As Message = Internal.stop(If(exception, New Exception("No packages installed...")), Me)
 
-                message.Message = {
+                message.message = {
                     $"there is no package called ‘{packageName}’",
                     $"package: {packageName}"
-                }.Join(message.Message)
+                }.Join(message.message)
 
                 Return message
             Else

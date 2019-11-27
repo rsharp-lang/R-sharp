@@ -59,6 +59,7 @@ Namespace Runtime.Internal
 
         Sub New()
             RtoString(GetType(Color)) = Function(c) DirectCast(c, Color).ToHtmlColor.ToLower
+            RtoString(GetType(vbObject)) = Function(o) DirectCast(o, vbObject).ToString
         End Sub
 
         ''' <summary>
@@ -77,6 +78,8 @@ Namespace Runtime.Internal
                 With DirectCast(x, Array)
                     If .Length > 1 Then
                         Call .printArray()
+                    ElseIf .Length = 0 Then
+                        Call Console.WriteLine("NULL")
                     Else
                         x = .GetValue(Scan0)
                         ' get the first value and then print its

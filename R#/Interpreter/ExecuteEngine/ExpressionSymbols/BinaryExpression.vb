@@ -1,48 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::96b63464c72ebb78d0a0a6d6146f2857, R#\Interpreter\ExecuteEngine\ExpressionSymbols\BinaryExpression.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class BinaryExpression
-    ' 
-    '         Properties: type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: DoStringJoin, Evaluate, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class BinaryExpression
+' 
+'         Properties: type
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: DoStringJoin, Evaluate, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -117,7 +118,11 @@ Namespace Interpreter.ExecuteEngine
                 If tb Like integers Then
 
                     Select Case [operator]
+                        Case "+" : Return Runtime.Core.Add(Of Double, Long, Double)(a, b).ToArray
+                        Case "-" : Return Runtime.Core.Minus(Of Double, Long, Double)(a, b).ToArray
                         Case "*" : Return Runtime.Core.Multiply(Of Double, Long, Double)(a, b).ToArray
+                        Case "/" : Return Runtime.Core.Divide(Of Double, Long, Double)(a, b).ToArray
+
                     End Select
                 ElseIf tb Like floats Then
                     Select Case [operator]
@@ -172,10 +177,23 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Public Shared Function DoStringJoin(a As Object, b As Object) As String()
-            Dim va = (From element In Runtime.asVector(Of Object)(a).AsQueryable Select Scripting.ToString(element, "NULL")).ToArray
-            Dim vb = (From element In Runtime.asVector(Of Object)(b).AsQueryable Select Scripting.ToString(element, "NULL")).ToArray
+            Dim va = getStringArray(a).ToArray
+            Dim vb = getStringArray(b).ToArray
+            Dim append = Function(x, y) x & y
 
-            Return Runtime.Core.BinaryCoreInternal(Of String, String, String)(va, vb, Function(x, y) x & y).ToArray
+            Return Runtime.Core _
+                .BinaryCoreInternal(Of String, String, String)(va, vb, append) _
+                .ToArray
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Private Shared Function getStringArray(a As Object) As IEnumerable(Of String)
+            Return From element As Object
+                   In Runtime _
+                       .asVector(Of Object)(a) _
+                       .AsQueryable
+                   Let str As String = Scripting.ToString(element, "NULL")
+                   Select str
         End Function
 
         Public Overrides Function ToString() As String

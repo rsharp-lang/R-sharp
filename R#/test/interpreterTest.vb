@@ -55,13 +55,20 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call iifTest()
+        ' Call isEmptyTest()
+        Call sourceScripttest()
+
+        Call missingSymbolInStringInterpolate()
+
+        Call commandLineArgumentTest()
         Call objClasstest()
 
         Call printClassTest()
 
         Call forLoop2()
         Call sequenceGeneratorTest()
-        Call iifTest()
+
         Call closureTest()
         Call tupleTest()
 
@@ -113,6 +120,20 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub isEmptyTest()
+        Call R.Evaluate("print(is.empty(?'--ABCDEFG'))")
+        Call R.Evaluate("let tag.name as string= ?'--ABCDEFG'")
+        Call R.Evaluate("print(is.empty(tag.name) ? 'replicate=' : tag.name)")
+
+        Pause()
+    End Sub
+
+    Sub missingSymbolInStringInterpolate()
+        Call R.Evaluate("`test ${xxx} symbol not found `")
 
         Pause()
     End Sub
@@ -258,6 +279,14 @@ test1::println('123');
 ")
     End Sub
 
+    Sub sourceScripttest()
+        ' Call R.Source("D:\GCModeller\src\R-sharp\tutorials\lambda.R")
+        Call R.LoadLibrary("D:\GCModeller\GCModeller\bin\R.base.dll")
+        Call R.Source("D:\GCModeller\src\GCModeller\engine\Rscript\dataset.R")
+
+        Pause()
+    End Sub
+
     Sub genericTest()
 
     End Sub
@@ -284,6 +313,14 @@ test1::println('123');
         Call R.Evaluate("print(l[['b']])")
         Call R.Evaluate("l$b <- [99,88,77,66,55,44]+99")
         Call R.Evaluate("print(l$b)")
+
+        Pause()
+    End Sub
+
+    Sub commandLineArgumentTest()
+        Call R.Evaluate("(5 > 9) ? 'A' : (?'--in') ")
+        Call R.Evaluate("print($)")
+        Call R.Evaluate("print(?'--in')")
 
         Pause()
     End Sub
@@ -382,6 +419,9 @@ print(zzz);
     End Sub
 
     Sub iifTest()
+        Call R.Add("deletions", "S:\synthetic_biology\test_model\wildtype\model\1025_EG.txt", TypeCodes.string)
+
+        Call R.Evaluate("print(file.exists(deletions) ? readLines(deletions) : NULL);")
         Call R.Evaluate("print(1 > 0 ? 999 : 777)")
 
         Pause()

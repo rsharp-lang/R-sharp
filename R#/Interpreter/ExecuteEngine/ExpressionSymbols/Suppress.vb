@@ -18,7 +18,7 @@ Namespace Interpreter.ExecuteEngine
 
             If Not result Is Nothing AndAlso result.GetType Is GetType(Message) Then
                 Dim message As Message = result
-                message.MessageLevel = MSG_TYPES.WRN
+                message.level = MSG_TYPES.WRN
                 envir.globalEnvironment.messages.Add(message)
                 Return Nothing
             Else

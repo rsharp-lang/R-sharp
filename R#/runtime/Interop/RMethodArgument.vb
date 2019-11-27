@@ -54,6 +54,11 @@ Namespace Runtime.Interop
         Public Property [default] As Object
         Public Property isOptional As Boolean
         Public Property isObjectList As Boolean
+        ''' <summary>
+        ''' Do not apply the <see cref="Runtime.getFirst(Object)"/> operation
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property isRequireRawVector As Boolean
 
         Public Overrides Function ToString() As String
             Return $"Dim {name} As {type}"
@@ -65,7 +70,8 @@ Namespace Runtime.Interop
                 .type = New RType(p.ParameterType),
                 .[default] = p.DefaultValue,
                 .isOptional = p.HasDefaultValue,
-                .isObjectList = Not p.GetCustomAttribute(Of RListObjectArgumentAttribute) Is Nothing
+                .isObjectList = Not p.GetCustomAttribute(Of RListObjectArgumentAttribute) Is Nothing,
+                .isRequireRawVector = Not p.GetCustomAttribute(Of RRawVectorArgumentAttribute) Is Nothing
             }
         End Function
     End Class
