@@ -46,13 +46,14 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.dataframe
 
 <Package("utils", Category:=APICategories.UtilityTools, Description:="")>
 Public Module utils
 
     <ExportAPI("write.csv")>
-    Public Function writecsv(data As Object, file$, envir As Environment) As Object
+    Public Function write_csv(<RRawVectorArgument> data As Object, file$, envir As Environment) As Object
         If data Is Nothing Then
             Return Internal.stop("Empty dataframe object!", envir)
         End If

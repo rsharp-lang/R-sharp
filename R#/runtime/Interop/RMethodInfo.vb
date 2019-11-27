@@ -243,7 +243,7 @@ Namespace Runtime.Interop
         Private Shared Function getValue(arg As RMethodArgument, value As Object) As Object
             If arg.type.isArray Then
                 value = CObj(Runtime.asVector(value, arg.type.raw.GetElementType))
-            Else
+            ElseIf Not arg.isRequireRawVector Then
                 value = Runtime.getFirst(value)
             End If
 

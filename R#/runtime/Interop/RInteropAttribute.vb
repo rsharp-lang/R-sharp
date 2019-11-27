@@ -54,6 +54,10 @@ Namespace Runtime.Interop
     End Class
 
     <AttributeUsage(AttributeTargets.Parameter, AllowMultiple:=False, Inherited:=True)>
+    Public Class RRawVectorArgumentAttribute : Inherits RInteropAttribute
+    End Class
+
+    <AttributeUsage(AttributeTargets.Parameter, AllowMultiple:=False, Inherited:=True)>
     Public Class RListObjectArgumentAttribute : Inherits RInteropAttribute
 
         Public Shared Iterator Function getObjectList(<RListObjectArgument> objects As Object, envir As Environment) As IEnumerable(Of NamedValue(Of Object))
