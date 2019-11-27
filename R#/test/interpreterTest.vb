@@ -55,6 +55,7 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call isEmptyTest()
         Call sourceScripttest()
 
         Call missingSymbolInStringInterpolate()
@@ -118,6 +119,12 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub isEmptyTest()
+        Call R.Evaluate("print(is.empty(?'--ABCDEFG'))")
 
         Pause()
     End Sub

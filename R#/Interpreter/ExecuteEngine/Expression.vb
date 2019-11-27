@@ -117,6 +117,8 @@ Namespace Interpreter.ExecuteEngine
                             .DoCall(AddressOf Expression.CreateExpression)
 
                         Return New Suppress(evaluate)
+                    Case "modeof", "typeof"
+                        Return New ModeOf(keyword, code(1))
                     Case "require"
                         Return code(1) _
                             .Skip(1) _
