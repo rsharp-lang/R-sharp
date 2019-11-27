@@ -1,5 +1,6 @@
 ﻿Imports Microsoft.VisualBasic.Language.Default
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -28,7 +29,7 @@ Namespace Interpreter.ExecuteEngine
         Public ReadOnly Property name As Expression
 
         Sub New(tokens As Token())
-            If tokens.First.text = "?" Then
+            If tokens.First = TokenType.iif Then
                 name = tokens _
                     .Skip(1) _
                     .DoCall(AddressOf Expression.CreateExpression)

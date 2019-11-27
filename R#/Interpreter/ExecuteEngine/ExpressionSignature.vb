@@ -68,7 +68,7 @@ Namespace Interpreter.ExecuteEngine
         Public Function ifElseTriple(tokens As Token()) As (test As Token(), ifelse As List(Of Token()))
             Dim blocks = tokens.SplitByTopLevelDelimiter(TokenType.iif)
 
-            If blocks = 1 Then
+            If blocks = 1 OrElse blocks = 2 Then
                 Return Nothing
             ElseIf blocks > 3 Then
                 Return Nothing

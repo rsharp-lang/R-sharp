@@ -55,6 +55,7 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call commandLineArgumentTest()
         Call objClasstest()
 
         Call printClassTest()
