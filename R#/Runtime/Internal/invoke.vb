@@ -241,19 +241,6 @@ Namespace Runtime.Internal
                     Return result
                 Case "getwd"
                     Return App.CurrentDirectory
-                Case "setwd"
-                    Dim dir As String() = Runtime.asVector(Of String)(paramVals(Scan0))
-
-                    If dir.Length = 0 Then
-                        Return invoke.missingParameter(funcName, "dir", envir)
-                    ElseIf dir(Scan0).StringEmpty Then
-                        Return invoke.invalidParameter("cannot change working directory due to the reason of NULL value provided!", funcName, "dir", envir)
-                    Else
-                        App.CurrentDirectory = dir(Scan0)
-                    End If
-
-                    Return App.CurrentDirectory
-
                 Case Else
                     Return Message.SymbolNotFound(envir, funcName, TypeCodes.closure)
             End Select

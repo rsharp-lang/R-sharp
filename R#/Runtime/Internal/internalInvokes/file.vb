@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.Linq
+﻿Imports Microsoft.VisualBasic.Language.UnixBash.FileSystem
+Imports Microsoft.VisualBasic.Linq
 
 Namespace Runtime.Internal.Invokes
 
@@ -12,6 +13,7 @@ Namespace Runtime.Internal.Invokes
         Sub New()
             Call Internal.invoke.add("file.exists", AddressOf file.exists)
             Call Internal.invoke.add("readLines", AddressOf file.readLines)
+            Call Internal.invoke.add("setwd", AddressOf file.setwd)
         End Sub
 
         Friend Sub pushEnvir()
@@ -32,6 +34,20 @@ Namespace Runtime.Internal.Invokes
 
         Friend Function readLines(envir As Environment, params As Object()) As String()
             Return Scripting.ToString(params(Scan0)).ReadAllLines
+        End Function
+
+        Friend Function setwd(envir As Environment, paramVals As Object()) As Object
+            Dim dir As String() = Runtime.asVector(Of String)(paramVals(Scan0))
+
+            If dir.Length = 0 Then
+                Return invoke.missingParameter(NameOf(setwd), "dir", envir)
+            ElseIf dir(Scan0).StringEmpty Then
+                Return invoke.invalidParameter("cannot change working directory due to the reason of NULL value provided!", NameOf(setwd), "dir", envir)
+            Else
+                App.CurrentDirectory = PathMapper.GetMapPath(dir(Scan0))
+            End If
+
+            Return App.CurrentDirectory
         End Function
     End Module
 End Namespace
