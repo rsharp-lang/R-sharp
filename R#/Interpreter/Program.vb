@@ -92,7 +92,10 @@ Namespace Interpreter
             If Not last Is Nothing Then
                 If last.GetType Is GetType(Message) Then
                     If DirectCast(last, Message).level = MSG_TYPES.ERR Then
-                        ' how to throw error?
+                        ' throw error will break the expression loop
+                        breakLoop = True
+                        ' populate out this error message to the top stack
+                        ' and then print errors
                         Return last
                     ElseIf DirectCast(last, Message).level = MSG_TYPES.DEBUG Then
                     ElseIf DirectCast(last, Message).level = MSG_TYPES.WRN Then
