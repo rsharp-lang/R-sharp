@@ -109,13 +109,13 @@ Namespace Interpreter.ExecuteEngine
 
         Private Shared Function possibleInterpolationFailure(commandline As String, envir As Environment) As Message
             Return New Message With {
-                .Message = {
+                .message = {
                     $"The input commandline string contains string interpolation syntax tag...",
                     $"commandline: " & commandline
                 },
-                .MessageLevel = MSG_TYPES.WRN,
-                .EnvironmentStack = envir.getEnvironmentStack,
-                .Trace = devtools.ExceptionData.GetCurrentStackTrace
+                .level = MSG_TYPES.WRN,
+                .environmentStack = envir.getEnvironmentStack,
+                .trace = devtools.ExceptionData.GetCurrentStackTrace
             }
         End Function
     End Class

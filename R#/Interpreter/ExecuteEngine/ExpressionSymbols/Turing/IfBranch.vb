@@ -123,12 +123,12 @@ Namespace Interpreter.ExecuteEngine
 
             If test Is Nothing Then
                 Return New Message With {
-                    .Message = {
+                    .message = {
                         $"missing value where TRUE/FALSE needed"
                     },
-                    .MessageLevel = MSG_TYPES.ERR,
-                    .EnvironmentStack = envir.getEnvironmentStack,
-                    .Trace = devtools.ExceptionData.GetCurrentStackTrace
+                    .level = MSG_TYPES.ERR,
+                    .environmentStack = envir.getEnvironmentStack,
+                    .trace = devtools.ExceptionData.GetCurrentStackTrace
                 }
             End If
 

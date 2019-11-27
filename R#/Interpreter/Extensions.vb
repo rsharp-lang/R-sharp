@@ -97,7 +97,7 @@ Namespace Interpreter
         End Function
 
         Friend Function printMessageInternal(message As Message) As Object
-            Dim execRoutine$ = message.EnvironmentStack _
+            Dim execRoutine$ = message.environmentStack _
                 .Reverse _
                 .Select(Function(frame) frame.Method.Method) _
                 .JoinBy(" -> ")
@@ -118,7 +118,7 @@ Namespace Interpreter
 
         <Extension>
         Private Function getMessagePrefix(message As Message) As String
-            Select Case message.MessageLevel
+            Select Case message.level
                 Case MSG_TYPES.ERR : Return "Error"
                 Case MSG_TYPES.INF : Return "Information"
                 Case MSG_TYPES.WRN : Return "Warning"
@@ -130,7 +130,7 @@ Namespace Interpreter
 
         <Extension>
         Private Function getMessageColor(message As Message) As ConsoleColor
-            Select Case message.MessageLevel
+            Select Case message.level
                 Case MSG_TYPES.ERR : Return ConsoleColor.Red
                 Case MSG_TYPES.INF : Return ConsoleColor.Blue
                 Case MSG_TYPES.WRN : Return ConsoleColor.Yellow

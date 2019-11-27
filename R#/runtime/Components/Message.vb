@@ -54,13 +54,17 @@ Namespace Runtime.Components
     ''' </summary>
     Public Class Message : Implements IEnumerable(Of String)
 
-        Public Property Message As String()
-        Public Property MessageLevel As MSG_TYPES
-        Public Property EnvironmentStack As StackFrame()
-        Public Property Trace As StackFrame()
+        Public Property message As String()
+        Public Property level As MSG_TYPES
+        Public Property environmentStack As StackFrame()
+        Public Property trace As StackFrame()
+
+        Public Overrides Function ToString() As String
+            Return $"[{level.Description}] {message(Scan0)}"
+        End Function
 
         Public Iterator Function GetEnumerator() As IEnumerator(Of String) Implements IEnumerable(Of String).GetEnumerator
-            For Each msg As String In Message
+            For Each msg As String In message
                 Yield msg
             Next
         End Function

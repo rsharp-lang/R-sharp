@@ -70,7 +70,7 @@ Module Program
         Dim result As Object = R.Evaluate(scriptText)
 
         If Not result Is Nothing AndAlso result.GetType Is GetType(Message) Then
-            Return DirectCast(result, Message).MessageLevel
+            Return DirectCast(result, Message).level
         Else
             Return 0
         End If

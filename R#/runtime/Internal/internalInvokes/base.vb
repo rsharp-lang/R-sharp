@@ -220,10 +220,10 @@ Namespace Runtime.Internal
             End If
 
             Return New Message With {
-                .Message = messages,
-                .EnvironmentStack = envir.getEnvironmentStack,
-                .MessageLevel = MSG_TYPES.ERR,
-                .Trace = devtools.ExceptionData.GetCurrentStackTrace
+                .message = messages,
+                .environmentStack = envir.getEnvironmentStack,
+                .level = MSG_TYPES.ERR,
+                .trace = devtools.ExceptionData.GetCurrentStackTrace
             }
         End Function
 
@@ -245,14 +245,14 @@ Namespace Runtime.Internal
 
         Private Function createMessageInternal(messages As Object, envir As Environment, level As MSG_TYPES) As Message
             Return New Message With {
-                .Message = Runtime.asVector(Of Object)(messages) _
+                .message = Runtime.asVector(Of Object)(messages) _
                     .AsObjectEnumerator _
                     .SafeQuery _
                     .Select(Function(o) Scripting.ToString(o, "NULL")) _
                     .ToArray,
-                .MessageLevel = level,
-                .EnvironmentStack = envir.getEnvironmentStack,
-                .Trace = devtools.ExceptionData.GetCurrentStackTrace
+                .level = level,
+                .environmentStack = envir.getEnvironmentStack,
+                .trace = devtools.ExceptionData.GetCurrentStackTrace
             }
         End Function
 

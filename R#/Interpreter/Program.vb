@@ -91,11 +91,11 @@ Namespace Interpreter
 
             If Not last Is Nothing Then
                 If last.GetType Is GetType(Message) Then
-                    If DirectCast(last, Message).MessageLevel = MSG_TYPES.ERR Then
+                    If DirectCast(last, Message).level = MSG_TYPES.ERR Then
                         ' how to throw error?
                         Return last
-                    ElseIf DirectCast(last, Message).MessageLevel = MSG_TYPES.DEBUG Then
-                    ElseIf DirectCast(last, Message).MessageLevel = MSG_TYPES.WRN Then
+                    ElseIf DirectCast(last, Message).level = MSG_TYPES.DEBUG Then
+                    ElseIf DirectCast(last, Message).level = MSG_TYPES.WRN Then
                     Else
 
                     End If
@@ -132,7 +132,7 @@ Namespace Interpreter
             If result Is Nothing Then
                 Return False
             ElseIf result.GetType Is GetType(Message) Then
-                Return DirectCast(result, Message).MessageLevel = MSG_TYPES.ERR
+                Return DirectCast(result, Message).level = MSG_TYPES.ERR
             Else
                 Return False
             End If
