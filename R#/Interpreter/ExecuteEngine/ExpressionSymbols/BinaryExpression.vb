@@ -118,7 +118,11 @@ Namespace Interpreter.ExecuteEngine
                 If tb Like integers Then
 
                     Select Case [operator]
+                        Case "+" : Return Runtime.Core.Add(Of Double, Long, Double)(a, b).ToArray
+                        Case "-" : Return Runtime.Core.Minus(Of Double, Long, Double)(a, b).ToArray
                         Case "*" : Return Runtime.Core.Multiply(Of Double, Long, Double)(a, b).ToArray
+                        Case "/" : Return Runtime.Core.Divide(Of Double, Long, Double)(a, b).ToArray
+
                     End Select
                 ElseIf tb Like floats Then
                     Select Case [operator]

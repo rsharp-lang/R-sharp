@@ -55,8 +55,10 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
-        Call missingSymbolInStringInterpolate()
         Call sourceScripttest()
+
+        Call missingSymbolInStringInterpolate()
+
         Call commandLineArgumentTest()
         Call objClasstest()
 
