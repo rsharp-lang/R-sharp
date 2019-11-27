@@ -38,6 +38,10 @@ Namespace Interpreter.ExecuteEngine
             End If
         End Sub
 
+        Public Overrides Function ToString() As String
+            Return $"$ARGV[[{name}]]"
+        End Function
+
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim arg As String = Runtime.getFirst(name.Evaluate(envir))
             Dim value As DefaultString = App.CommandLine(arg)

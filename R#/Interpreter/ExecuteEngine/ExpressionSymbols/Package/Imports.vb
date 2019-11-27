@@ -76,6 +76,10 @@ Namespace Interpreter.ExecuteEngine
             End With
         End Sub
 
+        Public Overrides Function ToString() As String
+            Return $"imports {packages} from {library}"
+        End Function
+
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim names As Index(Of String) = Runtime.asVector(Of String)(Me.packages.Evaluate(envir)) _
                 .AsObjectEnumerator _
