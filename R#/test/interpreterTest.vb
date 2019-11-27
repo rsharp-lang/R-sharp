@@ -125,6 +125,8 @@ Module interpreterTest
 
     Sub isEmptyTest()
         Call R.Evaluate("print(is.empty(?'--ABCDEFG'))")
+        Call R.Evaluate("let tag.name as string= ?'--ABCDEFG'")
+        Call R.Evaluate("print(is.empty(tag.name) ? 'replicate=' : tag.name)")
 
         Pause()
     End Sub

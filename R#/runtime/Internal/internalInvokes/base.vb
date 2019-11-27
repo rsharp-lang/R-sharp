@@ -78,22 +78,52 @@ Namespace Runtime.Internal
             Return New GenericInternalInvoke(
                 name:="is.empty",
                 invoke:=Function(o) As Object
-                            If o Is Nothing Then
-                                Return True
-                            Else
-                                Dim type As Type = o.GetType
-
-                                If type Is GetType(String) Then
-                                    Return DirectCast(o, String).StringEmpty(False)
-                                ElseIf type.IsArray Then
-                                    Return DirectCast(o, Array).Length = 0
-                                ElseIf type.ImplementInterface(GetType(RIndex)) Then
-                                    Return DirectCast(o, RIndex).length = 0
-                                Else
-                                    Return False
-                                End If
-                            End If
+                            Return isEmpty(o)
                         End Function)
+        End Function
+
+        Private Function isEmpty(o As Object) As Object
+            If o Is Nothing Then
+                Return True
+            End If
+
+            Dim type As Type = o.GetType
+
+            If type Is GetType(String) Then
+                Return DirectCast(o, String).StringEmpty(False)
+            ElseIf type Is GetType(String()) Then
+                With DirectCast(o, String())
+                    If .Length > 1 Then
+                        Return False
+                    ElseIf .Length = 0 OrElse .First.StringEmpty(False) Then
+                        Return True
+                    Else
+                        Return False
+                    End If
+                End With
+            ElseIf type.IsArray Then
+                With DirectCast(o, Array)
+                    If .Length = 0 Then
+                        Return True
+                    ElseIf .Length = 1 Then
+                        Dim first As Object = .GetValue(Scan0)
+
+                        If first Is Nothing Then
+                            Return True
+                        ElseIf first.GetType Is GetType(String) Then
+                            Return DirectCast(first, String).StringEmpty(False)
+                        Else
+                            Return False
+                        End If
+                    Else
+                        Return False
+                    End If
+                End With
+            ElseIf type.ImplementInterface(GetType(RIndex)) Then
+                Return DirectCast(o, RIndex).length = 0
+            Else
+                Return False
+            End If
         End Function
 
         Private Function globalenv() As GenericInternalInvoke
