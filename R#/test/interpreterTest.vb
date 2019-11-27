@@ -271,7 +271,7 @@ test1::println('123');
 
     Sub sourceScripttest()
         ' Call R.Source("D:\GCModeller\src\R-sharp\tutorials\lambda.R")
-        Call R.Source("D:\GCModeller\src\R-sharp\tutorials\data\forloop.R")
+        Call R.Source("D:\GCModeller\src\GCModeller\engine\Rscript\run.R")
 
         Pause()
     End Sub
