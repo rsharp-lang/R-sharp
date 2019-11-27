@@ -165,7 +165,8 @@ Namespace Interpreter.ExecuteEngine
                 End If
             ElseIf code(1).isOperator("=", "<-") Then
                 ' tuple value assign
-                Dim tuple = code(Scan0).Skip(1) _
+                Dim tuple = code(Scan0) _
+                    .Skip(1) _
                     .Take(code(Scan0).Length - 2) _
                     .SplitByTopLevelDelimiter(TokenType.comma) _
                     .Where(Function(t) Not t.isComma) _
