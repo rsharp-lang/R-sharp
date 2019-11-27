@@ -14,11 +14,25 @@ Namespace Runtime.Internal.Invokes
             Call Internal.invoke.add("file.exists", AddressOf file.exists)
             Call Internal.invoke.add("readLines", AddressOf file.readLines)
             Call Internal.invoke.add("setwd", AddressOf file.setwd)
+            Call Internal.invoke.add("normalize.filename", AddressOf file.normalizeFileName)
         End Sub
 
         Friend Sub pushEnvir()
             ' do nothing
         End Sub
+
+        Friend Function normalizeFileName(envir As Environment, params As Object()) As String()
+            Return params.SafeQuery _
+                .Select(Function(val)
+                            Return Runtime.asVector(Of Double)(val) _
+                                .AsObjectEnumerator _
+                                .Select(Function(file)
+                                            Return Scripting.ToString(file).NormalizePathString(False)
+                                        End Function)
+                        End Function) _
+                .IteratesALL _
+                .ToArray
+        End Function
 
         Friend Function exists(envir As Environment, params As Object()) As Boolean()
             Return params.SafeQuery _
