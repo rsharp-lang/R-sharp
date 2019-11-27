@@ -201,6 +201,7 @@
     <Compile Include="Runtime\Components\Interface\RPrint.vb" />
     <Compile Include="Runtime\Components\Interface\RFunction.vb" />
     <Compile Include="Runtime\Internal\debug.vb" />
+    <Compile Include="Runtime\Internal\internalInvokes\file.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\RInternalFuncInvoke.vb" />
     <Compile Include="Runtime\Internal\objects\conversion.vb" />
     <Compile Include="Runtime\Internal\printer\classPrinter.vb" />

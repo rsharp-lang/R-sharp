@@ -70,6 +70,7 @@ Namespace Runtime.Internal
         Sub New()
             Call RConversion.pushEnvir()
             Call base.pushEnvir()
+            Call Invokes.file.pushEnvir()
         End Sub
 
         ''' <summary>
@@ -78,6 +79,14 @@ Namespace Runtime.Internal
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Friend Sub add(handle As RInternalFuncInvoke)
             index(handle.funcName) = handle
+        End Sub
+
+        ''' <summary>
+        ''' Add internal invoke handle
+        ''' </summary>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Friend Sub add(name$, handle As Func(Of Environment, Object(), Object))
+            index(name) = New GenericInternalInvoke(name, handle)
         End Sub
 
         Public Function Rdataframe(envir As Environment, parameters As List(Of Expression)) As Object
