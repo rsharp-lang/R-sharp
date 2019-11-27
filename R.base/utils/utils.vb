@@ -49,30 +49,44 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.dataframe
 
-<Package("utils", Category:=APICategories.UtilityTools, Description:="")>
+''' <summary>
+''' The R Utils Package 
+''' </summary>
+<Package("utils", Category:=APICategories.UtilityTools)>
 Public Module utils
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="x">
+    ''' the object to be written, preferably a matrix or data frame. If not, it is attempted to coerce x to a data frame.
+    ''' </param>
+    ''' <param name="file">
+    ''' either a character string naming a file or a connection open for writing. "" indicates output to the console.
+    ''' </param>
+    ''' <param name="envir"></param>
+    ''' <returns></returns>
     <ExportAPI("write.csv")>
-    Public Function write_csv(<RRawVectorArgument> data As Object, file$, envir As Environment) As Object
-        If data Is Nothing Then
+    Public Function write_csv(<RRawVectorArgument> x As Object, file$, envir As Environment) As Object
+        If x Is Nothing Then
             Return Internal.stop("Empty dataframe object!", envir)
         End If
 
-        Dim type As Type = data.GetType
+        Dim type As Type = x.GetType
 
         If type Is GetType(Rdataframe) Then
-            Dim matrix As String()() = data.GetTable
+            Dim matrix As String()() = x.GetTable
             Dim dataframe As New File(matrix.Select(Function(r) New RowObject(r)))
 
             Return dataframe.Save(path:=file)
         ElseIf type Is GetType(File) Then
-            Return DirectCast(data, File).Save(path:=file)
+            Return DirectCast(x, File).Save(path:=file)
         ElseIf type Is GetType(DataFrame) Then
-            Return DirectCast(data, DataFrame).Save(path:=file)
+            Return DirectCast(x, DataFrame).Save(path:=file)
         ElseIf type Is GetType(EntityObject()) OrElse type.ImplementInterface(GetType(IEnumerable(Of EntityObject))) Then
-            Return DirectCast(data, IEnumerable(Of EntityObject)).SaveTo(path:=file)
+            Return DirectCast(x, IEnumerable(Of EntityObject)).SaveTo(path:=file)
         ElseIf type Is GetType(DataSet()) OrElse type.ImplementInterface(GetType(IEnumerable(Of DataSet))) Then
-            Return DirectCast(data, IEnumerable(Of DataSet)).SaveTo(path:=file)
+            Return DirectCast(x, IEnumerable(Of DataSet)).SaveTo(path:=file)
         Else
             Return Message.InCompatibleType(GetType(File), type, envir)
         End If
