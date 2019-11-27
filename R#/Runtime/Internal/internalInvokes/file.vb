@@ -35,7 +35,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         Friend Function readLines(envir As Environment, params As Object()) As String()
-            Return Scripting.ToString(params(Scan0)).ReadAllLines
+            Return Scripting.ToString(Runtime.getFirst(params(Scan0))).ReadAllLines
         End Function
 
         Friend Function setwd(envir As Environment, paramVals As Object()) As Object
