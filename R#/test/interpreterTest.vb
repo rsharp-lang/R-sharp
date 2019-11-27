@@ -55,6 +55,7 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call iifTest()
         ' Call isEmptyTest()
         Call sourceScripttest()
 
@@ -67,7 +68,7 @@ Module interpreterTest
 
         Call forLoop2()
         Call sequenceGeneratorTest()
-        Call iifTest()
+
         Call closureTest()
         Call tupleTest()
 
@@ -418,6 +419,9 @@ print(zzz);
     End Sub
 
     Sub iifTest()
+        Call R.Add("deletions", "S:\synthetic_biology\test_model\wildtype\model\1025_EG.txt", TypeCodes.string)
+
+        Call R.Evaluate("print(file.exists(deletions) ? readLines(deletions) : NULL);")
         Call R.Evaluate("print(1 > 0 ? 999 : 777)")
 
         Pause()

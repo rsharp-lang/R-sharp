@@ -26,7 +26,9 @@ Namespace Runtime.Internal.Invokes
                             If val Is Nothing Then
                                 Return False
                             Else
-                                Return FileExists(Scripting.ToString(val))
+                                Return Scripting _
+                                    .ToString(Runtime.getFirst(val)) _
+                                    .DoCall(AddressOf FileExists)
                             End If
                         End Function) _
                 .ToArray
