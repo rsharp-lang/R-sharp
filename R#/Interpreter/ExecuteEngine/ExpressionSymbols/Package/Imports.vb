@@ -98,6 +98,10 @@ Namespace Interpreter.ExecuteEngine
             Return LoadLibrary(libDll, envir, names)
         End Function
 
+        Private Shared Function isImportsAllPackages(names As Index(Of String)) As Boolean
+            Return names.Objects.Length = 1 AndAlso names.Objects(Scan0) = "*"
+        End Function
+
         ''' <summary>
         ''' Load packages from a given dll module file
         ''' </summary>
@@ -106,8 +110,15 @@ Namespace Interpreter.ExecuteEngine
         ''' <param name="names"></param>
         ''' <returns></returns>
         Public Shared Function LoadLibrary(libDll$, envir As Environment, names As Index(Of String)) As Object
+            Dim importsAll As Boolean = names.DoCall(AddressOf isImportsAllPackages)
             Dim packages = PackageLoader.ParsePackages(libDll) _
-                .Where(Function(pkg) pkg.info.Namespace Like names) _
+                .Where(Function(pkg)
+                           If importsAll Then
+                               Return True
+                           Else
+                               Return pkg.info.Namespace Like names
+                           End If
+                       End Function) _
                 .GroupBy(Function(pkg) pkg.namespace) _
                 .ToDictionary(Function(pkg) pkg.Key,
                               Function(group)
@@ -115,7 +126,7 @@ Namespace Interpreter.ExecuteEngine
                               End Function)
             Dim globalEnv As GlobalEnvironment = envir.globalEnvironment
 
-            If names.Objects.Length = 1 AndAlso names.Objects(Scan0) = "*" Then
+            If importsAll Then
                 For Each [namespace] As Package In packages.Values
                     Call ImportsPackage.ImportsStatic(globalEnv, [namespace].package)
                 Next
