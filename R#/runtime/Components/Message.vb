@@ -101,5 +101,15 @@ Namespace Runtime.Components
                          Return Internal.stop(msg, envir)
                      End Function)
         End Function
+
+        Public Shared Function InCompatibleType(require As Type, given As Type, envir As Environment, Optional message$ = "The given type is incompatible with the required type!") As Message
+            Return {
+                message,
+                "required: " & require.FullName,
+                "given: " & given.FullName
+            }.DoCall(Function(msg)
+                         Return Internal.stop(msg, envir)
+                     End Function)
+        End Function
     End Class
 End Namespace
