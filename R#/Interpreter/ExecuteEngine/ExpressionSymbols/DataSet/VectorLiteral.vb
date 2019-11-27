@@ -53,10 +53,17 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Namespace Interpreter.ExecuteEngine
 
     Public Class VectorLiteral : Inherits Expression
+        Implements IEnumerable(Of Expression)
 
         Public Overrides ReadOnly Property type As TypeCodes
 
-        ReadOnly values As Expression()
+        Public ReadOnly Property length As Integer
+            Get
+                Return values.Length
+            End Get
+        End Property
+
+        Friend ReadOnly values As Expression()
 
         Sub New(tokens As Token())
             Dim blocks As List(Of Token()) = tokens _
@@ -96,6 +103,16 @@ Namespace Interpreter.ExecuteEngine
 
         Public Overrides Function ToString() As String
             Return $"[{values.JoinBy(", ")}]"
+        End Function
+
+        Public Iterator Function GetEnumerator() As IEnumerator(Of Expression) Implements IEnumerable(Of Expression).GetEnumerator
+            For Each value As Expression In Me.values
+                Yield value
+            Next
+        End Function
+
+        Private Iterator Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
+            Yield GetEnumerator()
         End Function
     End Class
 End Namespace

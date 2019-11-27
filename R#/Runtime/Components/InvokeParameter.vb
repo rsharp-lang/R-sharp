@@ -62,6 +62,15 @@ Namespace Runtime.Components
                     Return DirectCast(value, ValueAssign) _
                         .targetSymbols(Scan0) _
                         .DoCall(AddressOf ValueAssign.GetSymbol)
+                ElseIf TypeOf value Is VectorLiteral Then
+                    With DirectCast(value, VectorLiteral)
+                        If .length = 1 AndAlso TypeOf .First Is ValueAssign Then
+                            ' [a = b] :> func(...)
+                            Return DirectCast(.First, ValueAssign).targetSymbols(Scan0).ToString
+                        Else
+                            Return .ToString
+                        End If
+                    End With
                 Else
                     Return value.ToString
                 End If
@@ -72,7 +81,7 @@ Namespace Runtime.Components
             Get
                 If value Is Nothing Then
                     Return False
-                ElseIf (TypeOf value Is SymbolReference OrElse TypeOf value Is ValueAssign) Then
+                ElseIf (TypeOf value Is SymbolReference OrElse TypeOf value Is ValueAssign OrElse TypeOf value Is VectorLiteral) Then
                     Return True
                 Else
                     Return False
