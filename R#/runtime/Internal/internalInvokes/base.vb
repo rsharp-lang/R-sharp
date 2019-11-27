@@ -331,7 +331,7 @@ Namespace Runtime.Internal
 
         Public Function print(x As Object, envir As Environment) As Object
             If x Is Nothing Then
-                Call Console.WriteLine("[1] NULL")
+                Call Console.WriteLine("NULL")
             ElseIf x.GetType.ImplementInterface(GetType(RPrint)) Then
                 Try
                     Call Console.WriteLine(DirectCast(x, RPrint).GetPrintContent)
