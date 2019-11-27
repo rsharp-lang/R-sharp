@@ -55,6 +55,7 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call sourceScripttest()
         Call commandLineArgumentTest()
         Call objClasstest()
 
@@ -257,6 +258,11 @@ test2::println('123');
 test1::println('123');
 
 ")
+    End Sub
+
+    Sub sourceScripttest()
+        Call R.Source("D:\GCModeller\src\R-sharp\tutorials\lambda.R")
+        Pause()
     End Sub
 
     Sub genericTest()
