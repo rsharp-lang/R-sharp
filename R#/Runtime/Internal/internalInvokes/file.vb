@@ -11,6 +11,7 @@ Namespace Runtime.Internal.Invokes
 
         Sub New()
             Call Internal.invoke.add("file.exists", AddressOf file.exists)
+            Call Internal.invoke.add("readLines", AddressOf file.readLines)
         End Sub
 
         Friend Sub pushEnvir()
@@ -27,6 +28,10 @@ Namespace Runtime.Internal.Invokes
                             End If
                         End Function) _
                 .ToArray
+        End Function
+
+        Friend Function readLines(envir As Environment, params As Object()) As String()
+            Return Scripting.ToString(params(Scan0)).ReadAllLines
         End Function
     End Module
 End Namespace
