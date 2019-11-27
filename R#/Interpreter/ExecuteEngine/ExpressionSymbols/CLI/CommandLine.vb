@@ -55,6 +55,13 @@ Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnosti
 
 Namespace Interpreter.ExecuteEngine
 
+    ''' <summary>
+    ''' External commandline invoke
+    ''' 
+    ''' ```
+    ''' @"cli"
+    ''' ```
+    ''' </summary>
     Public Class CommandLine : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes

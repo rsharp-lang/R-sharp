@@ -142,11 +142,12 @@
   <ItemGroup>
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\BinaryExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\ByRefFunctionCall.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CLI\CommandLineArgument.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Package\Require.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Suppress.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\MemberValueAssign.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\SymbolIndexer.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CommandLine.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CLI\CommandLine.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Package\Imports.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\LinqExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DeclareLambdaFunction.vb" />
