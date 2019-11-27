@@ -95,6 +95,17 @@ Namespace Interpreter.ExecuteEngine
                 libDll = $"{App.HOME}/{libDll}"
             End If
 
+            Return LoadLibrary(libDll, envir, names)
+        End Function
+
+        ''' <summary>
+        ''' Load packages from a given dll module file
+        ''' </summary>
+        ''' <param name="libDll">A given dll module file its file path</param>
+        ''' <param name="envir"></param>
+        ''' <param name="names"></param>
+        ''' <returns></returns>
+        Public Shared Function LoadLibrary(libDll$, envir As Environment, names As Index(Of String)) As Object
             Dim packages = PackageLoader.ParsePackages(libDll) _
                 .Where(Function(pkg) pkg.info.Namespace Like names) _
                 .GroupBy(Function(pkg) pkg.namespace) _
@@ -102,15 +113,16 @@ Namespace Interpreter.ExecuteEngine
                               Function(group)
                                   Return group.First
                               End Function)
+            Dim globalEnv As GlobalEnvironment = envir.globalEnvironment
 
             If names.Objects.Length = 1 AndAlso names.Objects(Scan0) = "*" Then
                 For Each [namespace] As Package In packages.Values
-                    Call ImportsPackage.ImportsStatic(envir.globalEnvironment, [namespace].package)
+                    Call ImportsPackage.ImportsStatic(globalEnv, [namespace].package)
                 Next
             Else
                 For Each required In names.Objects
                     If packages.ContainsKey(required) Then
-                        Call ImportsPackage.ImportsStatic(envir.globalEnvironment, packages(required).package)
+                        Call ImportsPackage.ImportsStatic(globalEnv, packages(required).package)
                     Else
                         Return Internal.stop({
                             $"There is no package named '{required}' in given module!",
