@@ -91,6 +91,12 @@ Namespace Interpreter.ExecuteEngine
             For Each part As Expression In stringParts.Skip(1)
                 [next] = part.Evaluate(envir)
 
+                With Runtime.asVector(Of Object)([next])
+                    If .Length = 1 Then
+                        [next] = .GetValue(Scan0)
+                    End If
+                End With
+
                 If Program.isException([next]) Then
                     Return [next]
                 Else

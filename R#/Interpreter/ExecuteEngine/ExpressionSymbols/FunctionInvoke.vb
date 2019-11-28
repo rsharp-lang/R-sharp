@@ -180,7 +180,13 @@ Namespace Interpreter.ExecuteEngine
                 Return Runtime.Internal.Rdataframe(envir, parameters)
             Else
                 Dim argVals = envir.Evaluate(parameters)
-                Dim result = Runtime.Internal.invokeInternals(envir, funcName, argVals)
+                Dim result As Object
+
+                If argVals.Any(AddressOf Program.isException) Then
+                    Return argVals.First(AddressOf Program.isException)
+                Else
+                    result = Runtime.Internal.invokeInternals(envir, funcName, argVals)
+                End If
 
                 Return result
             End If
