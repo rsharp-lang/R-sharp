@@ -129,7 +129,7 @@ Namespace Interpreter
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Friend Shared Function CreateProgram(tokens As IEnumerable(Of Token), debug As Boolean) As Program
+        Friend Shared Function CreateProgram(tokens As IEnumerable(Of Token), Optional debug As Boolean = False) As Program
             Return New Program With {
                 .debug = debug,
                 .execQueue = tokens.ToArray _
