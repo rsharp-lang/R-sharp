@@ -58,6 +58,9 @@ Module Program
     Private Function RunScript(filepath$, args As CommandLine) As Integer
         Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
 
+        Call Console.WriteLine(args.ToString)
+        Call Console.WriteLine()
+
         Call R.LoadLibrary("base")
         Call R.LoadLibrary("utils")
         Call R.LoadLibrary("grDevices")
