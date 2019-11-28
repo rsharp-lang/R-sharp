@@ -282,7 +282,8 @@ test1::println('123');
     Sub sourceScripttest()
         ' Call R.Source("D:\GCModeller\src\R-sharp\tutorials\lambda.R")
         Call R.LoadLibrary("D:\GCModeller\GCModeller\bin\R.base.dll")
-        Call R.Source("D:\GCModeller\src\GCModeller\engine\Rscript\dataset.R")
+        ' Call R.Source("D:\GCModeller\src\GCModeller\engine\Rscript\dataset.R")
+        Call R.Source("D:\GCModeller\src\R-sharp\tutorials\invokeTuple.R")
 
         Pause()
     End Sub
