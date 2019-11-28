@@ -184,7 +184,7 @@ Namespace Language.TokenIcer
         ReadOnly keywords As Index(Of String) = {
             "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string",
             "const", "imports", "require", "library",
-            "if", "else", "for", "loop", "while", "repeat", "step",
+            "if", "else", "for", "loop", "while", "repeat", "step", "break", "next",
             "in", "like", "which", "from", "where", "order", "by", "distinct", "select",
             "ascending", "descending",
             "suppress",

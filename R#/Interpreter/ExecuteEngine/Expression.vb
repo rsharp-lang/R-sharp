@@ -126,6 +126,9 @@ Namespace Interpreter.ExecuteEngine
                         .DoCall(Function(tokens)
                                     Return New Require(tokens)
                                 End Function)
+                Case "next"
+                    ' continute for
+                    Return New ContinuteFor
                 Case Else
                     Throw New SyntaxErrorException
             End Select

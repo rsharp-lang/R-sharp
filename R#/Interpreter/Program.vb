@@ -60,6 +60,11 @@ Namespace Interpreter
         Sub New()
         End Sub
 
+        ''' <summary>
+        ''' function/forloop/if/else/elseif/repeat/while, etc...
+        ''' </summary>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         Public Function Execute(envir As Environment) As Object
             Dim last As Object = Nothing
             Dim breakLoop As Boolean = False
@@ -91,7 +96,10 @@ Namespace Interpreter
             If debug Then
                 Call Console.WriteLine(expression.ToString)
             End If
-            If TypeOf expression Is ReturnValue Then
+
+            ' next keyword will break current closure 
+            ' and then goto execute next iteration loop
+            If TypeOf expression Is ReturnValue OrElse TypeOf expression Is ContinuteFor Then
                 ' return keyword will break the function
                 last = New ReturnValue(New Literal With {.value = last})
             End If
