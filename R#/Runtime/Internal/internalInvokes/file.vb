@@ -13,6 +13,7 @@ Namespace Runtime.Internal.Invokes
         Sub New()
             Call Internal.invoke.add("file.exists", AddressOf file.exists)
             Call Internal.invoke.add("readLines", AddressOf file.readLines)
+            Call Internal.invoke.add("writeLines", AddressOf file.writeLines)
             Call Internal.invoke.add("setwd", AddressOf file.setwd)
             Call Internal.invoke.add("normalize.filename", AddressOf file.normalizeFileName)
         End Sub
@@ -50,6 +51,24 @@ Namespace Runtime.Internal.Invokes
 
         Friend Function readLines(envir As Environment, params As Object()) As String()
             Return Scripting.ToString(Runtime.getFirst(params(Scan0))).ReadAllLines
+        End Function
+
+        ' writeLines(text, con = stdout(), sep = "\n", useBytes = FALSE)
+        Friend Function writeLines(envir As Environment, params As Object()) As Object
+            Dim text = Runtime.asVector(Of String)(params(Scan0))
+            Dim con$ = Scripting.ToString(Runtime.getFirst(params(1)))
+
+            If con.StringEmpty Then
+                Call text.AsObjectEnumerator _
+                    .JoinBy(vbCrLf) _
+                    .DoCall(AddressOf Console.WriteLine)
+            Else
+                Call text.AsObjectEnumerator _
+                    .JoinBy(vbCrLf) _
+                    .SaveTo(con)
+            End If
+
+            Return text
         End Function
 
         Friend Function setwd(envir As Environment, paramVals As Object()) As Object
