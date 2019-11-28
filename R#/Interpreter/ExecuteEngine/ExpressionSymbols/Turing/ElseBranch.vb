@@ -94,6 +94,12 @@ Namespace Interpreter.ExecuteEngine
                 Return last
             End If
         End Function
+
+        Public Overrides Function ToString() As String
+            Return $"else {{
+    {closure}
+}}"
+        End Function
     End Class
 
     Public Class ElseIfBranch : Inherits IfBranch

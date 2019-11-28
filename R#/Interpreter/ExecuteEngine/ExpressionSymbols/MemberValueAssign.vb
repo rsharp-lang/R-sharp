@@ -28,5 +28,9 @@ Namespace Interpreter.ExecuteEngine
                 Return list.setByName(names, value, envir)
             End If
         End Function
+
+        Public Overrides Function ToString() As String
+            Return $"{memberReference} <- {value}"
+        End Function
     End Class
 End Namespace

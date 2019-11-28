@@ -75,5 +75,9 @@ Namespace Interpreter.ExecuteEngine
                 Return falseResult.Evaluate(envir)
             End If
         End Function
+
+        Public Overrides Function ToString() As String
+            Return $"({ifTest} ? {trueResult} : {falseResult})"
+        End Function
     End Class
 End Namespace

@@ -138,5 +138,11 @@ Namespace Interpreter.ExecuteEngine
                 Return New IfPromise(Nothing, False)
             End If
         End Function
+
+        Public Overrides Function ToString() As String
+            Return $"if ({ifTest}) then {{
+    {trueClosure}
+}}"
+        End Function
     End Class
 End Namespace
