@@ -45,7 +45,7 @@ Namespace Interpreter.ExecuteEngine
                 ' y should be vector
                 Return Runtime.asVector(Of Object)(x) _
                     .AsObjectEnumerator _
-                    .JoinIterates(Runtime.asVector(Of Object)(y)) _
+                    .JoinIterates(Runtime.asVector(Of Object)(y).AsObjectEnumerator) _
                     .ToArray
             ElseIf type1 Is GetType(list) Then
                 Throw New NotImplementedException
