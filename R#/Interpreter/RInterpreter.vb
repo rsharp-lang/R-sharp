@@ -73,6 +73,12 @@ Namespace Interpreter
         Public ReadOnly Property globalEnvir As GlobalEnvironment
         Public ReadOnly Property warnings As New List(Of Message)
 
+        ''' <summary>
+        ''' R# running in debug mode.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property debug As Boolean = False
+
         Default Public ReadOnly Property GetValue(name As String) As Object
             Get
                 Return globalEnvir(name).value
@@ -214,7 +220,11 @@ Namespace Interpreter
 
         Private Function RunInternal(script$, source$, arguments As NamedValue(Of Object)()) As Object
             Dim globalEnvir As Environment = InitializeEnvironment(source, arguments)
-            Dim program As Program = Code.ParseScript(script).DoCall(AddressOf Program.CreateProgram)
+            Dim program As Program = Code _
+                .ParseScript(script) _
+                .DoCall(Function(code)
+                            Return Program.CreateProgram(code, debug)
+                        End Function)
             Dim result As Object = program.Execute(globalEnvir)
 
             Return finalizeResult(result)

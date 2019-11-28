@@ -55,6 +55,7 @@ Namespace Interpreter
     Public Class Program : Implements IEnumerable(Of Expression)
 
         Friend execQueue As Expression()
+        Friend debug As Boolean = False
 
         Sub New()
         End Sub
@@ -64,7 +65,7 @@ Namespace Interpreter
             Dim breakLoop As Boolean = False
 
             For Each expression As Expression In execQueue
-                last = ExecuteCodeLine(expression, envir, breakLoop)
+                last = ExecuteCodeLine(expression, envir, breakLoop, debug)
 
                 If breakLoop Then
                     Exit For
@@ -81,9 +82,15 @@ Namespace Interpreter
         ''' <param name="envir"></param>
         ''' <param name="breakLoop"></param>
         ''' <returns></returns>
-        Public Shared Function ExecuteCodeLine(expression As Expression, envir As Environment, Optional ByRef breakLoop As Boolean = False) As Object
+        Public Shared Function ExecuteCodeLine(expression As Expression, envir As Environment,
+                                               Optional ByRef breakLoop As Boolean = False,
+                                               Optional debug As Boolean = False) As Object
+
             Dim last = expression.Evaluate(envir)
 
+            If debug Then
+                Call Console.WriteLine(expression.ToString)
+            End If
             If TypeOf expression Is ReturnValue Then
                 ' return keyword will break the function
                 last = New ReturnValue(New Literal With {.value = last})
@@ -122,8 +129,9 @@ Namespace Interpreter
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Friend Shared Function CreateProgram(tokens As IEnumerable(Of Token)) As Program
+        Friend Shared Function CreateProgram(tokens As IEnumerable(Of Token), debug As Boolean) As Program
             Return New Program With {
+                .debug = debug,
                 .execQueue = tokens.ToArray _
                     .GetExpressions _
                     .ToArray
