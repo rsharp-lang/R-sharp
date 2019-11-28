@@ -51,7 +51,7 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 Namespace Interpreter.ExecuteEngine
 
     ''' <summary>
-    ''' ExpressionSignature
+    ''' The signature determination of the given expression tokens 
     ''' </summary>
     <HideModuleName>
     <Extension>
@@ -64,11 +64,21 @@ Namespace Interpreter.ExecuteEngine
             Return tokens(Scan0).SplitByTopLevelDelimiter(TokenType.sequence) > 1
         End Function
 
+        ''' <summary>
+        ''' The given code tokens is a lambda function?
+        ''' </summary>
+        ''' <param name="code"></param>
+        ''' <returns></returns>
+        <Extension>
+        Public Function isLambdaFunction(code As List(Of Token())) As Boolean
+            Return code > 2 AndAlso (code(Scan0).isIdentifier OrElse code(Scan0).isTuple) AndAlso code(1).isOperator("->", "=>")
+        End Function
+
         <Extension>
         Public Function ifElseTriple(tokens As Token()) As (test As Token(), ifelse As List(Of Token()))
             Dim blocks = tokens.SplitByTopLevelDelimiter(TokenType.iif)
 
-            If blocks = 1 Then
+            If blocks = 1 OrElse blocks = 2 Then
                 Return Nothing
             ElseIf blocks > 3 Then
                 Return Nothing

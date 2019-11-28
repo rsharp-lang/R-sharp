@@ -55,6 +55,13 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Interpreter.ExecuteEngine
 
+    ''' <summary>
+    ''' Invoke a function symbol
+    ''' 
+    ''' ```
+    ''' call xxx(...)
+    ''' ```
+    ''' </summary>
     Public Class FunctionInvoke : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
@@ -152,13 +159,14 @@ Namespace Interpreter.ExecuteEngine
             End If
 
             If funcVar Is Nothing AndAlso TypeOf funcName Is Literal Then
+                Dim funcStr = DirectCast(funcName, Literal).ToString
                 ' 可能是一个系统的内置函数
-                Return invokeRInternal(DirectCast(funcName, Literal).ToString, envir)
+                Return invokeRInternal(funcStr, envir)
             ElseIf funcVar.GetType Like runtimeFuncs Then
                 ' invoke method create from R# script
                 Return DirectCast(funcVar, RFunction).Invoke(envir, InvokeParameter.Create(parameters))
             Else
-                ' invoke .NET method
+                ' invoke .NET package method
                 Return DirectCast(funcVar, RMethodInfo).Invoke(envir, InvokeParameter.Create(parameters))
             End If
         End Function
@@ -171,7 +179,10 @@ Namespace Interpreter.ExecuteEngine
             ElseIf funcName = "data.frame" Then
                 Return Runtime.Internal.Rdataframe(envir, parameters)
             Else
-                Return Runtime.Internal.invokeInternals(envir, funcName, envir.Evaluate(parameters))
+                Dim argVals = envir.Evaluate(parameters)
+                Dim result = Runtime.Internal.invokeInternals(envir, funcName, argVals)
+
+                Return result
             End If
         End Function
     End Class

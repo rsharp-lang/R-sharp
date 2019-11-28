@@ -51,44 +51,56 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
 Module Terminal
 
-    Public Function RunTerminal() As Integer
-        Dim ps1 As New PS1("> ")
-        Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
-        Dim exec As Action(Of String) =
-            Sub(script)
-                Dim program As RProgram = RProgram.BuildProgram(script)
-                Dim result = R.Run(program)
+    Dim R As RInterpreter
 
-                If Not RProgram.isException(result) Then
-                    If program.Count = 1 AndAlso program.isSimplePrintCall Then
-                        ' do nothing
-                        Dim funcName As Literal = DirectCast(program.First, FunctionInvoke).funcName
-
-                        If funcName = "cat" Then
-                            Call Console.WriteLine()
-                        End If
-                    Else
-                        Call Internal.base.print(result, R.globalEnvir)
-                    End If
-                End If
-            End Sub
-
+    Sub New()
         Call Console.WriteLine("Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 ")
+    End Sub
+
+    Public Function RunTerminal() As Integer
+        R = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
+
         Call R.LoadLibrary("base")
         Call R.LoadLibrary("utils")
         Call R.LoadLibrary("grDevices")
 
-        Call New Shell(ps1, exec) With {
+        Call New Shell(New PS1("> "), AddressOf doRunScript) With {
             .Quite = "q()"
         }.Run()
 
         Return 0
     End Function
 
+    Private Sub doRunScript(script As String)
+        Dim program As RProgram = RProgram.BuildProgram(script)
+        Dim result = R.Run(program)
+
+        If RProgram.isException(result) Then
+            Return
+        End If
+
+        If program.Count = 1 AndAlso program.isSimplePrintCall Then
+            ' do nothing
+            Dim funcName As Literal = DirectCast(program.First, FunctionInvoke).funcName
+
+            If funcName = "cat" Then
+                Call Console.WriteLine()
+            End If
+        ElseIf Not program.isValueAssign Then
+            Call Internal.base.print(result, R.globalEnvir)
+        End If
+    End Sub
+
     ReadOnly echo As Index(Of String) = {"print", "cat", "echo"}
+
+    <Extension>
+    Private Function isValueAssign(program As RProgram) As Boolean
+        ' 如果是赋值表达式的话，也不会在终端上打印结果值
+        Return TypeOf program.Last Is ValueAssign
+    End Function
 
     <Extension>
     Private Function isSimplePrintCall(program As RProgram) As Boolean
@@ -96,7 +108,7 @@ Type 'q()' to quit R.
             Return False
         End If
 
-        Dim funcName = DirectCast(program.First, FunctionInvoke).funcName
+        Dim funcName As Expression = DirectCast(program.First, FunctionInvoke).funcName
 
         If Not TypeOf funcName Is Literal Then
             Return False

@@ -84,50 +84,56 @@ Namespace Interpreter.ExecuteEngine
                 .DoCall(AddressOf ParseExpression)
         End Function
 
+        Friend Shared Function keywordExpressionHandler(code As List(Of Token())) As Expression
+            Dim keyword As String = code(Scan0)(Scan0).text
+
+            Select Case keyword
+                Case "let"
+                    If code > 4 AndAlso code(3).isKeyword("function") Then
+                        Return New DeclareNewFunction(code)
+                    Else
+                        Return New DeclareNewVariable(code)
+                    End If
+                Case "if" : Return New IfBranch(code.Skip(1).IteratesALL)
+                Case "else" : Return New ElseBranch(code.Skip(1).IteratesALL.ToArray)
+                Case "elseif" : Return New ElseIfBranch(code.Skip(1).IteratesALL)
+                Case "return" : Return New ReturnValue(code.Skip(1).IteratesALL)
+                Case "for" : Return New ForLoop(code.Skip(1).IteratesALL)
+                Case "from" : Return New LinqExpression(code)
+                Case "imports" : Return New [Imports](code)
+                Case "function"
+                    Dim [let] = New Token() {New Token(TokenType.keyword, "let")}
+                    Dim name = New Token() {New Token(TokenType.identifier, "<$anonymous>")}
+                    Dim [as] = New Token() {New Token(TokenType.keyword, "as")}
+
+                    code = ({[let], name, [as]}) + code
+
+                    Return New DeclareNewFunction(code)
+                Case "suppress"
+                    Dim evaluate As Expression = code _
+                        .Skip(1) _
+                        .IteratesALL _
+                        .DoCall(AddressOf Expression.CreateExpression)
+
+                    Return New Suppress(evaluate)
+                Case "modeof", "typeof"
+                    Return New ModeOf(keyword, code(1))
+                Case "require"
+                    Return code(1) _
+                        .Skip(1) _
+                        .Take(code(1).Length - 2) _
+                        .ToArray _
+                        .DoCall(Function(tokens)
+                                    Return New Require(tokens)
+                                End Function)
+                Case Else
+                    Throw New SyntaxErrorException
+            End Select
+        End Function
+
         Friend Shared Function ParseExpression(code As List(Of Token())) As Expression
             If code(Scan0).isKeyword Then
-                Dim keyword As String = code(Scan0)(Scan0).text
-
-                Select Case keyword
-                    Case "let"
-                        If code > 4 AndAlso code(3).isKeyword("function") Then
-                            Return New DeclareNewFunction(code)
-                        Else
-                            Return New DeclareNewVariable(code)
-                        End If
-                    Case "if" : Return New IfBranch(code.Skip(1).IteratesALL)
-                    Case "else" : Return New ElseBranch(code.Skip(1).IteratesALL.ToArray)
-                    Case "elseif" : Return New ElseIfBranch(code.Skip(1).IteratesALL)
-                    Case "return" : Return New ReturnValue(code.Skip(1).IteratesALL)
-                    Case "for" : Return New ForLoop(code.Skip(1).IteratesALL)
-                    Case "from" : Return New LinqExpression(code)
-                    Case "imports" : Return New [Imports](code)
-                    Case "function"
-                        Dim [let] = New Token() {New Token(TokenType.keyword, "let")}
-                        Dim name = New Token() {New Token(TokenType.identifier, "<$anonymous>")}
-                        Dim [as] = New Token() {New Token(TokenType.keyword, "as")}
-
-                        code = ({[let], name, [as]}) + code
-
-                        Return New DeclareNewFunction(code)
-                    Case "suppress"
-                        Dim evaluate As Expression = code _
-                            .Skip(1) _
-                            .IteratesALL _
-                            .DoCall(AddressOf Expression.CreateExpression)
-
-                        Return New Suppress(evaluate)
-                    Case "require"
-                        Return code(1) _
-                            .Skip(1) _
-                            .Take(code(1).Length - 2) _
-                            .ToArray _
-                            .DoCall(Function(tokens)
-                                        Return New Require(tokens)
-                                    End Function)
-                    Case Else
-                        Throw New SyntaxErrorException
-                End Select
+                Return code.DoCall(AddressOf keywordExpressionHandler)
             ElseIf code = 1 Then
                 Dim item As Token() = code(Scan0)
 
@@ -144,7 +150,7 @@ Namespace Interpreter.ExecuteEngine
                         Return New IIfExpression(ifelse.test, ifelse.ifelse)
                     End If
                 End If
-            ElseIf code > 2 AndAlso (code(Scan0).isIdentifier OrElse code(Scan0).isTuple) AndAlso code(1).isOperator("->", "=>") Then
+            ElseIf code.isLambdaFunction Then
                 ' is a lambda function
                 Return New DeclareLambdaFunction(code)
             End If
@@ -159,7 +165,8 @@ Namespace Interpreter.ExecuteEngine
                 End If
             ElseIf code(1).isOperator("=", "<-") Then
                 ' tuple value assign
-                Dim tuple = code(Scan0).Skip(1) _
+                Dim tuple = code(Scan0) _
+                    .Skip(1) _
                     .Take(code(Scan0).Length - 2) _
                     .SplitByTopLevelDelimiter(TokenType.comma) _
                     .Where(Function(t) Not t.isComma) _

@@ -70,6 +70,8 @@ Namespace Runtime.Internal
         Sub New()
             Call RConversion.pushEnvir()
             Call base.pushEnvir()
+            Call Invokes.file.pushEnvir()
+            Call Invokes.stringr.pushEnvir()
         End Sub
 
         ''' <summary>
@@ -78,6 +80,14 @@ Namespace Runtime.Internal
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Friend Sub add(handle As RInternalFuncInvoke)
             index(handle.funcName) = handle
+        End Sub
+
+        ''' <summary>
+        ''' Add internal invoke handle
+        ''' </summary>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Friend Sub add(name$, handle As Func(Of Environment, Object(), Object))
+            index(name) = New GenericInternalInvoke(name, handle)
         End Sub
 
         Public Function Rdataframe(envir As Environment, parameters As List(Of Expression)) As Object
@@ -232,19 +242,6 @@ Namespace Runtime.Internal
                     Return result
                 Case "getwd"
                     Return App.CurrentDirectory
-                Case "setwd"
-                    Dim dir As String() = Runtime.asVector(Of String)(paramVals(Scan0))
-
-                    If dir.Length = 0 Then
-                        Return invoke.missingParameter(funcName, "dir", envir)
-                    ElseIf dir(Scan0).StringEmpty Then
-                        Return invoke.invalidParameter("cannot change working directory due to the reason of NULL value provided!", funcName, "dir", envir)
-                    Else
-                        App.CurrentDirectory = dir(Scan0)
-                    End If
-
-                    Return App.CurrentDirectory
-
                 Case Else
                     Return Message.SymbolNotFound(envir, funcName, TypeCodes.closure)
             End Select

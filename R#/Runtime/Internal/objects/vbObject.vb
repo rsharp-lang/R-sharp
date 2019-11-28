@@ -22,6 +22,12 @@ Namespace Runtime.Internal
             properties = type.raw.getObjProperties.ToDictionary(Function(p) p.Name)
             methods = type.raw _
                 .getObjMethods _
+                .GroupBy(Function(m) m.Name) _
+                .Select(Function(g)
+                            Return g _
+                                .OrderByDescending(Function(m) m.GetParameters.Length) _
+                                .First
+                        End Function) _
                 .ToDictionary(Function(m) m.Name,
                               Function(m)
                                   Return New RMethodInfo(m.Name, m, target)
@@ -90,12 +96,24 @@ Namespace Runtime.Internal
         ''' 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function setByName(names() As String, value As Array, envir As Environment) As Object Implements RNameIndex.setByName
-            Return Internal.stop(New InvalidProgramException, envir)
+            If names.Length = 0 Then
+                Return Nothing
+            ElseIf names.Length = 1 Then
+                Return setByName(names(Scan0), Runtime.getFirst(value), envir)
+            Else
+                Return Internal.stop(New InvalidProgramException("You can not set multiple property for one VisualBasic.NET class object at once!"), envir)
+            End If
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function ToString() As String
-            Return target.ToString
+            If target Is Nothing Then
+                Return "NULL"
+            ElseIf printer.RtoString.ContainsKey(target.GetType) Then
+                Return printer.RtoString(target.GetType)(target)
+            Else
+                Return target.ToString
+            End If
         End Function
     End Class
 End Namespace
