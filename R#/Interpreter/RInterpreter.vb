@@ -121,7 +121,7 @@ Namespace Interpreter
         ''' <param name="packageName">
         ''' package namespace or dll module file path
         ''' </param>
-        Public Sub LoadLibrary(packageName As String)
+        Public Function LoadLibrary(packageName As String) As RInterpreter
             Dim result As Message = globalEnvir.LoadLibrary(packageName)
 
             If Not result Is Nothing Then
@@ -132,7 +132,9 @@ Namespace Interpreter
                     Call Interpreter.printMessageInternal(result)
                 End If
             End If
-        End Sub
+
+            Return Me
+        End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Sub Add(name$, value As Object, Optional type As TypeCodes = TypeCodes.generic)
