@@ -86,7 +86,7 @@ Namespace Interpreter
                                                Optional ByRef breakLoop As Boolean = False,
                                                Optional debug As Boolean = False) As Object
 
-            Dim last = expression.Evaluate(envir)
+            Dim last As Object = expression.Evaluate(envir)
 
             If debug Then
                 Call Console.WriteLine(expression.ToString)
