@@ -32,6 +32,9 @@ Namespace Interpreter.ExecuteEngine
             ' pipeline操作符是优先度最高的
             Call buf.processPipeline(oplist)
 
+            ' append操作符
+            Call buf.processAppendData(oplist)
+
             ' 算数操作符以及字符串操作符按照操作符的优先度进行构建
             Call buf.processOperators(oplist, operatorPriority, test:=Function(op, o) op.IndexOf(o) > -1)
 
@@ -143,6 +146,18 @@ Namespace Interpreter.ExecuteEngine
 
             Return pip
         End Function
+
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <Extension>
+        Private Sub processAppendData(buf As List(Of [Variant](Of Expression, String)), oplist As List(Of String))
+            Call buf.genericSymbolOperatorProcessor(
+                oplist:=oplist,
+                opSymbol:="<<",
+                expression:=Function(a, b)
+                                Return New Append(a, b)
+                            End Function)
+        End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>

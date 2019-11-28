@@ -55,6 +55,7 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call appendTest()
         '  Call iifTest()
         ' Call isEmptyTest()
         Call sourceScripttest()
@@ -120,6 +121,12 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub appendTest()
+        Call R.Evaluate("print( 1:5 << [88,99,100] )")
 
         Pause()
     End Sub
