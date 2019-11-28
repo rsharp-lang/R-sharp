@@ -55,6 +55,7 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call namespaceTest()
         Call appendTest()
         '  Call iifTest()
         ' Call isEmptyTest()
@@ -89,7 +90,7 @@ Module interpreterTest
 
         Call inTest()
 
-        Call namespaceTest()
+
         Call namesTest()
 
         Call optionsTest()
@@ -343,6 +344,7 @@ test1::println('123');
     End Sub
 
     Sub namespaceTest()
+        Call R.Evaluate("console::progressbar.pin.top();")
         Call R.Evaluate("base::load('D:\GCModeller\src\R-sharp\tutorials\io\R#save.rda') +8")
 
         Pause()

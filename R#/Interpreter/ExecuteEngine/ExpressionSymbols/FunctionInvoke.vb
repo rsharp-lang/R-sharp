@@ -45,6 +45,7 @@
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
@@ -52,6 +53,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports RPackage = SMRUCC.Rsharp.Runtime.Package.Package
 
 Namespace Interpreter.ExecuteEngine
 
@@ -144,6 +146,10 @@ Namespace Interpreter.ExecuteEngine
             ' 系统环境下的函数符号
             Dim funcVar As RFunction
 
+            If Not [namespace].StringEmpty Then
+                Return envir.DoCall(AddressOf invokePackageInternal)
+            End If
+
             If TypeOf funcName Is Literal Then
                 Dim symbol = envir.FindSymbol(DirectCast(funcName, Literal).ToString)?.value
 
@@ -168,6 +174,24 @@ Namespace Interpreter.ExecuteEngine
             Else
                 ' invoke .NET package method
                 Return DirectCast(funcVar, RMethodInfo).Invoke(envir, InvokeParameter.Create(parameters))
+            End If
+        End Function
+
+        Private Function invokePackageInternal(envir As Environment) As Object
+            ' find package and then load method
+            Dim pkg As RPackage = envir.globalEnvironment.packages.FindPackage([namespace], Nothing)
+            Dim funcName As String = DirectCast(Me.funcName, Literal).ToString
+
+            If pkg Is Nothing Then
+                Return Message.SymbolNotFound(envir, [namespace], TypeCodes.ref)
+            Else
+                Dim api As RMethodInfo = pkg.GetFunction(funcName)
+
+                If api Is Nothing Then
+                    Return Message.SymbolNotFound(envir, $"{[namespace]}::{funcName}", TypeCodes.closure)
+                Else
+                    Return api.Invoke(envir, InvokeParameter.Create(parameters))
+                End If
             End If
         End Function
 
