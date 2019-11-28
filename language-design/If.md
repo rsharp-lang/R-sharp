@@ -17,3 +17,13 @@ var ensure.arguments <- function(args) {
     args;
 }
 ```
+
+## If default
+
+Means if null then use the default value
+
+```R
+let null <- NULL;
+
+print(null ! 999); 
+```
