@@ -41,13 +41,14 @@
 
 Imports System.ComponentModel
 Imports Microsoft.VisualBasic.CommandLine
+Imports Microsoft.VisualBasic.CommandLine.InteropService.SharedORM
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports R.exec
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 Imports SMRUCC.Rsharp.Runtime.Package
 
-Module CLI
+<CLI> Module CLI
 
     <ExportAPI("--install.packages")>
     <Description("Install new packages.")>
