@@ -97,11 +97,19 @@ Namespace Interpreter.ExecuteEngine
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Private Shared Function TypeCodeOf(values As IEnumerable(Of Expression)) As TypeCodes
-            Return values _
-                .GroupBy(Function(exp) exp.type) _
-                .OrderByDescending(Function(g) g.Count) _
-                .FirstOrDefault _
-               ?.Key
+            With values.ToArray
+                ' fix for System.InvalidOperationException: Nullable object must have a value.
+                '
+                If .Length = 0 Then
+                    Return TypeCodes.generic
+                Else
+                    Return values _
+                        .GroupBy(Function(exp) exp.type) _
+                        .OrderByDescending(Function(g) g.Count) _
+                        .First _
+                       ?.Key
+                End If
+            End With
         End Function
 
         Public Overrides Function Evaluate(envir As Environment) As Object
