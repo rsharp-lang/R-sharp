@@ -55,6 +55,13 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Interpreter.ExecuteEngine
 
+    ''' <summary>
+    ''' Invoke a function symbol
+    ''' 
+    ''' ```
+    ''' call xxx(...)
+    ''' ```
+    ''' </summary>
     Public Class FunctionInvoke : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes

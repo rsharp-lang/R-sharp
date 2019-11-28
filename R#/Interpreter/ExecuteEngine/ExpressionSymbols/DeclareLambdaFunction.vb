@@ -105,6 +105,23 @@ Namespace Interpreter.ExecuteEngine
                     ' lambda function with no parameter
                     Return closure.Evaluate(envir)
                 Else
+                    ' lambda function only allows one parameter in 
+                    ' its declaration
+                    '
+                    ' example as:
+                    ' 
+                    ' x -> x + 1;
+                    ' [x, y] -> x + y;       # tuple element is still one parameter, so this is legal
+                    ' [x, y, z] -> x * y *z; # tuple element is still one parameter, so this is legal
+                    '
+                    ' function invoke of the lambda function should be in syntax of
+                    '
+                    ' lambda(x)
+                    ' lambda([x,y])
+                    ' lambda([x,y,z])
+                    '
+                    ' Due to the reason of syntax rule of only allows one parameter.
+                    '
                     Return DeclareNewVariable _
                         .PushNames(names:=parameter.names,
                                    value:=arguments(Scan0).Evaluate(envir),

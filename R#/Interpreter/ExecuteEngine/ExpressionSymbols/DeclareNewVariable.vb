@@ -75,7 +75,7 @@ Namespace Interpreter.ExecuteEngine
             ' let var [as type [= ...]]
             names = getNames(code(1))
 
-            If code.Count = 2 Then
+            If code = 2 Then
                 type = TypeCodes.generic
             ElseIf code(2).isKeyword("as") Then
                 type = code(3)(Scan0).text.GetRTypeCode
@@ -86,7 +86,7 @@ Namespace Interpreter.ExecuteEngine
             Else
                 type = TypeCodes.generic
 
-                If code.Count > 2 AndAlso code(2).isOperator("=", "<-") Then
+                If code > 2 AndAlso code(2).isOperator("=", "<-") Then
                     Call code.Skip(3).DoCall(AddressOf getInitializeValue)
                 End If
             End If

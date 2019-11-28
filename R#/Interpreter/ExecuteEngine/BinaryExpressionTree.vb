@@ -115,23 +115,60 @@ Namespace Interpreter.ExecuteEngine
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
+        Private Function isFunctionTuple(b As Expression) As Boolean
+            If Not TypeOf b Is VectorLiteral Then
+                Return False
+            ElseIf Not DirectCast(b, VectorLiteral) _
+                .All(Function(e)
+                         Return TypeOf e Is FunctionInvoke OrElse TypeOf e Is SymbolReference
+                     End Function) Then
+
+                Return False
+            End If
+
+            Return True
+        End Function
+
+        Private Function buildPipeline(a As Expression, b As Expression) As Expression
+            Dim pip As FunctionInvoke
+
+            If TypeOf b Is FunctionInvoke Then
+                pip = b
+                pip.parameters.Insert(Scan0, a)
+            ElseIf TypeOf b Is SymbolReference Then
+                pip = New FunctionInvoke(DirectCast(b, SymbolReference).symbol, a)
+            Else
+                pip = Nothing
+            End If
+
+            Return pip
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <Extension>
         Private Sub processPipeline(buf As List(Of [Variant](Of Expression, String)), oplist As List(Of String))
             Call buf.genericSymbolOperatorProcessor(
                 oplist:=oplist,
                 opSymbol:=":>",
                 expression:=Function(a, b)
-                                Dim pip As FunctionInvoke
+                                Dim pip As Expression = buildPipeline(a, b)
 
-                                If TypeOf b.VA Is FunctionInvoke Then
-                                    pip = b.VA
-                                    pip.parameters.Insert(Scan0, a.VA)
-                                ElseIf TypeOf b.VA Is SymbolReference Then
-                                    pip = New FunctionInvoke(DirectCast(b.VA, SymbolReference).symbol, a.VA)
+                                If pip Is Nothing Then
+                                    If b.VA.isFunctionTuple Then
+                                        Dim invokes = b.TryCast(Of VectorLiteral)
+                                        Dim calls As New List(Of Expression)
+
+                                        For Each [call] As Expression In invokes
+                                            calls += buildPipeline(a, [call])
+                                        Next
+
+                                        Return New VectorLiteral(calls)
+                                    Else
+                                        Throw New SyntaxErrorException
+                                    End If
                                 Else
-                                    Throw New SyntaxErrorException
+                                    Return pip
                                 End If
-
-                                Return pip
                             End Function)
         End Sub
 

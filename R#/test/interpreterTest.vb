@@ -55,7 +55,7 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
-        Call iifTest()
+        '  Call iifTest()
         ' Call isEmptyTest()
         Call sourceScripttest()
 
@@ -282,6 +282,7 @@ test1::println('123');
     Sub sourceScripttest()
         ' Call R.Source("D:\GCModeller\src\R-sharp\tutorials\lambda.R")
         Call R.LoadLibrary("D:\GCModeller\GCModeller\bin\R.base.dll")
+        Call R.Evaluate("let [a,b,c,d] = x :> [add1, add2, add3, addWith(9)];")
         ' Call R.Source("D:\GCModeller\src\GCModeller\engine\Rscript\dataset.R")
         Call R.Source("D:\GCModeller\src\R-sharp\tutorials\invokeTuple.R")
 
