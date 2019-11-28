@@ -66,7 +66,26 @@ Namespace Runtime.Package
             Me.package = package
         End Sub
 
+        ''' <summary>
+        ''' [namespace::name -> entry_point]
+        ''' </summary>
+        Shared ReadOnly apiCache As New Dictionary(Of String, RMethodInfo)
+
         Public Function GetFunction(apiName As String) As RMethodInfo
+            Dim ref$ = $"{[namespace]}::{apiName}"
+            Dim api As RMethodInfo
+
+            If Not apiCache.ContainsKey(ref) Then
+                api = GetFunctionInternal(apiName)
+                apiCache(ref) = api
+            Else
+                api = apiCache(ref)
+            End If
+
+            Return api
+        End Function
+
+        Private Function GetFunctionInternal(apiName As String) As RMethodInfo
             Dim apiHandle As NamedValue(Of MethodInfo) = ImportsPackage _
                 .GetAllApi(package) _
                 .FirstOrDefault(Function(api)
