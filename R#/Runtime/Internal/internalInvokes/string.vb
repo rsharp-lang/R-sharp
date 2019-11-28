@@ -14,7 +14,7 @@
             Dim subj As String() = Runtime.asVector(Of String)(params(Scan0))
             Dim search As String = Scripting.ToString(Runtime.getFirst(params(1)))
             Dim replaceAs As String = Scripting.ToString(Runtime.getFirst(params(2)), "")
-            Dim regexp As Boolean = Runtime.asLogical(params(3))(Scan0)
+            Dim regexp As Boolean = Runtime.asLogical(params.ElementAtOrDefault(3))(Scan0)
 
             If regexp Then
                 Return subj.Select(Function(s) s.StringReplace(search, replaceAs)).ToArray

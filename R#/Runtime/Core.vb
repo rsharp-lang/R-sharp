@@ -259,6 +259,10 @@ Namespace Runtime
                 End If
 
             Else
+                If Not xtype.IsArray AndAlso Not ytype.IsArray Then
+                    Return {DirectCast([do](CObj(x), CObj(y)), TOut)}
+                End If
+
                 Throw New InvalidCastException(xtype.FullName)
             End If
         End Function
