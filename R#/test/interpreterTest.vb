@@ -55,6 +55,9 @@ Module interpreterTest
     Dim R As New RInterpreter
 
     Sub Main()
+        Call R.globalEnvir.packages.InstallLocals("D:\GCModeller\GCModeller\bin\R.base.dll")
+
+
         Call namespaceTest()
         Call appendTest()
         '  Call iifTest()

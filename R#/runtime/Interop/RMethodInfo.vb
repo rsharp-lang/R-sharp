@@ -47,6 +47,7 @@
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -82,6 +83,14 @@ Namespace Runtime.Interop
             Me.api = closure
             Me.returns = New RType(closure.Method.ReturnType)
             Me.parameters = closure.Method.DoCall(AddressOf parseParameters)
+        End Sub
+
+        ''' <summary>
+        ''' Static method
+        ''' </summary>
+        ''' <param name="api"></param>
+        Sub New(api As NamedValue(Of MethodInfo))
+            Call Me.New(api.Name, api.Value, Nothing)
         End Sub
 
         ''' <summary>

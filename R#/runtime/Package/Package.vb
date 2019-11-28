@@ -43,6 +43,8 @@
 
 #End Region
 
+Imports System.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime.Interop
 
@@ -65,7 +67,17 @@ Namespace Runtime.Package
         End Sub
 
         Public Function GetFunction(apiName As String) As RMethodInfo
+            Dim apiHandle As NamedValue(Of MethodInfo) = ImportsPackage _
+                .GetAllApi(package) _
+                .FirstOrDefault(Function(api)
+                                    Return api.Name = apiName
+                                End Function)
 
+            If apiHandle.IsEmpty Then
+                Return Nothing
+            Else
+                Return New RMethodInfo(apiHandle)
+            End If
         End Function
 
         Public Overrides Function ToString() As String
