@@ -71,6 +71,7 @@ Namespace Runtime.Internal
             Call RConversion.pushEnvir()
             Call base.pushEnvir()
             Call Invokes.file.pushEnvir()
+            Call Invokes.stringr.pushEnvir()
         End Sub
 
         ''' <summary>

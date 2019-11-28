@@ -81,6 +81,11 @@ Namespace Runtime
 
         ReadOnly numericTypes As Index(Of Type) = {GetType(Integer), GetType(Long), GetType(Double), GetType(Single)}
 
+        ''' <summary>
+        ''' NULL -> false
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
         Public Function asLogical(x As Object) As Boolean()
             If x Is Nothing Then
                 Return {False}
