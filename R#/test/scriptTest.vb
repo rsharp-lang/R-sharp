@@ -2,7 +2,7 @@
 
 Module scriptTest
 
-    Const script$ = "D:\GCModeller\src\GCModeller\engine\Rscript\run.R"
+    Const script$ = "D:\GCModeller\src\GCModeller\engine\Rscript\KO.R"
 
     Dim R As RInterpreter = New RInterpreter() With {
         .debug = True
