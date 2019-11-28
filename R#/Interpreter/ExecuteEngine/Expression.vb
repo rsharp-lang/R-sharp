@@ -189,6 +189,9 @@ Namespace Interpreter.ExecuteEngine
                     If code > 1 Then
                         If code(1).isKeyword("step") Then
                             steps = code(2)
+                        ElseIf code(1).isOperator Then
+                            ' do nothing
+                            GoTo Binary
                         Else
                             Throw New SyntaxErrorException
                         End If
@@ -197,7 +200,7 @@ Namespace Interpreter.ExecuteEngine
                     Return New SequenceLiteral(from, [to], steps)
                 End If
             End If
-
+Binary:
             Return code.ParseBinaryExpression
         End Function
     End Class
