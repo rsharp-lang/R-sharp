@@ -126,9 +126,13 @@ Namespace Interpreter.ExecuteEngine
                 envir = parent
             End If
 
+            Dim argumentKeys As String()
+            Dim key$
+
             ' function parameter should be evaluate 
             ' from the parent environment.
             arguments = InvokeParameter.CreateArguments(parent, params)
+            argumentKeys = arguments.Keys.ToArray
 
             ' initialize environment
             For i As Integer = 0 To Me.params.Length - 1
@@ -144,7 +148,17 @@ Namespace Interpreter.ExecuteEngine
                         Throw New MissingFieldException(var.names.GetJson)
                     End If
                 Else
-                    value = arguments("$" & i)
+                    key = "$" & i
+
+                    If arguments.ContainsKey(key) Then
+                        value = arguments(key)
+                    Else
+                        ' symbol :> func
+                        ' will cause parameter name as symbol name
+                        ' produce key not found error
+                        ' try to fix such bug
+                        value = arguments(argumentKeys(i))
+                    End If
                 End If
 
                 ' 20191120 对于函数对象而言，由于拥有自己的环境，在构建闭包之后
