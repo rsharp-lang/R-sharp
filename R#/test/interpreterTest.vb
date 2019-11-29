@@ -425,11 +425,18 @@ print(zzz);
 let add1 as function(xx) {
     xx + 1;
 }
-
+let div as function(x ,y) {
+    x / (y+1);
+}
 
 ")
         Call R.Evaluate("[xx = [99,23,44,55,66]] :> add1;")
         Call R.Evaluate("print($)")
+
+        Call R.Evaluate("print([x = 5:10] :> div(55));")
+        Call R.Evaluate("print(  5:10 :> div(55));")
+        Call R.Evaluate("print([y = 5:10] :> div(55));")
+        Call R.Evaluate("print(div(55, 5:10))")
 
         Pause()
     End Sub
