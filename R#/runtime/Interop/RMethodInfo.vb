@@ -161,7 +161,7 @@ Namespace Runtime.Interop
             For Each arg As InvokeParameter In params
                 If declareArguments.ContainsKey(arg.name) Then
                     i = declareNameIndex(arg.name)
-                    parameterVals(i) = getValue(declareArguments(arg.name), arg.Evaluate(envir))
+                    parameterVals(i) = getValue(declareArguments(arg.name), arg.Evaluate(envir), trace:=name)
                     declareArguments.Remove(arg.name)
                 Else
                     listObject.Add(arg)
@@ -203,6 +203,7 @@ Namespace Runtime.Interop
             Dim arg As RMethodArgument
             Dim keys As String() = arguments.Keys.ToArray
             Dim nameKey As String
+            Dim apiTrace As String = name
 
             For Each value As Object In arguments.Values
                 If Not value Is Nothing AndAlso value.GetType Is GetType(Message) Then
@@ -215,7 +216,7 @@ Namespace Runtime.Interop
                 arg = Me.parameters(i)
 
                 If arguments.ContainsKey(arg.name) Then
-                    Yield getValue(arg, arguments(arg.name))
+                    Yield getValue(arg, arguments(arg.name), apiTrace)
                 ElseIf i >= arguments.Count Then
                     ' default value
                     If arg.type.raw Is GetType(Environment) Then
@@ -229,9 +230,9 @@ Namespace Runtime.Interop
                     nameKey = $"${i}"
 
                     If arguments.ContainsKey(nameKey) Then
-                        Yield getValue(arg, arguments(nameKey))
+                        Yield getValue(arg, arguments(nameKey), apiTrace)
                     Else
-                        Yield getValue(arg, arguments(keys(i)))
+                        Yield getValue(arg, arguments(keys(i)), apiTrace)
                     End If
                 End If
             Next
@@ -249,14 +250,18 @@ Namespace Runtime.Interop
             Return Internal.stop(messages, envir)
         End Function
 
-        Private Shared Function getValue(arg As RMethodArgument, value As Object) As Object
+        Private Shared Function getValue(arg As RMethodArgument, value As Object, trace$) As Object
             If arg.type.isArray Then
                 value = CObj(Runtime.asVector(value, arg.type.raw.GetElementType))
             ElseIf Not arg.isRequireRawVector Then
                 value = Runtime.getFirst(value)
             End If
 
-            Return RConversion.CTypeDynamic(value, arg.type.raw)
+            Try
+                Return RConversion.CTypeDynamic(value, arg.type.raw)
+            Catch ex As Exception
+                Throw New InvalidCastException("Api: " & trace, ex)
+            End Try
         End Function
 
         Public Overrides Function ToString() As String

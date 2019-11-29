@@ -57,6 +57,10 @@ Namespace Runtime.Interop
             Return method.Invoke(target, parameters)
         End Function
 
+        Public Overrides Function ToString() As String
+            Return $"{Scripting.ToString(target, "NULL")}::{method.ToString}"
+        End Function
+
     End Class
 
     Friend Class RuntimeValueLiteral : Inherits Expression
