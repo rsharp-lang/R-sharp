@@ -81,6 +81,9 @@ Namespace Runtime
 
         ''' <summary>
         ''' Ensure that the input <paramref name="value"/> object is a sequence. 
+        ''' (This method will decouple the object instance value from vbObject 
+        ''' container unless the required <paramref name="type"/> is 
+        ''' <see cref="vbObject"/>.)
         ''' </summary>
         ''' <param name="value"></param>
         ''' <param name="type"></param>
