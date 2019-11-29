@@ -58,7 +58,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 
-Namespace Runtime.Internal
+Namespace Runtime.Internal.Invokes
 
     ''' <summary>
     ''' 在这个模块之中仅包含有最基本的数据操作函数

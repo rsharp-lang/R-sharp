@@ -1,4 +1,5 @@
-﻿Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+﻿Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 
 Namespace Runtime.Internal
 
@@ -16,11 +17,20 @@ Namespace Runtime.Internal
             If obj Is Nothing Then
                 Return Nothing
             Else
-                Select Case obj.GetType
+                Dim type As Type = obj.GetType
+
+                Select Case type
                     Case GetType(vbObject), GetType(vector), GetType(list)
                         Return obj
                     Case Else
-                        Return New vbObject(obj)
+                        If type.IsArray Then
+                            Return Runtime.asVector(Of Object)(obj) _
+                                .AsObjectEnumerator _
+                                .Select(Function(o) New vbObject(o)) _
+                                .ToArray
+                        Else
+                            Return New vbObject(obj)
+                        End If
                 End Select
             End If
         End Function

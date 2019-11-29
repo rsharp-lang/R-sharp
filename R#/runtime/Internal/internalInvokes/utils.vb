@@ -45,7 +45,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Package
 
-Namespace Runtime.Internal
+Namespace Runtime.Internal.Invokes
 
     Module utils
 
