@@ -76,13 +76,14 @@ Public Module utils
 
         If type Is GetType(Rdataframe) Then
             Dim matrix As String()() = x.GetTable
-            Dim dataframe As New File(matrix.Select(Function(r) New RowObject(r)))
+            Dim rows = matrix.Select(Function(r) New RowObject(r))
+            Dim dataframe As New File(rows)
 
             Return dataframe.Save(path:=file)
         ElseIf type Is GetType(File) Then
             Return DirectCast(x, File).Save(path:=file)
-        ElseIf type Is GetType(DataFrame) Then
-            Return DirectCast(x, DataFrame).Save(path:=file)
+        ElseIf type Is GetType(IO.DataFrame) Then
+            Return DirectCast(x, IO.DataFrame).Save(path:=file)
         ElseIf type Is GetType(EntityObject()) OrElse type.ImplementInterface(GetType(IEnumerable(Of EntityObject))) Then
             Return DirectCast(x, IEnumerable(Of EntityObject)).SaveTo(path:=file)
         ElseIf type Is GetType(DataSet()) OrElse type.ImplementInterface(GetType(IEnumerable(Of DataSet))) Then
