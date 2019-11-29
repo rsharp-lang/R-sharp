@@ -52,6 +52,7 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports RPackage = SMRUCC.Rsharp.Runtime.Package.Package
 
@@ -199,7 +200,7 @@ Namespace Interpreter.ExecuteEngine
             If funcName = "list" Then
                 Return Runtime.Internal.Rlist(envir, parameters)
             ElseIf funcName = "options" Then
-                Return Runtime.Internal.options(Runtime.Internal.Rlist(envir, parameters), envir)
+                Return base.options(Runtime.Internal.Rlist(envir, parameters), envir)
             ElseIf funcName = "data.frame" Then
                 Return Runtime.Internal.Rdataframe(envir, parameters)
             Else

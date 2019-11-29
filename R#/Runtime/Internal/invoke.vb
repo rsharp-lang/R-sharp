@@ -90,6 +90,11 @@ Namespace Runtime.Internal
             index(name) = New GenericInternalInvoke(name, handle)
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function [stop](message As Object, envir As Environment) As Message
+            Return base.stop(message, envir)
+        End Function
+
         Public Function Rdataframe(envir As Environment, parameters As List(Of Expression)) As Object
             Dim dataframe As New dataframe With {
                 .columns = InvokeParameter _
@@ -195,13 +200,13 @@ Namespace Runtime.Internal
                 Case "get"
                     Return base.get(paramVals(Scan0), envir)
                 Case "print"
-                    Return Internal.print(paramVals(Scan0), envir)
+                    Return base.print(paramVals(Scan0), envir)
                 Case "stop"
                     Return Internal.stop(paramVals(Scan0), envir)
                 Case "warning"
-                    Return Internal.warning(paramVals(Scan0), envir)
+                    Return base.warning(paramVals(Scan0), envir)
                 Case "cat"
-                    Return Internal.cat(paramVals(Scan0), paramVals.ElementAtOrDefault(1), paramVals.ElementAtOrDefault(2, " "))
+                    Return base.cat(paramVals(Scan0), paramVals.ElementAtOrDefault(1), paramVals.ElementAtOrDefault(2, " "))
                 Case "lapply"
                     If paramVals.ElementAtOrDefault(1) Is Nothing Then
                         Return Internal.stop({"Missing apply function!"}, envir)
@@ -215,7 +220,7 @@ Namespace Runtime.Internal
                         Return paramVals(1)
                     End If
 
-                    Return Internal.lapply(paramVals(Scan0), paramVals(1), envir)
+                    Return base.lapply(paramVals(Scan0), paramVals(1), envir)
                 Case "require"
                     Dim libraryNames As String() = paramVals _
                         .Select(AddressOf Scripting.ToString) _

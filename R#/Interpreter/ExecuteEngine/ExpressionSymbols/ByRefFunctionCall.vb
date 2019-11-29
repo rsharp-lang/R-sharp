@@ -45,6 +45,7 @@
 
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 
 Namespace Interpreter.ExecuteEngine
 
@@ -70,7 +71,7 @@ Namespace Interpreter.ExecuteEngine
         Public Overrides Function Evaluate(envir As Environment) As Object
             Select Case funcName
                 Case "names"
-                    Return Runtime.Internal.names(target.Evaluate(envir), value.Evaluate(envir), envir)
+                    Return base.names(target.Evaluate(envir), value.Evaluate(envir), envir)
                 Case Else
                     Return Message.SyntaxNotImplemented(envir, $"byref call of {funcName}")
             End Select
