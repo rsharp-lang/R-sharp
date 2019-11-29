@@ -96,7 +96,7 @@ Namespace Interpreter.ExecuteEngine
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim sequence As Object = Runtime.asVector(Of Object)(symbol.Evaluate(envir))
+            Dim obj As Object = symbol.Evaluate(envir)
             Dim indexer = Runtime.asVector(Of Object)(index.Evaluate(envir))
 
             If indexer.Length = 0 Then
@@ -104,29 +104,41 @@ Namespace Interpreter.ExecuteEngine
                     $"Attempt to select less than one element in get1index",
                     $"expression: {symbol}[[{index}]]"
                 }, envir)
-            ElseIf sequence Is Nothing OrElse sequence.Length = 0 Then
+            End If
+
+            If nameIndex Then
+                Return getByName(obj, indexer, envir)
+            Else
+                Return getByIndex(obj, indexer, envir)
+            End If
+        End Function
+
+        Private Function getByName(obj As Object, indexer As Array, envir As Environment) As Object
+            If Not obj.GetType.ImplementInterface(GetType(RNameIndex)) Then
+                Return Internal.stop("Target object can not be indexed by name!", envir)
+            ElseIf indexer.Length = 1 Then
+                Return DirectCast(obj, RNameIndex).getByName(Scripting.ToString(indexer.GetValue(Scan0)))
+            Else
+                Return DirectCast(obj, RNameIndex).getByName(Runtime.asVector(Of String)(indexer))
+            End If
+        End Function
+
+        Private Function getByIndex(obj As Object, indexer As Array, envir As Environment) As Object
+            Dim sequence As Array = Runtime.asVector(Of Object)(obj)
+
+            If sequence Is Nothing OrElse sequence.Length = 0 Then
                 Return Nothing
             ElseIf sequence.Length = 1 AndAlso sequence.GetValue(Scan0).GetType.ImplementInterface(GetType(IReflector)) Then
                 sequence = sequence.GetValue(Scan0)
             End If
 
-            If nameIndex Then
-                If Not sequence.GetType.ImplementInterface(GetType(RNameIndex)) Then
-                    Return Internal.stop("Target object can not be indexed by name!", envir)
-                ElseIf indexer.Length = 1 Then
-                    Return DirectCast(sequence, RNameIndex).getByName(Scripting.ToString(indexer.GetValue(Scan0)))
-                Else
-                    Return DirectCast(sequence, RNameIndex).getByName(Runtime.asVector(Of String)(indexer))
-                End If
+            ' by element index
+            If Not sequence.GetType.ImplementInterface(GetType(RIndex)) Then
+                Return Internal.stop("Target object can not be indexed!", envir)
+            ElseIf indexer.Length = 1 Then
+                Return DirectCast(sequence, RIndex).getByIndex(CInt(indexer.GetValue(Scan0)))
             Else
-                ' by element index
-                If Not sequence.GetType.ImplementInterface(GetType(RIndex)) Then
-                    Return Internal.stop("Target object can not be indexed!", envir)
-                ElseIf indexer.Length = 1 Then
-                    Return DirectCast(sequence, RIndex).getByIndex(CInt(indexer.GetValue(Scan0)))
-                Else
-                    Return DirectCast(sequence, RIndex).getByIndex(Runtime.asVector(Of Integer)(indexer))
-                End If
+                Return DirectCast(sequence, RIndex).getByIndex(Runtime.asVector(Of Integer)(indexer))
             End If
         End Function
 
