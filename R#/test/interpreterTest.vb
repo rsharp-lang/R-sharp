@@ -56,7 +56,7 @@ Module interpreterTest
 
     Sub Main()
         Call R.globalEnvir.packages.InstallLocals("D:\GCModeller\GCModeller\bin\R.base.dll")
-
+        Call pipelineParameterBugTest()
 
         Call namespaceTest()
         Call appendTest()
@@ -418,6 +418,20 @@ print(zzz);
 ")
 
         Call Pause()
+    End Sub
+
+    Sub pipelineParameterBugTest()
+        Call R.Evaluate("
+let add1 as function(xx) {
+    xx + 1;
+}
+
+
+")
+        Call R.Evaluate("[xx = [99,23,44,55,66]] :> add1;")
+        Call R.Evaluate("print($)")
+
+        Pause()
     End Sub
 
     Sub pipelineTest()
