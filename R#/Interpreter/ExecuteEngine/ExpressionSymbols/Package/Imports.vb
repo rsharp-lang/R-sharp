@@ -92,10 +92,15 @@ Namespace Interpreter.ExecuteEngine
             If libDll.StringEmpty Then
                 Return Internal.stop("No package module provided!", envir)
             ElseIf Not libDll.FileExists Then
-                libDll = $"{App.HOME}/{libDll}"
+                For Each location As String In {$"{App.HOME}/{libDll}", $"{App.HOME}/Library/{libDll}"}
+                    If location.FileExists Then
+                        libDll = location
+                        GoTo load
+                    End If
+                Next
             End If
 
-            Return LoadLibrary(libDll, envir, names)
+load:       Return LoadLibrary(libDll, envir, names)
         End Function
 
         Private Shared Function isImportsAllPackages(names As Index(Of String)) As Boolean
