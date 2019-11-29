@@ -48,4 +48,18 @@ Module dataframe
             Return Internal.debug.stop(New InvalidProgramException, envir)
         End If
     End Function
+
+    <ExportAPI("read.dataframe")>
+    Public Function readDataSet(file$, Optional mode$ = "numeric|character") As Object
+        Dim readMode = mode.Split("|"c).First
+
+        Select Case readMode.ToLower
+            Case "numeric"
+                Return DataSet.LoadDataSet(file).ToArray
+            Case "character"
+                Return EntityObject.LoadDataSet(file).ToArray
+            Case Else
+                Return utils.write_csv
+        End Select
+    End Function
 End Module

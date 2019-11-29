@@ -55,6 +55,21 @@ Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.dataframe
 <Package("utils", Category:=APICategories.UtilityTools)>
 Public Module utils
 
+    <ExportAPI("read.csv")>
+    Public Function read_csv(file As String) As Rdataframe
+        Dim datafile As File = IO.File.Load(file)
+        Dim cols = datafile.Columns.ToArray
+        Dim dataframe As New Rdataframe() With {
+            .columns = cols _
+                .ToDictionary(Function(col) col(Scan0),
+                              Function(col)
+                                  Return DirectCast(col.Skip(1).ToArray, Array)
+                              End Function)
+        }
+
+        Return dataframe
+    End Function
+
     ''' <summary>
     ''' 
     ''' </summary>
