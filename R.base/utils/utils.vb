@@ -69,7 +69,7 @@ Public Module utils
     <ExportAPI("write.csv")>
     Public Function write_csv(<RRawVectorArgument> x As Object, file$, envir As Environment) As Object
         If x Is Nothing Then
-            Return Internal.stop("Empty dataframe object!", envir)
+            Return Internal.debug.stop("Empty dataframe object!", envir)
         End If
 
         Dim type As Type = x.GetType

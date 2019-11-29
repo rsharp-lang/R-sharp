@@ -63,7 +63,7 @@ Partial Module base
     <Description("Reload datasets written with the function save.")>
     Public Function load(file As String, envir As Environment) As Object
         If Not file.FileExists Then
-            Return Internal.stop({"Disk file is unavailable...", file.GetFullPath}, envir)
+            Return Internal.debug.stop({"Disk file is unavailable...", file.GetFullPath}, envir)
         End If
 
         Dim tmp = App.GetAppSysTempFile(".cdf", App.PID, prefix:=RandomASCIIString(8, True))
@@ -77,7 +77,7 @@ Partial Module base
             Dim var As RVariable
 
             If objectNames.Length <> numOfObjects Then
-                Return Internal.stop({"Invalid file format!", "file=" & file}, envir)
+                Return Internal.debug.stop({"Invalid file format!", "file=" & file}, envir)
             End If
 
             For Each name As String In objectNames
@@ -124,9 +124,9 @@ Partial Module base
     <Argument("envir", True, CLITypes.File, Description:="environment to search for objects to be saved.")>
     Public Function save(<RListObjectArgument> objects As Object, file$, envir As Environment) As Object
         If file.StringEmpty Then
-            Return Internal.stop("'file' must be specified!", envir)
+            Return Internal.debug.stop("'file' must be specified!", envir)
         ElseIf objects Is Nothing Then
-            Return Internal.stop("'object' is nothing!", envir)
+            Return Internal.debug.stop("'object' is nothing!", envir)
         End If
 
         ' 先保存为cdf文件
