@@ -46,8 +46,18 @@ Namespace Runtime.Internal.Invokes
         Public key As Object
         Public group As Array
 
+        Shared Sub New()
+            Call printer.AttachConsoleFormatter(Of Group)(Function(group) group.ToString)
+        End Sub
+
         Public Overrides Function ToString() As String
-            Return printer.ValueToString(key)
+            Return vbCrLf &
+                $" '{group.Length}' elements with key: " & printer.ValueToString(key) & vbCrLf &
+                group.AsObjectEnumerator _
+                    .Select(Function(o)
+                                Return "   " & printer.ValueToString(o)
+                            End Function) _
+                    .JoinBy(vbCrLf)
         End Function
 
         Public Function getByName(name As String) As Object Implements RNameIndex.getByName
