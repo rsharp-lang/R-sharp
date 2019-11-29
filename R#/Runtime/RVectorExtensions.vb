@@ -3,7 +3,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Runtime
 
-    <HideModuleName> Module RVectorExtensions
+    <HideModuleName> Public Module RVectorExtensions
 
         ''' <summary>
         ''' Get first element in the input <paramref name="value"/> sequence
