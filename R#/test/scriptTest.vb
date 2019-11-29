@@ -2,7 +2,7 @@
 
 Module scriptTest
 
-    Const script$ = "D:\GCModeller\src\GCModeller\engine\Rscript\KO.R"
+    Const script$ = "D:\GCModeller\src\GCModeller\engine\Rscript\foldchange.R"
 
     Dim R As RInterpreter = New RInterpreter() With {
         .debug = True
@@ -11,5 +11,6 @@ Module scriptTest
 
     Sub Main()
         Call R.Source(script)
+        Call Pause()
     End Sub
 End Module
