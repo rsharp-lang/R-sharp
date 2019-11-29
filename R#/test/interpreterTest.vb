@@ -45,18 +45,21 @@
 
 #End Region
 
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal
+Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 
 Module interpreterTest
 
-    Dim R As New RInterpreter
+    Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
         Call R.globalEnvir.packages.InstallLocals("D:\GCModeller\GCModeller\bin\R.base.dll")
-
+        Call linqPipelineTest()
+        Call pipelineParameterBugTest()
 
         Call namespaceTest()
         Call appendTest()
@@ -418,6 +421,42 @@ print(zzz);
 ")
 
         Call Pause()
+    End Sub
+
+    Sub linqPipelineTest()
+        Dim seq = Iterator Function() As IEnumerable(Of NamedValue(Of String))
+                      For i As Integer = 0 To 10
+                          For j As Integer = 0 To 3
+                              Yield New NamedValue(Of String)(i.ToHexString, RandomASCIIString(16))
+                          Next
+                      Next
+                  End Function().ToArray
+
+        Call R.Add("seq", seq)
+        Call R.Evaluate("let x = seq :> as.object :> groupBy(x -> x$Name)")
+
+        Call Pause()
+    End Sub
+
+    Sub pipelineParameterBugTest()
+        Call R.Evaluate("
+let add1 as function(xx) {
+    xx + 1;
+}
+let div as function(x ,y) {
+    x / (y+1);
+}
+
+")
+        Call R.Evaluate("[xx = [99,23,44,55,66]] :> add1;")
+        Call R.Evaluate("print($)")
+
+        Call R.Evaluate("print([x = 5:10] :> div(55));")
+        Call R.Evaluate("print(  5:10 :> div(55));")
+        Call R.Evaluate("print([y = 5:10] :> div(x = 55));")
+        Call R.Evaluate("print(div(55, 5:10))")
+
+        Pause()
     End Sub
 
     Sub pipelineTest()

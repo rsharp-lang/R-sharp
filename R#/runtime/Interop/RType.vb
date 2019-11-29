@@ -66,11 +66,19 @@ Namespace Runtime.Interop
 
         Sub New(raw As Type)
             Me.raw = raw
-            Me.isArray = raw.IsInheritsFrom(GetType(Array))
+            Me.isArray = raw Is GetType(Array) OrElse raw.IsInheritsFrom(GetType(Array))
             Me.names = populateNames _
                 .Distinct _
                 .ToArray
         End Sub
+
+        Public Function GetRawElementType() As Type
+            If raw Is GetType(Array) Then
+                Return GetType(Object)
+            Else
+                Return raw.GetElementType
+            End If
+        End Function
 
         Private Iterator Function populateNames() As IEnumerable(Of String)
             For Each m As MethodInfo In raw.getObjMethods

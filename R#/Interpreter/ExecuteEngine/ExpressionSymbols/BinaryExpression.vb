@@ -130,13 +130,12 @@ Namespace Interpreter.ExecuteEngine
                     End Select
                 End If
             ElseIf ta Is GetType(String) OrElse tb Is GetType(String) Then
-                If [operator] = "&" Then
-                    Return DoStringJoin(a, b)
-                Else
-                    Throw New InvalidExpressionException
-                End If
+                Select Case [operator]
+                    Case "&" : Return DoStringBinary(Of String)(a, b, Function(x, y) x & y)
+                    Case "==" : Return DoStringBinary(Of Boolean)(a, b, Function(x, y) x = y)
+                    Case "!=" : Return DoStringBinary(Of Boolean)(a, b, Function(x, y) x <> y)
+                End Select
             Else
-
                 If [operator] = "||" OrElse [operator] = "&&" Then
                     Dim op As Func(Of Object, Object, Object)
 
@@ -176,13 +175,12 @@ Namespace Interpreter.ExecuteEngine
             Throw New NotImplementedException($"<{ta.FullName}> {[operator]} <{tb.FullName}>")
         End Function
 
-        Public Shared Function DoStringJoin(a As Object, b As Object) As String()
+        Public Shared Function DoStringBinary(Of Out)(a As Object, b As Object, op As Func(Of Object, Object, Object)) As Out()
             Dim va = getStringArray(a).ToArray
             Dim vb = getStringArray(b).ToArray
-            Dim append = Function(x, y) x & y
 
             Return Runtime.Core _
-                .BinaryCoreInternal(Of String, String, String)(va, vb, append) _
+                .BinaryCoreInternal(Of String, String, Out)(va, vb, op) _
                 .ToArray
         End Function
 

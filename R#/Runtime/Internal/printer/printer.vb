@@ -48,7 +48,7 @@ Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization
 
-Namespace Runtime.Internal
+Namespace Runtime.Internal.ConsolePrinter
 
     ''' <summary>
     ''' R# console nice print supports.

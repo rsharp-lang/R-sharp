@@ -41,7 +41,10 @@
 
 Imports Microsoft.VisualBasic.Scripting.MetaData
 
-<Package("base", Category:=APICategories.UtilityTools, Description:="")>
+''' <summary>
+''' 
+''' </summary>
+<Package("base", Category:=APICategories.UtilityTools)>
 Public Module base
 
 End Module

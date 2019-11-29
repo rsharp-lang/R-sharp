@@ -178,14 +178,14 @@ Namespace Language.TokenIcer
         ''' + ||
         ''' + ==
         ''' </summary>
-        ReadOnly longOperatorParts As Index(Of Char) = {"<"c, ">"c, "&"c, "|"c, ":"c, "="c, "-"c, "+"c}
-        ReadOnly longOperators As Index(Of String) = {"<=", "<-", "&&", "||", ":>", "::", "<<", "->", "=>", ">=", "==", "++", "--"}
+        ReadOnly longOperatorParts As Index(Of Char) = {"<"c, ">"c, "&"c, "|"c, ":"c, "="c, "-"c, "+"c, "!"}
+        ReadOnly longOperators As Index(Of String) = {"<=", "<-", "&&", "||", ":>", "::", "<<", "->", "=>", ">=", "==", "!=", "++", "--"}
         ReadOnly shortOperators As Index(Of Char) = {"$"c, "+"c, "*"c, "/"c, "%"c, "^"c, "!"c}
         ReadOnly keywords As Index(Of String) = {
             "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string",
             "const", "imports", "require", "library",
             "if", "else", "for", "loop", "while", "repeat", "step", "break", "next",
-            "in", "like", "which", "from", "where", "order", "by", "distinct", "select",
+            "in", "like", "from", "where", "order", "by", "distinct", "select",
             "ascending", "descending",
             "suppress",
             "typeof", "modeof"

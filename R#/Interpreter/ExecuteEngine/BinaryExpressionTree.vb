@@ -135,6 +135,14 @@ Namespace Interpreter.ExecuteEngine
         Private Function buildPipeline(a As Expression, b As Expression) As Expression
             Dim pip As FunctionInvoke
 
+            If TypeOf a Is VectorLiteral Then
+                With DirectCast(a, VectorLiteral)
+                    If .length = 1 AndAlso TypeOf .First Is ValueAssign Then
+                        a = .First
+                    End If
+                End With
+            End If
+
             If TypeOf b Is FunctionInvoke Then
                 pip = b
                 pip.parameters.Insert(Scan0, a)

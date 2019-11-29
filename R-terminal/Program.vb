@@ -58,6 +58,10 @@ Module Program
     Private Function RunScript(filepath$, args As CommandLine) As Integer
         Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
 
+        If args("--debug") Then
+            R.debug = True
+        End If
+
         Call Console.WriteLine(args.ToString)
         Call Console.WriteLine()
 

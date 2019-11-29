@@ -55,6 +55,21 @@ Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.dataframe
 <Package("utils", Category:=APICategories.UtilityTools)>
 Public Module utils
 
+    <ExportAPI("read.csv")>
+    Public Function read_csv(file As String) As Rdataframe
+        Dim datafile As File = IO.File.Load(file)
+        Dim cols = datafile.Columns.ToArray
+        Dim dataframe As New Rdataframe() With {
+            .columns = cols _
+                .ToDictionary(Function(col) col(Scan0),
+                              Function(col)
+                                  Return DirectCast(col.Skip(1).ToArray, Array)
+                              End Function)
+        }
+
+        Return dataframe
+    End Function
+
     ''' <summary>
     ''' 
     ''' </summary>
@@ -69,20 +84,21 @@ Public Module utils
     <ExportAPI("write.csv")>
     Public Function write_csv(<RRawVectorArgument> x As Object, file$, envir As Environment) As Object
         If x Is Nothing Then
-            Return Internal.stop("Empty dataframe object!", envir)
+            Return Internal.debug.stop("Empty dataframe object!", envir)
         End If
 
         Dim type As Type = x.GetType
 
         If type Is GetType(Rdataframe) Then
             Dim matrix As String()() = x.GetTable
-            Dim dataframe As New File(matrix.Select(Function(r) New RowObject(r)))
+            Dim rows = matrix.Select(Function(r) New RowObject(r))
+            Dim dataframe As New File(rows)
 
             Return dataframe.Save(path:=file)
         ElseIf type Is GetType(File) Then
             Return DirectCast(x, File).Save(path:=file)
-        ElseIf type Is GetType(DataFrame) Then
-            Return DirectCast(x, DataFrame).Save(path:=file)
+        ElseIf type Is GetType(IO.DataFrame) Then
+            Return DirectCast(x, IO.DataFrame).Save(path:=file)
         ElseIf type Is GetType(EntityObject()) OrElse type.ImplementInterface(GetType(IEnumerable(Of EntityObject))) Then
             Return DirectCast(x, IEnumerable(Of EntityObject)).SaveTo(path:=file)
         ElseIf type Is GetType(DataSet()) OrElse type.ImplementInterface(GetType(IEnumerable(Of DataSet))) Then

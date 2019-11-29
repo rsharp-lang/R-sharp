@@ -1,6 +1,7 @@
 ﻿Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal

@@ -54,11 +54,12 @@ Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 
-Namespace Runtime.Internal
+Namespace Runtime.Internal.Invokes
 
     ''' <summary>
     ''' 在这个模块之中仅包含有最基本的数据操作函数
@@ -327,6 +328,12 @@ Namespace Runtime.Internal
             End If
 
             Return strs
+        End Function
+
+        Public Function str(x As Object, envir As Environment) As Object
+            Dim print As String = classPrinter.printClass(x)
+            Console.WriteLine(print)
+            Return print
         End Function
 
         Public Function print(x As Object, envir As Environment) As Object

@@ -1,5 +1,8 @@
-﻿Imports Microsoft.VisualBasic.My
+﻿Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.My
 Imports Microsoft.VisualBasic.Text
+Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 
 Namespace Runtime.Internal
 
@@ -26,5 +29,9 @@ Namespace Runtime.Internal
             End If
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Shared Function [stop](message As Object, envir As Environment) As Message
+            Return base.stop(message, envir)
+        End Function
     End Class
 End Namespace
