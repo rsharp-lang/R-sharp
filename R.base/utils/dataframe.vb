@@ -59,7 +59,7 @@ Module dataframe
             Case "character"
                 Return EntityObject.LoadDataSet(file).ToArray
             Case Else
-                Return utils.write_csv
+                Return utils.read_csv(file)
         End Select
     End Function
 End Module
