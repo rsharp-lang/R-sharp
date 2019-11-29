@@ -72,6 +72,14 @@ Namespace Runtime.Interop
                 .ToArray
         End Sub
 
+        Public Function GetRawElementType() As Type
+            If raw Is GetType(Array) Then
+                Return GetType(Object)
+            Else
+                Return raw.GetElementType
+            End If
+        End Function
+
         Private Iterator Function populateNames() As IEnumerable(Of String)
             For Each m As MethodInfo In raw.getObjMethods
                 Yield m.Name
