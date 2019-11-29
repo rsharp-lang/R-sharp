@@ -249,8 +249,14 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="envir"></param>
         ''' <returns></returns>
         Public Function [stop](message As Object, envir As Environment) As Message
+            Dim debugMode As Boolean = envir.globalEnvironment.debugMode
+
             If Not message Is Nothing AndAlso message.GetType.IsInheritsFrom(GetType(Exception), strict:=False) Then
-                Return DirectCast(message, Exception).createDotNetExceptionMessage(envir)
+                If debugMode Then
+                    Throw DirectCast(message, Exception)
+                Else
+                    Return DirectCast(message, Exception).createDotNetExceptionMessage(envir)
+                End If
             Else
                 Return base.createMessageInternal(message, envir, level:=MSG_TYPES.ERR)
             End If
