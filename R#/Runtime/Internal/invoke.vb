@@ -203,6 +203,8 @@ Namespace Runtime.Internal
                     Return base.get(paramVals(Scan0), envir)
                 Case "print"
                     Return base.print(paramVals(Scan0), envir)
+                Case "str"
+                    Return base.str(paramVals(Scan0), envir)
                 Case "stop"
                     Return Internal.stop(paramVals(Scan0), envir)
                 Case "warning"

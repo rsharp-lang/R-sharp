@@ -330,6 +330,12 @@ Namespace Runtime.Internal.Invokes
             Return strs
         End Function
 
+        Public Function str(x As Object, envir As Environment) As Object
+            Dim print As String = classPrinter.printClass(x)
+            Console.WriteLine(print)
+            Return print
+        End Function
+
         Public Function print(x As Object, envir As Environment) As Object
             If x Is Nothing Then
                 Call Console.WriteLine("NULL")

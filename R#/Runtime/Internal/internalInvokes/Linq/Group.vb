@@ -5,6 +5,10 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 
 Namespace Runtime.Internal.Invokes.LinqPipeline
+
+    ''' <summary>
+    ''' Elements in <see cref="group"/> have a common <see cref="key"/>
+    ''' </summary>
     Friend Structure Group : Implements RNameIndex
 
         Public key As Object
