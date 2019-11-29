@@ -77,6 +77,11 @@ Namespace Interpreter
         ''' R# running in debug mode.
         ''' </summary>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' 调试模式下，除了输出表达式的字符串信息之外
+        ''' 还会改变stop的行为，在非调试模式下，stop函数只会丢出错误消息并且终止脚本的运行
+        ''' 但是在调试模式下面，stop函数则会令程序抛出异常方便开发人员进行错误的定位
+        ''' </remarks>
         Public Property debug As Boolean = False
 
         Default Public ReadOnly Property GetValue(name As String) As Object
