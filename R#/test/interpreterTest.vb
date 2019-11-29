@@ -52,7 +52,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal
 
 Module interpreterTest
 
-    Dim R As New RInterpreter
+    Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
         Call R.globalEnvir.packages.InstallLocals("D:\GCModeller\GCModeller\bin\R.base.dll")
@@ -435,7 +435,7 @@ let div as function(x ,y) {
 
         Call R.Evaluate("print([x = 5:10] :> div(55));")
         Call R.Evaluate("print(  5:10 :> div(55));")
-        Call R.Evaluate("print([y = 5:10] :> div(55));")
+        Call R.Evaluate("print([y = 5:10] :> div(x = 55));")
         Call R.Evaluate("print(div(55, 5:10))")
 
         Pause()
