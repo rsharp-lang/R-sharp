@@ -173,8 +173,11 @@ Namespace Interpreter.ExecuteEngine
                 ' invoke method create from R# script
                 Return DirectCast(funcVar, RFunction).Invoke(envir, InvokeParameter.Create(parameters))
             Else
+                Dim args = InvokeParameter.Create(parameters)
+                Dim interop As RMethodInfo = DirectCast(funcVar, RMethodInfo)
+
                 ' invoke .NET package method
-                Return DirectCast(funcVar, RMethodInfo).Invoke(envir, InvokeParameter.Create(parameters))
+                Return interop.Invoke(envir, args)
             End If
         End Function
 
