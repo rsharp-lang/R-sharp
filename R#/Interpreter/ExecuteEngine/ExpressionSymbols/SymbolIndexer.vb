@@ -50,12 +50,12 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
-Imports SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine
 
     ''' <summary>
-    ''' X$name或者X[[name]]
+    ''' get elements by index 
+    ''' (X$name或者X[[name]])
     ''' </summary>
     Public Class SymbolIndexer : Inherits Expression
 
