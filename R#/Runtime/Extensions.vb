@@ -148,7 +148,10 @@ Namespace Runtime
                                     End If
                                     If Not o.GetType Is typeofT Then
                                         ' 进行一些类型转换
-                                        o = RConversion.CTypeDynamic(o, typeofT)
+
+                                        ' if apply the RConversion.CTypeDynamic
+                                        ' then it may decouple object from vbObject container
+                                        o = Conversion.CTypeDynamic(o, typeofT)
                                     End If
 
                                     Return DirectCast(o, T)
