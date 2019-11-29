@@ -66,7 +66,7 @@ Namespace Runtime.Interop
 
         Sub New(raw As Type)
             Me.raw = raw
-            Me.isArray = raw.IsInheritsFrom(GetType(Array))
+            Me.isArray = raw Is GetType(Array) OrElse raw.IsInheritsFrom(GetType(Array))
             Me.names = populateNames _
                 .Distinct _
                 .ToArray

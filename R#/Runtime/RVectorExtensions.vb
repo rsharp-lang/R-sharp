@@ -1,5 +1,7 @@
-﻿Imports Microsoft.VisualBasic.Linq
+﻿Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 
 Namespace Runtime
 
@@ -53,14 +55,9 @@ Namespace Runtime
 
             If Not valueType Is arrayType Then
                 If valueType.IsArray Then
-                    Dim array As Array = Array.CreateInstance(type, DirectCast(value, Array).Length)
-                    Dim src As Array = value
-
-                    For i As Integer = 0 To array.Length - 1
-                        array.SetValue(RConversion.CTypeDynamic(src.GetValue(i), type), i)
-                    Next
-
-                    Return array
+                    Return type.createArray(value)
+                ElseIf valueType Is GetType(Group) Then
+                    Return type.createArray(DirectCast(value, Group).group)
                 Else
                     Dim array As Array = Array.CreateInstance(type, 1)
                     array.SetValue(RConversion.CTypeDynamic(value, type), Scan0)
@@ -69,6 +66,18 @@ Namespace Runtime
             Else
                 Return value
             End If
+        End Function
+
+        <Extension>
+        Private Function createArray(type As Type, value As Object) As Object
+            Dim src As Array = value
+            Dim array As Array = Array.CreateInstance(type, src.Length)
+
+            For i As Integer = 0 To array.Length - 1
+                array.SetValue(RConversion.CTypeDynamic(src.GetValue(i), type), i)
+            Next
+
+            Return array
         End Function
 
         ''' <summary>
@@ -84,38 +93,9 @@ Namespace Runtime
             If valueType Is typeofT Then
                 Return {DirectCast(value, T)}
             ElseIf valueType.IsInheritsFrom(GetType(Array)) Then
-                If DirectCast(value, Array) _
-                    .AsObjectEnumerator _
-                    .All(Function(i)
-                             If Not i.GetType.IsInheritsFrom(GetType(Array)) Then
-                                 Return True
-                             Else
-                                 Return DirectCast(i, Array).Length = 1
-                             End If
-                         End Function) Then
-
-                    value = DirectCast(value, Array) _
-                        .AsObjectEnumerator _
-                        .Select(Function(o)
-                                    If Not o.GetType Is typeofT Then
-                                        If o.GetType.IsInheritsFrom(GetType(Array)) Then
-                                            o = DirectCast(o, Array).GetValue(Scan0)
-                                        End If
-                                    End If
-                                    If Not o.GetType Is typeofT Then
-                                        ' 进行一些类型转换
-
-                                        ' if apply the RConversion.CTypeDynamic
-                                        ' then it may decouple object from vbObject container
-                                        o = Conversion.CTypeDynamic(o, typeofT)
-                                    End If
-
-                                    Return DirectCast(o, T)
-                                End Function) _
-                        .ToArray
-                End If
-
-                Return value
+                Return typeofT.fromArray(Of T)(value)
+            ElseIf valueType Is GetType(Group) Then
+                Return typeofT.fromArray(Of T)(DirectCast(value, Group).group)
             ElseIf valueType Is GetType(T()) Then
                 Return value
             ElseIf valueType.IsInheritsFrom(GetType(IEnumerable(Of T))) Then
@@ -123,6 +103,42 @@ Namespace Runtime
             Else
                 Return {value}
             End If
+        End Function
+
+        <Extension>
+        Private Function fromArray(Of T)(typeofT As Type, value As Object) As Object
+            If DirectCast(value, Array) _
+                .AsObjectEnumerator _
+                .All(Function(i)
+                         If Not i.GetType.IsInheritsFrom(GetType(Array)) Then
+                             Return True
+                         Else
+                             Return DirectCast(i, Array).Length = 1
+                         End If
+                     End Function) Then
+
+                value = DirectCast(value, Array) _
+                    .AsObjectEnumerator _
+                    .Select(Function(o)
+                                If Not o.GetType Is typeofT Then
+                                    If o.GetType.IsInheritsFrom(GetType(Array)) Then
+                                        o = DirectCast(o, Array).GetValue(Scan0)
+                                    End If
+                                End If
+                                If Not o.GetType Is typeofT Then
+                                    ' 进行一些类型转换
+
+                                    ' if apply the RConversion.CTypeDynamic
+                                    ' then it may decouple object from vbObject container
+                                    o = Conversion.CTypeDynamic(o, typeofT)
+                                End If
+
+                                Return DirectCast(o, T)
+                            End Function) _
+                    .ToArray
+            End If
+
+            Return value
         End Function
     End Module
 End Namespace
