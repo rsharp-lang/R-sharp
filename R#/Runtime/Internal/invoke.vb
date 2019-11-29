@@ -70,6 +70,7 @@ Namespace Runtime.Internal
         Sub New()
             Call RConversion.pushEnvir()
             Call base.pushEnvir()
+            Call linq.pushEnvir()
             Call Invokes.file.pushEnvir()
             Call Invokes.stringr.pushEnvir()
         End Sub

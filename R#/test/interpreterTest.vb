@@ -45,6 +45,7 @@
 
 #End Region
 
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -57,6 +58,7 @@ Module interpreterTest
 
     Sub Main()
         Call R.globalEnvir.packages.InstallLocals("D:\GCModeller\GCModeller\bin\R.base.dll")
+        Call linqPipelineTest()
         Call pipelineParameterBugTest()
 
         Call namespaceTest()
@@ -417,6 +419,21 @@ let zzz <- from x as double in list(skip = x, A =5,B =1, C=2,D =3,E =4)
 		   
 print(zzz);
 ")
+
+        Call Pause()
+    End Sub
+
+    Sub linqPipelineTest()
+        Dim seq = Iterator Function() As IEnumerable(Of NamedValue(Of String))
+                      For i As Integer = 0 To 10
+                          For j As Integer = 0 To 3
+                              Yield New NamedValue(Of String)(i.ToHexString, RandomASCIIString(16))
+                          Next
+                      Next
+                  End Function().ToArray
+
+        Call R.Add("seq", seq)
+        Call R.Evaluate("let x = seq :> as.object :> groupBy(x -> x$Name)")
 
         Call Pause()
     End Sub
