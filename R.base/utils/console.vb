@@ -1,10 +1,17 @@
 ﻿
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Terminal.ProgressBar
+Imports CMD = System.Console
 
 <Package("console", Category:=APICategories.SoftwareTools)>
 Module console
+
+    <ExportAPI("progressbar")>
+    Public Function CreateProgressBar(title$, Optional Y% = -1, Optional CLS As Boolean = False, Optional theme As ColorTheme = Nothing) As ProgressBar
+        Return New ProgressBar(title, Y Or CMD.CursorTop.When(Y <= 0), CLS, theme)
+    End Function
 
     ''' <summary>
     ''' Pin the top of progress bar
@@ -14,7 +21,7 @@ Module console
     <ExportAPI("progressbar.pin.top")>
     Public Function PinProgressBarTop(Optional top As Integer = -1) As Integer
         If top <= 0 Then
-            top = System.Console.CursorTop
+            top = CMD.CursorTop
         End If
 
         Call ProgressBar.PinTop(top)
@@ -32,9 +39,9 @@ Module console
     <ExportAPI("fore.color")>
     Public Function ConsoleForeColor(Optional color$ = Nothing) As String
         If color.StringEmpty Then
-            color = System.Console.ForegroundColor.ToString.ToLower
+            color = CMD.ForegroundColor.ToString.ToLower
         Else
-            System.Console.ForegroundColor = names.TryGetValue(color.ToLower, [default]:=ConsoleColor.White)
+            CMD.ForegroundColor = names.TryGetValue(color.ToLower, [default]:=ConsoleColor.White)
         End If
 
         Return color
@@ -43,9 +50,9 @@ Module console
     <ExportAPI("back.color")>
     Public Function ConsoleBackColor(Optional color$ = Nothing) As String
         If color.StringEmpty Then
-            color = System.Console.BackgroundColor.ToString.ToLower
+            color = CMD.BackgroundColor.ToString.ToLower
         Else
-            System.Console.BackgroundColor = names.TryGetValue(color.ToLower, [default]:=ConsoleColor.White)
+            CMD.BackgroundColor = names.TryGetValue(color.ToLower, [default]:=ConsoleColor.White)
         End If
 
         Return color
