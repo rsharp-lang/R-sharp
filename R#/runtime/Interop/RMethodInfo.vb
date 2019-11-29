@@ -256,11 +256,7 @@ Namespace Runtime.Interop
                 value = Runtime.getFirst(value)
             End If
 
-            If Not value Is Nothing AndAlso value.GetType Is GetType(vbObject) Then
-                value = DirectCast(value, vbObject).target
-            End If
-
-            Return Conversion.CTypeDynamic(value, arg.type.raw)
+            Return RConversion.CTypeDynamic(value, arg.type.raw)
         End Function
 
         Public Overrides Function ToString() As String

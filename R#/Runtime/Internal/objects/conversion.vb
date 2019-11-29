@@ -34,5 +34,17 @@ Namespace Runtime.Internal
                 End Select
             End If
         End Function
+
+        Public Function CTypeDynamic(obj As Object, type As Type) As Object
+            If obj Is Nothing Then
+                Return Nothing
+            ElseIf type Is GetType(vbObject) Then
+                Return asObject(obj)
+            ElseIf obj.GetType Is GetType(vbObject) Then
+                obj = DirectCast(obj, vbObject)
+            End If
+
+            Return Conversion.CTypeDynamic(obj, type)
+        End Function
     End Module
 End Namespace

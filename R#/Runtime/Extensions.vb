@@ -101,13 +101,13 @@ Namespace Runtime
                     Dim src As Array = value
 
                     For i As Integer = 0 To array.Length - 1
-                        array.SetValue(CTypeDynamic(src.GetValue(i), type), i)
+                        array.SetValue(RConversion.CTypeDynamic(src.GetValue(i), type), i)
                     Next
 
                     Return array
                 Else
                     Dim array As Array = Array.CreateInstance(type, 1)
-                    array.SetValue(CTypeDynamic(value, type), Scan0)
+                    array.SetValue(RConversion.CTypeDynamic(value, type), Scan0)
                     Return array
                 End If
             Else
@@ -148,7 +148,7 @@ Namespace Runtime
                                     End If
                                     If Not o.GetType Is typeofT Then
                                         ' 进行一些类型转换
-                                        o = Conversion.CTypeDynamic(o, typeofT)
+                                        o = RConversion.CTypeDynamic(o, typeofT)
                                     End If
 
                                     Return DirectCast(o, T)
