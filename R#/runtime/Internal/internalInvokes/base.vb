@@ -258,7 +258,16 @@ Namespace Runtime.Internal.Invokes
                     Return DirectCast(message, Exception).createDotNetExceptionMessage(envir)
                 End If
             Else
-                Return base.createMessageInternal(message, envir, level:=MSG_TYPES.ERR)
+                If debugMode Then
+                    Throw New Exception(Runtime.asVector(Of Object)(message) _
+                       .AsObjectEnumerator _
+                       .SafeQuery _
+                       .Select(Function(o) Scripting.ToString(o, "NULL")) _
+                       .JoinBy("; ")
+                    )
+                Else
+                    Return base.createMessageInternal(message, envir, level:=MSG_TYPES.ERR)
+                End If
             End If
         End Function
 
