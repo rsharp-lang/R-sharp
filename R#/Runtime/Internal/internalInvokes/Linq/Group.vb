@@ -15,8 +15,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         End Sub
 
         Public Overrides Function ToString() As String
-            Return vbCrLf &
-                $" '{group.Length}' elements with key: " & printer.ValueToString(key) & vbCrLf &
+            Return $" '{group.Length}' elements with key: " & printer.ValueToString(key) & vbCrLf &
                 group.AsObjectEnumerator _
                     .Select(Function(o)
                                 Return "   " & printer.ValueToString(o)
