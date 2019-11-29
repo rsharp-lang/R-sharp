@@ -58,6 +58,11 @@ Namespace Runtime
         Public ReadOnly Property options As Options
         Public ReadOnly Property packages As PackageManager
         Public ReadOnly Property Rscript As RInterpreter
+        Public ReadOnly Property debugMode As Boolean
+            Get
+                Return Rscript.debug
+            End Get
+        End Property
 
         Sub New(scriptHost As RInterpreter, options As Options)
             Me.options = options

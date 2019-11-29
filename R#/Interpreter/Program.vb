@@ -55,7 +55,6 @@ Namespace Interpreter
     Public Class Program : Implements IEnumerable(Of Expression)
 
         Friend execQueue As Expression()
-        Friend debug As Boolean = False
 
         Sub New()
         End Sub
@@ -68,6 +67,7 @@ Namespace Interpreter
         Public Function Execute(envir As Environment) As Object
             Dim last As Object = Nothing
             Dim breakLoop As Boolean = False
+            Dim debug As Boolean = envir.globalEnvironment.debugMode
 
             For Each expression As Expression In execQueue
                 last = ExecuteCodeLine(expression, envir, breakLoop, debug)
@@ -137,9 +137,8 @@ Namespace Interpreter
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Friend Shared Function CreateProgram(tokens As IEnumerable(Of Token), Optional debug As Boolean = False) As Program
+        Friend Shared Function CreateProgram(tokens As IEnumerable(Of Token)) As Program
             Return New Program With {
-                .debug = debug,
                 .execQueue = tokens.ToArray _
                     .GetExpressions _
                     .ToArray

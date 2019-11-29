@@ -223,7 +223,7 @@ Namespace Interpreter
             Dim program As Program = Code _
                 .ParseScript(script) _
                 .DoCall(Function(code)
-                            Return Program.CreateProgram(code, debug)
+                            Return Program.CreateProgram(code)
                         End Function)
             Dim result As Object = program.Execute(globalEnvir)
 
