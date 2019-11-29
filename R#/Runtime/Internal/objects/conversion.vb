@@ -41,7 +41,7 @@ Namespace Runtime.Internal
             ElseIf type Is GetType(vbObject) Then
                 Return asObject(obj)
             ElseIf obj.GetType Is GetType(vbObject) Then
-                obj = DirectCast(obj, vbObject)
+                obj = DirectCast(obj, vbObject).target
             End If
 
             Return Conversion.CTypeDynamic(obj, type)
