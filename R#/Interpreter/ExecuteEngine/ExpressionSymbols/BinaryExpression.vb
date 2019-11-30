@@ -127,6 +127,8 @@ Namespace Interpreter.ExecuteEngine
                 ElseIf tb Like floats Then
                     Select Case [operator]
                         Case "+" : Return Runtime.Core.Add(Of Double, Double, Double)(a, b).ToArray
+                        Case ">=" : Return Runtime.Core.BinaryCoreInternal(Of Double, Double, Boolean)(a, b, Function(x, y) x >= y).ToArray
+                        Case "<=" : Return Runtime.Core.BinaryCoreInternal(Of Double, Double, Boolean)(a, b, Function(x, y) x <= y).ToArray
                     End Select
                 End If
             ElseIf ta Is GetType(String) OrElse tb Is GetType(String) Then

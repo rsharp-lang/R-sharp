@@ -162,7 +162,7 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Private Shared Sub PushTuple(names$(), value As Object, type As TypeCodes, envir As Environment)
-            If value.GetType.IsInheritsFrom(GetType(Array)) Then
+            If Not value Is Nothing AndAlso value.GetType.IsArray Then
                 Dim vector As Array = value
 
                 If vector.Length = 1 Then
