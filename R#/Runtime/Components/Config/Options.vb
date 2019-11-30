@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7bbc9777f41fa6534a8dcccc167208ba, R#\Runtime\Components\Config\Options.vb"
+﻿#Region "Microsoft.VisualBasic::04232ed0ec67ca12c9d21fbd4d3a0e3f, R#\Runtime\Components\Config\Options.vb"
 
     ' Author:
     ' 
@@ -42,7 +42,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.Text.Xml.Models

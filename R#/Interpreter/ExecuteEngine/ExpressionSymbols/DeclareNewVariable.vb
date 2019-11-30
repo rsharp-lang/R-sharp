@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::767f07da6bc1125f5127e37d6806113c, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DeclareNewVariable.vb"
+﻿#Region "Microsoft.VisualBasic::c3def1bb1ca329b2237099a83edccfa7, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DeclareNewVariable.vb"
 
     ' Author:
     ' 
@@ -37,7 +37,7 @@
     ' 
     '         Constructor: (+4 Overloads) Sub New
     ' 
-    '         Function: Evaluate, getNames, PushNames, ToString
+    '         Function: Evaluate, getNames, getParameterView, PushNames, ToString
     ' 
     '         Sub: getInitializeValue, PushTuple
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f8c5d03f25244875dbbdfa08e26eb2ad, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ElseBranch.vb"
+﻿#Region "Microsoft.VisualBasic::28c60da0e2b685e2359312cabc10fb6f, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ElseBranch.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,7 @@
     '         Properties: type
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate
+    '         Function: Evaluate, ToString
     ' 
     '     Class ElseIfBranch
     ' 

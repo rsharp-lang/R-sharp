@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ca8bf5697306c1c009e1cac6e0801263, R#\test\docTest.vb"
+﻿#Region "Microsoft.VisualBasic::e905a3c57b8d185e7c25ab663baaa18d, R#\test\docTest.vb"
 
     ' Author:
     ' 
@@ -50,4 +50,3 @@ Module docTest
         Pause()
     End Sub
 End Module
-

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0c1081b998b3f0fa0db78620772793ae, R#\Runtime\Components\Message.vb"
+﻿#Region "Microsoft.VisualBasic::fc3b07130f0ede7787fbbd6ce27f6ad0, R#\Runtime\Components\Message.vb"
 
     ' Author:
     ' 
@@ -33,9 +33,10 @@
 
     '     Class Message
     ' 
-    '         Properties: EnvironmentStack, Message, MessageLevel, Trace
+    '         Properties: environmentStack, level, message, trace
     ' 
-    '         Function: GetEnumerator, IEnumerable_GetEnumerator, SymbolNotFound, SyntaxNotImplemented
+    '         Function: GetEnumerator, IEnumerable_GetEnumerator, InCompatibleType, SymbolNotFound, SyntaxNotImplemented
+    '                   ToString
     ' 
     ' 
     ' /********************************************************************************/
