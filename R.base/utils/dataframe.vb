@@ -10,6 +10,27 @@ Imports SMRUCC.Rsharp.Runtime
 <Package("dataframe", Category:=APICategories.UtilityTools)>
 Module dataframe
 
+    <ExportAPI("dataset.colnames")>
+    Public Function colnames(dataset As Array, envir As Environment) As Object
+        Dim baseElement As Type = dataset.GetValue(Scan0).GetType
+
+        If baseElement Is GetType(EntityObject) Then
+            Return dataset.AsObjectEnumerator _
+                .Select(Function(d)
+                            Return DirectCast(d, EntityObject)
+                        End Function) _
+                .PropertyNames
+        ElseIf baseElement Is GetType(DataSet) Then
+            Return dataset.AsObjectEnumerator _
+                .Select(Function(d)
+                            Return DirectCast(d, DataSet)
+                        End Function) _
+                .PropertyNames
+        Else
+            Return Internal.debug.stop(New InvalidProgramException, envir)
+        End If
+    End Function
+
     ''' <summary>
     ''' 
     ''' </summary>

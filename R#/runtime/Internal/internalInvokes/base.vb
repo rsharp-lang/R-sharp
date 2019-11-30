@@ -69,11 +69,23 @@ Namespace Runtime.Internal.Invokes
         Sub New()
             Call Internal.invoke.add(globalenv)
             Call Internal.invoke.add(isEmpty)
+            Call Internal.invoke.add("neg", AddressOf base.neg)
         End Sub
 
         Friend Sub pushEnvir()
             ' do nothing
         End Sub
+
+        Private Function neg(o As Object) As Object
+            If o Is Nothing Then
+                Return Nothing
+            Else
+                Return Runtime.asVector(Of Double)(o) _
+                    .AsObjectEnumerator _
+                    .Select(Function(d) -CDbl(d)) _
+                    .ToArray
+            End If
+        End Function
 
         Private Function isEmpty() As GenericInternalInvoke
             Return New GenericInternalInvoke(

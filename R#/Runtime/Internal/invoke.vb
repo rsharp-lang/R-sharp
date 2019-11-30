@@ -92,6 +92,14 @@ Namespace Runtime.Internal
             index(name) = New GenericInternalInvoke(name, handle)
         End Sub
 
+        ''' <summary>
+        ''' Add internal invoke handle
+        ''' </summary>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Friend Sub add(name$, handle As Func(Of Object, Object))
+            index(name) = New GenericInternalInvoke(name, handle)
+        End Sub
+
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function [stop](message As Object, envir As Environment) As Message
             Return base.stop(message, envir)
