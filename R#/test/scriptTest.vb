@@ -43,14 +43,14 @@ Imports SMRUCC.Rsharp.Interpreter
 
 Module scriptTest
 
-    Const script$ = "D:\GCModeller\src\GCModeller\engine\Rscript\foldchange.R"
+    Const script$ = "E:\GCModeller\src\GCModeller\engine\Rscript\enrichment.R"
 
     Dim R As RInterpreter = New RInterpreter() With {
         .debug = True
-    } _
-        .LoadLibrary("D:\GCModeller\GCModeller\bin\R.base.dll")
+    }
 
     Sub Main()
+        Call R.globalEnvir.packages.InstallLocals("E:\GCModeller\GCModeller\bin\R.base.dll")
         Call R.Source(script)
         Call Pause()
     End Sub
