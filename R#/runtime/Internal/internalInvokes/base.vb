@@ -100,7 +100,7 @@ Namespace Runtime.Internal.Invokes
                         End Function)
         End Function
 
-        Private Function isEmpty(o As Object) As Object
+        Friend Function isEmpty(o As Object) As Object
             If o Is Nothing Then
                 Return True
             End If

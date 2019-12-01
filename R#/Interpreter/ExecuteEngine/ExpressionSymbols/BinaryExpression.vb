@@ -138,23 +138,6 @@ Namespace Interpreter.ExecuteEngine
                     Case "!=" : Return DoStringBinary(Of Boolean)(a, b, Function(x, y) x <> y)
                 End Select
             Else
-                If [operator] = "||" OrElse [operator] = "&&" Then
-                    Dim op As Func(Of Object, Object, Object)
-
-                    If [operator] = "||" Then
-                        op = Function(x, y) x Or y
-                    Else
-                        op = Function(x, y) x And y
-                    End If
-
-                    Return Runtime.Core _
-                        .BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
-                            x:=Core.asLogical(a),
-                            y:=Core.asLogical(b),
-                            [do]:=op
-                        ).ToArray
-                End If
-
                 If ta Like logicals AndAlso tb Like logicals Then
                     Select Case [operator]
                         Case "=="
@@ -169,7 +152,29 @@ Namespace Interpreter.ExecuteEngine
                                 y:=Runtime.asVector(Of Boolean)(b),
                                 [do]:=Function(x, y) x <> y
                             ).ToArray
+                        Case "||", "&&"
+                            Dim op As Func(Of Object, Object, Object)
+
+                            If [operator] = "||" Then
+                                op = Function(x, y) x Or y
+                            Else
+                                op = Function(x, y) x And y
+                            End If
+
+                            Return Runtime.Core _
+                                .BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
+                                    x:=Core.asLogical(a),
+                                    y:=Core.asLogical(b),
+                                    [do]:=op
+                                ).ToArray
                     End Select
+                ElseIf [operator] = "||" Then
+                    ' let arg as string = ?"--opt" || default;
+                    If Internal.Invokes.base.isEmpty(a) Then
+                        Return b
+                    Else
+                        Return a
+                    End If
                 End If
 
             End If
