@@ -65,19 +65,11 @@ Namespace Runtime.Internal.Invokes
             Call Internal.invoke.add("writeLines", AddressOf file.writeLines)
             Call Internal.invoke.add("setwd", AddressOf file.setwd)
             Call Internal.invoke.add("normalize.filename", AddressOf file.normalizeFileName)
-            Call Internal.invoke.add("save.image", AddressOf saveImage)
         End Sub
 
         Friend Sub pushEnvir()
             ' do nothing
         End Sub
-
-        Private Function saveImage(envir As Environment, params As Object()) As Boolean
-            Dim image As Image = params(Scan0)
-            Dim file As String = params(1)
-
-            Return image.SaveAs(file)
-        End Function
 
         Friend Function normalizeFileName(envir As Environment, params As Object()) As String()
             Return params.SafeQuery _
