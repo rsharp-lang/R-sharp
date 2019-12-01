@@ -54,7 +54,7 @@ Namespace Runtime
         ''' </summary>
         ''' <param name="value"></param>
         ''' <returns></returns>
-        Friend Function getFirst(value As Object) As Object
+        Public Function getFirst(value As Object) As Object
             Dim valueType As Type
 
             If value Is Nothing Then

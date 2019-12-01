@@ -73,6 +73,61 @@ Module dataframe
     End Function
 
     ''' <summary>
+    ''' Get/set value of a given data column
+    ''' </summary>
+    ''' <param name="dataset"></param>
+    ''' <param name="col$"></param>
+    ''' <param name="values"></param>
+    ''' <param name="envir"></param>
+    ''' <returns></returns>
+    <ExportAPI("dataset.vector")>
+    Public Function vector(dataset As Array, col$, Optional values As Array = Nothing, Optional envir As Environment = Nothing) As Object
+        Dim baseElement As Type = dataset.GetValue(Scan0).GetType
+        Dim vectors As New List(Of Object)()
+        Dim isGetter As Boolean = False
+        Dim getValue As Func(Of Object) = Nothing
+
+        If values Is Nothing Then
+            isGetter = True
+        ElseIf values.Length = 1 Then
+            Dim firstValue As Object = Runtime.getFirst(values)
+            getValue = Function() firstValue
+        Else
+            Dim populator As IEnumerator = values.GetEnumerator
+            getValue = Function() As Object
+                           populator.MoveNext()
+                           Return populator.Current
+                       End Function
+        End If
+
+        If Not isGetter Then
+            vectors = New List(Of Object)(values.AsObjectEnumerator)
+        End If
+
+        If baseElement Is GetType(EntityObject) Then
+            For Each item As EntityObject In Runtime.asVector(Of EntityObject)(dataset)
+                If isGetter Then
+                    vectors.Add(item(col))
+                Else
+                    item(col) = Scripting.ToString(getValue())
+                End If
+            Next
+        ElseIf baseElement Is GetType(DataSet) Then
+            For Each item As DataSet In Runtime.asVector(Of DataSet)(dataset)
+                If isGetter Then
+                    vectors.Add(item(col))
+                Else
+                    item(col) = Conversion.CTypeDynamic(Of Double)(getValue())
+                End If
+            Next
+        Else
+            Return Internal.debug.stop(New InvalidProgramException, envir)
+        End If
+
+        Return vectors.ToArray
+    End Function
+
+    ''' <summary>
     ''' 
     ''' </summary>
     ''' <param name="dataset"></param>

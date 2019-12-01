@@ -46,6 +46,7 @@
 #End Region
 
 Imports System.Drawing
+Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Language.UnixBash.FileSystem
 Imports Microsoft.VisualBasic.Linq
@@ -66,11 +67,23 @@ Namespace Runtime.Internal.Invokes
             Call Internal.invoke.add("setwd", AddressOf file.setwd)
             Call Internal.invoke.add("normalize.filename", AddressOf file.normalizeFileName)
             Call Internal.invoke.add("basename", AddressOf file.basename)
+            Call Internal.invoke.add("list.dirs", AddressOf file.listDirs)
         End Sub
 
         Friend Sub pushEnvir()
             ' do nothing
         End Sub
+
+        Private Function listDirs(envir As Environment, params As Object()) As Object
+            Dim dir$ = Runtime.asVector(Of String)(params(Scan0)) _
+                .AsObjectEnumerator _
+                .DefaultFirst("./")
+            Dim dirs$() = dir _
+                .ListDirectory(SearchOption.SearchAllSubDirectories) _
+                .ToArray
+
+            Return dirs
+        End Function
 
         Private Function basename(envir As Environment, params As Object()) As Object
             If params.IsNullOrEmpty Then
