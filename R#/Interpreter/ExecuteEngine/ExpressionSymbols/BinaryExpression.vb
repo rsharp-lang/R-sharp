@@ -168,15 +168,16 @@ Namespace Interpreter.ExecuteEngine
                                     [do]:=op
                                 ).ToArray
                     End Select
-                ElseIf [operator] = "||" Then
-                    ' let arg as string = ?"--opt" || default;
-                    If Internal.Invokes.base.isEmpty(a) Then
-                        Return b
-                    Else
-                        Return a
-                    End If
                 End If
+            End If
 
+            If [operator] = "||" Then
+                ' let arg as string = ?"--opt" || default;
+                If Internal.Invokes.base.isEmpty(a) Then
+                    Return b
+                Else
+                    Return a
+                End If
             End If
 
             Throw New NotImplementedException($"<{ta.FullName}> {[operator]} <{tb.FullName}>")

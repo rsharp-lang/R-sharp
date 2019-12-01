@@ -69,7 +69,8 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
-        Call R.globalEnvir.packages.InstallLocals("D:\GCModeller\GCModeller\bin\R.base.dll")
+        ' Call R.globalEnvir.packages.InstallLocals("D:\GCModeller\GCModeller\bin\R.base.dll")
+        Call orDefaultTest()
         Call linqPipelineTest()
         Call pipelineParameterBugTest()
 
@@ -140,6 +141,13 @@ Module interpreterTest
         Call declareTest()
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub orDefaultTest()
+        Call R.Evaluate("print(?'--save' || '12345')")
+        Call R.Evaluate("print(5+ (?'--save2' || 12345))")
 
         Pause()
     End Sub
