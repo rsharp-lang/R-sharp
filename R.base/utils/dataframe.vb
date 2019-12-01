@@ -82,6 +82,10 @@ Module dataframe
     ''' <returns></returns>
     <ExportAPI("dataset.vector")>
     Public Function vector(dataset As Array, col$, Optional values As Array = Nothing, Optional envir As Environment = Nothing) As Object
+        If dataset Is Nothing OrElse dataset.Length = 0 Then
+            Return Nothing
+        End If
+
         Dim baseElement As Type = dataset.GetValue(Scan0).GetType
         Dim vectors As New List(Of Object)()
         Dim isGetter As Boolean = False
