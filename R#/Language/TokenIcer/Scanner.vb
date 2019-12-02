@@ -155,7 +155,10 @@ Namespace Language.TokenIcer
 
             If token.name = TokenType.comment Then
                 escape.comment = False
-            ElseIf token.name = TokenType.stringLiteral OrElse token.name = TokenType.stringInterpolation Then
+            ElseIf token.name = TokenType.stringLiteral OrElse
+                   token.name = TokenType.stringInterpolation OrElse
+                   token.name = TokenType.cliShellInvoke Then
+
                 escape.string = False
             End If
 

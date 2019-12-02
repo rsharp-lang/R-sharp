@@ -48,6 +48,8 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Module tokenlicerTest
 
     Sub Main()
+        Call sourceScriptTest()
+
         Call specialNameTest()
         Call elementIndexer()
         Call cliInvoke()
@@ -63,6 +65,12 @@ Module tokenlicerTest
         Call declareFunctionTest()
         Call stringParser()
         Call declareTest()
+
+        Pause()
+    End Sub
+
+    Sub sourceScriptTest()
+        Dim tokens As Token() = Rscript.FromFile("S:\2019\CD_plants\mzCloud\runExport.R").GetTokens
 
         Pause()
     End Sub
