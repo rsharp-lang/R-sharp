@@ -71,6 +71,8 @@ Type 'q()' to quit R.
         Call R.LoadLibrary("utils")
         Call R.LoadLibrary("grDevices")
 
+        Call Console.WriteLine()
+
         Call New Shell(New PS1("> "), AddressOf doRunScript) With {
             .Quite = "q()"
         }.Run()

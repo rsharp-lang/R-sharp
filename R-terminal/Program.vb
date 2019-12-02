@@ -69,6 +69,8 @@ Module Program
         Call R.LoadLibrary("utils")
         Call R.LoadLibrary("grDevices")
 
+        Call Console.WriteLine()
+
         For Each arg As NamedValue(Of String) In args.ToArgumentVector
             Call R.Add(CommandLine.TrimNamePrefix(arg.Name), arg.Value, TypeCodes.generic)
         Next
