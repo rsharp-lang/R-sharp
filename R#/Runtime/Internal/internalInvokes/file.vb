@@ -50,6 +50,7 @@ Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Language.UnixBash.FileSystem
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Language.UnixBash
 
 Namespace Runtime.Internal.Invokes
 
@@ -66,15 +67,34 @@ Namespace Runtime.Internal.Invokes
             Call Internal.invoke.add("writeLines", AddressOf file.writeLines)
             Call Internal.invoke.add("setwd", AddressOf file.setwd)
             Call Internal.invoke.add("normalize.filename", AddressOf file.normalizeFileName)
+            Call Internal.invoke.add("normalizePath", AddressOf file.normalizePath)
             Call Internal.invoke.add("basename", AddressOf file.basename)
             Call Internal.invoke.add("dirname", AddressOf file.dirname)
             Call Internal.invoke.add("list.dirs", AddressOf file.listDirs)
+            Call Internal.invoke.add("list.files", AddressOf file.listFiles)
             Call Internal.invoke.add("R.home", AddressOf file.Rhome)
         End Sub
 
         Friend Sub pushEnvir()
             ' do nothing
         End Sub
+
+        Private Function normalizePath(envir As Environment, params As Object()) As Object
+            If params.IsNullOrEmpty Then
+                Return Internal.stop("no file names provided!", envir)
+            Else
+                Return Runtime.asVector(Of String)(params(Scan0)) _
+                    .AsObjectEnumerator(Of String) _
+                    .Select(Function(path)
+                                If path.DirectoryExists Then
+                                    Return path.GetDirectoryFullPath
+                                Else
+                                    Return path.GetFullPath
+                                End If
+                            End Function) _
+                    .ToArray
+            End If
+        End Function
 
         Private Function Rhome(envir As Environment, params As Object()) As Object
             Return GetType(file).Assembly.Location.ParentPath
@@ -93,6 +113,17 @@ Namespace Runtime.Internal.Invokes
                 .ToArray
 
             Return fileNames.Select(AddressOf ParentPath).ToArray
+        End Function
+
+        Private Function listFiles(envir As Environment, params As Object()) As Object
+            Dim dir = Scripting.ToString(Runtime.getFirst(params(Scan0)), Nothing)
+            Dim pattern = Runtime.asVector(Of String)(params(1)).ToArray(Of String)
+
+            If pattern.Length = 0 Then
+                pattern = {"*.*"}
+            End If
+
+            Return (ls - l - r - pattern <= dir).ToArray
         End Function
 
         Private Function listDirs(envir As Environment, params As Object()) As Object
