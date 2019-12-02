@@ -75,11 +75,34 @@ Namespace Runtime.Internal.Invokes
             Call Internal.invoke.add(globalenv)
             Call Internal.invoke.add(isEmpty)
             Call Internal.invoke.add("neg", AddressOf base.neg)
+            Call Internal.invoke.add("do.call", AddressOf base.doCall)
         End Sub
 
         Friend Sub pushEnvir()
             ' do nothing
         End Sub
+
+        Private Function doCall(envir As Environment, params As Object()) As Object
+            If params.IsNullOrEmpty Then
+                Return Internal.stop("Nothing to call!", envir)
+            End If
+
+            Dim what = params(Scan0)
+            Dim targetType As Type = what.GetType
+
+            If targetType Is GetType(vbObject) Then
+                Dim calls$ = Scripting.ToString(Runtime.getFirst(params(1)))
+                Dim member = DirectCast(what, vbObject).getByName(name:=calls)
+
+                If member.GetType Is GetType(RMethodInfo) Then
+                    Return DirectCast(member, RMethodInfo).Invoke(envir, {})
+                Else
+                    Return member
+                End If
+            Else
+                Throw New NotImplementedException(targetType.FullName)
+            End If
+        End Function
 
         Private Function neg(o As Object) As Object
             If o Is Nothing Then
