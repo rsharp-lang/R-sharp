@@ -76,6 +76,14 @@ Namespace Runtime.Internal
             Call Invokes.stringr.pushEnvir()
         End Sub
 
+        Friend Function getFunction(name As String) As RInternalFuncInvoke
+            If index.ContainsKey(name) Then
+                Return index(name)
+            Else
+                Return Nothing
+            End If
+        End Function
+
         ''' <summary>
         ''' Add internal invoke handle
         ''' </summary>
