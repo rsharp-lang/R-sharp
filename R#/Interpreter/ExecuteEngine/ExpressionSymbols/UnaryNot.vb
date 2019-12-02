@@ -25,5 +25,9 @@ Namespace Interpreter.ExecuteEngine
 
             Return nots
         End Function
+
+        Public Overrides Function ToString() As String
+            Return $"(NOT {logical})"
+        End Function
     End Class
 End Namespace
