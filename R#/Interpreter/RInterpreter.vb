@@ -56,11 +56,11 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
-Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Interpreter
@@ -241,7 +241,25 @@ Namespace Interpreter
         ''' 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function Source(filepath$, ParamArray arguments As NamedValue(Of Object)()) As Object
-            Return RunInternal(Rscript.FromFile(filepath), arguments)
+            ' when source a given script by path
+            ' then an object list variable with special name will be push into 
+            ' the environment
+            ' 
+            ' let !script = list(dir = dirname, file = filename, fullName = filepath)
+            Dim script As New list With {
+                .slots = New Dictionary(Of String, Object) From {
+                    {"dir", filepath.ParentPath},
+                    {"file", filepath.FileName},
+                    {"fullName", filepath.GetFullPath}
+                }
+            }
+            Dim result As Object
+
+            globalEnvir.Push("!script", script, TypeCodes.list)
+            result = RunInternal(Rscript.FromFile(filepath), arguments)
+            globalEnvir.Delete("!script")
+
+            Return result
         End Function
 
         Public Shared ReadOnly Property Rsharp As New RInterpreter

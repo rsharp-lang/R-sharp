@@ -92,11 +92,18 @@ Namespace Runtime.Internal
         End Function
 
         Public Function getByIndex(i As Integer) As Object Implements RIndex.getByIndex
-            Throw New NotImplementedException()
+            If i >= length Then
+                Return Nothing
+            End If
+
+            Dim names = getNames()
+            Dim key As String = names(i)
+
+            Return slots(key)
         End Function
 
         Public Function getByIndex(i() As Integer) As Object() Implements RIndex.getByIndex
-            Throw New NotImplementedException()
+            Return i.Select(AddressOf getByIndex).ToArray
         End Function
 
         Public Function setByIndex(i As Integer, value As Object, envir As Environment) As Object Implements RIndex.setByIndex
