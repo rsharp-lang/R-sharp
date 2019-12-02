@@ -45,12 +45,11 @@
 
 #End Region
 
-Imports System.Drawing
 Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.Imaging
+Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Language.UnixBash.FileSystem
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.Language.UnixBash
 
 Namespace Runtime.Internal.Invokes
 
@@ -107,7 +106,7 @@ Namespace Runtime.Internal.Invokes
 
             Dim fileNames As String() = params _
                 .Select(Function(str)
-                            Return Runtime.asVector(Of String)(str).AsObjectEnumerator
+                            Return Runtime.asVector(Of String)(str).AsObjectEnumerator(Of String)
                         End Function) _
                 .IteratesALL _
                 .ToArray
