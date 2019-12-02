@@ -69,11 +69,16 @@ Namespace Runtime.Internal.Invokes
             Call Internal.invoke.add("basename", AddressOf file.basename)
             Call Internal.invoke.add("dirname", AddressOf file.dirname)
             Call Internal.invoke.add("list.dirs", AddressOf file.listDirs)
+            Call Internal.invoke.add("R.home", AddressOf file.Rhome)
         End Sub
 
         Friend Sub pushEnvir()
             ' do nothing
         End Sub
+
+        Private Function Rhome(envir As Environment, params As Object()) As Object
+            Return GetType(file).Assembly.Location.ParentPath
+        End Function
 
         Private Function dirname(envir As Environment, params As Object()) As Object
             If params.IsNullOrEmpty Then
