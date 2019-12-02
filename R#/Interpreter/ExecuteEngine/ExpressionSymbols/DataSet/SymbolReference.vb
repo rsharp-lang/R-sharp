@@ -75,13 +75,15 @@ Namespace Interpreter.ExecuteEngine
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim symbol As [Variant](Of Variable, RInternalFuncInvoke) = envir.FindSymbol(Me.symbol)
 
-            If symbol Is Nothing Then
+            If symbol Is Nothing OrElse Not symbol.HasValue Then
                 symbol = Runtime.Internal.invoke.getFunction(Me.symbol)
             End If
             If symbol Is Nothing Then
                 Return Message.SymbolNotFound(envir, Me.symbol, TypeCodes.generic)
+            ElseIf symbol Like GetType(Variable) Then
+                Return symbol.VA.value
             Else
-                Return symbol
+                Return symbol.Value
             End If
         End Function
 
