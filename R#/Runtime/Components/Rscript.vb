@@ -1,4 +1,5 @@
-﻿Imports SMRUCC.Rsharp.Language.TokenIcer
+﻿Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
+Imports SMRUCC.Rsharp.Language.TokenIcer
 
 Namespace Runtime.Components
 
@@ -31,6 +32,14 @@ Namespace Runtime.Components
             Return New Scanner(script).GetTokens.ToArray
         End Function
 
+        Public Function GetSourceDirectory() As String
+            If source.StringEmpty Then
+                Return App.CurrentDirectory
+            Else
+                Return source.ParentPath
+            End If
+        End Function
+
         Public Shared Function FromFile(path As String) As Rscript
             Return New Rscript With {
                 .source = path.GetFullPath,
@@ -52,6 +61,10 @@ Namespace Runtime.Components
 
                 Return script.Substring(left, right - left)
             End With
+        End Function
+
+        Public Function GetRawText(span As IntRange) As String
+            Return script.Substring(span.Min, span.Length)
         End Function
 
         Public Overrides Function ToString() As String
