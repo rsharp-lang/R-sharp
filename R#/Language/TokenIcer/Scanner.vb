@@ -257,6 +257,19 @@ Namespace Language.TokenIcer
 
                 Return token
 
+            ElseIf c = "!"c AndAlso code.PeekNext(6) = "script" Then
+                Call code.PopNext(6)
+
+                ' special name
+                If buffer = 0 Then
+                    Return New Token With {
+                        .text = "!script",
+                        .name = TokenType.identifier
+                    }
+                Else
+                    Throw New SyntaxErrorException
+                End If
+
             ElseIf c Like longOperatorParts Then
                 Return populateToken(bufferNext:=c)
 
