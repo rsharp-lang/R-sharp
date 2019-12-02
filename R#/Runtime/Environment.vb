@@ -177,6 +177,18 @@ Namespace Runtime
             End If
         End Function
 
+        Public Sub Delete(name As String)
+            If FindSymbol(name) Is Nothing Then
+                Return
+            End If
+
+            If variables.ContainsKey(name) Then
+                Call variables.Remove(name)
+            ElseIf Not parent Is Nothing Then
+                Call parent.Delete(name)
+            End If
+        End Sub
+
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function Evaluate(exec As IEnumerable(Of Expression)) As Object()
             Return exec _

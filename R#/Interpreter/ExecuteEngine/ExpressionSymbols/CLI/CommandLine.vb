@@ -90,7 +90,7 @@ Namespace Interpreter.ExecuteEngine
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim commandline$ = Runtime.getFirst(cli.Evaluate(envir))
-            Dim process As New IORedirectFile(commandline)
+            Dim process As New IORedirectFile(commandline, isShellCommand:=True)
             Dim std_out$
 
             If commandline.DoCall(AddressOf isInterpolation) Then

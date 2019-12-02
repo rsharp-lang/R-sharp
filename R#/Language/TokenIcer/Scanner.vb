@@ -155,7 +155,10 @@ Namespace Language.TokenIcer
 
             If token.name = TokenType.comment Then
                 escape.comment = False
-            ElseIf token.name = TokenType.stringLiteral OrElse token.name = TokenType.stringInterpolation Then
+            ElseIf token.name = TokenType.stringLiteral OrElse
+                   token.name = TokenType.stringInterpolation OrElse
+                   token.name = TokenType.cliShellInvoke Then
+
                 escape.string = False
             End If
 
@@ -256,6 +259,19 @@ Namespace Language.TokenIcer
                 buffer += c
 
                 Return token
+
+            ElseIf c = "!"c AndAlso code.PeekNext(6) = "script" Then
+                Call code.PopNext(6)
+
+                ' special name
+                If buffer = 0 Then
+                    Return New Token With {
+                        .text = "!script",
+                        .name = TokenType.identifier
+                    }
+                Else
+                    Throw New SyntaxErrorException
+                End If
 
             ElseIf c Like longOperatorParts Then
                 Return populateToken(bufferNext:=c)

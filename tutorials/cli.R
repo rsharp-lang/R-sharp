@@ -9,7 +9,7 @@
 # then code will be stopped if the suppress keyword is not set
 
 let app as string = 'eggHTS';
-let APP_HOME = "E:/GCModeller/GCModeller/bin";
+let APP_HOME = "D:/GCModeller/GCModeller/bin";
 let std_out <- @`${APP_HOME}/${app}.exe`;
 
 print(std_out);
