@@ -67,12 +67,28 @@ Namespace Runtime.Internal.Invokes
             Call Internal.invoke.add("setwd", AddressOf file.setwd)
             Call Internal.invoke.add("normalize.filename", AddressOf file.normalizeFileName)
             Call Internal.invoke.add("basename", AddressOf file.basename)
+            Call Internal.invoke.add("dirname", AddressOf file.dirname)
             Call Internal.invoke.add("list.dirs", AddressOf file.listDirs)
         End Sub
 
         Friend Sub pushEnvir()
             ' do nothing
         End Sub
+
+        Private Function dirname(envir As Environment, params As Object()) As Object
+            If params.IsNullOrEmpty Then
+                Return Internal.stop("no file names provided!", envir)
+            End If
+
+            Dim fileNames As String() = params _
+                .Select(Function(str)
+                            Return Runtime.asVector(Of String)(str).AsObjectEnumerator
+                        End Function) _
+                .IteratesALL _
+                .ToArray
+
+            Return fileNames.Select(AddressOf ParentPath).ToArray
+        End Function
 
         Private Function listDirs(envir As Environment, params As Object()) As Object
             Dim dir$ = Runtime.asVector(Of String)(params(Scan0)) _
@@ -90,7 +106,9 @@ Namespace Runtime.Internal.Invokes
                 Return Internal.stop("no file names provided!", envir)
             End If
 
-            Dim fileNames As String() = Runtime.asVector(Of String)(params(Scan0))
+            Dim fileNames As String() = Runtime.asVector(Of String)(params(Scan0)) _
+                .AsObjectEnumerator _
+                .ToArray(Of String)
             Dim withExtensionName As Boolean = Runtime.asLogical(params.ElementAtOrDefault(1))(Scan0)
 
             If withExtensionName Then
