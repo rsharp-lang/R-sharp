@@ -20,12 +20,29 @@ Namespace Runtime.Components
         ''' <returns></returns>
         Public Property script As String
 
+        Private Sub New()
+        End Sub
+
         ''' <summary>
         ''' Get language <see cref="Scanner"/> tokens
         ''' </summary>
         ''' <returns></returns>
         Public Function GetTokens() As Token()
             Return New Scanner(script).GetTokens.ToArray
+        End Function
+
+        Public Shared Function FromFile(path As String) As Rscript
+            Return New Rscript With {
+                .source = path.GetFullPath,
+                .script = .source.ReadAllText
+            }
+        End Function
+
+        Public Shared Function FromText(text As String) As Rscript
+            Return New Rscript With {
+                .source = Nothing,
+                .script = text
+            }
         End Function
 
         Public Function GetRawText(tokenSpan As IEnumerable(Of Token)) As String
