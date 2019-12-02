@@ -21,6 +21,16 @@ Namespace Runtime.Components
         ''' <returns></returns>
         Public Property script As String
 
+        Public ReadOnly Property fileName As String
+            Get
+                If source.StringEmpty Then
+                    Return Nothing
+                Else
+                    Return source.FileName
+                End If
+            End Get
+        End Property
+
         Private Sub New()
         End Sub
 

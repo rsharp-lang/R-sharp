@@ -180,7 +180,7 @@ Namespace Interpreter
         ''' 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function Evaluate(script As String) As Object
-            Return RunInternal(script, Nothing, {})
+            Return RunInternal(Rscript.FromText(script), {})
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
@@ -223,10 +223,10 @@ Namespace Interpreter
             Return result
         End Function
 
-        Private Function RunInternal(script$, source$, arguments As NamedValue(Of Object)()) As Object
-            Dim globalEnvir As Environment = InitializeEnvironment(source, arguments)
+        Private Function RunInternal(Rscript As Rscript, arguments As NamedValue(Of Object)()) As Object
+            Dim globalEnvir As Environment = InitializeEnvironment(Rscript.fileName, arguments)
             Dim program As Program = Code _
-                .ParseScript(script) _
+                .ParseScript(Rscript.script) _
                 .DoCall(Function(code)
                             Return Program.CreateProgram(code)
                         End Function)
@@ -245,7 +245,7 @@ Namespace Interpreter
         ''' 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function Source(filepath$, ParamArray arguments As NamedValue(Of Object)()) As Object
-            Return RunInternal(filepath.ReadAllText, filepath.ToFileURL, arguments)
+            Return RunInternal(Rscript.FromFile(filepath), arguments)
         End Function
 
         Public Shared ReadOnly Property Rsharp As New RInterpreter
