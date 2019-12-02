@@ -1,45 +1,45 @@
-﻿#Region "Microsoft.VisualBasic::96b63464c72ebb78d0a0a6d6146f2857, R#\Interpreter\ExecuteEngine\ExpressionSymbols\BinaryExpression.vb"
+﻿#Region "Microsoft.VisualBasic::a1bbe52f6ee345c75800844b5d5f18c9, R#\Interpreter\ExecuteEngine\ExpressionSymbols\BinaryExpression.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class BinaryExpression
-' 
-'         Properties: type
-' 
-'         Constructor: (+1 Overloads) Sub New
-'         Function: DoStringJoin, Evaluate, ToString
-' 
-' 
-' /********************************************************************************/
+    '     Class BinaryExpression
+    ' 
+    '         Properties: type
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    '         Function: DoStringBinary, Evaluate, getStringArray, ToString
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -127,6 +127,8 @@ Namespace Interpreter.ExecuteEngine
                 ElseIf tb Like floats Then
                     Select Case [operator]
                         Case "+" : Return Runtime.Core.Add(Of Double, Double, Double)(a, b).ToArray
+                        Case ">=" : Return Runtime.Core.BinaryCoreInternal(Of Double, Double, Boolean)(a, b, Function(x, y) x >= y).ToArray
+                        Case "<=" : Return Runtime.Core.BinaryCoreInternal(Of Double, Double, Boolean)(a, b, Function(x, y) x <= y).ToArray
                     End Select
                 End If
             ElseIf ta Is GetType(String) OrElse tb Is GetType(String) Then
@@ -136,23 +138,6 @@ Namespace Interpreter.ExecuteEngine
                     Case "!=" : Return DoStringBinary(Of Boolean)(a, b, Function(x, y) x <> y)
                 End Select
             Else
-                If [operator] = "||" OrElse [operator] = "&&" Then
-                    Dim op As Func(Of Object, Object, Object)
-
-                    If [operator] = "||" Then
-                        op = Function(x, y) x Or y
-                    Else
-                        op = Function(x, y) x And y
-                    End If
-
-                    Return Runtime.Core _
-                        .BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
-                            x:=Core.asLogical(a),
-                            y:=Core.asLogical(b),
-                            [do]:=op
-                        ).ToArray
-                End If
-
                 If ta Like logicals AndAlso tb Like logicals Then
                     Select Case [operator]
                         Case "=="
@@ -167,9 +152,32 @@ Namespace Interpreter.ExecuteEngine
                                 y:=Runtime.asVector(Of Boolean)(b),
                                 [do]:=Function(x, y) x <> y
                             ).ToArray
+                        Case "||", "&&"
+                            Dim op As Func(Of Object, Object, Object)
+
+                            If [operator] = "||" Then
+                                op = Function(x, y) x Or y
+                            Else
+                                op = Function(x, y) x And y
+                            End If
+
+                            Return Runtime.Core _
+                                .BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
+                                    x:=Core.asLogical(a),
+                                    y:=Core.asLogical(b),
+                                    [do]:=op
+                                ).ToArray
                     End Select
                 End If
+            End If
 
+            If [operator] = "||" Then
+                ' let arg as string = ?"--opt" || default;
+                If Internal.Invokes.base.isEmpty(a) Then
+                    Return b
+                Else
+                    Return a
+                End If
             End If
 
             Throw New NotImplementedException($"<{ta.FullName}> {[operator]} <{tb.FullName}>")

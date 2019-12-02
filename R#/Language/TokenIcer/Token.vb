@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e6195d25a6d7ca1a2ea400be71048c62, R#\Language\TokenIcer\Token.vb"
+﻿#Region "Microsoft.VisualBasic::8f8eaf23bc828d155ae1b150fcf86d3e, R#\Language\TokenIcer\Token.vb"
 
     ' Author:
     ' 
@@ -36,6 +36,7 @@
     '         Properties: literal
     ' 
     '         Constructor: (+2 Overloads) Sub New
+    '         Operators: <>, =
     ' 
     ' 
     ' /********************************************************************************/

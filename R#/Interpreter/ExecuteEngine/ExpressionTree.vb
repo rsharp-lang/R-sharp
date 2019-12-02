@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a53402d219f7d4b81548f9a2bc4bda14, R#\Interpreter\ExecuteEngine\ExpressionTree.vb"
+﻿#Region "Microsoft.VisualBasic::1730e1413f8c547e82f90dbca080aa2d, R#\Interpreter\ExecuteEngine\ExpressionTree.vb"
 
     ' Author:
     ' 
@@ -33,9 +33,7 @@
 
     '     Module ExpressionTree
     ' 
-    '         Function: CreateTree, ParseBinaryExpression, ParseExpressionTree
-    ' 
-    '         Sub: genericSymbolOperatorProcessor, processNameMemberReference, processNamespaceReference, processOperators, processPipeline
+    '         Function: CreateTree, ParseExpressionTree, simpleSequence
     ' 
     ' 
     ' /********************************************************************************/

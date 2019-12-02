@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::83fc2ff81b9be15e9f65e284d1e8d506, R#\Runtime\Components\Interface\RNames.vb"
+﻿#Region "Microsoft.VisualBasic::f2f40fecf10b4f67e9bf9c1d99187037, R#\Runtime\Components\Interface\RNames.vb"
 
     ' Author:
     ' 
@@ -31,11 +31,17 @@
 
     ' Summaries:
 
+    '     Interface IReflector
+    ' 
+    '         Function: getNames
+    ' 
     '     Interface RNames
     ' 
-    '         Function: getNames, setNames
+    '         Function: setNames
     ' 
     '     Interface RIndex
+    ' 
+    '         Properties: length
     ' 
     '         Function: (+2 Overloads) getByIndex, setByindex, setByIndex
     ' 

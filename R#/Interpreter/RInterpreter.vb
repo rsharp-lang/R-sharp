@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::60b55f4ce76fa2d6a4d8d1795f9705f1, R#\Interpreter\RInterpreter.vb"
+﻿#Region "Microsoft.VisualBasic::cff7e4a4755abc1a7d205d5cb87f09ff, R#\Interpreter\RInterpreter.vb"
 
 ' Author:
 ' 
@@ -33,14 +33,14 @@
 
 '     Class RInterpreter
 ' 
-'         Properties: globalEnvir, Rsharp, warnings
+'         Properties: debug, globalEnvir, Rsharp, warnings
 ' 
 '         Constructor: (+1 Overloads) Sub New
 ' 
 '         Function: (+2 Overloads) Evaluate, finalizeResult, FromEnvironmentConfiguration, InitializeEnvironment, Invoke
-'                   printErrorInternal, Run, RunInternal, Source
+'                   LoadLibrary, Run, RunInternal, Source
 ' 
-'         Sub: (+3 Overloads) Add, LoadLibrary, PrintMemory
+'         Sub: (+3 Overloads) Add, PrintMemory
 ' 
 ' 
 ' /********************************************************************************/
@@ -133,13 +133,13 @@ Namespace Interpreter
         ''' package namespace or dll module file path
         ''' </param>
         Public Function LoadLibrary(packageName As String) As RInterpreter
-            Dim result As Message = globalEnvir.LoadLibrary(packageName)
+            If packageName.FileExists Then
+                ' is a dll file
+                Call [Imports].LoadLibrary(packageName, globalEnvir, {"*"})
+            Else
+                Dim result As Message = globalEnvir.LoadLibrary(packageName)
 
-            If Not result Is Nothing Then
-                If packageName.FileExists Then
-                    ' is a dll file
-                    Call [Imports].LoadLibrary(packageName, globalEnvir, {"*"})
-                Else
+                If Not result Is Nothing Then
                     Call Interpreter.printMessageInternal(result)
                 End If
             End If
