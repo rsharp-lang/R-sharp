@@ -1,41 +1,41 @@
 ﻿#Region "Microsoft.VisualBasic::b1b18eab84eda50dec4385ec39b46862, R.base\utils\dataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module dataframe
-    ' 
-    '     Function: colnames, project, readDataSet
-    ' 
-    ' /********************************************************************************/
+' Module dataframe
+' 
+'     Function: colnames, project, readDataSet
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -44,6 +44,7 @@ Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 ''' <summary>
 ''' The sciBASIC.NET dataframe api
@@ -81,7 +82,7 @@ Module dataframe
     ''' <param name="envir"></param>
     ''' <returns></returns>
     <ExportAPI("dataset.vector")>
-    Public Function vector(dataset As Array, col$, Optional values As Array = Nothing, Optional envir As Environment = Nothing) As Object
+    Public Function vector(dataset As Array, col$, <RByRefValueAssign> Optional values As Array = Nothing, Optional envir As Environment = Nothing) As Object
         If dataset Is Nothing OrElse dataset.Length = 0 Then
             Return Nothing
         End If

@@ -57,6 +57,13 @@ Namespace Runtime.Interop
     Public Class RInteropAttribute : Inherits Attribute
     End Class
 
+    ''' <summary>
+    ''' 这个参数是接受``a(x) &lt;- y``操作之中的``y``结果值的
+    ''' </summary>
+    <AttributeUsage(AttributeTargets.Parameter, AllowMultiple:=False, Inherited:=True)>
+    Public Class RByRefValueAssignAttribute : Inherits RInteropAttribute
+    End Class
+
     <AttributeUsage(AttributeTargets.Parameter, AllowMultiple:=False, Inherited:=True)>
     Public Class RRawVectorArgumentAttribute : Inherits RInteropAttribute
     End Class
