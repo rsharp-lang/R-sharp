@@ -59,7 +59,7 @@ Namespace Language.TokenIcer
                     Case TokenType.numberLiteral
                         Return text.ParseDouble
                     Case Else
-                        Throw New InvalidCastException(ToString)
+                        Return Nothing
                 End Select
             End Get
         End Property

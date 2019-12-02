@@ -68,7 +68,7 @@ Module tokenlicerTest
     End Sub
 
     Sub specialNameTest()
-        Dim tokens = Rscript.FromText("let x as string = (!script)$dir;").GetTokens
+        Dim tokens As Token() = Rscript.FromText("let x as string = (!script)$dir;").GetTokens
 
         Pause()
     End Sub
