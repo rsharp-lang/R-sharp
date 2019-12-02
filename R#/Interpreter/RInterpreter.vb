@@ -225,11 +225,7 @@ Namespace Interpreter
 
         Private Function RunInternal(Rscript As Rscript, arguments As NamedValue(Of Object)()) As Object
             Dim globalEnvir As Environment = InitializeEnvironment(Rscript.fileName, arguments)
-            Dim program As Program = Code _
-                .ParseScript(Rscript.script) _
-                .DoCall(Function(code)
-                            Return Program.CreateProgram(code)
-                        End Function)
+            Dim program As Program = Program.CreateProgram(Rscript)
             Dim result As Object = program.Execute(globalEnvir)
 
             Return finalizeResult(result)

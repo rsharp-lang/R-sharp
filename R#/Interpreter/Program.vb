@@ -55,6 +55,7 @@ Namespace Interpreter
     Public Class Program : Implements IEnumerable(Of Expression)
 
         Friend execQueue As Expression()
+        Friend Rscript As Rscript
 
         Sub New()
         End Sub
@@ -137,11 +138,23 @@ Namespace Interpreter
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Friend Shared Function CreateProgram(tokens As IEnumerable(Of Token)) As Program
+        Public Shared Function CreateProgram(tokens As Token()) As Program
             Return New Program With {
-                .execQueue = tokens.ToArray _
-                    .GetExpressions _
-                    .ToArray
+                .Rscript = Nothing,
+                .execQueue = tokens.GetExpressions.ToArray
+            }
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Shared Function CreateProgram(Rscript As Rscript) As Program
+            Dim tokens As Token() = Rscript.GetTokens
+            Dim exec As Expression() = tokens.ToArray _
+                .GetExpressions _
+                .ToArray
+
+            Return New Program With {
+                .execQueue = exec,
+                .Rscript = Rscript
             }
         End Function
 
@@ -158,8 +171,8 @@ Namespace Interpreter
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function BuildProgram(scriptText As String) As Program
-            Return New Scanner(scriptText) _
-                .GetTokens _
+            Return Rscript _
+                .FromText(scriptText) _
                 .DoCall(AddressOf CreateProgram)
         End Function
 
