@@ -43,7 +43,7 @@ Imports SMRUCC.Rsharp.Interpreter
 
 Module scriptTest
 
-    Const script$ = "E:\GCModeller\src\GCModeller\engine\Rscript\enrichment.R"
+    Const script$ = "E:\GCModeller\src\GCModeller\engine\Rscript\enrichment_result_union.R"
 
     Dim R As RInterpreter = New RInterpreter() With {
         .debug = True

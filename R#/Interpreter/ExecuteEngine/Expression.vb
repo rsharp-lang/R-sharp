@@ -181,6 +181,9 @@ Namespace Interpreter.ExecuteEngine
             ElseIf code = 2 Then
                 If code(Scan0).Length = 1 AndAlso code(Scan0)(Scan0) = (TokenType.operator, "$") Then
                     Return New FunctionInvoke(code.IteratesALL.ToArray)
+                ElseIf code(Scan0).Length = 1 AndAlso code(Scan0)(Scan0) = (TokenType.operator, "!") Then
+                    ' not xxxx
+                    Return New UnaryNot(Expression.CreateExpression(code(1)))
                 End If
             ElseIf code = 3 Then
                 If code.isSequenceSyntax Then
