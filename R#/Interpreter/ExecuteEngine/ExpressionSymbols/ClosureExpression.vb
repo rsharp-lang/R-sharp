@@ -71,8 +71,7 @@ Namespace Interpreter.ExecuteEngine
         Dim program As Program
 
         Sub New(tokens As IEnumerable(Of Token))
-            program = tokens.ToArray _
-                .DoCall(AddressOf Program.CreateProgram)
+            program = tokens.ToArray.DoCall(AddressOf Program.CreateProgram)
         End Sub
 
         Sub New(code As Expression())
