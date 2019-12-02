@@ -150,7 +150,15 @@ Namespace Runtime.Internal.Invokes
                 ' get fileName
                 Return fileNames.Select(AddressOf FileName).ToArray
             Else
-                Return fileNames.Select(Function(file) file.BaseName).ToArray
+                Return fileNames _
+                    .Select(Function(file)
+                                If file.DirectoryExists Then
+                                    Return file.DirectoryName
+                                Else
+                                    Return file.BaseName
+                                End If
+                            End Function) _
+                    .ToArray
             End If
         End Function
 
