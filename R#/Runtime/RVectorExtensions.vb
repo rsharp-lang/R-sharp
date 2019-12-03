@@ -144,8 +144,14 @@ Namespace Runtime
         ''' <param name="value"></param>
         ''' <returns></returns>
         Public Function asVector(Of T)(value As Object) As Array
-            Dim valueType As Type = value.GetType
+            Dim valueType As Type
             Dim typeofT As Type = GetType(T)
+
+            If value Is Nothing Then
+                Return {}
+            Else
+                valueType = value.GetType
+            End If
 
             If valueType Is typeofT Then
                 Return {DirectCast(value, T)}

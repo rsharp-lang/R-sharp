@@ -1,49 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::0785a86d33f5d158ae83250c0b1b307a, R#\Runtime\Internal\internalInvokes\base.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module base
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: [get], [stop], all, any, cat
-    '                   createDotNetExceptionMessage, createMessageInternal, getEnvironmentStack, globalenv, (+2 Overloads) isEmpty
-    '                   lapply, length, names, neg, options
-    '                   print, sapply, source, str, warning
-    ' 
-    '         Sub: pushEnvir
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module base
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: [get], [stop], all, any, cat
+'                   createDotNetExceptionMessage, createMessageInternal, getEnvironmentStack, globalenv, (+2 Overloads) isEmpty
+'                   lapply, length, names, neg, options
+'                   print, sapply, source, str, warning
+' 
+'         Sub: pushEnvir
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -61,6 +61,7 @@ Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 
@@ -76,6 +77,7 @@ Namespace Runtime.Internal.Invokes
             Call Internal.invoke.add(isEmpty)
             Call Internal.invoke.add("neg", AddressOf base.neg)
             Call Internal.invoke.add("do.call", AddressOf base.doCall)
+            Call Internal.invoke.add("names", AddressOf base.names)
         End Sub
 
         Friend Sub pushEnvir()
@@ -263,22 +265,35 @@ Namespace Runtime.Internal.Invokes
             Dim namelist As Array = Runtime.asVector(Of String)(params.ElementAtOrDefault(1))
 
             If namelist Is Nothing OrElse namelist.Length = 0 Then
+                Dim type As Type = [object].GetType
+
                 ' get names
-                Select Case [object].GetType
+                Select Case type
                     Case GetType(list), GetType(dataframe)
                         Return DirectCast([object], RNames).getNames
                     Case GetType(vbObject)
                         Return DirectCast([object], vbObject).getNames
                     Case Else
-                        Return Internal.stop("unsupported!", envir)
+                        If type.IsArray Then
+                            Dim objVec As Array = Runtime.asVector(Of Object)([object])
+
+                            If objVec.AsObjectEnumerator.All(Function(o) o.GetType Is GetType(Group)) Then
+                                Return objVec.AsObjectEnumerator _
+                                    .Select(Function(g)
+                                                Return Scripting.ToString(DirectCast(g, Group).key, "NULL")
+                                            End Function) _
+                                    .ToArray
+                            End If
+                        End If
+                        Return Internal.stop({"unsupported!", "func: names"}, envir)
                 End Select
             Else
                 ' set names
-                Select Case [Object].GetType
+                Select Case [object].GetType
                     Case GetType(list), GetType(dataframe)
-                        Return DirectCast([Object], RNames).setNames(namelist, envir)
+                        Return DirectCast([object], RNames).setNames(namelist, envir)
                     Case Else
-                        Return Internal.stop("unsupported!", envir)
+                        Return Internal.stop({"unsupported!", "func: names"}, envir)
                 End Select
             End If
         End Function
