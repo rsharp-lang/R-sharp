@@ -65,6 +65,8 @@ Public Module grDevices
             Return Internal.debug.stop("Graphics data is NULL!", envir)
         ElseIf graphics.GetType Is GetType(Image) Then
             Return DirectCast(graphics, Image).SaveAs(file)
+        ElseIf graphics.GetType Is GetType(Bitmap) Then
+            Return DirectCast(graphics, Bitmap).SaveAs(file)
         ElseIf graphics.GetType.IsInheritsFrom(GetType(GraphicsData)) Then
             Return DirectCast(graphics, GraphicsData).Save(file)
         Else
