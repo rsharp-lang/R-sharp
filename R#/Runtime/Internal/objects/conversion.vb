@@ -55,6 +55,7 @@ Namespace Runtime.Internal
         Sub New()
             Call Internal.invoke.add(New GenericInternalInvoke("as.object", AddressOf asObject))
             Call Internal.invoke.add(New GenericInternalInvoke("as.list", AddressOf asList))
+            Call Internal.invoke.add(New GenericInternalInvoke("as.numeric", AddressOf asNumeric))
         End Sub
 
         Friend Sub pushEnvir()
@@ -109,6 +110,14 @@ Namespace Runtime.Internal
                             Throw New NotImplementedException
                         End If
                 End Select
+            End If
+        End Function
+
+        Public Function asNumeric(obj As Object) As Object
+            If obj Is Nothing Then
+                Return 0
+            Else
+                Return Runtime.asVector(Of Double)(obj)
             End If
         End Function
 

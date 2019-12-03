@@ -158,7 +158,11 @@ Namespace Runtime
             ElseIf valueType.IsInheritsFrom(GetType(IEnumerable(Of T))) Then
                 Return DirectCast(value, IEnumerable(Of T)).ToArray
             Else
-                Return {value}
+                If typeofT Is GetType(Object) Then
+                    Return {value}
+                Else
+                    Return {Conversion.CTypeDynamic(Of T)(value)}
+                End If
             End If
         End Function
 
