@@ -62,6 +62,7 @@ Namespace Runtime.Interop
 
         Public ReadOnly Property mode As TypeCodes
         Public ReadOnly Property isArray As Boolean
+        Public ReadOnly Property isCollection As Boolean
         Public ReadOnly Property raw As Type
         Public ReadOnly Property haveDynamicsProperty As Boolean
 
@@ -69,11 +70,13 @@ Namespace Runtime.Interop
 
         Sub New(raw As Type)
             Me.raw = raw
-            Me.isArray = raw Is GetType(Array) OrElse raw.IsInheritsFrom(GetType(Array))
             Me.names = populateNames _
                 .Distinct _
                 .ToArray
             Me.haveDynamicsProperty = raw.ImplementInterface(GetType(IDynamicsObject))
+            Me.isArray = raw Is GetType(Array) _
+                  OrElse raw.IsInheritsFrom(GetType(Array))
+            Me.isCollection = raw.ImplementInterface(GetType(IEnumerable)) AndAlso Not raw Is GetType(String)
         End Sub
 
         Public Function GetRawElementType() As Type
