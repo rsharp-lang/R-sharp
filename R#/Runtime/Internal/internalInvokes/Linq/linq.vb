@@ -62,11 +62,23 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Call Internal.invoke.add("first", AddressOf linq.first)
             Call Internal.invoke.add("which", AddressOf linq.where)
             Call Internal.invoke.add("projectAs", AddressOf linq.projectAs)
+            Call Internal.invoke.add("unique", AddressOf linq.unique)
         End Sub
 
         Friend Sub pushEnvir()
             ' do nothing
         End Sub
+
+        Private Function unique(envir As Environment, params As Object())
+            Dim items As Array = Runtime.asVector(Of Object)(params(Scan0))
+            Dim distinct As Object() = items _
+                .AsObjectEnumerator _
+                .GroupBy(Function(o) o) _
+                .Select(Function(g) g.Key) _
+                .ToArray
+
+            Return distinct
+        End Function
 
         Private Function projectAs(envir As Environment, params As Object()) As Object
             Dim sequence As Array = Runtime.asVector(Of Object)(params(Scan0))
