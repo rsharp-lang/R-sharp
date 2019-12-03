@@ -53,11 +53,27 @@ Namespace Runtime.Internal.Invokes
         Sub New()
             Call Internal.invoke.add("string.replace", AddressOf stringr.replace)
             Call Internal.invoke.add("paste", AddressOf stringr.paste)
+            Call Internal.invoke.add("strsplit", AddressOf strsplit)
         End Sub
 
         Friend Sub pushEnvir()
             ' do nothing
         End Sub
+
+        Friend Function strsplit(envir As Environment, params As Object()) As Object
+            Dim text As String() = Runtime.asVector(Of String)(params(Scan0))
+            Dim delimiter As String = Runtime.asVector(Of String)(params.ElementAtOrDefault(1, " ")) _
+                .AsObjectEnumerator _
+                .First
+
+            If text.IsNullOrEmpty Then
+                Return Nothing
+            ElseIf text.Length = 1 Then
+                Return Strings.Split(text(Scan0), delimiter)
+            Else
+                Throw New NotImplementedException
+            End If
+        End Function
 
         Friend Function paste(envir As Environment, params As Object()) As Object
             Dim strings As String() = Runtime.asVector(Of String)(params(Scan0))
