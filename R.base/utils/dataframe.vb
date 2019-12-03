@@ -52,6 +52,31 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 <Package("dataframe", Category:=APICategories.UtilityTools)>
 Module dataframe
 
+    Sub New()
+        Call Internal.ConsolePrinter.AttachConsoleFormatter(Of DataSet)(AddressOf RowToString)
+    End Sub
+
+    Private Function RowToString(x As Object) As String
+        Dim id$, length%
+        Dim keys$()
+
+        If x.GetType Is GetType(DataSet) Then
+            With DirectCast(x, DataSet)
+                id = .ID
+                length = .Properties.Count
+                keys = .Properties.Keys.ToArray
+            End With
+        Else
+            With DirectCast(x, EntityObject)
+                id = .ID
+                length = .Properties.Count
+                keys = .Properties.Keys.ToArray
+            End With
+        End If
+
+        Return $"${id} {length} slots {{{keys.Take(3).JoinBy(", ")}..."
+    End Function
+
     <ExportAPI("dataset.colnames")>
     Public Function colnames(dataset As Array, envir As Environment) As Object
         Dim baseElement As Type = dataset.GetValue(Scan0).GetType

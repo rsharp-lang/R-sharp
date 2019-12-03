@@ -83,7 +83,11 @@ Namespace Runtime.Internal
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function getNames() As String() Implements IReflector.getNames
-            Return type.getNames
+            If type.haveDynamicsProperty Then
+                Return type.getNames + DirectCast(target, IDynamicsObject).GetNames.AsList
+            Else
+                Return type.getNames
+            End If
         End Function
 
         ''' <summary>
