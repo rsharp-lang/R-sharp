@@ -258,8 +258,11 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
-        Public Function names([object] As Object, namelist As Object, envir As Environment) As Object
-            If namelist Is Nothing OrElse Runtime.asVector(Of Object)(namelist).Length = 0 Then
+        Public Function names(envir As Environment, params As Object()) As Object
+            Dim [object] As Object = params(Scan0)
+            Dim namelist As Array = Runtime.asVector(Of String)(params.ElementAtOrDefault(1))
+
+            If namelist Is Nothing OrElse namelist.Length = 0 Then
                 ' get names
                 Select Case [object].GetType
                     Case GetType(list), GetType(dataframe)
@@ -271,9 +274,9 @@ Namespace Runtime.Internal.Invokes
                 End Select
             Else
                 ' set names
-                Select Case [object].GetType
+                Select Case [Object].GetType
                     Case GetType(list), GetType(dataframe)
-                        Return DirectCast([object], RNames).setNames(namelist, envir)
+                        Return DirectCast([Object], RNames).setNames(namelist, envir)
                     Case Else
                         Return Internal.stop("unsupported!", envir)
                 End Select

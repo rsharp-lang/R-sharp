@@ -205,8 +205,6 @@ Namespace Runtime.Internal
                             .options _
                             .getOption(name, defaultVal)
                     End If
-                Case "names"
-                    Return base.names(paramVals(Scan0), Nothing, envir)
                 Case "source"
                     If paramVals.IsNullOrEmpty Then
                         Return invoke.missingParameter("source", "file", envir)

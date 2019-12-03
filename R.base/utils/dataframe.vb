@@ -64,13 +64,17 @@ Module dataframe
             With DirectCast(x, DataSet)
                 id = .ID
                 length = .Properties.Count
-                keys = .Properties.Keys.ToArray
+                keys = .Properties _
+                       .Keys _
+                       .ToArray
             End With
         Else
             With DirectCast(x, EntityObject)
                 id = .ID
                 length = .Properties.Count
-                keys = .Properties.Keys.ToArray
+                keys = .Properties _
+                       .Keys _
+                       .ToArray
             End With
         End If
 
