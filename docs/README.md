@@ -12,7 +12,7 @@ R# provides a wide variety of bioinformatics analysis toolkit from GCModeller an
 
 ## Hello world!
 
-For create a new kind of elegant R programming language, the resulting R# its language syntax is comes from the R language hybrid with VisualBasic.NET language and TypeScript language. 
+For create a new kind of elegant R programming language, the resulting R# its language syntax is comes from the R language hybrid with VisualBasic.NET language and TypeScript language. Here is a demo code example for say hello world as routine:
 
 ```R
 # declare a variable
@@ -37,4 +37,5 @@ word :> echo.lambda;
 # [3] "Hello world!" "Hello R# user!" "Hello GCModeller user!"
 ```
 
-For learning more about the R# language please visit this help document, the *[&lt;R# language design document>](language-design/language-design.md)*
+1. For learning more about the R# programming language please read this help document: The *[&lt;R# language design>](language-design/language-design.md)* document.
+2. Learn details information about the R# environment development, you could read this document: The *[&lt;R# system>](R-system/)*.
