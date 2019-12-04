@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9cd673e18a103d9904f3d3cb41e4f4a6, R#\Runtime\Interop\RType.vb"
+﻿#Region "Microsoft.VisualBasic::eee5305f02f8254b3ce9bb210d12beb3, R#\Runtime\Interop\RType.vb"
 
 ' Author:
 ' 
@@ -36,7 +36,7 @@
 '         Properties: fullName, isArray, mode, raw
 ' 
 '         Constructor: (+1 Overloads) Sub New
-'         Function: ToString
+'         Function: getNames, GetRawElementType, populateNames, ToString
 ' 
 ' 
 ' /********************************************************************************/
@@ -44,6 +44,8 @@
 #End Region
 
 Imports System.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal
@@ -60,16 +62,21 @@ Namespace Runtime.Interop
 
         Public ReadOnly Property mode As TypeCodes
         Public ReadOnly Property isArray As Boolean
+        Public ReadOnly Property isCollection As Boolean
         Public ReadOnly Property raw As Type
+        Public ReadOnly Property haveDynamicsProperty As Boolean
 
         Dim names As String()
 
         Sub New(raw As Type)
             Me.raw = raw
-            Me.isArray = raw Is GetType(Array) OrElse raw.IsInheritsFrom(GetType(Array))
             Me.names = populateNames _
                 .Distinct _
                 .ToArray
+            Me.haveDynamicsProperty = raw.ImplementInterface(GetType(IDynamicsObject))
+            Me.isArray = raw Is GetType(Array) _
+                  OrElse raw.IsInheritsFrom(GetType(Array))
+            Me.isCollection = raw.ImplementInterface(GetType(IEnumerable)) AndAlso Not raw Is GetType(String)
         End Sub
 
         Public Function GetRawElementType() As Type

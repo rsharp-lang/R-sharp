@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::352ec046e06f26392ed58b6f92771702, R#\Runtime\Interop\RMethodArgument.vb"
+﻿#Region "Microsoft.VisualBasic::056cc155d3678a5e2fe082937ee5d70d, R#\Runtime\Interop\RMethodArgument.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,8 @@
 
     '     Class RMethodArgument
     ' 
-    '         Properties: [default], isObjectList, isOptional, name, type
+    '         Properties: [default], isObjectList, isOptional, isRequireRawVector, name
+    '                     type
     ' 
     '         Function: ParseArgument, ToString
     ' 

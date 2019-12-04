@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c2011661ac2525f516f40763259ea73a, R.base\save.vb"
+﻿#Region "Microsoft.VisualBasic::b8809ae6ea7d029e2d1cfbdad4ee4612, R.base\save.vb"
 
     ' Author:
     ' 
@@ -190,4 +190,3 @@ Partial Module base
         Return objList.Keys.ToArray
     End Function
 End Module
-

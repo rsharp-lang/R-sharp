@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f2871917fdb327e513228145b18aa5cd, R#\Runtime\Internal\base.vb"
+﻿#Region "Microsoft.VisualBasic::0785a86d33f5d158ae83250c0b1b307a, R#\Runtime\Internal\internalInvokes\base.vb"
 
 ' Author:
 ' 
@@ -33,9 +33,14 @@
 
 '     Module base
 ' 
+'         Constructor: (+1 Overloads) Sub New
+' 
 '         Function: [get], [stop], all, any, cat
-'                   createDotNetExceptionMessage, createMessageInternal, getEnvironmentStack, lapply, names
-'                   options, print, sapply, warning
+'                   createDotNetExceptionMessage, createMessageInternal, getEnvironmentStack, globalenv, (+2 Overloads) isEmpty
+'                   lapply, length, names, neg, options
+'                   print, sapply, source, str, warning
+' 
+'         Sub: pushEnvir
 ' 
 ' 
 ' /********************************************************************************/
@@ -56,6 +61,7 @@ Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 
@@ -69,11 +75,47 @@ Namespace Runtime.Internal.Invokes
         Sub New()
             Call Internal.invoke.add(globalenv)
             Call Internal.invoke.add(isEmpty)
+            Call Internal.invoke.add("neg", AddressOf base.neg)
+            Call Internal.invoke.add("do.call", AddressOf base.doCall)
+            Call Internal.invoke.add("names", AddressOf base.names)
         End Sub
 
         Friend Sub pushEnvir()
             ' do nothing
         End Sub
+
+        Private Function doCall(envir As Environment, params As Object()) As Object
+            If params.IsNullOrEmpty Then
+                Return Internal.stop("Nothing to call!", envir)
+            End If
+
+            Dim what = params(Scan0)
+            Dim targetType As Type = what.GetType
+
+            If targetType Is GetType(vbObject) Then
+                Dim calls$ = Scripting.ToString(Runtime.getFirst(params(1)))
+                Dim member = DirectCast(what, vbObject).getByName(name:=calls)
+
+                If member.GetType Is GetType(RMethodInfo) Then
+                    Return DirectCast(member, RMethodInfo).Invoke(envir, {})
+                Else
+                    Return member
+                End If
+            Else
+                Throw New NotImplementedException(targetType.FullName)
+            End If
+        End Function
+
+        Private Function neg(o As Object) As Object
+            If o Is Nothing Then
+                Return Nothing
+            Else
+                Return Runtime.asVector(Of Double)(o) _
+                    .AsObjectEnumerator _
+                    .Select(Function(d) -CDbl(d)) _
+                    .ToArray
+            End If
+        End Function
 
         Private Function isEmpty() As GenericInternalInvoke
             Return New GenericInternalInvoke(
@@ -83,7 +125,7 @@ Namespace Runtime.Internal.Invokes
                         End Function)
         End Function
 
-        Private Function isEmpty(o As Object) As Object
+        Friend Function isEmpty(o As Object) As Object
             If o Is Nothing Then
                 Return True
             End If
@@ -218,16 +260,32 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
-        Public Function names([object] As Object, namelist As Object, envir As Environment) As Object
-            If namelist Is Nothing OrElse Runtime.asVector(Of Object)(namelist).Length = 0 Then
+        Public Function names(envir As Environment, params As Object()) As Object
+            Dim [object] As Object = params(Scan0)
+            Dim namelist As Array = Runtime.asVector(Of String)(params.ElementAtOrDefault(1))
+
+            If namelist Is Nothing OrElse namelist.Length = 0 Then
+                Dim type As Type = [object].GetType
+
                 ' get names
-                Select Case [object].GetType
+                Select Case type
                     Case GetType(list), GetType(dataframe)
                         Return DirectCast([object], RNames).getNames
                     Case GetType(vbObject)
                         Return DirectCast([object], vbObject).getNames
                     Case Else
-                        Return Internal.stop("unsupported!", envir)
+                        If type.IsArray Then
+                            Dim objVec As Array = Runtime.asVector(Of Object)([object])
+
+                            If objVec.AsObjectEnumerator.All(Function(o) o.GetType Is GetType(Group)) Then
+                                Return objVec.AsObjectEnumerator _
+                                    .Select(Function(g)
+                                                Return Scripting.ToString(DirectCast(g, Group).key, "NULL")
+                                            End Function) _
+                                    .ToArray
+                            End If
+                        End If
+                        Return Internal.stop({"unsupported!", "func: names"}, envir)
                 End Select
             Else
                 ' set names
@@ -235,7 +293,7 @@ Namespace Runtime.Internal.Invokes
                     Case GetType(list), GetType(dataframe)
                         Return DirectCast([object], RNames).setNames(namelist, envir)
                     Case Else
-                        Return Internal.stop("unsupported!", envir)
+                        Return Internal.stop({"unsupported!", "func: names"}, envir)
                 End Select
             End If
         End Function
@@ -249,10 +307,25 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="envir"></param>
         ''' <returns></returns>
         Public Function [stop](message As Object, envir As Environment) As Message
+            Dim debugMode As Boolean = envir.globalEnvironment.debugMode
+
             If Not message Is Nothing AndAlso message.GetType.IsInheritsFrom(GetType(Exception), strict:=False) Then
-                Return DirectCast(message, Exception).createDotNetExceptionMessage(envir)
+                If debugMode Then
+                    Throw DirectCast(message, Exception)
+                Else
+                    Return DirectCast(message, Exception).createDotNetExceptionMessage(envir)
+                End If
             Else
-                Return base.createMessageInternal(message, envir, level:=MSG_TYPES.ERR)
+                If debugMode Then
+                    Throw New Exception(Runtime.asVector(Of Object)(message) _
+                       .AsObjectEnumerator _
+                       .SafeQuery _
+                       .Select(Function(o) Scripting.ToString(o, "NULL")) _
+                       .JoinBy("; ")
+                    )
+                Else
+                    Return base.createMessageInternal(message, envir, level:=MSG_TYPES.ERR)
+                End If
             End If
         End Function
 

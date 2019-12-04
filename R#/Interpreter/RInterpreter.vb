@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::60b55f4ce76fa2d6a4d8d1795f9705f1, R#\Interpreter\RInterpreter.vb"
+﻿#Region "Microsoft.VisualBasic::cff7e4a4755abc1a7d205d5cb87f09ff, R#\Interpreter\RInterpreter.vb"
 
 ' Author:
 ' 
@@ -33,14 +33,14 @@
 
 '     Class RInterpreter
 ' 
-'         Properties: globalEnvir, Rsharp, warnings
+'         Properties: debug, globalEnvir, Rsharp, warnings
 ' 
 '         Constructor: (+1 Overloads) Sub New
 ' 
 '         Function: (+2 Overloads) Evaluate, finalizeResult, FromEnvironmentConfiguration, InitializeEnvironment, Invoke
-'                   printErrorInternal, Run, RunInternal, Source
+'                   LoadLibrary, Run, RunInternal, Source
 ' 
-'         Sub: (+3 Overloads) Add, LoadLibrary, PrintMemory
+'         Sub: (+3 Overloads) Add, PrintMemory
 ' 
 ' 
 ' /********************************************************************************/
@@ -56,11 +56,11 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
-Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Interpreter
@@ -133,13 +133,13 @@ Namespace Interpreter
         ''' package namespace or dll module file path
         ''' </param>
         Public Function LoadLibrary(packageName As String) As RInterpreter
-            Dim result As Message = globalEnvir.LoadLibrary(packageName)
+            If packageName.FileExists Then
+                ' is a dll file
+                Call [Imports].LoadLibrary(packageName, globalEnvir, {"*"})
+            Else
+                Dim result As Message = globalEnvir.LoadLibrary(packageName)
 
-            If Not result Is Nothing Then
-                If packageName.FileExists Then
-                    ' is a dll file
-                    Call [Imports].LoadLibrary(packageName, globalEnvir, {"*"})
-                Else
+                If Not result Is Nothing Then
                     Call Interpreter.printMessageInternal(result)
                 End If
             End If
@@ -180,7 +180,7 @@ Namespace Interpreter
         ''' 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function Evaluate(script As String) As Object
-            Return RunInternal(script, Nothing, {})
+            Return RunInternal(Rscript.FromText(script), {})
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
@@ -223,13 +223,9 @@ Namespace Interpreter
             Return result
         End Function
 
-        Private Function RunInternal(script$, source$, arguments As NamedValue(Of Object)()) As Object
-            Dim globalEnvir As Environment = InitializeEnvironment(source, arguments)
-            Dim program As Program = Code _
-                .ParseScript(script) _
-                .DoCall(Function(code)
-                            Return Program.CreateProgram(code)
-                        End Function)
+        Private Function RunInternal(Rscript As Rscript, arguments As NamedValue(Of Object)()) As Object
+            Dim globalEnvir As Environment = InitializeEnvironment(Rscript.fileName, arguments)
+            Dim program As Program = Program.CreateProgram(Rscript)
             Dim result As Object = program.Execute(globalEnvir)
 
             Return finalizeResult(result)
@@ -245,7 +241,25 @@ Namespace Interpreter
         ''' 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function Source(filepath$, ParamArray arguments As NamedValue(Of Object)()) As Object
-            Return RunInternal(filepath.ReadAllText, filepath.ToFileURL, arguments)
+            ' when source a given script by path
+            ' then an object list variable with special name will be push into 
+            ' the environment
+            ' 
+            ' let !script = list(dir = dirname, file = filename, fullName = filepath)
+            Dim script As New list With {
+                .slots = New Dictionary(Of String, Object) From {
+                    {"dir", filepath.ParentPath},
+                    {"file", filepath.FileName},
+                    {"fullName", filepath.GetFullPath}
+                }
+            }
+            Dim result As Object
+
+            globalEnvir.Push("!script", script, TypeCodes.list)
+            result = RunInternal(Rscript.FromFile(filepath), arguments)
+            globalEnvir.Delete("!script")
+
+            Return result
         End Function
 
         Public Shared ReadOnly Property Rsharp As New RInterpreter

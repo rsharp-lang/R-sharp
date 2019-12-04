@@ -1,50 +1,50 @@
-﻿#Region "Microsoft.VisualBasic::f9ccaca6e9f825153d8203d0202fa20c, R#\Language\TokenIcer\Scanner.vb"
+﻿#Region "Microsoft.VisualBasic::34d22df1f1af3d0774fe8481751ba9fa, R#\Language\TokenIcer\Scanner.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class Scanner
-' 
-'         Properties: lastCharIsEscapeSplash
-' 
-'         Constructor: (+1 Overloads) Sub New
-'         Function: finalizeToken, GetTokens, populateToken, walkChar
-'         Class Escapes
-' 
-'             Function: ToString
-' 
-' 
-' 
-' 
-' /********************************************************************************/
+    '     Class Scanner
+    ' 
+    '         Properties: lastCharIsEscapeSplash
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    '         Function: finalizeToken, GetTokens, populateToken, walkChar
+    '         Class Escapes
+    ' 
+    '             Function: ToString
+    ' 
+    ' 
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -155,7 +155,10 @@ Namespace Language.TokenIcer
 
             If token.name = TokenType.comment Then
                 escape.comment = False
-            ElseIf token.name = TokenType.stringLiteral OrElse token.name = TokenType.stringInterpolation Then
+            ElseIf token.name = TokenType.stringLiteral OrElse
+                   token.name = TokenType.stringInterpolation OrElse
+                   token.name = TokenType.cliShellInvoke Then
+
                 escape.string = False
             End If
 
@@ -256,6 +259,19 @@ Namespace Language.TokenIcer
                 buffer += c
 
                 Return token
+
+            ElseIf c = "!"c AndAlso code.PeekNext(6) = "script" Then
+                Call code.PopNext(6)
+
+                ' special name
+                If buffer = 0 Then
+                    Return New Token With {
+                        .text = "!script",
+                        .name = TokenType.identifier
+                    }
+                Else
+                    Throw New SyntaxErrorException
+                End If
 
             ElseIf c Like longOperatorParts Then
                 Return populateToken(bufferNext:=c)

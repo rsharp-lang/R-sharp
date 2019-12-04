@@ -1,45 +1,45 @@
-﻿#Region "Microsoft.VisualBasic::df581c58e0576e84aad5af194c1783c5, R#\Interpreter\ExecuteEngine\ExpressionSymbols\SymbolIndexer.vb"
+﻿#Region "Microsoft.VisualBasic::193d78cafc7cd40d3bdd43fa775c0ffd, R#\Interpreter\ExecuteEngine\ExpressionSymbols\SymbolIndexer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class SymbolIndexer
-    ' 
-    '         Properties: type
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: Evaluate, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class SymbolIndexer
+' 
+'         Properties: type
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: Evaluate, getByIndex, getByName, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -55,7 +55,8 @@ Imports SMRUCC.Rsharp.Runtime.Internal
 Namespace Interpreter.ExecuteEngine
 
     ''' <summary>
-    ''' X$name或者X[[name]]
+    ''' get elements by index 
+    ''' (X$name或者X[[name]])
     ''' </summary>
     Public Class SymbolIndexer : Inherits Expression
 
@@ -96,7 +97,7 @@ Namespace Interpreter.ExecuteEngine
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim sequence As Object = Runtime.asVector(Of Object)(symbol.Evaluate(envir))
+            Dim obj As Object = symbol.Evaluate(envir)
             Dim indexer = Runtime.asVector(Of Object)(index.Evaluate(envir))
 
             If indexer.Length = 0 Then
@@ -104,29 +105,46 @@ Namespace Interpreter.ExecuteEngine
                     $"Attempt to select less than one element in get1index",
                     $"expression: {symbol}[[{index}]]"
                 }, envir)
-            ElseIf sequence Is Nothing OrElse sequence.Length = 0 Then
-                Return Nothing
-            ElseIf sequence.Length = 1 AndAlso sequence.GetValue(Scan0).GetType.ImplementInterface(GetType(IReflector)) Then
-                sequence = sequence.GetValue(Scan0)
             End If
 
             If nameIndex Then
-                If Not sequence.GetType.ImplementInterface(GetType(RNameIndex)) Then
-                    Return Internal.stop("Target object can not be indexed by name!", envir)
-                ElseIf indexer.Length = 1 Then
-                    Return DirectCast(sequence, RNameIndex).getByName(Scripting.ToString(indexer.GetValue(Scan0)))
-                Else
-                    Return DirectCast(sequence, RNameIndex).getByName(Runtime.asVector(Of String)(indexer))
-                End If
+                Return getByName(obj, indexer, envir)
             Else
-                ' by element index
-                If Not sequence.GetType.ImplementInterface(GetType(RIndex)) Then
-                    Return Internal.stop("Target object can not be indexed!", envir)
-                ElseIf indexer.Length = 1 Then
-                    Return DirectCast(sequence, RIndex).getByIndex(CInt(indexer.GetValue(Scan0)))
-                Else
-                    Return DirectCast(sequence, RIndex).getByIndex(Runtime.asVector(Of Integer)(indexer))
-                End If
+                Return getByIndex(obj, indexer, envir)
+            End If
+        End Function
+
+        Private Function getByName(obj As Object, indexer As Array, envir As Environment) As Object
+            If Not obj.GetType.ImplementInterface(GetType(RNameIndex)) Then
+                Return Internal.stop("Target object can not be indexed by name!", envir)
+            ElseIf indexer.Length = 1 Then
+                Return DirectCast(obj, RNameIndex).getByName(Scripting.ToString(indexer.GetValue(Scan0)))
+            Else
+                Return DirectCast(obj, RNameIndex).getByName(Runtime.asVector(Of String)(indexer))
+            End If
+        End Function
+
+        Private Function getByIndex(obj As Object, indexer As Array, envir As Environment) As Object
+            Dim sequence As Array = Runtime.asVector(Of Object)(obj)
+            Dim Rarray As RIndex
+
+            If sequence Is Nothing OrElse sequence.Length = 0 Then
+                Return Nothing
+            ElseIf sequence.Length = 1 AndAlso sequence.GetValue(Scan0).GetType.ImplementInterface(GetType(RIndex)) Then
+                Rarray = sequence.GetValue(Scan0)
+
+                '' by element index
+                'If Not sequence.GetType.ImplementInterface(GetType(RIndex)) Then
+                '    Return Internal.stop("Target object can not be indexed!", envir)
+                'End If
+            Else
+                Rarray = New vector With {.data = sequence}
+            End If
+
+            If indexer.Length = 1 Then
+                Return Rarray.getByIndex(CInt(indexer.GetValue(Scan0)))
+            Else
+                Return Rarray.getByIndex(Runtime.asVector(Of Integer)(indexer))
             End If
         End Function
 

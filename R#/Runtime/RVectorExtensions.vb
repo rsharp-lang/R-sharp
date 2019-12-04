@@ -1,4 +1,47 @@
-﻿Imports System.Runtime.CompilerServices
+﻿#Region "Microsoft.VisualBasic::cf83550b7d755354885e692b2f99eff8, R#\Runtime\RVectorExtensions.vb"
+
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+
+' /********************************************************************************/
+
+' Summaries:
+
+'     Module RVectorExtensions
+' 
+'         Function: (+2 Overloads) asVector, createArray, fromArray, getFirst
+' 
+' 
+' /********************************************************************************/
+
+#End Region
+
+Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
@@ -7,12 +50,26 @@ Namespace Runtime
 
     <HideModuleName> Public Module RVectorExtensions
 
+        Public Function isVector(Of T)(x As Object) As Boolean
+            If x Is Nothing OrElse Not x.GetType.IsArray Then
+                Return False
+            Else
+                Dim type As Type = x.GetType
+
+                If type Is GetType(T()) OrElse type.ImplementInterface(GetType(IEnumerable(Of T))) Then
+                    Return True
+                Else
+                    Return DirectCast(x, Array).GetValue(Scan0).GetType Is GetType(T)
+                End If
+            End If
+        End Function
+
         ''' <summary>
         ''' Get first element in the input <paramref name="value"/> sequence
         ''' </summary>
         ''' <param name="value"></param>
         ''' <returns></returns>
-        Friend Function getFirst(value As Object) As Object
+        Public Function getFirst(value As Object) As Object
             Dim valueType As Type
 
             If value Is Nothing Then
@@ -87,8 +144,14 @@ Namespace Runtime
         ''' <param name="value"></param>
         ''' <returns></returns>
         Public Function asVector(Of T)(value As Object) As Array
-            Dim valueType As Type = value.GetType
+            Dim valueType As Type
             Dim typeofT As Type = GetType(T)
+
+            If value Is Nothing Then
+                Return {}
+            Else
+                valueType = value.GetType
+            End If
 
             If valueType Is typeofT Then
                 Return {DirectCast(value, T)}
@@ -101,7 +164,11 @@ Namespace Runtime
             ElseIf valueType.IsInheritsFrom(GetType(IEnumerable(Of T))) Then
                 Return DirectCast(value, IEnumerable(Of T)).ToArray
             Else
-                Return {value}
+                If typeofT Is GetType(Object) Then
+                    Return {value}
+                Else
+                    Return {Conversion.CTypeDynamic(Of T)(value)}
+                End If
             End If
         End Function
 

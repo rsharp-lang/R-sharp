@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d5a71e164bb342f7b88b8c45484af9f8, R.base\grDevices.vb"
+﻿#Region "Microsoft.VisualBasic::13811874f91b1ebaf83900bdc2698131, R.graphics\grDevices.vb"
 
 ' Author:
 ' 
@@ -35,6 +35,7 @@
 ' 
 '     Function: devCur, devOff, rgb
 ' 
+' 
 ' /********************************************************************************/
 
 #End Region
@@ -42,6 +43,7 @@
 Imports System.Drawing
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Imaging
+Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
@@ -56,6 +58,21 @@ Public Module grDevices
 
     Dim devlist As New Dictionary(Of Integer, IGraphics)
     Dim curDev As IGraphics
+
+    <ExportAPI("save.graphics")>
+    Public Function saveImage(graphics As Object, file$, envir As Environment) As Object
+        If graphics Is Nothing Then
+            Return Internal.debug.stop("Graphics data is NULL!", envir)
+        ElseIf graphics.GetType Is GetType(Image) Then
+            Return DirectCast(graphics, Image).SaveAs(file)
+        ElseIf graphics.GetType Is GetType(Bitmap) Then
+            Return DirectCast(graphics, Bitmap).SaveAs(file)
+        ElseIf graphics.GetType.IsInheritsFrom(GetType(GraphicsData)) Then
+            Return DirectCast(graphics, GraphicsData).Save(file)
+        Else
+            Return Internal.debug.stop(New InvalidProgramException($"'{graphics.GetType.Name}' is not a graphics data object!"), envir)
+        End If
+    End Function
 
     ''' <summary>
     ''' returns the number and name of the new active device 
@@ -179,4 +196,3 @@ break:
         End If
     End Function
 End Module
-

@@ -153,6 +153,7 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Package\Imports.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\LinqExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DeclareLambdaFunction.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\UnaryNot.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ContinuteFor.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ElseBranch.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ForLoop.vb" />
@@ -197,6 +198,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Interpreter\ExecuteEngine\Expression.vb" />
+    <Compile Include="Runtime\Components\Rscript.vb" />
     <Compile Include="Runtime\Components\Interface\RNames.vb" />
     <Compile Include="Runtime\GlobalEnvironment.vb" />
     <Compile Include="Runtime\Components\Config\Options.vb" />
