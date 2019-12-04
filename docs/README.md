@@ -29,3 +29,4 @@ word :> echo.lambda;
 # [3] "Hello world!" "Hello R# user!" "Hello GCModeller user!"
 ```
 
+For learning more about the R# language please visit this help document, the *[&lt;R# language design document>](language-design/language-design.md)*
