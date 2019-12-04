@@ -1,4 +1,4 @@
-# Using DotNET library 
+# Using .NET Library 
 
 <!-- vscode-markdown-toc -->
 * 1. [Add .NET Assembly Reference](#Add.NETAssemblyReference)
@@ -41,8 +41,7 @@ You can using a string variable for dynamics load library
 #
 # so that, you can
 
-let a.dll as string <- "./a.dll";
-let b.dll as string <- "./b.dll";
+let [a.dll, b.dll] as string <- ["a.dll", "b.dll"];
 
 `%||%` <- function(ver1, ver2) if (opt["version"] == "a") ver1 else ver2;
 	
@@ -60,14 +59,14 @@ For imports selected component, you can using selector. If the library.dll conta
 imports "namespace1" from library.dll;
 
 # imports multiple namespace
-imports "namespace1", "namespace2" from library.dll
+imports ["namespace1", "namespace2"] from library.dll
 ```
 
 By default ``R#`` is imports all of the components from the ``library.dll``, So that the statement ``imports library.dll`` is equals to:
 
 ```R
 # imports all components from dll library
-imports * from library.dll;
+imports "*" from library.dll;
 ``` 
 
 Probably sometimes, the .NET namespace that too long for write in your ``R#`` script, so that you can using ``imports...as`` for the root namespace alias:
@@ -76,11 +75,9 @@ Probably sometimes, the .NET namespace that too long for write in your ``R#`` sc
 let a.dll as string <- "./a.dll";
 let b.dll as string <- "./b.dll";
 
-`%||%` <- function(ver1, ver2) if (opt["version"] == "a") ver1 else ver2;
+imports * as nlp from a.ll else b.dll when opt["version"] == "b";
 
-imports * as nlp from a.ll %||% b.dll;
-
-var tokens as string <- nlp::tokenlizer(input.txt);
+let tokens as string <- nlp::tokenlizer(input.txt);
 ``` 
 
 and then you can using the .NET API by using ``library`` API imports directly:
@@ -111,9 +108,9 @@ NOTE:
 Construct a .NET object instance almost keeps the same as the VB.NET it does:
 
 ```R
-var x <- new type(args) with {
-    $property1 = ...;
-	$property2 = ...;
+let x as new type(args) with {
+   $property1 = ...;
+   $property2 = ...;
 }
 ``` 
 
@@ -137,12 +134,12 @@ But they are have slightly different:
 # For creates a R# list, using list() function
 # In fact, all of the list type in R# language is the Dictionary(Of String, Object) collection type.
 # The R# list property is the Key in the dictionary.
-var x <- list(a =1, b=2, c=3) {
+let x = list(a =1, b=2, c=3) {
     $property <- "dddddd";
 }
 
 # For creates a .NET object, using new keyword
-var x <- new NamedValue(of string) with {
+let x as new NamedValue[string]() with {
     $name <- "888888";
     $value <- "abcd";
 }
@@ -153,7 +150,7 @@ var x <- new NamedValue(of string) with {
 Only R# list can bind operator dynamics, this operator binding is not allowed on the .NET object, we just imports the .NET object its operators
 
 ```R
-var x <- list(name = "123") with {
+let x <- list(name = "123") with {
     %&% <- function($, last.name as string) {
         $name <- $name & last.name
     }
@@ -164,10 +161,13 @@ var x <- list(name = "123") with {
 
 ###  3.1. <a name='Usinginstantmethod'></a>Using instant method
 
-Using the .NET object its instant method in ``R#`` language is invoke by ``:`` operator:
+Using the .NET object its instant method in ``R#`` language is invoke by ``$`` operator:
 
 ```R
-var display as string <- 98.76:ToString("F4");
+# All of the .NET object should be convert to vbObject 
+# via as.object method at first
+# then you can invoke the method in .NET runtime
+let display as string <- (98.76 :> as.object)$ToString("F4");
 ```
 
 ###  3.2. <a name='Usingsharedmethod'></a>Using shared method
@@ -183,8 +183,7 @@ IO::SaveTo(list, "D:/test.csv");
 All of the imported .NET shared method and R# method, and if it has at least one parameter, then it can be using in pipeline mode:
 
 ```R
-|"abc", "123"|
-|SaveTo("D:/test.txt");
+["abc", "123"] :> SaveTo("D:/test.txt");
 
 # something like in VB.NET
 # Call {"abc", "123"}.SaveTo("D:/test.txt")

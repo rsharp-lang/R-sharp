@@ -14,7 +14,7 @@
 In R# language, each source script is run in a function closure mode, which means each R# script just like a program statement in a virtual function which its named ``Main``, and this function have a parameter list which user can read the arguments from commandline.
 
 ```R
-main <- function(...) {
+let main as function(...) {
     # R script statement running at here
     # inside a virtual function main closure
 }
@@ -25,8 +25,8 @@ main <- function(...) {
 For example, assume that we have a R# script like:
 
 ```R
-var message as string = ...;
-var pages as integer  = ...;
+let message as string = ...;
+let pages as integer  = ...;
 
 printf("[%s] got %s pages.", message, pages);
 
@@ -47,7 +47,7 @@ source <- function(path, ...) {
 # due to the reason of user not specific the arguments, so that 
 # the variables message and pages in this script will be value NA
 # so that the returns tuple result will be [NA, NA]
-var result <- source("script.R");
+let result <- source("script.R");
 
 result;
 # tuple(result)
@@ -64,7 +64,7 @@ result;
 # pages = 999
 
 # and of course, if you didn't want using the script return result, just call the source function:
-source("script.R", message="Hello world!", pages=999);
+source("script.R", message = "Hello world!", pages = 999);
 ```
 
 ###  1.2. <a name='Fromcommandline'></a>From commandline
@@ -80,7 +80,7 @@ R ./script.R
 # and of course, the white space is not allowed in a variable name
 # each commandline argument should seperated by at least one white space
 # and the value was specific in syntax like: variable=value 
-R ./script.R(message="Hello world!" pages=999);
+R ./script.R(message="Hello world!", pages=999);
 ```
 
 As you have notice that, the example R script have a value ``return`` statement. So did this value ``return`` statement working in a commandline mode? No, it does not, but actually the ``return`` statement in commandline mode just partly functional in your script: break the function but did not returns the values. 

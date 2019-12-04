@@ -78,7 +78,7 @@ Example:
 ```R
 # R variable with primitive type constraint
 # type = {integer, uinteger, double, string, char, boolean}
-var {variable} as {type} <- {initial_expression};
+let {variable} as {type} <- {initial_expression};
 ```
 
 ####  1.2. <a name='ifbranchstatement'></a>``if`` branch statement
@@ -115,12 +115,12 @@ if ({bool_expression}) {
 
 The function parameters, can be:
 
-|name                    |description                                                      |syntax                                           |
-|------------------------|-----------------------------------------------------------------|-------------------------------------------------|
-|``generic type``      |only an object identifier name                                   |``{identifier}``                                 |
-|``primitive type``    |identifier with type constraint                                  |``{identifier} as {type}``                       |
-|``parameter list``|generic list parameters                                          |``...``                                          |
-|``optional parameter``|parameter have its default value|``{identifier} [as {type}] = {value_expression}``|
+| name                   | description                      | syntax                                            |
+|------------------------|----------------------------------|---------------------------------------------------|
+| ``generic type``       | only an object identifier name   | ``{identifier}``                                  |
+| ``primitive type``     | identifier with type constraint  | ``{identifier} as {type}``                        |
+| ``parameter list``     | generic list parameters          | ``...``                                           |
+| ``optional parameter`` | parameter have its default value | ``{identifier} [as {type}] = {value_expression}`` |
 
 Supports of the optional parameter scripting:
 
