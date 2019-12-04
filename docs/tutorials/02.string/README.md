@@ -1,4 +1,4 @@
-[&lt;Back to index](../)
+[&lt; Back to index](../)
 
 # String in R#
 
