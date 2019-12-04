@@ -50,11 +50,14 @@ imports "*" from "seqtoolkit.dll";
 imports "seqtoolkit.dll";
 ```
 
-Once the package module is loaded, then the api function that comes from the GCModeller library will added into the R# runtime environment dynamically. For passing the input data file for the data api, we could write the file path in our R# script directly. But such method is not flexible, so we could get the file path from the commandline input. In R# script, we could get commandline argument value via ``?"<argumentName>"``. For an instance example, we have such commandline calls:
+Once the package module is loaded, then the api function that comes from the GCModeller library will added into the R# runtime environment dynamically. For passing the input data file for the data api, we could write the file path in our R# script directly. But such way is not flexible, it is recommended that we should get the file path from the commandline input. In R# script, we could get commandline argument value via ``?"<argumentName>"``. For an instance example, we have such commandline calls:
 
 ```batch
 @echo off
 
+REM R# ./sequenceLogo.R --seq <input.fasta> [--save <save.png> --title "drawing title"]
+REM Argument wrapped by [] means it is an optional argument
+REm it may be missing from the input. 
 R# ./sequenceLogo.R --seq LexA.fasta --save LexA.png --title "LexA"
 ```
 
@@ -100,6 +103,8 @@ let title as string     = ?"--title" || basename(seq.fasta);
 Then we have all of the data input for doing a sequence logo drawing job. In the R code, we call a function should be in way like:
 
 ```R
+# Code in R or R#
+
 fasta <- read.fasta(seq.fasta);
 msa   <- MSA.of(fasta);
 plot  <- plot.seqLogo(msa, title);
@@ -109,6 +114,8 @@ save.graphics(plot, file = logo.png );
 Probably you have found that the function invoke in R language maybe too verbose. Inspired by the ``extension method`` in VisualBasic.NET language, we've implements a pipeline calls operator in R# for doing such extension pipeline code. So you could do such pipeline by:
 
 ```R
+# Code in R#
+
 # All of the function that have at least one parameter 
 # can be piped natively in R# language
 seq.fasta
