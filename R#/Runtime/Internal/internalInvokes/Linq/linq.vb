@@ -73,24 +73,15 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         <ExportAPI("projectAs")>
         Private Function projectAs(envir As Environment, params As Object()) As Object
             Dim sequence As Array = Runtime.asVector(Of Object)(params(Scan0))
-            Dim project As Object = params(1)
-            Dim doProject As Func(Of Object, Object)
+            Dim project As RFunction = params(1)
+            Dim doProject As Func(Of Object, Object) =
+                Function(o)
+                    Dim arg As New InvokeParameter() With {
+                        .value = New RuntimeValueLiteral(o)
+                    }
 
-            If project.GetType.IsInheritsFrom(GetType(RInternalFuncInvoke)) Then
-                Dim invoke As RInternalFuncInvoke = project
-
-                doProject = Function(o) invoke.invoke(envir, {o})
-            Else
-                Dim invoke As RFunction = project
-
-                doProject = Function(o)
-                                Dim arg As New InvokeParameter() With {
-                                    .value = New RuntimeValueLiteral(o)
-                                }
-
-                                Return invoke.Invoke(envir, {arg})
-                            End Function
-            End If
+                    Return project.Invoke(envir, {arg})
+                End Function
 
             Dim result As Object() = sequence _
                 .AsObjectEnumerator _
