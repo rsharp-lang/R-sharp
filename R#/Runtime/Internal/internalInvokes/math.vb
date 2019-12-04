@@ -1,4 +1,6 @@
 ﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Linq
+Imports stdNum = System.Math
 
 Namespace Runtime.Internal.Invokes
 
@@ -11,6 +13,14 @@ Namespace Runtime.Internal.Invokes
             Else
                 Return math.round(CDbl(x), decimals)
             End If
+        End Function
+
+        <ExportAPI("log")>
+        Public Function log(x As Object, Optional newBase As Double = stdNum.E) As Object
+            Return Runtime.asVector(Of Double)(x) _
+                .AsObjectEnumerator(Of Double) _
+                .Select(Function(d) stdNum.Log(d, newBase)) _
+                .ToArray
         End Function
     End Module
 End Namespace

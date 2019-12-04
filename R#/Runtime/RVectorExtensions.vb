@@ -160,12 +160,12 @@ Namespace Runtime
             ElseIf valueType Is GetType(Group) Then
                 Return typeofT.fromArray(Of T)(DirectCast(value, Group).group)
             ElseIf valueType Is GetType(T()) Then
-                Return value
+                Return DirectCast(value, T())
             ElseIf valueType.IsInheritsFrom(GetType(IEnumerable(Of T))) Then
                 Return DirectCast(value, IEnumerable(Of T)).ToArray
             Else
                 If typeofT Is GetType(Object) Then
-                    Return {value}
+                    Return {DirectCast(value, T)}
                 Else
                     Return {Conversion.CTypeDynamic(Of T)(value)}
                 End If
