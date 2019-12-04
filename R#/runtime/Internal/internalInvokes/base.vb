@@ -204,6 +204,17 @@ Namespace Runtime.Internal.Invokes
             Return R.Source(path, args)
         End Function
 
+        <ExportAPI("getOption")>
+        Public Function getOption(name$, Optional defaultVal$ = Nothing, Optional envir As Environment = Nothing) As Object
+            If name.StringEmpty Then
+                Return invoke.missingParameter(NameOf(getOption), "name", envir)
+            Else
+                Return envir.globalEnvironment _
+                    .options _
+                    .getOption(name, defaultVal)
+            End If
+        End Function
+
         ''' <summary>
         ''' ###### Options Settings
         ''' 
@@ -384,7 +395,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("cat")>
-        Public Function cat(values As Object, file As String, sep As String) As Object
+        Public Function cat(values As Object, Optional file$ = Nothing, Optional sep$ = " ") As Object
             Dim strs = Runtime.asVector(Of Object)(values) _
                 .AsObjectEnumerator _
                 .Select(Function(o) Scripting.ToString(o, "")) _
@@ -429,7 +440,21 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("lapply")>
-        Public Function lapply(sequence As Object, apply As RFunction, envir As Environment) As Object
+        Public Function lapply(sequence As Object, doApply As Object, envir As Environment) As Object
+            If doApply Is Nothing Then
+                Return Internal.stop({"Missing apply function!"}, envir)
+            ElseIf Not doapply.GetType.ImplementInterface(GetType(RFunction)) Then
+                Return Internal.stop({"Target is not a function!"}, envir)
+            End If
+
+            If Program.isException(sequence) Then
+                Return sequence
+            ElseIf Program.isException(doapply) Then
+                Return doApply
+            End If
+
+            Dim apply As RFunction = apply
+
             If sequence.GetType Is GetType(Dictionary(Of String, Object)) Then
                 Return DirectCast(sequence, Dictionary(Of String, Object)) _
                     .ToDictionary(Function(d) d.Key,

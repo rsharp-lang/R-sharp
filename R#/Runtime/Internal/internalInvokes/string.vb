@@ -45,11 +45,25 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
 
 Namespace Runtime.Internal.Invokes
 
     Module stringr
+
+        <ExportAPI("sprintf")>
+        Public Function Csprintf(format As Array, arguments As Object, envir As Environment) As Object
+            Dim sprintf As Func(Of String, Object(), String) = AddressOf CLangStringFormatProvider.sprintf
+            Dim result As String() = format _
+                .AsObjectEnumerator _
+                .Select(Function(str)
+                            Return sprintf(Scripting.ToString(str, "NULL"), arguments)
+                        End Function) _
+                .ToArray
+
+            Return result
+        End Function
 
         <ExportAPI("strsplit")>
         Friend Function strsplit(envir As Environment, params As Object()) As Object

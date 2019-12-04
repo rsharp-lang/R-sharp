@@ -76,6 +76,7 @@ Namespace Runtime.Internal
             Call GetType(linq).pushEnvir
             Call GetType(Invokes.file).pushEnvir
             Call GetType(stringr).pushEnvir
+            Call GetType(utils).pushEnvir
         End Sub
 
         <Extension>
@@ -170,91 +171,6 @@ Namespace Runtime.Internal
             Else
                 Return Message.SymbolNotFound(envir, funcName, TypeCodes.closure)
             End If
-
-            Select Case funcName
-                Case "round"
-                    Dim x As Object = paramVals(Scan0)
-                    Dim decimals As Integer = Runtime.getFirst(paramVals(1))
-
-                    If x.GetType.IsInheritsFrom(GetType(Array)) Then
-                        Return (From element As Object In DirectCast(x, Array).AsQueryable Select Math.Round(CDbl(element), decimals)).ToArray
-                    Else
-                        Return Math.Round(CDbl(x), decimals)
-                    End If
-                Case "getOption"
-                    Dim name$ = Scripting.ToString(Runtime.getFirst(paramVals.ElementAtOrDefault(Scan0)), Nothing)
-                    Dim defaultVal$ = Scripting.ToString(paramVals.ElementAtOrDefault(1))
-
-                    If name.StringEmpty Then
-                        Return invoke.missingParameter(funcName, "name", envir)
-                    Else
-                        Return envir.globalEnvironment _
-                            .options _
-                            .getOption(name, defaultVal)
-                    End If
-                Case "source"
-                    If paramVals.IsNullOrEmpty Then
-                        Return invoke.missingParameter("source", "file", envir)
-                    Else
-                        Dim file As String = Scripting.ToString(Runtime.getFirst(paramVals(Scan0)))
-                        ' run external script
-                        Return base.source(file,, envir)
-                    End If
-                Case "get"
-                    Return base.get(paramVals(Scan0), envir)
-                Case "print"
-                    Return base.print(paramVals(Scan0), envir)
-                Case "str"
-                    Return base.str(paramVals(Scan0), envir)
-                Case "stop"
-                    Return Internal.stop(paramVals(Scan0), envir)
-                Case "warning"
-                    Return base.warning(paramVals(Scan0), envir)
-                Case "cat"
-                    Return base.cat(paramVals(Scan0), paramVals.ElementAtOrDefault(1), paramVals.ElementAtOrDefault(2, " "))
-                Case "lapply"
-                    If paramVals.ElementAtOrDefault(1) Is Nothing Then
-                        Return Internal.stop({"Missing apply function!"}, envir)
-                    ElseIf Not paramVals(1).GetType.ImplementInterface(GetType(RFunction)) Then
-                        Return Internal.stop({"Target is not a function!"}, envir)
-                    End If
-
-                    If Program.isException(paramVals(Scan0)) Then
-                        Return paramVals(Scan0)
-                    ElseIf Program.isException(paramVals(1)) Then
-                        Return paramVals(1)
-                    End If
-
-                    Return base.lapply(paramVals(Scan0), paramVals(1), envir)
-                Case "require"
-                    Dim libraryNames As String() = paramVals _
-                        .Select(AddressOf Scripting.ToString) _
-                        .ToArray
-
-                    Throw New NotImplementedException
-                Case "install.packages"
-                    Dim libraryNames As String() = paramVals _
-                        .Select(AddressOf Scripting.ToString) _
-                        .ToArray
-
-                    Return utils.installPackages(libraryNames, envir)
-                Case "sprintf"
-                    Dim format As Array = Runtime.asVector(Of String)(paramVals(Scan0))
-                    Dim arguments = paramVals.Skip(1).ToArray
-                    Dim sprintf As Func(Of String, Object(), String) = AddressOf CLangStringFormatProvider.sprintf
-                    Dim result As String() = format _
-                        .AsObjectEnumerator _
-                        .Select(Function(str)
-                                    Return sprintf(Scripting.ToString(str, "NULL"), arguments)
-                                End Function) _
-                        .ToArray
-
-                    Return result
-                Case "getwd"
-                    Return App.CurrentDirectory
-                Case Else
-                    Return Message.SymbolNotFound(envir, funcName, TypeCodes.closure)
-            End Select
         End Function
     End Module
 End Namespace

@@ -55,6 +55,8 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="packages">The dll file name</param>
         ''' <param name="envir"></param>
         ''' <returns></returns>
+        ''' 
+        <ExportAPI("install.packages")>
         Public Function installPackages(packages As String(), envir As Environment) As Object
             Dim pkgMgr As PackageManager = envir.globalEnvironment.packages
             Dim namespaces As New List(Of String)
@@ -85,8 +87,7 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("installed.packages")>
         Public Function GetInstalledPackages(envir As Environment) As Object
-
-
+            Throw New NotImplementedException
         End Function
     End Module
 End Namespace

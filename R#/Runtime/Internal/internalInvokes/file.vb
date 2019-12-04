@@ -204,6 +204,11 @@ Namespace Runtime.Internal.Invokes
             Return text
         End Function
 
+        <ExportAPI("getwd")>
+        Public Function getwd() As String
+            Return App.CurrentDirectory
+        End Function
+
         <ExportAPI("setwd")>
         Friend Function setwd(envir As Environment, paramVals As Object()) As Object
             Dim dir As String() = Runtime.asVector(Of String)(paramVals(Scan0))
