@@ -164,15 +164,14 @@ Namespace Runtime.Internal
         ''' <param name="funcName$"></param>
         ''' <param name="paramVals"></param>
         ''' <returns></returns>
-        Public Function invokeInternals(envir As Environment, funcName$, paramVals As Object()) As Object
+        Public Function invokeInternals(envir As Environment, funcName$, paramVals As InvokeParameter()) As Object
             If index.ContainsKey(funcName) Then
-                Return index(funcName).invoke(envir, paramVals)
+                Return index(funcName).Invoke(envir, paramVals)
+            Else
+                Return Message.SymbolNotFound(envir, funcName, TypeCodes.closure)
             End If
 
             Select Case funcName
-                Case "any" : Return base.any(paramVals(Scan0))
-                Case "all" : Return base.all(paramVals(Scan0))
-                Case "length" : Return base.length(paramVals(Scan0))
                 Case "round"
                     Dim x As Object = paramVals(Scan0)
                     Dim decimals As Integer = Runtime.getFirst(paramVals(1))

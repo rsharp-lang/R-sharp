@@ -207,14 +207,8 @@ Namespace Interpreter.ExecuteEngine
             ElseIf funcName = "data.frame" Then
                 Return Runtime.Internal.Rdataframe(envir, parameters)
             Else
-                Dim argVals = envir.Evaluate(parameters)
-                Dim result As Object
-
-                If argVals.Any(AddressOf Program.isException) Then
-                    Return argVals.First(AddressOf Program.isException)
-                Else
-                    result = Runtime.Internal.invokeInternals(envir, funcName, argVals)
-                End If
+                Dim argVals As InvokeParameter() = InvokeParameter.Create(parameters)
+                Dim result As Object = Internal.invokeInternals(envir, funcName, argVals)
 
                 Return result
             End If
