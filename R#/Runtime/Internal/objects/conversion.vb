@@ -44,6 +44,7 @@
 
 #End Region
 
+Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
@@ -52,16 +53,7 @@ Namespace Runtime.Internal
 
     Module RConversion
 
-        Sub New()
-            Call Internal.invoke.add(New GenericInternalInvoke("as.object", AddressOf asObject))
-            Call Internal.invoke.add(New GenericInternalInvoke("as.list", AddressOf asList))
-            Call Internal.invoke.add(New GenericInternalInvoke("as.numeric", AddressOf asNumeric))
-        End Sub
-
-        Friend Sub pushEnvir()
-            ' do nothing
-        End Sub
-
+        <ExportAPI("as.object")>
         Public Function asObject(obj As Object) As Object
             If obj Is Nothing Then
                 Return Nothing
@@ -84,6 +76,7 @@ Namespace Runtime.Internal
             End If
         End Function
 
+        <ExportAPI("as.list")>
         Public Function asList(obj As Object) As list
             If obj Is Nothing Then
                 Return Nothing
@@ -113,6 +106,7 @@ Namespace Runtime.Internal
             End If
         End Function
 
+        <ExportAPI("as.numeric")>
         Public Function asNumeric(obj As Object) As Object
             If obj Is Nothing Then
                 Return 0
