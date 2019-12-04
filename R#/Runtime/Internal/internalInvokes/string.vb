@@ -66,12 +66,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("strsplit")>
-        Friend Function strsplit(envir As Environment, params As Object()) As Object
-            Dim text As String() = Runtime.asVector(Of String)(params(Scan0))
-            Dim delimiter As String = Runtime.asVector(Of String)(params.ElementAtOrDefault(1, " ")) _
-                .AsObjectEnumerator _
-                .First
-
+        Friend Function strsplit(text$(), Optional delimiter$ = " ", Optional envir As Environment = Nothing) As Object
             If text.IsNullOrEmpty Then
                 Return Nothing
             ElseIf text.Length = 1 Then
@@ -82,23 +77,15 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("paste")>
-        Friend Function paste(envir As Environment, params As Object()) As Object
-            Dim strings As String() = Runtime.asVector(Of String)(params(Scan0))
-            Dim deli As String = Runtime _
-                .asVector(Of String)(params(1)) _
-                .AsObjectEnumerator _
-                .DefaultFirst(" ")
-
+        Friend Function paste(strings$(), Optional deli$ = " ", Optional envir As Environment = Nothing) As Object
             Return strings.JoinBy(deli)
         End Function
 
         <ExportAPI("string.replace")>
-        Friend Function replace(envir As Environment, params As Object()) As String()
-            Dim subj As String() = Runtime.asVector(Of String)(params(Scan0))
-            Dim search As String = Scripting.ToString(Runtime.getFirst(params(1)))
-            Dim replaceAs As String = Scripting.ToString(Runtime.getFirst(params(2)), "")
-            Dim regexp As Boolean = Runtime.asLogical(params.ElementAtOrDefault(3))(Scan0)
-
+        Friend Function replace(subj$(), search$,
+                                Optional replaceAs$ = "",
+                                Optional regexp As Boolean = False,
+                                Optional envir As Environment = Nothing) As Object
             If regexp Then
                 Return subj.Select(Function(s) s.StringReplace(search, replaceAs)).ToArray
             Else

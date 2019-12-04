@@ -62,12 +62,11 @@ Namespace Runtime.Internal.Invokes
     Module file
 
         <ExportAPI("normalizePath")>
-        Private Function normalizePath(envir As Environment, params As Object()) As Object
-            If params.IsNullOrEmpty Then
+        Private Function normalizePath(fileNames$(), envir As Environment) As Object
+            If fileNames.IsNullOrEmpty Then
                 Return Internal.stop("no file names provided!", envir)
             Else
-                Return Runtime.asVector(Of String)(params(Scan0)) _
-                    .AsObjectEnumerator(Of String) _
+                Return fileNames _
                     .Select(Function(path)
                                 If path.DirectoryExists Then
                                     Return path.GetDirectoryFullPath
@@ -80,32 +79,18 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("R.home")>
-        Private Function Rhome(envir As Environment, params As Object()) As Object
+        Private Function Rhome() As Object
             Return GetType(file).Assembly.Location.ParentPath
         End Function
 
         <ExportAPI("dirname")>
-        Private Function dirname(envir As Environment, params As Object()) As Object
-            If params.IsNullOrEmpty Then
-                Return Internal.stop("no file names provided!", envir)
-            End If
-
-            Dim fileNames As String() = params _
-                .Select(Function(str)
-                            Return Runtime.asVector(Of String)(str).AsObjectEnumerator(Of String)
-                        End Function) _
-                .IteratesALL _
-                .ToArray
-
+        Private Function dirname(fileNames As String(), envir As Environment) As Object
             Return fileNames.Select(AddressOf ParentPath).ToArray
         End Function
 
         <ExportAPI("list.files")>
-        Private Function listFiles(envir As Environment, params As Object()) As Object
-            Dim dir = Scripting.ToString(Runtime.getFirst(params(Scan0)), Nothing)
-            Dim pattern = Runtime.asVector(Of String)(params(1)).ToArray(Of String)
-
-            If pattern.Length = 0 Then
+        Private Function listFiles(dir$, Optional pattern$() = Nothing, Optional envir As Environment = Nothing) As Object
+            If pattern.IsNullOrEmpty Then
                 pattern = {"*.*"}
             End If
 
@@ -113,10 +98,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("list.dirs")>
-        Private Function listDirs(envir As Environment, params As Object()) As Object
-            Dim dir$ = Runtime.asVector(Of String)(params(Scan0)) _
-                .AsObjectEnumerator _
-                .DefaultFirst("./")
+        Private Function listDirs(Optional dir$ = "./", Optional envir As Environment = Nothing) As Object
             Dim dirs$() = dir _
                 .ListDirectory(SearchOption.SearchAllSubDirectories) _
                 .ToArray
@@ -125,16 +107,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("basename")>
-        Private Function basename(envir As Environment, params As Object()) As Object
-            If params.IsNullOrEmpty Then
-                Return Internal.stop("no file names provided!", envir)
-            End If
-
-            Dim fileNames As String() = Runtime.asVector(Of String)(params(Scan0)) _
-                .AsObjectEnumerator _
-                .ToArray(Of String)
-            Dim withExtensionName As Boolean = Runtime.asLogical(params.ElementAtOrDefault(1))(Scan0)
-
+        Private Function basename(fileNames$(), Optional withExtensionName As Boolean = False, Optional envir As Environment = Nothing) As Object
             If withExtensionName Then
                 ' get fileName
                 Return fileNames.Select(AddressOf FileName).ToArray
@@ -152,52 +125,34 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("normalize.filename")>
-        Friend Function normalizeFileName(envir As Environment, params As Object()) As String()
-            Return params.SafeQuery _
-                .Select(Function(val)
-                            Return Runtime.asVector(Of Double)(val) _
-                                .AsObjectEnumerator _
-                                .Select(Function(file)
-                                            Return Scripting.ToString(file).NormalizePathString(False)
-                                        End Function)
+        Friend Function normalizeFileName(strings$()) As String()
+            Return strings _
+                .Select(Function(file)
+                            Return file.NormalizePathString(False)
                         End Function) _
-                .IteratesALL _
                 .ToArray
         End Function
 
         <ExportAPI("file.exists")>
-        Friend Function exists(envir As Environment, params As Object()) As Boolean()
-            Return params.SafeQuery _
-                .Select(Function(val)
-                            If val Is Nothing Then
-                                Return False
-                            Else
-                                Return Scripting _
-                                    .ToString(Runtime.getFirst(val)) _
-                                    .DoCall(AddressOf FileExists)
-                            End If
-                        End Function) _
-                .ToArray
+        Friend Function exists(files$()) As Boolean()
+            Return files.Select(AddressOf FileExists).ToArray
         End Function
 
         <ExportAPI("readLines")>
-        Friend Function readLines(envir As Environment, params As Object()) As String()
-            Return Scripting.ToString(Runtime.getFirst(params(Scan0))).ReadAllLines
+        Friend Function readLines(file As String) As String()
+            Return file.ReadAllLines
         End Function
 
         ' writeLines(text, con = stdout(), sep = "\n", useBytes = FALSE)
         <ExportAPI("writeLines")>
-        Friend Function writeLines(envir As Environment, params As Object()) As Object
-            Dim text = Runtime.asVector(Of String)(params(Scan0))
-            Dim con$ = Scripting.ToString(Runtime.getFirst(params(1)))
-
+        Friend Function writeLines(text As String(), con As String, Optional sep$ = vbCrLf) As Object
             If con.StringEmpty Then
                 Call text.AsObjectEnumerator _
-                    .JoinBy(vbCrLf) _
+                    .JoinBy(sep) _
                     .DoCall(AddressOf Console.WriteLine)
             Else
                 Call text.AsObjectEnumerator _
-                    .JoinBy(vbCrLf) _
+                    .JoinBy(sep) _
                     .SaveTo(con)
             End If
 
@@ -210,9 +165,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("setwd")>
-        Friend Function setwd(envir As Environment, paramVals As Object()) As Object
-            Dim dir As String() = Runtime.asVector(Of String)(paramVals(Scan0))
-
+        Friend Function setwd(dir As String(), envir As Environment) As Object
             If dir.Length = 0 Then
                 Return invoke.missingParameter(NameOf(setwd), "dir", envir)
             ElseIf dir(Scan0).StringEmpty Then

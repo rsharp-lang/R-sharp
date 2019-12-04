@@ -16,7 +16,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("log")>
-        Public Function log(x As Object, Optional newBase As Double = stdNum.E) As Object
+        Public Function log(x As Double(), Optional newBase As Double = stdNum.E) As Object
             Return Runtime.asVector(Of Double)(x) _
                 .AsObjectEnumerator(Of Double) _
                 .Select(Function(d) stdNum.Log(d, newBase)) _

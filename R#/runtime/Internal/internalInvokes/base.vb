@@ -195,7 +195,7 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         ''' 
         <ExportAPI("source")>
-        Public Function source(path As String, Optional arguments As Object = Nothing, Optional envir As Environment = Nothing) As Object
+        Public Function source(path$, Optional arguments As Object = Nothing, Optional envir As Environment = Nothing) As Object
             Dim args As NamedValue(Of Object)() = RListObjectArgumentAttribute _
                 .getObjectList(arguments, envir) _
                 .ToArray
@@ -264,10 +264,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("names")>
-        Public Function names(envir As Environment, params As Object()) As Object
-            Dim [object] As Object = params(Scan0)
-            Dim namelist As Array = Runtime.asVector(Of String)(params.ElementAtOrDefault(1))
-
+        Public Function names([object] As Object, namelist As Array, envir As Environment) As Object
             If namelist Is Nothing OrElse namelist.Length = 0 Then
                 Dim type As Type = [object].GetType
 
