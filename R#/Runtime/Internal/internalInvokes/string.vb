@@ -44,22 +44,14 @@
 
 #End Region
 
+Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Linq
 
 Namespace Runtime.Internal.Invokes
 
     Module stringr
 
-        Sub New()
-            Call Internal.invoke.add("string.replace", AddressOf stringr.replace)
-            Call Internal.invoke.add("paste", AddressOf stringr.paste)
-            Call Internal.invoke.add("strsplit", AddressOf strsplit)
-        End Sub
-
-        Friend Sub pushEnvir()
-            ' do nothing
-        End Sub
-
+        <ExportAPI("strsplit")>
         Friend Function strsplit(envir As Environment, params As Object()) As Object
             Dim text As String() = Runtime.asVector(Of String)(params(Scan0))
             Dim delimiter As String = Runtime.asVector(Of String)(params.ElementAtOrDefault(1, " ")) _
@@ -75,6 +67,7 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        <ExportAPI("paste")>
         Friend Function paste(envir As Environment, params As Object()) As Object
             Dim strings As String() = Runtime.asVector(Of String)(params(Scan0))
             Dim deli As String = Runtime _
@@ -85,6 +78,7 @@ Namespace Runtime.Internal.Invokes
             Return strings.JoinBy(deli)
         End Function
 
+        <ExportAPI("string.replace")>
         Friend Function replace(envir As Environment, params As Object()) As String()
             Dim subj As String() = Runtime.asVector(Of String)(params(Scan0))
             Dim search As String = Scripting.ToString(Runtime.getFirst(params(1)))

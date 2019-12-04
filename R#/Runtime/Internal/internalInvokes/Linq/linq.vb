@@ -44,6 +44,7 @@
 
 #End Region
 
+Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -57,18 +58,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
     Module linq
 
-        Sub New()
-            Call Internal.invoke.add("groupBy", AddressOf linq.groupBy)
-            Call Internal.invoke.add("first", AddressOf linq.first)
-            Call Internal.invoke.add("which", AddressOf linq.where)
-            Call Internal.invoke.add("projectAs", AddressOf linq.projectAs)
-            Call Internal.invoke.add("unique", AddressOf linq.unique)
-        End Sub
-
-        Friend Sub pushEnvir()
-            ' do nothing
-        End Sub
-
+        <ExportAPI("unique")>
         Private Function unique(envir As Environment, params As Object())
             Dim items As Array = Runtime.asVector(Of Object)(params(Scan0))
             Dim distinct As Object() = items _
@@ -80,6 +70,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Return distinct
         End Function
 
+        <ExportAPI("projectAs")>
         Private Function projectAs(envir As Environment, params As Object()) As Object
             Dim sequence As Array = Runtime.asVector(Of Object)(params(Scan0))
             Dim project As Object = params(1)
@@ -115,6 +106,8 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' <param name="envir"></param>
         ''' <param name="params"></param>
         ''' <returns></returns>
+        ''' 
+        <ExportAPI("which")>
         Private Function where(envir As Environment, params As Object()) As Object
             Dim sequence As Array = Runtime.asVector(Of Object)(params(Scan0))
             Dim test As RFunction = params(1)
@@ -136,6 +129,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Return filter.ToArray
         End Function
 
+        <ExportAPI("first")>
         Private Function first(envir As Environment, params As Object()) As Object
             Dim sequence As Array = Runtime.asVector(Of Object)(params(Scan0))
             Dim test As RFunction = params(1)
@@ -156,6 +150,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Return Nothing
         End Function
 
+        <ExportAPI("groupBy")>
         Private Function groupBy(envir As Environment, params As Object()) As Object
             Dim sequence As Array = Runtime.asVector(Of Object)(params(Scan0))
             Dim getKey As RFunction = params(1)

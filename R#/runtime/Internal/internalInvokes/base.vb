@@ -50,6 +50,7 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
@@ -72,28 +73,15 @@ Namespace Runtime.Internal.Invokes
     ''' </summary>
     Public Module base
 
-        Sub New()
-            Call Internal.invoke.add(globalenv)
-            Call Internal.invoke.add(isEmpty)
-            Call Internal.invoke.add("neg", AddressOf base.neg)
-            Call Internal.invoke.add("do.call", AddressOf base.doCall)
-            Call Internal.invoke.add("names", AddressOf base.names)
-        End Sub
-
-        Friend Sub pushEnvir()
-            ' do nothing
-        End Sub
-
-        Private Function doCall(envir As Environment, params As Object()) As Object
-            If params.IsNullOrEmpty Then
+        <ExportAPI("do.call")>
+        Private Function doCall(what As Object, calls$, envir As Environment) As Object
+            If what Is Nothing OrElse calls.StringEmpty Then
                 Return Internal.stop("Nothing to call!", envir)
             End If
 
-            Dim what = params(Scan0)
             Dim targetType As Type = what.GetType
 
             If targetType Is GetType(vbObject) Then
-                Dim calls$ = Scripting.ToString(Runtime.getFirst(params(1)))
                 Dim member = DirectCast(what, vbObject).getByName(name:=calls)
 
                 If member.GetType Is GetType(RMethodInfo) Then
@@ -106,6 +94,7 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        <ExportAPI("neg")>
         Private Function neg(o As Object) As Object
             If o Is Nothing Then
                 Return Nothing
@@ -117,14 +106,7 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
-        Private Function isEmpty() As GenericInternalInvoke
-            Return New GenericInternalInvoke(
-                name:="is.empty",
-                invoke:=Function(o) As Object
-                            Return isEmpty(o)
-                        End Function)
-        End Function
-
+        <ExportAPI("is.empty")>
         Friend Function isEmpty(o As Object) As Object
             If o Is Nothing Then
                 Return True
@@ -169,8 +151,9 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
-        Private Function globalenv() As GenericInternalInvoke
-            Return New GenericInternalInvoke(NameOf(globalenv), Function(env, params) env.globalEnvironment)
+        <ExportAPI("globalenv")>
+        Private Function globalenv(env As Environment) As Object
+            Return env.globalEnvironment
         End Function
 
         ''' <summary>
@@ -178,6 +161,8 @@ Namespace Runtime.Internal.Invokes
         ''' </summary>
         ''' <param name="x"></param>
         ''' <returns></returns>
+        ''' 
+        <ExportAPI("length")>
         Public Function length(x As Object) As Integer
             If x Is Nothing Then
                 Return 0
@@ -191,11 +176,13 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <ExportAPI("any")>
         Public Function any(test As Object) As Object
             Return Runtime.asLogical(test).Any(Function(b) b = True)
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <ExportAPI("all")>
         Public Function all(test As Object) As Object
             Return Runtime.asLogical(test).All(Function(b) b = True)
         End Function
@@ -206,6 +193,8 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="path"></param>
         ''' <param name="envir"></param>
         ''' <returns></returns>
+        ''' 
+        <ExportAPI("source")>
         Public Function source(path As String, Optional arguments As Object = Nothing, Optional envir As Environment = Nothing) As Object
             Dim args As NamedValue(Of Object)() = RListObjectArgumentAttribute _
                 .getObjectList(arguments, envir) _
@@ -227,6 +216,8 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <param name="envir"></param>
         ''' <returns></returns>
+        ''' 
+        <ExportAPI("options")>
         Public Function options(opts As Object, envir As Environment) As Object
             Dim configs As Options = envir.globalEnvironment.options
 
@@ -241,6 +232,7 @@ Namespace Runtime.Internal.Invokes
             Return opts
         End Function
 
+        <ExportAPI("get")>
         Public Function [get](x As Object, envir As Environment) As Object
             Dim name As String = Runtime.asVector(Of Object)(x) _
                 .DoCall(Function(o)
@@ -260,6 +252,7 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        <ExportAPI("names")>
         Public Function names(envir As Environment, params As Object()) As Object
             Dim [object] As Object = params(Scan0)
             Dim namelist As Array = Runtime.asVector(Of String)(params.ElementAtOrDefault(1))
@@ -306,6 +299,8 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <param name="envir"></param>
         ''' <returns></returns>
+        ''' 
+        <ExportAPI("stop")>
         Public Function [stop](message As Object, envir As Environment) As Message
             Dim debugMode As Boolean = envir.globalEnvironment.debugMode
 
@@ -383,10 +378,12 @@ Namespace Runtime.Internal.Invokes
             }
         End Function
 
+        <ExportAPI("warning")>
         Public Function warning(message As Object, envir As Environment) As Message
             Return createMessageInternal(message, envir, level:=MSG_TYPES.WRN)
         End Function
 
+        <ExportAPI("cat")>
         Public Function cat(values As Object, file As String, sep As String) As Object
             Dim strs = Runtime.asVector(Of Object)(values) _
                 .AsObjectEnumerator _
@@ -403,12 +400,14 @@ Namespace Runtime.Internal.Invokes
             Return strs
         End Function
 
+        <ExportAPI("str")>
         Public Function str(x As Object, envir As Environment) As Object
             Dim print As String = classPrinter.printClass(x)
             Console.WriteLine(print)
             Return print
         End Function
 
+        <ExportAPI("print")>
         Public Function print(x As Object, envir As Environment) As Object
             If x Is Nothing Then
                 Call Console.WriteLine("NULL")
@@ -429,6 +428,7 @@ Namespace Runtime.Internal.Invokes
             Return x
         End Function
 
+        <ExportAPI("lapply")>
         Public Function lapply(sequence As Object, apply As RFunction, envir As Environment) As Object
             If sequence.GetType Is GetType(Dictionary(Of String, Object)) Then
                 Return DirectCast(sequence, Dictionary(Of String, Object)) _
@@ -447,6 +447,7 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        <ExportAPI("sapply")>
         Public Function sapply(sequence As Object, apply As RFunction, envir As Environment) As Object
             Throw New NotImplementedException
         End Function

@@ -55,8 +55,8 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
-Imports SMRUCC.Rsharp.Runtime.Package
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Package
 
 Namespace Runtime.Internal
 
@@ -72,11 +72,10 @@ Namespace Runtime.Internal
 
         Sub New()
             Call GetType(RConversion).pushEnvir
-
-            Call base.pushEnvir()
-            Call linq.pushEnvir()
-            Call Invokes.file.pushEnvir()
-            Call Invokes.stringr.pushEnvir()
+            Call GetType(base).pushEnvir
+            Call GetType(linq).pushEnvir
+            Call GetType(Invokes.file).pushEnvir
+            Call GetType(stringr).pushEnvir
         End Sub
 
         <Extension>
@@ -89,37 +88,13 @@ Namespace Runtime.Internal
                         End Sub)
         End Sub
 
-        Friend Function getFunction(name As String) As RInternalFuncInvoke
+        Friend Function getFunction(name As String) As RMethodInfo
             If index.ContainsKey(name) Then
                 Return index(name)
             Else
                 Return Nothing
             End If
         End Function
-
-        ''' <summary>
-        ''' Add internal invoke handle
-        ''' </summary>
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Friend Sub add(handle As RInternalFuncInvoke)
-            index(handle.funcName) = handle
-        End Sub
-
-        ''' <summary>
-        ''' Add internal invoke handle
-        ''' </summary>
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Friend Sub add(name$, handle As Func(Of Environment, Object(), Object))
-            index(name) = New GenericInternalInvoke(name, handle)
-        End Sub
-
-        ''' <summary>
-        ''' Add internal invoke handle
-        ''' </summary>
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Friend Sub add(name$, handle As Func(Of Object, Object))
-            index(name) = New GenericInternalInvoke(name, handle)
-        End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function [stop](message As Object, envir As Environment) As Message
