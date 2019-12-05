@@ -85,8 +85,18 @@ Namespace Runtime.Package
         Sub New()
         End Sub
 
+        ''' <summary>
+        ''' Get package loading entry information
+        ''' </summary>
+        ''' <param name="exception"></param>
+        ''' <returns></returns>
         Public Function GetLoader(ByRef exception As Exception) As Package
-            Dim loader As Type = [module].GetType(throwEx:=False, getException:=exception)
+            Dim loader As Type = [module].GetType(
+                knownFirst:=False,
+                throwEx:=False,
+                getException:=exception,
+                searchPath:={$"{App.HOME}/Library"}
+            )
             Dim info As New PackageAttribute([namespace]) With {
                 .Category = category,
                 .Cites = cites,
