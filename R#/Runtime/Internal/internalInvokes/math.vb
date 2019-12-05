@@ -9,9 +9,9 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("round")>
         Public Function round(x As Object, Optional decimals% = 0) As Object
             If x.GetType.IsInheritsFrom(GetType(Array)) Then
-                Return (From element As Object In DirectCast(x, Array).AsQueryable Select math.round(CDbl(element), decimals)).ToArray
+                Return (From element As Object In DirectCast(x, Array).AsQueryable Select stdNum.Round(CDbl(element), decimals)).ToArray
             Else
-                Return math.round(CDbl(x), decimals)
+                Return stdNum.Round(CDbl(x), decimals)
             End If
         End Function
 

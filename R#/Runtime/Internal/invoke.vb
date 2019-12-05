@@ -46,13 +46,9 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
-Imports Microsoft.VisualBasic.Emit.Delegates
-Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -77,6 +73,7 @@ Namespace Runtime.Internal
             Call GetType(Invokes.file).pushEnvir
             Call GetType(stringr).pushEnvir
             Call GetType(utils).pushEnvir
+            Call GetType(math).pushEnvir
         End Sub
 
         <Extension>

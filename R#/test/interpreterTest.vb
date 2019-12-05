@@ -69,6 +69,8 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+        Call declareTest()
+
         ' Call R.globalEnvir.packages.InstallLocals("D:\GCModeller\GCModeller\bin\R.base.dll")
         Call orDefaultTest()
         Call linqPipelineTest()
@@ -138,7 +140,6 @@ Module interpreterTest
 
         Call declareFunctionTest()
 
-        Call declareTest()
         Call stringInterpolateTest()
 
 
