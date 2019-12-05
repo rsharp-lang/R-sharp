@@ -71,7 +71,7 @@ Namespace Interpreter.ExecuteEngine
         Public Overrides Function Evaluate(envir As Environment) As Object
             Select Case funcName
                 Case "names"
-                    Return base.names(envir, {target.Evaluate(envir), value.Evaluate(envir)})
+                    Return base.names(target.Evaluate(envir), value.Evaluate(envir), envir)
                 Case Else
                     Return Message.SyntaxNotImplemented(envir, $"byref call of {funcName}")
             End Select
