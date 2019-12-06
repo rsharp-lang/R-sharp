@@ -106,6 +106,18 @@ Namespace Runtime.Interop
             Me.parameters = closure.DoCall(AddressOf parseParameters)
         End Sub
 
+        ''' <summary>
+        ''' Gets the <see cref="MethodInfo"/> represented by the delegate.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Function GetRawDeclares() As MethodInfo
+            If api Like GetType(MethodInvoke) Then
+                Return api.TryCast(Of MethodInvoke).method
+            Else
+                Return api.TryCast(Of [Delegate]).Method
+            End If
+        End Function
+
         Public Function GetPrintContent() As String Implements RPrint.GetPrintContent
             Return $"let {name} as function({parameters.JoinBy(", ")}) {{
     return call R#.interop_{name}(...);
