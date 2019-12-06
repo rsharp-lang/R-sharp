@@ -49,10 +49,14 @@ Module docTest
     Dim r As New RInterpreter
 
     Sub Main()
+        Call r.Evaluate("print(round)")
+
+        Pause()
+    End Sub
+
+    Sub GetDocs()
         Dim doc As New AnnotationDocs
         Dim testApi As RMethodInfo = r.Evaluate("log")
         Dim result = doc.GetAnnotations(testApi.GetRawDeclares)
-
-        Pause()
     End Sub
 End Module
