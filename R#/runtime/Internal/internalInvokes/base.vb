@@ -50,6 +50,7 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -95,7 +96,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("neg")>
-        Private Function neg(o As Object) As Object
+        Private Function neg(<RRawVectorArgument> o As Object) As Object
             If o Is Nothing Then
                 Return Nothing
             Else
@@ -107,7 +108,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("is.empty")>
-        Friend Function isEmpty(o As Object) As Object
+        Friend Function isEmpty(<RRawVectorArgument> o As Object) As Object
             If o Is Nothing Then
                 Return True
             End If
@@ -163,7 +164,7 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         ''' 
         <ExportAPI("length")>
-        Public Function length(x As Object) As Integer
+        Public Function length(<RRawVectorArgument> x As Object) As Integer
             If x Is Nothing Then
                 Return 0
             ElseIf x.GetType.IsArray Then
@@ -177,13 +178,13 @@ Namespace Runtime.Internal.Invokes
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <ExportAPI("any")>
-        Public Function any(test As Object) As Object
+        Public Function any(<RRawVectorArgument> test As Object) As Object
             Return Runtime.asLogical(test).Any(Function(b) b = True)
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <ExportAPI("all")>
-        Public Function all(test As Object) As Object
+        Public Function all(<RRawVectorArgument> test As Object) As Object
             Return Runtime.asLogical(test).All(Function(b) b = True)
         End Function
 
@@ -195,7 +196,11 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         ''' 
         <ExportAPI("source")>
-        Public Function source(path$, Optional arguments As Object = Nothing, Optional envir As Environment = Nothing) As Object
+        Public Function source(path$,
+                               <RListObjectArgument>
+                               Optional arguments As Object = Nothing,
+                               Optional envir As Environment = Nothing) As Object
+
             Dim args As NamedValue(Of Object)() = RListObjectArgumentAttribute _
                 .getObjectList(arguments, envir) _
                 .ToArray
@@ -205,7 +210,10 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("getOption")>
-        Public Function getOption(name$, Optional defaultVal$ = Nothing, Optional envir As Environment = Nothing) As Object
+        Public Function getOption(name$,
+                                  Optional defaultVal$ = Nothing,
+                                  Optional envir As Environment = Nothing) As Object
+
             If name.StringEmpty Then
                 Return invoke.missingParameter(NameOf(getOption), "name", envir)
             Else
@@ -229,7 +237,7 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         ''' 
         <ExportAPI("options")>
-        Public Function options(opts As Object, envir As Environment) As Object
+        Public Function options(<RListObjectArgument> opts As Object, envir As Environment) As Object
             Dim configs As Options = envir.globalEnvironment.options
 
             For Each value In DirectCast(opts, list).slots
@@ -309,7 +317,7 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         ''' 
         <ExportAPI("stop")>
-        Public Function [stop](message As Object, envir As Environment) As Message
+        Public Function [stop](<RRawVectorArgument> message As Object, envir As Environment) As Message
             Dim debugMode As Boolean = envir.globalEnvironment.debugMode
 
             If Not message Is Nothing AndAlso message.GetType.IsInheritsFrom(GetType(Exception), strict:=False) Then
@@ -387,12 +395,15 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("warning")>
-        Public Function warning(message As Object, envir As Environment) As Message
+        Public Function warning(<RRawVectorArgument> message As Object, envir As Environment) As Message
             Return createMessageInternal(message, envir, level:=MSG_TYPES.WRN)
         End Function
 
         <ExportAPI("cat")>
-        Public Function cat(values As Object, Optional file$ = Nothing, Optional sep$ = " ") As Object
+        Public Function cat(<RRawVectorArgument> values As Object,
+                            Optional file$ = Nothing,
+                            Optional sep$ = " ") As Object
+
             Dim strs = Runtime.asVector(Of Object)(values) _
                 .AsObjectEnumerator _
                 .Select(Function(o) Scripting.ToString(o, "")) _
@@ -409,14 +420,16 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("str")>
-        Public Function str(x As Object, envir As Environment) As Object
+        Public Function str(<RRawVectorArgument> x As Object, envir As Environment) As Object
             Dim print As String = classPrinter.printClass(x)
             Console.WriteLine(print)
             Return print
         End Function
 
+        Dim markdown As MarkdownRender = MarkdownRender.DefaultStyleRender
+
         <ExportAPI("print")>
-        Public Function print(x As Object, envir As Environment) As Object
+        Public Function print(<RRawVectorArgument> x As Object, envir As Environment) As Object
             If x Is Nothing Then
                 Call Console.WriteLine("NULL")
 
@@ -436,7 +449,7 @@ Namespace Runtime.Internal.Invokes
                     .PrintHelp(x)
             ElseIf type.ImplementInterface(GetType(RPrint)) Then
                 Try
-                    Call Console.WriteLine(DirectCast(x, RPrint).GetPrintContent)
+                    Call markdown.DoPrint(DirectCast(x, RPrint).GetPrintContent, 0)
                 Catch ex As Exception
                     Return Internal.stop(ex, envir)
                 End Try
@@ -452,7 +465,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("lapply")>
-        Public Function lapply(sequence As Object, doApply As Object, envir As Environment) As Object
+        Public Function lapply(<RRawVectorArgument> sequence As Object, doApply As Object, envir As Environment) As Object
             If doApply Is Nothing Then
                 Return Internal.stop({"Missing apply function!"}, envir)
             ElseIf Not doApply.GetType.ImplementInterface(GetType(RFunction)) Then
@@ -465,7 +478,7 @@ Namespace Runtime.Internal.Invokes
                 Return doApply
             End If
 
-            Dim apply As RFunction = apply
+            Dim apply As RFunction = doApply
 
             If sequence.GetType Is GetType(Dictionary(Of String, Object)) Then
                 Return DirectCast(sequence, Dictionary(Of String, Object)) _
@@ -485,7 +498,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("sapply")>
-        Public Function sapply(sequence As Object, apply As RFunction, envir As Environment) As Object
+        Public Function sapply(<RRawVectorArgument> sequence As Object, apply As RFunction, envir As Environment) As Object
             Throw New NotImplementedException
         End Function
     End Module

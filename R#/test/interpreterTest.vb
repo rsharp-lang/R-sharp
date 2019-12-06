@@ -69,6 +69,8 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+        Call markdownTest()
+
         Call declareTest()
 
         ' Call R.globalEnvir.packages.InstallLocals("D:\GCModeller\GCModeller\bin\R.base.dll")
@@ -142,6 +144,12 @@ Module interpreterTest
 
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub markdownTest()
+        Call R.Evaluate("print(sum)")
 
         Pause()
     End Sub
@@ -741,6 +749,7 @@ print(`value of the x='${x}'`);
         Call R.Evaluate("let y = round($, 0) ;")
 
         Call R.Evaluate("print(x)")
+        Call R.Evaluate("print(`length of x is ${length(x)}`)")
 
         Call R.Evaluate("let flags  as boolean = [true, true, true, false];")
         Call R.Evaluate("let str as  string =[`hello world!`, 'This program is running on R# scripting engine!', ""And, this is a string value.""]; # declares a string vector")

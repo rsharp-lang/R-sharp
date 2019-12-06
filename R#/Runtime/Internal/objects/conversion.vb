@@ -47,14 +47,14 @@
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal
 
     Module RConversion
 
         <ExportAPI("as.object")>
-        Public Function asObject(obj As Object) As Object
+        Public Function asObject(<RRawVectorArgument> obj As Object) As Object
             If obj Is Nothing Then
                 Return Nothing
             Else
@@ -107,11 +107,29 @@ Namespace Runtime.Internal
         End Function
 
         <ExportAPI("as.numeric")>
-        Public Function asNumeric(obj As Object) As Object
+        Public Function asNumeric(<RRawVectorArgument> obj As Object) As Object
             If obj Is Nothing Then
                 Return 0
             Else
                 Return Runtime.asVector(Of Double)(obj)
+            End If
+        End Function
+
+        <ExportAPI("as.character")>
+        Public Function asCharacters(<RRawVectorArgument> obj As Object) As Object
+            If obj Is Nothing Then
+                Return Nothing
+            Else
+                Return Runtime.asVector(Of String)(obj)
+            End If
+        End Function
+
+        <ExportAPI("as.logical")>
+        Public Function asLogicals(<RRawVectorArgument> obj As Object) As Object
+            If obj Is Nothing Then
+                Return Nothing
+            Else
+                Return Runtime.asLogical(obj)
             End If
         End Function
 

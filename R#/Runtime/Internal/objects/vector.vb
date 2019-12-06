@@ -52,6 +52,7 @@ Namespace Runtime.Internal
     Public Class vector : Implements RNames, RIndex
 
         Public Property data As Array
+
         Public ReadOnly Property length As Integer Implements RIndex.length
             Get
                 Return data.Length
@@ -155,7 +156,7 @@ Namespace Runtime.Internal
             For index As Integer = 0 To i.Length - 1
                 message = setByIndex(i(index), getValue(index), envir)
 
-                If Not message Is Nothing AndAlso message.GetType Is GetType(Runtime.Components.Message) Then
+                If Not message Is Nothing AndAlso message.GetType Is GetType(Message) Then
                     Return message
                 Else
                     result += message
