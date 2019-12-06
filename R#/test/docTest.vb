@@ -50,6 +50,8 @@ Module docTest
 
     Sub Main()
         Call r.Evaluate("print(round)")
+        Call r.Evaluate("print(length)")
+        Call r.Evaluate("print(names)")
 
         Pause()
     End Sub

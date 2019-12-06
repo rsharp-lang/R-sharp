@@ -150,6 +150,7 @@ Module interpreterTest
 
     Sub markdownTest()
         Call R.Evaluate("print(sum)")
+        Call R.Evaluate("print(names)")
 
         Pause()
     End Sub
