@@ -69,5 +69,18 @@ Namespace Runtime.Package
             Return type
         End Function
 
+        Public Function GetAnnotations(func As MethodInfo) As ProjectMember
+            Dim type As ProjectType = GetAnnotations(func.DeclaringType)
+
+            If type Is Nothing Then
+                ' 整个类型都没有xml注释
+                Return Nothing
+            Else
+                ' 可能目标函数对象没有xml注释
+                ' 在这里假设没有重载？
+                Return type.GetMethods(func.Name).ElementAtOrDefault(Scan0)
+            End If
+        End Function
+
     End Class
 End Namespace
