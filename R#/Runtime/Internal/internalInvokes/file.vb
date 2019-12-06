@@ -145,7 +145,7 @@ Namespace Runtime.Internal.Invokes
 
         ' writeLines(text, con = stdout(), sep = "\n", useBytes = FALSE)
         <ExportAPI("writeLines")>
-        Friend Function writeLines(text As String(), con As String, Optional sep$ = vbCrLf) As Object
+        Friend Function writeLines(text$(), Optional con$ = Nothing, Optional sep$ = vbCrLf) As Object
             If con.StringEmpty Then
                 Call text.AsObjectEnumerator _
                     .JoinBy(sep) _
@@ -165,7 +165,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("setwd")>
-        Friend Function setwd(dir As String(), envir As Environment) As Object
+        Friend Function setwd(dir$(), envir As Environment) As Object
             If dir.Length = 0 Then
                 Return invoke.missingParameter(NameOf(setwd), "dir", envir)
             ElseIf dir(Scan0).StringEmpty Then

@@ -47,13 +47,14 @@
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Invokes
 
     Module stringr
 
         <ExportAPI("sprintf")>
-        Public Function Csprintf(format As Array, arguments As Object, envir As Environment) As Object
+        Public Function Csprintf(format As Array, <RListObjectArgument> arguments As Object, envir As Environment) As Object
             Dim sprintf As Func(Of String, Object(), String) = AddressOf CLangStringFormatProvider.sprintf
             Dim result As String() = format _
                 .AsObjectEnumerator _
