@@ -1,5 +1,6 @@
 ﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports stdNum = System.Math
 
 Namespace Runtime.Internal.Invokes
@@ -7,11 +8,11 @@ Namespace Runtime.Internal.Invokes
     Module math
 
         <ExportAPI("round")>
-        Public Function round(x As Object, Optional decimals% = 0) As Object
-            If x.GetType.IsInheritsFrom(GetType(Array)) Then
-                Return (From element As Object In DirectCast(x, Array).AsQueryable Select stdNum.Round(CDbl(element), decimals)).ToArray
+        Public Function round(x As Double(), Optional decimals% = 0) As Object
+            If x.IsNullOrEmpty Then
+                Return Nothing
             Else
-                Return stdNum.Round(CDbl(x), decimals)
+                Return (From element As Double In x Select stdNum.Round(element, decimals)).ToArray
             End If
         End Function
 
@@ -21,6 +22,11 @@ Namespace Runtime.Internal.Invokes
                 .AsObjectEnumerator(Of Double) _
                 .Select(Function(d) stdNum.Log(d, newBase)) _
                 .ToArray
+        End Function
+
+        <ExportAPI("sum")>
+        Public Function sum(<RRawVectorArgument> x As Object) As Double
+
         End Function
     End Module
 End Namespace
