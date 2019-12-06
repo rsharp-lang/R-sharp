@@ -209,7 +209,10 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("getOption")>
-        Public Function getOption(name$, Optional defaultVal$ = Nothing, Optional envir As Environment = Nothing) As Object
+        Public Function getOption(name$,
+                                  Optional defaultVal$ = Nothing,
+                                  Optional envir As Environment = Nothing) As Object
+
             If name.StringEmpty Then
                 Return invoke.missingParameter(NameOf(getOption), "name", envir)
             Else

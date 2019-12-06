@@ -26,7 +26,21 @@ Namespace Runtime.Internal.Invokes
 
         <ExportAPI("sum")>
         Public Function sum(<RRawVectorArgument> x As Object) As Double
+            If x Is Nothing Then
+                Return 0
+            End If
 
+            Dim array = Runtime.asVector(Of Object)(x)
+            Dim elementType As Type = Runtime.MeasureArrayElementType(array)
+
+            Select Case elementType
+                Case GetType(Boolean)
+                    Return Runtime.asLogical(array).Select(Function(b) If(b, 1, 0)).Sum
+                Case GetType(Integer), GetType(Long), GetType(Short), GetType(Byte)
+                    Return Runtime.asVector(Of Long)(x).AsObjectEnumerator(Of Long).Sum
+                Case Else
+                    Return Runtime.asVector(Of Double)(x).AsObjectEnumerator(Of Double).Sum
+            End Select
         End Function
     End Module
 End Namespace
