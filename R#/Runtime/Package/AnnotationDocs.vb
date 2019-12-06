@@ -44,6 +44,7 @@ Imports System.Reflection
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Serialization
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
+Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports LibraryAssembly = System.Reflection.Assembly
 
@@ -96,13 +97,22 @@ Namespace Runtime.Package
 
             If Not docs Is Nothing Then
                 Call markdown.DoPrint(docs.Summary, 1)
+                Call markdown.Reset()
+                Call Console.WriteLine()
+                Call Console.WriteLine()
 
                 For Each param As param In docs.Params
-                    Call markdown.DoPrint(param.text, 3)
+                    Call markdown.DoPrint($"``[{param.name}]``  " & param.text.Trim(" "c, ASCII.CR, ASCII.LF), 3)
+                    Call markdown.Reset()
+                    Call Console.WriteLine()
                 Next
             End If
 
-            Call Console.WriteLine(api.GetPrintContent)
+            Call Console.WriteLine()
+
+            For Each line In api.GetPrintContent.LineTokens
+                Call Console.WriteLine(New String(" "c, 4) & line)
+            Next
         End Sub
 
     End Class
