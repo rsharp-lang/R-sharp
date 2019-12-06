@@ -42,8 +42,10 @@
 
 Imports System.Reflection
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
+Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Serialization
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports LibraryAssembly = System.Reflection.Assembly
 
 Namespace Runtime.Package
 
@@ -53,10 +55,10 @@ Namespace Runtime.Package
     Public Class AnnotationDocs
 
         ReadOnly projects As New Dictionary(Of String, Project)
-        ReadOnly markdown As MarkdownRender
+        ReadOnly markdown As MarkdownRender = MarkdownRender.DefaultStyleRender
 
         Public Function GetAnnotations(package As Type) As ProjectType
-            Dim assembly As Assembly = package.Assembly
+            Dim assembly As LibraryAssembly = package.Assembly
             Dim project As Project
             Dim projectKey As String = assembly.ToString
             Dim docXml As String = assembly.Location.TrimSuffix & ".xml"
@@ -93,7 +95,11 @@ Namespace Runtime.Package
             Dim docs As ProjectMember = GetAnnotations(api.GetRawDeclares)
 
             If Not docs Is Nothing Then
+                Call markdown.DoPrint(docs.Summary, 1)
 
+                For Each param As param In docs.Params
+                    Call markdown.DoPrint(param.text, 3)
+                Next
             End If
 
             Call Console.WriteLine(api.GetPrintContent)
