@@ -2,5 +2,8 @@
 
     Module functionPrinter
 
+        Public Sub printMethod()
+
+        End Sub
     End Module
 End Namespace
