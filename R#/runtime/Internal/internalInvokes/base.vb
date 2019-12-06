@@ -50,6 +50,7 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -425,13 +426,15 @@ Namespace Runtime.Internal.Invokes
             Return print
         End Function
 
+        Dim markdown As MarkdownRender = MarkdownRender.DefaultStyleRender
+
         <ExportAPI("print")>
         Public Function print(<RRawVectorArgument> x As Object, envir As Environment) As Object
             If x Is Nothing Then
                 Call Console.WriteLine("NULL")
             ElseIf x.GetType.ImplementInterface(GetType(RPrint)) Then
                 Try
-                    Call Console.WriteLine(DirectCast(x, RPrint).GetPrintContent)
+                    Call markdown.DoPrint(DirectCast(x, RPrint).GetPrintContent, 0)
                 Catch ex As Exception
                     Return Internal.stop(ex, envir)
                 End Try

@@ -69,6 +69,8 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+        Call markdownTest()
+
         Call declareTest()
 
         ' Call R.globalEnvir.packages.InstallLocals("D:\GCModeller\GCModeller\bin\R.base.dll")
@@ -142,6 +144,12 @@ Module interpreterTest
 
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub markdownTest()
+        Call R.Evaluate("print(sum)")
 
         Pause()
     End Sub
