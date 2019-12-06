@@ -419,15 +419,30 @@ Namespace Runtime.Internal.Invokes
         Public Function print(x As Object, envir As Environment) As Object
             If x Is Nothing Then
                 Call Console.WriteLine("NULL")
-            ElseIf x.GetType.ImplementInterface(GetType(RPrint)) Then
+
+                ' just returns nothing literal
+                Return Nothing
+            Else
+                Return doPrintInternal(x, x.GetType, envir)
+            End If
+        End Function
+
+        Private Function doPrintInternal(x As Object, type As Type, envir As Environment) As Object
+            If type Is GetType(RMethodInfo) Then
+                Call envir _
+                    .globalEnvironment _
+                    .packages _
+                    .packageDocs _
+                    .PrintHelp(x)
+            ElseIf type.ImplementInterface(GetType(RPrint)) Then
                 Try
                     Call Console.WriteLine(DirectCast(x, RPrint).GetPrintContent)
                 Catch ex As Exception
                     Return Internal.stop(ex, envir)
                 End Try
-            ElseIf x.GetType Is GetType(Message) Then
+            ElseIf type Is GetType(Message) Then
                 Return x
-            ElseIf x.GetType Is GetType(list) Then
+            ElseIf type Is GetType(list) Then
                 Call printer.printInternal(DirectCast(x, list).slots, "")
             Else
                 Call printer.printInternal(x, "")
@@ -440,13 +455,13 @@ Namespace Runtime.Internal.Invokes
         Public Function lapply(sequence As Object, doApply As Object, envir As Environment) As Object
             If doApply Is Nothing Then
                 Return Internal.stop({"Missing apply function!"}, envir)
-            ElseIf Not doapply.GetType.ImplementInterface(GetType(RFunction)) Then
+            ElseIf Not doApply.GetType.ImplementInterface(GetType(RFunction)) Then
                 Return Internal.stop({"Target is not a function!"}, envir)
             End If
 
             If Program.isException(sequence) Then
                 Return sequence
-            ElseIf Program.isException(doapply) Then
+            ElseIf Program.isException(doApply) Then
                 Return doApply
             End If
 
