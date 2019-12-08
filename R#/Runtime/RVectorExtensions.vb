@@ -50,6 +50,12 @@ Namespace Runtime
 
     <HideModuleName> Public Module RVectorExtensions
 
+        ''' <summary>
+        ''' Object ``x`` is an array of <typeparamref name="T"/>?
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
         Public Function isVector(Of T)(x As Object) As Boolean
             If x Is Nothing OrElse Not x.GetType.IsArray Then
                 Return False
