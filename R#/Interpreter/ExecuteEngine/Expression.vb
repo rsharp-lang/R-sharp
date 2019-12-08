@@ -144,6 +144,8 @@ Namespace Interpreter.ExecuteEngine
                 ' using keyword as identifier name
                 If Not expression Is Nothing Then
                     Return expression
+                Else
+                    code(Scan0)(Scan0).name = TokenType.identifier
                 End If
             End If
 
