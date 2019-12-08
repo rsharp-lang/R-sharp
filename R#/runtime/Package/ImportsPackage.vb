@@ -64,7 +64,7 @@ Namespace Runtime.Package
             Dim access As BindingFlags
 
             If includesInternal Then
-                access = BindingFlags.Static
+                access = BindingFlags.NonPublic Or BindingFlags.Public Or BindingFlags.Static
             Else
                 access = BindingFlags.Public Or BindingFlags.Static
             End If
