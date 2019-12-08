@@ -47,7 +47,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
 
-Namespace Runtime.Internal
+Namespace Runtime.Internal.ConsolePrinter
 
     ''' <summary>
     ''' Console print formatter for non System user class type
