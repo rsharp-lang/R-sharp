@@ -65,6 +65,13 @@ Namespace Runtime.Package
             Dim docXml As String = assembly.Location.TrimSuffix & ".xml"
             Dim type As ProjectType
 
+            ' get xml docs from app path or annotation folder
+            ' in app home folder
+            If Not docXml.FileExists Then
+                docXml = assembly.Location.ParentPath
+                docXml = docXml & $"/Annotation/{assembly.Location.BaseName}.xml"
+            End If
+
             If Not projects.ContainsKey(projectKey) Then
                 projects(projectKey) = ProjectSpace.CreateDocProject(docXml)
             End If
@@ -102,7 +109,7 @@ Namespace Runtime.Package
                 Call Console.WriteLine()
 
                 For Each param As param In docs.Params
-                    Call markdown.DoPrint($"``[{param.name}]``  " & param.text.Trim(" "c, ASCII.CR, ASCII.LF), 3)
+                    Call markdown.DoPrint($"``{param.name}:``  " & param.text.Trim(" "c, ASCII.CR, ASCII.LF), 3)
                     Call markdown.Reset()
                     Call Console.WriteLine()
                 Next
