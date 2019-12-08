@@ -62,7 +62,7 @@ Namespace Runtime.Internal.Invokes
     Module file
 
         <ExportAPI("normalizePath")>
-        Private Function normalizePath(fileNames$(), envir As Environment) As Object
+        Public Function normalizePath(fileNames$(), envir As Environment) As Object
             If fileNames.IsNullOrEmpty Then
                 Return Internal.stop("no file names provided!", envir)
             Else
@@ -79,17 +79,17 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("R.home")>
-        Private Function Rhome() As Object
+        Public Function Rhome() As Object
             Return GetType(file).Assembly.Location.ParentPath
         End Function
 
         <ExportAPI("dirname")>
-        Private Function dirname(fileNames As String(), envir As Environment) As Object
+        Public Function dirname(fileNames As String(), envir As Environment) As Object
             Return fileNames.Select(AddressOf ParentPath).ToArray
         End Function
 
         <ExportAPI("list.files")>
-        Private Function listFiles(dir$, Optional pattern$() = Nothing, Optional envir As Environment = Nothing) As Object
+        Public Function listFiles(dir$, Optional pattern$() = Nothing, Optional envir As Environment = Nothing) As Object
             If pattern.IsNullOrEmpty Then
                 pattern = {"*.*"}
             End If
@@ -98,7 +98,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("list.dirs")>
-        Private Function listDirs(Optional dir$ = "./", Optional envir As Environment = Nothing) As Object
+        Public Function listDirs(Optional dir$ = "./", Optional envir As Environment = Nothing) As Object
             Dim dirs$() = dir _
                 .ListDirectory(SearchOption.SearchAllSubDirectories) _
                 .ToArray
@@ -107,7 +107,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("basename")>
-        Private Function basename(fileNames$(), Optional withExtensionName As Boolean = False, Optional envir As Environment = Nothing) As Object
+        Public Function basename(fileNames$(), Optional withExtensionName As Boolean = False, Optional envir As Environment = Nothing) As Object
             If withExtensionName Then
                 ' get fileName
                 Return fileNames.Select(AddressOf FileName).ToArray
@@ -125,7 +125,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("normalize.filename")>
-        Friend Function normalizeFileName(strings$()) As String()
+        Public Function normalizeFileName(strings$()) As String()
             Return strings _
                 .Select(Function(file)
                             Return file.NormalizePathString(False)
@@ -134,18 +134,18 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("file.exists")>
-        Friend Function exists(files$()) As Boolean()
+        Public Function exists(files$()) As Boolean()
             Return files.Select(AddressOf FileExists).ToArray
         End Function
 
         <ExportAPI("readLines")>
-        Friend Function readLines(file As String) As String()
+        Public Function readLines(file As String) As String()
             Return file.ReadAllLines
         End Function
 
         ' writeLines(text, con = stdout(), sep = "\n", useBytes = FALSE)
         <ExportAPI("writeLines")>
-        Friend Function writeLines(text$(), Optional con$ = Nothing, Optional sep$ = vbCrLf) As Object
+        Public Function writeLines(text$(), Optional con$ = Nothing, Optional sep$ = vbCrLf) As Object
             If con.StringEmpty Then
                 Call text.AsObjectEnumerator _
                     .JoinBy(sep) _
@@ -165,7 +165,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("setwd")>
-        Friend Function setwd(dir$(), envir As Environment) As Object
+        Public Function setwd(dir$(), envir As Environment) As Object
             If dir.Length = 0 Then
                 Return invoke.missingParameter(NameOf(setwd), "dir", envir)
             ElseIf dir(Scan0).StringEmpty Then

@@ -75,7 +75,7 @@ Namespace Runtime.Internal.Invokes
     Public Module base
 
         <ExportAPI("do.call")>
-        Private Function doCall(what As Object, calls$, envir As Environment) As Object
+        Public Function doCall(what As Object, calls$, envir As Environment) As Object
             If what Is Nothing OrElse calls.StringEmpty Then
                 Return Internal.stop("Nothing to call!", envir)
             End If
@@ -96,7 +96,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("neg")>
-        Private Function neg(<RRawVectorArgument> o As Object) As Object
+        Public Function neg(<RRawVectorArgument> o As Object) As Object
             If o Is Nothing Then
                 Return Nothing
             Else

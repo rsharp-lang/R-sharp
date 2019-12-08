@@ -79,7 +79,7 @@ Namespace Runtime.Internal
         <Extension>
         Private Sub pushEnvir(baseModule As Type)
             Call ImportsPackage _
-                .GetAllApi(baseModule) _
+                .GetAllApi(baseModule, includesInternal:=True) _
                 .Select(Function(m) New RMethodInfo(m)) _
                 .DoEach(Sub(m)
                             Call index.Add(m.name, m)
