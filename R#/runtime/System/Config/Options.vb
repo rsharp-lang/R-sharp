@@ -84,6 +84,28 @@ Namespace Runtime.Components.Configuration
             End Get
         End Property
 
+        ''' <summary>
+        ''' controls the number of significant (see signif) digits to print when printing 
+        ''' numeric values. It is a suggestion only. Valid values are 1...22 with default 
+        ''' 7. See the note in print.default about values greater than 15.
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property digits As Integer
+            Get
+                Return getOption("digits", [default]:=7).ParseInteger
+            End Get
+        End Property
+
+        ''' <summary>
+        ''' ``F`` or ``G``
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property f64Format As String
+            Get
+                Return getOption("f64.format", [default]:="F")
+            End Get
+        End Property
+
         Public ReadOnly Property HTTPUserAgent As String
             Get
                 Return getOption("HTTPUserAgent", [default]:=Defaults.HTTPUserAgent)

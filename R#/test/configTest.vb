@@ -12,7 +12,7 @@ Module configTest
 
         Call R.Evaluate("options(max.print = 100)")
         Call R.Print("getOption(""max.print"")")
-        Call R.Print("options(""max.print"")")
+        Call R.Print("options([""max.print"", ""lib""])")
         Call R.Print("1:500 step 0.125")
 
         Pause()

@@ -1,48 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::2979dcf9b9cd5ec81ca8a5159abaaf5e, R#\Runtime\Internal\internalInvokes\Linq\Group.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Structure Group
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: (+2 Overloads) getByName, getNames, (+2 Overloads) setByName, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Structure Group
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: (+2 Overloads) getByName, getNames, (+2 Overloads) setByName, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Serialization
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
@@ -58,14 +59,20 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         Public group As Array
 
         Shared Sub New()
-            Call printer.AttachConsoleFormatter(Of Group)(Function(group) group.ToString)
+            Call printer.AttachInternalConsoleFormatter(Of Group)(AddressOf InternalToString)
         End Sub
 
-        Public Overrides Function ToString() As String
-            Return $" '{group.Length}' elements with key: " & printer.ValueToString(key) & vbCrLf &
+        Private Shared Function InternalToString(env As GlobalEnvironment) As IStringBuilder
+            Return Function(x) DirectCast(x, Group).ToString(env)
+        End Function
+
+        Public Overloads Function ToString(env As Environment) As String
+            Dim globalEnv As GlobalEnvironment = env.global
+
+            Return $" '{group.Length}' elements with key: " & printer.ValueToString(key, globalEnv) & vbCrLf &
                 group.AsObjectEnumerator _
                     .Select(Function(o)
-                                Return "   " & printer.ValueToString(o)
+                                Return "   " & printer.ValueToString(o, globalEnv)
                             End Function) _
                     .JoinBy(vbCrLf)
         End Function

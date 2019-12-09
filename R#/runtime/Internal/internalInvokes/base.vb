@@ -461,10 +461,10 @@ Namespace Runtime.Internal.Invokes
                 Call DirectCast(x, list) _
                     .slots _
                     .DoCall(Sub(list)
-                                printer.printInternal(list, "", maxPrint)
+                                printer.printInternal(list, "", maxPrint, envir.global)
                             End Sub)
             Else
-                Call printer.printInternal(x, "", maxPrint)
+                Call printer.printInternal(x, "", maxPrint, envir.global)
             End If
 
             Return x
