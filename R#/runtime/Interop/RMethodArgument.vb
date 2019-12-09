@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::056cc155d3678a5e2fe082937ee5d70d, R#\Runtime\Interop\RMethodArgument.vb"
+﻿#Region "Microsoft.VisualBasic::fd084ee23e0e32ee16f427d5b3d29768, R#\Runtime\Interop\RMethodArgument.vb"
 
     ' Author:
     ' 
@@ -37,6 +37,10 @@
     '                     type
     ' 
     '         Function: ParseArgument, ToString
+    ' 
+    '     Class RArgumentList
+    ' 
+    '         Function: CreateArguments
     ' 
     ' 
     ' /********************************************************************************/

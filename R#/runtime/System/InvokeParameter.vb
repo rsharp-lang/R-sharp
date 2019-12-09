@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cbbca20acbd8601bbc8da6faa7b8a3a9, R#\Runtime\Components\InvokeParameter.vb"
+﻿#Region "Microsoft.VisualBasic::985b6eaa8db17d3be05b7515986d3c56, R#\Runtime\System\InvokeParameter.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Class InvokeParameter
     ' 
-    '         Properties: haveSymbolName, name, value
+    '         Properties: haveSymbolName, isSymbolAssign, name, value
     ' 
     '         Function: Create, CreateArguments, Evaluate, ToString
     ' 

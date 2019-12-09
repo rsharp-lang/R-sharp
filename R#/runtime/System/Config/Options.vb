@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::04232ed0ec67ca12c9d21fbd4d3a0e3f, R#\Runtime\Components\Config\Options.vb"
+﻿#Region "Microsoft.VisualBasic::02da29ebd8bbaaf6e123837b19bf8096, R#\Runtime\System\Config\Options.vb"
 
     ' Author:
     ' 
@@ -33,10 +33,14 @@
 
     '     Class Options
     ' 
-    '         Properties: [lib], localConfig
+    '         Properties: [lib], digits, f64Format, HTTPUserAgent, localConfig
+    '                     maxPrint
     ' 
     '         Constructor: (+1 Overloads) Sub New
+    ' 
     '         Function: getOption, setOption
+    ' 
+    '         Sub: flush
     ' 
     ' 
     ' /********************************************************************************/

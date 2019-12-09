@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a471aa923c9bac902b4fca72758c6080, R#\Runtime\Extensions.vb"
+﻿#Region "Microsoft.VisualBasic::d1d027c4a018a347a8aaa65cd11c56b8, R#\Runtime\Extensions.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Module Extensions
     ' 
-    '         Function: [GetType], ClosureStackName, (+2 Overloads) GetRTypeCode, IsPrimitive
+    '         Function: [GetType], ClosureStackName, (+2 Overloads) GetRTypeCode, IsPrimitive, MeasureArrayElementType
     ' 
     ' 
     ' /********************************************************************************/

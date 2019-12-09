@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::abf2561309a2a146b2f50f8c9f773ff3, R.exec\Compiler.vb"
+﻿#Region "Microsoft.VisualBasic::573a4fc9772d2aea9a821f56a448f5c4, R.exec\Compiler.vb"
 
     ' Author:
     ' 
@@ -69,4 +69,3 @@ Public Module Compiler
         ' Dim names = declares.
     End Function
 End Module
-
