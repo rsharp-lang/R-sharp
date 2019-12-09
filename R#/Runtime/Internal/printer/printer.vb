@@ -201,7 +201,7 @@ printSingleElement:
             Dim i As i32 = 1 - divSize
 
             For Each row As String() In contents.Split(divSize)
-                Call Console.WriteLine($"[{i = i + divSize}] " & row.JoinBy(vbTab))
+                Call Console.WriteLine($"[{i = i + divSize}]{vbTab}" & row.JoinBy(vbTab))
             Next
 
             If xvec.Length > maxPrint Then
