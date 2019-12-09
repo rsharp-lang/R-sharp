@@ -159,14 +159,14 @@ printSingleElement:
         ''' </summary>
         ''' <param name="xvec"></param>
         <Extension>
-        Private Sub printArray(xvec As Array)
+        Private Sub printArray(xvec As Array, maxPrint%)
             Dim elementType As Type = xvec.GetType.GetElementType
             Dim toString As IStringBuilder = printer.ToString(elementType)
             Dim stringVec = From element As Object
                             In xvec.AsQueryable
                             Select toString(element)
             Dim maxColumns As Integer = Console.LargestWindowWidth
-            Dim contents As String() = stringVec.ToArray
+            Dim contents As String() = stringVec.Take(maxPrint).ToArray
             ' maxsize / average size
             Dim divSize As Integer = maxColumns \ contents.Average(Function(c) c.Length + 1) - 1
             Dim i As i32 = 1
@@ -174,6 +174,10 @@ printSingleElement:
             For Each row As String() In contents.Split(divSize)
                 Call Console.WriteLine($"[{i = i + divSize}] " & row.JoinBy(vbTab))
             Next
+
+            If xvec.Length > maxPrint Then
+                Call Console.WriteLine($"[ reached getOption(""max.print"") -- omitted {xvec.Length - contents.Length} entries ]")
+            End If
         End Sub
     End Module
 End Namespace
