@@ -69,6 +69,7 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+        Call sourceFunctionTest()
         Call markdownTest()
 
         Call declareTest()
@@ -321,6 +322,10 @@ test2::println('123');
 test1::println('123');
 
 ")
+    End Sub
+
+    Sub sourceFunctionTest()
+        Call R.Evaluate("source('a.R')")
     End Sub
 
     Sub sourceScripttest()

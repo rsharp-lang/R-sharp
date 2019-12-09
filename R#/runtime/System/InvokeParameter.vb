@@ -77,6 +77,20 @@ Namespace Runtime.Components
             End Get
         End Property
 
+        ''' <summary>
+        ''' 主要是应用于生成list的参数列表
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property isSymbolAssign As Boolean
+            Get
+                If value Is Nothing Then
+                    Return False
+                Else
+                    Return TypeOf value Is ValueAssign
+                End If
+            End Get
+        End Property
+
         Public ReadOnly Property haveSymbolName As Boolean
             Get
                 If value Is Nothing Then
