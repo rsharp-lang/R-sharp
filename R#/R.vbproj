@@ -200,6 +200,7 @@
     <Compile Include="Interpreter\ExecuteEngine\Expression.vb" />
     <Compile Include="Runtime\Internal\printer\functionPrinter.vb" />
     <Compile Include="Runtime\Interop\RReturn.vb" />
+    <Compile Include="Runtime\System\Config\Defaults.vb" />
     <Compile Include="Runtime\System\Rscript.vb" />
     <Compile Include="Runtime\System\Interface\RNames.vb" />
     <Compile Include="Runtime\GlobalEnvironment.vb" />
