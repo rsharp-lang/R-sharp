@@ -1,60 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::c7f95e4ba4c69987bdb11512355978ab, R#\Runtime\Internal\invoke.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module invoke
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: [stop], invalidParameter, invokeInternals, missingParameter, Rdataframe
-    '                   Rlist
-    ' 
-    '         Sub: (+3 Overloads) add
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module invoke
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: [stop], invalidParameter, invokeInternals, missingParameter, Rdataframe
+'                   Rlist
+' 
+'         Sub: (+3 Overloads) add
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
-Imports Microsoft.VisualBasic.Emit.Delegates
-Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
+Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Package
 
 Namespace Runtime.Internal
 
@@ -66,47 +64,35 @@ Namespace Runtime.Internal
         ''' <summary>
         ''' 内部函数索引
         ''' </summary>
-        ReadOnly index As New Dictionary(Of String, RInternalFuncInvoke)
+        ReadOnly index As New Dictionary(Of String, RMethodInfo)
 
         Sub New()
-            Call RConversion.pushEnvir()
-            Call base.pushEnvir()
-            Call linq.pushEnvir()
-            Call Invokes.file.pushEnvir()
-            Call Invokes.stringr.pushEnvir()
+            Call GetType(RConversion).pushEnvir
+            Call GetType(base).pushEnvir
+            Call GetType(linq).pushEnvir
+            Call GetType(Invokes.file).pushEnvir
+            Call GetType(stringr).pushEnvir
+            Call GetType(utils).pushEnvir
+            Call GetType(math).pushEnvir
         End Sub
 
-        Friend Function getFunction(name As String) As RInternalFuncInvoke
+        <Extension>
+        Private Sub pushEnvir(baseModule As Type)
+            Call ImportsPackage _
+                .GetAllApi(baseModule, includesInternal:=True) _
+                .Select(Function(m) New RMethodInfo(m)) _
+                .DoEach(Sub(m)
+                            Call index.Add(m.name, m)
+                        End Sub)
+        End Sub
+
+        Friend Function getFunction(name As String) As RMethodInfo
             If index.ContainsKey(name) Then
                 Return index(name)
             Else
                 Return Nothing
             End If
         End Function
-
-        ''' <summary>
-        ''' Add internal invoke handle
-        ''' </summary>
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Friend Sub add(handle As RInternalFuncInvoke)
-            index(handle.funcName) = handle
-        End Sub
-
-        ''' <summary>
-        ''' Add internal invoke handle
-        ''' </summary>
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Friend Sub add(name$, handle As Func(Of Environment, Object(), Object))
-            index(name) = New GenericInternalInvoke(name, handle)
-        End Sub
-
-        ''' <summary>
-        ''' Add internal invoke handle
-        ''' </summary>
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Friend Sub add(name$, handle As Func(Of Object, Object))
-            index(name) = New GenericInternalInvoke(name, handle)
-        End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function [stop](message As Object, envir As Environment) As Message
@@ -176,100 +162,12 @@ Namespace Runtime.Internal
         ''' <param name="funcName$"></param>
         ''' <param name="paramVals"></param>
         ''' <returns></returns>
-        Public Function invokeInternals(envir As Environment, funcName$, paramVals As Object()) As Object
+        Public Function invokeInternals(envir As Environment, funcName$, paramVals As InvokeParameter()) As Object
             If index.ContainsKey(funcName) Then
-                Return index(funcName).invoke(envir, paramVals)
+                Return index(funcName).Invoke(envir, paramVals)
+            Else
+                Return Message.SymbolNotFound(envir, funcName, TypeCodes.closure)
             End If
-
-            Select Case funcName
-                Case "any" : Return base.any(paramVals(Scan0))
-                Case "all" : Return base.all(paramVals(Scan0))
-                Case "length" : Return base.length(paramVals(Scan0))
-                Case "round"
-                    Dim x As Object = paramVals(Scan0)
-                    Dim decimals As Integer = Runtime.getFirst(paramVals(1))
-
-                    If x.GetType.IsInheritsFrom(GetType(Array)) Then
-                        Return (From element As Object In DirectCast(x, Array).AsQueryable Select Math.Round(CDbl(element), decimals)).ToArray
-                    Else
-                        Return Math.Round(CDbl(x), decimals)
-                    End If
-                Case "getOption"
-                    Dim name$ = Scripting.ToString(Runtime.getFirst(paramVals.ElementAtOrDefault(Scan0)), Nothing)
-                    Dim defaultVal$ = Scripting.ToString(paramVals.ElementAtOrDefault(1))
-
-                    If name.StringEmpty Then
-                        Return invoke.missingParameter(funcName, "name", envir)
-                    Else
-                        Return envir.globalEnvironment _
-                            .options _
-                            .getOption(name, defaultVal)
-                    End If
-                Case "names"
-                    Return base.names(paramVals(Scan0), Nothing, envir)
-                Case "source"
-                    If paramVals.IsNullOrEmpty Then
-                        Return invoke.missingParameter("source", "file", envir)
-                    Else
-                        Dim file As String = Scripting.ToString(Runtime.getFirst(paramVals(Scan0)))
-                        ' run external script
-                        Return base.source(file,, envir)
-                    End If
-                Case "get"
-                    Return base.get(paramVals(Scan0), envir)
-                Case "print"
-                    Return base.print(paramVals(Scan0), envir)
-                Case "str"
-                    Return base.str(paramVals(Scan0), envir)
-                Case "stop"
-                    Return Internal.stop(paramVals(Scan0), envir)
-                Case "warning"
-                    Return base.warning(paramVals(Scan0), envir)
-                Case "cat"
-                    Return base.cat(paramVals(Scan0), paramVals.ElementAtOrDefault(1), paramVals.ElementAtOrDefault(2, " "))
-                Case "lapply"
-                    If paramVals.ElementAtOrDefault(1) Is Nothing Then
-                        Return Internal.stop({"Missing apply function!"}, envir)
-                    ElseIf Not paramVals(1).GetType.ImplementInterface(GetType(RFunction)) Then
-                        Return Internal.stop({"Target is not a function!"}, envir)
-                    End If
-
-                    If Program.isException(paramVals(Scan0)) Then
-                        Return paramVals(Scan0)
-                    ElseIf Program.isException(paramVals(1)) Then
-                        Return paramVals(1)
-                    End If
-
-                    Return base.lapply(paramVals(Scan0), paramVals(1), envir)
-                Case "require"
-                    Dim libraryNames As String() = paramVals _
-                        .Select(AddressOf Scripting.ToString) _
-                        .ToArray
-
-                    Throw New NotImplementedException
-                Case "install.packages"
-                    Dim libraryNames As String() = paramVals _
-                        .Select(AddressOf Scripting.ToString) _
-                        .ToArray
-
-                    Return utils.installPackages(libraryNames, envir)
-                Case "sprintf"
-                    Dim format As Array = Runtime.asVector(Of String)(paramVals(Scan0))
-                    Dim arguments = paramVals.Skip(1).ToArray
-                    Dim sprintf As Func(Of String, Object(), String) = AddressOf CLangStringFormatProvider.sprintf
-                    Dim result As String() = format _
-                        .AsObjectEnumerator _
-                        .Select(Function(str)
-                                    Return sprintf(Scripting.ToString(str, "NULL"), arguments)
-                                End Function) _
-                        .ToArray
-
-                    Return result
-                Case "getwd"
-                    Return App.CurrentDirectory
-                Case Else
-                    Return Message.SymbolNotFound(envir, funcName, TypeCodes.closure)
-            End Select
         End Function
     End Module
 End Namespace

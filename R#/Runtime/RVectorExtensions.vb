@@ -50,6 +50,12 @@ Namespace Runtime
 
     <HideModuleName> Public Module RVectorExtensions
 
+        ''' <summary>
+        ''' Object ``x`` is an array of <typeparamref name="T"/>?
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
         Public Function isVector(Of T)(x As Object) As Boolean
             If x Is Nothing OrElse Not x.GetType.IsArray Then
                 Return False
@@ -144,8 +150,14 @@ Namespace Runtime
         ''' <param name="value"></param>
         ''' <returns></returns>
         Public Function asVector(Of T)(value As Object) As Array
-            Dim valueType As Type = value.GetType
+            Dim valueType As Type
             Dim typeofT As Type = GetType(T)
+
+            If value Is Nothing Then
+                Return {}
+            Else
+                valueType = value.GetType
+            End If
 
             If valueType Is typeofT Then
                 Return {DirectCast(value, T)}
@@ -154,11 +166,15 @@ Namespace Runtime
             ElseIf valueType Is GetType(Group) Then
                 Return typeofT.fromArray(Of T)(DirectCast(value, Group).group)
             ElseIf valueType Is GetType(T()) Then
-                Return value
+                Return DirectCast(value, T())
             ElseIf valueType.IsInheritsFrom(GetType(IEnumerable(Of T))) Then
                 Return DirectCast(value, IEnumerable(Of T)).ToArray
             Else
-                Return {value}
+                If typeofT Is GetType(Object) Then
+                    Return {DirectCast(value, T)}
+                Else
+                    Return {Conversion.CTypeDynamic(Of T)(value)}
+                End If
             End If
         End Function
 

@@ -44,24 +44,17 @@
 
 #End Region
 
+Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal
 
     Module RConversion
 
-        Sub New()
-            Call Internal.invoke.add(New GenericInternalInvoke("as.object", AddressOf asObject))
-            Call Internal.invoke.add(New GenericInternalInvoke("as.list", AddressOf asList))
-        End Sub
-
-        Friend Sub pushEnvir()
-            ' do nothing
-        End Sub
-
-        Public Function asObject(obj As Object) As Object
+        <ExportAPI("as.object")>
+        Public Function asObject(<RRawVectorArgument> obj As Object) As Object
             If obj Is Nothing Then
                 Return Nothing
             Else
@@ -83,6 +76,7 @@ Namespace Runtime.Internal
             End If
         End Function
 
+        <ExportAPI("as.list")>
         Public Function asList(obj As Object) As list
             If obj Is Nothing Then
                 Return Nothing
@@ -109,6 +103,33 @@ Namespace Runtime.Internal
                             Throw New NotImplementedException
                         End If
                 End Select
+            End If
+        End Function
+
+        <ExportAPI("as.numeric")>
+        Public Function asNumeric(<RRawVectorArgument> obj As Object) As Object
+            If obj Is Nothing Then
+                Return 0
+            Else
+                Return Runtime.asVector(Of Double)(obj)
+            End If
+        End Function
+
+        <ExportAPI("as.character")>
+        Public Function asCharacters(<RRawVectorArgument> obj As Object) As Object
+            If obj Is Nothing Then
+                Return Nothing
+            Else
+                Return Runtime.asVector(Of String)(obj)
+            End If
+        End Function
+
+        <ExportAPI("as.logical")>
+        Public Function asLogicals(<RRawVectorArgument> obj As Object) As Object
+            If obj Is Nothing Then
+                Return Nothing
+            Else
+                Return Runtime.asLogical(obj)
             End If
         End Function
 

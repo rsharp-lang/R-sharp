@@ -106,6 +106,18 @@ Namespace Runtime.Interop
             Me.parameters = closure.DoCall(AddressOf parseParameters)
         End Sub
 
+        ''' <summary>
+        ''' Gets the <see cref="MethodInfo"/> represented by the delegate.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Function GetRawDeclares() As MethodInfo
+            If api Like GetType(MethodInvoke) Then
+                Return api.TryCast(Of MethodInvoke).method
+            Else
+                Return api.TryCast(Of [Delegate]).Method
+            End If
+        End Function
+
         Public Function GetPrintContent() As String Implements RPrint.GetPrintContent
             Return $"let {name} as function({parameters.JoinBy(", ")}) {{
     return call R#.interop_{name}(...);
@@ -253,6 +265,9 @@ Namespace Runtime.Interop
         Private Shared Function getValue(arg As RMethodArgument, value As Object, trace$) As Object
             If arg.type.isArray Then
                 value = CObj(Runtime.asVector(value, arg.type.GetRawElementType))
+            ElseIf arg.type.isCollection Then
+                ' ienumerable
+                value = value
             ElseIf Not arg.isRequireRawVector Then
                 value = Runtime.getFirst(value)
             End If

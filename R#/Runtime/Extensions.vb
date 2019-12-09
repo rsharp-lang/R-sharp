@@ -49,6 +49,20 @@ Namespace Runtime
 
     <HideModuleName> Public Module Extensions
 
+        Public Function MeasureArrayElementType(array As Array) As Type
+            Dim x As Object
+
+            For i As Integer = 0 To array.Length - 1
+                x = array.GetValue(i)
+
+                If Not x Is Nothing Then
+                    Return x.GetType
+                End If
+            Next
+
+            Return GetType(Void)
+        End Function
+
         ''' <summary>
         ''' Converts the input string text to value <see cref="TypeCodes"/>
         ''' </summary>

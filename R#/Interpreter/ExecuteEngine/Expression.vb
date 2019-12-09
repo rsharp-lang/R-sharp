@@ -130,14 +130,26 @@ Namespace Interpreter.ExecuteEngine
                     ' continute for
                     Return New ContinuteFor
                 Case Else
-                    Throw New SyntaxErrorException
+                    ' may be it is using keyword as identifier name
+                    Return Nothing
             End Select
         End Function
 
         Friend Shared Function ParseExpression(code As List(Of Token())) As Expression
             If code(Scan0).isKeyword Then
-                Return code.DoCall(AddressOf keywordExpressionHandler)
-            ElseIf code = 1 Then
+                Dim expression As Expression = code.DoCall(AddressOf keywordExpressionHandler)
+
+                ' if expression is nothing
+                ' then it means the keyword is probably 
+                ' using keyword as identifier name
+                If Not expression Is Nothing Then
+                    Return expression
+                Else
+                    code(Scan0)(Scan0).name = TokenType.identifier
+                End If
+            End If
+
+            If code = 1 Then
                 Dim item As Token() = code(Scan0)
 
                 If item.isLiteral Then

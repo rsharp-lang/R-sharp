@@ -44,37 +44,49 @@
 
 #End Region
 
+Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Invokes
 
     Module stringr
 
-        Sub New()
-            Call Internal.invoke.add("string.replace", AddressOf stringr.replace)
-            Call Internal.invoke.add("paste", AddressOf stringr.paste)
-        End Sub
-
-        Friend Sub pushEnvir()
-            ' do nothing
-        End Sub
-
-        Friend Function paste(envir As Environment, params As Object()) As Object
-            Dim strings As String() = Runtime.asVector(Of String)(params(Scan0))
-            Dim deli As String = Runtime _
-                .asVector(Of String)(params(1)) _
+        <ExportAPI("sprintf")>
+        Public Function Csprintf(format As Array, <RListObjectArgument> arguments As Object, envir As Environment) As Object
+            Dim sprintf As Func(Of String, Object(), String) = AddressOf CLangStringFormatProvider.sprintf
+            Dim result As String() = format _
                 .AsObjectEnumerator _
-                .DefaultFirst(" ")
+                .Select(Function(str)
+                            Return sprintf(Scripting.ToString(str, "NULL"), arguments)
+                        End Function) _
+                .ToArray
 
+            Return result
+        End Function
+
+        <ExportAPI("strsplit")>
+        Friend Function strsplit(text$(), Optional delimiter$ = " ", Optional envir As Environment = Nothing) As Object
+            If text.IsNullOrEmpty Then
+                Return Nothing
+            ElseIf text.Length = 1 Then
+                Return Strings.Split(text(Scan0), delimiter)
+            Else
+                Throw New NotImplementedException
+            End If
+        End Function
+
+        <ExportAPI("paste")>
+        Friend Function paste(strings$(), Optional deli$ = " ", Optional envir As Environment = Nothing) As Object
             Return strings.JoinBy(deli)
         End Function
 
-        Friend Function replace(envir As Environment, params As Object()) As String()
-            Dim subj As String() = Runtime.asVector(Of String)(params(Scan0))
-            Dim search As String = Scripting.ToString(Runtime.getFirst(params(1)))
-            Dim replaceAs As String = Scripting.ToString(Runtime.getFirst(params(2)), "")
-            Dim regexp As Boolean = Runtime.asLogical(params.ElementAtOrDefault(3))(Scan0)
-
+        <ExportAPI("string.replace")>
+        Friend Function replace(subj$(), search$,
+                                Optional replaceAs$ = "",
+                                Optional regexp As Boolean = False,
+                                Optional envir As Environment = Nothing) As Object
             If regexp Then
                 Return subj.Select(Function(s) s.StringReplace(search, replaceAs)).ToArray
             Else

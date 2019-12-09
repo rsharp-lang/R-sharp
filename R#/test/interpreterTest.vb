@@ -69,6 +69,10 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+        Call markdownTest()
+
+        Call declareTest()
+
         ' Call R.globalEnvir.packages.InstallLocals("D:\GCModeller\GCModeller\bin\R.base.dll")
         Call orDefaultTest()
         Call linqPipelineTest()
@@ -138,9 +142,15 @@ Module interpreterTest
 
         Call declareFunctionTest()
 
-        Call declareTest()
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub markdownTest()
+        Call R.Evaluate("print(sum)")
+        Call R.Evaluate("print(names)")
 
         Pause()
     End Sub
@@ -738,6 +748,10 @@ print(`value of the x='${x}'`);
         Call R.Evaluate("let a = 1+2*3+5^6; # code comments")
         Call R.Evaluate("let x as double = [999, 888, 777, 666] / 5.3 ;")
         Call R.Evaluate("let y = round($, 0) ;")
+
+        Call R.Evaluate("print(x)")
+        Call R.Evaluate("print(`length of x is ${length(x)}`)")
+
         Call R.Evaluate("let flags  as boolean = [true, true, true, false];")
         Call R.Evaluate("let str as  string =[`hello world!`, 'This program is running on R# scripting engine!', ""And, this is a string value.""]; # declares a string vector")
         Call R.Evaluate("let z as double;")

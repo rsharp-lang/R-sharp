@@ -84,6 +84,11 @@ Namespace Interpreter
         ''' </remarks>
         Public Property debug As Boolean = False
 
+        ''' <summary>
+        ''' Get value of a <see cref="Variable"/>
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <returns></returns>
         Default Public ReadOnly Property GetValue(name As String) As Object
             Get
                 Return globalEnvir(name).value

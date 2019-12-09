@@ -44,50 +44,38 @@
 
 #End Region
 
-Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
-Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Invokes.LinqPipeline
 
     Module linq
 
-        Sub New()
-            Call Internal.invoke.add("groupBy", AddressOf linq.groupBy)
-            Call Internal.invoke.add("first", AddressOf linq.first)
-            Call Internal.invoke.add("which", AddressOf linq.where)
-            Call Internal.invoke.add("projectAs", AddressOf linq.projectAs)
-        End Sub
+        <ExportAPI("unique")>
+        Private Function unique(items As Array, envir As Environment)
+            Dim distinct As Object() = items _
+                .AsObjectEnumerator _
+                .GroupBy(Function(o) o) _
+                .Select(Function(g) g.Key) _
+                .ToArray
 
-        Friend Sub pushEnvir()
-            ' do nothing
-        End Sub
+            Return distinct
+        End Function
 
-        Private Function projectAs(envir As Environment, params As Object()) As Object
-            Dim sequence As Array = Runtime.asVector(Of Object)(params(Scan0))
-            Dim project As Object = params(1)
-            Dim doProject As Func(Of Object, Object)
+        <ExportAPI("projectAs")>
+        Private Function projectAs(sequence As Array, project As RFunction, envir As Environment) As Object
+            Dim doProject As Func(Of Object, Object) =
+                Function(o)
+                    Dim arg As New InvokeParameter() With {
+                        .value = New RuntimeValueLiteral(o)
+                    }
 
-            If project.GetType.IsInheritsFrom(GetType(RInternalFuncInvoke)) Then
-                Dim invoke As RInternalFuncInvoke = project
-
-                doProject = Function(o) invoke.invoke(envir, {o})
-            Else
-                Dim invoke As RFunction = project
-
-                doProject = Function(o)
-                                Dim arg As New InvokeParameter() With {
-                                    .value = New RuntimeValueLiteral(o)
-                                }
-
-                                Return invoke.Invoke(envir, {arg})
-                            End Function
-            End If
+                    Return project.Invoke(envir, {arg})
+                End Function
 
             Dim result As Object() = sequence _
                 .AsObjectEnumerator _
@@ -101,11 +89,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' The which test filter
         ''' </summary>
         ''' <param name="envir"></param>
-        ''' <param name="params"></param>
         ''' <returns></returns>
-        Private Function where(envir As Environment, params As Object()) As Object
-            Dim sequence As Array = Runtime.asVector(Of Object)(params(Scan0))
-            Dim test As RFunction = params(1)
+        ''' 
+        <ExportAPI("which")>
+        Private Function where(sequence As Array, test As RFunction, envir As Environment) As Object
             Dim pass As Boolean
             Dim arg As InvokeParameter
             Dim filter As New List(Of Object)
@@ -124,9 +111,8 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Return filter.ToArray
         End Function
 
-        Private Function first(envir As Environment, params As Object()) As Object
-            Dim sequence As Array = Runtime.asVector(Of Object)(params(Scan0))
-            Dim test As RFunction = params(1)
+        <ExportAPI("first")>
+        Private Function first(sequence As Array, test As RFunction, envir As Environment) As Object
             Dim pass As Boolean
             Dim arg As InvokeParameter
 
@@ -144,9 +130,8 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Return Nothing
         End Function
 
-        Private Function groupBy(envir As Environment, params As Object()) As Object
-            Dim sequence As Array = Runtime.asVector(Of Object)(params(Scan0))
-            Dim getKey As RFunction = params(1)
+        <ExportAPI("groupBy")>
+        Private Function groupBy(sequence As Array, getKey As RFunction, envir As Environment) As Object
             Dim result = sequence.AsObjectEnumerator _
                 .GroupBy(Function(o)
                              Dim arg As New InvokeParameter() With {

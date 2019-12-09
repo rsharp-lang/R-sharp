@@ -47,7 +47,7 @@ Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Interpreter.ExecuteEngine
 
@@ -73,7 +73,7 @@ Namespace Interpreter.ExecuteEngine
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim symbol As [Variant](Of Variable, RInternalFuncInvoke) = envir.FindSymbol(Me.symbol)
+            Dim symbol As [Variant](Of Variable, RMethodInfo) = envir.FindSymbol(Me.symbol)
 
             If symbol Is Nothing OrElse Not symbol.HasValue Then
                 symbol = Runtime.Internal.invoke.getFunction(Me.symbol)
