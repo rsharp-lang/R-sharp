@@ -441,6 +441,8 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         Private Function doPrintInternal(x As Object, type As Type, envir As Environment) As Object
+            Dim maxPrint% = envir.global.options.maxPrint
+
             If type Is GetType(RMethodInfo) Then
                 Call envir _
                     .globalEnvironment _
@@ -456,9 +458,13 @@ Namespace Runtime.Internal.Invokes
             ElseIf type Is GetType(Message) Then
                 Return x
             ElseIf type Is GetType(list) Then
-                Call printer.printInternal(DirectCast(x, list).slots, "")
+                Call DirectCast(x, list) _
+                    .slots _
+                    .DoCall(Sub(list)
+                                printer.printInternal(list, "", maxPrint)
+                            End Sub)
             Else
-                Call printer.printInternal(x, "")
+                Call printer.printInternal(x, "", maxPrint)
             End If
 
             Return x

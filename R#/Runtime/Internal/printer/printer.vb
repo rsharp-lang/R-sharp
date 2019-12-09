@@ -75,13 +75,13 @@ Namespace Runtime.Internal.ConsolePrinter
             RtoString(GetType(T)) = formatter
         End Sub
 
-        Friend Sub printInternal(x As Object, listPrefix$)
+        Friend Sub printInternal(x As Object, listPrefix$, maxPrint%)
             Dim valueType As Type = x.GetType
 
             If valueType.IsInheritsFrom(GetType(Array)) Then
                 With DirectCast(x, Array)
                     If .Length > 1 Then
-                        Call .printArray()
+                        Call .printArray(maxPrint)
                     ElseIf .Length = 0 Then
                         Call Console.WriteLine("NULL")
                     Else
@@ -92,9 +92,9 @@ Namespace Runtime.Internal.ConsolePrinter
                     End If
                 End With
             ElseIf valueType Is GetType(vector) Then
-                Call DirectCast(x, vector).data.printArray()
+                Call DirectCast(x, vector).data.printArray(maxPrint)
             ElseIf valueType Is GetType(Dictionary(Of String, Object)) Then
-                Call DirectCast(x, Dictionary(Of String, Object)).printList(listPrefix)
+                Call DirectCast(x, Dictionary(Of String, Object)).printList(listPrefix, maxPrint)
             ElseIf valueType Is GetType(dataframe) Then
                 Call DirectCast(x, dataframe) _
                     .GetTable _
@@ -107,7 +107,7 @@ printSingleElement:
         End Sub
 
         <Extension>
-        Private Sub printList(list As Dictionary(Of String, Object), listPrefix$)
+        Private Sub printList(list As Dictionary(Of String, Object), listPrefix$, maxPrint%)
             For Each slot As KeyValuePair(Of String, Object) In list
                 Dim key$ = slot.Key
 
@@ -118,7 +118,7 @@ printSingleElement:
                 End If
 
                 Call Console.WriteLine(key)
-                Call printer.printInternal(slot.Value, key)
+                Call printer.printInternal(slot.Value, key, maxPrint)
                 Call Console.WriteLine()
             Next
         End Sub
