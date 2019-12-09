@@ -204,7 +204,7 @@ Module interpreterTest
     Sub printClassTest()
         Dim [class] As Object = New SMRUCC.Rsharp.Runtime.Environment
 
-        Call Console.WriteLine(printer.ValueToString([class]))
+        Call Console.WriteLine(printer.ValueToString([class], R.globalEnvir))
 
         Pause()
     End Sub
