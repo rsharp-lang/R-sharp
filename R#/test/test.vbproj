@@ -118,6 +118,7 @@
   <ItemGroup>
     <Compile Include="interpreterTest.vb" />
     <Compile Include="docTest.vb" />
+    <Compile Include="configTest.vb" />
     <Compile Include="scriptTest.vb" />
     <Compile Include="tokenlicerTest.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />

@@ -43,14 +43,14 @@ Imports SMRUCC.Rsharp.Interpreter
 
 Module scriptTest
 
-    Const script$ = "E:\GCModeller\src\GCModeller\annotations\GSEA\Rscript\GSEA.R"
+    Const script$ = "S:\2019\mzCloud\runExport.R"
 
     Dim R As RInterpreter = New RInterpreter() With {
         .debug = True
     }
 
     Sub Main()
-        Call R.globalEnvir.packages.InstallLocals("E:\GCModeller\GCModeller\bin\Library\R.base.dll")
+        Call R.globalEnvir.packages.InstallLocals("D:\GCModeller\GCModeller\bin\Library\R.base.dll")
         Call R.Source(script)
         Call Pause()
     End Sub

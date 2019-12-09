@@ -112,6 +112,10 @@ Namespace Interpreter
                 Console.WriteLine($"  {++i}. {msg}")
             Next
 
+            If Not message.source Is Nothing Then
+                Call Console.WriteLine($" R# source: {message.source.ToString}")
+            End If
+
             Console.ForegroundColor = backup
 
             Return Nothing

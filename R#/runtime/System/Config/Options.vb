@@ -55,6 +55,10 @@ Namespace Runtime.Components.Configuration
     Public Class Options : Implements IFileReference
 
         ReadOnly file As ConfigFile
+
+        ''' <summary>
+        ''' The memory cache value of the configuration.
+        ''' </summary>
         ReadOnly configValues As Dictionary(Of String, String)
 
         ''' <summary>
@@ -64,6 +68,47 @@ Namespace Runtime.Components.Configuration
         Public ReadOnly Property [lib] As String
             Get
                 Return getOption(NameOf([lib]), [default]:=LocalPackageDatabase.localDb)
+            End Get
+        End Property
+
+        ''' <summary>
+        ''' Max count number for print vector. integer, defaulting to 999. 
+        ''' print or show methods can make use of this option, to limit the 
+        ''' amount of information that is printed, to something in the 
+        ''' order of (and typically slightly less than) max.print entries.
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property maxPrint As Integer
+            Get
+                Return getOption("max.print", [default]:=999).ParseInteger
+            End Get
+        End Property
+
+        ''' <summary>
+        ''' controls the number of significant (see signif) digits to print when printing 
+        ''' numeric values. It is a suggestion only. Valid values are 1...22 with default 
+        ''' 7. See the note in print.default about values greater than 15.
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property digits As Integer
+            Get
+                Return getOption("digits", [default]:=7).ParseInteger
+            End Get
+        End Property
+
+        ''' <summary>
+        ''' ``F`` or ``G``
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property f64Format As String
+            Get
+                Return getOption("f64.format", [default]:="F")
+            End Get
+        End Property
+
+        Public ReadOnly Property HTTPUserAgent As String
+            Get
+                Return getOption("HTTPUserAgent", [default]:=Defaults.HTTPUserAgent)
             End Get
         End Property
 
@@ -79,6 +124,13 @@ Namespace Runtime.Components.Configuration
                               End Function)
         End Sub
 
+        ''' <summary>
+        ''' Get configuration value string, if the option is not exists in current configuration, 
+        ''' then this function will create a new configuration value with use default value.
+        ''' </summary>
+        ''' <param name="opt"></param>
+        ''' <param name="default$"></param>
+        ''' <returns></returns>
         Public Function getOption(opt As String, Optional default$ = Nothing) As String
             If configValues.ContainsKey(opt) Then
                 Return configValues(opt)
@@ -87,6 +139,12 @@ Namespace Runtime.Components.Configuration
             End If
         End Function
 
+        ''' <summary>
+        ''' Set configuration value and update the configuration database.
+        ''' </summary>
+        ''' <param name="opt$"></param>
+        ''' <param name="value$"></param>
+        ''' <returns></returns>
         Public Function setOption(opt$, value$) As Object
             If configValues.ContainsKey(opt) Then
                 configValues(opt) = value
@@ -96,10 +154,19 @@ Namespace Runtime.Components.Configuration
                 file.config.Add(New NamedValue With {.name = opt, .text = value})
             End If
 
-            Call file.GetXml.SaveTo(localConfig)
+            Call flush()
 
             Return opt
         End Function
+
+        ''' <summary>
+        ''' Save configuration file
+        ''' </summary>
+        Public Sub flush()
+            Call file _
+                .GetXml _
+                .SaveTo(localConfig)
+        End Sub
 
     End Class
 End Namespace

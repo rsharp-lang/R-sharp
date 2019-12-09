@@ -124,6 +124,8 @@ Namespace Interpreter.ExecuteEngine
 
             If envir Is Nothing Then
                 envir = parent
+            Else
+                envir = New Environment(parent, Me.funcName)
             End If
 
             Dim argumentKeys As String()

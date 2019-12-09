@@ -62,6 +62,7 @@ Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports REnv = SMRUCC.Rsharp.Runtime.Internal.Invokes
 
 Namespace Interpreter
 
@@ -129,6 +130,18 @@ Namespace Interpreter
                                  )
                              End Sub)
             End With
+        End Sub
+
+        ''' <summary>
+        ''' A shortcut of ``print(expr)``
+        ''' </summary>
+        ''' <param name="expr"></param>
+        Public Sub Print(expr As String)
+            Dim result As Object = Evaluate(expr)
+
+            ' do expression evaluation and then 
+            ' print($expr)
+            Call REnv.print(result, globalEnvir)
         End Sub
 
         ''' <summary>
