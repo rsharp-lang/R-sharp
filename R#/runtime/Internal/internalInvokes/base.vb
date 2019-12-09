@@ -278,7 +278,7 @@ Namespace Runtime.Internal.Invokes
             Dim symbol As Variable = envir.FindSymbol(name)
 
             If symbol Is Nothing Then
-                Return ErrorMessage.SymbolNotFound(envir, name, TypeCodes.generic)
+                Return Message.SymbolNotFound(envir, name, TypeCodes.generic)
             Else
                 Return symbol.value
             End If

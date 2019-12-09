@@ -79,7 +79,7 @@ Namespace Interpreter.ExecuteEngine
                 symbol = Runtime.Internal.invoke.getFunction(Me.symbol)
             End If
             If symbol Is Nothing Then
-                Return ErrorMessage.SymbolNotFound(envir, Me.symbol, TypeCodes.generic)
+                Return Message.SymbolNotFound(envir, Me.symbol, TypeCodes.generic)
             ElseIf symbol Like GetType(Variable) Then
                 Return symbol.VA.value
             Else

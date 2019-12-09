@@ -192,12 +192,12 @@ Namespace Interpreter.ExecuteEngine
             Dim funcName As String = DirectCast(Me.funcName, Literal).ToString
 
             If pkg Is Nothing Then
-                Return ErrorMessage.SymbolNotFound(envir, [namespace], TypeCodes.ref)
+                Return Message.SymbolNotFound(envir, [namespace], TypeCodes.ref)
             Else
                 Dim api As RMethodInfo = pkg.GetFunction(funcName)
 
                 If api Is Nothing Then
-                    Return ErrorMessage.SymbolNotFound(envir, $"{[namespace]}::{funcName}", TypeCodes.closure)
+                    Return Message.SymbolNotFound(envir, $"{[namespace]}::{funcName}", TypeCodes.closure)
                 Else
                     Return api.Invoke(envir, InvokeParameter.Create(parameters))
                 End If

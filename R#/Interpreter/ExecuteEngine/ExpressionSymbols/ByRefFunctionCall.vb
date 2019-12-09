@@ -73,7 +73,7 @@ Namespace Interpreter.ExecuteEngine
                 Case "names"
                     Return base.names(target.Evaluate(envir), value.Evaluate(envir), envir)
                 Case Else
-                    Return ErrorMessage.SyntaxNotImplemented(envir, $"byref call of {funcName}")
+                    Return Message.SyntaxNotImplemented(envir, $"byref call of {funcName}")
             End Select
         End Function
     End Class

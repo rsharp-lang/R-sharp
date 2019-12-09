@@ -117,7 +117,7 @@ Namespace Runtime
 
                 If symbol Is Nothing Then
                     Return New Variable With {
-                        .value = ErrorMessage.SymbolNotFound(Me, name, TypeCodes.generic)
+                        .value = Message.SymbolNotFound(Me, name, TypeCodes.generic)
                     }
                 Else
                     Return symbol
