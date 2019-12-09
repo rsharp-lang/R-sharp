@@ -104,7 +104,7 @@ Public Module utils
         ElseIf Runtime.isVector(Of DataSet)(x) Then
             Return DirectCast(Runtime.asVector(Of DataSet)(x), DataSet()).SaveTo(path:=file)
         Else
-            Return Message.InCompatibleType(GetType(File), type, envir)
+            Return ErrorMessage.InCompatibleType(GetType(File), type, envir)
         End If
     End Function
 End Module

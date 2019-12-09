@@ -166,7 +166,7 @@ Namespace Runtime.Internal
             If index.ContainsKey(funcName) Then
                 Return index(funcName).Invoke(envir, paramVals)
             Else
-                Return Message.SymbolNotFound(envir, funcName, TypeCodes.closure)
+                Return ErrorMessage.SymbolNotFound(envir, funcName, TypeCodes.closure)
             End If
         End Function
     End Module

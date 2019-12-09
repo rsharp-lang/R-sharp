@@ -1,50 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::18801db20b4983c205e65dcf46387519, R#\Runtime\Environment.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class Environment
-    ' 
-    '         Properties: globalEnvironment, isGlobal, messages, parent, stackTag
-    '                     types, variables
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    ' 
-    '         Function: asRVector, Evaluate, FindSymbol, GetEnumerator, IEnumerable_GetEnumerator
-    '                   Push, ToString
-    ' 
-    '         Sub: Clear, (+2 Overloads) Dispose
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class Environment
+' 
+'         Properties: globalEnvironment, isGlobal, messages, parent, stackTag
+'                     types, variables
+' 
+'         Constructor: (+2 Overloads) Sub New
+' 
+'         Function: asRVector, Evaluate, FindSymbol, GetEnumerator, IEnumerable_GetEnumerator
+'                   Push, ToString
+' 
+'         Sub: Clear, (+2 Overloads) Dispose
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -117,7 +117,7 @@ Namespace Runtime
 
                 If symbol Is Nothing Then
                     Return New Variable With {
-                        .value = Message.SymbolNotFound(Me, name, TypeCodes.generic)
+                        .value = ErrorMessage.SymbolNotFound(Me, name, TypeCodes.generic)
                     }
                 Else
                     Return symbol
@@ -125,7 +125,7 @@ Namespace Runtime
             End Get
             Set(value As Variable)
                 If name.First = "["c AndAlso name.Last = "]"c Then
-                    GlobalEnvironment(name.GetStackValue("[", "]")) = value
+                    globalEnvironment(name.GetStackValue("[", "]")) = value
                 Else
                     variables(name) = value
                 End If
@@ -165,7 +165,7 @@ Namespace Runtime
         ''' <returns></returns>
         Public Function FindSymbol(name As String) As Variable
             If (name.First = "["c AndAlso name.Last = "]"c) Then
-                Return GlobalEnvironment.FindSymbol(name.GetStackValue("[", "]"))
+                Return globalEnvironment.FindSymbol(name.GetStackValue("[", "]"))
             End If
 
             If variables.ContainsKey(name) Then

@@ -263,7 +263,7 @@ Namespace Interpreter.ExecuteEngine
             End Select
 
             If target Is Nothing Then
-                Return Message.SymbolNotFound(envir, symbolName.ToString, TypeCodes.generic)
+                Return ErrorMessage.SymbolNotFound(envir, symbolName.ToString, TypeCodes.generic)
             End If
 
             If isByRef Then

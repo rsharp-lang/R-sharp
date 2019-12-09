@@ -51,28 +51,15 @@ Imports Microsoft.VisualBasic.Linq
 Namespace Runtime.Components
 
     ''' <summary>
-    ''' The warning message and exception message
+    ''' Message produced by <see cref="Internal.stop(Object, Environment)"/>
     ''' </summary>
-    Public Class Message : Implements IEnumerable(Of String)
+    Public Class ErrorMessage : Inherits Message
 
-        Public Property message As String()
-        Public Property level As MSG_TYPES
-        Public Property environmentStack As StackFrame()
-        Public Property trace As StackFrame()
+        Public Property source As Message
 
-        Public Overrides Function ToString() As String
-            Return $"[{level.Description}] {message(Scan0)}"
-        End Function
-
-        Public Iterator Function GetEnumerator() As IEnumerator(Of String) Implements IEnumerable(Of String).GetEnumerator
-            For Each msg As String In message
-                Yield msg
-            Next
-        End Function
-
-        Private Iterator Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
-            Yield GetEnumerator()
-        End Function
+        Sub New()
+            level = MSG_TYPES.ERR
+        End Sub
 
         Public Shared Function SymbolNotFound(envir As Environment, symbolName$, type As TypeCodes) As Message
             Dim exception$
@@ -111,6 +98,31 @@ Namespace Runtime.Components
             }.DoCall(Function(msg)
                          Return Internal.stop(msg, envir)
                      End Function)
+        End Function
+    End Class
+
+    ''' <summary>
+    ''' The warning message and exception message
+    ''' </summary>
+    Public Class Message : Implements IEnumerable(Of String)
+
+        Public Property message As String()
+        Public Property level As MSG_TYPES
+        Public Property environmentStack As StackFrame()
+        Public Property trace As StackFrame()
+
+        Public Overrides Function ToString() As String
+            Return $"[{level.Description}] {message(Scan0)}"
+        End Function
+
+        Public Iterator Function GetEnumerator() As IEnumerator(Of String) Implements IEnumerable(Of String).GetEnumerator
+            For Each msg As String In message
+                Yield msg
+            Next
+        End Function
+
+        Private Iterator Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
+            Yield GetEnumerator()
         End Function
     End Class
 End Namespace
