@@ -239,16 +239,29 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("options")>
         Public Function options(<RListObjectArgument> opts As Object, envir As Environment) As Object
             Dim configs As Options = envir.globalEnvironment.options
+            Dim values As list
 
-            For Each value In DirectCast(opts, list).slots
-                Try
-                    configs.setOption(value.Key, value.Value)
-                Catch ex As Exception
-                    Return Internal.stop(ex, envir)
-                End Try
-            Next
+            If opts.GetType Is GetType(String()) Then
+                values = New list With {
+                    .slots = DirectCast(opts, String()) _
+                        .ToDictionary(Function(key) key,
+                                      Function(key)
+                                          Return CObj(configs.getOption(key, ""))
+                                      End Function)
+                }
+            Else
+                values = DirectCast(opts, list)
 
-            Return opts
+                For Each value As KeyValuePair(Of String, Object) In values.slots
+                    Try
+                        configs.setOption(value.Key, value.Value)
+                    Catch ex As Exception
+                        Return Internal.stop(ex, envir)
+                    End Try
+                Next
+            End If
+
+            Return values
         End Function
 
         <ExportAPI("get")>
