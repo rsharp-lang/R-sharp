@@ -189,9 +189,15 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
-        ''' 运行外部脚本
+        ''' ## Run the external R# script. Read R Code from a File, a Connection or Expressions
+        ''' 
+        ''' causes R to accept its input from the named file or URL or connection or expressions directly. 
+        ''' Input is read and parsed from that file until the end of the file is reached, then the parsed 
+        ''' expressions are evaluated sequentially in the chosen environment.
         ''' </summary>
-        ''' <param name="path"></param>
+        ''' <param name="path">
+        ''' a connection Or a character String giving the pathname Of the file Or URL To read from. 
+        ''' "" indicates the connection ``stdin()``.</param>
         ''' <param name="envir"></param>
         ''' <returns></returns>
         ''' 
