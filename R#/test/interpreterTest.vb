@@ -325,7 +325,10 @@ test1::println('123');
     End Sub
 
     Sub sourceFunctionTest()
+        Call R.Evaluate("source(path = 'abc.R')")
         Call R.Evaluate("source('a.R')")
+
+        Pause()
     End Sub
 
     Sub sourceScripttest()

@@ -260,9 +260,18 @@ Namespace Interpreter
             }
             Dim result As Object
 
-            globalEnvir.Push("!script", script, TypeCodes.list)
-            result = RunInternal(Rscript.FromFile(filepath), arguments)
-            globalEnvir.Delete("!script")
+            If filepath.FileExists Then
+                globalEnvir.Push("!script", script, TypeCodes.list)
+                result = RunInternal(Rscript.FromFile(filepath), arguments)
+                globalEnvir.Delete("!script")
+            Else
+                result = Internal.stop({
+                    $"cannot open the connection.",
+                    $"cannot open file '{filepath.FileName}': No such file or directory",
+                    $"file: {filepath.GetFullPath}",
+                    $"function: source"
+                }, globalEnvir)
+            End If
 
             Return result
         End Function
