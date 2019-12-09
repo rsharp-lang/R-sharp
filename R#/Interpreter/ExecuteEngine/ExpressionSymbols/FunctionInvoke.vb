@@ -128,7 +128,7 @@ Namespace Interpreter.ExecuteEngine
         ''' <param name="parameters"></param>
         Sub New(funcVar As Expression, ParamArray parameters As Expression())
             Me.funcName = funcVar
-            Me.parameters = parameters.ToList
+            Me.parameters = parameters.AsList
         End Sub
 
         Public Overrides Function ToString() As String
