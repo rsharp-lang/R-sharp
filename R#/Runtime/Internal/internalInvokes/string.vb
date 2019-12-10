@@ -69,7 +69,7 @@ Namespace Runtime.Internal.Invokes
             ElseIf text.Length = 1 Then
                 Return Strings.Split(text(Scan0), delimiter)
             Else
-                Throw New NotImplementedException
+                Return Internal.stop(New NotImplementedException, envir)
             End If
         End Function
 

@@ -88,7 +88,7 @@ Namespace Runtime.Internal.Invokes
                     Return member
                 End If
             Else
-                Throw New NotImplementedException(targetType.FullName)
+                Return Internal.stop(New NotImplementedException(targetType.FullName), envir)
             End If
         End Function
 

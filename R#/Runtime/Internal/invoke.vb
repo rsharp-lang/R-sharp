@@ -94,6 +94,12 @@ Namespace Runtime.Internal
             End If
         End Function
 
+        ''' <summary>
+        ''' In debug mode, will throw exception at the caller site
+        ''' </summary>
+        ''' <param name="message"></param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function [stop](message As Object, envir As Environment) As Message
             Return base.stop(message, envir)

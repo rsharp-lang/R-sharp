@@ -91,7 +91,7 @@ Namespace Interpreter.ExecuteEngine
                     Case GetType(ValueAssign)
                         Return DirectCast(assignTo, ValueAssign).DoValueAssign(envir, Value)
                     Case Else
-                        Throw New NotImplementedException
+                        Return Internal.stop(New NotImplementedException, envir)
                 End Select
             End Function
         End Class

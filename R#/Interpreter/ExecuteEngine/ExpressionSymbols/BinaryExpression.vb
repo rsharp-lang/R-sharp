@@ -180,7 +180,7 @@ Namespace Interpreter.ExecuteEngine
                 End If
             End If
 
-            Throw New NotImplementedException($"<{ta.FullName}> {[operator]} <{tb.FullName}>")
+            Return Internal.stop(New NotImplementedException($"<{ta.FullName}> {[operator]} <{tb.FullName}>"), envir)
         End Function
 
         Public Shared Function DoStringBinary(Of Out)(a As Object, b As Object, op As Func(Of Object, Object, Object)) As Out()
