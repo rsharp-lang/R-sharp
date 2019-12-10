@@ -88,22 +88,56 @@ Namespace Runtime.Internal.Invokes
             Return fileNames.Select(AddressOf ParentPath).ToArray
         End Function
 
+        ''' <summary>
+        ''' List the Files in a Directory/Folder
+        ''' </summary>
+        ''' <param name="dir">
+        ''' a character vector of full path names; the default corresponds to the working directory, ``getwd()``. 
+        ''' Tilde expansion (see path.expand) is performed. Missing values will be ignored.
+        ''' </param>
+        ''' <param name="pattern$"></param>
+        ''' <returns></returns>
         <ExportAPI("list.files")>
-        Public Function listFiles(dir$, Optional pattern$() = Nothing, Optional envir As Environment = Nothing) As Object
+        Public Function listFiles(Optional dir$ = "./",
+                                  Optional pattern$() = Nothing,
+                                  Optional recursive As Boolean = False) As Object
+
             If pattern.IsNullOrEmpty Then
                 pattern = {"*.*"}
             End If
 
-            Return (ls - l - r - pattern <= dir).ToArray
+            If recursive Then
+                Return (ls - l - r - pattern <= dir).ToArray
+            Else
+                Return (ls - l - pattern <= dir).ToArray
+            End If
         End Function
 
+        ''' <summary>
+        ''' List the Files in a Directory/Folder
+        ''' </summary>
+        ''' <param name="dir">
+        ''' a character vector of full path names; the default corresponds to the working directory, ``getwd()``. 
+        ''' Tilde expansion (see path.expand) is performed. Missing values will be ignored.
+        ''' </param>
+        ''' <param name="fullNames"></param>
+        ''' <param name="recursive"></param>
+        ''' <returns></returns>
         <ExportAPI("list.dirs")>
-        Public Function listDirs(Optional dir$ = "./", Optional envir As Environment = Nothing) As Object
-            Dim dirs$() = dir _
-                .ListDirectory(SearchOption.SearchAllSubDirectories) _
-                .ToArray
+        Public Function listDirs(Optional dir$ = "./",
+                                 Optional fullNames As Boolean = True,
+                                 Optional recursive As Boolean = True) As Object
 
-            Return dirs
+            If Not dir.DirectoryExists Then
+                Return {}
+            Else
+                Dim level As SearchOption = If(recursive, SearchOption.SearchAllSubDirectories, SearchOption.SearchTopLevelOnly)
+                Dim dirs$() = dir _
+                    .ListDirectory(level, fullNames) _
+                    .ToArray
+
+                Return dirs
+            End If
         End Function
 
         <ExportAPI("basename")>
