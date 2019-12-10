@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::9b358e683a85373b16e28bf0aa374c6b, R#\Runtime\Interop\RMethodInfo.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class RMethodInfo
-    ' 
-    '         Properties: name, parameters, returns
-    ' 
-    '         Constructor: (+3 Overloads) Sub New
-    '         Function: createNormalArguments, createObjectListArguments, GetPrintContent, GetRawDeclares, getValue
-    '                   Invoke, missingParameter, parseParameters, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class RMethodInfo
+' 
+'         Properties: name, parameters, returns
+' 
+'         Constructor: (+3 Overloads) Sub New
+'         Function: createNormalArguments, createObjectListArguments, GetPrintContent, GetRawDeclares, getValue
+'                   Invoke, missingParameter, parseParameters, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -50,6 +50,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal
@@ -170,20 +171,33 @@ Namespace Runtime.Interop
             Dim listObject As New List(Of InvokeParameter)
             Dim i As Integer
             Dim sequenceIndex As Integer = Scan0
+            Dim paramVal As Object
 
             For Each arg As InvokeParameter In params
                 If declareArguments.ContainsKey(arg.name) OrElse Not arg.isSymbolAssign Then
                     i = declareNameIndex(arg.name)
 
                     If i > -1 Then
-                        parameterVals(i) = getValue(declareArguments(arg.name), arg.Evaluate(envir), trace:=name)
+                        paramVal = getValue(declareArguments(arg.name), arg.Evaluate(envir), trace:=name, envir:=envir)
+                        parameterVals(i) = paramVal
                         declareArguments.Remove(arg.name)
                     Else
-                        parameterVals(sequenceIndex) = getValue(declareArguments.First.Value, arg.Evaluate(envir), trace:=name)
+                        paramVal = declareArguments _
+                            .First _
+                            .Value _
+                            .DoCall(Function(a)
+                                        Return getValue(a, arg.Evaluate(envir), trace:=name, envir:=envir)
+                                    End Function)
+
+                        parameterVals(sequenceIndex) = paramVal
                         declareArguments.Remove(declareArguments.First.Key)
                     End If
+
+                    If Not paramVal Is Nothing AndAlso paramVal.GetType Is GetType(Message) Then
+                        Return {paramVal}
+                    End If
                 Else
-                    listObject.Add(arg)
+                    Call listObject.Add(arg)
                 End If
 
                 sequenceIndex += 1
@@ -214,7 +228,13 @@ Namespace Runtime.Interop
             End If
 
             If declareArguments.Count > 0 Then
-                Return {missingParameter(declareArguments.Values.First, envir, name)}
+                Return {
+                    declareArguments.Values _
+                        .First _
+                        .DoCall(Function(a)
+                                    Return missingParameter(a, envir, name)
+                                End Function)
+                }
             Else
                 Return parameterVals
             End If
@@ -237,7 +257,7 @@ Namespace Runtime.Interop
                 arg = Me.parameters(i)
 
                 If arguments.ContainsKey(arg.name) Then
-                    Yield getValue(arg, arguments(arg.name), apiTrace)
+                    Yield getValue(arg, arguments(arg.name), apiTrace, envir)
                 ElseIf i >= arguments.Count Then
                     ' default value
                     If arg.type.raw Is GetType(Environment) Then
@@ -251,15 +271,15 @@ Namespace Runtime.Interop
                     nameKey = $"${i}"
 
                     If arguments.ContainsKey(nameKey) Then
-                        Yield getValue(arg, arguments(nameKey), apiTrace)
+                        Yield getValue(arg, arguments(nameKey), apiTrace, envir)
                     Else
-                        Yield getValue(arg, arguments(keys(i)), apiTrace)
+                        Yield getValue(arg, arguments(keys(i)), apiTrace, envir)
                     End If
                 End If
             Next
         End Function
 
-        Private Shared Function missingParameter(arg As RMethodArgument, envir As Environment, name$) As Object
+        Friend Shared Function missingParameter(arg As RMethodArgument, envir As Environment, name$) As Object
             Dim messages$() = {
                 $"Missing parameter value for '{arg.name}'!",
                 $"parameter: {arg.name}",
@@ -271,7 +291,7 @@ Namespace Runtime.Interop
             Return Internal.stop(messages, envir)
         End Function
 
-        Private Shared Function getValue(arg As RMethodArgument, value As Object, trace$) As Object
+        Private Shared Function getValue(arg As RMethodArgument, value As Object, trace$, ByRef envir As Environment) As Object
             If arg.type.isArray Then
                 value = CObj(Runtime.asVector(value, arg.type.GetRawElementType))
             ElseIf arg.type.isCollection Then
@@ -284,7 +304,7 @@ Namespace Runtime.Interop
             Try
                 Return RConversion.CTypeDynamic(value, arg.type.raw)
             Catch ex As Exception
-                Throw New InvalidCastException("Api: " & trace, ex)
+                Return Internal.stop(New InvalidCastException("Api: " & trace, ex), envir)
             End Try
         End Function
 

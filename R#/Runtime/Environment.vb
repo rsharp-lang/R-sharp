@@ -89,7 +89,7 @@ Namespace Runtime
         End Property
 
         Friend ReadOnly ifPromise As New List(Of IfBranch.IfPromise)
-        Friend [global] As GlobalEnvironment
+        Friend ReadOnly [global] As GlobalEnvironment
 
         ''' <summary>
         ''' 当前的环境是否为最顶层的全局环境？

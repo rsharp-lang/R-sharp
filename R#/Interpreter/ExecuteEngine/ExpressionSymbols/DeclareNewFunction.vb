@@ -147,7 +147,7 @@ Namespace Interpreter.ExecuteEngine
                     If var.hasInitializeExpression Then
                         value = var.value.Evaluate(envir)
                     Else
-                        Throw New MissingFieldException(var.names.GetJson)
+                        Return Message.SymbolNotFound  Throw New MissingFieldException(var.names.GetJson)
                     End If
                 Else
                     key = "$" & i
