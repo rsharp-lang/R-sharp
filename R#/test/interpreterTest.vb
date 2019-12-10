@@ -154,7 +154,12 @@ Module interpreterTest
     End Sub
 
     Sub unaryNegTest()
-        Call R.Print("-99")
+
+        Call R.Evaluate("options(f64.format = 'G', digits = 3)")
+
+        Call R.Print("-99 + 99999")
+        Call R.Print("+99 + 99999")
+        Call R.Print("-99 + 99999 - (-10000)")
 
         Pause()
     End Sub

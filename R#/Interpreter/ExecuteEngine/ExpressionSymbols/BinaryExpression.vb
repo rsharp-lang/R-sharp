@@ -97,6 +97,7 @@ Namespace Interpreter.ExecuteEngine
                         Case "-" : Return Runtime.Core.Minus(Of Long, Long, Long)(a, b).ToArray
                         Case "*" : Return Runtime.Core.Multiply(Of Long, Long, Long)(a, b).ToArray
                         Case "/" : Return Runtime.Core.Divide(Of Long, Long, Double)(a, b).ToArray
+                        Case "%" : Return Runtime.Core.Module(Of Long, Long, Double)(a, b).ToArray
                         Case "^" : Return Runtime.Core.Power(Of Long, Long, Double)(a, b).ToArray
                         Case ">" : Return Runtime.Core.BinaryCoreInternal(Of Long, Long, Boolean)(a, b, Function(x, y) x > y).ToArray
                         Case "<" : Return Runtime.Core.BinaryCoreInternal(Of Long, Long, Boolean)(a, b, Function(x, y) x < y).ToArray
@@ -122,11 +123,17 @@ Namespace Interpreter.ExecuteEngine
                         Case "-" : Return Runtime.Core.Minus(Of Double, Long, Double)(a, b).ToArray
                         Case "*" : Return Runtime.Core.Multiply(Of Double, Long, Double)(a, b).ToArray
                         Case "/" : Return Runtime.Core.Divide(Of Double, Long, Double)(a, b).ToArray
+                        Case "^" : Return Runtime.Core.Power(Of Double, Long, Double)(a, b).ToArray
 
                     End Select
                 ElseIf tb Like floats Then
                     Select Case [operator]
                         Case "+" : Return Runtime.Core.Add(Of Double, Double, Double)(a, b).ToArray
+                        Case "-" : Return Runtime.Core.Minus(Of Double, Double, Double)(a, b).ToArray
+                        Case "*" : Return Runtime.Core.Multiply(Of Double, Double, Double)(a, b).ToArray
+                        Case "/" : Return Runtime.Core.Divide(Of Double, Double, Double)(a, b).ToArray
+                        Case "^" : Return Runtime.Core.Power(Of Double, Double, Double)(a, b).ToArray
+                        Case "%" : Return Runtime.Core.Module(Of Double, Double, Double)(a, b).ToArray
                         Case ">=" : Return Runtime.Core.BinaryCoreInternal(Of Double, Double, Boolean)(a, b, Function(x, y) x >= y).ToArray
                         Case "<=" : Return Runtime.Core.BinaryCoreInternal(Of Double, Double, Boolean)(a, b, Function(x, y) x <= y).ToArray
                     End Select
