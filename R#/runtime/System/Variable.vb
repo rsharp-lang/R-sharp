@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bffa17d36095f03e3a392bafdc65ac1e, R#\Runtime\Components\Variable.vb"
+﻿#Region "Microsoft.VisualBasic::bffa17d36095f03e3a392bafdc65ac1e, R#\Runtime\System\Variable.vb"
 
     ' Author:
     ' 

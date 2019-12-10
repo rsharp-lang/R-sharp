@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::66e97ccea84125adc9aef9588317a71e, R#\Runtime\Interop\RMethodInfo.vb"
+﻿#Region "Microsoft.VisualBasic::9b358e683a85373b16e28bf0aa374c6b, R#\Runtime\Interop\RMethodInfo.vb"
 
     ' Author:
     ' 
@@ -36,8 +36,8 @@
     '         Properties: name, parameters, returns
     ' 
     '         Constructor: (+3 Overloads) Sub New
-    '         Function: createNormalArguments, createObjectListArguments, GetPrintContent, getValue, Invoke
-    '                   missingParameter, parseParameters, ToString
+    '         Function: createNormalArguments, createObjectListArguments, GetPrintContent, GetRawDeclares, getValue
+    '                   Invoke, missingParameter, parseParameters, ToString
     ' 
     ' 
     ' /********************************************************************************/
@@ -169,15 +169,24 @@ Namespace Runtime.Interop
             Dim declareNameIndex As Index(Of String) = Me.parameters.Keys.Indexing
             Dim listObject As New List(Of InvokeParameter)
             Dim i As Integer
+            Dim sequenceIndex As Integer = Scan0
 
             For Each arg As InvokeParameter In params
-                If declareArguments.ContainsKey(arg.name) Then
+                If declareArguments.ContainsKey(arg.name) OrElse Not arg.isSymbolAssign Then
                     i = declareNameIndex(arg.name)
-                    parameterVals(i) = getValue(declareArguments(arg.name), arg.Evaluate(envir), trace:=name)
-                    declareArguments.Remove(arg.name)
+
+                    If i > -1 Then
+                        parameterVals(i) = getValue(declareArguments(arg.name), arg.Evaluate(envir), trace:=name)
+                        declareArguments.Remove(arg.name)
+                    Else
+                        parameterVals(sequenceIndex) = getValue(declareArguments.First.Value, arg.Evaluate(envir), trace:=name)
+                        declareArguments.Remove(declareArguments.First.Key)
+                    End If
                 Else
                     listObject.Add(arg)
                 End If
+
+                sequenceIndex += 1
             Next
 
             ' get index of list argument

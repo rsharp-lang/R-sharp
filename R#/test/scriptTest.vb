@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9ec83e7bdbe50299d1dcfd27f5b588fc, R#\test\scriptTest.vb"
+﻿#Region "Microsoft.VisualBasic::91a699cab5f25bd350a6ecf091336e76, R#\test\scriptTest.vb"
 
     ' Author:
     ' 
@@ -55,4 +55,3 @@ Module scriptTest
         Call Pause()
     End Sub
 End Module
-
