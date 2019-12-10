@@ -67,7 +67,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         End Function
 
         Public Overloads Function ToString(env As Environment) As String
-            Dim globalEnv As GlobalEnvironment = env.global
+            Dim globalEnv As GlobalEnvironment = env.globalEnvironment
 
             Return $" '{group.Length}' elements with key: " & printer.ValueToString(key, globalEnv) & vbCrLf &
                 group.AsObjectEnumerator _

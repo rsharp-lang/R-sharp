@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::e146a0e576f87198c3e39a497a240c91, R#\Runtime\Internal\internalInvokes\base.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module base
-    ' 
-    '         Function: [get], [stop], all, any, cat
-    '                   createDotNetExceptionMessage, createMessageInternal, doCall, doPrintInternal, getEnvironmentStack
-    '                   getOption, globalenv, isEmpty, lapply, length
-    '                   names, neg, options, print, sapply
-    '                   source, str, warning
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module base
+' 
+'         Function: [get], [stop], all, any, cat
+'                   createDotNetExceptionMessage, createMessageInternal, doCall, doPrintInternal, getEnvironmentStack
+'                   getOption, globalenv, isEmpty, lapply, length
+'                   names, neg, options, print, sapply
+'                   source, str, warning
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -457,11 +457,11 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         Private Function doPrintInternal(x As Object, type As Type, envir As Environment) As Object
-            Dim maxPrint% = envir.global.options.maxPrint
+            Dim globalEnv As GlobalEnvironment = envir.globalEnvironment
+            Dim maxPrint% = globalEnv.options.maxPrint
 
             If type Is GetType(RMethodInfo) Then
-                Call envir _
-                    .globalEnvironment _
+                Call globalEnv _
                     .packages _
                     .packageDocs _
                     .PrintHelp(x)
@@ -477,10 +477,10 @@ Namespace Runtime.Internal.Invokes
                 Call DirectCast(x, list) _
                     .slots _
                     .DoCall(Sub(list)
-                                printer.printInternal(list, "", maxPrint, envir.global)
+                                printer.printInternal(list, "", maxPrint, globalEnv)
                             End Sub)
             Else
-                Call printer.printInternal(x, "", maxPrint, envir.global)
+                Call printer.printInternal(x, "", maxPrint, globalEnv)
             End If
 
             Return x
