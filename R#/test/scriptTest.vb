@@ -43,7 +43,7 @@ Imports SMRUCC.Rsharp.Interpreter
 
 Module scriptTest
 
-    Const script$ = "S:\2019\mzCloud\runExport.R"
+    Const script$ = "S:\2019\mzCloud\mzcloud_mgf.R"
 
     Dim R As RInterpreter = New RInterpreter() With {
         .debug = True
