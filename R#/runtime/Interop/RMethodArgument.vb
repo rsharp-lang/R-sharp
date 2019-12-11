@@ -68,9 +68,9 @@ Namespace Runtime.Interop
 
         Public Overrides Function ToString() As String
             If isOptional Then
-                Return $"'{name}' as {type} = {If(type.mode = TypeCodes.boolean, [default].ToString.ToUpper, Scripting.ToString([default], "NULL"))}"
+                Return $"``{name}`` as {type} = {If(type.mode = TypeCodes.boolean, [default].ToString.ToUpper, Scripting.ToString([default], "NULL"))}"
             Else
-                Return $"'{name}' as {type}"
+                Return $"``{name}`` as {type}"
             End If
         End Function
 

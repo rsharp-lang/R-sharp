@@ -124,7 +124,7 @@ Namespace Runtime.Interop
             Dim rawDeclare$ = raw.FullName
             Dim packageName$ = raw.NamespaceEntry(True).Namespace
 
-            Return $"let {name} as function({parameters.JoinBy(", ")}) {{
+            Return $"let ``{name}`` as function({parameters.JoinBy(", ")}) {{
     #
     # .NET API information
     #
@@ -132,9 +132,8 @@ Namespace Runtime.Interop
     # library: {raw.Assembly.Location}
     # package: ""{packageName}""
     #
-    return call R#.interop_[{raw.Name}::{GetRawDeclares().Name}](...);
-}}
-    "
+    return call ``R#.interop_[{raw.Name}::{GetRawDeclares().Name}]``(...);
+}}"
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>

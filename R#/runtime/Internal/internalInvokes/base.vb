@@ -196,8 +196,9 @@ Namespace Runtime.Internal.Invokes
         ''' a connection Or a character String giving the pathname Of the file Or URL To read from. 
         ''' "" indicates the connection ``stdin()``.</param>
         ''' <param name="envir"></param>
-        ''' <returns></returns>
-        ''' 
+        ''' <returns>
+        ''' The value of special ``last variable`` or the value returns by the ``return`` keyword. 
+        ''' </returns>
         <ExportAPI("source")>
         Public Function source(path$,
                                <RListObjectArgument>
