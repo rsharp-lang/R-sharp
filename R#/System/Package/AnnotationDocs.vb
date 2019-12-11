@@ -116,21 +116,21 @@ Namespace Runtime.Package
             Call Console.WriteLine()
 
             If Not docs.Returns.StringEmpty Then
-                Call Console.WriteLine(" [returns]: ")
+                Call markdown.DoPrint(" [**returns**]: ", 0)
                 Call markdown.DoPrint(docs.Returns, 1)
                 Call Console.WriteLine()
             End If
 
             Dim contentLines = api.GetPrintContent.LineTokens.AsList
 
-            Call markdown.DoPrint(contentLines(Scan0), 3)
+            Call markdown.DoPrint(contentLines(Scan0), 2)
 
             For Each line As String In contentLines.Skip(1).Take(7)
-                Call markdown.DoPrint("# " & line.Trim, 7)
+                Call markdown.DoPrint("# " & line.Trim, 6)
             Next
 
-            Call markdown.DoPrint(contentLines(-2).Trim, 7)
-            Call markdown.DoPrint(contentLines(-1).Trim, 3)
+            Call markdown.DoPrint(contentLines(-2).Trim, 6)
+            Call markdown.DoPrint(contentLines(-1).Trim, 2)
 
             Call Console.WriteLine()
         End Sub
