@@ -49,7 +49,7 @@ Module docTest
     Dim r As New RInterpreter
 
     Sub Main()
-        Call r.Evaluate("print(round)")
+        Call r.Print("source")
         'Call r.Evaluate("print(length)")
         'Call r.Evaluate("print(names)")
 
