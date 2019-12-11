@@ -67,22 +67,21 @@ Namespace Runtime.Internal.Invokes
             If text.IsNullOrEmpty Then
                 Return Nothing
             ElseIf text.Length = 1 Then
-                Return Strings.Split(text(Scan0), delimiter)
+                Return Microsoft.VisualBasic.Strings.Split(text(Scan0), delimiter)
             Else
-                Throw New NotImplementedException
+                Return Internal.stop(New NotImplementedException, envir)
             End If
         End Function
 
         <ExportAPI("paste")>
-        Friend Function paste(strings$(), Optional deli$ = " ", Optional envir As Environment = Nothing) As Object
+        Friend Function paste(strings$(), Optional deli$ = " ") As Object
             Return strings.JoinBy(deli)
         End Function
 
         <ExportAPI("string.replace")>
         Friend Function replace(subj$(), search$,
                                 Optional replaceAs$ = "",
-                                Optional regexp As Boolean = False,
-                                Optional envir As Environment = Nothing) As Object
+                                Optional regexp As Boolean = False) As Object
             If regexp Then
                 Return subj.Select(Function(s) s.StringReplace(search, replaceAs)).ToArray
             Else

@@ -77,7 +77,7 @@ Namespace Runtime.Internal.ConsolePrinter
         End Sub
 
         Private Function f64_InternalToString(env As GlobalEnvironment) As IStringBuilder
-            Dim opts As Options = env.global.options
+            Dim opts As Options = env.globalEnvironment.options
             Dim format As String = $"{opts.f64Format}{opts.digits}"
 
             Return Function(d) DirectCast(d, Double).ToString(format)

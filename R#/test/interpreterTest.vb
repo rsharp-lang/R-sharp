@@ -70,6 +70,9 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+
+        Call unaryNegTest()
+
         Call sourceFunctionTest()
         Call markdownTest()
 
@@ -146,6 +149,17 @@ Module interpreterTest
 
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub unaryNegTest()
+
+        Call R.Evaluate("options(f64.format = 'G', digits = 3)")
+
+        Call R.Print("-99 + 99999")
+        Call R.Print("+99 + 99999")
+        Call R.Print("-99 + 99999 - (-10000)")
 
         Pause()
     End Sub

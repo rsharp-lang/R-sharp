@@ -140,7 +140,7 @@ Namespace Interpreter.ExecuteEngine
             End If
         End Function
 
-        Private Shared Function setFromVector(envir As Environment, targetSymbols As Expression(), isByRef As Boolean, value As Object)
+        Private Shared Function setFromVector(envir As Environment, targetSymbols As Expression(), isByRef As Boolean, value As Object) As Object
             Dim message As New Value(Of Message)
             Dim array As Array
 
@@ -166,7 +166,7 @@ Namespace Interpreter.ExecuteEngine
                 Next
             Else
                 ' 数量不对
-                Throw New InvalidCastException
+                Return Internal.stop(New InvalidCastException, envir)
             End If
 
             Return Nothing
@@ -200,7 +200,7 @@ Namespace Interpreter.ExecuteEngine
                 Next
             Else
                 ' 数量不对
-                Throw New InvalidCastException
+                Return Internal.stop(New InvalidCastException, envir)
             End If
 
             Return Nothing
@@ -231,7 +231,7 @@ Namespace Interpreter.ExecuteEngine
                 Return setFromObjectList(envir, targetSymbols, isByRef, value)
 
             Else
-                Throw New NotImplementedException
+                Return Internal.stop(New NotImplementedException, envir)
             End If
 
             Return Nothing
@@ -244,7 +244,7 @@ Namespace Interpreter.ExecuteEngine
                 Case GetType(SymbolReference)
                     Return DirectCast(symbolName, SymbolReference).symbol
                 Case Else
-                    Throw New InvalidExpressionException
+                    Return Nothing
             End Select
         End Function
 

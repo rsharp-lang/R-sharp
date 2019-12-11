@@ -106,22 +106,33 @@ Namespace Runtime.Package
 
             If Not docs Is Nothing Then
                 Call markdown.DoPrint(docs.Summary, 1)
-                Call markdown.Reset()
-                Call Console.WriteLine()
                 Call Console.WriteLine()
 
                 For Each param As param In docs.Params
                     Call markdown.DoPrint($"``{param.name}:``  " & param.text.Trim(" "c, ASCII.CR, ASCII.LF), 3)
-                    Call markdown.Reset()
-                    Call Console.WriteLine()
                 Next
             End If
 
             Call Console.WriteLine()
 
-            For Each line In api.GetPrintContent.LineTokens
-                Call Console.WriteLine(New String(" "c, 4) & line)
+            If Not docs.Returns.StringEmpty Then
+                Call markdown.DoPrint(" [**returns**]: ", 0)
+                Call markdown.DoPrint(docs.Returns, 1)
+                Call Console.WriteLine()
+            End If
+
+            Dim contentLines = api.GetPrintContent.LineTokens.AsList
+
+            Call markdown.DoPrint(contentLines(Scan0), 2)
+
+            For Each line As String In contentLines.Skip(1).Take(7)
+                Call markdown.DoPrint("# " & line.Trim, 6)
             Next
+
+            Call markdown.DoPrint(contentLines(-2).Trim, 6)
+            Call markdown.DoPrint(contentLines(-1).Trim, 2)
+
+            Call Console.WriteLine()
         End Sub
 
     End Class

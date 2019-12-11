@@ -113,6 +113,10 @@ Namespace Runtime.Components
             End Get
         End Property
 
+        ''' <summary>
+        ''' The vector length
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property length As Integer
             Get
                 If typeCode.IsPrimitive AndAlso value.GetType.IsInheritsFrom(GetType(Array)) Then

@@ -77,7 +77,7 @@ Namespace Interpreter.ExecuteEngine
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             If envir.ifPromise = 0 Then
-                Throw New SyntaxErrorException
+                Return Internal.stop(New SyntaxErrorException, envir)
             Else
                 Dim last As IfBranch.IfPromise
 

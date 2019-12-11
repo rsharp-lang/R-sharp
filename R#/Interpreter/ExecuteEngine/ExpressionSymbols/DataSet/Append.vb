@@ -92,10 +92,10 @@ Namespace Interpreter.ExecuteEngine
                     .JoinIterates(Runtime.asVector(Of Object)(y).AsObjectEnumerator) _
                     .ToArray
             ElseIf type1 Is GetType(list) Then
-                Throw New NotImplementedException
+                Return Internal.stop(New NotImplementedException, envir)
             End If
 
-            Throw New NotImplementedException
+            Return Internal.stop(New NotImplementedException, envir)
         End Function
     End Class
 End Namespace
