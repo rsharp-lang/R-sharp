@@ -120,9 +120,21 @@ Namespace Runtime.Interop
         End Function
 
         Public Function GetPrintContent() As String Implements RPrint.GetPrintContent
+            Dim raw As Type = GetRawDeclares().DeclaringType
+            Dim rawDeclare$ = raw.FullName
+            Dim packageName$ = raw.NamespaceEntry(True).Namespace
+
             Return $"let {name} as function({parameters.JoinBy(", ")}) {{
-    return call R#.interop_{name}(...);
-}}"
+    #
+    # .NET API information
+    #
+    # module: {rawDeclare}
+    # library: {raw.Assembly.Location}
+    # package: ""{packageName}""
+    #
+    return call R#.interop_[{raw.Name}::{GetRawDeclares().Name}](...);
+}}
+    "
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>

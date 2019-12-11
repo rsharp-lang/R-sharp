@@ -78,6 +78,7 @@ Namespace Runtime.Interop
             Me.isArray = raw Is GetType(Array) _
                   OrElse raw.IsInheritsFrom(GetType(Array))
             Me.isCollection = raw.ImplementInterface(GetType(IEnumerable)) AndAlso Not raw Is GetType(String)
+            Me.mode = raw.GetRTypeCode
         End Sub
 
         Public Function GetRawElementType() As Type
@@ -98,7 +99,11 @@ Namespace Runtime.Interop
         End Function
 
         Public Overrides Function ToString() As String
-            Return $"<{mode.Description}> {raw.Name}"
+            If mode.IsPrimitive Then
+                Return mode.Description
+            Else
+                Return $"<{mode.Description}> {raw.Name}"
+            End If
         End Function
 
         Public Function getNames() As String() Implements IReflector.getNames
