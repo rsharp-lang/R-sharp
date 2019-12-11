@@ -219,6 +219,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Interpreter\ExecuteEngine\Expression.vb" />
+    <Compile Include="Runtime\Internal\internalInvokes\strings.vb" />
     <Compile Include="Runtime\Internal\printer\functionPrinter.vb" />
     <Compile Include="Runtime\Interop\RReturn.vb" />
     <Compile Include="System\Config\Defaults.vb" />
