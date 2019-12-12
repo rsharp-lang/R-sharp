@@ -150,6 +150,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("globalenv")>
+        <DebuggerStepThrough>
         Private Function globalenv(env As Environment) As Object
             Return env.globalEnvironment
         End Function
@@ -412,6 +413,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("warning")>
+        <DebuggerStepThrough>
         Public Function warning(<RRawVectorArgument> message As Object, envir As Environment) As Message
             Return createMessageInternal(message, envir, level:=MSG_TYPES.WRN)
         End Function

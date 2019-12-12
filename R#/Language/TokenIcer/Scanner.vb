@@ -93,6 +93,7 @@ Namespace Language.TokenIcer
             End Get
         End Property
 
+        <DebuggerStepThrough>
         Sub New(source As [Variant](Of String, CharPtr))
             If source Like GetType(String) Then
                 Me.code = source.TryCast(Of String).SolveStream
