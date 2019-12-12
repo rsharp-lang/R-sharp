@@ -73,12 +73,21 @@ Type 'q()' to quit R.
 
         Call Console.WriteLine()
 
-        Call New Shell(New PS1("> "), AddressOf doRunScript) With {
-            .Quite = "q()"
+        Call New Shell(New PS1("> "), AddressOf doRunScriptWithSpecialCommand) With {
+            .Quite = "!.R#::quit"
         }.Run()
 
         Return 0
     End Function
+
+    Private Sub doRunScriptWithSpecialCommand(script As String)
+        Select Case script
+            Case "CLS"
+                Call Console.Clear()
+            Case Else
+                Call doRunScript(script)
+        End Select
+    End Sub
 
     Private Sub doRunScript(script As String)
         Dim program As RProgram = RProgram.BuildProgram(script)
@@ -102,12 +111,14 @@ Type 'q()' to quit R.
 
     ReadOnly echo As Index(Of String) = {"print", "cat", "echo"}
 
+    <DebuggerStepThrough>
     <Extension>
     Private Function isValueAssign(program As RProgram) As Boolean
         ' 如果是赋值表达式的话，也不会在终端上打印结果值
         Return TypeOf program.Last Is ValueAssign
     End Function
 
+    <DebuggerStepThrough>
     <Extension>
     Private Function isSimplePrintCall(program As RProgram) As Boolean
         If Not TypeOf program.First Is FunctionInvoke Then

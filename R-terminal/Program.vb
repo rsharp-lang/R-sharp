@@ -40,13 +40,13 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine
-Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 
 Module Program
 
+    <DebuggerStepThrough>
     Public Function Main() As Integer
         Return GetType(CLI).RunCLI(
             args:=App.CommandLine,
