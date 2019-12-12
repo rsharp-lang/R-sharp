@@ -60,6 +60,8 @@ Namespace Runtime.Internal
                 Select Case type
                     Case GetType(vbObject), GetType(vector), GetType(list)
                         Return obj
+                    Case GetType(RReturn)
+                        Return asObject(DirectCast(obj, RReturn).Value)
                     Case Else
                         If type.IsArray Then
                             Return Runtime.asVector(Of Object)(obj) _
