@@ -62,6 +62,14 @@ Namespace Runtime.Internal
         Dim names As String()
         Dim nameIndex As Index(Of String)
 
+        Sub New()
+        End Sub
+
+        Sub New(names As String(), data As Array, envir As Environment)
+            Me.data = data
+            Me.setNames(names, envir)
+        End Sub
+
         Public Function getNames() As String() Implements RNames.getNames
             Return names
         End Function

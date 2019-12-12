@@ -524,8 +524,41 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("sapply")>
-        Public Function sapply(<RRawVectorArgument> sequence As Object, apply As RFunction, envir As Environment) As Object
-            Throw New NotImplementedException
+        Public Function sapply(<RRawVectorArgument> sequence As Object, doApply As Object, envir As Environment) As Object
+            If doApply Is Nothing Then
+                Return Internal.stop({"Missing apply function!"}, envir)
+            ElseIf Not doApply.GetType.ImplementInterface(GetType(RFunction)) Then
+                Return Internal.stop({"Target is not a function!"}, envir)
+            End If
+
+            If Program.isException(sequence) Then
+                Return sequence
+            ElseIf Program.isException(doApply) Then
+                Return doApply
+            End If
+
+            Dim apply As RFunction = doApply
+
+            If sequence.GetType Is GetType(Dictionary(Of String, Object)) Then
+                Dim list = DirectCast(sequence, Dictionary(Of String, Object))
+                Dim names = list.Keys.ToArray
+                Dim seq As Array = names _
+                    .Select(Function(key)
+                                Return apply.Invoke(envir, {list(key)})
+                            End Function) _
+                    .ToArray
+
+                Return New vector(names, seq, envir)
+            Else
+                Dim seq = Runtime.asVector(Of Object)(sequence) _
+                    .AsObjectEnumerator _
+                    .Select(Function(d)
+                                Return apply.Invoke(envir, {d})
+                            End Function) _
+                    .ToArray
+
+                Return New vector With {.data = seq}
+            End If
         End Function
     End Module
 End Namespace
