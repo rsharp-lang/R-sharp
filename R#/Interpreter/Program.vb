@@ -146,6 +146,7 @@ Namespace Interpreter
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
         Public Shared Function CreateProgram(tokens As Token()) As Program
             Return New Program With {
                 .Rscript = Nothing,
@@ -178,6 +179,7 @@ Namespace Interpreter
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
         Public Shared Function BuildProgram(scriptText As String) As Program
             Return Rscript _
                 .FromText(scriptText) _

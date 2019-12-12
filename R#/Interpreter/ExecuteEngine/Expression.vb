@@ -78,6 +78,7 @@ Namespace Interpreter.ExecuteEngine
         }
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
         Public Shared Function CreateExpression(code As IEnumerable(Of Token)) As Expression
             Return code _
                 .SplitByTopLevelDelimiter(TokenType.operator, includeKeyword:=True) _
