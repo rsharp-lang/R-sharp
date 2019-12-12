@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e905a3c57b8d185e7c25ab663baaa18d, R#\test\docTest.vb"
+﻿#Region "Microsoft.VisualBasic::a8e25473c091663fc4aa248ae0fcc924, R#\test\docTest.vb"
 
     ' Author:
     ' 
@@ -33,20 +33,32 @@
 
     ' Module docTest
     ' 
-    '     Sub: Main
+    '     Sub: GetDocs, Main
     ' 
     ' /********************************************************************************/
 
 #End Region
 
+Imports System.Reflection
+Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Package
 
 Module docTest
 
+    Dim r As New RInterpreter
+
     Sub Main()
-        Dim doc As New AnnotationDocs
-        Dim result = doc.GetAnnotations(GetType(LICENSE))
+        Call r.Print("source")
+        'Call r.Evaluate("print(length)")
+        'Call r.Evaluate("print(names)")
 
         Pause()
+    End Sub
+
+    Sub GetDocs()
+        Dim doc As New AnnotationDocs
+        Dim testApi As RMethodInfo = r.Evaluate("log")
+        Dim result = doc.GetAnnotations(testApi.GetRawDeclares)
     End Sub
 End Module

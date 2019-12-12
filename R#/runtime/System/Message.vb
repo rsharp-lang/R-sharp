@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fc3b07130f0ede7787fbbd6ce27f6ad0, R#\Runtime\Components\Message.vb"
+﻿#Region "Microsoft.VisualBasic::fe13b4af88f97bb457520af0a301ae79, R#\Runtime\System\Message.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Class Message
     ' 
-    '         Properties: environmentStack, level, message, trace
+    '         Properties: environmentStack, level, message, source, trace
     ' 
     '         Function: GetEnumerator, IEnumerable_GetEnumerator, InCompatibleType, SymbolNotFound, SyntaxNotImplemented
     '                   ToString
@@ -47,6 +47,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 
 Namespace Runtime.Components
 
@@ -59,20 +60,7 @@ Namespace Runtime.Components
         Public Property level As MSG_TYPES
         Public Property environmentStack As StackFrame()
         Public Property trace As StackFrame()
-
-        Public Overrides Function ToString() As String
-            Return $"[{level.Description}] {message(Scan0)}"
-        End Function
-
-        Public Iterator Function GetEnumerator() As IEnumerator(Of String) Implements IEnumerable(Of String).GetEnumerator
-            For Each msg As String In message
-                Yield msg
-            Next
-        End Function
-
-        Private Iterator Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
-            Yield GetEnumerator()
-        End Function
+        Public Property source As Expression
 
         Public Shared Function SymbolNotFound(envir As Environment, symbolName$, type As TypeCodes) As Message
             Dim exception$
@@ -111,6 +99,20 @@ Namespace Runtime.Components
             }.DoCall(Function(msg)
                          Return Internal.stop(msg, envir)
                      End Function)
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return $"[{level.Description}] {message(Scan0)}"
+        End Function
+
+        Public Iterator Function GetEnumerator() As IEnumerator(Of String) Implements IEnumerable(Of String).GetEnumerator
+            For Each msg As String In message
+                Yield msg
+            Next
+        End Function
+
+        Private Iterator Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
+            Yield GetEnumerator()
         End Function
     End Class
 End Namespace

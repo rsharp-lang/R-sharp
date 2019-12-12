@@ -1,49 +1,49 @@
-﻿#Region "Microsoft.VisualBasic::cff7e4a4755abc1a7d205d5cb87f09ff, R#\Interpreter\RInterpreter.vb"
+﻿#Region "Microsoft.VisualBasic::7c3c7125cf5127833ce71f5853330601, R#\Interpreter\RInterpreter.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class RInterpreter
-' 
-'         Properties: debug, globalEnvir, Rsharp, warnings
-' 
-'         Constructor: (+1 Overloads) Sub New
-' 
-'         Function: (+2 Overloads) Evaluate, finalizeResult, FromEnvironmentConfiguration, InitializeEnvironment, Invoke
-'                   LoadLibrary, Run, RunInternal, Source
-' 
-'         Sub: (+3 Overloads) Add, PrintMemory
-' 
-' 
-' /********************************************************************************/
+    '     Class RInterpreter
+    ' 
+    '         Properties: debug, globalEnvir, Rsharp, warnings
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    ' 
+    '         Function: (+2 Overloads) Evaluate, finalizeResult, FromEnvironmentConfiguration, InitializeEnvironment, Invoke
+    '                   LoadLibrary, Run, RunInternal, Source
+    ' 
+    '         Sub: (+3 Overloads) Add, Print, PrintMemory
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -62,6 +62,7 @@ Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports REnv = SMRUCC.Rsharp.Runtime.Internal.Invokes
 
 Namespace Interpreter
 
@@ -84,6 +85,11 @@ Namespace Interpreter
         ''' </remarks>
         Public Property debug As Boolean = False
 
+        ''' <summary>
+        ''' Get value of a <see cref="Variable"/>
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <returns></returns>
         Default Public ReadOnly Property GetValue(name As String) As Object
             Get
                 Return globalEnvir(name).value
@@ -124,6 +130,18 @@ Namespace Interpreter
                                  )
                              End Sub)
             End With
+        End Sub
+
+        ''' <summary>
+        ''' A shortcut of ``print(expr)``
+        ''' </summary>
+        ''' <param name="expr"></param>
+        Public Sub Print(expr As String)
+            Dim result As Object = Evaluate(expr)
+
+            ' do expression evaluation and then 
+            ' print($expr)
+            Call REnv.print(result, globalEnvir)
         End Sub
 
         ''' <summary>
@@ -255,9 +273,18 @@ Namespace Interpreter
             }
             Dim result As Object
 
-            globalEnvir.Push("!script", script, TypeCodes.list)
-            result = RunInternal(Rscript.FromFile(filepath), arguments)
-            globalEnvir.Delete("!script")
+            If filepath.FileExists Then
+                globalEnvir.Push("!script", script, TypeCodes.list)
+                result = RunInternal(Rscript.FromFile(filepath), arguments)
+                globalEnvir.Delete("!script")
+            Else
+                result = Internal.stop({
+                    $"cannot open the connection.",
+                    $"cannot open file '{filepath.FileName}': No such file or directory",
+                    $"file: {filepath.GetFullPath}",
+                    $"function: source"
+                }, globalEnvir)
+            End If
 
             Return result
         End Function

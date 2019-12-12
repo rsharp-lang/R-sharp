@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bcf3a28ab18d886e5181d23a2ffbb46c, R#\Runtime\Package\ImportsPackage.vb"
+﻿#Region "Microsoft.VisualBasic::ba703964b277f9e38fca22982ebfd7a0, R#\Runtime\Package\ImportsPackage.vb"
 
     ' Author:
     ' 
@@ -57,8 +57,19 @@ Namespace Runtime.Package
     ''' </summary>
     Public Module ImportsPackage
 
-        Public Iterator Function GetAllApi(package As Type, Optional strict As Boolean = True) As IEnumerable(Of NamedValue(Of MethodInfo))
-            Dim methods = package.GetMethods(BindingFlags.Public Or BindingFlags.Static)
+        Public Iterator Function GetAllApi(package As Type,
+                                           Optional strict As Boolean = True,
+                                           Optional includesInternal As Boolean = False) As IEnumerable(Of NamedValue(Of MethodInfo))
+
+            Dim access As BindingFlags
+
+            If includesInternal Then
+                access = BindingFlags.NonPublic Or BindingFlags.Public Or BindingFlags.Static
+            Else
+                access = BindingFlags.Public Or BindingFlags.Static
+            End If
+
+            Dim methods As MethodInfo() = package.GetMethods(access)
             Dim name As String
             Dim flag As ExportAPIAttribute
 

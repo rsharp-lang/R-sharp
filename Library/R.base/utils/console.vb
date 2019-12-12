@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::141ffeb74b72d072d2149fe3ecb38719, R.base\utils\console.vb"
+﻿#Region "Microsoft.VisualBasic::04b50bdc5904b228f94661a67e2c4d61, Library\R.base\utils\console.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language
@@ -101,4 +100,3 @@ Module console
         Return color
     End Function
 End Module
-

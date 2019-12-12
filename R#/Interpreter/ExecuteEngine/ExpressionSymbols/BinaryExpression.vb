@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a1bbe52f6ee345c75800844b5d5f18c9, R#\Interpreter\ExecuteEngine\ExpressionSymbols\BinaryExpression.vb"
+﻿#Region "Microsoft.VisualBasic::0e1007fdfc2e003a71b0c6d2c5728ac1, R#\Interpreter\ExecuteEngine\ExpressionSymbols\BinaryExpression.vb"
 
     ' Author:
     ' 
@@ -97,6 +97,7 @@ Namespace Interpreter.ExecuteEngine
                         Case "-" : Return Runtime.Core.Minus(Of Long, Long, Long)(a, b).ToArray
                         Case "*" : Return Runtime.Core.Multiply(Of Long, Long, Long)(a, b).ToArray
                         Case "/" : Return Runtime.Core.Divide(Of Long, Long, Double)(a, b).ToArray
+                        Case "%" : Return Runtime.Core.Module(Of Long, Long, Double)(a, b).ToArray
                         Case "^" : Return Runtime.Core.Power(Of Long, Long, Double)(a, b).ToArray
                         Case ">" : Return Runtime.Core.BinaryCoreInternal(Of Long, Long, Boolean)(a, b, Function(x, y) x > y).ToArray
                         Case "<" : Return Runtime.Core.BinaryCoreInternal(Of Long, Long, Boolean)(a, b, Function(x, y) x < y).ToArray
@@ -122,11 +123,17 @@ Namespace Interpreter.ExecuteEngine
                         Case "-" : Return Runtime.Core.Minus(Of Double, Long, Double)(a, b).ToArray
                         Case "*" : Return Runtime.Core.Multiply(Of Double, Long, Double)(a, b).ToArray
                         Case "/" : Return Runtime.Core.Divide(Of Double, Long, Double)(a, b).ToArray
+                        Case "^" : Return Runtime.Core.Power(Of Double, Long, Double)(a, b).ToArray
 
                     End Select
                 ElseIf tb Like floats Then
                     Select Case [operator]
                         Case "+" : Return Runtime.Core.Add(Of Double, Double, Double)(a, b).ToArray
+                        Case "-" : Return Runtime.Core.Minus(Of Double, Double, Double)(a, b).ToArray
+                        Case "*" : Return Runtime.Core.Multiply(Of Double, Double, Double)(a, b).ToArray
+                        Case "/" : Return Runtime.Core.Divide(Of Double, Double, Double)(a, b).ToArray
+                        Case "^" : Return Runtime.Core.Power(Of Double, Double, Double)(a, b).ToArray
+                        Case "%" : Return Runtime.Core.Module(Of Double, Double, Double)(a, b).ToArray
                         Case ">=" : Return Runtime.Core.BinaryCoreInternal(Of Double, Double, Boolean)(a, b, Function(x, y) x >= y).ToArray
                         Case "<=" : Return Runtime.Core.BinaryCoreInternal(Of Double, Double, Boolean)(a, b, Function(x, y) x <= y).ToArray
                     End Select
@@ -180,7 +187,7 @@ Namespace Interpreter.ExecuteEngine
                 End If
             End If
 
-            Throw New NotImplementedException($"<{ta.FullName}> {[operator]} <{tb.FullName}>")
+            Return Internal.stop(New NotImplementedException($"<{ta.FullName}> {[operator]} <{tb.FullName}>"), envir)
         End Function
 
         Public Shared Function DoStringBinary(Of Out)(a As Object, b As Object, op As Func(Of Object, Object, Object)) As Out()

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3f0623dce1282229ccf83d3daeab5f49, R#\Runtime\Components\Interface\RPrint.vb"
+﻿#Region "Microsoft.VisualBasic::3f0623dce1282229ccf83d3daeab5f49, R#\Runtime\System\Interface\RPrint.vb"
 
     ' Author:
     ' 

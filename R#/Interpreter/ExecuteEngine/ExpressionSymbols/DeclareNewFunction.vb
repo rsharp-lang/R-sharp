@@ -1,48 +1,48 @@
-﻿#Region "Microsoft.VisualBasic::348d2d2f993ca4bc45bee948965c8c0b, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DeclareNewFunction.vb"
+﻿#Region "Microsoft.VisualBasic::30432a0e2cada9bfb6b7f91d47d3e82d, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DeclareNewFunction.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class DeclareNewFunction
-    ' 
-    '         Properties: funcName, type
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    ' 
-    '         Function: Evaluate, Invoke, ToString
-    ' 
-    '         Sub: getExecBody, getParameters
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class DeclareNewFunction
+' 
+'         Properties: funcName, type
+' 
+'         Constructor: (+2 Overloads) Sub New
+' 
+'         Function: Evaluate, Invoke, ToString
+' 
+'         Sub: getExecBody, getParameters
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -124,6 +124,8 @@ Namespace Interpreter.ExecuteEngine
 
             If envir Is Nothing Then
                 envir = parent
+            Else
+                envir = New Environment(parent, Me.funcName)
             End If
 
             Dim argumentKeys As String()
@@ -145,7 +147,14 @@ Namespace Interpreter.ExecuteEngine
                     If var.hasInitializeExpression Then
                         value = var.value.Evaluate(envir)
                     Else
-                        Throw New MissingFieldException(var.names.GetJson)
+                        Dim message As String() = {
+                            $"argument ""{var.names.GetJson}"" is missing, with no default",
+                            $"function: {funcName}",
+                            $"parameterName: {var.names.GetJson}",
+                            $"type: {var.type.Description}"
+                        }
+
+                        Return Internal.stop(message, envir)
                     End If
                 Else
                     key = "$" & i

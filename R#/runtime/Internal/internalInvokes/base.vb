@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0785a86d33f5d158ae83250c0b1b307a, R#\Runtime\Internal\internalInvokes\base.vb"
+﻿#Region "Microsoft.VisualBasic::e146a0e576f87198c3e39a497a240c91, R#\Runtime\Internal\internalInvokes\base.vb"
 
 ' Author:
 ' 
@@ -33,14 +33,11 @@
 
 '     Module base
 ' 
-'         Constructor: (+1 Overloads) Sub New
-' 
 '         Function: [get], [stop], all, any, cat
-'                   createDotNetExceptionMessage, createMessageInternal, getEnvironmentStack, globalenv, (+2 Overloads) isEmpty
-'                   lapply, length, names, neg, options
-'                   print, sapply, source, str, warning
-' 
-'         Sub: pushEnvir
+'                   createDotNetExceptionMessage, createMessageInternal, doCall, doPrintInternal, getEnvironmentStack
+'                   getOption, globalenv, isEmpty, lapply, length
+'                   names, neg, options, print, sapply
+'                   source, str, warning
 ' 
 ' 
 ' /********************************************************************************/
@@ -75,7 +72,7 @@ Namespace Runtime.Internal.Invokes
     Public Module base
 
         <ExportAPI("do.call")>
-        Private Function doCall(what As Object, calls$, envir As Environment) As Object
+        Public Function doCall(what As Object, calls$, envir As Environment) As Object
             If what Is Nothing OrElse calls.StringEmpty Then
                 Return Internal.stop("Nothing to call!", envir)
             End If
@@ -91,12 +88,12 @@ Namespace Runtime.Internal.Invokes
                     Return member
                 End If
             Else
-                Throw New NotImplementedException(targetType.FullName)
+                Return Internal.stop(New NotImplementedException(targetType.FullName), envir)
             End If
         End Function
 
         <ExportAPI("neg")>
-        Private Function neg(<RRawVectorArgument> o As Object) As Object
+        Public Function neg(<RRawVectorArgument> o As Object) As Object
             If o Is Nothing Then
                 Return Nothing
             Else
@@ -189,12 +186,19 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
-        ''' 运行外部脚本
-        ''' </summary>
-        ''' <param name="path"></param>
-        ''' <param name="envir"></param>
-        ''' <returns></returns>
+        ''' ## Run the external R# script. Read R Code from a File, a Connection or Expressions
         ''' 
+        ''' causes R to accept its input from the named file or URL or connection or expressions directly. 
+        ''' Input is read and parsed from that file until the end of the file is reached, then the parsed 
+        ''' expressions are evaluated sequentially in the chosen environment.
+        ''' </summary>
+        ''' <param name="path">
+        ''' a connection Or a character String giving the pathname Of the file Or URL To read from. 
+        ''' "" indicates the connection ``stdin()``.</param>
+        ''' <param name="envir"></param>
+        ''' <returns>
+        ''' The value of special ``last variable`` or the value returns by the ``return`` keyword. 
+        ''' </returns>
         <ExportAPI("source")>
         Public Function source(path$,
                                <RListObjectArgument>
@@ -239,16 +243,29 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("options")>
         Public Function options(<RListObjectArgument> opts As Object, envir As Environment) As Object
             Dim configs As Options = envir.globalEnvironment.options
+            Dim values As list
 
-            For Each value In DirectCast(opts, list).slots
-                Try
-                    configs.setOption(value.Key, value.Value)
-                Catch ex As Exception
-                    Return Internal.stop(ex, envir)
-                End Try
-            Next
+            If opts.GetType Is GetType(String()) Then
+                values = New list With {
+                    .slots = DirectCast(opts, String()) _
+                        .ToDictionary(Function(key) key,
+                                      Function(key)
+                                          Return CObj(configs.getOption(key, ""))
+                                      End Function)
+                }
+            Else
+                values = DirectCast(opts, list)
 
-            Return opts
+                For Each value As KeyValuePair(Of String, Object) In values.slots
+                    Try
+                        configs.setOption(value.Key, value.Value)
+                    Catch ex As Exception
+                        Return Internal.stop(ex, envir)
+                    End Try
+                Next
+            End If
+
+            Return values
         End Function
 
         <ExportAPI("get")>
@@ -432,18 +449,39 @@ Namespace Runtime.Internal.Invokes
         Public Function print(<RRawVectorArgument> x As Object, envir As Environment) As Object
             If x Is Nothing Then
                 Call Console.WriteLine("NULL")
-            ElseIf x.GetType.ImplementInterface(GetType(RPrint)) Then
+
+                ' just returns nothing literal
+                Return Nothing
+            Else
+                Return doPrintInternal(x, x.GetType, envir)
+            End If
+        End Function
+
+        Private Function doPrintInternal(x As Object, type As Type, envir As Environment) As Object
+            Dim globalEnv As GlobalEnvironment = envir.globalEnvironment
+            Dim maxPrint% = globalEnv.options.maxPrint
+
+            If type Is GetType(RMethodInfo) Then
+                Call globalEnv _
+                    .packages _
+                    .packageDocs _
+                    .PrintHelp(x)
+            ElseIf type.ImplementInterface(GetType(RPrint)) Then
                 Try
                     Call markdown.DoPrint(DirectCast(x, RPrint).GetPrintContent, 0)
                 Catch ex As Exception
                     Return Internal.stop(ex, envir)
                 End Try
-            ElseIf x.GetType Is GetType(Message) Then
+            ElseIf type Is GetType(Message) Then
                 Return x
-            ElseIf x.GetType Is GetType(list) Then
-                Call printer.printInternal(DirectCast(x, list).slots, "")
+            ElseIf type Is GetType(list) Then
+                Call DirectCast(x, list) _
+                    .slots _
+                    .DoCall(Sub(list)
+                                printer.printInternal(list, "", maxPrint, globalEnv)
+                            End Sub)
             Else
-                Call printer.printInternal(x, "")
+                Call printer.printInternal(x, "", maxPrint, globalEnv)
             End If
 
             Return x

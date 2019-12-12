@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bffa17d36095f03e3a392bafdc65ac1e, R#\Runtime\Components\Variable.vb"
+﻿#Region "Microsoft.VisualBasic::bffa17d36095f03e3a392bafdc65ac1e, R#\Runtime\System\Variable.vb"
 
     ' Author:
     ' 
@@ -113,6 +113,10 @@ Namespace Runtime.Components
             End Get
         End Property
 
+        ''' <summary>
+        ''' The vector length
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property length As Integer
             Get
                 If typeCode.IsPrimitive AndAlso value.GetType.IsInheritsFrom(GetType(Array)) Then

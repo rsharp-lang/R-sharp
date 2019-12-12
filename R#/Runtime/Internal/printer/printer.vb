@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::aea0a9fa894659ae34238d64532f2ce5, R#\Runtime\Internal\printer\printer.vb"
+﻿#Region "Microsoft.VisualBasic::087cc7f53adb0d4978be446df1cd8f92, R#\Runtime\Internal\printer\printer.vb"
 
     ' Author:
     ' 
@@ -31,13 +31,17 @@
 
     ' Summaries:
 
+    '     Delegate Function
+    ' 
+    ' 
     '     Module printer
     ' 
     '         Constructor: (+1 Overloads) Sub New
     ' 
-    '         Function: ToString, ValueToString
+    '         Function: f64_InternalToString, ToString, ValueToString
     ' 
-    '         Sub: AttachConsoleFormatter, printArray, printInternal, printList
+    '         Sub: AttachConsoleFormatter, AttachInternalConsoleFormatter, printArray, printInternal, printList
+    ' 
     ' 
     ' 
     ' /********************************************************************************/
@@ -48,10 +52,14 @@ Imports System.Drawing
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.Imaging
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization
+Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 
 Namespace Runtime.Internal.ConsolePrinter
+
+    Public Delegate Function InternalToString(env As GlobalEnvironment) As IStringBuilder
 
     ''' <summary>
     ''' R# console nice print supports.
@@ -59,11 +67,21 @@ Namespace Runtime.Internal.ConsolePrinter
     Public Module printer
 
         Friend ReadOnly RtoString As New Dictionary(Of Type, IStringBuilder)
+        Friend ReadOnly RInternalToString As New Dictionary(Of Type, InternalToString)
 
         Sub New()
             RtoString(GetType(Color)) = Function(c) DirectCast(c, Color).ToHtmlColor.ToLower
             RtoString(GetType(vbObject)) = Function(o) DirectCast(o, vbObject).ToString
+
+            RInternalToString(GetType(Double)) = AddressOf printer.f64_InternalToString
         End Sub
+
+        Private Function f64_InternalToString(env As GlobalEnvironment) As IStringBuilder
+            Dim opts As Options = env.globalEnvironment.options
+            Dim format As String = $"{opts.f64Format}{opts.digits}"
+
+            Return Function(d) DirectCast(d, Double).ToString(format)
+        End Function
 
         ''' <summary>
         ''' <see cref="Object"/> -> <see cref="String"/>
@@ -74,13 +92,22 @@ Namespace Runtime.Internal.ConsolePrinter
             RtoString(GetType(T)) = formatter
         End Sub
 
-        Friend Sub printInternal(x As Object, listPrefix$)
+        ''' <summary>
+        ''' <see cref="Object"/> -> <see cref="String"/>
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="formatter"></param>
+        Friend Sub AttachInternalConsoleFormatter(Of T)(formatter As InternalToString)
+            RInternalToString(GetType(T)) = formatter
+        End Sub
+
+        Friend Sub printInternal(x As Object, listPrefix$, maxPrint%, env As GlobalEnvironment)
             Dim valueType As Type = x.GetType
 
             If valueType.IsInheritsFrom(GetType(Array)) Then
                 With DirectCast(x, Array)
                     If .Length > 1 Then
-                        Call .printArray()
+                        Call .printArray(maxPrint, env)
                     ElseIf .Length = 0 Then
                         Call Console.WriteLine("NULL")
                     Else
@@ -91,9 +118,9 @@ Namespace Runtime.Internal.ConsolePrinter
                     End If
                 End With
             ElseIf valueType Is GetType(vector) Then
-                Call DirectCast(x, vector).data.printArray()
+                Call DirectCast(x, vector).data.printArray(maxPrint, env)
             ElseIf valueType Is GetType(Dictionary(Of String, Object)) Then
-                Call DirectCast(x, Dictionary(Of String, Object)).printList(listPrefix)
+                Call DirectCast(x, Dictionary(Of String, Object)).printList(listPrefix, maxPrint, env)
             ElseIf valueType Is GetType(dataframe) Then
                 Call DirectCast(x, dataframe) _
                     .GetTable _
@@ -101,12 +128,12 @@ Namespace Runtime.Internal.ConsolePrinter
                     .DoCall(AddressOf Console.WriteLine)
             Else
 printSingleElement:
-                Call Console.WriteLine("[1] " & printer.ValueToString(x))
+                Call Console.WriteLine("[1] " & printer.ValueToString(x, env))
             End If
         End Sub
 
         <Extension>
-        Private Sub printList(list As Dictionary(Of String, Object), listPrefix$)
+        Private Sub printList(list As Dictionary(Of String, Object), listPrefix$, maxPrint%, env As GlobalEnvironment)
             For Each slot As KeyValuePair(Of String, Object) In list
                 Dim key$ = slot.Key
 
@@ -117,25 +144,32 @@ printSingleElement:
                 End If
 
                 Call Console.WriteLine(key)
-                Call printer.printInternal(slot.Value, key)
+                Call printer.printInternal(slot.Value, key, maxPrint, env)
                 Call Console.WriteLine()
             Next
         End Sub
 
         ''' <summary>
-        ''' Debugger test api of <see cref="ToString(Type)"/>
+        ''' Debugger test api of <see cref="ToString"/>
         ''' </summary>
         ''' <param name="x"></param>
         ''' <returns></returns>
         <Extension>
-        Public Function ValueToString(x As Object) As String
-            Return printer.ToString(x.GetType)(x)
+        Public Function ValueToString(x As Object, env As GlobalEnvironment) As String
+            Return printer.ToString(x.GetType, env)(x)
         End Function
 
+        ''' <summary>
+        ''' The external string formatter will overrides the internal formatter
+        ''' </summary>
+        ''' <param name="elementType"></param>
+        ''' <returns></returns>
         <Extension>
-        Private Function ToString(elementType As Type) As IStringBuilder
+        Private Function ToString(elementType As Type, env As GlobalEnvironment) As IStringBuilder
             If RtoString.ContainsKey(elementType) Then
                 Return RtoString(elementType)
+            ElseIf RInternalToString.ContainsKey(elementType) Then
+                Return RInternalToString(elementType)(env)
             ElseIf elementType Is GetType(String) Then
                 Return Function(o) As String
                            If o Is Nothing Then
@@ -153,15 +187,30 @@ printSingleElement:
             End If
         End Function
 
+        ''' <summary>
+        ''' Print vector elements
+        ''' </summary>
+        ''' <param name="xvec"></param>
         <Extension>
-        Private Sub printArray(xvec As Array)
-            Dim elementType As Type = xvec.GetType.GetElementType
-            Dim toString As IStringBuilder = printer.ToString(elementType)
+        Private Sub printArray(xvec As Array, maxPrint%, env As GlobalEnvironment)
+            Dim elementType As Type = Runtime.MeasureArrayElementType(xvec)
+            Dim toString As IStringBuilder = printer.ToString(elementType, env)
             Dim stringVec = From element As Object
                             In xvec.AsQueryable
                             Select toString(element)
+            Dim maxColumns As Integer = Console.WindowWidth
+            Dim contents As String() = stringVec.Take(maxPrint).ToArray
+            ' maxsize / average size
+            Dim divSize As Integer = maxColumns \ contents.Average(Function(c) c.Length + 1) - 1
+            Dim i As i32 = 1 - divSize
 
-            Call Console.WriteLine($"[{xvec.Length}] " & stringVec.JoinBy(vbTab))
+            For Each row As String() In contents.Split(divSize)
+                Call Console.WriteLine($"[{i = i + divSize}]{vbTab}" & row.JoinBy(vbTab))
+            Next
+
+            If xvec.Length > maxPrint Then
+                Call Console.WriteLine($"[ reached getOption(""max.print"") -- omitted {xvec.Length - contents.Length} entries ]")
+            End If
         End Sub
     End Module
 End Namespace

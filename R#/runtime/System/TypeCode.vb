@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f2721bf469e192a38a39af965443677b, R#\Runtime\Components\TypeCode.vb"
+﻿#Region "Microsoft.VisualBasic::f2721bf469e192a38a39af965443677b, R#\Runtime\System\TypeCode.vb"
 
     ' Author:
     ' 

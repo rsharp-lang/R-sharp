@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d604963fa5fed03dac9beef2563f5624, R#\test\interpreterTest.vb"
+﻿#Region "Microsoft.VisualBasic::086f369e8405712dbaf3220fba00358f, R#\test\interpreterTest.vb"
 
     ' Author:
     ' 
@@ -34,8 +34,8 @@
     ' Module interpreterTest
     ' 
     '     Sub: appendTest, closureEnvironmentTest, closureTest, isEmptyTest, lastSymbolTest
-    '          Main, missingSymbolInStringInterpolate, moduleTest, objClasstest, printClassTest
-    '          sequenceGeneratorTest, suppressTest
+    '          Main, markdownTest, missingSymbolInStringInterpolate, moduleTest, objClasstest
+    '          orDefaultTest, printClassTest, sequenceGeneratorTest, suppressTest
     ' module test1
     ' 
     '     Sub: boolTest, branchTest, cliTest, commandLineArgumentTest, dataframeTest
@@ -43,8 +43,9 @@
     '          forLoopTest, genericTest, iifTest, ImportsDll, inTest
     '          invokeTest, lambdaTest, linqPipelineTest, linqTest, listTest
     '          logicalTest, nameAccessorTest, namespaceTest, namesTest, optionsTest
-    '          parameterTest, pipelineParameterBugTest, pipelineTest, sourceScripttest, StackTest
-    '          stringInterpolateTest, symbolNotFoundTest, testScript, tupleTest, whichTest
+    '          parameterTest, pipelineParameterBugTest, pipelineTest, sourceFunctionTest, sourceScripttest
+    '          StackTest, stringInterpolateTest, symbolNotFoundTest, testScript, tupleTest
+    '          whichTest
     ' module test2
     ' 
     ' 
@@ -69,6 +70,10 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+
+        Call unaryNegTest()
+
+        Call sourceFunctionTest()
         Call markdownTest()
 
         Call declareTest()
@@ -148,8 +153,20 @@ Module interpreterTest
         Pause()
     End Sub
 
+    Sub unaryNegTest()
+
+        Call R.Evaluate("options(f64.format = 'G', digits = 3)")
+
+        Call R.Print("-99 + 99999")
+        Call R.Print("+99 + 99999")
+        Call R.Print("-99 + 99999 - (-10000)")
+
+        Pause()
+    End Sub
+
     Sub markdownTest()
         Call R.Evaluate("print(sum)")
+        Call R.Evaluate("print(names)")
 
         Pause()
     End Sub
@@ -203,7 +220,7 @@ Module interpreterTest
     Sub printClassTest()
         Dim [class] As Object = New SMRUCC.Rsharp.Runtime.Environment
 
-        Call Console.WriteLine(printer.ValueToString([class]))
+        Call Console.WriteLine(printer.ValueToString([class], R.globalEnvir))
 
         Pause()
     End Sub
@@ -320,6 +337,13 @@ test2::println('123');
 test1::println('123');
 
 ")
+    End Sub
+
+    Sub sourceFunctionTest()
+        Call R.Evaluate("source(path = 'abc.R')")
+        Call R.Evaluate("source('a.R')")
+
+        Pause()
     End Sub
 
     Sub sourceScripttest()

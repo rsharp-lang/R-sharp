@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::48a9e99181a8b0a89c5c9170077101c5, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Append.vb"
+﻿#Region "Microsoft.VisualBasic::033ba84a812eacb558391a72f2a8d981, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Append.vb"
 
     ' Author:
     ' 
@@ -42,7 +42,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime
@@ -93,10 +92,10 @@ Namespace Interpreter.ExecuteEngine
                     .JoinIterates(Runtime.asVector(Of Object)(y).AsObjectEnumerator) _
                     .ToArray
             ElseIf type1 Is GetType(list) Then
-                Throw New NotImplementedException
+                Return Internal.stop(New NotImplementedException, envir)
             End If
 
-            Throw New NotImplementedException
+            Return Internal.stop(New NotImplementedException, envir)
         End Function
     End Class
 End Namespace

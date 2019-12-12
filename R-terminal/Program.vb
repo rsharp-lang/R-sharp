@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6873aa3491bc7e7c0a0301616c94862e, R-terminal\Program.vb"
+﻿#Region "Microsoft.VisualBasic::6d8cb059ba54d5cbc8db0217f2519b68, R-terminal\Program.vb"
 
     ' Author:
     ' 
@@ -71,9 +71,9 @@ Module Program
 
         Call Console.WriteLine()
 
-        For Each arg As NamedValue(Of String) In args.ToArgumentVector
-            Call R.Add(CommandLine.TrimNamePrefix(arg.Name), arg.Value, TypeCodes.generic)
-        Next
+        'For Each arg As NamedValue(Of String) In args.ToArgumentVector
+        '    Call R.Add(CommandLine.TrimNamePrefix(arg.Name), arg.Value, TypeCodes.generic)
+        'Next
 
         Dim result As Object = R.Source(filepath)
 

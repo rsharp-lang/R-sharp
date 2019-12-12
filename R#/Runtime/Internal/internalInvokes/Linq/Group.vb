@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2979dcf9b9cd5ec81ca8a5159abaaf5e, R#\Runtime\Internal\internalInvokes\Linq\Group.vb"
+﻿#Region "Microsoft.VisualBasic::1dcdf271c30a74044b24ef424c47d26b, R#\Runtime\Internal\internalInvokes\Linq\Group.vb"
 
     ' Author:
     ' 
@@ -34,7 +34,7 @@
     '     Structure Group
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: (+2 Overloads) getByName, getNames, (+2 Overloads) setByName, ToString
+    '         Function: (+2 Overloads) getByName, getNames, InternalToString, (+2 Overloads) setByName, ToString
     ' 
     ' 
     ' /********************************************************************************/
@@ -43,6 +43,7 @@
 
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Serialization
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
@@ -58,14 +59,20 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         Public group As Array
 
         Shared Sub New()
-            Call printer.AttachConsoleFormatter(Of Group)(Function(group) group.ToString)
+            Call printer.AttachInternalConsoleFormatter(Of Group)(AddressOf InternalToString)
         End Sub
 
-        Public Overrides Function ToString() As String
-            Return $" '{group.Length}' elements with key: " & printer.ValueToString(key) & vbCrLf &
+        Private Shared Function InternalToString(env As GlobalEnvironment) As IStringBuilder
+            Return Function(x) DirectCast(x, Group).ToString(env)
+        End Function
+
+        Public Overloads Function ToString(env As Environment) As String
+            Dim globalEnv As GlobalEnvironment = env.globalEnvironment
+
+            Return $" '{group.Length}' elements with key: " & printer.ValueToString(key, globalEnv) & vbCrLf &
                 group.AsObjectEnumerator _
                     .Select(Function(o)
-                                Return "   " & printer.ValueToString(o)
+                                Return "   " & printer.ValueToString(o, globalEnv)
                             End Function) _
                     .JoinBy(vbCrLf)
         End Function

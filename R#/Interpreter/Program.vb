@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::236bf5873374615c450d9f9c19304e41, R#\Interpreter\Program.vb"
+﻿#Region "Microsoft.VisualBasic::ffa974d682be0be8789176c8349a9d5f, R#\Interpreter\Program.vb"
 
     ' Author:
     ' 
@@ -34,7 +34,7 @@
     '     Class Program
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: BuildProgram, CreateProgram, Execute, ExecuteCodeLine, GetEnumerator
+    '         Function: BuildProgram, (+2 Overloads) CreateProgram, Execute, ExecuteCodeLine, GetEnumerator
     '                   IEnumerable_GetEnumerator, isException, ToString
     ' 
     ' 
@@ -74,6 +74,14 @@ Namespace Interpreter
                 last = ExecuteCodeLine(expression, envir, breakLoop, debug)
 
                 If breakLoop Then
+                    If Not last Is Nothing AndAlso Program.isException(last) Then
+                        Dim err As Message = last
+
+                        If err.source Is Nothing Then
+                            err.source = expression
+                        End If
+                    End If
+
                     Exit For
                 End If
             Next

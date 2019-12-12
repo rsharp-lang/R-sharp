@@ -109,6 +109,11 @@ Namespace Interpreter.ExecuteEngine
             End Select
         End Sub
 
+        Sub New(value As Double)
+            Me.type = TypeCodes.double
+            Me.value = value
+        End Sub
+
         Sub New(value As String)
             Me.type = TypeCodes.string
             Me.value = value

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3b1c21e96efecc46f470e0d9adffd8d5, R#\Interpreter\Extensions.vb"
+﻿#Region "Microsoft.VisualBasic::2fd0f0fdf1fb18d15f742dd5fe33a7ff, R#\Interpreter\Extensions.vb"
 
     ' Author:
     ' 
@@ -111,6 +111,10 @@ Namespace Interpreter
             For Each msg As String In message
                 Console.WriteLine($"  {++i}. {msg}")
             Next
+
+            If Not message.source Is Nothing Then
+                Call Console.WriteLine($" R# source: {message.source.ToString}")
+            End If
 
             Console.ForegroundColor = backup
 

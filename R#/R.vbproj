@@ -117,6 +117,27 @@
     <PlatformTarget>x64</PlatformTarget>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Rsharp_app_release|AnyCPU'">
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Rsharp_app_release\</OutputPath>
+    <DocumentationFile>R.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Rsharp_app_release|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x64\Rsharp_app_release\</OutputPath>
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
+    <DocumentationFile>R.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -198,12 +219,15 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Interpreter\ExecuteEngine\Expression.vb" />
+    <Compile Include="Runtime\Internal\internalInvokes\strings.vb" />
     <Compile Include="Runtime\Internal\printer\functionPrinter.vb" />
+    <Compile Include="Runtime\Interop\RReturn.vb" />
+    <Compile Include="System\Config\Defaults.vb" />
     <Compile Include="Runtime\System\Rscript.vb" />
     <Compile Include="Runtime\System\Interface\RNames.vb" />
     <Compile Include="Runtime\GlobalEnvironment.vb" />
-    <Compile Include="Runtime\System\Config\Options.vb" />
-    <Compile Include="Runtime\System\Config\ConfigFile.vb" />
+    <Compile Include="System\Config\Options.vb" />
+    <Compile Include="System\Config\ConfigFile.vb" />
     <Compile Include="Runtime\System\Interface\RPrint.vb" />
     <Compile Include="Runtime\System\Interface\RFunction.vb" />
     <Compile Include="Runtime\Internal\debug.vb" />
@@ -223,12 +247,12 @@
     <Compile Include="Runtime\Interop\RMethodArgument.vb" />
     <Compile Include="Runtime\System\InvokeParameter.vb" />
     <Compile Include="Runtime\RVectorExtensions.vb" />
-    <Compile Include="Runtime\Package\AnnotationDocs.vb" />
-    <Compile Include="Runtime\Package\Database\LocalPackageDatabase.vb" />
-    <Compile Include="Runtime\Package\Database\PackageLoaderEntry.vb" />
-    <Compile Include="Runtime\Package\PackageManager.vb" />
-    <Compile Include="Runtime\Package\Package.vb" />
-    <Compile Include="Runtime\Package\ImportsPackage.vb" />
+    <Compile Include="System\Package\AnnotationDocs.vb" />
+    <Compile Include="System\Package\Database\LocalPackageDatabase.vb" />
+    <Compile Include="System\Package\Database\PackageLoaderEntry.vb" />
+    <Compile Include="System\Package\PackageManager.vb" />
+    <Compile Include="System\Package\Package.vb" />
+    <Compile Include="System\Package\ImportsPackage.vb" />
     <Compile Include="Runtime\System\Message.vb" />
     <Compile Include="Runtime\Interop\RMethodInfo.vb" />
     <Compile Include="Runtime\Core.vb" />
@@ -242,7 +266,7 @@
     <Compile Include="Runtime\Internal\objects\list.vb" />
     <Compile Include="Runtime\System\Variable.vb" />
     <Compile Include="Runtime\System\TypeCode.vb" />
-    <Compile Include="Runtime\Package\PackageLoader.vb" />
+    <Compile Include="System\Package\PackageLoader.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">

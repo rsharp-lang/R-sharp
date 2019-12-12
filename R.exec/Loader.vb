@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::be16373f9ff4797a6eb8a2528062b922, R.exec\Loader.vb"
+﻿#Region "Microsoft.VisualBasic::43818007d0359e695db155fcc6c31a29, R.exec\Loader.vb"
 
     ' Author:
     ' 
@@ -39,11 +39,9 @@
 
 #End Region
 
-
 ''' <summary>
 ''' R# executable file loader
 ''' </summary>
 Public Module Loader
 
 End Module
-

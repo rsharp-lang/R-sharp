@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::18801db20b4983c205e65dcf46387519, R#\Runtime\Environment.vb"
+﻿#Region "Microsoft.VisualBasic::386bd812647080bac6d558953e1652cf, R#\Runtime\Environment.vb"
 
     ' Author:
     ' 
@@ -41,7 +41,7 @@
     '         Function: asRVector, Evaluate, FindSymbol, GetEnumerator, IEnumerable_GetEnumerator
     '                   Push, ToString
     ' 
-    '         Sub: Clear, (+2 Overloads) Dispose
+    '         Sub: Clear, Delete, (+2 Overloads) Dispose
     ' 
     ' 
     ' /********************************************************************************/
@@ -89,7 +89,13 @@ Namespace Runtime
         End Property
 
         Friend ReadOnly ifPromise As New List(Of IfBranch.IfPromise)
-        Friend [global] As GlobalEnvironment
+
+        ''' <summary>
+        ''' In the constructor function of <see cref="Runtime.GlobalEnvironment"/>, 
+        ''' require attach itself to this parent field
+        ''' So this parent field should not be readonly
+        ''' </summary>
+        Protected [global] As GlobalEnvironment
 
         ''' <summary>
         ''' 当前的环境是否为最顶层的全局环境？
@@ -125,7 +131,7 @@ Namespace Runtime
             End Get
             Set(value As Variable)
                 If name.First = "["c AndAlso name.Last = "]"c Then
-                    GlobalEnvironment(name.GetStackValue("[", "]")) = value
+                    globalEnvironment(name.GetStackValue("[", "]")) = value
                 Else
                     variables(name) = value
                 End If
@@ -151,6 +157,14 @@ Namespace Runtime
             Me.global = parent.globalEnvironment
         End Sub
 
+        Sub New(globalEnv As GlobalEnvironment)
+            Call Me.New
+
+            Me.parent = globalEnv
+            Me.global = globalEnv
+            Me.stackTag = "<globalEnvironment>"
+        End Sub
+
         Public Sub Clear()
             Call variables.Clear()
             Call types.Clear()
@@ -165,7 +179,7 @@ Namespace Runtime
         ''' <returns></returns>
         Public Function FindSymbol(name As String) As Variable
             If (name.First = "["c AndAlso name.Last = "]"c) Then
-                Return GlobalEnvironment.FindSymbol(name.GetStackValue("[", "]"))
+                Return globalEnvironment.FindSymbol(name.GetStackValue("[", "]"))
             End If
 
             If variables.ContainsKey(name) Then
@@ -215,7 +229,7 @@ Namespace Runtime
                 .value = value
             }
                 If Not .constraintValid Then
-                    Throw New Exception(String.Format(ConstraintInvalid, .typeCode, type))
+                    Return Internal.stop(New Exception(String.Format(ConstraintInvalid, .typeCode, type)), Me)
                 Else
                     Call .DoCall(AddressOf variables.Add)
                 End If

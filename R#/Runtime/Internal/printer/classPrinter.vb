@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8e1d966e08651df92c0ff0b1917848f3, R#\Runtime\Internal\printer\classPrinter.vb"
+﻿#Region "Microsoft.VisualBasic::6e4657cbe305681fa6c1d55a2c7d677b, R#\Runtime\Internal\printer\classPrinter.vb"
 
     ' Author:
     ' 
@@ -47,7 +47,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
 
-Namespace Runtime.Internal
+Namespace Runtime.Internal.ConsolePrinter
 
     ''' <summary>
     ''' Console print formatter for non System user class type

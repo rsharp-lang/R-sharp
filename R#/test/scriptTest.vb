@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9ec83e7bdbe50299d1dcfd27f5b588fc, R#\test\scriptTest.vb"
+﻿#Region "Microsoft.VisualBasic::91a699cab5f25bd350a6ecf091336e76, R#\test\scriptTest.vb"
 
     ' Author:
     ' 
@@ -43,16 +43,15 @@ Imports SMRUCC.Rsharp.Interpreter
 
 Module scriptTest
 
-    Const script$ = "E:\GCModeller\src\GCModeller\engine\Rscript\renderMap.R"
+    Const script$ = "S:\2019\mzCloud\mzcloud_mgf.R"
 
     Dim R As RInterpreter = New RInterpreter() With {
         .debug = True
     }
 
     Sub Main()
-        Call R.globalEnvir.packages.InstallLocals("E:\GCModeller\GCModeller\bin\R.base.dll")
+        Call R.globalEnvir.packages.InstallLocals("D:\GCModeller\GCModeller\bin\Library\R.base.dll")
         Call R.Source(script)
         Call Pause()
     End Sub
 End Module
-

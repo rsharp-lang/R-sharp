@@ -53,6 +53,9 @@ Imports Microsoft.VisualBasic.Linq
 
 Namespace Runtime
 
+    ''' <summary>
+    ''' Operator impl core
+    ''' </summary>
     Public Module Core
 
         ''' <summary>

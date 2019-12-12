@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ea769360f6532c26e4ced272dcf3b4cc, R#\Interpreter\ExecuteEngine\ExpressionSymbols\FunctionInvoke.vb"
+﻿#Region "Microsoft.VisualBasic::8b6a7d4f8481498c489a6fe5a8a4dcbe, R#\Interpreter\ExecuteEngine\ExpressionSymbols\FunctionInvoke.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,7 @@
     '         Properties: [namespace], funcName, type
     ' 
     '         Constructor: (+3 Overloads) Sub New
-    '         Function: Evaluate, invokePackageInternal, invokeRInternal, ToString
+    '         Function: Evaluate, invokePackageInternal, invokeRInternal, isOptionNames, ToString
     ' 
     ' 
     ' /********************************************************************************/
@@ -45,6 +45,7 @@
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports SMRUCC.Rsharp.Language
@@ -52,6 +53,7 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports RPackage = SMRUCC.Rsharp.Runtime.Package.Package
@@ -86,6 +88,9 @@ Namespace Interpreter.ExecuteEngine
         ''' <returns></returns>
         Public Property [namespace] As String
 
+        ''' <summary>
+        ''' The parameters expression that passing to the target invoked function.
+        ''' </summary>
         Friend ReadOnly parameters As List(Of Expression)
 
         Sub New(tokens As Token())
@@ -102,7 +107,7 @@ Namespace Interpreter.ExecuteEngine
                 .Select(Function(param)
                             Return Expression.CreateExpression(param)
                         End Function) _
-                .ToList
+                .AsList
         End Sub
 
         ''' <summary>
@@ -123,7 +128,7 @@ Namespace Interpreter.ExecuteEngine
         ''' <param name="parameters"></param>
         Sub New(funcVar As Expression, ParamArray parameters As Expression())
             Me.funcName = funcVar
-            Me.parameters = parameters.ToList
+            Me.parameters = parameters.AsList
         End Sub
 
         Public Overrides Function ToString() As String
@@ -203,7 +208,14 @@ Namespace Interpreter.ExecuteEngine
             If funcName = "list" Then
                 Return Runtime.Internal.Rlist(envir, parameters)
             ElseIf funcName = "options" Then
-                Return base.options(Runtime.Internal.Rlist(envir, parameters), envir)
+                If parameters.DoCall(AddressOf isOptionNames) Then
+                    Dim names As String() = Runtime.asVector(Of String)(parameters(Scan0).Evaluate(envir))
+                    Dim values As list = base.options(names, envir)
+
+                    Return values
+                Else
+                    Return base.options(Runtime.Internal.Rlist(envir, parameters), envir)
+                End If
             ElseIf funcName = "data.frame" Then
                 Return Runtime.Internal.Rdataframe(envir, parameters)
             Else
@@ -212,6 +224,18 @@ Namespace Interpreter.ExecuteEngine
 
                 Return result
             End If
+        End Function
+
+        Private Shared Function isOptionNames(parameters As List(Of Expression)) As Boolean
+            Dim first As Expression = parameters.ElementAtOrDefault(Scan0)
+
+            If first Is Nothing OrElse Not parameters = 1 Then
+                Return False
+            End If
+
+            Return TypeOf first Is VectorLiteral OrElse
+                   TypeOf first Is SymbolReference OrElse
+                   TypeOf first Is SymbolIndexer
         End Function
     End Class
 End Namespace

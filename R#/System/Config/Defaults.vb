@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d180788d5a181bef2894fed9a6e1df18, R#\Runtime\Package\AnnotationDocs.vb"
+﻿#Region "Microsoft.VisualBasic::20932fe5b6b2e851e17338b8ebae43d7, R#\Runtime\System\Config\Defaults.vb"
 
     ' Author:
     ' 
@@ -31,43 +31,20 @@
 
     ' Summaries:
 
-    '     Class AnnotationDocs
+    '     Module Defaults
     ' 
-    '         Function: GetAnnotations
+    '         Properties: HTTPUserAgent
     ' 
     ' 
     ' /********************************************************************************/
 
 #End Region
 
-Imports System.Reflection
-Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
+Namespace Runtime.Components.Configuration
 
-Namespace Runtime.Package
+    Module Defaults
 
-    ''' <summary>
-    ''' Parser of the <see cref="Project"/> assembly
-    ''' </summary>
-    Public Class AnnotationDocs
+        Public ReadOnly Property HTTPUserAgent As String = $"SMRUCC/R# {App.Version}; R (3.4.4 x86_64-w64-mingw32 x86_64 mingw32)"
 
-        ReadOnly projects As New Dictionary(Of String, Project)
-
-        Public Function GetAnnotations(package As Type) As ProjectType
-            Dim assembly As Assembly = package.Assembly
-            Dim project As Project
-            Dim projectKey As String = assembly.ToString
-            Dim docXml As String = assembly.Location.TrimSuffix & ".xml"
-            Dim type As ProjectType
-
-            If Not projects.ContainsKey(projectKey) Then
-                projects(projectKey) = ProjectSpace.CreateDocProject(docXml)
-            End If
-
-            project = projects(projectKey)
-            type = project.GetType(package.FullName)
-
-            Return type
-        End Function
-
-    End Class
+    End Module
 End Namespace

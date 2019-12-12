@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::99d2fc2d9efb79edc24217570fb3f6be, R#\Runtime\Interop\RInteropAttribute.vb"
+﻿#Region "Microsoft.VisualBasic::f3590cd0fa89ae7ed33f73d5cd798cd9, R#\Runtime\Interop\RInteropAttribute.vb"
 
     ' Author:
     ' 
@@ -32,6 +32,10 @@
     ' Summaries:
 
     '     Class RInteropAttribute
+    ' 
+    ' 
+    ' 
+    '     Class RByRefValueAssignAttribute
     ' 
     ' 
     ' 
