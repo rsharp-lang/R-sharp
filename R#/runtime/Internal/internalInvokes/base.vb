@@ -54,6 +54,7 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Configuration
@@ -562,5 +563,80 @@ Namespace Runtime.Internal.Invokes
                 Return New vector With {.data = seq}
             End If
         End Function
+
+        ''' <summary>
+        ''' # Terminate an R Session
+        ''' 
+        ''' The function ``quit`` or its alias ``q`` terminate the current R session.
+        ''' </summary>
+        ''' <param name="save">
+        ''' a character string indicating whether the environment (workspace) should be saved, 
+        ''' one of ``"no"``, ``"yes"``, ``"ask"`` or ``"default"``.
+        ''' </param>
+        ''' <param name="status">
+        ''' the (numerical) error status to be returned to the operating system, where relevant. 
+        ''' Conventionally 0 indicates successful completion.
+        ''' </param>
+        ''' <param name="runLast">
+        ''' should ``.Last()`` be executed?
+        ''' </param>
+        ''' 
+        <ExportAPI("quit")>
+        Public Sub quit(Optional save$ = "default",
+                        Optional status% = 0,
+                        Optional runLast As Boolean = True,
+                        Optional envir As Environment = Nothing)
+
+            Call base.q(save, status, runLast, envir)
+        End Sub
+
+        ''' <summary>
+        ''' # Terminate an R Session
+        ''' 
+        ''' The function ``quit`` or its alias ``q`` terminate the current R session.
+        ''' </summary>
+        ''' <param name="save">
+        ''' a character string indicating whether the environment (workspace) should be saved, 
+        ''' one of ``"no"``, ``"yes"``, ``"ask"`` or ``"default"``.
+        ''' </param>
+        ''' <param name="status">
+        ''' the (numerical) error status to be returned to the operating system, where relevant. 
+        ''' Conventionally 0 indicates successful completion.
+        ''' </param>
+        ''' <param name="runLast">
+        ''' should ``.Last()`` be executed?
+        ''' </param>
+        ''' 
+        <ExportAPI("q")>
+        Public Sub q(Optional save$ = "default",
+                     Optional status% = 0,
+                     Optional runLast As Boolean = True,
+                     Optional envir As Environment = Nothing)
+
+            Call Console.Write("Save workspace image? [y/n/c]: ")
+
+            Dim input As String = Console.ReadLine.Trim(ASCII.CR, ASCII.LF, " "c, ASCII.TAB)
+
+            If input = "c" Then
+                ' cancel
+                Return
+            End If
+
+            If input = "y" Then
+
+            Else
+
+            End If
+
+            If runLast Then
+                Dim last = envir.FindSymbol(".Last")
+
+                If Not last Is Nothing Then
+                    Call DirectCast(last, RFunction).Invoke(envir, {})
+                End If
+            End If
+
+            Call App.Exit(status)
+        End Sub
     End Module
 End Namespace
