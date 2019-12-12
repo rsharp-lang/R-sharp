@@ -464,15 +464,16 @@ Namespace Runtime.Internal.Invokes
             End If
 
             Dim apply As RFunction = doApply
+            Dim list As Dictionary(Of String, Object)
 
             If sequence.GetType Is GetType(Dictionary(Of String, Object)) Then
-                Return DirectCast(sequence, Dictionary(Of String, Object)) _
+                list = DirectCast(sequence, Dictionary(Of String, Object)) _
                     .ToDictionary(Function(d) d.Key,
                                   Function(d)
                                       Return apply.Invoke(envir, {d.Value})
                                   End Function)
             Else
-                Return Runtime.asVector(Of Object)(sequence) _
+                list = Runtime.asVector(Of Object)(sequence) _
                     .AsObjectEnumerator _
                     .SeqIterator _
                     .ToDictionary(Function(i) $"[[{i.i}]]",
@@ -480,6 +481,8 @@ Namespace Runtime.Internal.Invokes
                                       Return apply.Invoke(envir, {d.value})
                                   End Function)
             End If
+
+            Return New list With {.slots = list}
         End Function
 
         <ExportAPI("sapply")>
