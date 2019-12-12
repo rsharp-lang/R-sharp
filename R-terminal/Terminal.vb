@@ -52,6 +52,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Module Terminal
 
@@ -91,9 +92,9 @@ Type 'q()' to quit R.
 
     Private Sub doRunScript(script As String)
         Dim program As RProgram = RProgram.BuildProgram(script)
-        Dim result = R.Run(program)
+        Dim result As Object = REnv.TryCatch(Function() R.Run(program))
 
-        If RProgram.isException(result) Then
+        If RProgram.isException(result, R.globalEnvir) Then
             Return
         End If
 

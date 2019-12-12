@@ -105,6 +105,9 @@ Namespace Interpreter.ExecuteEngine
                 If parameter.names.Length = 0 Then
                     ' lambda function with no parameter
                     Return closure.Evaluate(envir)
+                ElseIf arguments.Length = 0 AndAlso parameter.names.Length > 0 Then
+                    ' no value for the required parameter
+                    Return DeclareNewFunction.MissingParameters(parameter, name, envir)
                 Else
                     ' lambda function only allows one parameter in 
                     ' its declaration

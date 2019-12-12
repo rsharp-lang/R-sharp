@@ -116,6 +116,17 @@ Namespace Interpreter.ExecuteEngine
             body = New ClosureExpression(tokens)
         End Sub
 
+        Friend Shared Function MissingParameters(var As DeclareNewVariable, funcName$, envir As Environment) As Object
+            Dim message As String() = {
+                $"argument ""{var.names.GetJson}"" is missing, with no default",
+                $"function: {funcName}",
+                $"parameterName: {var.names.GetJson}",
+                $"type: {var.type.Description}"
+            }
+
+            Return Internal.stop(message, envir)
+        End Function
+
         Public Function Invoke(parent As Environment, params As InvokeParameter()) As Object Implements RFunction.Invoke
             Dim var As DeclareNewVariable
             Dim value As Object
@@ -147,14 +158,7 @@ Namespace Interpreter.ExecuteEngine
                     If var.hasInitializeExpression Then
                         value = var.value.Evaluate(envir)
                     Else
-                        Dim message As String() = {
-                            $"argument ""{var.names.GetJson}"" is missing, with no default",
-                            $"function: {funcName}",
-                            $"parameterName: {var.names.GetJson}",
-                            $"type: {var.type.Description}"
-                        }
-
-                        Return Internal.stop(message, envir)
+                        Return MissingParameters(var, funcName, envir)
                     End If
                 Else
                     key = "$" & i
