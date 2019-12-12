@@ -61,6 +61,7 @@ Namespace Interpreter.ExecuteEngine
     ''' </remarks>
     Public Class DeclareLambdaFunction : Inherits Expression
         Implements RFunction
+        Implements RPrint
 
         Public Overrides ReadOnly Property type As TypeCodes
             Get
@@ -135,6 +136,10 @@ Namespace Interpreter.ExecuteEngine
 
         Public Overrides Function ToString() As String
             Return name
+        End Function
+
+        Public Function GetPrintContent() As String Implements RPrint.GetPrintContent
+            Return $"**{name}**"
         End Function
     End Class
 End Namespace

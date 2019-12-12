@@ -115,7 +115,7 @@ Type 'q()' to quit R.
     <Extension>
     Private Function isValueAssign(program As RProgram) As Boolean
         ' 如果是赋值表达式的话，也不会在终端上打印结果值
-        Return TypeOf program.Last Is ValueAssign
+        Return TypeOf program.Last Is ValueAssign OrElse TypeOf program.Last Is DeclareNewVariable
     End Function
 
     <DebuggerStepThrough>
