@@ -71,6 +71,11 @@ Namespace Runtime.Internal.Invokes
     ''' </summary>
     Public Module base
 
+        <ExportAPI("console.cls")>
+        Public Sub cls()
+            Call Console.Clear()
+        End Sub
+
         <ExportAPI("do.call")>
         Public Function doCall(what As Object, calls$, envir As Environment) As Object
             If what Is Nothing OrElse calls.StringEmpty Then
