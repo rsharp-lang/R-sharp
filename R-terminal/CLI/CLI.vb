@@ -43,7 +43,6 @@ Imports System.ComponentModel
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.InteropService.SharedORM
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports R.exec
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 Imports SMRUCC.Rsharp.Runtime.Package
@@ -71,13 +70,5 @@ Imports SMRUCC.Rsharp.Runtime.Package
         End If
 
         Return 0
-    End Function
-
-    <ExportAPI("/compile")>
-    <Usage("/compile --script <script.R> [--out <app.exec>]")>
-    Public Function Compile(args As CommandLine) As Integer
-        Dim script$ = args <= "--script"
-        Dim out$ = args("--out") Or $"{script.TrimSuffix}.exec"
-        Dim assembly = Compiler.Build(script.ReadAllText).ToArray
     End Function
 End Module

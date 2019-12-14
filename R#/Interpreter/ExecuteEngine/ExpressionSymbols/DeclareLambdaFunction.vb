@@ -61,6 +61,7 @@ Namespace Interpreter.ExecuteEngine
     ''' </remarks>
     Public Class DeclareLambdaFunction : Inherits Expression
         Implements RFunction
+        Implements RPrint
 
         Public Overrides ReadOnly Property type As TypeCodes
             Get
@@ -104,6 +105,9 @@ Namespace Interpreter.ExecuteEngine
                 If parameter.names.Length = 0 Then
                     ' lambda function with no parameter
                     Return closure.Evaluate(envir)
+                ElseIf arguments.Length = 0 AndAlso parameter.names.Length > 0 Then
+                    ' no value for the required parameter
+                    Return DeclareNewFunction.MissingParameters(parameter, name, envir)
                 Else
                     ' lambda function only allows one parameter in 
                     ' its declaration
@@ -135,6 +139,10 @@ Namespace Interpreter.ExecuteEngine
 
         Public Overrides Function ToString() As String
             Return name
+        End Function
+
+        Public Function GetPrintContent() As String Implements RPrint.GetPrintContent
+            Return $"**{name}**"
         End Function
     End Class
 End Namespace

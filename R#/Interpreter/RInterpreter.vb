@@ -166,14 +166,17 @@ Namespace Interpreter
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
         Public Sub Add(name$, value As Object, Optional type As TypeCodes = TypeCodes.generic)
             Call globalEnvir.Push(name, value, type)
         End Sub
 
+        <DebuggerStepThrough>
         Public Sub Add(name$, closure As [Delegate])
             globalEnvir.Push(name, New RMethodInfo(name, closure), TypeCodes.closure)
         End Sub
 
+        <DebuggerStepThrough>
         Public Sub Add(name$, closure As MethodInfo, Optional target As Object = Nothing)
             globalEnvir.Push(name, New RMethodInfo(name, closure, target), TypeCodes.closure)
         End Sub
@@ -197,11 +200,13 @@ Namespace Interpreter
         ''' <returns></returns>
         ''' 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
         Public Function Evaluate(script As String) As Object
             Return RunInternal(Rscript.FromText(script), {})
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
         Public Function Run(program As Program) As Object
             Return finalizeResult(program.Execute(globalEnvir))
         End Function
@@ -311,6 +316,7 @@ Namespace Interpreter
             End SyncLock
         End Function
 
+        <DebuggerStepThrough>
         Public Shared Function FromEnvironmentConfiguration(configs As String) As RInterpreter
             Return New RInterpreter(New Options(configs))
         End Function

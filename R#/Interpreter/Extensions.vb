@@ -68,6 +68,7 @@ Namespace Interpreter
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
+        <DebuggerStepThrough>
         Private Function isTerminator(block As Token()) As Boolean
             Return block.Length = 1 AndAlso block(Scan0).name Like ignores
         End Function

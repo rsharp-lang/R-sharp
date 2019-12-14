@@ -146,6 +146,7 @@ Namespace Interpreter
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
         Public Shared Function CreateProgram(tokens As Token()) As Program
             Return New Program With {
                 .Rscript = Nothing,
@@ -167,17 +168,21 @@ Namespace Interpreter
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Shared Function isException(result As Object) As Boolean
+        Public Shared Function isException(ByRef result As Object, Optional envir As Environment = Nothing) As Boolean
             If result Is Nothing Then
                 Return False
             ElseIf result.GetType Is GetType(Message) Then
                 Return DirectCast(result, Message).level = MSG_TYPES.ERR
+            ElseIf Not envir Is Nothing AndAlso result.GetType.IsInheritsFrom(GetType(Exception)) Then
+                result = Internal.stop(result, envir)
+                Return True
             Else
                 Return False
             End If
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
         Public Shared Function BuildProgram(scriptText As String) As Program
             Return Rscript _
                 .FromText(scriptText) _

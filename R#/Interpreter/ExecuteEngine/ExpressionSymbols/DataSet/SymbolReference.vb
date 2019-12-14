@@ -78,7 +78,7 @@ Namespace Interpreter.ExecuteEngine
             If symbol Is Nothing OrElse Not symbol.HasValue Then
                 symbol = Runtime.Internal.invoke.getFunction(Me.symbol)
             End If
-            If symbol Is Nothing Then
+            If symbol Is Nothing OrElse Not symbol.HasValue Then
                 Return Message.SymbolNotFound(envir, Me.symbol, TypeCodes.generic)
             ElseIf symbol Like GetType(Variable) Then
                 Return symbol.VA.value

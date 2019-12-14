@@ -49,6 +49,14 @@ Namespace Runtime
 
     <HideModuleName> Public Module Extensions
 
+        Public Function TryCatch(runScript As Func(Of Object)) As Object
+            Try
+                Return runScript()
+            Catch ex As Exception
+                Return ex
+            End Try
+        End Function
+
         Public Function MeasureArrayElementType(array As Array) As Type
             Dim x As Object
 

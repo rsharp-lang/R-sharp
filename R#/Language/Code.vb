@@ -50,6 +50,7 @@ Namespace Language
     Module Code
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
         Public Function ParseScript(script As String) As Token()
             Return New Scanner(script).GetTokens().ToArray
         End Function
