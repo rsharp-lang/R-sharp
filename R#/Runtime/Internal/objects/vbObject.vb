@@ -65,7 +65,7 @@ Namespace Runtime.Internal
 
         Sub New(obj As Object)
             target = obj
-            type = New RType(obj.GetType)
+            type = RType.GetRSharpType(obj.GetType)
             properties = type.raw.getObjProperties.ToDictionary(Function(p) p.Name)
             methods = type.raw _
                 .getObjMethods _

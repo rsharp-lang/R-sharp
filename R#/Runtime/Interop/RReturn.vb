@@ -76,7 +76,7 @@ Namespace Runtime.Interop
             Me.Value = value
 
             If Not value Is Nothing Then
-                Me.type = New RType(value.GetType)
+                Me.type = RType.GetRSharpType(value.GetType)
             Else
 
             End If

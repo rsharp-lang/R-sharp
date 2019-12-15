@@ -82,7 +82,7 @@ Namespace Runtime.Interop
         Sub New(name$, closure As [Delegate])
             Me.name = name
             Me.api = closure
-            Me.returns = New RType(closure.Method.ReturnType)
+            Me.returns = RType.GetRSharpType(closure.Method.ReturnType)
             Me.parameters = closure.Method.DoCall(AddressOf parseParameters)
         End Sub
 
@@ -103,7 +103,7 @@ Namespace Runtime.Interop
         Sub New(name$, closure As MethodInfo, target As Object)
             Me.name = name
             Me.api = New MethodInvoke With {.method = closure, .target = target}
-            Me.returns = New RType(closure.ReturnType)
+            Me.returns = RType.GetRSharpType(closure.ReturnType)
             Me.parameters = closure.DoCall(AddressOf parseParameters)
         End Sub
 

@@ -77,7 +77,7 @@ Namespace Runtime.Interop
         Public Shared Function ParseArgument(p As ParameterInfo) As RMethodArgument
             Return New RMethodArgument With {
                 .name = p.Name,
-                .type = New RType(p.ParameterType),
+                .type = RType.GetRSharpType(p.ParameterType),
                 .[default] = p.DefaultValue,
                 .isOptional = p.HasDefaultValue,
                 .isObjectList = Not p.GetCustomAttribute(Of RListObjectArgumentAttribute) Is Nothing,

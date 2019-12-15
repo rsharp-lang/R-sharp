@@ -69,7 +69,7 @@ Namespace Runtime.Interop
 
         Dim names As String()
 
-        Sub New(raw As Type)
+        Private Sub New(raw As Type)
             Me.raw = raw
             Me.names = populateNames _
                 .Distinct _
@@ -107,7 +107,17 @@ Namespace Runtime.Interop
         End Function
 
         Public Function getNames() As String() Implements IReflector.getNames
-            Return names
+            Return names.Clone
+        End Function
+
+        ''' <summary>
+        ''' Get VB.NET to R# type wrapper
+        ''' </summary>
+        ''' <param name="type"></param>
+        ''' <returns></returns>
+        Public Shared Function GetRSharpType(type As Type) As RType
+            Static cache As New Dictionary(Of Type, RType)
+            Return cache.ComputeIfAbsent(type, Function(t) New RType(t))
         End Function
     End Class
 End Namespace
