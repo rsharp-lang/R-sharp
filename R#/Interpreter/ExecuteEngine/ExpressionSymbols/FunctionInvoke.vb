@@ -1,49 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::8b6a7d4f8481498c489a6fe5a8a4dcbe, R#\Interpreter\ExecuteEngine\ExpressionSymbols\FunctionInvoke.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class FunctionInvoke
-    ' 
-    '         Properties: [namespace], funcName, type
-    ' 
-    '         Constructor: (+3 Overloads) Sub New
-    '         Function: Evaluate, invokePackageInternal, invokeRInternal, isOptionNames, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class FunctionInvoke
+' 
+'         Properties: [namespace], funcName, type
+' 
+'         Constructor: (+3 Overloads) Sub New
+'         Function: Evaluate, invokePackageInternal, invokeRInternal, isOptionNames, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -148,6 +149,36 @@ Namespace Interpreter.ExecuteEngine
         }
 
         Public Overrides Function Evaluate(envir As Environment) As Object
+            Dim target As RFunction = getFuncVar(envir)
+            Dim result As Object = doInvokeFuncVar(target, envir)
+
+            If result Is Nothing Then
+                Return Nothing
+            ElseIf Program.isException(result) Then
+                Return result
+            ElseIf result.GetType Is GetType(RReturn) Then
+                Dim returns As RReturn = DirectCast(result, RReturn)
+                Dim messages = envir.globalEnvironment.messages
+
+                If returns.HasValue Then
+                    messages.AddRange(returns.messages)
+                    Return returns.Value
+                ElseIf returns.isError Then
+                    returns.messages.Where(Function(m) m.level <> MSG_TYPES.ERR).DoCall(AddressOf messages.AddRange)
+                    Return returns.messages.Where(Function(m) m.level = MSG_TYPES.ERR)
+                Else
+                    ' 2019-12-15
+                    ' isError的时候也会导致hasValue为false
+                    ' 所以null的情况不可以和warning的情况合并在一起处理
+                    messages.AddRange(returns.messages)
+                    Return Nothing
+                End If
+            Else
+                Return result
+            End If
+        End Function
+
+        Private Function getFuncVar(envir As Environment) As RFunction
             ' 当前环境中的函数符号的优先度要高于
             ' 系统环境下的函数符号
             Dim funcVar As RFunction
@@ -170,6 +201,10 @@ Namespace Interpreter.ExecuteEngine
                 funcVar = funcName.Evaluate(envir)
             End If
 
+            Return funcVar
+        End Function
+
+        Private Function doInvokeFuncVar(funcVar As RFunction, envir As Environment) As Object
             If funcVar Is Nothing AndAlso TypeOf funcName Is Literal Then
                 Dim funcStr = DirectCast(funcName, Literal).ToString
                 ' 可能是一个系统的内置函数

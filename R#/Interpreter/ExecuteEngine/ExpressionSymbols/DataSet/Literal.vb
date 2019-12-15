@@ -130,6 +130,7 @@ Namespace Interpreter.ExecuteEngine
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
         Public Overrides Function Evaluate(envir As Environment) As Object
             Return value
         End Function
@@ -138,6 +139,8 @@ Namespace Interpreter.ExecuteEngine
         ''' Get string representation of the literal object value
         ''' </summary>
         ''' <returns></returns>
+        ''' 
+        <DebuggerStepThrough>
         Public Overrides Function ToString() As String
             If value Is Nothing Then
                 Return "NULL"
