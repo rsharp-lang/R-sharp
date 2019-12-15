@@ -51,9 +51,21 @@ Namespace Runtime.Interop
 
         Public Property messages As New List(Of Message)
 
+        Public ReadOnly type As RType
+
         Public ReadOnly Property isError As Boolean
             Get
                 Return messages.Any(Function(msg) msg.level = MSG_TYPES.ERR)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property HasValue As Boolean
+            Get
+                If Value Is Nothing Then
+                    Return Not messages.IsNullOrEmpty
+                Else
+                    Return True
+                End If
             End Get
         End Property
 
@@ -62,6 +74,12 @@ Namespace Runtime.Interop
 
         Sub New(value As Object)
             Me.Value = value
+
+            If Not value Is Nothing Then
+                Me.type = New RType(value.GetType)
+            Else
+
+            End If
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
