@@ -47,6 +47,9 @@ Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Runtime.Interop
 
+    ''' <summary>
+    ''' VB.NET api to R# function invoke result wrapper, with additional warning, debug, errors messages, etc
+    ''' </summary>
     Public Class RReturn : Inherits Value(Of Object)
 
         Public Property messages As New List(Of Message)
@@ -78,7 +81,7 @@ Namespace Runtime.Interop
             If Not value Is Nothing Then
                 Me.type = RType.GetRSharpType(value.GetType)
             Else
-
+                Me.type = RType.GetRSharpType(GetType(Void))
             End If
         End Sub
 
