@@ -42,5 +42,10 @@ Namespace Runtime.Internal.Invokes
         Private Function ls(env As Environment) As Object
             Return env.variables.Keys.ToArray
         End Function
+
+        <ExportAPI("objects")>
+        Private Function objects(env As Environment) As Object
+            Return env.variables.Keys.ToArray
+        End Function
     End Module
 End Namespace
