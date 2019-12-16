@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::032d6a3ff0328cbb8a851984bf4903da, R-terminal\Terminal.vb"
+﻿#Region "Microsoft.VisualBasic::b6d2c12507910a62bcc76a14abca47dc, R-terminal\Terminal.vb"
 
     ' Author:
     ' 
@@ -37,7 +37,7 @@
     ' 
     '     Function: isSimplePrintCall, isValueAssign, RunTerminal
     ' 
-    '     Sub: doRunScript
+    '     Sub: doRunScript, doRunScriptWithSpecialCommand
     ' 
     ' /********************************************************************************/
 

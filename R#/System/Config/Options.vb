@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::02da29ebd8bbaaf6e123837b19bf8096, R#\Runtime\System\Config\Options.vb"
+﻿#Region "Microsoft.VisualBasic::a72323d1fa6dfb0f879b40ab183a4a8f, R#\System\Config\Options.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     ' 
     '         Function: getOption, setOption
     ' 
-    '         Sub: flush
+    '         Sub: (+2 Overloads) Dispose, flush
     ' 
     ' 
     ' /********************************************************************************/

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4aee4a7a8a8f0d27009d4682df16bd1e, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal.vb"
+﻿#Region "Microsoft.VisualBasic::fca4f6741c33d2967730538caa48e3c6, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,7 @@
     ' 
     '         Properties: [FALSE], [TRUE], NULL, type
     ' 
-    '         Constructor: (+5 Overloads) Sub New
+    '         Constructor: (+6 Overloads) Sub New
     '         Function: Evaluate, ToString
     '         Operators: <>, =
     ' 

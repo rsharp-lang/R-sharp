@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::20932fe5b6b2e851e17338b8ebae43d7, R#\System\Config\Defaults.vb"
+﻿#Region "Microsoft.VisualBasic::185c14cc602ab703f60b63e68f61a2f5, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\UnaryNot.vb"
 
     ' Author:
     ' 
@@ -31,20 +31,48 @@
 
     ' Summaries:
 
-    '     Module Defaults
+    '     Class UnaryNot
     ' 
-    '         Properties: HTTPUserAgent
+    '         Properties: type
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    '         Function: Evaluate, ToString
     ' 
     ' 
     ' /********************************************************************************/
 
 #End Region
 
-Namespace Runtime.Components.Configuration
+Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 
-    Module Defaults
+Namespace Interpreter.ExecuteEngine
 
-        Public ReadOnly Property HTTPUserAgent As String = $"SMRUCC/R# {App.Version}; R (3.4.4 x86_64-w64-mingw32 x86_64 mingw32)"
+    Public Class UnaryNot : Inherits Expression
 
-    End Module
+        Public Overrides ReadOnly Property type As TypeCodes
+            Get
+                Return TypeCodes.boolean
+            End Get
+        End Property
+
+        ReadOnly logical As Expression
+
+        Sub New(logical As Expression)
+            Me.logical = logical
+        End Sub
+
+        Public Overrides Function Evaluate(envir As Environment) As Object
+            Dim logicals As Boolean() = Runtime.asLogical(logical.Evaluate(envir))
+            Dim nots As Boolean() = logicals _
+                .Select(Function(b) Not b) _
+                .ToArray
+
+            Return nots
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return $"(NOT {logical})"
+        End Function
+    End Class
 End Namespace

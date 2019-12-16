@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3efb56fc4f625bec7fea44a3d174d551, R#\Runtime\System\Config\ConfigFile.vb"
+﻿#Region "Microsoft.VisualBasic::3efb56fc4f625bec7fea44a3d174d551, R#\System\Config\ConfigFile.vb"
 
     ' Author:
     ' 

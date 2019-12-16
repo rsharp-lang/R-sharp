@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4224a5059154d961f09dfc052cbc88c5, Library\R.graph\NetworkModule.vb"
+﻿#Region "Microsoft.VisualBasic::5773906fa65566bb64e84f2c1c49a894, Library\R.graph\NetworkModule.vb"
 
     ' Author:
     ' 
@@ -39,7 +39,6 @@
 
 #End Region
 
-
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.visualize.Network
 Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream
@@ -68,4 +67,3 @@ Public Module NetworkModule
         Return tables.Save(file)
     End Function
 End Module
-

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::542f8b9c2c931730cb3a0434c1bd379e, R#\test\configTest.vb"
+﻿#Region "Microsoft.VisualBasic::3e544487949e16a7f5c1b5662a02ac83, R#\test\configTest.vb"
 
     ' Author:
     ' 
@@ -59,4 +59,3 @@ Module configTest
         Pause()
     End Sub
 End Module
-

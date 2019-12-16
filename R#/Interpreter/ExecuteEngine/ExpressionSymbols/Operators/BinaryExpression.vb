@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0e1007fdfc2e003a71b0c6d2c5728ac1, R#\Interpreter\ExecuteEngine\ExpressionSymbols\BinaryExpression.vb"
+﻿#Region "Microsoft.VisualBasic::ecc67eaa29b64f6d5af8852e6fe3d7fb, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryExpression.vb"
 
     ' Author:
     ' 
@@ -159,31 +159,14 @@ Namespace Interpreter.ExecuteEngine
                                 y:=Runtime.asVector(Of Boolean)(b),
                                 [do]:=Function(x, y) x <> y
                             ).ToArray
-                        Case "||", "&&"
-                            Dim op As Func(Of Object, Object, Object)
-
-                            If [operator] = "||" Then
-                                op = Function(x, y) x Or y
-                            Else
-                                op = Function(x, y) x And y
-                            End If
-
+                        Case "&&"
                             Return Runtime.Core _
                                 .BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
                                     x:=Core.asLogical(a),
                                     y:=Core.asLogical(b),
-                                    [do]:=op
+                                    [do]:=Function(x, y) x AndAlso y
                                 ).ToArray
                     End Select
-                End If
-            End If
-
-            If [operator] = "||" Then
-                ' let arg as string = ?"--opt" || default;
-                If Internal.Invokes.base.isEmpty(a) Then
-                    Return b
-                Else
-                    Return a
                 End If
             End If
 
