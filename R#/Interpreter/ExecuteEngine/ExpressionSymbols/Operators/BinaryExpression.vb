@@ -159,31 +159,14 @@ Namespace Interpreter.ExecuteEngine
                                 y:=Runtime.asVector(Of Boolean)(b),
                                 [do]:=Function(x, y) x <> y
                             ).ToArray
-                        Case "||", "&&"
-                            Dim op As Func(Of Object, Object, Object)
-
-                            If [operator] = "||" Then
-                                op = Function(x, y) x Or y
-                            Else
-                                op = Function(x, y) x And y
-                            End If
-
+                        Case "&&"
                             Return Runtime.Core _
                                 .BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
                                     x:=Core.asLogical(a),
                                     y:=Core.asLogical(b),
-                                    [do]:=op
+                                    [do]:=Function(x, y) x AndAlso y
                                 ).ToArray
                     End Select
-                End If
-            End If
-
-            If [operator] = "||" Then
-                ' let arg as string = ?"--opt" || default;
-                If Internal.Invokes.base.isEmpty(a) Then
-                    Return b
-                Else
-                    Return a
                 End If
             End If
 

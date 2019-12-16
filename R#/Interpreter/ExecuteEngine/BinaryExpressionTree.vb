@@ -303,9 +303,12 @@ Namespace Interpreter.ExecuteEngine
                             Dim a = buf(j - 1)
                             Dim b = buf(j + 1)
                             Dim be As Expression
+                            Dim opToken As String = buf(j).VB
 
-                            If buf(j).VB = "in" Then
+                            If opToken = "in" Then
                                 be = New FunctionInvoke("any", New BinaryExpression(a, b, "=="))
+                            ElseIf opToken = "||" Then
+                                be = New BinaryOrExpression(a, b)
                             Else
                                 be = New BinaryExpression(a, b, buf(j).VB)
                             End If
