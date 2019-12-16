@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::086f369e8405712dbaf3220fba00358f, R#\test\interpreterTest.vb"
+﻿#Region "Microsoft.VisualBasic::15d6b65e2a29538c6507d09bb9176007, R#\test\interpreterTest.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,7 @@
     ' 
     '     Sub: appendTest, closureEnvironmentTest, closureTest, isEmptyTest, lastSymbolTest
     '          Main, markdownTest, missingSymbolInStringInterpolate, moduleTest, objClasstest
-    '          orDefaultTest, printClassTest, sequenceGeneratorTest, suppressTest
+    '          orDefaultTest, printClassTest, sequenceGeneratorTest, suppressTest, unaryNegTest
     ' module test1
     ' 
     '     Sub: boolTest, branchTest, cliTest, commandLineArgumentTest, dataframeTest

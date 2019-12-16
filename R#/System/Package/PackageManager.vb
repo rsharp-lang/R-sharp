@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::626cf236086a01855bca0e862aebac13, R#\Runtime\Package\PackageManager.vb"
+﻿#Region "Microsoft.VisualBasic::deec3e7c8e9d760dbfd1b6d94210701d, R#\System\Package\PackageManager.vb"
 
     ' Author:
     ' 
@@ -39,7 +39,7 @@
     ' 
     '         Function: FindPackage, InstallLocals
     ' 
-    '         Sub: Flush
+    '         Sub: (+2 Overloads) Dispose, Flush
     ' 
     ' 
     ' /********************************************************************************/

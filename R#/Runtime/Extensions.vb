@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d1d027c4a018a347a8aaa65cd11c56b8, R#\Runtime\Extensions.vb"
+﻿#Region "Microsoft.VisualBasic::0c67910d9f9b14928e6590feebbd1a29, R#\Runtime\Extensions.vb"
 
     ' Author:
     ' 
@@ -34,6 +34,7 @@
     '     Module Extensions
     ' 
     '         Function: [GetType], ClosureStackName, (+2 Overloads) GetRTypeCode, IsPrimitive, MeasureArrayElementType
+    '                   TryCatch
     ' 
     ' 
     ' /********************************************************************************/

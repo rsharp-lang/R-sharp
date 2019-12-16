@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5b7a867bdc71bb63aa418fdba36249fa, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DeclareLambdaFunction.vb"
+﻿#Region "Microsoft.VisualBasic::d7e26bc93dd331fa118f08164c4734b0, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DeclareLambdaFunction.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,7 @@
     '         Properties: name, type
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, Invoke, ToString
+    '         Function: Evaluate, GetPrintContent, Invoke, ToString
     ' 
     ' 
     ' /********************************************************************************/
