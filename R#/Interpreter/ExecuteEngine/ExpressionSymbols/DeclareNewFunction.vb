@@ -174,6 +174,10 @@ Namespace Interpreter.ExecuteEngine
                     End If
                 End If
 
+                If Program.isException(value) Then
+                    Return value
+                End If
+
                 ' 20191120 对于函数对象而言，由于拥有自己的环境，在构建闭包之后
                 ' 多次调用函数会重复利用之前的环境参数
                 ' 所以在这里只需要判断一下更新值或者插入新的变量
