@@ -48,6 +48,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Module tokenlicerTest
 
     Sub Main()
+        Call numberUnittest()
         Call sourceScriptTest()
 
         Call specialNameTest()
@@ -65,6 +66,12 @@ Module tokenlicerTest
         Call declareFunctionTest()
         Call stringParser()
         Call declareTest()
+
+        Pause()
+    End Sub
+
+    Sub numberUnittest()
+        Dim tokens = Rscript.FromText("5TB+888MB").GetTokens
 
         Pause()
     End Sub
