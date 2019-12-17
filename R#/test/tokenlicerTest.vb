@@ -72,6 +72,8 @@ Module tokenlicerTest
 
     Sub numberUnittest()
         Dim tokens = Rscript.FromText("5TB+888MB").GetTokens
+        Dim tokens2 = Rscript.FromText("33.569 [km/s]")
+
 
         Pause()
     End Sub
