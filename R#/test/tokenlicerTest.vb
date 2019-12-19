@@ -70,6 +70,10 @@ Module tokenlicerTest
         Pause()
     End Sub
 
+    Sub regexpLiteral()
+        Dim tokens = New Scanner("let s = !'\d+'('123,123,444,555,999,14523333','ig')").GetTokens.ToArray
+    End Sub
+
     Sub numberUnittest()
         Dim tokens = Rscript.FromText("5TB+888MB").GetTokens
         Dim tokens2 = Rscript.FromText("33.569 [km/s]")
