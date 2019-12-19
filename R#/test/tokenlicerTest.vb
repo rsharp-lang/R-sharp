@@ -48,6 +48,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Module tokenlicerTest
 
     Sub Main()
+        Call regexpLiteral()
         Call numberUnittest()
         Call sourceScriptTest()
 
@@ -72,6 +73,8 @@ Module tokenlicerTest
 
     Sub regexpLiteral()
         Dim tokens = New Scanner("let s = !'\d+'('123,123,444,555,999,14523333','ig')").GetTokens.ToArray
+
+        Pause()
     End Sub
 
     Sub numberUnittest()
