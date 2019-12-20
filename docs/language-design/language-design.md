@@ -409,32 +409,33 @@ and you can do this pipeline programming in ``R#``
 # and then calling the replace function, at last capitalize all 
 # of the string result
 
-"foo = bar" 
-|replace("foo", "bar") 
-|capitalize
+["foo = bar"]
+:> replace("foo", "bar")
+:> capitalize
 
 # BAR = BAR
 ```
 
 ```R
-test1 <- function(x) {
+let test1 as function(x) {
+    # ...
 }
-test2 <- function(x, y) {
+let test2 as function(x, y) {
+    # ...
 }
-test3 <- function(a) {
+let test3 as function(a) {
+    # ...
 }
 
 # Doing the exactly the same as VisualBasic pipeline in R language:
-var result <- 
-
-"hello world!" 
-|test1() 
-|test2(99) 
-|test3()
+let result <- ["hello world!"]
+:> test1
+:> test2(99)
+:> test3
 ;
-    
+
 # or you can just using the R function in normal way, and it is too much complicated to read:
-var result <- test3(test2(test1("hello world"), 99));
+let result <- test3(test2(test1("hello world"), 99));
 ```
 
 Note: Unlike the unix bash pipeline, operations can be keeps in the sample line, the R# pipeline syntax, require all of the pipeline content should be in different lines:
@@ -443,9 +444,9 @@ Note: Unlike the unix bash pipeline, operations can be keeps in the sample line,
 # This is the correct pipeline syntax in R#
 # Pipeline in multiple line mode will makes your code comment more elegant, and more easy to understand
 list(a=123, b= TRUE, c="123")
-|rep(10)                      # replicate 10 times of the value from list functiuon
-|rbind()                      # rbind these replicated values as a dataframe
-|write.csv(file="./abc.csv")  # save the resulted data frame as csv file
+:> rep(10)                      # replicate 10 times of the value from list functiuon
+:> rbind()                      # rbind these replicated values as a dataframe
+:> write.csv(file="./abc.csv")  # save the resulted data frame as csv file
 ;
 
 # The pipeline example is equals to these code in R:
@@ -468,8 +469,8 @@ In VisualBasic, the function pipeline required user imports all of the namespace
 # so we can apply these two function in pipeline mode, like
 
 foo_value
-|namespace.1::func1()    # using the func1 in namespace.1 
-|namespace.2::func1()    # using the func1 in namespace.2
+:> namespace.1::func1()    # using the func1 in namespace.1 
+:> namespace.2::func1()    # using the func1 in namespace.2
 ;
 ```
 
