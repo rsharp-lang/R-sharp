@@ -51,6 +51,22 @@ Namespace Runtime.Internal.Invokes
 
     Module stringr
 
+        <ExportAPI("nchar")>
+        Public Function nchar(<RRawVectorArgument> strs As Object) As Object
+            If strs Is Nothing Then
+                Return 0
+            End If
+
+            If strs.GetType Is GetType(String) Then
+                Return DirectCast(strs, String).Length
+            Else
+                Return Runtime.asVector(Of String)(strs) _
+                    .AsObjectEnumerator(Of String) _
+                    .Select(AddressOf VBStr.Len) _
+                    .ToArray
+            End If
+        End Function
+
         ''' <summary>
         ''' Initializes a new instance of the ``RegularExpression`` class
         ''' for the specified regular expression <paramref name="pattern"/>.
