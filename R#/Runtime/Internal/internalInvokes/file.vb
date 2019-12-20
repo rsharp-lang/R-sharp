@@ -301,5 +301,30 @@ Namespace Runtime.Internal.Invokes
 
             Return json.SaveTo(file)
         End Function
+
+        ''' <summary>
+        ''' read list from a given json file
+        ''' </summary>
+        ''' <param name="file">A json file path</param>
+        ''' <param name="mode">The value mode of the loaded list object in ``R#``</param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
+        <ExportAPI("read.list")>
+        Public Function readList(file$, Optional mode$ = "character", Optional envir As Environment = Nothing) As Object
+            Select Case LCase(mode)
+                Case "character"
+                    Return file.LoadJsonFile(Of Dictionary(Of String, String))
+                Case "numeric"
+                    Return file.LoadJsonFile(Of Dictionary(Of String, Double))
+                Case "integer"
+                    Return file.LoadJsonFile(Of Dictionary(Of String, Long))
+                Case "logical"
+                    Return file.LoadJsonFile(Of Dictionary(Of String, Boolean))
+                Case "any"
+                    Return file.LoadJsonFile(Of Dictionary(Of String, Object))(knownTypes:={GetType(String), GetType(Boolean), GetType(Double), GetType(Long), GetType(Integer)})
+                Case Else
+                    Return Internal.stop($"Invalid data mode: '{mode}'!", envir)
+            End Select
+        End Function
     End Module
 End Namespace
