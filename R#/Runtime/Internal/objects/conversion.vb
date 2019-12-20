@@ -132,12 +132,20 @@ Namespace Runtime.Internal
             End If
         End Function
 
+        ''' <summary>
+        ''' If target <paramref name="type"/> is <see cref="Object"/>, then this function 
+        ''' will stop the narrowing conversion from <see cref="vbObject"/> wrapper to 
+        ''' object type
+        ''' </summary>
+        ''' <param name="obj"></param>
+        ''' <param name="type"></param>
+        ''' <returns></returns>
         Public Function CTypeDynamic(obj As Object, type As Type) As Object
             If obj Is Nothing Then
                 Return Nothing
             ElseIf type Is GetType(vbObject) Then
                 Return asObject(obj)
-            ElseIf obj.GetType Is GetType(vbObject) Then
+            ElseIf obj.GetType Is GetType(vbObject) AndAlso Not type Is GetType(Object) Then
                 obj = DirectCast(obj, vbObject).target
             End If
 
