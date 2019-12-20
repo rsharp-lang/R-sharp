@@ -187,17 +187,23 @@ printSingleElement:
             End If
         End Function
 
+        Friend Function getStrings(xVec As Array, env As GlobalEnvironment) As IEnumerable(Of String)
+            Dim elementType As Type = Runtime.MeasureArrayElementType(xVec)
+            Dim toString As IStringBuilder = printer.ToString(elementType, env)
+
+            Return From element As Object
+                   In xVec.AsQueryable
+                   Let str As String = toString(element)
+                   Select str
+        End Function
+
         ''' <summary>
         ''' Print vector elements
         ''' </summary>
         ''' <param name="xvec"></param>
         <Extension>
         Private Sub printArray(xvec As Array, maxPrint%, env As GlobalEnvironment)
-            Dim elementType As Type = Runtime.MeasureArrayElementType(xvec)
-            Dim toString As IStringBuilder = printer.ToString(elementType, env)
-            Dim stringVec = From element As Object
-                            In xvec.AsQueryable
-                            Select toString(element)
+            Dim stringVec As IEnumerable(Of String) = getStrings(xvec, env)
             Dim maxColumns As Integer = Console.WindowWidth
             Dim contents As String() = stringVec.Take(maxPrint).ToArray
             ' maxsize / average size
