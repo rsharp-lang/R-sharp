@@ -62,7 +62,11 @@ Namespace Runtime.Internal.Invokes
             Dim namespaces As New List(Of String)
 
             For Each pkgName As String In packages.SafeQuery
-                namespaces += pkgMgr.InstallLocals(pkgName)
+                If pkgName.FileExists Then
+                    namespaces += pkgMgr.InstallLocals(pkgName)
+                Else
+                    Return Internal.stop($"Library module '{pkgName.GetFullPath}' is not exists on your file system!", envir)
+                End If
             Next
 
             Call pkgMgr.Flush()
