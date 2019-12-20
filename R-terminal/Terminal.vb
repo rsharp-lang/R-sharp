@@ -105,12 +105,18 @@ Type 'q()' to quit R.
             If funcName = "cat" Then
                 Call Console.WriteLine()
             End If
-        ElseIf Not program.isValueAssign Then
+        ElseIf Not program.isValueAssign AndAlso Not program.isImports Then
             Call base.print(result, R.globalEnvir)
         End If
     End Sub
 
     ReadOnly echo As Index(Of String) = {"print", "cat", "echo"}
+
+    <DebuggerStepThrough>
+    <Extension>
+    Private Function isImports(program As RProgram) As Boolean
+        Return program.Count = 1 AndAlso TypeOf program.First Is [Imports]
+    End Function
 
     <DebuggerStepThrough>
     <Extension>

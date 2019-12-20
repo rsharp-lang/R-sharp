@@ -69,9 +69,11 @@ Namespace Runtime.Internal
         Sub New()
             Call GetType(RConversion).pushEnvir
             Call GetType(base).pushEnvir
+            Call GetType(env).pushEnvir
             Call GetType(linq).pushEnvir
             Call GetType(Invokes.file).pushEnvir
             Call GetType(stringr).pushEnvir
+            Call GetType(strings).pushEnvir
             Call GetType(utils).pushEnvir
             Call GetType(math).pushEnvir
         End Sub
