@@ -45,6 +45,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports VBStr = Microsoft.VisualBasic.Strings
 
 Namespace Runtime.Internal.Invokes
 
@@ -79,9 +80,13 @@ Namespace Runtime.Internal.Invokes
             If text.IsNullOrEmpty Then
                 Return Nothing
             ElseIf text.Length = 1 Then
-                Return Microsoft.VisualBasic.Strings.Split(text(Scan0), delimiter)
+                Return VBStr.Split(text(Scan0), delimiter)
             Else
-                Return Internal.stop(New NotImplementedException, envir)
+                Return text.SeqIterator _
+                    .ToDictionary(Function(i) $"[[{i.i + 1}]]",
+                                  Function(i)
+                                      Return VBStr.Split(i.value, delimiter)
+                                  End Function)
             End If
         End Function
 
