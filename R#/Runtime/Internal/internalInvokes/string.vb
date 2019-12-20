@@ -1,45 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::52c3381031c38485d6bc0f3a565dddd6, R#\Runtime\Internal\internalInvokes\string.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module stringr
-    ' 
-    '         Function: Csprintf, paste, replace, strsplit
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module stringr
+' 
+'         Function: Csprintf, paste, replace, strsplit
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
@@ -48,6 +49,17 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Namespace Runtime.Internal.Invokes
 
     Module stringr
+
+        ''' <summary>
+        ''' Initializes a new instance of the ``RegularExpression`` class
+        ''' for the specified regular expression <paramref name="pattern"/>.
+        ''' </summary>
+        ''' <param name="pattern">the specified regular expression</param>
+        ''' <returns></returns>
+        <ExportAPI("regexp")>
+        Public Function regexp(pattern As String) As Object
+            Return New Regex(pattern)
+        End Function
 
         <ExportAPI("sprintf")>
         Public Function Csprintf(format As Array, <RListObjectArgument> arguments As Object, envir As Environment) As Object
