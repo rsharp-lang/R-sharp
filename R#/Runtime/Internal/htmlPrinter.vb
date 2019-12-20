@@ -15,8 +15,14 @@ Namespace Runtime.Internal
             RtoHtml(GetType(T)) = formatter
         End Sub
 
-        Public Function GetHtml(x As Object) As String
-            Return RtoHtml(x.GetType)(x)
+        Friend Function GetHtml(x As Object) As String
+            Dim keyType As Type = x.GetType
+
+            If RtoHtml.ContainsKey(keyType) Then
+                Return RtoHtml(keyType)(x)
+            Else
+                Throw New InvalidProgramException(keyType.FullName)
+            End If
         End Function
     End Module
 End Namespace

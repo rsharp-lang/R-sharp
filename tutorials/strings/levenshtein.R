@@ -15,3 +15,5 @@ print(b);
 cat("\n");
 print("string similarity:");
 print(compares$MatchSimilarity);
+
+print(html(compares));
