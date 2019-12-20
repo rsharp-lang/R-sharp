@@ -16,4 +16,4 @@ cat("\n");
 print("string similarity:");
 print(compares$MatchSimilarity);
 
-print(html(compares));
+html(compares) :> writeLines(con = "./index.html");

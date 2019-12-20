@@ -18,6 +18,10 @@ Namespace Runtime.Internal
         Friend Function GetHtml(x As Object) As String
             Dim keyType As Type = x.GetType
 
+            If keyType Is GetType(vbObject) Then
+                Return GetHtml(DirectCast(x, vbObject).target)
+            End If
+
             If RtoHtml.ContainsKey(keyType) Then
                 Return RtoHtml(keyType)(x)
             Else
