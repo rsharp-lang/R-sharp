@@ -42,7 +42,7 @@
 Imports Microsoft.VisualBasic.CommandLine
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Components.Configuration
+Imports SMRUCC.Rsharp.System.Configuration
 
 Module Program
 

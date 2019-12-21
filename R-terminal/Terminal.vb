@@ -49,10 +49,10 @@ Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Terminal
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
-Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
-Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
+Imports SMRUCC.Rsharp.System.Configuration
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
 Module Terminal
 
