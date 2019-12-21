@@ -51,7 +51,7 @@ Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Runtime.Package
 
-Namespace Runtime.Components.Configuration
+Namespace System.Configuration
 
     ''' <summary>
     ''' Data reader of <see cref="ConfigFile"/>

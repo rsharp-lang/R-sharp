@@ -48,7 +48,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime.Interop
 
-Namespace Runtime.Package
+Namespace System.Package
 
     Public Class Package
 

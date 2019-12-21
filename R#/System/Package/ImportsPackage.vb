@@ -50,7 +50,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
 
-Namespace Runtime.Package
+Namespace System.Package
 
     ''' <summary>
     ''' Helper methods for add .NET function into <see cref="Environment"/> target

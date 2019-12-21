@@ -48,7 +48,7 @@ Imports System.Runtime.CompilerServices
 Imports System.Xml.Serialization
 Imports Microsoft.VisualBasic.Scripting.MetaData
 
-Namespace Runtime.Package
+Namespace System.Package
 
     <XmlType("package")>
     Public Class PackageLoaderEntry

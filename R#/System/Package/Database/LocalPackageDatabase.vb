@@ -49,7 +49,7 @@ Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text.Xml.Models
 
-Namespace Runtime.Package
+Namespace System.Package
 
     Public Class LocalPackageDatabase : Inherits XmlDataModel
         Implements IList(Of PackageLoaderEntry)

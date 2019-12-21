@@ -51,7 +51,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 
-Namespace Runtime.Package
+Namespace System.Package
 
     Public Class PackageManager : Implements IDisposable
 
