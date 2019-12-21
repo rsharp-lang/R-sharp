@@ -58,7 +58,7 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports RPackage = SMRUCC.Rsharp.Runtime.Package.Package
+Imports RPkg = SMRUCC.Rsharp.System.Package.Package
 
 Namespace Interpreter.ExecuteEngine
 
@@ -224,7 +224,7 @@ Namespace Interpreter.ExecuteEngine
 
         Private Function invokePackageInternal(envir As Environment) As Object
             ' find package and then load method
-            Dim pkg As RPackage = envir.globalEnvironment.packages.FindPackage([namespace], Nothing)
+            Dim pkg As RPkg = envir.globalEnvironment.packages.FindPackage([namespace], Nothing)
             Dim funcName As String = DirectCast(Me.funcName, Literal).ToString
 
             If pkg Is Nothing Then
