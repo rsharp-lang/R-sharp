@@ -60,6 +60,26 @@ Namespace Interpreter
         Sub New()
         End Sub
 
+        Public Function EndWithFuncCalls(ParamArray anyFuncs As String()) As Boolean
+            Dim last As Expression = execQueue.LastOrDefault
+
+            If last Is Nothing Then
+                Return False
+            ElseIf Not TypeOf last Is FunctionInvoke Then
+                Return False
+            End If
+
+            Dim funcName As Expression = DirectCast(last, FunctionInvoke).funcName
+
+            If Not TypeOf funcName Is Literal Then
+                Return False
+            End If
+
+            Dim strName As String = CStr(DirectCast(funcName, Literal).value)
+
+            Return anyFuncs.Any(Function(a) a = strName)
+        End Function
+
         ''' <summary>
         ''' function/forloop/if/else/elseif/repeat/while, etc...
         ''' </summary>
