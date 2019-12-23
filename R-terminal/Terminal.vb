@@ -59,6 +59,7 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 Module Terminal
 
     Dim R As RInterpreter
+    Dim echo As Index(Of String) = {"print", "cat", "echo", "q", "quit"}
 
     Sub New()
         Dim Rcore = GetType(RInterpreter).Assembly.FromAssembly
@@ -116,7 +117,7 @@ Type 'q()' to quit R.
             Return
         End If
 
-        If program.Count = 1 AndAlso program.isSimplePrintCall Then
+        If program.Count = 1 AndAlso program.EndWithFuncCalls(echo.Objects) Then
             ' do nothing
             Dim funcName As Literal = DirectCast(program.First, FunctionInvoke).funcName
 
@@ -127,8 +128,6 @@ Type 'q()' to quit R.
             Call base.print(result, R.globalEnvir)
         End If
     End Sub
-
-    ReadOnly echo As Index(Of String) = {"print", "cat", "echo"}
 
     <DebuggerStepThrough>
     <Extension>
@@ -141,21 +140,5 @@ Type 'q()' to quit R.
     Private Function isValueAssign(program As RProgram) As Boolean
         ' 如果是赋值表达式的话，也不会在终端上打印结果值
         Return TypeOf program.Last Is ValueAssign OrElse TypeOf program.Last Is DeclareNewVariable
-    End Function
-
-    <DebuggerStepThrough>
-    <Extension>
-    Private Function isSimplePrintCall(program As RProgram) As Boolean
-        If Not TypeOf program.First Is FunctionInvoke Then
-            Return False
-        End If
-
-        Dim funcName As Expression = DirectCast(program.First, FunctionInvoke).funcName
-
-        If Not TypeOf funcName Is Literal Then
-            Return False
-        Else
-            Return DirectCast(funcName, Literal).ToString Like echo
-        End If
     End Function
 End Module
