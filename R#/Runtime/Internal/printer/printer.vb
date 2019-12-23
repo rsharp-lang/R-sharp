@@ -1,50 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::cb4a20e656e30e078189e4c3bce91688, R#\Runtime\Internal\printer\printer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Delegate Function
-    ' 
-    ' 
-    '     Module printer
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: f64_InternalToString, ToString, ValueToString
-    ' 
-    '         Sub: AttachConsoleFormatter, AttachInternalConsoleFormatter, printArray, printInternal, printList
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Delegate Function
+' 
+' 
+'     Module printer
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: f64_InternalToString, ToString, ValueToString
+' 
+'         Sub: AttachConsoleFormatter, AttachInternalConsoleFormatter, printArray, printInternal, printList
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -55,7 +55,7 @@ Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization
-Imports SMRUCC.Rsharp.Runtime.Components.Configuration
+Imports SMRUCC.Rsharp.System.Configuration
 
 Namespace Runtime.Internal.ConsolePrinter
 
@@ -187,17 +187,23 @@ printSingleElement:
             End If
         End Function
 
+        Friend Function getStrings(xVec As Array, env As GlobalEnvironment) As IEnumerable(Of String)
+            Dim elementType As Type = Runtime.MeasureArrayElementType(xVec)
+            Dim toString As IStringBuilder = printer.ToString(elementType, env)
+
+            Return From element As Object
+                   In xVec.AsQueryable
+                   Let str As String = toString(element)
+                   Select str
+        End Function
+
         ''' <summary>
         ''' Print vector elements
         ''' </summary>
         ''' <param name="xvec"></param>
         <Extension>
         Private Sub printArray(xvec As Array, maxPrint%, env As GlobalEnvironment)
-            Dim elementType As Type = Runtime.MeasureArrayElementType(xvec)
-            Dim toString As IStringBuilder = printer.ToString(elementType, env)
-            Dim stringVec = From element As Object
-                            In xvec.AsQueryable
-                            Select toString(element)
+            Dim stringVec As IEnumerable(Of String) = getStrings(xvec, env)
             Dim maxColumns As Integer = Console.WindowWidth
             Dim contents As String() = stringVec.Take(maxPrint).ToArray
             ' maxsize / average size

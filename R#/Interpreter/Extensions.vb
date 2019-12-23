@@ -114,6 +114,7 @@ Namespace Interpreter
             Next
 
             If Not message.source Is Nothing Then
+                Call Console.WriteLine()
                 Call Console.WriteLine($" R# source: {message.source.ToString}")
             End If
 

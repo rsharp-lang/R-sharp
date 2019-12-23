@@ -45,9 +45,9 @@
 
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Components.Configuration
-Imports SMRUCC.Rsharp.Runtime.Package
-Imports RPkg = SMRUCC.Rsharp.Runtime.Package.Package
+Imports SMRUCC.Rsharp.System.Configuration
+Imports SMRUCC.Rsharp.System.Package
+Imports RPkg = SMRUCC.Rsharp.System.Package.Package
 
 Namespace Runtime
 

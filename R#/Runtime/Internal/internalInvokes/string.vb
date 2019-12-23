@@ -44,12 +44,31 @@ Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports VBStr = Microsoft.VisualBasic.Strings
 
 Namespace Runtime.Internal.Invokes
 
     Module stringr
+
+        <ExportAPI("html")>
+        Public Function html(x As Object, env As Environment) As Object
+            If x Is Nothing Then
+                Return Nothing
+            Else
+                Return htmlPrinter.GetHtml(x)
+            End If
+        End Function
+
+        <ExportAPI("string")>
+        Public Function [string](<RRawVectorArgument> x As Object, env As Environment) As Object
+            If x Is Nothing Then
+                Return ""
+            Else
+                Return printer.getStrings(x, env.globalEnvironment).ToArray
+            End If
+        End Function
 
         <ExportAPI("nchar")>
         Public Function nchar(<RRawVectorArgument> strs As Object) As Object

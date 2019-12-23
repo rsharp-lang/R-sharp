@@ -50,7 +50,7 @@ Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports LibraryAssembly = System.Reflection.Assembly
 
-Namespace Runtime.Package
+Namespace System.Package
 
     ''' <summary>
     ''' Parser of the <see cref="Project"/> assembly

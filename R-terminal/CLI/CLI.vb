@@ -44,8 +44,8 @@ Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.InteropService.SharedORM
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports SMRUCC.Rsharp.Runtime
-Imports SMRUCC.Rsharp.Runtime.Components.Configuration
-Imports SMRUCC.Rsharp.Runtime.Package
+Imports SMRUCC.Rsharp.System.Configuration
+Imports SMRUCC.Rsharp.System.Package
 
 <CLI> Module CLI
 

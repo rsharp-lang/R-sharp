@@ -49,10 +49,11 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.Language
+Imports SMRUCC.Rsharp.System.Configuration
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 
-Namespace Runtime.Package
+Namespace System.Package
 
     Public Class PackageManager : Implements IDisposable, Enumeration(Of Package)
 

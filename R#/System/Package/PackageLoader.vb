@@ -45,7 +45,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Scripting.MetaData
 
-Namespace Runtime.Package
+Namespace System.Package
 
     Public Module PackageLoader
 
