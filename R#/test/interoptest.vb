@@ -10,11 +10,24 @@ Module interoptest
         Call R.Evaluate("x <- as.object(x)")
         Call R.Print("x")
 
+        Call R.Evaluate("x$name <- '9999'")
+        Call R.Print("`name value of x is ${x$name}.`")
+        Call R.Print("do.call")
+
+        Call R.Evaluate("x :> do.call(calls = 'setName', newName = 'ABCCCCD')")
+        Call R.Print("`name value of x is ${x$name}.`")
 
         Pause()
     End Sub
 End Module
 
 Public Class TestContainer
+
+    Public Property name As String
+
+    Public Function setName(newName As String) As String
+        name = newName
+        Return newName
+    End Function
 
 End Class
