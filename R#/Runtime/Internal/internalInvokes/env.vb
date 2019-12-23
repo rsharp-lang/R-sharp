@@ -1,6 +1,7 @@
 ﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Invokes
@@ -71,13 +72,21 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <returns>The result of the (evaluated) function call.</returns>
         <ExportAPI("do.call")>
-        Public Function doCall(what As Object, calls$, <RListObjectArgument> args As Object, envir As Environment) As Object
+        Public Function doCall(what As Object, calls$,
+                               <RListObjectArgument>
+                               Optional args As Object = Nothing,
+                               Optional envir As Environment = Nothing) As Object
+
             If what Is Nothing OrElse calls.StringEmpty Then
                 Return Internal.stop("Nothing to call!", envir)
+            ElseIf what.GetType Is GetType(String) Then
+                ' call static api by name
+                Return CallInternal(what, args, envir)
             End If
 
             Dim targetType As Type = what.GetType
 
+            ' call api from an object instance 
             If targetType Is GetType(vbObject) Then
                 Dim member = DirectCast(what, vbObject).getByName(name:=calls)
 
@@ -93,6 +102,10 @@ Namespace Runtime.Internal.Invokes
             Else
                 Return Internal.stop(New NotImplementedException(targetType.FullName), envir)
             End If
+        End Function
+
+        Public Function CallInternal(call$, args As Object, envir As Environment) As Object
+            Return Internal.stop(New NotImplementedException("Call internal functions"), envir)
         End Function
     End Module
 End Namespace
