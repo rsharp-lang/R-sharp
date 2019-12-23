@@ -1,44 +1,44 @@
 ﻿#Region "Microsoft.VisualBasic::33e92367a40a0726f70297b52beba095, R#\System\Package\AnnotationDocs.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class AnnotationDocs
-    ' 
-    '         Function: (+2 Overloads) GetAnnotations
-    ' 
-    '         Sub: PrintHelp
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class AnnotationDocs
+' 
+'         Function: (+2 Overloads) GetAnnotations
+' 
+'         Sub: PrintHelp
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -46,6 +46,8 @@ Imports System.Reflection
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Serialization
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
+Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports LibraryAssembly = System.Reflection.Assembly
@@ -109,23 +111,19 @@ Namespace System.Package
             Dim docs As ProjectMember = GetAnnotations(api.GetRawDeclares)
 
             If Not docs Is Nothing Then
-                Call markdown.DoPrint(docs.Summary, 1)
-                Call Console.WriteLine()
-
-                For Each param As param In docs.Params
-                    Call markdown.DoPrint($"``{param.name}:``  " & param.text.Trim(" "c, ASCII.CR, ASCII.LF), 3)
-                Next
-            End If
-
-            Call Console.WriteLine()
-
-            If Not docs.Returns.StringEmpty Then
-                Call markdown.DoPrint(" [**returns**]: ", 0)
-                Call markdown.DoPrint(docs.Returns, 1)
+                Call docs.DoCall(AddressOf printDocs)
+            Else
                 Call Console.WriteLine()
             End If
 
-            Dim contentLines = api.GetPrintContent.LineTokens.AsList
+            Call api.DoCall(AddressOf printFuncBody)
+        End Sub
+
+        Private Sub printFuncBody(api As RMethodInfo)
+            Dim contentLines As List(Of String) = api _
+                .GetPrintContent _
+                .LineTokens _
+                .AsList
 
             Call markdown.DoPrint(contentLines(Scan0), 2)
 
@@ -137,6 +135,23 @@ Namespace System.Package
             Call markdown.DoPrint(contentLines(-1).Trim, 2)
 
             Call Console.WriteLine()
+        End Sub
+
+        Private Sub printDocs(docs As ProjectMember)
+            Call markdown.DoPrint(docs.Summary, 1)
+            Call Console.WriteLine()
+
+            For Each param As param In docs.Params
+                Call markdown.DoPrint($"``{param.name}:``  " & param.text.Trim(" "c, ASCII.CR, ASCII.LF), 3)
+            Next
+
+            Call Console.WriteLine()
+
+            If Not docs.Returns.StringEmpty Then
+                Call markdown.DoPrint(" [**returns**]: ", 0)
+                Call markdown.DoPrint(docs.Returns, 1)
+                Call Console.WriteLine()
+            End If
         End Sub
 
     End Class
