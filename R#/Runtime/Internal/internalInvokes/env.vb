@@ -81,8 +81,12 @@ Namespace Runtime.Internal.Invokes
             If targetType Is GetType(vbObject) Then
                 Dim member = DirectCast(what, vbObject).getByName(name:=calls)
 
+                ' invoke .NET API / property getter
                 If member.GetType Is GetType(RMethodInfo) Then
-                    Return DirectCast(member, RMethodInfo).Invoke(envir, {})
+                    Dim arguments As Dictionary(Of String, Object) = list.GetSlots(args)
+                    Dim api As RMethodInfo = DirectCast(member, RMethodInfo)
+
+                    Return api.Invoke(api.CreateParameterArrayFromListArgument(envir, arguments))
                 Else
                     Return member
                 End If
