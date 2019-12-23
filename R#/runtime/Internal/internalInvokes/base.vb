@@ -78,27 +78,6 @@ Namespace Runtime.Internal.Invokes
             Call Console.Clear()
         End Sub
 
-        <ExportAPI("do.call")>
-        Public Function doCall(what As Object, calls$, envir As Environment) As Object
-            If what Is Nothing OrElse calls.StringEmpty Then
-                Return Internal.stop("Nothing to call!", envir)
-            End If
-
-            Dim targetType As Type = what.GetType
-
-            If targetType Is GetType(vbObject) Then
-                Dim member = DirectCast(what, vbObject).getByName(name:=calls)
-
-                If member.GetType Is GetType(RMethodInfo) Then
-                    Return DirectCast(member, RMethodInfo).Invoke(envir, {})
-                Else
-                    Return member
-                End If
-            Else
-                Return Internal.stop(New NotImplementedException(targetType.FullName), envir)
-            End If
-        End Function
-
         <ExportAPI("neg")>
         Public Function neg(<RRawVectorArgument> o As Object) As Object
             If o Is Nothing Then

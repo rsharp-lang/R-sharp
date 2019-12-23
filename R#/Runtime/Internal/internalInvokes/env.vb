@@ -1,6 +1,7 @@
 ﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Invokes
 
@@ -46,6 +47,27 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("objects")>
         Private Function objects(env As Environment) As Object
             Return env.variables.Keys.ToArray
+        End Function
+
+        <ExportAPI("do.call")>
+        Public Function doCall(what As Object, calls$, <RListObjectArgument> params As Object, envir As Environment) As Object
+            If what Is Nothing OrElse calls.StringEmpty Then
+                Return Internal.stop("Nothing to call!", envir)
+            End If
+
+            Dim targetType As Type = what.GetType
+
+            If targetType Is GetType(vbObject) Then
+                Dim member = DirectCast(what, vbObject).getByName(name:=calls)
+
+                If member.GetType Is GetType(RMethodInfo) Then
+                    Return DirectCast(member, RMethodInfo).Invoke(envir, {})
+                Else
+                    Return member
+                End If
+            Else
+                Return Internal.stop(New NotImplementedException(targetType.FullName), envir)
+            End If
         End Function
     End Module
 End Namespace
