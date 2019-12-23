@@ -58,7 +58,7 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         ''' 
         <ExportAPI("install.packages")>
-        Public Function installPackages(packages As String(), envir As Environment) As Object
+        Public Function installPackages(packages$(), Optional envir As Environment = Nothing) As Object
             Dim pkgMgr As PackageManager = envir.globalEnvironment.packages
             Dim namespaces As New List(Of String)
 
@@ -91,7 +91,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="envir"></param>
         ''' <returns></returns>
         <ExportAPI("installed.packages")>
-        Public Function GetInstalledPackages(envir As Environment) As Object
+        Public Function GetInstalledPackages(Optional envir As Environment = Nothing) As Object
             Dim pkgMgr As PackageManager = envir.globalEnvironment.packages
             Dim packages As RPkg() = pkgMgr.AsEnumerable.ToArray
             Dim Package As Array = packages.Select(Function(pkg) pkg.namespace).ToArray
