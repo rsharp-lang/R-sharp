@@ -45,6 +45,7 @@
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Development
+Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Terminal
@@ -63,15 +64,16 @@ Module Terminal
         Dim Rcore = GetType(RInterpreter).Assembly.FromAssembly
         Dim framework = GetType(App).Assembly.FromAssembly
 
-        Call Console.WriteLine($"
-   , __           | 
-  /|/  \  |  |    | Documentation: https://r_lang.dev.SMRUCC.org/
-   |___/--+--+--  |
-   | \  --+--+--  | Version {Rcore.AssemblyVersion} ({Rcore.BuiltTime.ToString})
-   |  \_/ |  |    | sciBASIC.NET Runtime: {framework.AssemblyVersion}               
+        Call MarkdownRender.Print($"
+  `` , __         ``  | 
+  ``/|/  \  |  |  ``  | Documentation: https://r_lang.dev.SMRUCC.org/
+  `` |___/--+--+--``  |
+  `` | \  --+--+--``  | Version ``{Rcore.AssemblyVersion}`` (**{Rcore.BuiltTime.ToString}**)
+  `` |  \_/ |  |  ``  | sciBASIC.NET Runtime: ``{framework.AssemblyVersion}``         
                   
 Welcome to the R# language
 ")
+        Call Console.WriteLine()
         Call Console.WriteLine("Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
