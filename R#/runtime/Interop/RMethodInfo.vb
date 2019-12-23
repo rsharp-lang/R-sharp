@@ -50,7 +50,6 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal
@@ -144,6 +143,28 @@ Namespace Runtime.Interop
                 .ToArray
         End Function
 
+        Public Function Invoke(parameters As Object()) As Object
+            Dim result As Object
+
+            For Each arg In parameters
+                If Not arg Is Nothing AndAlso arg.GetType Is GetType(Message) Then
+                    Return arg
+                End If
+            Next
+
+            If api Like GetType(MethodInvoke) Then
+                result = api.TryCast(Of MethodInvoke).Invoke(parameters)
+            Else
+                result = api.VB.Method.Invoke(Nothing, parameters.ToArray)
+            End If
+
+            Return result
+        End Function
+
+        Public Function CreateParameterArrayFromListArgument(envir As Environment, list As Dictionary(Of String, Object)) As Object()
+            Return createNormalArguments(envir, arguments:=list).ToArray
+        End Function
+
         Public Function Invoke(envir As Environment, params As InvokeParameter()) As Object Implements RFunction.Invoke
             Dim parameters As Object()
 
@@ -158,21 +179,7 @@ Namespace Runtime.Interop
                     .ToArray
             End If
 
-            For Each arg In parameters
-                If Not arg Is Nothing AndAlso arg.GetType Is GetType(Message) Then
-                    Return arg
-                End If
-            Next
-
-            Dim result As Object
-
-            If api Like GetType(MethodInvoke) Then
-                result = api.TryCast(Of MethodInvoke).Invoke(parameters)
-            Else
-                result = api.VB.Method.Invoke(Nothing, parameters.ToArray)
-            End If
-
-            Return result
+            Return Invoke(parameters)
         End Function
 
         Private Function createObjectListArguments(envir As Environment, params As InvokeParameter()) As IEnumerable(Of Object)

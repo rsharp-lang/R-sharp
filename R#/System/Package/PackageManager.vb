@@ -49,11 +49,12 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.System.Configuration
 
 Namespace System.Package
 
-    Public Class PackageManager : Implements IDisposable
+    Public Class PackageManager : Implements IDisposable, Enumeration(Of Package)
 
         ReadOnly pkgDb As LocalPackageDatabase
         ReadOnly config As Options
@@ -134,5 +135,15 @@ Namespace System.Package
             ' GC.SuppressFinalize(Me)
         End Sub
 #End Region
+
+        Public Iterator Function GenericEnumerator() As IEnumerator(Of Package) Implements Enumeration(Of Package).GenericEnumerator
+            For Each loader As PackageLoaderEntry In pkgDb.packages
+                Yield loader.GetLoader(Nothing)
+            Next
+        End Function
+
+        Public Iterator Function GetEnumerator() As IEnumerator Implements Enumeration(Of Package).GetEnumerator
+            Yield GenericEnumerator()
+        End Function
     End Class
 End Namespace

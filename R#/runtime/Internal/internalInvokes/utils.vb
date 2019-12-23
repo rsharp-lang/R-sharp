@@ -44,6 +44,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.System.Package
+Imports RPkg = SMRUCC.Rsharp.System.Package.Package
 
 Namespace Runtime.Internal.Invokes
 
@@ -57,7 +58,7 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         ''' 
         <ExportAPI("install.packages")>
-        Public Function installPackages(packages As String(), envir As Environment) As Object
+        Public Function installPackages(packages$(), Optional envir As Environment = Nothing) As Object
             Dim pkgMgr As PackageManager = envir.globalEnvironment.packages
             Dim namespaces As New List(Of String)
 
@@ -90,8 +91,24 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="envir"></param>
         ''' <returns></returns>
         <ExportAPI("installed.packages")>
-        Public Function GetInstalledPackages(envir As Environment) As Object
-            Throw New NotImplementedException
+        Public Function GetInstalledPackages(Optional envir As Environment = Nothing) As Object
+            Dim pkgMgr As PackageManager = envir.globalEnvironment.packages
+            Dim packages As RPkg() = pkgMgr.AsEnumerable.ToArray
+            Dim Package As Array = packages.Select(Function(pkg) pkg.namespace).ToArray
+            Dim LibPath As Array = packages.Select(Function(pkg) pkg.LibPath.GetFullPath).ToArray
+            Dim Version As Array = packages.Select(Function(pkg) pkg.info.Revision).ToArray
+            Dim Built As Array = packages.Select(Function(pkg) pkg.GetPackageModuleInfo.BuiltTime.ToString).ToArray
+            Dim summary As New dataframe With {
+                .rownames = packages.Select(Function(pkg) pkg.namespace).ToArray,
+                .columns = New Dictionary(Of String, Array) From {
+                    {NameOf(Package), Package},
+                    {NameOf(LibPath), LibPath},
+                    {NameOf(Version), Version},
+                    {NameOf(Built), Built}
+                }
+            }
+
+            Return summary
         End Function
     End Module
 End Namespace
