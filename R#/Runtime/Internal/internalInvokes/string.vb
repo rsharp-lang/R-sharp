@@ -72,7 +72,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("xml")>
-        Public Function xml(x As Object, env As Environment) As Object
+        Public Function xml(<RRawVectorArgument> x As Object, env As Environment) As Object
             If x Is Nothing Then
                 Return "<?xml version=""1.0"" encoding=""utf-16""?>"
             Else
@@ -85,7 +85,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("json")>
-        Public Function json(x As Object, env As Environment) As Object
+        Public Function json(<RRawVectorArgument> x As Object, env As Environment) As Object
             If x Is Nothing Then
                 Return "null"
             Else
