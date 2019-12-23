@@ -12,11 +12,14 @@ Module interoptest
 
         Call R.Evaluate("x$name <- '9999'")
         Call R.Print("`name value of x is ${x$name}.`")
+        Call R.Evaluate("x[['name']] <- '8848'")
+        Call R.Print("`name value of x is ${x$name}.`")
+
         Call R.Print("do.call")
         Call R.Print("x$setName")
 
         Call R.Evaluate("x :> do.call(calls = 'setName', newName = 'ABCCCCD')")
-        Call R.Print("`name value of x is ${x$name}.`")
+        Call R.Print("`name value of x is ${x[['name']]}.`")
 
         Pause()
     End Sub
