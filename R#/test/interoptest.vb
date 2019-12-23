@@ -13,6 +13,7 @@ Module interoptest
         Call R.Evaluate("x$name <- '9999'")
         Call R.Print("`name value of x is ${x$name}.`")
         Call R.Print("do.call")
+        Call R.Print("x$setName")
 
         Call R.Evaluate("x :> do.call(calls = 'setName', newName = 'ABCCCCD')")
         Call R.Print("`name value of x is ${x$name}.`")
@@ -25,6 +26,11 @@ Public Class TestContainer
 
     Public Property name As String
 
+    ''' <summary>
+    ''' # Test for R# interop
+    ''' </summary>
+    ''' <param name="newName">function parameter for set name property value</param>
+    ''' <returns>The new name</returns>
     Public Function setName(newName As String) As String
         name = newName
         Return newName
