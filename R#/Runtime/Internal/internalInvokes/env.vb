@@ -49,8 +49,29 @@ Namespace Runtime.Internal.Invokes
             Return env.variables.Keys.ToArray
         End Function
 
+        ''' <summary>
+        ''' # Execute a Function Call
+        ''' 
+        ''' ``do.call`` constructs and executes a function call from a name or 
+        ''' a function and a list of arguments to be passed to it.
+        ''' </summary>
+        ''' <param name="what"></param>
+        ''' <param name="calls">
+        ''' either a function or a non-empty character string naming the function 
+        ''' to be called.
+        ''' </param>
+        ''' <param name="args">
+        ''' a list of arguments to the function call. The names attribute of 
+        ''' args gives the argument names.
+        ''' </param>
+        ''' <param name="envir">
+        ''' an environment within which to evaluate the call. This will be most 
+        ''' useful if what is a character string and the arguments are symbols 
+        ''' or quoted expressions.
+        ''' </param>
+        ''' <returns>The result of the (evaluated) function call.</returns>
         <ExportAPI("do.call")>
-        Public Function doCall(what As Object, calls$, <RListObjectArgument> params As Object, envir As Environment) As Object
+        Public Function doCall(what As Object, calls$, <RListObjectArgument> args As Object, envir As Environment) As Object
             If what Is Nothing OrElse calls.StringEmpty Then
                 Return Internal.stop("Nothing to call!", envir)
             End If
