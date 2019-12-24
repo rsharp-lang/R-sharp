@@ -83,6 +83,10 @@ Namespace Interpreter.ExecuteEngine
             Return program.Execute(envir)
         End Function
 
+        Public Overrides Function ToString() As String
+            Return program.ToString
+        End Function
+
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function ParseExpressionTree(tokens As IEnumerable(Of Token)) As ClosureExpression
             Return New ClosureExpression(tokens)
