@@ -181,16 +181,24 @@ Namespace Interpreter.ExecuteEngine
                 End If
             ElseIf code(1).isOperator("=", "<-") Then
                 ' tuple value assign
-                Dim tuple = code(Scan0) _
-                    .Skip(1) _
-                    .Take(code(Scan0).Length - 2) _
-                    .SplitByTopLevelDelimiter(TokenType.comma) _
-                    .Where(Function(t) Not t.isComma) _
-                    .Select(AddressOf Expression.CreateExpression) _
-                    .ToArray
-                Dim value = code(2)
+                ' or member reference assign
+                Dim target As Token() = code(Scan0)
+                Dim value As Token() = code(2)
+                Dim symbol As Expression()
 
-                Return New ValueAssign(tuple, Expression.CreateExpression(value))
+                If target.isSymbolIndexer Then
+                    symbol = {New SymbolIndexer(target)}
+                Else
+                    symbol = target _
+                        .Skip(1) _
+                        .Take(code(Scan0).Length - 2) _
+                        .SplitByTopLevelDelimiter(TokenType.comma) _
+                        .Where(Function(t) Not t.isComma) _
+                        .Select(AddressOf Expression.CreateExpression) _
+                        .ToArray
+                End If
+
+                Return New ValueAssign(symbol, Expression.CreateExpression(value))
             ElseIf code = 2 Then
                 If code(Scan0).Length = 1 AndAlso code(Scan0)(Scan0) = (TokenType.operator, "$") Then
                     Return New FunctionInvoke(code.IteratesALL.ToArray)

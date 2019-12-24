@@ -77,6 +77,7 @@ Namespace Runtime.Components
             End Get
         End Property
 
+        <DebuggerStepThrough>
         Private Sub New()
         End Sub
 
