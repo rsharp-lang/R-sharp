@@ -188,14 +188,14 @@ Namespace Runtime
         ''' </summary>
         ''' <param name="name"></param>
         ''' <returns></returns>
-        Public Function FindSymbol(name As String) As Variable
+        Public Function FindSymbol(name As String, Optional [inherits] As Boolean = True) As Variable
             If (name.First = "["c AndAlso name.Last = "]"c) Then
                 Return globalEnvironment.FindSymbol(name.GetStackValue("[", "]"))
             End If
 
             If variables.ContainsKey(name) Then
                 Return variables(name)
-            ElseIf Not parent Is Nothing Then
+            ElseIf [inherits] AndAlso Not parent Is Nothing Then
                 Return parent.FindSymbol(name)
             Else
                 Return Nothing

@@ -8,8 +8,20 @@ Namespace Runtime.Internal.Invokes
 
     Module env
 
+        ''' <summary>
+        ''' # Return the Value of a Named Object
+        ''' 
+        ''' Search by name for an object (get) or zero or more objects (mget).
+        ''' </summary>
+        ''' <param name="x">For get, an object name (given as a character string).
+        ''' For mget, a character vector of object names.</param>
+        ''' <param name="envir">where to look for the object (see ‘Details’); if omitted search as if the name of the object appeared unquoted in an expression.</param>
+        ''' <param name="inherits">
+        ''' should the enclosing frames of the environment be searched?
+        ''' </param>
+        ''' <returns></returns>
         <ExportAPI("get")>
-        Public Function [get](x As Object, envir As Environment) As Object
+        Public Function [get](x As Object, envir As Environment, Optional [inherits] As Boolean = True) As Object
             Dim name As String = Runtime.asVector(Of Object)(x) _
                 .DoCall(Function(o)
                             Return Scripting.ToString(Runtime.getFirst(o), null:=Nothing)
@@ -19,7 +31,7 @@ Namespace Runtime.Internal.Invokes
                 Return Internal.stop("NULL value provided for object name!", envir)
             End If
 
-            Dim symbol As Variable = envir.FindSymbol(name)
+            Dim symbol As Variable = envir.FindSymbol(name, [inherits])
 
             If symbol Is Nothing Then
                 Return Message.SymbolNotFound(envir, name, TypeCodes.generic)
