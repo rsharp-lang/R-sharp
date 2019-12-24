@@ -101,13 +101,29 @@ Namespace Interpreter.ExecuteEngine
 
             Me.sequence = Expression.CreateExpression([loop].Skip(2).IteratesALL)
             Me.body = New DeclareNewFunction With {
-                .body = blocks(2) _
-                    .Skip(1) _
-                    .DoCall(AddressOf ClosureExpression.ParseExpressionTree),
+                .body = ParseLoopBody(blocks(2), isParallel:=parallel),
                 .funcName = "forloop_internal",
                 .params = {}
             }
         End Sub
+
+        Private Shared Function ParseLoopBody(tokens As Token(), ByRef isParallel As Boolean) As ClosureExpression
+            If tokens(Scan0) = (TokenType.open, "{") Then
+                Return tokens _
+                    .Skip(1) _
+                    .DoCall(AddressOf ClosureExpression.ParseExpressionTree)
+            ElseIf tokens(Scan0) = (TokenType.operator, "%") AndAlso
+                   tokens(1) = (TokenType.identifier, "dopar") AndAlso
+                   tokens(2) = (TokenType.operator, "%") Then
+                isParallel = True
+
+                Return tokens _
+                    .Skip(4) _
+                    .DoCall(AddressOf ClosureExpression.ParseExpressionTree)
+            Else
+                Throw New SyntaxErrorException
+            End If
+        End Function
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim result As New List(Of Object)
