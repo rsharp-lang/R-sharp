@@ -88,4 +88,6 @@ Public Module NetworkModule
     Public Function addEdge(g As NetworkGraph, u$, v$) As Edge
         Return g.CreateEdge(u, v)
     End Function
+
+
 End Module

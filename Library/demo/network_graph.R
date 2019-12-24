@@ -1,4 +1,5 @@
 require(igraph);
+require(igraph.layouts);
 
 let g = empty.network();
 
@@ -12,5 +13,7 @@ g :> add.edge("C", "D");
 g :> add.edge("C", "E");
 g :> add.edge("A", "E");
 
-g :> save.network(file = `${!script$dir}/demo_network`);
+g 
+:> layout.force_directed 
+:> save.network(file = `${!script$dir}/demo_network`);
 
