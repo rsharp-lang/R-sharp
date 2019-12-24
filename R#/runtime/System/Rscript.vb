@@ -107,6 +107,14 @@ Namespace Runtime.Components
             }
         End Function
 
+        Public Shared Function AutoHandleScript(handle As String) As Rscript
+            If handle.FileExists Then
+                Return FromFile(handle)
+            Else
+                Return FromText(handle)
+            End If
+        End Function
+
         <DebuggerStepThrough>
         Public Shared Function FromText(text As String) As Rscript
             Return New Rscript With {
