@@ -85,6 +85,11 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' This function returns a logical value to determine that the given object is empty or not?
+        ''' </summary>
+        ''' <param name="o"></param>
+        ''' <returns></returns>
         <ExportAPI("is.empty")>
         Friend Function isEmpty(<RRawVectorArgument> o As Object) As Object
             If o Is Nothing Then

@@ -53,6 +53,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 
 Namespace Interpreter.ExecuteEngine
 
@@ -253,21 +254,28 @@ Namespace Interpreter.ExecuteEngine
         Private Shared Function setByNameIndex(symbolName As Expression, envir As Environment, value As Object) As Message
             Dim symbolIndex As SymbolIndexer = symbolName
             Dim targetObj As Object = symbolIndex.symbol.Evaluate(envir)
+            Dim index As Object = symbolIndex.index.Evaluate(envir)
+
+            If True = CBool(base.isEmpty(index)) Then
+                Return SymbolIndexer.emptyIndexError(symbolIndex, envir)
+            End If
 
             If targetObj Is Nothing Then
                 Return Internal.stop({"Target symbol is nothing!", $"SymbolName: {symbolIndex.symbol}"}, envir)
-            ElseIf Not targetObj.GetType.ImplementInterface(GetType(RNameIndex)) Then
+            End If
+
+            If symbolIndex.nameIndex AndAlso index.GetType Like BinaryExpression.integers Then
+                Return setVectorElements(targetObj, Runtime.asVector(Of Integer)(index), value, envir)
+            End If
+
+            If Not targetObj.GetType.ImplementInterface(GetType(RNameIndex)) Then
                 Return Internal.stop({"Target symbol can not be indexed by name!", $"SymbolName: {symbolIndex.symbol}"}, envir)
             End If
 
-            Dim indexStr As String = Scripting.ToString(symbolIndex.index.Evaluate(envir), Nothing)
+            Dim indexStr As String = Scripting.ToString(index, Nothing)
 
             If indexStr.StringEmpty Then
-                Return Internal.stop({
-                    $"attempt to select less than one element in OneIndex!",
-                    $"SymbolName: {symbolIndex.symbol}",
-                    $"Index: {symbolIndex.index}"
-                }, envir)
+                Return SymbolIndexer.emptyIndexError(symbolIndex, envir)
             End If
 
             Dim result As Object = DirectCast(targetObj, RNameIndex).setByName(indexStr, value, envir)
@@ -310,19 +318,9 @@ Namespace Interpreter.ExecuteEngine
             Return Nothing
         End Function
 
-        Private Shared Function setVectorElements(ByRef target As Object, index As Object, value As Object, env As Environment) As Message
-            If target Is Nothing Then
-                Return Nothing
-            End If
-
+        Private Shared Function setVectorElements(ByRef target As Object, index As Integer(), value As Object, env As Environment) As Message
             If target.GetType Is GetType(vector) Then
                 target = DirectCast(target, vector).data
-            End If
-
-            If index Is Nothing Then
-                Return Internal.stop("", env)
-            Else
-                index = Runtime.asVector(Of Integer)(index)
             End If
 
             Dim targetVector As Array = target
