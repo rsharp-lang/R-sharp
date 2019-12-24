@@ -112,13 +112,30 @@ Namespace Runtime.Internal.Invokes
             Return summary
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="url"></param>
+        ''' <param name="save"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("wget")>
         Public Function wget(url As String, Optional save As String = Nothing, Optional env As Environment = Nothing) As Object
-            If save.StringEmpty Then
+            If url.StringEmpty Then
+                Return Internal.stop({"Missing url data source for file get!"}, env)
+            ElseIf save.StringEmpty Then
                 save = App.CurrentDirectory & "/" & url.Split("?"c).First.BaseName.NormalizePathString(False)
             End If
 
             Return Http.wget.Download(url, save)
         End Function
+
+        ''' <summary>
+        ''' Clears the console buffer and corresponding console window of display information.
+        ''' </summary>
+        <ExportAPI("clear")>
+        Public Sub cls()
+            Call Console.Clear()
+        End Sub
     End Module
 End Namespace

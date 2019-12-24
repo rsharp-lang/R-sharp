@@ -73,11 +73,6 @@ Namespace Runtime.Internal.Invokes
     ''' </summary>
     Public Module base
 
-        <ExportAPI("console.cls")>
-        Public Sub cls()
-            Call Console.Clear()
-        End Sub
-
         <ExportAPI("neg")>
         Public Function neg(<RRawVectorArgument> o As Object) As Object
             If o Is Nothing Then
