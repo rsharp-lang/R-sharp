@@ -77,6 +77,7 @@ Namespace Runtime.Components
             End Get
         End Property
 
+        <DebuggerStepThrough>
         Private Sub New()
         End Sub
 
@@ -104,6 +105,14 @@ Namespace Runtime.Components
                 .source = path.GetFullPath,
                 .script = .source.ReadAllText
             }
+        End Function
+
+        Public Shared Function AutoHandleScript(handle As String) As Rscript
+            If handle.FileExists Then
+                Return FromFile(handle)
+            Else
+                Return FromText(handle)
+            End If
         End Function
 
         <DebuggerStepThrough>

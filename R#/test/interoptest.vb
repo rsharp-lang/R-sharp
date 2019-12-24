@@ -2,7 +2,7 @@
 
 Module interoptest
 
-    Dim R As New RInterpreter With {.debug = True}
+    Dim R As New RInterpreter With {.debug = False}
 
     Sub Main()
 
@@ -14,8 +14,9 @@ Module interoptest
         Call R.Print("`name value of x is ${x$name}.`")
         Call R.Evaluate("x[['name']] <- '8848'")
         Call R.Print("`name value of x is ${x$name}.`")
+        Call R.Print("x")
 
-        Call R.Print("do.call")
+        ' Call R.Print("do.call")
         Call R.Print("x$setName")
 
         Call R.Evaluate("x :> do.call(calls = 'setName', newName = 'ABCCCCD')")
@@ -37,6 +38,10 @@ Public Class TestContainer
     Public Function setName(newName As String) As String
         name = newName
         Return newName
+    End Function
+
+    Public Overrides Function ToString() As String
+        Return $"Container: {name}"
     End Function
 
 End Class
