@@ -40,6 +40,7 @@
 
 #End Region
 
+Imports System.Threading
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -136,6 +137,11 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("clear")>
         Public Sub cls()
             Call Console.Clear()
+        End Sub
+
+        <ExportAPI("sleep")>
+        Public Sub sleep(sec As Integer)
+            Call Thread.Sleep(sec * 1000)
         End Sub
     End Module
 End Namespace
