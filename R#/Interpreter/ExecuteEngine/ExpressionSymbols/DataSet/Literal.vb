@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4aee4a7a8a8f0d27009d4682df16bd1e, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal.vb"
+﻿#Region "Microsoft.VisualBasic::fca4f6741c33d2967730538caa48e3c6, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,7 @@
     ' 
     '         Properties: [FALSE], [TRUE], NULL, type
     ' 
-    '         Constructor: (+5 Overloads) Sub New
+    '         Constructor: (+6 Overloads) Sub New
     '         Function: Evaluate, ToString
     '         Operators: <>, =
     ' 
@@ -130,6 +130,7 @@ Namespace Interpreter.ExecuteEngine
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
         Public Overrides Function Evaluate(envir As Environment) As Object
             Return value
         End Function
@@ -138,6 +139,8 @@ Namespace Interpreter.ExecuteEngine
         ''' Get string representation of the literal object value
         ''' </summary>
         ''' <returns></returns>
+        ''' 
+        <DebuggerStepThrough>
         Public Overrides Function ToString() As String
             If value Is Nothing Then
                 Return "NULL"

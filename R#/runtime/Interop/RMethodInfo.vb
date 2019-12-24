@@ -1,46 +1,46 @@
-﻿#Region "Microsoft.VisualBasic::9b358e683a85373b16e28bf0aa374c6b, R#\Runtime\Interop\RMethodInfo.vb"
+﻿#Region "Microsoft.VisualBasic::6dbd84b614f1a8883d65f5aaa35b7080, R#\Runtime\Interop\RMethodInfo.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class RMethodInfo
-' 
-'         Properties: name, parameters, returns
-' 
-'         Constructor: (+3 Overloads) Sub New
-'         Function: createNormalArguments, createObjectListArguments, GetPrintContent, GetRawDeclares, getValue
-'                   Invoke, missingParameter, parseParameters, ToString
-' 
-' 
-' /********************************************************************************/
+    '     Class RMethodInfo
+    ' 
+    '         Properties: name, parameters, returns
+    ' 
+    '         Constructor: (+3 Overloads) Sub New
+    '         Function: createNormalArguments, createObjectListArguments, GetPrintContent, GetRawDeclares, getValue
+    '                   Invoke, missingParameter, parseParameters, ToString
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -50,7 +50,6 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal
@@ -82,7 +81,7 @@ Namespace Runtime.Interop
         Sub New(name$, closure As [Delegate])
             Me.name = name
             Me.api = closure
-            Me.returns = New RType(closure.Method.ReturnType)
+            Me.returns = RType.GetRSharpType(closure.Method.ReturnType)
             Me.parameters = closure.Method.DoCall(AddressOf parseParameters)
         End Sub
 
@@ -103,7 +102,7 @@ Namespace Runtime.Interop
         Sub New(name$, closure As MethodInfo, target As Object)
             Me.name = name
             Me.api = New MethodInvoke With {.method = closure, .target = target}
-            Me.returns = New RType(closure.ReturnType)
+            Me.returns = RType.GetRSharpType(closure.ReturnType)
             Me.parameters = closure.DoCall(AddressOf parseParameters)
         End Sub
 
@@ -144,6 +143,28 @@ Namespace Runtime.Interop
                 .ToArray
         End Function
 
+        Public Function Invoke(parameters As Object()) As Object
+            Dim result As Object
+
+            For Each arg In parameters
+                If Not arg Is Nothing AndAlso arg.GetType Is GetType(Message) Then
+                    Return arg
+                End If
+            Next
+
+            If api Like GetType(MethodInvoke) Then
+                result = api.TryCast(Of MethodInvoke).Invoke(parameters)
+            Else
+                result = api.VB.Method.Invoke(Nothing, parameters.ToArray)
+            End If
+
+            Return result
+        End Function
+
+        Public Function CreateParameterArrayFromListArgument(envir As Environment, list As Dictionary(Of String, Object)) As Object()
+            Return createNormalArguments(envir, arguments:=list).ToArray
+        End Function
+
         Public Function Invoke(envir As Environment, params As InvokeParameter()) As Object Implements RFunction.Invoke
             Dim parameters As Object()
 
@@ -158,21 +179,7 @@ Namespace Runtime.Interop
                     .ToArray
             End If
 
-            For Each arg In parameters
-                If Not arg Is Nothing AndAlso arg.GetType Is GetType(Message) Then
-                    Return arg
-                End If
-            Next
-
-            Dim result As Object
-
-            If api Like GetType(MethodInvoke) Then
-                result = api.TryCast(Of MethodInvoke).Invoke(parameters)
-            Else
-                result = api.VB.Method.Invoke(Nothing, parameters.ToArray)
-            End If
-
-            Return result
+            Return Invoke(parameters)
         End Function
 
         Private Function createObjectListArguments(envir As Environment, params As InvokeParameter()) As IEnumerable(Of Object)

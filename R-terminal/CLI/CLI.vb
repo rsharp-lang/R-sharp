@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8a117cfcced92382cdbe6e0224ab75f4, R-terminal\CLI\CLI.vb"
+﻿#Region "Microsoft.VisualBasic::772d140b33ff14fd22b0915ea1f6be0b, R-terminal\CLI\CLI.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     ' Module CLI
     ' 
-    '     Function: Compile, Install
+    '     Function: Install
     ' 
     ' /********************************************************************************/
 
@@ -44,8 +44,8 @@ Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.InteropService.SharedORM
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports SMRUCC.Rsharp.Runtime
-Imports SMRUCC.Rsharp.Runtime.Components.Configuration
-Imports SMRUCC.Rsharp.Runtime.Package
+Imports SMRUCC.Rsharp.System.Configuration
+Imports SMRUCC.Rsharp.System.Package
 
 <CLI> Module CLI
 

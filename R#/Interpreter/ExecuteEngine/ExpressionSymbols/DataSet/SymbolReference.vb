@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c21295506f41b302043ba41f1152fdb5, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolReference.vb"
+﻿#Region "Microsoft.VisualBasic::80ac2ee6e4e5e6f763114772c4befc14, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolReference.vb"
 
     ' Author:
     ' 
@@ -78,7 +78,7 @@ Namespace Interpreter.ExecuteEngine
             If symbol Is Nothing OrElse Not symbol.HasValue Then
                 symbol = Runtime.Internal.invoke.getFunction(Me.symbol)
             End If
-            If symbol Is Nothing Then
+            If symbol Is Nothing OrElse Not symbol.HasValue Then
                 Return Message.SymbolNotFound(envir, Me.symbol, TypeCodes.generic)
             ElseIf symbol Like GetType(Variable) Then
                 Return symbol.VA.value

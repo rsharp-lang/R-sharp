@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::380a78bcaf96742374a85ba7b97e2e7e, R#\Runtime\Package\Database\LocalPackageDatabase.vb"
+﻿#Region "Microsoft.VisualBasic::380a78bcaf96742374a85ba7b97e2e7e, R#\System\Package\Database\LocalPackageDatabase.vb"
 
     ' Author:
     ' 
@@ -49,7 +49,7 @@ Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text.Xml.Models
 
-Namespace Runtime.Package
+Namespace System.Package
 
     Public Class LocalPackageDatabase : Inherits XmlDataModel
         Implements IList(Of PackageLoaderEntry)

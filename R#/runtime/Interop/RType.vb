@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e2e836c4c27e45f40e7817a5fda40e49, R#\Runtime\Interop\RType.vb"
+﻿#Region "Microsoft.VisualBasic::f0f127c0cf4fb48d7df76e55c3a221fa, R#\Runtime\Interop\RType.vb"
 
     ' Author:
     ' 
@@ -37,7 +37,7 @@
     '                     raw
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: getNames, GetRawElementType, populateNames, ToString
+    '         Function: getNames, GetRawElementType, GetRSharpType, populateNames, ToString
     ' 
     ' 
     ' /********************************************************************************/
@@ -69,7 +69,7 @@ Namespace Runtime.Interop
 
         Dim names As String()
 
-        Sub New(raw As Type)
+        Private Sub New(raw As Type)
             Me.raw = raw
             Me.names = populateNames _
                 .Distinct _
@@ -107,7 +107,17 @@ Namespace Runtime.Interop
         End Function
 
         Public Function getNames() As String() Implements IReflector.getNames
-            Return names
+            Return names.Clone
+        End Function
+
+        ''' <summary>
+        ''' Get VB.NET to R# type wrapper
+        ''' </summary>
+        ''' <param name="type"></param>
+        ''' <returns></returns>
+        Public Shared Function GetRSharpType(type As Type) As RType
+            Static cache As New Dictionary(Of Type, RType)
+            Return cache.ComputeIfAbsent(type, Function(t) New RType(t))
         End Function
     End Class
 End Namespace

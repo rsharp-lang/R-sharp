@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::288883d42f601605b146d5dee2effd85, R#\Runtime\Package\PackageLoader.vb"
+﻿#Region "Microsoft.VisualBasic::288883d42f601605b146d5dee2effd85, R#\System\Package\PackageLoader.vb"
 
     ' Author:
     ' 
@@ -45,7 +45,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Scripting.MetaData
 
-Namespace Runtime.Package
+Namespace System.Package
 
     Public Module PackageLoader
 

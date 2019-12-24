@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2fd0f0fdf1fb18d15f742dd5fe33a7ff, R#\Interpreter\Extensions.vb"
+﻿#Region "Microsoft.VisualBasic::cc32bd079a16fe24ddba68cb005fd206, R#\Interpreter\Extensions.vb"
 
     ' Author:
     ' 
@@ -68,6 +68,7 @@ Namespace Interpreter
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
+        <DebuggerStepThrough>
         Private Function isTerminator(block As Token()) As Boolean
             Return block.Length = 1 AndAlso block(Scan0).name Like ignores
         End Function
@@ -113,6 +114,7 @@ Namespace Interpreter
             Next
 
             If Not message.source Is Nothing Then
+                Call Console.WriteLine()
                 Call Console.WriteLine($" R# source: {message.source.ToString}")
             End If
 

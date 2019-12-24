@@ -60,10 +60,12 @@ Namespace Runtime.Interop
         Public target As Object
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
         Public Function Invoke(parameters As Object()) As Object
             Return method.Invoke(target, parameters)
         End Function
 
+        <DebuggerStepThrough>
         Public Overrides Function ToString() As String
             Return $"{Scripting.ToString(target, "NULL")}::{method.ToString}"
         End Function
@@ -88,6 +90,7 @@ Namespace Runtime.Interop
             Me.value = value
         End Sub
 
+        <DebuggerStepThrough>
         Public Overrides Function Evaluate(envir As Environment) As Object
             Return value
         End Function

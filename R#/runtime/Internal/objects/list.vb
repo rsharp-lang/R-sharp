@@ -169,5 +169,21 @@ Namespace Runtime.Internal
 
             Return result.ToArray
         End Function
+
+        Public Shared Function GetSlots(any As Object) As Dictionary(Of String, Object)
+            If any Is Nothing Then
+                Return Nothing
+            End If
+
+            Dim type As Type = any.GetType
+
+            If type Is GetType(list) Then
+                Return DirectCast(any, list).slots
+            ElseIf type Is GetType(Dictionary(Of String, Object)) Then
+                Return any
+            Else
+                Return Nothing
+            End If
+        End Function
     End Class
 End Namespace

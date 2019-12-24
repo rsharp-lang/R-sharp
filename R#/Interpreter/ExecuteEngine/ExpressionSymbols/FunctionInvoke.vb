@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8b6a7d4f8481498c489a6fe5a8a4dcbe, R#\Interpreter\ExecuteEngine\ExpressionSymbols\FunctionInvoke.vb"
+﻿#Region "Microsoft.VisualBasic::8b1cbfb112703e050634960568bbecc0, R#\Interpreter\ExecuteEngine\ExpressionSymbols\FunctionInvoke.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,8 @@
     '         Properties: [namespace], funcName, type
     ' 
     '         Constructor: (+3 Overloads) Sub New
-    '         Function: Evaluate, invokePackageInternal, invokeRInternal, isOptionNames, ToString
+    '         Function: doInvokeFuncVar, Evaluate, getFuncVar, invokePackageInternal, invokeRInternal
+    '                   isOptionNames, ToString
     ' 
     ' 
     ' /********************************************************************************/
@@ -44,6 +45,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -56,7 +58,7 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports RPackage = SMRUCC.Rsharp.Runtime.Package.Package
+Imports RPkg = SMRUCC.Rsharp.System.Package.Package
 
 Namespace Interpreter.ExecuteEngine
 
@@ -148,6 +150,36 @@ Namespace Interpreter.ExecuteEngine
         }
 
         Public Overrides Function Evaluate(envir As Environment) As Object
+            Dim target As RFunction = getFuncVar(envir)
+            Dim result As Object = doInvokeFuncVar(target, envir)
+
+            If result Is Nothing Then
+                Return Nothing
+            ElseIf Program.isException(result) Then
+                Return result
+            ElseIf result.GetType Is GetType(RReturn) Then
+                Dim returns As RReturn = DirectCast(result, RReturn)
+                Dim messages = envir.globalEnvironment.messages
+
+                If returns.HasValue Then
+                    messages.AddRange(returns.messages)
+                    Return returns.Value
+                ElseIf returns.isError Then
+                    returns.messages.Where(Function(m) m.level <> MSG_TYPES.ERR).DoCall(AddressOf messages.AddRange)
+                    Return returns.messages.Where(Function(m) m.level = MSG_TYPES.ERR)
+                Else
+                    ' 2019-12-15
+                    ' isError的时候也会导致hasValue为false
+                    ' 所以null的情况不可以和warning的情况合并在一起处理
+                    messages.AddRange(returns.messages)
+                    Return Nothing
+                End If
+            Else
+                Return result
+            End If
+        End Function
+
+        Private Function getFuncVar(envir As Environment) As RFunction
             ' 当前环境中的函数符号的优先度要高于
             ' 系统环境下的函数符号
             Dim funcVar As RFunction
@@ -170,6 +202,10 @@ Namespace Interpreter.ExecuteEngine
                 funcVar = funcName.Evaluate(envir)
             End If
 
+            Return funcVar
+        End Function
+
+        Private Function doInvokeFuncVar(funcVar As RFunction, envir As Environment) As Object
             If funcVar Is Nothing AndAlso TypeOf funcName Is Literal Then
                 Dim funcStr = DirectCast(funcName, Literal).ToString
                 ' 可能是一个系统的内置函数
@@ -188,7 +224,7 @@ Namespace Interpreter.ExecuteEngine
 
         Private Function invokePackageInternal(envir As Environment) As Object
             ' find package and then load method
-            Dim pkg As RPackage = envir.globalEnvironment.packages.FindPackage([namespace], Nothing)
+            Dim pkg As RPkg = envir.globalEnvironment.packages.FindPackage([namespace], Nothing)
             Dim funcName As String = DirectCast(Me.funcName, Literal).ToString
 
             If pkg Is Nothing Then

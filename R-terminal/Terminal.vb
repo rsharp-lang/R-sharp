@@ -1,63 +1,80 @@
-﻿#Region "Microsoft.VisualBasic::032d6a3ff0328cbb8a851984bf4903da, R-terminal\Terminal.vb"
+﻿#Region "Microsoft.VisualBasic::b6d2c12507910a62bcc76a14abca47dc, R-terminal\Terminal.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module Terminal
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: isSimplePrintCall, isValueAssign, RunTerminal
-    ' 
-    '     Sub: doRunScript
-    ' 
-    ' /********************************************************************************/
+' Module Terminal
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: isSimplePrintCall, isValueAssign, RunTerminal
+' 
+'     Sub: doRunScript, doRunScriptWithSpecialCommand
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Development
+Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Terminal
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
-Imports SMRUCC.Rsharp.Runtime.Components.Configuration
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.System.Configuration
+Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
 Module Terminal
 
     Dim R As RInterpreter
+    Dim echo As Index(Of String) = {"print", "cat", "echo", "q", "quit"}
 
     Sub New()
+        Dim Rcore = GetType(RInterpreter).Assembly.FromAssembly
+        Dim framework = GetType(App).Assembly.FromAssembly
+
+        Call MarkdownRender.Print($"
+  `` , __         ``  | 
+  ``/|/  \  |  |  ``  | Documentation: https://r_lang.dev.SMRUCC.org/
+  `` |___/--+--+--``  |
+  `` | \  --+--+--``  | Version ``{Rcore.AssemblyVersion}`` (**{Rcore.BuiltTime.ToString}**)
+  `` |  \_/ |  |  ``  | sciBASIC.NET Runtime: ``{framework.AssemblyVersion}``         
+                  
+Welcome to the R# language
+")
+        Call Console.WriteLine()
         Call Console.WriteLine("Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
@@ -71,55 +88,57 @@ Type 'q()' to quit R.
         Call R.LoadLibrary("utils")
         Call R.LoadLibrary("grDevices")
 
-        Call Console.WriteLine()
+        Console.WriteLine()
+        Console.Title = "R# language"
 
-        Call New Shell(New PS1("> "), AddressOf doRunScript) With {
-            .Quite = "q()"
+        Call New Shell(New PS1("> "), AddressOf doRunScriptWithSpecialCommand) With {
+            .Quite = "!.R#::quit"
         }.Run()
 
         Return 0
     End Function
 
+    Private Sub doRunScriptWithSpecialCommand(script As String)
+        Select Case script
+            Case "CLS"
+                Call Console.Clear()
+            Case Else
+                Call doRunScript(script)
+        End Select
+
+        Console.Title = "R# language"
+    End Sub
+
     Private Sub doRunScript(script As String)
         Dim program As RProgram = RProgram.BuildProgram(script)
-        Dim result = R.Run(program)
+        Dim result As Object = REnv.TryCatch(Function() R.Run(program))
 
-        If RProgram.isException(result) Then
+        If RProgram.isException(result, R.globalEnvir) Then
             Return
         End If
 
-        If program.Count = 1 AndAlso program.isSimplePrintCall Then
+        If program.Count = 1 AndAlso program.EndWithFuncCalls(echo.Objects) Then
             ' do nothing
             Dim funcName As Literal = DirectCast(program.First, FunctionInvoke).funcName
 
             If funcName = "cat" Then
                 Call Console.WriteLine()
             End If
-        ElseIf Not program.isValueAssign Then
+        ElseIf Not program.isValueAssign AndAlso Not program.isImports Then
             Call base.print(result, R.globalEnvir)
         End If
     End Sub
 
-    ReadOnly echo As Index(Of String) = {"print", "cat", "echo"}
+    <DebuggerStepThrough>
+    <Extension>
+    Private Function isImports(program As RProgram) As Boolean
+        Return program.Count = 1 AndAlso TypeOf program.First Is [Imports]
+    End Function
 
+    <DebuggerStepThrough>
     <Extension>
     Private Function isValueAssign(program As RProgram) As Boolean
         ' 如果是赋值表达式的话，也不会在终端上打印结果值
-        Return TypeOf program.Last Is ValueAssign
-    End Function
-
-    <Extension>
-    Private Function isSimplePrintCall(program As RProgram) As Boolean
-        If Not TypeOf program.First Is FunctionInvoke Then
-            Return False
-        End If
-
-        Dim funcName As Expression = DirectCast(program.First, FunctionInvoke).funcName
-
-        If Not TypeOf funcName Is Literal Then
-            Return False
-        Else
-            Return DirectCast(funcName, Literal).ToString Like echo
-        End If
+        Return TypeOf program.Last Is ValueAssign OrElse TypeOf program.Last Is DeclareNewVariable
     End Function
 End Module

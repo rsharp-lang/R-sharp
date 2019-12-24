@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5b7a867bdc71bb63aa418fdba36249fa, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DeclareLambdaFunction.vb"
+﻿#Region "Microsoft.VisualBasic::d7e26bc93dd331fa118f08164c4734b0, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DeclareLambdaFunction.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,7 @@
     '         Properties: name, type
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, Invoke, ToString
+    '         Function: Evaluate, GetPrintContent, Invoke, ToString
     ' 
     ' 
     ' /********************************************************************************/
@@ -61,6 +61,7 @@ Namespace Interpreter.ExecuteEngine
     ''' </remarks>
     Public Class DeclareLambdaFunction : Inherits Expression
         Implements RFunction
+        Implements RPrint
 
         Public Overrides ReadOnly Property type As TypeCodes
             Get
@@ -104,6 +105,9 @@ Namespace Interpreter.ExecuteEngine
                 If parameter.names.Length = 0 Then
                     ' lambda function with no parameter
                     Return closure.Evaluate(envir)
+                ElseIf arguments.Length = 0 AndAlso parameter.names.Length > 0 Then
+                    ' no value for the required parameter
+                    Return DeclareNewFunction.MissingParameters(parameter, name, envir)
                 Else
                     ' lambda function only allows one parameter in 
                     ' its declaration
@@ -135,6 +139,10 @@ Namespace Interpreter.ExecuteEngine
 
         Public Overrides Function ToString() As String
             Return name
+        End Function
+
+        Public Function GetPrintContent() As String Implements RPrint.GetPrintContent
+            Return $"**{name}**"
         End Function
     End Class
 End Namespace

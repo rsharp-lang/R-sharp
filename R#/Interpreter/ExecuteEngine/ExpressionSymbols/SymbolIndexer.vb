@@ -105,6 +105,8 @@ Namespace Interpreter.ExecuteEngine
                     $"Attempt to select less than one element in get1index",
                     $"expression: {symbol}[[{index}]]"
                 }, envir)
+            ElseIf Program.isException(obj) Then
+                Return obj
             End If
 
             If nameIndex Then

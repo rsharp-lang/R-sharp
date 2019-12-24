@@ -8,8 +8,8 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("R# language runtime and interpreter console")>
-<Assembly: AssemblyDescription("R# language runtime and interpreter console")>
+<Assembly: AssemblyTitle("R# language runtime and script interpreter")>
+<Assembly: AssemblyDescription("R# language runtime and script interpreter")>
 <Assembly: AssemblyCompany("SMRUCC")>
 <Assembly: AssemblyProduct("GCModeller")>
 <Assembly: AssemblyCopyright("Copyright © xie.guigang@gcmodeller.org 2019")>
@@ -32,4 +32,4 @@ Imports System.Runtime.InteropServices
 ' <Assembly: AssemblyVersion("1.0.*")>
 
 <Assembly: AssemblyVersion("2.333.*")>
-<Assembly: AssemblyFileVersion("2.12.*")>
+<Assembly: AssemblyFileVersion("2.13.*")>

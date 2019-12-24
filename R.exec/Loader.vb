@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::43818007d0359e695db155fcc6c31a29, R.exec\Loader.vb"
+﻿#Region "Microsoft.VisualBasic::ce66cc50eee4369a0ae7f031b36e6288, R.exec\Loader.vb"
 
     ' Author:
     ' 
@@ -33,15 +33,41 @@
 
     ' Module Loader
     ' 
-    ' 
+    '     Function: Run
     ' 
     ' /********************************************************************************/
 
 #End Region
 
+Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Net.Http
+Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Runtime
+
 ''' <summary>
 ''' R# executable file loader
 ''' </summary>
+''' 
+<Package("R.executable.loader")>
 Public Module Loader
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="base64">
+    ''' base64 string
+    ''' </param>
+    ''' <returns></returns>
+    <ExportAPI("run")>
+    Public Function Run(Optional base64$ = Nothing, Optional envir As Environment = Nothing) As Object
+        Dim binary As Byte()
+
+        If base64.StringEmpty Then
+            binary = DirectCast(envir.last, String).Base64RawBytes
+        Else
+            binary = base64.Base64RawBytes
+        End If
+
+        Throw New NotImplementedException
+    End Function
 End Module

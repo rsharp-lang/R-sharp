@@ -1,55 +1,57 @@
-﻿#Region "Microsoft.VisualBasic::46f75b7737a7798d88d1a06747ef7b98, R#\Interpreter\ExecuteEngine\ExpressionSymbols\ValueAssign.vb"
+﻿#Region "Microsoft.VisualBasic::193012cf416bc3201086330e220aa509, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssign.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class ValueAssign
-    ' 
-    '         Properties: symbolSize, type
-    ' 
-    '         Constructor: (+3 Overloads) Sub New
-    '         Function: assignSymbol, assignTuples, doValueAssign, DoValueAssign, Evaluate
-    '                   GetSymbol, setFromObjectList, setFromVector, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class ValueAssign
+' 
+'         Properties: symbolSize, type
+' 
+'         Constructor: (+3 Overloads) Sub New
+'         Function: assignSymbol, assignTuples, doValueAssign, DoValueAssign, Evaluate
+'                   GetSymbol, setFromObjectList, setFromVector, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine
@@ -248,6 +250,35 @@ Namespace Interpreter.ExecuteEngine
             End Select
         End Function
 
+        Private Shared Function setByNameIndex(symbolName As Expression, envir As Environment, value As Object) As Message
+            Dim symbolIndex As SymbolIndexer = symbolName
+            Dim targetObj As Object = symbolIndex.symbol.Evaluate(envir)
+
+            If targetObj Is Nothing Then
+                Return Internal.stop({"Target symbol is nothing!", $"SymbolName: {symbolIndex.symbol}"}, envir)
+            ElseIf Not targetObj.GetType.ImplementInterface(GetType(RNameIndex)) Then
+                Return Internal.stop({"Target symbol can not be indexed by name!", $"SymbolName: {symbolIndex.symbol}"}, envir)
+            End If
+
+            Dim indexStr As String = Scripting.ToString(symbolIndex.index.Evaluate(envir), Nothing)
+
+            If indexStr.StringEmpty Then
+                Return Internal.stop({
+                    $"attempt to select less than one element in OneIndex!",
+                    $"SymbolName: {symbolIndex.symbol}",
+                    $"Index: {symbolIndex.index}"
+                }, envir)
+            End If
+
+            Dim result As Object = DirectCast(targetObj, RNameIndex).setByName(indexStr, value, envir)
+
+            If Not result Is Nothing AndAlso result.GetType Is GetType(Message) Then
+                Return result
+            Else
+                Return Nothing
+            End If
+        End Function
+
         Private Shared Function assignSymbol(envir As Environment, symbolName As Expression, isByRef As Boolean, value As Object) As Message
             Dim target As Variable = Nothing
 
@@ -257,7 +288,7 @@ Namespace Interpreter.ExecuteEngine
                 Case GetType(SymbolReference)
                     target = envir.FindSymbol(DirectCast(symbolName, SymbolReference).symbol)
                 Case GetType(SymbolIndexer)
-                    Throw New NotImplementedException
+                    Return setByNameIndex(symbolName, envir, value)
                 Case Else
                     Throw New InvalidExpressionException
             End Select

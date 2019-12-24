@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::feb8394bc3eb5306089c5b3fe4d57ae0, R#\Language\TokenIcer\Scanner.vb"
+﻿#Region "Microsoft.VisualBasic::cb7f61d1af64e094f144a07bdeecae9d, R#\Language\TokenIcer\Scanner.vb"
 
     ' Author:
     ' 
@@ -93,6 +93,7 @@ Namespace Language.TokenIcer
             End Get
         End Property
 
+        <DebuggerStepThrough>
         Sub New(source As [Variant](Of String, CharPtr))
             If source Like GetType(String) Then
                 Me.code = source.TryCast(Of String).SolveStream

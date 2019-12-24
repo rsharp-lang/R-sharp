@@ -1,53 +1,124 @@
-﻿#Region "Microsoft.VisualBasic::8ae1d24e28be4d563dd595b4db66d30e, R#\Runtime\Internal\internalInvokes\string.vb"
+﻿#Region "Microsoft.VisualBasic::52c3381031c38485d6bc0f3a565dddd6, R#\Runtime\Internal\internalInvokes\string.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module stringr
-    ' 
-    '         Function: Csprintf, paste, replace, strsplit
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module stringr
+' 
+'         Function: Csprintf, paste, replace, strsplit
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Serialization.JSON
+Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports VBStr = Microsoft.VisualBasic.Strings
 
 Namespace Runtime.Internal.Invokes
 
     Module stringr
+
+        <ExportAPI("html")>
+        Public Function html(x As Object, env As Environment) As Object
+            If x Is Nothing Then
+                Return Nothing
+            Else
+                Return htmlPrinter.GetHtml(x)
+            End If
+        End Function
+
+        <ExportAPI("string")>
+        Public Function [string](<RRawVectorArgument> x As Object, env As Environment) As Object
+            If x Is Nothing Then
+                Return ""
+            Else
+                Return printer.getStrings(x, env.globalEnvironment).ToArray
+            End If
+        End Function
+
+        <ExportAPI("xml")>
+        Public Function xml(<RRawVectorArgument> x As Object, env As Environment) As Object
+            If x Is Nothing Then
+                Return "<?xml version=""1.0"" encoding=""utf-16""?>"
+            Else
+                Try
+                    Return XmlExtensions.GetXml(x, x.GetType)
+                Catch ex As Exception
+                    Return Internal.stop(ex, env)
+                End Try
+            End If
+        End Function
+
+        <ExportAPI("json")>
+        Public Function json(<RRawVectorArgument> x As Object, env As Environment) As Object
+            If x Is Nothing Then
+                Return "null"
+            Else
+                Return JsonContract.GetObjectJson(x.GetType, x)
+            End If
+        End Function
+
+        <ExportAPI("nchar")>
+        Public Function nchar(<RRawVectorArgument> strs As Object) As Object
+            If strs Is Nothing Then
+                Return 0
+            End If
+
+            If strs.GetType Is GetType(String) Then
+                Return DirectCast(strs, String).Length
+            Else
+                Return Runtime.asVector(Of String)(strs) _
+                    .AsObjectEnumerator(Of String) _
+                    .Select(AddressOf VBStr.Len) _
+                    .ToArray
+            End If
+        End Function
+
+        ''' <summary>
+        ''' Initializes a new instance of the ``RegularExpression`` class
+        ''' for the specified regular expression <paramref name="pattern"/>.
+        ''' </summary>
+        ''' <param name="pattern">the specified regular expression</param>
+        ''' <returns></returns>
+        <ExportAPI("regexp")>
+        Public Function regexp(pattern As String) As Object
+            Return New Regex(pattern)
+        End Function
 
         <ExportAPI("sprintf")>
         Public Function Csprintf(format As Array, <RListObjectArgument> arguments As Object, envir As Environment) As Object
@@ -67,9 +138,13 @@ Namespace Runtime.Internal.Invokes
             If text.IsNullOrEmpty Then
                 Return Nothing
             ElseIf text.Length = 1 Then
-                Return Microsoft.VisualBasic.Strings.Split(text(Scan0), delimiter)
+                Return VBStr.Split(text(Scan0), delimiter)
             Else
-                Return Internal.stop(New NotImplementedException, envir)
+                Return text.SeqIterator _
+                    .ToDictionary(Function(i) $"[[{i.i + 1}]]",
+                                  Function(i)
+                                      Return VBStr.Split(i.value, delimiter)
+                                  End Function)
             End If
         End Function
 

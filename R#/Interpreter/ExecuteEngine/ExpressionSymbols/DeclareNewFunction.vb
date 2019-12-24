@@ -1,48 +1,48 @@
-﻿#Region "Microsoft.VisualBasic::30432a0e2cada9bfb6b7f91d47d3e82d, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DeclareNewFunction.vb"
+﻿#Region "Microsoft.VisualBasic::9426161f0bb99cfbc0f55caa8a561ced, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DeclareNewFunction.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class DeclareNewFunction
-' 
-'         Properties: funcName, type
-' 
-'         Constructor: (+2 Overloads) Sub New
-' 
-'         Function: Evaluate, Invoke, ToString
-' 
-'         Sub: getExecBody, getParameters
-' 
-' 
-' /********************************************************************************/
+    '     Class DeclareNewFunction
+    ' 
+    '         Properties: funcName, type
+    ' 
+    '         Constructor: (+2 Overloads) Sub New
+    ' 
+    '         Function: Evaluate, Invoke, MissingParameters, ToString
+    ' 
+    '         Sub: getExecBody, getParameters
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -116,6 +116,17 @@ Namespace Interpreter.ExecuteEngine
             body = New ClosureExpression(tokens)
         End Sub
 
+        Friend Shared Function MissingParameters(var As DeclareNewVariable, funcName$, envir As Environment) As Object
+            Dim message As String() = {
+                $"argument ""{var.names.GetJson}"" is missing, with no default",
+                $"function: {funcName}",
+                $"parameterName: {var.names.GetJson}",
+                $"type: {var.type.Description}"
+            }
+
+            Return Internal.stop(message, envir)
+        End Function
+
         Public Function Invoke(parent As Environment, params As InvokeParameter()) As Object Implements RFunction.Invoke
             Dim var As DeclareNewVariable
             Dim value As Object
@@ -147,14 +158,7 @@ Namespace Interpreter.ExecuteEngine
                     If var.hasInitializeExpression Then
                         value = var.value.Evaluate(envir)
                     Else
-                        Dim message As String() = {
-                            $"argument ""{var.names.GetJson}"" is missing, with no default",
-                            $"function: {funcName}",
-                            $"parameterName: {var.names.GetJson}",
-                            $"type: {var.type.Description}"
-                        }
-
-                        Return Internal.stop(message, envir)
+                        Return MissingParameters(var, funcName, envir)
                     End If
                 Else
                     key = "$" & i
@@ -168,6 +172,10 @@ Namespace Interpreter.ExecuteEngine
                         ' try to fix such bug
                         value = arguments(argumentKeys(i))
                     End If
+                End If
+
+                If Program.isException(value) Then
+                    Return value
                 End If
 
                 ' 20191120 对于函数对象而言，由于拥有自己的环境，在构建闭包之后

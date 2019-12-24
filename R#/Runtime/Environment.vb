@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::386bd812647080bac6d558953e1652cf, R#\Runtime\Environment.vb"
+﻿#Region "Microsoft.VisualBasic::b49552e92e126e9df09b80b4f892adcc, R#\Runtime\Environment.vb"
 
     ' Author:
     ' 
@@ -33,10 +33,10 @@
 
     '     Class Environment
     ' 
-    '         Properties: globalEnvironment, isGlobal, messages, parent, stackTag
-    '                     types, variables
+    '         Properties: globalEnvironment, isGlobal, last, messages, parent
+    '                     stackTag, types, variables
     ' 
-    '         Constructor: (+2 Overloads) Sub New
+    '         Constructor: (+3 Overloads) Sub New
     ' 
     '         Function: asRVector, Evaluate, FindSymbol, GetEnumerator, IEnumerable_GetEnumerator
     '                   Push, ToString
@@ -52,6 +52,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -85,6 +86,16 @@ Namespace Runtime
         Public ReadOnly Property globalEnvironment As GlobalEnvironment
             Get
                 Return [global]
+            End Get
+        End Property
+
+        ''' <summary>
+        ''' get value of the special last variable in R# <see cref="Environment"/>
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property last As Object
+            Get
+                Return FindSymbol(RInterpreter.lastVariableName)?.value
             End Get
         End Property
 

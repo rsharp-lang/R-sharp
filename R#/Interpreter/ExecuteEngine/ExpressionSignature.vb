@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::42d2c931bc17e7c82e9346704bca9833, R#\Interpreter\ExecuteEngine\ExpressionSignature.vb"
+﻿#Region "Microsoft.VisualBasic::c76b03842c57a681bc582228a82405d2, R#\Interpreter\ExecuteEngine\ExpressionSignature.vb"
 
     ' Author:
     ' 
@@ -59,6 +59,7 @@ Namespace Interpreter.ExecuteEngine
 
         Friend ReadOnly valueAssignOperatorSymbols As Index(Of String) = {"<-", "="}
 
+        <DebuggerStepThrough>
         <Extension>
         Public Function isSequenceSyntax(tokens As List(Of Token())) As Boolean
             Return tokens(Scan0).SplitByTopLevelDelimiter(TokenType.sequence) > 1
@@ -69,6 +70,8 @@ Namespace Interpreter.ExecuteEngine
         ''' </summary>
         ''' <param name="code"></param>
         ''' <returns></returns>
+        ''' 
+        <DebuggerStepThrough>
         <Extension>
         Public Function isLambdaFunction(code As List(Of Token())) As Boolean
             Return code > 2 AndAlso (code(Scan0).isIdentifier OrElse code(Scan0).isTuple) AndAlso code(1).isOperator("->", "=>")

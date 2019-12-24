@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::185c14cc602ab703f60b63e68f61a2f5, R#\Interpreter\ExecuteEngine\ExpressionSymbols\UnaryNot.vb"
+﻿#Region "Microsoft.VisualBasic::1f36a990818173aa0daed5b81f23e5c4, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryOrExpression.vb"
 
     ' Author:
     ' 
@@ -31,7 +31,7 @@
 
     ' Summaries:
 
-    '     Class UnaryNot
+    '     Class BinaryOrExpression
     ' 
     '         Properties: type
     ' 
@@ -48,31 +48,56 @@ Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Interpreter.ExecuteEngine
 
-    Public Class UnaryNot : Inherits Expression
+    Public Class BinaryOrExpression : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
-            Get
-                Return TypeCodes.boolean
-            End Get
-        End Property
 
-        ReadOnly logical As Expression
+        ReadOnly left, right As Expression
 
-        Sub New(logical As Expression)
-            Me.logical = logical
+        Sub New(a As Expression, b As Expression)
+            left = a
+            right = b
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim logicals As Boolean() = Runtime.asLogical(logical.Evaluate(envir))
-            Dim nots As Boolean() = logicals _
-                .Select(Function(b) Not b) _
-                .ToArray
+            ' 20191216
+            ' fix for
+            ' value || stop(xxxx)
+            Dim a As Object = left.Evaluate(envir)
+            Dim ta As Type
 
-            Return nots
+            If a Is Nothing Then
+                ta = GetType(Void)
+            Else
+                ta = a.GetType
+            End If
+
+            If ta Like BinaryExpression.logicals Then
+                ' boolean = a || b
+                Dim b As Object = right.Evaluate(envir)
+
+                If Program.isException(b) Then
+                    Return b
+                Else
+                    Return Runtime.Core _
+                        .BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
+                            x:=Core.asLogical(a),
+                            y:=Core.asLogical(b),
+                            [do]:=Function(x, y) x OrElse y
+                        ).ToArray
+                End If
+            Else
+                ' let arg as string = ?"--opt" || default;
+                If Internal.Invokes.base.isEmpty(a) Then
+                    Return right.Evaluate(envir)
+                Else
+                    Return a
+                End If
+            End If
         End Function
 
         Public Overrides Function ToString() As String
-            Return $"(NOT {logical})"
+            Return $"({left} || {right})"
         End Function
     End Class
 End Namespace

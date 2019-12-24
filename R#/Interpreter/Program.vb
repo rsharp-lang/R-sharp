@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ffa974d682be0be8789176c8349a9d5f, R#\Interpreter\Program.vb"
+﻿#Region "Microsoft.VisualBasic::785cd99c0ee8278390c4814791529598, R#\Interpreter\Program.vb"
 
     ' Author:
     ' 
@@ -59,6 +59,26 @@ Namespace Interpreter
 
         Sub New()
         End Sub
+
+        Public Function EndWithFuncCalls(ParamArray anyFuncs As String()) As Boolean
+            Dim last As Expression = execQueue.LastOrDefault
+
+            If last Is Nothing Then
+                Return False
+            ElseIf Not TypeOf last Is FunctionInvoke Then
+                Return False
+            End If
+
+            Dim funcName As Expression = DirectCast(last, FunctionInvoke).funcName
+
+            If Not TypeOf funcName Is Literal Then
+                Return False
+            End If
+
+            Dim strName As String = CStr(DirectCast(funcName, Literal).value)
+
+            Return anyFuncs.Any(Function(a) a = strName)
+        End Function
 
         ''' <summary>
         ''' function/forloop/if/else/elseif/repeat/while, etc...
@@ -146,6 +166,7 @@ Namespace Interpreter
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
         Public Shared Function CreateProgram(tokens As Token()) As Program
             Return New Program With {
                 .Rscript = Nothing,
@@ -167,17 +188,21 @@ Namespace Interpreter
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Shared Function isException(result As Object) As Boolean
+        Public Shared Function isException(ByRef result As Object, Optional envir As Environment = Nothing) As Boolean
             If result Is Nothing Then
                 Return False
             ElseIf result.GetType Is GetType(Message) Then
                 Return DirectCast(result, Message).level = MSG_TYPES.ERR
+            ElseIf Not envir Is Nothing AndAlso result.GetType.IsInheritsFrom(GetType(Exception)) Then
+                result = Internal.stop(result, envir)
+                Return True
             Else
                 Return False
             End If
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
         Public Shared Function BuildProgram(scriptText As String) As Program
             Return Rscript _
                 .FromText(scriptText) _

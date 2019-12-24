@@ -1,44 +1,44 @@
-﻿#Region "Microsoft.VisualBasic::a5c8b5f5927bf9072f012f85bab5221f, R#\Runtime\Internal\internalInvokes\file.vb"
+﻿#Region "Microsoft.VisualBasic::ed82fb99cc0546debbea71e2beedda35, R#\Runtime\Internal\internalInvokes\file.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module file
-    ' 
-    '         Function: basename, dirname, exists, getwd, listDirs
-    '                   listFiles, normalizeFileName, normalizePath, readLines, Rhome
-    '                   setwd, writeLines
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module file
+' 
+'         Function: basename, dirname, exists, getwd, listDirs
+'                   listFiles, normalizeFileName, normalizePath, readLines, Rhome
+'                   setwd, writeLines
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -48,6 +48,7 @@ Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Language.UnixBash.FileSystem
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Serialization.JSON
 
 Namespace Runtime.Internal.Invokes
 
@@ -274,6 +275,56 @@ Namespace Runtime.Internal.Invokes
             End If
 
             Return App.CurrentDirectory
+        End Function
+
+        ''' <summary>
+        ''' Save a R# object list in json file format
+        ''' </summary>
+        ''' <param name="list"></param>
+        ''' <param name="file$"></param>
+        ''' <returns></returns>
+        <ExportAPI("save.list")>
+        Public Function saveList(list As Object, file$, Optional envir As Environment = Nothing) As Object
+            If list Is Nothing Then
+                Return False
+            End If
+
+            Dim json$
+
+            If list.GetType Is GetType(list) Then
+                json = DirectCast(list, list).slots.GetJson
+            ElseIf list.GetType Is GetType(Dictionary(Of String, String)) Then
+                json = JsonContract.GetObjectJson(list.GetType, list, False)
+            Else
+                Return Internal.stop(New NotSupportedException(list.GetType.FullName), envir)
+            End If
+
+            Return json.SaveTo(file)
+        End Function
+
+        ''' <summary>
+        ''' read list from a given json file
+        ''' </summary>
+        ''' <param name="file">A json file path</param>
+        ''' <param name="mode">The value mode of the loaded list object in ``R#``</param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
+        <ExportAPI("read.list")>
+        Public Function readList(file$, Optional mode$ = "character", Optional envir As Environment = Nothing) As Object
+            Select Case LCase(mode)
+                Case "character"
+                    Return file.LoadJsonFile(Of Dictionary(Of String, String))
+                Case "numeric"
+                    Return file.LoadJsonFile(Of Dictionary(Of String, Double))
+                Case "integer"
+                    Return file.LoadJsonFile(Of Dictionary(Of String, Long))
+                Case "logical"
+                    Return file.LoadJsonFile(Of Dictionary(Of String, Boolean))
+                Case "any"
+                    Return file.LoadJsonFile(Of Dictionary(Of String, Object))(knownTypes:={GetType(String), GetType(Boolean), GetType(Double), GetType(Long), GetType(Integer)})
+                Case Else
+                    Return Internal.stop($"Invalid data mode: '{mode}'!", envir)
+            End Select
         End Function
     End Module
 End Namespace

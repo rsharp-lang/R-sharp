@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7c16a2c45553908ad17d624ac6ab0880, R#\Interpreter\ExecuteEngine\ExpressionSymbols\ClosureExpression.vb"
+﻿#Region "Microsoft.VisualBasic::8ef4535e5cc5a4935638f191f6c959ca, R#\Interpreter\ExecuteEngine\ExpressionSymbols\ClosureExpression.vb"
 
     ' Author:
     ' 
@@ -63,6 +63,8 @@ Namespace Interpreter.ExecuteEngine
         End Property
 
         Public ReadOnly Property isEmpty As Boolean
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
+            <DebuggerStepThrough>
             Get
                 Return program.execQueue.IsNullOrEmpty
             End Get
@@ -71,11 +73,16 @@ Namespace Interpreter.ExecuteEngine
         Dim program As Program
 
         Sub New(tokens As IEnumerable(Of Token))
-            program = tokens.ToArray.DoCall(AddressOf Program.CreateProgram)
+            program = tokens _
+                .ToArray _
+                .DoCall(AddressOf Program.CreateProgram)
         End Sub
 
+        <DebuggerStepThrough>
         Sub New(code As Expression())
-            program = New Program With {.execQueue = code}
+            program = New Program With {
+                .execQueue = code
+            }
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
@@ -88,11 +95,13 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
         Public Shared Function ParseExpressionTree(tokens As IEnumerable(Of Token)) As ClosureExpression
             Return New ClosureExpression(tokens)
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
         Public Shared Widening Operator CType(code As Expression()) As ClosureExpression
             Return New ClosureExpression(code)
         End Operator

@@ -77,6 +77,7 @@ Namespace Runtime.Components
             End Get
         End Property
 
+        <DebuggerStepThrough>
         Private Sub New()
         End Sub
 
@@ -84,6 +85,8 @@ Namespace Runtime.Components
         ''' Get language <see cref="Scanner"/> tokens
         ''' </summary>
         ''' <returns></returns>
+        ''' 
+        <DebuggerStepThrough>
         Public Function GetTokens() As Token()
             Return New Scanner(script).GetTokens.ToArray
         End Function
@@ -96,6 +99,7 @@ Namespace Runtime.Components
             End If
         End Function
 
+        <DebuggerStepThrough>
         Public Shared Function FromFile(path As String) As Rscript
             Return New Rscript With {
                 .source = path.GetFullPath,
@@ -103,6 +107,7 @@ Namespace Runtime.Components
             }
         End Function
 
+        <DebuggerStepThrough>
         Public Shared Function FromText(text As String) As Rscript
             Return New Rscript With {
                 .source = Nothing,

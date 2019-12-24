@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::de94b5d750a44780de9973933a20b30e, R#\Runtime\Internal\objects\vbObject.vb"
+﻿#Region "Microsoft.VisualBasic::aefe20ef4bb6e103c212a5f93495b52a, R#\Runtime\Internal\objects\vbObject.vb"
 
     ' Author:
     ' 
@@ -65,7 +65,7 @@ Namespace Runtime.Internal
 
         Sub New(obj As Object)
             target = obj
-            type = New RType(obj.GetType)
+            type = RType.GetRSharpType(obj.GetType)
             properties = type.raw.getObjProperties.ToDictionary(Function(p) p.Name)
             methods = type.raw _
                 .getObjMethods _

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6d8cb059ba54d5cbc8db0217f2519b68, R-terminal\Program.vb"
+﻿#Region "Microsoft.VisualBasic::161255cab10f5667cba9f304e42d9c18, R-terminal\Program.vb"
 
     ' Author:
     ' 
@@ -40,13 +40,13 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine
-Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Components.Configuration
+Imports SMRUCC.Rsharp.System.Configuration
 
 Module Program
 
+    <DebuggerStepThrough>
     Public Function Main() As Integer
         Return GetType(CLI).RunCLI(
             args:=App.CommandLine,

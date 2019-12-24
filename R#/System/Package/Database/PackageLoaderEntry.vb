@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::085baebb28193d83651f025f6588a255, R#\Runtime\Package\Database\PackageLoaderEntry.vb"
+﻿#Region "Microsoft.VisualBasic::085baebb28193d83651f025f6588a255, R#\System\Package\Database\PackageLoaderEntry.vb"
 
     ' Author:
     ' 
@@ -48,7 +48,7 @@ Imports System.Runtime.CompilerServices
 Imports System.Xml.Serialization
 Imports Microsoft.VisualBasic.Scripting.MetaData
 
-Namespace Runtime.Package
+Namespace System.Package
 
     <XmlType("package")>
     Public Class PackageLoaderEntry
