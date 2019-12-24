@@ -66,4 +66,15 @@ Public Module NetworkModule
 
         Return tables.Save(file)
     End Function
+
+    <ExportAPI("empty.network")>
+    Public Function emptyNetwork(Optional g As NetworkGraph = Nothing) As NetworkGraph
+        If g Is Nothing Then
+            g = New NetworkGraph
+        Else
+            g.Clear()
+        End If
+
+        Return g
+    End Function
 End Module
