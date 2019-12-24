@@ -48,6 +48,8 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Module tokenlicerTest
 
     Sub Main()
+        Call customOperatorTest()
+
         Call regexpLiteral()
         Call numberUnittest()
         Call sourceScriptTest()
@@ -67,6 +69,12 @@ Module tokenlicerTest
         Call declareFunctionTest()
         Call stringParser()
         Call declareTest()
+
+        Pause()
+    End Sub
+
+    Sub customOperatorTest()
+        Dim tokens = Rscript.FromFile("D:\GCModeller\src\R-sharp\tutorials\parallel.R").GetTokens
 
         Pause()
     End Sub
