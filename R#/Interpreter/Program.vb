@@ -205,7 +205,7 @@ Namespace Interpreter
         <DebuggerStepThrough>
         Public Shared Function BuildProgram(scriptText As String) As Program
             Return Rscript _
-                .FromText(scriptText) _
+                .AutoHandleScript(scriptText) _
                 .DoCall(AddressOf CreateProgram)
         End Function
 
