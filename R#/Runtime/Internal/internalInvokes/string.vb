@@ -44,6 +44,7 @@ Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports VBStr = Microsoft.VisualBasic.Strings
@@ -67,6 +68,28 @@ Namespace Runtime.Internal.Invokes
                 Return ""
             Else
                 Return printer.getStrings(x, env.globalEnvironment).ToArray
+            End If
+        End Function
+
+        <ExportAPI("xml")>
+        Public Function xml(<RRawVectorArgument> x As Object, env As Environment) As Object
+            If x Is Nothing Then
+                Return "<?xml version=""1.0"" encoding=""utf-16""?>"
+            Else
+                Try
+                    Return XmlExtensions.GetXml(x, x.GetType)
+                Catch ex As Exception
+                    Return Internal.stop(ex, env)
+                End Try
+            End If
+        End Function
+
+        <ExportAPI("json")>
+        Public Function json(<RRawVectorArgument> x As Object, env As Environment) As Object
+            If x Is Nothing Then
+                Return "null"
+            Else
+                Return JsonContract.GetObjectJson(x.GetType, x)
             End If
         End Function
 

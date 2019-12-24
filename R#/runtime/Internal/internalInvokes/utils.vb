@@ -43,6 +43,7 @@
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Net
 Imports SMRUCC.Rsharp.System.Package
 Imports RPkg = SMRUCC.Rsharp.System.Package.Package
 
@@ -109,6 +110,15 @@ Namespace Runtime.Internal.Invokes
             }
 
             Return summary
+        End Function
+
+        <ExportAPI("wget")>
+        Public Function wget(url As String, Optional save As String = Nothing, Optional env As Environment = Nothing) As Object
+            If save.StringEmpty Then
+                save = App.CurrentDirectory & "/" & url.Split("?"c).First.BaseName.NormalizePathString(False)
+            End If
+
+            Return Http.wget.Download(url, save)
         End Function
     End Module
 End Namespace
