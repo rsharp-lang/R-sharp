@@ -1,5 +1,6 @@
 require(igraph);
 require(igraph.layouts);
+require(igraph.render);
 
 let g = empty.network();
 
@@ -17,3 +18,6 @@ g
 :> layout.force_directed 
 :> save.network(file = `${!script$dir}/demo_network`);
 
+g 
+:> render.Plot 
+:> save.graphics(file = `${!script$dir}/plot.png`);
