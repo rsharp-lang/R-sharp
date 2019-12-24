@@ -278,5 +278,62 @@ Namespace Interpreter.ExecuteEngine
 
             Return Nothing
         End Function
+
+        Private Shared Function setVectorElements(ByRef target As Object, index As Object, value As Object, env As Environment) As Message
+            If target Is Nothing Then
+                Return Nothing
+            End If
+
+            If target.GetType Is GetType(vector) Then
+                target = DirectCast(target, vector).data
+            End If
+
+            If index Is Nothing Then
+                Return Internal.stop("", env)
+            Else
+                index = Runtime.asVector(Of Integer)(index)
+            End If
+
+            Dim targetVector As Array = target
+            Dim getValue As Func(Of Object)
+
+            If value Is Nothing Then
+                getValue = Function() Nothing
+            Else
+                Dim valueVec As Array = Runtime.asVector(Of Object)(value)
+                Dim i As i32 = Scan0
+
+                If valueVec.Length = 1 Then
+                    value = valueVec.GetValue(Scan0)
+                    getValue = Function() value
+                Else
+
+                    getValue = Function() valueVec.GetValue(++i)
+                End If
+            End If
+
+            Dim elementType As Type = Runtime.MeasureArrayElementType(targetVector)
+
+            For Each i As Integer In DirectCast(index, Integer())
+                ' 动态调整数组的大小
+                If targetVector.Length > i Then
+                    targetVector.SetValue(getValue(), i)
+                Else
+                    Dim newVec As Array = Array.CreateInstance(elementType, i + 1)
+
+                    Array.ConstrainedCopy(targetVector, Scan0, newVec, Scan0, targetVector.Length)
+                    newVec.SetValue(getValue(), i)
+                    targetVector = newVec
+                End If
+            Next
+
+            If target.GetType Is GetType(vector) Then
+                DirectCast(target, vector).data = targetVector
+            Else
+                target = targetVector
+            End If
+
+            Return Nothing
+        End Function
     End Class
 End Namespace
