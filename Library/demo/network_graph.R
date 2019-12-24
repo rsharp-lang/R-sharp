@@ -6,5 +6,5 @@ for(id in ["A","B","C","D","E"]) {
 	g$CreateNode(id);
 }
 
-g :> save.network(file = "./demo_network");
+g :> save.network(file = `${!script$dir}/demo_network`);
 
