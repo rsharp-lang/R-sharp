@@ -8,7 +8,10 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Module Layouts
 
     <ExportAPI("layout.force_directed")>
-    Public Function forceDirect(g As NetworkGraph) As NetworkGraph
-        Return g.doForceLayout(showProgress:=True)
+    Public Function forceDirect(g As NetworkGraph, Optional iterations% = 1000) As NetworkGraph
+        Return g.doForceLayout(
+            showProgress:=True,
+            iterations:=iterations
+        )
     End Function
 End Module
