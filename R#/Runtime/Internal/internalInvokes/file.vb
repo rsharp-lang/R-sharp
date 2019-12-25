@@ -290,13 +290,14 @@ Namespace Runtime.Internal.Invokes
             End If
 
             Dim json$
+            Dim listType As Type = list.GetType
 
-            If list.GetType Is GetType(list) Then
+            If listType Is GetType(list) Then
                 json = DirectCast(list, list).slots.GetJson
-            ElseIf list.GetType Is GetType(Dictionary(Of String, String)) Then
+            ElseIf listType Is GetType(Dictionary(Of String, String)) OrElse listType Is GetType(Dictionary(Of String, Integer)) Then
                 json = JsonContract.GetObjectJson(list.GetType, list, False)
             Else
-                Return Internal.stop(New NotSupportedException(list.GetType.FullName), envir)
+                Return Internal.stop(New NotSupportedException(listType.FullName), envir)
             End If
 
             Return json.SaveTo(file)
