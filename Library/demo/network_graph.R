@@ -36,12 +36,6 @@ g :> add.edge("G1", "H1");
 
 g :> add.edge("H", "H1");
 
-# Then we can do network layout and 
-# save the generated network model in csv file tables
-g 
-:> layout.force_directed 
-:> save.network(file = `${!script$dir}/demo_network`);
-
 # do network styling
 g :> type_groups(type = "A+",      nodes = ["A","B","C"]);
 g :> type_groups(type = "B_class", nodes = ["D"]);
@@ -52,6 +46,12 @@ g :> color.type_group(type = "A+",      color = "red");
 g :> color.type_group(type = "B_class", color = "green");
 g :> color.type_group(type = "tails",   color = "yellow");
 g :> color.type_group(type = "mirror",  color = "purple");
+
+# Then we can do network layout and 
+# save the generated network model in csv file tables
+g 
+:> layout.force_directed 
+:> save.network(file = `${!script$dir}/demo_network`);
 
 # Do network render plot and then 
 # saved the generated image file
