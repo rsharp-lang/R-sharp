@@ -26,7 +26,7 @@ Module Visualize
                                <RRawVectorArgument>
                                Optional canvasSize As Object = "1024,768",
                                Optional defaultColor$ = "skyblue",
-                               Optional labelerIterations% = 500) As GraphicsData
+                               Optional labelerIterations% = 0) As GraphicsData
 
         Return g.DrawImage(
             canvasSize:=InteropArgumentHelper.getSize(canvasSize),
