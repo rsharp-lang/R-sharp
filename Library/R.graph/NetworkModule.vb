@@ -42,6 +42,7 @@
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.visualize.Network
 Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream
+Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream.Generic
 Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports node = Microsoft.VisualBasic.Data.visualize.Network.Graph.Node
@@ -89,5 +90,14 @@ Public Module NetworkModule
         Return g.CreateEdge(u, v)
     End Function
 
+    <ExportAPI("type_groups")>
+    Public Function typeGroupOfNodes(g As NetworkGraph, type$, nodes As String()) As NetworkGraph
+        Call nodes _
+            .Select(AddressOf g.GetElementByID) _
+            .DoEach(Sub(n)
+                        n.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) = type
+                    End Sub)
+        Return g
+    End Function
 
 End Module
