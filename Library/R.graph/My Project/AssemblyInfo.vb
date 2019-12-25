@@ -10,10 +10,10 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTitle("R# network graph analysis library module")>
 <Assembly: AssemblyDescription("R# network graph analysis library module")>
-<Assembly: AssemblyCompany("")>
-<Assembly: AssemblyProduct("R.graph")>
+<Assembly: AssemblyCompany("SMRUCC")>
+<Assembly: AssemblyProduct("R#")>
 <Assembly: AssemblyCopyright("Copyright © SMRUCC 2019")>
-<Assembly: AssemblyTrademark("")>
+<Assembly: AssemblyTrademark("R#")>
 
 <Assembly: ComVisible(False)>
 
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")>
 
-<Assembly: AssemblyVersion("1.0.0.0")>
-<Assembly: AssemblyFileVersion("1.0.0.0")>
+<Assembly: AssemblyVersion("1.231.*")>
+<Assembly: AssemblyFileVersion("1.20.*")>
