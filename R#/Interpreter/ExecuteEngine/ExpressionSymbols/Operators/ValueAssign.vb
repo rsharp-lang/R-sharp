@@ -53,6 +53,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 
 Namespace Interpreter.ExecuteEngine
 
@@ -253,21 +254,28 @@ Namespace Interpreter.ExecuteEngine
         Private Shared Function setByNameIndex(symbolName As Expression, envir As Environment, value As Object) As Message
             Dim symbolIndex As SymbolIndexer = symbolName
             Dim targetObj As Object = symbolIndex.symbol.Evaluate(envir)
+            Dim index As Object = symbolIndex.index.Evaluate(envir)
+
+            If True = CBool(base.isEmpty(index)) Then
+                Return SymbolIndexer.emptyIndexError(symbolIndex, envir)
+            End If
 
             If targetObj Is Nothing Then
                 Return Internal.stop({"Target symbol is nothing!", $"SymbolName: {symbolIndex.symbol}"}, envir)
-            ElseIf Not targetObj.GetType.ImplementInterface(GetType(RNameIndex)) Then
+            End If
+
+            If symbolIndex.nameIndex AndAlso index.GetType Like BinaryExpression.integers Then
+                Return setVectorElements(targetObj, Runtime.asVector(Of Integer)(index), value, envir)
+            End If
+
+            If Not targetObj.GetType.ImplementInterface(GetType(RNameIndex)) Then
                 Return Internal.stop({"Target symbol can not be indexed by name!", $"SymbolName: {symbolIndex.symbol}"}, envir)
             End If
 
-            Dim indexStr As String = Scripting.ToString(symbolIndex.index.Evaluate(envir), Nothing)
+            Dim indexStr As String = Scripting.ToString(index, Nothing)
 
             If indexStr.StringEmpty Then
-                Return Internal.stop({
-                    $"attempt to select less than one element in OneIndex!",
-                    $"SymbolName: {symbolIndex.symbol}",
-                    $"Index: {symbolIndex.index}"
-                }, envir)
+                Return SymbolIndexer.emptyIndexError(symbolIndex, envir)
             End If
 
             Dim result As Object = DirectCast(targetObj, RNameIndex).setByName(indexStr, value, envir)
@@ -305,6 +313,53 @@ Namespace Interpreter.ExecuteEngine
                 Else
                     target.value = value
                 End If
+            End If
+
+            Return Nothing
+        End Function
+
+        Private Shared Function setVectorElements(ByRef target As Object, index As Integer(), value As Object, env As Environment) As Message
+            If target.GetType Is GetType(vector) Then
+                target = DirectCast(target, vector).data
+            End If
+
+            Dim targetVector As Array = target
+            Dim getValue As Func(Of Object)
+
+            If value Is Nothing Then
+                getValue = Function() Nothing
+            Else
+                Dim valueVec As Array = Runtime.asVector(Of Object)(value)
+                Dim i As i32 = Scan0
+
+                If valueVec.Length = 1 Then
+                    value = valueVec.GetValue(Scan0)
+                    getValue = Function() value
+                Else
+
+                    getValue = Function() valueVec.GetValue(++i)
+                End If
+            End If
+
+            Dim elementType As Type = Runtime.MeasureArrayElementType(targetVector)
+
+            For Each i As Integer In DirectCast(index, Integer())
+                ' 动态调整数组的大小
+                If targetVector.Length > i Then
+                    targetVector.SetValue(getValue(), i)
+                Else
+                    Dim newVec As Array = Array.CreateInstance(elementType, i + 1)
+
+                    Array.ConstrainedCopy(targetVector, Scan0, newVec, Scan0, targetVector.Length)
+                    newVec.SetValue(getValue(), i)
+                    targetVector = newVec
+                End If
+            Next
+
+            If target.GetType Is GetType(vector) Then
+                DirectCast(target, vector).data = targetVector
+            Else
+                target = targetVector
             End If
 
             Return Nothing

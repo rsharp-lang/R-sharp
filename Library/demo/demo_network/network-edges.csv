@@ -1,0 +1,6 @@
+﻿fromNode,toNode,value,interaction_type,selfLoop,label
+A,B,0,,False,
+B,C,0,,False,
+C,D,0,,False,
+C,E,0,,False,
+A,E,0,,False,
