@@ -41,6 +41,7 @@
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.visualize.Network
+Imports Microsoft.VisualBasic.Data.visualize.Network.Analysis
 Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream
 Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream.Generic
 Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
@@ -75,6 +76,11 @@ Public Module NetworkModule
         Return NetworkFileIO.Load(directory).CreateGraph(defaultNodeSize:=InteropArgumentHelper.getSize(defaultNodeSize))
     End Function
 
+    ''' <summary>
+    ''' Create a new network graph or clear the given network graph
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <returns></returns>
     <ExportAPI("empty.network")>
     Public Function emptyNetwork(Optional g As NetworkGraph = Nothing) As NetworkGraph
         If g Is Nothing Then
@@ -84,6 +90,16 @@ Public Module NetworkModule
         End If
 
         Return g
+    End Function
+
+    ''' <summary>
+    ''' Calculate node degree in given graph
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <returns></returns>
+    <ExportAPI("degree")>
+    Public Function degree(g As NetworkGraph) As Dictionary(Of String, Integer)
+        Return g.ComputeNodeDegrees
     End Function
 
     <ExportAPI("add.node")>
