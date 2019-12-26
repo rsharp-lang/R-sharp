@@ -87,6 +87,12 @@ Namespace Runtime.Interop
     <AttributeUsage(AttributeTargets.Parameter, AllowMultiple:=False, Inherited:=True)>
     Public Class RListObjectArgumentAttribute : Inherits RInteropAttribute
 
+        ''' <summary>
+        ''' Safe get a collection of argument name and value tuple
+        ''' </summary>
+        ''' <param name="objects"></param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         Public Shared Iterator Function getObjectList(<RListObjectArgument> objects As Object, envir As Environment) As IEnumerable(Of NamedValue(Of Object))
             Dim type As Type
 

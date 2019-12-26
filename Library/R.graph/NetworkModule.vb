@@ -40,6 +40,7 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.visualize.Network
 Imports Microsoft.VisualBasic.Data.visualize.Network.Analysis
 Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream
@@ -47,6 +48,8 @@ Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream.Generic
 Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports R.graphics
+Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports node = Microsoft.VisualBasic.Data.visualize.Network.Graph.Node
 
 <Package("igraph")>
@@ -103,13 +106,36 @@ Public Module NetworkModule
     End Function
 
     <ExportAPI("add.node")>
-    Public Function addNode(g As NetworkGraph, label$) As node
-        Return g.CreateNode(label)
+    Public Function addNode(g As NetworkGraph, label$,
+                            <RListObjectArgument>
+                            Optional attrs As Object = Nothing,
+                            Optional env As Environment = Nothing) As node
+
+        Dim node As node = g.CreateNode(label)
+
+        For Each attribute As NamedValue(Of Object) In RListObjectArgumentAttribute.getObjectList(attrs, env)
+            node.data.Add(attribute.Name, Scripting.ToString(attribute.Value))
+        Next
+
+        Return node
     End Function
 
     <ExportAPI("add.edge")>
     Public Function addEdge(g As NetworkGraph, u$, v$) As Edge
         Return g.CreateEdge(u, v)
+    End Function
+
+    <ExportAPI("add.edges")>
+    Public Function addEdges(g As NetworkGraph,
+                             <RListObjectArgument>
+                             Optional tuples As Object = Nothing,
+                             Optional env As Environment = Nothing) As NetworkGraph
+
+        For Each tuple As NamedValue(Of Object) In RListObjectArgumentAttribute.getObjectList(tuples, env)
+
+        Next
+
+        Return g
     End Function
 
     <ExportAPI("type_groups")>
