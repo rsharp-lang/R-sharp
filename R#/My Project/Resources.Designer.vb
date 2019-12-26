@@ -61,6 +61,23 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to R# is a language and environment for GCModeller scripting 
+        '''and data science chart plot graphics. It is an Open source 
+        '''project which is similar to the R language and environment 
+        '''which was developed at R&amp;D laboratory from BioNovogene 
+        '''corporation by Xie.Guigang. The R# language its language 
+        '''syntax is derived from the R language, and R# can be considered 
+        '''as a part of implementation of R on Microsoft .NET Framework 
+        '''environment. Although there are too many important differences 
+        '''between R# and R, bu [rest of string was truncated]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property contributions() As String
+            Get
+                Return ResourceManager.GetString("contributions", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to                     GNU GENERAL PUBLIC LICENSE
         '''                       Version 3, 29 June 2007
         '''

@@ -388,5 +388,8 @@
   <ItemGroup>
     <None Include="Resources\gpl.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\contributions.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
