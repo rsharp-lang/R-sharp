@@ -105,6 +105,15 @@ Public Module NetworkModule
         Return g.ComputeNodeDegrees
     End Function
 
+    <ExportAPI("add.nodes")>
+    Public Function addNodes(g As NetworkGraph, labels$()) As NetworkGraph
+        For Each label As String In labels
+            Call g.CreateNode(label)
+        Next
+
+        Return g
+    End Function
+
     <ExportAPI("add.node")>
     Public Function addNode(g As NetworkGraph, label$,
                             <RListObjectArgument>

@@ -6,38 +6,21 @@ require(igraph.render);
 let g = empty.network();
 
 # and then add nodes by given id list
-for(id in ["A","B","C","D","E", "F", "G", "H"]) {
-	g :> add.node(label = id);
-}
+g 
+:> add.nodes(labels = ["A","B","C","D","E", "F", "G", "H"]) 
+:> add.nodes(labels = ["A1","B1","C1","D1","E1", "F1", "G1", "H1"]);
 
-for(id in ["A1","B1","C1","D1","E1", "F1", "G1", "H1"]) {
-	g :> add.node(label = id);
-}
-
+# add node one by one
 for(id in ["X","Y","Z"]) {
-	g :> add.node(label = id);
+	g :> add.node(label = id, size = 9);
 }
 
 # add edges between the specific nodes tuples
-g :> add.edge("A", "B");
-g :> add.edge("B", "C");
-g :> add.edge("C", "D");
-g :> add.edge("C", "E");
-g :> add.edge("A", "E");
-g :> add.edge("A", "F");
-g :> add.edge("F", "G");
-g :> add.edge("F", "H");
-g :> add.edge("B", "H");
+g 
+:> add.edges(["A", "B"],  ["B", "C"],   ["C", "D"],   ["C", "E"],   ["A", "E"],   ["A", "F"],   ["F", "G"],   ["F", "H"],  ["B", "H"]);
+:> add.edges(["B1", "H"], ["B1", "A1"], ["B1", "C1"], ["B1", "D1"], ["D1", "E1"], ["E1", "F1"], ["F1", "G1"], ["G1", "H1"]);
 
-g :> add.edge("B1", "H");
-g :> add.edge("B1", "A1");
-g :> add.edge("B1", "C1");
-g :> add.edge("B1", "D1");
-g :> add.edge("D1", "E1");
-g :> add.edge("E1", "F1");
-g :> add.edge("F1", "G1");
-g :> add.edge("G1", "H1");
-
+# add edges between nodes one by one
 g :> add.edge("H", "H1");
 
 g :> add.edge("X", "Y");
