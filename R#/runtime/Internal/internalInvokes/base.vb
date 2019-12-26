@@ -59,6 +59,7 @@ Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
@@ -513,32 +514,25 @@ Namespace Runtime.Internal.Invokes
             Return strs
         End Function
 
+        ''' <summary>
+        ''' # Compactly Display the Structure of an Arbitrary ``R#`` Object
+        ''' 
+        ''' Compactly display the internal structure of an R object, a diagnostic function 
+        ''' and an alternative to summary (and to some extent, dput). Ideally, only one 
+        ''' line for each ‘basic’ structure is displayed. It is especially well suited to 
+        ''' compactly display the (abbreviated) contents of (possibly nested) lists. The 
+        ''' idea is to give reasonable output for any R object. It calls args for 
+        ''' (non-primitive) function objects.
+        ''' 
+        ''' ``strOptions()`` Is a convenience function for setting ``options(str = .)``, 
+        ''' see the examples.
+        ''' </summary>
+        ''' <param name="[object]">any R object about which you want to have some information.</param>
+        ''' <returns></returns>
         <ExportAPI("str")>
-        Public Function str(<RRawVectorArgument> x As Object, Optional envir As Environment = Nothing) As Object
-            If x Is Nothing Then
-                Return Nothing
-            End If
-
-            Dim type As Type = x.GetType
-
-            If type.ImplementInterface(GetType(IDictionary)) Then
-                Dim list As IDictionary = x
-                Dim value As Object
-                Dim sb As New StringBuilder
-
-                Call sb.AppendLine("List of " & list.Count)
-
-                For Each slotKey As Object In list.Keys
-                    value = list(slotKey)
-                    sb.AppendLine($" $ {slotKey}: {str(value, envir)}")
-                Next
-
-                Return sb.ToString
-            ElseIf Runtime.IsPrimitive(type.GetRTypeCode, includeComplexList:=False) Then
-
-            Else
-                Return classPrinter.printClass(x)
-            End If
+        Public Function str(<RRawVectorArgument> [object] As Object, Optional env As Environment = Nothing) As Object
+            Call Console.WriteLine(reflector.GetStructure([object], env.globalEnvironment))
+            Return Nothing
         End Function
 
         Dim markdown As MarkdownRender = MarkdownRender.DefaultStyleRender

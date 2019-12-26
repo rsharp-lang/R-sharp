@@ -43,7 +43,8 @@ g
 :> color.type_group(type = "tails",   color = "yellow")
 :> color.type_group(type = "mirror",  color = "purple");
 
-print(str(g :> degree));
+cat("\n");
+str(g :> degree);
 
 # display console progress bar on current y location
 console::progressbar.pin.top();
