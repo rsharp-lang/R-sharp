@@ -105,6 +105,15 @@ Namespace Runtime.Internal
             End If
         End Function
 
+        <ExportAPI("as.integer")>
+        Public Function asInteger(<RRawVectorArgument> obj As Object) As Object
+            If obj Is Nothing Then
+                Return 0
+            Else
+                Return Runtime.asVector(Of Long)(obj)
+            End If
+        End Function
+
         <ExportAPI("as.numeric")>
         Public Function asNumeric(<RRawVectorArgument> obj As Object) As Object
             If obj Is Nothing Then
