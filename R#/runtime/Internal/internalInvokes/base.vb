@@ -73,6 +73,11 @@ Namespace Runtime.Internal.Invokes
     ''' </summary>
     Public Module base
 
+        <ExportAPI("license")>
+        Public Sub license()
+            Call Console.WriteLine(My.Resources.gpl)
+        End Sub
+
         <ExportAPI("neg")>
         Public Function neg(<RRawVectorArgument> o As Object) As Object
             If o Is Nothing Then
