@@ -1,0 +1,25 @@
+R# is a language and environment for GCModeller scripting 
+and data science chart plot graphics. It is an Open source 
+project which is similar to the R language and environment 
+which was developed at R&D laboratory from BioNovogene 
+corporation by Xie.Guigang. The R# language its language 
+syntax is derived from the R language, and R# can be considered 
+as a part of implementation of R on Microsoft .NET Framework 
+environment. Although there are too many important differences 
+between R# and R, but much code written for R could runs 
+unaltered under R#.
+
+Unlike the R Project, R# language is not focus on the 
+statistical computing, R# try to combine the numeric computing 
+with the .NET library programming which is comes from the 
+GCModeller on the contrary. So in this way, R# provides a 
+wide variety of bioinformatics analysis toolkit from 
+GCModeller and graphical techniques, and is highly extensible.
+
+Authors of R#.
+
+Since mid-2018 there has been a core group with write access to the R#
+source, currently consisting of
+
+Xie.Guigang <xie.guigang@gcmodeller.org>
+Guan.Qianqian <amethyst.asuka@gcmodeller.org>

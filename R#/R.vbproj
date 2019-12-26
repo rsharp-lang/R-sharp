@@ -308,6 +308,7 @@
     <Compile Include="Runtime\Internal\internalInvokes\env.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\help.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\strings.vb" />
+    <Compile Include="Runtime\Internal\objects\invisible.vb" />
     <Compile Include="Runtime\Internal\objects\names.vb" />
     <Compile Include="Runtime\Internal\objects\unit.vb" />
     <Compile Include="Runtime\Internal\printer\functionPrinter.vb" />
@@ -385,6 +386,11 @@
       <Name>47-dotnet_Microsoft.VisualBasic</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\gpl.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\contributions.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
