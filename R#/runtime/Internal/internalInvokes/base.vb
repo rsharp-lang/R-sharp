@@ -73,10 +73,33 @@ Namespace Runtime.Internal.Invokes
     ''' </summary>
     Public Module base
 
+        ''' <summary>
+        ''' # The R# License Terms
+        ''' 
+        ''' The license terms under which R# is distributed.
+        ''' </summary>
+        ''' <returns></returns>
         <ExportAPI("license")>
-        Public Sub license()
+        Public Function license() As <RSuppressPrint> Object
             Call Console.WriteLine(My.Resources.gpl)
-        End Sub
+            Return Nothing
+        End Function
+
+        ''' <summary>
+        ''' # Change the Print Mode to Invisible
+        ''' 
+        ''' Return a (temporarily) invisible copy of an object.
+        ''' </summary>
+        ''' <param name="x">an arbitrary R object.</param>
+        ''' <returns>
+        ''' This function can be useful when it is desired to have functions 
+        ''' return values which can be assigned, but which do not print when 
+        ''' they are not assigned.
+        ''' </returns>
+        <ExportAPI("invisible")>
+        Public Function invisible(x As Object) As <RSuppressPrint> Object
+            Return x
+        End Function
 
         <ExportAPI("neg")>
         Public Function neg(<RRawVectorArgument> o As Object) As Object

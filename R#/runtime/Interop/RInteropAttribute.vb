@@ -72,6 +72,13 @@ Namespace Runtime.Interop
     Public Class RRawVectorArgumentAttribute : Inherits RInteropAttribute
     End Class
 
+    ''' <summary>
+    ''' The return value will not be print on the console
+    ''' </summary>
+    <AttributeUsage(AttributeTargets.ReturnValue, AllowMultiple:=False, Inherited:=True)>
+    Public Class RSuppressPrintAttribute : Inherits RInteropAttribute
+    End Class
+
     <AttributeUsage(AttributeTargets.Parameter, AllowMultiple:=False, Inherited:=True)>
     Public Class RListObjectArgumentAttribute : Inherits RInteropAttribute
 
