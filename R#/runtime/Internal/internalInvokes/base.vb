@@ -98,7 +98,7 @@ Namespace Runtime.Internal.Invokes
         ''' </returns>
         <ExportAPI("invisible")>
         Public Function invisible(x As Object) As <RSuppressPrint> Object
-            Return x
+            Return New RReturn(x, invisible:=True)
         End Function
 
         <ExportAPI("neg")>
