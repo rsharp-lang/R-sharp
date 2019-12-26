@@ -150,10 +150,10 @@ Namespace Interpreter.ExecuteEngine
         }
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim target As [Variant](Of RFunction, Message) = getFuncVar(envir)
+            Dim target As Object = getFuncVar(envir)
             Dim result As Object
 
-            If target Like GetType(Message) Then
+            If Not target Is Nothing AndAlso target.GetType Is GetType(Message) Then
                 Return target
             Else
                 result = doInvokeFuncVar(target, envir)
@@ -185,7 +185,7 @@ Namespace Interpreter.ExecuteEngine
             End If
         End Function
 
-        Private Function getFuncVar(envir As Environment) As [Variant](Of RFunction, Message)
+        Private Function getFuncVar(envir As Environment) As Object
             ' 当前环境中的函数符号的优先度要高于
             ' 系统环境下的函数符号
             Dim funcVar As RFunction
@@ -228,7 +228,7 @@ Namespace Interpreter.ExecuteEngine
             End If
         End Function
 
-        Private Function getPackageApiImpl(envir As Environment) As [Variant](Of RFunction, Message)
+        Private Function getPackageApiImpl(envir As Environment) As Object
             ' find package and then load method
             Dim pkg As RPkg = envir.globalEnvironment.packages.FindPackage([namespace], Nothing)
             Dim funcName As String = DirectCast(Me.funcName, Literal).ToString
