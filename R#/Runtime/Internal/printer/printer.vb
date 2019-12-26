@@ -135,17 +135,18 @@ printSingleElement:
 
         <Extension>
         Private Sub printList(list As IDictionary, listPrefix$, maxPrint%, env As GlobalEnvironment)
-            For Each slot As KeyValuePair(Of String, Object) In list
-                Dim key$ = slot.Key
+            For Each objKey As Object In list.Keys
+                Dim slotValue As Object = list(objKey)
+                Dim key$ = objKey.ToString
 
                 If key.IsPattern("\d+") Then
-                    key = $"{listPrefix}[[{slot.Key}]]"
+                    key = $"{listPrefix}[[{key}]]"
                 Else
-                    key = $"{listPrefix}${slot.Key}"
+                    key = $"{listPrefix}${key}"
                 End If
 
                 Call Console.WriteLine(key)
-                Call printer.printInternal(slot.Value, key, maxPrint, env)
+                Call printer.printInternal(slotValue, key, maxPrint, env)
                 Call Console.WriteLine()
             Next
         End Sub
