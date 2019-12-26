@@ -46,6 +46,7 @@ Imports Microsoft.VisualBasic.Data.visualize.Network.Analysis
 Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream
 Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream.Generic
 Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports R.graphics
 Imports SMRUCC.Rsharp.Runtime
@@ -146,11 +147,22 @@ Public Module NetworkModule
     Public Function addEdges(g As NetworkGraph, tuples As Object) As NetworkGraph
         Dim nodeLabels As String()
         Dim edge As Edge
+        Dim i As i32 = 1
 
         For Each tuple As NamedValue(Of Object) In list.GetSlots(tuples).IterateNameValues
             nodeLabels = REnv.asVector(Of String)(tuple.Value)
             edge = g.CreateEdge(nodeLabels(0), nodeLabels(1))
-            edge.ID = tuple.Name
+
+            ' 20191226
+            ' 如果使用数字作为边的编号的话
+            ' 极有可能会出现重复的边编号
+            ' 所以在这里判断一下
+            ' 尽量避免使用数字作为编号
+            If ++i = tuple.Name.ParseInteger Then
+                edge.ID = $"{edge.U.label}..{edge.V.label}"
+            Else
+                edge.ID = tuple.Name
+            End If
         Next
 
         Return g
