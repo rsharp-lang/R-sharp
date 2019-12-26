@@ -47,6 +47,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
@@ -514,9 +515,30 @@ Namespace Runtime.Internal.Invokes
 
         <ExportAPI("str")>
         Public Function str(<RRawVectorArgument> x As Object, Optional envir As Environment = Nothing) As Object
-            Dim print As String = classPrinter.printClass(x)
-            Console.WriteLine(print)
-            Return print
+            If x Is Nothing Then
+                Return Nothing
+            End If
+
+            Dim type As Type = x.GetType
+
+            If type.ImplementInterface(GetType(IDictionary)) Then
+                Dim list As IDictionary = x
+                Dim value As Object
+                Dim sb As New StringBuilder
+
+                Call sb.AppendLine("List of " & list.Count)
+
+                For Each slotKey As Object In list.Keys
+                    value = list(slotKey)
+                    sb.AppendLine($" $ {slotKey}: {str(value, envir)}")
+                Next
+
+                Return sb.ToString
+            ElseIf Runtime.IsPrimitive(type.GetRTypeCode, includeComplexList:=False) Then
+
+            Else
+                Return classPrinter.printClass(x)
+            End If
         End Function
 
         Dim markdown As MarkdownRender = MarkdownRender.DefaultStyleRender

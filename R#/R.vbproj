@@ -314,6 +314,7 @@
     <Compile Include="Runtime\Internal\printer\functionPrinter.vb" />
     <Compile Include="Runtime\Internal\htmlPrinter.vb" />
     <Compile Include="Runtime\Interop\RReturn.vb" />
+    <Compile Include="Runtime\RTypeExtensions.vb" />
     <Compile Include="System\Config\Defaults.vb" />
     <Compile Include="Runtime\System\Rscript.vb" />
     <Compile Include="Runtime\System\Interface\RNames.vb" />
