@@ -136,12 +136,18 @@ Public Module NetworkModule
         Return g.CreateEdge(u, v)
     End Function
 
+    ''' <summary>
+    ''' Add edges by a given node label tuple list
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <param name="tuples">a given node label tuple list</param>
+    ''' <returns></returns>
     <ExportAPI("add.edges")>
-    Public Function addEdges(g As NetworkGraph, Optional tuples As Object = Nothing) As NetworkGraph
+    Public Function addEdges(g As NetworkGraph, tuples As Object) As NetworkGraph
         Dim nodeLabels As String()
         Dim edge As Edge
 
-        For Each tuple As NamedValue(Of Object) In DirectCast(tuples, list).namedValues
+        For Each tuple As NamedValue(Of Object) In list.GetSlots(tuples).IterateNameValues
             nodeLabels = REnv.asVector(Of String)(tuple.Value)
             edge = g.CreateEdge(nodeLabels(0), nodeLabels(1))
             edge.ID = tuple.Name
