@@ -45,6 +45,9 @@ g
 
 print(g :> degree);
 
+# display console progress bar on current y location
+console::progressbar.pin.top();
+
 # Then we can do network layout and 
 # save the generated network model in csv file tables
 g 
