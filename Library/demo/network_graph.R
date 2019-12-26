@@ -17,8 +17,8 @@ for(id in ["X","Y","Z"]) {
 
 # add edges between the specific nodes tuples
 g 
-:> add.edges(["A", "B"],  ["B", "C"],   ["C", "D"],   ["C", "E"],   ["A", "E"],   ["A", "F"],   ["F", "G"],   ["F", "H"],  ["B", "H"]);
-:> add.edges(["B1", "H"], ["B1", "A1"], ["B1", "C1"], ["B1", "D1"], ["D1", "E1"], ["E1", "F1"], ["F1", "G1"], ["G1", "H1"]);
+:> add.edges(list(["A", "B"],  ["B", "C"],  ["C", "D"],  ["C", "E"],  ["A", "E"],   ["A", "F"],   ["F", "G"],   ["F", "H"],  ["B", "H"]))
+:> add.edges(list(["B1", "H"], ["B1", "A1"], ["B1", "C1"], ["B1", "D1"], ["D1", "E1"], ["E1", "F1"], ["F1", "G1"], ["G1", "H1"]));
 
 # add edges between nodes one by one
 g :> add.edge("H", "H1");
@@ -32,15 +32,15 @@ g :> add.edge("X", "A1");
 
 # do network styling
 g 
-:> type_groups(type = "A+",      nodes = ["A","B","C"]);
-:> type_groups(type = "B_class", nodes = ["D"]);
-:> type_groups(type = "tails",   nodes = ["F", "G"]);
+:> type_groups(type = "A+",      nodes = ["A","B","C"])
+:> type_groups(type = "B_class", nodes = ["D"])
+:> type_groups(type = "tails",   nodes = ["F", "G"])
 :> type_groups(type = "mirror",  nodes = ["A1","B1","C1","D1","E1", "F1", "G1", "H1"]);
 
 g 
-:> color.type_group(type = "A+",      color = "red");
-:> color.type_group(type = "B_class", color = "green");
-:> color.type_group(type = "tails",   color = "yellow");
+:> color.type_group(type = "A+",      color = "red")
+:> color.type_group(type = "B_class", color = "green")
+:> color.type_group(type = "tails",   color = "yellow")
 :> color.type_group(type = "mirror",  color = "purple");
 
 print(g :> degree);

@@ -49,8 +49,10 @@ Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports R.graphics
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports node = Microsoft.VisualBasic.Data.visualize.Network.Graph.Node
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 <Package("igraph")>
 Public Module NetworkModule
@@ -135,13 +137,14 @@ Public Module NetworkModule
     End Function
 
     <ExportAPI("add.edges")>
-    Public Function addEdges(g As NetworkGraph,
-                             <RListObjectArgument>
-                             Optional tuples As Object = Nothing,
-                             Optional env As Environment = Nothing) As NetworkGraph
+    Public Function addEdges(g As NetworkGraph, Optional tuples As Object = Nothing) As NetworkGraph
+        Dim nodeLabels As String()
+        Dim edge As Edge
 
-        For Each tuple As NamedValue(Of Object) In RListObjectArgumentAttribute.getObjectList(tuples, env)
-
+        For Each tuple As NamedValue(Of Object) In DirectCast(tuples, list).namedValues
+            nodeLabels = REnv.asVector(Of String)(tuple.Value)
+            edge = g.CreateEdge(nodeLabels(0), nodeLabels(1))
+            edge.ID = tuple.Name
         Next
 
         Return g
