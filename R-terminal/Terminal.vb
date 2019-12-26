@@ -51,6 +51,7 @@ Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Terminal
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Configuration
@@ -137,6 +138,8 @@ Type 'q()' to quit R.
             Return False
         ElseIf result.GetType Is GetType(RReturn) Then
             Return DirectCast(result, RReturn).invisible
+        ElseIf result.GetType Is GetType(invisible) Then
+            Return True
         Else
             Return False
         End If
