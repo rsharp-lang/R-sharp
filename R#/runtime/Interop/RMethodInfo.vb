@@ -166,7 +166,9 @@ Namespace Runtime.Interop
             End If
 
             If invisible Then
-                Return New RReturn(result, invisible:=True)
+                Return New invisible With {
+                    .value = result
+                }
             Else
                 Return result
             End If
