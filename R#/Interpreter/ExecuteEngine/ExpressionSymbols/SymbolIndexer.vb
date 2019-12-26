@@ -101,10 +101,7 @@ Namespace Interpreter.ExecuteEngine
             Dim indexer = Runtime.asVector(Of Object)(index.Evaluate(envir))
 
             If indexer.Length = 0 Then
-                Return Internal.stop({
-                    $"Attempt to select less than one element in get1index",
-                    $"expression: {symbol}[[{index}]]"
-                }, envir)
+                Return emptyIndexError(Me, envir)
             ElseIf Program.isException(obj) Then
                 Return obj
             End If
@@ -114,6 +111,14 @@ Namespace Interpreter.ExecuteEngine
             Else
                 Return getByIndex(obj, indexer, envir)
             End If
+        End Function
+
+        Friend Shared Function emptyIndexError(symbol As SymbolIndexer, env As Environment) As Message
+            Return Internal.stop({
+                $"attempt to select less than one element in OneIndex!",
+                $"SymbolName: {symbol.symbol}",
+                $"Index: {symbol.index}"
+            }, env)
         End Function
 
         Private Function getByName(obj As Object, indexer As Array, envir As Environment) As Object

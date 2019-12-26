@@ -104,6 +104,7 @@ Namespace Runtime.Internal
         ''' <param name="envir"></param>
         ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
         Public Function [stop](message As Object, envir As Environment) As Message
             Return base.stop(message, envir)
         End Function

@@ -85,8 +85,17 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' This function returns a logical value to determine that the given object is empty or not?
+        ''' </summary>
+        ''' <param name="o"></param>
+        ''' <returns></returns>
         <ExportAPI("is.empty")>
         Friend Function isEmpty(<RRawVectorArgument> o As Object) As Object
+            ' 20191224
+            ' 这个函数虽然申明为object类型的返回值，
+            ' 实际上为了统一api的申明，在这里返回的都是一个逻辑值
+
             If o Is Nothing Then
                 Return True
             End If

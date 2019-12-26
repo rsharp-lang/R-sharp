@@ -207,10 +207,10 @@ printSingleElement:
             Dim maxColumns As Integer = Console.WindowWidth
             Dim contents As String() = stringVec.Take(maxPrint).ToArray
             ' maxsize / average size
-            Dim divSize As Integer = maxColumns \ contents.Average(Function(c) c.Length + 1) - 1
+            Dim divSize As Integer = CInt(maxColumns / contents.Average(Function(c) c.Length + 1)) - 2
             Dim i As i32 = 1 - divSize
 
-            For Each row As String() In contents.Split(divSize)
+            For Each row As String() In contents.Split(partitionSize:=divSize)
                 Call Console.WriteLine($"[{i = i + divSize}]{vbTab}" & row.JoinBy(vbTab))
             Next
 
