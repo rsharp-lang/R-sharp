@@ -69,6 +69,12 @@ Namespace Runtime.Interop
         Public ReadOnly Property returns As RType
         Public ReadOnly Property parameters As RMethodArgument()
 
+        ''' <summary>
+        ''' Do not print the value of this function on console
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property invisible As Boolean
+
         ReadOnly api As [Variant](Of MethodInvoke, [Delegate])
 
         ''' <summary>
@@ -104,6 +110,7 @@ Namespace Runtime.Interop
             Me.api = New MethodInvoke With {.method = closure, .target = target}
             Me.returns = RType.GetRSharpType(closure.ReturnType)
             Me.parameters = closure.DoCall(AddressOf parseParameters)
+            Me.invisible = RSuppressPrintAttribute.IsPrintInvisible(closure)
         End Sub
 
         ''' <summary>
@@ -158,7 +165,11 @@ Namespace Runtime.Interop
                 result = api.VB.Method.Invoke(Nothing, parameters.ToArray)
             End If
 
-            Return result
+            If invisible Then
+                Return New RReturn(result, invisible:=True)
+            Else
+                Return result
+            End If
         End Function
 
         Public Function CreateParameterArrayFromListArgument(envir As Environment, list As Dictionary(Of String, Object)) As Object()
