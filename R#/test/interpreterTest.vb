@@ -70,6 +70,7 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+        Call booleanCLIArgumentTest()
 
         Call unaryNegTest()
 
@@ -141,7 +142,7 @@ Module interpreterTest
         Call forLoopTest()
 
         Call logicalTest()
-        Call boolTest()
+        Call boolLiteralTest()
 
         Call listTest()
 
@@ -149,6 +150,14 @@ Module interpreterTest
 
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub booleanCLIArgumentTest()
+        Call R.Evaluate("print(?'--flag')")
+        Call R.Evaluate("let b as boolean = ?'--flag'")
+        Call R.Evaluate("print(b)")
 
         Pause()
     End Sub
@@ -612,7 +621,7 @@ x <- 999;
         Pause()
     End Sub
 
-    Sub boolTest()
+    Sub boolLiteralTest()
         Call R.Evaluate("
 let b as boolean = [✔, false, false, ✔];
 

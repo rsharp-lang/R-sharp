@@ -6,6 +6,7 @@ Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports R.graphics
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 ''' <summary>
@@ -24,21 +25,13 @@ Module Visualize
     Public Function renderPlot(g As NetworkGraph,
                                <RRawVectorArgument>
                                Optional canvasSize As Object = "1024,768",
-                               Optional labelerIterations% = 500) As GraphicsData
-
-        If canvasSize Is Nothing Then
-            canvasSize = "1024,768"
-        ElseIf canvasSize.GetType Is GetType(String()) Then
-            canvasSize = DirectCast(canvasSize, Array).GetValue(Scan0)
-        ElseIf canvasSize.GetType Is GetType(Long()) Then
-            With DirectCast(canvasSize, Long())
-                canvasSize = $"{ .GetValue(0)},{ .GetValue(1)}"
-            End With
-        End If
+                               Optional defaultColor$ = "skyblue",
+                               Optional labelerIterations% = 0) As GraphicsData
 
         Return g.DrawImage(
-            canvasSize:=canvasSize,
-            labelerIterations:=labelerIterations
+            canvasSize:=InteropArgumentHelper.getSize(canvasSize),
+            labelerIterations:=labelerIterations,
+            defaultColor:=InteropArgumentHelper.getColor(defaultColor)
         )
     End Function
 

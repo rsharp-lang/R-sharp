@@ -45,6 +45,7 @@ Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream
 Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream.Generic
 Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports R.graphics
 Imports node = Microsoft.VisualBasic.Data.visualize.Network.Graph.Node
 
 <Package("igraph")>
@@ -67,6 +68,11 @@ Public Module NetworkModule
         End If
 
         Return tables.Save(file)
+    End Function
+
+    <ExportAPI("read.network")>
+    Public Function LoadNetwork(directory$, Optional defaultNodeSize As Object = "20,20") As NetworkGraph
+        Return NetworkFileIO.Load(directory).CreateGraph(defaultNodeSize:=InteropArgumentHelper.getSize(defaultNodeSize))
     End Function
 
     <ExportAPI("empty.network")>
