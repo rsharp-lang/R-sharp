@@ -1,43 +1,43 @@
 ﻿#Region "Microsoft.VisualBasic::005894b941196a47a062407cb3e0ab62, R#\Runtime\Internal\objects\conversion.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module RConversion
-    ' 
-    '         Function: asCharacters, asList, asLogicals, asNumeric, asObject
-    '                   CTypeDynamic
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module RConversion
+' 
+'         Function: asCharacters, asList, asLogicals, asNumeric, asObject
+'                   CTypeDynamic
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -50,6 +50,11 @@ Namespace Runtime.Internal
 
     Module RConversion
 
+        ''' <summary>
+        ''' Cast .NET object to R# object
+        ''' </summary>
+        ''' <param name="obj"></param>
+        ''' <returns></returns>
         <ExportAPI("as.object")>
         Public Function asObject(<RRawVectorArgument> obj As Object) As Object
             If obj Is Nothing Then
@@ -75,6 +80,11 @@ Namespace Runtime.Internal
             End If
         End Function
 
+        ''' <summary>
+        ''' Cast the raw dictionary object to R# list object
+        ''' </summary>
+        ''' <param name="obj"></param>
+        ''' <returns></returns>
         <ExportAPI("as.list")>
         Public Function asList(obj As Object) As list
             If obj Is Nothing Then
@@ -105,10 +115,17 @@ Namespace Runtime.Internal
             End If
         End Function
 
+        ''' <summary>
+        ''' Cast the given vector or list to integer type
+        ''' </summary>
+        ''' <param name="obj"></param>
+        ''' <returns></returns>
         <ExportAPI("as.integer")>
         Public Function asInteger(<RRawVectorArgument> obj As Object) As Object
             If obj Is Nothing Then
                 Return 0
+            ElseIf obj.GetType.ImplementInterface(GetType(IDictionary)) Then
+                Return Runtime.CTypeOfList(Of Long)(obj)
             Else
                 Return Runtime.asVector(Of Long)(obj)
             End If
@@ -118,6 +135,8 @@ Namespace Runtime.Internal
         Public Function asNumeric(<RRawVectorArgument> obj As Object) As Object
             If obj Is Nothing Then
                 Return 0
+            ElseIf obj.GetType.ImplementInterface(GetType(IDictionary)) Then
+                Return Runtime.CTypeOfList(Of Double)(obj)
             Else
                 Return Runtime.asVector(Of Double)(obj)
             End If
@@ -127,6 +146,8 @@ Namespace Runtime.Internal
         Public Function asCharacters(<RRawVectorArgument> obj As Object) As Object
             If obj Is Nothing Then
                 Return Nothing
+            ElseIf obj.GetType.ImplementInterface(GetType(IDictionary)) Then
+                Return Runtime.CTypeOfList(Of String)(obj)
             Else
                 Return Runtime.asVector(Of String)(obj)
             End If
@@ -136,6 +157,8 @@ Namespace Runtime.Internal
         Public Function asLogicals(<RRawVectorArgument> obj As Object) As Object
             If obj Is Nothing Then
                 Return Nothing
+            ElseIf obj.GetType.ImplementInterface(GetType(IDictionary)) Then
+                Return Runtime.CTypeOfList(Of Boolean)(obj)
             Else
                 Return Runtime.asLogical(obj)
             End If
