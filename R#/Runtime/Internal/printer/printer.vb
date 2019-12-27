@@ -206,11 +206,12 @@ printSingleElement:
         <Extension>
         Private Sub printArray(xvec As Array, maxPrint%, env As GlobalEnvironment)
             Dim stringVec As IEnumerable(Of String) = getStrings(xvec, env)
-            Dim maxColumns As Integer = Console.WindowWidth
+            Dim maxColumns As Integer = Console.WindowWidth - 1
             Dim contents As String() = stringVec.Take(maxPrint).ToArray
             ' maxsize / average size
-            Dim divSize As Integer = CInt(maxColumns / contents.Average(Function(c) c.Length + 1)) - 5
+            Dim divSize As Integer = CInt(maxColumns / contents.Max(Function(c) c.Length + 1)) - 6
             Dim i As i32 = 1 - divSize
+            Dim unitWidth As Integer = maxColumns \ divSize
 
             For Each row As String() In contents.Split(partitionSize:=divSize)
                 Call Console.WriteLine($"[{i = i + divSize}]{vbTab}" & row.JoinBy(vbTab))
