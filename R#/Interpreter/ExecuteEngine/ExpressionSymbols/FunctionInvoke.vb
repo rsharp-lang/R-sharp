@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8b1cbfb112703e050634960568bbecc0, R#\Interpreter\ExecuteEngine\ExpressionSymbols\FunctionInvoke.vb"
+﻿#Region "Microsoft.VisualBasic::115c59c190a4ff8a769dffddfd43fe95, R#\Interpreter\ExecuteEngine\ExpressionSymbols\FunctionInvoke.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,7 @@
     '         Properties: [namespace], funcName, type
     ' 
     '         Constructor: (+3 Overloads) Sub New
-    '         Function: doInvokeFuncVar, Evaluate, getFuncVar, invokePackageInternal, invokeRInternal
+    '         Function: doInvokeFuncVar, Evaluate, getFuncVar, getPackageApiImpl, invokeRInternal
     '                   isOptionNames, ToString
     ' 
     ' 

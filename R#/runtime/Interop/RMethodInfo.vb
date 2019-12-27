@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6dbd84b614f1a8883d65f5aaa35b7080, R#\Runtime\Interop\RMethodInfo.vb"
+﻿#Region "Microsoft.VisualBasic::c80a3c4fd77ddeb9861ca9b9dbfebf57, R#\Runtime\Interop\RMethodInfo.vb"
 
     ' Author:
     ' 
@@ -33,11 +33,11 @@
 
     '     Class RMethodInfo
     ' 
-    '         Properties: name, parameters, returns
+    '         Properties: invisible, name, parameters, returns
     ' 
     '         Constructor: (+3 Overloads) Sub New
-    '         Function: createNormalArguments, createObjectListArguments, GetPrintContent, GetRawDeclares, getValue
-    '                   Invoke, missingParameter, parseParameters, ToString
+    '         Function: createNormalArguments, createObjectListArguments, CreateParameterArrayFromListArgument, GetPrintContent, GetRawDeclares
+    '                   getValue, (+2 Overloads) Invoke, missingParameter, parseParameters, ToString
     ' 
     ' 
     ' /********************************************************************************/
