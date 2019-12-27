@@ -124,32 +124,6 @@ Namespace Runtime.Internal
             Return dataframe
         End Function
 
-        Public Function Rlist(envir As Environment, parameters As List(Of Expression)) As Object
-            Dim list As New Dictionary(Of String, Object)
-            Dim slot As Expression
-            Dim key As String
-            Dim value As Object
-
-            For i As Integer = 0 To parameters.Count - 1
-                slot = parameters(i)
-
-                If TypeOf slot Is ValueAssign Then
-                    ' 不支持tuple
-                    key = DirectCast(slot, ValueAssign) _
-                        .targetSymbols(Scan0) _
-                        .DoCall(AddressOf ValueAssign.GetSymbol)
-                    value = DirectCast(slot, ValueAssign).value.Evaluate(envir)
-                Else
-                    key = i + 1
-                    value = slot.Evaluate(envir)
-                End If
-
-                Call list.Add(key, value)
-            Next
-
-            Return New list With {.slots = list}
-        End Function
-
         Friend Function missingParameter(funcName$, paramName$, envir As Environment) As Message
             Return Internal.stop({
                 $"missing parameter '{paramName}' for function {funcName}",

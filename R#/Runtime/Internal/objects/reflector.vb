@@ -1,6 +1,5 @@
 ﻿Imports System.Text
 Imports Microsoft.VisualBasic.Emit.Delegates
-Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
@@ -12,6 +11,8 @@ Namespace Runtime.Internal
         Public Function GetStructure(x As Object, env As GlobalEnvironment) As String
             If x Is Nothing Then
                 Return "<NULL>"
+            ElseIf x.GetType Is GetType(list) Then
+                x = DirectCast(x, list).slots
             End If
 
             Dim type As Type = x.GetType

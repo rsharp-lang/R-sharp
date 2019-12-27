@@ -128,6 +128,40 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' # Lists – Generic and Dotted Pairs
+        ''' 
+        ''' Functions to construct, coerce and check for both kinds of ``R#`` lists.
+        ''' </summary>
+        ''' <param name="slots">objects, possibly named.</param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
+        <ExportAPI("list")>
+        Public Function Rlist(<RListObjectArgument> slots As Object, envir As Environment) As Object
+            Dim list As New Dictionary(Of String, Object)
+            Dim slot As InvokeParameter
+            Dim key As String
+            Dim value As Object
+            Dim parameters As InvokeParameter() = slots
+
+            For i As Integer = 0 To parameters.Length - 1
+                slot = parameters(i)
+
+                If slot.haveSymbolName Then
+                    ' 不支持tuple
+                    key = slot.name
+                    value = slot.Evaluate(envir)
+                Else
+                    key = i + 1
+                    value = slot.Evaluate(envir)
+                End If
+
+                Call list.Add(key, value)
+            Next
+
+            Return New list With {.slots = list}
+        End Function
+
+        ''' <summary>
         ''' This function returns a logical value to determine that the given object is empty or not?
         ''' </summary>
         ''' <param name="o"></param>
