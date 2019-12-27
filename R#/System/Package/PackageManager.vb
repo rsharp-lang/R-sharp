@@ -66,6 +66,13 @@ Namespace System.Package
             Me.config = config
         End Sub
 
+        ''' <summary>
+        ''' If the package is not exists or load package failure
+        ''' then this function returns nothing
+        ''' </summary>
+        ''' <param name="packageName"></param>
+        ''' <param name="exception"></param>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function FindPackage(packageName As String, ByRef exception As Exception) As Package
             Return pkgDb.FindPackage(packageName, exception)

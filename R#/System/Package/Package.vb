@@ -69,6 +69,16 @@ Namespace System.Package
             End Get
         End Property
 
+        ''' <summary>
+        ''' Get all api names in this package module
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property ls As String()
+            Get
+                Return ImportsPackage.GetAllApi(package).Keys
+            End Get
+        End Property
+
         Sub New(info As PackageAttribute, package As Type)
             Me.info = info
             Me.package = package

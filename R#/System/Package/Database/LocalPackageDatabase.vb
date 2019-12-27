@@ -69,6 +69,13 @@ Namespace System.Package
         <XmlArray>
         Public Property packages As PackageLoaderEntry()
 
+        ''' <summary>
+        ''' If the package is not exists or load package failure
+        ''' then this function returns nothing
+        ''' </summary>
+        ''' <param name="packageName"></param>
+        ''' <param name="exception"></param>
+        ''' <returns></returns>
         Public Function FindPackage(packageName As String, ByRef exception As Exception) As Package
             Dim entry As PackageLoaderEntry = packages _
                 .Where(Function(pkg)
