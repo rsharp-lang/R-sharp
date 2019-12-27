@@ -99,9 +99,9 @@ Public Module utils
         ElseIf type Is GetType(IO.DataFrame) Then
             Return DirectCast(x, IO.DataFrame).Save(path:=file)
         ElseIf Runtime.isVector(Of EntityObject)(x) Then
-            Return DirectCast(Runtime.asVector(Of EntityObject)(x), EntityObject()).SaveTo(path:=file)
+            Return DirectCast(Runtime.asVector(Of EntityObject)(x), EntityObject()).SaveTo(path:=file, silent:=True)
         ElseIf Runtime.isVector(Of DataSet)(x) Then
-            Return DirectCast(Runtime.asVector(Of DataSet)(x), DataSet()).SaveTo(path:=file)
+            Return DirectCast(Runtime.asVector(Of DataSet)(x), DataSet()).SaveTo(path:=file, silent:=True)
         Else
             Return Message.InCompatibleType(GetType(File), type, envir)
         End If
