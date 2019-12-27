@@ -475,6 +475,13 @@ Namespace Runtime.Internal.Invokes
             Return frames
         End Function
 
+        ''' <summary>
+        ''' Create R# internal message
+        ''' </summary>
+        ''' <param name="messages"></param>
+        ''' <param name="envir"></param>
+        ''' <param name="level">The message level</param>
+        ''' <returns></returns>
         Private Function createMessageInternal(messages As Object, envir As Environment, level As MSG_TYPES) As Message
             Return New Message With {
                 .message = Runtime.asVector(Of Object)(messages) _
@@ -494,6 +501,18 @@ Namespace Runtime.Internal.Invokes
             Return createMessageInternal(message, envir, level:=MSG_TYPES.WRN)
         End Function
 
+        ''' <summary>
+        ''' # Concatenate and Print
+        ''' 
+        ''' Outputs the objects, concatenating the representations. 
+        ''' ``cat`` performs much less conversion than ``print``.
+        ''' </summary>
+        ''' <param name="values">R objects (see ‘Details’ for the types of objects allowed).</param>
+        ''' <param name="file">A connection, or a character string naming the file to print to. 
+        ''' If "" (the default), cat prints to the standard output connection, the console 
+        ''' unless redirected by ``sink``.</param>
+        ''' <param name="sep">a character vector of strings to append after each element.</param>
+        ''' <returns></returns>
         <ExportAPI("cat")>
         Public Function cat(<RRawVectorArgument> values As Object,
                             Optional file$ = Nothing,
@@ -537,6 +556,16 @@ Namespace Runtime.Internal.Invokes
 
         Dim markdown As MarkdownRender = MarkdownRender.DefaultStyleRender
 
+        ''' <summary>
+        ''' # Print Values
+        ''' 
+        ''' print prints its argument and returns it invisibly (via invisible(x)). 
+        ''' It is a generic function which means that new printing methods can be 
+        ''' easily added for new classes.
+        ''' </summary>
+        ''' <param name="x">an object used to select a method.</param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         <ExportAPI("print")>
         Public Function print(<RRawVectorArgument> x As Object, envir As Environment) As Object
             If x Is Nothing Then
@@ -579,31 +608,49 @@ Namespace Runtime.Internal.Invokes
             Return x
         End Function
 
+        ''' <summary>
+        ''' # Apply a Function over a List or Vector
+        ''' 
+        ''' lapply returns a list of the same length as X, each element of 
+        ''' which is the result of applying FUN to the corresponding 
+        ''' element of X.
+        ''' </summary>
+        ''' <param name="X">
+        ''' a vector (atomic or list) or an expression object. Other objects 
+        ''' (including classed objects) will be coerced by ``base::as.list``.
+        ''' </param>
+        ''' <param name="FUN">
+        ''' the Function to be applied To Each element Of X: see 'Details’. 
+        ''' In the case of functions like +, %*%, the function name must be 
+        ''' backquoted or quoted.
+        ''' </param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         <ExportAPI("lapply")>
-        Public Function lapply(<RRawVectorArgument> sequence As Object, doApply As Object, envir As Environment) As Object
-            If doApply Is Nothing Then
+        Public Function lapply(<RRawVectorArgument> X As Object, FUN As Object, envir As Environment) As Object
+            If FUN Is Nothing Then
                 Return Internal.stop({"Missing apply function!"}, envir)
-            ElseIf Not doApply.GetType.ImplementInterface(GetType(RFunction)) Then
+            ElseIf Not FUN.GetType.ImplementInterface(GetType(RFunction)) Then
                 Return Internal.stop({"Target is not a function!"}, envir)
             End If
 
-            If Program.isException(sequence) Then
-                Return sequence
-            ElseIf Program.isException(doApply) Then
-                Return doApply
+            If Program.isException(X) Then
+                Return X
+            ElseIf Program.isException(FUN) Then
+                Return FUN
             End If
 
-            Dim apply As RFunction = doApply
+            Dim apply As RFunction = FUN
             Dim list As Dictionary(Of String, Object)
 
-            If sequence.GetType Is GetType(Dictionary(Of String, Object)) Then
-                list = DirectCast(sequence, Dictionary(Of String, Object)) _
+            If X.GetType Is GetType(Dictionary(Of String, Object)) Then
+                list = DirectCast(X, Dictionary(Of String, Object)) _
                     .ToDictionary(Function(d) d.Key,
                                   Function(d)
                                       Return apply.Invoke(envir, {d.Value})
                                   End Function)
             Else
-                list = Runtime.asVector(Of Object)(sequence) _
+                list = Runtime.asVector(Of Object)(X) _
                     .AsObjectEnumerator _
                     .SeqIterator _
                     .ToDictionary(Function(i) $"[[{i.i}]]",
@@ -615,24 +662,43 @@ Namespace Runtime.Internal.Invokes
             Return New list With {.slots = list}
         End Function
 
+        ''' <summary>
+        ''' # Apply a Function over a List or Vector
+        ''' 
+        ''' sapply is a user-friendly version and wrapper of lapply by default 
+        ''' returning a vector, matrix or, if simplify = "array", an array 
+        ''' if appropriate, by applying simplify2array(). sapply(x, f, simplify 
+        ''' = FALSE, USE.NAMES = FALSE) is the same as lapply(x, f).
+        ''' </summary>
+        ''' <param name="X">
+        ''' a vector (atomic or list) or an expression object. Other objects 
+        ''' (including classed objects) will be coerced by ``base::as.list``.
+        ''' </param>
+        ''' <param name="FUN">
+        ''' the Function to be applied To Each element Of X: see 'Details’. 
+        ''' In the case of functions like +, %*%, the function name must be 
+        ''' backquoted or quoted.
+        ''' </param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         <ExportAPI("sapply")>
-        Public Function sapply(<RRawVectorArgument> sequence As Object, doApply As Object, envir As Environment) As Object
-            If doApply Is Nothing Then
+        Public Function sapply(<RRawVectorArgument> X As Object, FUN As Object, envir As Environment) As Object
+            If FUN Is Nothing Then
                 Return Internal.stop({"Missing apply function!"}, envir)
-            ElseIf Not doApply.GetType.ImplementInterface(GetType(RFunction)) Then
+            ElseIf Not FUN.GetType.ImplementInterface(GetType(RFunction)) Then
                 Return Internal.stop({"Target is not a function!"}, envir)
             End If
 
-            If Program.isException(sequence) Then
-                Return sequence
-            ElseIf Program.isException(doApply) Then
-                Return doApply
+            If Program.isException(X) Then
+                Return X
+            ElseIf Program.isException(FUN) Then
+                Return FUN
             End If
 
-            Dim apply As RFunction = doApply
+            Dim apply As RFunction = FUN
 
-            If sequence.GetType Is GetType(Dictionary(Of String, Object)) Then
-                Dim list = DirectCast(sequence, Dictionary(Of String, Object))
+            If X.GetType Is GetType(Dictionary(Of String, Object)) Then
+                Dim list = DirectCast(X, Dictionary(Of String, Object))
                 Dim names = list.Keys.ToArray
                 Dim seq As Array = names _
                     .Select(Function(key)
@@ -642,7 +708,7 @@ Namespace Runtime.Internal.Invokes
 
                 Return New vector(names, seq, envir)
             Else
-                Dim seq = Runtime.asVector(Of Object)(sequence) _
+                Dim seq = Runtime.asVector(Of Object)(X) _
                     .AsObjectEnumerator _
                     .Select(Function(d)
                                 Return apply.Invoke(envir, {d})
