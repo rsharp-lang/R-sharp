@@ -209,7 +209,7 @@ printSingleElement:
             Dim maxColumns As Integer = Console.WindowWidth
             Dim contents As String() = stringVec.Take(maxPrint).ToArray
             ' maxsize / average size
-            Dim divSize As Integer = CInt(maxColumns / contents.Average(Function(c) c.Length + 1)) - 2
+            Dim divSize As Integer = CInt(maxColumns / contents.Average(Function(c) c.Length + 1)) - 5
             Dim i As i32 = 1 - divSize
 
             For Each row As String() In contents.Split(partitionSize:=divSize)
