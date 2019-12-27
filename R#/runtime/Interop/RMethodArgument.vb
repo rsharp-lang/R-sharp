@@ -67,8 +67,20 @@ Namespace Runtime.Interop
         Public Property isRequireRawVector As Boolean
 
         Public Overrides Function ToString() As String
+            Dim defaultValue As String = "``<NULL>``"
+
+            If [default] Is Nothing Then
+                defaultValue = "``<NULL>``"
+            ElseIf isOptional Then
+                If [default].GetType Is GetType(String) Then
+                    defaultValue = $"""{[default]}"""
+                Else
+                    defaultValue = [default].ToString.ToUpper
+                End If
+            End If
+
             If isOptional Then
-                Return $"``{name}`` as {type} = {If(type.mode = TypeCodes.boolean, [default].ToString.ToUpper, Scripting.ToString([default], "NULL"))}"
+                Return $"``{name}`` as {type} = {defaultValue}"
             Else
                 Return $"``{name}`` as {type}"
             End If
