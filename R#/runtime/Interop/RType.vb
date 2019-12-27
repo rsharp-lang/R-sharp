@@ -66,6 +66,7 @@ Namespace Runtime.Interop
         Public ReadOnly Property isCollection As Boolean
         Public ReadOnly Property raw As Type
         Public ReadOnly Property haveDynamicsProperty As Boolean
+        Public ReadOnly Property isEnvironment As Boolean
 
         Dim names As String()
 
@@ -79,6 +80,7 @@ Namespace Runtime.Interop
                   OrElse raw.IsInheritsFrom(GetType(Array))
             Me.isCollection = raw.ImplementInterface(GetType(IEnumerable)) AndAlso Not raw Is GetType(String)
             Me.mode = raw.GetRTypeCode
+            Me.isEnvironment = raw.IsInheritsFrom(GetType(Environment), strict:=False)
         End Sub
 
         Public Function GetRawElementType() As Type

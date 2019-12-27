@@ -49,7 +49,6 @@
 
 Imports System.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
-Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Runtime.Interop
 
@@ -77,6 +76,14 @@ Namespace Runtime.Interop
                 Else
                     defaultValue = [default].ToString.ToUpper
                 End If
+            End If
+
+            If isObjectList Then
+                Return "..."
+            End If
+
+            If type.isEnvironment Then
+                Return $"[``<Environment>``]"
             End If
 
             If isOptional Then
