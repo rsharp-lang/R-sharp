@@ -56,7 +56,13 @@ Namespace Runtime.Interop
 
         Public Property messages As New List(Of Message)
 
-        Public ReadOnly type As RType
+        Public ReadOnly Property type As RType
+
+        ''' <summary>
+        ''' Change the Print Mode to Invisible
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property invisible As Boolean
 
         Public ReadOnly Property isError As Boolean
             Get
@@ -77,8 +83,9 @@ Namespace Runtime.Interop
         Private Sub New()
         End Sub
 
-        Sub New(value As Object)
+        Sub New(value As Object, Optional invisible As Boolean = False)
             Me.Value = value
+            Me.invisible = invisible
 
             If Not value Is Nothing Then
                 Me.type = RType.GetRSharpType(value.GetType)

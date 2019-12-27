@@ -67,8 +67,8 @@ Namespace Runtime.Internal
         ReadOnly index As New Dictionary(Of String, RMethodInfo)
 
         Sub New()
-            Call GetType(RConversion).pushEnvir
             Call GetType(base).pushEnvir
+            Call GetType(RConversion).pushEnvir
             Call GetType(env).pushEnvir
             Call GetType(linq).pushEnvir
             Call GetType(Invokes.file).pushEnvir
@@ -83,7 +83,9 @@ Namespace Runtime.Internal
         Private Sub pushEnvir(baseModule As Type)
             Call ImportsPackage _
                 .GetAllApi(baseModule, includesInternal:=True) _
-                .Select(Function(m) New RMethodInfo(m)) _
+                .Select(Function(m)
+                            Return New RMethodInfo(m)
+                        End Function) _
                 .DoEach(Sub(m)
                             Call index.Add(m.name, m)
                         End Sub)

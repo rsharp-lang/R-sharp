@@ -130,7 +130,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Rsharp_app_release|x64'">
     <DebugSymbols>true</DebugSymbols>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>bin\x64\Rsharp_app_release\</OutputPath>
+    <OutputPath>..\App\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <DocumentationFile>R_lang.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
@@ -307,12 +307,15 @@
     <Compile Include="Interpreter\ExecuteEngine\Expression.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\env.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\help.vb" />
+    <Compile Include="Runtime\Internal\objects\reflector.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\strings.vb" />
+    <Compile Include="Runtime\Internal\objects\invisible.vb" />
     <Compile Include="Runtime\Internal\objects\names.vb" />
     <Compile Include="Runtime\Internal\objects\unit.vb" />
     <Compile Include="Runtime\Internal\printer\functionPrinter.vb" />
     <Compile Include="Runtime\Internal\htmlPrinter.vb" />
     <Compile Include="Runtime\Interop\RReturn.vb" />
+    <Compile Include="Runtime\RTypeExtensions.vb" />
     <Compile Include="System\Config\Defaults.vb" />
     <Compile Include="Runtime\System\Rscript.vb" />
     <Compile Include="Runtime\System\Interface\RNames.vb" />
@@ -385,6 +388,11 @@
       <Name>47-dotnet_Microsoft.VisualBasic</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\gpl.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\contributions.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

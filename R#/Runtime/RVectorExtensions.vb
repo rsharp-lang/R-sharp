@@ -143,6 +143,10 @@ Namespace Runtime
             Return array
         End Function
 
+        Public Function CTypeOfList(Of T)(list As IDictionary) As Dictionary(Of String, T)
+            Throw New NotImplementedException
+        End Function
+
         ''' <summary>
         ''' 这个函数会确保返回的输出值都是一个数组
         ''' </summary>

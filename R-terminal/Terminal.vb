@@ -51,7 +51,9 @@ Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Terminal
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Configuration
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
@@ -125,9 +127,23 @@ Type 'q()' to quit R.
                 Call Console.WriteLine()
             End If
         ElseIf Not program.isValueAssign AndAlso Not program.isImports Then
-            Call base.print(result, R.globalEnvir)
+            If Not isInvisible(result) Then
+                Call base.print(result, R.globalEnvir)
+            End If
         End If
     End Sub
+
+    Private Function isInvisible(result As Object) As Boolean
+        If result Is Nothing Then
+            Return False
+        ElseIf result.GetType Is GetType(RReturn) Then
+            Return DirectCast(result, RReturn).invisible
+        ElseIf result.GetType Is GetType(invisible) Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
 
     <DebuggerStepThrough>
     <Extension>

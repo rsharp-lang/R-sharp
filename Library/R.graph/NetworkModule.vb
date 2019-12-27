@@ -40,13 +40,20 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.visualize.Network
+Imports Microsoft.VisualBasic.Data.visualize.Network.Analysis
 Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream
 Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream.Generic
 Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports R.graphics
+Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Internal
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports node = Microsoft.VisualBasic.Data.visualize.Network.Graph.Node
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 <Package("igraph")>
 Public Module NetworkModule
@@ -75,6 +82,11 @@ Public Module NetworkModule
         Return NetworkFileIO.Load(directory).CreateGraph(defaultNodeSize:=InteropArgumentHelper.getSize(defaultNodeSize))
     End Function
 
+    ''' <summary>
+    ''' Create a new network graph or clear the given network graph
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <returns></returns>
     <ExportAPI("empty.network")>
     Public Function emptyNetwork(Optional g As NetworkGraph = Nothing) As NetworkGraph
         If g Is Nothing Then
@@ -86,14 +98,74 @@ Public Module NetworkModule
         Return g
     End Function
 
+    ''' <summary>
+    ''' Calculate node degree in given graph
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <returns></returns>
+    <ExportAPI("degree")>
+    Public Function degree(g As NetworkGraph) As Dictionary(Of String, Integer)
+        Return g.ComputeNodeDegrees
+    End Function
+
+    <ExportAPI("add.nodes")>
+    Public Function addNodes(g As NetworkGraph, labels$()) As NetworkGraph
+        For Each label As String In labels
+            Call g.CreateNode(label)
+        Next
+
+        Return g
+    End Function
+
     <ExportAPI("add.node")>
-    Public Function addNode(g As NetworkGraph, label$) As node
-        Return g.CreateNode(label)
+    Public Function addNode(g As NetworkGraph, label$,
+                            <RListObjectArgument>
+                            Optional attrs As Object = Nothing,
+                            Optional env As Environment = Nothing) As node
+
+        Dim node As node = g.CreateNode(label)
+
+        For Each attribute As NamedValue(Of Object) In RListObjectArgumentAttribute.getObjectList(attrs, env)
+            node.data.Add(attribute.Name, Scripting.ToString(attribute.Value))
+        Next
+
+        Return node
     End Function
 
     <ExportAPI("add.edge")>
     Public Function addEdge(g As NetworkGraph, u$, v$) As Edge
         Return g.CreateEdge(u, v)
+    End Function
+
+    ''' <summary>
+    ''' Add edges by a given node label tuple list
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <param name="tuples">a given node label tuple list</param>
+    ''' <returns></returns>
+    <ExportAPI("add.edges")>
+    Public Function addEdges(g As NetworkGraph, tuples As Object) As NetworkGraph
+        Dim nodeLabels As String()
+        Dim edge As Edge
+        Dim i As i32 = 1
+
+        For Each tuple As NamedValue(Of Object) In list.GetSlots(tuples).IterateNameValues
+            nodeLabels = REnv.asVector(Of String)(tuple.Value)
+            edge = g.CreateEdge(nodeLabels(0), nodeLabels(1))
+
+            ' 20191226
+            ' 如果使用数字作为边的编号的话
+            ' 极有可能会出现重复的边编号
+            ' 所以在这里判断一下
+            ' 尽量避免使用数字作为编号
+            If ++i = tuple.Name.ParseInteger Then
+                edge.ID = $"{edge.U.label}..{edge.V.label}"
+            Else
+                edge.ID = tuple.Name
+            End If
+        Next
+
+        Return g
     End Function
 
     <ExportAPI("type_groups")>

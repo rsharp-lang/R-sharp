@@ -6,46 +6,48 @@ require(igraph.render);
 let g = empty.network();
 
 # and then add nodes by given id list
-for(id in ["A","B","C","D","E", "F", "G", "H"]) {
-	g :> add.node(label = id);
-}
+g 
+:> add.nodes(labels = ["A","B","C","D","E", "F", "G", "H"]) 
+:> add.nodes(labels = ["A1","B1","C1","D1","E1", "F1", "G1", "H1"]);
 
-for(id in ["A1","B1","C1","D1","E1", "F1", "G1", "H1"]) {
-	g :> add.node(label = id);
+# add node one by one
+for(id in ["X","Y","Z"]) {
+	g :> add.node(label = id, size = 9);
 }
 
 # add edges between the specific nodes tuples
-g :> add.edge("A", "B");
-g :> add.edge("B", "C");
-g :> add.edge("C", "D");
-g :> add.edge("C", "E");
-g :> add.edge("A", "E");
-g :> add.edge("A", "F");
-g :> add.edge("F", "G");
-g :> add.edge("F", "H");
-g :> add.edge("B", "H");
+g 
+:> add.edges(list(["A", "B"],  ["B", "C"],  ["C", "D"],  ["C", "E"],  ["A", "E"],   ["A", "F"],   ["F", "G"],   ["F", "H"],  ["B", "H"]))
+:> add.edges(list(["B1", "H"], ["B1", "A1"], ["B1", "C1"], ["B1", "D1"], ["D1", "E1"], ["E1", "F1"], ["F1", "G1"], ["G1", "H1"]));
 
-g :> add.edge("B1", "H");
-g :> add.edge("B1", "A1");
-g :> add.edge("B1", "C1");
-g :> add.edge("B1", "D1");
-g :> add.edge("D1", "E1");
-g :> add.edge("E1", "F1");
-g :> add.edge("F1", "G1");
-g :> add.edge("G1", "H1");
-
+# add edges between nodes one by one
 g :> add.edge("H", "H1");
 
-# do network styling
-g :> type_groups(type = "A+",      nodes = ["A","B","C"]);
-g :> type_groups(type = "B_class", nodes = ["D"]);
-g :> type_groups(type = "tails",   nodes = ["F", "G"]);
-g :> type_groups(type = "mirror",  nodes = ["A1","B1","C1","D1","E1", "F1", "G1", "H1"]);
+g :> add.edge("X", "Y");
+g :> add.edge("Y", "Z");
+g :> add.edge("X", "Z");
 
-g :> color.type_group(type = "A+",      color = "red");
-g :> color.type_group(type = "B_class", color = "green");
-g :> color.type_group(type = "tails",   color = "yellow");
-g :> color.type_group(type = "mirror",  color = "purple");
+g :> add.edge("X", "A");
+g :> add.edge("X", "A1");
+
+# do network styling
+g 
+:> type_groups(type = "A+",      nodes = ["A","B","C"])
+:> type_groups(type = "B_class", nodes = ["D"])
+:> type_groups(type = "tails",   nodes = ["F", "G"])
+:> type_groups(type = "mirror",  nodes = ["A1","B1","C1","D1","E1", "F1", "G1", "H1"]);
+
+g 
+:> color.type_group(type = "A+",      color = "red")
+:> color.type_group(type = "B_class", color = "green")
+:> color.type_group(type = "tails",   color = "yellow")
+:> color.type_group(type = "mirror",  color = "purple");
+
+cat("\n");
+str(g :> degree);
+
+# display console progress bar on current y location
+console::progressbar.pin.top();
 
 # Then we can do network layout and 
 # save the generated network model in csv file tables

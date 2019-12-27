@@ -150,8 +150,14 @@ Namespace Interpreter.ExecuteEngine
         }
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim target As RFunction = getFuncVar(envir)
-            Dim result As Object = doInvokeFuncVar(target, envir)
+            Dim target As Object = getFuncVar(envir)
+            Dim result As Object
+
+            If Not target Is Nothing AndAlso target.GetType Is GetType(Message) Then
+                Return target
+            Else
+                result = doInvokeFuncVar(target, envir)
+            End If
 
             If result Is Nothing Then
                 Return Nothing
@@ -179,13 +185,13 @@ Namespace Interpreter.ExecuteEngine
             End If
         End Function
 
-        Private Function getFuncVar(envir As Environment) As RFunction
+        Private Function getFuncVar(envir As Environment) As Object
             ' 当前环境中的函数符号的优先度要高于
             ' 系统环境下的函数符号
             Dim funcVar As RFunction
 
             If Not [namespace].StringEmpty Then
-                Return envir.DoCall(AddressOf invokePackageInternal)
+                Return envir.DoCall(AddressOf getPackageApiImpl)
             End If
 
             If TypeOf funcName Is Literal Then
@@ -222,7 +228,7 @@ Namespace Interpreter.ExecuteEngine
             End If
         End Function
 
-        Private Function invokePackageInternal(envir As Environment) As Object
+        Private Function getPackageApiImpl(envir As Environment) As Object
             ' find package and then load method
             Dim pkg As RPkg = envir.globalEnvironment.packages.FindPackage([namespace], Nothing)
             Dim funcName As String = DirectCast(Me.funcName, Literal).ToString
@@ -235,7 +241,7 @@ Namespace Interpreter.ExecuteEngine
                 If api Is Nothing Then
                     Return Message.SymbolNotFound(envir, $"{[namespace]}::{funcName}", TypeCodes.closure)
                 Else
-                    Return api.Invoke(envir, InvokeParameter.Create(parameters))
+                    Return DirectCast(api, RFunction)
                 End If
             End If
         End Function

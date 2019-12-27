@@ -47,6 +47,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
@@ -58,6 +59,7 @@ Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
@@ -72,6 +74,46 @@ Namespace Runtime.Internal.Invokes
     ''' 在这个模块之中仅包含有最基本的数据操作函数
     ''' </summary>
     Public Module base
+
+        ''' <summary>
+        ''' # The R# License Terms
+        ''' 
+        ''' The license terms under which R# is distributed.
+        ''' </summary>
+        ''' <returns></returns>
+        <ExportAPI("license")>
+        Public Function license() As <RSuppressPrint> Object
+            Call Console.WriteLine(My.Resources.gpl)
+            Return Nothing
+        End Function
+
+        ''' <summary>
+        ''' # ``R#`` Project Contributors
+        ''' 
+        ''' The R# Who-is-who, describing who made significant contributions to the development of R#.
+        ''' </summary>
+        ''' <returns></returns>
+        <ExportAPI("contributors")>
+        Public Function contributors() As <RSuppressPrint> Object
+            Call Console.WriteLine(My.Resources.contributions)
+            Return Nothing
+        End Function
+
+        ''' <summary>
+        ''' # Change the Print Mode to Invisible
+        ''' 
+        ''' Return a (temporarily) invisible copy of an object.
+        ''' </summary>
+        ''' <param name="x">an arbitrary R object.</param>
+        ''' <returns>
+        ''' This function can be useful when it is desired to have functions 
+        ''' return values which can be assigned, but which do not print when 
+        ''' they are not assigned.
+        ''' </returns>
+        <ExportAPI("invisible")>
+        Public Function invisible(x As Object) As <RSuppressPrint> Object
+            Return x
+        End Function
 
         <ExportAPI("neg")>
         Public Function neg(<RRawVectorArgument> o As Object) As Object
@@ -472,11 +514,25 @@ Namespace Runtime.Internal.Invokes
             Return strs
         End Function
 
+        ''' <summary>
+        ''' # Compactly Display the Structure of an Arbitrary ``R#`` Object
+        ''' 
+        ''' Compactly display the internal structure of an R object, a diagnostic function 
+        ''' and an alternative to summary (and to some extent, dput). Ideally, only one 
+        ''' line for each ‘basic’ structure is displayed. It is especially well suited to 
+        ''' compactly display the (abbreviated) contents of (possibly nested) lists. The 
+        ''' idea is to give reasonable output for any R object. It calls args for 
+        ''' (non-primitive) function objects.
+        ''' 
+        ''' ``strOptions()`` Is a convenience function for setting ``options(str = .)``, 
+        ''' see the examples.
+        ''' </summary>
+        ''' <param name="[object]">any R object about which you want to have some information.</param>
+        ''' <returns></returns>
         <ExportAPI("str")>
-        Public Function str(<RRawVectorArgument> x As Object, Optional envir As Environment = Nothing) As Object
-            Dim print As String = classPrinter.printClass(x)
-            Console.WriteLine(print)
-            Return print
+        Public Function str(<RRawVectorArgument> [object] As Object, Optional env As Environment = Nothing) As Object
+            Call Console.WriteLine(reflector.GetStructure([object], env.globalEnvironment))
+            Return Nothing
         End Function
 
         Dim markdown As MarkdownRender = MarkdownRender.DefaultStyleRender

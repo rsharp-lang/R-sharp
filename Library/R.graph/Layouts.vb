@@ -11,11 +11,24 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 <Package("igraph.layouts")>
 Module Layouts
 
+    ''' <summary>
+    ''' Do force directed layout
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <param name="iterations"></param>
+    ''' <param name="clearScreen">
+    ''' Clear of the console screen when display the progress bar.
+    ''' </param>
+    ''' <returns></returns>
     <ExportAPI("layout.force_directed")>
-    Public Function forceDirect(g As NetworkGraph, Optional iterations% = 1000) As NetworkGraph
+    Public Function forceDirect(g As NetworkGraph,
+                                Optional iterations% = 1000,
+                                Optional clearScreen As Boolean = False) As NetworkGraph
+
         Return g.doForceLayout(
             showProgress:=True,
-            iterations:=iterations
+            iterations:=iterations,
+            clearScreen:=clearScreen
         )
     End Function
 
