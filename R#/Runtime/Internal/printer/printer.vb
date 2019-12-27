@@ -1,50 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::7364ba661788ee34d49c53eed7b0b9ec, R#\Runtime\Internal\printer\printer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Delegate Function
-    ' 
-    ' 
-    '     Module printer
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: f64_InternalToString, getStrings, ToString, ValueToString
-    ' 
-    '         Sub: AttachConsoleFormatter, AttachInternalConsoleFormatter, printArray, printInternal, printList
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Delegate Function
+' 
+' 
+'     Module printer
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: f64_InternalToString, getStrings, ToString, ValueToString
+' 
+'         Sub: AttachConsoleFormatter, AttachInternalConsoleFormatter, printArray, printInternal, printList
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -209,12 +209,19 @@ printSingleElement:
             Dim maxColumns As Integer = Console.WindowWidth - 1
             Dim contents As String() = stringVec.Take(maxPrint).ToArray
             ' maxsize / average size
-            Dim divSize As Integer = CInt(maxColumns / contents.Max(Function(c) c.Length + 1)) - 6
+            Dim unitWidth As Integer = contents.Max(Function(c) c.Length) + 1
+            Dim divSize As Integer = maxColumns \ unitWidth - 3
             Dim i As i32 = 1 - divSize
-            Dim unitWidth As Integer = maxColumns \ divSize
 
             For Each row As String() In contents.Split(partitionSize:=divSize)
-                Call Console.WriteLine($"[{i = i + divSize}]{vbTab}" & row.JoinBy(vbTab))
+                Call Console.Write($"[{i = i + divSize}]{vbTab}")
+
+                For Each c As String In row
+                    Call Console.Write(c)
+                    Call Console.Write(New String(" "c, unitWidth - c.Length))
+                Next
+
+                Call Console.WriteLine()
             Next
 
             If xvec.Length > maxPrint Then
