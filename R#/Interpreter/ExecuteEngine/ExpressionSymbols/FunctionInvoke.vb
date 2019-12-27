@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8b1cbfb112703e050634960568bbecc0, R#\Interpreter\ExecuteEngine\ExpressionSymbols\FunctionInvoke.vb"
+﻿#Region "Microsoft.VisualBasic::115c59c190a4ff8a769dffddfd43fe95, R#\Interpreter\ExecuteEngine\ExpressionSymbols\FunctionInvoke.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,7 @@
     '         Properties: [namespace], funcName, type
     ' 
     '         Constructor: (+3 Overloads) Sub New
-    '         Function: doInvokeFuncVar, Evaluate, getFuncVar, invokePackageInternal, invokeRInternal
+    '         Function: doInvokeFuncVar, Evaluate, getFuncVar, getPackageApiImpl, invokeRInternal
     '                   isOptionNames, ToString
     ' 
     ' 
@@ -247,25 +247,22 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Private Function invokeRInternal(funcName$, envir As Environment) As Object
-            If funcName = "list" Then
-                Return Runtime.Internal.Rlist(envir, parameters)
-            ElseIf funcName = "options" Then
+            If funcName = "options" Then
                 If parameters.DoCall(AddressOf isOptionNames) Then
                     Dim names As String() = Runtime.asVector(Of String)(parameters(Scan0).Evaluate(envir))
                     Dim values As list = base.options(names, envir)
 
                     Return values
-                Else
-                    Return base.options(Runtime.Internal.Rlist(envir, parameters), envir)
                 End If
             ElseIf funcName = "data.frame" Then
                 Return Runtime.Internal.Rdataframe(envir, parameters)
-            Else
-                Dim argVals As InvokeParameter() = InvokeParameter.Create(parameters)
-                Dim result As Object = Internal.invokeInternals(envir, funcName, argVals)
-
-                Return result
             End If
+
+            ' invoke internal R# api
+            Dim argVals As InvokeParameter() = InvokeParameter.Create(parameters)
+            Dim result As Object = Internal.invokeInternals(envir, funcName, argVals)
+
+            Return result
         End Function
 
         Private Shared Function isOptionNames(parameters As List(Of Expression)) As Boolean

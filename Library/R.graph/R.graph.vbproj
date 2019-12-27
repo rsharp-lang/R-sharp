@@ -128,6 +128,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Layouts.vb" />
+    <Compile Include="Dijkstra.vb" />
     <Compile Include="Visualize.vb" />
     <Compile Include="NetworkModule.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />

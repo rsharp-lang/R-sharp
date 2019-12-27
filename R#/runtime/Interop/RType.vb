@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f0f127c0cf4fb48d7df76e55c3a221fa, R#\Runtime\Interop\RType.vb"
+﻿#Region "Microsoft.VisualBasic::597273769cc5ebfd410709d7720ee18f, R#\Runtime\Interop\RType.vb"
 
     ' Author:
     ' 
@@ -33,8 +33,8 @@
 
     '     Class RType
     ' 
-    '         Properties: fullName, haveDynamicsProperty, isArray, isCollection, mode
-    '                     raw
+    '         Properties: fullName, haveDynamicsProperty, isArray, isCollection, isEnvironment
+    '                     mode, raw
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: getNames, GetRawElementType, GetRSharpType, populateNames, ToString
@@ -66,6 +66,7 @@ Namespace Runtime.Interop
         Public ReadOnly Property isCollection As Boolean
         Public ReadOnly Property raw As Type
         Public ReadOnly Property haveDynamicsProperty As Boolean
+        Public ReadOnly Property isEnvironment As Boolean
 
         Dim names As String()
 
@@ -79,6 +80,7 @@ Namespace Runtime.Interop
                   OrElse raw.IsInheritsFrom(GetType(Array))
             Me.isCollection = raw.ImplementInterface(GetType(IEnumerable)) AndAlso Not raw Is GetType(String)
             Me.mode = raw.GetRTypeCode
+            Me.isEnvironment = raw.IsInheritsFrom(GetType(Environment), strict:=False)
         End Sub
 
         Public Function GetRawElementType() As Type

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ed82c27f309f33754114eb65cdb475df, R#\Runtime\Interop\RMethodArgument.vb"
+﻿#Region "Microsoft.VisualBasic::417bbc225fd37fe86d984ac367749f7d, R#\Runtime\Interop\RMethodArgument.vb"
 
     ' Author:
     ' 
@@ -49,7 +49,6 @@
 
 Imports System.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
-Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Runtime.Interop
 
@@ -67,8 +66,28 @@ Namespace Runtime.Interop
         Public Property isRequireRawVector As Boolean
 
         Public Overrides Function ToString() As String
+            Dim defaultValue As String = "``<NULL>``"
+
+            If [default] Is Nothing Then
+                defaultValue = "``<NULL>``"
+            ElseIf isOptional Then
+                If [default].GetType Is GetType(String) Then
+                    defaultValue = $"""{[default]}"""
+                Else
+                    defaultValue = [default].ToString.ToUpper
+                End If
+            End If
+
+            If isObjectList Then
+                Return "..."
+            End If
+
+            If type.isEnvironment Then
+                Return $"[``<Environment>``]"
+            End If
+
             If isOptional Then
-                Return $"``{name}`` as {type} = {If(type.mode = TypeCodes.boolean, [default].ToString.ToUpper, Scripting.ToString([default], "NULL"))}"
+                Return $"``{name}`` as {type} = {defaultValue}"
             Else
                 Return $"``{name}`` as {type}"
             End If

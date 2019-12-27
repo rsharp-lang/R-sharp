@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6f1dd3a75e9519a6bfd099ac1d053bfd, R#\Runtime\RVectorExtensions.vb"
+﻿#Region "Microsoft.VisualBasic::67cf230d2fc0717b0247e27bd2838b55, R#\Runtime\RVectorExtensions.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,8 @@
 
     '     Module RVectorExtensions
     ' 
-    '         Function: (+2 Overloads) asVector, createArray, fromArray, getFirst, isVector
+    '         Function: (+2 Overloads) asVector, createArray, CTypeOfList, fromArray, getFirst
+    '                   isVector
     ' 
     ' 
     ' /********************************************************************************/

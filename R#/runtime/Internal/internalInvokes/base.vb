@@ -1,48 +1,49 @@
-﻿#Region "Microsoft.VisualBasic::dd2783a55f8243d5d171b3885d21e363, R#\Runtime\Internal\internalInvokes\base.vb"
+﻿#Region "Microsoft.VisualBasic::42ba6df12a480b498e6c6cc2c0453ce9, R#\Runtime\Internal\internalInvokes\base.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Module base
-' 
-'         Function: [get], [stop], all, any, cat
-'                   createDotNetExceptionMessage, createMessageInternal, doCall, doPrintInternal, getEnvironmentStack
-'                   getOption, globalenv, isEmpty, lapply, length
-'                   names, neg, options, print, sapply
-'                   source, str, warning
-' 
-'         Sub: cls, q, quit
-' 
-' 
-' /********************************************************************************/
+    '     Module base
+    ' 
+    '         Function: [stop], all, any, cat, colnames
+    '                   contributors, createDotNetExceptionMessage, createMessageInternal, doPrintInternal, getEnvironmentStack
+    '                   getOption, invisible, isEmpty, lapply, length
+    '                   license, names, neg, options, print
+    '                   Rlist, rownames, sapply, source, str
+    '                   warning
+    ' 
+    '         Sub: q, quit
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -125,6 +126,40 @@ Namespace Runtime.Internal.Invokes
                     .Select(Function(d) -CDbl(d)) _
                     .ToArray
             End If
+        End Function
+
+        ''' <summary>
+        ''' # Lists – Generic and Dotted Pairs
+        ''' 
+        ''' Functions to construct, coerce and check for both kinds of ``R#`` lists.
+        ''' </summary>
+        ''' <param name="slots">objects, possibly named.</param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
+        <ExportAPI("list")>
+        Public Function Rlist(<RListObjectArgument> slots As Object, envir As Environment) As Object
+            Dim list As New Dictionary(Of String, Object)
+            Dim slot As InvokeParameter
+            Dim key As String
+            Dim value As Object
+            Dim parameters As InvokeParameter() = slots
+
+            For i As Integer = 0 To parameters.Length - 1
+                slot = parameters(i)
+
+                If slot.haveSymbolName Then
+                    ' 不支持tuple
+                    key = slot.name
+                    value = slot.Evaluate(envir)
+                Else
+                    key = i + 1
+                    value = slot.Evaluate(envir)
+                End If
+
+                Call list.Add(key, value)
+            Next
+
+            Return New list With {.slots = list}
         End Function
 
         ''' <summary>

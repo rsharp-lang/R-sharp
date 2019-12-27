@@ -8,11 +8,11 @@ Imports System.Runtime.InteropServices
 
 '查看程序集特性的值
 
-<Assembly: AssemblyTitle("R.base")>
+<Assembly: AssemblyTitle("R# base packages")>
 <Assembly: AssemblyDescription("")>
-<Assembly: AssemblyCompany("Microsoft")>
+<Assembly: AssemblyCompany("SMRUCC")>
 <Assembly: AssemblyProduct("R.base")>
-<Assembly: AssemblyCopyright("Copyright © Microsoft 2019")>
+<Assembly: AssemblyCopyright("Copyright © SMRUCC 2019")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>

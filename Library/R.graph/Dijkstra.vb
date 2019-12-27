@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e81513118e68e0a2699e1c664cfa15ea, R-terminal\CLI\CLI.vb"
+﻿#Region "Microsoft.VisualBasic::004295d7ccb1e61074f84816dc0b900d, Library\R.graph\Dijkstra.vb"
 
     ' Author:
     ' 
@@ -31,44 +31,30 @@
 
     ' Summaries:
 
-    ' Module CLI
+    ' Module Dijkstra
     ' 
-    '     Function: Install
+    '     Function: CreateRouter, DijkstraRoutine
     ' 
     ' /********************************************************************************/
 
 #End Region
 
-Imports System.ComponentModel
-Imports Microsoft.VisualBasic.CommandLine
-Imports Microsoft.VisualBasic.CommandLine.InteropService.SharedORM
+
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports SMRUCC.Rsharp.Runtime
-Imports SMRUCC.Rsharp.System.Configuration
-Imports SMRUCC.Rsharp.System.Package
+Imports Microsoft.VisualBasic.Data.GraphTheory.Dijkstra
+Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
+Imports Microsoft.VisualBasic.Scripting.MetaData
 
-<CLI> Module CLI
+<Package("igraph.dijkstra")>
+Module Dijkstra
 
-    <ExportAPI("--install.packages")>
-    <Description("Install new packages.")>
-    <Usage("--install.packages /module <*.dll> [--verbose]")>
-    Public Function Install(args As CommandLine) As Integer
-        Dim module$ = args <= "/module"
-        Dim config As New Options(ConfigFile.localConfigs)
+    <ExportAPI("router.dijkstra")>
+    Public Function CreateRouter(g As NetworkGraph, Optional undirected As Boolean = False) As DijkstraRouter
+        Return DijkstraRouter.FromNetwork(g, undirected)
+    End Function
 
-        Internal.debug.verbose = args("--verbose")
-        Internal.debug.write($"load config file: {ConfigFile.localConfigs}")
-        Internal.debug.write($"load package registry: {config.lib}")
+    Public Function DijkstraRoutine()
 
-        If [module].StringEmpty Then
-            Return "Missing '/module' argument!".PrintException
-        Else
-            Dim pkgMgr As New PackageManager(config)
-
-            Call pkgMgr.InstallLocals(dllFile:=[module])
-            Call pkgMgr.Flush()
-        End If
-
-        Return 0
     End Function
 End Module
+

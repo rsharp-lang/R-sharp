@@ -1,47 +1,47 @@
-﻿#Region "Microsoft.VisualBasic::3cf28b3cc2b55bdeb985169660cb0dd2, R#\Runtime\Internal\invoke.vb"
+﻿#Region "Microsoft.VisualBasic::7fb04851dde897ffff51b9fab1130255, R#\Runtime\Internal\invoke.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Module invoke
-' 
-'         Constructor: (+1 Overloads) Sub New
-' 
-'         Function: [stop], getFunction, invalidParameter, invokeInternals, missingParameter
-'                   Rdataframe, Rlist
-' 
-'         Sub: pushEnvir
-' 
-' 
-' /********************************************************************************/
+    '     Module invoke
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    ' 
+    '         Function: [stop], getFunction, invalidParameter, invokeInternals, missingParameter
+    '                   Rdataframe
+    ' 
+    '         Sub: pushEnvir
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -122,32 +122,6 @@ Namespace Runtime.Internal
             }
 
             Return dataframe
-        End Function
-
-        Public Function Rlist(envir As Environment, parameters As List(Of Expression)) As Object
-            Dim list As New Dictionary(Of String, Object)
-            Dim slot As Expression
-            Dim key As String
-            Dim value As Object
-
-            For i As Integer = 0 To parameters.Count - 1
-                slot = parameters(i)
-
-                If TypeOf slot Is ValueAssign Then
-                    ' 不支持tuple
-                    key = DirectCast(slot, ValueAssign) _
-                        .targetSymbols(Scan0) _
-                        .DoCall(AddressOf ValueAssign.GetSymbol)
-                    value = DirectCast(slot, ValueAssign).value.Evaluate(envir)
-                Else
-                    key = i + 1
-                    value = slot.Evaluate(envir)
-                End If
-
-                Call list.Add(key, value)
-            Next
-
-            Return New list With {.slots = list}
         End Function
 
         Friend Function missingParameter(funcName$, paramName$, envir As Environment) As Message
