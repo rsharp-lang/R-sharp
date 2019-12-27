@@ -135,7 +135,8 @@ Namespace Runtime.Interop
     # .NET API information
     #
     # module: {rawDeclare}
-    # library: {raw.Assembly.Location}
+    # LibPath: {raw.Assembly.Location.ParentPath}
+    # library: {raw.Assembly.Location.FileName}
     # package: ""{packageName}""
     #
     return call ``R#.interop_[{raw.Name}::{GetRawDeclares().Name}]``(...);

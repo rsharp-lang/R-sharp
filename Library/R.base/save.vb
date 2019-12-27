@@ -57,9 +57,24 @@ Imports RVariable = SMRUCC.Rsharp.Runtime.Components.Variable
 
 Partial Module base
 
+    ''' <summary>
+    ''' # Reload Saved Datasets
+    ''' 
+    ''' Reload datasets written with the function ``save``.
+    ''' </summary>
+    ''' <param name="file">a (readable binary-mode) connection or a character 
+    ''' string giving the name of the file to load (when tilde expansion is 
+    ''' done).</param>
+    ''' <param name="envir">the environment where the data should be loaded.</param>
+    ''' <param name="verbose">
+    ''' should item names be printed during loading?
+    ''' </param>
+    ''' <returns></returns>
     <ExportAPI("load")>
-    <Description("Reload datasets written with the function save.")>
-    Public Function load(file As String, envir As Environment) As Object
+    Public Function load(file As String,
+                         Optional envir As Environment = Nothing,
+                         Optional verbose As Boolean = False) As Object
+
         If Not file.FileExists Then
             Return Internal.debug.stop({"Disk file is unavailable...", file.GetFullPath}, envir)
         End If
@@ -108,19 +123,24 @@ Partial Module base
     End Function
 
     ''' <summary>
-    ''' 数据将会被保存为netCDF文件然后进行zip压缩保存
+    ''' # Save R Objects
+    ''' 
+    ''' writes an external representation of R objects to the specified file. 
+    ''' The objects can be read back from the file at a later date by using 
+    ''' the function load or attach (or data in some cases).
     ''' </summary>
-    ''' <param name="objects">一般为一个list对象</param>
-    ''' <param name="file"></param>
-    ''' <param name="envir"></param>
+    ''' <param name="objects">the names of the objects to be saved (as symbols or character strings).</param>
+    ''' <param name="file">
+    ''' a (writable binary-mode) connection or the name of the file where 
+    ''' the data will be saved (when tilde expansion is done). Must be a 
+    ''' file name for save.image or version = 1.
+    ''' </param>
+    ''' <param name="envir">environment to search for objects to be saved.</param>
     ''' <returns></returns>
     ''' 
     <ExportAPI("save")>
-    <Description("writes an external representation of R objects to the specified file. The objects can be read back from the file at a later date by using the function load or attach (or data in some cases).")>
-    <Argument("objects", False, CLITypes.Undefined, AcceptTypes:={GetType(String())}, Description:="the names of the objects to be saved (as symbols or character strings).")>
-    <Argument("file", False, CLITypes.File, Description:="a (writable binary-mode) connection or the name of the file where the data will be saved (when tilde expansion is done). Must be a file name for save.image or version = 1.")>
-    <Argument("envir", True, CLITypes.File, Description:="environment to search for objects to be saved.")>
     Public Function save(<RListObjectArgument> objects As Object, file$, envir As Environment) As Object
+        ' 数据将会被保存为netCDF文件然后进行zip压缩保存
         If file.StringEmpty Then
             Return Internal.debug.stop("'file' must be specified!", envir)
         ElseIf objects Is Nothing Then

@@ -131,6 +131,8 @@ Namespace System.Package
                 Call markdown.DoPrint("# " & line.Trim, 6)
             Next
 
+            Call Console.WriteLine()
+
             Call markdown.DoPrint(contentLines(-2).Trim, 6)
             Call markdown.DoPrint(contentLines(-1).Trim, 2)
 

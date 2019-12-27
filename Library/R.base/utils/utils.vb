@@ -54,6 +54,32 @@ Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.dataframe
 <Package("utils", Category:=APICategories.UtilityTools)>
 Public Module utils
 
+    ''' <summary>
+    ''' # Data Input
+    ''' 
+    ''' Reads a file in table format and creates a data frame from it, 
+    ''' with cases corresponding to lines and variables to fields in 
+    ''' the file.
+    ''' </summary>
+    ''' <param name="file">
+    ''' the name of the file which the data are to be read from. Each 
+    ''' row of the table appears as one line of the file. If it does 
+    ''' not contain an absolute path, the file name is relative to the 
+    ''' current working directory, getwd(). Tilde-expansion is performed 
+    ''' where supported. This can be a compressed file (see file).
+    ''' 
+    ''' Alternatively, file can be a readable text-mode connection (which 
+    ''' will be opened for reading if necessary, And if so closed (And 
+    ''' hence destroyed) at the end of the function call). (If ``stdin()``
+    ''' Is used, the prompts for lines may be somewhat confusing. 
+    ''' Terminate input with a blank line Or an EOF signal, Ctrl-D on Unix 
+    ''' And Ctrl-Z on Windows. Any pushback on stdin() will be cleared 
+    ''' before return.)
+    ''' 
+    ''' file can also be a complete URL. (For the supported URL schemes, 
+    ''' see the 'URLs’ section of the help for ``url``.)
+    ''' </param>
+    ''' <returns></returns>
     <ExportAPI("read.csv")>
     Public Function read_csv(file As String) As Rdataframe
         Dim datafile As File = IO.File.Load(file)
@@ -70,7 +96,11 @@ Public Module utils
     End Function
 
     ''' <summary>
+    ''' # Data Output
     ''' 
+    ''' prints its required argument ``x`` (after converting it to a 
+    ''' data frame if it is not one nor a matrix) to a file or 
+    ''' connection.
     ''' </summary>
     ''' <param name="x">
     ''' the object to be written, preferably a matrix or data frame. If not, it is attempted to coerce x to a data frame.
@@ -78,12 +108,12 @@ Public Module utils
     ''' <param name="file">
     ''' either a character string naming a file or a connection open for writing. "" indicates output to the console.
     ''' </param>
-    ''' <param name="envir"></param>
+    ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("write.csv")>
-    Public Function write_csv(<RRawVectorArgument> x As Object, file$, envir As Environment) As Object
+    Public Function write_csv(<RRawVectorArgument> x As Object, file$, env As Environment) As Object
         If x Is Nothing Then
-            Return Internal.debug.stop("Empty dataframe object!", envir)
+            Return Internal.debug.stop("Empty dataframe object!", env)
         End If
 
         Dim type As Type = x.GetType
@@ -103,7 +133,7 @@ Public Module utils
         ElseIf Runtime.isVector(Of DataSet)(x) Then
             Return DirectCast(Runtime.asVector(Of DataSet)(x), DataSet()).SaveTo(path:=file, silent:=True)
         Else
-            Return Message.InCompatibleType(GetType(File), type, envir)
+            Return Message.InCompatibleType(GetType(File), type, env)
         End If
     End Function
 End Module
