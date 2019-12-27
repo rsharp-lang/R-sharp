@@ -82,7 +82,7 @@ Namespace Runtime.Interop
         ''' <param name="arguments">Object list parameter is not allowed!</param>
         ''' <returns></returns>
         Public Function Invoke(envir As Environment, arguments() As InvokeParameter) As Object Implements RFunction.Invoke
-            Dim params As NamedValue(Of Object)() = InvokeParameter.CreateArguments(envir, arguments).NamedValues
+            Dim params As NamedValue(Of Object)() = InvokeParameter.CreateArguments(envir, arguments).NamedValues.ToArray
             Dim method As MethodInfo = GetMethod(params)
             ' Dim result As Object = method.Invoke(Nothing,)
 

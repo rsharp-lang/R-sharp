@@ -78,6 +78,11 @@ Namespace Interpreter.ExecuteEngine
             GetType(Boolean())
         }
 
+        Friend Shared ReadOnly characters As Index(Of Type) = {
+            GetType(String), GetType(String()),
+            GetType(Char), GetType(Char())
+        }
+
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim a As Object = left.Evaluate(envir)
             Dim b As Object = right.Evaluate(envir)

@@ -51,6 +51,7 @@
 Imports System.Drawing
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -119,8 +120,8 @@ Namespace Runtime.Internal.ConsolePrinter
                 End With
             ElseIf valueType Is GetType(vector) Then
                 Call DirectCast(x, vector).data.printArray(maxPrint, env)
-            ElseIf valueType Is GetType(Dictionary(Of String, Object)) Then
-                Call DirectCast(x, Dictionary(Of String, Object)).printList(listPrefix, maxPrint, env)
+            ElseIf valueType.ImplementInterface(GetType(IDictionary)) Then
+                Call DirectCast(x, IDictionary).printList(listPrefix, maxPrint, env)
             ElseIf valueType Is GetType(dataframe) Then
                 Call DirectCast(x, dataframe) _
                     .GetTable _
@@ -133,18 +134,19 @@ printSingleElement:
         End Sub
 
         <Extension>
-        Private Sub printList(list As Dictionary(Of String, Object), listPrefix$, maxPrint%, env As GlobalEnvironment)
-            For Each slot As KeyValuePair(Of String, Object) In list
-                Dim key$ = slot.Key
+        Private Sub printList(list As IDictionary, listPrefix$, maxPrint%, env As GlobalEnvironment)
+            For Each objKey As Object In list.Keys
+                Dim slotValue As Object = list(objKey)
+                Dim key$ = objKey.ToString
 
                 If key.IsPattern("\d+") Then
-                    key = $"{listPrefix}[[{slot.Key}]]"
+                    key = $"{listPrefix}[[{key}]]"
                 Else
-                    key = $"{listPrefix}${slot.Key}"
+                    key = $"{listPrefix}${key}"
                 End If
 
                 Call Console.WriteLine(key)
-                Call printer.printInternal(slot.Value, key, maxPrint, env)
+                Call printer.printInternal(slotValue, key, maxPrint, env)
                 Call Console.WriteLine()
             Next
         End Sub
