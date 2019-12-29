@@ -50,8 +50,8 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 
 Namespace Interpreter.ExecuteEngine
