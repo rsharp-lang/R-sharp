@@ -71,7 +71,11 @@ Namespace System.Package
             Dim type As Type = Me.FindPackage(pkgName, Nothing).package
             Dim docs As ProjectType = packageDocs.GetAnnotations(type)
 
-            Return docs.Summary
+            If docs Is Nothing Then
+                Return Nothing
+            Else
+                Return docs.Summary
+            End If
         End Function
 
         ''' <summary>
