@@ -50,7 +50,7 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Interop
 
-Namespace Runtime.Internal
+Namespace Runtime.Internal.Object
 
     ''' <summary>
     ''' Proxy for VB.NET class <see cref="Object"/>

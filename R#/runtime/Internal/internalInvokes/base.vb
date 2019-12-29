@@ -1,54 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::42ba6df12a480b498e6c6cc2c0453ce9, R#\Runtime\Internal\internalInvokes\base.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module base
-    ' 
-    '         Function: [stop], all, any, cat, colnames
-    '                   contributors, createDotNetExceptionMessage, createMessageInternal, doPrintInternal, getEnvironmentStack
-    '                   getOption, invisible, isEmpty, lapply, length
-    '                   license, names, neg, options, print
-    '                   Rlist, rownames, sapply, source, str
-    '                   warning
-    ' 
-    '         Sub: q, quit
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module base
+' 
+'         Function: [stop], all, any, cat, colnames
+'                   contributors, createDotNetExceptionMessage, createMessageInternal, doPrintInternal, getEnvironmentStack
+'                   getOption, invisible, isEmpty, lapply, length
+'                   license, names, neg, options, print
+'                   Rlist, rownames, sapply, source, str
+'                   warning
+' 
+'         Sub: q, quit
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
-Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
@@ -60,14 +59,15 @@ Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Interpreter
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Configuration
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports RObj = SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Runtime.Internal.Invokes
 
@@ -352,9 +352,9 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("names")>
         Public Function names([object] As Object, Optional namelist As Array = Nothing, Optional envir As Environment = Nothing) As Object
             If namelist Is Nothing OrElse namelist.Length = 0 Then
-                Return Internal.names.getNames([object], envir)
+                Return RObj.names.getNames([object], envir)
             Else
-                Return Internal.names.setNames([object], namelist, envir)
+                Return RObj.names.setNames([object], namelist, envir)
             End If
         End Function
 
@@ -391,9 +391,9 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("rownames")>
         Public Function rownames([object] As Object, Optional namelist As Array = Nothing, Optional envir As Environment = Nothing) As Object
             If namelist Is Nothing OrElse namelist.Length = 0 Then
-                Return Internal.names.getNames([object], envir)
+                Return RObj.names.getNames([object], envir)
             Else
-                Return Internal.names.setNames([object], namelist, envir)
+                Return RObj.names.setNames([object], namelist, envir)
             End If
         End Function
 
@@ -430,9 +430,9 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("colnames")>
         Public Function colnames([object] As Object, Optional namelist As Array = Nothing, Optional envir As Environment = Nothing) As Object
             If namelist Is Nothing OrElse namelist.Length = 0 Then
-                Return Internal.names.getNames([object], envir)
+                Return RObj.names.getNames([object], envir)
             Else
-                Return Internal.names.setNames([object], namelist, envir)
+                Return RObj.names.setNames([object], namelist, envir)
             End If
         End Function
 
@@ -741,7 +741,7 @@ Namespace Runtime.Internal.Invokes
                             End Function) _
                     .ToArray
 
-                Return New vector(names, seq, envir)
+                Return New RObj.vector(names, seq, envir)
             Else
                 Dim seq = Runtime.asVector(Of Object)(X) _
                     .AsObjectEnumerator _
@@ -750,7 +750,7 @@ Namespace Runtime.Internal.Invokes
                             End Function) _
                     .ToArray
 
-                Return New vector With {.data = seq}
+                Return New RObj.vector With {.data = seq}
             End If
         End Function
 
