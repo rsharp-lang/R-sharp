@@ -48,10 +48,14 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace System.Package
 
+    ''' <summary>
+    ''' The R# package module wrapper
+    ''' </summary>
     Public Class Package
 
         Public Property info As PackageAttribute
@@ -120,6 +124,13 @@ Namespace System.Package
             Else
                 Return New RMethodInfo(apiHandle)
             End If
+        End Function
+
+        Public Function GetPackageDescription(env As Environment) As String
+            Dim pkgMgr As PackageManager = env.globalEnvironment.packages
+            Dim docs As String = pkgMgr.GetPackageDocuments([namespace])
+
+            Return docs
         End Function
 
         Public Overrides Function ToString() As String
