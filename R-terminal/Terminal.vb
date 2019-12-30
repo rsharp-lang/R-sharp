@@ -61,7 +61,7 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 Module Terminal
 
     Dim R As RInterpreter
-    Dim echo As Index(Of String) = {"print", "cat", "echo", "q", "quit"}
+    Dim echo As Index(Of String) = {"print", "cat", "echo", "q", "quit", "require", "library"}
 
     Sub New()
         Dim Rcore = GetType(RInterpreter).Assembly.FromAssembly
@@ -119,9 +119,9 @@ Type 'q()' to quit R.
             Return
         End If
 
-        If program.Count = 1 AndAlso program.EndWithFuncCalls(echo.Objects) Then
+        If program.EndWithFuncCalls(echo.Objects) Then
             ' do nothing
-            Dim funcName As Literal = DirectCast(program.First, FunctionInvoke).funcName
+            Dim funcName As Literal = DirectCast(program.Last, FunctionInvoke).funcName
 
             If funcName = "cat" Then
                 Call Console.WriteLine()
@@ -148,7 +148,17 @@ Type 'q()' to quit R.
     <DebuggerStepThrough>
     <Extension>
     Private Function isImports(program As RProgram) As Boolean
-        Return program.Count = 1 AndAlso TypeOf program.First Is [Imports]
+        If program.Count <> 1 Then
+            Return False
+        Else
+            Dim Rexp As Expression = program.First
+
+            If TypeOf Rexp Is [Imports] OrElse TypeOf Rexp Is Require Then
+                Return True
+            Else
+                Return False
+            End If
+        End If
     End Function
 
     <DebuggerStepThrough>
