@@ -142,7 +142,7 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Public Function GetPrintContent() As String Implements RPrint.GetPrintContent
-            Return $"**{name}**"
+            Return $"``{name}``"
         End Function
     End Class
 End Namespace
