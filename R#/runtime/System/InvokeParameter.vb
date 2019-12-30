@@ -103,6 +103,11 @@ Namespace Runtime.Components
             End Get
         End Property
 
+        ''' <summary>
+        ''' get value part
+        ''' </summary>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function Evaluate(envir As Environment) As Object
             If value Is Nothing Then

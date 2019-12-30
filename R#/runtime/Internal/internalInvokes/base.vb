@@ -373,8 +373,9 @@ Namespace Runtime.Internal.Invokes
         Public Function options(<RListObjectArgument> opts As Object, envir As Environment) As Object
             Dim configs As Options = envir.globalEnvironment.options
             Dim values As list
+            Dim type As Type = opts.GetType
 
-            If opts.GetType Is GetType(String()) Then
+            If type Is GetType(String()) Then
                 values = New list With {
                     .slots = DirectCast(opts, String()) _
                         .ToDictionary(Function(key) key,
@@ -382,12 +383,28 @@ Namespace Runtime.Internal.Invokes
                                           Return CObj(configs.getOption(key, ""))
                                       End Function)
                 }
-            Else
+            ElseIf type Is GetType(list) Then
                 values = DirectCast(opts, list)
 
                 For Each value As KeyValuePair(Of String, Object) In values.slots
                     Try
                         configs.setOption(value.Key, value.Value)
+                    Catch ex As Exception
+                        Return Internal.stop(ex, envir)
+                    End Try
+                Next
+            Else
+                values = New list With {
+                    .slots = New Dictionary(Of String, Object)
+                }
+
+                ' invoke parameters
+                For Each value As InvokeParameter In DirectCast(opts, InvokeParameter())
+                    Dim name = value.name
+                    Dim cfgValue As Object = value.Evaluate(envir)
+
+                    Try
+                        values.slots(name) = configs.setOption(name, Scripting.ToString(cfgValue))
                     Catch ex As Exception
                         Return Internal.stop(ex, envir)
                     End Try
