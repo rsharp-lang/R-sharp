@@ -41,18 +41,21 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.visualize.Network
 Imports Microsoft.VisualBasic.Data.visualize.Network.Analysis
 Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream
 Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream.Generic
 Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports R.graphics
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports node = Microsoft.VisualBasic.Data.visualize.Network.Graph.Node
@@ -144,8 +147,8 @@ Public Module NetworkModule
     ''' <returns></returns>
     <ExportAPI("attrs")>
     Public Function setAttributes(<RRawVectorArgument> nodes As Object,
-                                   <RListObjectArgument> attrs As Object,
-                                   Optional env As Environment = Nothing) As Object
+                                  <RListObjectArgument> attrs As Object,
+                                  Optional env As Environment = Nothing) As Object
 
         Dim attrValues As NamedValue(Of String)() = RListObjectArgumentAttribute _
             .getObjectList(attrs, env) _
@@ -252,6 +255,52 @@ Public Module NetworkModule
                         n.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) = type
                     End Sub)
         Return g
+    End Function
+
+    ''' <summary>
+    ''' Node select by group or other condition
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <param name="typeSelector$"></param>
+    ''' <returns></returns>
+    <ExportAPI("select")>
+    Public Function getByGroup(g As NetworkGraph, typeSelector As Object, Optional env As Environment = Nothing) As Object
+        If typeSelector Is Nothing Then
+            Return {}
+        ElseIf typeSelector.GetType Is GetType(String) Then
+            Dim typeStr$ = typeSelector.ToString
+
+            Return g.vertex _
+                .Where(Function(n)
+                           Return n.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) = typeStr
+                       End Function) _
+                .ToArray
+        ElseIf REnv.isVector(Of String)(typeSelector) Then
+            Dim typeIndex As Index(Of String) = REnv _
+                .asVector(Of String)(typeSelector) _
+                .AsObjectEnumerator(Of String) _
+                .ToArray
+
+            Return g.vertex _
+                .Where(Function(n)
+                           Return n.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) Like typeIndex
+                       End Function) _
+                .ToArray
+        ElseIf typeSelector.GetType.ImplementInterface(GetType(RFunction)) Then
+            Dim selector As RFunction = typeSelector
+
+            Return g.vertex _
+                .Where(Function(n)
+                           Dim test As Object = selector.Invoke(env, InvokeParameter.Create(n))
+                           ' get test result
+                           Return REnv _
+                               .asLogical(test) _
+                               .FirstOrDefault
+                       End Function) _
+                .ToArray
+        Else
+            Return Message.InCompatibleType(GetType(RFunction), typeSelector.GetType, env)
+        End If
     End Function
 
 End Module

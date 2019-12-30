@@ -72,7 +72,7 @@ Namespace Runtime.Interop
 
     End Class
 
-    Friend Class RuntimeValueLiteral : Inherits Expression
+    Public Class RuntimeValueLiteral : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
             Get
@@ -84,7 +84,7 @@ Namespace Runtime.Interop
             End Get
         End Property
 
-        Public value As Object
+        Public ReadOnly Property value As Object
 
         Sub New(value As Object)
             Me.value = value
