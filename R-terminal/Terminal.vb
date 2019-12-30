@@ -114,8 +114,13 @@ Type 'q()' to quit R.
     Private Sub doRunScript(script As String)
         Dim program As RProgram = RProgram.BuildProgram(script)
         Dim result As Object = REnv.TryCatch(Function() R.Run(program))
+        Dim requirePrintErr As Boolean = False
 
-        If RProgram.isException(result, R.globalEnvir) Then
+        If RProgram.isException(result, R.globalEnvir, isDotNETException:=requirePrintErr) Then
+            If requirePrintErr Then
+                Call REnv.Internal.debug.PrintMessageInternal(result)
+            End If
+
             Return
         End If
 

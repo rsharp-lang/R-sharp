@@ -158,7 +158,7 @@ Namespace Interpreter
                 Dim result As Message = globalEnvir.LoadLibrary(packageName)
 
                 If Not result Is Nothing Then
-                    Call Interpreter.printMessageInternal(result)
+                    Call Internal.debug.PrintMessageInternal(result)
                 End If
             End If
 
@@ -234,13 +234,18 @@ Namespace Interpreter
             last.value = result
 
             If Program.isException(result) Then
-                Call printMessageInternal(message:=result)
+                Call VBDebugger.WaitOutput()
+                Call Internal.debug.PrintMessageInternal(message:=result)
             End If
 
             If globalEnvir.messages > 0 Then
+                Call VBDebugger.WaitOutput()
+
                 For Each message As Message In globalEnvir.messages
-                    Call message.DoCall(AddressOf printMessageInternal)
+                    Call message.DoCall(AddressOf Internal.debug.PrintMessageInternal)
                 Next
+
+                Call globalEnvir.messages.Clear()
             End If
 
             Return result
