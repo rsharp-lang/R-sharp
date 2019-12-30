@@ -177,6 +177,14 @@ Public Module NetworkModule
 
         If id Is Nothing Then
             Return Nothing
+        End If
+
+        Dim idtype As Type = id.GetType
+
+        If idtype Is GetType(Integer) Then
+            Return g.GetElementByID(DirectCast(id, Integer))
+        ElseIf idtype Is GetType(String) Then
+            Return g.GetElementByID(DirectCast(id, String))
         ElseIf REnv.isVector(Of Integer)(id) Then
             array = REnv.asVector(Of Integer)(id) _
                 .AsObjectEnumerator _
@@ -195,11 +203,7 @@ Public Module NetworkModule
             Return Message.InCompatibleType(GetType(String), id.GetType, env)
         End If
 
-        If array.Length = 1 Then
-            Return array.GetValue(Scan0)
-        Else
-            Return array
-        End If
+        Return array
     End Function
 
     <ExportAPI("type_groups")>
