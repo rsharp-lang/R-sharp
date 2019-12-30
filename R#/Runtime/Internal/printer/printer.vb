@@ -214,6 +214,10 @@ printSingleElement:
             Dim divSize As Integer = maxColumns \ unitWidth - 3
             Dim i As i32 = 1 - divSize
 
+            If divSize <= 0 Then
+                divSize = 1
+            End If
+
             For Each row As String() In contents.Split(partitionSize:=divSize)
                 Call Console.Write($"[{i = i + divSize}]{vbTab}")
 

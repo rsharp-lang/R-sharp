@@ -188,13 +188,15 @@ Namespace Interpreter
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Shared Function isException(ByRef result As Object, Optional envir As Environment = Nothing) As Boolean
+        Public Shared Function isException(ByRef result As Object, Optional envir As Environment = Nothing, ByRef Optional isDotNETException As Boolean = False) As Boolean
             If result Is Nothing Then
                 Return False
             ElseIf result.GetType Is GetType(Message) Then
                 Return DirectCast(result, Message).level = MSG_TYPES.ERR
             ElseIf Not envir Is Nothing AndAlso result.GetType.IsInheritsFrom(GetType(Exception)) Then
+                isDotNETException = True
                 result = Internal.stop(result, envir)
+
                 Return True
             Else
                 Return False

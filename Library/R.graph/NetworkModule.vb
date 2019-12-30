@@ -51,7 +51,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports R.graphics
 Imports SMRUCC.Rsharp.Runtime
-Imports SMRUCC.Rsharp.Runtime.Internal
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports node = Microsoft.VisualBasic.Data.visualize.Network.Graph.Node
 Imports REnv = SMRUCC.Rsharp.Runtime

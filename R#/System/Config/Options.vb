@@ -128,6 +128,10 @@ Namespace System.Configuration
                               End Function)
         End Sub
 
+        Public Overrides Function ToString() As String
+            Return $"{configValues.Count} configuration values: {configValues.Keys.Take(5).JoinBy(", ")}..."
+        End Function
+
         ''' <summary>
         ''' Get configuration value string, if the option is not exists in current configuration, 
         ''' then this function will create a new configuration value with use default value.
@@ -135,7 +139,7 @@ Namespace System.Configuration
         ''' <param name="opt"></param>
         ''' <param name="default$"></param>
         ''' <returns></returns>
-        Public Function getOption(opt As String, Optional default$ = Nothing) As String
+        Public Function getOption(opt$, Optional default$ = Nothing) As String
             If configValues.ContainsKey(opt) Then
                 Return configValues(opt)
             Else
@@ -160,7 +164,7 @@ Namespace System.Configuration
 
             Call flush()
 
-            Return opt
+            Return value
         End Function
 
         ''' <summary>
