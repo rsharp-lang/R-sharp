@@ -12,5 +12,7 @@ g :> add.edge("G", "C1");
 g :> add.edge("G", "B1");
 g :> add.edge("Z", "D");
 
+g :> add.node("ABCDEFG");
+
 # z is similar to g
 print(graph.jaccard(g, z));

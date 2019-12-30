@@ -25,7 +25,7 @@ Module Comparison
     ''' <param name="cutoff#"></param>
     ''' <returns></returns>
     <ExportAPI("graph.jaccard")>
-    Public Function similarity(a As NetworkGraph, b As NetworkGraph, Optional cutoff# = 0.65) As Double
+    Public Function similarity(a As NetworkGraph, b As NetworkGraph, Optional cutoff# = 0.85) As Double
         Return Analysis.GraphSimilarity(a, b, cutoff)
     End Function
 End Module
