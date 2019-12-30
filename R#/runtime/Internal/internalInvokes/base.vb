@@ -543,7 +543,7 @@ Namespace Runtime.Internal.Invokes
                        .JoinBy("; ")
                     )
                 Else
-                    Return base.createMessageInternal(message, envir, level:=MSG_TYPES.ERR)
+                    Return base.CreateMessageInternal(message, envir, level:=MSG_TYPES.ERR)
                 End If
             End If
         End Function
@@ -596,7 +596,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="envir"></param>
         ''' <param name="level">The message level</param>
         ''' <returns></returns>
-        Private Function createMessageInternal(messages As Object, envir As Environment, level As MSG_TYPES) As Message
+        Friend Function CreateMessageInternal(messages As Object, envir As Environment, level As MSG_TYPES) As Message
             Return New Message With {
                 .message = Runtime.asVector(Of Object)(messages) _
                     .AsObjectEnumerator _
@@ -612,7 +612,7 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("warning")>
         <DebuggerStepThrough>
         Public Function warning(<RRawVectorArgument> message As Object, Optional envir As Environment = Nothing) As Message
-            Return createMessageInternal(message, envir, level:=MSG_TYPES.WRN)
+            Return CreateMessageInternal(message, envir, level:=MSG_TYPES.WRN)
         End Function
 
         ''' <summary>
