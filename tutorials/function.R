@@ -9,4 +9,10 @@ let add.abs as function(x, y) {
 	return x + y;
 }
 
+# print user function which is declared in 
+# current R# script
 print(add.abs);
+
+# print api function which is declared in a 
+# package library module file
+print(list);
