@@ -17,4 +17,15 @@ Module Comparison
         Return Analysis.NodeSimilarity(a, b)
     End Function
 
+    ''' <summary>
+    ''' calculate graph jaccard similarity based on the nodes' cos score.
+    ''' </summary>
+    ''' <param name="a"></param>
+    ''' <param name="b"></param>
+    ''' <param name="cutoff#"></param>
+    ''' <returns></returns>
+    <ExportAPI("graph.jaccard")>
+    Public Function similarity(a As NetworkGraph, b As NetworkGraph, Optional cutoff# = 0.65) As Double
+        Return Analysis.GraphSimilarity(a, b, cutoff)
+    End Function
 End Module
