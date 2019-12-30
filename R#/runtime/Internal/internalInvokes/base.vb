@@ -350,7 +350,11 @@ Namespace Runtime.Internal.Invokes
         ''' return value from the left-hand side.)
         ''' </returns>
         <ExportAPI("names")>
-        Public Function names([object] As Object, Optional namelist As Array = Nothing, Optional envir As Environment = Nothing) As Object
+        Public Function names([object] As Object,
+                              <RByRefValueAssign>
+                              Optional namelist As Array = Nothing,
+                              Optional envir As Environment = Nothing) As Object
+
             If namelist Is Nothing OrElse namelist.Length = 0 Then
                 Return RObj.names.getNames([object], envir)
             Else
@@ -389,7 +393,11 @@ Namespace Runtime.Internal.Invokes
         ''' by as.character, And setting colnames will convert the row names To character.
         ''' </remarks>
         <ExportAPI("rownames")>
-        Public Function rownames([object] As Object, Optional namelist As Array = Nothing, Optional envir As Environment = Nothing) As Object
+        Public Function rownames([object] As Object,
+                                 <RByRefValueAssign>
+                                 Optional namelist As Array = Nothing,
+                                 Optional envir As Environment = Nothing) As Object
+
             If namelist Is Nothing OrElse namelist.Length = 0 Then
                 Return RObj.names.getNames([object], envir)
             Else
@@ -428,7 +436,11 @@ Namespace Runtime.Internal.Invokes
         ''' by as.character, And setting colnames will convert the row names To character.
         ''' </remarks>
         <ExportAPI("colnames")>
-        Public Function colnames([object] As Object, Optional namelist As Array = Nothing, Optional envir As Environment = Nothing) As Object
+        Public Function colnames([object] As Object,
+                                 <RByRefValueAssign>
+                                 Optional namelist As Array = Nothing,
+                                 Optional envir As Environment = Nothing) As Object
+
             If namelist Is Nothing OrElse namelist.Length = 0 Then
                 Return RObj.names.getNames([object], envir)
             Else
