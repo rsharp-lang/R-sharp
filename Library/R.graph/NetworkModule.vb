@@ -206,7 +206,14 @@ Public Module NetworkModule
         Return array
     End Function
 
-    <ExportAPI("type_groups")>
+    ''' <summary>
+    ''' Make node groups by given type name
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <param name="type"></param>
+    ''' <param name="nodes"></param>
+    ''' <returns></returns>
+    <ExportAPI("groups")>
     Public Function typeGroupOfNodes(g As NetworkGraph, type$, nodes As String()) As NetworkGraph
         Call nodes _
             .Select(AddressOf g.GetElementByID) _
