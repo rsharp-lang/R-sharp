@@ -135,6 +135,37 @@ Public Module NetworkModule
         Return node
     End Function
 
+    ''' <summary>
+    ''' Set node attribute data
+    ''' </summary>
+    ''' <param name="nodes"></param>
+    ''' <param name="attrs"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("attrs")>
+    Public Function setAttributes(<RRawVectorArgument> nodes As Object,
+                                   <RListObjectArgument> attrs As Object,
+                                   Optional env As Environment = Nothing) As Object
+
+        Dim attrValues As NamedValue(Of String)() = RListObjectArgumentAttribute _
+            .getObjectList(attrs, env) _
+            .Select(Function(a)
+                        Return New NamedValue(Of String) With {
+                            .Name = a.Name,
+                            .Value = Scripting.ToString(a.Value)
+                        }
+                    End Function) _
+            .ToArray
+
+        For Each node As node In REnv.asVector(Of node)(nodes)
+            For Each a In attrValues
+                node.data(a.Name) = a.Value
+            Next
+        Next
+
+        Return nodes
+    End Function
+
     <ExportAPI("add.edge")>
     Public Function addEdge(g As NetworkGraph, u$, v$) As Edge
         Return g.CreateEdge(u, v)
