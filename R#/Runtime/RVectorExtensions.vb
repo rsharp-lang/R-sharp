@@ -58,8 +58,14 @@ Namespace Runtime
         ''' <param name="x"></param>
         ''' <returns></returns>
         Public Function isVector(Of T)(x As Object) As Boolean
-            If x Is Nothing OrElse Not x.GetType.IsArray Then
+            If x Is Nothing Then
                 Return False
+            ElseIf Not x.GetType.IsArray Then
+                If x.GetType Is GetType(T) Then
+                    Return True
+                Else
+                    Return False
+                End If
             Else
                 Dim type As Type = x.GetType
 
