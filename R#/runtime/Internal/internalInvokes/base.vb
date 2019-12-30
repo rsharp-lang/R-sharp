@@ -217,13 +217,33 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
-        ''' Get vector length
-        ''' </summary>
-        ''' <param name="x"></param>
-        ''' <returns></returns>
+        ''' # Length of an Object
         ''' 
+        ''' Get or set the length of vectors (including lists) and factors, 
+        ''' and of any other R object for which a method has been defined.
+        ''' </summary>
+        ''' <param name="x">an R object. For replacement, a vector or factor.</param>
+        ''' <param name="newSize">
+        ''' a non-negative integer or double (which will be rounded down).
+        ''' </param>
+        ''' <returns>
+        ''' The default method for length currently returns a non-negative 
+        ''' integer of length 1, except for vectors of more than 2^31 - 1 
+        ''' elements, when it returns a double.
+        '''
+        ''' For vectors(including lists) And factors the length Is the 
+        ''' number of elements. For an environment it Is the number of 
+        ''' objects in the environment, And NULL has length 0. For expressions 
+        ''' And pairlists (including language objects And dotlists) it Is the 
+        ''' length of the pairlist chain. All other objects (including 
+        ''' functions) have length one: note that For functions this differs 
+        ''' from S.
+        '''
+        ''' The replacement form removes all the attributes Of x except its 
+        ''' names, which are adjusted (And If necessary extended by "").
+        ''' </returns>
         <ExportAPI("length")>
-        Public Function length(<RRawVectorArgument> x As Object) As Integer
+        Public Function length(<RRawVectorArgument> x As Object, <RByRefValueAssign> Optional newSize As Integer = -1) As Integer
             If x Is Nothing Then
                 Return 0
             ElseIf x.GetType.IsArray Then
@@ -235,15 +255,62 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' # Are Some Values True?
+        ''' 
+        ''' Given a set of logical vectors, is at least one of the values true?
+        ''' </summary>
+        ''' <param name="test">
+        ''' zero or more logical vectors. Other objects of zero length are ignored, 
+        ''' and the rest are coerced to logical ignoring any class.
+        ''' </param>
+        ''' <param name="narm">
+        ''' logical. If true NA values are removed before the result Is computed.
+        ''' </param>
+        ''' <returns>
+        ''' The value is a logical vector of length one.
+        '''
+        ''' Let x denote the concatenation of all the logical vectors in ... 
+        ''' (after coercion), after removing NAs if requested by na.rm = TRUE.
+        ''' 
+        ''' The value returned Is True If at least one Of the values In x Is True, 
+        ''' And False If all Of the values In x are False (including If there are 
+        ''' no values). Otherwise the value Is NA (which can only occur If 
+        ''' na.rm = False And ... contains no True values And at least one NA 
+        ''' value).
+        ''' </returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <ExportAPI("any")>
-        Public Function any(<RRawVectorArgument> test As Object) As Object
+        Public Function any(<RRawVectorArgument> test As Object, Optional narm As Boolean = False) As Object
             Return Runtime.asLogical(test).Any(Function(b) b = True)
         End Function
 
+        ''' <summary>
+        ''' # Are All Values True?
+        ''' 
+        ''' Given a set of logical vectors, are all of the values true?
+        ''' </summary>
+        ''' <param name="test">zero or more logical vectors. Other objects of zero 
+        ''' length are ignored, and the rest are coerced to logical ignoring any 
+        ''' class.</param>
+        ''' <param name="narm">
+        ''' logical. If true NA values are removed before the result is computed.
+        ''' </param>
+        ''' <returns>
+        ''' The value is a logical vector of length one.
+        '''
+        ''' Let x denote the concatenation of all the logical vectors in ... 
+        ''' (after coercion), after removing NAs if requested by na.rm = TRUE.
+        '''
+        ''' The value returned Is True If all Of the values In x are True 
+        ''' (including If there are no values), And False If at least one Of 
+        ''' the values In x Is False. Otherwise the value Is NA (which can 
+        ''' only occur If na.rm = False And ... contains no False values And 
+        ''' at least one NA value).
+        ''' </returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <ExportAPI("all")>
-        Public Function all(<RRawVectorArgument> test As Object) As Object
+        Public Function all(<RRawVectorArgument> test As Object, Optional narm As Boolean = False) As Object
             Return Runtime.asLogical(test).All(Function(b) b = True)
         End Function
 
