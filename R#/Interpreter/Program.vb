@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::785cd99c0ee8278390c4814791529598, R#\Interpreter\Program.vb"
+﻿#Region "Microsoft.VisualBasic::750fb4c7c89681c28949c80139bbf461, R#\Interpreter\Program.vb"
 
     ' Author:
     ' 
@@ -34,8 +34,8 @@
     '     Class Program
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: BuildProgram, (+2 Overloads) CreateProgram, Execute, ExecuteCodeLine, GetEnumerator
-    '                   IEnumerable_GetEnumerator, isException, ToString
+    '         Function: BuildProgram, (+2 Overloads) CreateProgram, EndWithFuncCalls, Execute, ExecuteCodeLine
+    '                   GetEnumerator, IEnumerable_GetEnumerator, isException, ToString
     ' 
     ' 
     ' /********************************************************************************/
@@ -188,13 +188,15 @@ Namespace Interpreter
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Shared Function isException(ByRef result As Object, Optional envir As Environment = Nothing) As Boolean
+        Public Shared Function isException(ByRef result As Object, Optional envir As Environment = Nothing, ByRef Optional isDotNETException As Boolean = False) As Boolean
             If result Is Nothing Then
                 Return False
             ElseIf result.GetType Is GetType(Message) Then
                 Return DirectCast(result, Message).level = MSG_TYPES.ERR
             ElseIf Not envir Is Nothing AndAlso result.GetType.IsInheritsFrom(GetType(Exception)) Then
+                isDotNETException = True
                 result = Internal.stop(result, envir)
+
                 Return True
             Else
                 Return False

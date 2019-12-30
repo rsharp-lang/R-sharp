@@ -1,56 +1,88 @@
 ﻿#Region "Microsoft.VisualBasic::a6a87dbf8adb4c0432febf502d2172a5, R#\Runtime\Internal\internalInvokes\strings.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module strings
-    ' 
-    '         Function: AscW, InStr
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module strings
+' 
+'         Function: AscW, InStr
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports BasicString = Microsoft.VisualBasic.Strings
+Imports BASICString = Microsoft.VisualBasic.Strings
 
 Namespace Runtime.Internal.Invokes
 
     ''' <summary>
-    ''' Simulation of the <see cref="Microsoft.VisualBasic.Strings"/> module
+    ''' Simulation of the <see cref="BASICString"/> module
     ''' </summary>
     Module strings
+
+        ''' <summary>
+        ''' Removes all leading and trailing occurrences of a set of characters specified
+        ''' in an array from the current System.String object.
+        ''' </summary>
+        ''' <param name="strings$"></param>
+        ''' <param name="characters">An array of Unicode characters to remove, or null.</param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' The string that remains after all occurrences of the characters in the trimChars
+        ''' parameter are removed from the start and end of the current string. If trimChars
+        ''' is null or an empty array, white-space characters are removed instead. If no
+        ''' characters can be trimmed from the current instance, the method returns the current
+        ''' instance unchanged.
+        ''' </returns>
+        <ExportAPI("trim")>
+        Public Function Trim(strings$(), Optional characters$ = " "c, Optional env As Environment = Nothing) As Object
+            If strings.IsNullOrEmpty Then
+                Return Nothing
+            ElseIf characters Is Nothing Then
+                Return Internal.stop("characters component part for trimmed could not be NULL!", env)
+            End If
+
+            Dim chars As Char() = characters.ToArray()
+
+            Return strings _
+                .Select(Function(str)
+                            Return str.Trim(chars)
+                        End Function) _
+                .ToArray
+        End Function
 
         ''' <summary>
         ''' Returns an integer specifying the start position of the first occurrence of one
@@ -88,7 +120,7 @@ Namespace Runtime.Internal.Invokes
                     method = CompareMethod.Text
                 End If
 
-                Return strings.Select(Function(str) BasicString.InStr(str, substr, method)).ToArray
+                Return strings.Select(Function(str) BASICString.InStr(str, substr, method)).ToArray
             End If
         End Function
 
@@ -113,18 +145,18 @@ Namespace Runtime.Internal.Invokes
             Dim type As Type = x.GetType
 
             If type Is GetType(String) Then
-                Return DirectCast(x, String).Select(AddressOf BasicString.AscW).ToArray
+                Return DirectCast(x, String).Select(AddressOf BASICString.AscW).ToArray
             ElseIf type Is GetType(Char) Then
-                Return {BasicString.AscW(DirectCast(x, Char))}
+                Return {BASICString.AscW(DirectCast(x, Char))}
             ElseIf type Is GetType(Char()) Then
-                Return DirectCast(x, Char()).Select(AddressOf BasicString.AscW).ToArray
+                Return DirectCast(x, Char()).Select(AddressOf BASICString.AscW).ToArray
             ElseIf type Is GetType(String()) Then
                 Return New list With {
                     .slots = DirectCast(x, String()) _
                         .SeqIterator _
                         .ToDictionary(Function(i) CStr(i.i + 1),
                                       Function(i)
-                                          Return CObj(i.value.Select(AddressOf BasicString.AscW).ToArray)
+                                          Return CObj(i.value.Select(AddressOf BASICString.AscW).ToArray)
                                       End Function)
                 }
             Else

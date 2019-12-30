@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::deec3e7c8e9d760dbfd1b6d94210701d, R#\System\Package\PackageManager.vb"
+﻿#Region "Microsoft.VisualBasic::11d20a260f6eaa728b16f934a4345bb6, R#\System\Package\PackageManager.vb"
 
 ' Author:
 ' 
@@ -37,7 +37,7 @@
 ' 
 '         Constructor: (+1 Overloads) Sub New
 ' 
-'         Function: FindPackage, InstallLocals
+'         Function: FindPackage, GenericEnumerator, GetEnumerator, InstallLocals
 ' 
 '         Sub: (+2 Overloads) Dispose, Flush
 ' 
@@ -48,6 +48,7 @@
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Development
+Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.System.Configuration
@@ -66,6 +67,24 @@ Namespace System.Package
             Me.config = config
         End Sub
 
+        Public Function GetPackageDocuments(pkgName As String) As String
+            Dim type As Type = Me.FindPackage(pkgName, Nothing).package
+            Dim docs As ProjectType = packageDocs.GetAnnotations(type)
+
+            If docs Is Nothing Then
+                Return Nothing
+            Else
+                Return docs.Summary
+            End If
+        End Function
+
+        ''' <summary>
+        ''' If the package is not exists or load package failure
+        ''' then this function returns nothing
+        ''' </summary>
+        ''' <param name="packageName"></param>
+        ''' <param name="exception"></param>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function FindPackage(packageName As String, ByRef exception As Exception) As Package
             Return pkgDb.FindPackage(packageName, exception)

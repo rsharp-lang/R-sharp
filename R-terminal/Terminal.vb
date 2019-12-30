@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b6d2c12507910a62bcc76a14abca47dc, R-terminal\Terminal.vb"
+﻿#Region "Microsoft.VisualBasic::f27c33e7d5eaf84ab38c2c8559234329, R-terminal\Terminal.vb"
 
 ' Author:
 ' 
@@ -35,7 +35,7 @@
 ' 
 '     Constructor: (+1 Overloads) Sub New
 ' 
-'     Function: isSimplePrintCall, isValueAssign, RunTerminal
+'     Function: isImports, isInvisible, isValueAssign, RunTerminal
 ' 
 '     Sub: doRunScript, doRunScriptWithSpecialCommand
 ' 
@@ -51,8 +51,8 @@ Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Terminal
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
-Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Configuration
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -61,7 +61,7 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 Module Terminal
 
     Dim R As RInterpreter
-    Dim echo As Index(Of String) = {"print", "cat", "echo", "q", "quit"}
+    Dim echo As Index(Of String) = {"print", "cat", "echo", "q", "quit", "require", "library"}
 
     Sub New()
         Dim Rcore = GetType(RInterpreter).Assembly.FromAssembly
@@ -114,14 +114,19 @@ Type 'q()' to quit R.
     Private Sub doRunScript(script As String)
         Dim program As RProgram = RProgram.BuildProgram(script)
         Dim result As Object = REnv.TryCatch(Function() R.Run(program))
+        Dim requirePrintErr As Boolean = False
 
-        If RProgram.isException(result, R.globalEnvir) Then
+        If RProgram.isException(result, R.globalEnvir, isDotNETException:=requirePrintErr) Then
+            If requirePrintErr Then
+                Call REnv.Internal.debug.PrintMessageInternal(result)
+            End If
+
             Return
         End If
 
-        If program.Count = 1 AndAlso program.EndWithFuncCalls(echo.Objects) Then
+        If program.EndWithFuncCalls(echo.Objects) Then
             ' do nothing
-            Dim funcName As Literal = DirectCast(program.First, FunctionInvoke).funcName
+            Dim funcName As Literal = DirectCast(program.Last, FunctionInvoke).funcName
 
             If funcName = "cat" Then
                 Call Console.WriteLine()
@@ -148,7 +153,17 @@ Type 'q()' to quit R.
     <DebuggerStepThrough>
     <Extension>
     Private Function isImports(program As RProgram) As Boolean
-        Return program.Count = 1 AndAlso TypeOf program.First Is [Imports]
+        If program.Count <> 1 Then
+            Return False
+        Else
+            Dim Rexp As Expression = program.First
+
+            If TypeOf Rexp Is [Imports] OrElse TypeOf Rexp Is Require Then
+                Return True
+            Else
+                Return False
+            End If
+        End If
     End Function
 
     <DebuggerStepThrough>

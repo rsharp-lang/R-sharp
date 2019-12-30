@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::aeced3b40757f156cbbda94a71a6c3e7, R#\Runtime\Interop\RReturn.vb"
+﻿#Region "Microsoft.VisualBasic::0235b13fa84acafe93b558832d2ac0a3, R#\Runtime\Interop\RReturn.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Class RReturn
     ' 
-    '         Properties: HasValue, isError, messages
+    '         Properties: HasValue, invisible, isError, messages, type
     ' 
     '         Constructor: (+2 Overloads) Sub New
     ' 

@@ -48,7 +48,7 @@ Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 
-Namespace Runtime.Internal
+Namespace Runtime.Internal.Object
 
     Public Class vector : Implements RNames, RIndex
 

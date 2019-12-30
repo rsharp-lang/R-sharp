@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cc32bd079a16fe24ddba68cb005fd206, R#\Interpreter\Extensions.vb"
+﻿#Region "Microsoft.VisualBasic::decf2d0ebe27bca6d130a207ebbc76bc, R#\Interpreter\Extensions.vb"
 
     ' Author:
     ' 
@@ -42,15 +42,12 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
-Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ComponentModel.Collection
-Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
-Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Interpreter
 
@@ -96,55 +93,6 @@ Namespace Interpreter
                     Next
                 End If
             Next
-        End Function
-
-        Friend Function printMessageInternal(message As Message) As Object
-            Dim execRoutine$ = message.environmentStack _
-                .Reverse _
-                .Select(Function(frame) frame.Method.Method) _
-                .JoinBy(" -> ")
-            Dim i As i32 = 1
-            Dim backup = Console.ForegroundColor
-
-            Console.ForegroundColor = message.getMessageColor
-            Console.WriteLine($" {message.getMessagePrefix} in {execRoutine}")
-
-            For Each msg As String In message
-                Console.WriteLine($"  {++i}. {msg}")
-            Next
-
-            If Not message.source Is Nothing Then
-                Call Console.WriteLine()
-                Call Console.WriteLine($" R# source: {message.source.ToString}")
-            End If
-
-            Console.ForegroundColor = backup
-
-            Return Nothing
-        End Function
-
-        <Extension>
-        Private Function getMessagePrefix(message As Message) As String
-            Select Case message.level
-                Case MSG_TYPES.ERR : Return "Error"
-                Case MSG_TYPES.INF : Return "Information"
-                Case MSG_TYPES.WRN : Return "Warning"
-                Case MSG_TYPES.DEBUG : Return "Debug output"
-                Case Else
-                    Return "Message"
-            End Select
-        End Function
-
-        <Extension>
-        Private Function getMessageColor(message As Message) As ConsoleColor
-            Select Case message.level
-                Case MSG_TYPES.ERR : Return ConsoleColor.Red
-                Case MSG_TYPES.INF : Return ConsoleColor.Blue
-                Case MSG_TYPES.WRN : Return ConsoleColor.Yellow
-                Case MSG_TYPES.DEBUG : Return ConsoleColor.Green
-                Case Else
-                    Return ConsoleColor.White
-            End Select
         End Function
     End Module
 End Namespace

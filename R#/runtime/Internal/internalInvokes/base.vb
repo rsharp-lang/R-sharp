@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::dd2783a55f8243d5d171b3885d21e363, R#\Runtime\Internal\internalInvokes\base.vb"
+﻿#Region "Microsoft.VisualBasic::42ba6df12a480b498e6c6cc2c0453ce9, R#\Runtime\Internal\internalInvokes\base.vb"
 
 ' Author:
 ' 
@@ -33,13 +33,14 @@
 
 '     Module base
 ' 
-'         Function: [get], [stop], all, any, cat
-'                   createDotNetExceptionMessage, createMessageInternal, doCall, doPrintInternal, getEnvironmentStack
-'                   getOption, globalenv, isEmpty, lapply, length
-'                   names, neg, options, print, sapply
-'                   source, str, warning
+'         Function: [stop], all, any, cat, colnames
+'                   contributors, createDotNetExceptionMessage, createMessageInternal, doPrintInternal, getEnvironmentStack
+'                   getOption, invisible, isEmpty, lapply, length
+'                   license, names, neg, options, print
+'                   Rlist, rownames, sapply, source, str
+'                   warning
 ' 
-'         Sub: cls, q, quit
+'         Sub: q, quit
 ' 
 ' 
 ' /********************************************************************************/
@@ -47,7 +48,6 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
-Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
@@ -59,14 +59,15 @@ Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Interpreter
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Configuration
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports RObj = SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Runtime.Internal.Invokes
 
@@ -128,6 +129,40 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' # Lists – Generic and Dotted Pairs
+        ''' 
+        ''' Functions to construct, coerce and check for both kinds of ``R#`` lists.
+        ''' </summary>
+        ''' <param name="slots">objects, possibly named.</param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
+        <ExportAPI("list")>
+        Public Function Rlist(<RListObjectArgument> slots As Object, envir As Environment) As Object
+            Dim list As New Dictionary(Of String, Object)
+            Dim slot As InvokeParameter
+            Dim key As String
+            Dim value As Object
+            Dim parameters As InvokeParameter() = slots
+
+            For i As Integer = 0 To parameters.Length - 1
+                slot = parameters(i)
+
+                If slot.haveSymbolName Then
+                    ' 不支持tuple
+                    key = slot.name
+                    value = slot.Evaluate(envir)
+                Else
+                    key = i + 1
+                    value = slot.Evaluate(envir)
+                End If
+
+                Call list.Add(key, value)
+            Next
+
+            Return New list With {.slots = list}
+        End Function
+
+        ''' <summary>
         ''' This function returns a logical value to determine that the given object is empty or not?
         ''' </summary>
         ''' <param name="o"></param>
@@ -182,13 +217,33 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
-        ''' Get vector length
-        ''' </summary>
-        ''' <param name="x"></param>
-        ''' <returns></returns>
+        ''' # Length of an Object
         ''' 
+        ''' Get or set the length of vectors (including lists) and factors, 
+        ''' and of any other R object for which a method has been defined.
+        ''' </summary>
+        ''' <param name="x">an R object. For replacement, a vector or factor.</param>
+        ''' <param name="newSize">
+        ''' a non-negative integer or double (which will be rounded down).
+        ''' </param>
+        ''' <returns>
+        ''' The default method for length currently returns a non-negative 
+        ''' integer of length 1, except for vectors of more than 2^31 - 1 
+        ''' elements, when it returns a double.
+        '''
+        ''' For vectors(including lists) And factors the length Is the 
+        ''' number of elements. For an environment it Is the number of 
+        ''' objects in the environment, And NULL has length 0. For expressions 
+        ''' And pairlists (including language objects And dotlists) it Is the 
+        ''' length of the pairlist chain. All other objects (including 
+        ''' functions) have length one: note that For functions this differs 
+        ''' from S.
+        '''
+        ''' The replacement form removes all the attributes Of x except its 
+        ''' names, which are adjusted (And If necessary extended by "").
+        ''' </returns>
         <ExportAPI("length")>
-        Public Function length(<RRawVectorArgument> x As Object) As Integer
+        Public Function length(<RRawVectorArgument> x As Object, <RByRefValueAssign> Optional newSize As Integer = -1) As Integer
             If x Is Nothing Then
                 Return 0
             ElseIf x.GetType.IsArray Then
@@ -200,15 +255,62 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' # Are Some Values True?
+        ''' 
+        ''' Given a set of logical vectors, is at least one of the values true?
+        ''' </summary>
+        ''' <param name="test">
+        ''' zero or more logical vectors. Other objects of zero length are ignored, 
+        ''' and the rest are coerced to logical ignoring any class.
+        ''' </param>
+        ''' <param name="narm">
+        ''' logical. If true NA values are removed before the result Is computed.
+        ''' </param>
+        ''' <returns>
+        ''' The value is a logical vector of length one.
+        '''
+        ''' Let x denote the concatenation of all the logical vectors in ... 
+        ''' (after coercion), after removing NAs if requested by na.rm = TRUE.
+        ''' 
+        ''' The value returned Is True If at least one Of the values In x Is True, 
+        ''' And False If all Of the values In x are False (including If there are 
+        ''' no values). Otherwise the value Is NA (which can only occur If 
+        ''' na.rm = False And ... contains no True values And at least one NA 
+        ''' value).
+        ''' </returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <ExportAPI("any")>
-        Public Function any(<RRawVectorArgument> test As Object) As Object
+        Public Function any(<RRawVectorArgument> test As Object, Optional narm As Boolean = False) As Object
             Return Runtime.asLogical(test).Any(Function(b) b = True)
         End Function
 
+        ''' <summary>
+        ''' # Are All Values True?
+        ''' 
+        ''' Given a set of logical vectors, are all of the values true?
+        ''' </summary>
+        ''' <param name="test">zero or more logical vectors. Other objects of zero 
+        ''' length are ignored, and the rest are coerced to logical ignoring any 
+        ''' class.</param>
+        ''' <param name="narm">
+        ''' logical. If true NA values are removed before the result is computed.
+        ''' </param>
+        ''' <returns>
+        ''' The value is a logical vector of length one.
+        '''
+        ''' Let x denote the concatenation of all the logical vectors in ... 
+        ''' (after coercion), after removing NAs if requested by na.rm = TRUE.
+        '''
+        ''' The value returned Is True If all Of the values In x are True 
+        ''' (including If there are no values), And False If at least one Of 
+        ''' the values In x Is False. Otherwise the value Is NA (which can 
+        ''' only occur If na.rm = False And ... contains no False values And 
+        ''' at least one NA value).
+        ''' </returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <ExportAPI("all")>
-        Public Function all(<RRawVectorArgument> test As Object) As Object
+        Public Function all(<RRawVectorArgument> test As Object, Optional narm As Boolean = False) As Object
             Return Runtime.asLogical(test).All(Function(b) b = True)
         End Function
 
@@ -271,8 +373,9 @@ Namespace Runtime.Internal.Invokes
         Public Function options(<RListObjectArgument> opts As Object, envir As Environment) As Object
             Dim configs As Options = envir.globalEnvironment.options
             Dim values As list
+            Dim type As Type = opts.GetType
 
-            If opts.GetType Is GetType(String()) Then
+            If type Is GetType(String()) Then
                 values = New list With {
                     .slots = DirectCast(opts, String()) _
                         .ToDictionary(Function(key) key,
@@ -280,12 +383,28 @@ Namespace Runtime.Internal.Invokes
                                           Return CObj(configs.getOption(key, ""))
                                       End Function)
                 }
-            Else
+            ElseIf type Is GetType(list) Then
                 values = DirectCast(opts, list)
 
                 For Each value As KeyValuePair(Of String, Object) In values.slots
                     Try
                         configs.setOption(value.Key, value.Value)
+                    Catch ex As Exception
+                        Return Internal.stop(ex, envir)
+                    End Try
+                Next
+            Else
+                values = New list With {
+                    .slots = New Dictionary(Of String, Object)
+                }
+
+                ' invoke parameters
+                For Each value As InvokeParameter In DirectCast(opts, InvokeParameter())
+                    Dim name = value.name
+                    Dim cfgValue As Object = value.Evaluate(envir)
+
+                    Try
+                        values.slots(name) = configs.setOption(name, Scripting.ToString(cfgValue))
                     Catch ex As Exception
                         Return Internal.stop(ex, envir)
                     End Try
@@ -315,11 +434,15 @@ Namespace Runtime.Internal.Invokes
         ''' return value from the left-hand side.)
         ''' </returns>
         <ExportAPI("names")>
-        Public Function names([object] As Object, Optional namelist As Array = Nothing, Optional envir As Environment = Nothing) As Object
+        Public Function names([object] As Object,
+                              <RByRefValueAssign>
+                              Optional namelist As Array = Nothing,
+                              Optional envir As Environment = Nothing) As Object
+
             If namelist Is Nothing OrElse namelist.Length = 0 Then
-                Return Internal.names.getNames([object], envir)
+                Return RObj.names.getNames([object], envir)
             Else
-                Return Internal.names.setNames([object], namelist, envir)
+                Return RObj.names.setNames([object], namelist, envir)
             End If
         End Function
 
@@ -354,11 +477,15 @@ Namespace Runtime.Internal.Invokes
         ''' by as.character, And setting colnames will convert the row names To character.
         ''' </remarks>
         <ExportAPI("rownames")>
-        Public Function rownames([object] As Object, Optional namelist As Array = Nothing, Optional envir As Environment = Nothing) As Object
+        Public Function rownames([object] As Object,
+                                 <RByRefValueAssign>
+                                 Optional namelist As Array = Nothing,
+                                 Optional envir As Environment = Nothing) As Object
+
             If namelist Is Nothing OrElse namelist.Length = 0 Then
-                Return Internal.names.getNames([object], envir)
+                Return RObj.names.getNames([object], envir)
             Else
-                Return Internal.names.setNames([object], namelist, envir)
+                Return RObj.names.setNames([object], namelist, envir)
             End If
         End Function
 
@@ -393,11 +520,15 @@ Namespace Runtime.Internal.Invokes
         ''' by as.character, And setting colnames will convert the row names To character.
         ''' </remarks>
         <ExportAPI("colnames")>
-        Public Function colnames([object] As Object, Optional namelist As Array = Nothing, Optional envir As Environment = Nothing) As Object
+        Public Function colnames([object] As Object,
+                                 <RByRefValueAssign>
+                                 Optional namelist As Array = Nothing,
+                                 Optional envir As Environment = Nothing) As Object
+
             If namelist Is Nothing OrElse namelist.Length = 0 Then
-                Return Internal.names.getNames([object], envir)
+                Return RObj.names.getNames([object], envir)
             Else
-                Return Internal.names.setNames([object], namelist, envir)
+                Return RObj.names.setNames([object], namelist, envir)
             End If
         End Function
 
@@ -429,7 +560,7 @@ Namespace Runtime.Internal.Invokes
                        .JoinBy("; ")
                     )
                 Else
-                    Return base.createMessageInternal(message, envir, level:=MSG_TYPES.ERR)
+                    Return base.CreateMessageInternal(message, envir, level:=MSG_TYPES.ERR)
                 End If
             End If
         End Function
@@ -475,7 +606,14 @@ Namespace Runtime.Internal.Invokes
             Return frames
         End Function
 
-        Private Function createMessageInternal(messages As Object, envir As Environment, level As MSG_TYPES) As Message
+        ''' <summary>
+        ''' Create R# internal message
+        ''' </summary>
+        ''' <param name="messages"></param>
+        ''' <param name="envir"></param>
+        ''' <param name="level">The message level</param>
+        ''' <returns></returns>
+        Friend Function CreateMessageInternal(messages As Object, envir As Environment, level As MSG_TYPES) As Message
             Return New Message With {
                 .message = Runtime.asVector(Of Object)(messages) _
                     .AsObjectEnumerator _
@@ -491,9 +629,21 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("warning")>
         <DebuggerStepThrough>
         Public Function warning(<RRawVectorArgument> message As Object, Optional envir As Environment = Nothing) As Message
-            Return createMessageInternal(message, envir, level:=MSG_TYPES.WRN)
+            Return CreateMessageInternal(message, envir, level:=MSG_TYPES.WRN)
         End Function
 
+        ''' <summary>
+        ''' # Concatenate and Print
+        ''' 
+        ''' Outputs the objects, concatenating the representations. 
+        ''' ``cat`` performs much less conversion than ``print``.
+        ''' </summary>
+        ''' <param name="values">R objects (see ‘Details’ for the types of objects allowed).</param>
+        ''' <param name="file">A connection, or a character string naming the file to print to. 
+        ''' If "" (the default), cat prints to the standard output connection, the console 
+        ''' unless redirected by ``sink``.</param>
+        ''' <param name="sep">a character vector of strings to append after each element.</param>
+        ''' <returns></returns>
         <ExportAPI("cat")>
         Public Function cat(<RRawVectorArgument> values As Object,
                             Optional file$ = Nothing,
@@ -537,6 +687,16 @@ Namespace Runtime.Internal.Invokes
 
         Dim markdown As MarkdownRender = MarkdownRender.DefaultStyleRender
 
+        ''' <summary>
+        ''' # Print Values
+        ''' 
+        ''' print prints its argument and returns it invisibly (via invisible(x)). 
+        ''' It is a generic function which means that new printing methods can be 
+        ''' easily added for new classes.
+        ''' </summary>
+        ''' <param name="x">an object used to select a method.</param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         <ExportAPI("print")>
         Public Function print(<RRawVectorArgument> x As Object, envir As Environment) As Object
             If x Is Nothing Then
@@ -579,31 +739,49 @@ Namespace Runtime.Internal.Invokes
             Return x
         End Function
 
+        ''' <summary>
+        ''' # Apply a Function over a List or Vector
+        ''' 
+        ''' lapply returns a list of the same length as X, each element of 
+        ''' which is the result of applying FUN to the corresponding 
+        ''' element of X.
+        ''' </summary>
+        ''' <param name="X">
+        ''' a vector (atomic or list) or an expression object. Other objects 
+        ''' (including classed objects) will be coerced by ``base::as.list``.
+        ''' </param>
+        ''' <param name="FUN">
+        ''' the Function to be applied To Each element Of X: see 'Details’. 
+        ''' In the case of functions like +, %*%, the function name must be 
+        ''' backquoted or quoted.
+        ''' </param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         <ExportAPI("lapply")>
-        Public Function lapply(<RRawVectorArgument> sequence As Object, doApply As Object, envir As Environment) As Object
-            If doApply Is Nothing Then
+        Public Function lapply(<RRawVectorArgument> X As Object, FUN As Object, envir As Environment) As Object
+            If FUN Is Nothing Then
                 Return Internal.stop({"Missing apply function!"}, envir)
-            ElseIf Not doApply.GetType.ImplementInterface(GetType(RFunction)) Then
+            ElseIf Not FUN.GetType.ImplementInterface(GetType(RFunction)) Then
                 Return Internal.stop({"Target is not a function!"}, envir)
             End If
 
-            If Program.isException(sequence) Then
-                Return sequence
-            ElseIf Program.isException(doApply) Then
-                Return doApply
+            If Program.isException(X) Then
+                Return X
+            ElseIf Program.isException(FUN) Then
+                Return FUN
             End If
 
-            Dim apply As RFunction = doApply
+            Dim apply As RFunction = FUN
             Dim list As Dictionary(Of String, Object)
 
-            If sequence.GetType Is GetType(Dictionary(Of String, Object)) Then
-                list = DirectCast(sequence, Dictionary(Of String, Object)) _
+            If X.GetType Is GetType(Dictionary(Of String, Object)) Then
+                list = DirectCast(X, Dictionary(Of String, Object)) _
                     .ToDictionary(Function(d) d.Key,
                                   Function(d)
                                       Return apply.Invoke(envir, {d.Value})
                                   End Function)
             Else
-                list = Runtime.asVector(Of Object)(sequence) _
+                list = Runtime.asVector(Of Object)(X) _
                     .AsObjectEnumerator _
                     .SeqIterator _
                     .ToDictionary(Function(i) $"[[{i.i}]]",
@@ -615,24 +793,43 @@ Namespace Runtime.Internal.Invokes
             Return New list With {.slots = list}
         End Function
 
+        ''' <summary>
+        ''' # Apply a Function over a List or Vector
+        ''' 
+        ''' sapply is a user-friendly version and wrapper of lapply by default 
+        ''' returning a vector, matrix or, if simplify = "array", an array 
+        ''' if appropriate, by applying simplify2array(). sapply(x, f, simplify 
+        ''' = FALSE, USE.NAMES = FALSE) is the same as lapply(x, f).
+        ''' </summary>
+        ''' <param name="X">
+        ''' a vector (atomic or list) or an expression object. Other objects 
+        ''' (including classed objects) will be coerced by ``base::as.list``.
+        ''' </param>
+        ''' <param name="FUN">
+        ''' the Function to be applied To Each element Of X: see 'Details’. 
+        ''' In the case of functions like +, %*%, the function name must be 
+        ''' backquoted or quoted.
+        ''' </param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         <ExportAPI("sapply")>
-        Public Function sapply(<RRawVectorArgument> sequence As Object, doApply As Object, envir As Environment) As Object
-            If doApply Is Nothing Then
+        Public Function sapply(<RRawVectorArgument> X As Object, FUN As Object, envir As Environment) As Object
+            If FUN Is Nothing Then
                 Return Internal.stop({"Missing apply function!"}, envir)
-            ElseIf Not doApply.GetType.ImplementInterface(GetType(RFunction)) Then
+            ElseIf Not FUN.GetType.ImplementInterface(GetType(RFunction)) Then
                 Return Internal.stop({"Target is not a function!"}, envir)
             End If
 
-            If Program.isException(sequence) Then
-                Return sequence
-            ElseIf Program.isException(doApply) Then
-                Return doApply
+            If Program.isException(X) Then
+                Return X
+            ElseIf Program.isException(FUN) Then
+                Return FUN
             End If
 
-            Dim apply As RFunction = doApply
+            Dim apply As RFunction = FUN
 
-            If sequence.GetType Is GetType(Dictionary(Of String, Object)) Then
-                Dim list = DirectCast(sequence, Dictionary(Of String, Object))
+            If X.GetType Is GetType(Dictionary(Of String, Object)) Then
+                Dim list = DirectCast(X, Dictionary(Of String, Object))
                 Dim names = list.Keys.ToArray
                 Dim seq As Array = names _
                     .Select(Function(key)
@@ -640,16 +837,16 @@ Namespace Runtime.Internal.Invokes
                             End Function) _
                     .ToArray
 
-                Return New vector(names, seq, envir)
+                Return New RObj.vector(names, seq, envir)
             Else
-                Dim seq = Runtime.asVector(Of Object)(sequence) _
+                Dim seq = Runtime.asVector(Of Object)(X) _
                     .AsObjectEnumerator _
                     .Select(Function(d)
                                 Return apply.Invoke(envir, {d})
                             End Function) _
                     .ToArray
 
-                Return New vector With {.data = seq}
+                Return New RObj.vector With {.data = seq}
             End If
         End Function
 

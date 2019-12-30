@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8ef4535e5cc5a4935638f191f6c959ca, R#\Interpreter\ExecuteEngine\ExpressionSymbols\ClosureExpression.vb"
+﻿#Region "Microsoft.VisualBasic::bf1deae1b9efc0f7f378afbc437eb80e, R#\Interpreter\ExecuteEngine\ExpressionSymbols\ClosureExpression.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,7 @@
     '         Properties: isEmpty, type
     ' 
     '         Constructor: (+2 Overloads) Sub New
-    '         Function: Evaluate, ParseExpressionTree
+    '         Function: Evaluate, ParseExpressionTree, ToString
     ' 
     ' 
     ' /********************************************************************************/

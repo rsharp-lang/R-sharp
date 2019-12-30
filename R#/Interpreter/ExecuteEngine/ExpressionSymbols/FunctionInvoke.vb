@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8b1cbfb112703e050634960568bbecc0, R#\Interpreter\ExecuteEngine\ExpressionSymbols\FunctionInvoke.vb"
+﻿#Region "Microsoft.VisualBasic::115c59c190a4ff8a769dffddfd43fe95, R#\Interpreter\ExecuteEngine\ExpressionSymbols\FunctionInvoke.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,7 @@
     '         Properties: [namespace], funcName, type
     ' 
     '         Constructor: (+3 Overloads) Sub New
-    '         Function: doInvokeFuncVar, Evaluate, getFuncVar, invokePackageInternal, invokeRInternal
+    '         Function: doInvokeFuncVar, Evaluate, getFuncVar, getPackageApiImpl, invokeRInternal
     '                   isOptionNames, ToString
     ' 
     ' 
@@ -55,8 +55,8 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
-Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports RPkg = SMRUCC.Rsharp.System.Package.Package
 
@@ -247,37 +247,43 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Private Function invokeRInternal(funcName$, envir As Environment) As Object
-            If funcName = "list" Then
-                Return Runtime.Internal.Rlist(envir, parameters)
-            ElseIf funcName = "options" Then
-                If parameters.DoCall(AddressOf isOptionNames) Then
-                    Dim names As String() = Runtime.asVector(Of String)(parameters(Scan0).Evaluate(envir))
-                    Dim values As list = base.options(names, envir)
+            If funcName = "options" Then
+                If Not parameters.DoCall(AddressOf allIsValueAssign) Then
+                    Dim names As String()
 
-                    Return values
-                Else
-                    Return base.options(Runtime.Internal.Rlist(envir, parameters), envir)
+                    If parameters.Count = 1 Then
+                        Dim firstInput = parameters(Scan0).Evaluate(envir)
+
+                        If firstInput.GetType Is GetType(list) Then
+                            Return base.options(firstInput, envir)
+                        Else
+                            names = Runtime.asVector(Of String)(firstInput)
+                        End If
+                    Else
+                        Dim vector As Object() = parameters _
+                            .Select(Function(exp)
+                                        Return exp.Evaluate(envir)
+                                    End Function) _
+                            .ToArray
+
+                        names = Runtime.asVector(Of String)(vector)
+                    End If
+
+                    Return base.options(names, envir)
                 End If
             ElseIf funcName = "data.frame" Then
                 Return Runtime.Internal.Rdataframe(envir, parameters)
-            Else
-                Dim argVals As InvokeParameter() = InvokeParameter.Create(parameters)
-                Dim result As Object = Internal.invokeInternals(envir, funcName, argVals)
-
-                Return result
             End If
+
+            ' invoke internal R# api
+            Dim argVals As InvokeParameter() = InvokeParameter.Create(parameters)
+            Dim result As Object = Internal.invokeInternals(envir, funcName, argVals)
+
+            Return result
         End Function
 
-        Private Shared Function isOptionNames(parameters As List(Of Expression)) As Boolean
-            Dim first As Expression = parameters.ElementAtOrDefault(Scan0)
-
-            If first Is Nothing OrElse Not parameters = 1 Then
-                Return False
-            End If
-
-            Return TypeOf first Is VectorLiteral OrElse
-                   TypeOf first Is SymbolReference OrElse
-                   TypeOf first Is SymbolIndexer
+        Private Shared Function allIsValueAssign(parameters As IEnumerable(Of Expression)) As Boolean
+            Return parameters.All(Function(e) TypeOf e Is ValueAssign)
         End Function
     End Class
 End Namespace

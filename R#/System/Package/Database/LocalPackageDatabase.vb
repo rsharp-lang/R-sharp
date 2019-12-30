@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::380a78bcaf96742374a85ba7b97e2e7e, R#\System\Package\Database\LocalPackageDatabase.vb"
+﻿#Region "Microsoft.VisualBasic::b7cd866196844c50617646ab7df8be9f, R#\System\Package\Database\LocalPackageDatabase.vb"
 
     ' Author:
     ' 
@@ -69,6 +69,13 @@ Namespace System.Package
         <XmlArray>
         Public Property packages As PackageLoaderEntry()
 
+        ''' <summary>
+        ''' If the package is not exists or load package failure
+        ''' then this function returns nothing
+        ''' </summary>
+        ''' <param name="packageName"></param>
+        ''' <param name="exception"></param>
+        ''' <returns></returns>
         Public Function FindPackage(packageName As String, ByRef exception As Exception) As Package
             Dim entry As PackageLoaderEntry = packages _
                 .Where(Function(pkg)

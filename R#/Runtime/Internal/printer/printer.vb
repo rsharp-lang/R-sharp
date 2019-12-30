@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cb4a20e656e30e078189e4c3bce91688, R#\Runtime\Internal\printer\printer.vb"
+﻿#Region "Microsoft.VisualBasic::7364ba661788ee34d49c53eed7b0b9ec, R#\Runtime\Internal\printer\printer.vb"
 
 ' Author:
 ' 
@@ -38,7 +38,7 @@
 ' 
 '         Constructor: (+1 Overloads) Sub New
 ' 
-'         Function: f64_InternalToString, ToString, ValueToString
+'         Function: f64_InternalToString, getStrings, ToString, ValueToString
 ' 
 '         Sub: AttachConsoleFormatter, AttachInternalConsoleFormatter, printArray, printInternal, printList
 ' 
@@ -56,6 +56,7 @@ Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.System.Configuration
 
 Namespace Runtime.Internal.ConsolePrinter
@@ -206,14 +207,26 @@ printSingleElement:
         <Extension>
         Private Sub printArray(xvec As Array, maxPrint%, env As GlobalEnvironment)
             Dim stringVec As IEnumerable(Of String) = getStrings(xvec, env)
-            Dim maxColumns As Integer = Console.WindowWidth
+            Dim maxColumns As Integer = Console.WindowWidth - 1
             Dim contents As String() = stringVec.Take(maxPrint).ToArray
             ' maxsize / average size
-            Dim divSize As Integer = CInt(maxColumns / contents.Average(Function(c) c.Length + 1)) - 2
+            Dim unitWidth As Integer = contents.Max(Function(c) c.Length) + 1
+            Dim divSize As Integer = maxColumns \ unitWidth - 3
             Dim i As i32 = 1 - divSize
 
+            If divSize <= 0 Then
+                divSize = 1
+            End If
+
             For Each row As String() In contents.Split(partitionSize:=divSize)
-                Call Console.WriteLine($"[{i = i + divSize}]{vbTab}" & row.JoinBy(vbTab))
+                Call Console.Write($"[{i = i + divSize}]{vbTab}")
+
+                For Each c As String In row
+                    Call Console.Write(c)
+                    Call Console.Write(New String(" "c, unitWidth - c.Length))
+                Next
+
+                Call Console.WriteLine()
             Next
 
             If xvec.Length > maxPrint Then

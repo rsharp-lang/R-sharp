@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cd17c5fbfa7c24e8dfc8e5827073a96e, R#\Runtime\Internal\internalInvokes\utils.vb"
+﻿#Region "Microsoft.VisualBasic::80800a887ab06dd6064617f3e8c9e388, R#\Runtime\Internal\internalInvokes\utils.vb"
 
 ' Author:
 ' 
@@ -33,7 +33,9 @@
 
 '     Module utils
 ' 
-'         Function: GetInstalledPackages, installPackages
+'         Function: GetInstalledPackages, installPackages, wget
+' 
+'         Sub: cls, sleep
 ' 
 ' 
 ' /********************************************************************************/
@@ -45,6 +47,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Net
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.System.Package
 Imports RPkg = SMRUCC.Rsharp.System.Package.Package
 
@@ -53,9 +56,30 @@ Namespace Runtime.Internal.Invokes
     Module utils
 
         ''' <summary>
+        ''' # Install Packages from Repositories or Local Files
         ''' 
+        ''' Download and install packages from CRAN-like repositories or from local files.
+        ''' 
+        ''' This is the main function to install packages. It takes a vector of names and 
+        ''' a destination library, downloads the packages from the repositories and installs 
+        ''' them. (If the library is omitted it defaults to the first directory in 
+        ''' .libPaths(), with a message if there is more than one.) If lib is omitted or 
+        ''' is of length one and is not a (group) writable directory, in interactive use 
+        ''' the code offers to create a personal library tree (the first element of 
+        ''' Sys.getenv("R_LIBS_USER")) and install there. Detection of a writable 
+        ''' directory is problematic on Windows: see the ‘Note’ section.
+        '''
+        ''' For installs from a repository an attempt Is made To install the packages In 
+        ''' an order that respects their dependencies. This does assume that all the 
+        ''' entries In Lib are On the Default library path For installs (Set by 
+        ''' environment variable R_LIBS).
+        '''
+        ''' You are advised To run update.packages before install.packages To ensure that 
+        ''' any already installed dependencies have their latest versions.
         ''' </summary>
-        ''' <param name="packages">The dll file name</param>
+        ''' <param name="packages">The dll file name, character vector of the names of 
+        ''' packages whose current versions should be downloaded from the repositories.
+        ''' </param>
         ''' <param name="envir"></param>
         ''' <returns></returns>
         ''' 
@@ -95,18 +119,29 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("installed.packages")>
         Public Function GetInstalledPackages(Optional envir As Environment = Nothing) As Object
             Dim pkgMgr As PackageManager = envir.globalEnvironment.packages
-            Dim packages As RPkg() = pkgMgr.AsEnumerable.ToArray
+            Dim packages As RPkg() = pkgMgr _
+                .AsEnumerable _
+                .OrderBy(Function(pkg) pkg.namespace) _
+                .ToArray
             Dim Package As Array = packages.Select(Function(pkg) pkg.namespace).ToArray
             Dim LibPath As Array = packages.Select(Function(pkg) pkg.LibPath.GetFullPath).ToArray
             Dim Version As Array = packages.Select(Function(pkg) pkg.info.Revision).ToArray
             Dim Built As Array = packages.Select(Function(pkg) pkg.GetPackageModuleInfo.BuiltTime.ToString).ToArray
+            Dim Description As Array = packages _
+                .Select(Function(pkg)
+                            Return pkg.GetPackageDescription(envir) _
+                                .LineTokens _
+                                .DefaultFirst("n/a")
+                        End Function) _
+                .ToArray
             Dim summary As New dataframe With {
                 .rownames = packages.Select(Function(pkg) pkg.namespace).ToArray,
                 .columns = New Dictionary(Of String, Array) From {
                     {NameOf(Package), Package},
                     {NameOf(LibPath), LibPath},
                     {NameOf(Version), Version},
-                    {NameOf(Built), Built}
+                    {NameOf(Built), Built},
+                    {NameOf(Description), Description}
                 }
             }
 
@@ -139,6 +174,10 @@ Namespace Runtime.Internal.Invokes
             Call Console.Clear()
         End Sub
 
+        ''' <summary>
+        ''' Suspends the current thread for the specified number of seconds.
+        ''' </summary>
+        ''' <param name="sec"></param>
         <ExportAPI("sleep")>
         Public Sub sleep(sec As Integer)
             Call Thread.Sleep(sec * 1000)

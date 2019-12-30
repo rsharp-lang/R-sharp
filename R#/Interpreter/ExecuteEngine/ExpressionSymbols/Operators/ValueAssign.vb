@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::193012cf416bc3201086330e220aa509, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssign.vb"
+﻿#Region "Microsoft.VisualBasic::1ea1aa708400c264b34222efef05c5b6, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssign.vb"
 
 ' Author:
 ' 
@@ -37,7 +37,8 @@
 ' 
 '         Constructor: (+3 Overloads) Sub New
 '         Function: assignSymbol, assignTuples, doValueAssign, DoValueAssign, Evaluate
-'                   GetSymbol, setFromObjectList, setFromVector, ToString
+'                   GetSymbol, setByNameIndex, setFromObjectList, setFromVector, setVectorElements
+'                   ToString
 ' 
 ' 
 ' /********************************************************************************/
@@ -52,8 +53,8 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
-Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Interpreter.ExecuteEngine
 
