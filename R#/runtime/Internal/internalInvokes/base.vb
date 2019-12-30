@@ -1,54 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::42ba6df12a480b498e6c6cc2c0453ce9, R#\Runtime\Internal\internalInvokes\base.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module base
-    ' 
-    '         Function: [stop], all, any, cat, colnames
-    '                   contributors, createDotNetExceptionMessage, createMessageInternal, doPrintInternal, getEnvironmentStack
-    '                   getOption, invisible, isEmpty, lapply, length
-    '                   license, names, neg, options, print
-    '                   Rlist, rownames, sapply, source, str
-    '                   warning
-    ' 
-    '         Sub: q, quit
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module base
+' 
+'         Function: [stop], all, any, cat, colnames
+'                   contributors, createDotNetExceptionMessage, createMessageInternal, doPrintInternal, getEnvironmentStack
+'                   getOption, invisible, isEmpty, lapply, length
+'                   license, names, neg, options, print
+'                   Rlist, rownames, sapply, source, str
+'                   warning
+' 
+'         Sub: q, quit
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
-Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
@@ -60,14 +59,15 @@ Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Interpreter
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Configuration
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports RObj = SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Runtime.Internal.Invokes
 
@@ -352,9 +352,9 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("names")>
         Public Function names([object] As Object, Optional namelist As Array = Nothing, Optional envir As Environment = Nothing) As Object
             If namelist Is Nothing OrElse namelist.Length = 0 Then
-                Return Internal.names.getNames([object], envir)
+                Return RObj.names.getNames([object], envir)
             Else
-                Return Internal.names.setNames([object], namelist, envir)
+                Return RObj.names.setNames([object], namelist, envir)
             End If
         End Function
 
@@ -391,9 +391,9 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("rownames")>
         Public Function rownames([object] As Object, Optional namelist As Array = Nothing, Optional envir As Environment = Nothing) As Object
             If namelist Is Nothing OrElse namelist.Length = 0 Then
-                Return Internal.names.getNames([object], envir)
+                Return RObj.names.getNames([object], envir)
             Else
-                Return Internal.names.setNames([object], namelist, envir)
+                Return RObj.names.setNames([object], namelist, envir)
             End If
         End Function
 
@@ -430,9 +430,9 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("colnames")>
         Public Function colnames([object] As Object, Optional namelist As Array = Nothing, Optional envir As Environment = Nothing) As Object
             If namelist Is Nothing OrElse namelist.Length = 0 Then
-                Return Internal.names.getNames([object], envir)
+                Return RObj.names.getNames([object], envir)
             Else
-                Return Internal.names.setNames([object], namelist, envir)
+                Return RObj.names.setNames([object], namelist, envir)
             End If
         End Function
 
@@ -510,6 +510,13 @@ Namespace Runtime.Internal.Invokes
             Return frames
         End Function
 
+        ''' <summary>
+        ''' Create R# internal message
+        ''' </summary>
+        ''' <param name="messages"></param>
+        ''' <param name="envir"></param>
+        ''' <param name="level">The message level</param>
+        ''' <returns></returns>
         Private Function createMessageInternal(messages As Object, envir As Environment, level As MSG_TYPES) As Message
             Return New Message With {
                 .message = Runtime.asVector(Of Object)(messages) _
@@ -529,6 +536,18 @@ Namespace Runtime.Internal.Invokes
             Return createMessageInternal(message, envir, level:=MSG_TYPES.WRN)
         End Function
 
+        ''' <summary>
+        ''' # Concatenate and Print
+        ''' 
+        ''' Outputs the objects, concatenating the representations. 
+        ''' ``cat`` performs much less conversion than ``print``.
+        ''' </summary>
+        ''' <param name="values">R objects (see ‘Details’ for the types of objects allowed).</param>
+        ''' <param name="file">A connection, or a character string naming the file to print to. 
+        ''' If "" (the default), cat prints to the standard output connection, the console 
+        ''' unless redirected by ``sink``.</param>
+        ''' <param name="sep">a character vector of strings to append after each element.</param>
+        ''' <returns></returns>
         <ExportAPI("cat")>
         Public Function cat(<RRawVectorArgument> values As Object,
                             Optional file$ = Nothing,
@@ -572,6 +591,16 @@ Namespace Runtime.Internal.Invokes
 
         Dim markdown As MarkdownRender = MarkdownRender.DefaultStyleRender
 
+        ''' <summary>
+        ''' # Print Values
+        ''' 
+        ''' print prints its argument and returns it invisibly (via invisible(x)). 
+        ''' It is a generic function which means that new printing methods can be 
+        ''' easily added for new classes.
+        ''' </summary>
+        ''' <param name="x">an object used to select a method.</param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         <ExportAPI("print")>
         Public Function print(<RRawVectorArgument> x As Object, envir As Environment) As Object
             If x Is Nothing Then
@@ -614,31 +643,49 @@ Namespace Runtime.Internal.Invokes
             Return x
         End Function
 
+        ''' <summary>
+        ''' # Apply a Function over a List or Vector
+        ''' 
+        ''' lapply returns a list of the same length as X, each element of 
+        ''' which is the result of applying FUN to the corresponding 
+        ''' element of X.
+        ''' </summary>
+        ''' <param name="X">
+        ''' a vector (atomic or list) or an expression object. Other objects 
+        ''' (including classed objects) will be coerced by ``base::as.list``.
+        ''' </param>
+        ''' <param name="FUN">
+        ''' the Function to be applied To Each element Of X: see 'Details’. 
+        ''' In the case of functions like +, %*%, the function name must be 
+        ''' backquoted or quoted.
+        ''' </param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         <ExportAPI("lapply")>
-        Public Function lapply(<RRawVectorArgument> sequence As Object, doApply As Object, envir As Environment) As Object
-            If doApply Is Nothing Then
+        Public Function lapply(<RRawVectorArgument> X As Object, FUN As Object, envir As Environment) As Object
+            If FUN Is Nothing Then
                 Return Internal.stop({"Missing apply function!"}, envir)
-            ElseIf Not doApply.GetType.ImplementInterface(GetType(RFunction)) Then
+            ElseIf Not FUN.GetType.ImplementInterface(GetType(RFunction)) Then
                 Return Internal.stop({"Target is not a function!"}, envir)
             End If
 
-            If Program.isException(sequence) Then
-                Return sequence
-            ElseIf Program.isException(doApply) Then
-                Return doApply
+            If Program.isException(X) Then
+                Return X
+            ElseIf Program.isException(FUN) Then
+                Return FUN
             End If
 
-            Dim apply As RFunction = doApply
+            Dim apply As RFunction = FUN
             Dim list As Dictionary(Of String, Object)
 
-            If sequence.GetType Is GetType(Dictionary(Of String, Object)) Then
-                list = DirectCast(sequence, Dictionary(Of String, Object)) _
+            If X.GetType Is GetType(Dictionary(Of String, Object)) Then
+                list = DirectCast(X, Dictionary(Of String, Object)) _
                     .ToDictionary(Function(d) d.Key,
                                   Function(d)
                                       Return apply.Invoke(envir, {d.Value})
                                   End Function)
             Else
-                list = Runtime.asVector(Of Object)(sequence) _
+                list = Runtime.asVector(Of Object)(X) _
                     .AsObjectEnumerator _
                     .SeqIterator _
                     .ToDictionary(Function(i) $"[[{i.i}]]",
@@ -650,24 +697,43 @@ Namespace Runtime.Internal.Invokes
             Return New list With {.slots = list}
         End Function
 
+        ''' <summary>
+        ''' # Apply a Function over a List or Vector
+        ''' 
+        ''' sapply is a user-friendly version and wrapper of lapply by default 
+        ''' returning a vector, matrix or, if simplify = "array", an array 
+        ''' if appropriate, by applying simplify2array(). sapply(x, f, simplify 
+        ''' = FALSE, USE.NAMES = FALSE) is the same as lapply(x, f).
+        ''' </summary>
+        ''' <param name="X">
+        ''' a vector (atomic or list) or an expression object. Other objects 
+        ''' (including classed objects) will be coerced by ``base::as.list``.
+        ''' </param>
+        ''' <param name="FUN">
+        ''' the Function to be applied To Each element Of X: see 'Details’. 
+        ''' In the case of functions like +, %*%, the function name must be 
+        ''' backquoted or quoted.
+        ''' </param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         <ExportAPI("sapply")>
-        Public Function sapply(<RRawVectorArgument> sequence As Object, doApply As Object, envir As Environment) As Object
-            If doApply Is Nothing Then
+        Public Function sapply(<RRawVectorArgument> X As Object, FUN As Object, envir As Environment) As Object
+            If FUN Is Nothing Then
                 Return Internal.stop({"Missing apply function!"}, envir)
-            ElseIf Not doApply.GetType.ImplementInterface(GetType(RFunction)) Then
+            ElseIf Not FUN.GetType.ImplementInterface(GetType(RFunction)) Then
                 Return Internal.stop({"Target is not a function!"}, envir)
             End If
 
-            If Program.isException(sequence) Then
-                Return sequence
-            ElseIf Program.isException(doApply) Then
-                Return doApply
+            If Program.isException(X) Then
+                Return X
+            ElseIf Program.isException(FUN) Then
+                Return FUN
             End If
 
-            Dim apply As RFunction = doApply
+            Dim apply As RFunction = FUN
 
-            If sequence.GetType Is GetType(Dictionary(Of String, Object)) Then
-                Dim list = DirectCast(sequence, Dictionary(Of String, Object))
+            If X.GetType Is GetType(Dictionary(Of String, Object)) Then
+                Dim list = DirectCast(X, Dictionary(Of String, Object))
                 Dim names = list.Keys.ToArray
                 Dim seq As Array = names _
                     .Select(Function(key)
@@ -675,16 +741,16 @@ Namespace Runtime.Internal.Invokes
                             End Function) _
                     .ToArray
 
-                Return New vector(names, seq, envir)
+                Return New RObj.vector(names, seq, envir)
             Else
-                Dim seq = Runtime.asVector(Of Object)(sequence) _
+                Dim seq = Runtime.asVector(Of Object)(X) _
                     .AsObjectEnumerator _
                     .Select(Function(d)
                                 Return apply.Invoke(envir, {d})
                             End Function) _
                     .ToArray
 
-                Return New vector With {.data = seq}
+                Return New RObj.vector With {.data = seq}
             End If
         End Function
 

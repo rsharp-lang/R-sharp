@@ -49,6 +49,7 @@ Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Language.UnixBash.FileSystem
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Runtime.Internal.Invokes
 

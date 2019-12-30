@@ -46,7 +46,7 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Interop
 
-Namespace Runtime.Internal
+Namespace Runtime.Internal.Object
 
     Module RConversion
 

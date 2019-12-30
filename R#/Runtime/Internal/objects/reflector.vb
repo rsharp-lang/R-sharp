@@ -46,7 +46,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 
-Namespace Runtime.Internal
+Namespace Runtime.Internal.Object
 
     Module reflector
 

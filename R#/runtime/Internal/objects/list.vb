@@ -48,7 +48,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 
-Namespace Runtime.Internal
+Namespace Runtime.Internal.Object
 
     Public Class list : Implements RNames, RIndex, RNameIndex
 
