@@ -694,6 +694,8 @@ tryStop(['This','is','an','exception', 'test']);
     End Sub
 
     Sub listTest()
+        Call R.Evaluate("list([1,2,3,4,5],'999',FALSE)")
+
         Call R.Evaluate("let l = list([FALSE, TRUE, FALSE],  a = 123, b = 999, c = TRUE, d = list(aaa = FALSE, ccc = ['a','b','c'])  );")
         Call R.Evaluate("print(l);")
 

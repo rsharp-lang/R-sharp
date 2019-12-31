@@ -53,6 +53,8 @@ Namespace Runtime.Components
 
         Public Property value As Expression
 
+        Public ReadOnly Property index As Integer
+
         Public ReadOnly Property name As String
             Get
                 If value Is Nothing Then
@@ -104,6 +106,9 @@ Namespace Runtime.Components
             End Get
         End Property
 
+        Private Sub New()
+        End Sub
+
         ''' <summary>
         ''' get value part
         ''' </summary>
@@ -127,9 +132,10 @@ Namespace Runtime.Components
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function Create(expressions As IEnumerable(Of Expression)) As InvokeParameter()
             Return expressions _
-                .Select(Function(e)
+                .Select(Function(e, i)
                             Return New InvokeParameter With {
-                                .value = e
+                                ._value = e,
+                                ._index = i + 1
                             }
                         End Function) _
                 .ToArray
@@ -153,9 +159,10 @@ Namespace Runtime.Components
 
         Public Shared Function Create(ParamArray args As Object()) As InvokeParameter()
             Return args _
-                .Select(Function(a)
+                .Select(Function(a, i)
                             Return New InvokeParameter() With {
-                                .value = New RuntimeValueLiteral(a)
+                                ._value = New RuntimeValueLiteral(a),
+                                ._index = i + 1
                             }
                         End Function) _
                 .ToArray

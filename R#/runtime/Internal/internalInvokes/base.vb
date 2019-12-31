@@ -138,7 +138,11 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="envir"></param>
         ''' <returns></returns>
         <ExportAPI("list")>
-        Public Function Rlist(<RListObjectArgument> slots As Object, envir As Environment) As Object
+        Public Function Rlist(<RListObjectArgument>
+                              <RRawVectorArgument>
+                              slots As Object,
+                              Optional envir As Environment = Nothing) As Object
+
             Dim list As New Dictionary(Of String, Object)
             Dim slot As InvokeParameter
             Dim key As String
