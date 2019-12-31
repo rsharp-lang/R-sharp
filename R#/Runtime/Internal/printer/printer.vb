@@ -134,6 +134,8 @@ Namespace Runtime.Internal.ConsolePrinter
                     .GetTable _
                     .Print(addBorder:=False) _
                     .DoCall(AddressOf Console.WriteLine)
+            ElseIf valueType Is GetType(vbObject) Then
+                Call DirectCast(x, vbObject).ToString.DoCall(AddressOf Console.WriteLine)
             Else
 printSingleElement:
                 Call Console.WriteLine("[1] " & printer.ValueToString(x, env))
