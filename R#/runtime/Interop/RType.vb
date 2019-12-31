@@ -53,19 +53,43 @@ Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 
 Namespace Runtime.Interop
 
+    ''' <summary>
+    ''' The type wrapper for .NET type to R# language runtime
+    ''' </summary>
     Public Class RType : Implements IReflector
 
+        ''' <summary>
+        ''' <see cref="Type.FullName"/>
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property fullName As String
             Get
                 Return raw.FullName
             End Get
         End Property
 
+        ''' <summary>
+        ''' The mapped R# data type
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property mode As TypeCodes
         Public ReadOnly Property isArray As Boolean
         Public ReadOnly Property isCollection As Boolean
+
+        ''' <summary>
+        ''' .NET type
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property raw As Type
+        ''' <summary>
+        ''' implements interface of <see cref="IDynamicsObject"/>?
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property haveDynamicsProperty As Boolean
+        ''' <summary>
+        ''' is an <see cref="Environment"/> object?
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property isEnvironment As Boolean
 
         Dim names As String()
