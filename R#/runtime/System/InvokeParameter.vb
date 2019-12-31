@@ -98,8 +98,10 @@ Namespace Runtime.Components
             Get
                 If value Is Nothing Then
                     Return False
-                ElseIf (TypeOf value Is SymbolReference OrElse TypeOf value Is ValueAssign OrElse TypeOf value Is VectorLiteral) Then
+                ElseIf TypeOf value Is SymbolReference OrElse TypeOf value Is ValueAssign Then
                     Return True
+                ElseIf TypeOf value Is VectorLiteral Then
+                    Return DirectCast(value, VectorLiteral).type = TypeCodes.string
                 Else
                     Return False
                 End If

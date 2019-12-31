@@ -282,6 +282,7 @@ Namespace Interpreter.ExecuteEngine
             Return result
         End Function
 
+        <DebuggerStepThrough>
         Private Shared Function allIsValueAssign(parameters As IEnumerable(Of Expression)) As Boolean
             Return parameters.All(Function(e) TypeOf e Is ValueAssign)
         End Function
