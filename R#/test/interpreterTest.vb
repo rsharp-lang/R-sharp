@@ -71,6 +71,8 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+
+        Call listTest()
         Call booleanCLIArgumentTest()
 
         Call unaryNegTest()
@@ -144,8 +146,6 @@ Module interpreterTest
 
         Call logicalTest()
         Call boolLiteralTest()
-
-        Call listTest()
 
         Call declareFunctionTest()
 

@@ -745,12 +745,6 @@ Namespace Runtime.Internal.Invokes
                 End Try
             ElseIf type Is GetType(Message) Then
                 Return x
-            ElseIf type Is GetType(list) Then
-                Call DirectCast(x, list) _
-                    .slots _
-                    .DoCall(Sub(list)
-                                printer.printInternal(list, "", maxPrint, globalEnv)
-                            End Sub)
             Else
                 Call printer.printInternal(x, "", maxPrint, globalEnv)
             End If

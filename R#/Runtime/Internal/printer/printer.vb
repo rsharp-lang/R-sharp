@@ -123,6 +123,12 @@ Namespace Runtime.Internal.ConsolePrinter
                 Call DirectCast(x, vector).data.printArray(maxPrint, env)
             ElseIf valueType.ImplementInterface(GetType(IDictionary)) Then
                 Call DirectCast(x, IDictionary).printList(listPrefix, maxPrint, env)
+            ElseIf valueType Is GetType(list) Then
+                Call DirectCast(x, list) _
+                    .slots _
+                    .DoCall(Sub(list)
+                                list.printList(listPrefix, maxPrint, env)
+                            End Sub)
             ElseIf valueType Is GetType(dataframe) Then
                 Call DirectCast(x, dataframe) _
                     .GetTable _
