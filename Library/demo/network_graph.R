@@ -32,16 +32,16 @@ g :> add.edge("X", "A1");
 
 # do network styling
 g 
-:> type_groups(type = "A+",      nodes = ["A","B","C"])
-:> type_groups(type = "B_class", nodes = ["D"])
-:> type_groups(type = "tails",   nodes = ["F", "G"])
-:> type_groups(type = "mirror",  nodes = ["A1","B1","C1","D1","E1", "F1", "G1", "H1"]);
+:> groups(type = "A+",      nodes = ["A","B","C"])
+:> groups(type = "B_class", nodes = ["D"])
+:> groups(type = "tails",   nodes = ["F", "G"])
+:> groups(type = "mirror",  nodes = ["A1","B1","C1","D1","E1", "F1", "G1", "H1"]);
 
 g 
-:> color.type_group(type = "A+",      color = "red")
-:> color.type_group(type = "B_class", color = "green")
-:> color.type_group(type = "tails",   color = "yellow")
-:> color.type_group(type = "mirror",  color = "purple");
+:> color.group(type = "A+",      color = "red")
+:> color.group(type = "B_class", color = "green")
+:> color.group(type = "tails",   color = "yellow")
+:> color.group(type = "mirror",  color = "purple");
 
 cat("\n");
 str(g :> degree);

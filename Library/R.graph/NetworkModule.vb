@@ -1,56 +1,61 @@
 ﻿#Region "Microsoft.VisualBasic::7f1c40a74e12ab8a0416c52f21b6c4cf, Library\R.graph\NetworkModule.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module NetworkModule
-    ' 
-    '     Function: addEdge, addEdges, addNode, addNodes, degree
-    '               emptyNetwork, LoadNetwork, SaveNetwork, typeGroupOfNodes
-    ' 
-    ' /********************************************************************************/
+' Module NetworkModule
+' 
+'     Function: addEdge, addEdges, addNode, addNodes, degree
+'               emptyNetwork, LoadNetwork, SaveNetwork, typeGroupOfNodes
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.visualize.Network
 Imports Microsoft.VisualBasic.Data.visualize.Network.Analysis
 Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream
 Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream.Generic
 Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports R.graphics
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports node = Microsoft.VisualBasic.Data.visualize.Network.Graph.Node
@@ -133,6 +138,37 @@ Public Module NetworkModule
         Return node
     End Function
 
+    ''' <summary>
+    ''' Set node attribute data
+    ''' </summary>
+    ''' <param name="nodes"></param>
+    ''' <param name="attrs"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("attrs")>
+    Public Function setAttributes(<RRawVectorArgument> nodes As Object,
+                                  <RListObjectArgument> attrs As Object,
+                                  Optional env As Environment = Nothing) As Object
+
+        Dim attrValues As NamedValue(Of String)() = RListObjectArgumentAttribute _
+            .getObjectList(attrs, env) _
+            .Select(Function(a)
+                        Return New NamedValue(Of String) With {
+                            .Name = a.Name,
+                            .Value = Scripting.ToString(a.Value)
+                        }
+                    End Function) _
+            .ToArray
+
+        For Each node As node In REnv.asVector(Of node)(nodes)
+            For Each a In attrValues
+                node.data(a.Name) = a.Value
+            Next
+        Next
+
+        Return nodes
+    End Function
+
     <ExportAPI("add.edge")>
     Public Function addEdge(g As NetworkGraph, u$, v$) As Edge
         Return g.CreateEdge(u, v)
@@ -169,7 +205,49 @@ Public Module NetworkModule
         Return g
     End Function
 
-    <ExportAPI("type_groups")>
+    <ExportAPI("getElementByID")>
+    Public Function getElementByID(g As NetworkGraph, id As Object, Optional env As Environment = Nothing) As Object
+        Dim array As Array
+
+        If id Is Nothing Then
+            Return Nothing
+        End If
+
+        Dim idtype As Type = id.GetType
+
+        If idtype Is GetType(Integer) Then
+            Return g.GetElementByID(DirectCast(id, Integer))
+        ElseIf idtype Is GetType(String) Then
+            Return g.GetElementByID(DirectCast(id, String))
+        ElseIf REnv.isVector(Of Integer)(id) Then
+            array = REnv.asVector(Of Integer)(id) _
+                .AsObjectEnumerator _
+                .Select(Function(i)
+                            Return g.GetElementByID(DirectCast(i, Integer))
+                        End Function) _
+                .ToArray
+        ElseIf REnv.isVector(Of String)(id) Then
+            array = REnv.asVector(Of String)(id) _
+                .AsObjectEnumerator _
+                .Select(Function(i)
+                            Return g.GetElementByID(DirectCast(i, String))
+                        End Function) _
+                .ToArray
+        Else
+            Return Message.InCompatibleType(GetType(String), id.GetType, env)
+        End If
+
+        Return array
+    End Function
+
+    ''' <summary>
+    ''' Make node groups by given type name
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <param name="type"></param>
+    ''' <param name="nodes"></param>
+    ''' <returns></returns>
+    <ExportAPI("groups")>
     Public Function typeGroupOfNodes(g As NetworkGraph, type$, nodes As String()) As NetworkGraph
         Call nodes _
             .Select(AddressOf g.GetElementByID) _
@@ -177,6 +255,52 @@ Public Module NetworkModule
                         n.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) = type
                     End Sub)
         Return g
+    End Function
+
+    ''' <summary>
+    ''' Node select by group or other condition
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <param name="typeSelector$"></param>
+    ''' <returns></returns>
+    <ExportAPI("select")>
+    Public Function getByGroup(g As NetworkGraph, typeSelector As Object, Optional env As Environment = Nothing) As Object
+        If typeSelector Is Nothing Then
+            Return {}
+        ElseIf typeSelector.GetType Is GetType(String) Then
+            Dim typeStr$ = typeSelector.ToString
+
+            Return g.vertex _
+                .Where(Function(n)
+                           Return n.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) = typeStr
+                       End Function) _
+                .ToArray
+        ElseIf REnv.isVector(Of String)(typeSelector) Then
+            Dim typeIndex As Index(Of String) = REnv _
+                .asVector(Of String)(typeSelector) _
+                .AsObjectEnumerator(Of String) _
+                .ToArray
+
+            Return g.vertex _
+                .Where(Function(n)
+                           Return n.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) Like typeIndex
+                       End Function) _
+                .ToArray
+        ElseIf typeSelector.GetType.ImplementInterface(GetType(RFunction)) Then
+            Dim selector As RFunction = typeSelector
+
+            Return g.vertex _
+                .Where(Function(n)
+                           Dim test As Object = selector.Invoke(env, InvokeParameter.Create(n))
+                           ' get test result
+                           Return REnv _
+                               .asLogical(test) _
+                               .FirstOrDefault
+                       End Function) _
+                .ToArray
+        Else
+            Return Message.InCompatibleType(GetType(RFunction), typeSelector.GetType, env)
+        End If
     End Function
 
 End Module

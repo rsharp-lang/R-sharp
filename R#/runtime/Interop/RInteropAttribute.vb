@@ -59,6 +59,7 @@
 Imports System.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Runtime.Interop
 
@@ -182,6 +183,11 @@ Namespace Runtime.Interop
                 Return
             Else
                 type = objects.GetType
+            End If
+
+            If type Is GetType(list) Then
+                objects = DirectCast(objects, list).slots
+                type = GetType(Dictionary(Of String, Object))
             End If
 
             If type Is GetType(Dictionary(Of String, Object)) Then

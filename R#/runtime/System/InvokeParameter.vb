@@ -1,50 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::985b6eaa8db17d3be05b7515986d3c56, R#\Runtime\System\InvokeParameter.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class InvokeParameter
-    ' 
-    '         Properties: haveSymbolName, isSymbolAssign, name, value
-    ' 
-    '         Function: Create, CreateArguments, Evaluate, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class InvokeParameter
+' 
+'         Properties: haveSymbolName, isSymbolAssign, name, value
+' 
+'         Function: Create, CreateArguments, Evaluate, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Components
 
@@ -148,6 +149,16 @@ Namespace Runtime.Components
                               Function(a)
                                   Return a.value.Evaluate(envir)
                               End Function)
+        End Function
+
+        Public Shared Function Create(ParamArray args As Object()) As InvokeParameter()
+            Return args _
+                .Select(Function(a)
+                            Return New InvokeParameter() With {
+                                .value = New RuntimeValueLiteral(a)
+                            }
+                        End Function) _
+                .ToArray
         End Function
     End Class
 End Namespace

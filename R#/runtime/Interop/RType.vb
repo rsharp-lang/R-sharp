@@ -91,6 +91,10 @@ Namespace Runtime.Interop
             End If
         End Function
 
+        ''' <summary>
+        ''' <see cref="getNames()"/>
+        ''' </summary>
+        ''' <returns></returns>
         Private Iterator Function populateNames() As IEnumerable(Of String)
             For Each m As MethodInfo In raw.getObjMethods
                 Yield m.Name
@@ -108,6 +112,10 @@ Namespace Runtime.Interop
             End If
         End Function
 
+        ''' <summary>
+        ''' Get method names and property names of target type object instance
+        ''' </summary>
+        ''' <returns></returns>
         Public Function getNames() As String() Implements IReflector.getNames
             Return names.Clone
         End Function
