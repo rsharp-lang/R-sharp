@@ -702,7 +702,7 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("str")>
         Public Function str(<RRawVectorArgument> [object] As Object, Optional env As Environment = Nothing) As Object
-            Call Console.WriteLine(reflector.GetStructure([object], env.globalEnvironment))
+            Call Console.WriteLine(reflector.GetStructure([object], env.globalEnvironment, " "))
             Return Nothing
         End Function
 
