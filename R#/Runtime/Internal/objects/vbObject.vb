@@ -90,11 +90,28 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        Public Function existsName(name As String) As Boolean
+            If properties.ContainsKey(name) Then
+                Return True
+            ElseIf methods.ContainsKey(name) Then
+                Return True
+            ElseIf type.haveDynamicsProperty Then
+                Return DirectCast(target, IDynamicsObject).HasName(name)
+            Else
+                Return False
+            End If
+        End Function
+
         ''' <summary>
         ''' Get property value/method reference by name
         ''' </summary>
         ''' <param name="name"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' Function will returns nothing when target not found, but 
+        ''' property value read getter result may be nothing, please 
+        ''' check member exists or not by method <see cref="existsName"/> 
+        ''' if the result value is nothing of this function.
+        ''' </returns>
         Public Function getByName(name As String) As Object Implements RNameIndex.getByName
             If properties.ContainsKey(name) Then
                 Return properties(name).GetValue(target)
