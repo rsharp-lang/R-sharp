@@ -58,10 +58,15 @@ Namespace Runtime.Internal.Object
     Public Class vbObject : Implements RNameIndex
 
         Public ReadOnly Property target As Object
+
+        ''' <summary>
+        ''' R# type wrapper of the type data for <see cref="target"/>
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property type As RType
 
-        Dim properties As Dictionary(Of String, PropertyInfo)
-        Dim methods As Dictionary(Of String, RMethodInfo)
+        ReadOnly properties As Dictionary(Of String, PropertyInfo)
+        ReadOnly methods As Dictionary(Of String, RMethodInfo)
 
         Sub New(obj As Object)
             target = obj

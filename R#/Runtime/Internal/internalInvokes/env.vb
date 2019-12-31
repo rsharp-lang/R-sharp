@@ -174,10 +174,14 @@ Namespace Runtime.Internal.Invokes
 
             ' call api from an object instance 
             If targetType Is GetType(vbObject) Then
-                Dim member = DirectCast(what, vbObject).getByName(name:=calls)
+                Dim Robj As vbObject = DirectCast(what, vbObject)
+                Dim member As Object
 
-                If member Is Nothing Then
-
+                If Not Robj.existsName(calls) Then
+                    ' throw exception for invoke missing member from .NET object?
+                    Return Internal.stop({$"Missing member '{calls}' in target {what}", "type: " & Robj.type.fullName, "member name: " & calls}, envir)
+                Else
+                    member = Robj.getByName(name:=calls)
                 End If
 
                 ' invoke .NET API / property getter
@@ -189,6 +193,8 @@ Namespace Runtime.Internal.Invokes
                 Else
                     Return member
                 End If
+            ElseIf targetType Is GetType(list) Then
+                Throw New NotImplementedException
             Else
                 Return Internal.stop(New NotImplementedException(targetType.FullName), envir)
             End If
