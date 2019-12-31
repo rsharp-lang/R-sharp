@@ -138,7 +138,11 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="envir"></param>
         ''' <returns></returns>
         <ExportAPI("list")>
-        Public Function Rlist(<RListObjectArgument> slots As Object, envir As Environment) As Object
+        Public Function Rlist(<RListObjectArgument>
+                              <RRawVectorArgument>
+                              slots As Object,
+                              Optional envir As Environment = Nothing) As Object
+
             Dim list As New Dictionary(Of String, Object)
             Dim slot As InvokeParameter
             Dim key As String
@@ -164,25 +168,42 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' # Object Summaries
+        ''' 
+        ''' summary is a generic function used to produce result summaries of 
+        ''' the results of various model fitting functions. The function 
+        ''' invokes particular methods which depend on the class of the first 
+        ''' argument.
+        ''' </summary>
+        ''' <param name="object">
+        ''' an object for which a summary is desired.
+        ''' </param>
+        ''' <returns></returns>
+        <ExportAPI("summary")>
+        Public Function summary([object] As Object) As Object
+            Throw New NotImplementedException
+        End Function
+
+        ''' <summary>
         ''' This function returns a logical value to determine that the given object is empty or not?
         ''' </summary>
-        ''' <param name="o"></param>
+        ''' <param name="x">an object for which test for empty is desired.</param>
         ''' <returns></returns>
         <ExportAPI("is.empty")>
-        Public Function isEmpty(<RRawVectorArgument> o As Object) As Object
+        Public Function isEmpty(<RRawVectorArgument> x As Object) As Object
             ' 20191224
             ' 这个函数虽然申明为object类型的返回值，
             ' 实际上为了统一api的申明，在这里返回的都是一个逻辑值
-            If o Is Nothing Then
+            If x Is Nothing Then
                 Return True
             End If
 
-            Dim type As Type = o.GetType
+            Dim type As Type = x.GetType
 
             If type Is GetType(String) Then
-                Return DirectCast(o, String).StringEmpty(False)
+                Return DirectCast(x, String).StringEmpty(False)
             ElseIf type Is GetType(String()) Then
-                With DirectCast(o, String())
+                With DirectCast(x, String())
                     If .Length > 1 Then
                         Return False
                     ElseIf .Length = 0 OrElse .First.StringEmpty(False) Then
@@ -192,7 +213,7 @@ Namespace Runtime.Internal.Invokes
                     End If
                 End With
             ElseIf type.IsArray Then
-                With DirectCast(o, Array)
+                With DirectCast(x, Array)
                     If .Length = 0 Then
                         Return True
                     ElseIf .Length = 1 Then
@@ -210,7 +231,7 @@ Namespace Runtime.Internal.Invokes
                     End If
                 End With
             ElseIf type.ImplementInterface(GetType(RIndex)) Then
-                Return DirectCast(o, RIndex).length = 0
+                Return DirectCast(x, RIndex).length = 0
             Else
                 Return False
             End If
@@ -681,7 +702,7 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("str")>
         Public Function str(<RRawVectorArgument> [object] As Object, Optional env As Environment = Nothing) As Object
-            Call Console.WriteLine(reflector.GetStructure([object], env.globalEnvironment))
+            Call Console.WriteLine(reflector.GetStructure([object], env.globalEnvironment, " "))
             Return Nothing
         End Function
 
@@ -728,12 +749,6 @@ Namespace Runtime.Internal.Invokes
                 End Try
             ElseIf type Is GetType(Message) Then
                 Return x
-            ElseIf type Is GetType(list) Then
-                Call DirectCast(x, list) _
-                    .slots _
-                    .DoCall(Sub(list)
-                                printer.printInternal(list, "", maxPrint, globalEnv)
-                            End Sub)
             Else
                 Call printer.printInternal(x, "", maxPrint, globalEnv)
             End If

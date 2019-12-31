@@ -123,11 +123,19 @@ Namespace Runtime.Internal.ConsolePrinter
                 Call DirectCast(x, vector).data.printArray(maxPrint, env)
             ElseIf valueType.ImplementInterface(GetType(IDictionary)) Then
                 Call DirectCast(x, IDictionary).printList(listPrefix, maxPrint, env)
+            ElseIf valueType Is GetType(list) Then
+                Call DirectCast(x, list) _
+                    .slots _
+                    .DoCall(Sub(list)
+                                list.printList(listPrefix, maxPrint, env)
+                            End Sub)
             ElseIf valueType Is GetType(dataframe) Then
                 Call DirectCast(x, dataframe) _
                     .GetTable _
                     .Print(addBorder:=False) _
                     .DoCall(AddressOf Console.WriteLine)
+            ElseIf valueType Is GetType(vbObject) Then
+                Call DirectCast(x, vbObject).ToString.DoCall(AddressOf Console.WriteLine)
             Else
 printSingleElement:
                 Call Console.WriteLine("[1] " & printer.ValueToString(x, env))

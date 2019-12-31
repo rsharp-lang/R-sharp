@@ -64,6 +64,16 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 <Package("igraph")>
 Public Module NetworkModule
 
+    Sub New()
+        REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of NetworkGraph)(AddressOf printGraph)
+    End Sub
+
+    Private Function printGraph(obj As Object) As String
+        Dim g As NetworkGraph = DirectCast(obj, NetworkGraph)
+
+        Return $"Network graph with {g.vertex.Count} vertex nodes and {g.graphEdges.Count} edges."
+    End Function
+
     <ExportAPI("save.network")>
     Public Function SaveNetwork(g As Object, file$, Optional properties As String() = Nothing) As Boolean
         If g Is Nothing Then
