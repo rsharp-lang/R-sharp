@@ -52,8 +52,15 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 
 Namespace Runtime.Interop
 
+    ''' <summary>
+    ''' The R# method argument wrapper
+    ''' </summary>
     Public Class RMethodArgument : Implements INamedValue
 
+        ''' <summary>
+        ''' The argument name
+        ''' </summary>
+        ''' <returns></returns>
         Public Property name As String Implements INamedValue.Key
         Public Property type As RType
         Public Property [default] As Object
