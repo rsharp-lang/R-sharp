@@ -59,6 +59,7 @@ Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
@@ -163,26 +164,42 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' # Object Summaries
+        ''' 
+        ''' summary is a generic function used to produce result summaries of 
+        ''' the results of various model fitting functions. The function 
+        ''' invokes particular methods which depend on the class of the first 
+        ''' argument.
+        ''' </summary>
+        ''' <param name="object">
+        ''' an object for which a summary is desired.
+        ''' </param>
+        ''' <returns></returns>
+        <ExportAPI("summary")>
+        Public Function summary([object] As Object) As Object
+            Throw New NotImplementedException
+        End Function
+
+        ''' <summary>
         ''' This function returns a logical value to determine that the given object is empty or not?
         ''' </summary>
-        ''' <param name="o"></param>
+        ''' <param name="x">an object for which test for empty is desired.</param>
         ''' <returns></returns>
         <ExportAPI("is.empty")>
-        Friend Function isEmpty(<RRawVectorArgument> o As Object) As Object
+        Public Function isEmpty(<RRawVectorArgument> x As Object) As Object
             ' 20191224
             ' 这个函数虽然申明为object类型的返回值，
             ' 实际上为了统一api的申明，在这里返回的都是一个逻辑值
-
-            If o Is Nothing Then
+            If x Is Nothing Then
                 Return True
             End If
 
-            Dim type As Type = o.GetType
+            Dim type As Type = x.GetType
 
             If type Is GetType(String) Then
-                Return DirectCast(o, String).StringEmpty(False)
+                Return DirectCast(x, String).StringEmpty(False)
             ElseIf type Is GetType(String()) Then
-                With DirectCast(o, String())
+                With DirectCast(x, String())
                     If .Length > 1 Then
                         Return False
                     ElseIf .Length = 0 OrElse .First.StringEmpty(False) Then
@@ -192,7 +209,7 @@ Namespace Runtime.Internal.Invokes
                     End If
                 End With
             ElseIf type.IsArray Then
-                With DirectCast(o, Array)
+                With DirectCast(x, Array)
                     If .Length = 0 Then
                         Return True
                     ElseIf .Length = 1 Then
@@ -210,7 +227,7 @@ Namespace Runtime.Internal.Invokes
                     End If
                 End With
             ElseIf type.ImplementInterface(GetType(RIndex)) Then
-                Return DirectCast(o, RIndex).length = 0
+                Return DirectCast(x, RIndex).length = 0
             Else
                 Return False
             End If
@@ -718,6 +735,8 @@ Namespace Runtime.Internal.Invokes
                     .packages _
                     .packageDocs _
                     .PrintHelp(x)
+            ElseIf type Is GetType(DeclareNewFunction) Then
+                Call Console.WriteLine(x.ToString)
             ElseIf type.ImplementInterface(GetType(RPrint)) Then
                 Try
                     Call markdown.DoPrint(DirectCast(x, RPrint).GetPrintContent, 0)

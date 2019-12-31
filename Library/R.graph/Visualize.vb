@@ -77,7 +77,7 @@ Module Visualize
         )
     End Function
 
-    <ExportAPI("color.type_group")>
+    <ExportAPI("color.group")>
     Public Function colorByTypeGroup(g As NetworkGraph, type$, color$) As NetworkGraph
         Dim colorBrush As Brush = color.GetBrush
 
