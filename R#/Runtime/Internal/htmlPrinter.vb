@@ -52,7 +52,7 @@ Namespace Runtime.Internal
         ReadOnly RtoHtml As New Dictionary(Of Type, IStringBuilder)
 
         ''' <summary>
-        ''' <see cref="Object"/> -> <see cref="String"/>
+        ''' Create html document from given object. (<see cref="Object"/> -> html <see cref="String"/>)
         ''' </summary>
         ''' <typeparam name="T"></typeparam>
         ''' <param name="formatter"></param>

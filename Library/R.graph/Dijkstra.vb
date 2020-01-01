@@ -55,7 +55,7 @@ Imports REnv = SMRUCC.Rsharp.Runtime.Internal
 Module Dijkstra
 
     Sub New()
-        REnv.AttachHtmlFormatter(Of Route)(AddressOf printRoutine)
+        REnv.ConsolePrinter.AttachConsoleFormatter(Of Route)(AddressOf printRoutine)
     End Sub
 
     Private Function printRoutine(obj As Object) As String
