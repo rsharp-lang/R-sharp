@@ -4,5 +4,5 @@ setwd(!script$dir);
 
 read.network("demo_network")
 :> router.dijkstra
-:> routine.min_cost("", "")
+:> routine.min_cost("G", "Z")
 :> print;
