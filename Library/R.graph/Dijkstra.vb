@@ -39,7 +39,9 @@
 
 #End Region
 
+Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Data.GraphTheory
 Imports Microsoft.VisualBasic.Data.GraphTheory.Dijkstra
 Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -52,13 +54,34 @@ Imports REnv = SMRUCC.Rsharp.Runtime.Internal
 <Package("igraph.dijkstra")>
 Module Dijkstra
 
+    Sub New()
+        REnv.AttachHtmlFormatter(Of Route)(AddressOf printRoutine)
+    End Sub
+
+    Private Function printRoutine(obj As Object) As String
+        Dim route As Route = DirectCast(obj, Route)
+        Dim summary As New StringBuilder
+
+        Call summary.AppendLine(route.ToString)
+
+        For Each link As VertexEdge In route.Connections
+            Call summary.AppendLine($"  {link.U.label} -> {link.V.label}")
+        Next
+
+        Return summary.ToString
+    End Function
+
     <ExportAPI("router.dijkstra")>
     Public Function CreateRouter(g As NetworkGraph, Optional undirected As Boolean = False) As DijkstraRouter
         Return DijkstraRouter.FromNetwork(g, undirected)
     End Function
 
     <ExportAPI("routine.min_cost")>
-    Public Function DijkstraRoutine(router As DijkstraRouter, from As Object, [to] As Object, Optional env As Environment = Nothing) As Object
+    Public Function DijkstraRoutine(router As DijkstraRouter,
+                                    from As Object,
+                                    [to] As Object,
+                                    Optional env As Environment = Nothing) As Object
+
         If from Is Nothing Then
             Return REnv.debug.stop("start point is nothing!", env)
         ElseIf [to] Is Nothing Then
