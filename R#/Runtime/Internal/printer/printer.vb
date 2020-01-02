@@ -107,7 +107,9 @@ Namespace Runtime.Internal.ConsolePrinter
         Friend Sub printInternal(x As Object, listPrefix$, maxPrint%, env As GlobalEnvironment)
             Dim valueType As Type = x.GetType
 
-            If valueType.IsInheritsFrom(GetType(Array)) Then
+            If RtoString.ContainsKey(valueType) Then
+                Call Console.WriteLine(RtoString(valueType)(x))
+            ElseIf valueType.IsInheritsFrom(GetType(Array)) Then
                 With DirectCast(x, Array)
                     If .Length > 1 Then
                         Call .printArray(maxPrint, env)
