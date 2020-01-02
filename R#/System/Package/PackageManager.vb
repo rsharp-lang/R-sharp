@@ -69,6 +69,15 @@ Namespace System.Package
             Me.config = config
         End Sub
 
+        ''' <summary>
+        ''' Check if the given dll module <paramref name="libraryFileName"/> is exists in database or not.
+        ''' </summary>
+        ''' <param name="libraryFileName"></param>
+        ''' <returns></returns>
+        Public Function hasLibFile(libraryFileName As String) As Boolean
+            Return pkgDb.hasLibFile(libraryFileName)
+        End Function
+
         Public Function GetPackageDocuments(pkgName As String) As String
             Dim type As Type = Me.FindPackage(pkgName, Nothing).package
             Dim docs As ProjectType = packageDocs.GetAnnotations(type)

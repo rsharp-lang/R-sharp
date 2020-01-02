@@ -70,6 +70,15 @@ Namespace System.Package
         Public Property packages As PackageLoaderEntry()
 
         ''' <summary>
+        ''' Check if the given dll module <paramref name="libraryFileName"/> is exists in database or not.
+        ''' </summary>
+        ''' <param name="libraryFileName"></param>
+        ''' <returns></returns>
+        Public Function hasLibFile(libraryFileName As String) As Boolean
+            Return packages.Any(Function(pkg) pkg.module.assembly = libraryFileName)
+        End Function
+
+        ''' <summary>
         ''' If the package is not exists or load package failure
         ''' then this function returns nothing
         ''' </summary>

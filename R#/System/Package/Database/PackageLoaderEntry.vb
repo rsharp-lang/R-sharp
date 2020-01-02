@@ -53,10 +53,20 @@ Namespace System.Package
     <XmlType("package")>
     Public Class PackageLoaderEntry
 
+        ''' <summary>
+        ''' Package name
+        ''' </summary>
+        ''' <returns></returns>
         <XmlAttribute>
         Public Property [namespace] As String
+
+        ''' <summary>
+        ''' Package summary information
+        ''' </summary>
+        ''' <returns></returns>
         <XmlText>
         Public Property description As String
+
         ''' <summary>
         ''' This plugins project's home page url.
         ''' </summary>
@@ -64,6 +74,7 @@ Namespace System.Package
         ''' 
         <XmlAttribute>
         Public Property url As String
+
         ''' <summary>
         ''' Your name or E-Mail
         ''' </summary>
@@ -71,15 +82,23 @@ Namespace System.Package
         ''' 
         <XmlElement>
         Public Property publisher As String
+
         <XmlAttribute>
         Public Property revision As Integer
+
         ''' <summary>
         ''' 这个脚本模块包的文献引用列表
         ''' </summary>
         ''' <returns></returns>
         Public Property cites As String
+
         <XmlAttribute>
         Public Property category As APICategories = APICategories.SoftwareTools
+
+        ''' <summary>
+        ''' The package loader entry information
+        ''' </summary>
+        ''' <returns></returns>
         Public Property [module] As TypeInfo
 
         Sub New()

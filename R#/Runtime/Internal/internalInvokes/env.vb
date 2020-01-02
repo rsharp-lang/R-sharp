@@ -118,15 +118,28 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("ls")>
         Private Function ls(Optional name$ = Nothing, Optional env As Environment = Nothing) As Object
             If name.StringEmpty Then
+                ' list all of the objects in current 
+                ' R# runtime environment
                 Return env.variables.Keys.ToArray
             Else
-                Dim globalEnv = env.globalEnvironment
-                Dim package As Package = globalEnv.packages.FindPackage(name, Nothing)
+                Dim globalEnv As GlobalEnvironment = env.globalEnvironment
+                Dim pkgMgr As PackageManager = globalEnv.packages
 
-                If package Is Nothing Then
-                    Return {}
+                If pkgMgr.hasLibFile(name.FileName) Then
+                    ' list all of the package names in current dll module
+                    Return PackageLoader _
+                        .ParsePackages(dll:=name) _
+                        .Select(Function(pkg) pkg.namespace) _
+                        .ToArray
                 Else
-                    Return package.ls
+                    ' list all of the function api names in current package
+                    Dim package As Package = pkgMgr.FindPackage(name, Nothing)
+
+                    If package Is Nothing Then
+                        Return {}
+                    Else
+                        Return package.ls
+                    End If
                 End If
             End If
         End Function
