@@ -60,6 +60,17 @@ Namespace Runtime.Internal.Object
             End Get
         End Property
 
+        ''' <summary>
+        ''' Get slot value by name
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <returns></returns>
+        Default Public ReadOnly Property SlotValue(name As String) As Object
+            Get
+                Return getByName(name)
+            End Get
+        End Property
+
         Public Function getNames() As String() Implements RNames.getNames
             Return slots.Keys.ToArray
         End Function
@@ -124,6 +135,12 @@ Namespace Runtime.Internal.Object
             Throw New NotImplementedException()
         End Function
 
+        ''' <summary>
+        ''' If target key name is not found in list, then
+        ''' function will returns nothing
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <returns></returns>
         Public Function getByName(name As String) As Object Implements RNameIndex.getByName
             If slots.ContainsKey(name) Then
                 Return slots(name)
