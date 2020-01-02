@@ -59,6 +59,12 @@ Namespace Runtime.Interop
         Public method As MethodInfo
         Public target As Object
 
+        Public ReadOnly Property isStatic As Boolean
+            Get
+                Return target Is Nothing
+            End Get
+        End Property
+
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
         Public Function Invoke(parameters As Object()) As Object
