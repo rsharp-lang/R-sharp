@@ -316,6 +316,9 @@
     <Compile Include="Runtime\Internal\objects\unit.vb" />
     <Compile Include="Runtime\Internal\printer\functionPrinter.vb" />
     <Compile Include="Runtime\Internal\htmlPrinter.vb" />
+    <Compile Include="Runtime\Interop\RInteropAttributes\RSymbolTextArgumentAttribute.vb" />
+    <Compile Include="Runtime\Interop\RInteropAttributes\RSuppressPrintAttribute.vb" />
+    <Compile Include="Runtime\Interop\RInteropAttributes\RListObjectArgumentAttribute.vb" />
     <Compile Include="Runtime\Interop\RReturn.vb" />
     <Compile Include="Runtime\RTypeExtensions.vb" />
     <Compile Include="System\Config\Defaults.vb" />
@@ -339,7 +342,7 @@
     <Compile Include="Runtime\Internal\printer\printer.vb" />
     <Compile Include="Runtime\Interop\RMethodOverloads.vb" />
     <Compile Include="Runtime\Interop\MethodInvoke.vb" />
-    <Compile Include="Runtime\Interop\RInteropAttribute.vb" />
+    <Compile Include="Runtime\Interop\RInteropAttributes\RInteropAttribute.vb" />
     <Compile Include="Runtime\Interop\RMethodArgument.vb" />
     <Compile Include="Runtime\System\InvokeParameter.vb" />
     <Compile Include="Runtime\RVectorExtensions.vb" />
