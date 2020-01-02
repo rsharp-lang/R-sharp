@@ -1,45 +1,45 @@
 ﻿#Region "Microsoft.VisualBasic::80ac2ee6e4e5e6f763114772c4befc14, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolReference.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class SymbolReference
-    ' 
-    '         Properties: symbol, type
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: Evaluate, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class SymbolReference
+' 
+'         Properties: symbol, type
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: Evaluate, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -47,7 +47,9 @@ Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports RPkg = SMRUCC.Rsharp.System.Package.Package
 
 Namespace Interpreter.ExecuteEngine
 
@@ -89,6 +91,51 @@ Namespace Interpreter.ExecuteEngine
 
         Public Overrides Function ToString() As String
             Return $"&{symbol}"
+        End Function
+    End Class
+
+    Public Class NamespaceFunctionSymbolReference : Inherits Expression
+
+        Public ReadOnly Property [namespace] As String
+        Public ReadOnly Property symbol As Expression
+
+        Public Overrides ReadOnly Property type As TypeCodes
+            Get
+                Return TypeCodes.closure
+            End Get
+        End Property
+
+        Public Sub New(namespace$, symbol As Expression)
+            Me.symbol = symbol
+            Me.namespace = [namespace]
+        End Sub
+
+        Public Overrides Function Evaluate(envir As Environment) As Object
+            Return getPackageApiImpl(envir, [namespace], symbol)
+        End Function
+
+        Friend Shared Function getPackageApiImpl(env As Environment, namespace$, funcNameSymbol As Expression) As Object
+            ' find package and then load method
+            Dim pkg As RPkg = env.globalEnvironment.packages.FindPackage([namespace], Nothing)
+            Dim funcName As String = Scripting.ToString(funcNameSymbol.Evaluate(env))
+
+            If pkg Is Nothing Then
+                Return Message.SymbolNotFound(env, [namespace], TypeCodes.ref)
+            ElseIf funcName Is Nothing Then
+                Return Internal.stop(New NullReferenceException, env)
+            Else
+                Dim api As RMethodInfo = pkg.GetFunction(funcName)
+
+                If api Is Nothing Then
+                    Return Message.SymbolNotFound(env, $"{[namespace]}::{funcName}", TypeCodes.closure)
+                Else
+                    Return DirectCast(api, RFunction)
+                End If
+            End If
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return $"&{[namespace]}::<{symbol.ToString}>"
         End Function
     End Class
 End Namespace
