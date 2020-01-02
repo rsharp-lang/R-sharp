@@ -58,6 +58,7 @@
 
 Imports System.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
@@ -74,12 +75,48 @@ Namespace Runtime.Interop
     Public Class RByRefValueAssignAttribute : Inherits RInteropAttribute
     End Class
 
+    ''' <summary>
+    ''' 表示这个参数是一个数组，环境系统不应该自动调用getFirst取第一个值
+    ''' </summary>
     <AttributeUsage(AttributeTargets.Parameter, AllowMultiple:=False, Inherited:=True)>
     Public Class RRawVectorArgumentAttribute : Inherits RInteropAttribute
     End Class
 
     ''' <summary>
-    ''' The return value will not be print on the console
+    ''' 表示当前的这个参数的参数值可以接受文本或者未找到符号的变量名作为参数值
+    ''' </summary>
+    ''' 
+    <AttributeUsage(AttributeTargets.Parameter, AllowMultiple:=False, Inherited:=True)>
+    Public Class RSymbolTextArgumentAttribute : Inherits RInteropAttribute
+
+        ' 例如
+        ' 接受文本参数值   func("text")
+        ' 接受符号名参数值 func(text) 如果text不存在于环境中，则等价于func("text")
+        ' 如果text存在于环境中，并且值为hello，则等价于func("hello")
+
+        Public Shared Function getSymbolText(symbol As Expression, env As Environment) As String
+            Select Case symbol.GetType
+                Case GetType(Literal)
+                    Return DirectCast(symbol, Literal).value
+                Case GetType(SymbolReference)
+                    Dim symbolName$ = DirectCast(symbol, SymbolReference).symbol
+                    Dim var As Variable = env.FindSymbol(symbolName)
+
+                    If var Is Nothing Then
+                        Return symbolName
+                    Else
+                        Return Scripting.ToString(var.value, Nothing)
+                    End If
+                Case Else
+                    Return Scripting.ToString(symbol.Evaluate(env), Nothing)
+            End Select
+        End Function
+
+    End Class
+
+    ''' <summary>
+    ''' The return value will not be print on the console.
+    ''' (函数的返回值不会被自动打印出来)
     ''' </summary>
     <AttributeUsage(AttributeTargets.ReturnValue, AllowMultiple:=False, Inherited:=True)>
     Public Class RSuppressPrintAttribute : Inherits RInteropAttribute
@@ -167,6 +204,9 @@ Namespace Runtime.Interop
         End Function
     End Class
 
+    ''' <summary>
+    ''' 表示当前的函数参数为一个 ``...`` 可以产生一个字典list对象值的参数列表
+    ''' </summary>
     <AttributeUsage(AttributeTargets.Parameter, AllowMultiple:=False, Inherited:=True)>
     Public Class RListObjectArgumentAttribute : Inherits RInteropAttribute
 
