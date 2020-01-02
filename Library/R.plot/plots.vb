@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c1edb109054b41e1db102e1ff127aa16, Library\R.plot\plots.vb"
+﻿#Region "Microsoft.VisualBasic::f92b952b1116f2f89e2bf9a4e0431a1f, Library\R.plot\plots.vb"
 
     ' Author:
     ' 
@@ -42,4 +42,3 @@
 Module plots
 
 End Module
-

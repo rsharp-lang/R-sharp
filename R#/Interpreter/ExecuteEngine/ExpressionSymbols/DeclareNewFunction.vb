@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cedbbc4ef2567a31e8f371f5d24fdef2, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DeclareNewFunction.vb"
+﻿#Region "Microsoft.VisualBasic::c45867a2d65ca7a91c5d7f315f47c4a7, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DeclareNewFunction.vb"
 
     ' Author:
     ' 

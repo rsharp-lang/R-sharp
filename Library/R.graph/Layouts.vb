@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8d7687340ae994c7ba0d02224f6a79fe, Library\R.graph\Layouts.vb"
+﻿#Region "Microsoft.VisualBasic::77783f837b6e743412f45a339d2fb0c2, Library\R.graph\Layouts.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports System.Drawing
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -88,4 +87,3 @@ Module Layouts
         Return g
     End Function
 End Module
-

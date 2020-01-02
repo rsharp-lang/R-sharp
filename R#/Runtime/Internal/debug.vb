@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::87ef9cf628211d6d02a26f69b67ced70, R#\Runtime\Internal\debug.vb"
+﻿#Region "Microsoft.VisualBasic::373b70eee79ebb02534323aad03bc1f3, R#\Runtime\Internal\debug.vb"
 
     ' Author:
     ' 
@@ -37,7 +37,7 @@
     ' 
     '         Constructor: (+1 Overloads) Sub New
     ' 
-    '         Function: [stop]
+    '         Function: [stop], getMessageColor, getMessagePrefix, PrintMessageInternal
     ' 
     '         Sub: write
     ' 
