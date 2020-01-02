@@ -1,59 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::a23ac5d69ab2f5480605a6ecb60258a8, R-terminal\Terminal.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module Terminal
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: isImports, isInvisible, isValueAssign, RunTerminal
-    ' 
-    '     Sub: doRunScript, doRunScriptWithSpecialCommand
-    ' 
-    ' /********************************************************************************/
+' Module Terminal
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: isImports, isInvisible, isValueAssign, RunTerminal
+' 
+'     Sub: doRunScript, doRunScriptWithSpecialCommand
+' 
+' /********************************************************************************/
 
 #End Region
 
-Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
-Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Terminal
 Imports SMRUCC.Rsharp.Interpreter
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
-Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
-Imports SMRUCC.Rsharp.Runtime.Internal.Object
-Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Configuration
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
@@ -61,7 +55,6 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 Module Terminal
 
     Dim R As RInterpreter
-    Dim echo As Index(Of String) = {"print", "cat", "echo", "q", "quit", "require", "library", "str"}
 
     Sub New()
         Dim Rcore = GetType(RInterpreter).Assembly.FromAssembly
@@ -114,62 +107,7 @@ Type 'q()' to quit R.
     Private Sub doRunScript(script As String)
         Dim program As RProgram = RProgram.BuildProgram(script)
         Dim result As Object = REnv.TryCatch(Function() R.Run(program))
-        Dim requirePrintErr As Boolean = False
 
-        If RProgram.isException(result, R.globalEnvir, isDotNETException:=requirePrintErr) Then
-            If requirePrintErr Then
-                Call REnv.Internal.debug.PrintMessageInternal(result)
-            End If
-
-            Return
-        End If
-
-        If program.EndWithFuncCalls(echo.Objects) Then
-            ' do nothing
-            Dim funcName As Literal = DirectCast(program.Last, FunctionInvoke).funcName
-
-            If funcName = "cat" Then
-                Call Console.WriteLine()
-            End If
-        ElseIf Not program.isValueAssign AndAlso Not program.isImports Then
-            If Not isInvisible(result) Then
-                Call base.print(result, R.globalEnvir)
-            End If
-        End If
+        Call Rscript.handleResult(result, R.globalEnvir, program)
     End Sub
-
-    Private Function isInvisible(result As Object) As Boolean
-        If result Is Nothing Then
-            Return False
-        ElseIf result.GetType Is GetType(RReturn) Then
-            Return DirectCast(result, RReturn).invisible
-        ElseIf result.GetType Is GetType(invisible) Then
-            Return True
-        Else
-            Return False
-        End If
-    End Function
-
-    <DebuggerStepThrough>
-    <Extension>
-    Private Function isImports(program As RProgram) As Boolean
-        If program.Count <> 1 Then
-            Return False
-        Else
-            Dim Rexp As Expression = program.First
-
-            If TypeOf Rexp Is [Imports] OrElse TypeOf Rexp Is Require Then
-                Return True
-            Else
-                Return False
-            End If
-        End If
-    End Function
-
-    <DebuggerStepThrough>
-    <Extension>
-    Private Function isValueAssign(program As RProgram) As Boolean
-        ' 如果是赋值表达式的话，也不会在终端上打印结果值
-        Return TypeOf program.Last Is ValueAssign OrElse TypeOf program.Last Is DeclareNewVariable
-    End Function
 End Module

@@ -258,6 +258,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CLI\CLI.vb" />
+    <Compile Include="Rscript.vb" />
     <Compile Include="Terminal.vb" />
     <Compile Include="Program.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
