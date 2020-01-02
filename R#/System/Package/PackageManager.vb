@@ -49,6 +49,7 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.System.Configuration
@@ -61,6 +62,7 @@ Namespace System.Package
         ReadOnly config As Options
 
         Public ReadOnly Property packageDocs As New AnnotationDocs
+        Public ReadOnly Property loadedPackages As New Index(Of String)
 
         Sub New(config As Options)
             Me.pkgDb = LocalPackageDatabase.Load(config.lib)

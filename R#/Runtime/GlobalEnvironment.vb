@@ -45,6 +45,7 @@
 
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.System.Configuration
 Imports SMRUCC.Rsharp.System.Package
 Imports RPkg = SMRUCC.Rsharp.System.Package.Package
@@ -77,7 +78,11 @@ Namespace Runtime
             Dim package As RPkg = packages.FindPackage(packageName, exception)
             Dim masked As String()
 
-            Call Console.WriteLine($"Loading required package: {packageName}")
+            If Not packageName Like packages.loadedPackages Then
+                Call Console.WriteLine($"Loading required package: {packageName}")
+            Else
+                Return Nothing
+            End If
 
             If package Is Nothing Then
                 Return MissingPackage(packageName, exception)
@@ -91,7 +96,8 @@ Namespace Runtime
                     Call Console.WriteLine()
                     Call Console.WriteLine($"The following object is masked from 'package:{packageName}':")
                     Call Console.WriteLine()
-                    Call Console.WriteLine(masked.JoinBy(", "))
+
+                    Call printer.printContentArray(masked, ", ", "    ")
                 End If
             End If
 
