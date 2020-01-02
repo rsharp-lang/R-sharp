@@ -1,50 +1,51 @@
-﻿#Region "Microsoft.VisualBasic::7364ba661788ee34d49c53eed7b0b9ec, R#\Runtime\Internal\printer\printer.vb"
+﻿#Region "Microsoft.VisualBasic::3e25e20c810fce0b066f751391ccf320, R#\Runtime\Internal\printer\printer.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Delegate Function
-' 
-' 
-'     Module printer
-' 
-'         Constructor: (+1 Overloads) Sub New
-' 
-'         Function: f64_InternalToString, getStrings, ToString, ValueToString
-' 
-'         Sub: AttachConsoleFormatter, AttachInternalConsoleFormatter, printArray, printInternal, printList
-' 
-' 
-' 
-' /********************************************************************************/
+    '     Delegate Function
+    ' 
+    ' 
+    '     Module printer
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    ' 
+    '         Function: f64_InternalToString, getStrings, ToString, ValueToString
+    ' 
+    '         Sub: AttachConsoleFormatter, AttachInternalConsoleFormatter, printArray, printContentArray, printInternal
+    '              printList
+    ' 
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -106,7 +107,9 @@ Namespace Runtime.Internal.ConsolePrinter
         Friend Sub printInternal(x As Object, listPrefix$, maxPrint%, env As GlobalEnvironment)
             Dim valueType As Type = x.GetType
 
-            If valueType.IsInheritsFrom(GetType(Array)) Then
+            If RtoString.ContainsKey(valueType) Then
+                Call Console.WriteLine(RtoString(valueType)(x))
+            ElseIf valueType.IsInheritsFrom(GetType(Array)) Then
                 With DirectCast(x, Array)
                     If .Length > 1 Then
                         Call .printArray(maxPrint, env)
@@ -213,10 +216,20 @@ printSingleElement:
         ''' </summary>
         ''' <param name="xvec"></param>
         <Extension>
-        Private Sub printArray(xvec As Array, maxPrint%, env As GlobalEnvironment)
+        Friend Sub printArray(xvec As Array, maxPrint%, env As GlobalEnvironment)
             Dim stringVec As IEnumerable(Of String) = getStrings(xvec, env)
-            Dim maxColumns As Integer = Console.WindowWidth - 1
             Dim contents As String() = stringVec.Take(maxPrint).ToArray
+
+            Call contents.printContentArray(Nothing, Nothing)
+
+            If xvec.Length > maxPrint Then
+                Call Console.WriteLine($"[ reached getOption(""max.print"") -- omitted {xvec.Length - contents.Length} entries ]")
+            End If
+        End Sub
+
+        <Extension>
+        Friend Sub printContentArray(contents$(), deli$, indentPrefix$)
+            Dim maxColumns As Integer = Console.WindowWidth - 1
             ' maxsize / average size
             Dim unitWidth As Integer = contents.Max(Function(c) c.Length) + 1
             Dim divSize As Integer = maxColumns \ unitWidth - 3
@@ -227,19 +240,24 @@ printSingleElement:
             End If
 
             For Each row As String() In contents.Split(partitionSize:=divSize)
-                Call Console.Write($"[{i = i + divSize}]{vbTab}")
+                If indentPrefix Is Nothing Then
+                    Call Console.Write($"[{i = i + divSize}]{vbTab}")
+                Else
+                    Call Console.Write(indentPrefix)
+                End If
 
                 For Each c As String In row
                     Call Console.Write(c)
-                    Call Console.Write(New String(" "c, unitWidth - c.Length))
+
+                    If deli Is Nothing Then
+                        Call Console.Write(New String(" "c, unitWidth - c.Length))
+                    Else
+                        Call Console.Write(deli)
+                    End If
                 Next
 
                 Call Console.WriteLine()
             Next
-
-            If xvec.Length > maxPrint Then
-                Call Console.WriteLine($"[ reached getOption(""max.print"") -- omitted {xvec.Length - contents.Length} entries ]")
-            End If
         End Sub
     End Module
 End Namespace

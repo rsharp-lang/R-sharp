@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b7cd866196844c50617646ab7df8be9f, R#\System\Package\Database\LocalPackageDatabase.vb"
+﻿#Region "Microsoft.VisualBasic::b8f6022048995bc5ba579f741c1e1152, R#\System\Package\Database\LocalPackageDatabase.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,7 @@
     '         Properties: localDb, numOfpackages, packages, system
     ' 
     '         Function: Build, EmptyRepository, FindPackage, GenericEnumerator, GetEnumerator
-    '                   Load
+    '                   hasLibFile, Load
     ' 
     ' 
     ' /********************************************************************************/
@@ -68,6 +68,15 @@ Namespace System.Package
 
         <XmlArray>
         Public Property packages As PackageLoaderEntry()
+
+        ''' <summary>
+        ''' Check if the given dll module <paramref name="libraryFileName"/> is exists in database or not.
+        ''' </summary>
+        ''' <param name="libraryFileName"></param>
+        ''' <returns></returns>
+        Public Function hasLibFile(libraryFileName As String) As Boolean
+            Return packages.Any(Function(pkg) pkg.module.assembly = libraryFileName)
+        End Function
 
         ''' <summary>
         ''' If the package is not exists or load package failure

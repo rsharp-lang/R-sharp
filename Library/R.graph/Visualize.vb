@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1a3fdeaa84ecde35fa7eb60c0edf153c, Library\R.graph\Visualize.vb"
+﻿#Region "Microsoft.VisualBasic::6e1df57810f6dca83d76d68bad943684, Library\R.graph\Visualize.vb"
 
     ' Author:
     ' 
@@ -34,7 +34,6 @@
     ' Module Visualize
     ' 
     '     Function: colorByTypeGroup, renderPlot
-    ' 
     ' 
     ' /********************************************************************************/
 
@@ -93,5 +92,3 @@ Module Visualize
     End Function
 
 End Module
-
-

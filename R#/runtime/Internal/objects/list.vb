@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::723e5732d8f3ee88e3ce1538306b7db0, R#\Runtime\Internal\objects\list.vb"
+﻿#Region "Microsoft.VisualBasic::3e604a3ca6a687ef0d4a7c8663afaf91, R#\Runtime\Internal\objects\list.vb"
 
     ' Author:
     ' 
@@ -57,6 +57,17 @@ Namespace Runtime.Internal.Object
         Public ReadOnly Property length As Integer Implements RIndex.length
             Get
                 Return slots.Count
+            End Get
+        End Property
+
+        ''' <summary>
+        ''' Get slot value by name
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <returns></returns>
+        Default Public ReadOnly Property SlotValue(name As String) As Object
+            Get
+                Return getByName(name)
             End Get
         End Property
 
@@ -124,6 +135,12 @@ Namespace Runtime.Internal.Object
             Throw New NotImplementedException()
         End Function
 
+        ''' <summary>
+        ''' If target key name is not found in list, then
+        ''' function will returns nothing
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <returns></returns>
         Public Function getByName(name As String) As Object Implements RNameIndex.getByName
             If slots.ContainsKey(name) Then
                 Return slots(name)

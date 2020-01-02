@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::decf2d0ebe27bca6d130a207ebbc76bc, R#\Interpreter\Extensions.vb"
+﻿#Region "Microsoft.VisualBasic::ca9f79cdc039cc26f8f8f41a69285047, R#\Interpreter\Extensions.vb"
 
     ' Author:
     ' 
@@ -33,8 +33,7 @@
 
     '     Module Extensions
     ' 
-    '         Function: GetExpressions, getMessageColor, getMessagePrefix, isTerminator, printMessageInternal
-    '                   RunProgram
+    '         Function: GetExpressions, isTerminator, RunProgram
     ' 
     ' 
     ' /********************************************************************************/

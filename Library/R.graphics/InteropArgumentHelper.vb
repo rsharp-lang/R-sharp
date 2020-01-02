@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d23bececdfdaaa040fc0ce6db71e03b8, Library\R.graphics\InteropArgumentHelper.vb"
+﻿#Region "Microsoft.VisualBasic::0c7b6ac43f5401872f393e334f5aa03c, Library\R.graphics\InteropArgumentHelper.vb"
 
     ' Author:
     ' 
@@ -92,4 +92,3 @@ Public Module InteropArgumentHelper
         End Select
     End Function
 End Module
-

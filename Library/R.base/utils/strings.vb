@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::71c18b418034bf9e9b789376e8e69224, Library\R.base\utils\strings.vb"
+﻿#Region "Microsoft.VisualBasic::02e99087d1358fd1f6b3cb2418e9c5c5, Library\R.base\utils\strings.vb"
 
     ' Author:
     ' 
@@ -57,4 +57,3 @@ Module strings
         Return LevenshteinDistance.ComputeDistance(x, y)
     End Function
 End Module
-

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0f893da8d6a1727672bdb8bd806d0a6f, R#\Runtime\Interop\MethodInvoke.vb"
+﻿#Region "Microsoft.VisualBasic::28f752a3b490ace7a72136214ef91bb2, R#\Runtime\Interop\MethodInvoke.vb"
 
     ' Author:
     ' 
@@ -33,11 +33,13 @@
 
     '     Class MethodInvoke
     ' 
+    '         Properties: isStatic
+    ' 
     '         Function: Invoke, ToString
     ' 
     '     Class RuntimeValueLiteral
     ' 
-    '         Properties: type
+    '         Properties: type, value
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: Evaluate, ToString
@@ -58,6 +60,12 @@ Namespace Runtime.Interop
 
         Public method As MethodInfo
         Public target As Object
+
+        Public ReadOnly Property isStatic As Boolean
+            Get
+                Return target Is Nothing
+            End Get
+        End Property
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>

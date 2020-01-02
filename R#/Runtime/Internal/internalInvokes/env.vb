@@ -1,43 +1,43 @@
-﻿#Region "Microsoft.VisualBasic::6a43bd87fe1d5368b473f8afc664440b, R#\Runtime\Internal\internalInvokes\env.vb"
+﻿#Region "Microsoft.VisualBasic::b099dc7d6ba547cd54e2d4caf27ef33f, R#\Runtime\Internal\internalInvokes\env.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Module env
-' 
-'         Function: [get], CallInternal, doCall, environment, globalenv
-'                   ls, objects
-' 
-' 
-' /********************************************************************************/
+    '     Module env
+    ' 
+    '         Function: [get], CallInternal, doCall, environment, globalenv
+    '                   ls, objects
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -116,17 +116,30 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <returns></returns>
         <ExportAPI("ls")>
-        Private Function ls(Optional name$ = Nothing, Optional env As Environment = Nothing) As Object
+        Private Function ls(<RSymbolTextArgument> Optional name$ = Nothing, Optional env As Environment = Nothing) As Object
             If name.StringEmpty Then
+                ' list all of the objects in current 
+                ' R# runtime environment
                 Return env.variables.Keys.ToArray
             Else
-                Dim globalEnv = env.globalEnvironment
-                Dim package As Package = globalEnv.packages.FindPackage(name, Nothing)
+                Dim globalEnv As GlobalEnvironment = env.globalEnvironment
+                Dim pkgMgr As PackageManager = globalEnv.packages
 
-                If package Is Nothing Then
-                    Return {}
+                If pkgMgr.hasLibFile(name.FileName) Then
+                    ' list all of the package names in current dll module
+                    Return PackageLoader _
+                        .ParsePackages(dll:=name) _
+                        .Select(Function(pkg) pkg.namespace) _
+                        .ToArray
                 Else
-                    Return package.ls
+                    ' list all of the function api names in current package
+                    Dim package As Package = pkgMgr.FindPackage(name, Nothing)
+
+                    If package Is Nothing Then
+                        Return {}
+                    Else
+                        Return package.ls
+                    End If
                 End If
             End If
         End Function

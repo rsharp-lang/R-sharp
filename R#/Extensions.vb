@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2be0b5aebd4f88b8d8c3c1d68eb60a2b, R#\Extensions.vb"
+﻿#Region "Microsoft.VisualBasic::77281ddc2be5b98064bfe60963b07a8e, R#\Extensions.vb"
 
     ' Author:
     ' 
@@ -52,4 +52,3 @@ Public Module Extensions
         Return New RReturn(x)
     End Function
 End Module
-

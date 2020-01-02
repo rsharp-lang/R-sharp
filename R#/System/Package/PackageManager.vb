@@ -1,54 +1,56 @@
-﻿#Region "Microsoft.VisualBasic::11d20a260f6eaa728b16f934a4345bb6, R#\System\Package\PackageManager.vb"
+﻿#Region "Microsoft.VisualBasic::703c0d0122e89147c2144ec221b031eb, R#\System\Package\PackageManager.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class PackageManager
-' 
-'         Properties: packageDocs
-' 
-'         Constructor: (+1 Overloads) Sub New
-' 
-'         Function: FindPackage, GenericEnumerator, GetEnumerator, InstallLocals
-' 
-'         Sub: (+2 Overloads) Dispose, Flush
-' 
-' 
-' /********************************************************************************/
+    '     Class PackageManager
+    ' 
+    '         Properties: loadedPackages, packageDocs
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    ' 
+    '         Function: FindPackage, GenericEnumerator, GetEnumerator, GetPackageDocuments, hasLibFile
+    '                   InstallLocals
+    ' 
+    '         Sub: (+2 Overloads) Dispose, Flush
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.System.Configuration
@@ -61,11 +63,21 @@ Namespace System.Package
         ReadOnly config As Options
 
         Public ReadOnly Property packageDocs As New AnnotationDocs
+        Public ReadOnly Property loadedPackages As New Index(Of String)
 
         Sub New(config As Options)
             Me.pkgDb = LocalPackageDatabase.Load(config.lib)
             Me.config = config
         End Sub
+
+        ''' <summary>
+        ''' Check if the given dll module <paramref name="libraryFileName"/> is exists in database or not.
+        ''' </summary>
+        ''' <param name="libraryFileName"></param>
+        ''' <returns></returns>
+        Public Function hasLibFile(libraryFileName As String) As Boolean
+            Return pkgDb.hasLibFile(libraryFileName)
+        End Function
 
         Public Function GetPackageDocuments(pkgName As String) As String
             Dim type As Type = Me.FindPackage(pkgName, Nothing).package

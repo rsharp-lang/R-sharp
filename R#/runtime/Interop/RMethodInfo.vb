@@ -1,46 +1,46 @@
-﻿#Region "Microsoft.VisualBasic::c80a3c4fd77ddeb9861ca9b9dbfebf57, R#\Runtime\Interop\RMethodInfo.vb"
+﻿#Region "Microsoft.VisualBasic::052497aa3484fc661e046fcd2cf87d86, R#\Runtime\Interop\RMethodInfo.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class RMethodInfo
-' 
-'         Properties: invisible, name, parameters, returns
-' 
-'         Constructor: (+3 Overloads) Sub New
-'         Function: createNormalArguments, createObjectListArguments, CreateParameterArrayFromListArgument, GetPrintContent, GetRawDeclares
-'                   getValue, (+2 Overloads) Invoke, missingParameter, parseParameters, ToString
-' 
-' 
-' /********************************************************************************/
+    '     Class RMethodInfo
+    ' 
+    '         Properties: invisible, name, parameters, returns
+    ' 
+    '         Constructor: (+3 Overloads) Sub New
+    '         Function: createNormalArguments, createObjectListArguments, CreateParameterArrayFromListArgument, GetPrintContent, GetRawDeclares
+    '                   getValue, (+2 Overloads) Invoke, missingParameter, parseParameters, ToString
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

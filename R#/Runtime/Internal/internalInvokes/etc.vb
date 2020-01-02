@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d5e0aa1b7c683cb266a74e93609a60fd, R#\Runtime\Internal\htmlPrinter.vb"
+﻿#Region "Microsoft.VisualBasic::cc40945dc59cb68999e7b8792a7455ef, R#\Runtime\Internal\internalInvokes\etc.vb"
 
     ' Author:
     ' 
@@ -31,47 +31,44 @@
 
     ' Summaries:
 
-    '     Module htmlPrinter
+    '     Module etc
     ' 
-    '         Function: GetHtml
-    ' 
-    '         Sub: AttachHtmlFormatter
+    '         Function: contributors, license
     ' 
     ' 
     ' /********************************************************************************/
 
 #End Region
 
-Imports Microsoft.VisualBasic.Serialization
-Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports SMRUCC.Rsharp.Runtime.Interop
 
-Namespace Runtime.Internal
+Namespace Runtime.Internal.Invokes
 
-    Public Module htmlPrinter
-
-        ReadOnly RtoHtml As New Dictionary(Of Type, IStringBuilder)
+    Module etc
 
         ''' <summary>
-        ''' Create html document from given object. (<see cref="Object"/> -> html <see cref="String"/>)
+        ''' # The R# License Terms
+        ''' 
+        ''' The license terms under which R# is distributed.
         ''' </summary>
-        ''' <typeparam name="T"></typeparam>
-        ''' <param name="formatter"></param>
-        Public Sub AttachHtmlFormatter(Of T)(formatter As IStringBuilder)
-            RtoHtml(GetType(T)) = formatter
-        End Sub
+        ''' <returns></returns>
+        <ExportAPI("license")>
+        Public Function license() As <RSuppressPrint> Object
+            Call Console.WriteLine(Rsharp.LICENSE.GPL3)
+            Return Nothing
+        End Function
 
-        Friend Function GetHtml(x As Object) As String
-            Dim keyType As Type = x.GetType
-
-            If keyType Is GetType(vbObject) Then
-                Return GetHtml(DirectCast(x, vbObject).target)
-            End If
-
-            If RtoHtml.ContainsKey(keyType) Then
-                Return RtoHtml(keyType)(x)
-            Else
-                Throw New InvalidProgramException(keyType.FullName)
-            End If
+        ''' <summary>
+        ''' # ``R#`` Project Contributors
+        ''' 
+        ''' The R# Who-is-who, describing who made significant contributions to the development of R#.
+        ''' </summary>
+        ''' <returns></returns>
+        <ExportAPI("contributors")>
+        Public Function contributors() As <RSuppressPrint> Object
+            Call Console.WriteLine(My.Resources.contributions)
+            Return Nothing
         End Function
     End Module
 End Namespace

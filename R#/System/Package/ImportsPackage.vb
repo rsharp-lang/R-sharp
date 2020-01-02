@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b2390a6d80c97c12da3ad039d5d32b74, R#\System\Package\ImportsPackage.vb"
+﻿#Region "Microsoft.VisualBasic::ee3fb879e85cb38d9a2f7096a4978709, R#\System\Package\ImportsPackage.vb"
 
     ' Author:
     ' 
@@ -33,9 +33,9 @@
 
     '     Module ImportsPackage
     ' 
-    '         Function: GetAllApi
+    '         Function: GetAllApi, ImportsStatic
     ' 
-    '         Sub: ImportsInstance, ImportsStatic
+    '         Sub: ImportsInstance
     ' 
     ' 
     ' /********************************************************************************/
@@ -47,6 +47,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -95,8 +96,15 @@ Namespace System.Package
             Next
         End Function
 
+        ''' <summary>
+        ''' This function returns a list of object which is masked by the new imports <paramref name="package"/>
+        ''' </summary>
+        ''' <param name="envir"></param>
+        ''' <param name="package"></param>
+        ''' <param name="strict"></param>
+        ''' <returns></returns>
         <Extension>
-        Public Sub ImportsStatic(envir As Environment, package As Type, Optional strict As Boolean = True)
+        Public Function ImportsStatic(envir As Environment, package As Type, Optional strict As Boolean = True) As IEnumerable(Of String)
             Dim [global] As GlobalEnvironment = envir.globalEnvironment
             Dim docs As ProjectType = [global].packages.packageDocs.GetAnnotations(package)
             Dim symbol As Variable
@@ -104,17 +112,23 @@ Namespace System.Package
                 .GetAllApi(package, strict) _
                 .Select(Function(m) New RMethodInfo(m)) _
                 .ToArray
+            Dim masked As New List(Of String)
 
             For Each api As RMethodInfo In Rmethods
                 symbol = [global].FindSymbol(api.name)
 
                 If symbol Is Nothing Then
+                    ' add new
                     [global].Push(api.name, api, TypeCodes.closure)
                 Else
+                    ' overrides and masked by current package
                     symbol.value = api
+                    masked += symbol.name
                 End If
             Next
-        End Sub
+
+            Return masked
+        End Function
 
         <Extension>
         Public Sub ImportsInstance(envir As Environment, target As Object)
