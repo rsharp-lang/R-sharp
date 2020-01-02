@@ -43,6 +43,7 @@ Imports Microsoft.VisualBasic.CommandLine
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.System.Configuration
+Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
 Module Program
 
@@ -51,8 +52,21 @@ Module Program
         Return GetType(CLI).RunCLI(
             args:=App.CommandLine,
             executeFile:=AddressOf RunScript,
-            executeEmpty:=AddressOf Terminal.RunTerminal
+            executeEmpty:=AddressOf Terminal.RunTerminal,
+            executeNotFound:=AddressOf RunExpression
         )
+    End Function
+
+    Private Function RunExpression(args As CommandLine) As Integer
+        Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
+        Dim expression$ = args.cli
+        Dim result As Object = R.Evaluate(expression)
+
+        If RProgram.isException(result) Then
+            Return 500
+        Else
+            Return 0
+        End If
     End Function
 
     Private Function RunScript(filepath$, args As CommandLine) As Integer
