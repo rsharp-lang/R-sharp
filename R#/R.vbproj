@@ -9,7 +9,7 @@
     <StartupObject>
     </StartupObject>
     <RootNamespace>SMRUCC.Rsharp</RootNamespace>
-    <AssemblyName>R_lang</AssemblyName>
+    <AssemblyName>REnv</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
@@ -23,7 +23,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>./bin</OutputPath>
-    <DocumentationFile>R_lang.xml</DocumentationFile>
+    <DocumentationFile>REnv.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -34,7 +34,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>./bin</OutputPath>
-    <DocumentationFile>R_lang.xml</DocumentationFile>
+    <DocumentationFile>REnv.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -58,7 +58,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\x64\Debug\</OutputPath>
-    <DocumentationFile>R_lang.xml</DocumentationFile>
+    <DocumentationFile>REnv.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -67,7 +67,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\x64\Release\</OutputPath>
-    <DocumentationFile>R_lang.xml</DocumentationFile>
+    <DocumentationFile>REnv.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -77,7 +77,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'GCModeller%28Release_X64%29|AnyCPU'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\GCModeller%28Release_X64%29\</OutputPath>
-    <DocumentationFile>R_lang.xml</DocumentationFile>
+    <DocumentationFile>REnv.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -87,7 +87,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'GCModeller%28Release_X64%29|x64'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\..\..\GCModeller\bin\</OutputPath>
-    <DocumentationFile>R_lang.xml</DocumentationFile>
+    <DocumentationFile>REnv.xml</DocumentationFile>
     <Optimize>false</Optimize>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <DebugType>full</DebugType>
@@ -99,7 +99,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DEMO|AnyCPU'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\DEMO\</OutputPath>
-    <DocumentationFile>R_lang.xml</DocumentationFile>
+    <DocumentationFile>REnv.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -111,7 +111,7 @@
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\App\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
-    <DocumentationFile>R_lang.xml</DocumentationFile>
+    <DocumentationFile>REnv.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -120,7 +120,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Rsharp_app_release|AnyCPU'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Rsharp_app_release\</OutputPath>
-    <DocumentationFile>R_lang.xml</DocumentationFile>
+    <DocumentationFile>REnv.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -132,7 +132,7 @@
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\App\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
-    <DocumentationFile>R_lang.xml</DocumentationFile>
+    <DocumentationFile>REnv.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -141,7 +141,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Biodeep|AnyCPU'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Biodeep\</OutputPath>
-    <DocumentationFile>R_lang.xml</DocumentationFile>
+    <DocumentationFile>REnv.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -153,7 +153,7 @@
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\..\..\..\MassSpectrum-toolkits\App\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
-    <DocumentationFile>R_lang.xml</DocumentationFile>
+    <DocumentationFile>REnv.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -162,7 +162,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Biodeep_UNIX_x64|AnyCPU'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Biodeep_UNIX_x64\</OutputPath>
-    <DocumentationFile>R_lang.xml</DocumentationFile>
+    <DocumentationFile>REnv.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -174,7 +174,7 @@
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\x64\Biodeep_UNIX_x64\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
-    <DocumentationFile>R_lang.xml</DocumentationFile>
+    <DocumentationFile>REnv.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -183,7 +183,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BioDeep_database|AnyCPU'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\BioDeep_database\</OutputPath>
-    <DocumentationFile>R_lang.xml</DocumentationFile>
+    <DocumentationFile>REnv.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -195,7 +195,7 @@
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\x64\BioDeep_database\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
-    <DocumentationFile>R_lang.xml</DocumentationFile>
+    <DocumentationFile>REnv.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -204,7 +204,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Biostack|AnyCPU'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Biostack\</OutputPath>
-    <DocumentationFile>R_lang.xml</DocumentationFile>
+    <DocumentationFile>REnv.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -216,7 +216,7 @@
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\..\..\..\MassSpectrum-toolkits\dist\bin\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
-    <DocumentationFile>R_lang.xml</DocumentationFile>
+    <DocumentationFile>REnv.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -289,6 +289,7 @@
     <Compile Include="Language\TokenIcer\Scanner.vb" />
     <Compile Include="Language\TokenType.vb" />
     <Compile Include="Extensions.vb" />
+    <Compile Include="LICENSE.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -307,6 +308,7 @@
     <Compile Include="Interpreter\ExecuteEngine\Expression.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\env.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\help.vb" />
+    <Compile Include="Runtime\Internal\internalInvokes\etc.vb" />
     <Compile Include="Runtime\Internal\objects\reflector.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\strings.vb" />
     <Compile Include="Runtime\Internal\objects\invisible.vb" />

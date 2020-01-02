@@ -151,19 +151,22 @@ Namespace Interpreter.ExecuteEngine
                 oplist:=oplist,
                 opSymbol:="::",
                 expression:=Function(a, b)
-                                Dim refCalls As FunctionInvoke
+                                Dim namespaceRef As Expression
+                                Dim nsSymbol$ = a.TryCast(Of SymbolReference).symbol
 
                                 If TypeOf b.VA Is FunctionInvoke Then
-                                    refCalls = b.VA
+                                    ' a::b() function invoke
+                                    Dim calls As FunctionInvoke = b.VA
+                                    calls.namespace = nsSymbol
+                                    namespaceRef = calls
                                 ElseIf TypeOf b.VA Is SymbolReference Then
-                                    refCalls = New FunctionInvoke(DirectCast(b.VA, SymbolReference).symbol, a.VA)
+                                    ' a::b view function help info
+                                    namespaceRef = New NamespaceFunctionSymbolReference(nsSymbol, b.VA)
                                 Else
                                     Throw New SyntaxErrorException
                                 End If
 
-                                refCalls.namespace = a.TryCast(Of SymbolReference).symbol
-
-                                Return refCalls
+                                Return namespaceRef
                             End Function)
         End Sub
 

@@ -78,6 +78,9 @@ Namespace Runtime.Interop
 
     End Class
 
+    ''' <summary>
+    ''' Literal of any .NET runtime value object
+    ''' </summary>
     Public Class RuntimeValueLiteral : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes

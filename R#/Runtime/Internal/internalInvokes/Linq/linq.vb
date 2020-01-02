@@ -64,15 +64,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
         <ExportAPI("projectAs")>
         Private Function projectAs(sequence As Array, project As RFunction, envir As Environment) As Object
-            Dim doProject As Func(Of Object, Object) =
-                Function(o)
-                    Dim arg As New InvokeParameter() With {
-                        .value = New RuntimeValueLiteral(o)
-                    }
-
-                    Return project.Invoke(envir, {arg})
-                End Function
-
+            Dim doProject As Func(Of Object, Object) = Function(o) project.Invoke(envir, InvokeParameter.Create(o))
             Dim result As Object() = sequence _
                 .AsObjectEnumerator _
                 .Select(doProject) _
@@ -90,14 +82,12 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         <ExportAPI("which")>
         Private Function where(sequence As Array, test As RFunction, envir As Environment) As Object
             Dim pass As Boolean
-            Dim arg As InvokeParameter
+            Dim arg As InvokeParameter()
             Dim filter As New List(Of Object)
 
             For Each item As Object In sequence
-                arg = New InvokeParameter() With {
-                    .value = New RuntimeValueLiteral(item)
-                }
-                pass = Runtime.asLogical(test.Invoke(envir, {arg}))(Scan0)
+                arg = InvokeParameter.Create(item)
+                pass = Runtime.asLogical(test.Invoke(envir, arg))(Scan0)
 
                 If pass Then
                     Call filter.Add(item)
@@ -110,13 +100,11 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         <ExportAPI("first")>
         Private Function first(sequence As Array, test As RFunction, envir As Environment) As Object
             Dim pass As Boolean
-            Dim arg As InvokeParameter
+            Dim arg As InvokeParameter()
 
             For Each item As Object In sequence
-                arg = New InvokeParameter() With {
-                    .value = New RuntimeValueLiteral(item)
-                }
-                pass = Runtime.asLogical(test.Invoke(envir, {arg}))(Scan0)
+                arg = InvokeParameter.Create(item)
+                pass = Runtime.asLogical(test.Invoke(envir, arg))(Scan0)
 
                 If pass Then
                     Return item
@@ -130,11 +118,8 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         Private Function groupBy(sequence As Array, getKey As RFunction, envir As Environment) As Object
             Dim result = sequence.AsObjectEnumerator _
                 .GroupBy(Function(o)
-                             Dim arg As New InvokeParameter() With {
-                                .value = New RuntimeValueLiteral(o)
-                             }
-
-                             Return getKey.Invoke(envir, {arg})
+                             Dim arg = InvokeParameter.Create(o)
+                             Return getKey.Invoke(envir, arg)
                          End Function) _
                 .Select(Function(group)
                             Return New Group With {

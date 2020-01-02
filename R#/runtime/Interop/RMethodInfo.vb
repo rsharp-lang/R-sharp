@@ -210,19 +210,25 @@ Namespace Runtime.Interop
                     i = declareNameIndex(arg.name)
 
                     If i > -1 Then
-                        paramVal = getValue(declareArguments(arg.name), arg.Evaluate(envir), trace:=name, envir:=envir)
+                        paramVal = getValue(declareArguments(arg.name), arg.Evaluate(envir), trace:=name, envir:=envir, False)
                         parameterVals(i) = paramVal
                         declareArguments.Remove(arg.name)
                     Else
                         paramVal = declareArguments _
                             .First _
-                            .Value _
                             .DoCall(Function(a)
-                                        Return getValue(a, arg.Evaluate(envir), trace:=name, envir:=envir)
+                                        Return getValue(a.Value, arg.Evaluate(envir), trace:=name, envir:=envir, True)
                                     End Function)
 
-                        parameterVals(sequenceIndex) = paramVal
-                        declareArguments.Remove(declareArguments.First.Key)
+                        If paramVal Is GetType(Void) Then
+                            ' do nothing
+                            ' this parameter input is possibly a list argument
+                        Else
+                            parameterVals(sequenceIndex) = paramVal
+                            declareArguments.Remove(declareArguments.First.Key)
+                        End If
+
+                        listObject.Add(arg)
                     End If
 
                     If Not paramVal Is Nothing AndAlso paramVal.GetType Is GetType(Message) Then
@@ -289,7 +295,7 @@ Namespace Runtime.Interop
                 arg = Me.parameters(i)
 
                 If arguments.ContainsKey(arg.name) Then
-                    Yield getValue(arg, arguments(arg.name), apiTrace, envir)
+                    Yield getValue(arg, arguments(arg.name), apiTrace, envir, False)
                 ElseIf i >= arguments.Count Then
                     ' default value
                     If arg.type.raw Is GetType(Environment) Then
@@ -303,9 +309,9 @@ Namespace Runtime.Interop
                     nameKey = $"${i}"
 
                     If arguments.ContainsKey(nameKey) Then
-                        Yield getValue(arg, arguments(nameKey), apiTrace, envir)
+                        Yield getValue(arg, arguments(nameKey), apiTrace, envir, False)
                     Else
-                        Yield getValue(arg, arguments(keys(i)), apiTrace, envir)
+                        Yield getValue(arg, arguments(keys(i)), apiTrace, envir, False)
                     End If
                 End If
             Next
@@ -323,7 +329,20 @@ Namespace Runtime.Interop
             Return Internal.stop(messages, envir)
         End Function
 
-        Private Shared Function getValue(arg As RMethodArgument, value As Object, trace$, ByRef envir As Environment) As Object
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="arg"></param>
+        ''' <param name="value"></param>
+        ''' <param name="trace$"></param>
+        ''' <param name="envir"></param>
+        ''' <param name="trygetListParam">
+        ''' Fix bugs for list arguments when the parameter input have no symbol name
+        ''' In such situation, then type is mismatch due to the reason of invalid 
+        ''' offset bugs
+        ''' </param>
+        ''' <returns></returns>
+        Private Shared Function getValue(arg As RMethodArgument, value As Object, trace$, ByRef envir As Environment, trygetListParam As Boolean) As Object
             If arg.type.isArray Then
                 value = CObj(Runtime.asVector(value, arg.type.GetRawElementType))
             ElseIf arg.type.isCollection Then
@@ -335,6 +354,8 @@ Namespace Runtime.Interop
 
             Try
                 Return RConversion.CTypeDynamic(value, arg.type.raw)
+            Catch ex As Exception When trygetListParam
+                Return GetType(Void)
             Catch ex As Exception
                 Return Internal.stop(New InvalidCastException("Api: " & trace, ex), envir)
             End Try

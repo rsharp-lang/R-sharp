@@ -77,6 +77,7 @@ Namespace Runtime.Internal
             Call GetType(utils).pushEnvir
             Call GetType(math).pushEnvir
             Call GetType(help).pushEnvir
+            Call GetType(etc).pushEnvir
         End Sub
 
         <Extension>

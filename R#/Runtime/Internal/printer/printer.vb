@@ -123,11 +123,19 @@ Namespace Runtime.Internal.ConsolePrinter
                 Call DirectCast(x, vector).data.printArray(maxPrint, env)
             ElseIf valueType.ImplementInterface(GetType(IDictionary)) Then
                 Call DirectCast(x, IDictionary).printList(listPrefix, maxPrint, env)
+            ElseIf valueType Is GetType(list) Then
+                Call DirectCast(x, list) _
+                    .slots _
+                    .DoCall(Sub(list)
+                                list.printList(listPrefix, maxPrint, env)
+                            End Sub)
             ElseIf valueType Is GetType(dataframe) Then
                 Call DirectCast(x, dataframe) _
                     .GetTable _
                     .Print(addBorder:=False) _
                     .DoCall(AddressOf Console.WriteLine)
+            ElseIf valueType Is GetType(vbObject) Then
+                Call DirectCast(x, vbObject).ToString.DoCall(AddressOf Console.WriteLine)
             Else
 printSingleElement:
                 Call Console.WriteLine("[1] " & printer.ValueToString(x, env))
@@ -205,10 +213,20 @@ printSingleElement:
         ''' </summary>
         ''' <param name="xvec"></param>
         <Extension>
-        Private Sub printArray(xvec As Array, maxPrint%, env As GlobalEnvironment)
+        Friend Sub printArray(xvec As Array, maxPrint%, env As GlobalEnvironment)
             Dim stringVec As IEnumerable(Of String) = getStrings(xvec, env)
-            Dim maxColumns As Integer = Console.WindowWidth - 1
             Dim contents As String() = stringVec.Take(maxPrint).ToArray
+
+            Call contents.printContentArray(Nothing, Nothing)
+
+            If xvec.Length > maxPrint Then
+                Call Console.WriteLine($"[ reached getOption(""max.print"") -- omitted {xvec.Length - contents.Length} entries ]")
+            End If
+        End Sub
+
+        <Extension>
+        Friend Sub printContentArray(contents$(), deli$, indentPrefix$)
+            Dim maxColumns As Integer = Console.WindowWidth - 1
             ' maxsize / average size
             Dim unitWidth As Integer = contents.Max(Function(c) c.Length) + 1
             Dim divSize As Integer = maxColumns \ unitWidth - 3
@@ -219,19 +237,24 @@ printSingleElement:
             End If
 
             For Each row As String() In contents.Split(partitionSize:=divSize)
-                Call Console.Write($"[{i = i + divSize}]{vbTab}")
+                If indentPrefix Is Nothing Then
+                    Call Console.Write($"[{i = i + divSize}]{vbTab}")
+                Else
+                    Call Console.Write(indentPrefix)
+                End If
 
                 For Each c As String In row
                     Call Console.Write(c)
-                    Call Console.Write(New String(" "c, unitWidth - c.Length))
+
+                    If deli Is Nothing Then
+                        Call Console.Write(New String(" "c, unitWidth - c.Length))
+                    Else
+                        Call Console.Write(deli)
+                    End If
                 Next
 
                 Call Console.WriteLine()
             Next
-
-            If xvec.Length > maxPrint Then
-                Call Console.WriteLine($"[ reached getOption(""max.print"") -- omitted {xvec.Length - contents.Length} entries ]")
-            End If
         End Sub
     End Module
 End Namespace

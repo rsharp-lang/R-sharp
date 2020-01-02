@@ -83,4 +83,18 @@ Imports SMRUCC.Rsharp.System.Package
         Console.Write(GetType(RInterpreter).Assembly.FromAssembly.AssemblyVersion)
         Return 0
     End Function
+
+    <ExportAPI("--info")>
+    <Description("Print R# interpreter version information and R# terminal version information.")>
+    Public Function Info(args As CommandLine) As Integer
+        Dim Rterminal As AssemblyInfo = GetType(Program).Assembly.FromAssembly
+        Dim RsharpCore As AssemblyInfo = GetType(RInterpreter).Assembly.FromAssembly
+
+        Call Rterminal.AppSummary(Nothing, Nothing, App.StdOut)
+        Call RsharpCore.AppSummary(Nothing, Nothing, App.StdOut)
+
+        Call App.StdOut.value.Flush()
+
+        Return 0
+    End Function
 End Module

@@ -61,7 +61,7 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 Module Terminal
 
     Dim R As RInterpreter
-    Dim echo As Index(Of String) = {"print", "cat", "echo", "q", "quit", "require", "library"}
+    Dim echo As Index(Of String) = {"print", "cat", "echo", "q", "quit", "require", "library", "str"}
 
     Sub New()
         Dim Rcore = GetType(RInterpreter).Assembly.FromAssembly

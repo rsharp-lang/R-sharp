@@ -58,7 +58,6 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports RPkg = SMRUCC.Rsharp.System.Package.Package
 
 Namespace Interpreter.ExecuteEngine
 
@@ -191,7 +190,11 @@ Namespace Interpreter.ExecuteEngine
             Dim funcVar As RFunction
 
             If Not [namespace].StringEmpty Then
-                Return envir.DoCall(AddressOf getPackageApiImpl)
+                Return NamespaceFunctionSymbolReference.getPackageApiImpl(
+                    env:=envir,
+                    [namespace]:=[namespace],
+                    funcNameSymbol:=funcName
+                )
             End If
 
             If TypeOf funcName Is Literal Then
@@ -225,24 +228,6 @@ Namespace Interpreter.ExecuteEngine
 
                 ' invoke .NET package method
                 Return interop.Invoke(envir, args)
-            End If
-        End Function
-
-        Private Function getPackageApiImpl(envir As Environment) As Object
-            ' find package and then load method
-            Dim pkg As RPkg = envir.globalEnvironment.packages.FindPackage([namespace], Nothing)
-            Dim funcName As String = DirectCast(Me.funcName, Literal).ToString
-
-            If pkg Is Nothing Then
-                Return Message.SymbolNotFound(envir, [namespace], TypeCodes.ref)
-            Else
-                Dim api As RMethodInfo = pkg.GetFunction(funcName)
-
-                If api Is Nothing Then
-                    Return Message.SymbolNotFound(envir, $"{[namespace]}::{funcName}", TypeCodes.closure)
-                Else
-                    Return DirectCast(api, RFunction)
-                End If
             End If
         End Function
 
@@ -282,6 +267,7 @@ Namespace Interpreter.ExecuteEngine
             Return result
         End Function
 
+        <DebuggerStepThrough>
         Private Shared Function allIsValueAssign(parameters As IEnumerable(Of Expression)) As Boolean
             Return parameters.All(Function(e) TypeOf e Is ValueAssign)
         End Function

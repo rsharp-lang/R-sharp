@@ -78,30 +78,6 @@ Namespace Runtime.Internal.Invokes
     Public Module base
 
         ''' <summary>
-        ''' # The R# License Terms
-        ''' 
-        ''' The license terms under which R# is distributed.
-        ''' </summary>
-        ''' <returns></returns>
-        <ExportAPI("license")>
-        Public Function license() As <RSuppressPrint> Object
-            Call Console.WriteLine(My.Resources.gpl)
-            Return Nothing
-        End Function
-
-        ''' <summary>
-        ''' # ``R#`` Project Contributors
-        ''' 
-        ''' The R# Who-is-who, describing who made significant contributions to the development of R#.
-        ''' </summary>
-        ''' <returns></returns>
-        <ExportAPI("contributors")>
-        Public Function contributors() As <RSuppressPrint> Object
-            Call Console.WriteLine(My.Resources.contributions)
-            Return Nothing
-        End Function
-
-        ''' <summary>
         ''' # Change the Print Mode to Invisible
         ''' 
         ''' Return a (temporarily) invisible copy of an object.
@@ -138,7 +114,11 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="envir"></param>
         ''' <returns></returns>
         <ExportAPI("list")>
-        Public Function Rlist(<RListObjectArgument> slots As Object, envir As Environment) As Object
+        Public Function Rlist(<RListObjectArgument>
+                              <RRawVectorArgument>
+                              slots As Object,
+                              Optional envir As Environment = Nothing) As Object
+
             Dim list As New Dictionary(Of String, Object)
             Dim slot As InvokeParameter
             Dim key As String
@@ -698,7 +678,7 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("str")>
         Public Function str(<RRawVectorArgument> [object] As Object, Optional env As Environment = Nothing) As Object
-            Call Console.WriteLine(reflector.GetStructure([object], env.globalEnvironment))
+            Call Console.WriteLine(reflector.GetStructure([object], env.globalEnvironment, " "))
             Return Nothing
         End Function
 
@@ -745,12 +725,6 @@ Namespace Runtime.Internal.Invokes
                 End Try
             ElseIf type Is GetType(Message) Then
                 Return x
-            ElseIf type Is GetType(list) Then
-                Call DirectCast(x, list) _
-                    .slots _
-                    .DoCall(Sub(list)
-                                printer.printInternal(list, "", maxPrint, globalEnv)
-                            End Sub)
             Else
                 Call printer.printInternal(x, "", maxPrint, globalEnv)
             End If

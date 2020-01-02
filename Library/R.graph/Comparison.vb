@@ -3,6 +3,9 @@ Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.Data.visualize.Network
 Imports Microsoft.VisualBasic.Scripting.MetaData
 
+''' <summary>
+''' Network graph comparison tools
+''' </summary>
 <Package("igraph.comparison")>
 Module Comparison
 
