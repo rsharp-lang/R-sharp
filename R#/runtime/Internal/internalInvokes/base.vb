@@ -78,30 +78,6 @@ Namespace Runtime.Internal.Invokes
     Public Module base
 
         ''' <summary>
-        ''' # The R# License Terms
-        ''' 
-        ''' The license terms under which R# is distributed.
-        ''' </summary>
-        ''' <returns></returns>
-        <ExportAPI("license")>
-        Public Function license() As <RSuppressPrint> Object
-            Call Console.WriteLine(My.Resources.gpl)
-            Return Nothing
-        End Function
-
-        ''' <summary>
-        ''' # ``R#`` Project Contributors
-        ''' 
-        ''' The R# Who-is-who, describing who made significant contributions to the development of R#.
-        ''' </summary>
-        ''' <returns></returns>
-        <ExportAPI("contributors")>
-        Public Function contributors() As <RSuppressPrint> Object
-            Call Console.WriteLine(My.Resources.contributions)
-            Return Nothing
-        End Function
-
-        ''' <summary>
         ''' # Change the Print Mode to Invisible
         ''' 
         ''' Return a (temporarily) invisible copy of an object.

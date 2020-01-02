@@ -289,6 +289,7 @@
     <Compile Include="Language\TokenIcer\Scanner.vb" />
     <Compile Include="Language\TokenType.vb" />
     <Compile Include="Extensions.vb" />
+    <Compile Include="LICENSE.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -307,6 +308,7 @@
     <Compile Include="Interpreter\ExecuteEngine\Expression.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\env.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\help.vb" />
+    <Compile Include="Runtime\Internal\internalInvokes\etc.vb" />
     <Compile Include="Runtime\Internal\objects\reflector.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\strings.vb" />
     <Compile Include="Runtime\Internal\objects\invisible.vb" />
