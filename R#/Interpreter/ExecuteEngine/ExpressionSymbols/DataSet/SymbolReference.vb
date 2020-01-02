@@ -114,20 +114,32 @@ Namespace Interpreter.ExecuteEngine
             Return getPackageApiImpl(envir, [namespace], symbol)
         End Function
 
+        Private Shared Function getFuncNameSymbolText(funcNameSymbol As Expression, env As Environment) As Object
+            Select Case funcNameSymbol.GetType
+                Case GetType(Literal)
+                    Return DirectCast(funcNameSymbol, Literal).value
+                Case GetType(SymbolReference)
+                    Return DirectCast(funcNameSymbol, SymbolReference).symbol
+                Case Else
+                    Return Message.InCompatibleType(GetType(Literal), funcNameSymbol.GetType, env)
+            End Select
+        End Function
+
         Friend Shared Function getPackageApiImpl(env As Environment, namespace$, funcNameSymbol As Expression) As Object
             ' find package and then load method
             Dim pkg As RPkg = env.globalEnvironment.packages.FindPackage([namespace], Nothing)
-            Dim funcName As String = Scripting.ToString(funcNameSymbol.Evaluate(env))
+            Dim funcName As Object = getFuncNameSymbolText(funcNameSymbol, env)
 
             If pkg Is Nothing Then
                 Return Message.SymbolNotFound(env, [namespace], TypeCodes.ref)
-            ElseIf funcName Is Nothing Then
-                Return Internal.stop(New NullReferenceException, env)
+            ElseIf funcName.GetType Is GetType(Message) Then
+                Return funcName
             Else
-                Dim api As RMethodInfo = pkg.GetFunction(funcName)
+                Dim funcNameText As String = funcName.ToString
+                Dim api As RMethodInfo = pkg.GetFunction(funcNameText)
 
                 If api Is Nothing Then
-                    Return Message.SymbolNotFound(env, $"{[namespace]}::{funcName}", TypeCodes.closure)
+                    Return Message.SymbolNotFound(env, $"{[namespace]}::{funcNameText}", TypeCodes.closure)
                 Else
                     Return DirectCast(api, RFunction)
                 End If
