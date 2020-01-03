@@ -213,6 +213,19 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' dir.exists returns a logical vector of TRUE or FALSE values (without names).
+        ''' </summary>
+        ''' <param name="paths">
+        ''' character vectors containing file or directory paths. 
+        ''' Tilde expansion (see path.expand) is done.
+        ''' </param>
+        ''' <returns></returns>
+        <ExportAPI("dir.exists")>
+        Public Function dir_exists(paths As String()) As Boolean()
+            Return paths.Select(AddressOf DirectoryExists).ToArray
+        End Function
+
+        ''' <summary>
         ''' Read Text Lines from a Connection
         ''' 
         ''' Read some or all text lines from a connection.
