@@ -58,8 +58,8 @@ Namespace System.Package
     ''' </summary>
     Public Class Package
 
-        Public Property info As PackageAttribute
-        Public Property package As Type
+        Public ReadOnly Property info As PackageAttribute
+        Public ReadOnly Property package As Type
 
         Public ReadOnly Property [namespace] As String
             Get
@@ -83,6 +83,8 @@ Namespace System.Package
             End Get
         End Property
 
+        Dim assemblyInfoCache As AssemblyInfo
+
         Sub New(info As PackageAttribute, package As Type)
             Me.info = info
             Me.package = package
@@ -90,7 +92,11 @@ Namespace System.Package
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function GetPackageModuleInfo() As AssemblyInfo
-            Return package.Assembly.FromAssembly
+            If assemblyInfoCache Is Nothing Then
+                assemblyInfoCache = package.Assembly.FromAssembly
+            End If
+
+            Return assemblyInfoCache
         End Function
 
         ''' <summary>

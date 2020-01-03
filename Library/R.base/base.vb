@@ -44,7 +44,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 ''' <summary>
 ''' 
 ''' </summary>
-<Package("base", Category:=APICategories.UtilityTools)>
+<Package("base", Category:=APICategories.UtilityTools, Publisher:="xie.guigang@gcmodeller.org")>
 Public Module base
 
 End Module

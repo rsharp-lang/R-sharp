@@ -68,6 +68,35 @@ Namespace Runtime.Internal.Object
             End Get
         End Property
 
+        Public Function GetByRowIndex(index As Integer()) As dataframe
+            Dim subsetRowNumbers As String() = index _
+                .Select(Function(i, j)
+                            Return rownames.ElementAtOrDefault(i, j)
+                        End Function) _
+                .ToArray
+            Dim subsetData As Dictionary(Of String, Array) = columns _
+                .ToDictionary(Function(c) c.Key,
+                              Function(c)
+                                  If c.Value.Length = 1 Then
+                                      ' single value
+                                      Return DirectCast(c.Value.getvalue(Scan0), Array)
+                                  End If
+
+                                  Dim vec = index _
+                                    .Select(Function(i)
+                                                Return c.Value.GetValue(i)
+                                            End Function) _
+                                    .ToArray
+
+                                  Return DirectCast(vec, Array)
+                              End Function)
+
+            Return New dataframe With {
+                .rownames = subsetRowNumbers,
+                .columns = subsetData
+            }
+        End Function
+
         ''' <summary>
         ''' Each element in a return result array is a row in table matrix
         ''' </summary>

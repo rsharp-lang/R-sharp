@@ -1,47 +1,48 @@
 ﻿#Region "Microsoft.VisualBasic::40d74baa9f5b22a01a430265ca7037fc, R#\Runtime\Internal\internalInvokes\utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module utils
-    ' 
-    '         Function: GetInstalledPackages, installPackages, wget
-    ' 
-    '         Sub: cls, sleep
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module utils
+' 
+'         Function: GetInstalledPackages, installPackages, wget
+' 
+'         Sub: cls, sleep
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports System.Threading
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language
@@ -117,15 +118,17 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="envir"></param>
         ''' <returns></returns>
         <ExportAPI("installed.packages")>
-        Public Function GetInstalledPackages(Optional envir As Environment = Nothing) As Object
+        Public Function GetInstalledPackages(Optional envir As Environment = Nothing, Optional groupBy$ = "none|LibPath|Author|Category") As Object
             Dim pkgMgr As PackageManager = envir.globalEnvironment.packages
             Dim packages As RPkg() = pkgMgr _
                 .AsEnumerable _
                 .OrderBy(Function(pkg) pkg.namespace) _
                 .ToArray
             Dim Package As Array = packages.Select(Function(pkg) pkg.namespace).ToArray
-            Dim LibPath As Array = packages.Select(Function(pkg) pkg.LibPath.GetFullPath).ToArray
+            Dim LibPath As Array = packages.Select(Function(pkg) pkg.LibPath.FileName).ToArray
             Dim Version As Array = packages.Select(Function(pkg) pkg.info.Revision).ToArray
+            Dim Author As Array = packages.Select(Function(pkg) pkg.info.Publisher).ToArray
+            Dim Category As Array = packages.Select(Function(pkg) pkg.info.Category.ToString).ToArray
             Dim Built As Array = packages.Select(Function(pkg) pkg.GetPackageModuleInfo.BuiltTime.ToString).ToArray
             Dim Description As Array = packages _
                 .Select(Function(pkg)
@@ -141,11 +144,50 @@ Namespace Runtime.Internal.Invokes
                     {NameOf(LibPath), LibPath},
                     {NameOf(Version), Version},
                     {NameOf(Built), Built},
-                    {NameOf(Description), Description}
+                    {NameOf(Author), Author},
+                    {NameOf(Description), Description},
+                    {NameOf(Category), Category}
                 }
             }
 
-            Return summary
+            If Not groupBy.StringEmpty Then
+                Dim groupIndex As Dictionary(Of String, Integer())
+
+                Select Case groupBy.Split("|"c).First.ToLower
+                    Case "libpath"
+                        groupIndex = DirectCast(LibPath, String()).keyGroups
+                    Case "author"
+                        groupIndex = DirectCast(Author, String()).keyGroups
+                    Case "category"
+                        groupIndex = DirectCast(Category, String()).keyGroups
+                    Case Else
+                        Return summary
+                End Select
+
+                Return New list With {
+                    .slots = groupIndex _
+                        .ToDictionary(Function(group) group.Key,
+                                      Function(partition)
+                                          Return CObj(summary.GetByRowIndex(partition.Value))
+                                      End Function)
+                }
+            Else
+                Return summary
+            End If
+        End Function
+
+        <Extension>
+        Private Function keyGroups(keys As String()) As Dictionary(Of String, Integer())
+            Dim uniques As String() = keys.Distinct.ToArray
+
+            Return uniques _
+                .ToDictionary(Function(key) key,
+                              Function(key)
+                                  Return keys.SeqIterator _
+                                      .Where(Function(name) name.value = key) _
+                                      .Select(Function(index) index.i) _
+                                      .ToArray
+                              End Function)
         End Function
 
         ''' <summary>
