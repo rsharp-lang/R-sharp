@@ -49,6 +49,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports csv = Microsoft.VisualBasic.Data.csv.IO.File
+Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports RPrinter = SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 
 ''' <summary>
@@ -235,16 +236,45 @@ Module dataframe
     ''' <param name="mode$"></param>
     ''' <returns></returns>
     <ExportAPI("read.dataframe")>
-    Public Function readDataSet(file$, Optional mode$ = "numeric|character|any", Optional silent As Boolean = True) As Object
+    Public Function readDataSet(file$, Optional mode$ = "numeric|character|any", Optional toRObj As Boolean = False, Optional silent As Boolean = True) As Object
         Dim readMode As String = mode.Split("|"c).First
+        Dim dataframe As New Rdataframe
 
         Select Case readMode.ToLower
             Case "numeric"
-                Return DataSet.LoadDataSet(file, silent:=silent).ToArray
+                Dim data = DataSet.LoadDataSet(file, silent:=silent).ToArray
+
+                If toRObj Then
+                    Dim allKeys$() = data.PropertyNames
+
+                    dataframe.rownames = data.Select(Function(r) r.ID).ToArray
+                    dataframe.columns = allKeys _
+                        .ToDictionary(Function(key) key,
+                                      Function(key)
+                                          Return DirectCast(data.Select(Function(r) r(key)).ToArray, Array)
+                                      End Function)
+                Else
+                    Return data
+                End If
             Case "character"
-                Return EntityObject.LoadDataSet(file, silent:=silent).ToArray
+                Dim data = EntityObject.LoadDataSet(file, silent:=silent).ToArray
+
+                If toRObj Then
+                    Dim allKeys$() = data.PropertyNames
+
+                    dataframe.rownames = data.Select(Function(r) r.ID).ToArray
+                    dataframe.columns = allKeys _
+                        .ToDictionary(Function(key) key,
+                                      Function(key)
+                                          Return DirectCast(data.Select(Function(r) r(key)).ToArray, Array)
+                                      End Function)
+                Else
+                    Return data
+                End If
             Case Else
-                Return utils.read_csv(file)
+                dataframe = utils.read_csv(file)
         End Select
+
+        Return dataframe
     End Function
 End Module
