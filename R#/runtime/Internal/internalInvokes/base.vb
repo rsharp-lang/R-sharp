@@ -389,6 +389,9 @@ Namespace Runtime.Internal.Invokes
                         Return Internal.stop(ex, envir)
                     End Try
                 Next
+            ElseIf type.IsArray AndAlso DirectCast(opts, Array).Length = 0 Then
+                ' get all options
+                values = RConversion.asList(configs.getAllConfigs)
             Else
                 values = New list With {
                     .slots = New Dictionary(Of String, Object)

@@ -90,29 +90,33 @@ Namespace Runtime.Internal.Object
             If obj Is Nothing Then
                 Return Nothing
             Else
-                Dim type As Type = obj.GetType
-
-                Select Case type
-                    Case GetType(Dictionary(Of String, Object))
-                        Return New list With {.slots = obj}
-                    Case GetType(list)
-                        Return obj
-                    Case Else
-                        If type.ImplementInterface(GetType(IDictionary)) Then
-                            Dim objList As New Dictionary(Of String, Object)
-
-                            With DirectCast(obj, IDictionary)
-                                For Each key As Object In .Keys
-                                    Call objList.Add(Scripting.ToString(key), .Item(key))
-                                Next
-                            End With
-
-                            Return New list With {.slots = objList}
-                        Else
-                            Throw New NotImplementedException
-                        End If
-                End Select
+                Return listInternal(obj)
             End If
+        End Function
+
+        Private Function listInternal(obj As Object) As list
+            Dim type As Type = obj.GetType
+
+            Select Case type
+                Case GetType(Dictionary(Of String, Object))
+                    Return New list With {.slots = obj}
+                Case GetType(list)
+                    Return obj
+                Case Else
+                    If type.ImplementInterface(GetType(IDictionary)) Then
+                        Dim objList As New Dictionary(Of String, Object)
+
+                        With DirectCast(obj, IDictionary)
+                            For Each key As Object In .Keys
+                                Call objList.Add(Scripting.ToString(key), .Item(key))
+                            Next
+                        End With
+
+                        Return New list With {.slots = objList}
+                    Else
+                        Throw New NotImplementedException
+                    End If
+            End Select
         End Function
 
         ''' <summary>

@@ -128,6 +128,10 @@ Namespace System.Configuration
                               End Function)
         End Sub
 
+        Public Function getAllConfigs() As Dictionary(Of String, String)
+            Return New Dictionary(Of String, String)(configValues)
+        End Function
+
         Public Overrides Function ToString() As String
             Return $"{configValues.Count} configuration values: {configValues.Keys.Take(5).JoinBy(", ")}..."
         End Function
