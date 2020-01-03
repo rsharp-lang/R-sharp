@@ -104,10 +104,12 @@ Public Module utils
     ''' connection.
     ''' </summary>
     ''' <param name="x">
-    ''' the object to be written, preferably a matrix or data frame. If not, it is attempted to coerce x to a data frame.
+    ''' the object to be written, preferably a matrix or data frame. 
+    ''' If not, it is attempted to coerce x to a data frame.
     ''' </param>
     ''' <param name="file">
-    ''' either a character string naming a file or a connection open for writing. "" indicates output to the console.
+    ''' either a character string naming a file or a connection open 
+    ''' for writing. "" indicates output to the console.
     ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
