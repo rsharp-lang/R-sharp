@@ -51,11 +51,13 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Namespace Interpreter.ExecuteEngine
 
     ''' <summary>
+    ''' ByVal append, not modify the source vector
+    ''' 
     ''' ```
     ''' a &lt;&lt; b
     ''' ```
     ''' </summary>
-    Public Class Append : Inherits Expression
+    Public Class AppendOperator : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
             Get
@@ -87,6 +89,7 @@ Namespace Interpreter.ExecuteEngine
 
             If type1.IsArray OrElse type1 Is GetType(vector) Then
                 ' y should be vector
+                ' execute the byval append
                 Return Runtime.asVector(Of Object)(x) _
                     .AsObjectEnumerator _
                     .JoinIterates(Runtime.asVector(Of Object)(y).AsObjectEnumerator) _

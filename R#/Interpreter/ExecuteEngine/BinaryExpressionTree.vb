@@ -217,7 +217,7 @@ Namespace Interpreter.ExecuteEngine
                 oplist:=oplist,
                 opSymbol:="<<",
                 expression:=Function(a, b)
-                                Return New Append(a, b)
+                                Return New AppendOperator(a, b)
                             End Function)
         End Sub
 
