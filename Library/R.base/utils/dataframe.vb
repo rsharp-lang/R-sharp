@@ -1,51 +1,55 @@
 ﻿#Region "Microsoft.VisualBasic::ff8f9e963fb8c38437ca88b1abeda18e, Library\R.base\utils\dataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module dataframe
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: colnames, project, readDataSet, RowToString, vector
-    ' 
-    ' /********************************************************************************/
+' Module dataframe
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: colnames, project, readDataSet, RowToString, vector
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports csv = Microsoft.VisualBasic.Data.csv.IO.File
+Imports RPrinter = SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 
 ''' <summary>
 ''' The sciBASIC.NET dataframe api
@@ -54,8 +58,31 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Module dataframe
 
     Sub New()
-        Call Internal.ConsolePrinter.AttachConsoleFormatter(Of DataSet)(AddressOf RowToString)
+        Call RPrinter.AttachConsoleFormatter(Of DataSet)(AddressOf RowToString)
+        Call RPrinter.AttachConsoleFormatter(Of DataSet())(AddressOf printTable)
+        Call RPrinter.AttachConsoleFormatter(Of EntityObject())(AddressOf printTable)
+        Call RPrinter.AttachConsoleFormatter(Of csv)(AddressOf printTable)
     End Sub
+
+    Private Function printTable(obj As Object) As String
+        Dim matrix As csv
+
+        Select Case obj.GetType
+            Case GetType(DataSet())
+                matrix = DirectCast(obj, DataSet()).ToCsvDoc
+            Case GetType(EntityObject())
+                matrix = DirectCast(obj, EntityObject()).ToCsvDoc
+            Case GetType(csv)
+                matrix = DirectCast(obj, csv)
+            Case Else
+                Throw New NotImplementedException
+        End Select
+
+        Return matrix _
+            .AsMatrix _
+            .Select(Function(r) r.ToArray) _
+            .Print(False)
+    End Function
 
     Private Function RowToString(x As Object) As String
         Dim id$, length%
@@ -208,7 +235,7 @@ Module dataframe
     ''' <param name="mode$"></param>
     ''' <returns></returns>
     <ExportAPI("read.dataframe")>
-    Public Function readDataSet(file$, Optional mode$ = "numeric|character") As Object
+    Public Function readDataSet(file$, Optional mode$ = "numeric|character|any") As Object
         Dim readMode = mode.Split("|"c).First
 
         Select Case readMode.ToLower
