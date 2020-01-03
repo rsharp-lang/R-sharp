@@ -119,7 +119,7 @@ Public Module utils
         Dim type As Type = x.GetType
 
         If type Is GetType(Rdataframe) Then
-            Dim matrix As String()() = x.GetTable
+            Dim matrix As String()() = DirectCast(x, Rdataframe).GetTable(env.globalEnvironment)
             Dim rows = matrix.Select(Function(r) New RowObject(r))
             Dim dataframe As New File(rows)
 
