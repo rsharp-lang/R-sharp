@@ -44,7 +44,6 @@
 
 Imports Microsoft.VisualBasic.Serialization
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
-Imports SMRUCC.Rsharp.System.Configuration
 
 Namespace Runtime.Internal.Object
 
@@ -56,9 +55,16 @@ Namespace Runtime.Internal.Object
         ''' <returns></returns>
         Public Property columns As Dictionary(Of String, Array)
         Public Property rownames As String()
+
         Public ReadOnly Property nrows As Integer
             Get
                 Return Aggregate col In columns.Values Let len = col.Length Into Max(len)
+            End Get
+        End Property
+
+        Public ReadOnly Property ncols As Integer
+            Get
+                Return columns.Count
             End Get
         End Property
 
