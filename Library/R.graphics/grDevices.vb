@@ -42,6 +42,7 @@
 
 Imports System.Drawing
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Language
@@ -49,6 +50,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 ''' <summary>
 ''' The R# Graphics Devices and Support for Colours and Fonts
@@ -72,6 +74,25 @@ Public Module grDevices
         Else
             Return Internal.debug.stop(New InvalidProgramException($"'{graphics.GetType.Name}' is not a graphics data object!"), envir)
         End If
+    End Function
+
+    <ExportAPI("graphics.attrs")>
+    Public Function imageAttrs(image As GraphicsData,
+                               <RListObjectArgument>
+                               Optional attrs As Object = Nothing,
+                               Optional env As Environment = Nothing) As Object
+
+        Dim attrVals As NamedValue(Of Object)() = RListObjectArgumentAttribute.getObjectList(attrs, env).ToArray
+
+        Select Case image.Driver
+            Case Drivers.GDI
+                ' only works for jpeg
+                Dim jpeg As Image = DirectCast(image, ImageData).Image
+            Case Else
+                Return Internal.debug.stop(New NotImplementedException, env)
+        End Select
+
+        Return image
     End Function
 
     ''' <summary>

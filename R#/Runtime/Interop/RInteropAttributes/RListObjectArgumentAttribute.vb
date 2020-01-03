@@ -52,6 +52,10 @@ Namespace Runtime.Interop
     <AttributeUsage(AttributeTargets.Parameter, AllowMultiple:=False, Inherited:=True)>
     Public Class RListObjectArgumentAttribute : Inherits RInteropAttribute
 
+        Public Overrides Function ToString() As String
+            Return "..."
+        End Function
+
         ''' <summary>
         ''' Safe get a collection of argument name and value tuple
         ''' </summary>
