@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::209c271a2b1de053f39c78932bc924f0, Library\R.graphics\grDevices.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module grDevices
-    ' 
-    '     Function: devCur, devOff, rgb, saveImage
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Module grDevices
+' 
+'     Function: devCur, devOff, rgb, saveImage
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -46,8 +46,8 @@ Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
-Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 ''' <summary>
@@ -160,28 +160,14 @@ Public Module grDevices
             Return Nothing
         End If
 
-        Dim populate As Func(Of IEnumerable(Of Color)) =
-            Iterator Function() As IEnumerable(Of Color)
-                Dim counts As i32 = Scan0
-
-                For Each r As Integer In red
-                    For Each g As Integer In green
-                        For Each b As Integer In blue
-                            For Each a As Integer In alpha
-                                If maxColorValue > 0 AndAlso ++counts = maxColorValue Then
-                                    GoTo break
-                                Else
-                                    Yield Color.FromArgb(a, r, g, b)
-                                End If
-                            Next
-                        Next
-                    Next
-                Next
-break:
-                ' exit iterator loops
-            End Function
         Dim colors As New vector With {
-            .data = populate().ToArray
+            .data = colorPopulator(
+                red:=red,
+                green:=green,
+                blue:=blue,
+                alpha:=alpha,
+                maxColorValue:=maxColorValue
+            ).ToArray
         }
         Dim result As Object = Nothing
 
@@ -189,10 +175,30 @@ break:
             result = colors.setNames(names, envir)
         End If
 
-        If Not result Is Nothing AndAlso result.GetType Is GetType(Message) Then
+        If Program.isException(result) Then
             Return result
         Else
             Return colors
         End If
+    End Function
+
+    Private Iterator Function colorPopulator(red%(), green%(), blue%(), alpha%(), maxColorValue%) As IEnumerable(Of Color)
+        Dim counts As i32 = Scan0
+
+        For Each r As Integer In red
+            For Each g As Integer In green
+                For Each b As Integer In blue
+                    For Each a As Integer In alpha
+                        If maxColorValue > 0 AndAlso ++counts = maxColorValue Then
+                            GoTo break
+                        Else
+                            Yield Color.FromArgb(a, r, g, b)
+                        End If
+                    Next
+                Next
+            Next
+        Next
+break:
+        ' exit iterator loops
     End Function
 End Module
