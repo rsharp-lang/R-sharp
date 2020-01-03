@@ -221,6 +221,8 @@ Namespace Interpreter.ExecuteEngine
                 Return invokeRInternal(funcStr, envir)
             ElseIf funcVar.GetType Like runtimeFuncs Then
                 ' invoke method create from R# script
+                ' end of user function invoke
+                ' for break the internal function closure loop
                 Return DirectCast(funcVar, RFunction).Invoke(envir, InvokeParameter.Create(parameters))
             Else
                 Dim args = InvokeParameter.Create(parameters)
