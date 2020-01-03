@@ -48,14 +48,29 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Interpreter.ExecuteEngine
 
     Public Class ReturnValue : Inherits Expression
 
-        Public Overrides ReadOnly Property type As TypeCodes
+        ReadOnly value As Expression
 
-        Dim value As Expression
+        Public Overrides ReadOnly Property type As TypeCodes
+            Get
+                If value Is Nothing Then
+                    Return TypeCodes.NA
+                Else
+                    Return value.type
+                End If
+            End Get
+        End Property
+
+        Public ReadOnly Property IsRuntimeFunctionReturnWrapper As Boolean
+            Get
+                Return Not value Is Nothing AndAlso TypeOf value Is RuntimeValueLiteral
+            End Get
+        End Property
 
         Sub New(value As IEnumerable(Of Token))
             With value.ToArray

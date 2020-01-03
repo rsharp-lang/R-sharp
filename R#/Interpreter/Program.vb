@@ -130,9 +130,35 @@ Namespace Interpreter
 
             ' next keyword will break current closure 
             ' and then goto execute next iteration loop
-            If TypeOf expression Is ReturnValue OrElse TypeOf expression Is ContinuteFor Then
+            If TypeOf expression Is ReturnValue Then
                 ' return keyword will break the function
-                ' last = New ReturnValue(New RuntimeValueLiteral(last))
+                ' current program maybe is a for loop, if closure, etc
+                ' so we needs wrap the last value with 
+                ' return keyword.
+                last = New ReturnValue(New RuntimeValueLiteral(last))
+                breakLoop = True
+            ElseIf Not last Is Nothing AndAlso last.GetType Is GetType(ReturnValue) Then
+                ' the internal closure invoke a returns keyword
+                ' so break the current loop
+                '
+                ' This situation maybe a deep nested closure, example like 
+                '
+                ' let fun as function() {
+                '    for(x in xxx) {
+                '       for(y in yyy) {
+                '           if (true(x, y)) {
+                '              return ooo;
+                '           }
+                '       }
+                '    }
+                ' }
+                '
+                ' Do not break the returns keyword popout chain 
+                '
+                breakLoop = True
+            End If
+
+            If TypeOf expression Is ContinuteFor Then
                 breakLoop = True
             End If
 

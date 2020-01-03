@@ -223,7 +223,21 @@ Namespace Interpreter.ExecuteEngine
                 ' invoke method create from R# script
                 ' end of user function invoke
                 ' for break the internal function closure loop
-                Return DirectCast(funcVar, RFunction).Invoke(envir, InvokeParameter.Create(parameters))
+                ' due to the reason of in program closure executation
+                ' loop, then returns result will be wrapped as return runtime literal value
+                ' so we needs to break such wrapper at here
+                ' or ctype error will happends
+                Dim result As Object = DirectCast(funcVar, RFunction).Invoke(envir, InvokeParameter.Create(parameters))
+
+                If Not result Is Nothing Then
+                    If result.GetType Is GetType(ReturnValue) AndAlso DirectCast(result, ReturnValue).IsRuntimeFunctionReturnWrapper Then
+                        Return DirectCast(result, ReturnValue).Evaluate(Nothing)
+                    Else
+                        Return result
+                    End If
+                Else
+                    Return Nothing
+                End If
             Else
                 Dim args = InvokeParameter.Create(parameters)
                 Dim interop As RMethodInfo = DirectCast(funcVar, RMethodInfo)
