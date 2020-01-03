@@ -1,41 +1,41 @@
 ﻿#Region "Microsoft.VisualBasic::1cfa41805a2df318d115030184d92501, Library\R.base\utils\utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module utils
-    ' 
-    '     Function: read_csv, write_csv
-    ' 
-    ' /********************************************************************************/
+' Module utils
+' 
+'     Function: read_csv, write_csv
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -43,6 +43,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -123,11 +124,11 @@ Public Module utils
             Dim rows = matrix.Select(Function(r) New RowObject(r))
             Dim dataframe As New File(rows)
 
-            Return dataframe.Save(path:=file)
+            Return dataframe.Save(path:=file, encoding:=Encodings.UTF8WithoutBOM, silent:=True)
         ElseIf type Is GetType(File) Then
-            Return DirectCast(x, File).Save(path:=file)
+            Return DirectCast(x, File).Save(path:=file, encoding:=Encodings.UTF8WithoutBOM, silent:=True)
         ElseIf type Is GetType(IO.DataFrame) Then
-            Return DirectCast(x, IO.DataFrame).Save(path:=file)
+            Return DirectCast(x, IO.DataFrame).Save(path:=file, encoding:=Encodings.UTF8WithoutBOM, silent:=True)
         ElseIf Runtime.isVector(Of EntityObject)(x) Then
             Return DirectCast(Runtime.asVector(Of EntityObject)(x), EntityObject()).SaveTo(path:=file, silent:=True)
         ElseIf Runtime.isVector(Of DataSet)(x) Then
