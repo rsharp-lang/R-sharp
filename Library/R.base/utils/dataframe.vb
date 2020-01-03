@@ -55,7 +55,7 @@ Imports RPrinter = SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 ''' <summary>
 ''' The sciBASIC.NET dataframe api
 ''' </summary>
-<Package("dataframe", Category:=APICategories.UtilityTools)>
+<Package("dataframe", Category:=APICategories.UtilityTools, Publisher:="xie.guigang@gcmodeller.org")>
 Module dataframe
 
     Sub New()

@@ -118,7 +118,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="envir"></param>
         ''' <returns></returns>
         <ExportAPI("installed.packages")>
-        Public Function GetInstalledPackages(Optional envir As Environment = Nothing, Optional groupBy$ = "none|LibPath|Author|Category") As Object
+        Public Function GetInstalledPackages(Optional groupBy$ = "none|LibPath|Author|Category", Optional envir As Environment = Nothing) As Object
             Dim pkgMgr As PackageManager = envir.globalEnvironment.packages
             Dim packages As RPkg() = pkgMgr _
                 .AsEnumerable _
@@ -127,7 +127,7 @@ Namespace Runtime.Internal.Invokes
             Dim Package As Array = packages.Select(Function(pkg) pkg.namespace).ToArray
             Dim LibPath As Array = packages.Select(Function(pkg) pkg.LibPath.FileName).ToArray
             Dim Version As Array = packages.Select(Function(pkg) pkg.info.Revision).ToArray
-            Dim Author As Array = packages.Select(Function(pkg) pkg.info.Publisher).ToArray
+            Dim Author As Array = packages.Select(Function(pkg) pkg.info.Publisher.LineTokens.DefaultFirst("n/a")).ToArray
             Dim Category As Array = packages.Select(Function(pkg) pkg.info.Category.ToString).ToArray
             Dim Built As Array = packages.Select(Function(pkg) pkg.GetPackageModuleInfo.BuiltTime.ToString).ToArray
             Dim Description As Array = packages _
