@@ -43,6 +43,8 @@ Imports Microsoft.VisualBasic.CommandLine
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.System.Configuration
+Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
 Module Program
 
@@ -51,8 +53,17 @@ Module Program
         Return GetType(CLI).RunCLI(
             args:=App.CommandLine,
             executeFile:=AddressOf RunScript,
-            executeEmpty:=AddressOf Terminal.RunTerminal
+            executeEmpty:=AddressOf Terminal.RunTerminal,
+            executeNotFound:=AddressOf RunExpression
         )
+    End Function
+
+    Private Function RunExpression(args As CommandLine) As Integer
+        Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
+        Dim program As RProgram = RProgram.BuildProgram(args.cli)
+        Dim result As Object = REnv.TryCatch(Function() R.Run(program))
+
+        Return Rscript.handleResult(result, R.globalEnvir, program)
     End Function
 
     Private Function RunScript(filepath$, args As CommandLine) As Integer
@@ -70,10 +81,6 @@ Module Program
         Call R.LoadLibrary("grDevices")
 
         Call Console.WriteLine()
-
-        'For Each arg As NamedValue(Of String) In args.ToArgumentVector
-        '    Call R.Add(CommandLine.TrimNamePrefix(arg.Name), arg.Value, TypeCodes.generic)
-        'Next
 
         Dim result As Object = R.Source(filepath)
 
