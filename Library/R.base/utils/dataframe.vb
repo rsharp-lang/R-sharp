@@ -235,14 +235,14 @@ Module dataframe
     ''' <param name="mode$"></param>
     ''' <returns></returns>
     <ExportAPI("read.dataframe")>
-    Public Function readDataSet(file$, Optional mode$ = "numeric|character|any") As Object
-        Dim readMode = mode.Split("|"c).First
+    Public Function readDataSet(file$, Optional mode$ = "numeric|character|any", Optional silent As Boolean = True) As Object
+        Dim readMode As String = mode.Split("|"c).First
 
         Select Case readMode.ToLower
             Case "numeric"
-                Return DataSet.LoadDataSet(file).ToArray
+                Return DataSet.LoadDataSet(file, silent:=silent).ToArray
             Case "character"
-                Return EntityObject.LoadDataSet(file).ToArray
+                Return EntityObject.LoadDataSet(file, silent:=silent).ToArray
             Case Else
                 Return utils.read_csv(file)
         End Select
