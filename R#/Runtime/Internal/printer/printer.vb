@@ -83,7 +83,16 @@ Namespace Runtime.Internal.ConsolePrinter
             Dim opts As Options = env.globalEnvironment.options
             Dim format As String = $"{opts.f64Format}{opts.digits}"
 
-            Return Function(d) DirectCast(d, Double).ToString(format)
+            Return Function(d)
+                       Dim val As Double = DirectCast(d, Double)
+                       Dim str As String = val.ToString(format)
+
+                       If val > 0 Then
+                           str = " " & str
+                       End If
+
+                       Return str
+                   End Function
         End Function
 
         ''' <summary>
@@ -134,7 +143,7 @@ Namespace Runtime.Internal.ConsolePrinter
                             End Sub)
             ElseIf valueType Is GetType(dataframe) Then
                 Call DirectCast(x, dataframe) _
-                    .GetTable _
+                    .GetTable(env) _
                     .Print(addBorder:=False) _
                     .DoCall(AddressOf Console.WriteLine)
             ElseIf valueType Is GetType(vbObject) Then
@@ -179,7 +188,7 @@ printSingleElement:
         ''' <param name="elementType"></param>
         ''' <returns></returns>
         <Extension>
-        Private Function ToString(elementType As Type, env As GlobalEnvironment) As IStringBuilder
+        Friend Function ToString(elementType As Type, env As GlobalEnvironment) As IStringBuilder
             If RtoString.ContainsKey(elementType) Then
                 Return RtoString(elementType)
             ElseIf RInternalToString.ContainsKey(elementType) Then
