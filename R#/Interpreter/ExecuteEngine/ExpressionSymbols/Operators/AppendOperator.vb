@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1b65e8b495ff5cb46eaf0bd8cacbff59, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Append.vb"
+﻿#Region "Microsoft.VisualBasic::7fbcf7ba0bf973543e1876dfd90e9d5b, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\AppendOperator.vb"
 
     ' Author:
     ' 
@@ -31,7 +31,7 @@
 
     ' Summaries:
 
-    '     Class Append
+    '     Class AppendOperator
     ' 
     '         Properties: type
     ' 

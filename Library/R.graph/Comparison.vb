@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a69511755691d3c2e376e56081b4a99b, Library\R.graph\Comparison.vb"
+﻿#Region "Microsoft.VisualBasic::a6cec8cf381e4808e3ee8c7402b7a288, Library\R.graph\Comparison.vb"
 
     ' Author:
     ' 
@@ -73,4 +73,3 @@ Module Comparison
         Return Analysis.GraphSimilarity(a, b, cutoff)
     End Function
 End Module
-

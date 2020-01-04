@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fb3b34c34596905a9e5fe33de05d0dd3, R#\Runtime\Internal\internalInvokes\math.vb"
+﻿#Region "Microsoft.VisualBasic::e7ca109fd52ec60753b3661a10221b62, R#\Runtime\Internal\internalInvokes\math.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Module math
     ' 
-    '         Function: log, round, sum
+    '         Function: log, pow, round, sum
     ' 
     ' 
     ' /********************************************************************************/

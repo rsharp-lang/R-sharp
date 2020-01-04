@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::104f0bc266859ea2cad1ef0e436efcd7, R#\Runtime\Internal\internalInvokes\file.vb"
+﻿#Region "Microsoft.VisualBasic::ea643eababed25986800985c28ed3a0a, R#\Runtime\Internal\internalInvokes\file.vb"
 
     ' Author:
     ' 
@@ -33,9 +33,9 @@
 
     '     Module file
     ' 
-    '         Function: basename, dirname, exists, getwd, listDirs
-    '                   listFiles, normalizeFileName, normalizePath, readLines, readList
-    '                   Rhome, saveList, setwd, writeLines
+    '         Function: basename, dir_exists, dirname, exists, getwd
+    '                   listDirs, listFiles, normalizeFileName, normalizePath, readLines
+    '                   readList, Rhome, saveList, setwd, writeLines
     ' 
     ' 
     ' /********************************************************************************/

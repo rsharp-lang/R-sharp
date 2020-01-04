@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9405a3fc0856daa54051151a7021dd1a, R#\Runtime\Internal\objects\conversion.vb"
+﻿#Region "Microsoft.VisualBasic::61d9914ed7d8ed56d6208ff6c0fc9122, R#\Runtime\Internal\objects\conversion.vb"
 
     ' Author:
     ' 
@@ -34,7 +34,7 @@
     '     Module RConversion
     ' 
     '         Function: asCharacters, asInteger, asList, asLogicals, asNumeric
-    '                   asObject, CTypeDynamic
+    '                   asObject, CTypeDynamic, listInternal
     ' 
     ' 
     ' /********************************************************************************/
