@@ -68,6 +68,21 @@ Namespace Runtime.Internal.Object
             End Get
         End Property
 
+        Public Function GetColumnVector(columnName As String) As Array
+            Dim n As Integer = nrows
+            Dim col As Array = columns.TryGetValue(columnName)
+
+            If col Is Nothing Then
+                Return Nothing
+            ElseIf col.Length = n Then
+                Return col
+            Else
+                Return VectorExtensions _
+                    .Replicate(col.GetValue(Scan0), n) _
+                    .ToArray
+            End If
+        End Function
+
         Public Function GetByRowIndex(index As Integer()) As dataframe
             Dim subsetRowNumbers As String() = index _
                 .Select(Function(i, j)
