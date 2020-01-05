@@ -1,48 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::ea643eababed25986800985c28ed3a0a, R#\Runtime\Internal\internalInvokes\file.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module file
-    ' 
-    '         Function: basename, dir_exists, dirname, exists, getwd
-    '                   listDirs, listFiles, normalizeFileName, normalizePath, readLines
-    '                   readList, Rhome, saveList, setwd, writeLines
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module file
+' 
+'         Function: basename, dir_exists, dirname, exists, getwd
+'                   listDirs, listFiles, normalizeFileName, normalizePath, readLines
+'                   readList, Rhome, saveList, setwd, writeLines
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Language.UnixBash
@@ -308,14 +309,22 @@ Namespace Runtime.Internal.Invokes
 
             If listType Is GetType(list) Then
                 json = DirectCast(list, list).slots.GetJson
-            ElseIf listType Is GetType(Dictionary(Of String, String)) OrElse listType Is GetType(Dictionary(Of String, Integer)) Then
-                json = JsonContract.GetObjectJson(list.GetType, list, False)
+            ElseIf listType.ImplementInterface(GetType(IDictionary)) AndAlso
+                listType.GenericTypeArguments.Length > 0 AndAlso
+                listType.GenericTypeArguments(Scan0) Is GetType(String) Then
+
+                json = JsonContract.GetObjectJson(listType, list, True, True, listKnownTypes)
             Else
                 Return Internal.stop(New NotSupportedException(listType.FullName), envir)
             End If
 
             Return json.SaveTo(file)
         End Function
+
+        ReadOnly listKnownTypes As Type() = {
+            GetType(String), GetType(Boolean), GetType(Double), GetType(Long), GetType(Integer),
+            GetType(String()), GetType(Boolean()), GetType(Double()), GetType(Long()), GetType(Integer())
+        }
 
         ''' <summary>
         ''' read list from a given json file
@@ -336,7 +345,7 @@ Namespace Runtime.Internal.Invokes
                 Case "logical"
                     Return file.LoadJsonFile(Of Dictionary(Of String, Boolean))
                 Case "any"
-                    Return file.LoadJsonFile(Of Dictionary(Of String, Object))(knownTypes:={GetType(String), GetType(Boolean), GetType(Double), GetType(Long), GetType(Integer)})
+                    Return file.LoadJsonFile(Of Dictionary(Of String, Object))(knownTypes:=listKnownTypes)
                 Case Else
                     Return Internal.stop($"Invalid data mode: '{mode}'!", envir)
             End Select
