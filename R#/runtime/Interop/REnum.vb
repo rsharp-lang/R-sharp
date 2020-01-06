@@ -13,6 +13,7 @@ Namespace Runtime.Interop
 
         ReadOnly namedValues As New Dictionary(Of String, Object)
         ReadOnly intValues As New Dictionary(Of String, Object)
+        ReadOnly namedIntegers As New Dictionary(Of String, Long)
 
         Public ReadOnly Iterator Property values As IEnumerable(Of Object)
             Get
@@ -38,7 +39,13 @@ Namespace Runtime.Interop
         End Sub
 
         Public Function IntValue(val As Object) As Long
+            Dim key As String = val.ToString.ToLower
 
+            If namedIntegers.ContainsKey(key) Then
+                Return namedIntegers(key)
+            Else
+                Return Conversion.CTypeDynamic(val, GetType(Long))
+            End If
         End Function
 
         Private Sub doEnumParser()
@@ -58,6 +65,7 @@ Namespace Runtime.Interop
                 int = CLng(members(flag.ToString).GetValue(Nothing))
                 intValues.Add("T" & int, flag)
                 namedValues.Add(flag.ToString.ToLower, flag)
+                namedIntegers.Add(flag.ToString.ToLower, int)
             Next
         End Sub
 

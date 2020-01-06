@@ -24,7 +24,7 @@ Namespace Runtime.Internal.ConsolePrinter
             End If
         End Function
 
-        Friend Function defaultValueToString([default] As Object, type As Type) As String
+        Public Function defaultValueToString([default] As Object, type As Type) As String
             Dim s As String = [default].ToString
 
             If s.IsPattern("\d+") Then

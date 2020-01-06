@@ -81,9 +81,22 @@ Module interoptest
         Dim e As REnum = REnum.GetEnumList(GetType(MSG_TYPES))
 
         Call Console.WriteLine(ConsolePrinter.enumPrinter.printClass(MSG_TYPES.INF))
+        Call Console.WriteLine(ConsolePrinter.enumPrinter.defaultValueToString(eeee.a Or eeee.b Or eeee.c Or eeee.d Or eeee.e Or eeee.f Or eeee.g Or eeee.h Or eeee.t, GetType(eeee)))
 
         Pause()
     End Sub
+
+    Enum eeee
+        a = 1
+        b = a * 2
+        c = b * 2
+        d = c * 2
+        e = d * 2
+        f = e * 2
+        g = f * 2
+        h = g * 2
+        t = h * 2
+    End Enum
 End Module
 
 Public Class TestContainer
