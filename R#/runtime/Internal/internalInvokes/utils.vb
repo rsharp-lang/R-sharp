@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::40d74baa9f5b22a01a430265ca7037fc, R#\Runtime\Internal\internalInvokes\utils.vb"
+﻿#Region "Microsoft.VisualBasic::704d1ce750d5d89e639250bfc7d81678, R#\Runtime\Internal\internalInvokes\utils.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Module utils
     ' 
-    '         Function: GetInstalledPackages, installPackages, wget
+    '         Function: GetInstalledPackages, installPackages, keyGroups, wget
     ' 
     '         Sub: cls, sleep
     ' 
@@ -42,6 +42,7 @@
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports System.Threading
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language
@@ -117,15 +118,17 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="envir"></param>
         ''' <returns></returns>
         <ExportAPI("installed.packages")>
-        Public Function GetInstalledPackages(Optional envir As Environment = Nothing) As Object
+        Public Function GetInstalledPackages(Optional groupBy$ = "none|LibPath|Author|Category", Optional envir As Environment = Nothing) As Object
             Dim pkgMgr As PackageManager = envir.globalEnvironment.packages
             Dim packages As RPkg() = pkgMgr _
                 .AsEnumerable _
                 .OrderBy(Function(pkg) pkg.namespace) _
                 .ToArray
             Dim Package As Array = packages.Select(Function(pkg) pkg.namespace).ToArray
-            Dim LibPath As Array = packages.Select(Function(pkg) pkg.LibPath.GetFullPath).ToArray
+            Dim LibPath As Array = packages.Select(Function(pkg) pkg.LibPath.FileName).ToArray
             Dim Version As Array = packages.Select(Function(pkg) pkg.info.Revision).ToArray
+            Dim Author As Array = packages.Select(Function(pkg) pkg.info.Publisher.LineTokens.DefaultFirst("n/a")).ToArray
+            Dim Category As Array = packages.Select(Function(pkg) pkg.info.Category.ToString).ToArray
             Dim Built As Array = packages.Select(Function(pkg) pkg.GetPackageModuleInfo.BuiltTime.ToString).ToArray
             Dim Description As Array = packages _
                 .Select(Function(pkg)
@@ -141,11 +144,50 @@ Namespace Runtime.Internal.Invokes
                     {NameOf(LibPath), LibPath},
                     {NameOf(Version), Version},
                     {NameOf(Built), Built},
-                    {NameOf(Description), Description}
+                    {NameOf(Author), Author},
+                    {NameOf(Description), Description},
+                    {NameOf(Category), Category}
                 }
             }
 
-            Return summary
+            If Not groupBy.StringEmpty Then
+                Dim groupIndex As Dictionary(Of String, Integer())
+
+                Select Case groupBy.Split("|"c).First.ToLower
+                    Case "libpath"
+                        groupIndex = DirectCast(LibPath, String()).keyGroups
+                    Case "author"
+                        groupIndex = DirectCast(Author, String()).keyGroups
+                    Case "category"
+                        groupIndex = DirectCast(Category, String()).keyGroups
+                    Case Else
+                        Return summary
+                End Select
+
+                Return New list With {
+                    .slots = groupIndex _
+                        .ToDictionary(Function(group) group.Key,
+                                      Function(partition)
+                                          Return CObj(summary.GetByRowIndex(partition.Value))
+                                      End Function)
+                }
+            Else
+                Return summary
+            End If
+        End Function
+
+        <Extension>
+        Private Function keyGroups(keys As String()) As Dictionary(Of String, Integer())
+            Dim uniques As String() = keys.Distinct.ToArray
+
+            Return uniques _
+                .ToDictionary(Function(key) key,
+                              Function(key)
+                                  Return keys.SeqIterator _
+                                      .Where(Function(name) name.value = key) _
+                                      .Select(Function(index) index.i) _
+                                      .ToArray
+                              End Function)
         End Function
 
         ''' <summary>

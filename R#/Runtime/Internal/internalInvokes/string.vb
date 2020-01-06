@@ -55,11 +55,11 @@ Namespace Runtime.Internal.Invokes
     Module stringr
 
         <ExportAPI("html")>
-        Public Function html(x As Object, env As Environment) As Object
+        Public Function html(<RRawVectorArgument> x As Object, env As Environment) As Object
             If x Is Nothing Then
                 Return Nothing
             Else
-                Return htmlPrinter.GetHtml(x)
+                Return htmlPrinter.GetHtml(x, env)
             End If
         End Function
 

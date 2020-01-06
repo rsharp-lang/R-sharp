@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8d576670ead3450af04b70d6470e8c09, R-terminal\Program.vb"
+﻿#Region "Microsoft.VisualBasic::1b9f6bfad14f28b511a7f6d01c677521, R-terminal\Program.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     ' Module Program
     ' 
-    '     Function: Main, RunScript
+    '     Function: Main, RunExpression, RunScript
     ' 
     ' /********************************************************************************/
 

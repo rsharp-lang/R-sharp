@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1b65e8b495ff5cb46eaf0bd8cacbff59, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Append.vb"
+﻿#Region "Microsoft.VisualBasic::7fbcf7ba0bf973543e1876dfd90e9d5b, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\AppendOperator.vb"
 
     ' Author:
     ' 
@@ -31,7 +31,7 @@
 
     ' Summaries:
 
-    '     Class Append
+    '     Class AppendOperator
     ' 
     '         Properties: type
     ' 
@@ -51,11 +51,13 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Namespace Interpreter.ExecuteEngine
 
     ''' <summary>
+    ''' ByVal append, not modify the source vector
+    ''' 
     ''' ```
     ''' a &lt;&lt; b
     ''' ```
     ''' </summary>
-    Public Class Append : Inherits Expression
+    Public Class AppendOperator : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
             Get
@@ -87,6 +89,7 @@ Namespace Interpreter.ExecuteEngine
 
             If type1.IsArray OrElse type1 Is GetType(vector) Then
                 ' y should be vector
+                ' execute the byval append
                 Return Runtime.asVector(Of Object)(x) _
                     .AsObjectEnumerator _
                     .JoinIterates(Runtime.asVector(Of Object)(y).AsObjectEnumerator) _

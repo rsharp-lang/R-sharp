@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c8deb6bdebe9e95ac74fb29600082ee5, R#\Interpreter\ExecuteEngine\BinaryExpressionTree.vb"
+﻿#Region "Microsoft.VisualBasic::7a74ac4725a8e71d2b4c325322a6a7c8, R#\Interpreter\ExecuteEngine\BinaryExpressionTree.vb"
 
     ' Author:
     ' 
@@ -217,7 +217,7 @@ Namespace Interpreter.ExecuteEngine
                 oplist:=oplist,
                 opSymbol:="<<",
                 expression:=Function(a, b)
-                                Return New Append(a, b)
+                                Return New AppendOperator(a, b)
                             End Function)
         End Sub
 

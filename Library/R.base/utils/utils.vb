@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1cfa41805a2df318d115030184d92501, Library\R.base\utils\utils.vb"
+﻿#Region "Microsoft.VisualBasic::bf3d85189dac0cd7424ce9c174b5e498, Library\R.base\utils\utils.vb"
 
     ' Author:
     ' 
@@ -43,6 +43,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -103,10 +104,12 @@ Public Module utils
     ''' connection.
     ''' </summary>
     ''' <param name="x">
-    ''' the object to be written, preferably a matrix or data frame. If not, it is attempted to coerce x to a data frame.
+    ''' the object to be written, preferably a matrix or data frame. 
+    ''' If not, it is attempted to coerce x to a data frame.
     ''' </param>
     ''' <param name="file">
-    ''' either a character string naming a file or a connection open for writing. "" indicates output to the console.
+    ''' either a character string naming a file or a connection open 
+    ''' for writing. "" indicates output to the console.
     ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
@@ -119,15 +122,15 @@ Public Module utils
         Dim type As Type = x.GetType
 
         If type Is GetType(Rdataframe) Then
-            Dim matrix As String()() = x.GetTable
+            Dim matrix As String()() = DirectCast(x, Rdataframe).GetTable(env.globalEnvironment)
             Dim rows = matrix.Select(Function(r) New RowObject(r))
             Dim dataframe As New File(rows)
 
-            Return dataframe.Save(path:=file)
+            Return dataframe.Save(path:=file, encoding:=Encodings.UTF8WithoutBOM, silent:=True)
         ElseIf type Is GetType(File) Then
-            Return DirectCast(x, File).Save(path:=file)
+            Return DirectCast(x, File).Save(path:=file, encoding:=Encodings.UTF8WithoutBOM, silent:=True)
         ElseIf type Is GetType(IO.DataFrame) Then
-            Return DirectCast(x, IO.DataFrame).Save(path:=file)
+            Return DirectCast(x, IO.DataFrame).Save(path:=file, encoding:=Encodings.UTF8WithoutBOM, silent:=True)
         ElseIf Runtime.isVector(Of EntityObject)(x) Then
             Return DirectCast(Runtime.asVector(Of EntityObject)(x), EntityObject()).SaveTo(path:=file, silent:=True)
         ElseIf Runtime.isVector(Of DataSet)(x) Then

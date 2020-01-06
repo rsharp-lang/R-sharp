@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f775af4a2af38536d0a0bff64fa06b88, Library\R.base\base.vb"
+﻿#Region "Microsoft.VisualBasic::42c60a6e93aa92dc37c2b994435d26e5, Library\R.base\base.vb"
 
     ' Author:
     ' 
@@ -44,7 +44,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 ''' <summary>
 ''' 
 ''' </summary>
-<Package("base", Category:=APICategories.UtilityTools)>
+<Package("base", Category:=APICategories.UtilityTools, Publisher:="xie.guigang@gcmodeller.org")>
 Public Module base
 
 End Module

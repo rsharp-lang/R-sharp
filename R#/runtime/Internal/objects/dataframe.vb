@@ -1,44 +1,44 @@
-﻿#Region "Microsoft.VisualBasic::74e52f0f0f98987f8ebcbb0adc35a7b0, R#\Runtime\Internal\objects\dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::be03df21ea1cd3a6cdbbb4b77998860f, R#\Runtime\Internal\objects\dataframe.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class dataframe
-' 
-'         Properties: columns, nrows, rownames
-' 
-'         Function: GetTable
-' 
-' 
-' /********************************************************************************/
+    '     Class dataframe
+    ' 
+    '         Properties: columns, ncols, nrows, rownames
+    ' 
+    '         Function: GetByRowIndex, GetTable
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -67,6 +67,50 @@ Namespace Runtime.Internal.Object
                 Return columns.Count
             End Get
         End Property
+
+        Public Function GetColumnVector(columnName As String) As Array
+            Dim n As Integer = nrows
+            Dim col As Array = columns.TryGetValue(columnName)
+
+            If col Is Nothing Then
+                Return Nothing
+            ElseIf col.Length = n Then
+                Return col
+            Else
+                Return VectorExtensions _
+                    .Replicate(col.GetValue(Scan0), n) _
+                    .ToArray
+            End If
+        End Function
+
+        Public Function GetByRowIndex(index As Integer()) As dataframe
+            Dim subsetRowNumbers As String() = index _
+                .Select(Function(i, j)
+                            Return rownames.ElementAtOrDefault(i, j)
+                        End Function) _
+                .ToArray
+            Dim subsetData As Dictionary(Of String, Array) = columns _
+                .ToDictionary(Function(c) c.Key,
+                              Function(c)
+                                  If c.Value.Length = 1 Then
+                                      ' single value
+                                      Return DirectCast(c.Value.getvalue(Scan0), Array)
+                                  End If
+
+                                  Dim vec = index _
+                                    .Select(Function(i)
+                                                Return c.Value.GetValue(i)
+                                            End Function) _
+                                    .ToArray
+
+                                  Return DirectCast(vec, Array)
+                              End Function)
+
+            Return New dataframe With {
+                .rownames = subsetRowNumbers,
+                .columns = subsetData
+            }
+        End Function
 
         ''' <summary>
         ''' Each element in a return result array is a row in table matrix

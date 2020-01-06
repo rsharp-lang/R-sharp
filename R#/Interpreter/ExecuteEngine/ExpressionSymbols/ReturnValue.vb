@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0981e23029019a2c10198ccaf842efb3, R#\Interpreter\ExecuteEngine\ExpressionSymbols\ReturnValue.vb"
+﻿#Region "Microsoft.VisualBasic::61f301145780e5e2338c1da8846e1c6d, R#\Interpreter\ExecuteEngine\ExpressionSymbols\ReturnValue.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Class ReturnValue
     ' 
-    '         Properties: type
+    '         Properties: IsRuntimeFunctionReturnWrapper, type
     ' 
     '         Constructor: (+2 Overloads) Sub New
     '         Function: Evaluate, ToString
@@ -43,18 +43,34 @@
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Interpreter.ExecuteEngine
 
     Public Class ReturnValue : Inherits Expression
 
-        Public Overrides ReadOnly Property type As TypeCodes
+        ReadOnly value As Expression
 
-        Dim value As Expression
+        Public Overrides ReadOnly Property type As TypeCodes
+            Get
+                If value Is Nothing Then
+                    Return TypeCodes.NA
+                Else
+                    Return value.type
+                End If
+            End Get
+        End Property
+
+        Public ReadOnly Property IsRuntimeFunctionReturnWrapper As Boolean
+            Get
+                Return Not value Is Nothing AndAlso TypeOf value Is RuntimeValueLiteral
+            End Get
+        End Property
 
         Sub New(value As IEnumerable(Of Token))
             With value.ToArray
@@ -68,10 +84,12 @@ Namespace Interpreter.ExecuteEngine
             End With
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Sub New(value As Expression)
             Me.value = value
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function Evaluate(envir As Environment) As Object
             Return Me.value.Evaluate(envir)
         End Function

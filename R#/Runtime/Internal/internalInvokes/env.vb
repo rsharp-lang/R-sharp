@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b099dc7d6ba547cd54e2d4caf27ef33f, R#\Runtime\Internal\internalInvokes\env.vb"
+﻿#Region "Microsoft.VisualBasic::97be911b48e70029c335c7f199443ea8, R#\Runtime\Internal\internalInvokes\env.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,14 @@
     '     Module env
     ' 
     '         Function: [get], CallInternal, doCall, environment, globalenv
-    '                   ls, objects
+    '                   ls, objects, objectSize
     ' 
     ' 
     ' /********************************************************************************/
 
 #End Region
 
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -157,6 +158,42 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("objects")>
         Private Function objects(env As Environment) As Object
             Return env.variables.Keys.ToArray
+        End Function
+
+        ''' <summary>
+        ''' # Report the Space Allocated for an Object
+        ''' 
+        ''' Provides an estimate of the memory that is being used to store 
+        ''' an R# object.
+        ''' 
+        ''' Exactly which parts of the memory allocation should be attributed 
+        ''' to which object is not clear-cut. This function merely provides 
+        ''' a rough indication: it should be reasonably accurate for atomic 
+        ''' vectors, but does not detect if elements of a list are shared, for 
+        ''' example. (Sharing amongst elements of a character vector is taken 
+        ''' into account, but not that between character vectors in a single 
+        ''' object.)
+        '''
+        ''' The calculation Is Of the size Of the Object, And excludes the 
+        ''' space needed To store its name In the symbol table.
+        '''
+        ''' Associated space(e.g., the environment of a function And what the 
+        ''' pointer in a EXTPTRSXP points to) Is Not included in the 
+        ''' calculation.
+        '''
+        ''' Object sizes are larger On 64-bit builds than 32-bit ones, but will 
+        ''' very likely be the same On different platforms With the same word 
+        ''' length And pointer size.
+        ''' </summary>
+        ''' <param name="x">an R# object.</param>
+        ''' <returns>
+        ''' An object of class "object_size" with a length-one double value, 
+        ''' an estimate of the memory allocation attributable to the object 
+        ''' in bytes.
+        ''' </returns>
+        <ExportAPI("object.size")>
+        Public Function objectSize(<RRawVectorArgument> x As Object) As Long
+            Return HeapSizeOf.MeasureSize(x)
         End Function
 
         ''' <summary>

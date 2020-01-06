@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::658da89b6e5b7b466e39b6e973e92e06, R#\System\Config\Options.vb"
+﻿#Region "Microsoft.VisualBasic::7479700c69343fea6a75db8d2eb4b001, R#\System\Config\Options.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     ' 
     '         Constructor: (+1 Overloads) Sub New
     ' 
-    '         Function: getOption, setOption, ToString
+    '         Function: getAllConfigs, getOption, setOption, ToString
     ' 
     '         Sub: (+2 Overloads) Dispose, flush
     ' 
