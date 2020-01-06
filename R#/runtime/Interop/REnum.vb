@@ -1,4 +1,7 @@
-﻿Namespace Runtime.Interop
+﻿Imports System.Reflection
+Imports Microsoft.VisualBasic.Linq
+
+Namespace Runtime.Interop
 
     ''' <summary>
     ''' VB.NET enum type wrapper in R#
@@ -20,7 +23,17 @@
         End Sub
 
         Private Sub doEnumParser()
-            Enums(Of ()
+            Dim values As [Enum]() = raw _
+                .GetEnumValues _
+                .AsObjectEnumerator _
+                .Select(Function(flag) DirectCast(flag, [Enum])) _
+                .ToArray
+            Dim members As Dictionary(Of String, FieldInfo)
+
+            For Each flag As [Enum] In values
+                namedValues.Add(flag.ToString.ToLower, flag)
+
+            Next
         End Sub
 
         Public Function GetByName(name As String) As Object
