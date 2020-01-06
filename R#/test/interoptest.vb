@@ -48,6 +48,7 @@
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Internal
 
 Module interoptest
 
@@ -78,6 +79,8 @@ Module interoptest
 
     Sub enumTest()
         Dim e As REnum = REnum.GetEnumList(GetType(MSG_TYPES))
+
+        Call Console.WriteLine(ConsolePrinter.enumPrinter.printClass(MSG_TYPES.INF))
 
         Pause()
     End Sub

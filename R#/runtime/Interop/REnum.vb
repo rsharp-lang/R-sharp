@@ -37,6 +37,10 @@ Namespace Runtime.Interop
                 .CreatePrimitiveType()
         End Sub
 
+        Public Function IntValue(val As Object) As Long
+
+        End Function
+
         Private Sub doEnumParser()
             Dim values As [Enum]() = raw _
                 .GetEnumValues _
