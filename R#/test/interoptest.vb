@@ -49,6 +49,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Internal
+Imports System.Reflection
 
 Module interoptest
 
@@ -81,12 +82,26 @@ Module interoptest
         Dim e As REnum = REnum.GetEnumList(GetType(MSG_TYPES))
 
         Call Console.WriteLine(ConsolePrinter.enumPrinter.printClass(MSG_TYPES.INF))
-        Call Console.WriteLine(ConsolePrinter.enumPrinter.defaultValueToString(eeee.a Or eeee.b Or eeee.c Or eeee.d Or eeee.e Or eeee.f Or eeee.g Or eeee.h Or eeee.t, GetType(eeee)))
+        ' Call Console.WriteLine(ConsolePrinter.enumPrinter.defaultValueToString(eeee.a Or eeee.b Or eeee.c Or eeee.d Or eeee.e Or eeee.f Or eeee.g Or eeee.h Or eeee.t, GetType(eeee)))
+
+        Dim method As MethodInfo = GetType(interoptest).GetMethod(NameOf(testEnumArgs))
+        Dim type As REnum = REnum.GetEnumList(GetType(eeee))
+        Dim flags = eeee.a Or eeee.b Or eeee.c
+
+        Call method.Invoke(Nothing, {flags})
+        Call method.Invoke(Nothing, {type.getByIntVal(CInt(flags))})
+        Call method.Invoke(Nothing, {eeee.t})
+        Call method.Invoke(Nothing, {8})
+        Call method.Invoke(Nothing, {type.GetByName("f")})
 
         Pause()
     End Sub
 
-    Enum eeee
+    Sub testEnumArgs(e As eeee)
+        Call Console.WriteLine(ConsolePrinter.defaultValueToString(e, GetType(eeee)))
+    End Sub
+
+    Enum eeee As Long
         a = 1
         b = a * 2
         c = b * 2
