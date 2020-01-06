@@ -84,12 +84,22 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' Get global environment
+        ''' </summary>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("globalenv")>
         <DebuggerStepThrough>
         Private Function globalenv(env As Environment) As Object
             Return env.globalEnvironment
         End Function
 
+        ''' <summary>
+        ''' Get current environment
+        ''' </summary>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("environment")>
         <DebuggerStepThrough>
         Private Function environment(env As Environment) As Object
