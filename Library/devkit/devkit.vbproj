@@ -105,6 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="devkit.vb" />
+    <Compile Include="docs.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -152,6 +153,10 @@
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\vs_solutions\dev\VisualStudio\VisualStudio.vbproj">
       <Project>{3a65d811-fc5c-4ad9-8456-8f720ff14c16}</Project>
       <Name>VisualStudio</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\R#\R.vbproj">
+      <Project>{0c2eb77c-39f2-460d-a3f8-ce905f867637}</Project>
+      <Name>R</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
