@@ -210,14 +210,26 @@ Namespace Runtime.Interop
                     i = declareNameIndex(arg.name)
 
                     If i > -1 Then
-                        paramVal = getValue(declareArguments(arg.name), arg.Evaluate(envir), trace:=name, envir:=envir, False)
+                        paramVal = getValue(
+                            arg:=declareArguments(arg.name),
+                            value:=arg.Evaluate(envir),
+                            trace:=name,
+                            envir:=envir,
+                            trygetListParam:=False
+                        )
                         parameterVals(i) = paramVal
                         declareArguments.Remove(arg.name)
                     Else
                         paramVal = declareArguments _
                             .First _
                             .DoCall(Function(a)
-                                        Return getValue(a.Value, arg.Evaluate(envir), trace:=name, envir:=envir, True)
+                                        Return getValue(
+                                            arg:=a.Value,
+                                            value:=arg.Evaluate(envir),
+                                            trace:=name,
+                                            envir:=envir,
+                                            trygetListParam:=True
+                                        )
                                     End Function)
 
                         If paramVal Is GetType(Void) Then
