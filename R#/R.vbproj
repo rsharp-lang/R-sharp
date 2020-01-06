@@ -337,6 +337,7 @@
     <Compile Include="Runtime\Internal\objects\unit.vb" />
     <Compile Include="Runtime\Internal\printer\functionPrinter.vb" />
     <Compile Include="Runtime\Internal\htmlPrinter.vb" />
+    <Compile Include="Runtime\Internal\printer\enumPrinter.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RSymbolTextArgumentAttribute.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RSuppressPrintAttribute.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RListObjectArgumentAttribute.vb" />
