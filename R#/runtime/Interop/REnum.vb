@@ -1,5 +1,6 @@
 ﻿Imports System.Reflection
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Scripting.Runtime
 
 Namespace Runtime.Interop
 
@@ -13,13 +14,27 @@ Namespace Runtime.Interop
         ReadOnly namedValues As New Dictionary(Of String, Object)
         ReadOnly intValues As New Dictionary(Of String, Object)
 
-        Sub New(type As Type)
+        Public ReadOnly Iterator Property values As IEnumerable(Of Object)
+            Get
+                For Each item As Object In namedValues.Values
+                    Yield item
+                Next
+            End Get
+        End Property
+
+        Public ReadOnly Property baseType As Type
+
+        Private Sub New(type As Type)
             raw = type
 
             ' parsing enum type values for 
             ' named values and 
             ' int values
             Call doEnumParser()
+
+            baseType = DirectCast(namedValues.Values.First, [Enum]) _
+                .GetTypeCode() _
+                .CreatePrimitiveType()
         End Sub
 
         Private Sub doEnumParser()
@@ -33,10 +48,12 @@ Namespace Runtime.Interop
                 .ToDictionary(Function(flag)
                                   Return flag.GetValue(Nothing).ToString
                               End Function)
+            Dim int As Long
 
             For Each flag As [Enum] In values
+                int = CLng(members(flag.ToString).GetValue(Nothing))
+                intValues.Add("T" & int, flag)
                 namedValues.Add(flag.ToString.ToLower, flag)
-
             Next
         End Sub
 
@@ -45,7 +62,27 @@ Namespace Runtime.Interop
         End Function
 
         Public Function getByIntVal(int As Long) As Object
+            Dim key = "T" & int
 
+            If intValues.ContainsKey(key) Then
+                Return intValues(key)
+            Else
+                ' is a flags combination
+                Return Conversion.CTypeDynamic(int, baseType)
+            End If
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return $"({baseType.Name}) {raw.FullName}"
+        End Function
+
+        Public Shared Function GetEnumList(type As Type) As REnum
+            If Not type.IsEnum Then
+                Throw New InvalidCastException(type.FullName)
+            End If
+
+            Static enumCache As New Dictionary(Of Type, REnum)
+            Return enumCache.ComputeIfAbsent(type, Function() New REnum(type))
         End Function
     End Class
 End Namespace
