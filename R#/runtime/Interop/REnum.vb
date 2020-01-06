@@ -28,7 +28,11 @@ Namespace Runtime.Interop
                 .AsObjectEnumerator _
                 .Select(Function(flag) DirectCast(flag, [Enum])) _
                 .ToArray
-            Dim members As Dictionary(Of String, FieldInfo)
+            Dim members As Dictionary(Of String, FieldInfo) = raw.GetFields _
+                .Where(Function(field) field.FieldType Is raw) _
+                .ToDictionary(Function(flag)
+                                  Return flag.GetValue(Nothing).ToString
+                              End Function)
 
             For Each flag As [Enum] In values
                 namedValues.Add(flag.ToString.ToLower, flag)
