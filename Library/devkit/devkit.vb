@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3b412910994a26e70c49bba072c4a4ab, Library\devkit\devkit.vb"
+﻿#Region "Microsoft.VisualBasic::525c8de5d59111087ab4633f4a4a4fdd, Library\devkit\devkit.vb"
 
     ' Author:
     ' 
@@ -33,13 +33,15 @@
 
     ' Module devkit
     ' 
-    ' 
+    '     Function: AssemblyInfo
     ' 
     ' /********************************************************************************/
 
 #End Region
 
-
+Imports System.Reflection
+Imports Microsoft.VisualBasic.ApplicationServices.Development
+Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
 
 ''' <summary>
@@ -48,5 +50,10 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 <Package("VisualStudio.devkit")>
 Module devkit
 
-End Module
+    <ExportAPI("AssemblyInfo")>
+    Public Function AssemblyInfo(dllfile As String) As AssemblyInfo
+        Return Assembly.UnsafeLoadFrom(dllfile.GetFullPath).FromAssembly
+    End Function
 
+
+End Module

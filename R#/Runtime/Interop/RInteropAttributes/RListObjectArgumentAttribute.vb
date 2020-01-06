@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::42407dc47e0653c21e759ca44555c994, R#\Runtime\Interop\RInteropAttributes\RListObjectArgumentAttribute.vb"
+﻿#Region "Microsoft.VisualBasic::ee44803f1c42c3f43bad820befbe286b, R#\Runtime\Interop\RInteropAttributes\RListObjectArgumentAttribute.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Class RListObjectArgumentAttribute
     ' 
-    '         Function: getObjectList
+    '         Function: getObjectList, ToString
     ' 
     ' 
     ' /********************************************************************************/
