@@ -84,7 +84,7 @@ Module docs
         For Each api As NamedValue(Of MethodInfo) In apis
             Rapi = New RMethodInfo(api)
             apiList += annotations _
-                .GetAnnotations(api.Value) _
+                .GetAnnotations(api.Value, requireNoneNull:=True) _
                 .DoCall(AddressOf Rapi.apiDocsHtml)
         Next
 
@@ -162,10 +162,10 @@ Module docs
             </div>)
         Dim args As New List(Of XElement)
 
-        For Each arg In docs.Params
+        For Each arg In docs.Params.SafeQuery
             args +=
                 <li>
-                                              <code><%= arg.name %></code>: {$info}
+                    <code><%= arg.name %></code>: {$info}
                 </li>
         Next
 
