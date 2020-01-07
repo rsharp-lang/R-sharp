@@ -117,6 +117,18 @@ Namespace System.Package
             End If
 
             Call api.DoCall(AddressOf printFuncBody)
+
+            Dim enums = api.parameters _
+                .Where(Function(par) par.type.raw.IsEnum) _
+                .Select(Function(par) par.type.raw) _
+                .GroupBy(Function(type) type.FullName) _
+                .ToArray
+
+            If enums.Length > 0 Then
+                For Each [enum] As Type In enums.Select(Function(tg) tg.First)
+
+                Next
+            End If
         End Sub
 
         Private Sub printFuncBody(api As RMethodInfo)
