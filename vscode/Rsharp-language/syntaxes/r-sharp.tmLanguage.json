@@ -6,7 +6,13 @@
 			"include": "#keywords"
 		},
 		{
-			"include": "#strings"
+			"include": "#strings1"
+		},
+		{
+			"include": "#strings2"
+		},
+		{
+			"include": "#strings3"
 		}
 	],
 	"repository": {
@@ -16,7 +22,7 @@
 				"match": "\\b(if|while|for|return|let|as|integer|string|double|boolean|object|imports|require|from|steps|which|loop|repeat|function|in|else|print)\\b"
 			}]
 		},
-		"strings": {
+		"strings1": {
 			"name": "string.quoted.double.r-sharp",
 			"begin": "\"",
 			"end": "\"",
@@ -26,6 +32,33 @@
 					"match": "\\\\."
 				}
 			]
+		},
+		"strings2": {
+			"name": "string.quoted.double.r-sharp",
+			"begin": "`",
+			"end": "`",
+			"patterns": [
+				{
+					"name": "constant.character.escape.r-sharp",
+					"match": "\\\\."
+				}
+			]
+		},
+		"strings3": {
+			"name": "string.quoted.double.r-sharp",
+			"begin": "'",
+			"end": "'",
+			"patterns": [
+				{
+					"name": "constant.character.escape.r-sharp",
+					"match": "\\\\."
+				}
+			]
+		},
+		"comments": {
+			"name": "comment.line.r-sharp",
+			"begin": "#",
+			"end": "\n"
 		}
 	},
 	"scopeName": "main.r"

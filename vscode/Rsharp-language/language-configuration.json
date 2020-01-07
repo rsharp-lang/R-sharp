@@ -17,7 +17,8 @@
         ["[", "]"],
         ["(", ")"],
         ["\"", "\""],
-        ["'", "'"]
+        ["'", "'"],
+        ["`", "`"]
     ],
     // symbols that that can be used to surround a selection
     "surroundingPairs": [
@@ -25,6 +26,17 @@
         ["[", "]"],
         ["(", ")"],
         ["\"", "\""],
-        ["'", "'"]
-    ]
+        ["'", "'"],
+        ["`", "`"]
+    ],
+    "folding": {
+        "markers": {
+          "start": "^\\s*//\\s*#?region\\b",
+          "end": "^\\s*//\\s*#?endregion\\b"
+        }
+      },
+      "indentationRules": {
+        "increaseIndentPattern": "^((?!\\/\\/).)*(\\{[^}\"'`]*|\\([^)\"'`]*|\\[[^\\]\"'`]*)$",
+        "decreaseIndentPattern": "^((?!.*?\\/\\*).*\\*/)?\\s*[\\)\\}\\]].*$"
+      }
 }
