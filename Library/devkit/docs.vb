@@ -131,7 +131,10 @@ Module docs
         With html
             !summary = markdown.Transform(apiDocs.Summary)
             !remarks = markdown.Transform(apiDocs.Remarks)
-            !usage = markdown.Transform(api.GetPrintContent).Replace(" ", "&nbsp;")
+            !usage = api.GetPrintContent _
+                .Replace("<", "&lt;") _
+                .DoCall(AddressOf markdown.Transform) _
+                .Replace(" ", "&nbsp;")
             !parameters = parameters
 
             If apiDocs.Returns.StringEmpty Then
