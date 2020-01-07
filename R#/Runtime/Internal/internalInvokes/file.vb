@@ -331,24 +331,35 @@ Namespace Runtime.Internal.Invokes
         ''' </summary>
         ''' <param name="file">A json file path</param>
         ''' <param name="mode">The value mode of the loaded list object in ``R#``</param>
+        ''' <param name="ofVector">
+        ''' Is a list of vector?
+        ''' </param>
         ''' <param name="envir"></param>
         ''' <returns></returns>
         <ExportAPI("read.list")>
-        Public Function readList(file$, Optional mode$ = "character", Optional envir As Environment = Nothing) As Object
+        Public Function readList(file$,
+                                 Optional mode$ = "character",
+                                 Optional ofVector As Boolean = False,
+                                 Optional envir As Environment = Nothing) As Object
+
             Select Case LCase(mode)
-                Case "character"
-                    Return file.LoadJsonFile(Of Dictionary(Of String, String))
-                Case "numeric"
-                    Return file.LoadJsonFile(Of Dictionary(Of String, Double))
-                Case "integer"
-                    Return file.LoadJsonFile(Of Dictionary(Of String, Long))
-                Case "logical"
-                    Return file.LoadJsonFile(Of Dictionary(Of String, Boolean))
+                Case "character" : Return loadListInternal(Of String)(file, ofVector)
+                Case "numeric" : Return loadListInternal(Of Double)(file, ofVector)
+                Case "integer" : Return loadListInternal(Of Long)(file, ofVector)
+                Case "logical" : Return loadListInternal(Of Boolean)(file, ofVector)
                 Case "any"
                     Return file.LoadJsonFile(Of Dictionary(Of String, Object))(knownTypes:=listKnownTypes)
                 Case Else
                     Return Internal.stop($"Invalid data mode: '{mode}'!", envir)
             End Select
+        End Function
+
+        Private Function loadListInternal(Of T)(file As String, ofVector As Boolean) As Object
+            If ofVector Then
+                Return file.LoadJsonFile(Of Dictionary(Of String, T()))
+            Else
+                Return file.LoadJsonFile(Of Dictionary(Of String, T))
+            End If
         End Function
     End Module
 End Namespace

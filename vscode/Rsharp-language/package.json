@@ -1,0 +1,25 @@
+{
+    "name": "Rsharp-language",
+    "displayName": "R# GCModeller Scripting Language",
+    "description": "R# GCModeller Scripting Language",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.41.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "r-sharp",
+            "aliases": ["R# GCModeller Scripting Language", "r-sharp"],
+            "extensions": [".r"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "r-sharp",
+            "scopeName": "main.r",
+            "path": "./syntaxes/r-sharp.tmLanguage.json"
+        }]
+    }
+}

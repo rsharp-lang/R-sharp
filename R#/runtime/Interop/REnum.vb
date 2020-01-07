@@ -23,6 +23,12 @@ Namespace Runtime.Interop
             End Get
         End Property
 
+        Public ReadOnly Property name As String
+            Get
+                Return raw.Name
+            End Get
+        End Property
+
         Public ReadOnly Property baseType As Type
 
         Private Sub New(type As Type)
@@ -68,6 +74,10 @@ Namespace Runtime.Interop
                 namedIntegers.Add(flag.ToString.ToLower, int)
             Next
         End Sub
+
+        Public Function hasName(name As String) As Boolean
+            Return namedValues.ContainsKey(name.ToLower)
+        End Function
 
         Public Function GetByName(name As String) As Object
             Return namedValues.TryGetValue(name.ToLower)

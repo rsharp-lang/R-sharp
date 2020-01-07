@@ -80,6 +80,26 @@ Namespace Runtime.Interop
         Public ReadOnly Property isCollection As Boolean
 
         ''' <summary>
+        ''' Is dictionary of string and value types?
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property isGenericListObject As Boolean
+            Get
+                If Not raw.ImplementInterface(GetType(IDictionary)) Then
+                    Return False
+                End If
+                If raw.GenericTypeArguments.Length <> 2 Then
+                    Return False
+                End If
+                If raw.GenericTypeArguments(Scan0) Is GetType(String) Then
+                    Return True
+                Else
+                    Return False
+                End If
+            End Get
+        End Property
+
+        ''' <summary>
         ''' .NET type
         ''' </summary>
         ''' <returns></returns>
@@ -134,6 +154,10 @@ Namespace Runtime.Interop
         Public Overrides Function ToString() As String
             If mode.IsPrimitive Then
                 Return mode.Description
+            ElseIf isGenericListObject Then
+                Return $"list[{GetRSharpType(raw.GenericTypeArguments(1)).ToString}]"
+            ElseIf raw.IsEnum Then
+                Return $"<integer> {raw.Name}"
             Else
                 Return $"<{mode.Description}> {raw.Name}"
             End If

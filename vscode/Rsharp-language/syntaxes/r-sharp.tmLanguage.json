@@ -1,0 +1,176 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "R# GCModeller Scripting Language",
+	"firstLineMatch": "^#!.*\\bREnv\\s*$",
+	"patterns": [
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#strings1"
+		},
+		{
+			"include": "#strings2"
+		},
+		{
+			"include": "#strings3"
+		},
+		{
+			"include": "#number"
+		},
+		{
+			"include": "#operator"
+		}
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [{
+				"name": "keyword.control.r-sharp",
+				"match": "\\b(if|while|for|return|let|as|integer|string|double|boolean|object|imports|require|from|steps|which|loop|repeat|function|in|else|print|stop)\\b"
+			}]
+		},
+		"strings1": {
+			"name": "string.quoted.double.r-sharp",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.r-sharp",
+					"match": "\\\\."
+				}
+			]
+		},
+		"strings2": {
+			"name": "string.quoted.double.r-sharp",
+			"begin": "`",
+			"end": "`",
+			"patterns": [
+				{
+					"name": "constant.character.escape.r-sharp",
+					"match": "\\\\."
+				}
+			]
+		},
+		"strings3": {
+			"name": "string.quoted.double.r-sharp",
+			"begin": "'",
+			"end": "'",
+			"patterns": [
+				{
+					"name": "constant.character.escape.r-sharp",
+					"match": "\\\\."
+				}
+			]
+		},
+		"number": {
+			"patterns": [
+			  {
+				"match": "((\\b0(x|X)[0-9a-fA-F](_?[0-9a-fA-F])*)|(\\b0o[0-7](_?[0-7])*)|(\\b0b[0-1](_?[0-1])*)|((\\b[0-9](_?[0-9])*\\.?(_?[0-9]*))|(\\.[0-9](_?[0-9])*))([eE][+-]?[0-9](_?[0-9])*)?(im\\b)?|\\bInf(32)?\\b|\\bNaN(32)?\\b)",
+				"name": "constant.numeric.r-sharp"
+			  },
+			  {
+				"match": "\\btrue\\b|\\bfalse\\b|\\bnothing\\b|\\bmissing\\b",
+				"name": "constant.language.r-sharp"
+			  }
+			]
+		  },
+		  "operator": {
+			"patterns": [
+			  {
+				"match": "(?:->|<-|-->|=>)",
+				"name": "keyword.operator.arrow.julia"
+			  },
+			  {
+				"match": "(?::=|\\+=|-=|\\*=|//=|/=|\\.//=|\\./=|\\.\\*=|\\\\=|\\.\\\\=|\\^=|\\.\\^=|%=|\\.%=|÷=|\\.÷=|\\|=|&=|\\$=|<<=|>>=|>>>=|=(?!=))",
+				"name": "keyword.operator.update.julia"
+			  },
+			  {
+				"match": "(?:<<|>>>|>>|\\.>>>|\\.>>|\\.<<)",
+				"name": "keyword.operator.shift.julia"
+			  },
+			  {
+				"match": "(?:\\s*(::|>:|<:)\\s*((?:(?:Union)?\\([^)]*\\)|[[:alpha:]_][[:word:]⁺-ₜ!′\\.]*(?:(?:{(?:[^{}]|{(?:[^{}]|{[^{}]*})*})*})|(?:\".+\"))?)))(?:\\.\\.\\.)?",
+				"captures": {
+				  "1": {
+					"name": "keyword.operator.relation.julia"
+				  },
+				  "2": {
+					"name": "support.type.julia"
+				  }
+				}
+			  },
+			  {
+				"match": "(?:===|(?<=\\s)in(?=\\s)|\\.==|!==|!=|\\.>=|\\.>|\\.<=|\\.<|==|\\.!=|\\.=|\\.!|<:|>:|:>|(?<!>)>=|(?<!<)<=|>|<)",
+				"name": "keyword.operator.relation.julia"
+			  },
+			  {
+				"match": "(?:\\?:)",
+				"name": "keyword.operator.ternary.julia"
+			  },
+			  {
+				"match": "(?:\\|\\||&&|(?<![[:word:]])!)",
+				"name": "keyword.operator.boolean.julia"
+			  },
+			  {
+				"match": "(?<=[[:word:]⁺-ₜ!′∇\\)\\]\\}])(?::)",
+				"name": "keyword.operator.range.julia"
+			  },
+			  {
+				"match": "(?:\\|>)",
+				"name": "keyword.operator.applies.julia"
+			  },
+			  {
+				"match": "(?:\\||\\&|~)",
+				"name": "keyword.operator.bitwise.julia"
+			  },
+			  {
+				"match": "(?:\\+\\+|--|\\+|\\.\\+|-|\\.\\-|\\*|\\.\\*|//(?!=)|\\.//(?!=)|/|\\./|%|\\.%|\\\\|\\.\\\\|\\^|\\.\\^)",
+				"name": "keyword.operator.arithmetic.julia"
+			  },
+			  {
+				"match": "(?:::|(?<=\\s)isa(?=\\s))",
+				"name": "keyword.operator.isa.julia"
+			  },
+			  {
+				"match": "(?:\\.(?=(?:@|_|\\p{L}))|\\.\\.+)",
+				"name": "keyword.operator.dots.julia"
+			  },
+			  {
+				"match": "(?:\\$(?=.+))",
+				"name": "keyword.operator.interpolation.julia"
+			  },
+			  {
+				"captures": {
+				  "2": {
+					"name": "keyword.operator.transposed-variable.julia"
+				  }
+				},
+				"match": "([[:alpha:]_∇][[:word:]⁺-ₜ!′∇]*)(('|(\\.'))*\\.?')"
+			  },
+			  {
+				"captures": {
+				  "1": {
+					"name": "bracket.end.julia"
+				  },
+				  "2": {
+					"name": "keyword.operator.transposed-matrix.julia"
+				  }
+				},
+				"match": "(\\])((?:'|(?:\\.'))*\\.?')"
+			  },
+			  {
+				"captures": {
+				  "1": {
+					"name": "bracket.end.julia"
+				  },
+				  "2": {
+					"name": "keyword.operator.transposed-parens.julia"
+				  }
+				},
+				"match": "(\\))((?:'|(?:\\.'))*\\.?')"
+			  }
+			]
+		  }
+	},
+	"scopeName": "main.r"
+}

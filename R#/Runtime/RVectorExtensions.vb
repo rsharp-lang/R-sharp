@@ -113,7 +113,7 @@ Namespace Runtime
         ''' <param name="value"></param>
         ''' <param name="type"></param>
         ''' <returns></returns>
-        Public Function asVector(value As Object, type As Type) As Array
+        Public Function asVector(value As Object, type As Type, env As Environment) As Array
             Dim arrayType As Type = type.MakeArrayType
             Dim valueType As Type
 
@@ -125,12 +125,12 @@ Namespace Runtime
 
             If Not valueType Is arrayType Then
                 If valueType.IsArray Then
-                    Return type.createArray(value)
+                    Return type.createArray(value, env)
                 ElseIf valueType Is GetType(Group) Then
-                    Return type.createArray(DirectCast(value, Group).group)
+                    Return type.createArray(DirectCast(value, Group).group, env)
                 Else
                     Dim array As Array = Array.CreateInstance(type, 1)
-                    array.SetValue(RConversion.CTypeDynamic(value, type), Scan0)
+                    array.SetValue(RConversion.CTypeDynamic(value, type, env), Scan0)
                     Return array
                 End If
             Else
@@ -139,12 +139,12 @@ Namespace Runtime
         End Function
 
         <Extension>
-        Private Function createArray(type As Type, value As Object) As Object
+        Private Function createArray(type As Type, value As Object, env As Environment) As Object
             Dim src As Array = value
             Dim array As Array = Array.CreateInstance(type, src.Length)
 
             For i As Integer = 0 To array.Length - 1
-                array.SetValue(RConversion.CTypeDynamic(src.GetValue(i), type), i)
+                array.SetValue(RConversion.CTypeDynamic(src.GetValue(i), type, env), i)
             Next
 
             Return array
@@ -183,6 +183,8 @@ Namespace Runtime
             Else
                 If typeofT Is GetType(Object) Then
                     Return {DirectCast(value, T)}
+                ElseIf typeofT Is GetType(Boolean) AndAlso valueType Is GetType(String) Then
+                    Return {DirectCast(value, String).ParseBoolean}
                 Else
                     Return {Conversion.CTypeDynamic(Of T)(value)}
                 End If
