@@ -1,4 +1,5 @@
 ﻿Imports System.Reflection
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
@@ -10,6 +11,7 @@ Imports Microsoft.VisualBasic.MIME.Markup.MarkDown
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.SymbolBuilder
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Package
 
 ''' <summary>
@@ -56,6 +58,8 @@ Module docs
                </html>
     End Function
 
+    ReadOnly markdown As New MarkdownHTML
+
     ''' <summary>
     ''' Create html help document for the specific package module
     ''' </summary>
@@ -75,39 +79,68 @@ Module docs
         Dim docs As New ScriptBuilder(template Or defaultTemplate)
         Dim apiList As New List(Of String)
         Dim annotations As AnnotationDocs = globalEnv.packages.packageDocs
+        Dim Rapi As RMethodInfo
 
         For Each api As NamedValue(Of MethodInfo) In apis
-            apiList += apiDocs(api.Name, api.Value, annotations.GetAnnotations(api.Value))
+            Rapi = New RMethodInfo(api)
+            apiList += annotations _
+                .GetAnnotations(api.Value) _
+                .DoCall(AddressOf Rapi.apiDocsHtml)
         Next
 
         With docs
             !packageName = package
-            !packageDescription = globalEnv.packages.GetPackageDocuments(package)
+            !packageDescription = globalEnv.packages _
+                .GetPackageDocuments(package) _
+                .DoCall(AddressOf markdown.Transform)
             !apiList = apiList.JoinBy("<br />")
         End With
 
         Return docs.ToString
     End Function
 
-    Private Function apiDocs(name$, declares As MethodInfo, api As ProjectMember) As String
+    <Extension>
+    Private Function apiDocsHtml(api As RMethodInfo, apiDocs As ProjectMember) As String
         Dim docs =
             <div>
-                <h3 id=<%= name %>><%= name %></h3>
-
-                <p>{$summary}</p>
-                <p style="display: %s">{$remarks}</p>
+                <h2 id=<%= api.name %>><%= api.name %></h2>
                 <hr/>
 
+                <p>
+                    {$summary}                    
+                    <pre><code>{$usage}</code></pre>
+
+                    {$parameters}
+                       
+                    {$value}
+
+                    <span style="font-size:0.9em; display: %s">
+                        <h4>Details</h4>
+                        <blockquote>{$remarks}</blockquote>
+                    </span>
+                </p>
             </div>
         Dim html As New ScriptBuilder(docs)
-        Dim markdown As New MarkdownHTML
         Dim displayRemarks As String
+        Dim parameters$ = ""
+
+        If api.parameters.Length > 0 Then
+            parameters = apiDocs.parameterTable
+        End If
 
         With html
-            !summary = markdown.Transform(api.Summary)
-            !remarks = markdown.Transform(api.Remarks)
+            !summary = markdown.Transform(apiDocs.Summary)
+            !remarks = markdown.Transform(apiDocs.Remarks)
+            !usage = markdown.Transform(api.GetPrintContent).Replace(" ", "&nbsp;")
+            !parameters = parameters
 
-            If api.Remarks.StringEmpty Then
+            If apiDocs.Returns.StringEmpty Then
+                !value = ""
+            Else
+                !value = "<h4>Value</h4>" & markdown.Transform(apiDocs.Returns)
+            End If
+
+            If apiDocs.Remarks.StringEmpty Then
                 displayRemarks = "none"
             Else
                 displayRemarks = "block"
@@ -115,5 +148,39 @@ Module docs
         End With
 
         Return sprintf(html.ToString, displayRemarks)
+    End Function
+
+    <Extension>
+    Private Function parameterTable(docs As ProjectMember) As String
+        Dim list As New ScriptBuilder(
+            <div>
+                <h4>Arguments</h4>
+
+                <ul>
+                   {$list}
+                </ul>
+            </div>)
+        Dim args As New List(Of XElement)
+
+        For Each arg In docs.Params
+            args +=
+                <li>
+                                              <code><%= arg.name %></code>: {$info}
+                </li>
+        Next
+
+        list!list = args _
+            .Select(Function(e, i)
+                        Dim li As New ScriptBuilder(e)
+
+                        li!info = markdown _
+                            .Transform(docs.Params(i).text) _
+                            .GetStackValue("<p>", "</p>")
+
+                        Return li.ToString
+                    End Function) _
+            .JoinBy(vbCrLf)
+
+        Return list.ToString
     End Function
 End Module

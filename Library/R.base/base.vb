@@ -42,7 +42,13 @@
 Imports Microsoft.VisualBasic.Scripting.MetaData
 
 ''' <summary>
+''' #### The R Base Package
 ''' 
+''' This package contains the basic functions which let R function as a language: 
+''' arithmetic, input/output, basic programming support, etc. Its contents are 
+''' available through inheritance from any environment.
+'''
+''' For a complete list of functions, use ``ls("base")``.
 ''' </summary>
 <Package("base", Category:=APICategories.UtilityTools, Publisher:="xie.guigang@gcmodeller.org")>
 Public Module base
