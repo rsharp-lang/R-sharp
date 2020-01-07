@@ -13,7 +13,7 @@
 		"keywords": {
 			"patterns": [{
 				"name": "keyword.control.r-sharp",
-				"match": "\\b(if|while|for|return|let|as|integer|string|double|boolean|object|imports|require|from|steps|which|loop|repeat)\\b"
+				"match": "\\b(if|while|for|return|let|as|integer|string|double|boolean|object|imports|require|from|steps|which|loop|repeat|function|in|else|print)\\b"
 			}]
 		},
 		"strings": {
