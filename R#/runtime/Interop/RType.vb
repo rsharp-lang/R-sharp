@@ -156,6 +156,8 @@ Namespace Runtime.Interop
                 Return mode.Description
             ElseIf isGenericListObject Then
                 Return $"list[{GetRSharpType(raw.GenericTypeArguments(1)).ToString}]"
+            ElseIf raw.IsEnum Then
+                Return $"<integer> {raw.Name}"
             Else
                 Return $"<{mode.Description}> {raw.Name}"
             End If

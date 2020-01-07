@@ -56,7 +56,7 @@ Module interoptest
     Dim R As New RInterpreter With {.debug = False}
 
     Sub Main()
-
+        Call enumParameterTest()
         Call enumTest()
 
         Call R.Add("x", New TestContainer)
@@ -93,6 +93,13 @@ Module interoptest
         Call method.Invoke(Nothing, {eeee.t})
         Call method.Invoke(Nothing, {8})
         Call method.Invoke(Nothing, {type.GetByName("f")})
+
+        Pause()
+    End Sub
+
+    Sub enumParameterTest()
+        Call R.Add("display", GetType(interoptest).GetMethod(NameOf(testEnumArgs)), target:=Nothing)
+        Call R.Evaluate("display('f')")
 
         Pause()
     End Sub

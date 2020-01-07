@@ -75,6 +75,10 @@ Namespace Runtime.Interop
             Next
         End Sub
 
+        Public Function hasName(name As String) As Boolean
+            Return namedValues.ContainsKey(name.ToLower)
+        End Function
+
         Public Function GetByName(name As String) As Object
             Return namedValues.TryGetValue(name.ToLower)
         End Function

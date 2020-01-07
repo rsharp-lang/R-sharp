@@ -363,7 +363,7 @@ Namespace Runtime.Interop
         ''' <returns></returns>
         Private Shared Function getValue(arg As RMethodArgument, value As Object, trace$, ByRef envir As Environment, trygetListParam As Boolean) As Object
             If arg.type.isArray Then
-                value = CObj(Runtime.asVector(value, arg.type.GetRawElementType))
+                value = CObj(Runtime.asVector(value, arg.type.GetRawElementType, env:=envir))
             ElseIf arg.type.isCollection Then
                 ' ienumerable
                 value = value
@@ -372,7 +372,7 @@ Namespace Runtime.Interop
             End If
 
             Try
-                Return RConversion.CTypeDynamic(value, arg.type.raw)
+                Return RConversion.CTypeDynamic(value, arg.type.raw, env:=envir)
             Catch ex As Exception When trygetListParam
                 Return GetType(Void)
             Catch ex As Exception
