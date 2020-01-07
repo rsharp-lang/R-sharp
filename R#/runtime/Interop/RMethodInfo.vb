@@ -129,8 +129,15 @@ Namespace Runtime.Interop
             Dim raw As Type = GetRawDeclares().DeclaringType
             Dim rawDeclare$ = raw.FullName
             Dim packageName$ = raw.NamespaceEntry(True).Namespace
+            Dim params$
 
-            Return $"let ``{name}`` as function({parameters.JoinBy(", ")}) {{
+            If parameters.Length > 3 Then
+                params = parameters.JoinBy(", " & vbCrLf)
+            Else
+                params = parameters.JoinBy(", ")
+            End If
+
+            Return $"let ``{name}`` as function({params}) {{
     #
     # .NET API information
     #

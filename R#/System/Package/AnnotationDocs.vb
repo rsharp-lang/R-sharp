@@ -136,10 +136,21 @@ Namespace System.Package
                 .GetPrintContent _
                 .LineTokens _
                 .AsList
+            Dim offset% = 1
+            Dim indent%
 
             Call markdown.DoPrint(contentLines(Scan0), 2)
 
-            For Each line As String In contentLines.Skip(1).Take(7)
+            If api.parameters.Length > 3 Then
+                indent = 19 + api.name.Length
+                offset = api.parameters.Length
+
+                For Each line As String In contentLines.Skip(1).Take(offset - 1)
+                    Call markdown.DoPrint(line, indent)
+                Next
+            End If
+
+            For Each line As String In contentLines.Skip(offset).Take(7)
                 Call markdown.DoPrint("# " & line.Trim, 6)
             Next
 
