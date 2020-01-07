@@ -23,6 +23,12 @@ Namespace Runtime.Interop
             End Get
         End Property
 
+        Public ReadOnly Property name As String
+            Get
+                Return raw.Name
+            End Get
+        End Property
+
         Public ReadOnly Property baseType As Type
 
         Private Sub New(type As Type)

@@ -155,7 +155,7 @@ Namespace Runtime.Interop
             If mode.IsPrimitive Then
                 Return mode.Description
             ElseIf isGenericListObject Then
-                Return $"list[{raw.GenericTypeArguments(1).Name}]"
+                Return $"list[{GetRSharpType(raw.GenericTypeArguments(1)).ToString}]"
             Else
                 Return $"<{mode.Description}> {raw.Name}"
             End If
