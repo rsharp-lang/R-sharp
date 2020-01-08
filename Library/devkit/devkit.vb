@@ -50,6 +50,11 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 <Package("VisualStudio.devkit")>
 Module devkit
 
+    ''' <summary>
+    ''' Get .NET library module assembly information data.
+    ''' </summary>
+    ''' <param name="dllfile"></param>
+    ''' <returns></returns>
     <ExportAPI("AssemblyInfo")>
     Public Function AssemblyInfo(dllfile As String) As AssemblyInfo
         Return Assembly.UnsafeLoadFrom(dllfile.GetFullPath).FromAssembly
