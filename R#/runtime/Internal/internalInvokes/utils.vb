@@ -129,12 +129,17 @@ Namespace Runtime.Internal.Invokes
             Dim Version As Array = packages.Select(Function(pkg) pkg.info.Revision).ToArray
             Dim Author As Array = packages.Select(Function(pkg) pkg.info.Publisher.LineTokens.DefaultFirst("n/a")).ToArray
             Dim Category As Array = packages.Select(Function(pkg) pkg.info.Category.ToString).ToArray
-            Dim Built As Array = packages.Select(Function(pkg) If(pkg.isMissing, "<Unknown>", pkg.GetPackageModuleInfo.BuiltTime.ToString)).ToArray
+            Dim Built As Array = packages _
+                .Select(Function(pkg)
+                            Return If(pkg.isMissing, "<Unknown>", pkg.GetPackageModuleInfo.BuiltTime.ToString)
+                        End Function) _
+                .ToArray
             Dim Description As Array = packages _
                 .Select(Function(pkg)
                             Return pkg.GetPackageDescription(envir) _
                                 .LineTokens _
-                                .DefaultFirst("n/a")
+                                .DefaultFirst("n/a") _
+                                .TrimStart("#"c, " "c)
                         End Function) _
                 .ToArray
             Dim summary As New dataframe With {
