@@ -86,6 +86,14 @@ Namespace Interpreter
         Public Property debug As Boolean = False
 
         ''' <summary>
+        ''' 是否在严格模式下运行R#脚本？默认为严格模式，即：
+        ''' 
+        ''' 1. 所有的变量必须使用``let``关键词进行申明
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property strict As Boolean = True
+
+        ''' <summary>
         ''' Get value of a <see cref="Variable"/>
         ''' </summary>
         ''' <param name="name"></param>
@@ -105,6 +113,9 @@ Namespace Interpreter
 
             globalEnvir = New GlobalEnvironment(Me, envirConf)
             globalEnvir.Push(lastVariableName, Nothing, TypeCodes.generic)
+
+            ' config R# interpreter engine
+            [strict] = envirConf.strict
         End Sub
 
         Public Sub PrintMemory(Optional dev As TextWriter = Nothing)

@@ -73,6 +73,12 @@ Namespace System.Package
             End Get
         End Property
 
+        Public ReadOnly Property isMissing As Boolean
+            Get
+                Return package Is Nothing
+            End Get
+        End Property
+
         ''' <summary>
         ''' Get all api names in this package module
         ''' </summary>
@@ -88,6 +94,21 @@ Namespace System.Package
         Sub New(info As PackageAttribute, package As Type)
             Me.info = info
             Me.package = package
+        End Sub
+
+        ''' <summary>
+        ''' For missing package
+        ''' </summary>
+        ''' <param name="loaderInfo"></param>
+        Sub New(loaderInfo As PackageLoaderEntry)
+            Me.info = New PackageAttribute(loaderInfo.namespace) With {
+                .Category = loaderInfo.category,
+                .Cites = loaderInfo.cites,
+                .Description = loaderInfo.description,
+                .Publisher = loaderInfo.publisher,
+                .Revision = loaderInfo.revision,
+                .Url = loaderInfo.url
+            }
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
@@ -133,10 +154,14 @@ Namespace System.Package
         End Function
 
         Public Function GetPackageDescription(env As Environment) As String
-            Dim pkgMgr As PackageManager = env.globalEnvironment.packages
-            Dim docs As String = pkgMgr.GetPackageDocuments([namespace])
+            If isMissing Then
+                Return Nothing
+            Else
+                Dim pkgMgr As PackageManager = env.globalEnvironment.packages
+                Dim docs As String = pkgMgr.GetPackageDocuments([namespace])
 
-            Return docs
+                Return docs
+            End If
         End Function
 
         Public Overrides Function ToString() As String

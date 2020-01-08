@@ -103,6 +103,9 @@ Namespace Runtime.Internal.Object
                     Return New list With {.slots = obj}
                 Case GetType(list)
                     Return obj
+                Case GetType(vbObject)
+                    ' object property as list data
+                    Return DirectCast(obj, vbObject).toList
                 Case Else
                     If type.ImplementInterface(GetType(IDictionary)) Then
                         Dim objList As New Dictionary(Of String, Object)

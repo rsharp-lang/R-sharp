@@ -1,61 +1,61 @@
 ﻿#Region "Microsoft.VisualBasic::a6e3c6ffc206cf73b3cd49240312d733, R#\test\interpreterTest.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module interpreterTest
-    ' 
-    '     Sub: appendTest, booleanCLIArgumentTest, closureEnvironmentTest, closureTest, isEmptyTest
-    '          lastSymbolTest, Main, markdownTest, missingSymbolInStringInterpolate, moduleTest
-    '          objClasstest, orDefaultTest, printClassTest, sequenceGeneratorTest, suppressTest
-    '          unaryNegTest
-    ' module test1
-    ' 
-    '     Sub: boolLiteralTest, branchTest, cliTest, commandLineArgumentTest, dataframeTest
-    '          declareFunctionTest, declareTest, elementIndexerTest, exceptionHandler, forLoop2
-    '          forLoopTest, genericTest, iifTest, ImportsDll, inTest
-    '          invokeTest, lambdaTest, linqPipelineTest, linqTest, listTest
-    '          logicalTest, nameAccessorTest, namespaceTest, namesTest, optionsTest
-    '          parameterTest, pipelineParameterBugTest, pipelineTest, sourceFunctionTest, sourceScripttest
-    '          StackTest, stringInterpolateTest, symbolNotFoundTest, testScript, tupleTest
-    '          whichTest
-    ' module test2
-    ' 
-    ' 
-    ' 
-    ' 
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Module interpreterTest
+' 
+'     Sub: appendTest, booleanCLIArgumentTest, closureEnvironmentTest, closureTest, isEmptyTest
+'          lastSymbolTest, Main, markdownTest, missingSymbolInStringInterpolate, moduleTest
+'          objClasstest, orDefaultTest, printClassTest, sequenceGeneratorTest, suppressTest
+'          unaryNegTest
+' module test1
+' 
+'     Sub: boolLiteralTest, branchTest, cliTest, commandLineArgumentTest, dataframeTest
+'          declareFunctionTest, declareTest, elementIndexerTest, exceptionHandler, forLoop2
+'          forLoopTest, genericTest, iifTest, ImportsDll, inTest
+'          invokeTest, lambdaTest, linqPipelineTest, linqTest, listTest
+'          logicalTest, nameAccessorTest, namespaceTest, namesTest, optionsTest
+'          parameterTest, pipelineParameterBugTest, pipelineTest, sourceFunctionTest, sourceScripttest
+'          StackTest, stringInterpolateTest, symbolNotFoundTest, testScript, tupleTest
+'          whichTest
+' module test2
+' 
+' 
+' 
+' 
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -74,6 +74,8 @@ Module interpreterTest
 
         Call lambdaTest2()
 
+
+        Call packageTest()
 
         Call listTest()
         Call booleanCLIArgumentTest()
@@ -443,6 +445,15 @@ test1::println('123');
     Sub inTest()
         Call R.Evaluate("print( 55 in [1,55,7])")
         Call R.Evaluate("print(99 in 3)")
+
+        Pause()
+    End Sub
+
+    Sub packageTest()
+        R = RInterpreter.FromEnvironmentConfiguration("C:\Users\lipidsearch\AppData\Local\GCModeller\R#\R#.configs.xml")
+        R.debug = True
+
+        Call R.Evaluate("print(installed.packages())")
 
         Pause()
     End Sub

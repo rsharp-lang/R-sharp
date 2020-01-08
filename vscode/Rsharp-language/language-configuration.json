@@ -32,9 +32,9 @@
     ],
     "folding": {
         "markers": {
-          "start": "^\\s*//\\s*#?region\\b",
-          "end": "^\\s*//\\s*#?endregion\\b"
-        }
+			"start": "^\\s*#region",
+			"end": "^\\s*#endregion"
+		}
       },
       "indentationRules": {
         "increaseIndentPattern": "^((?!\\/\\/).)*(\\{[^}\"'`]*|\\([^)\"'`]*|\\[[^\\]\"'`]*)$",

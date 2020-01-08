@@ -112,6 +112,8 @@ Namespace Interpreter.ExecuteEngine
 
         Public Function DoValueAssign(envir As Environment, value As Object) As Object
             If Not value Is Nothing AndAlso value.GetType Is GetType(IfBranch.IfPromise) Then
+                ' 如果是if分支返回的结果，则将if分支的赋值对象设置为
+                ' 当前的赋值操作的目标对象符号
                 DirectCast(value, IfBranch.IfPromise).assignTo = Me
                 Return value
             Else

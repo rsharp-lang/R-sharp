@@ -104,6 +104,17 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        <ExportAPI("append")>
+        Public Function append(<RRawVectorArgument> x As Object, <RRawVectorArgument> values As Object, Optional env As Environment = Nothing) As Object
+            If x Is Nothing Then
+                Return values
+            ElseIf values Is Nothing Then
+                Return values
+            End If
+
+            Throw New NotImplementedException
+        End Function
+
         ''' <summary>
         ''' # Lists – Generic and Dotted Pairs
         ''' 
@@ -481,10 +492,14 @@ Namespace Runtime.Internal.Invokes
                                  Optional namelist As Array = Nothing,
                                  Optional envir As Environment = Nothing) As Object
 
+            If [object] Is Nothing Then
+                Return Nothing
+            End If
+
             If namelist Is Nothing OrElse namelist.Length = 0 Then
-                Return RObj.names.getNames([object], envir)
+                Return RObj.names.getRowNames([object], envir)
             Else
-                Return RObj.names.setNames([object], namelist, envir)
+                Return RObj.names.setRowNames([object], namelist, envir)
             End If
         End Function
 
@@ -524,10 +539,14 @@ Namespace Runtime.Internal.Invokes
                                  Optional namelist As Array = Nothing,
                                  Optional envir As Environment = Nothing) As Object
 
+            If [object] Is Nothing Then
+                Return Nothing
+            End If
+
             If namelist Is Nothing OrElse namelist.Length = 0 Then
-                Return RObj.names.getNames([object], envir)
+                Return RObj.names.getColNames([object], envir)
             Else
-                Return RObj.names.setNames([object], namelist, envir)
+                Return RObj.names.setColNames([object], namelist, envir)
             End If
         End Function
 

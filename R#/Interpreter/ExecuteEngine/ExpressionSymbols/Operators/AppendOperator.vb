@@ -95,6 +95,11 @@ Namespace Interpreter.ExecuteEngine
                     .JoinIterates(Runtime.asVector(Of Object)(y).AsObjectEnumerator) _
                     .ToArray
             ElseIf type1 Is GetType(list) Then
+                If type2 Is GetType(list) Then
+                ElseIf type2.IsArray Then
+                Else
+                    Return Internal.stop(New InvalidProgramException(type2.FullName), envir)
+                End If
                 Return Internal.stop(New NotImplementedException, envir)
             End If
 
