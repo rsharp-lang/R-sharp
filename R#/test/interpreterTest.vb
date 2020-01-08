@@ -72,6 +72,8 @@ Module interpreterTest
 
     Sub Main()
 
+        Call packageTest()
+
         Call listTest()
         Call booleanCLIArgumentTest()
 
@@ -440,6 +442,15 @@ test1::println('123');
     Sub inTest()
         Call R.Evaluate("print( 55 in [1,55,7])")
         Call R.Evaluate("print(99 in 3)")
+
+        Pause()
+    End Sub
+
+    Sub packageTest()
+        R = RInterpreter.FromEnvironmentConfiguration("C:\Users\lipidsearch\AppData\Local\GCModeller\R#\R#.configs.xml")
+        R.debug = True
+
+        Call R.Evaluate("print(installed.packages())")
 
         Pause()
     End Sub

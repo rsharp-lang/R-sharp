@@ -125,11 +125,11 @@ Namespace Runtime.Internal.Invokes
                 .OrderBy(Function(pkg) pkg.namespace) _
                 .ToArray
             Dim Package As Array = packages.Select(Function(pkg) pkg.namespace).ToArray
-            Dim LibPath As Array = packages.Select(Function(pkg) pkg.LibPath.FileName).ToArray
+            Dim LibPath As Array = packages.Select(Function(pkg) If(pkg.isMissing, "<missing>", pkg.LibPath.FileName)).ToArray
             Dim Version As Array = packages.Select(Function(pkg) pkg.info.Revision).ToArray
             Dim Author As Array = packages.Select(Function(pkg) pkg.info.Publisher.LineTokens.DefaultFirst("n/a")).ToArray
             Dim Category As Array = packages.Select(Function(pkg) pkg.info.Category.ToString).ToArray
-            Dim Built As Array = packages.Select(Function(pkg) pkg.GetPackageModuleInfo.BuiltTime.ToString).ToArray
+            Dim Built As Array = packages.Select(Function(pkg) If(pkg.isMissing, "<Unknown>", pkg.GetPackageModuleInfo.BuiltTime.ToString)).ToArray
             Dim Description As Array = packages _
                 .Select(Function(pkg)
                             Return pkg.GetPackageDescription(envir) _
