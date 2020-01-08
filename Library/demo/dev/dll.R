@@ -6,4 +6,4 @@ setwd("../../../App");
 AssemblyInfo("devkit.dll") 
 :> as.object 
 :> as.list 
-:> str;
+:> print;

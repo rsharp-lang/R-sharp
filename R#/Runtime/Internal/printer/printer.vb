@@ -114,7 +114,14 @@ Namespace Runtime.Internal.ConsolePrinter
         End Sub
 
         Friend Sub printInternal(x As Object, listPrefix$, maxPrint%, env As GlobalEnvironment)
-            Dim valueType As Type = x.GetType
+            Dim valueType As Type
+
+            If x Is Nothing Then
+                Call Console.WriteLine("NULL")
+                Return
+            Else
+                valueType = x.GetType
+            End If
 
             If RtoString.ContainsKey(valueType) Then
                 Call Console.WriteLine(RtoString(valueType)(x))
