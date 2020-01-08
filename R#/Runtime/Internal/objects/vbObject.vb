@@ -192,5 +192,28 @@ Namespace Runtime.Internal.Object
                 Return target.ToString
             End If
         End Function
+
+        Public Function toList() As list
+            Dim list As Dictionary(Of String, Object) = properties _
+                .ToDictionary(Function(p) p.Key,
+                              Function(p)
+                                  Return p.Value.GetValue(target)
+                              End Function)
+
+            If type.haveDynamicsProperty Then
+                Dim dynamic As IDynamicsObject = target
+
+                For Each name As String In dynamic _
+                    .GetNames _
+                    .Where(Function(nameKey)
+                               Return Not list.ContainsKey(nameKey)
+                           End Function)
+
+                    Call list.Add(name, dynamic.GetItemValue(name))
+                Next
+            End If
+
+            Return New list With {.slots = list}
+        End Function
     End Class
 End Namespace
