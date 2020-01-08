@@ -47,6 +47,14 @@ Module docs
                        <meta class="foundation-mq-topbar"/>
                    </head>
                    <body>
+                       <table width="100%" summary=<%= "page for {{$packageName}}" %>>
+                           <tbody>
+                               <tr>
+                                   <td>{{$packageName}}</td><td style="text-align: right;">R# Documentation</td>
+                               </tr>
+                           </tbody>
+                       </table>
+
                        <h1>{$packageName}</h1>
                        <hr/>
                        <p>{$packageDescription}</p>
