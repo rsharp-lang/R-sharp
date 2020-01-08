@@ -104,6 +104,17 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        <ExportAPI("append")>
+        Public Function append(<RRawVectorArgument> x As Object, <RRawVectorArgument> values As Object, Optional env As Environment = Nothing) As Object
+            If x Is Nothing Then
+                Return values
+            ElseIf values Is Nothing Then
+                Return values
+            End If
+
+            Throw New NotImplementedException
+        End Function
+
         ''' <summary>
         ''' # Lists – Generic and Dotted Pairs
         ''' 
