@@ -59,6 +59,10 @@ Namespace System.Package
     ''' </summary>
     Public Module ImportsPackage
 
+        Public Function GetAllApi(package As Package) As IEnumerable(Of NamedValue(Of MethodInfo))
+            Return GetAllApi(package.package, strict:=True, includesInternal:=False)
+        End Function
+
         Public Iterator Function GetAllApi(package As Type,
                                            Optional strict As Boolean = True,
                                            Optional includesInternal As Boolean = False) As IEnumerable(Of NamedValue(Of MethodInfo))

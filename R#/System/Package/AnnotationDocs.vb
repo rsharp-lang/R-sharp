@@ -1,44 +1,44 @@
 ﻿#Region "Microsoft.VisualBasic::fe7a1a586ceb7e8905db4d82ead751e5, R#\System\Package\AnnotationDocs.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class AnnotationDocs
-    ' 
-    '         Function: (+2 Overloads) GetAnnotations
-    ' 
-    '         Sub: printDocs, printFuncBody, PrintHelp
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class AnnotationDocs
+' 
+'         Function: (+2 Overloads) GetAnnotations
+' 
+'         Sub: printDocs, printFuncBody, PrintHelp
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -51,6 +51,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports LibraryAssembly = System.Reflection.Assembly
+Imports EnumPrinter = SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter.enumPrinter
 
 Namespace System.Package
 
@@ -90,17 +91,24 @@ Namespace System.Package
             Return type
         End Function
 
-        Public Function GetAnnotations(func As MethodInfo) As ProjectMember
+        Public Function GetAnnotations(func As MethodInfo, Optional requireNoneNull As Boolean = False) As ProjectMember
             Dim type As ProjectType = GetAnnotations(func.DeclaringType)
+            Dim docs As ProjectMember
 
             If type Is Nothing Then
                 ' 整个类型都没有xml注释
-                Return Nothing
+                docs = Nothing
             Else
                 ' 可能目标函数对象没有xml注释
                 ' 在这里假设没有重载？
-                Return type.GetMethods(func.Name).ElementAtOrDefault(Scan0)
+                docs = type.GetMethods(func.Name).ElementAtOrDefault(Scan0)
             End If
+
+            If requireNoneNull Then
+                docs = New ProjectMember(type)
+            End If
+
+            Return docs
         End Function
 
         ''' <summary>
@@ -117,6 +125,27 @@ Namespace System.Package
             End If
 
             Call api.DoCall(AddressOf printFuncBody)
+
+            Dim enums = api.parameters _
+                .Where(Function(par) par.type.raw.IsEnum) _
+                .Select(Function(par) par.type.raw) _
+                .GroupBy(Function(type) type.FullName) _
+                .ToArray
+
+            If enums.Length > 0 Then
+                Call Console.WriteLine(" where have enum values:")
+
+                For Each [enum] As REnum In enums.Select(Function(tg) REnum.GetEnumList(tg.First))
+                    Call Console.WriteLine()
+                    Call Console.WriteLine($"{New String(" "c, 2)}let {[enum].name} as integer = {{")
+
+                    For Each value As Object In [enum].values
+                        Call Console.WriteLine($"{New String(" "c, 6)}{value.ToString} = {[enum].IntValue(value)};")
+                    Next
+
+                    Call Console.WriteLine($"{New String(" "c, 2)}}}")
+                Next
+            End If
         End Sub
 
         Private Sub printFuncBody(api As RMethodInfo)
@@ -124,10 +153,21 @@ Namespace System.Package
                 .GetPrintContent _
                 .LineTokens _
                 .AsList
+            Dim offset% = 1
+            Dim indent%
 
             Call markdown.DoPrint(contentLines(Scan0), 2)
 
-            For Each line As String In contentLines.Skip(1).Take(7)
+            If api.parameters.Length > 3 Then
+                indent = 19 + api.name.Length
+                offset = api.parameters.Length
+
+                For Each line As String In contentLines.Skip(1).Take(offset - 1)
+                    Call markdown.DoPrint(line, indent)
+                Next
+            End If
+
+            For Each line As String In contentLines.Skip(offset).Take(7)
                 Call markdown.DoPrint("# " & line.Trim, 6)
             Next
 

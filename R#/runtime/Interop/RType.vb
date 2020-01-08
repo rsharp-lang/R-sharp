@@ -1,50 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::5865532df870dcb27b70657554e0aa74, R#\Runtime\Interop\RType.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class RType
-    ' 
-    '         Properties: fullName, haveDynamicsProperty, isArray, isCollection, isEnvironment
-    '                     mode, raw
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: getNames, GetRawElementType, GetRSharpType, populateNames, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class RType
+' 
+'         Properties: fullName, haveDynamicsProperty, isArray, isCollection, isEnvironment
+'                     mode, raw
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: getNames, GetRawElementType, GetRSharpType, populateNames, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Reflection
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -63,6 +64,8 @@ Namespace Runtime.Interop
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property fullName As String
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
+            <DebuggerStepThrough>
             Get
                 Return raw.FullName
             End Get
@@ -75,6 +78,26 @@ Namespace Runtime.Interop
         Public ReadOnly Property mode As TypeCodes
         Public ReadOnly Property isArray As Boolean
         Public ReadOnly Property isCollection As Boolean
+
+        ''' <summary>
+        ''' Is dictionary of string and value types?
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property isGenericListObject As Boolean
+            Get
+                If Not raw.ImplementInterface(GetType(IDictionary)) Then
+                    Return False
+                End If
+                If raw.GenericTypeArguments.Length <> 2 Then
+                    Return False
+                End If
+                If raw.GenericTypeArguments(Scan0) Is GetType(String) Then
+                    Return True
+                Else
+                    Return False
+                End If
+            End Get
+        End Property
 
         ''' <summary>
         ''' .NET type
@@ -131,6 +154,10 @@ Namespace Runtime.Interop
         Public Overrides Function ToString() As String
             If mode.IsPrimitive Then
                 Return mode.Description
+            ElseIf isGenericListObject Then
+                Return $"list[{GetRSharpType(raw.GenericTypeArguments(1)).ToString}]"
+            ElseIf raw.IsEnum Then
+                Return $"<integer> {raw.Name}"
             Else
                 Return $"<{mode.Description}> {raw.Name}"
             End If
@@ -140,6 +167,9 @@ Namespace Runtime.Interop
         ''' Get method names and property names of target type object instance
         ''' </summary>
         ''' <returns></returns>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
         Public Function getNames() As String() Implements IReflector.getNames
             Return names.Clone
         End Function
@@ -153,5 +183,11 @@ Namespace Runtime.Interop
             Static cache As New Dictionary(Of Type, RType)
             Return cache.ComputeIfAbsent(type, Function(t) New RType(t))
         End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
+        Public Shared Narrowing Operator CType(type As RType) As Type
+            Return type.raw
+        End Operator
     End Class
 End Namespace

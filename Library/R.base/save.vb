@@ -57,7 +57,7 @@ Imports RVariable = SMRUCC.Rsharp.Runtime.Components.Variable
 Partial Module base
 
     ''' <summary>
-    ''' # Reload Saved Datasets
+    ''' ### Reload Saved Datasets
     ''' 
     ''' Reload datasets written with the function ``save``.
     ''' </summary>
@@ -68,7 +68,44 @@ Partial Module base
     ''' <param name="verbose">
     ''' should item names be printed during loading?
     ''' </param>
-    ''' <returns></returns>
+    ''' <returns>
+    ''' A character vector of the names of objects created, invisibly.
+    ''' </returns>
+    ''' <remarks>
+    ''' load can load R objects saved in the current or any earlier format. 
+    ''' It can read a compressed file (see save) directly from a file or from 
+    ''' a suitable connection (including a call to url).
+    '''
+    ''' A Not-open connection will be opened in mode "rb" And closed after 
+    ''' use. Any connection other than a gzfile Or gzcon connection will be 
+    ''' wrapped in gzcon to allow compressed saves to be handled: note that 
+    ''' this leaves the connection In an altered state (In particular, 
+    ''' binary-only), And that it needs To be closed explicitly (it will 
+    ''' Not be garbage-collected).
+    '''
+    ''' Only R objects saved In the current format (used since R 1.4.0) can 
+    ''' be read from a connection. If no input Is available On a connection 
+    ''' a warning will be given, but any input Not In the current format 
+    ''' will result In a Error.
+    '''
+    ''' Loading from an earlier version will give a warning about the 'magic number’: 
+    ''' magic numbers 1971:1977 are from R &lt; 0.99.0, and RD[ABX]1 from 
+    ''' R 0.99.0 to R 1.3.1. These are all obsolete, and you are strongly 
+    ''' recommended to re-save such files in a current format.
+    '''
+    ''' The verbose argument Is mainly intended For debugging. If it Is True, 
+    ''' Then As objects from the file are loaded, their names will be printed 
+    ''' To the console. If verbose Is Set To an Integer value greater than 
+    ''' one, additional names corresponding To attributes And other parts Of 
+    ''' individual objects will also be printed. Larger values will print names 
+    ''' To a greater depth.
+    '''
+    ''' Objects can be saved With references To namespaces, usually As part Of 
+    ''' the environment Of a Function Or formula. Such objects can be loaded 
+    ''' even If the Namespace Is Not available: it Is replaced by a reference 
+    ''' to the global environment with a warning. The warning identifies the 
+    ''' first object with such a reference (but there may be more than one).
+    ''' </remarks>
     <ExportAPI("load")>
     Public Function load(file As String,
                          Optional envir As Environment = Nothing,
@@ -122,7 +159,7 @@ Partial Module base
     End Function
 
     ''' <summary>
-    ''' # Save R Objects
+    ''' ### Save R Objects
     ''' 
     ''' writes an external representation of R objects to the specified file. 
     ''' The objects can be read back from the file at a later date by using 
