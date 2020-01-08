@@ -56,7 +56,7 @@ Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Public Module utils
 
     ''' <summary>
-    ''' # Data Input
+    ''' ### Data Input
     ''' 
     ''' Reads a file in table format and creates a data frame from it, 
     ''' with cases corresponding to lines and variables to fields in 
@@ -97,7 +97,7 @@ Public Module utils
     End Function
 
     ''' <summary>
-    ''' # Data Output
+    ''' ### Data Output
     ''' 
     ''' prints its required argument ``x`` (after converting it to a 
     ''' data frame if it is not one nor a matrix) to a file or 

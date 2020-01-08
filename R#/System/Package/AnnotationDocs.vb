@@ -91,17 +91,24 @@ Namespace System.Package
             Return type
         End Function
 
-        Public Function GetAnnotations(func As MethodInfo) As ProjectMember
+        Public Function GetAnnotations(func As MethodInfo, Optional requireNoneNull As Boolean = False) As ProjectMember
             Dim type As ProjectType = GetAnnotations(func.DeclaringType)
+            Dim docs As ProjectMember
 
             If type Is Nothing Then
                 ' 整个类型都没有xml注释
-                Return Nothing
+                docs = Nothing
             Else
                 ' 可能目标函数对象没有xml注释
                 ' 在这里假设没有重载？
-                Return type.GetMethods(func.Name).ElementAtOrDefault(Scan0)
+                docs = type.GetMethods(func.Name).ElementAtOrDefault(Scan0)
             End If
+
+            If requireNoneNull Then
+                docs = New ProjectMember(type)
+            End If
+
+            Return docs
         End Function
 
         ''' <summary>
