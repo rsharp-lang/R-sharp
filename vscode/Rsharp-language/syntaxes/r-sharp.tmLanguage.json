@@ -95,7 +95,7 @@
                     "name": "support.constant.misc.r"
                 },
                 {
-                    "match": "\\b(TRUE|FALSE|NULL|NA|NA_integer_|NA_real_|NA_complex_|NA_character_|Inf|NaN)\\b",
+                    "match": "\\b(true|false|TRUE|FALSE|NULL|NA|NA_integer_|NA_real_|NA_complex_|NA_character_|Inf|NaN)\\b",
                     "name": "constant.language.r"
                 },
                 {
@@ -162,7 +162,7 @@
         "keywords": {
             "patterns": [
                 {
-                    "match": "\\b(break|next|repeat|else|in)\\b",
+                    "match": "\\b(break|next|repeat|else|in|let|imports|as|string|boolean|object|integer|double|generic)\\b",
                     "name": "keyword.control.r"
                 },
                 {
