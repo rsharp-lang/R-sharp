@@ -48,7 +48,7 @@ Public Module HttpServer
 
     <ExportAPI("serve")>
     Public Function serve(content$, Optional port% = -1) As HttpSocket
-        Dim socket As New HttpSocket(Sub(req, rep) Call rep.WriteHTML(content), Rnd() * 30000)
+        Dim socket As New HttpSocket(Sub(req, rep) Call rep.WriteHTML(content), Rnd() * 30000, threads:=1)
         Dim localUrl$ = socket.localhost
 
         Call socket.DriverRun
