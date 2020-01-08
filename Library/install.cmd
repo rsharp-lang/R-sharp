@@ -12,4 +12,8 @@ R# install.packages('R.graphics.dll');
 R# install.packages('R.plot.dll');
 R# install.packages('R.web.dll');
 
+REM finally, view of the summary information about the installed
+REM libraries.
+R# installed.packages();
+
 pause
