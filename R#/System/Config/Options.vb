@@ -116,6 +116,12 @@ Namespace System.Configuration
             End Get
         End Property
 
+        Public ReadOnly Property [strict] As Boolean
+            Get
+                Return getOption("strict", [default]:="on")
+            End Get
+        End Property
+
         Public Property localConfig As String Implements IFileReference.FilePath
 
         Sub New(configs As String)
