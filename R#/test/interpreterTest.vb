@@ -72,6 +72,9 @@ Module interpreterTest
 
     Sub Main()
 
+        Call lambdaTest2()
+
+
         Call listTest()
         Call booleanCLIArgumentTest()
 
@@ -539,6 +542,13 @@ let div as function(x ,y) {
 
         Call R.Evaluate("print(file.exists(deletions) ? readLines(deletions) : NULL);")
         Call R.Evaluate("print(1 > 0 ? 999 : 777)")
+
+        Pause()
+    End Sub
+
+    Sub lambdaTest2()
+        Call R.Evaluate("let pop5 = function() 5;")
+        Call R.Evaluate("let add233 = function(x) x+233;")
 
         Pause()
     End Sub
