@@ -31,11 +31,11 @@ Module docs
                        <title>{$packageName}</title>
 
                        <meta name="author" content="xie.guigang@gcmodeller.org"/>
-                       <meta name="copyright" content="SMRUCC genomics Copyright (c) 2019"/>
+                       <meta name="copyright" content="SMRUCC genomics Copyright (c) 2020"/>
                        <meta name="keywords" content="GCModeller; Xanthomonas; Artificial Life"/>
                        <meta name="generator" content="https://github.com/xieguigang/xDoc"/>
                        <meta name="theme-color" content="#333"/>
-                       <meta name="last-update" content="2019-07-21 10:11:22"/>
+                       <meta name="last-update" content=<%= Now.ToString %>/>
                        <meta name="description" content="A software system aim at Artificial Life system design and analysis."/>
 
                        <meta class="foundation-data-attribute-namespace"/>

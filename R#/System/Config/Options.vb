@@ -1,52 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::7479700c69343fea6a75db8d2eb4b001, R#\System\Config\Options.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class Options
-    ' 
-    '         Properties: [lib], digits, f64Format, HTTPUserAgent, localConfig
-    '                     maxPrint
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: getAllConfigs, getOption, setOption, ToString
-    ' 
-    '         Sub: (+2 Overloads) Dispose, flush
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class Options
+' 
+'         Properties: [lib], digits, f64Format, HTTPUserAgent, localConfig
+'                     maxPrint
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: getAllConfigs, getOption, setOption, ToString
+' 
+'         Sub: (+2 Overloads) Dispose, flush
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.System.Package
@@ -116,6 +117,12 @@ Namespace System.Configuration
             End Get
         End Property
 
+        Public ReadOnly Property [strict] As Boolean
+            Get
+                Return getOption("strict", [default]:="on")
+            End Get
+        End Property
+
         Public Property localConfig As String Implements IFileReference.FilePath
 
         Sub New(configs As String)
@@ -128,6 +135,8 @@ Namespace System.Configuration
                               End Function)
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
         Public Function getAllConfigs() As Dictionary(Of String, String)
             Return New Dictionary(Of String, String)(configValues)
         End Function
@@ -174,6 +183,9 @@ Namespace System.Configuration
         ''' <summary>
         ''' Save configuration file
         ''' </summary>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
         Public Sub flush()
             Call file _
                 .GetXml _
