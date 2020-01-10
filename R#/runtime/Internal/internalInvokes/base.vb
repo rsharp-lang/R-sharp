@@ -149,14 +149,20 @@ Namespace Runtime.Internal.Invokes
         Public Function Rdataframe(<RListObjectArgument>
                                    <RRawVectorArgument>
                                    columns As Object, Optional envir As Environment = Nothing) As Object
-
-            Dim parameters As Expression() = columns
+            ' data.frame(a = 1, b = ["g","h","eee"], c = T)
+            Dim parameters As InvokeParameter() = columns
             Dim dataframe As New dataframe With {
-                .columns = InvokeParameter _
-                    .CreateArguments(envir, InvokeParameter.Create(expressions:=parameters)) _
-                    .ToDictionary(Function(a) a.Key,
+                .columns = parameters _
+                    .SeqIterator _
+                    .ToDictionary(Function(a)
+                                      If a.value.haveSymbolName Then
+                                          Return a.value.name
+                                      Else
+                                          Return "X" & (a.i + 1)
+                                      End If
+                                  End Function,
                                   Function(a)
-                                      Return envir.createColumnVector(a.Value)
+                                      Return envir.createColumnVector(a.value.Evaluate(envir))
                                   End Function)
             }
 
@@ -167,8 +173,8 @@ Namespace Runtime.Internal.Invokes
         Private Function createColumnVector(env As Environment, a As Object) As Array
             ' 假设dataframe之中每一列数据的类型都是相同的
             ' 则我们直接使用第一个元素的类型作为列的数据类型
-            Dim first As Object = Runtime.getFirst(a.Value, nonNULL:=True)
-            Dim colVec As Array = Runtime.asVector(a.value, first.GetType, env)
+            Dim first As Object = Runtime.getFirst(a, nonNULL:=True)
+            Dim colVec As Array = Runtime.asVector(a, first.GetType, env)
 
             Return colVec
         End Function
