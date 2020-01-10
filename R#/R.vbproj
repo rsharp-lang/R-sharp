@@ -272,6 +272,9 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\AppendOperator.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\ModeOf.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryOrExpression.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\DataFrameSlice.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\DataFrameProjection.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\StringBinaryExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Package\Require.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Suppress.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\MemberValueAssign.vb" />

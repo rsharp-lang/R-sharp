@@ -206,7 +206,7 @@ Namespace Runtime
         ''' <param name="y"></param>
         ''' <param name="[do]"></param>
         ''' <returns></returns>
-        Public Function BinaryCoreInternal(Of TX As IComparable(Of TX), TY As IComparable(Of TY), TOut)(x As Object, y As Object, [do] As Func(Of Object, Object, Object)) As IEnumerable(Of TOut)
+        Public Function BinaryCoreInternal(Of TX, TY, TOut)(x As Object, y As Object, [do] As Func(Of Object, Object, Object)) As IEnumerable(Of TOut)
             Dim xtype As Type = x.GetType
             Dim ytype As Type = y.GetType
 

@@ -119,7 +119,7 @@ Namespace System.Configuration
 
         Public ReadOnly Property [strict] As Boolean
             Get
-                Return getOption("strict", [default]:="on")
+                Return getOption("strict", [default]:="on").ParseBoolean
             End Get
         End Property
 
