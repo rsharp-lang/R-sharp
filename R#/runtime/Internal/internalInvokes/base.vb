@@ -115,11 +115,45 @@ Namespace Runtime.Internal.Invokes
             Throw New NotImplementedException
         End Function
 
+        ''' <summary>
+        ''' #### Data Frames
+        ''' 
+        ''' The function data.frame() creates data frames, tightly coupled collections 
+        ''' of variables which share many of the properties of matrices and of lists, 
+        ''' used as the fundamental data structure by most of R's modeling software.
+        ''' </summary>
+        ''' <param name="columns">
+        ''' these arguments are of either the form value or tag = value. Component names 
+        ''' are created based on the tag (if present) or the deparsed argument itself.
+        ''' </param>
+        ''' <param name="envir"></param>
+        ''' <returns>
+        ''' A data frame, a matrix-like structure whose columns may be of differing types 
+        ''' (numeric, logical, factor and character and so on).
+        '''
+        ''' How the names Of the data frame are created Is complex, And the rest Of this 
+        ''' paragraph Is only the basic story. If the arguments are all named And simple 
+        ''' objects (Not lists, matrices Of data frames) Then the argument names give the 
+        ''' column names. For an unnamed simple argument, a deparsed version Of the 
+        ''' argument Is used As the name (With an enclosing I(...) removed). For a named 
+        ''' matrix/list/data frame argument With more than one named column, the names Of 
+        ''' the columns are the name Of the argument followed by a dot And the column name 
+        ''' inside the argument: If the argument Is unnamed, the argument's column names 
+        ''' are used. For a named or unnamed matrix/list/data frame argument that contains 
+        ''' a single column, the column name in the result is the column name in the 
+        ''' argument. 
+        ''' Finally, the names are adjusted to be unique and syntactically valid unless 
+        ''' ``check.names = FALSE``.
+        ''' </returns>
         <ExportAPI("data.frame")>
-        Public Function Rdataframe(parameters As List(Of Expression), Optional envir As Environment = Nothing) As Object
+        Public Function Rdataframe(<RListObjectArgument>
+                                   <RRawVectorArgument>
+                                   columns As Object, Optional envir As Environment = Nothing) As Object
+
+            Dim parameters As Expression() = columns
             Dim dataframe As New dataframe With {
                 .columns = InvokeParameter _
-                    .CreateArguments(envir, InvokeParameter.Create(parameters)) _
+                    .CreateArguments(envir, InvokeParameter.Create(expressions:=parameters)) _
                     .ToDictionary(Function(a) a.Key,
                                   Function(a)
                                       Return envir.createColumnVector(a.Value)

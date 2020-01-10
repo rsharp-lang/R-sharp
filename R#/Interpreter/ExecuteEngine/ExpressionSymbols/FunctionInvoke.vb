@@ -272,8 +272,6 @@ Namespace Interpreter.ExecuteEngine
 
                     Return base.options(names, envir)
                 End If
-            ElseIf funcName = "data.frame" Then
-                Return Runtime.Internal.Rdataframe(envir, parameters)
             End If
 
             ' invoke internal R# api
