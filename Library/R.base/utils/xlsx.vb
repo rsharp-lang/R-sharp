@@ -1,4 +1,5 @@
 ﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.MIME.Office.Excel.XML.xl.worksheets
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports csv = Microsoft.VisualBasic.Data.csv.IO.File
@@ -31,4 +32,20 @@ Module xlsx
 
         Return dataframe
     End Function
+
+    <ExportAPI("write.xlsx")>
+    Public Function writeXlsx(x As Object, file$, Optional sheetName$ = "Sheet1") As Boolean
+        Throw New NotImplementedException
+    End Function
+
+    <ExportAPI("createWorkbook")>
+    Public Function createWorkbook() As msXlsx
+
+    End Function
+
+    <ExportAPI("createSheet")>
+    Public Function createSheet(wb As msXlsx, Optional sheetName$ = "Sheet1") As worksheet
+        Return wb.AddSheetTable(sheetName)
+    End Function
+
 End Module
