@@ -56,6 +56,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports REnv = SMRUCC.Rsharp.Runtime.Internal
 Imports RPkg = SMRUCC.Rsharp.System.Package.Package
 
 Namespace Interpreter.ExecuteEngine
@@ -85,7 +86,7 @@ Namespace Interpreter.ExecuteEngine
             Dim symbol As [Variant](Of Variable, RMethodInfo) = envir.FindSymbol(Me.symbol)
 
             If symbol Is Nothing OrElse Not symbol.HasValue Then
-                symbol = Runtime.Internal.invoke.getFunction(Me.symbol)
+                symbol = REnv.invoke.getFunction(Me.symbol)
             End If
             If symbol Is Nothing OrElse Not symbol.HasValue Then
                 Return Message.SymbolNotFound(envir, Me.symbol, TypeCodes.generic)

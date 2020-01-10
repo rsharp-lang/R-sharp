@@ -67,6 +67,8 @@ Namespace Runtime.Interop
         Public Property [default] As Object
         Public Property isOptional As Boolean
         Public Property isObjectList As Boolean
+        Public Property isByrefValueParameter As Boolean
+
         ''' <summary>
         ''' Do not apply the <see cref="Runtime.getFirst"/> operation
         ''' </summary>
@@ -110,7 +112,8 @@ Namespace Runtime.Interop
                 .[default] = p.DefaultValue,
                 .isOptional = p.HasDefaultValue,
                 .isObjectList = Not p.GetCustomAttribute(Of RListObjectArgumentAttribute) Is Nothing,
-                .isRequireRawVector = Not p.GetCustomAttribute(Of RRawVectorArgumentAttribute) Is Nothing
+                .isRequireRawVector = Not p.GetCustomAttribute(Of RRawVectorArgumentAttribute) Is Nothing,
+                .isByrefValueParameter = Not p.GetCustomAttribute(Of RByRefValueAssignAttribute) Is Nothing
             }
         End Function
     End Class
