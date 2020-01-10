@@ -188,6 +188,15 @@ Namespace Interpreter.ExecuteEngine
 
                 If target.isSymbolIndexer Then
                     symbol = {New SymbolIndexer(target)}
+                ElseIf target.isFunctionInvoke Then
+                    ' func(x) <- vals
+                    ' byref calls
+                    Dim vals As Expression = code _
+                        .Skip(2) _
+                        .IteratesALL _
+                        .DoCall(AddressOf Expression.CreateExpression)
+
+                    Return New ByRefFunctionCall(New FunctionInvoke(target), vals)
                 Else
                     symbol = target _
                         .Skip(1) _
