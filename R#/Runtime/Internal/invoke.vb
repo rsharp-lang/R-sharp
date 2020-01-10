@@ -118,11 +118,21 @@ Namespace Runtime.Internal
                     .CreateArguments(envir, InvokeParameter.Create(parameters)) _
                     .ToDictionary(Function(a) a.Key,
                                   Function(a)
-                                      Return Runtime.asVector(Of Double)(a.Value)
+                                      Return envir.createColumnVector(a.Value)
                                   End Function)
             }
 
             Return dataframe
+        End Function
+
+        <Extension>
+        Private Function createColumnVector(env As Environment, a As Object) As Array
+            ' 假设dataframe之中每一列数据的类型都是相同的
+            ' 则我们直接使用第一个元素的类型作为列的数据类型
+            Dim first As Object = Runtime.getFirst(a.Value, nonNULL:=True)
+            Dim colVec As Array = Runtime.asVector(a.value, first.GetType, env)
+
+            Return colVec
         End Function
 
         Friend Function missingParameter(funcName$, paramName$, envir As Environment) As Message
