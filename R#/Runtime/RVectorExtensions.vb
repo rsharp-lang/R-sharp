@@ -82,7 +82,7 @@ Namespace Runtime
         ''' </summary>
         ''' <param name="value"></param>
         ''' <returns></returns>
-        Public Function getFirst(value As Object) As Object
+        Public Function getFirst(value As Object, Optional nonNULL As Boolean = False) As Object
             Dim valueType As Type
 
             If value Is Nothing Then
@@ -91,10 +91,16 @@ Namespace Runtime
                 valueType = value.GetType
             End If
 
-            If valueType.IsInheritsFrom(GetType(Array)) Then
+            If valueType.IsArray Then
                 With DirectCast(value, Array)
                     If .Length = 0 Then
                         Return Nothing
+                    ElseIf nonNULL Then
+                        For i As Integer = 0 To .Length - 1
+                            If Not .GetValue(i) Is Nothing Then
+                                Return .GetValue(i)
+                            End If
+                        Next
                     Else
                         Return .GetValue(Scan0)
                     End If

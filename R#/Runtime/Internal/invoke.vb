@@ -46,7 +46,6 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
@@ -110,19 +109,6 @@ Namespace Runtime.Internal
         <DebuggerStepThrough>
         Public Function [stop](message As Object, envir As Environment) As Message
             Return base.stop(message, envir)
-        End Function
-
-        Public Function Rdataframe(envir As Environment, parameters As List(Of Expression)) As Object
-            Dim dataframe As New dataframe With {
-                .columns = InvokeParameter _
-                    .CreateArguments(envir, InvokeParameter.Create(parameters)) _
-                    .ToDictionary(Function(a) a.Key,
-                                  Function(a)
-                                      Return Runtime.asVector(Of Double)(a.Value)
-                                  End Function)
-            }
-
-            Return dataframe
         End Function
 
         Friend Function missingParameter(funcName$, paramName$, envir As Environment) As Message
