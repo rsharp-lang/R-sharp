@@ -792,7 +792,7 @@ Namespace Runtime.Internal.Invokes
                 list = DirectCast(X, Dictionary(Of String, Object)) _
                     .ToDictionary(Function(d) d.Key,
                                   Function(d)
-                                      Return apply.Invoke(envir, {d.Value})
+                                      Return apply.Invoke(envir, invokeArgument(d.Value))
                                   End Function)
             Else
                 list = Runtime.asVector(Of Object)(X) _
@@ -800,11 +800,15 @@ Namespace Runtime.Internal.Invokes
                     .SeqIterator _
                     .ToDictionary(Function(i) $"[[{i.i}]]",
                                   Function(d)
-                                      Return apply.Invoke(envir, {d.value})
+                                      Return apply.Invoke(envir, invokeArgument(d.value))
                                   End Function)
             End If
 
             Return New list With {.slots = list}
+        End Function
+
+        Private Function invokeArgument(value As Object) As InvokeParameter()
+            Return InvokeParameter.Create(value)
         End Function
 
         ''' <summary>
