@@ -115,6 +115,30 @@ Namespace Runtime.Internal.Invokes
             Throw New NotImplementedException
         End Function
 
+        <ExportAPI("data.frame")>
+        Public Function Rdataframe(parameters As List(Of Expression), Optional envir As Environment = Nothing) As Object
+            Dim dataframe As New dataframe With {
+                .columns = InvokeParameter _
+                    .CreateArguments(envir, InvokeParameter.Create(parameters)) _
+                    .ToDictionary(Function(a) a.Key,
+                                  Function(a)
+                                      Return envir.createColumnVector(a.Value)
+                                  End Function)
+            }
+
+            Return dataframe
+        End Function
+
+        <Extension>
+        Private Function createColumnVector(env As Environment, a As Object) As Array
+            ' 假设dataframe之中每一列数据的类型都是相同的
+            ' 则我们直接使用第一个元素的类型作为列的数据类型
+            Dim first As Object = Runtime.getFirst(a.Value, nonNULL:=True)
+            Dim colVec As Array = Runtime.asVector(a.value, first.GetType, env)
+
+            Return colVec
+        End Function
+
         ''' <summary>
         ''' # Lists – Generic and Dotted Pairs
         ''' 
