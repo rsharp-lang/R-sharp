@@ -1,48 +1,48 @@
 ﻿#Region "Microsoft.VisualBasic::47dce6434854b823fe68c76fccc983f9, R#\Runtime\Internal\internalInvokes\base.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module base
-    ' 
-    '         Function: [stop], all, any, cat, colnames
-    '                   createDotNetExceptionMessage, CreateMessageInternal, doPrintInternal, getEnvironmentStack, getOption
-    '                   invisible, isEmpty, lapply, length, names
-    '                   neg, options, print, Rlist, rownames
-    '                   sapply, source, str, summary, warning
-    ' 
-    '         Sub: q, quit
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module base
+' 
+'         Function: [stop], all, any, cat, colnames
+'                   createDotNetExceptionMessage, CreateMessageInternal, doPrintInternal, getEnvironmentStack, getOption
+'                   invisible, isEmpty, lapply, length, names
+'                   neg, options, print, Rlist, rownames
+'                   sapply, source, str, summary, warning
+' 
+'         Sub: q, quit
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -856,19 +856,25 @@ Namespace Runtime.Internal.Invokes
                 list = DirectCast(X, Dictionary(Of String, Object)) _
                     .ToDictionary(Function(d) d.Key,
                                   Function(d)
-                                      Return apply.Invoke(envir, {d.Value})
+                                      Return apply.Invoke(envir, invokeArgument(d.Value))
                                   End Function)
             Else
                 list = Runtime.asVector(Of Object)(X) _
                     .AsObjectEnumerator _
                     .SeqIterator _
-                    .ToDictionary(Function(i) $"[[{i.i}]]",
+                    .ToDictionary(Function(i)
+                                      Return $"[[{i.i + 1}]]"
+                                  End Function,
                                   Function(d)
-                                      Return apply.Invoke(envir, {d.value})
+                                      Return apply.Invoke(envir, invokeArgument(d.value))
                                   End Function)
             End If
 
             Return New list With {.slots = list}
+        End Function
+
+        Private Function invokeArgument(value As Object) As InvokeParameter()
+            Return InvokeParameter.Create(value)
         End Function
 
         ''' <summary>

@@ -85,7 +85,16 @@ Namespace Runtime.Internal.Object
             End Select
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="[object]"></param>
+        ''' <param name="namelist">This method will ensure that the value is a string vector</param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         Public Function setNames([object] As Object, namelist As Array, envir As Environment) As Object
+            namelist = Runtime.asVector(Of String)(namelist)
+
             ' set names
             Select Case [object].GetType
                 Case GetType(list), GetType(dataframe)
