@@ -67,8 +67,10 @@ Namespace Runtime.Interop
         Public Property [default] As Object
         Public Property isOptional As Boolean
         Public Property isObjectList As Boolean
+        Public Property isByrefValueParameter As Boolean
+
         ''' <summary>
-        ''' Do not apply the <see cref="Runtime.getFirst(Object)"/> operation
+        ''' Do not apply the <see cref="Runtime.getFirst"/> operation
         ''' </summary>
         ''' <returns></returns>
         Public Property isRequireRawVector As Boolean
@@ -110,19 +112,9 @@ Namespace Runtime.Interop
                 .[default] = p.DefaultValue,
                 .isOptional = p.HasDefaultValue,
                 .isObjectList = Not p.GetCustomAttribute(Of RListObjectArgumentAttribute) Is Nothing,
-                .isRequireRawVector = Not p.GetCustomAttribute(Of RRawVectorArgumentAttribute) Is Nothing
+                .isRequireRawVector = Not p.GetCustomAttribute(Of RRawVectorArgumentAttribute) Is Nothing,
+                .isByrefValueParameter = Not p.GetCustomAttribute(Of RByRefValueAssignAttribute) Is Nothing
             }
-        End Function
-    End Class
-
-    Public Class RArgumentList
-
-        ''' <summary>
-        ''' Create argument value for <see cref="MethodInfo.Invoke(Object, Object())"/>
-        ''' </summary>
-        ''' <returns></returns>
-        Public Iterator Function CreateArguments() As IEnumerable(Of Object)
-
         End Function
     End Class
 End Namespace

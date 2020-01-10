@@ -53,6 +53,7 @@ Namespace Runtime.Internal.Object
     Public Class vector : Implements RNames, RIndex
 
         Public Property data As Array
+        Public Property unit As unit
 
         Public ReadOnly Property length As Integer Implements RIndex.length
             Get

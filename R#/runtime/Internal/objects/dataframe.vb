@@ -83,6 +83,24 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        ''' <summary>
+        ''' ``data[, selector]``
+        ''' </summary>
+        ''' <param name="selector"></param>
+        ''' <returns></returns>
+        Public Function projectByColumn(selector As Array) As dataframe
+            Throw New NotImplementedException
+        End Function
+
+        ''' <summary>
+        ''' ``data[selector, ]``
+        ''' </summary>
+        ''' <param name="selector"></param>
+        ''' <returns></returns>
+        Public Function sliceByRow(selector As Array) As dataframe
+            Throw New NotImplementedException
+        End Function
+
         Public Function GetByRowIndex(index As Integer()) As dataframe
             Dim subsetRowNumbers As String() = index _
                 .Select(Function(i, j)

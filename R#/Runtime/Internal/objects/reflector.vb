@@ -62,29 +62,38 @@ Namespace Runtime.Internal.Object
             Dim code As TypeCodes = type.GetRTypeCode
 
             If type.ImplementInterface(GetType(IDictionary)) Then
-                Dim list As IDictionary = x
-                Dim value As Object
-                Dim sb As New StringBuilder
-                Dim i As i32 = 1
-
-                Call sb.AppendLine("List of " & list.Count)
-
-                For Each slotKey As Object In list.Keys
-                    value = list(slotKey)
-
-                    If ++i = CInt(Val(slotKey.ToString)) Then
-                        slotKey = $"[{slotKey}]"
-                    End If
-
-                    sb.AppendLine($"{indent}$ {slotKey}: {GetStructure(value, env, indent & "..")}")
-                Next
-
-                Return sb.ToString
+                Return strList(list:=x, env:=env, indent:=indent)
             ElseIf Runtime.IsPrimitive(code, includeComplexList:=False) Then
                 Return strVector(Runtime.asVector(Of Object)(x), type, env)
+            ElseIf type Is GetType(dataframe) Then
+                Return dataframe(x, env)
             Else
                 Return classPrinter.printClass(x)
             End If
+        End Function
+
+        Private Function strList(list As IDictionary, env As GlobalEnvironment, indent$) As String
+            Dim value As Object
+            Dim sb As New StringBuilder
+            Dim i As i32 = 1
+
+            Call sb.AppendLine("List of " & list.Count)
+
+            For Each slotKey As Object In list.Keys
+                value = list(slotKey)
+
+                If ++i = CInt(Val(slotKey.ToString)) Then
+                    slotKey = $"[{slotKey}]"
+                End If
+
+                sb.AppendLine($"{indent}$ {slotKey}: {GetStructure(value, env, indent & "..")}")
+            Next
+
+            Return sb.ToString
+        End Function
+
+        Private Function dataframe(d As dataframe, env As GlobalEnvironment) As String
+            Throw New NotImplementedException
         End Function
 
         Private Function strVector(a As Array, type As Type, env As GlobalEnvironment) As String

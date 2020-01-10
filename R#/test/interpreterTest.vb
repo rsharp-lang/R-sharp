@@ -71,7 +71,7 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
-
+        Call dataframeTest()
         Call lambdaTest2()
 
 
@@ -133,7 +133,7 @@ Module interpreterTest
         Call optionsTest()
 
         Call ImportsDll()
-        Call dataframeTest()
+
         Call parameterTest()
 
         Call linqTest()
@@ -467,6 +467,8 @@ test1::println('123');
     End Sub
 
     Sub dataframeTest()
+        Call R.Evaluate("print(data.frame(a = 1, b = ['g','h','eee'], c = T, [TRUE,FALSE,FALSE]))")
+
         Call R.Evaluate("let d <- data.frame(a = [1,2,3,4,5], b= F, xx='ABCDEFG')")
         Call R.Evaluate("print(d)")
 

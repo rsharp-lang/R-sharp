@@ -149,7 +149,7 @@ Namespace Interpreter.ExecuteEngine
         }
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim target As Object = getFuncVar(envir)
+            Dim target As Object = getFuncVar(funcName, [namespace], envir)
             Dim result As Object
 
             If Not target Is Nothing AndAlso target.GetType Is GetType(Message) Then
@@ -184,7 +184,15 @@ Namespace Interpreter.ExecuteEngine
             End If
         End Function
 
-        Private Function getFuncVar(envir As Environment) As Object
+        ''' <summary>
+        ''' This function maybe returns <see cref="RFunction"/>, nothing or exception <see cref="Message"/> 
+        ''' if the namespace reference function is not found or unable to load library module.
+        ''' </summary>
+        ''' <param name="funcName"></param>
+        ''' <param name="namespace"></param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
+        Friend Shared Function getFuncVar(funcName As Expression, namespace$, envir As Environment) As Object
             ' 当前环境中的函数符号的优先度要高于
             ' 系统环境下的函数符号
             Dim funcVar As RFunction
@@ -272,8 +280,6 @@ Namespace Interpreter.ExecuteEngine
 
                     Return base.options(names, envir)
                 End If
-            ElseIf funcName = "data.frame" Then
-                Return Runtime.Internal.Rdataframe(envir, parameters)
             End If
 
             ' invoke internal R# api

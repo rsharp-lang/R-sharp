@@ -272,6 +272,9 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\AppendOperator.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\ModeOf.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryOrExpression.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\DataFrameSlice.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\DataFrameProjection.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\StringBinaryExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Package\Require.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Suppress.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\MemberValueAssign.vb" />
@@ -338,6 +341,7 @@
     <Compile Include="Runtime\Internal\printer\functionPrinter.vb" />
     <Compile Include="Runtime\Internal\htmlPrinter.vb" />
     <Compile Include="Runtime\Internal\printer\enumPrinter.vb" />
+    <Compile Include="Runtime\Interop\RArgumentList.vb" />
     <Compile Include="Runtime\Interop\REnum.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RSymbolTextArgumentAttribute.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RSuppressPrintAttribute.vb" />

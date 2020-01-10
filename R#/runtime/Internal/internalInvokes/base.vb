@@ -1,48 +1,48 @@
 ﻿#Region "Microsoft.VisualBasic::47dce6434854b823fe68c76fccc983f9, R#\Runtime\Internal\internalInvokes\base.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module base
-    ' 
-    '         Function: [stop], all, any, cat, colnames
-    '                   createDotNetExceptionMessage, CreateMessageInternal, doPrintInternal, getEnvironmentStack, getOption
-    '                   invisible, isEmpty, lapply, length, names
-    '                   neg, options, print, Rlist, rownames
-    '                   sapply, source, str, summary, warning
-    ' 
-    '         Sub: q, quit
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module base
+' 
+'         Function: [stop], all, any, cat, colnames
+'                   createDotNetExceptionMessage, CreateMessageInternal, doPrintInternal, getEnvironmentStack, getOption
+'                   invisible, isEmpty, lapply, length, names
+'                   neg, options, print, Rlist, rownames
+'                   sapply, source, str, summary, warning
+' 
+'         Sub: q, quit
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -113,6 +113,70 @@ Namespace Runtime.Internal.Invokes
             End If
 
             Throw New NotImplementedException
+        End Function
+
+        ''' <summary>
+        ''' #### Data Frames
+        ''' 
+        ''' The function data.frame() creates data frames, tightly coupled collections 
+        ''' of variables which share many of the properties of matrices and of lists, 
+        ''' used as the fundamental data structure by most of R's modeling software.
+        ''' </summary>
+        ''' <param name="columns">
+        ''' these arguments are of either the form value or tag = value. Component names 
+        ''' are created based on the tag (if present) or the deparsed argument itself.
+        ''' </param>
+        ''' <param name="envir"></param>
+        ''' <returns>
+        ''' A data frame, a matrix-like structure whose columns may be of differing types 
+        ''' (numeric, logical, factor and character and so on).
+        '''
+        ''' How the names Of the data frame are created Is complex, And the rest Of this 
+        ''' paragraph Is only the basic story. If the arguments are all named And simple 
+        ''' objects (Not lists, matrices Of data frames) Then the argument names give the 
+        ''' column names. For an unnamed simple argument, a deparsed version Of the 
+        ''' argument Is used As the name (With an enclosing I(...) removed). For a named 
+        ''' matrix/list/data frame argument With more than one named column, the names Of 
+        ''' the columns are the name Of the argument followed by a dot And the column name 
+        ''' inside the argument: If the argument Is unnamed, the argument's column names 
+        ''' are used. For a named or unnamed matrix/list/data frame argument that contains 
+        ''' a single column, the column name in the result is the column name in the 
+        ''' argument. 
+        ''' Finally, the names are adjusted to be unique and syntactically valid unless 
+        ''' ``check.names = FALSE``.
+        ''' </returns>
+        <ExportAPI("data.frame")>
+        Public Function Rdataframe(<RListObjectArgument>
+                                   <RRawVectorArgument>
+                                   columns As Object, Optional envir As Environment = Nothing) As Object
+            ' data.frame(a = 1, b = ["g","h","eee"], c = T)
+            Dim parameters As InvokeParameter() = columns
+            Dim dataframe As New dataframe With {
+                .columns = parameters _
+                    .SeqIterator _
+                    .ToDictionary(Function(a)
+                                      If a.value.haveSymbolName Then
+                                          Return a.value.name
+                                      Else
+                                          Return "X" & (a.i + 1)
+                                      End If
+                                  End Function,
+                                  Function(a)
+                                      Return envir.createColumnVector(a.value.Evaluate(envir))
+                                  End Function)
+            }
+
+            Return dataframe
+        End Function
+
+        <Extension>
+        Private Function createColumnVector(env As Environment, a As Object) As Array
+            ' 假设dataframe之中每一列数据的类型都是相同的
+            ' 则我们直接使用第一个元素的类型作为列的数据类型
+            Dim first As Object = Runtime.getFirst(a, nonNULL:=True)
+            Dim colVec As Array = Runtime.asVector(a, first.GetType, env)
+
+            Return colVec
         End Function
 
         ''' <summary>
@@ -792,19 +856,25 @@ Namespace Runtime.Internal.Invokes
                 list = DirectCast(X, Dictionary(Of String, Object)) _
                     .ToDictionary(Function(d) d.Key,
                                   Function(d)
-                                      Return apply.Invoke(envir, {d.Value})
+                                      Return apply.Invoke(envir, invokeArgument(d.Value))
                                   End Function)
             Else
                 list = Runtime.asVector(Of Object)(X) _
                     .AsObjectEnumerator _
                     .SeqIterator _
-                    .ToDictionary(Function(i) $"[[{i.i}]]",
+                    .ToDictionary(Function(i)
+                                      Return $"[[{i.i + 1}]]"
+                                  End Function,
                                   Function(d)
-                                      Return apply.Invoke(envir, {d.value})
+                                      Return apply.Invoke(envir, invokeArgument(d.value))
                                   End Function)
             End If
 
             Return New list With {.slots = list}
+        End Function
+
+        Private Function invokeArgument(value As Object) As InvokeParameter()
+            Return InvokeParameter.Create(value)
         End Function
 
         ''' <summary>

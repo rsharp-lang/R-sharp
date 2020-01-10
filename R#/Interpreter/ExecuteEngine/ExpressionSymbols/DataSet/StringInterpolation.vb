@@ -100,7 +100,7 @@ Namespace Interpreter.ExecuteEngine
                 If Program.isException([next]) Then
                     Return [next]
                 Else
-                    current = BinaryExpression.DoStringBinary(Of String)(
+                    current = StringBinaryExpression.DoStringBinary(Of String)(
                         a:=current,
                         b:=[next],
                         op:=Function(x, y) x & y
