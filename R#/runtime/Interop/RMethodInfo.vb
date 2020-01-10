@@ -46,7 +46,6 @@
 
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
-Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -190,7 +189,7 @@ Namespace Runtime.Interop
             Dim parameters As Object()
 
             If Me.parameters.Any(Function(a) a.isObjectList) Then
-                parameters = createObjectListArguments(envir, params).ToArray
+                parameters = RArgumentList.CreateObjectListArguments(Me, envir, params).ToArray
             Else
                 parameters = InvokeParameter _
                     .CreateArguments(envir, params) _
@@ -201,100 +200,6 @@ Namespace Runtime.Interop
             End If
 
             Return Invoke(parameters)
-        End Function
-
-        Private Function createObjectListArguments(envir As Environment, params As InvokeParameter()) As IEnumerable(Of Object)
-            Dim parameterVals As Object() = New Object(Me.parameters.Length - 1) {}
-            Dim declareArguments = Me.parameters.ToDictionary(Function(a) a.name)
-            Dim declareNameIndex As Index(Of String) = Me.parameters.Keys.Indexing
-            Dim listObject As New List(Of InvokeParameter)
-            Dim i As Integer
-            Dim sequenceIndex As Integer = Scan0
-            Dim paramVal As Object
-
-            For Each arg As InvokeParameter In params
-                If declareArguments.ContainsKey(arg.name) OrElse Not arg.isSymbolAssign Then
-                    i = declareNameIndex(arg.name)
-
-                    If i > -1 Then
-                        paramVal = getValue(
-                            arg:=declareArguments(arg.name),
-                            value:=arg.Evaluate(envir),
-                            trace:=name,
-                            envir:=envir,
-                            trygetListParam:=False
-                        )
-                        parameterVals(i) = paramVal
-                        declareArguments.Remove(arg.name)
-                    Else
-                        paramVal = declareArguments _
-                            .First _
-                            .DoCall(Function(a)
-                                        Return getValue(
-                                            arg:=a.Value,
-                                            value:=arg.Evaluate(envir),
-                                            trace:=name,
-                                            envir:=envir,
-                                            trygetListParam:=True
-                                        )
-                                    End Function)
-
-                        If paramVal Is GetType(Void) Then
-                            ' do nothing
-                            ' this parameter input is possibly a list argument
-                        Else
-                            parameterVals(sequenceIndex) = paramVal
-                            declareArguments.Remove(declareArguments.First.Key)
-                        End If
-
-                        listObject.Add(arg)
-                    End If
-
-                    If Not paramVal Is Nothing AndAlso paramVal.GetType Is GetType(Message) Then
-                        Return {paramVal}
-                    End If
-                Else
-                    Call listObject.Add(arg)
-                End If
-
-                sequenceIndex += 1
-            Next
-
-            ' get index of list argument
-            i = Me.parameters _
-                .First(Function(a) a.isObjectList).name _
-                .DoCall(Function(a)
-                            Call declareArguments.Remove(a)
-                            Return declareNameIndex.IndexOf(a)
-                        End Function)
-            parameterVals(i) = listObject.ToArray
-
-            If declareArguments.Count > 0 Then
-                Dim envirArgument As RMethodArgument = declareArguments _
-                    .Values _
-                    .Where(Function(a)
-                               Return a.type.raw Is GetType(Environment)
-                           End Function) _
-                    .FirstOrDefault
-
-                If Not envirArgument Is Nothing Then
-                    i = declareNameIndex(envirArgument.name)
-                    parameterVals(i) = envir
-                    declareArguments.Remove(envirArgument.name)
-                End If
-            End If
-
-            If declareArguments.Count > 0 Then
-                Return {
-                    declareArguments.Values _
-                        .First _
-                        .DoCall(Function(a)
-                                    Return missingParameter(a, envir, name)
-                                End Function)
-                }
-            Else
-                Return parameterVals
-            End If
         End Function
 
         Private Iterator Function createNormalArguments(envir As Environment, arguments As Dictionary(Of String, Object)) As IEnumerable(Of Object)
@@ -361,7 +266,7 @@ Namespace Runtime.Interop
         ''' offset bugs
         ''' </param>
         ''' <returns></returns>
-        Private Shared Function getValue(arg As RMethodArgument, value As Object, trace$, ByRef envir As Environment, trygetListParam As Boolean) As Object
+        Friend Shared Function getValue(arg As RMethodArgument, value As Object, trace$, ByRef envir As Environment, trygetListParam As Boolean) As Object
             If arg.type.isArray Then
                 value = CObj(Runtime.asVector(value, arg.type.GetRawElementType, env:=envir))
             ElseIf arg.type.isCollection Then
