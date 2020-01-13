@@ -267,7 +267,7 @@ Namespace Interpreter.ExecuteEngine
                 Return Internal.stop({"Target symbol is nothing!", $"SymbolName: {symbolIndex.symbol}"}, envir)
             End If
 
-            If symbolIndex.nameIndex AndAlso index.GetType Like BinaryExpression.integers Then
+            If symbolIndex.indexType = SymbolIndexers.vectorIndex AndAlso index.GetType Like BinaryExpression.integers Then
                 Return setVectorElements(targetObj, Runtime.asVector(Of Integer)(index), value, envir)
             End If
 

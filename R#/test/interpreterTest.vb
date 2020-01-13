@@ -65,12 +65,15 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Module interpreterTest
 
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+        Call dataframeIndexTest()
+
         Call dataframeTest()
         Call lambdaTest2()
 
@@ -462,6 +465,17 @@ test1::println('123');
         Call R.Evaluate("imports 'VBMath' from 'Microsoft.VisualBasic.Framework_v47_dotnet_8da45dcd8060cc9a.dll'")
         Call R.Evaluate(" print( RMS([1,2,3,4,5,6,7,8,9,10], (1:10) * 5))")
         Call R.Evaluate("print(RMS)")
+
+        Pause()
+    End Sub
+
+    Sub dataframeIndexTest()
+        R.Add("x", New dataframe With {.columns = New Dictionary(Of String, Array) From {
+              {"A", {1, 2, 3, 4, 5}},
+              {"BB", {False}}
+        }})
+
+        Call R.Evaluate("x[, 'BB']")
 
         Pause()
     End Sub

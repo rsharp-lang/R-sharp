@@ -54,8 +54,31 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Interpreter.ExecuteEngine
 
+    Public Enum SymbolIndexers
+        ''' <summary>
+        ''' a[x]
+        ''' </summary>
+        vectorIndex
+        ''' <summary>
+        ''' a[[x]], a$x
+        ''' </summary>
+        nameIndex
+        ''' <summary>
+        ''' a[, x]
+        ''' </summary>
+        dataframeColumns
+        ''' <summary>
+        ''' a[x, ]
+        ''' </summary>
+        dataframeRows
+        ''' <summary>
+        ''' a[x,y]
+        ''' </summary>
+        dataframeRanges
+    End Enum
+
     ''' <summary>
-    ''' get elements by index 
+    ''' get/set elements by index 
     ''' (X$name或者X[[name]])
     ''' </summary>
     Public Class SymbolIndexer : Inherits Expression
@@ -68,21 +91,43 @@ Namespace Interpreter.ExecuteEngine
         ''' <summary>
         ''' X[[name]]
         ''' </summary>
-        Friend ReadOnly nameIndex As Boolean = False
+        Friend ReadOnly indexType As SymbolIndexers
 
         Sub New(tokens As Token())
             symbol = {tokens(Scan0)}.DoCall(AddressOf Expression.CreateExpression)
             tokens = tokens.Skip(2).Take(tokens.Length - 3).ToArray
 
             If tokens(Scan0) = (TokenType.open, "[") AndAlso tokens.Last = (TokenType.close, "]") Then
-                nameIndex = True
                 tokens = tokens _
                     .Skip(1) _
                     .Take(tokens.Length - 2) _
                     .ToArray
-            End If
+                indexType = SymbolIndexers.nameIndex
+                index = Expression.CreateExpression(tokens)
+            Else
+                Dim blocks = tokens.SplitByTopLevelDelimiter(TokenType.comma, False)
 
-            index = Expression.CreateExpression(tokens)
+                If blocks > 1 Then
+                    ' dataframe indexer
+                    If blocks(0).isComma Then
+                        ' x[, a] by columns
+                        indexType = SymbolIndexers.dataframeColumns
+                        index = Expression.CreateExpression(blocks.Skip(1).IteratesALL)
+                    ElseIf blocks = 2 AndAlso blocks(1).isComma Then
+                        ' x[a, ] by row
+                        indexType = SymbolIndexers.dataframeRows
+                        index = Expression.CreateExpression(blocks(Scan0))
+                    Else
+                        ' x[a,b] by range
+                        indexType = SymbolIndexers.dataframeRanges
+                        index = New VectorLiteral(blocks.Where(Function(t) Not t.isComma).Select(AddressOf Expression.CreateExpression))
+                    End If
+                Else
+                    ' vector indexer
+                    indexType = SymbolIndexers.vectorIndex
+                    index = Expression.CreateExpression(tokens)
+                End If
+            End If
         End Sub
 
         ''' <summary>
@@ -93,7 +138,7 @@ Namespace Interpreter.ExecuteEngine
         Sub New(symbol As Expression, byName As Expression)
             Me.symbol = symbol
             Me.index = byName
-            Me.nameIndex = True
+            Me.indexType = SymbolIndexers.nameIndex
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
@@ -106,7 +151,7 @@ Namespace Interpreter.ExecuteEngine
                 Return obj
             End If
 
-            If nameIndex Then
+            If indexType = SymbolIndexers.nameIndex Then
                 Return getByName(obj, indexer, envir)
             Else
                 Return getByIndex(obj, indexer, envir)

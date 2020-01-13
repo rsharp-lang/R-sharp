@@ -88,16 +88,16 @@ Namespace Interpreter.ExecuteEngine
             ' 还会剩余最后一个元素
             ' 所以在这里需要加上
             Me.values = values
-            Me.type = values.DoCall(AddressOf TypeCodeOf)
+            Me.type = Me.values.DoCall(AddressOf TypeCodeOf)
         End Sub
 
         Sub New(values As IEnumerable(Of Expression))
             Me.values = values.ToArray
-            Me.type = values.DoCall(AddressOf TypeCodeOf)
+            Me.type = Me.values.DoCall(AddressOf TypeCodeOf)
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Private Shared Function TypeCodeOf(values As IEnumerable(Of Expression)) As TypeCodes
+        Private Shared Function TypeCodeOf(values As Expression()) As TypeCodes
             With values.ToArray
                 ' fix for System.InvalidOperationException: Nullable object must have a value.
                 '
