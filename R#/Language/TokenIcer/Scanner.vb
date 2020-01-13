@@ -192,7 +192,8 @@ Namespace Language.TokenIcer
             "in", "like", "from", "where", "order", "by", "distinct", "select",
             "ascending", "descending",
             "suppress",
-            "typeof", "modeof"
+            "typeof", "modeof",
+            "using"
         }
 
         Private Function walkChar(c As Char) As Token

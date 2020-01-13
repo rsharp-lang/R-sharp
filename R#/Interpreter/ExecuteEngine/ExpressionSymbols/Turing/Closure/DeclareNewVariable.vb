@@ -103,6 +103,13 @@ Namespace Interpreter.ExecuteEngine
             value = Nothing
         End Sub
 
+        Sub New(symbol As Token(), value As Token())
+            Me.names = getNames(symbol)
+            Me.type = TypeCodes.generic
+            Me.hasInitializeExpression = True
+            Me.value = Expression.CreateExpression(value)
+        End Sub
+
         Sub New()
         End Sub
 
@@ -130,6 +137,11 @@ Namespace Interpreter.ExecuteEngine
             value = Expression.ParseExpression(code.AsList)
         End Sub
 
+        ''' <summary>
+        ''' Push current variable into the target environment ``<paramref name="envir"/>``.
+        ''' </summary>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim value As Object
 

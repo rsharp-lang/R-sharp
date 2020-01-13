@@ -130,6 +130,8 @@ Namespace Interpreter.ExecuteEngine
                 Case "next"
                     ' continute for
                     Return New ContinuteFor
+                Case "using"
+                    Return New UsingClosure(code.Skip(1))
                 Case Else
                     ' may be it is using keyword as identifier name
                     Return Nothing

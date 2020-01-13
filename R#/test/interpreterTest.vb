@@ -72,6 +72,7 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+        Call usingTest()
         Call dataframeIndexTest()
 
         Call dataframeTest()
@@ -159,6 +160,22 @@ Module interpreterTest
 
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub usingTest()
+        Call R.Evaluate("using a as file('./test.txt') {
+	# call System.IDispose
+	# operations with variable a
+	print((a :> as.object)$Name);
+}
+
+# call a$Dispose()
+# and then delete a from the current environment
+let a as string = 'abc: ' & $;
+
+print(a);")
 
         Pause()
     End Sub

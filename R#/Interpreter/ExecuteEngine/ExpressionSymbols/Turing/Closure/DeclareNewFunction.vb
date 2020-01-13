@@ -86,7 +86,7 @@ Namespace Interpreter.ExecuteEngine
         End Sub
 
         Sub New(code As List(Of Token()))
-            Dim [declare] = code(4)
+            Dim [declare] As Token() = code(4)
             Dim parts = [declare].SplitByTopLevelDelimiter(TokenType.close)
             Dim paramPart = parts(Scan0).Skip(1).ToArray
             Dim bodyPart = parts(2).Skip(1).ToArray

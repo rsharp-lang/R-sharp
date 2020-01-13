@@ -67,7 +67,6 @@ Namespace Language
             End With
         End Function
 
-        <DebuggerStepThrough>
         <Extension>
         Friend Function SplitByTopLevelDelimiter(tokens As IEnumerable(Of Token), delimiter As TokenType,
                                                  Optional includeKeyword As Boolean = False,
