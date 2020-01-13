@@ -67,6 +67,28 @@ Namespace Runtime.Internal.Object
         Sub New()
         End Sub
 
+        Sub New(model As Type, input As IEnumerable)
+            Dim i As i32 = Scan0
+            ' create an empty vector with 
+            ' allocable data buffer
+            Dim buffer As Array = Array.CreateInstance(model, BufferSize)
+
+            For Each obj As Object In input
+                buffer.SetValue(obj, CInt(i))
+
+                If ++i = data.Length Then
+                    ' resize vector buffer
+                    data = buffer
+                    buffer = Array.CreateInstance(model, BufferSize + buffer.Length)
+                    Array.ConstrainedCopy(data, Scan0, buffer, Scan0, data.Length)
+                End If
+            Next
+
+            ' trim the vector to its acutal size
+            data = Array.CreateInstance(model, CInt(i) - 1)
+            Array.ConstrainedCopy(buffer, Scan0, data, Scan0, data.Length)
+        End Sub
+
         Sub New(names As String(), data As Array, envir As Environment)
             Me.data = data
             Me.setNames(names, envir)
