@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::19caddffdbd16bb1c203e0b4de2dc72b, R#\Runtime\Internal\invoke.vb"
+﻿#Region "Microsoft.VisualBasic::489052f1f90b4124849fe7501879c6a3, R#\Runtime\Internal\invoke.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,6 @@
     '         Constructor: (+1 Overloads) Sub New
     ' 
     '         Function: [stop], getFunction, invalidParameter, invokeInternals, missingParameter
-    '                   Rdataframe
     ' 
     '         Sub: pushEnvir
     ' 

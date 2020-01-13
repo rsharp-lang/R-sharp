@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e7b2be643713d382ab3d4c684be30b9a, R#\Runtime\Internal\objects\vector.vb"
+﻿#Region "Microsoft.VisualBasic::34f5a48ee526d01ef9cd21ecd0df39f0, R#\Runtime\Internal\objects\vector.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Class vector
     ' 
-    '         Properties: data, length
+    '         Properties: data, length, unit
     ' 
     '         Constructor: (+2 Overloads) Sub New
     '         Function: (+2 Overloads) getByIndex, getNames, setByindex, setByIndex, setNames

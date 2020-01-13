@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5d2b3d0aac3b61f25bbc8a55c5a6ec26, R#\Interpreter\ExecuteEngine\ExpressionSymbols\SymbolIndexer.vb"
+﻿#Region "Microsoft.VisualBasic::c50e074089e71bebd928728d2e0758f0, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer.vb"
 
     ' Author:
     ' 
@@ -31,6 +31,14 @@
 
     ' Summaries:
 
+    '     Enum SymbolIndexers
+    ' 
+    '         dataframeColumns, dataframeRanges, dataframeRows, nameIndex, vectorIndex
+    ' 
+    '  
+    ' 
+    ' 
+    ' 
     '     Class SymbolIndexer
     ' 
     '         Properties: type

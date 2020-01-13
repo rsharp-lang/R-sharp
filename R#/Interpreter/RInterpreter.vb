@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::43db86a19a7c001357b98b8bb7fac536, R#\Interpreter\RInterpreter.vb"
+﻿#Region "Microsoft.VisualBasic::da7760bed9b7ab07ea0925326ee5f696, R#\Interpreter\RInterpreter.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Class RInterpreter
     ' 
-    '         Properties: debug, globalEnvir, Rsharp, warnings
+    '         Properties: debug, globalEnvir, Rsharp, strict, warnings
     ' 
     '         Constructor: (+1 Overloads) Sub New
     ' 

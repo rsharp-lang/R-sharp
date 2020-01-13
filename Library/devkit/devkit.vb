@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::525c8de5d59111087ab4633f4a4a4fdd, Library\devkit\devkit.vb"
+﻿#Region "Microsoft.VisualBasic::6172ac2105533361bc60c1830a742883, Library\devkit\devkit.vb"
 
     ' Author:
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f65ae7d599756a3a8931091b6a834649, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\StringInterpolation.vb"
+﻿#Region "Microsoft.VisualBasic::4d80b2d1b259a87eff53cad393c5d8a8, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\StringInterpolation.vb"
 
     ' Author:
     ' 
