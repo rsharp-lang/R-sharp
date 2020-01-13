@@ -113,8 +113,11 @@ Namespace Runtime.Internal.Object
         End Function
 
         Public Function getByIndex(i As Integer) As Object Implements RIndex.getByIndex
-            If i >= length Then
+            If i > length Then
                 Return Nothing
+            Else
+                ' R# vector index start from 1
+                i -= 1
             End If
 
             Dim names = getNames()

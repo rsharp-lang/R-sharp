@@ -125,10 +125,10 @@ Namespace Runtime.Internal.Object
                 i = data.Length + i
             End If
 
-            If i >= data.Length OrElse i < 0 Then
+            If i > data.Length OrElse i < 0 Then
                 Return Nothing
             Else
-                Return data.GetValue(i)
+                Return data.GetValue(i - 1)
             End If
         End Function
 
