@@ -188,7 +188,7 @@ Namespace Interpreter.ExecuteEngine
                 Dim value As Token() = code(2)
                 Dim symbol As Expression()
 
-                If target.isSymbolIndexer Then
+                If target.isSimpleSymbolIndexer Then
                     symbol = {New SymbolIndexer(target)}
                 ElseIf target.isFunctionInvoke Then
                     ' func(x) <- vals

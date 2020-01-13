@@ -101,11 +101,17 @@ Namespace Interpreter.ExecuteEngine
         ''' </summary>
         Friend ReadOnly indexType As SymbolIndexers
 
+        ''' <summary>
+        ''' Simple indexer
+        ''' </summary>
+        ''' <param name="tokens">
+        ''' ``a[x]``
+        ''' </param>
         Sub New(tokens As Token())
             symbol = {tokens(Scan0)}.DoCall(AddressOf Expression.CreateExpression)
             tokens = tokens.Skip(2).Take(tokens.Length - 3).ToArray
 
-            If tokens(Scan0) = (TokenType.open, "[") AndAlso tokens.Last = (TokenType.close, "]") Then
+            If tokens.isStackOf("[", "]") Then
                 tokens = tokens _
                     .Skip(1) _
                     .Take(tokens.Length - 2) _
@@ -113,29 +119,52 @@ Namespace Interpreter.ExecuteEngine
                 indexType = SymbolIndexers.nameIndex
                 index = Expression.CreateExpression(tokens)
             Else
-                Dim blocks = tokens.SplitByTopLevelDelimiter(TokenType.comma, False)
-
-                If blocks > 1 Then
-                    ' dataframe indexer
-                    If blocks(0).isComma Then
-                        ' x[, a] by columns
-                        indexType = SymbolIndexers.dataframeColumns
-                        index = Expression.CreateExpression(blocks.Skip(1).IteratesALL)
-                    ElseIf blocks = 2 AndAlso blocks(1).isComma Then
-                        ' x[a, ] by row
-                        indexType = SymbolIndexers.dataframeRows
-                        index = Expression.CreateExpression(blocks(Scan0))
-                    Else
-                        ' x[a,b] by range
-                        indexType = SymbolIndexers.dataframeRanges
-                        index = New VectorLiteral(blocks.Where(Function(t) Not t.isComma).Select(AddressOf Expression.CreateExpression))
-                    End If
-                Else
-                    ' vector indexer
-                    indexType = SymbolIndexers.vectorIndex
-                    index = Expression.CreateExpression(tokens)
-                End If
+                Call parseIndex(tokens, index, indexType)
             End If
+        End Sub
+
+        Private Shared Sub parseIndex(tokens As Token(), ByRef index As Expression, ByRef indexType As SymbolIndexers)
+            Dim blocks = tokens.SplitByTopLevelDelimiter(TokenType.comma, False)
+
+            If blocks > 1 Then
+                ' dataframe indexer
+                If blocks(0).isComma Then
+                    ' x[, a] by columns
+                    indexType = SymbolIndexers.dataframeColumns
+                    index = Expression.CreateExpression(blocks.Skip(1).IteratesALL)
+                ElseIf blocks = 2 AndAlso blocks(1).isComma Then
+                    ' x[a, ] by row
+                    indexType = SymbolIndexers.dataframeRows
+                    index = Expression.CreateExpression(blocks(Scan0))
+                Else
+                    ' x[a,b] by range
+                    indexType = SymbolIndexers.dataframeRanges
+                    index = New VectorLiteral(blocks.Where(Function(t) Not t.isComma).Select(AddressOf Expression.CreateExpression))
+                End If
+            Else
+                ' vector indexer
+                indexType = SymbolIndexers.vectorIndex
+                index = Expression.CreateExpression(tokens)
+            End If
+        End Sub
+
+        ''' <summary>
+        ''' Complex indexer
+        ''' 
+        ''' ```
+        ''' func(...)[x]
+        ''' ```
+        ''' </summary>
+        ''' <param name="ref"></param>
+        ''' <param name="indexer"></param>
+        Sub New(ref As Token(), indexer As Token())
+            symbol = Expression.CreateExpression(ref)
+            indexer = indexer _
+                .Skip(1) _
+                .Take(indexer.Length - 2) _
+                .ToArray
+
+            Call parseIndex(indexer, index, indexType)
         End Sub
 
         ''' <summary>

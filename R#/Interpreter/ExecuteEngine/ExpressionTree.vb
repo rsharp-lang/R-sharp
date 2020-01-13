@@ -105,7 +105,7 @@ Namespace Interpreter.ExecuteEngine
                 ' 简单的表达式
                 If tokens.isFunctionInvoke Then
                     Return New FunctionInvoke(tokens)
-                ElseIf tokens.isSymbolIndexer Then
+                ElseIf tokens.isSimpleSymbolIndexer Then
                     Return New SymbolIndexer(tokens)
                 ElseIf tokens(Scan0).name = TokenType.open Then
                     Dim openSymbol = tokens(Scan0).text
@@ -121,10 +121,16 @@ Namespace Interpreter.ExecuteEngine
                             .DoCall(AddressOf ParseBinaryExpression)
                     ElseIf openSymbol = "{" Then
                         ' 是一个可以产生值的closure
-                        Throw New NotImplementedException
+                        Return New ClosureExpression(tokens)
                     End If
                 ElseIf tokens(Scan0).name = TokenType.stringInterpolation Then
                     Return New StringInterpolation(tokens(Scan0))
+                Else
+                    Dim indexer As Expression = tokens.parseComplexSymbolIndexer
+
+                    If Not indexer Is Nothing Then
+                        Return indexer
+                    End If
                 End If
             Else
                 Return ParseBinaryExpression(blocks)
