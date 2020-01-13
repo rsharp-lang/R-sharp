@@ -50,6 +50,9 @@ Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Interpreter.ExecuteEngine
 
+    ''' <summary>
+    ''' Loading/Attaching and Listing of Packages
+    ''' </summary>
     Public Class Require : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
@@ -64,6 +67,12 @@ Namespace Interpreter.ExecuteEngine
                 .ToArray
         End Sub
 
+        ''' <summary>
+        ''' require returns (invisibly) a logical indicating whether the 
+        ''' required package is available.
+        ''' </summary>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim names As New List(Of String)
             Dim [global] As GlobalEnvironment = envir.globalEnvironment
