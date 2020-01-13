@@ -43,11 +43,9 @@
 
 #End Region
 
-Imports System.ComponentModel
 Imports System.IO
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
-Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Language.UnixBash.FileSystem
@@ -59,7 +57,7 @@ Imports fsOptions = Microsoft.VisualBasic.FileIO.SearchOption
 Namespace Runtime.Internal.Invokes
 
     ''' <summary>
-    ''' ## File Manipulation
+    ''' #### File Manipulation
     ''' 
     ''' These functions provide a low-level interface to the computer's file system.
     ''' </summary>
