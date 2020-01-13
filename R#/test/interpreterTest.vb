@@ -173,7 +173,7 @@ Module interpreterTest
 
 # call a$Dispose()
 # and then delete a from the current environment
-let a as string = 'abc: ' & $;
+let a as string = 'abc: ';
 
 print(a);")
 

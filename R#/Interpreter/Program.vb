@@ -191,7 +191,9 @@ Namespace Interpreter
         End Function
 
         Public Overrides Function ToString() As String
-            Return execQueue.Select(Function(exp) exp.ToString & ";").JoinBy(vbCrLf)
+            Return execQueue _
+                .Select(Function(exp) exp.ToString & ";") _
+                .JoinBy(vbCrLf)
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>

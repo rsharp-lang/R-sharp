@@ -53,5 +53,12 @@ Namespace Interpreter.ExecuteEngine
                 Return result
             End Using
         End Function
+
+        Public Overrides Function ToString() As String
+            Return $"using {params} {{
+    # using closure internal
+    {closure}
+}}"
+        End Function
     End Class
 End Namespace
