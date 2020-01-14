@@ -96,7 +96,7 @@ Namespace Runtime.Interop
                     defaultValue = $"""{[default]}"""
                 ElseIf type.raw.IsEnum Then
                     defaultValue = enumPrinter.defaultValueToString([default], type)
-                ElseIf type.raw.IsArray Then
+                ElseIf [default].GetType.IsArray Then
                     defaultValue = JSON.GetObjectJson([default].GetType, [default], indent:=False)
                 Else
                     defaultValue = [default].ToString.ToUpper
