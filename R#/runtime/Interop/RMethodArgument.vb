@@ -74,6 +74,18 @@ Namespace Runtime.Interop
 
         Friend rawVectorFlag As RRawVectorArgumentAttribute
 
+        ''' <summary>
+        ''' Get element type of the target raw vector
+        ''' </summary>
+        ''' <returns></returns>
+        Public Function GetRawVectorElementType() As Type
+            If Not rawVectorFlag Is Nothing Then
+                Return rawVectorFlag.vector
+            Else
+                Return Nothing
+            End If
+        End Function
+
         Public Overrides Function ToString() As String
             Dim defaultValue As String = "``<NULL>``"
 

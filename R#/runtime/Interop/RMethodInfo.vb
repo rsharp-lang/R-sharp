@@ -274,6 +274,8 @@ Namespace Runtime.Interop
                 value = value
             ElseIf Not arg.isRequireRawVector Then
                 value = Runtime.getFirst(value)
+            ElseIf arg.isRequireRawVector AndAlso Not arg.rawVectorFlag.vector Is Nothing Then
+                Return Runtime.asVector(value, arg.rawVectorFlag.vector, envir)
             End If
 
             Try
