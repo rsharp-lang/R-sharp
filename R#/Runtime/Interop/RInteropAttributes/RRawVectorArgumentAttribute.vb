@@ -24,6 +24,12 @@
         Public ReadOnly Property vector As Type
         Public ReadOnly Property parser As Type
 
+        Public ReadOnly Property containsLiteral As Boolean
+            Get
+                Return Not (vector Is Nothing OrElse parser Is Nothing)
+            End Get
+        End Property
+
         ''' <summary>
         ''' 
         ''' </summary>

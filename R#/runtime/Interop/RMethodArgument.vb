@@ -71,6 +71,8 @@ Namespace Runtime.Interop
         ''' <returns></returns>
         Public Property isRequireRawVector As Boolean
 
+        Friend rawVectorFlag As RRawVectorArgumentAttribute
+
         Public Overrides Function ToString() As String
             Dim defaultValue As String = "``<NULL>``"
 
@@ -105,12 +107,28 @@ Namespace Runtime.Interop
             Return New RMethodArgument With {
                 .name = p.Name,
                 .type = RType.GetRSharpType(p.ParameterType),
-                .[default] = p.DefaultValue,
+                .rawVectorFlag = p.GetCustomAttribute(Of RRawVectorArgumentAttribute),
+                .[default] = getDefaultVector(.rawVectorFlag, p.DefaultValue),
                 .isOptional = p.HasDefaultValue,
                 .isObjectList = Not p.GetCustomAttribute(Of RListObjectArgumentAttribute) Is Nothing,
-                .isRequireRawVector = Not p.GetCustomAttribute(Of RRawVectorArgumentAttribute) Is Nothing,
+                .isRequireRawVector = Not .rawVectorFlag Is Nothing,
                 .isByrefValueParameter = Not p.GetCustomAttribute(Of RByRefValueAssignAttribute) Is Nothing
             }
+        End Function
+
+        Private Shared Function getDefaultVector(flag As RRawVectorArgumentAttribute, [default] As Object) As Object
+            If flag Is Nothing OrElse [default] Is Nothing Then
+                Return [default]
+            ElseIf Not flag.containsLiteral Then
+                Return [default]
+            End If
+
+            If [default].GetType Is GetType(String) Then
+                ' parser works for string expression only
+                Return flag.GetVector(DirectCast([default], String))
+            Else
+                Return [default]
+            End If
         End Function
     End Class
 End Namespace
