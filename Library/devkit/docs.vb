@@ -156,8 +156,9 @@ Module docs
                 <hr/>
 
                 <p>
-                    {$summary}                    
-                    <pre><code>{$usage}</code></pre>
+                    {$summary}  
+                
+                    <pre>{$usage}</pre>
 
                     {$parameters}
                        
@@ -181,9 +182,8 @@ Module docs
             !summary = markdown.Transform(apiDocs.Summary)
             !remarks = markdown.Transform(apiDocs.Remarks)
             !usage = api.GetPrintContent _
-                .Replace("<", "&lt;") _
                 .DoCall(AddressOf markdown.Transform) _
-                .Replace(" ", "&nbsp;")
+                .Replace("<br />", "")
             !parameters = parameters
 
             If apiDocs.Returns.StringEmpty Then
