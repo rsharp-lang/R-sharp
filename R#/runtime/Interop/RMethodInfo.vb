@@ -129,6 +129,9 @@ Namespace Runtime.Interop
             Dim rawDeclare$ = raw.FullName
             Dim packageName$ = raw.NamespaceEntry(True).Namespace
             Dim params$
+            Dim returns As RType = RApiReturnAttribute _
+                .GetActualReturnType(GetRawDeclares) _
+                .DoCall(AddressOf RType.GetRSharpType)
 
             If parameters.Length > 3 Then
                 params = parameters.JoinBy(", " & vbCrLf)
@@ -136,7 +139,7 @@ Namespace Runtime.Interop
                 params = parameters.JoinBy(", ")
             End If
 
-            Return $"let ``{name}`` as function({params}) {{
+            Return $"let ``{name}`` as function({params}) -> ``{returns}`` {{
     #
     # .NET API information
     #
