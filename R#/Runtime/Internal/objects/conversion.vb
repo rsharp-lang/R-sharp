@@ -81,6 +81,30 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        <ExportAPI("unlist")>
+        Public Function unlist(list As Object, Optional [typeof] As Type = Nothing, Optional env As Environment = Nothing) As Object
+            If list Is Nothing Then
+                Return Nothing
+            End If
+
+            If list.GetType Is GetType(list) Then
+                Dim rlist As list = DirectCast(list, list)
+                Dim data = rlist.getNames.Select(Function(key) rlist.slots(key))
+                Dim vec As vector
+
+                If [typeof] Is Nothing Then
+                    vec = New vector(rlist.getNames, data.ToArray, env)
+                Else
+                    vec = New vector([typeof], data)
+                    vec.setNames(rlist.getNames, env)
+                End If
+
+                Return vec
+            Else
+                Return Internal.stop(New InvalidCastException, env)
+            End If
+        End Function
+
         ''' <summary>
         ''' Cast the raw dictionary object to R# list object
         ''' </summary>
