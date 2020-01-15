@@ -70,11 +70,16 @@ Namespace System.Package
             Dim docXml As String = assembly.Location.TrimSuffix & ".xml"
             Dim type As ProjectType
 
-            ' get xml docs from app path or annotation folder
-            ' in app home folder
             If Not docXml.FileExists Then
-                docXml = assembly.Location.ParentPath
-                docXml = docXml & $"/Annotation/{assembly.Location.BaseName}.xml"
+                ' get xml docs from app path or annotation folder
+                ' in app home folder
+                For Each dir As String In {"/", "Annotation", "Library"}
+                    docXml = $"{App.HOME}/{dir}/{assembly.Location.BaseName}.xml"
+
+                    If docXml.FileExists Then
+                        Exit For
+                    End If
+                Next
             End If
 
             If docXml.FileExists AndAlso Not projects.ContainsKey(projectKey) Then
