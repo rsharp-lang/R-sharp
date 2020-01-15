@@ -92,21 +92,22 @@ Namespace Interpreter.ExecuteEngine
                 End If
             ElseIf keyword = "valueof" Then
                 If value Is Nothing Then
-                    Return GetType(Void)
+                    Return RType.GetRSharpType(GetType(Void))
                 ElseIf value.GetType Is GetType(Message) Then
                     Return value
                 ElseIf value.GetType Is GetType(RMethodInfo) Then
                     Return DirectCast(value, RMethodInfo) _
                         .GetRawDeclares _
-                        .DoCall(AddressOf RApiReturnAttribute.GetActualReturnType)
+                        .DoCall(AddressOf RApiReturnAttribute.GetActualReturnType) _
+                        .DoCall(AddressOf RType.GetRSharpType)
                 Else
                     Return Message.InCompatibleType(GetType(RMethodInfo), value.GetType, envir)
                 End If
             Else
                 If value Is Nothing Then
-                    Return GetType(Void)
+                    Return RType.GetRSharpType(GetType(Void))
                 Else
-                    Return value.GetType
+                    Return RType.GetRSharpType(value.GetType)
                 End If
             End If
         End Function

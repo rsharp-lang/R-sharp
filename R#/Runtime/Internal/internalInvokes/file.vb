@@ -52,6 +52,7 @@ Imports Microsoft.VisualBasic.Language.UnixBash.FileSystem
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports fsOptions = Microsoft.VisualBasic.FileIO.SearchOption
 
 Namespace Runtime.Internal.Invokes
@@ -74,6 +75,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="envir"></param>
         ''' <returns></returns>
         <ExportAPI("normalizePath")>
+        <RApiReturn(GetType(String()))>
         Public Function normalizePath(fileNames$(), envir As Environment) As Object
             If fileNames.IsNullOrEmpty Then
                 Return Internal.stop("no file names provided!", envir)
@@ -91,7 +93,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("R.home")>
-        Public Function Rhome() As Object
+        Public Function Rhome() As String
             Return GetType(file).Assembly.Location.ParentPath
         End Function
 
@@ -102,7 +104,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="fileNames">character vector, containing path names.</param>
         ''' <returns></returns>
         <ExportAPI("dirname")>
-        Public Function dirname(fileNames As String()) As Object
+        Public Function dirname(fileNames As String()) As String()
             Return fileNames.Select(AddressOf ParentPath).ToArray
         End Function
 
@@ -118,6 +120,7 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <returns></returns>
         <ExportAPI("list.files")>
+        <RApiReturn(GetType(String()))>
         Public Function listFiles(Optional dir$ = "./",
                                   Optional pattern$() = Nothing,
                                   Optional recursive As Boolean = False) As Object
@@ -144,6 +147,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="recursive"></param>
         ''' <returns></returns>
         <ExportAPI("list.dirs")>
+        <RApiReturn(GetType(String()))>
         Public Function listDirs(Optional dir$ = "./",
                                  Optional fullNames As Boolean = True,
                                  Optional recursive As Boolean = True) As Object
@@ -167,7 +171,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="withExtensionName"></param>
         ''' <returns></returns>
         <ExportAPI("basename")>
-        Public Function basename(fileNames$(), Optional withExtensionName As Boolean = False) As Object
+        Public Function basename(fileNames$(), Optional withExtensionName As Boolean = False) As String()
             If withExtensionName Then
                 ' get fileName
                 Return fileNames.Select(AddressOf FileName).ToArray
@@ -282,6 +286,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="envir"></param>
         ''' <returns></returns>
         <ExportAPI("setwd")>
+        <RApiReturn(GetType(String))>
         Public Function setwd(dir$(), envir As Environment) As Object
             If dir.Length = 0 Then
                 Return invoke.missingParameter(NameOf(setwd), "dir", envir)
