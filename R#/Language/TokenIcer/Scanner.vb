@@ -192,7 +192,7 @@ Namespace Language.TokenIcer
             "in", "like", "from", "where", "order", "by", "distinct", "select",
             "ascending", "descending",
             "suppress",
-            "typeof", "modeof",
+            "typeof", "modeof", "valueof",
             "using"
         }
 
