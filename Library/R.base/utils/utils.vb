@@ -116,6 +116,7 @@ Public Module utils
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("write.csv")>
+    <RApiReturn(GetType(Boolean))>
     Public Function write_csv(<RRawVectorArgument> x As Object, file$, env As Environment) As Object
         If x Is Nothing Then
             Return Internal.debug.stop("Empty dataframe object!", env)
