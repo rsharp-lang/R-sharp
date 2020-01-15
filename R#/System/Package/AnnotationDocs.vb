@@ -109,7 +109,7 @@ Namespace System.Package
                 docs = type.GetMethods(func.Name).ElementAtOrDefault(Scan0)
             End If
 
-            If requireNoneNull Then
+            If docs Is Nothing AndAlso requireNoneNull Then
                 docs = New ProjectMember(type)
             End If
 
