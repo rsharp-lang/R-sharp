@@ -76,7 +76,7 @@ Namespace Runtime.Internal.Object
             For Each obj As Object In input
                 buffer.SetValue(obj, CInt(i))
 
-                If ++i = data.Length Then
+                If ++i = buffer.Length Then
                     ' resize vector buffer
                     data = buffer
                     buffer = Array.CreateInstance(model, BufferSize + buffer.Length)
@@ -85,7 +85,7 @@ Namespace Runtime.Internal.Object
             Next
 
             ' trim the vector to its acutal size
-            data = Array.CreateInstance(model, CInt(i) - 1)
+            data = Array.CreateInstance(model, length:=i)
             Array.ConstrainedCopy(buffer, Scan0, data, Scan0, data.Length)
         End Sub
 

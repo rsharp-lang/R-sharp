@@ -137,7 +137,7 @@ Public Module utils
             Return DirectCast(Runtime.asVector(Of EntityObject)(x), EntityObject()).SaveTo(path:=file, encoding:=Encodings.UTF8WithoutBOM.CodePage, silent:=True)
         ElseIf Runtime.isVector(Of DataSet)(x) Then
             Return DirectCast(Runtime.asVector(Of DataSet)(x), DataSet()).SaveTo(path:=file, encoding:=Encodings.UTF8WithoutBOM.CodePage, silent:=True)
-        ElseIf type.IsArray Then
+        ElseIf type.IsArray OrElse type Is GetType(vector) Then
             Return saveGeneric(x, type, file, env)
         Else
             Return Message.InCompatibleType(GetType(File), type, env)
