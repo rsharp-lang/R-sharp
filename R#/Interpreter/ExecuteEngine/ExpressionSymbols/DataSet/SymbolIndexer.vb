@@ -186,11 +186,18 @@ Namespace Interpreter.ExecuteEngine
                 Return emptyIndexError(Me, envir)
             ElseIf Program.isException(obj) Then
                 Return obj
+            ElseIf obj Is Nothing Then
+                Return Nothing
             End If
 
+            ' now obj is always have values:
             If indexType = SymbolIndexers.nameIndex Then
+                ' a[[name]]
+                ' a$name
                 Return getByName(obj, indexer, envir)
             Else
+                ' a[name]
+                ' a[index]
                 Return getByIndex(obj, indexer, envir)
             End If
         End Function
@@ -213,27 +220,46 @@ Namespace Interpreter.ExecuteEngine
             End If
         End Function
 
+        ''' <summary>
+        ''' vec[names/x] or list[names/index]
+        ''' </summary>
+        ''' <param name="obj"></param>
+        ''' <param name="indexer"></param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         Private Function getByIndex(obj As Object, indexer As Array, envir As Environment) As Object
-            Dim sequence As Array = Runtime.asVector(Of Object)(obj)
-            Dim Rarray As RIndex
+            If obj.GetType Is GetType(list) Then
+                Dim list As list = DirectCast(obj, list)
 
-            If sequence Is Nothing OrElse sequence.Length = 0 Then
-                Return Nothing
-            ElseIf sequence.Length = 1 AndAlso sequence.GetValue(Scan0).GetType.ImplementInterface(GetType(RIndex)) Then
-                Rarray = sequence.GetValue(Scan0)
-
-                '' by element index
-                'If Not sequence.GetType.ImplementInterface(GetType(RIndex)) Then
-                '    Return Internal.stop("Target object can not be indexed!", envir)
-                'End If
+                If Runtime.isVector(Of String)(indexer) Then
+                    ' get by names
+                    Return list.getByName(Runtime.asVector(Of String)(indexer))
+                Else
+                    ' get by index
+                    Return list.getByIndex(Runtime.asVector(Of Integer)(indexer))
+                End If
             Else
-                Rarray = New vector With {.data = sequence}
-            End If
+                Dim sequence As Array = Runtime.asVector(Of Object)(obj)
+                Dim Rarray As RIndex
 
-            If indexer.Length = 1 Then
-                Return Rarray.getByIndex(CInt(indexer.GetValue(Scan0)))
-            Else
-                Return Rarray.getByIndex(Runtime.asVector(Of Integer)(indexer))
+                If sequence.Length = 0 Then
+                    Return Nothing
+                ElseIf sequence.Length = 1 AndAlso sequence.GetValue(Scan0).GetType.ImplementInterface(GetType(RIndex)) Then
+                    Rarray = sequence.GetValue(Scan0)
+
+                    '' by element index
+                    'If Not sequence.GetType.ImplementInterface(GetType(RIndex)) Then
+                    '    Return Internal.stop("Target object can not be indexed!", envir)
+                    'End If
+                Else
+                    Rarray = New vector With {.data = sequence}
+                End If
+
+                If indexer.Length = 1 Then
+                    Return Rarray.getByIndex(CInt(indexer.GetValue(Scan0)))
+                Else
+                    Return Rarray.getByIndex(Runtime.asVector(Of Integer)(indexer))
+                End If
             End If
         End Function
 

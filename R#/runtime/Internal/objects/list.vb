@@ -152,8 +152,19 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        ''' <summary>
+        ''' Create a list subset
+        ''' </summary>
+        ''' <param name="names"></param>
+        ''' <returns></returns>
         Public Function getByName(names() As String) As Object Implements RNameIndex.getByName
-            Return names.Select(AddressOf getByName).ToArray
+            Dim subset As Dictionary(Of String, Object) = names _
+                .ToDictionary(Function(key) key,
+                              Function(key)
+                                  Return getByName(key)
+                              End Function)
+
+            Return New list With {.slots = subset}
         End Function
 
         Public Function setByName(name As String, value As Object, envir As Environment) As Object Implements RNameIndex.setByName
