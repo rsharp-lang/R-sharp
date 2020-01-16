@@ -65,6 +65,57 @@ Namespace Runtime.Internal.Invokes
     Module file
 
         ''' <summary>
+        ''' ``file.copy`` works in a similar way to ``file.append`` but with the arguments 
+        ''' in the natural order for copying. Copying to existing destination files is 
+        ''' skipped unless overwrite = TRUE. The to argument can specify a single existing 
+        ''' directory. If copy.mode = TRUE file read/write/execute permissions are copied 
+        ''' where possible, restricted by ‘umask’. (On Windows this applies only to files.
+        ''' ) Other security attributes such as ACLs are not copied. On a POSIX filesystem 
+        ''' the targets of symbolic links will be copied rather than the links themselves, 
+        ''' and hard links are copied separately. Using copy.date = TRUE may or may not 
+        ''' copy the timestamp exactly (for example, fractional seconds may be omitted), 
+        ''' but is more likely to do so as from R 3.4.0.
+        ''' </summary>
+        ''' <param name="from"></param>
+        ''' <param name="to"></param>
+        ''' <returns>
+        ''' These functions return a logical vector indicating which operation succeeded 
+        ''' for each of the files attempted. Using a missing value for a file or path 
+        ''' name will always be regarded as a failure.
+        ''' </returns>
+        ''' 
+        <ExportAPI("file.copy")>
+        <RApiReturn(GetType(Boolean()))>
+        Public Function filecopy(from$(), to$(), Optional env As Environment = Nothing) As Object
+            Dim result As New List(Of Object)
+            Dim isDir As Boolean = from.Length > 1 AndAlso [to].Length = 1
+
+            If isDir Then
+                Dim dirName$ = [to](Scan0) & "/"
+
+                For Each file As String In from
+                    If file.FileCopy(dirName) Then
+                        result.Add(True)
+                    Else
+                        result.Add(file)
+                    End If
+                Next
+            ElseIf from.Length <> [to].Length Then
+                Return Internal.stop("number of from files is not equals to the number of target file locations!", env)
+            Else
+                For i As Integer = 0 To from.Length - 1
+                    If from(i).FileCopy([to](i)) Then
+                        result.Add(True)
+                    Else
+                        result.Add(from(i))
+                    End If
+                Next
+            End If
+
+            Return result.ToArray
+        End Function
+
+        ''' <summary>
         ''' Express File Paths in Canonical Form
         ''' 
         ''' Convert file paths to canonical form for the platform, to display them in a 
