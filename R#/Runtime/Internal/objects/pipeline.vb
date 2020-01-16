@@ -15,8 +15,8 @@ Namespace Runtime.Internal.Object
             elementType = RType.GetRSharpType(type)
         End Sub
 
-        Public Function createVector() As vector
-            Return New vector(elementType, pipeline)
+        Public Function createVector(env As Environment) As vector
+            Return New vector(elementType, pipeline, env)
         End Function
 
         Public Iterator Function populates(Of T)() As IEnumerable(Of T)

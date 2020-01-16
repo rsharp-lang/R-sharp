@@ -1,52 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::34f5a48ee526d01ef9cd21ecd0df39f0, R#\Runtime\Internal\objects\vector.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class vector
-    ' 
-    '         Properties: data, length, unit
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: (+2 Overloads) getByIndex, getNames, setByindex, setByIndex, setNames
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class vector
+' 
+'         Properties: data, length, unit
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: (+2 Overloads) getByIndex, getNames, setByindex, setByIndex, setNames
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Object
 
@@ -61,20 +63,42 @@ Namespace Runtime.Internal.Object
             End Get
         End Property
 
+        Public ReadOnly Property type As RType
+            Get
+                Return data _
+                    .GetType _
+                    .GetElementType _
+                    .DoCall(AddressOf RType.GetRSharpType)
+            End Get
+        End Property
+
         Dim names As String()
         Dim nameIndex As Index(Of String)
 
         Sub New()
         End Sub
 
-        Sub New(model As Type, input As IEnumerable)
+        ''' <summary>
+        ''' Create a vector from a pipeline model and given array element <paramref name="model"/> type
+        ''' </summary>
+        ''' <param name="model"></param>
+        ''' <param name="input"></param>
+        Sub New(model As Type, input As IEnumerable, env As Environment)
             Dim i As i32 = Scan0
             ' create an empty vector with 
             ' allocable data buffer
             Dim buffer As Array = Array.CreateInstance(model, BufferSize)
 
             For Each obj As Object In input
-                buffer.SetValue(obj, CInt(i))
+                If Not obj Is Nothing Then
+                    If obj.GetType Is model Then
+                        ' do nothing
+                    ElseIf obj.GetType.IsInheritsFrom(model) Then
+                        obj = RConversion.CTypeDynamic(obj, model, env)
+                    End If
+                End If
+
+                Call buffer.SetValue(obj, CInt(i))
 
                 If ++i = buffer.Length Then
                     ' resize vector buffer
@@ -196,6 +220,10 @@ Namespace Runtime.Internal.Object
             Next
 
             Return result.ToArray
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return $"[{length}] vec<{type.ToString}>"
         End Function
     End Class
 End Namespace

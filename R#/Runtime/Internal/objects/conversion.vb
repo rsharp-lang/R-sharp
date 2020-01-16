@@ -95,7 +95,7 @@ Namespace Runtime.Internal.Object
                 If [typeof] Is Nothing Then
                     vec = New vector(rlist.getNames, data.ToArray, env)
                 Else
-                    vec = New vector([typeof], data)
+                    vec = New vector([typeof], data, env)
                     vec.setNames(rlist.getNames, env)
                 End If
 

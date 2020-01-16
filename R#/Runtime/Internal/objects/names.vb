@@ -65,22 +65,39 @@ Namespace Runtime.Internal.Object
                     If type.IsArray Then
                         Dim objVec As Array = Runtime.asVector(Of Object)([object])
 
-                        If objVec.AsObjectEnumerator.All(Function(o) o.GetType Is GetType(Group)) Then
+                        If objVec _
+                            .AsObjectEnumerator _
+                            .All(Function(o)
+                                     Return o.GetType Is GetType(Group)
+                                 End Function) Then
+
                             Return objVec.AsObjectEnumerator _
                                 .Select(Function(g)
                                             Return Scripting.ToString(DirectCast(g, Group).key, "NULL")
                                         End Function) _
                                 .ToArray
-                        ElseIf objVec.AsObjectEnumerator.All(Function(o)
-                                                                 Return o.GetType.ImplementInterface(GetType(INamedValue))
-                                                             End Function) Then
+                        ElseIf objVec _
+                            .AsObjectEnumerator _
+                            .All(Function(o)
+                                     Return o.GetType.ImplementInterface(GetType(INamedValue))
+                                 End Function) Then
+
                             Return objVec.AsObjectEnumerator _
                                 .Select(Function(o)
                                             Return DirectCast(o, INamedValue).Key
                                         End Function) _
                                 .ToArray
                         End If
+                    ElseIf type.ImplementInterface(GetType(IDictionary)) Then
+                        Dim keys As vector = DirectCast([object], IDictionary) _
+                            .Keys _
+                            .DoCall(Function(a)
+                                        Return New vector(GetType(String), a, env:=envir)
+                                    End Function)
+
+                        Return keys
                     End If
+
                     Return Internal.stop({"unsupported!", "func: names"}, envir)
             End Select
         End Function
