@@ -275,13 +275,24 @@ Namespace Interpreter.ExecuteEngine
                 Return Internal.stop({"Target symbol can not be indexed by name!", $"SymbolName: {symbolIndex.symbol}"}, envir)
             End If
 
-            Dim indexStr As String = Scripting.ToString(index, Nothing)
+            Dim indexStr As String() = Runtime.asVector(Of String)(index)
+            Dim result As Object
 
-            If indexStr.StringEmpty Then
+            If indexStr.IsNullOrEmpty Then
                 Return SymbolIndexer.emptyIndexError(symbolIndex, envir)
             End If
 
-            Dim result As Object = DirectCast(targetObj, RNameIndex).setByName(indexStr, value, envir)
+            If symbolIndex.indexType = SymbolIndexers.nameIndex Then
+                ' a[[x]] <- v
+                ' a$x <- v
+                result = DirectCast(targetObj, RNameIndex).setByName(indexStr(Scan0), value, envir)
+
+                If indexStr.Length > 1 Then
+                    envir.AddMessage($"'{symbolIndex.index}' contains multiple index, only use first index key value...")
+                End If
+            Else
+                result = DirectCast(targetObj, RNameIndex).setByName(indexStr, value, envir)
+            End If
 
             If Not result Is Nothing AndAlso result.GetType Is GetType(Message) Then
                 Return result
