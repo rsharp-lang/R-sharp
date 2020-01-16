@@ -90,6 +90,10 @@ Namespace Runtime.Internal.Invokes
             Dim result As New List(Of Object)
             Dim isDir As Boolean = from.Length > 1 AndAlso [to].Length = 1
 
+            If from.Length = 0 Then
+                Return {}
+            End If
+
             If isDir Then
                 Dim dirName$ = [to](Scan0) & "/"
 
