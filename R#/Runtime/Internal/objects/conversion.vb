@@ -1,48 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::1581f6e965897670e83d0974f90d5a21, R#\Runtime\Internal\objects\conversion.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module RConversion
-    ' 
-    '         Function: asCharacters, asInteger, asList, asLogicals, asNumeric
-    '                   asObject, CastToEnum, CTypeDynamic, listInternal
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module RConversion
+' 
+'         Function: asCharacters, asInteger, asList, asLogicals, asNumeric
+'                   asObject, CastToEnum, CTypeDynamic, listInternal
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -89,14 +90,31 @@ Namespace Runtime.Internal.Object
 
             If list.GetType Is GetType(list) Then
                 Dim rlist As list = DirectCast(list, list)
-                Dim data = rlist.getNames.Select(Function(key) rlist.slots(key))
+                Dim data As New List(Of Object)
+                Dim names As New List(Of String)
                 Dim vec As vector
 
+                For Each name As String In rlist.getNames
+                    Dim a As Array = Runtime.asVector(Of Object)(rlist.slots(name))
+
+                    If a.Length = 1 Then
+                        data.Add(a.GetValue(Scan0))
+                        names.Add(name)
+                    Else
+                        Dim i As i32 = 1
+
+                        For Each item As Object In a
+                            data.Add(item)
+                            names.Add($"{name}{++i}")
+                        Next
+                    End If
+                Next
+
                 If [typeof] Is Nothing Then
-                    vec = New vector(rlist.getNames, data.ToArray, env)
+                    vec = New vector(names, data.ToArray, env)
                 Else
-                    vec = New vector([typeof], data, env)
-                    vec.setNames(rlist.getNames, env)
+                    vec = New vector([typeof], data.AsEnumerable, env)
+                    vec.setNames(names.ToArray, env)
                 End If
 
                 Return vec
