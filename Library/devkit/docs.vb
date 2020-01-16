@@ -109,6 +109,26 @@ Module docs
 
     ReadOnly markdown As New MarkdownHTML
 
+    <ExportAPI("markdown.docs")>
+    Public Function makeMarkdownDocs(package$, Optional env As Environment = Nothing) As String
+        Dim globalEnv As GlobalEnvironment = env.globalEnvironment
+        Dim apis As NamedValue(Of MethodInfo)() = globalEnv.packages _
+            .FindPackage(package, Nothing) _
+            .DoCall(AddressOf ImportsPackage.GetAllApi) _
+            .ToArray
+        Dim docs As New ScriptBuilder("")
+
+        With docs
+            !packageName = package
+            !packageDescription = globalEnv.packages _
+                .GetPackageDocuments(package) _
+                .DoCall(AddressOf markdown.Transform)
+            ' !apiList = apiList.JoinBy("<br />")
+        End With
+
+        Return docs.ToString
+    End Function
+
     ''' <summary>
     ''' Create html help document for the specific package module
     ''' </summary>
