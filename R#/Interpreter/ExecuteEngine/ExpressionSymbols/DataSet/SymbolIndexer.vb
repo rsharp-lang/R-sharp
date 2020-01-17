@@ -195,10 +195,25 @@ Namespace Interpreter.ExecuteEngine
                 ' a[[name]]
                 ' a$name
                 Return getByName(obj, indexer, envir)
-            Else
+            ElseIf indexType = SymbolIndexers.vectorIndex Then
                 ' a[name]
                 ' a[index]
                 Return getByIndex(obj, indexer, envir)
+            ElseIf indexType = SymbolIndexers.dataframeColumns Then
+                Return getColumn(obj, indexer, envir)
+            Else
+                Return Internal.stop(New NotImplementedException(indexType.ToString), envir)
+            End If
+        End Function
+
+        Private Function getColumn(obj As dataframe, indexer As Array, envir As Environment) As Object
+            If indexer.Length = 0 Then
+                Return Nothing
+            ElseIf indexer.Length = 1 Then
+                Return obj.GetColumnVector(Scripting.ToString(indexer.GetValue(Scan0)))
+            Else
+                ' dataframe projection
+                Return obj.projectByColumn(indexer)
             End If
         End Function
 
