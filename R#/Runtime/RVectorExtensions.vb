@@ -177,7 +177,7 @@ Namespace Runtime
             If value Is Nothing Then
                 Return {}
             Else
-                If value Is GetType(vector) Then
+                If value.GetType Is GetType(vector) Then
                     value = DirectCast(value, vector).data
                 End If
 
