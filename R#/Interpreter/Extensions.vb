@@ -85,16 +85,37 @@ Namespace Interpreter
                         .Where(Function(t) Not t.name = TokenType.comment) _
                         .SplitByTopLevelDelimiter(TokenType.close,, "}") _
                         .Split(2)
-                    Dim expr As Expression
+                    Dim expr As SyntaxResult
 
                     For Each joinBlock In parts
                         block = joinBlock(Scan0).JoinIterates(joinBlock.ElementAtOrDefault(1)).ToArray
                         expr = Expression.CreateExpression(block)
 
-                        Yield expr
+                        If expr.isException Then
+                            Call SyntaxErrorHelper(
+                                syntaxResult:=expr,
+                                Rscript:=Rscript,
+                                tokens:=block
+                            )
+                        Else
+                            Yield expr.expression
+                        End If
                     Next
                 End If
             Next
         End Function
+
+        Private Sub SyntaxErrorHelper(Rscript As Rscript, tokens As Token(), syntaxResult As SyntaxResult)
+            Dim rawText As String = Rscript.GetRawText(tokens)
+            Dim err As Exception = syntaxResult.error
+            Dim message As String = err.ToString
+
+            message &= vbCrLf & vbCrLf & "Syntax error nearby:"
+            message &= vbCrLf & vbCrLf & rawText
+            message &= vbCrLf & vbCrLf & "The parser stack trace:"
+            message &= vbCrLf & vbCrLf & syntaxResult.stackTrace
+
+            Throw New Exception(message)
+        End Sub
     End Module
 End Namespace
