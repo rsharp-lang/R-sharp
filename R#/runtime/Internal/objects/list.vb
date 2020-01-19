@@ -71,6 +71,17 @@ Namespace Runtime.Internal.Object
             End Get
         End Property
 
+        Sub New()
+        End Sub
+
+        Sub New(table As IDictionary)
+            _slots = New Dictionary(Of String, Object)
+
+            For Each itemKey In table.Keys
+                _slots(itemKey.ToString) = table(itemKey)
+            Next
+        End Sub
+
         Public Function getNames() As String() Implements RNames.getNames
             Return slots.Keys.ToArray
         End Function

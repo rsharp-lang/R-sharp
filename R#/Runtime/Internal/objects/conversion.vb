@@ -41,6 +41,7 @@
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
@@ -89,38 +90,44 @@ Namespace Runtime.Internal.Object
             End If
 
             If list.GetType Is GetType(list) Then
-                Dim rlist As list = DirectCast(list, list)
-                Dim data As New List(Of Object)
-                Dim names As New List(Of String)
-                Dim vec As vector
-
-                For Each name As String In rlist.getNames
-                    Dim a As Array = Runtime.asVector(Of Object)(rlist.slots(name))
-
-                    If a.Length = 1 Then
-                        data.Add(a.GetValue(Scan0))
-                        names.Add(name)
-                    Else
-                        Dim i As i32 = 1
-
-                        For Each item As Object In a
-                            data.Add(item)
-                            names.Add($"{name}{++i}")
-                        Next
-                    End If
-                Next
-
-                If [typeof] Is Nothing Then
-                    vec = New vector(names, data.ToArray, env)
-                Else
-                    vec = New vector([typeof], data.AsEnumerable, env)
-                    vec.setNames(names.ToArray, env)
-                End If
-
-                Return vec
+                Return DirectCast(list, list).unlistOfRList([typeof], env)
+            ElseIf list.GetType.ImplementInterface(GetType(IDictionary)) Then
+                Return New list(list).unlistOfRList([typeof], env)
             Else
-                Return Internal.stop(New InvalidCastException, env)
+                Return Internal.stop(New InvalidCastException(list.GetType.FullName), env)
             End If
+        End Function
+
+        <Extension>
+        Private Function unlistOfRList(rlist As list, [typeof] As Type, env As Environment) As Object
+            Dim data As New List(Of Object)
+            Dim names As New List(Of String)
+            Dim vec As vector
+
+            For Each name As String In rlist.getNames
+                Dim a As Array = Runtime.asVector(Of Object)(rlist.slots(name))
+
+                If a.Length = 1 Then
+                    data.Add(a.GetValue(Scan0))
+                    names.Add(name)
+                Else
+                    Dim i As i32 = 1
+
+                    For Each item As Object In a
+                        data.Add(item)
+                        names.Add($"{name}{++i}")
+                    Next
+                End If
+            Next
+
+            If [typeof] Is Nothing Then
+                vec = New vector(names, data.ToArray, env)
+            Else
+                vec = New vector([typeof], data.AsEnumerable, env)
+                vec.setNames(names.ToArray, env)
+            End If
+
+            Return vec
         End Function
 
         ''' <summary>
