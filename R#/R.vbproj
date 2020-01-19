@@ -266,6 +266,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interpreter\SyntaxResult.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\ByRefFunctionCall.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CLI\CommandLineArgument.vb" />

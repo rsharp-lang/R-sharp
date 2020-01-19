@@ -1,44 +1,44 @@
 ﻿#Region "Microsoft.VisualBasic::bb41647eca889208389f186f1da37d07, R#\Interpreter\ExecuteEngine\Expression.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class Expression
-    ' 
-    '         Properties: expressionName
-    ' 
-    '         Function: CreateExpression, keywordExpressionHandler, ParseExpression
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class Expression
+' 
+'         Properties: expressionName
+' 
+'         Function: CreateExpression, keywordExpressionHandler, ParseExpression
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -79,13 +79,13 @@ Namespace Interpreter.ExecuteEngine
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
-        Public Shared Function CreateExpression(code As IEnumerable(Of Token)) As Expression
+        Friend Shared Function CreateExpression(code As IEnumerable(Of Token)) As SyntaxResult
             Return code _
                 .SplitByTopLevelDelimiter(TokenType.operator, includeKeyword:=True) _
                 .DoCall(AddressOf ParseExpression)
         End Function
 
-        Friend Shared Function keywordExpressionHandler(code As List(Of Token())) As Expression
+        Friend Shared Function keywordExpressionHandler(code As List(Of Token())) As SyntaxResult
             Dim keyword As String = code(Scan0)(Scan0).text
 
             Select Case keyword
@@ -111,12 +111,16 @@ Namespace Interpreter.ExecuteEngine
 
                     Return New DeclareNewFunction(code)
                 Case "suppress"
-                    Dim evaluate As Expression = code _
+                    Dim evaluate As SyntaxResult = code _
                         .Skip(1) _
                         .IteratesALL _
                         .DoCall(AddressOf Expression.CreateExpression)
 
-                    Return New Suppress(evaluate)
+                    If evaluate.isException Then
+                        Return evaluate
+                    Else
+                        Return New Suppress(evaluate.expression)
+                    End If
                 Case "modeof", "typeof", "valueof"
                     Return New ModeOf(keyword, code(1))
                 Case "require"
@@ -138,9 +142,9 @@ Namespace Interpreter.ExecuteEngine
             End Select
         End Function
 
-        Friend Shared Function ParseExpression(code As List(Of Token())) As Expression
+        Friend Shared Function ParseExpression(code As List(Of Token())) As SyntaxResult
             If code(Scan0).isKeyword Then
-                Dim expression As Expression = code.DoCall(AddressOf keywordExpressionHandler)
+                Dim expression As SyntaxResult = code.DoCall(AddressOf keywordExpressionHandler)
 
                 ' if expression is nothing
                 ' then it means the keyword is probably 
@@ -182,40 +186,19 @@ Namespace Interpreter.ExecuteEngine
                     End If
                 End If
             ElseIf code(1).isOperator("=", "<-") Then
-                ' tuple value assign
-                ' or member reference assign
-                Dim target As Token() = code(Scan0)
-                Dim value As Token() = code(2)
-                Dim symbol As Expression()
-
-                If target.isSimpleSymbolIndexer Then
-                    symbol = {New SymbolIndexer(target)}
-                ElseIf target.isFunctionInvoke Then
-                    ' func(x) <- vals
-                    ' byref calls
-                    Dim vals As Expression = code _
-                        .Skip(2) _
-                        .IteratesALL _
-                        .DoCall(AddressOf Expression.CreateExpression)
-
-                    Return New ByRefFunctionCall(New FunctionInvoke(target), vals)
-                Else
-                    symbol = target _
-                        .Skip(1) _
-                        .Take(code(Scan0).Length - 2) _
-                        .SplitByTopLevelDelimiter(TokenType.comma) _
-                        .Where(Function(t) Not t.isComma) _
-                        .Select(AddressOf Expression.CreateExpression) _
-                        .ToArray
-                End If
-
-                Return New ValueAssign(symbol, Expression.CreateExpression(value))
+                Return getValueAssign(code)
             ElseIf code = 2 Then
                 If code(Scan0).Length = 1 AndAlso code(Scan0)(Scan0) = (TokenType.operator, "$") Then
                     Return New FunctionInvoke(code.IteratesALL.ToArray)
                 ElseIf code(Scan0).Length = 1 AndAlso code(Scan0)(Scan0) = (TokenType.operator, "!") Then
                     ' not xxxx
-                    Return New UnaryNot(Expression.CreateExpression(code(1)))
+                    Dim valExpression As SyntaxResult = Expression.CreateExpression(code(1))
+
+                    If valExpression.isException Then
+                        Return valExpression
+                    Else
+                        Return New UnaryNot(valExpression.expression)
+                    End If
                 End If
             ElseIf code = 3 Then
                 If code.isSequenceSyntax Then
@@ -231,7 +214,7 @@ Namespace Interpreter.ExecuteEngine
                             ' do nothing
                             GoTo Binary
                         Else
-                            Throw New SyntaxErrorException
+                            Return New SyntaxResult(New SyntaxErrorException)
                         End If
                     End If
 
@@ -240,6 +223,65 @@ Namespace Interpreter.ExecuteEngine
             End If
 Binary:
             Return code.ParseBinaryExpression
+        End Function
+
+        Private Shared Function getValueAssign(code As List(Of Token())) As SyntaxResult
+            ' tuple value assign
+            ' or member reference assign
+            Dim target As Token() = code(Scan0)
+            Dim value As Token() = code(2)
+            Dim symbol As Expression()
+
+            If target.isSimpleSymbolIndexer Then
+                symbol = {New SymbolIndexer(target)}
+            ElseIf target.isFunctionInvoke Then
+                ' func(x) <- vals
+                ' byref calls
+                Dim vals As SyntaxResult = code _
+                    .Skip(2) _
+                    .IteratesALL _
+                    .DoCall(AddressOf Expression.CreateExpression)
+
+                If vals.isException Then
+                    Return vals
+                Else
+                    Return New ByRefFunctionCall(New FunctionInvoke(target), vals.expression)
+                End If
+            Else
+                ' the exception is always the last one
+                With target.Skip(1) _
+                           .Take(code(Scan0).Length - 2) _
+                           .DoCall(AddressOf getTupleSymbols) _
+                           .ToArray
+
+                    If .Last.isException Then
+                        Return .Last
+                    Else
+                        symbol = .Select(Function(e) e.expression) _
+                                 .ToArray
+                    End If
+                End With
+            End If
+
+            Dim valExpression As SyntaxResult = Expression.CreateExpression(value)
+
+            If valExpression.isException Then
+                Return valExpression
+            Else
+                Return New ValueAssign(symbol, valExpression.expression)
+            End If
+        End Function
+
+        Private Shared Iterator Function getTupleSymbols(target As IEnumerable(Of Token)) As IEnumerable(Of SyntaxResult)
+            For Each token As SyntaxResult In target.SplitByTopLevelDelimiter(TokenType.comma) _
+                                                    .Where(Function(t) Not t.isComma) _
+                                                    .Select(AddressOf Expression.CreateExpression)
+                Yield token
+
+                If token.isException Then
+                    Exit For
+                End If
+            Next
         End Function
     End Class
 End Namespace

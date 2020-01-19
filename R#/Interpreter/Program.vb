@@ -197,18 +197,8 @@ Namespace Interpreter
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        <DebuggerStepThrough>
-        Public Shared Function CreateProgram(tokens As Token()) As Program
-            Return New Program With {
-                .Rscript = Nothing,
-                .execQueue = tokens.GetExpressions.ToArray
-            }
-        End Function
-
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function CreateProgram(Rscript As Rscript) As Program
-            Dim tokens As Token() = Rscript.GetTokens
-            Dim exec As Expression() = tokens.ToArray _
+            Dim exec As Expression() = Rscript _
                 .GetExpressions _
                 .ToArray
 
