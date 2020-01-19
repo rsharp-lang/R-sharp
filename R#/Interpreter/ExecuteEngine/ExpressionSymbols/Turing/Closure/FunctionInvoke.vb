@@ -76,11 +76,6 @@ Namespace Interpreter.ExecuteEngine
             End Get
         End Property
 
-        ''' <summary>
-        ''' The source location of current function invoke calls
-        ''' </summary>
-        Dim span As CodeSpan
-
         Public ReadOnly Property funcName As Expression
 
         ''' <summary>
@@ -93,23 +88,6 @@ Namespace Interpreter.ExecuteEngine
         ''' The parameters expression that passing to the target invoked function.
         ''' </summary>
         Friend ReadOnly parameters As List(Of Expression)
-
-        Sub New(tokens As Token())
-            Dim params = tokens _
-                .Skip(2) _
-                .Take(tokens.Length - 3) _
-                .ToArray
-
-            funcName = New Literal(tokens(Scan0).text)
-            span = tokens(Scan0).span
-            parameters = params _
-                .SplitByTopLevelDelimiter(TokenType.comma) _
-                .Where(Function(t) Not t.isComma) _
-                .Select(Function(param)
-                            Return Expression.CreateExpression(param)
-                        End Function) _
-                .AsList
-        End Sub
 
         ''' <summary>
         ''' Use for create pipeline calls from identifier target

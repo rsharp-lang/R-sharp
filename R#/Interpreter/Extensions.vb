@@ -53,11 +53,6 @@ Namespace Interpreter
 
     <HideModuleName> Module Extensions
 
-        <Extension>
-        Public Function RunProgram(code As Token(), envir As Environment) As Object
-            Return Program.CreateProgram(code).Execute(envir)
-        End Function
-
         ReadOnly ignores As Index(Of TokenType) = {
             TokenType.comment,
             TokenType.terminator
