@@ -84,47 +84,9 @@ Namespace Interpreter.ExecuteEngine
             End Get
         End Property
 
-        Sub New(tokens As IEnumerable(Of Token))
-            Dim blocks = tokens.SplitByTopLevelDelimiter(TokenType.close)
-            Dim [loop] = blocks(Scan0).Skip(1).SplitByTopLevelDelimiter(TokenType.keyword)
-            Dim vars As Token() = [loop](Scan0)
+        Sub New(variables$(), sequence As Expression, body As DeclareNewFunction, parallel As Boolean)
 
-            If vars.Length = 1 Then
-                variables = {vars(Scan0).text}
-            Else
-                variables = vars _
-                    .Skip(1) _
-                    .Take(vars.Length - 2) _
-                    .Where(Function(x) Not x.name = TokenType.comma) _
-                    .Select(Function(x) x.text) _
-                    .ToArray
-            End If
-
-            Me.sequence = Expression.CreateExpression([loop].Skip(2).IteratesALL)
-            Me.body = New DeclareNewFunction With {
-                .body = ParseLoopBody(blocks(2), isParallel:=parallel),
-                .funcName = "forloop_internal",
-                .params = {}
-            }
         End Sub
-
-        Private Shared Function ParseLoopBody(tokens As Token(), ByRef isParallel As Boolean) As ClosureExpression
-            If tokens(Scan0) = (TokenType.open, "{") Then
-                Return tokens _
-                    .Skip(1) _
-                    .DoCall(AddressOf ClosureExpression.ParseExpressionTree)
-            ElseIf tokens(Scan0) = (TokenType.operator, "%") AndAlso
-                   tokens(1) = (TokenType.identifier, "dopar") AndAlso
-                   tokens(2) = (TokenType.operator, "%") Then
-                isParallel = True
-
-                Return tokens _
-                    .Skip(4) _
-                    .DoCall(AddressOf ClosureExpression.ParseExpressionTree)
-            Else
-                Throw New SyntaxErrorException
-            End If
-        End Function
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim result As New List(Of Object)
