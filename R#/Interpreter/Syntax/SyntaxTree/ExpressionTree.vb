@@ -97,7 +97,7 @@ Namespace Interpreter.SyntaxParser
                     blocks = New List(Of Token()) From {tokens}
                 End If
             ElseIf tokens.Length = 2 AndAlso tokens(Scan0).name = TokenType.iif Then
-                Return New CommandLineArgument(tokens)
+                Return SyntaxImplements.CommandLineArgument(tokens)
             Else
                 blocks = tokens.SplitByTopLevelDelimiter(TokenType.operator)
             End If

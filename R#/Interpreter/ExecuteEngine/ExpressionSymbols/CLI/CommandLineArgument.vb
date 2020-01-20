@@ -44,9 +44,6 @@
 #End Region
 
 Imports Microsoft.VisualBasic.Language.Default
-Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Language
-Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 
@@ -73,14 +70,8 @@ Namespace Interpreter.ExecuteEngine
         ''' <returns></returns>
         Public ReadOnly Property name As Expression
 
-        Sub New(tokens As Token())
-            If tokens.First = TokenType.iif Then
-                name = tokens _
-                    .Skip(1) _
-                    .DoCall(AddressOf Expression.CreateExpression)
-            Else
-                name = Expression.CreateExpression(tokens)
-            End If
+        Sub New(name As Expression)
+            Me.name = name
         End Sub
 
         Public Overrides Function ToString() As String

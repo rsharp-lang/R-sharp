@@ -101,7 +101,7 @@ Namespace Interpreter.ExecuteEngine
                 Case "elseif" : Return code.Skip(1).IteratesALL.DoCall(AddressOf SyntaxImplements.ElseIfBranch)
                 Case "return" : Return New ReturnValue(code.Skip(1).IteratesALL)
                 Case "for" : Return SyntaxImplements.ForLoop(code.Skip(1).IteratesALL)
-                Case "from" : Return New LinqExpression(code)
+                Case "from" : Return SyntaxImplements.LinqExpression(code)
                 Case "imports" : Return SyntaxImplements.[Imports](code)
                 Case "function"
                     Dim [let] = New Token() {New Token(TokenType.keyword, "let")}
@@ -123,7 +123,7 @@ Namespace Interpreter.ExecuteEngine
                         Return New Suppress(evaluate.expression)
                     End If
                 Case "modeof", "typeof", "valueof"
-                    Return New ModeOf(keyword, code(1))
+                    Return SyntaxImplements.ModeOf(keyword, code(1))
                 Case "require"
                     Return code(1) _
                         .Skip(1) _

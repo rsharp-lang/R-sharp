@@ -52,6 +52,16 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
     Module DeclareNewVariableSyntax
 
+        Public Function ModeOf(keyword$, target As Token()) As SyntaxResult
+            Dim ObjTarget = Expression.CreateExpression(target)
+
+            If ObjTarget.isException Then
+                Return ObjTarget
+            Else
+                Return New ModeOf(keyword, ObjTarget.expression)
+            End If
+        End Function
+
         Public Function DeclareNewVariable(code As List(Of Token())) As SyntaxResult
             Dim var As New DeclareNewVariable
             Dim valSyntaxtemp As SyntaxResult = Nothing

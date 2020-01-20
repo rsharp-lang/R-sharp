@@ -44,7 +44,6 @@
 #End Region
 
 Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -76,9 +75,9 @@ Namespace Interpreter.ExecuteEngine
         ''' <returns></returns>
         Public ReadOnly Property target As Expression
 
-        Sub New(keyword$, target As Token())
+        Sub New(keyword$, target As Expression)
             Me.keyword = keyword
-            Me.target = Expression.CreateExpression(target)
+            Me.target = target
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object

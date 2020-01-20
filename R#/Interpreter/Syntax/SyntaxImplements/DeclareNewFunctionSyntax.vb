@@ -50,6 +50,24 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
     Module DeclareNewFunctionSyntax
 
+        Public Function ReturnValue(value As IEnumerable(Of Token)) As SyntaxResult
+            With value.ToArray
+                ' just return
+                ' no value
+                If .Length = 0 Then
+                    Return New ReturnValue(Literal.NULL)
+                Else
+                    Dim valueSyntax As SyntaxResult = .DoCall(AddressOf Expression.CreateExpression)
+
+                    If valueSyntax.isException Then
+                        Return valueSyntax
+                    Else
+                        Return New ReturnValue(valueSyntax.expression)
+                    End If
+                End If
+            End With
+        End Function
+
         Public Function DeclareNewFunction(code As List(Of Token())) As SyntaxResult
             Dim [declare] As Token() = code(4)
             Dim parts As List(Of Token()) = [declare].SplitByTopLevelDelimiter(TokenType.close)

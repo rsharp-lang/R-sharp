@@ -44,8 +44,6 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
-Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -71,18 +69,6 @@ Namespace Interpreter.ExecuteEngine
                 Return Not value Is Nothing AndAlso TypeOf value Is RuntimeValueLiteral
             End Get
         End Property
-
-        Sub New(value As IEnumerable(Of Token))
-            With value.ToArray
-                ' just return
-                ' no value
-                If .Length = 0 Then
-                    Me.value = Literal.NULL
-                Else
-                    Me.value = .DoCall(AddressOf Expression.CreateExpression)
-                End If
-            End With
-        End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Sub New(value As Expression)
