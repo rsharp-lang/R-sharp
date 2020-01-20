@@ -66,9 +66,12 @@ Namespace Interpreter
         End Function
 
         <Extension>
-        Public Iterator Function GetExpressions(Rscript As Rscript) As IEnumerable(Of Expression)
-            Dim tokens As Token() = Rscript.GetTokens
+        Public Function GetExpressions(Rscript As Rscript) As IEnumerable(Of Expression)
+            Return Rscript.GetTokens.GetExpressions(Rscript, Nothing)
+        End Function
 
+        <Extension>
+        Public Iterator Function GetExpressions(tokens As Token(), Rscript As Rscript, errHandler As Action(Of SyntaxResult)) As IEnumerable(Of Expression)
             For Each block In tokens.SplitByTopLevelDelimiter(TokenType.terminator)
                 If block.Length = 0 OrElse block.isTerminator Then
                     ' skip code comments
@@ -87,11 +90,16 @@ Namespace Interpreter
                         expr = Expression.CreateExpression(block)
 
                         If expr.isException Then
-                            Call SyntaxErrorHelper(
-                                syntaxResult:=expr,
-                                Rscript:=Rscript,
-                                tokens:=block
-                            )
+                            If errHandler Is Nothing Then
+                                Call SyntaxErrorHelper(
+                                    syntaxResult:=expr,
+                                    Rscript:=Rscript,
+                                    tokens:=block
+                                )
+                            Else
+                                Call errHandler(expr)
+                                Exit For
+                            End If
                         Else
                             Yield expr.expression
                         End If
