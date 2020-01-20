@@ -61,6 +61,13 @@ Namespace Interpreter.SyntaxParser
     Module ExpressionSignature
 
         Friend ReadOnly valueAssignOperatorSymbols As Index(Of String) = {"<-", "="}
+        Friend ReadOnly literalTypes As Index(Of TokenType) = {
+            TokenType.stringLiteral,
+            TokenType.booleanLiteral,
+            TokenType.integerLiteral,
+            TokenType.numberLiteral,
+            TokenType.missingLiteral
+        }
 
         <DebuggerStepThrough>
         <Extension>

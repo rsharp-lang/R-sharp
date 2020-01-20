@@ -281,6 +281,7 @@
     <Compile Include="Interpreter\Syntax\SyntaxImplements\StringInterpolationSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\SymbolIndexer.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\FunctionInvokeSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxTree\ExpressionBuilder.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxTree\Splitter.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxResult.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryExpression.vb" />
