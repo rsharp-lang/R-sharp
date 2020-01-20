@@ -243,6 +243,8 @@ Namespace Interpreter.ExecuteEngine
 
                         If firstInput.GetType Is GetType(list) Then
                             Return base.options(firstInput, envir)
+                        ElseIf Program.isException(firstInput) Then
+                            Return firstInput
                         Else
                             names = Runtime.asVector(Of String)(firstInput)
                         End If
@@ -252,6 +254,12 @@ Namespace Interpreter.ExecuteEngine
                                         Return exp.Evaluate(envir)
                                     End Function) _
                             .ToArray
+
+                        For Each element As Object In vector
+                            If Program.isException(element) Then
+                                Return element
+                            End If
+                        Next
 
                         names = Runtime.asVector(Of String)(vector)
                     End If
