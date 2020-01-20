@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::78dec6b5ec2322097784fc8760177656, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SequenceLiteral.vb"
+﻿#Region "Microsoft.VisualBasic::91e90fca433345411ef1fa04176384ea, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SequenceLiteral.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,7 @@
     ' 
     '         Properties: type
     ' 
-    '         Constructor: (+2 Overloads) Sub New
+    '         Constructor: (+1 Overloads) Sub New
     '         Function: Evaluate, isIntegerSequence, ToString
     ' 
     ' 

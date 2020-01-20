@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::215a95ebbf91d0784f5f9b9b92b5afb8, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\IfBranch.vb"
+﻿#Region "Microsoft.VisualBasic::43db5e4c91203320a76940d4fd520c7d, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\IfBranch.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,7 @@
     ' 
     '         Properties: type
     ' 
-    '         Constructor: (+2 Overloads) Sub New
+    '         Constructor: (+1 Overloads) Sub New
     '         Function: Evaluate, ToString
     '         Class IfPromise
     ' 

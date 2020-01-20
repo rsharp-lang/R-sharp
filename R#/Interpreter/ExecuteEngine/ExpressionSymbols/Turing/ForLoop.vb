@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a6fbc9d70db6ddb39d73b5c49dd83ba7, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ForLoop.vb"
+﻿#Region "Microsoft.VisualBasic::cfecb809408433c3b91efeb2cf3acb78, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ForLoop.vb"
 
     ' Author:
     ' 
@@ -36,8 +36,7 @@
     '         Properties: type
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, exec, execParallel, ParseLoopBody, RunLoop
-    '                   ToString
+    '         Function: Evaluate, exec, execParallel, RunLoop, ToString
     ' 
     ' 
     ' /********************************************************************************/

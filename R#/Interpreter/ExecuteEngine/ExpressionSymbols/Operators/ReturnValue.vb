@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::61f301145780e5e2338c1da8846e1c6d, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ReturnValue.vb"
+﻿#Region "Microsoft.VisualBasic::4ad7e40996d51d26b6e693694067a9e6, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ReturnValue.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,7 @@
     ' 
     '         Properties: IsRuntimeFunctionReturnWrapper, type
     ' 
-    '         Constructor: (+2 Overloads) Sub New
+    '         Constructor: (+1 Overloads) Sub New
     '         Function: Evaluate, ToString
     ' 
     ' 

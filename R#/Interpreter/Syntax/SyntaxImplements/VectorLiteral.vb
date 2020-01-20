@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::238988ed3ea57c109e257f926bd4f061, R#\Interpreter\Syntax\SyntaxImplements\VectorLiteral.vb"
+﻿#Region "Microsoft.VisualBasic::25d53edb16f3da8b56621f487b6e7620, R#\Interpreter\Syntax\SyntaxImplements\VectorLiteral.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Module VectorLiteralSyntax
     ' 
-    '         Function: TypeCodeOf, VectorLiteral
+    '         Function: LiteralSyntax, (+2 Overloads) SequenceLiteral, TypeCodeOf, VectorLiteral
     ' 
     ' 
     ' /********************************************************************************/

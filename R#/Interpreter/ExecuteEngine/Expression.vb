@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0f6553b2c38546aba30181c9edff744e, R#\Interpreter\ExecuteEngine\Expression.vb"
+﻿#Region "Microsoft.VisualBasic::4cca7169cf2d459322b42e37dc2c87a1, R#\Interpreter\ExecuteEngine\Expression.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,7 @@
     ' 
     '         Properties: expressionName
     ' 
-    '         Function: CreateExpression, getTupleSymbols, getValueAssign, keywordExpressionHandler, ParseExpression
+    '         Function: CreateExpression
     ' 
     ' 
     ' /********************************************************************************/

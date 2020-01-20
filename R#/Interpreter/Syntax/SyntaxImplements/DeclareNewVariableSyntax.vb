@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::686e4d6ad65cc0ca46c31870989ba631, R#\Interpreter\Syntax\SyntaxImplements\DeclareNewVariableSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::83782631940239c33fe69ccca6535766, R#\Interpreter\Syntax\SyntaxImplements\DeclareNewVariableSyntax.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Module DeclareNewVariableSyntax
     ' 
-    '         Function: (+4 Overloads) DeclareNewVariable, getNames
+    '         Function: (+4 Overloads) DeclareNewVariable, getNames, ModeOf
     ' 
     ' 
     ' /********************************************************************************/

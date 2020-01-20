@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::813b515c3d75d06036670aa70564a8b4, R#\Interpreter\Syntax\SyntaxImplements\DeclareNewFunctionSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::f89efe8396c25a737d906a4bf937d82b, R#\Interpreter\Syntax\SyntaxImplements\DeclareNewFunctionSyntax.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Module DeclareNewFunctionSyntax
     ' 
-    '         Function: DeclareNewFunction, getParameters
+    '         Function: DeclareNewFunction, getParameters, ReturnValue
     ' 
     ' 
     ' /********************************************************************************/
