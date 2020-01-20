@@ -267,7 +267,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\SymbolIndexer.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\SyntaxImplements.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\FunctionInvokeSyntax.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\SyntaxTree\Splitter.vb" />
     <Compile Include="Interpreter\SyntaxResult.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\ByRefFunctionCall.vb" />
