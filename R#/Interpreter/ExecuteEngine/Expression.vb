@@ -91,9 +91,9 @@ Namespace Interpreter.ExecuteEngine
             Select Case keyword
                 Case "let"
                     If code > 4 AndAlso code(3).isKeyword("function") Then
-                        Return New DeclareNewFunction(code)
+                        Return SyntaxImplements.DeclareNewFunction(code)
                     Else
-                        Return New DeclareNewVariable(code)
+                        Return SyntaxImplements.DeclareNewVariable(code)
                     End If
                 Case "if" : Return New IfBranch(code.Skip(1).IteratesALL)
                 Case "else" : Return New ElseBranch(code.Skip(1).IteratesALL.ToArray)
@@ -109,7 +109,7 @@ Namespace Interpreter.ExecuteEngine
 
                     code = ({[let], name, [as]}) + code
 
-                    Return New DeclareNewFunction(code)
+                    Return SyntaxImplements.DeclareNewFunction(code)
                 Case "suppress"
                     Dim evaluate As SyntaxResult = code _
                         .Skip(1) _
@@ -182,7 +182,7 @@ Namespace Interpreter.ExecuteEngine
                     Dim opText$ = code(1)(Scan0).text
 
                     If opText = "=" OrElse opText = "<-" Then
-                        Return New ValueAssign(code)
+                        Return SyntaxImplements.ValueAssign(code)
                     End If
                 End If
             ElseIf code(1).isOperator("=", "<-") Then

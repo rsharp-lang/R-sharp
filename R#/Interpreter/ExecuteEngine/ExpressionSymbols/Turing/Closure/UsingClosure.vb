@@ -1,7 +1,4 @@
 ﻿Imports Microsoft.VisualBasic.Emit.Delegates
-Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Language
-Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 
@@ -14,20 +11,9 @@ Namespace Interpreter.ExecuteEngine
         ReadOnly params As DeclareNewVariable
         ReadOnly closure As ClosureExpression
 
-        Sub New(code As IEnumerable(Of Token()))
-            Dim input = code.IteratesALL.ToArray
-            Dim tokens As Token()() = input _
-                .SplitByTopLevelDelimiter(TokenType.close) _
-                .ToArray
-            Dim parmPart As Token() = tokens(Scan0)
-
-            If tokens(1).Length = 1 AndAlso tokens(1)(Scan0) = (TokenType.close, ")") Then
-                parmPart = parmPart + tokens(1).AsList
-            End If
-
-            closure = New ClosureExpression(tokens(2).Skip(1))
-            tokens = parmPart.SplitByTopLevelDelimiter(TokenType.keyword, tokenText:="as")
-            params = New DeclareNewVariable(tokens(Scan0), tokens(2))
+        Sub New(params As DeclareNewVariable, closure As ClosureExpression)
+            Me.params = params
+            Me.closure = closure
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
