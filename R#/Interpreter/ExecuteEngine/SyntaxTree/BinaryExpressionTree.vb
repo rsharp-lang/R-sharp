@@ -1,45 +1,45 @@
 ﻿#Region "Microsoft.VisualBasic::7a74ac4725a8e71d2b4c325322a6a7c8, R#\Interpreter\ExecuteEngine\BinaryExpressionTree.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module BinaryExpressionTree
-    ' 
-    '         Function: buildPipeline, isFunctionTuple, ParseBinaryExpression
-    ' 
-    '         Sub: genericSymbolOperatorProcessor, processAppendData, processNameMemberReference, processNamespaceReference, processOperators
-    '              processPipeline
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module BinaryExpressionTree
+' 
+'         Function: buildPipeline, isFunctionTuple, ParseBinaryExpression
+' 
+'         Sub: genericSymbolOperatorProcessor, processAppendData, processNameMemberReference, processNamespaceReference, processOperators
+'              processPipeline
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -106,16 +106,32 @@ Namespace Interpreter.ExecuteEngine
             Call buf.processOperators(oplist, logicalOperators, test:=Function(op, o) op = o)
 
             If buf > 1 Then
-                If buf.isByRefCall Then
-                    Return New ByRefFunctionCall(buf(Scan0), buf(2))
-                ElseIf buf.isNamespaceReferenceCall Then
+                For Each a As [Variant](Of SyntaxResult, String) In buf
+                    If a.VA IsNot Nothing AndAlso a.VA.isException Then
+                        Return a.VA
+                    End If
+                Next
+
+                Dim tokens = buf _
+                    .Select(Function(a)
+                                If a.VA Is Nothing Then
+                                    Return New [Variant](Of Expression, String)(a.VB)
+                                Else
+                                    Return New [Variant](Of Expression, String)(a.VA.expression)
+                                End If
+                            End Function) _
+                    .ToArray
+
+                If tokens.isByRefCall Then
+                    Return New ByRefFunctionCall(tokens(Scan0), tokens(2))
+                ElseIf tokens.isNamespaceReferenceCall Then
                     Dim calls As FunctionInvoke = buf(2).TryCast(Of Expression)
                     Dim [namespace] As Expression = buf(Scan0).TryCast(Of Expression)
 
                     Return New SyntaxResult(New NotImplementedException)
-                ElseIf buf = 3 AndAlso buf(1) Like GetType(String) AndAlso buf(1).TryCast(Of String) Like ExpressionSignature.valueAssignOperatorSymbols Then
+                ElseIf buf = 3 AndAlso tokens(1) Like GetType(String) AndAlso tokens(1).TryCast(Of String) Like ExpressionSignature.valueAssignOperatorSymbols Then
                     ' set value by name
-                    Return New MemberValueAssign(buf(Scan0), buf(2))
+                    Return New MemberValueAssign(tokens(Scan0), tokens(2))
                 End If
 
                 Return New SyntaxResult(New SyntaxErrorException)
@@ -133,22 +149,28 @@ Namespace Interpreter.ExecuteEngine
                                 Dim nameSymbol As String
                                 Dim typeofName As Type = b.GetUnderlyingType
 
+                                If a.VA.isException Then
+                                    Return a
+                                ElseIf b.VA.isException Then
+                                    Return b
+                                End If
+
                                 If typeofName Is GetType(SymbolReference) Then
                                     nameSymbol = DirectCast(b.VA.expression, SymbolReference).symbol
                                 ElseIf typeofName Is GetType(Literal) Then
                                     nameSymbol = DirectCast(b.VA.expression, Literal).value
                                 ElseIf typeofName Is GetType(FunctionInvoke) Then
                                     Dim invoke As FunctionInvoke = b.VA.expression
-                                    Dim funcVar As New SymbolIndexer(a.VA, invoke.funcName)
+                                    Dim funcVar As New SymbolIndexer(a.VA.expression, invoke.funcName)
 
-                                    Return New FunctionInvoke(funcVar, invoke.parameters.ToArray)
+                                    Return New SyntaxResult(New FunctionInvoke(funcVar, invoke.parameters.ToArray))
                                 Else
-                                    Throw New NotImplementedException
+                                    Return New SyntaxResult(New NotImplementedException)
                                 End If
 
                                 ' a$b symbol reference
-                                Dim symbolRef As New SymbolIndexer(a.VA, New Literal(nameSymbol))
-                                Return symbolRef
+                                Dim symbolRef As New SymbolIndexer(a.VA.expression, New Literal(nameSymbol))
+                                Return New SyntaxResult(symbolRef)
                             End Function)
         End Sub
 
@@ -159,21 +181,29 @@ Namespace Interpreter.ExecuteEngine
                 opSymbol:="::",
                 expression:=Function(a, b)
                                 Dim namespaceRef As Expression
-                                Dim nsSymbol$ = a.TryCast(Of SymbolReference).symbol
+                                Dim syntaxTemp As SyntaxResult = a.TryCast(Of SyntaxResult)
 
-                                If TypeOf b.VA Is FunctionInvoke Then
-                                    ' a::b() function invoke
-                                    Dim calls As FunctionInvoke = b.VA
-                                    calls.namespace = nsSymbol
-                                    namespaceRef = calls
-                                ElseIf TypeOf b.VA Is SymbolReference Then
-                                    ' a::b view function help info
-                                    namespaceRef = New NamespaceFunctionSymbolReference(nsSymbol, b.VA)
-                                Else
-                                    Throw New SyntaxErrorException
+                                If syntaxTemp.isException Then
+                                    Return syntaxTemp
+                                ElseIf b.VA.isException Then
+                                    Return b.VA
                                 End If
 
-                                Return namespaceRef
+                                Dim nsSymbol$ = DirectCast(syntaxTemp.expression, SymbolReference).symbol
+
+                                If TypeOf b.VA.expression Is FunctionInvoke Then
+                                    ' a::b() function invoke
+                                    Dim calls As FunctionInvoke = b.VA.expression
+                                    calls.namespace = nsSymbol
+                                    namespaceRef = calls
+                                ElseIf TypeOf b.VA.expression Is SymbolReference Then
+                                    ' a::b view function help info
+                                    namespaceRef = New NamespaceFunctionSymbolReference(nsSymbol, b.VA.expression)
+                                Else
+                                    Return New SyntaxResult(New SyntaxErrorException)
+                                End If
+
+                                Return New SyntaxResult(namespaceRef)
                             End Function)
         End Sub
 
@@ -224,7 +254,13 @@ Namespace Interpreter.ExecuteEngine
                 oplist:=oplist,
                 opSymbol:="<<",
                 expression:=Function(a, b)
-                                Return New AppendOperator(a, b)
+                                If a.VA.isException Then
+                                    Return a
+                                ElseIf b.VA.isException Then
+                                    Return b
+                                Else
+                                    Return New SyntaxResult(New AppendOperator(a.VA.expression, b.VA.expression))
+                                End If
                             End Function)
         End Sub
 
@@ -235,23 +271,31 @@ Namespace Interpreter.ExecuteEngine
                 oplist:=oplist,
                 opSymbol:=":>",
                 expression:=Function(a, b)
-                                Dim pip As Expression = buildPipeline(a, b)
+                                Dim pip As Expression
+
+                                If a.VA.isException Then
+                                    Return a
+                                ElseIf b.VA.isException Then
+                                    Return b
+                                Else
+                                    pip = buildPipeline(a.VA.expression, b.VA.expression)
+                                End If
 
                                 If pip Is Nothing Then
-                                    If b.VA.isFunctionTuple Then
+                                    If b.VA.expression.isFunctionTuple Then
                                         Dim invokes = b.TryCast(Of VectorLiteral)
                                         Dim calls As New List(Of Expression)
 
                                         For Each [call] As Expression In invokes
-                                            calls += buildPipeline(a, [call])
+                                            calls += buildPipeline(a.VA.expression, [call])
                                         Next
 
-                                        Return New VectorLiteral(calls)
+                                        Return New SyntaxResult(New VectorLiteral(calls))
                                     Else
                                         Return New SyntaxResult(New SyntaxErrorException)
                                     End If
                                 Else
-                                    Return pip
+                                    Return New SyntaxResult(pip)
                                 End If
                             End Function)
         End Sub

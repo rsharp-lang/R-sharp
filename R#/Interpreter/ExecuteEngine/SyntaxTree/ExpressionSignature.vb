@@ -99,7 +99,7 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         <Extension>
-        Public Function isNamespaceReferenceCall(tokens As List(Of [Variant](Of Expression, String))) As Boolean
+        Public Function isNamespaceReferenceCall(tokens As [Variant](Of Expression, String)()) As Boolean
             If Not tokens(1) Like GetType(String) OrElse Not tokens(1).TryCast(Of String) = "::" Then
                 Return False
             ElseIf Not tokens(2) Like GetType(FunctionInvoke) Then
@@ -112,12 +112,12 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         <Extension>
-        Public Function isByRefCall(tokens As List(Of [Variant](Of Expression, String))) As Boolean
+        Public Function isByRefCall(tokens As [Variant](Of Expression, String)()) As Boolean
             If Not tokens(Scan0) Like GetType(FunctionInvoke) Then
                 Return False
             ElseIf Not tokens(1) Like GetType(String) OrElse Not tokens(1).TryCast(Of String) Like valueAssignOperatorSymbols Then
                 Return False
-            ElseIf Not tokens >= 3 Then
+            ElseIf Not tokens.Length >= 3 Then
                 Return False
             Else
                 Return True
