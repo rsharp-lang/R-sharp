@@ -129,7 +129,7 @@ Namespace Interpreter.ExecuteEngine
                         .Take(code(1).Length - 2) _
                         .ToArray _
                         .DoCall(Function(tokens)
-                                    Return New Require(tokens)
+                                    Return SyntaxImplements.Require(tokens)
                                 End Function)
                 Case "next"
                     ' continute for
@@ -233,7 +233,13 @@ Binary:
             Dim symbol As Expression()
 
             If target.isSimpleSymbolIndexer Then
-                symbol = {New SymbolIndexer(target)}
+                Dim syntaxTemp As SyntaxResult = SyntaxImplements.SymbolIndexer(target)
+
+                If syntaxTemp.isException Then
+                    Return syntaxTemp
+                Else
+                    symbol = {syntaxTemp.expression}
+                End If
             ElseIf target.isFunctionInvoke Then
                 ' func(x) <- vals
                 ' byref calls
