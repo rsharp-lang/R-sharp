@@ -18,7 +18,7 @@ Namespace Interpreter
             End Get
         End Property
 
-        Private Sub New(syntax As Expression)
+        Public Sub New(syntax As Expression)
             Me.expression = syntax
         End Sub
 

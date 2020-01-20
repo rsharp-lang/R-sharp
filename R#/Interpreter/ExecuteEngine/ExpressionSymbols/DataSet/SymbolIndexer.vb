@@ -123,7 +123,7 @@ Namespace Interpreter.ExecuteEngine
             End If
         End Sub
 
-        Private Shared Sub parseIndex(tokens As Token(), ByRef index As Expression, ByRef indexType As SymbolIndexers)
+        Private Shared Sub parseIndex(tokens As Token(), ByRef index As SyntaxResult, ByRef indexType As SymbolIndexers)
             Dim blocks = tokens.SplitByTopLevelDelimiter(TokenType.comma, False)
 
             If blocks > 1 Then
@@ -139,7 +139,22 @@ Namespace Interpreter.ExecuteEngine
                 Else
                     ' x[a,b] by range
                     indexType = SymbolIndexers.dataframeRanges
-                    index = New VectorLiteral(blocks.Where(Function(t) Not t.isComma).Select(AddressOf Expression.CreateExpression))
+
+                    Dim elements As New List(Of Expression)
+
+                    For Each result As SyntaxResult In blocks _
+                        .Where(Function(t) Not t.isComma) _
+                        .Select(AddressOf Expression.CreateExpression)
+
+                        If result.isException Then
+                            index = result
+                            Return
+                        Else
+                            elements.Add(result.expression)
+                        End If
+                    Next
+
+                    index = New VectorLiteral(elements.ToArray)
                 End If
             Else
                 ' vector indexer

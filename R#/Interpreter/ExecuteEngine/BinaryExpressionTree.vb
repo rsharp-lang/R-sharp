@@ -58,9 +58,10 @@ Namespace Interpreter.ExecuteEngine
         ReadOnly logicalOperators As String() = {"&&", "||", "!"}
 
         <Extension>
-        Public Function ParseBinaryExpression(tokenBlocks As List(Of Token())) As Expression
-            Dim buf As New List(Of [Variant](Of Expression, String))
+        Public Function ParseBinaryExpression(tokenBlocks As List(Of Token())) As SyntaxResult
+            Dim buf As New List(Of [Variant](Of SyntaxResult, String))
             Dim oplist As New List(Of String)
+            Dim syntaxResult As SyntaxResult
 
             If tokenBlocks(Scan0).Length = 1 AndAlso tokenBlocks(Scan0)(Scan0) = (TokenType.operator, {"-", "+"}) Then
                 ' insert a ZERO before
@@ -69,7 +70,13 @@ Namespace Interpreter.ExecuteEngine
 
             For i As Integer = Scan0 To tokenBlocks.Count - 1
                 If i Mod 2 = 0 Then
-                    Call buf.Add(Expression.CreateExpression(tokenBlocks(i)))
+                    syntaxResult = Expression.CreateExpression(tokenBlocks(i))
+
+                    If syntaxResult.isException Then
+                        Return syntaxResult
+                    Else
+                        Call buf.Add(syntaxResult)
+                    End If
                 Else
                     Call buf.Add(tokenBlocks(i)(Scan0).text)
                     Call oplist.Add(buf.Last.VB)
@@ -105,20 +112,20 @@ Namespace Interpreter.ExecuteEngine
                     Dim calls As FunctionInvoke = buf(2).TryCast(Of Expression)
                     Dim [namespace] As Expression = buf(Scan0).TryCast(Of Expression)
 
-                    Throw New NotImplementedException
+                    Return New SyntaxResult(New NotImplementedException)
                 ElseIf buf = 3 AndAlso buf(1) Like GetType(String) AndAlso buf(1).TryCast(Of String) Like ExpressionSignature.valueAssignOperatorSymbols Then
                     ' set value by name
                     Return New MemberValueAssign(buf(Scan0), buf(2))
                 End If
 
-                Throw New SyntaxErrorException
+                Return New SyntaxResult(New SyntaxErrorException)
             Else
                 Return buf(Scan0)
             End If
         End Function
 
         <Extension>
-        Private Sub processNameMemberReference(buf As List(Of [Variant](Of Expression, String)), oplist As List(Of String))
+        Private Sub processNameMemberReference(buf As List(Of [Variant](Of SyntaxResult, String)), oplist As List(Of String))
             Call buf.genericSymbolOperatorProcessor(
                 oplist:=oplist,
                 opSymbol:="$",
@@ -127,11 +134,11 @@ Namespace Interpreter.ExecuteEngine
                                 Dim typeofName As Type = b.GetUnderlyingType
 
                                 If typeofName Is GetType(SymbolReference) Then
-                                    nameSymbol = DirectCast(b.VA, SymbolReference).symbol
+                                    nameSymbol = DirectCast(b.VA.expression, SymbolReference).symbol
                                 ElseIf typeofName Is GetType(Literal) Then
-                                    nameSymbol = DirectCast(b.VA, Literal).value
+                                    nameSymbol = DirectCast(b.VA.expression, Literal).value
                                 ElseIf typeofName Is GetType(FunctionInvoke) Then
-                                    Dim invoke As FunctionInvoke = b
+                                    Dim invoke As FunctionInvoke = b.VA.expression
                                     Dim funcVar As New SymbolIndexer(a.VA, invoke.funcName)
 
                                     Return New FunctionInvoke(funcVar, invoke.parameters.ToArray)
@@ -146,7 +153,7 @@ Namespace Interpreter.ExecuteEngine
         End Sub
 
         <Extension>
-        Private Sub processNamespaceReference(buf As List(Of [Variant](Of Expression, String)), oplist As List(Of String))
+        Private Sub processNamespaceReference(buf As List(Of [Variant](Of SyntaxResult, String)), oplist As List(Of String))
             Call buf.genericSymbolOperatorProcessor(
                 oplist:=oplist,
                 opSymbol:="::",
@@ -212,7 +219,7 @@ Namespace Interpreter.ExecuteEngine
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
-        Private Sub processAppendData(buf As List(Of [Variant](Of Expression, String)), oplist As List(Of String))
+        Private Sub processAppendData(buf As List(Of [Variant](Of SyntaxResult, String)), oplist As List(Of String))
             Call buf.genericSymbolOperatorProcessor(
                 oplist:=oplist,
                 opSymbol:="<<",
@@ -223,7 +230,7 @@ Namespace Interpreter.ExecuteEngine
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
-        Private Sub processPipeline(buf As List(Of [Variant](Of Expression, String)), oplist As List(Of String))
+        Private Sub processPipeline(buf As List(Of [Variant](Of SyntaxResult, String)), oplist As List(Of String))
             Call buf.genericSymbolOperatorProcessor(
                 oplist:=oplist,
                 opSymbol:=":>",
@@ -241,7 +248,7 @@ Namespace Interpreter.ExecuteEngine
 
                                         Return New VectorLiteral(calls)
                                     Else
-                                        Throw New SyntaxErrorException
+                                        Return New SyntaxResult(New SyntaxErrorException)
                                     End If
                                 Else
                                     Return pip
@@ -250,10 +257,10 @@ Namespace Interpreter.ExecuteEngine
         End Sub
 
         <Extension>
-        Private Sub genericSymbolOperatorProcessor(buf As List(Of [Variant](Of Expression, String)),
+        Private Sub genericSymbolOperatorProcessor(buf As List(Of [Variant](Of SyntaxResult, String)),
                                                    oplist As List(Of String),
                                                    opSymbol$,
-                                                   expression As Func(Of [Variant](Of Expression, String), [Variant](Of Expression, String), Expression))
+                                                   expression As Func(Of [Variant](Of SyntaxResult, String), [Variant](Of SyntaxResult, String), SyntaxResult))
             If buf = 1 Then
                 Return
             End If
@@ -269,7 +276,7 @@ Namespace Interpreter.ExecuteEngine
                         ' j-1 and j+1
                         Dim a = buf(j - 1) ' parameter
                         Dim b = buf(j + 1) ' function invoke
-                        Dim exp As Expression = expression(a, b)
+                        Dim exp As SyntaxResult = expression(a, b)
 
                         Call buf.RemoveRange(j - 1, 3)
                         Call buf.Insert(j - 1, exp)
@@ -288,7 +295,7 @@ Namespace Interpreter.ExecuteEngine
         ''' <param name="operators$"></param>
         ''' <param name="test">test(op, o)</param>
         <Extension>
-        Private Sub processOperators(buf As List(Of [Variant](Of Expression, String)), oplist As List(Of String), operators$(), test As Func(Of String, String, Boolean))
+        Private Sub processOperators(buf As List(Of [Variant](Of SyntaxResult, String)), oplist As List(Of String), operators$(), test As Func(Of String, String, Boolean))
             If buf = 1 Then
                 Return
             End If
@@ -303,21 +310,21 @@ Namespace Interpreter.ExecuteEngine
                     For j As Integer = 0 To buf.Count - 1
                         If buf(j) Like GetType(String) AndAlso test(op, buf(j).VB) Then
                             ' j-1 and j+1
-                            Dim a = buf(j - 1)
-                            Dim b = buf(j + 1)
+                            Dim a As SyntaxResult = buf(j - 1)
+                            Dim b As SyntaxResult = buf(j + 1)
                             Dim be As Expression
                             Dim opToken As String = buf(j).VB
 
                             If opToken = "in" Then
-                                be = New FunctionInvoke("any", New BinaryExpression(a, b, "=="))
+                                be = New FunctionInvoke("any", New BinaryExpression(a.expression, b.expression, "=="))
                             ElseIf opToken = "||" Then
-                                be = New BinaryOrExpression(a, b)
+                                be = New BinaryOrExpression(a.expression, b.expression)
                             Else
-                                be = New BinaryExpression(a, b, buf(j).VB)
+                                be = New BinaryExpression(a.expression, b.expression, buf(j).VB)
                             End If
 
                             Call buf.RemoveRange(j - 1, 3)
-                            Call buf.Insert(j - 1, be)
+                            Call buf.Insert(j - 1, New SyntaxResult(be))
 
                             Exit For
                         End If

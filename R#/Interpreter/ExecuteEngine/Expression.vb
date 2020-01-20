@@ -189,7 +189,7 @@ Namespace Interpreter.ExecuteEngine
                 Return getValueAssign(code)
             ElseIf code = 2 Then
                 If code(Scan0).Length = 1 AndAlso code(Scan0)(Scan0) = (TokenType.operator, "$") Then
-                    Return New FunctionInvoke(code.IteratesALL.ToArray)
+                    Return SyntaxImplements.FunctionInvoke(code.IteratesALL.ToArray)
                 ElseIf code(Scan0).Length = 1 AndAlso code(Scan0)(Scan0) = (TokenType.operator, "!") Then
                     ' not xxxx
                     Dim valExpression As SyntaxResult = Expression.CreateExpression(code(1))
@@ -245,7 +245,13 @@ Binary:
                 If vals.isException Then
                     Return vals
                 Else
-                    Return New ByRefFunctionCall(New FunctionInvoke(target), vals.expression)
+                    Dim calls = SyntaxImplements.FunctionInvoke(target)
+
+                    If calls.isException Then
+                        Return calls
+                    Else
+                        Return New ByRefFunctionCall(calls.expression, vals.expression)
+                    End If
                 End If
             Else
                 ' the exception is always the last one
