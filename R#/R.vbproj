@@ -266,6 +266,10 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\CommandLine.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\DeclareNewFunctionSyntax.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\ClosureExpressionSyntax.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\Module1.vb" />
     <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\RequireSyntax.vb" />
     <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\VectorLiteral.vb" />
     <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\StringInterpolationSyntax.vb" />

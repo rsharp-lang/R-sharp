@@ -51,7 +51,7 @@ Namespace Interpreter.ExecuteEngine
     Module ExpressionTree
 
         <Extension>
-        Public Function CreateTree(tokens As Token()) As Expression
+        Public Function CreateTree(tokens As Token()) As SyntaxResult
             Dim blocks As List(Of Token()) = tokens.SplitByTopLevelDelimiter(TokenType.comma)
 
             If blocks = 1 Then
@@ -64,7 +64,7 @@ Namespace Interpreter.ExecuteEngine
                     Return blocks(Scan0).ParseExpressionTree
                 End If
             Else
-                Throw New NotImplementedException
+                Return New SyntaxResult(New NotImplementedException)
             End If
         End Function
 
@@ -89,7 +89,7 @@ Namespace Interpreter.ExecuteEngine
                 If tokens(Scan0).name = TokenType.stringInterpolation Then
                     Return SyntaxImplements.StringInterpolation(tokens(Scan0))
                 ElseIf tokens(Scan0).name = TokenType.cliShellInvoke Then
-                    Return New CommandLine(tokens(Scan0))
+                    Return SyntaxImplements.CommandLine(tokens(Scan0))
                 ElseIf tokens(Scan0) = (TokenType.operator, "$") Then
                     Return New SymbolReference("$")
                 Else
@@ -136,7 +136,7 @@ Namespace Interpreter.ExecuteEngine
                 Return ParseBinaryExpression(blocks)
             End If
 
-            Throw New NotImplementedException
+            Return New SyntaxResult(New NotImplementedException)
         End Function
     End Module
 End Namespace
