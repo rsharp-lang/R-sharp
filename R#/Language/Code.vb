@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::90901f30ed2108cd3513609b2ba35628, R#\Language\Code.vb"
+﻿#Region "Microsoft.VisualBasic::42a1826153829742d86aa27a2824a83c, R#\Language\Code.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Module Code
     ' 
-    '         Function: GetCodeSpan, ParseScript, SplitByTopLevelDelimiter
+    '         Function: GetCodeSpan, ParseScript
     ' 
     ' 
     ' /********************************************************************************/

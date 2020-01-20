@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c50e074089e71bebd928728d2e0758f0, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer.vb"
+﻿#Region "Microsoft.VisualBasic::478d71637bc0d0a1f323e3f52fef3135, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer.vb"
 
     ' Author:
     ' 
@@ -44,7 +44,8 @@
     '         Properties: type
     ' 
     '         Constructor: (+2 Overloads) Sub New
-    '         Function: emptyIndexError, Evaluate, getByIndex, getByName, ToString
+    '         Function: emptyIndexError, Evaluate, getByIndex, getByName, getColumn
+    '                   ToString
     ' 
     ' 
     ' /********************************************************************************/

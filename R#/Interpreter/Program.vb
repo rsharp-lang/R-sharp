@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f9c6bb27f363f9775f8b57bc18cc69c5, R#\Interpreter\Program.vb"
+﻿#Region "Microsoft.VisualBasic::a8fae44024333d4cb8a30fa787734491, R#\Interpreter\Program.vb"
 
     ' Author:
     ' 
@@ -34,7 +34,7 @@
     '     Class Program
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: BuildProgram, (+2 Overloads) CreateProgram, EndWithFuncCalls, Execute, ExecuteCodeLine
+    '         Function: BuildProgram, CreateProgram, EndWithFuncCalls, Execute, ExecuteCodeLine
     '                   GetEnumerator, IEnumerable_GetEnumerator, isException, ToString
     ' 
     ' 

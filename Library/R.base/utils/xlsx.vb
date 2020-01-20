@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::57bbeee0b4d39ede11cc7f677066ea3b, Library\R.base\utils\xlsx.vb"
+﻿#Region "Microsoft.VisualBasic::1193cae46eab0918808740e7f2618aed, Library\R.base\utils\xlsx.vb"
 
     ' Author:
     ' 
@@ -90,4 +90,3 @@ Module xlsx
     End Function
 
 End Module
-

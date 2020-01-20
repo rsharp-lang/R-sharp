@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c45867a2d65ca7a91c5d7f315f47c4a7, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewFunction.vb"
+﻿#Region "Microsoft.VisualBasic::759543302a47e87ab40a67de087b05de, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewFunction.vb"
 
     ' Author:
     ' 
@@ -35,11 +35,8 @@
     ' 
     '         Properties: funcName, type
     ' 
-    '         Constructor: (+2 Overloads) Sub New
-    ' 
+    '         Constructor: (+1 Overloads) Sub New
     '         Function: Evaluate, Invoke, MissingParameters, ToString
-    ' 
-    '         Sub: getExecBody, getParameters
     ' 
     ' 
     ' /********************************************************************************/

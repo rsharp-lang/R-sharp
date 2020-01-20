@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::38a4ea253e8b48e74fe4a961076fe905, Library\devkit\docs.vb"
+﻿#Region "Microsoft.VisualBasic::200e6394f745da1568bc355347a71e96, Library\devkit\docs.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     ' Module docs
     ' 
-    '     Function: apiDocsHtml, getDefaultTemplate, makeHtmlDocs, parameterTable
+    '     Function: apiDocsHtml, getDefaultTemplate, makeHtmlDocs, makeMarkdownDocs, parameterTable
     ' 
     ' /********************************************************************************/
 
@@ -256,4 +256,3 @@ Module docs
         Return list.ToString
     End Function
 End Module
-

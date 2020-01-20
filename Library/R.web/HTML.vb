@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b7bb8288dfb6012fb3bb986cead43a07, Library\R.web\HTML.vb"
+﻿#Region "Microsoft.VisualBasic::c913e8efee40349b8e36276c88cabec9, Library\R.web\HTML.vb"
 
     ' Author:
     ' 
@@ -57,4 +57,3 @@ Module HTML
         Return render.Transform(markdown)
     End Function
 End Module
-
