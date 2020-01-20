@@ -49,7 +49,6 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
@@ -83,15 +82,6 @@ Namespace Interpreter.ExecuteEngine
                 Return targetSymbols.Length
             End Get
         End Property
-
-        Sub New(tokens As List(Of Token()))
-            targetSymbols = DeclareNewVariable _
-                .getNames(tokens(Scan0)) _
-                .Select(Function(name) New Literal(name)) _
-                .ToArray
-            isByRef = tokens(Scan0)(Scan0).text = "="
-            value = tokens.Skip(2).AsList.DoCall(AddressOf Expression.ParseExpression)
-        End Sub
 
         Sub New(targetSymbols$(), value As Expression)
             Me.targetSymbols = targetSymbols _
