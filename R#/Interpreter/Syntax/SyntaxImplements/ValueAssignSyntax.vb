@@ -57,7 +57,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Dim isByRef = tokens(Scan0)(Scan0).text = "="
             Dim value As SyntaxResult = tokens.Skip(2) _
                 .AsList _
-                .DoCall(AddressOf Expression.ParseExpression)
+                .ParseExpression
 
             If value.isException Then
                 Return value

@@ -231,7 +231,7 @@ Namespace Interpreter.SyntaxParser
         ''' <returns></returns>
         <Extension>
         Public Function isLiteral(tokens As Token(), Optional type As TokenType = TokenType.invalid) As Boolean
-            If tokens.Length = 1 AndAlso tokens(Scan0).name Like Expression.literalTypes Then
+            If tokens.Length = 1 AndAlso tokens(Scan0).name Like ExpressionSignature.literalTypes Then
                 If type <> TokenType.invalid Then
                     Return tokens(Scan0).name = type
                 Else

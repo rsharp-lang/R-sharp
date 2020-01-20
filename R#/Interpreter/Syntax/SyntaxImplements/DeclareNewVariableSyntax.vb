@@ -77,13 +77,13 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 var.m_type = code(3)(Scan0).text.GetRTypeCode
 
                 If code.Count > 4 AndAlso code(4).isOperator("=", "<-") Then
-                    valSyntaxtemp = code.Skip(5).AsList.DoCall(AddressOf Expression.ParseExpression)
+                    valSyntaxtemp = code.Skip(5).AsList.ParseExpression
                 End If
             Else
                 var.m_type = TypeCodes.generic
 
                 If code > 2 AndAlso code(2).isOperator("=", "<-") Then
-                    valSyntaxtemp = code.Skip(3).AsList.DoCall(AddressOf Expression.ParseExpression)
+                    valSyntaxtemp = code.Skip(3).AsList.ParseExpression
                 End If
             End If
 
@@ -97,7 +97,9 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         End Function
 
         Public Function DeclareNewVariable(code As List(Of Token)) As SyntaxResult
-            Return SyntaxImplements.DeclareNewVariable(code:=code.SplitByTopLevelDelimiter(TokenType.operator, includeKeyword:=True))
+            Return code _
+                .SplitByTopLevelDelimiter(TokenType.operator, includeKeyword:=True) _
+                .DoCall(AddressOf SyntaxImplements.DeclareNewVariable)
         End Function
 
         Public Function DeclareNewVariable(singleToken As Token()) As SyntaxResult
