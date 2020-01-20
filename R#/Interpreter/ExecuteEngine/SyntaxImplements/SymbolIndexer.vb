@@ -126,7 +126,7 @@ Namespace Interpreter.ExecuteEngine.SyntaxImplements
                     End If
                 Next
 
-                index = New VectorLiteral(elements.ToArray)
+                index = New ExecuteEngine.VectorLiteral(elements.ToArray)
             End If
         End Sub
     End Module

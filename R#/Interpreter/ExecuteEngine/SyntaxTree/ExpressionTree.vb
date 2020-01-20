@@ -82,12 +82,12 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         <Extension>
-        Private Function ParseExpressionTree(tokens As Token()) As Expression
+        Private Function ParseExpressionTree(tokens As Token()) As SyntaxResult
             Dim blocks As List(Of Token())
 
             If tokens.Length = 1 Then
                 If tokens(Scan0).name = TokenType.stringInterpolation Then
-                    Return New StringInterpolation(tokens(Scan0))
+                    Return SyntaxImplements.StringInterpolation(tokens(Scan0))
                 ElseIf tokens(Scan0).name = TokenType.cliShellInvoke Then
                     Return New CommandLine(tokens(Scan0))
                 ElseIf tokens(Scan0) = (TokenType.operator, "$") Then
@@ -104,9 +104,9 @@ Namespace Interpreter.ExecuteEngine
             If blocks = 1 Then
                 ' 简单的表达式
                 If tokens.isFunctionInvoke Then
-                    Return New FunctionInvoke(tokens)
+                    Return SyntaxImplements.FunctionInvoke(tokens)
                 ElseIf tokens.isSimpleSymbolIndexer Then
-                    Return New SymbolIndexer(tokens)
+                    Return SyntaxImplements.SymbolIndexer(tokens)
                 ElseIf tokens(Scan0).name = TokenType.open Then
                     Dim openSymbol = tokens(Scan0).text
 
@@ -124,9 +124,9 @@ Namespace Interpreter.ExecuteEngine
                         Return New ClosureExpression(tokens)
                     End If
                 ElseIf tokens(Scan0).name = TokenType.stringInterpolation Then
-                    Return New StringInterpolation(tokens(Scan0))
+                    Return SyntaxImplements.StringInterpolation(tokens(Scan0))
                 Else
-                    Dim indexer As Expression = tokens.parseComplexSymbolIndexer
+                    Dim indexer As SyntaxResult = tokens.parseComplexSymbolIndexer
 
                     If Not indexer Is Nothing Then
                         Return indexer

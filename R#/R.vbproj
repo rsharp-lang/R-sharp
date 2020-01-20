@@ -266,6 +266,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\VectorLiteral.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\StringInterpolationSyntax.vb" />
     <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\SymbolIndexer.vb" />
     <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\FunctionInvokeSyntax.vb" />
     <Compile Include="Interpreter\ExecuteEngine\SyntaxTree\Splitter.vb" />

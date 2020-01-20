@@ -44,7 +44,6 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
-Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -71,12 +70,6 @@ Namespace Interpreter.ExecuteEngine
         End Property
 
         Dim program As Program
-
-        Sub New(tokens As IEnumerable(Of Token))
-            program = tokens _
-                .ToArray _
-                .DoCall(AddressOf Program.CreateProgram)
-        End Sub
 
         <DebuggerStepThrough>
         Sub New(code As Expression())
