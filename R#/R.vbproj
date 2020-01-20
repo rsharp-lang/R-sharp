@@ -266,19 +266,19 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\CommandLine.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\DeclareNewFunctionSyntax.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\ClosureExpressionSyntax.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\DeclareNewVariableSyntax.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\DeclareLambdaFunctionSyntax.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\UsingClosureSyntax.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\ValueAssignSyntax.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\RequireSyntax.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\VectorLiteral.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\StringInterpolationSyntax.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\SymbolIndexer.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\FunctionInvokeSyntax.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\SyntaxTree\Splitter.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\CommandLine.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\DeclareNewFunctionSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\ClosureExpressionSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\DeclareNewVariableSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\DeclareLambdaFunctionSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\UsingClosureSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\ValueAssignSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\RequireSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\VectorLiteral.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\StringInterpolationSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\SymbolIndexer.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\FunctionInvokeSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxTree\Splitter.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxResult.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\ByRefFunctionCall.vb" />
@@ -316,9 +316,9 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\VectorLiteral.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewVariable.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\SyntaxTree\ExpressionTree.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\SyntaxTree\ExpressionSignature.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\SyntaxTree\BinaryExpressionTree.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxTree\ExpressionTree.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxTree\ExpressionSignature.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxTree\BinaryExpressionTree.vb" />
     <Compile Include="Interpreter\Extensions.vb" />
     <Compile Include="Interpreter\Program.vb" />
     <Compile Include="Interpreter\RInterpreter.vb" />
