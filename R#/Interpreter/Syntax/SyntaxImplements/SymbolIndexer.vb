@@ -4,7 +4,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 
-Namespace Interpreter.ExecuteEngine.SyntaxImplements
+Namespace Interpreter.SyntaxParser.SyntaxImplements
 
     Module SymbolIndexerSyntax
 

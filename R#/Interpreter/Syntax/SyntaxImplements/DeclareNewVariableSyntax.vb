@@ -5,7 +5,7 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 
-Namespace Interpreter.ExecuteEngine.SyntaxImplements
+Namespace Interpreter.SyntaxParser.SyntaxImplements
 
     Module DeclareNewVariableSyntax
 
@@ -52,7 +52,7 @@ Namespace Interpreter.ExecuteEngine.SyntaxImplements
                 .names = getNames(singleToken),
                 .m_type = TypeCodes.generic,
                 .hasInitializeExpression = False,
-                .value = Nothing
+                .Value = Nothing
             }
         End Function
 

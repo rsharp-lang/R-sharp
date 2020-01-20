@@ -1,6 +1,6 @@
 ﻿Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 
-Namespace Interpreter
+Namespace Interpreter.SyntaxParser
 
     Friend Class SyntaxResult
 

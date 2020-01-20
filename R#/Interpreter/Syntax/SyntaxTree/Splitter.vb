@@ -3,7 +3,7 @@ Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 
-Namespace Interpreter.ExecuteEngine
+Namespace Interpreter.SyntaxParser
 
     Module Splitter
 

@@ -2,7 +2,7 @@
 Imports System.Text.RegularExpressions
 Imports SMRUCC.Rsharp.Language.TokenIcer
 
-Namespace Interpreter.ExecuteEngine.SyntaxImplements
+Namespace Interpreter.SyntaxParser.SyntaxImplements
 
     Module CommandLineSyntax
 

@@ -5,7 +5,7 @@ Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime.Components
 
-Namespace Interpreter.ExecuteEngine.SyntaxImplements
+Namespace Interpreter.SyntaxParser.SyntaxImplements
 
     Module VectorLiteralSyntax
 
