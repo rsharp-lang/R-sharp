@@ -266,7 +266,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\SymbolIndexer.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\SyntaxImplements.vb" />
     <Compile Include="Interpreter\SyntaxResult.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\ByRefFunctionCall.vb" />
@@ -304,9 +305,9 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\VectorLiteral.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewVariable.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionTree.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSignature.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\BinaryExpressionTree.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\SyntaxTree\ExpressionTree.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\SyntaxTree\ExpressionSignature.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\SyntaxTree\BinaryExpressionTree.vb" />
     <Compile Include="Interpreter\Extensions.vb" />
     <Compile Include="Interpreter\Program.vb" />
     <Compile Include="Interpreter\RInterpreter.vb" />

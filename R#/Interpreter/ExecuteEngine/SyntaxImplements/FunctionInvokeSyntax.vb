@@ -1,9 +1,9 @@
 ﻿Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 
-Namespace Interpreter.ExecuteEngine
+Namespace Interpreter.ExecuteEngine.SyntaxImplements
 
-    Module SyntaxImplements
+    Module FunctionInvokeSyntax
 
         Public Function FunctionInvoke(tokens As Token()) As SyntaxResult
             Dim params = tokens _
