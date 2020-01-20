@@ -122,7 +122,7 @@ Namespace Interpreter.SyntaxParser
                             .DoCall(AddressOf ParseBinaryExpression)
                     ElseIf openSymbol = "{" Then
                         ' 是一个可以产生值的closure
-                        Return New ClosureExpression(tokens)
+                        Return SyntaxImplements.ClosureExpression(tokens)
                     End If
                 ElseIf tokens(Scan0).name = TokenType.stringInterpolation Then
                     Return SyntaxImplements.StringInterpolation(tokens(Scan0))

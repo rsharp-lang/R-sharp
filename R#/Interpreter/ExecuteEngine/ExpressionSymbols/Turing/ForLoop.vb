@@ -47,8 +47,6 @@
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
-Imports SMRUCC.Rsharp.Language
-Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 
@@ -85,7 +83,10 @@ Namespace Interpreter.ExecuteEngine
         End Property
 
         Sub New(variables$(), sequence As Expression, body As DeclareNewFunction, parallel As Boolean)
-
+            Me.variables = variables
+            Me.sequence = sequence
+            Me.body = body
+            Me.parallel = parallel
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object

@@ -272,6 +272,7 @@
     <Compile Include="Interpreter\Syntax\SyntaxImplements\DeclareNewVariableSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\DeclareLambdaFunctionSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\ForLoopSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\IfBranchSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\UsingClosureSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\ValueAssignSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\RequireSyntax.vb" />

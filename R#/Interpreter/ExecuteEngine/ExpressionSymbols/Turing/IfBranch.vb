@@ -52,9 +52,6 @@
 #End Region
 
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
-Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Language
-Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
@@ -95,19 +92,6 @@ Namespace Interpreter.ExecuteEngine
                 End Select
             End Function
         End Class
-
-        Sub New(tokens As IEnumerable(Of Token))
-            Dim blocks = tokens.SplitByTopLevelDelimiter(TokenType.close)
-
-            ifTest = Expression.CreateExpression(blocks(Scan0).Skip(1))
-            trueClosure = New DeclareNewFunction With {
-                .funcName = "if_closure_internal",
-                .params = {},
-                .body = blocks(2) _
-                    .Skip(1) _
-                    .DoCall(AddressOf ClosureExpression.ParseExpressionTree)
-            }
-        End Sub
 
         Sub New(ifTest As Expression, trueClosure As ClosureExpression)
             Me.ifTest = ifTest

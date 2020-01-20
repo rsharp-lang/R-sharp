@@ -45,6 +45,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
+Imports [String] = SMRUCC.Rsharp.Interpreter.ExecuteEngine.StringInterpolation
 
 Namespace Interpreter.SyntaxParser.SyntaxImplements
 
@@ -73,7 +74,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 End If
             Next
 
-            Return New StringInterpolation(parts)
+            Return New [String](parts)
         End Function
     End Module
 End Namespace
