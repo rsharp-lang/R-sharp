@@ -72,6 +72,9 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+
+        Call syntaxErrorTest()
+
         Call usingTest()
         Call dataframeIndexTest()
 
@@ -162,6 +165,12 @@ Module interpreterTest
 
 
         Pause()
+    End Sub
+
+    Sub syntaxErrorTest()
+        Call R.Evaluate("let a as string = '123'
+
+print(a);")
     End Sub
 
     Sub usingTest()

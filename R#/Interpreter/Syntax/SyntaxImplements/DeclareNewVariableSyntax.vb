@@ -89,6 +89,8 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
             If valSyntaxtemp Is Nothing Then
                 var.hasInitializeExpression = False
+            ElseIf valSyntaxtemp.isException Then
+                Return valSyntaxtemp
             Else
                 var.value = valSyntaxtemp.expression
             End If
