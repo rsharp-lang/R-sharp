@@ -62,8 +62,13 @@ Namespace Interpreter.ExecuteEngine
         ''' </summary>
         Friend value As Expression
         Friend hasInitializeExpression As Boolean = False
+        Friend m_type As TypeCodes
 
         Public Overrides ReadOnly Property type As TypeCodes
+            Get
+                Return m_type
+            End Get
+        End Property
 
         Sub New()
         End Sub
