@@ -112,7 +112,7 @@ Namespace Interpreter.SyntaxParser
                     Dim openSymbol = tokens(Scan0).text
 
                     If openSymbol = "[" Then
-                        Return New VectorLiteral(tokens)
+                        Return SyntaxImplements.VectorLiteral(tokens)
                     ElseIf openSymbol = "(" Then
                         ' 是一个表达式
                         Return tokens _
