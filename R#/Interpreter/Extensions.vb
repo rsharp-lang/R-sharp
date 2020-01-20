@@ -119,6 +119,7 @@ Namespace Interpreter
             message &= vbCrLf & vbCrLf & rawText
             message &= vbCrLf & vbCrLf & "The parser stack trace:"
             message &= vbCrLf & vbCrLf & syntaxResult.stackTrace
+            message &= vbCrLf & vbCrLf
 
             Throw New Exception(message)
         End Sub

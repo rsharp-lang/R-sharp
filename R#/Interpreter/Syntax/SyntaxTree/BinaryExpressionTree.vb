@@ -148,13 +148,14 @@ Namespace Interpreter.SyntaxParser
                 opSymbol:="$",
                 expression:=Function(a, b)
                                 Dim nameSymbol As String
-                                Dim typeofName As Type = b.GetUnderlyingType
 
                                 If a.VA.isException Then
                                     Return a
                                 ElseIf b.VA.isException Then
                                     Return b
                                 End If
+
+                                Dim typeofName As Type = b.VA.expression.GetType
 
                                 If typeofName Is GetType(SymbolReference) Then
                                     nameSymbol = DirectCast(b.VA.expression, SymbolReference).symbol
