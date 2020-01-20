@@ -174,7 +174,7 @@ Namespace Interpreter.ExecuteEngine
                 End If
             ElseIf code.isLambdaFunction Then
                 ' is a lambda function
-                Return New DeclareLambdaFunction(code)
+                Return SyntaxImplements.DeclareLambdaFunction(code)
             End If
 
             If code(Scan0).isIdentifier Then

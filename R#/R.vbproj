@@ -279,7 +279,7 @@
     <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\SymbolIndexer.vb" />
     <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\FunctionInvokeSyntax.vb" />
     <Compile Include="Interpreter\ExecuteEngine\SyntaxTree\Splitter.vb" />
-    <Compile Include="Interpreter\SyntaxResult.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxResult.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\ByRefFunctionCall.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CLI\CommandLineArgument.vb" />
@@ -443,5 +443,6 @@
   <ItemGroup>
     <None Include="Resources\contributions.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
