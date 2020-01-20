@@ -1,58 +1,55 @@
 ﻿#Region "Microsoft.VisualBasic::315d15522c5cb222fdfd7e8d8feaeefd, R#\Interpreter\ExecuteEngine\ExpressionSymbols\LinqExpression.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class LinqExpression
-    ' 
-    '         Properties: type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: Evaluate
-    ' 
-    '         Sub: doParseLINQProgram
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class LinqExpression
+' 
+'         Properties: type
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: Evaluate
+' 
+'         Sub: doParseLINQProgram
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
-Imports Microsoft.VisualBasic.Emit.Marshal
-Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Language
-Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Interpreter.ExecuteEngine
 
@@ -77,7 +74,7 @@ Namespace Interpreter.ExecuteEngine
         ''' 第一个元素是from申明的
         ''' 剩余的元素都是let语句申明的
         ''' </remarks>
-        Dim locals As New List(Of DeclareNewVariable)
+        Dim locals As DeclareNewVariable()
         Dim program As ClosureExpression
         ''' <summary>
         ''' select
@@ -86,139 +83,37 @@ Namespace Interpreter.ExecuteEngine
 
         Dim output As ClosureExpression
 
-        Sub New(tokens As List(Of Token()))
-            Dim variables As New List(Of String)
-            Dim i As Integer = 0
+        Sub New(locals As IEnumerable(Of DeclareNewVariable), sequence As Expression, program As ClosureExpression, projection As Expression, output As ClosureExpression)
+            Me.locals = locals.ToArray
+            Me.sequence = sequence
+            Me.program = program
+            Me.projection = projection
+            Me.output = output
+        End Sub
 
-            For i = 1 To tokens.Count - 1
-                If tokens(i).isIdentifier Then
-                    variables.Add(tokens(i)(Scan0).text)
-                ElseIf tokens(i).isKeyword("in") Then
-                    sequence = Expression.CreateExpression(tokens(i + 1))
-                    Exit For
-                End If
-            Next
+        Private Function produceSequenceVector(env As Environment, ByRef isList As Boolean) As Object
+            Dim sequence As Object = Me.sequence.Evaluate(env)
 
             If sequence Is Nothing Then
-                Throw New SyntaxErrorException
-            Else
-                i += 2
-                locals = New DeclareNewVariable With {
-                    .names = variables.ToArray,
-                    .hasInitializeExpression = False,
-                    .value = Nothing
-                }
+                Return {}
+            ElseIf Interpreter.Program.isException(sequence) Then
+                Return sequence
+            ElseIf sequence.GetType Is GetType(list) Then
+                sequence = DirectCast(sequence, list).slots
             End If
 
-            tokens = tokens _
-                .Skip(i) _
-                .IteratesALL _
-                .SplitByTopLevelDelimiter(TokenType.keyword)
+            If sequence.GetType Is GetType(Dictionary(Of String, Object)) Then
+                sequence = DirectCast(sequence, Dictionary(Of String, Object)).ToArray
+                isList = True
+            Else
+                sequence = Runtime.asVector(Of Object)(sequence)
+            End If
 
-            Call New Pointer(Of Token())(tokens).DoCall(AddressOf doParseLINQProgram)
-        End Sub
-
-        Shared ReadOnly linqKeywordDelimiters As String() = {"where", "distinct", "select", "order", "group", "let"}
-
-        Private Sub doParseLINQProgram(p As Pointer(Of Token()))
-            Dim buffer As New List(Of Token())
-            Dim token As Token()
-            Dim program As New List(Of Expression)
-            Dim expression As Expression
-            Dim output As New List(Of Expression)
-
-            Do While Not p.EndRead
-                buffer *= 0
-                token = ++p
-
-                If token.isKeyword Then
-                    Select Case token(Scan0).text
-                        Case "let"
-                            buffer += token
-
-                            Do While Not p.EndRead AndAlso Not p.Current.isOneOfKeywords(linqKeywordDelimiters)
-                                buffer += ++p
-                            Loop
-
-                            Dim declares = buffer _
-                                .IteratesALL _
-                                .SplitByTopLevelDelimiter(TokenType.operator, True) _
-                                .DoCall(Function(blocks)
-                                            Return New DeclareNewVariable(blocks)
-                                        End Function)
-
-                            program += New ValueAssign(declares.names, declares.value)
-                            locals += declares
-                            declares.value = Nothing
-                        Case "where"
-                            Do While Not p.EndRead AndAlso Not p.Current.isOneOfKeywords(linqKeywordDelimiters)
-                                buffer += ++p
-                            Loop
-
-                            expression = buffer _
-                                .IteratesALL _
-                                .DoCall(AddressOf Expression.CreateExpression)
-                            ' 需要取反才可以正常执行中断语句
-                            ' 例如 where 5 < 2
-                            ' if test的结果为false
-                            ' 则当前迭代循环需要跳过
-                            ' 即执行trueclosure部分
-                            ' 或者添加一个else closure
-                            expression = New BinaryExpression(expression, Literal.FALSE, "==")
-                            program += New IfBranch(expression, {New ReturnValue(Literal.NULL)})
-                        Case "distinct"
-                            output += New FunctionInvoke("unique", New SymbolReference("$"))
-                        Case "order"
-                            ' order by xxx asc
-                            Do While Not p.EndRead AndAlso Not p.Current.isOneOfKeywords(linqKeywordDelimiters)
-                                buffer += ++p
-                            Loop
-
-                            token = buffer.IteratesALL.ToArray
-
-                            If Not token(Scan0).isKeyword("by") Then
-                                Throw New SyntaxErrorException
-                            End If
-
-                            ' skip first by keyword
-                            expression = token _
-                                .Skip(1) _
-                                .Take(token.Length - 2) _
-                                .DoCall(AddressOf Expression.CreateExpression)
-                            output += New FunctionInvoke("sort", expression, New Literal(token.Last.isKeyword("descending")))
-                        Case "select"
-                            If Not projection Is Nothing Then
-                                Throw New SyntaxErrorException("Only allows one project function!")
-                            End If
-
-                            Do While Not p.EndRead AndAlso Not p.Current.isOneOfKeywords(linqKeywordDelimiters)
-                                buffer += ++p
-                            Loop
-
-                            projection = Expression.CreateExpression(buffer.IteratesALL)
-
-                            If TypeOf projection Is VectorLiteral Then
-                                projection = New FunctionInvoke("list", DirectCast(projection, VectorLiteral).ToArray)
-                            End If
-                        Case "group"
-                            Do While Not p.EndRead AndAlso Not p.Current.isOneOfKeywords(linqKeywordDelimiters)
-                                buffer += ++p
-                            Loop
-
-                            Throw New NotImplementedException
-                        Case Else
-                            Throw New SyntaxErrorException
-                    End Select
-                End If
-            Loop
-
-            Me.program = program.ToArray
-            Me.output = output.ToArray
-        End Sub
+            Return sequence
+        End Function
 
         Public Overrides Function Evaluate(parent As Environment) As Object
             Dim envir As New Environment(parent, "linq_closure")
-            Dim sequence As Object
             Dim result As New Dictionary(Of String, Object)
             Dim key$
             Dim from As Expression() = locals(Scan0).names _
@@ -226,28 +121,31 @@ Namespace Interpreter.ExecuteEngine
                             Return New Literal(name)
                         End Function) _
                 .ToArray
+            Dim isList As Boolean = False
 
             ' 20191105
             ' 序列的产生需要放在变量申明之前
             ' 否则linq表达式中的与外部环境中的同名变量会导致NULL错误出现
-            sequence = Me.sequence.Evaluate(envir)
+            Dim source As Object = produceSequenceVector(envir, isList)
+
+            If Interpreter.Program.isException(source) Then
+                Return source
+            End If
+
+            Dim sequence As Array = DirectCast(source, Array)
 
             For Each local As DeclareNewVariable In locals
                 Call local.Evaluate(envir)
             Next
 
-            If sequence.GetType Is GetType(Dictionary(Of String, Object)) Then
-                sequence = DirectCast(sequence, Dictionary(Of String, Object)).ToArray
-            Else
-                sequence = Runtime.asVector(Of Object)(sequence)
-            End If
-
             For i As Integer = 0 To sequence.Length - 1
-                Dim item = sequence.GetValue(i)
+                Dim item As Object = sequence.GetValue(i)
 
-                If TypeOf item Is KeyValuePair(Of String, Object) Then
-                    key = DirectCast(item, KeyValuePair(Of String, Object)).Key
-                    item = DirectCast(item, KeyValuePair(Of String, Object)).Value
+                If isList Then
+                    With DirectCast(item, KeyValuePair(Of String, Object))
+                        key = .Key
+                        item = .Value
+                    End With
                 Else
                     key = i + 1
                 End If

@@ -7,6 +7,26 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
     Module IfBranchSyntax
 
+        Public Function IIfExpression(test As Token(), ifelse As List(Of Token())) As SyntaxResult
+            Dim ifTest = Expression.CreateExpression(test)
+            Dim trueResult = Expression.CreateExpression(ifelse(Scan0))
+            Dim falseResult = Expression.CreateExpression(ifelse(2))
+
+            If ifTest.isException Then
+                Return ifTest
+            ElseIf trueResult.isException Then
+                Return trueResult
+            ElseIf falseResult.isException Then
+                Return falseResult
+            Else
+                Return New IIfExpression(
+                    iftest:=ifTest.expression,
+                    trueResult:=trueResult.expression,
+                    falseResult:=falseResult.expression
+                )
+            End If
+        End Function
+
         Public Function IfBranch(tokens As IEnumerable(Of Token)) As SyntaxResult
             Dim blocks = tokens.SplitByTopLevelDelimiter(TokenType.close)
             Dim ifTest = Expression.CreateExpression(blocks(Scan0).Skip(1))

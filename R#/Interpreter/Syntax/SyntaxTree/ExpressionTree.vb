@@ -56,10 +56,10 @@ Namespace Interpreter.SyntaxParser
             Dim blocks As List(Of Token()) = tokens.SplitByTopLevelDelimiter(TokenType.comma)
 
             If blocks = 1 Then
-                Dim exp As Expression = blocks(Scan0).simpleSequence
+                Dim expression As SyntaxResult = blocks(Scan0).simpleSequence
 
-                If Not exp Is Nothing Then
-                    Return exp
+                If Not expression Is Nothing Then
+                    Return expression
                 Else
                     ' 是一个复杂的表达式
                     Return blocks(Scan0).ParseExpressionTree
@@ -70,13 +70,13 @@ Namespace Interpreter.SyntaxParser
         End Function
 
         <Extension>
-        Private Function simpleSequence(tokens As Token()) As SequenceLiteral
+        Private Function simpleSequence(tokens As Token()) As SyntaxResult
             Dim blocks = tokens.SplitByTopLevelDelimiter(TokenType.sequence)
 
             If blocks = 3 Then
-                Return New SequenceLiteral(blocks(Scan0), blocks(2), Nothing)
+                Return SyntaxImplements.SequenceLiteral(blocks(Scan0), blocks(2), Nothing)
             ElseIf blocks = 5 Then
-                Return New SequenceLiteral(blocks(Scan0), blocks(2), blocks.ElementAtOrDefault(4))
+                Return SyntaxImplements.SequenceLiteral(blocks(Scan0), blocks(2), blocks.ElementAtOrDefault(4))
             Else
                 Return Nothing
             End If

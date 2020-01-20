@@ -102,7 +102,7 @@ Namespace Interpreter.ExecuteEngine
                 Case "return" : Return New ReturnValue(code.Skip(1).IteratesALL)
                 Case "for" : Return SyntaxImplements.ForLoop(code.Skip(1).IteratesALL)
                 Case "from" : Return New LinqExpression(code)
-                Case "imports" : Return New [Imports](code)
+                Case "imports" : Return SyntaxImplements.[Imports](code)
                 Case "function"
                     Dim [let] = New Token() {New Token(TokenType.keyword, "let")}
                     Dim name = New Token() {New Token(TokenType.identifier, "<$anonymous>")}
@@ -170,7 +170,7 @@ Namespace Interpreter.ExecuteEngine
                     If ifelse.ifelse Is Nothing Then
                         Return item.CreateTree
                     Else
-                        Return New IIfExpression(ifelse.test, ifelse.ifelse)
+                        Return SyntaxImplements.IIfExpression(ifelse.test, ifelse.ifelse)
                     End If
                 End If
             ElseIf code.isLambdaFunction Then
@@ -219,7 +219,7 @@ Namespace Interpreter.ExecuteEngine
                         End If
                     End If
 
-                    Return New SequenceLiteral(from, [to], steps)
+                    Return SyntaxImplements.SequenceLiteral(from, [to], steps)
                 End If
             End If
 Binary:
