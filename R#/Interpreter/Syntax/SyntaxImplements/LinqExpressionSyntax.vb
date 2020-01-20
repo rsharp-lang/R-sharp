@@ -185,6 +185,5 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
             Return Nothing
         End Function
-
     End Module
 End Namespace

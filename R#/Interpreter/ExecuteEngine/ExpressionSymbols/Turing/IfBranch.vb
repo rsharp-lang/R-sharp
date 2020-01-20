@@ -63,8 +63,8 @@ Namespace Interpreter.ExecuteEngine
 
         Public Overrides ReadOnly Property type As TypeCodes
 
-        Dim ifTest As Expression
-        Dim trueClosure As DeclareNewFunction
+        Friend ReadOnly ifTest As Expression
+        Friend ReadOnly trueClosure As DeclareNewFunction
 
         Friend Class IfPromise
 

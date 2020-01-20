@@ -47,7 +47,15 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         End Function
 
         Public Function ElseIfBranch(tokens As IEnumerable(Of Token)) As SyntaxResult
+            Dim [if] As SyntaxResult = IfBranch(tokens)
 
+            If [if].isException Then
+                Return [if]
+            Else
+                With DirectCast([if].expression, IfBranch)
+                    Return New ElseIfBranch(.ifTest, .trueClosure.body)
+                End With
+            End If
         End Function
 
         Public Function ElseBranch(code As Token()) As SyntaxResult
