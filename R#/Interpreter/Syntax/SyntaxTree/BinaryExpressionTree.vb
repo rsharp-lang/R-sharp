@@ -285,7 +285,7 @@ Namespace Interpreter.SyntaxParser
 
                                 If pip Is Nothing Then
                                     If b.VA.expression.isFunctionTuple Then
-                                        Dim invokes = b.TryCast(Of VectorLiteral)
+                                        Dim invokes As VectorLiteral = b.VA.expression
                                         Dim calls As New List(Of Expression)
 
                                         For Each [call] As Expression In invokes

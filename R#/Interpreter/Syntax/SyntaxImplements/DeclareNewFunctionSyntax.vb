@@ -84,7 +84,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Dim params As New List(Of DeclareNewVariable)
             Dim err As SyntaxResult = getParameters(paramPart, params)
 
-            If err.isException Then
+            If err IsNot Nothing AndAlso err.isException Then
                 Return err
             Else
                 Return New DeclareNewFunction With {
