@@ -69,7 +69,13 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     Return New CommandLine(temp.expression)
                 End If
             Else
-                Return New CommandLine(New Literal(shell))
+                Dim literalSyntax As SyntaxResult = SyntaxImplements.LiteralSyntax(shell)
+
+                If literalSyntax.isException Then
+                    Return literalSyntax
+                Else
+                    Return New CommandLine(literalSyntax.expression)
+                End If
             End If
         End Function
 

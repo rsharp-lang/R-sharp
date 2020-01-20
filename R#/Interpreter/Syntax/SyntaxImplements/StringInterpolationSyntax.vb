@@ -59,7 +59,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
             For Each part As Token() In block
                 If part.isLiteral(TokenType.stringLiteral) Then
-                    parts += New Literal(part(Scan0))
+                    parts += New Literal(part(Scan0).text)
                 Else
                     syntaxTemp = part _
                         .Skip(1) _

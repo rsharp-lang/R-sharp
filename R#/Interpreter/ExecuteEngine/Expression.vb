@@ -161,7 +161,7 @@ Namespace Interpreter.ExecuteEngine
                 Dim item As Token() = code(Scan0)
 
                 If item.isLiteral Then
-                    Return New Literal(item(Scan0))
+                    Return SyntaxImplements.LiteralSyntax(item(Scan0))
                 ElseIf item.isIdentifier Then
                     Return New SymbolReference(item(Scan0))
                 Else

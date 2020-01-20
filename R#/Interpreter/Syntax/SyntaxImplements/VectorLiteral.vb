@@ -52,6 +52,34 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
     Module VectorLiteralSyntax
 
+        Public Function LiteralSyntax(token As Token) As SyntaxResult
+            Select Case token.name
+                Case TokenType.booleanLiteral
+                    Return New Literal With {.m_type = TypeCodes.boolean, .value = token.text.ParseBoolean}
+                Case TokenType.integerLiteral
+                    Return New Literal With {.m_type = TypeCodes.integer, .value = CLng(token.text.ParseInteger)}
+                Case TokenType.numberLiteral
+                    Return New Literal With {.m_type = TypeCodes.double, .value = token.text.ParseDouble}
+                Case TokenType.stringLiteral, TokenType.cliShellInvoke
+                    Return New Literal With {.m_type = TypeCodes.string, .value = token.text}
+                Case TokenType.missingLiteral
+                    Dim type = TypeCodes.generic
+                    Dim value As Object
+
+                    Select Case token.text
+                        Case "NULL" : value = Nothing
+                        Case "NA" : value = GetType(Void)
+                        Case "Inf" : value = Double.PositiveInfinity
+                        Case Else
+                            Return New SyntaxResult(New SyntaxErrorException)
+                    End Select
+
+                    Return New Literal With {.m_type = type, .value = value}
+                Case Else
+                    Return New SyntaxResult(New InvalidExpressionException(token.ToString))
+            End Select
+        End Function
+
         Public Function VectorLiteral(tokens As Token()) As SyntaxResult
             Dim blocks As List(Of Token()) = tokens _
                 .Skip(1) _
@@ -111,7 +139,17 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             If steps.IsNullOrEmpty Then
                 Return New SequenceLiteral(fromSyntax.expression, toSyntax.expression, New Literal(1))
             ElseIf steps.isLiteral Then
-                Return New SequenceLiteral(fromSyntax.expression, toSyntax.expression, New Literal(steps(Scan0)))
+                Dim stepLiteral As SyntaxResult = SyntaxImplements.LiteralSyntax(steps(Scan0))
+
+                If stepLiteral.isException Then
+                    Return stepLiteral
+                End If
+
+                Return New SequenceLiteral(
+                    from:=fromSyntax.expression,
+                    [to]:=toSyntax.expression,
+                    steps:=stepLiteral.expression
+                )
             Else
                 Dim stepsSyntax = Expression.CreateExpression(steps)
 
