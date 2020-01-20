@@ -152,13 +152,18 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         <Extension>
-        Public Function parseComplexSymbolIndexer(tokens As Token()) As SymbolIndexer
+        Public Function parseComplexSymbolIndexer(tokens As Token()) As SyntaxResult
             ' func(...)[x]
             Dim code = tokens.SplitByTopLevelDelimiter(TokenType.close, tokenText:=")")
             Dim indexer = code.Last
 
             If indexer.isStackOf("[", "]") Then
-                Return New SymbolIndexer(code.Take(code.Count - 1).IteratesALL.ToArray, indexer)
+                Return code.Take(code.Count - 1) _
+                    .IteratesALL _
+                    .ToArray _
+                    .DoCall(Function(a)
+                                Return SyntaxImplements.SymbolIndexer(a, indexer)
+                            End Function)
             Else
                 Return Nothing
             End If
