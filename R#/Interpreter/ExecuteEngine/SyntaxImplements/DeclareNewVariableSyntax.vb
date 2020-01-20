@@ -1,5 +1,4 @@
-﻿Imports System.Runtime.CompilerServices
-Imports Microsoft.VisualBasic.Language
+﻿Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
@@ -68,7 +67,7 @@ Namespace Interpreter.ExecuteEngine.SyntaxImplements
                 .hasInitializeExpression = True,
                 .names = getNames(symbol),
                 .value = valSyntaxTemp.expression,
-                .m_type = .value.type,
+                .m_type = .value.type
             }
         End Function
 
