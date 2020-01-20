@@ -270,6 +270,7 @@
     <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\DeclareNewFunctionSyntax.vb" />
     <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\ClosureExpressionSyntax.vb" />
     <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\DeclareNewVariableSyntax.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\DeclareLambdaFunctionSyntax.vb" />
     <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\UsingClosureSyntax.vb" />
     <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\ValueAssignSyntax.vb" />
     <Compile Include="Interpreter\ExecuteEngine\SyntaxImplements\RequireSyntax.vb" />
