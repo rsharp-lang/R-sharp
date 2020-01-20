@@ -1,6 +1,7 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 
@@ -15,7 +16,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         ''' ``a[x]``
         ''' </param>
         Public Function SymbolIndexer(tokens As Token()) As SyntaxResult
-            Dim symbol = {tokens(Scan0)}.DoCall(AddressOf Expression.CreateExpression)
+            Dim symbol As SyntaxResult = {tokens(Scan0)}.DoCall(AddressOf Expression.CreateExpression)
             Dim indexType As SymbolIndexers
             Dim index As SyntaxResult = Nothing
 
