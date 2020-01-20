@@ -101,45 +101,10 @@ Namespace Interpreter.ExecuteEngine
         ''' </summary>
         Friend ReadOnly indexType As SymbolIndexers
 
-        ''' <summary>
-        ''' Simple indexer
-        ''' </summary>
-        ''' <param name="tokens">
-        ''' ``a[x]``
-        ''' </param>
-        Sub New(tokens As Token())
-            symbol = {tokens(Scan0)}.DoCall(AddressOf Expression.CreateExpression)
-            tokens = tokens.Skip(2).Take(tokens.Length - 3).ToArray
-
-            If tokens.isStackOf("[", "]") Then
-                tokens = tokens _
-                    .Skip(1) _
-                    .Take(tokens.Length - 2) _
-                    .ToArray
-                indexType = SymbolIndexers.nameIndex
-                index = Expression.CreateExpression(tokens)
-            Else
-                Call parseIndex(tokens, index, indexType)
-            End If
-        End Sub
-
-        ''' <summary>
-        ''' Complex indexer
-        ''' 
-        ''' ```
-        ''' func(...)[x]
-        ''' ```
-        ''' </summary>
-        ''' <param name="ref"></param>
-        ''' <param name="indexer"></param>
-        Sub New(ref As Token(), indexer As Token())
-            symbol = Expression.CreateExpression(ref)
-            indexer = indexer _
-                .Skip(1) _
-                .Take(indexer.Length - 2) _
-                .ToArray
-
-            Call parseIndex(indexer, index, indexType)
+        Sub New(symbol As Expression, index As Expression, indexType As SymbolIndexers)
+            Me.symbol = symbol
+            Me.index = index
+            Me.indexType = indexType
         End Sub
 
         ''' <summary>
