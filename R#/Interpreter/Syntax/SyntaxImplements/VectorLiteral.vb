@@ -93,5 +93,63 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 End If
             End With
         End Function
+
+        Public Function SequenceLiteral(from As Token, [to] As Token, steps As Token) As SyntaxResult
+            Dim fromSyntax = Expression.CreateExpression({from})
+            Dim toSyntax = Expression.CreateExpression({[to]})
+
+            If fromSyntax.isException Then
+                Return fromSyntax
+            ElseIf toSyntax.isException Then
+                Return toSyntax
+            End If
+
+            If steps Is Nothing Then
+                Return New SequenceLiteral(fromSyntax.expression, toSyntax.expression, New Literal(1))
+            ElseIf steps.name = TokenType.numberLiteral OrElse steps.name = TokenType.integerLiteral Then
+                Return New SequenceLiteral(fromSyntax.expression, toSyntax.expression, New Literal(steps))
+            Else
+                Dim stepsSyntax As SyntaxResult = Expression.CreateExpression({steps})
+
+                If stepsSyntax.isException Then
+                    Return stepsSyntax
+                End If
+
+                Return New SequenceLiteral(
+                    from:=fromSyntax.expression,
+                    [to]:=toSyntax.expression,
+                    steps:=stepsSyntax.expression
+                )
+            End If
+        End Function
+
+        Public Function SequenceLiteral(from As Token(), [to] As Token(), steps As Token()) As SyntaxResult
+            Dim fromSyntax = Expression.CreateExpression(from)
+            Dim toSyntax = Expression.CreateExpression([to])
+
+            If fromSyntax.isException Then
+                Return fromSyntax
+            ElseIf toSyntax.isException Then
+                Return toSyntax
+            End If
+
+            If steps.IsNullOrEmpty Then
+                Return New SequenceLiteral(fromSyntax.expression, toSyntax.expression, New Literal(1))
+            ElseIf steps.isLiteral Then
+                Return New SequenceLiteral(fromSyntax.expression, toSyntax.expression, New Literal(steps(Scan0)))
+            Else
+                Dim stepsSyntax = Expression.CreateExpression(steps)
+
+                If stepsSyntax.isException Then
+                    Return stepsSyntax
+                Else
+                    Return New SequenceLiteral(
+                        from:=fromSyntax.expression,
+                        [to]:=toSyntax.expression,
+                        steps:=stepsSyntax.expression
+                    )
+                End If
+            End If
+        End Function
     End Module
 End Namespace

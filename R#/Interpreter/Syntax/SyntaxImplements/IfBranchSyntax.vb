@@ -25,5 +25,22 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
             Return New SyntaxResult(New IfBranch(ifTest.expression, closureInternal.expression))
         End Function
+
+        Public Function ElseIfBranch(tokens As IEnumerable(Of Token)) As SyntaxResult
+
+        End Function
+
+        Public Function ElseBranch(code As Token()) As SyntaxResult
+            Dim syntaxResult As SyntaxResult = code _
+                .Skip(1) _
+                .Take(code.Length - 2) _
+                .DoCall(AddressOf SyntaxImplements.ClosureExpression)
+
+            If syntaxResult.isException Then
+                Return syntaxResult
+            Else
+                Return New ElseBranch(syntaxResult.expression)
+            End If
+        End Function
     End Module
 End Namespace

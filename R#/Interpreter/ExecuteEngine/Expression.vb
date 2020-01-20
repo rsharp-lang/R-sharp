@@ -96,11 +96,11 @@ Namespace Interpreter.ExecuteEngine
                     Else
                         Return SyntaxImplements.DeclareNewVariable(code)
                     End If
-                Case "if" : Return New IfBranch(code.Skip(1).IteratesALL)
-                Case "else" : Return New ElseBranch(code.Skip(1).IteratesALL.ToArray)
-                Case "elseif" : Return New ElseIfBranch(code.Skip(1).IteratesALL)
+                Case "if" : Return SyntaxImplements.IfBranch(code.Skip(1).IteratesALL)
+                Case "else" : Return code.Skip(1).IteratesALL.ToArray.DoCall(AddressOf SyntaxImplements.ElseBranch)
+                Case "elseif" : Return code.Skip(1).IteratesALL.DoCall(AddressOf SyntaxImplements.ElseIfBranch)
                 Case "return" : Return New ReturnValue(code.Skip(1).IteratesALL)
-                Case "for" : Return New ForLoop(code.Skip(1).IteratesALL)
+                Case "for" : Return SyntaxImplements.ForLoop(code.Skip(1).IteratesALL)
                 Case "from" : Return New LinqExpression(code)
                 Case "imports" : Return New [Imports](code)
                 Case "function"

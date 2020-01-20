@@ -1,54 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::337dd020f953b329d562c6c6468eb47d, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ElseBranch.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class ElseBranch
-    ' 
-    '         Properties: type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, ToString
-    ' 
-    '     Class ElseIfBranch
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class ElseBranch
+' 
+'         Properties: type
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate, ToString
+' 
+'     Class ElseIfBranch
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
-Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 
@@ -64,12 +62,9 @@ Namespace Interpreter.ExecuteEngine
 
         Dim closure As DeclareNewFunction
 
-        Sub New(code As Token())
+        Sub New(bodyClosure As ClosureExpression)
             closure = New DeclareNewFunction With {
-                .body = code _
-                    .Skip(1) _
-                    .Take(code.Length - 2) _
-                    .DoCall(AddressOf ClosureExpression.ParseExpressionTree),
+                .body = bodyClosure,
                 .funcName = "else_branch_internal",
                 .params = {}
             }
@@ -104,8 +99,8 @@ Namespace Interpreter.ExecuteEngine
 
     Public Class ElseIfBranch : Inherits IfBranch
 
-        Public Sub New(tokens As IEnumerable(Of Token))
-            MyBase.New(tokens)
+        Public Sub New(ifTest As Expression, trueClosure As ClosureExpression)
+            MyBase.New(ifTest, trueClosure)
         End Sub
     End Class
 End Namespace

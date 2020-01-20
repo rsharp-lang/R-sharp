@@ -8,7 +8,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
     Module ForLoopSyntax
 
-        Public Function ForLoopSyntax(tokens As IEnumerable(Of Token)) As SyntaxResult
+        Public Function ForLoop(tokens As IEnumerable(Of Token)) As SyntaxResult
             Dim blocks As List(Of Token()) = tokens.SplitByTopLevelDelimiter(TokenType.close)
             Dim [loop] As List(Of Token()) = blocks(Scan0) _
                 .Skip(1) _

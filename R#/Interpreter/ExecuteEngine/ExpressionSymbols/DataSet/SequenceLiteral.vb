@@ -45,8 +45,6 @@
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Language
-Imports SMRUCC.Rsharp.Language
-Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 
@@ -62,30 +60,10 @@ Namespace Interpreter.ExecuteEngine
         Dim [to] As Expression
         Dim steps As Expression
 
-        Sub New(from As Token, [to] As Token, steps As Token)
-            Me.from = Expression.CreateExpression({from})
-            Me.to = Expression.CreateExpression({[to]})
-
-            If steps Is Nothing Then
-                Me.steps = New Literal(1)
-            ElseIf steps.name = TokenType.numberLiteral OrElse steps.name = TokenType.integerLiteral Then
-                Me.steps = New Literal(steps)
-            Else
-                Me.steps = Expression.CreateExpression({steps})
-            End If
-        End Sub
-
-        Sub New(from As Token(), [to] As Token(), steps As Token())
-            Me.from = Expression.CreateExpression(from)
-            Me.to = Expression.CreateExpression([to])
-
-            If steps.IsNullOrEmpty Then
-                Me.steps = New Literal(1)
-            ElseIf steps.isLiteral Then
-                Me.steps = New Literal(steps(Scan0))
-            Else
-                Me.steps = Expression.CreateExpression(steps)
-            End If
+        Sub New(from As Expression, [to] As Expression, steps As Expression)
+            Me.from = from
+            Me.to = [to]
+            Me.steps = steps
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
