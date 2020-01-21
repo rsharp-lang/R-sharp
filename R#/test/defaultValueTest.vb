@@ -29,4 +29,8 @@ Class defaultVector
     Public Shared Widening Operator CType(default$) As defaultVector
         Return New defaultVector With {.data = [default].Split(","c).Select(AddressOf ParseBoolean).ToArray}
     End Operator
+
+    Public Shared Narrowing Operator CType(vec As defaultVector) As String
+        Return vec.data.GetJson
+    End Operator
 End Class
