@@ -62,7 +62,18 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 .SplitByTopLevelDelimiter(TokenType.comma) _
                 .Where(Function(t) Not t.isComma) _
                 .Select(Function(param)
-                            Return Expression.CreateExpression(param, opts)
+                            ' name = value
+                            ' value
+                            ' fix bugs of using the keyword as identifier
+                            Dim parts = param.SplitByTopLevelDelimiter(TokenType.operator, False, "=")
+
+                            If parts = 3 Then
+                                ' name = value
+                                Return SyntaxImplements.ValueAssign(parts, opts)
+                            Else
+                                ' is a value expression
+                                Return Expression.CreateExpression(param, opts)
+                            End If
                         End Function)
 
                 If token.isException Then

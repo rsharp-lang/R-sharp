@@ -69,6 +69,11 @@ Namespace Interpreter.SyntaxParser
             TokenType.missingLiteral
         }
 
+        <Extension>
+        Public Function isValueAssign(tokens As List(Of Token())) As Boolean
+            Return tokens(1).Length = 1 AndAlso tokens(1)(Scan0).name = TokenType.operator AndAlso tokens(1)(Scan0).text Like valueAssignOperatorSymbols
+        End Function
+
         <DebuggerStepThrough>
         <Extension>
         Public Function isSequenceSyntax(tokens As List(Of Token())) As Boolean
