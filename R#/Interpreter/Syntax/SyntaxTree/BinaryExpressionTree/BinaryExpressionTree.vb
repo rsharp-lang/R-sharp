@@ -84,15 +84,17 @@ Namespace Interpreter.SyntaxParser
                 End If
             Next
 
-            Call buf.processNameMemberReference(oplist, opts)
+            Dim processors As GenericSymbolOperatorProcessor() = {
+                New NameMemberReferenceProcessor(),
+                New NamespaceReferenceProcessor(),
+                New PipelineProcessor(),     ' pipeline操作符是优先度最高的
+                New VectorAppendProcessor()  ' append操作符
+            }
+            Dim queue As New SyntaxQueue With {.buf = buf}
 
-            Call buf.processNamespaceReference(oplist, opts)
-
-            ' pipeline操作符是优先度最高的
-            Call buf.processPipeline(oplist, opts)
-
-            ' append操作符
-            Call buf.processAppendData(oplist)
+            For Each process As GenericSymbolOperatorProcessor In processors
+                Call process.JoinBinaryExpression(queue, oplist, opts)
+            Next
 
             ' 算数操作符以及字符串操作符按照操作符的优先度进行构建
             Call buf.processOperators(oplist, operatorPriority, test:=Function(op, o) op.IndexOf(o) > -1)

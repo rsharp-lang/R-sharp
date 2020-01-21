@@ -4,7 +4,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 
 Namespace Interpreter.SyntaxParser
 
-    Friend Class VectorAppendProcessorL : Inherits GenericSymbolOperatorProcessor
+    Friend Class VectorAppendProcessor : Inherits GenericSymbolOperatorProcessor
 
         Public Sub New()
             MyBase.New("<<")
