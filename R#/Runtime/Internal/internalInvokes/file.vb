@@ -56,6 +56,7 @@ Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports fsOptions = Microsoft.VisualBasic.FileIO.SearchOption
+Imports BASICString = Microsoft.VisualBasic.Strings
 
 Namespace Runtime.Internal.Invokes
 
@@ -431,7 +432,7 @@ Namespace Runtime.Internal.Invokes
                                  Optional ofVector As Boolean = False,
                                  Optional envir As Environment = Nothing) As Object
 
-            Select Case LCase(mode)
+            Select Case BASICString.LCase(mode)
                 Case "character" : Return loadListInternal(Of String)(file, ofVector)
                 Case "numeric" : Return loadListInternal(Of Double)(file, ofVector)
                 Case "integer" : Return loadListInternal(Of Long)(file, ofVector)

@@ -54,6 +54,65 @@ Namespace Runtime.Internal.Invokes
     Module strings
 
         ''' <summary>
+        ''' Returns a string that contains a specified number of characters starting from
+        ''' a specified position in a string.
+        ''' </summary>
+        ''' <param name="strings">Required. String expression from which characters are returned.</param>
+        ''' <param name="start">
+        ''' Required. Integer expression. Starting position of the characters to return.
+        ''' If Start is greater than the number of characters in str, the Mid function returns
+        ''' a zero-length string (""). Start is one based.
+        ''' </param>
+        ''' <param name="len">
+        ''' Optional. Integer expression. Number of characters to return. If omitted or if
+        ''' there are fewer than Length characters in the text (including the character at
+        ''' position Start), all characters from the start position to the end of the string
+        ''' are returned.
+        ''' </param>
+        ''' <returns>
+        ''' A string that consists of the specified number of characters starting from the
+        ''' specified position in the string.
+        ''' </returns>
+        <ExportAPI("mid")>
+        Public Function mid(strings As String(), start As Integer, Optional len As Integer = -1) As String()
+            Return strings _
+                .Select(Function(str)
+                            If len = 0 Then
+                                Return ""
+                            ElseIf len < 0 Then
+                                Return BASICString.Mid(str, start)
+                            Else
+                                Return BASICString.Mid(str, start, len)
+                            End If
+                        End Function) _
+                .ToArray
+        End Function
+
+        ''' <summary>
+        ''' Returns a string or character converted to lowercase.
+        ''' </summary>
+        ''' <param name="strings">Required. Any valid String or Char expression.</param>
+        ''' <returns>
+        ''' Returns a string or character converted to lowercase.
+        ''' </returns>
+        <ExportAPI("lcase")>
+        Public Function lcase(strings As String()) As String()
+            Return strings.SafeQuery.Select(AddressOf BASICString.LCase).ToArray
+        End Function
+
+        ''' <summary>
+        ''' Returns a string or character containing the specified string converted to uppercase.
+        ''' </summary>
+        ''' <param name="strings">Required. Any valid String or Char expression.</param>
+        ''' <returns>
+        ''' Returns a string or character containing the specified string converted to uppercase.
+        ''' </returns>
+        <ExportAPI("ucase")>
+        Public Function ucase(strings As String()) As String()
+            Return strings.SafeQuery.Select(AddressOf BASICString.UCase).ToArray
+        End Function
+
+        ''' <summary>
         ''' Removes all leading and trailing occurrences of a set of characters specified
         ''' in an array from the current System.String object.
         ''' </summary>
