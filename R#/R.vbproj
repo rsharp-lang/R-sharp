@@ -364,6 +364,7 @@
     <Compile Include="Runtime\Internal\printer\enumPrinter.vb" />
     <Compile Include="Runtime\Interop\RArgumentList.vb" />
     <Compile Include="Runtime\Interop\REnum.vb" />
+    <Compile Include="Runtime\Interop\RInteropAttributes\RDefaultValueAttribute.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RRawVectorArgumentAttribute.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RSymbolTextArgumentAttribute.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RSuppressPrintAttribute.vb" />
