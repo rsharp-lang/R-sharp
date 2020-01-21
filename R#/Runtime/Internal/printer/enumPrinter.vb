@@ -46,6 +46,8 @@ Namespace Runtime.Internal.ConsolePrinter
 
     Public Module enumPrinter
 
+        ReadOnly printerCache As New Dictionary(Of Type, Func(Of Object, String))
+
         ''' <summary>
         ''' 
         ''' </summary>
@@ -54,16 +56,23 @@ Namespace Runtime.Internal.ConsolePrinter
         ''' </param>
         ''' <returns></returns>
         Public Function printClass(obj As Object) As String
-            Dim type As REnum = REnum.GetEnumList(obj.GetType)
-            Dim base As Type = type.baseType
-            Dim describ$ = DirectCast(obj, [Enum]).Description
-            Dim print$ = $"{{{base.Name.ToLower} {type.IntValue(obj)}}} {obj.ToString}"
+            Return printerCache.ComputeIfAbsent(obj.GetType, AddressOf printEnumValue)(obj)
+        End Function
 
-            If describ = obj.ToString Then
-                Return print
-            Else
-                Return $"{print} #{describ}"
-            End If
+        Public Function printEnumValue(enumType As Type) As Func(Of Object, String)
+            Dim type As REnum = REnum.GetEnumList(enumType)
+            Dim base As Type = type.baseType
+
+            Return Function(obj) As String
+                       Dim describ$ = DirectCast(obj, [Enum]).Description
+                       Dim print$ = $"{{{base.Name.ToLower} {type.IntValue(obj)}}} {obj.ToString}"
+
+                       If describ = obj.ToString Then
+                           Return print
+                       Else
+                           Return $"{print} #{describ}"
+                       End If
+                   End Function
         End Function
 
         Public Function defaultValueToString([default] As Object, type As Type) As String

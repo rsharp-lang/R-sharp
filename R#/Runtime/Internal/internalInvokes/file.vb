@@ -1,50 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::cc60cb22b19ea349fe31a0d3b27a6413, R#\Runtime\Internal\internalInvokes\file.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module file
-    ' 
-    '         Function: basename, dir_exists, dirname, exists, file
-    '                   filecopy, getwd, listDirs, listFiles, loadListInternal
-    '                   normalizeFileName, normalizePath, readLines, readList, Rhome
-    '                   saveList, setwd, writeLines
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module file
+' 
+'         Function: basename, dir_exists, dirname, exists, file
+'                   filecopy, getwd, listDirs, listFiles, loadListInternal
+'                   normalizeFileName, normalizePath, readLines, readList, Rhome
+'                   saveList, setwd, writeLines
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.IO
+Imports System.Reflection
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Language.UnixBash
@@ -63,6 +65,31 @@ Namespace Runtime.Internal.Invokes
     ''' These functions provide a low-level interface to the computer's file system.
     ''' </summary>
     Module file
+
+        <ExportAPI("file.info")>
+        Public Function fileinfo(files As String(), Optional env As Environment = Nothing) As Object
+            If files.IsNullOrEmpty Then
+                Return Nothing
+            ElseIf files.Length = 1 Then
+                Dim file As String = files(Scan0)
+                Dim fileInfoObj As New FileInfo(file)
+                Dim data As New Dictionary(Of String, Object)
+
+                For Each [property] As PropertyInfo In fileInfoObj _
+                    .GetType _
+                    .GetProperties(PublicProperty) _
+                    .Where(Function(p)
+                               Return p.GetIndexParameters.IsNullOrEmpty
+                           End Function)
+
+                    Call data.Add([property].Name, [property].GetValue(fileInfoObj))
+                Next
+
+                Return New list With {.slots = data}
+            Else
+                Return Internal.stop(New NotImplementedException, env)
+            End If
+        End Function
 
         ''' <summary>
         ''' ``file.copy`` works in a similar way to ``file.append`` but with the arguments 

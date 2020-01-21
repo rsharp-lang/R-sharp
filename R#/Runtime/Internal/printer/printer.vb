@@ -77,6 +77,7 @@ Namespace Runtime.Internal.ConsolePrinter
             RtoString(GetType(Color)) = Function(c) DirectCast(c, Color).ToHtmlColor.ToLower
             RtoString(GetType(vbObject)) = Function(o) DirectCast(o, vbObject).ToString
             RtoString(GetType(RType)) = Function(o) DirectCast(o, RType).ToString
+            RtoString(GetType(DateTime)) = Function(o) $"#{DirectCast(o, DateTime).ToString}#"
 
             RInternalToString(GetType(Double)) = AddressOf printer.f64_InternalToString
         End Sub
@@ -214,6 +215,8 @@ printSingleElement:
                 Return AddressOf classPrinter.printClass
             ElseIf elementType = GetType(Boolean) Then
                 Return Function(b) b.ToString.ToUpper
+            ElseIf elementType.IsEnum Then
+                Return AddressOf enumPrinter.printEnumValue(elementType).Invoke
             Else
                 Return Function(obj) Scripting.ToString(obj, "NULL", True)
             End If
