@@ -72,7 +72,7 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
-
+        Call listoperationtest()
         Call syntaxErrorTest()
 
         Call usingTest()
@@ -752,6 +752,12 @@ let tryStop as function(message = 'default exception message') {
 # tryStop();
 tryStop(['This','is','an','exception', 'test']);
 ")
+
+        Pause()
+    End Sub
+
+    Sub listoperationtest()
+        Call R.Source("D:\GCModeller\src\R-sharp\tutorials\data\listValue.R")
 
         Pause()
     End Sub

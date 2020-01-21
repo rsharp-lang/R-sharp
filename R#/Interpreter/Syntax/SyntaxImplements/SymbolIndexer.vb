@@ -96,6 +96,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         ''' 
         ''' ```
         ''' func(...)[x]
+        ''' func(...)[[x]]
         ''' ```
         ''' </summary>
         ''' <param name="ref"></param>
@@ -131,8 +132,15 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 ' dataframe indexer
                 blocks.parseDataframeIndex(index, indexType, opts)
             Else
-                ' vector indexer
-                indexType = SymbolIndexers.vectorIndex
+                If tokens.isStackOf("[", "]") Then
+                    ' list get value by name
+                    indexType = SymbolIndexers.nameIndex
+                Else
+                    ' vector indexer
+                    ' list subset by names
+                    indexType = SymbolIndexers.vectorIndex
+                End If
+
                 index = Expression.CreateExpression(tokens, opts)
             End If
         End Sub
