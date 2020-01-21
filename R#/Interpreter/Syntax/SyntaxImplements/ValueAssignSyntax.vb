@@ -49,7 +49,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
     Module ValueAssignSyntax
 
-        Public Function ValueAssign(tokens As List(Of Token())) As SyntaxResult
+        Public Function ValueAssign(tokens As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim targetSymbols = DeclareNewVariableSyntax _
                 .getNames(tokens(Scan0)) _
                 .Select(Function(name) New Literal(name)) _
@@ -57,7 +57,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Dim isByRef = tokens(Scan0)(Scan0).text = "="
             Dim value As SyntaxResult = tokens.Skip(2) _
                 .AsList _
-                .ParseExpression
+                .ParseExpression(opts)
 
             If value.isException Then
                 Return value

@@ -52,52 +52,52 @@ Namespace Interpreter.SyntaxParser
     Module ExpressionTree
 
         <Extension>
-        Public Function CreateTree(tokens As Token()) As SyntaxResult
+        Public Function CreateTree(tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim blocks As List(Of Token()) = tokens.SplitByTopLevelDelimiter(TokenType.comma)
 
             If blocks = 1 Then
-                Dim expression As SyntaxResult = blocks(Scan0).simpleSequence
+                Dim expression As SyntaxResult = blocks(Scan0).simpleSequence(opts)
 
                 If Not expression Is Nothing Then
                     Return expression
                 Else
                     ' 是一个复杂的表达式
-                    Return blocks(Scan0).ParseExpressionTree
+                    Return blocks(Scan0).ParseExpressionTree(opts)
                 End If
             Else
-                Return New SyntaxResult(New NotImplementedException)
+                Return New SyntaxResult(New NotImplementedException, opts.debug)
             End If
         End Function
 
         <Extension>
-        Private Function simpleSequence(tokens As Token()) As SyntaxResult
+        Private Function simpleSequence(tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim blocks = tokens.SplitByTopLevelDelimiter(TokenType.sequence)
 
             If blocks = 3 Then
-                Return SyntaxImplements.SequenceLiteral(blocks(Scan0), blocks(2), Nothing)
+                Return SyntaxImplements.SequenceLiteral(blocks(Scan0), blocks(2), Nothing, opts)
             ElseIf blocks = 5 Then
-                Return SyntaxImplements.SequenceLiteral(blocks(Scan0), blocks(2), blocks.ElementAtOrDefault(4))
+                Return SyntaxImplements.SequenceLiteral(blocks(Scan0), blocks(2), blocks.ElementAtOrDefault(4), opts)
             Else
                 Return Nothing
             End If
         End Function
 
         <Extension>
-        Private Function ParseExpressionTree(tokens As Token()) As SyntaxResult
+        Private Function ParseExpressionTree(tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim blocks As List(Of Token())
 
             If tokens.Length = 1 Then
                 If tokens(Scan0).name = TokenType.stringInterpolation Then
-                    Return SyntaxImplements.StringInterpolation(tokens(Scan0))
+                    Return SyntaxImplements.StringInterpolation(tokens(Scan0), opts)
                 ElseIf tokens(Scan0).name = TokenType.cliShellInvoke Then
-                    Return SyntaxImplements.CommandLine(tokens(Scan0))
+                    Return SyntaxImplements.CommandLine(tokens(Scan0), opts)
                 ElseIf tokens(Scan0) = (TokenType.operator, "$") Then
                     Return New SymbolReference("$")
                 Else
                     blocks = New List(Of Token()) From {tokens}
                 End If
             ElseIf tokens.Length = 2 AndAlso tokens(Scan0).name = TokenType.iif Then
-                Return SyntaxImplements.CommandLineArgument(tokens)
+                Return SyntaxImplements.CommandLineArgument(tokens, opts)
             Else
                 blocks = tokens.SplitByTopLevelDelimiter(TokenType.operator)
             End If
@@ -105,39 +105,62 @@ Namespace Interpreter.SyntaxParser
             If blocks = 1 Then
                 ' 简单的表达式
                 If tokens.isFunctionInvoke Then
-                    Return SyntaxImplements.FunctionInvoke(tokens)
+                    Return SyntaxImplements.FunctionInvoke(tokens, opts)
                 ElseIf tokens.isSimpleSymbolIndexer Then
-                    Return SyntaxImplements.SymbolIndexer(tokens)
+                    Return SyntaxImplements.SymbolIndexer(tokens, opts)
                 ElseIf tokens(Scan0).name = TokenType.open Then
                     Dim openSymbol = tokens(Scan0).text
 
                     If openSymbol = "[" Then
-                        Return SyntaxImplements.VectorLiteral(tokens)
+                        Return SyntaxImplements.VectorLiteral(tokens, opts)
                     ElseIf openSymbol = "(" Then
-                        ' 是一个表达式
-                        Return tokens _
-                            .Skip(1) _
-                            .Take(tokens.Length - 2) _
-                            .SplitByTopLevelDelimiter(TokenType.operator) _
-                            .DoCall(AddressOf ParseBinaryExpression)
+                        ' (xxxx)
+                        ' (xxxx)[xx]
+                        Dim splitTokens = tokens.SplitByTopLevelDelimiter(TokenType.close)
+
+                        If splitTokens = 2 Then
+                            '  0     1
+                            ' (xxxx |) is a single expression
+                            ' 是一个表达式
+                            Return splitTokens(Scan0) _
+                                .Skip(1) _
+                                .SplitByTopLevelDelimiter(TokenType.operator) _
+                                .ParseBinaryExpression(opts)
+                        ElseIf splitTokens = 4 Then
+                            If splitTokens.Last.Length = 1 AndAlso splitTokens.Last()(Scan0) = (TokenType.close, "]") Then
+                                ' 0      1    2     3
+                                ' (xxxx |) | [xxx | ]
+                                ' symbol indexer
+                                Dim symbolExpression As Token() = splitTokens(Scan0).Skip(1).ToArray
+                                Dim indexerExpression As Token() = splitTokens(2) _
+                                    .JoinIterates(splitTokens.Last) _
+                                    .ToArray
+
+                                Return SyntaxImplements.SymbolIndexer(symbolExpression, indexerExpression, opts)
+                            Else
+                                Return New SyntaxResult(New SyntaxErrorException, opts.debug)
+                            End If
+                        Else
+                            Throw New NotImplementedException
+                        End If
                     ElseIf openSymbol = "{" Then
                         ' 是一个可以产生值的closure
-                        Return SyntaxImplements.ClosureExpression(tokens)
+                        Return SyntaxImplements.ClosureExpression(tokens, opts)
                     End If
                 ElseIf tokens(Scan0).name = TokenType.stringInterpolation Then
-                    Return SyntaxImplements.StringInterpolation(tokens(Scan0))
+                    Return SyntaxImplements.StringInterpolation(tokens(Scan0), opts)
                 Else
-                    Dim indexer As SyntaxResult = tokens.parseComplexSymbolIndexer
+                    Dim indexer As SyntaxResult = tokens.parseComplexSymbolIndexer(opts)
 
                     If Not indexer Is Nothing Then
                         Return indexer
                     End If
                 End If
             Else
-                Return ParseBinaryExpression(blocks)
+                Return ParseBinaryExpression(blocks, opts)
             End If
 
-            Return New SyntaxResult(New NotImplementedException)
+            Return New SyntaxResult(New NotImplementedException, opts.debug)
         End Function
     End Module
 End Namespace

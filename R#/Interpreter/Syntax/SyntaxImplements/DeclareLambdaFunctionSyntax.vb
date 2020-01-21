@@ -52,7 +52,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         ''' 只允许拥有一个参数，并且只允许出现一行代码
         ''' </summary>
         ''' <param name="tokens"></param>
-        Public Function DeclareLambdaFunction(tokens As List(Of Token())) As SyntaxResult
+        Public Function DeclareLambdaFunction(tokens As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
             With tokens.ToArray
                 Dim name = .IteratesALL _
                            .Select(Function(t) t.text) _
@@ -63,7 +63,9 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 Dim parameter As SyntaxResult = SyntaxImplements.DeclareNewVariable(tokens(Scan0))
                 Dim closure As SyntaxResult = .Skip(2) _
                                               .IteratesALL _
-                                              .DoCall(AddressOf Expression.CreateExpression)
+                                              .DoCall(Function(code)
+                                                          Return Expression.CreateExpression(code, opts)
+                                                      End Function)
 
                 If parameter.isException Then
                     Return parameter

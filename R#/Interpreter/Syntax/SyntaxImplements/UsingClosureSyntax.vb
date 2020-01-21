@@ -49,7 +49,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
     Module UsingClosureSyntax
 
-        Public Function UsingClosure(code As IEnumerable(Of Token())) As SyntaxResult
+        Public Function UsingClosure(code As IEnumerable(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim input As Token() = code.IteratesALL.ToArray
             Dim tokens As Token()() = input _
                 .SplitByTopLevelDelimiter(TokenType.close) _
@@ -60,7 +60,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 parmPart = parmPart + tokens(1).AsList
             End If
 
-            Dim closureSyntax = SyntaxImplements.ClosureExpression(tokens(2).Skip(1))
+            Dim closureSyntax = SyntaxImplements.ClosureExpression(tokens(2).Skip(1), opts)
 
             If closureSyntax.isException Then
                 Return closureSyntax
@@ -68,7 +68,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 tokens = parmPart.SplitByTopLevelDelimiter(TokenType.keyword, tokenText:="as")
             End If
 
-            Dim paramsSyntax = SyntaxImplements.DeclareNewVariable(tokens(Scan0), tokens(2))
+            Dim paramsSyntax = SyntaxImplements.DeclareNewVariable(tokens(Scan0), tokens(2), opts)
 
             If paramsSyntax.isException Then
                 Return paramsSyntax

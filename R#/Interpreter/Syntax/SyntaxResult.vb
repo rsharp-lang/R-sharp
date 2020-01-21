@@ -67,9 +67,13 @@ Namespace Interpreter.SyntaxParser
             Me.expression = syntax
         End Sub
 
-        Sub New(err As Exception)
-            Me.stackTrace = Environment.StackTrace
-            Me.error = err
+        Sub New(err As Exception, debug As Boolean)
+            If debug Then
+                Throw err
+            Else
+                Me.stackTrace = Environment.StackTrace
+                Me.error = err
+            End If
         End Sub
 
         Public Overrides Function ToString() As String

@@ -57,6 +57,7 @@ Namespace Interpreter.SyntaxParser
             Dim buf As New List(Of Token)
             Dim stack As New Stack(Of Token)
             Dim isDelimiter As Func(Of Token, Boolean)
+            Dim tokenVector As Token() = tokens.ToArray
 
             If tokenText Is Nothing Then
                 isDelimiter = Function(t) t.name = delimiter
@@ -67,7 +68,7 @@ Namespace Interpreter.SyntaxParser
             End If
 
             ' 使用最顶层的comma进行分割
-            For Each t As Token In tokens
+            For Each t As Token In tokenVector
                 Dim add As Boolean = True
 
                 If t.name = TokenType.open Then

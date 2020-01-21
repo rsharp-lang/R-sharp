@@ -53,7 +53,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
     Module VectorLiteralSyntax
 
-        Public Function LiteralSyntax(token As Token) As SyntaxResult
+        Public Function LiteralSyntax(token As Token, opts As SyntaxBuilderOptions) As SyntaxResult
             Select Case token.name
                 Case TokenType.booleanLiteral
                     Return New Literal With {.m_type = TypeCodes.boolean, .value = token.text.ParseBoolean}
@@ -72,16 +72,16 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                         Case "NA" : value = GetType(Void)
                         Case "Inf" : value = Double.PositiveInfinity
                         Case Else
-                            Return New SyntaxResult(New SyntaxErrorException)
+                            Return New SyntaxResult(New SyntaxErrorException, opts.debug)
                     End Select
 
                     Return New Literal With {.m_type = type, .value = value}
                 Case Else
-                    Return New SyntaxResult(New InvalidExpressionException(token.ToString))
+                    Return New SyntaxResult(New InvalidExpressionException(token.ToString), opts.debug)
             End Select
         End Function
 
-        Public Function VectorLiteral(tokens As Token()) As SyntaxResult
+        Public Function VectorLiteral(tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim blocks As List(Of Token()) = tokens _
                 .Skip(1) _
                 .Take(tokens.Length - 2) _
@@ -91,7 +91,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
             For Each block As Token() In blocks
                 If Not (block.Length = 1 AndAlso block(Scan0).name = TokenType.comma) Then
-                    syntaxTemp = block.DoCall(AddressOf Expression.CreateExpression)
+                    syntaxTemp = block.DoCall(Function(code) Expression.CreateExpression(code, opts))
 
                     If syntaxTemp.isException Then
                         Return syntaxTemp
@@ -153,13 +153,13 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             End With
         End Function
 
-        Public Function SequenceLiteral(from As Token, [to] As Token, steps As Token) As SyntaxResult
-            Return SequenceLiteral({from}, {[to]}, {steps})
+        Public Function SequenceLiteral(from As Token, [to] As Token, steps As Token, opts As SyntaxBuilderOptions) As SyntaxResult
+            Return SequenceLiteral({from}, {[to]}, {steps}, opts)
         End Function
 
-        Public Function SequenceLiteral(from As Token(), [to] As Token(), steps As Token()) As SyntaxResult
-            Dim fromSyntax = Expression.CreateExpression(from)
-            Dim toSyntax = Expression.CreateExpression([to])
+        Public Function SequenceLiteral(from As Token(), [to] As Token(), steps As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
+            Dim fromSyntax = Expression.CreateExpression(from, opts)
+            Dim toSyntax = Expression.CreateExpression([to], opts)
 
             If fromSyntax.isException Then
                 Return fromSyntax
@@ -170,7 +170,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             If steps.IsNullOrEmpty Then
                 Return New SequenceLiteral(fromSyntax.expression, toSyntax.expression, New Literal(1))
             ElseIf steps.isLiteral Then
-                Dim stepLiteral As SyntaxResult = SyntaxImplements.LiteralSyntax(steps(Scan0))
+                Dim stepLiteral As SyntaxResult = SyntaxImplements.LiteralSyntax(steps(Scan0), opts)
 
                 If stepLiteral.isException Then
                     Return stepLiteral
@@ -182,7 +182,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     steps:=stepLiteral.expression
                 )
             Else
-                Dim stepsSyntax = Expression.CreateExpression(steps)
+                Dim stepsSyntax As SyntaxResult = Expression.CreateExpression(steps, opts)
 
                 If stepsSyntax.isException Then
                     Return stepsSyntax

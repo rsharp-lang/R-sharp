@@ -59,8 +59,8 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         ''' <param name="tokens">
         ''' ``a[x]``
         ''' </param>
-        Public Function SymbolIndexer(tokens As Token()) As SyntaxResult
-            Dim symbol As SyntaxResult = {tokens(Scan0)}.DoCall(AddressOf Expression.CreateExpression)
+        Public Function SymbolIndexer(tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
+            Dim symbol As SyntaxResult = {tokens(Scan0)}.DoCall(Function(code) Expression.CreateExpression(code, opts))
             Dim indexType As SymbolIndexers
             Dim index As SyntaxResult = Nothing
 
@@ -79,9 +79,9 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     .Take(tokens.Length - 2) _
                     .ToArray
                 indexType = SymbolIndexers.nameIndex
-                index = Expression.CreateExpression(tokens)
+                index = Expression.CreateExpression(tokens, opts)
             Else
-                Call tokens.parseIndex(index, indexType)
+                Call tokens.parseIndex(index, indexType, opts)
             End If
 
             If index.isException Then
@@ -100,8 +100,8 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         ''' </summary>
         ''' <param name="ref"></param>
         ''' <param name="indexer"></param>
-        Public Function SymbolIndexer(ref As Token(), indexer As Token()) As SyntaxResult
-            Dim symbol = Expression.CreateExpression(ref)
+        Public Function SymbolIndexer(ref As Token(), indexer As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
+            Dim symbol As SyntaxResult = Expression.CreateExpression(ref, opts)
             Dim index As SyntaxResult = Nothing
             Dim indexType As SymbolIndexers
 
@@ -114,7 +114,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 .Take(indexer.Length - 2) _
                 .ToArray
 
-            Call indexer.parseIndex(index, indexType)
+            Call indexer.parseIndex(index, indexType, opts)
 
             If index.isException Then
                 Return index
@@ -124,16 +124,16 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         End Function
 
         <Extension>
-        Private Sub parseIndex(tokens As Token(), ByRef index As SyntaxResult, ByRef indexType As SymbolIndexers)
+        Private Sub parseIndex(tokens As Token(), ByRef index As SyntaxResult, ByRef indexType As SymbolIndexers, opts As SyntaxBuilderOptions)
             Dim blocks As List(Of Token()) = tokens.SplitByTopLevelDelimiter(TokenType.comma, False)
 
             If blocks > 1 Then
                 ' dataframe indexer
-                blocks.parseDataframeIndex(index, indexType)
+                blocks.parseDataframeIndex(index, indexType, opts)
             Else
                 ' vector indexer
                 indexType = SymbolIndexers.vectorIndex
-                index = Expression.CreateExpression(tokens)
+                index = Expression.CreateExpression(tokens, opts)
             End If
         End Sub
 
@@ -144,15 +144,15 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         ''' <param name="index"></param>
         ''' <param name="indexType"></param>
         <Extension>
-        Private Sub parseDataframeIndex(blocks As List(Of Token()), ByRef index As SyntaxResult, ByRef indexType As SymbolIndexers)
+        Private Sub parseDataframeIndex(blocks As List(Of Token()), ByRef index As SyntaxResult, ByRef indexType As SymbolIndexers, opts As SyntaxBuilderOptions)
             If blocks(0).isComma Then
                 ' x[, a] by columns
                 indexType = SymbolIndexers.dataframeColumns
-                index = Expression.CreateExpression(blocks.Skip(1).IteratesALL)
+                index = Expression.CreateExpression(blocks.Skip(1).IteratesALL, opts)
             ElseIf blocks = 2 AndAlso blocks(1).isComma Then
                 ' x[a, ] by row
                 indexType = SymbolIndexers.dataframeRows
-                index = Expression.CreateExpression(blocks(Scan0))
+                index = Expression.CreateExpression(blocks(Scan0), opts)
             Else
                 Dim elements As New List(Of Expression)
 
@@ -161,7 +161,9 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
                 For Each result As SyntaxResult In blocks _
                     .Where(Function(t) Not t.isComma) _
-                    .Select(AddressOf Expression.CreateExpression)
+                    .Select(Function(tokens)
+                                Return Expression.CreateExpression(tokens, opts)
+                            End Function)
 
                     If result.isException Then
                         index = result

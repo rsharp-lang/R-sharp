@@ -69,10 +69,10 @@ Namespace Interpreter.ExecuteEngine
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
-        Friend Shared Function CreateExpression(code As IEnumerable(Of Token)) As SyntaxResult
+        Friend Shared Function CreateExpression(code As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult
             Return code _
                 .SplitByTopLevelDelimiter(TokenType.operator, includeKeyword:=True) _
-                .ParseExpression
+                .ParseExpression(opts)
         End Function
     End Class
 End Namespace

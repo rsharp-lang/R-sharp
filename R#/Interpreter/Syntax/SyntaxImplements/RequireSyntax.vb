@@ -50,13 +50,15 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
     Module RequireSyntax
 
-        Public Function Require(names As Token()) As SyntaxResult
+        Public Function Require(names As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim packages As New List(Of Expression)
 
             For Each name As SyntaxResult In names _
                 .SplitByTopLevelDelimiter(TokenType.comma) _
                 .Where(Function(b) Not b.isComma) _
-                .Select(AddressOf Expression.CreateExpression)
+                .Select(Function(tokens)
+                            Return Expression.CreateExpression(tokens, opts)
+                        End Function)
 
                 If name.isException Then
                     Return name
@@ -68,13 +70,13 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Return New SyntaxResult(New Require(packages))
         End Function
 
-        Public Function [Imports](code As IEnumerable(Of Token())) As SyntaxResult
+        Public Function [Imports](code As IEnumerable(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
             With code.ToArray
                 If Not .ElementAt(Scan0).isKeyword("imports") OrElse Not .ElementAt(2).isKeyword("from") Then
-                    Return New SyntaxResult(New SyntaxErrorException)
+                    Return New SyntaxResult(New SyntaxErrorException, opts.debug)
                 Else
-                    Dim packages = .ElementAt(1).DoCall(AddressOf Expression.CreateExpression)
-                    Dim library = .ElementAt(3).DoCall(AddressOf Expression.CreateExpression)
+                    Dim packages = .ElementAt(1).DoCall(Function(tokens) Expression.CreateExpression(tokens, opts))
+                    Dim library = .ElementAt(3).DoCall(Function(tokens) Expression.CreateExpression(tokens, opts))
 
                     If packages.isException Then
                         Return packages

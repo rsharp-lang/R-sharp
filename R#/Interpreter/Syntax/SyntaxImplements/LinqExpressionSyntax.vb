@@ -52,7 +52,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
     Module LinqExpressionSyntax
 
-        Public Function LinqExpression(tokens As List(Of Token())) As SyntaxResult
+        Public Function LinqExpression(tokens As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim variables As New List(Of String)
             Dim i As Integer = 0
             Dim sequence As SyntaxResult = Nothing
@@ -62,13 +62,13 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 If tokens(i).isIdentifier Then
                     variables.Add(tokens(i)(Scan0).text)
                 ElseIf tokens(i).isKeyword("in") Then
-                    sequence = Expression.CreateExpression(tokens(i + 1))
+                    sequence = Expression.CreateExpression(tokens(i + 1), opts)
                     Exit For
                 End If
             Next
 
             If sequence Is Nothing Then
-                Return New SyntaxResult(New SyntaxErrorException)
+                Return New SyntaxResult(New SyntaxErrorException, opts.debug)
             ElseIf sequence.isException Then
                 Return sequence
             Else
@@ -92,7 +92,8 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 locals:=locals,
                 projection:=projection,
                 output:=output,
-                programClosure:=program
+                programClosure:=program,
+                opts:=opts
             )
 
             If [error].isException Then
@@ -108,7 +109,8 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         Private Function doParseLINQProgram(p As Pointer(Of Token()), locals As List(Of DeclareNewVariable),
                                             ByRef projection As Expression,
                                             ByRef output As ClosureExpression,
-                                            ByRef programClosure As ClosureExpression) As SyntaxResult
+                                            ByRef programClosure As ClosureExpression,
+                                            opts As SyntaxBuilderOptions) As SyntaxResult
 
             Dim buffer As New List(Of Token())
             Dim token As Token()
@@ -132,7 +134,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                                 .IteratesALL _
                                 .SplitByTopLevelDelimiter(TokenType.operator, True) _
                                 .DoCall(Function(blocks)
-                                            Return SyntaxImplements.DeclareNewVariable(blocks)
+                                            Return SyntaxImplements.DeclareNewVariable(blocks, opts)
                                         End Function)
 
                             If declares.isException Then
@@ -151,7 +153,9 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
                             Dim exprSyntax As SyntaxResult = buffer _
                                 .IteratesALL _
-                                .DoCall(AddressOf Expression.CreateExpression)
+                                .DoCall(Function(code)
+                                            Return Expression.CreateExpression(code, opts)
+                                        End Function)
 
                             If exprSyntax.isException Then
                                 Return exprSyntax
@@ -176,14 +180,16 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                             token = buffer.IteratesALL.ToArray
 
                             If Not token(Scan0).isKeyword("by") Then
-                                Return New SyntaxResult(New SyntaxErrorException)
+                                Return New SyntaxResult(New SyntaxErrorException, opts.debug)
                             End If
 
                             ' skip first by keyword
                             Dim exprSyntax As SyntaxResult = token _
                                 .Skip(1) _
                                 .Take(token.Length - 2) _
-                                .DoCall(AddressOf Expression.CreateExpression)
+                                .DoCall(Function(code)
+                                            Return Expression.CreateExpression(code, opts)
+                                        End Function)
 
                             If exprSyntax.isException Then
                                 Return exprSyntax
@@ -192,14 +198,14 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                             outputs += New FunctionInvoke("sort", exprSyntax.expression, New Literal(token.Last.isKeyword("descending")))
                         Case "select"
                             If Not projection Is Nothing Then
-                                Return New SyntaxResult(New SyntaxErrorException("Only allows one project function!"))
+                                Return New SyntaxResult(New SyntaxErrorException("Only allows one project function!"), opts.debug)
                             End If
 
                             Do While Not p.EndRead AndAlso Not p.Current.isOneOfKeywords(linqKeywordDelimiters)
                                 buffer += ++p
                             Loop
 
-                            Dim projectSyntax = Expression.CreateExpression(buffer.IteratesALL)
+                            Dim projectSyntax = Expression.CreateExpression(buffer.IteratesALL, opts)
 
                             If projectSyntax.isException Then
                                 Return projectSyntax
@@ -215,9 +221,9 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                                 buffer += ++p
                             Loop
 
-                            Return New SyntaxResult(New NotImplementedException)
+                            Return New SyntaxResult(New NotImplementedException, opts.debug)
                         Case Else
-                            Return New SyntaxResult(New SyntaxErrorException)
+                            Return New SyntaxResult(New SyntaxErrorException, opts.debug)
                     End Select
                 End If
             Loop

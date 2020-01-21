@@ -47,10 +47,10 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
     Module ClosureExpressionSyntax
 
-        Public Function ClosureExpression(tokens As IEnumerable(Of Token)) As SyntaxResult
+        Public Function ClosureExpression(tokens As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim [error] As SyntaxResult = Nothing
             Dim lines As Expression() = Interpreter _
-                .GetExpressions(tokens.ToArray, Nothing, Sub(ex) [error] = ex) _
+                .GetExpressions(tokens.ToArray, Nothing, Sub(ex) [error] = ex, opts) _
                 .ToArray
 
             If Not [error] Is Nothing Then

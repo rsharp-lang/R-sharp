@@ -53,7 +53,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
         Const InterpolatePattern$ = "[$]\{.+?\}"
 
-        Public Function CommandLine(shell As Token) As SyntaxResult
+        Public Function CommandLine(shell As Token, opts As SyntaxBuilderOptions) As SyntaxResult
             If Not shell.text _
                 .Match(InterpolatePattern, RegexOptions.Singleline) _
                 .StringEmpty Then
@@ -61,7 +61,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 ' 如果是字符串插值，在Windows平台上会需要注意转义问题
                 ' 因为windows平台上文件夹符号为\
                 ' 可能会对$产生转义，从而导致字符串插值失败
-                Dim temp As SyntaxResult = SyntaxImplements.StringInterpolation(shell)
+                Dim temp As SyntaxResult = SyntaxImplements.StringInterpolation(shell, opts)
 
                 If temp.isException Then
                     Return temp
@@ -69,7 +69,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     Return New CommandLine(temp.expression)
                 End If
             Else
-                Dim literalSyntax As SyntaxResult = SyntaxImplements.LiteralSyntax(shell)
+                Dim literalSyntax As SyntaxResult = SyntaxImplements.LiteralSyntax(shell, opts)
 
                 If literalSyntax.isException Then
                     Return literalSyntax
@@ -84,15 +84,17 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Return Not text.Match(InterpolatePattern, RegexOptions.Singleline).StringEmpty
         End Function
 
-        Public Function CommandLineArgument(tokens As Token()) As SyntaxResult
+        Public Function CommandLineArgument(tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim name As SyntaxResult
 
             If tokens.First = TokenType.iif Then
                 name = tokens _
                     .Skip(1) _
-                    .DoCall(AddressOf Expression.CreateExpression)
+                    .DoCall(Function(code)
+                                Return Expression.CreateExpression(code, opts)
+                            End Function)
             Else
-                name = Expression.CreateExpression(tokens)
+                name = Expression.CreateExpression(tokens, opts)
             End If
 
             If name.isException Then

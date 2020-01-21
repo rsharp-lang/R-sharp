@@ -59,7 +59,7 @@ Namespace Interpreter.SyntaxParser
         ReadOnly logicalOperators As String() = {"&&", "||", "!"}
 
         <Extension>
-        Public Function ParseBinaryExpression(tokenBlocks As List(Of Token())) As SyntaxResult
+        Public Function ParseBinaryExpression(tokenBlocks As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim buf As New List(Of [Variant](Of SyntaxResult, String))
             Dim oplist As New List(Of String)
             Dim syntaxResult As SyntaxResult
@@ -71,7 +71,7 @@ Namespace Interpreter.SyntaxParser
 
             For i As Integer = Scan0 To tokenBlocks.Count - 1
                 If i Mod 2 = 0 Then
-                    syntaxResult = Expression.CreateExpression(tokenBlocks(i))
+                    syntaxResult = Expression.CreateExpression(tokenBlocks(i), opts)
 
                     If syntaxResult.isException Then
                         Return syntaxResult
@@ -84,12 +84,12 @@ Namespace Interpreter.SyntaxParser
                 End If
             Next
 
-            Call buf.processNameMemberReference(oplist)
+            Call buf.processNameMemberReference(oplist, opts)
 
-            Call buf.processNamespaceReference(oplist)
+            Call buf.processNamespaceReference(oplist, opts)
 
             ' pipeline操作符是优先度最高的
-            Call buf.processPipeline(oplist)
+            Call buf.processPipeline(oplist, opts)
 
             ' append操作符
             Call buf.processAppendData(oplist)
@@ -129,20 +129,20 @@ Namespace Interpreter.SyntaxParser
                     Dim calls As FunctionInvoke = buf(2).TryCast(Of Expression)
                     Dim [namespace] As Expression = buf(Scan0).TryCast(Of Expression)
 
-                    Return New SyntaxResult(New NotImplementedException)
+                    Return New SyntaxResult(New NotImplementedException, opts.debug)
                 ElseIf buf = 3 AndAlso tokens(1) Like GetType(String) AndAlso tokens(1).TryCast(Of String) Like ExpressionSignature.valueAssignOperatorSymbols Then
                     ' set value by name
                     Return New MemberValueAssign(tokens(Scan0), tokens(2))
                 End If
 
-                Return New SyntaxResult(New SyntaxErrorException)
+                Return New SyntaxResult(New SyntaxErrorException, opts.debug)
             Else
                 Return buf(Scan0)
             End If
         End Function
 
         <Extension>
-        Private Sub processNameMemberReference(buf As List(Of [Variant](Of SyntaxResult, String)), oplist As List(Of String))
+        Private Sub processNameMemberReference(buf As List(Of [Variant](Of SyntaxResult, String)), oplist As List(Of String), opts As SyntaxBuilderOptions)
             Call buf.genericSymbolOperatorProcessor(
                 oplist:=oplist,
                 opSymbol:="$",
@@ -167,7 +167,7 @@ Namespace Interpreter.SyntaxParser
 
                                     Return New SyntaxResult(New FunctionInvoke(funcVar, invoke.parameters.ToArray))
                                 Else
-                                    Return New SyntaxResult(New NotImplementedException)
+                                    Return New SyntaxResult(New NotImplementedException, opts.debug)
                                 End If
 
                                 ' a$b symbol reference
@@ -177,7 +177,7 @@ Namespace Interpreter.SyntaxParser
         End Sub
 
         <Extension>
-        Private Sub processNamespaceReference(buf As List(Of [Variant](Of SyntaxResult, String)), oplist As List(Of String))
+        Private Sub processNamespaceReference(buf As List(Of [Variant](Of SyntaxResult, String)), oplist As List(Of String), opts As SyntaxBuilderOptions)
             Call buf.genericSymbolOperatorProcessor(
                 oplist:=oplist,
                 opSymbol:="::",
@@ -202,7 +202,7 @@ Namespace Interpreter.SyntaxParser
                                     ' a::b view function help info
                                     namespaceRef = New NamespaceFunctionSymbolReference(nsSymbol, b.VA.expression)
                                 Else
-                                    Return New SyntaxResult(New SyntaxErrorException)
+                                    Return New SyntaxResult(New SyntaxErrorException, opts.debug)
                                 End If
 
                                 Return New SyntaxResult(namespaceRef)
@@ -268,7 +268,7 @@ Namespace Interpreter.SyntaxParser
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
-        Private Sub processPipeline(buf As List(Of [Variant](Of SyntaxResult, String)), oplist As List(Of String))
+        Private Sub processPipeline(buf As List(Of [Variant](Of SyntaxResult, String)), oplist As List(Of String), opts As SyntaxBuilderOptions)
             Call buf.genericSymbolOperatorProcessor(
                 oplist:=oplist,
                 opSymbol:=":>",
@@ -294,7 +294,7 @@ Namespace Interpreter.SyntaxParser
 
                                         Return New SyntaxResult(New VectorLiteral(calls))
                                     Else
-                                        Return New SyntaxResult(New SyntaxErrorException)
+                                        Return New SyntaxResult(New SyntaxErrorException, opts.debug)
                                     End If
                                 Else
                                     Return New SyntaxResult(pip)

@@ -161,7 +161,7 @@ Namespace Interpreter.SyntaxParser
         End Function
 
         <Extension>
-        Public Function parseComplexSymbolIndexer(tokens As Token()) As SyntaxResult
+        Public Function parseComplexSymbolIndexer(tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
             ' func(...)[x]
             Dim code = tokens.SplitByTopLevelDelimiter(TokenType.close, tokenText:=")")
             Dim indexer = code.Last
@@ -171,7 +171,7 @@ Namespace Interpreter.SyntaxParser
                     .IteratesALL _
                     .ToArray _
                     .DoCall(Function(a)
-                                Return SyntaxImplements.SymbolIndexer(a, indexer)
+                                Return SyntaxImplements.SymbolIndexer(a, indexer, opts)
                             End Function)
             Else
                 Return Nothing

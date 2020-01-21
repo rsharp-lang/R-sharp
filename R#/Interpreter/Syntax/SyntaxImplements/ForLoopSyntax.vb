@@ -50,7 +50,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
     Module ForLoopSyntax
 
-        Public Function ForLoop(tokens As IEnumerable(Of Token)) As SyntaxResult
+        Public Function ForLoop(tokens As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim blocks As List(Of Token()) = tokens.SplitByTopLevelDelimiter(TokenType.close)
             Dim [loop] As List(Of Token()) = blocks(Scan0) _
                 .Skip(1) _
@@ -72,14 +72,20 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Dim sequence As SyntaxResult = [loop] _
                 .Skip(2) _
                 .IteratesALL _
-                .DoCall(AddressOf Expression.CreateExpression)
+                .DoCall(Function(code)
+                            Return Expression.CreateExpression(code, opts)
+                        End Function)
 
             If sequence.isException Then
                 Return sequence
             End If
 
             Dim parallel As Boolean = False
-            Dim loopBody As SyntaxResult = ParseLoopBody(blocks(2), isParallel:=parallel)
+            Dim loopBody As SyntaxResult = ParseLoopBody(
+                tokens:=blocks(2),
+                isParallel:=parallel,
+                opts:=opts
+            )
 
             If loopBody.isException Then
                 Return loopBody
@@ -94,11 +100,13 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Return New SyntaxResult(New ForLoop(variables, sequence.expression, body, parallel))
         End Function
 
-        Private Function ParseLoopBody(tokens As Token(), ByRef isParallel As Boolean) As SyntaxResult
+        Private Function ParseLoopBody(tokens As Token(), ByRef isParallel As Boolean, opts As SyntaxBuilderOptions) As SyntaxResult
             If tokens(Scan0) = (TokenType.open, "{") Then
                 Return tokens _
                     .Skip(1) _
-                    .DoCall(AddressOf ClosureExpressionSyntax.ClosureExpression)
+                    .DoCall(Function(code)
+                                Return ClosureExpressionSyntax.ClosureExpression(code, opts)
+                            End Function)
             ElseIf tokens(Scan0) = (TokenType.operator, "%") AndAlso
                    tokens(1) = (TokenType.identifier, "dopar") AndAlso
                    tokens(2) = (TokenType.operator, "%") Then
@@ -108,7 +116,9 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
                 Return tokens _
                     .Skip(4) _
-                    .DoCall(AddressOf ClosureExpressionSyntax.ClosureExpression)
+                    .DoCall(Function(code)
+                                Return ClosureExpressionSyntax.ClosureExpression(code, opts)
+                            End Function)
             Else
                 Throw New SyntaxErrorException
             End If

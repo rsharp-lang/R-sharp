@@ -48,7 +48,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
     Module FunctionInvokeSyntax
 
-        Public Function FunctionInvoke(tokens As Token()) As SyntaxResult
+        Public Function FunctionInvoke(tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim params = tokens _
                 .Skip(2) _
                 .Take(tokens.Length - 3) _
@@ -62,7 +62,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 .SplitByTopLevelDelimiter(TokenType.comma) _
                 .Where(Function(t) Not t.isComma) _
                 .Select(Function(param)
-                            Return Expression.CreateExpression(param)
+                            Return Expression.CreateExpression(param, opts)
                         End Function)
 
                 If token.isException Then

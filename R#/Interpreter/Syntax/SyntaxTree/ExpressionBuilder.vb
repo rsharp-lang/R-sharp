@@ -53,23 +53,23 @@ Namespace Interpreter.SyntaxParser
     Module ExpressionBuilder
 
         <Extension>
-        Friend Function keywordExpressionHandler(code As List(Of Token())) As SyntaxResult
+        Friend Function keywordExpressionHandler(code As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim keyword As String = code(Scan0)(Scan0).text
 
             Select Case keyword
                 Case "let"
                     If code > 4 AndAlso code(3).isKeyword("function") Then
-                        Return SyntaxImplements.DeclareNewFunction(code)
+                        Return SyntaxImplements.DeclareNewFunction(code, opts)
                     Else
-                        Return SyntaxImplements.DeclareNewVariable(code)
+                        Return SyntaxImplements.DeclareNewVariable(code, opts)
                     End If
-                Case "if" : Return SyntaxImplements.IfBranch(code.Skip(1).IteratesALL)
-                Case "else" : Return code.Skip(1).IteratesALL.ToArray.DoCall(AddressOf SyntaxImplements.ElseBranch)
-                Case "elseif" : Return code.Skip(1).IteratesALL.DoCall(AddressOf SyntaxImplements.ElseIfBranch)
-                Case "return" : Return SyntaxImplements.ReturnValue(code.Skip(1).IteratesALL)
-                Case "for" : Return SyntaxImplements.ForLoop(code.Skip(1).IteratesALL)
-                Case "from" : Return SyntaxImplements.LinqExpression(code)
-                Case "imports" : Return SyntaxImplements.[Imports](code)
+                Case "if" : Return SyntaxImplements.IfBranch(code.Skip(1).IteratesALL, opts)
+                Case "else" : Return code.Skip(1).IteratesALL.ToArray.DoCall(Function(tokens) SyntaxImplements.ElseBranch(tokens, opts))
+                Case "elseif" : Return code.Skip(1).IteratesALL.DoCall(Function(tokens) SyntaxImplements.ElseIfBranch(tokens, opts))
+                Case "return" : Return SyntaxImplements.ReturnValue(code.Skip(1).IteratesALL, opts)
+                Case "for" : Return SyntaxImplements.ForLoop(code.Skip(1).IteratesALL, opts)
+                Case "from" : Return SyntaxImplements.LinqExpression(code, opts)
+                Case "imports" : Return SyntaxImplements.[Imports](code, opts)
                 Case "function"
                     Dim [let] = New Token() {New Token(TokenType.keyword, "let")}
                     Dim name = New Token() {New Token(TokenType.identifier, "<$anonymous>")}
@@ -77,12 +77,14 @@ Namespace Interpreter.SyntaxParser
 
                     code = ({[let], name, [as]}) + code
 
-                    Return SyntaxImplements.DeclareNewFunction(code)
+                    Return SyntaxImplements.DeclareNewFunction(code, opts)
                 Case "suppress"
                     Dim evaluate As SyntaxResult = code _
                         .Skip(1) _
                         .IteratesALL _
-                        .DoCall(AddressOf Expression.CreateExpression)
+                        .DoCall(Function(tokens)
+                                    Return Expression.CreateExpression(tokens, opts)
+                                End Function)
 
                     If evaluate.isException Then
                         Return evaluate
@@ -90,20 +92,20 @@ Namespace Interpreter.SyntaxParser
                         Return New Suppress(evaluate.expression)
                     End If
                 Case "modeof", "typeof", "valueof"
-                    Return SyntaxImplements.ModeOf(keyword, code(1))
+                    Return SyntaxImplements.ModeOf(keyword, code(1), opts)
                 Case "require"
                     Return code(1) _
                         .Skip(1) _
                         .Take(code(1).Length - 2) _
                         .ToArray _
                         .DoCall(Function(tokens)
-                                    Return SyntaxImplements.Require(tokens)
+                                    Return SyntaxImplements.Require(tokens, opts)
                                 End Function)
                 Case "next"
                     ' continute for
                     Return New ContinuteFor
                 Case "using"
-                    Return SyntaxImplements.UsingClosure(code.Skip(1))
+                    Return SyntaxImplements.UsingClosure(code.Skip(1), opts)
                 Case Else
                     ' may be it is using keyword as identifier name
                     Return Nothing
@@ -111,9 +113,9 @@ Namespace Interpreter.SyntaxParser
         End Function
 
         <Extension>
-        Friend Function ParseExpression(code As List(Of Token())) As SyntaxResult
+        Friend Function ParseExpression(code As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
             If code(Scan0).isKeyword Then
-                Dim expression As SyntaxResult = code.DoCall(AddressOf keywordExpressionHandler)
+                Dim expression As SyntaxResult = code.keywordExpressionHandler(opts)
 
                 ' if expression is nothing
                 ' then it means the keyword is probably 
@@ -129,21 +131,21 @@ Namespace Interpreter.SyntaxParser
                 Dim item As Token() = code(Scan0)
 
                 If item.isLiteral Then
-                    Return SyntaxImplements.LiteralSyntax(item(Scan0))
+                    Return SyntaxImplements.LiteralSyntax(item(Scan0), opts)
                 ElseIf item.isIdentifier Then
                     Return New SymbolReference(item(Scan0))
                 Else
                     Dim ifelse = item.ifElseTriple
 
                     If ifelse.ifelse Is Nothing Then
-                        Return item.CreateTree
+                        Return item.CreateTree(opts)
                     Else
-                        Return SyntaxImplements.IIfExpression(ifelse.test, ifelse.ifelse)
+                        Return SyntaxImplements.IIfExpression(ifelse.test, ifelse.ifelse, opts)
                     End If
                 End If
             ElseIf code.isLambdaFunction Then
                 ' is a lambda function
-                Return SyntaxImplements.DeclareLambdaFunction(code)
+                Return SyntaxImplements.DeclareLambdaFunction(code, opts)
             End If
 
             If code(Scan0).isIdentifier Then
@@ -151,17 +153,17 @@ Namespace Interpreter.SyntaxParser
                     Dim opText$ = code(1)(Scan0).text
 
                     If opText = "=" OrElse opText = "<-" Then
-                        Return SyntaxImplements.ValueAssign(code)
+                        Return SyntaxImplements.ValueAssign(code, opts)
                     End If
                 End If
             ElseIf code(1).isOperator("=", "<-") Then
-                Return getValueAssign(code)
+                Return getValueAssign(code, opts)
             ElseIf code = 2 Then
                 If code(Scan0).Length = 1 AndAlso code(Scan0)(Scan0) = (TokenType.operator, "$") Then
-                    Return SyntaxImplements.FunctionInvoke(code.IteratesALL.ToArray)
+                    Return SyntaxImplements.FunctionInvoke(code.IteratesALL.ToArray, opts)
                 ElseIf code(Scan0).Length = 1 AndAlso code(Scan0)(Scan0) = (TokenType.operator, "!") Then
                     ' not xxxx
-                    Dim valExpression As SyntaxResult = Expression.CreateExpression(code(1))
+                    Dim valExpression As SyntaxResult = Expression.CreateExpression(code(1), opts)
 
                     If valExpression.isException Then
                         Return valExpression
@@ -183,18 +185,18 @@ Namespace Interpreter.SyntaxParser
                             ' do nothing
                             GoTo Binary
                         Else
-                            Return New SyntaxResult(New SyntaxErrorException)
+                            Return New SyntaxResult(New SyntaxErrorException, opts.debug)
                         End If
                     End If
 
-                    Return SyntaxImplements.SequenceLiteral(from, [to], steps)
+                    Return SyntaxImplements.SequenceLiteral(from, [to], steps, opts)
                 End If
             End If
 Binary:
-            Return code.ParseBinaryExpression
+            Return code.ParseBinaryExpression(opts)
         End Function
 
-        Private Function getValueAssign(code As List(Of Token())) As SyntaxResult
+        Private Function getValueAssign(code As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
             ' tuple value assign
             ' or member reference assign
             Dim target As Token() = code(Scan0)
@@ -202,7 +204,7 @@ Binary:
             Dim symbol As Expression()
 
             If target.isSimpleSymbolIndexer Then
-                Dim syntaxTemp As SyntaxResult = SyntaxImplements.SymbolIndexer(target)
+                Dim syntaxTemp As SyntaxResult = SyntaxImplements.SymbolIndexer(target, opts)
 
                 If syntaxTemp.isException Then
                     Return syntaxTemp
@@ -215,12 +217,14 @@ Binary:
                 Dim vals As SyntaxResult = code _
                     .Skip(2) _
                     .IteratesALL _
-                    .DoCall(AddressOf Expression.CreateExpression)
+                    .DoCall(Function(tokens)
+                                Return Expression.CreateExpression(tokens, opts)
+                            End Function)
 
                 If vals.isException Then
                     Return vals
                 Else
-                    Dim calls = SyntaxImplements.FunctionInvoke(target)
+                    Dim calls As SyntaxResult = SyntaxImplements.FunctionInvoke(target, opts)
 
                     If calls.isException Then
                         Return calls
@@ -232,7 +236,9 @@ Binary:
                 ' the exception is always the last one
                 With target.Skip(1) _
                            .Take(code(Scan0).Length - 2) _
-                           .DoCall(AddressOf getTupleSymbols) _
+                           .DoCall(Function(tokens)
+                                       Return getTupleSymbols(tokens, opts)
+                                   End Function) _
                            .ToArray
 
                     If .Last.isException Then
@@ -244,7 +250,7 @@ Binary:
                 End With
             End If
 
-            Dim valExpression As SyntaxResult = Expression.CreateExpression(value)
+            Dim valExpression As SyntaxResult = Expression.CreateExpression(value, opts)
 
             If valExpression.isException Then
                 Return valExpression
@@ -253,10 +259,12 @@ Binary:
             End If
         End Function
 
-        Private Iterator Function getTupleSymbols(target As IEnumerable(Of Token)) As IEnumerable(Of SyntaxResult)
+        Private Iterator Function getTupleSymbols(target As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As IEnumerable(Of SyntaxResult)
             For Each token As SyntaxResult In target.SplitByTopLevelDelimiter(TokenType.comma) _
                                                     .Where(Function(t) Not t.isComma) _
-                                                    .Select(AddressOf Expression.CreateExpression)
+                                                    .Select(Function(tokens)
+                                                                Return Expression.CreateExpression(tokens, opts)
+                                                            End Function)
                 Yield token
 
                 If token.isException Then

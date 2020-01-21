@@ -49,10 +49,10 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
     Module IfBranchSyntax
 
-        Public Function IIfExpression(test As Token(), ifelse As List(Of Token())) As SyntaxResult
-            Dim ifTest = Expression.CreateExpression(test)
-            Dim trueResult = Expression.CreateExpression(ifelse(Scan0))
-            Dim falseResult = Expression.CreateExpression(ifelse(2))
+        Public Function IIfExpression(test As Token(), ifelse As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
+            Dim ifTest = Expression.CreateExpression(test, opts)
+            Dim trueResult = Expression.CreateExpression(ifelse(Scan0), opts)
+            Dim falseResult = Expression.CreateExpression(ifelse(2), opts)
 
             If ifTest.isException Then
                 Return ifTest
@@ -69,9 +69,9 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             End If
         End Function
 
-        Public Function IfBranch(tokens As IEnumerable(Of Token)) As SyntaxResult
+        Public Function IfBranch(tokens As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim blocks = tokens.SplitByTopLevelDelimiter(TokenType.close)
-            Dim ifTest = Expression.CreateExpression(blocks(Scan0).Skip(1))
+            Dim ifTest = Expression.CreateExpression(blocks(Scan0).Skip(1), opts)
 
             If ifTest.isException Then
                 Return ifTest
@@ -79,7 +79,9 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
             Dim closureInternal As SyntaxResult = blocks(2) _
                 .Skip(1) _
-                .DoCall(AddressOf SyntaxImplements.ClosureExpression)
+                .DoCall(Function(code)
+                            Return SyntaxImplements.ClosureExpression(code, opts)
+                        End Function)
 
             If closureInternal.isException Then
                 Return closureInternal
@@ -88,8 +90,8 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Return New SyntaxResult(New IfBranch(ifTest.expression, closureInternal.expression))
         End Function
 
-        Public Function ElseIfBranch(tokens As IEnumerable(Of Token)) As SyntaxResult
-            Dim [if] As SyntaxResult = IfBranch(tokens)
+        Public Function ElseIfBranch(tokens As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult
+            Dim [if] As SyntaxResult = IfBranch(tokens, opts)
 
             If [if].isException Then
                 Return [if]
@@ -100,11 +102,13 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             End If
         End Function
 
-        Public Function ElseBranch(code As Token()) As SyntaxResult
+        Public Function ElseBranch(code As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim syntaxResult As SyntaxResult = code _
                 .Skip(1) _
                 .Take(code.Length - 2) _
-                .DoCall(AddressOf SyntaxImplements.ClosureExpression)
+                .DoCall(Function(tokens)
+                            Return SyntaxImplements.ClosureExpression(tokens, opts)
+                        End Function)
 
             If syntaxResult.isException Then
                 Return syntaxResult

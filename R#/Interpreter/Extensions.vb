@@ -68,12 +68,12 @@ Namespace Interpreter
         End Function
 
         <Extension>
-        Public Function GetExpressions(Rscript As Rscript) As IEnumerable(Of Expression)
-            Return Rscript.GetTokens.GetExpressions(Rscript, Nothing)
+        Public Function GetExpressions(Rscript As Rscript, opts As SyntaxBuilderOptions) As IEnumerable(Of Expression)
+            Return Rscript.GetTokens.GetExpressions(Rscript, Nothing, opts)
         End Function
 
         <Extension>
-        Public Iterator Function GetExpressions(tokens As Token(), Rscript As Rscript, errHandler As Action(Of SyntaxResult)) As IEnumerable(Of Expression)
+        Public Iterator Function GetExpressions(tokens As Token(), Rscript As Rscript, errHandler As Action(Of SyntaxResult), opts As SyntaxBuilderOptions) As IEnumerable(Of Expression)
             For Each block In tokens.SplitByTopLevelDelimiter(TokenType.terminator)
                 If block.Length = 0 OrElse block.isTerminator Then
                     ' skip code comments
@@ -89,7 +89,7 @@ Namespace Interpreter
 
                     For Each joinBlock In parts
                         block = joinBlock(Scan0).JoinIterates(joinBlock.ElementAtOrDefault(1)).ToArray
-                        expr = Expression.CreateExpression(block)
+                        expr = Expression.CreateExpression(block, opts)
 
                         If expr.isException Then
                             If errHandler Is Nothing Then
