@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9d9ebf37038ecf9c8514d9bea19660ee, R#\Runtime\Interop\RMethodArgument.vb"
+﻿#Region "Microsoft.VisualBasic::59c28691cf24cb374dbd4f6967d5232c, R#\Runtime\Interop\RMethodArgument.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,7 @@
     '         Properties: [default], isByrefValueParameter, isObjectList, isOptional, isRequireRawVector
     '                     name, type
     ' 
-    '         Function: getDefaultVector, GetRawVectorElementType, ParseArgument, ToString
+    '         Function: getDefaultValue, getDefaultVector, GetRawVectorElementType, ParseArgument, ToString
     ' 
     ' 
     ' /********************************************************************************/

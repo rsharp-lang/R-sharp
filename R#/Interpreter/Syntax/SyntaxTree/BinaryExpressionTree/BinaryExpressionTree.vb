@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5ddd58839475f90aa9bc617b8585b944, R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree.vb"
+﻿#Region "Microsoft.VisualBasic::03ef089f78e2a842c7ee838b7d599d22, R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\BinaryExpressionTree.vb"
 
     ' Author:
     ' 
@@ -33,10 +33,9 @@
 
     '     Module BinaryExpressionTree
     ' 
-    '         Function: buildPipeline, isFunctionTuple, ParseBinaryExpression
+    '         Function: ParseBinaryExpression
     ' 
-    '         Sub: genericSymbolOperatorProcessor, processAppendData, processNameMemberReference, processNamespaceReference, processOperators
-    '              processPipeline
+    '         Sub: processOperators
     ' 
     ' 
     ' /********************************************************************************/

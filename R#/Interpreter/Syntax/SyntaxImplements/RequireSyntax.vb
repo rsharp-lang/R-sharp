@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::28fdde43f2362db7e42f6be97affec61, R#\Interpreter\Syntax\SyntaxImplements\RequireSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::e8f42cd568a1e783fdd275e2454bd113, R#\Interpreter\Syntax\SyntaxImplements\RequireSyntax.vb"
 
     ' Author:
     ' 

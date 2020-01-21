@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::839e379b89faa057ed2b02b9537cb640, R#\Runtime\Internal\printer\enumPrinter.vb"
+﻿#Region "Microsoft.VisualBasic::070de125127d02c0ba2dd6ee02edf30c, R#\Runtime\Internal\printer\enumPrinter.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Module enumPrinter
     ' 
-    '         Function: defaultValueToString, printClass
+    '         Function: defaultValueToString, printClass, printEnumValue
     ' 
     ' 
     ' /********************************************************************************/

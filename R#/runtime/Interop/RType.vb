@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::476ca4372d4f1d74f38fd252af7fc1f6, R#\Runtime\Interop\RType.vb"
+﻿#Region "Microsoft.VisualBasic::839e4ed574f3580e7f16ca91bcc006d8, R#\Runtime\Interop\RType.vb"
 
     ' Author:
     ' 
@@ -37,7 +37,8 @@
     '                     isGenericListObject, mode, raw
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: getNames, GetRawElementType, GetRSharpType, populateNames, ToString
+    '         Function: [GetType], getNames, GetRawElementType, GetRSharpType, populateNames
+    '                   ToString
     ' 
     ' 
     ' /********************************************************************************/

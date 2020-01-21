@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c22ba6ebacdf8e30e894b92df8c0aa10, R#\Interpreter\Syntax\SyntaxImplements\SymbolIndexer.vb"
+﻿#Region "Microsoft.VisualBasic::bb648dfa8532bbdeb39726331ec8d22c, R#\Interpreter\Syntax\SyntaxImplements\SymbolIndexer.vb"
 
     ' Author:
     ' 

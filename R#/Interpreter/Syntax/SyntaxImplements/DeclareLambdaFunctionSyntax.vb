@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f7bd0a4c6acd53ca0c5d06d57d129418, R#\Interpreter\Syntax\SyntaxImplements\DeclareLambdaFunctionSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::74476886073282f082d2ca261d22fb9a, R#\Interpreter\Syntax\SyntaxImplements\DeclareLambdaFunctionSyntax.vb"
 
     ' Author:
     ' 
