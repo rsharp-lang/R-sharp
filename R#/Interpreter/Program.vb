@@ -226,10 +226,12 @@ Namespace Interpreter
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
-        Public Shared Function BuildProgram(scriptText As String) As Program
+        Public Shared Function BuildProgram(scriptText As String, Optional debug As Boolean = False) As Program
             Return Rscript _
                 .AutoHandleScript(scriptText) _
-                .DoCall(AddressOf CreateProgram)
+                .DoCall(Function(script)
+                            Return CreateProgram(script, debug)
+                        End Function)
         End Function
 
         Public Iterator Function GetEnumerator() As IEnumerator(Of Expression) Implements IEnumerable(Of Expression).GetEnumerator

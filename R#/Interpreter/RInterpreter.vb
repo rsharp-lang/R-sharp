@@ -264,7 +264,7 @@ Namespace Interpreter
 
         Private Function RunInternal(Rscript As Rscript, arguments As NamedValue(Of Object)()) As Object
             Dim globalEnvir As Environment = InitializeEnvironment(Rscript.fileName, arguments)
-            Dim program As Program = Program.CreateProgram(Rscript)
+            Dim program As Program = Program.CreateProgram(Rscript, debug:=debug)
             Dim result As Object = program.Execute(globalEnvir)
 
             Return finalizeResult(result)
