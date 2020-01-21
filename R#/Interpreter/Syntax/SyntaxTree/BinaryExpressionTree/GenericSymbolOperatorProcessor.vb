@@ -5,11 +5,15 @@ Namespace Interpreter.SyntaxParser
 
     Friend MustInherit Class GenericSymbolOperatorProcessor
 
-        Protected MustOverride ReadOnly Property operatorSymbol As String
+        ReadOnly operatorSymbol As String
 
-        Protected MustOverride Function expression(a As [Variant](Of SyntaxResult, String), b As [Variant](Of SyntaxResult, String)) As SyntaxResult
+        Sub New(opSymbol As String)
+            operatorSymbol = opSymbol
+        End Sub
 
-        Public Function JoinBinaryExpression(queue As SyntaxQueue, oplist As List(Of String)) As SyntaxQueue
+        Protected MustOverride Function expression(a As [Variant](Of SyntaxResult, String), b As [Variant](Of SyntaxResult, String), opts As SyntaxBuilderOptions) As SyntaxResult
+
+        Public Function JoinBinaryExpression(queue As SyntaxQueue, oplist As List(Of String), opts As SyntaxBuilderOptions) As SyntaxQueue
             If queue.buf = 1 Then
                 Return queue
             End If
@@ -26,7 +30,7 @@ Namespace Interpreter.SyntaxParser
                         ' j-1 and j+1
                         Dim a = buf(j - 1) ' parameter
                         Dim b = buf(j + 1) ' function invoke
-                        Dim exp As SyntaxResult = expression(a, b)
+                        Dim exp As SyntaxResult = expression(a, b, opts)
 
                         Call buf.RemoveRange(j - 1, 3)
                         Call buf.Insert(j - 1, exp)

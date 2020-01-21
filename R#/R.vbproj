@@ -282,7 +282,11 @@
     <Compile Include="Interpreter\Syntax\SyntaxImplements\StringInterpolationSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\SymbolIndexer.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\FunctionInvokeSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\PipelineProcessor.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\VectorAppendProcessor.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\NamespaceReference.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\GenericSymbolOperatorProcessor.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\NameMemberReference.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxTree\ExpressionBuilder.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxTree\Splitter.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxResult.vb" />
