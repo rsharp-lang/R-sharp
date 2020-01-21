@@ -73,6 +73,7 @@ Namespace Runtime.Interop
         Public Property isRequireRawVector As Boolean
 
         Friend rawVectorFlag As RRawVectorArgumentAttribute
+        Friend defaultScriptValue As RDefaultValueAttribute
 
         ''' <summary>
         ''' Get element type of the target raw vector
@@ -96,6 +97,8 @@ Namespace Runtime.Interop
                     defaultValue = $"""{[default]}"""
                 ElseIf type.raw.IsEnum Then
                     defaultValue = enumPrinter.defaultValueToString([default], type)
+                ElseIf Not defaultScriptValue Is Nothing Then
+                    defaultValue = $"'{defaultScriptValue.defaultValue}'"
                 ElseIf [default].GetType.IsArray Then
                     defaultValue = JSON.GetObjectJson([default].GetType, [default], indent:=False)
                 Else
@@ -123,12 +126,25 @@ Namespace Runtime.Interop
                 .name = p.Name,
                 .type = RType.GetRSharpType(p.ParameterType),
                 .rawVectorFlag = p.GetCustomAttribute(Of RRawVectorArgumentAttribute),
-                .[default] = getDefaultVector(.rawVectorFlag, p.DefaultValue),
+                .defaultScriptValue = p.GetCustomAttribute(Of RDefaultValueAttribute),
+                .[default] = getDefaultValue(.rawVectorFlag, .defaultScriptValue, p.ParameterType, p.DefaultValue),
                 .isOptional = p.HasDefaultValue,
                 .isObjectList = Not p.GetCustomAttribute(Of RListObjectArgumentAttribute) Is Nothing,
                 .isRequireRawVector = Not .rawVectorFlag Is Nothing,
                 .isByrefValueParameter = Not p.GetCustomAttribute(Of RByRefValueAssignAttribute) Is Nothing
             }
+        End Function
+
+        Private Shared Function getDefaultValue(rawVector As RRawVectorArgumentAttribute, defaultScript As RDefaultValueAttribute, paramType As Type, [default] As Object) As Object
+            If rawVector Is Nothing Then
+                If Not defaultScript Is Nothing Then
+                    Return defaultScript.ParseDefaultValue(paramType)
+                Else
+                    Return [default]
+                End If
+            Else
+                Return getDefaultVector(rawVector, [default])
+            End If
         End Function
 
         Private Shared Function getDefaultVector(flag As RRawVectorArgumentAttribute, [default] As Object) As Object
