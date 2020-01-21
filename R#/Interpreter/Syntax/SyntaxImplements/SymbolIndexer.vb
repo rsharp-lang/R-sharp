@@ -133,8 +133,17 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 blocks.parseDataframeIndex(index, indexType, opts)
             Else
                 If tokens.isStackOf("[", "]") Then
-                    ' list get value by name
-                    indexType = SymbolIndexers.nameIndex
+                    blocks = tokens.Skip(1).Take(tokens.Length - 2).SplitByTopLevelDelimiter(TokenType.comma, False)
+
+                    If blocks = 1 Then
+                        ' list get value by name
+                        indexType = SymbolIndexers.nameIndex
+                        tokens = blocks(Scan0)
+                    Else
+                        ' list subset by names
+                        ' list[[a,b,c,d]]
+                        indexType = SymbolIndexers.vectorIndex
+                    End If
                 Else
                     ' vector indexer
                     ' list subset by names
