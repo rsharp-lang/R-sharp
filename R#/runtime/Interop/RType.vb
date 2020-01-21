@@ -184,6 +184,10 @@ Namespace Runtime.Interop
             Return cache.ComputeIfAbsent(type, Function(t) New RType(t))
         End Function
 
+        Public Overloads Shared Function [GetType](code As TypeCodes) As RType
+            Return GetRSharpType(Runtime.GetType(code))
+        End Function
+
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
         Public Shared Narrowing Operator CType(type As RType) As Type

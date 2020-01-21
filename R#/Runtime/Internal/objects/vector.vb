@@ -82,7 +82,7 @@ Namespace Runtime.Internal.Object
         ''' <summary>
         ''' Create a vector from a pipeline model and given array element <paramref name="model"/> type
         ''' </summary>
-        ''' <param name="model"></param>
+        ''' <param name="model">element type of the array</param>
         ''' <param name="input"></param>
         Sub New(model As Type, input As IEnumerable, env As Environment)
             Dim i As i32 = Scan0

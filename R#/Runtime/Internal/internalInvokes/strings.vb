@@ -74,7 +74,7 @@ Namespace Runtime.Internal.Invokes
         ''' specified position in the string.
         ''' </returns>
         <ExportAPI("mid")>
-        Public Function mid(strings As String(), start As Integer, Optional len As Integer = -1) As String()
+        Public Function Mid(strings As String(), start As Integer, Optional len As Integer = -1) As String()
             Return strings _
                 .Select(Function(str)
                             If len = 0 Then
@@ -96,7 +96,7 @@ Namespace Runtime.Internal.Invokes
         ''' Returns a string or character converted to lowercase.
         ''' </returns>
         <ExportAPI("lcase")>
-        Public Function lcase(strings As String()) As String()
+        Public Function LCase(strings As String()) As String()
             Return strings.SafeQuery.Select(AddressOf BASICString.LCase).ToArray
         End Function
 
@@ -108,7 +108,7 @@ Namespace Runtime.Internal.Invokes
         ''' Returns a string or character containing the specified string converted to uppercase.
         ''' </returns>
         <ExportAPI("ucase")>
-        Public Function ucase(strings As String()) As String()
+        Public Function UCase(strings As String()) As String()
             Return strings.SafeQuery.Select(AddressOf BASICString.UCase).ToArray
         End Function
 

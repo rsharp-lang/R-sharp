@@ -84,10 +84,36 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="list"></param>
+        ''' <param name="[typeof]">element type of the array</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("unlist")>
-        Public Function unlist(list As Object, Optional [typeof] As Type = Nothing, Optional env As Environment = Nothing) As Object
+        Public Function unlist(list As Object, Optional [typeof] As Object = Nothing, Optional env As Environment = Nothing) As Object
             If list Is Nothing Then
                 Return Nothing
+            End If
+            If Not [typeof] Is Nothing Then
+                Select Case [typeof].GetType
+                    Case GetType(Type) ' do nothing
+                    Case GetType(RType)
+                        [typeof] = DirectCast([typeof], RType).raw
+                    Case GetType(String)
+                        Dim RType As RType = DirectCast([typeof], String) _
+                            .GetRTypeCode _
+                            .DoCall(AddressOf RType.GetType)
+
+                        If RType.isArray Then
+                            [typeof] = RType.raw.GetElementType
+                        Else
+                            [typeof] = RType.raw
+                        End If
+                    Case Else
+                        Return Internal.stop(New NotImplementedException, env)
+                End Select
             End If
 
             If list.GetType Is GetType(list) Then
@@ -99,6 +125,13 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="rlist"></param>
+        ''' <param name="[typeof]">element type of the array</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <Extension>
         Private Function unlistOfRList(rlist As list, [typeof] As Type, env As Environment) As Object
             Dim data As New List(Of Object)
