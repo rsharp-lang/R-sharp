@@ -176,6 +176,11 @@ Namespace Interpreter
             Return Me
         End Function
 
+        Public Function LoadLibrary(package As Type) As RInterpreter
+            Call globalEnvir.LoadLibrary(package)
+            Return Me
+        End Function
+
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
         Public Sub Add(name$, value As Object, Optional type As TypeCodes = TypeCodes.generic)
