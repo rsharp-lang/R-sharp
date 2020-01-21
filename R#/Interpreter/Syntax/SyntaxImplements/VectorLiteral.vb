@@ -1,46 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::25d53edb16f3da8b56621f487b6e7620, R#\Interpreter\Syntax\SyntaxImplements\VectorLiteral.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module VectorLiteralSyntax
-    ' 
-    '         Function: LiteralSyntax, (+2 Overloads) SequenceLiteral, TypeCodeOf, VectorLiteral
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module VectorLiteralSyntax
+' 
+'         Function: LiteralSyntax, (+2 Overloads) SequenceLiteral, TypeCodeOf, VectorLiteral
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
@@ -105,6 +106,11 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Return New SyntaxResult(New VectorLiteral(values, values.DoCall(AddressOf TypeCodeOf)))
         End Function
 
+        ''' <summary>
+        ''' get type code value of the vector literal 
+        ''' </summary>
+        ''' <param name="values"></param>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Friend Function TypeCodeOf(values As IEnumerable(Of Expression)) As TypeCodes
             With values.ToArray
@@ -112,12 +118,37 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 '
                 If .Length = 0 Then
                     Return TypeCodes.generic
+                ElseIf .Length = 1 Then
+                    Return DirectCast(.GetValue(Scan0), Expression).type
                 Else
-                    Return values _
-                        .GroupBy(Function(exp) exp.type) _
-                        .OrderByDescending(Function(g) g.Count) _
-                        .First _
-                       ?.Key
+                    ' generic > string > double > float > long > integer > byte > boolean
+                    Static typeCodeWeights As Index(Of TypeCodes) = {
+                        TypeCodes.boolean,
+                        TypeCodes.integer,
+                        TypeCodes.double,
+                        TypeCodes.string,
+                        TypeCodes.generic
+                    }
+
+                    ' get unique types
+                    Dim types As TypeCodes() = .Select(Function(exp) exp.type) _
+                                               .Distinct _
+                                               .ToArray
+                    If types.Length = 1 Then
+                        Return types(Scan0)
+                    Else
+                        Dim maxType As TypeCodes = TypeCodes.boolean
+                        Dim maxWeight As Integer
+
+                        For Each code As TypeCodes In types
+                            If typeCodeWeights.IndexOf(code) > maxWeight Then
+                                maxType = code
+                                maxWeight = typeCodeWeights(maxType)
+                            End If
+                        Next
+
+                        Return maxType
+                    End If
                 End If
             End With
         End Function
