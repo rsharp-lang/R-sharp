@@ -40,6 +40,7 @@
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
@@ -66,7 +67,7 @@ Namespace Runtime.Internal.Object
             ElseIf Runtime.IsPrimitive(code, includeComplexList:=False) Then
                 Return strVector(Runtime.asVector(Of Object)(x), type, env)
             ElseIf type Is GetType(dataframe) Then
-                Return dataframe(x, env)
+                Return dataframe(x, env, indent)
             Else
                 Return printer.ValueToString(x, env)
             End If
@@ -76,6 +77,7 @@ Namespace Runtime.Internal.Object
             Dim value As Object
             Dim sb As New StringBuilder
             Dim i As i32 = 1
+            Dim keyValues As New List(Of (key$, value$))
 
             Call sb.AppendLine("List of " & list.Count)
 
@@ -86,14 +88,47 @@ Namespace Runtime.Internal.Object
                     slotKey = $"[{slotKey}]"
                 End If
 
-                sb.AppendLine($"{indent}$ {slotKey}: {GetStructure(value, env, indent & "..")}")
+                keyValues.Add(($"{indent}$ {slotKey}", GetStructure(value, env, indent & "..")))
+            Next
+
+            Return sb.printSlots(keyValues)
+        End Function
+
+        <Extension>
+        Private Function printSlots(sb As StringBuilder, keyValues As List(Of (key$, value$))) As String
+            Dim maxPrefixSize As Integer = keyValues _
+                .Select(Function(s) s.key) _
+                .MaxLengthString _
+                .Length
+
+            For Each slot In keyValues
+                Call sb.AppendLine($"{slot.key}{New String(" "c, maxPrefixSize - slot.key.Length)} : {slot.value}")
             Next
 
             Return sb.ToString
         End Function
 
-        Private Function dataframe(d As dataframe, env As GlobalEnvironment) As String
-            Throw New NotImplementedException
+        Private Function dataframe(d As dataframe, env As GlobalEnvironment, indent$) As String
+            Dim sb As New StringBuilder()
+            Dim value As Array
+            Dim i As i32 = 1
+            Dim slotKey As String
+            Dim keyValues As New List(Of (key$, value$))
+
+            Call sb.AppendLine($"'data.frame':	{d.nrows} obs. of  {d.ncols} variables:")
+
+            For Each col As KeyValuePair(Of String, Array) In d.columns
+                value = col.Value
+                slotKey = col.Key
+
+                If ++i = CInt(Val(slotKey.ToString)) Then
+                    slotKey = $"[{slotKey}]"
+                End If
+
+                keyValues.Add(($"{indent}$ {slotKey}", GetStructure(value, env, indent & "..")))
+            Next
+
+            Return sb.printSlots(keyValues)
         End Function
 
         Private Function strVector(a As Array, type As Type, env As GlobalEnvironment) As String
