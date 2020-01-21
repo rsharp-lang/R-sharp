@@ -282,6 +282,7 @@
     <Compile Include="Interpreter\Syntax\SyntaxImplements\StringInterpolationSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\SymbolIndexer.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\FunctionInvokeSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\GenericSymbolOperatorProcessor.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxTree\ExpressionBuilder.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxTree\Splitter.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxResult.vb" />
@@ -323,7 +324,7 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewVariable.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxTree\ExpressionTree.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxTree\ExpressionSignature.vb" />
-    <Compile Include="Interpreter\Syntax\SyntaxTree\BinaryExpressionTree.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\BinaryExpressionTree.vb" />
     <Compile Include="Interpreter\Extensions.vb" />
     <Compile Include="Interpreter\Program.vb" />
     <Compile Include="Interpreter\RInterpreter.vb" />
