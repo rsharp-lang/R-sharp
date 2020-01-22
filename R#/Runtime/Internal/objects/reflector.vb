@@ -81,7 +81,7 @@ Namespace Runtime.Internal.Object
 
             Call sb.AppendLine("List of " & list.Count)
 
-            For Each slotKey As Object In list.Keys
+            For Each slotKey As Object In (From x In list.Keys.AsQueryable Select x Take 100)
                 value = list(slotKey)
 
                 If ++i = CInt(Val(slotKey.ToString)) Then
@@ -91,11 +91,17 @@ Namespace Runtime.Internal.Object
                 keyValues.Add(($"{indent}$ {slotKey}", GetStructure(value, env, indent & "..")))
             Next
 
-            Return sb.printSlots(keyValues)
+            Dim truncated$ = Nothing
+
+            If list.Count > 100 Then
+                truncated = $"{indent}[list output truncated]"
+            End If
+
+            Return sb.printSlots(keyValues, truncated)
         End Function
 
         <Extension>
-        Private Function printSlots(sb As StringBuilder, keyValues As List(Of (key$, value$))) As String
+        Private Function printSlots(sb As StringBuilder, keyValues As List(Of (key$, value$)), truncated$) As String
             Dim maxPrefixSize As Integer = keyValues _
                 .Select(Function(s) s.key) _
                 .MaxLengthString _
@@ -104,6 +110,10 @@ Namespace Runtime.Internal.Object
             For Each slot In keyValues
                 Call sb.AppendLine($"{slot.key}{New String(" "c, maxPrefixSize - slot.key.Length)} : {slot.value}")
             Next
+
+            If Not truncated.StringEmpty Then
+                Call sb.AppendLine(truncated)
+            End If
 
             Return sb.ToString
         End Function
