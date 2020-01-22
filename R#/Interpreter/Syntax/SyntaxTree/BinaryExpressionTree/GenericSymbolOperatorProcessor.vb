@@ -60,15 +60,15 @@ Namespace Interpreter.SyntaxParser
 
         Protected MustOverride Function expression(a As [Variant](Of SyntaxResult, String), b As [Variant](Of SyntaxResult, String), opts As SyntaxBuilderOptions) As SyntaxResult
 
-        Public Function JoinBinaryExpression(queue As SyntaxQueue, oplist As List(Of String), opts As SyntaxBuilderOptions) As SyntaxQueue
+        Public Function JoinBinaryExpression(queue As SyntaxQueue, oplist As List(Of String), opts As SyntaxBuilderOptions) As SyntaxResult
             If queue.buf = 1 Then
-                Return queue
+                Return Nothing
             End If
 
             Dim nop As Integer = oplist _
                 .AsEnumerable _
                 .Count(Function(op) op = operatorSymbol)
-            Dim buf = queue.buf
+            Dim buf As List(Of [Variant](Of SyntaxResult, String)) = queue.buf
 
             ' 从左往右计算
             For i As Integer = 0 To nop - 1
@@ -79,15 +79,19 @@ Namespace Interpreter.SyntaxParser
                         Dim b = buf(j + 1) ' function invoke
                         Dim exp As SyntaxResult = expression(a, b, opts)
 
-                        Call buf.RemoveRange(j - 1, 3)
-                        Call buf.Insert(j - 1, exp)
+                        If exp.isException Then
+                            Return exp
+                        Else
+                            Call buf.RemoveRange(j - 1, 3)
+                            Call buf.Insert(j - 1, exp)
+                        End If
 
                         Exit For
                     End If
                 Next
             Next
 
-            Return queue
+            Return Nothing
         End Function
 
     End Class

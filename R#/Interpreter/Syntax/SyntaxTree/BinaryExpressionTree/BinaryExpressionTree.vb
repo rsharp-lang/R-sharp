@@ -1,44 +1,44 @@
 ﻿#Region "Microsoft.VisualBasic::03ef089f78e2a842c7ee838b7d599d22, R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\BinaryExpressionTree.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module BinaryExpressionTree
-    ' 
-    '         Function: ParseBinaryExpression
-    ' 
-    '         Sub: processOperators
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module BinaryExpressionTree
+' 
+'         Function: ParseBinaryExpression
+' 
+'         Sub: processOperators
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -61,7 +61,7 @@ Namespace Interpreter.SyntaxParser
         Public Function ParseBinaryExpression(tokenBlocks As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim buf As New List(Of [Variant](Of SyntaxResult, String))
             Dim oplist As New List(Of String)
-            Dim syntaxResult As SyntaxResult
+            Dim syntaxResult As New Value(Of SyntaxResult)
 
             If tokenBlocks(Scan0).Length = 1 AndAlso tokenBlocks(Scan0)(Scan0) = (TokenType.operator, {"-", "+"}) Then
                 ' insert a ZERO before
@@ -72,10 +72,10 @@ Namespace Interpreter.SyntaxParser
                 If i Mod 2 = 0 Then
                     syntaxResult = Expression.CreateExpression(tokenBlocks(i), opts)
 
-                    If syntaxResult.isException Then
+                    If syntaxResult.Value.isException Then
                         Return syntaxResult
                     Else
-                        Call buf.Add(syntaxResult)
+                        Call buf.Add(syntaxResult.Value)
                     End If
                 Else
                     Call buf.Add(tokenBlocks(i)(Scan0).text)
@@ -92,20 +92,30 @@ Namespace Interpreter.SyntaxParser
             Dim queue As New SyntaxQueue With {.buf = buf}
 
             For Each process As GenericSymbolOperatorProcessor In processors
-                Call process.JoinBinaryExpression(queue, oplist, opts)
+                If Not (syntaxResult = process.JoinBinaryExpression(queue, oplist, opts)) Is Nothing Then
+                    Return syntaxResult
+                End If
             Next
 
             ' 算数操作符以及字符串操作符按照操作符的优先度进行构建
-            Call buf.processOperators(oplist, operatorPriority, test:=Function(op, o) op.IndexOf(o) > -1)
+            If Not (syntaxResult = buf.processOperators(oplist, operatorPriority, test:=Function(op, o) op.IndexOf(o) > -1, opts)) Is Nothing Then
+                Return syntaxResult
+            End If
 
             ' 然后处理字符串操作符
-            Call buf.processOperators(oplist, {"&"}, test:=Function(op, o) op = o)
+            If Not (syntaxResult = buf.processOperators(oplist, {"&"}, test:=Function(op, o) op = o, opts)) Is Nothing Then
+                Return syntaxResult
+            End If
 
             ' 之后处理比较操作符
-            Call buf.processOperators(oplist, comparisonOperators, test:=Function(op, o) op = o)
+            If Not (syntaxResult = buf.processOperators(oplist, comparisonOperators, test:=Function(op, o) op = o, opts)) Is Nothing Then
+                Return syntaxResult
+            End If
 
             ' 最后处理逻辑操作符
-            Call buf.processOperators(oplist, logicalOperators, test:=Function(op, o) op = o)
+            If Not (syntaxResult = buf.processOperators(oplist, logicalOperators, test:=Function(op, o) op = o, opts)) Is Nothing Then
+                Return syntaxResult
+            End If
 
             If buf > 1 Then
                 Return buf.joinRemaining(opts)
@@ -155,9 +165,9 @@ Namespace Interpreter.SyntaxParser
         ''' <param name="operators$"></param>
         ''' <param name="test">test(op, o)</param>
         <Extension>
-        Private Sub processOperators(buf As List(Of [Variant](Of SyntaxResult, String)), oplist As List(Of String), operators$(), test As Func(Of String, String, Boolean))
+        Private Function processOperators(buf As List(Of [Variant](Of SyntaxResult, String)), oplist As List(Of String), operators$(), test As Func(Of String, String, Boolean), opts As SyntaxBuilderOptions) As SyntaxResult
             If buf = 1 Then
-                Return
+                Return Nothing
             End If
 
             For Each op As String In operators
@@ -170,8 +180,15 @@ Namespace Interpreter.SyntaxParser
                     For j As Integer = 0 To buf.Count - 1
                         If buf(j) Like GetType(String) AndAlso test(op, buf(j).VB) Then
                             ' j-1 and j+1
-                            Dim a As SyntaxResult = buf(j - 1)
-                            Dim b As SyntaxResult = buf(j + 1)
+                            Dim a As SyntaxResult = If(j - 1 < 0, New SyntaxResult(New SyntaxErrorException, opts.debug), buf(j - 1).TryCast(Of SyntaxResult))
+                            Dim b As SyntaxResult = If(j + 1 >= buf.Count, New SyntaxResult(New SyntaxErrorException, opts.debug), buf(j + 1).TryCast(Of SyntaxResult))
+
+                            If a.isException Then
+                                Return a
+                            ElseIf b.isException Then
+                                Return b
+                            End If
+
                             Dim be As Expression
                             Dim opToken As String = buf(j).VB
 
@@ -191,6 +208,8 @@ Namespace Interpreter.SyntaxParser
                     Next
                 Next
             Next
-        End Sub
+
+            Return Nothing
+        End Function
     End Module
 End Namespace
