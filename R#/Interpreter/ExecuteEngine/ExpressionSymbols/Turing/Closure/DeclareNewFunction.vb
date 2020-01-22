@@ -68,16 +68,19 @@ Namespace Interpreter.ExecuteEngine
             End Get
         End Property
 
-        Public Property funcName As String Implements RFunction.name
+        Public ReadOnly Property funcName As String Implements RFunction.name
 
-        Friend params As DeclareNewVariable()
-        Friend body As ClosureExpression
+        Friend ReadOnly params As DeclareNewVariable()
+        Friend ReadOnly body As ClosureExpression
         ''' <summary>
         ''' The environment of current function closure
         ''' </summary>
         Friend envir As Environment
 
-        Sub New()
+        Sub New(funcName$, params As DeclareNewVariable(), body As ClosureExpression)
+            Me.funcName = funcName
+            Me.params = params
+            Me.body = body
         End Sub
 
         Friend Shared Function MissingParameters(var As DeclareNewVariable, funcName$, envir As Environment) As Object

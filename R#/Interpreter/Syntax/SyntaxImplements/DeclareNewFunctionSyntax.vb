@@ -92,12 +92,11 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             If err IsNot Nothing AndAlso err.isException Then
                 Return err
             Else
-                Return New DeclareNewFunction With {
-                    .funcName = funcName,
-                    .body = bodyPart.expression,
-                    .envir = Nothing,
-                    .params = params.ToArray
-                }
+                Return New DeclareNewFunction(
+                    funcName:=funcName,
+                    body:=bodyPart.expression,
+                    params:=params.ToArray
+                )
             End If
         End Function
 
@@ -108,10 +107,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
             For Each syntaxTemp As SyntaxResult In parts _
                 .Select(Function(t)
-                            Dim [let] As New List(Of Token) From {
-                                New Token With {.name = TokenType.keyword, .text = "let"}
-                            }
-                            Return SyntaxImplements.DeclareNewVariable([let] + t)
+                            Return SyntaxImplements.DeclareNewVariable(t)
                         End Function)
 
                 If syntaxTemp.isException Then

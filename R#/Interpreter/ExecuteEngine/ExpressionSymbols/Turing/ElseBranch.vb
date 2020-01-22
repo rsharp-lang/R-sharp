@@ -63,11 +63,11 @@ Namespace Interpreter.ExecuteEngine
         Dim closure As DeclareNewFunction
 
         Sub New(bodyClosure As ClosureExpression)
-            closure = New DeclareNewFunction With {
-                .body = bodyClosure,
-                .funcName = "else_branch_internal",
-                .params = {}
-            }
+            closure = New DeclareNewFunction(
+                body:=bodyClosure,
+                funcName:="else_branch_internal",
+                params:={}
+            )
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object

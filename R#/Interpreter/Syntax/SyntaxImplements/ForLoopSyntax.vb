@@ -91,11 +91,11 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 Return loopBody
             End If
 
-            Dim body As New DeclareNewFunction With {
-                .body = loopBody.expression,
-                .funcName = "forloop_internal",
-                .params = {}
-            }
+            Dim body As New DeclareNewFunction(
+                body:=loopBody.expression,
+                funcName:="forloop_internal",
+                params:={}
+            )
 
             Return New SyntaxResult(New ForLoop(variables, sequence.expression, body, parallel))
         End Function
