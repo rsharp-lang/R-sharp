@@ -138,7 +138,7 @@ Namespace Runtime.Internal.Object
                 keyValues.Add(($"{indent}$ {slotKey}", GetStructure(value, env, indent & "..")))
             Next
 
-            Return sb.printSlots(keyValues)
+            Return sb.printSlots(keyValues, Nothing)
         End Function
 
         Private Function strVector(a As Array, type As Type, env As GlobalEnvironment) As String

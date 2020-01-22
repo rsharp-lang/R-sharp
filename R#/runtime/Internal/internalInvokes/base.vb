@@ -322,6 +322,10 @@ Namespace Runtime.Internal.Invokes
                 Return DirectCast(x, Array).Length
             ElseIf x.GetType.ImplementInterface(GetType(RIndex)) Then
                 Return DirectCast(x, RIndex).length
+            ElseIf x.GetType.ImplementInterface(GetType(IDictionary)) Then
+                Return DirectCast(x, IDictionary).Count
+            ElseIf x.GetType Is GetType(dataframe) Then
+                Return DirectCast(x, dataframe).ncols
             Else
                 Return 1
             End If
