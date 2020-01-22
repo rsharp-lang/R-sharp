@@ -108,38 +108,43 @@ Namespace Interpreter.SyntaxParser
             Call buf.processOperators(oplist, logicalOperators, test:=Function(op, o) op = o)
 
             If buf > 1 Then
-                For Each a As [Variant](Of SyntaxResult, String) In buf
-                    If a.VA IsNot Nothing AndAlso a.VA.isException Then
-                        Return a.VA
-                    End If
-                Next
-
-                Dim tokens = buf _
-                    .Select(Function(a)
-                                If a.VA Is Nothing Then
-                                    Return New [Variant](Of Expression, String)(a.VB)
-                                Else
-                                    Return New [Variant](Of Expression, String)(a.VA.expression)
-                                End If
-                            End Function) _
-                    .ToArray
-
-                If tokens.isByRefCall Then
-                    Return New ByRefFunctionCall(tokens(Scan0), tokens(2))
-                ElseIf tokens.isNamespaceReferenceCall Then
-                    Dim calls As FunctionInvoke = buf(2).TryCast(Of Expression)
-                    Dim [namespace] As Expression = buf(Scan0).TryCast(Of Expression)
-
-                    Return New SyntaxResult(New NotImplementedException, opts.debug)
-                ElseIf buf = 3 AndAlso tokens(1) Like GetType(String) AndAlso tokens(1).TryCast(Of String) Like ExpressionSignature.valueAssignOperatorSymbols Then
-                    ' set value by name
-                    Return New MemberValueAssign(tokens(Scan0), tokens(2))
-                End If
-
-                Return New SyntaxResult(New SyntaxErrorException, opts.debug)
+                Return buf.joinRemaining(opts)
             Else
                 Return buf(Scan0)
             End If
+        End Function
+
+        <Extension>
+        Private Function joinRemaining(buf As List(Of [Variant](Of SyntaxResult, String)), opts As SyntaxBuilderOptions) As SyntaxResult
+            For Each a As [Variant](Of SyntaxResult, String) In buf
+                If a.VA IsNot Nothing AndAlso a.VA.isException Then
+                    Return a.VA
+                End If
+            Next
+
+            Dim tokens As [Variant](Of Expression, String)() = buf _
+                .Select(Function(a)
+                            If a.VA Is Nothing Then
+                                Return New [Variant](Of Expression, String)(a.VB)
+                            Else
+                                Return New [Variant](Of Expression, String)(a.VA.expression)
+                            End If
+                        End Function) _
+                .ToArray
+
+            If tokens.isByRefCall Then
+                Return New ByRefFunctionCall(tokens(Scan0), tokens(2))
+            ElseIf tokens.isNamespaceReferenceCall Then
+                Dim calls As FunctionInvoke = buf(2).TryCast(Of Expression)
+                Dim [namespace] As Expression = buf(Scan0).TryCast(Of Expression)
+
+                Return New SyntaxResult(New NotImplementedException, opts.debug)
+            ElseIf buf = 3 AndAlso tokens(1) Like GetType(String) AndAlso tokens(1).TryCast(Of String) Like ExpressionSignature.valueAssignOperatorSymbols Then
+                ' set value by name
+                Return New MemberValueAssign(tokens(Scan0), tokens(2))
+            End If
+
+            Return New SyntaxResult(New SyntaxErrorException, opts.debug)
         End Function
 
         ''' <summary>
