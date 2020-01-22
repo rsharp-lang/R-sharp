@@ -1,48 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::091231756e3a7b0873fbaa5b4931e487, R#\Interpreter\ExecuteEngine\ExpressionSymbols\LinqExpression.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class LinqExpression
-    ' 
-    '         Properties: type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, produceSequenceVector
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class LinqExpression
+' 
+'         Properties: type
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate, produceSequenceVector
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -88,8 +89,8 @@ Namespace Interpreter.ExecuteEngine
             Me.output = output
         End Sub
 
-        Private Function produceSequenceVector(env As Environment, ByRef isList As Boolean) As Object
-            Dim sequence As Object = Me.sequence.Evaluate(env)
+        Friend Shared Function produceSequenceVector(seq As Expression, env As Environment, ByRef isList As Boolean) As Object
+            Dim sequence As Object = seq.Evaluate(env)
 
             If sequence Is Nothing Then
                 Return {}
@@ -102,6 +103,14 @@ Namespace Interpreter.ExecuteEngine
             If sequence.GetType Is GetType(Dictionary(Of String, Object)) Then
                 sequence = DirectCast(sequence, Dictionary(Of String, Object)).ToArray
                 isList = True
+            ElseIf sequence.GetType.ImplementInterface(GetType(IDictionary)) Then
+                With DirectCast(sequence, IDictionary)
+                    sequence = (From key In .Keys.AsQueryable
+                                Let keyStr As String = Scripting.ToString(key)
+                                Let keyVal As Object = .Item(key)
+                                Select New KeyValuePair(Of String, Object)(keyStr, keyVal)).ToArray
+                    isList = True
+                End With
             Else
                 sequence = Runtime.asVector(Of Object)(sequence)
             End If
@@ -123,7 +132,7 @@ Namespace Interpreter.ExecuteEngine
             ' 20191105
             ' 序列的产生需要放在变量申明之前
             ' 否则linq表达式中的与外部环境中的同名变量会导致NULL错误出现
-            Dim source As Object = produceSequenceVector(envir, isList)
+            Dim source As Object = produceSequenceVector(Me.sequence, envir, isList)
 
             If Interpreter.Program.isException(source) Then
                 Return source

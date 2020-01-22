@@ -79,6 +79,10 @@ Namespace Runtime.Internal.Object
             Dim i As i32 = 1
             Dim keyValues As New List(Of (key$, value$))
 
+            If list.Count = 0 Then
+                Return $"{indent}list()"
+            End If
+
             Call sb.AppendLine("List of " & list.Count)
 
             For Each slotKey As Object In (From x In list.Keys.AsQueryable Select x Take 100)

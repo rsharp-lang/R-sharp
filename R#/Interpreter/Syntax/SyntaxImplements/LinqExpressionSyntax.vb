@@ -96,7 +96,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 opts:=opts
             )
 
-            If [error].isException Then
+            If Not [error] Is Nothing AndAlso [error].isException Then
                 Return [error]
             Else
                 Return New LinqExpression(locals, sequence.expression, program, projection, output)

@@ -193,7 +193,7 @@ Namespace Interpreter.SyntaxParser
                             Dim opToken As String = buf(j).VB
 
                             If opToken = "in" Then
-                                be = New FunctionInvoke("any", New BinaryExpression(a.expression, b.expression, "=="))
+                                be = New BinaryInExpression(a.expression, b.expression)
                             ElseIf opToken = "||" Then
                                 be = New BinaryOrExpression(a.expression, b.expression)
                             Else
