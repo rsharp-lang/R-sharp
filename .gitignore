@@ -16,6 +16,9 @@ local.properties
 .settings/
 .loadpath
 
+*.lock
+*.ide
+
 # External tool builders
 .externalToolBuilders/
 
@@ -217,3 +220,4 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+/App
