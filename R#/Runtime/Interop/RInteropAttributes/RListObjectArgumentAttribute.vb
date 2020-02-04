@@ -1,45 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::ee44803f1c42c3f43bad820befbe286b, R#\Runtime\Interop\RInteropAttributes\RListObjectArgumentAttribute.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class RListObjectArgumentAttribute
-    ' 
-    '         Function: getObjectList, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class RListObjectArgumentAttribute
+' 
+'         Function: getObjectList, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -71,8 +72,8 @@ Namespace Runtime.Interop
                 type = objects.GetType
             End If
 
-            If type Is GetType(List) Then
-                objects = DirectCast(objects, List).slots
+            If type Is GetType(list) Then
+                objects = DirectCast(objects, list).slots
                 type = GetType(Dictionary(Of String, Object))
             End If
 
@@ -95,9 +96,30 @@ Namespace Runtime.Interop
             End If
         End Function
 
-        Public Shared Function CreateArgumentModel(Of T As Class)(list As Dictionary(Of String, Object)) As T
+        Public Shared Function CreateArgumentModel(Of T As {New, Class})(list As Dictionary(Of String, Object)) As T
+            Dim args As Object = New T()
+            Dim schema = DataFramework.Schema(Of T)(PropertyAccess.Writeable, True)
+            Dim value As Object
+            Dim target As PropertyInfo
 
+            For Each slotKey As String In schema.Keys
+                If list.ContainsKey(slotKey) Then
+                    value = list(slotKey)
+                    target = schema(slotKey)
 
+                    If DataFramework.IsPrimitive(target.PropertyType) Then
+                        value = Runtime.getFirst(value)
+                    ElseIf target.PropertyType.IsArray Then
+                        Throw New NotImplementedException
+                    Else
+                        Throw New NotImplementedException
+                    End If
+
+                    target.SetValue(args, value)
+                End If
+            Next
+
+            Return DirectCast(args, T)
         End Function
     End Class
 End Namespace
