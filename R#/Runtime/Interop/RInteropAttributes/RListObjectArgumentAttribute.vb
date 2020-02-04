@@ -94,5 +94,10 @@ Namespace Runtime.Interop
                 Throw New NotImplementedException
             End If
         End Function
+
+        Public Shared Function CreateArgumentModel(Of T As Class)(list As Dictionary(Of String, Object)) As T
+
+
+        End Function
     End Class
 End Namespace
