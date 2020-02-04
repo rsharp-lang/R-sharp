@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bf3d85189dac0cd7424ce9c174b5e498, Library\R.base\utils\utils.vb"
+﻿#Region "Microsoft.VisualBasic::2c4e6b69d67132e78aa7b15df8eef205, Library\R.base\utils\utils.vb"
 
     ' Author:
     ' 
@@ -33,12 +33,13 @@
 
     ' Module utils
     ' 
-    '     Function: read_csv, write_csv
+    '     Function: read_csv, saveGeneric, write_csv
     ' 
     ' /********************************************************************************/
 
 #End Region
 
+Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
@@ -46,6 +47,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 
@@ -114,6 +116,7 @@ Public Module utils
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("write.csv")>
+    <RApiReturn(GetType(Boolean))>
     Public Function write_csv(<RRawVectorArgument> x As Object, file$, env As Environment) As Object
         If x Is Nothing Then
             Return Internal.debug.stop("Empty dataframe object!", env)
@@ -135,8 +138,23 @@ Public Module utils
             Return DirectCast(Runtime.asVector(Of EntityObject)(x), EntityObject()).SaveTo(path:=file, encoding:=Encodings.UTF8WithoutBOM.CodePage, silent:=True)
         ElseIf Runtime.isVector(Of DataSet)(x) Then
             Return DirectCast(Runtime.asVector(Of DataSet)(x), DataSet()).SaveTo(path:=file, encoding:=Encodings.UTF8WithoutBOM.CodePage, silent:=True)
+        ElseIf type.IsArray OrElse type Is GetType(vector) Then
+            Return saveGeneric(x, type, file, env)
         Else
             Return Message.InCompatibleType(GetType(File), type, env)
         End If
+    End Function
+
+    Private Function saveGeneric(x As Object, type As Type, file$, env As Environment) As Boolean
+        Dim encoding As Encoding = Encodings.UTF8WithoutBOM.CodePage
+
+        If type Is GetType(vector) Then
+            x = DirectCast(x, vector).data
+            type = x.GetType
+        End If
+
+        type = type.GetElementType
+
+        Return DirectCast(x, Array).SaveTable(file, encoding, type, silent:=True)
     End Function
 End Module

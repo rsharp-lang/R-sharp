@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cc5f08ae0c0b89f2a0e1feef3f6e04d8, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\IIfExpression.vb"
+﻿#Region "Microsoft.VisualBasic::b271fa43be4df78bae493441e70e71b5, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\IIfExpression.vb"
 
     ' Author:
     ' 
@@ -43,7 +43,6 @@
 
 #End Region
 
-Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 
@@ -60,10 +59,10 @@ Namespace Interpreter.ExecuteEngine
 
         Public Overrides ReadOnly Property type As TypeCodes
 
-        Sub New(test As Token(), ifelse As List(Of Token()))
-            ifTest = Expression.CreateExpression(test)
-            trueResult = Expression.CreateExpression(ifelse(Scan0))
-            falseResult = Expression.CreateExpression(ifelse(2))
+        Sub New(iftest As Expression, trueResult As Expression, falseResult As Expression)
+            Me.ifTest = iftest
+            Me.trueResult = trueResult
+            Me.falseResult = falseResult
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object

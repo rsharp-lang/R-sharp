@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::61f301145780e5e2338c1da8846e1c6d, R#\Interpreter\ExecuteEngine\ExpressionSymbols\ReturnValue.vb"
+﻿#Region "Microsoft.VisualBasic::06352770882f13cbfd6c22f92451c8ae, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\ClosureExpression.vb"
 
     ' Author:
     ' 
@@ -31,12 +31,12 @@
 
     ' Summaries:
 
-    '     Class ReturnValue
+    '     Class ClosureExpression
     ' 
-    '         Properties: IsRuntimeFunctionReturnWrapper, type
+    '         Properties: isEmpty, type
     ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: Evaluate, ToString
+    '         Constructor: (+1 Overloads) Sub New
+    '         Function: Evaluate, ParseExpressionTree, ToString
     ' 
     ' 
     ' /********************************************************************************/
@@ -44,58 +44,59 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
-Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Interpreter.ExecuteEngine
 
-    Public Class ReturnValue : Inherits Expression
-
-        ReadOnly value As Expression
+    ''' <summary>
+    ''' 其实就是一段拥有自己的<see cref="Environment"/>的没有名称的匿名函数
+    ''' </summary>
+    Public Class ClosureExpression : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
             Get
-                If value Is Nothing Then
-                    Return TypeCodes.NA
-                Else
-                    Return value.type
-                End If
+                Return TypeCodes.closure
             End Get
         End Property
 
-        Public ReadOnly Property IsRuntimeFunctionReturnWrapper As Boolean
+        Public ReadOnly Property isEmpty As Boolean
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
+            <DebuggerStepThrough>
             Get
-                Return Not value Is Nothing AndAlso TypeOf value Is RuntimeValueLiteral
+                Return program.execQueue.IsNullOrEmpty
             End Get
         End Property
 
-        Sub New(value As IEnumerable(Of Token))
-            With value.ToArray
-                ' just return
-                ' no value
-                If .Length = 0 Then
-                    Me.value = Literal.NULL
-                Else
-                    Me.value = .DoCall(AddressOf Expression.CreateExpression)
-                End If
-            End With
-        End Sub
+        Dim program As Program
 
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Sub New(value As Expression)
-            Me.value = value
+        <DebuggerStepThrough>
+        Sub New(code As Expression())
+            program = New Program With {
+                .execQueue = code
+            }
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Return Me.value.Evaluate(envir)
+            Return program.Execute(envir)
         End Function
 
         Public Overrides Function ToString() As String
-            Return $"return {value.ToString}"
+            Return program.ToString
         End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
+        Public Shared Function ParseExpressionTree(tokens As IEnumerable(Of Token)) As ClosureExpression
+            Return New ClosureExpression(tokens)
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
+        Public Shared Widening Operator CType(code As Expression()) As ClosureExpression
+            Return New ClosureExpression(code)
+        End Operator
     End Class
 End Namespace

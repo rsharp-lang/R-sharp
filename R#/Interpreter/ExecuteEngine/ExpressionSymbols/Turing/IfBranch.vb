@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::215a95ebbf91d0784f5f9b9b92b5afb8, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\IfBranch.vb"
+﻿#Region "Microsoft.VisualBasic::43db5e4c91203320a76940d4fd520c7d, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\IfBranch.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,7 @@
     ' 
     '         Properties: type
     ' 
-    '         Constructor: (+2 Overloads) Sub New
+    '         Constructor: (+1 Overloads) Sub New
     '         Function: Evaluate, ToString
     '         Class IfPromise
     ' 
@@ -52,9 +52,6 @@
 #End Region
 
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
-Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Language
-Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
@@ -66,8 +63,8 @@ Namespace Interpreter.ExecuteEngine
 
         Public Overrides ReadOnly Property type As TypeCodes
 
-        Dim ifTest As Expression
-        Dim trueClosure As DeclareNewFunction
+        Friend ReadOnly ifTest As Expression
+        Friend ReadOnly trueClosure As DeclareNewFunction
 
         Friend Class IfPromise
 
@@ -96,26 +93,13 @@ Namespace Interpreter.ExecuteEngine
             End Function
         End Class
 
-        Sub New(tokens As IEnumerable(Of Token))
-            Dim blocks = tokens.SplitByTopLevelDelimiter(TokenType.close)
-
-            ifTest = Expression.CreateExpression(blocks(Scan0).Skip(1))
-            trueClosure = New DeclareNewFunction With {
-                .funcName = "if_closure_internal",
-                .params = {},
-                .body = blocks(2) _
-                    .Skip(1) _
-                    .DoCall(AddressOf ClosureExpression.ParseExpressionTree)
-            }
-        End Sub
-
         Sub New(ifTest As Expression, trueClosure As ClosureExpression)
             Me.ifTest = ifTest
-            Me.trueClosure = New DeclareNewFunction With {
-                .funcName = "if_closure_internal",
-                .params = {},
-                .body = trueClosure
-            }
+            Me.trueClosure = New DeclareNewFunction(
+                funcName:="if_closure_internal",
+                params:={},
+                body:=trueClosure
+            )
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object

@@ -1,61 +1,61 @@
-﻿#Region "Microsoft.VisualBasic::a6e3c6ffc206cf73b3cd49240312d733, R#\test\interpreterTest.vb"
+﻿#Region "Microsoft.VisualBasic::a8259560a077973390489dd8fcb016e2, R#\test\interpreterTest.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-' Module interpreterTest
-' 
-'     Sub: appendTest, booleanCLIArgumentTest, closureEnvironmentTest, closureTest, isEmptyTest
-'          lastSymbolTest, Main, markdownTest, missingSymbolInStringInterpolate, moduleTest
-'          objClasstest, orDefaultTest, printClassTest, sequenceGeneratorTest, suppressTest
-'          unaryNegTest
-' module test1
-' 
-'     Sub: boolLiteralTest, branchTest, cliTest, commandLineArgumentTest, dataframeTest
-'          declareFunctionTest, declareTest, elementIndexerTest, exceptionHandler, forLoop2
-'          forLoopTest, genericTest, iifTest, ImportsDll, inTest
-'          invokeTest, lambdaTest, linqPipelineTest, linqTest, listTest
-'          logicalTest, nameAccessorTest, namespaceTest, namesTest, optionsTest
-'          parameterTest, pipelineParameterBugTest, pipelineTest, sourceFunctionTest, sourceScripttest
-'          StackTest, stringInterpolateTest, symbolNotFoundTest, testScript, tupleTest
-'          whichTest
-' module test2
-' 
-' 
-' 
-' 
-' 
-' 
-' 
-' /********************************************************************************/
+    ' Module interpreterTest
+    ' 
+    '     Sub: appendTest, booleanCLIArgumentTest, closureEnvironmentTest, closureTest, isEmptyTest
+    '          lastSymbolTest, Main, markdownTest, missingSymbolInStringInterpolate, moduleTest
+    '          objClasstest, orDefaultTest, printClassTest, sequenceGeneratorTest, suppressTest
+    '          syntaxErrorTest, unaryNegTest, usingTest
+    ' module test1
+    ' 
+    '     Sub: boolLiteralTest, branchTest, cliTest, commandLineArgumentTest, dataframeIndexTest
+    '          dataframeTest, declareFunctionTest, declareTest, elementIndexerTest, exceptionHandler
+    '          forLoop2, forLoopTest, genericTest, iifTest, ImportsDll
+    '          inTest, invokeTest, lambdaTest, lambdaTest2, linqPipelineTest
+    '          linqTest, listoperationtest, listTest, logicalTest, nameAccessorTest
+    '          namespaceTest, namesTest, optionsTest, packageTest, parameterTest
+    '          pipelineParameterBugTest, pipelineTest, sourceFunctionTest, sourceScripttest, StackTest
+    '          stringInterpolateTest, symbolNotFoundTest, testScript, tupleTest, whichTest
+    ' module test2
+    ' 
+    ' 
+    ' 
+    ' 
+    ' 
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -65,12 +65,19 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Module interpreterTest
 
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+        Call listoperationtest()
+        Call syntaxErrorTest()
+
+        Call usingTest()
+        Call dataframeIndexTest()
+
         Call dataframeTest()
         Call lambdaTest2()
 
@@ -156,6 +163,28 @@ Module interpreterTest
 
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub syntaxErrorTest()
+        Call R.Evaluate("let a as string = '123'
+
+print(a);")
+    End Sub
+
+    Sub usingTest()
+        Call R.Evaluate("using a as file('./test.txt') {
+	# call System.IDispose
+	# operations with variable a
+	print((a :> as.object)$Name);
+}
+
+# call a$Dispose()
+# and then delete a from the current environment
+let a as string = 'abc: ';
+
+print(a);")
 
         Pause()
     End Sub
@@ -466,6 +495,17 @@ test1::println('123');
         Pause()
     End Sub
 
+    Sub dataframeIndexTest()
+        R.Add("x", New dataframe With {.columns = New Dictionary(Of String, Array) From {
+              {"A", {1, 2, 3, 4, 5}},
+              {"BB", {False}}
+        }})
+
+        Call R.Evaluate("x[, 'BB']")
+
+        Pause()
+    End Sub
+
     Sub dataframeTest()
         Call R.Evaluate("print(data.frame(a = 1, b = ['g','h','eee'], c = T, [TRUE,FALSE,FALSE]))")
 
@@ -712,6 +752,12 @@ let tryStop as function(message = 'default exception message') {
 # tryStop();
 tryStop(['This','is','an','exception', 'test']);
 ")
+
+        Pause()
+    End Sub
+
+    Sub listoperationtest()
+        Call R.Source("D:\GCModeller\src\R-sharp\tutorials\data\listValue.R")
 
         Pause()
     End Sub

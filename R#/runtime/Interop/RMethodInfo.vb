@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::052497aa3484fc661e046fcd2cf87d86, R#\Runtime\Interop\RMethodInfo.vb"
+﻿#Region "Microsoft.VisualBasic::e904c09459e1dcdbbd7c8c8bd1da2904, R#\Runtime\Interop\RMethodInfo.vb"
 
     ' Author:
     ' 
@@ -36,8 +36,8 @@
     '         Properties: invisible, name, parameters, returns
     ' 
     '         Constructor: (+3 Overloads) Sub New
-    '         Function: createNormalArguments, createObjectListArguments, CreateParameterArrayFromListArgument, GetPrintContent, GetRawDeclares
-    '                   getValue, (+2 Overloads) Invoke, missingParameter, parseParameters, ToString
+    '         Function: createNormalArguments, CreateParameterArrayFromListArgument, GetPrintContent, GetRawDeclares, getValue
+    '                   (+2 Overloads) Invoke, missingParameter, parseParameters, ToString
     ' 
     ' 
     ' /********************************************************************************/
@@ -129,6 +129,9 @@ Namespace Runtime.Interop
             Dim rawDeclare$ = raw.FullName
             Dim packageName$ = raw.NamespaceEntry(True).Namespace
             Dim params$
+            Dim returns As RType = RApiReturnAttribute _
+                .GetActualReturnType(GetRawDeclares) _
+                .DoCall(AddressOf RType.GetRSharpType)
 
             If parameters.Length > 3 Then
                 params = parameters.JoinBy(", " & vbCrLf)
@@ -136,7 +139,7 @@ Namespace Runtime.Interop
                 params = parameters.JoinBy(", ")
             End If
 
-            Return $"let ``{name}`` as function({params}) {{
+            Return $"let ``{name}`` as function({params}) -> ``{returns}`` {{
     #
     # .NET API information
     #
@@ -274,6 +277,8 @@ Namespace Runtime.Interop
                 value = value
             ElseIf Not arg.isRequireRawVector Then
                 value = Runtime.getFirst(value)
+            ElseIf arg.isRequireRawVector AndAlso Not arg.rawVectorFlag.vector Is Nothing Then
+                Return Runtime.asVector(value, arg.rawVectorFlag.vector, envir)
             End If
 
             Try

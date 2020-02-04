@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::20daf3a9683a2a809ef330d52fa57cc3, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\VectorLiteral.vb"
+﻿#Region "Microsoft.VisualBasic::d5dee7b44106976d53cca61653c4a3f0, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\VectorLiteral.vb"
 
     ' Author:
     ' 
@@ -37,18 +37,14 @@
     ' 
     '         Constructor: (+2 Overloads) Sub New
     '         Function: Evaluate, GetEnumerator, IEnumerable_GetEnumerator, ToArray, ToString
-    '                   TypeCodeOf
     ' 
     ' 
     ' /********************************************************************************/
 
 #End Region
 
-Imports System.Runtime.CompilerServices
-Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Language
-Imports SMRUCC.Rsharp.Language.TokenIcer
+Imports SMRUCC.Rsharp.Interpreter.SyntaxParser
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 
@@ -72,46 +68,15 @@ Namespace Interpreter.ExecuteEngine
 
         Friend ReadOnly values As Expression()
 
-        Sub New(tokens As Token())
-            Dim blocks As List(Of Token()) = tokens _
-                .Skip(1) _
-                .Take(tokens.Length - 2) _
-                .SplitByTopLevelDelimiter(TokenType.comma)
-            Dim values As New List(Of Expression)
-
-            For Each block As Token() In blocks
-                If Not (block.Length = 1 AndAlso block(Scan0).name = TokenType.comma) Then
-                    Call values.Add(block.DoCall(AddressOf Expression.CreateExpression))
-                End If
-            Next
-
-            ' 还会剩余最后一个元素
-            ' 所以在这里需要加上
+        Sub New(values As Expression(), type As TypeCodes)
             Me.values = values
-            Me.type = values.DoCall(AddressOf TypeCodeOf)
+            Me.type = type
         End Sub
 
         Sub New(values As IEnumerable(Of Expression))
             Me.values = values.ToArray
-            Me.type = values.DoCall(AddressOf TypeCodeOf)
+            Me.type = Me.values.DoCall(AddressOf SyntaxImplements.TypeCodeOf)
         End Sub
-
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Private Shared Function TypeCodeOf(values As IEnumerable(Of Expression)) As TypeCodes
-            With values.ToArray
-                ' fix for System.InvalidOperationException: Nullable object must have a value.
-                '
-                If .Length = 0 Then
-                    Return TypeCodes.generic
-                Else
-                    Return values _
-                        .GroupBy(Function(exp) exp.type) _
-                        .OrderByDescending(Function(g) g.Count) _
-                        .First _
-                       ?.Key
-                End If
-            End With
-        End Function
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim vector = values _

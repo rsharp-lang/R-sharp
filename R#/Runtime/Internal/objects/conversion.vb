@@ -1,48 +1,51 @@
-﻿#Region "Microsoft.VisualBasic::61d9914ed7d8ed56d6208ff6c0fc9122, R#\Runtime\Internal\objects\conversion.vb"
+﻿#Region "Microsoft.VisualBasic::bd0dffe8cf8e5ed984bd537bbe4435ca, R#\Runtime\Internal\objects\conversion.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Module RConversion
-' 
-'         Function: asCharacters, asInteger, asList, asLogicals, asNumeric
-'                   asObject, CTypeDynamic, listInternal
-' 
-' 
-' /********************************************************************************/
+    '     Module RConversion
+    ' 
+    '         Function: asCharacters, asInteger, asList, asLogicals, asNumeric
+    '                   asObject, CastToEnum, CTypeDynamic, listInternal, unlist
+    '                   unlistOfRList
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -79,6 +82,86 @@ Namespace Runtime.Internal.Object
                         End If
                 End Select
             End If
+        End Function
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="list"></param>
+        ''' <param name="[typeof]">element type of the array</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("unlist")>
+        Public Function unlist(list As Object, Optional [typeof] As Object = Nothing, Optional env As Environment = Nothing) As Object
+            If list Is Nothing Then
+                Return Nothing
+            End If
+            If Not [typeof] Is Nothing Then
+                Select Case [typeof].GetType
+                    Case GetType(Type) ' do nothing
+                    Case GetType(RType)
+                        [typeof] = DirectCast([typeof], RType).raw
+                    Case GetType(String)
+                        Dim RType As RType = DirectCast([typeof], String) _
+                            .GetRTypeCode _
+                            .DoCall(AddressOf RType.GetType)
+
+                        If RType.isArray Then
+                            [typeof] = RType.raw.GetElementType
+                        Else
+                            [typeof] = RType.raw
+                        End If
+                    Case Else
+                        Return Internal.stop(New NotImplementedException, env)
+                End Select
+            End If
+
+            If list.GetType Is GetType(list) Then
+                Return DirectCast(list, list).unlistOfRList([typeof], env)
+            ElseIf list.GetType.ImplementInterface(GetType(IDictionary)) Then
+                Return New list(list).unlistOfRList([typeof], env)
+            Else
+                Return Internal.stop(New InvalidCastException(list.GetType.FullName), env)
+            End If
+        End Function
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="rlist"></param>
+        ''' <param name="[typeof]">element type of the array</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <Extension>
+        Private Function unlistOfRList(rlist As list, [typeof] As Type, env As Environment) As Object
+            Dim data As New List(Of Object)
+            Dim names As New List(Of String)
+            Dim vec As vector
+
+            For Each name As String In rlist.getNames
+                Dim a As Array = Runtime.asVector(Of Object)(rlist.slots(name))
+
+                If a.Length = 1 Then
+                    data.Add(a.GetValue(Scan0))
+                    names.Add(name)
+                Else
+                    Dim i As i32 = 1
+
+                    For Each item As Object In a
+                        data.Add(item)
+                        names.Add($"{name}{++i}")
+                    Next
+                End If
+            Next
+
+            If [typeof] Is Nothing Then
+                vec = New vector(names, data.ToArray, env)
+            Else
+                vec = New vector([typeof], data.AsEnumerable, env)
+                vec.setNames(names.ToArray, env)
+            End If
+
+            Return vec
         End Function
 
         ''' <summary>

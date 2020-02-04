@@ -1,65 +1,151 @@
-﻿#Region "Microsoft.VisualBasic::ea643eababed25986800985c28ed3a0a, R#\Runtime\Internal\internalInvokes\file.vb"
+﻿#Region "Microsoft.VisualBasic::6c9f2430eda7cd6a7bc8b84ec8a920ff, R#\Runtime\Internal\internalInvokes\file.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Module file
-' 
-'         Function: basename, dir_exists, dirname, exists, getwd
-'                   listDirs, listFiles, normalizeFileName, normalizePath, readLines
-'                   readList, Rhome, saveList, setwd, writeLines
-' 
-' 
-' /********************************************************************************/
+    '     Module file
+    ' 
+    '         Function: basename, dir_exists, dirname, exists, file
+    '                   filecopy, fileinfo, getwd, listDirs, listFiles
+    '                   loadListInternal, normalizeFileName, normalizePath, readLines, readList
+    '                   Rhome, saveList, setwd, writeLines
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
+Imports System.IO
+Imports System.Reflection
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
-Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Language.UnixBash.FileSystem
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Interop
+Imports fsOptions = Microsoft.VisualBasic.FileIO.SearchOption
+Imports BASICString = Microsoft.VisualBasic.Strings
 
 Namespace Runtime.Internal.Invokes
 
     ''' <summary>
-    ''' ## File Manipulation
+    ''' #### File Manipulation
     ''' 
     ''' These functions provide a low-level interface to the computer's file system.
     ''' </summary>
     Module file
+
+        <ExportAPI("file.info")>
+        Public Function fileinfo(files As String(), Optional env As Environment = Nothing) As Object
+            If files.IsNullOrEmpty Then
+                Return Nothing
+            ElseIf files.Length = 1 Then
+                Dim file As String = files(Scan0)
+                Dim fileInfoObj As New FileInfo(file)
+                Dim data As New Dictionary(Of String, Object)
+
+                For Each [property] As PropertyInfo In fileInfoObj _
+                    .GetType _
+                    .GetProperties(PublicProperty) _
+                    .Where(Function(p)
+                               Return p.GetIndexParameters.IsNullOrEmpty
+                           End Function)
+
+                    Call data.Add([property].Name, [property].GetValue(fileInfoObj))
+                Next
+
+                Return New list With {.slots = data}
+            Else
+                Return Internal.stop(New NotImplementedException, env)
+            End If
+        End Function
+
+        ''' <summary>
+        ''' ``file.copy`` works in a similar way to ``file.append`` but with the arguments 
+        ''' in the natural order for copying. Copying to existing destination files is 
+        ''' skipped unless overwrite = TRUE. The to argument can specify a single existing 
+        ''' directory. If copy.mode = TRUE file read/write/execute permissions are copied 
+        ''' where possible, restricted by ‘umask’. (On Windows this applies only to files.
+        ''' ) Other security attributes such as ACLs are not copied. On a POSIX filesystem 
+        ''' the targets of symbolic links will be copied rather than the links themselves, 
+        ''' and hard links are copied separately. Using copy.date = TRUE may or may not 
+        ''' copy the timestamp exactly (for example, fractional seconds may be omitted), 
+        ''' but is more likely to do so as from R 3.4.0.
+        ''' </summary>
+        ''' <param name="from"></param>
+        ''' <param name="to"></param>
+        ''' <returns>
+        ''' These functions return a logical vector indicating which operation succeeded 
+        ''' for each of the files attempted. Using a missing value for a file or path 
+        ''' name will always be regarded as a failure.
+        ''' </returns>
+        ''' 
+        <ExportAPI("file.copy")>
+        <RApiReturn(GetType(Boolean()))>
+        Public Function filecopy(from$(), to$(), Optional env As Environment = Nothing) As Object
+            Dim result As New List(Of Object)
+            Dim isDir As Boolean = from.Length > 1 AndAlso [to].Length = 1
+
+            If from.Length = 0 Then
+                Return {}
+            End If
+
+            If isDir Then
+                Dim dirName$ = [to](Scan0) & "/"
+
+                For Each file As String In from
+                    If file.FileCopy(dirName) Then
+                        result.Add(True)
+                    Else
+                        result.Add(file)
+                    End If
+                Next
+            ElseIf from.Length <> [to].Length Then
+                Return Internal.stop("number of from files is not equals to the number of target file locations!", env)
+            Else
+                For i As Integer = 0 To from.Length - 1
+                    If from(i).FileCopy([to](i)) Then
+                        result.Add(True)
+                    Else
+                        result.Add(from(i))
+                    End If
+                Next
+            End If
+
+            Return result.ToArray
+        End Function
 
         ''' <summary>
         ''' Express File Paths in Canonical Form
@@ -72,6 +158,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="envir"></param>
         ''' <returns></returns>
         <ExportAPI("normalizePath")>
+        <RApiReturn(GetType(String()))>
         Public Function normalizePath(fileNames$(), envir As Environment) As Object
             If fileNames.IsNullOrEmpty Then
                 Return Internal.stop("no file names provided!", envir)
@@ -89,7 +176,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("R.home")>
-        Public Function Rhome() As Object
+        Public Function Rhome() As String
             Return GetType(file).Assembly.Location.ParentPath
         End Function
 
@@ -100,7 +187,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="fileNames">character vector, containing path names.</param>
         ''' <returns></returns>
         <ExportAPI("dirname")>
-        Public Function dirname(fileNames As String()) As Object
+        Public Function dirname(fileNames As String()) As String()
             Return fileNames.Select(AddressOf ParentPath).ToArray
         End Function
 
@@ -116,6 +203,7 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <returns></returns>
         <ExportAPI("list.files")>
+        <RApiReturn(GetType(String()))>
         Public Function listFiles(Optional dir$ = "./",
                                   Optional pattern$() = Nothing,
                                   Optional recursive As Boolean = False) As Object
@@ -142,6 +230,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="recursive"></param>
         ''' <returns></returns>
         <ExportAPI("list.dirs")>
+        <RApiReturn(GetType(String()))>
         Public Function listDirs(Optional dir$ = "./",
                                  Optional fullNames As Boolean = True,
                                  Optional recursive As Boolean = True) As Object
@@ -149,7 +238,7 @@ Namespace Runtime.Internal.Invokes
             If Not dir.DirectoryExists Then
                 Return {}
             Else
-                Dim level As SearchOption = If(recursive, SearchOption.SearchAllSubDirectories, SearchOption.SearchTopLevelOnly)
+                Dim level As fsOptions = If(recursive, fsOptions.SearchAllSubDirectories, fsOptions.SearchTopLevelOnly)
                 Dim dirs$() = dir _
                     .ListDirectory(level, fullNames) _
                     .ToArray
@@ -165,7 +254,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="withExtensionName"></param>
         ''' <returns></returns>
         <ExportAPI("basename")>
-        Public Function basename(fileNames$(), Optional withExtensionName As Boolean = False) As Object
+        Public Function basename(fileNames$(), Optional withExtensionName As Boolean = False) As String()
             If withExtensionName Then
                 ' get fileName
                 Return fileNames.Select(AddressOf FileName).ToArray
@@ -280,6 +369,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="envir"></param>
         ''' <returns></returns>
         <ExportAPI("setwd")>
+        <RApiReturn(GetType(String))>
         Public Function setwd(dir$(), envir As Environment) As Object
             If dir.Length = 0 Then
                 Return invoke.missingParameter(NameOf(setwd), "dir", envir)
@@ -342,7 +432,7 @@ Namespace Runtime.Internal.Invokes
                                  Optional ofVector As Boolean = False,
                                  Optional envir As Environment = Nothing) As Object
 
-            Select Case LCase(mode)
+            Select Case BASICString.LCase(mode)
                 Case "character" : Return loadListInternal(Of String)(file, ofVector)
                 Case "numeric" : Return loadListInternal(Of Double)(file, ofVector)
                 Case "integer" : Return loadListInternal(Of Long)(file, ofVector)
@@ -360,6 +450,22 @@ Namespace Runtime.Internal.Invokes
             Else
                 Return file.LoadJsonFile(Of Dictionary(Of String, T))
             End If
+        End Function
+
+        ''' <summary>
+        ''' Functions to create, open and close connections, i.e., 
+        ''' "generalized files", such as possibly compressed files, 
+        ''' URLs, pipes, etc.
+        ''' </summary>
+        ''' <param name="description">character string. A description of the connection: see ‘Details’.</param>
+        ''' <param name="open">
+        ''' character string. A description of how to open the connection (if it should be opened initially). 
+        ''' See section ‘Modes’ for possible values.
+        ''' </param>
+        ''' <returns></returns>
+        <ExportAPI("file")>
+        Public Function file(description$, Optional open As FileMode = FileMode.OpenOrCreate) As FileStream
+            Return description.Open(open, doClear:=FileMode.Truncate)
         End Function
     End Module
 End Namespace

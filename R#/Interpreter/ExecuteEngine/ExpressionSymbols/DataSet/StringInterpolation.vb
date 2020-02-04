@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f65ae7d599756a3a8931091b6a834649, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\StringInterpolation.vb"
+﻿#Region "Microsoft.VisualBasic::15c466b879bfab5fd6175b3c1d8b4423, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\StringInterpolation.vb"
 
     ' Author:
     ' 
@@ -43,10 +43,6 @@
 
 #End Region
 
-Imports Microsoft.VisualBasic.Language
-Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Language
-Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 
@@ -65,23 +61,8 @@ Namespace Interpreter.ExecuteEngine
         ''' </summary>
         ReadOnly stringParts As Expression()
 
-        Sub New(token As Token)
-            Dim tokens = TokenIcer.StringInterpolation.ParseTokens(token.text)
-            Dim block = tokens.SplitByTopLevelDelimiter(TokenType.stringLiteral)
-            Dim parts As New List(Of Expression)
-
-            For Each part As Token() In block
-                If part.isLiteral(TokenType.stringLiteral) Then
-                    parts += New Literal(part(Scan0))
-                Else
-                    parts += part _
-                        .Skip(1) _
-                        .Take(part.Length - 2) _
-                        .DoCall(AddressOf Expression.CreateExpression)
-                End If
-            Next
-
-            stringParts = parts
+        Sub New(stringParts As Expression())
+            Me.stringParts = stringParts
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object

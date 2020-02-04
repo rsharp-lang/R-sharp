@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::43db86a19a7c001357b98b8bb7fac536, R#\Interpreter\RInterpreter.vb"
+﻿#Region "Microsoft.VisualBasic::0ea60f6458e56290d399716a5f629077, R#\Interpreter\RInterpreter.vb"
 
     ' Author:
     ' 
@@ -33,12 +33,12 @@
 
     '     Class RInterpreter
     ' 
-    '         Properties: debug, globalEnvir, Rsharp, warnings
+    '         Properties: debug, globalEnvir, Rsharp, strict, warnings
     ' 
     '         Constructor: (+1 Overloads) Sub New
     ' 
     '         Function: (+2 Overloads) Evaluate, finalizeResult, FromEnvironmentConfiguration, InitializeEnvironment, Invoke
-    '                   LoadLibrary, Run, RunInternal, Source
+    '                   (+2 Overloads) LoadLibrary, Run, RunInternal, Source
     ' 
     '         Sub: (+3 Overloads) Add, Print, PrintMemory
     ' 
@@ -176,6 +176,11 @@ Namespace Interpreter
             Return Me
         End Function
 
+        Public Function LoadLibrary(package As Type) As RInterpreter
+            Call globalEnvir.LoadLibrary(package)
+            Return Me
+        End Function
+
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
         Public Sub Add(name$, value As Object, Optional type As TypeCodes = TypeCodes.generic)
@@ -264,7 +269,7 @@ Namespace Interpreter
 
         Private Function RunInternal(Rscript As Rscript, arguments As NamedValue(Of Object)()) As Object
             Dim globalEnvir As Environment = InitializeEnvironment(Rscript.fileName, arguments)
-            Dim program As Program = Program.CreateProgram(Rscript)
+            Dim program As Program = Program.CreateProgram(Rscript, debug:=debug)
             Dim result As Object = program.Execute(globalEnvir)
 
             Return finalizeResult(result)

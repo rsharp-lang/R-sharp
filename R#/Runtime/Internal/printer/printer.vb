@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a57d3419a150764a637dd3f93bf8cd50, R#\Runtime\Internal\printer\printer.vb"
+﻿#Region "Microsoft.VisualBasic::656d998d7f906639a6523d06cda20bde, R#\Runtime\Internal\printer\printer.vb"
 
     ' Author:
     ' 
@@ -58,6 +58,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Configuration
 
 Namespace Runtime.Internal.ConsolePrinter
@@ -75,6 +76,8 @@ Namespace Runtime.Internal.ConsolePrinter
         Sub New()
             RtoString(GetType(Color)) = Function(c) DirectCast(c, Color).ToHtmlColor.ToLower
             RtoString(GetType(vbObject)) = Function(o) DirectCast(o, vbObject).ToString
+            RtoString(GetType(RType)) = Function(o) DirectCast(o, RType).ToString
+            RtoString(GetType(DateTime)) = Function(o) $"#{DirectCast(o, DateTime).ToString}#"
 
             RInternalToString(GetType(Double)) = AddressOf printer.f64_InternalToString
         End Sub
@@ -212,6 +215,8 @@ printSingleElement:
                 Return AddressOf classPrinter.printClass
             ElseIf elementType = GetType(Boolean) Then
                 Return Function(b) b.ToString.ToUpper
+            ElseIf elementType.IsEnum Then
+                Return AddressOf enumPrinter.printEnumValue(elementType).Invoke
             Else
                 Return Function(obj) Scripting.ToString(obj, "NULL", True)
             End If

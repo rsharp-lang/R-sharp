@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e7ca109fd52ec60753b3661a10221b62, R#\Runtime\Internal\internalInvokes\math.vb"
+﻿#Region "Microsoft.VisualBasic::57e01ec17603cc841d1e6953f056f262, R#\Runtime\Internal\internalInvokes\math.vb"
 
     ' Author:
     ' 
@@ -63,7 +63,7 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <returns></returns>
         <ExportAPI("round")>
-        Public Function round(x As Array, Optional decimals% = 0) As Object
+        Public Function round(x As Array, Optional decimals% = 0) As Double()
             If x Is Nothing OrElse x.Length = 0 Then
                 Return Nothing
             Else
@@ -87,7 +87,7 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <returns></returns>
         <ExportAPI("log")>
-        Public Function log(x As Array, Optional newBase As Double = stdNum.E) As Object
+        Public Function log(x As Array, Optional newBase As Double = stdNum.E) As Double()
             Return Runtime.asVector(Of Double)(x) _
                 .AsObjectEnumerator(Of Double) _
                 .Select(Function(d) stdNum.Log(d, newBase)) _
@@ -118,7 +118,7 @@ Namespace Runtime.Internal.Invokes
             x = Runtime.asVector(Of Double)(x)
             y = Runtime.asVector(Of Double)(y)
 
-            Return Runtime.Core.Power(Of Double, Double, Double)(x, y)
+            Return Runtime.Core.Power(Of Double, Double, Double)(x, y).ToArray
         End Function
     End Module
 End Namespace

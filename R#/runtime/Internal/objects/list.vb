@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3e604a3ca6a687ef0d4a7c8663afaf91, R#\Runtime\Internal\objects\list.vb"
+﻿#Region "Microsoft.VisualBasic::828383027a52901da605ff52dad44480, R#\Runtime\Internal\objects\list.vb"
 
     ' Author:
     ' 
@@ -35,6 +35,7 @@
     ' 
     '         Properties: length, slots
     ' 
+    '         Constructor: (+2 Overloads) Sub New
     '         Function: (+2 Overloads) getByIndex, (+2 Overloads) getByName, getNames, GetSlots, namedValues
     '                   setByindex, setByIndex, (+2 Overloads) setByName, setNames, ToString
     ' 
@@ -70,6 +71,17 @@ Namespace Runtime.Internal.Object
                 Return getByName(name)
             End Get
         End Property
+
+        Sub New()
+        End Sub
+
+        Sub New(table As IDictionary)
+            _slots = New Dictionary(Of String, Object)
+
+            For Each itemKey In table.Keys
+                _slots(itemKey.ToString) = table(itemKey)
+            Next
+        End Sub
 
         Public Function getNames() As String() Implements RNames.getNames
             Return slots.Keys.ToArray
@@ -113,8 +125,11 @@ Namespace Runtime.Internal.Object
         End Function
 
         Public Function getByIndex(i As Integer) As Object Implements RIndex.getByIndex
-            If i >= length Then
+            If i > length Then
                 Return Nothing
+            Else
+                ' R# vector index start from 1
+                i -= 1
             End If
 
             Dim names = getNames()
@@ -149,8 +164,19 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        ''' <summary>
+        ''' Create a list subset
+        ''' </summary>
+        ''' <param name="names"></param>
+        ''' <returns></returns>
         Public Function getByName(names() As String) As Object Implements RNameIndex.getByName
-            Return names.Select(AddressOf getByName).ToArray
+            Dim subset As Dictionary(Of String, Object) = names _
+                .ToDictionary(Function(key) key,
+                              Function(key)
+                                  Return getByName(key)
+                              End Function)
+
+            Return New list With {.slots = subset}
         End Function
 
         Public Function setByName(name As String, value As Object, envir As Environment) As Object Implements RNameIndex.setByName

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f9c6bb27f363f9775f8b57bc18cc69c5, R#\Interpreter\Program.vb"
+﻿#Region "Microsoft.VisualBasic::4fbdba78523897d6f4c73fb91ad8b29f, R#\Interpreter\Program.vb"
 
     ' Author:
     ' 
@@ -34,7 +34,7 @@
     '     Class Program
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: BuildProgram, (+2 Overloads) CreateProgram, EndWithFuncCalls, Execute, ExecuteCodeLine
+    '         Function: BuildProgram, CreateProgram, EndWithFuncCalls, Execute, ExecuteCodeLine
     '                   GetEnumerator, IEnumerable_GetEnumerator, isException, ToString
     ' 
     ' 
@@ -46,7 +46,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
-Imports SMRUCC.Rsharp.Language.TokenIcer
+Imports SMRUCC.Rsharp.Interpreter.SyntaxParser
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -191,23 +191,15 @@ Namespace Interpreter
         End Function
 
         Public Overrides Function ToString() As String
-            Return execQueue.Select(Function(exp) exp.ToString & ";").JoinBy(vbCrLf)
+            Return execQueue _
+                .Select(Function(exp) exp.ToString & ";") _
+                .JoinBy(vbCrLf)
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        <DebuggerStepThrough>
-        Public Shared Function CreateProgram(tokens As Token()) As Program
-            Return New Program With {
-                .Rscript = Nothing,
-                .execQueue = tokens.GetExpressions.ToArray
-            }
-        End Function
-
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Shared Function CreateProgram(Rscript As Rscript) As Program
-            Dim tokens As Token() = Rscript.GetTokens
-            Dim exec As Expression() = tokens.ToArray _
-                .GetExpressions _
+        Public Shared Function CreateProgram(Rscript As Rscript, Optional debug As Boolean = False) As Program
+            Dim exec As Expression() = Rscript _
+                .GetExpressions(New SyntaxBuilderOptions With {.debug = debug}) _
                 .ToArray
 
             Return New Program With {
@@ -234,10 +226,12 @@ Namespace Interpreter
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
-        Public Shared Function BuildProgram(scriptText As String) As Program
+        Public Shared Function BuildProgram(scriptText As String, Optional debug As Boolean = False) As Program
             Return Rscript _
                 .AutoHandleScript(scriptText) _
-                .DoCall(AddressOf CreateProgram)
+                .DoCall(Function(script)
+                            Return CreateProgram(script, debug)
+                        End Function)
         End Function
 
         Public Iterator Function GetEnumerator() As IEnumerator(Of Expression) Implements IEnumerable(Of Expression).GetEnumerator

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c17b840f1c20d6e3f4a0b6914db20e1b, R#\Runtime\Interop\RInteropAttributes\RInteropAttribute.vb"
+﻿#Region "Microsoft.VisualBasic::b70349963e296b090d4188423110b24f, R#\Runtime\Interop\RInteropAttributes\RInteropAttribute.vb"
 
     ' Author:
     ' 
@@ -39,10 +39,6 @@
     ' 
     ' 
     ' 
-    '     Class RRawVectorArgumentAttribute
-    ' 
-    ' 
-    ' 
     '     Class RParameterNameAliasAttribute
     ' 
     '         Properties: [alias]
@@ -50,10 +46,19 @@
     '         Constructor: (+1 Overloads) Sub New
     '         Function: ToString
     ' 
+    '     Class RApiReturnAttribute
+    ' 
+    '         Properties: returnType
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    '         Function: GetActualReturnType, ToString
+    ' 
     ' 
     ' /********************************************************************************/
 
 #End Region
+
+Imports System.Reflection
 
 Namespace Runtime.Interop
 
@@ -68,13 +73,6 @@ Namespace Runtime.Interop
     Public Class RByRefValueAssignAttribute : Inherits RInteropAttribute
     End Class
 
-    ''' <summary>
-    ''' 表示这个参数是一个数组，环境系统不应该自动调用getFirst取第一个值
-    ''' </summary>
-    <AttributeUsage(AttributeTargets.Parameter, AllowMultiple:=False, Inherited:=True)>
-    Public Class RRawVectorArgumentAttribute : Inherits RInteropAttribute
-    End Class
-
     <AttributeUsage(AttributeTargets.Parameter, AllowMultiple:=False, Inherited:=True)>
     Public Class RParameterNameAliasAttribute : Inherits RInteropAttribute
 
@@ -86,6 +84,35 @@ Namespace Runtime.Interop
 
         Public Overrides Function ToString() As String
             Return [alias]
+        End Function
+    End Class
+
+    ''' <summary>
+    ''' For make compatibale with return value and exception message or R# object wrapper
+    ''' The .NET api is usually declare as returns object value, then we could use this
+    ''' attribute to let user known the actual returns type of the target api function
+    ''' </summary>
+    <AttributeUsage(AttributeTargets.Method, AllowMultiple:=False, Inherited:=True)>
+    Public Class RApiReturnAttribute : Inherits RInteropAttribute
+
+        Public ReadOnly Property returnType As Type
+
+        Sub New(type As Type)
+            returnType = type
+        End Sub
+
+        Public Overrides Function ToString() As String
+            Return $"fun() -> {returnType.Name}"
+        End Function
+
+        Public Shared Function GetActualReturnType(api As MethodInfo) As Type
+            Dim tag As RApiReturnAttribute = api.GetCustomAttribute(Of RApiReturnAttribute)
+
+            If tag Is Nothing Then
+                Return api.ReturnType
+            Else
+                Return tag.returnType
+            End If
         End Function
     End Class
 End Namespace

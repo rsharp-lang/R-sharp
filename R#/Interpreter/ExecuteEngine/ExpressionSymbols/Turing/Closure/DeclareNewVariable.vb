@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b4fdbfab911f7f084277410614ebabd3, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DeclareNewVariable.vb"
+﻿#Region "Microsoft.VisualBasic::0f3dda74af06766681d55e96394121e4, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewVariable.vb"
 
     ' Author:
     ' 
@@ -35,22 +35,17 @@
     ' 
     '         Properties: type
     ' 
-    '         Constructor: (+4 Overloads) Sub New
+    '         Constructor: (+1 Overloads) Sub New
     ' 
-    '         Function: Evaluate, getNames, getParameterView, PushNames, ToString
+    '         Function: Evaluate, getParameterView, PushNames, ToString
     ' 
-    '         Sub: getInitializeValue, PushTuple
+    '         Sub: PushTuple
     ' 
     ' 
     ' /********************************************************************************/
 
 #End Region
 
-Imports System.Runtime.CompilerServices
-Imports Microsoft.VisualBasic.Language
-Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Language
-Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 
@@ -67,69 +62,22 @@ Namespace Interpreter.ExecuteEngine
         ''' </summary>
         Friend value As Expression
         Friend hasInitializeExpression As Boolean = False
+        Friend m_type As TypeCodes
 
         Public Overrides ReadOnly Property type As TypeCodes
-
-        Sub New(code As List(Of Token()))
-            ' 0   1    2   3    4 5
-            ' let var [as type [= ...]]
-            names = getNames(code(1))
-
-            If code = 2 Then
-                type = TypeCodes.generic
-            ElseIf code(2).isKeyword("as") Then
-                type = code(3)(Scan0).text.GetRTypeCode
-
-                If code.Count > 4 AndAlso code(4).isOperator("=", "<-") Then
-                    Call code.Skip(5).DoCall(AddressOf getInitializeValue)
-                End If
-            Else
-                type = TypeCodes.generic
-
-                If code > 2 AndAlso code(2).isOperator("=", "<-") Then
-                    Call code.Skip(3).DoCall(AddressOf getInitializeValue)
-                End If
-            End If
-        End Sub
-
-        Sub New(code As List(Of Token))
-            Call Me.New(code:=code.SplitByTopLevelDelimiter(TokenType.operator, includeKeyword:=True))
-        End Sub
-
-        Sub New(singleToken As Token())
-            names = getNames(singleToken)
-            type = TypeCodes.generic
-            hasInitializeExpression = False
-            value = Nothing
-        End Sub
+            Get
+                Return m_type
+            End Get
+        End Property
 
         Sub New()
         End Sub
 
-        Friend Shared Function getNames(code As Token()) As String()
-            If code.Length > 1 Then
-                Return code.Skip(1) _
-                    .Take(code.Length - 2) _
-                    .Where(Function(token) Not token.name = TokenType.comma) _
-                    .Select(Function(symbol)
-                                If symbol.name <> TokenType.identifier Then
-                                    Throw New SyntaxErrorException
-                                Else
-                                    Return symbol.text
-                                End If
-                            End Function) _
-                    .ToArray
-            Else
-                Return {code(Scan0).text}
-            End If
-        End Function
-
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Private Sub getInitializeValue(code As IEnumerable(Of Token()))
-            hasInitializeExpression = True
-            value = Expression.ParseExpression(code.AsList)
-        End Sub
-
+        ''' <summary>
+        ''' Push current variable into the target environment ``<paramref name="envir"/>``.
+        ''' </summary>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim value As Object
 
@@ -189,6 +137,8 @@ Namespace Interpreter.ExecuteEngine
         Public Overrides Function ToString() As String
             If names.Length > 1 Then
                 Return $"Dim [{names.JoinBy(", ")}] As {type.Description} = {Scripting.ToString(value, "NULL")}"
+            ElseIf names.Length = 0 Then
+                Return "Syntax Error!"
             Else
                 Return $"Dim {names(Scan0)} As {type.Description} = {Scripting.ToString(value, "NULL")}"
             End If

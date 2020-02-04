@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::662090053221b9673f0ad0734f648a42, R#\Runtime\RVectorExtensions.vb"
+﻿#Region "Microsoft.VisualBasic::c7e35544e437fa0e2bfb9e40658ea3e3, R#\Runtime\RVectorExtensions.vb"
 
     ' Author:
     ' 
@@ -126,6 +126,10 @@ Namespace Runtime
             If value Is Nothing Then
                 Return Nothing
             Else
+                If value.GetType Is GetType(vector) Then
+                    value = DirectCast(value, vector).data
+                End If
+
                 valueType = value.GetType
             End If
 
@@ -173,6 +177,10 @@ Namespace Runtime
             If value Is Nothing Then
                 Return {}
             Else
+                If value.GetType Is GetType(vector) Then
+                    value = DirectCast(value, vector).data
+                End If
+
                 valueType = value.GetType
             End If
 

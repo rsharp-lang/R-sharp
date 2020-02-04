@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fd92af3523f3cb6cdc88ee1adb00e8d2, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssign.vb"
+﻿#Region "Microsoft.VisualBasic::545832ee0f5a883eeb5e55d184595ef0, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssign.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,7 @@
     ' 
     '         Properties: symbolSize, type
     ' 
-    '         Constructor: (+3 Overloads) Sub New
+    '         Constructor: (+2 Overloads) Sub New
     '         Function: assignSymbol, assignTuples, doValueAssign, DoValueAssign, Evaluate
     '                   GetSymbol, setByNameIndex, setFromObjectList, setFromVector, setVectorElements
     '                   ToString
@@ -49,7 +49,6 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
@@ -83,15 +82,6 @@ Namespace Interpreter.ExecuteEngine
                 Return targetSymbols.Length
             End Get
         End Property
-
-        Sub New(tokens As List(Of Token()))
-            targetSymbols = DeclareNewVariable _
-                .getNames(tokens(Scan0)) _
-                .Select(Function(name) New Literal(name)) _
-                .ToArray
-            isByRef = tokens(Scan0)(Scan0).text = "="
-            value = tokens.Skip(2).AsList.DoCall(AddressOf Expression.ParseExpression)
-        End Sub
 
         Sub New(targetSymbols$(), value As Expression)
             Me.targetSymbols = targetSymbols _
@@ -267,7 +257,7 @@ Namespace Interpreter.ExecuteEngine
                 Return Internal.stop({"Target symbol is nothing!", $"SymbolName: {symbolIndex.symbol}"}, envir)
             End If
 
-            If symbolIndex.nameIndex AndAlso index.GetType Like BinaryExpression.integers Then
+            If symbolIndex.indexType = SymbolIndexers.vectorIndex AndAlso index.GetType Like BinaryExpression.integers Then
                 Return setVectorElements(targetObj, Runtime.asVector(Of Integer)(index), value, envir)
             End If
 
@@ -275,13 +265,24 @@ Namespace Interpreter.ExecuteEngine
                 Return Internal.stop({"Target symbol can not be indexed by name!", $"SymbolName: {symbolIndex.symbol}"}, envir)
             End If
 
-            Dim indexStr As String = Scripting.ToString(index, Nothing)
+            Dim indexStr As String() = Runtime.asVector(Of String)(index)
+            Dim result As Object
 
-            If indexStr.StringEmpty Then
+            If indexStr.IsNullOrEmpty Then
                 Return SymbolIndexer.emptyIndexError(symbolIndex, envir)
             End If
 
-            Dim result As Object = DirectCast(targetObj, RNameIndex).setByName(indexStr, value, envir)
+            If symbolIndex.indexType = SymbolIndexers.nameIndex Then
+                ' a[[x]] <- v
+                ' a$x <- v
+                result = DirectCast(targetObj, RNameIndex).setByName(indexStr(Scan0), value, envir)
+
+                If indexStr.Length > 1 Then
+                    envir.AddMessage($"'{symbolIndex.index}' contains multiple index, only use first index key value...")
+                End If
+            Else
+                result = DirectCast(targetObj, RNameIndex).setByName(indexStr, value, envir)
+            End If
 
             If Not result Is Nothing AndAlso result.GetType Is GetType(Message) Then
                 Return result

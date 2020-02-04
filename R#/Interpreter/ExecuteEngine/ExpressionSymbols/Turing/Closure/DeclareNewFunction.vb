@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c45867a2d65ca7a91c5d7f315f47c4a7, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DeclareNewFunction.vb"
+﻿#Region "Microsoft.VisualBasic::759543302a47e87ab40a67de087b05de, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewFunction.vb"
 
     ' Author:
     ' 
@@ -35,11 +35,8 @@
     ' 
     '         Properties: funcName, type
     ' 
-    '         Constructor: (+2 Overloads) Sub New
-    ' 
+    '         Constructor: (+1 Overloads) Sub New
     '         Function: Evaluate, Invoke, MissingParameters, ToString
-    ' 
-    '         Sub: getExecBody, getParameters
     ' 
     ' 
     ' /********************************************************************************/
@@ -49,8 +46,6 @@
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
-Imports SMRUCC.Rsharp.Language
-Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
@@ -73,47 +68,19 @@ Namespace Interpreter.ExecuteEngine
             End Get
         End Property
 
-        Public Property funcName As String Implements RFunction.name
+        Public ReadOnly Property funcName As String Implements RFunction.name
 
-        Friend params As DeclareNewVariable()
-        Friend body As ClosureExpression
+        Friend ReadOnly params As DeclareNewVariable()
+        Friend ReadOnly body As ClosureExpression
         ''' <summary>
         ''' The environment of current function closure
         ''' </summary>
         Friend envir As Environment
 
-        Sub New()
-        End Sub
-
-        Sub New(code As List(Of Token()))
-            Dim [declare] = code(4)
-            Dim parts = [declare].SplitByTopLevelDelimiter(TokenType.close)
-            Dim paramPart = parts(Scan0).Skip(1).ToArray
-            Dim bodyPart = parts(2).Skip(1).ToArray
-
-            funcName = code(1)(Scan0).text
-
-            Call getParameters(paramPart)
-            Call getExecBody(bodyPart)
-        End Sub
-
-        Private Sub getParameters(tokens As Token())
-            Dim parts = tokens.SplitByTopLevelDelimiter(TokenType.comma) _
-                .Where(Function(t) Not t.isComma) _
-                .ToArray
-
-            params = parts _
-                .Select(Function(t)
-                            Dim [let] As New List(Of Token) From {
-                                New Token With {.name = TokenType.keyword, .text = "let"}
-                            }
-                            Return New DeclareNewVariable([let] + t)
-                        End Function) _
-                .ToArray
-        End Sub
-
-        Private Sub getExecBody(tokens As Token())
-            body = New ClosureExpression(tokens)
+        Sub New(funcName$, params As DeclareNewVariable(), body As ClosureExpression)
+            Me.funcName = funcName
+            Me.params = params
+            Me.body = body
         End Sub
 
         Friend Shared Function MissingParameters(var As DeclareNewVariable, funcName$, envir As Environment) As Object

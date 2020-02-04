@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5d2b3d0aac3b61f25bbc8a55c5a6ec26, R#\Interpreter\ExecuteEngine\ExpressionSymbols\SymbolIndexer.vb"
+﻿#Region "Microsoft.VisualBasic::478d71637bc0d0a1f323e3f52fef3135, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer.vb"
 
     ' Author:
     ' 
@@ -31,12 +31,21 @@
 
     ' Summaries:
 
+    '     Enum SymbolIndexers
+    ' 
+    '         dataframeColumns, dataframeRanges, dataframeRows, nameIndex, vectorIndex
+    ' 
+    '  
+    ' 
+    ' 
+    ' 
     '     Class SymbolIndexer
     ' 
     '         Properties: type
     ' 
     '         Constructor: (+2 Overloads) Sub New
-    '         Function: emptyIndexError, Evaluate, getByIndex, getByName, ToString
+    '         Function: emptyIndexError, Evaluate, getByIndex, getByName, getColumn
+    '                   ToString
     ' 
     ' 
     ' /********************************************************************************/
@@ -54,8 +63,31 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Interpreter.ExecuteEngine
 
+    Public Enum SymbolIndexers
+        ''' <summary>
+        ''' a[x]
+        ''' </summary>
+        vectorIndex
+        ''' <summary>
+        ''' a[[x]], a$x
+        ''' </summary>
+        nameIndex
+        ''' <summary>
+        ''' a[, x]
+        ''' </summary>
+        dataframeColumns
+        ''' <summary>
+        ''' a[x, ]
+        ''' </summary>
+        dataframeRows
+        ''' <summary>
+        ''' a[x,y]
+        ''' </summary>
+        dataframeRanges
+    End Enum
+
     ''' <summary>
-    ''' get elements by index 
+    ''' get/set elements by index 
     ''' (X$name或者X[[name]])
     ''' </summary>
     Public Class SymbolIndexer : Inherits Expression
@@ -68,21 +100,12 @@ Namespace Interpreter.ExecuteEngine
         ''' <summary>
         ''' X[[name]]
         ''' </summary>
-        Friend ReadOnly nameIndex As Boolean = False
+        Friend ReadOnly indexType As SymbolIndexers
 
-        Sub New(tokens As Token())
-            symbol = {tokens(Scan0)}.DoCall(AddressOf Expression.CreateExpression)
-            tokens = tokens.Skip(2).Take(tokens.Length - 3).ToArray
-
-            If tokens(Scan0) = (TokenType.open, "[") AndAlso tokens.Last = (TokenType.close, "]") Then
-                nameIndex = True
-                tokens = tokens _
-                    .Skip(1) _
-                    .Take(tokens.Length - 2) _
-                    .ToArray
-            End If
-
-            index = Expression.CreateExpression(tokens)
+        Sub New(symbol As Expression, index As Expression, indexType As SymbolIndexers)
+            Me.symbol = symbol
+            Me.index = index
+            Me.indexType = indexType
         End Sub
 
         ''' <summary>
@@ -93,7 +116,7 @@ Namespace Interpreter.ExecuteEngine
         Sub New(symbol As Expression, byName As Expression)
             Me.symbol = symbol
             Me.index = byName
-            Me.nameIndex = True
+            Me.indexType = SymbolIndexers.nameIndex
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
@@ -104,12 +127,34 @@ Namespace Interpreter.ExecuteEngine
                 Return emptyIndexError(Me, envir)
             ElseIf Program.isException(obj) Then
                 Return obj
+            ElseIf obj Is Nothing Then
+                Return Nothing
             End If
 
-            If nameIndex Then
+            ' now obj is always have values:
+            If indexType = SymbolIndexers.nameIndex Then
+                ' a[[name]]
+                ' a$name
                 Return getByName(obj, indexer, envir)
-            Else
+            ElseIf indexType = SymbolIndexers.vectorIndex Then
+                ' a[name]
+                ' a[index]
                 Return getByIndex(obj, indexer, envir)
+            ElseIf indexType = SymbolIndexers.dataframeColumns Then
+                Return getColumn(obj, indexer, envir)
+            Else
+                Return Internal.stop(New NotImplementedException(indexType.ToString), envir)
+            End If
+        End Function
+
+        Private Function getColumn(obj As dataframe, indexer As Array, envir As Environment) As Object
+            If indexer.Length = 0 Then
+                Return Nothing
+            ElseIf indexer.Length = 1 Then
+                Return obj.GetColumnVector(Scripting.ToString(indexer.GetValue(Scan0)))
+            Else
+                ' dataframe projection
+                Return obj.projectByColumn(indexer)
             End If
         End Function
 
@@ -131,27 +176,46 @@ Namespace Interpreter.ExecuteEngine
             End If
         End Function
 
+        ''' <summary>
+        ''' vec[names/x] or list[names/index]
+        ''' </summary>
+        ''' <param name="obj"></param>
+        ''' <param name="indexer"></param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         Private Function getByIndex(obj As Object, indexer As Array, envir As Environment) As Object
-            Dim sequence As Array = Runtime.asVector(Of Object)(obj)
-            Dim Rarray As RIndex
+            If obj.GetType Is GetType(list) Then
+                Dim list As list = DirectCast(obj, list)
 
-            If sequence Is Nothing OrElse sequence.Length = 0 Then
-                Return Nothing
-            ElseIf sequence.Length = 1 AndAlso sequence.GetValue(Scan0).GetType.ImplementInterface(GetType(RIndex)) Then
-                Rarray = sequence.GetValue(Scan0)
-
-                '' by element index
-                'If Not sequence.GetType.ImplementInterface(GetType(RIndex)) Then
-                '    Return Internal.stop("Target object can not be indexed!", envir)
-                'End If
+                If Runtime.isVector(Of String)(indexer) Then
+                    ' get by names
+                    Return list.getByName(Runtime.asVector(Of String)(indexer))
+                Else
+                    ' get by index
+                    Return list.getByIndex(Runtime.asVector(Of Integer)(indexer))
+                End If
             Else
-                Rarray = New vector With {.data = sequence}
-            End If
+                Dim sequence As Array = Runtime.asVector(Of Object)(obj)
+                Dim Rarray As RIndex
 
-            If indexer.Length = 1 Then
-                Return Rarray.getByIndex(CInt(indexer.GetValue(Scan0)))
-            Else
-                Return Rarray.getByIndex(Runtime.asVector(Of Integer)(indexer))
+                If sequence.Length = 0 Then
+                    Return Nothing
+                ElseIf sequence.Length = 1 AndAlso sequence.GetValue(Scan0).GetType.ImplementInterface(GetType(RIndex)) Then
+                    Rarray = sequence.GetValue(Scan0)
+
+                    '' by element index
+                    'If Not sequence.GetType.ImplementInterface(GetType(RIndex)) Then
+                    '    Return Internal.stop("Target object can not be indexed!", envir)
+                    'End If
+                Else
+                    Rarray = New vector With {.data = sequence}
+                End If
+
+                If indexer.Length = 1 Then
+                    Return Rarray.getByIndex(CInt(indexer.GetValue(Scan0)))
+                Else
+                    Return Rarray.getByIndex(Runtime.asVector(Of Integer)(indexer))
+                End If
             End If
         End Function
 

@@ -1,44 +1,44 @@
-﻿#Region "Microsoft.VisualBasic::fe7a1a586ceb7e8905db4d82ead751e5, R#\System\Package\AnnotationDocs.vb"
+﻿#Region "Microsoft.VisualBasic::9e5525a6ad3cde883d6883062207eb94, R#\System\Package\AnnotationDocs.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class AnnotationDocs
-' 
-'         Function: (+2 Overloads) GetAnnotations
-' 
-'         Sub: printDocs, printFuncBody, PrintHelp
-' 
-' 
-' /********************************************************************************/
+    '     Class AnnotationDocs
+    ' 
+    '         Function: (+2 Overloads) GetAnnotations
+    ' 
+    '         Sub: printDocs, printFuncBody, PrintHelp
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -70,11 +70,16 @@ Namespace System.Package
             Dim docXml As String = assembly.Location.TrimSuffix & ".xml"
             Dim type As ProjectType
 
-            ' get xml docs from app path or annotation folder
-            ' in app home folder
             If Not docXml.FileExists Then
-                docXml = assembly.Location.ParentPath
-                docXml = docXml & $"/Annotation/{assembly.Location.BaseName}.xml"
+                ' get xml docs from app path or annotation folder
+                ' in app home folder
+                For Each dir As String In {"/", "Annotation", "Library"}
+                    docXml = $"{App.HOME}/{dir}/{assembly.Location.BaseName}.xml"
+
+                    If docXml.FileExists Then
+                        Exit For
+                    End If
+                Next
             End If
 
             If docXml.FileExists AndAlso Not projects.ContainsKey(projectKey) Then
@@ -104,7 +109,7 @@ Namespace System.Package
                 docs = type.GetMethods(func.Name).ElementAtOrDefault(Scan0)
             End If
 
-            If requireNoneNull Then
+            If docs Is Nothing AndAlso requireNoneNull Then
                 docs = New ProjectMember(type)
             End If
 

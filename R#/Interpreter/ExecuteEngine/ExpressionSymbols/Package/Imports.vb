@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b4a67a0cff1f7aa9ba252c689a509358, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Package\Imports.vb"
+﻿#Region "Microsoft.VisualBasic::17cce4226dbc574df455718c81e8d36a, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Package\Imports.vb"
 
     ' Author:
     ' 
@@ -45,7 +45,6 @@
 
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.System.Package
@@ -62,18 +61,16 @@ Namespace Interpreter.ExecuteEngine
     Public Class [Imports] : Inherits Expression
 
         Public ReadOnly Property packages As Expression
+        ''' <summary>
+        ''' ``*.dll`` file name
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property library As Expression
         Public Overrides ReadOnly Property type As TypeCodes
 
-        Sub New(code As IEnumerable(Of Token()))
-            With code.ToArray
-                If Not .ElementAt(Scan0).isKeyword("imports") OrElse Not .ElementAt(2).isKeyword("from") Then
-                    Throw New SyntaxErrorException
-                Else
-                    packages = .ElementAt(1).DoCall(AddressOf Expression.CreateExpression)
-                    library = .ElementAt(3).DoCall(AddressOf Expression.CreateExpression)
-                End If
-            End With
+        Sub New(packages As Expression, library As Expression)
+            Me.packages = packages
+            Me.library = library
         End Sub
 
         Public Overrides Function ToString() As String

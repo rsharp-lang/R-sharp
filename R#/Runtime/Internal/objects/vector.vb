@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e7b2be643713d382ab3d4c684be30b9a, R#\Runtime\Internal\objects\vector.vb"
+﻿#Region "Microsoft.VisualBasic::b681017451fa647bbfd4c86f5386d66d, R#\Runtime\Internal\objects\vector.vb"
 
     ' Author:
     ' 
@@ -33,10 +33,11 @@
 
     '     Class vector
     ' 
-    '         Properties: data, length
+    '         Properties: data, length, type, unit
     ' 
-    '         Constructor: (+2 Overloads) Sub New
+    '         Constructor: (+3 Overloads) Sub New
     '         Function: (+2 Overloads) getByIndex, getNames, setByindex, setByIndex, setNames
+    '                   ToString
     ' 
     ' 
     ' /********************************************************************************/
@@ -45,8 +46,10 @@
 
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Object
 
@@ -61,10 +64,54 @@ Namespace Runtime.Internal.Object
             End Get
         End Property
 
+        Public ReadOnly Property type As RType
+            Get
+                Return data _
+                    .GetType _
+                    .GetElementType _
+                    .DoCall(AddressOf RType.GetRSharpType)
+            End Get
+        End Property
+
         Dim names As String()
         Dim nameIndex As Index(Of String)
 
         Sub New()
+        End Sub
+
+        ''' <summary>
+        ''' Create a vector from a pipeline model and given array element <paramref name="model"/> type
+        ''' </summary>
+        ''' <param name="model">element type of the array</param>
+        ''' <param name="input"></param>
+        Sub New(model As Type, input As IEnumerable, env As Environment)
+            Dim i As i32 = Scan0
+            ' create an empty vector with 
+            ' allocable data buffer
+            Dim buffer As Array = Array.CreateInstance(model, BufferSize)
+
+            For Each obj As Object In input
+                If Not obj Is Nothing Then
+                    If obj.GetType Is model Then
+                        ' do nothing
+                    ElseIf obj.GetType.IsInheritsFrom(model) Then
+                        obj = RConversion.CTypeDynamic(obj, model, env)
+                    End If
+                End If
+
+                Call buffer.SetValue(obj, CInt(i))
+
+                If ++i = buffer.Length Then
+                    ' resize vector buffer
+                    data = buffer
+                    buffer = Array.CreateInstance(model, BufferSize + buffer.Length)
+                    Array.ConstrainedCopy(data, Scan0, buffer, Scan0, data.Length)
+                End If
+            Next
+
+            ' trim the vector to its acutal size
+            data = Array.CreateInstance(model, length:=i)
+            Array.ConstrainedCopy(buffer, Scan0, data, Scan0, data.Length)
         End Sub
 
         Sub New(names As String(), data As Array, envir As Environment)
@@ -103,10 +150,10 @@ Namespace Runtime.Internal.Object
                 i = data.Length + i
             End If
 
-            If i >= data.Length OrElse i < 0 Then
+            If i > data.Length OrElse i < 0 Then
                 Return Nothing
             Else
-                Return data.GetValue(i)
+                Return data.GetValue(i - 1)
             End If
         End Function
 
@@ -174,6 +221,10 @@ Namespace Runtime.Internal.Object
             Next
 
             Return result.ToArray
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return $"[{length}] vec<{type.ToString}>"
         End Function
     End Class
 End Namespace

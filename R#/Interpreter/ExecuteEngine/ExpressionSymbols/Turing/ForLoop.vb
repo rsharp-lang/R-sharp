@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a6fbc9d70db6ddb39d73b5c49dd83ba7, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ForLoop.vb"
+﻿#Region "Microsoft.VisualBasic::cfecb809408433c3b91efeb2cf3acb78, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ForLoop.vb"
 
     ' Author:
     ' 
@@ -36,8 +36,7 @@
     '         Properties: type
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, exec, execParallel, ParseLoopBody, RunLoop
-    '                   ToString
+    '         Function: Evaluate, exec, execParallel, RunLoop, ToString
     ' 
     ' 
     ' /********************************************************************************/
@@ -47,8 +46,6 @@
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
-Imports SMRUCC.Rsharp.Language
-Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 
@@ -84,47 +81,12 @@ Namespace Interpreter.ExecuteEngine
             End Get
         End Property
 
-        Sub New(tokens As IEnumerable(Of Token))
-            Dim blocks = tokens.SplitByTopLevelDelimiter(TokenType.close)
-            Dim [loop] = blocks(Scan0).Skip(1).SplitByTopLevelDelimiter(TokenType.keyword)
-            Dim vars As Token() = [loop](Scan0)
-
-            If vars.Length = 1 Then
-                variables = {vars(Scan0).text}
-            Else
-                variables = vars _
-                    .Skip(1) _
-                    .Take(vars.Length - 2) _
-                    .Where(Function(x) Not x.name = TokenType.comma) _
-                    .Select(Function(x) x.text) _
-                    .ToArray
-            End If
-
-            Me.sequence = Expression.CreateExpression([loop].Skip(2).IteratesALL)
-            Me.body = New DeclareNewFunction With {
-                .body = ParseLoopBody(blocks(2), isParallel:=parallel),
-                .funcName = "forloop_internal",
-                .params = {}
-            }
+        Sub New(variables$(), sequence As Expression, body As DeclareNewFunction, parallel As Boolean)
+            Me.variables = variables
+            Me.sequence = sequence
+            Me.body = body
+            Me.parallel = parallel
         End Sub
-
-        Private Shared Function ParseLoopBody(tokens As Token(), ByRef isParallel As Boolean) As ClosureExpression
-            If tokens(Scan0) = (TokenType.open, "{") Then
-                Return tokens _
-                    .Skip(1) _
-                    .DoCall(AddressOf ClosureExpression.ParseExpressionTree)
-            ElseIf tokens(Scan0) = (TokenType.operator, "%") AndAlso
-                   tokens(1) = (TokenType.identifier, "dopar") AndAlso
-                   tokens(2) = (TokenType.operator, "%") Then
-                isParallel = True
-
-                Return tokens _
-                    .Skip(4) _
-                    .DoCall(AddressOf ClosureExpression.ParseExpressionTree)
-            Else
-                Throw New SyntaxErrorException
-            End If
-        End Function
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim result As New List(Of Object)

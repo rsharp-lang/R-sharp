@@ -1,4 +1,45 @@
-﻿Imports System.Reflection
+﻿#Region "Microsoft.VisualBasic::200e6394f745da1568bc355347a71e96, Library\devkit\docs.vb"
+
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+
+    ' /********************************************************************************/
+
+    ' Summaries:
+
+    ' Module docs
+    ' 
+    '     Function: apiDocsHtml, getDefaultTemplate, makeHtmlDocs, makeMarkdownDocs, parameterTable
+    ' 
+    ' /********************************************************************************/
+
+#End Region
+
+Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -68,6 +109,26 @@ Module docs
 
     ReadOnly markdown As New MarkdownHTML
 
+    <ExportAPI("markdown.docs")>
+    Public Function makeMarkdownDocs(package$, Optional env As Environment = Nothing) As String
+        Dim globalEnv As GlobalEnvironment = env.globalEnvironment
+        Dim apis As NamedValue(Of MethodInfo)() = globalEnv.packages _
+            .FindPackage(package, Nothing) _
+            .DoCall(AddressOf ImportsPackage.GetAllApi) _
+            .ToArray
+        Dim docs As New ScriptBuilder("")
+
+        With docs
+            !packageName = package
+            !packageDescription = globalEnv.packages _
+                .GetPackageDocuments(package) _
+                .DoCall(AddressOf markdown.Transform)
+            ' !apiList = apiList.JoinBy("<br />")
+        End With
+
+        Return docs.ToString
+    End Function
+
     ''' <summary>
     ''' Create html help document for the specific package module
     ''' </summary>
@@ -115,8 +176,9 @@ Module docs
                 <hr/>
 
                 <p>
-                    {$summary}                    
-                    <pre><code>{$usage}</code></pre>
+                    {$summary}  
+                
+                    <pre>{$usage}</pre>
 
                     {$parameters}
                        
@@ -140,9 +202,8 @@ Module docs
             !summary = markdown.Transform(apiDocs.Summary)
             !remarks = markdown.Transform(apiDocs.Remarks)
             !usage = api.GetPrintContent _
-                .Replace("<", "&lt;") _
                 .DoCall(AddressOf markdown.Transform) _
-                .Replace(" ", "&nbsp;")
+                .Replace("<br />", "")
             !parameters = parameters
 
             If apiDocs.Returns.StringEmpty Then

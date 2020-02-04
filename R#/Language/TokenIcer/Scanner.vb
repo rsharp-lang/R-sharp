@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cb7f61d1af64e094f144a07bdeecae9d, R#\Language\TokenIcer\Scanner.vb"
+﻿#Region "Microsoft.VisualBasic::c839398f1b1932fe5cf23d5e9e415619, R#\Language\TokenIcer\Scanner.vb"
 
     ' Author:
     ' 
@@ -192,7 +192,8 @@ Namespace Language.TokenIcer
             "in", "like", "from", "where", "order", "by", "distinct", "select",
             "ascending", "descending",
             "suppress",
-            "typeof", "modeof"
+            "typeof", "modeof", "valueof",
+            "using"
         }
 
         Private Function walkChar(c As Char) As Token

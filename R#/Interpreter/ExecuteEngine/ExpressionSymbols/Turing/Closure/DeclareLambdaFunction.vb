@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6b7444e208abdc26f50741fabd0a5e61, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DeclareLambdaFunction.vb"
+﻿#Region "Microsoft.VisualBasic::80c567895c2c15084d361d5e7574f130, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareLambdaFunction.vb"
 
     ' Author:
     ' 
@@ -74,21 +74,10 @@ Namespace Interpreter.ExecuteEngine
         Dim parameter As DeclareNewVariable
         Dim closure As Expression
 
-        ''' <summary>
-        ''' 只允许拥有一个参数，并且只允许出现一行代码
-        ''' </summary>
-        ''' <param name="tokens"></param>
-        Sub New(tokens As List(Of Token()))
-            With tokens.ToArray
-                name = .IteratesALL _
-                       .Select(Function(t) t.text) _
-                       .JoinBy(" ") _
-                       .DoCall(Function(exp)
-                                   Return "[lambda: " & exp & "]"
-                               End Function)
-                parameter = New DeclareNewVariable(tokens(Scan0))
-                closure = Expression.CreateExpression(.Skip(2).IteratesALL)
-            End With
+        Sub New(name$, parameter As DeclareNewVariable, closure As Expression)
+            Me.name = name
+            Me.parameter = parameter
+            Me.closure = closure
         End Sub
 
         ''' <summary>

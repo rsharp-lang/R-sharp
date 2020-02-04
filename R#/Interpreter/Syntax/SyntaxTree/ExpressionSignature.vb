@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c76b03842c57a681bc582228a82405d2, R#\Interpreter\ExecuteEngine\ExpressionSignature.vb"
+﻿#Region "Microsoft.VisualBasic::3eca32a1bfeea29cc4fd38c4ce3bd7d4, R#\Interpreter\Syntax\SyntaxTree\ExpressionSignature.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,8 @@
     ' 
     '         Function: ifElseTriple, isByRefCall, isComma, isFunctionInvoke, isIdentifier
     '                   (+2 Overloads) isKeyword, isLambdaFunction, isLiteral, isNamespaceReferenceCall, isOneOfKeywords
-    '                   isOperator, isSequenceSyntax, isSymbolIndexer, isTuple
+    '                   isOperator, isSequenceSyntax, isSimpleSymbolIndexer, isStackOf, isTuple
+    '                   isValueAssign, parseComplexSymbolIndexer
     ' 
     ' 
     ' /********************************************************************************/
@@ -45,10 +46,12 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 
-Namespace Interpreter.ExecuteEngine
+Namespace Interpreter.SyntaxParser
 
     ''' <summary>
     ''' The signature determination of the given expression tokens 
@@ -58,6 +61,18 @@ Namespace Interpreter.ExecuteEngine
     Module ExpressionSignature
 
         Friend ReadOnly valueAssignOperatorSymbols As Index(Of String) = {"<-", "="}
+        Friend ReadOnly literalTypes As Index(Of TokenType) = {
+            TokenType.stringLiteral,
+            TokenType.booleanLiteral,
+            TokenType.integerLiteral,
+            TokenType.numberLiteral,
+            TokenType.missingLiteral
+        }
+
+        <Extension>
+        Public Function isValueAssign(tokens As List(Of Token())) As Boolean
+            Return tokens(1).Length = 1 AndAlso tokens(1)(Scan0).name = TokenType.operator AndAlso tokens(1)(Scan0).text Like valueAssignOperatorSymbols
+        End Function
 
         <DebuggerStepThrough>
         <Extension>
@@ -98,7 +113,7 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         <Extension>
-        Public Function isNamespaceReferenceCall(tokens As List(Of [Variant](Of Expression, String))) As Boolean
+        Public Function isNamespaceReferenceCall(tokens As [Variant](Of Expression, String)()) As Boolean
             If Not tokens(1) Like GetType(String) OrElse Not tokens(1).TryCast(Of String) = "::" Then
                 Return False
             ElseIf Not tokens(2) Like GetType(FunctionInvoke) Then
@@ -111,12 +126,12 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         <Extension>
-        Public Function isByRefCall(tokens As List(Of [Variant](Of Expression, String))) As Boolean
+        Public Function isByRefCall(tokens As [Variant](Of Expression, String)()) As Boolean
             If Not tokens(Scan0) Like GetType(FunctionInvoke) Then
                 Return False
             ElseIf Not tokens(1) Like GetType(String) OrElse Not tokens(1).TryCast(Of String) Like valueAssignOperatorSymbols Then
                 Return False
-            ElseIf Not tokens >= 3 Then
+            ElseIf Not tokens.Length >= 3 Then
                 Return False
             Else
                 Return True
@@ -140,7 +155,7 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         <Extension>
-        Public Function isSymbolIndexer(tokens As Token()) As Boolean
+        Public Function isSimpleSymbolIndexer(tokens As Token()) As Boolean
             If Not tokens(Scan0).name = TokenType.identifier Then
                 Return False
             ElseIf Not tokens(1) = (TokenType.open, "[") OrElse Not tokens.Last = (TokenType.close, "]") Then
@@ -148,6 +163,29 @@ Namespace Interpreter.ExecuteEngine
             Else
                 Return True
             End If
+        End Function
+
+        <Extension>
+        Public Function parseComplexSymbolIndexer(tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
+            ' func(...)[x]
+            Dim code = tokens.SplitByTopLevelDelimiter(TokenType.close, tokenText:=")")
+            Dim indexer = code.Last
+
+            If indexer.isStackOf("[", "]") Then
+                Return code.Take(code.Count - 1) _
+                    .IteratesALL _
+                    .ToArray _
+                    .DoCall(Function(a)
+                                Return SyntaxImplements.SymbolIndexer(a, indexer, opts)
+                            End Function)
+            Else
+                Return Nothing
+            End If
+        End Function
+
+        <Extension>
+        Public Function isStackOf(tokens As Token(), open$, close$) As Boolean
+            Return (tokens(Scan0) = (TokenType.open, open)) AndAlso (tokens.Last = (TokenType.close, close))
         End Function
 
         ''' <summary>
@@ -198,7 +236,7 @@ Namespace Interpreter.ExecuteEngine
         ''' <returns></returns>
         <Extension>
         Public Function isLiteral(tokens As Token(), Optional type As TokenType = TokenType.invalid) As Boolean
-            If tokens.Length = 1 AndAlso tokens(Scan0).name Like Expression.literalTypes Then
+            If tokens.Length = 1 AndAlso tokens(Scan0).name Like ExpressionSignature.literalTypes Then
                 If type <> TokenType.invalid Then
                     Return tokens(Scan0).name = type
                 Else

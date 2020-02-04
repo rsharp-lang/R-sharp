@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a19e21776e5d6ce31637e21e5bef0ba6, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
+﻿#Region "Microsoft.VisualBasic::629091d1ed36776f3635ab546dadb383, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
 
     ' Author:
     ' 
@@ -52,14 +52,27 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
     Module linq
 
         <ExportAPI("unique")>
-        Private Function unique(items As Array, envir As Environment)
-            Dim distinct As Object() = items _
-                .AsObjectEnumerator _
-                .GroupBy(Function(o) o) _
-                .Select(Function(g) g.Key) _
-                .ToArray
-
-            Return distinct
+        Private Function unique(items As Array, Optional getKey As RFunction = Nothing, Optional envir As Environment = Nothing) As Object
+            If getKey Is Nothing Then
+                Return items _
+                   .AsObjectEnumerator _
+                   .GroupBy(Function(o)
+                                Dim arg = InvokeParameter.Create(o)
+                                Return getKey.Invoke(envir, arg)
+                            End Function) _
+                   .Select(Function(g)
+                               Return g.First
+                           End Function) _
+                   .ToArray
+            Else
+                Return items _
+                   .AsObjectEnumerator _
+                   .GroupBy(Function(o)
+                                Return o
+                            End Function) _
+                   .Select(Function(g) g.Key) _
+                   .ToArray
+            End If
         End Function
 
         <ExportAPI("projectAs")>
@@ -80,7 +93,15 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' <returns></returns>
         ''' 
         <ExportAPI("which")>
-        Private Function where(sequence As Array, test As RFunction, envir As Environment) As Object
+        Private Function where(sequence As Array,
+                               Optional test As RFunction = Nothing,
+                               Optional envir As Environment = Nothing) As Object
+
+            If test Is Nothing Then
+                ' test for which index
+                Return Which.IsTrue(Runtime.asLogical(sequence))
+            End If
+
             Dim pass As Boolean
             Dim arg As InvokeParameter()
             Dim filter As New List(Of Object)
@@ -98,9 +119,20 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         End Function
 
         <ExportAPI("first")>
-        Private Function first(sequence As Array, test As RFunction, envir As Environment) As Object
+        Private Function first(sequence As Array,
+                               Optional test As RFunction = Nothing,
+                               Optional envir As Environment = Nothing) As Object
+
             Dim pass As Boolean
             Dim arg As InvokeParameter()
+
+            If test Is Nothing Then
+                If sequence.Length = 0 Then
+                    Return Nothing
+                Else
+                    Return sequence.GetValue(Scan0)
+                End If
+            End If
 
             For Each item As Object In sequence
                 arg = InvokeParameter.Create(item)

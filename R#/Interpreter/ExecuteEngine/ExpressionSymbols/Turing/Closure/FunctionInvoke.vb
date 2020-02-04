@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bdfd5060a3e3bbd90c5ac4309ed59765, R#\Interpreter\ExecuteEngine\ExpressionSymbols\FunctionInvoke.vb"
+﻿#Region "Microsoft.VisualBasic::1a90872f0356d84a8106f9206c53d733, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\FunctionInvoke.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,7 @@
     ' 
     '         Properties: [namespace], funcName, type
     ' 
-    '         Constructor: (+3 Overloads) Sub New
+    '         Constructor: (+2 Overloads) Sub New
     '         Function: allIsValueAssign, doInvokeFuncVar, Evaluate, getFuncVar, invokeRInternal
     '                   ToString
     ' 
@@ -76,11 +76,6 @@ Namespace Interpreter.ExecuteEngine
             End Get
         End Property
 
-        ''' <summary>
-        ''' The source location of current function invoke calls
-        ''' </summary>
-        Dim span As CodeSpan
-
         Public ReadOnly Property funcName As Expression
 
         ''' <summary>
@@ -93,23 +88,6 @@ Namespace Interpreter.ExecuteEngine
         ''' The parameters expression that passing to the target invoked function.
         ''' </summary>
         Friend ReadOnly parameters As List(Of Expression)
-
-        Sub New(tokens As Token())
-            Dim params = tokens _
-                .Skip(2) _
-                .Take(tokens.Length - 3) _
-                .ToArray
-
-            funcName = New Literal(tokens(Scan0).text)
-            span = tokens(Scan0).span
-            parameters = params _
-                .SplitByTopLevelDelimiter(TokenType.comma) _
-                .Where(Function(t) Not t.isComma) _
-                .Select(Function(param)
-                            Return Expression.CreateExpression(param)
-                        End Function) _
-                .AsList
-        End Sub
 
         ''' <summary>
         ''' Use for create pipeline calls from identifier target
@@ -265,6 +243,8 @@ Namespace Interpreter.ExecuteEngine
 
                         If firstInput.GetType Is GetType(list) Then
                             Return base.options(firstInput, envir)
+                        ElseIf Program.isException(firstInput) Then
+                            Return firstInput
                         Else
                             names = Runtime.asVector(Of String)(firstInput)
                         End If
@@ -274,6 +254,12 @@ Namespace Interpreter.ExecuteEngine
                                         Return exp.Evaluate(envir)
                                     End Function) _
                             .ToArray
+
+                        For Each element As Object In vector
+                            If Program.isException(element) Then
+                                Return element
+                            End If
+                        Next
 
                         names = Runtime.asVector(Of String)(vector)
                     End If

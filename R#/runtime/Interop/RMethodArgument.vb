@@ -1,54 +1,51 @@
-﻿#Region "Microsoft.VisualBasic::aee6b6d71d380de0bc4c0698d8fb1886, R#\Runtime\Interop\RMethodArgument.vb"
+﻿#Region "Microsoft.VisualBasic::59c28691cf24cb374dbd4f6967d5232c, R#\Runtime\Interop\RMethodArgument.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class RMethodArgument
-' 
-'         Properties: [default], isObjectList, isOptional, isRequireRawVector, name
-'                     type
-' 
-'         Function: ParseArgument, ToString
-' 
-'     Class RArgumentList
-' 
-'         Function: CreateArguments
-' 
-' 
-' /********************************************************************************/
+    '     Class RMethodArgument
+    ' 
+    '         Properties: [default], isByrefValueParameter, isObjectList, isOptional, isRequireRawVector
+    '                     name, type
+    ' 
+    '         Function: getDefaultValue, getDefaultVector, GetRawVectorElementType, ParseArgument, ToString
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
 Imports System.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
+Imports Microsoft.VisualBasic.Serialization
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 
 Namespace Runtime.Interop
@@ -75,6 +72,21 @@ Namespace Runtime.Interop
         ''' <returns></returns>
         Public Property isRequireRawVector As Boolean
 
+        Friend rawVectorFlag As RRawVectorArgumentAttribute
+        Friend defaultScriptValue As RDefaultValueAttribute
+
+        ''' <summary>
+        ''' Get element type of the target raw vector
+        ''' </summary>
+        ''' <returns></returns>
+        Public Function GetRawVectorElementType() As Type
+            If Not rawVectorFlag Is Nothing Then
+                Return rawVectorFlag.vector
+            Else
+                Return Nothing
+            End If
+        End Function
+
         Public Overrides Function ToString() As String
             Dim defaultValue As String = "``<NULL>``"
 
@@ -85,6 +97,10 @@ Namespace Runtime.Interop
                     defaultValue = $"""{[default]}"""
                 ElseIf type.raw.IsEnum Then
                     defaultValue = enumPrinter.defaultValueToString([default], type)
+                ElseIf Not defaultScriptValue Is Nothing Then
+                    defaultValue = $"'{defaultScriptValue.defaultValue}'"
+                ElseIf [default].GetType.IsArray Then
+                    defaultValue = JSON.GetObjectJson([default].GetType, [default], indent:=False)
                 Else
                     defaultValue = [default].ToString.ToUpper
                 End If
@@ -109,12 +125,41 @@ Namespace Runtime.Interop
             Return New RMethodArgument With {
                 .name = p.Name,
                 .type = RType.GetRSharpType(p.ParameterType),
-                .[default] = p.DefaultValue,
+                .rawVectorFlag = p.GetCustomAttribute(Of RRawVectorArgumentAttribute),
+                .defaultScriptValue = p.GetCustomAttribute(Of RDefaultValueAttribute),
+                .[default] = getDefaultValue(.rawVectorFlag, .defaultScriptValue, p.ParameterType, p.DefaultValue),
                 .isOptional = p.HasDefaultValue,
                 .isObjectList = Not p.GetCustomAttribute(Of RListObjectArgumentAttribute) Is Nothing,
-                .isRequireRawVector = Not p.GetCustomAttribute(Of RRawVectorArgumentAttribute) Is Nothing,
+                .isRequireRawVector = Not .rawVectorFlag Is Nothing,
                 .isByrefValueParameter = Not p.GetCustomAttribute(Of RByRefValueAssignAttribute) Is Nothing
             }
+        End Function
+
+        Private Shared Function getDefaultValue(rawVector As RRawVectorArgumentAttribute, defaultScript As RDefaultValueAttribute, paramType As Type, [default] As Object) As Object
+            If rawVector Is Nothing Then
+                If Not defaultScript Is Nothing Then
+                    Return defaultScript.ParseDefaultValue(paramType)
+                Else
+                    Return [default]
+                End If
+            Else
+                Return getDefaultVector(rawVector, [default])
+            End If
+        End Function
+
+        Private Shared Function getDefaultVector(flag As RRawVectorArgumentAttribute, [default] As Object) As Object
+            If flag Is Nothing OrElse [default] Is Nothing Then
+                Return [default]
+            ElseIf Not flag.containsLiteral Then
+                Return [default]
+            End If
+
+            If [default].GetType Is GetType(String) Then
+                ' parser works for string expression only
+                Return flag.GetVector(DirectCast([default], String))
+            Else
+                Return [default]
+            End If
         End Function
     End Class
 End Namespace

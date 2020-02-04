@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a6cec8cf381e4808e3ee8c7402b7a288, Library\R.graph\Comparison.vb"
+﻿#Region "Microsoft.VisualBasic::60cd584a86a5d24ac126394613a00b5a, Library\R.graph\Comparison.vb"
 
     ' Author:
     ' 
@@ -57,8 +57,8 @@ Module Comparison
     ''' <param name="b"></param>
     ''' <returns></returns>
     <ExportAPI("node.cos")>
-    Public Function similarity(a As Node, b As Node) As Double
-        Return Analysis.NodeSimilarity(a, b)
+    Public Function similarity(a As Node, b As Node, Optional topologyCos As Boolean = False) As Double
+        Return Analysis.NodeSimilarity(a, b, topologyCos)
     End Function
 
     ''' <summary>
@@ -69,7 +69,7 @@ Module Comparison
     ''' <param name="cutoff#"></param>
     ''' <returns></returns>
     <ExportAPI("graph.jaccard")>
-    Public Function similarity(a As NetworkGraph, b As NetworkGraph, Optional cutoff# = 0.85) As Double
-        Return Analysis.GraphSimilarity(a, b, cutoff)
+    Public Function similarity(a As NetworkGraph, b As NetworkGraph, Optional cutoff# = 0.85, Optional topologyCos As Boolean = False) As Double
+        Return Analysis.GraphSimilarity(a, b, cutoff, topologyCos)
     End Function
 End Module
