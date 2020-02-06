@@ -53,7 +53,7 @@ Namespace Interpreter.ExecuteEngine
 
         Public Overrides ReadOnly Property type As TypeCodes
 
-        Dim left, right As Expression
+        Friend left, right As Expression
         Dim [operator] As String
 
         Sub New(left As Expression, right As Expression, op$)

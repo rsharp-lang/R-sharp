@@ -13,7 +13,14 @@ Namespace Interpreter.ExecuteEngine
             End Get
         End Property
 
-        Dim a, b As Expression
+        ''' <summary>
+        ''' left
+        ''' </summary>
+        Friend a As Expression
+        ''' <summary>
+        ''' right
+        ''' </summary>
+        Friend b As Expression
 
         Sub New(a As Expression, b As Expression)
             Me.a = a

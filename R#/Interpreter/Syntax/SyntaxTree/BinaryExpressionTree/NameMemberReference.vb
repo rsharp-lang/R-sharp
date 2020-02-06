@@ -53,31 +53,60 @@ Namespace Interpreter.SyntaxParser
         End Sub
 
         Protected Overrides Function expression(a As [Variant](Of SyntaxResult, String), b As [Variant](Of SyntaxResult, String), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim nameSymbol As String
-
             If a.VA.isException Then
                 Return a
             ElseIf b.VA.isException Then
                 Return b
+            Else
+                Return createIndexer(a.VA.expression, b.VA.expression, opts)
             End If
+        End Function
 
-            Dim typeofName As Type = b.VA.expression.GetType
+        Private Shared Function createIndexer(a As Expression, b As Expression, opts As SyntaxBuilderOptions) As SyntaxResult
+            Dim typeofName As Type = b.GetType
+            Dim nameSymbol As String
 
             If typeofName Is GetType(SymbolReference) Then
-                nameSymbol = DirectCast(b.VA.expression, SymbolReference).symbol
+                nameSymbol = DirectCast(b, SymbolReference).symbol
             ElseIf typeofName Is GetType(Literal) Then
-                nameSymbol = DirectCast(b.VA.expression, Literal).value
+                nameSymbol = DirectCast(b, Literal).value
             ElseIf typeofName Is GetType(FunctionInvoke) Then
-                Dim invoke As FunctionInvoke = b.VA.expression
-                Dim funcVar As New SymbolIndexer(a.VA.expression, invoke.funcName)
+                Dim invoke As FunctionInvoke = DirectCast(b, FunctionInvoke)
+                Dim funcVar As New SymbolIndexer(a, invoke.funcName)
 
                 Return New SyntaxResult(New FunctionInvoke(funcVar, invoke.parameters.ToArray))
+            ElseIf typeofName Is GetType(BinaryInExpression) Then
+                ' merge symbol into binary expression
+                ' symbol$name in ...
+                Dim bin As BinaryInExpression = DirectCast(b, BinaryInExpression)
+                Dim left As SyntaxResult = createIndexer(a, bin.a, opts)
+
+                If left.isException Then
+                    Return left
+                Else
+                    bin.a = left.expression
+                End If
+
+                Return New SyntaxResult(bin)
+            ElseIf typeofName Is GetType(BinaryExpression) Then
+                ' merge symbol into binary expression
+                ' symbol$name <op> ...
+                Dim bin As BinaryExpression = DirectCast(b, BinaryExpression)
+                Dim left As SyntaxResult = createIndexer(a, bin.left, opts)
+
+                If left.isException Then
+                    Return left
+                Else
+                    bin.left = left.expression
+                End If
+
+                Return New SyntaxResult(bin)
             Else
                 Return New SyntaxResult(New NotImplementedException, opts.debug)
             End If
 
             ' a$b symbol reference
-            Dim symbolRef As New SymbolIndexer(a.VA.expression, New Literal(nameSymbol))
+            Dim symbolRef As New SymbolIndexer(a, New Literal(nameSymbol))
             Return New SyntaxResult(symbolRef)
         End Function
     End Class
