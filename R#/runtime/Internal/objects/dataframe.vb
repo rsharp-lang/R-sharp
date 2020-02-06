@@ -134,7 +134,7 @@ Namespace Runtime.Internal.Object
         ''' Each element in a return result array is a row in table matrix
         ''' </summary>
         ''' <returns></returns>
-        Public Function GetTable(env As GlobalEnvironment) As String()()
+        Public Function GetTable(env As GlobalEnvironment, Optional printContent As Boolean = True) As String()()
             Dim table As String()() = New String(nrows)() {}
             Dim row As String()
             Dim rIndex As Integer
@@ -155,7 +155,9 @@ Namespace Runtime.Internal.Object
                 .Select(Function(key) columns(key).GetType.GetElementType) _
                 .ToArray
             Dim formatters As IStringBuilder() = elementTypes _
-                .Select(Function(type) printer.ToString(type, env)) _
+                .Select(Function(type)
+                            Return printer.ToString(type, env, printContent)
+                        End Function) _
                 .ToArray
 
             For i As Integer = 1 To table.Length - 1

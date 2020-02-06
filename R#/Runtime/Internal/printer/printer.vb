@@ -189,7 +189,7 @@ printSingleElement:
         ''' <returns></returns>
         <Extension>
         Public Function ValueToString(x As Object, env As GlobalEnvironment) As String
-            Return printer.ToString(x.GetType, env)(x)
+            Return printer.ToString(x.GetType, env, True)(x)
         End Function
 
         ''' <summary>
@@ -198,7 +198,7 @@ printSingleElement:
         ''' <param name="elementType"></param>
         ''' <returns></returns>
         <Extension>
-        Friend Function ToString(elementType As Type, env As GlobalEnvironment) As IStringBuilder
+        Friend Function ToString(elementType As Type, env As GlobalEnvironment, printContent As Boolean) As IStringBuilder
             If RtoString.ContainsKey(elementType) Then
                 Return RtoString(elementType)
             ElseIf RInternalToString.ContainsKey(elementType) Then
@@ -207,8 +207,10 @@ printSingleElement:
                 Return Function(o) As String
                            If o Is Nothing Then
                                Return "NULL"
-                           Else
+                           ElseIf printContent Then
                                Return $"""{o}"""
+                           Else
+                               Return CStr(o)
                            End If
                        End Function
             ElseIf Not (elementType.Namespace.StartsWith("System.") OrElse elementType.Namespace = "System") Then
@@ -224,7 +226,7 @@ printSingleElement:
 
         Friend Function getStrings(xVec As Array, env As GlobalEnvironment) As IEnumerable(Of String)
             Dim elementType As Type = Runtime.MeasureArrayElementType(xVec)
-            Dim toString As IStringBuilder = printer.ToString(elementType, env)
+            Dim toString As IStringBuilder = printer.ToString(elementType, env, True)
 
             Return From element As Object
                    In xVec.AsQueryable
