@@ -917,12 +917,16 @@ Namespace Runtime.Internal.Invokes
 
             Dim apply As RFunction = FUN
 
+            If X.GetType Is GetType(list) Then
+                X = DirectCast(X, list).slots
+            End If
+
             If X.GetType Is GetType(Dictionary(Of String, Object)) Then
                 Dim list = DirectCast(X, Dictionary(Of String, Object))
                 Dim names = list.Keys.ToArray
                 Dim seq As Array = names _
                     .Select(Function(key)
-                                Return apply.Invoke(envir, {list(key)})
+                                Return apply.Invoke(envir, invokeArgument(list(key)))
                             End Function) _
                     .ToArray
 
@@ -931,7 +935,7 @@ Namespace Runtime.Internal.Invokes
                 Dim seq = Runtime.asVector(Of Object)(X) _
                     .AsObjectEnumerator _
                     .Select(Function(d)
-                                Return apply.Invoke(envir, {d})
+                                Return apply.Invoke(envir, invokeArgument(d))
                             End Function) _
                     .ToArray
 

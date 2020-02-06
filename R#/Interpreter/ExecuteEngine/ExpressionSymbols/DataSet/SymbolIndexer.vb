@@ -95,7 +95,7 @@ Namespace Interpreter.ExecuteEngine
         Public Overrides ReadOnly Property type As TypeCodes
 
         Friend ReadOnly index As Expression
-        Friend ReadOnly symbol As Expression
+        Friend symbol As Expression
 
         ''' <summary>
         ''' X[[name]]
@@ -213,6 +213,8 @@ Namespace Interpreter.ExecuteEngine
 
                 If indexer.Length = 1 Then
                     Return Rarray.getByIndex(CInt(indexer.GetValue(Scan0)))
+                ElseIf Runtime.isVector(Of Boolean)(indexer) Then
+                    Return Rarray.getByIndex(Which.IsTrue(Runtime.asLogical(indexer), offset:=1))
                 Else
                     Return Rarray.getByIndex(Runtime.asVector(Of Integer)(indexer))
                 End If

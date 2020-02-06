@@ -101,6 +101,19 @@ Namespace Interpreter.SyntaxParser
                 End If
 
                 Return New SyntaxResult(bin)
+            ElseIf typeofName Is GetType(SymbolIndexer) Then
+                ' a$b[x]
+                ' use symbol b as index name
+                Dim bin As SymbolIndexer = DirectCast(b, SymbolIndexer)
+                Dim left As SyntaxResult = createIndexer(a, bin.symbol, opts)
+
+                If left.isException Then
+                    Return left
+                Else
+                    bin.symbol = left.expression
+                End If
+
+                Return New SyntaxResult(bin)
             Else
                 Return New SyntaxResult(New NotImplementedException, opts.debug)
             End If

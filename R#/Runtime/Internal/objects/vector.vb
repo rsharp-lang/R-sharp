@@ -145,6 +145,13 @@ Namespace Runtime.Internal.Object
             Return names
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="i">
+        ''' 这个下标值应该是从1开始的
+        ''' </param>
+        ''' <returns></returns>
         Public Function getByIndex(i As Integer) As Object Implements RIndex.getByIndex
             If i < 0 Then
                 i = data.Length + i
@@ -153,10 +160,18 @@ Namespace Runtime.Internal.Object
             If i > data.Length OrElse i < 0 Then
                 Return Nothing
             Else
+                ' 下标是从1开始的
                 Return data.GetValue(i - 1)
             End If
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="i">
+        ''' 这个下标值应该是从1开始的
+        ''' </param>
+        ''' <returns></returns>
         Public Function getByIndex(i() As Integer) As Object() Implements RIndex.getByIndex
             Return i.Select(AddressOf getByIndex).ToArray
         End Function
