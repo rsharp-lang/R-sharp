@@ -1,45 +1,45 @@
 ﻿#Region "Microsoft.VisualBasic::cfecb809408433c3b91efeb2cf3acb78, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ForLoop.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class ForLoop
-    ' 
-    '         Properties: type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, exec, execParallel, RunLoop, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class ForLoop
+' 
+'         Properties: type
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate, exec, execParallel, RunLoop, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -48,6 +48,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Interpreter.ExecuteEngine
 
@@ -117,9 +118,7 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Private Function execParallel(envir As Environment) As IEnumerable(Of Object)
-            Dim data As Array = Runtime.asVector(Of Object)(sequence.Evaluate(envir))
-            Dim result As IEnumerable(Of Object) = data _
-                .AsObjectEnumerator _
+            Dim result As IEnumerable(Of Object) = getSequence(envir) _
                 .AsParallel _
                 .Select(Function(value, i)
                             Return RunLoop(value, i, envir)
@@ -140,11 +139,26 @@ Namespace Interpreter.ExecuteEngine
             End Using
         End Function
 
+        Private Function getSequence(env As Environment) As IEnumerable(Of Object)
+            Dim rawSeq As Object = sequence.Evaluate(env)
+            Dim data As IEnumerable(Of Object)
+
+            If rawSeq Is Nothing Then
+                Return {}
+            ElseIf rawSeq.GetType Is GetType(list) Then
+                ' list value as sequence data
+                data = DirectCast(rawSeq, list).slots.Values.AsEnumerable
+            Else
+                data = Runtime.asVector(Of Object)(rawSeq).AsObjectEnumerator
+            End If
+
+            Return data
+        End Function
+
         Private Iterator Function exec(envir As Environment) As IEnumerable(Of Object)
-            Dim data As Array = Runtime.asVector(Of Object)(sequence.Evaluate(envir))
             Dim i As i32 = 1
 
-            For Each value As Object In data
+            For Each value As Object In getSequence(envir)
                 Yield RunLoop(value, ++i, envir)
             Next
         End Function
