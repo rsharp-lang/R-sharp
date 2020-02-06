@@ -94,7 +94,19 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' ### Count the Number of Characters (or Bytes or Width)
+        ''' 
+        ''' nchar takes a character vector as an argument and 
+        ''' returns a vector whose elements contain the sizes 
+        ''' of the corresponding elements of x.
+        ''' </summary>
+        ''' <param name="strs">
+        ''' character vector, or a vector to be coerced to a character 
+        ''' vector. Giving a factor is an error.</param>
+        ''' <returns></returns>
         <ExportAPI("nchar")>
+        <RApiReturn(GetType(Integer))>
         Public Function nchar(<RRawVectorArgument> strs As Object) As Object
             If strs Is Nothing Then
                 Return 0
