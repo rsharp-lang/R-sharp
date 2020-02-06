@@ -115,6 +115,17 @@ Namespace Runtime.Internal.Object
         End Sub
 
         Sub New(names As String(), data As Array, envir As Environment)
+            If data.AsObjectEnumerator _
+                   .All(Function(a)
+                            Return Not a Is Nothing AndAlso a.GetType.IsArray AndAlso DirectCast(a, Array).Length = 1
+                        End Function) Then
+
+                data = data _
+                    .AsObjectEnumerator _
+                    .Select(Function(a) DirectCast(a, Array).GetValue(Scan0)) _
+                    .ToArray
+            End If
+
             Me.data = data
             Me.setNames(names, envir)
         End Sub

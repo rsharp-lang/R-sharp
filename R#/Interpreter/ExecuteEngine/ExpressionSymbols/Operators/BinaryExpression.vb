@@ -117,6 +117,12 @@ Namespace Interpreter.ExecuteEngine
                         Case "*" : Return Runtime.Core.Multiply(Of Long, Double, Double)(a, b).ToArray
                         Case "/" : Return Runtime.Core.Divide(Of Long, Double, Double)(a, b).ToArray
                         Case "^" : Return Runtime.Core.Power(Of Long, Double, Double)(a, b).ToArray
+                        Case ">" : Return Runtime.Core.BinaryCoreInternal(Of Long, Double, Boolean)(a, b, Function(x, y) x > y).ToArray
+                        Case "<" : Return Runtime.Core.BinaryCoreInternal(Of Long, Double, Boolean)(a, b, Function(x, y) x < y).ToArray
+                        Case "!=" : Return Runtime.Core.BinaryCoreInternal(Of Long, Double, Boolean)(a, b, Function(x, y) x <> y).ToArray
+                        Case "==" : Return Runtime.Core.BinaryCoreInternal(Of Long, Double, Boolean)(a, b, Function(x, y) x = y).ToArray
+                        Case ">=" : Return Runtime.Core.BinaryCoreInternal(Of Long, Double, Boolean)(a, b, Function(x, y) x >= y).ToArray
+                        Case "<=" : Return Runtime.Core.BinaryCoreInternal(Of Long, Double, Boolean)(a, b, Function(x, y) x <= y).ToArray
                     End Select
                 End If
             ElseIf ta Like floats Then
