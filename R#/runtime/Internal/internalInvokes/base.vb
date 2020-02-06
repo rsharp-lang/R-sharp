@@ -78,6 +78,28 @@ Namespace Runtime.Internal.Invokes
     Public Module base
 
         ''' <summary>
+        ''' ### Replicate Elements of Vectors and Lists
+        ''' 
+        ''' rep replicates the values in x. It is a generic function, 
+        ''' and the (internal) default method is described here.
+        ''' </summary>
+        ''' <param name="x">
+        ''' a vector (of any mode including a list) or a factor or (for rep only) 
+        ''' a POSIXct or POSIXlt or Date object; or an S4 object containing such 
+        ''' an object.
+        ''' </param>
+        ''' <param name="times">an integer-valued vector giving the (non-negative) 
+        ''' number of times to repeat each element if of length length(x), or to 
+        ''' repeat the whole vector if of length 1. Negative or NA values are an 
+        ''' error. A double vector is accepted, other inputs being coerced to an 
+        ''' integer or double vector.</param>
+        ''' <returns></returns>
+        <ExportAPI("rep")>
+        Public Function rep(x As Object, times As Integer) As Object
+            Return Repeats(x, times)
+        End Function
+
+        ''' <summary>
         ''' # Change the Print Mode to Invisible
         ''' 
         ''' Return a (temporarily) invisible copy of an object.
@@ -178,6 +200,28 @@ Namespace Runtime.Internal.Invokes
             Dim colVec As Array = Runtime.asVector(a, first.GetType, env)
 
             Return colVec
+        End Function
+
+        <ExportAPI("nrow")>
+        Public Function nrow(x As Object, Optional env As Environment = Nothing) As Object
+            If x Is Nothing Then
+                Return 0
+            ElseIf x.GetType Is GetType(dataframe) Then
+                Return DirectCast(x, dataframe).nrows
+            Else
+                Return Internal.stop(RType.GetRSharpType(x).ToString & " is not a dataframe!", env)
+            End If
+        End Function
+
+        <ExportAPI("ncol")>
+        Public Function ncol(x As Object, Optional env As Environment = Nothing) As Object
+            If x Is Nothing Then
+                Return 0
+            ElseIf x.GetType Is GetType(dataframe) Then
+                Return DirectCast(x, dataframe).ncols
+            Else
+                Return Internal.stop(RType.GetRSharpType(x).ToString & " is not a dataframe!", env)
+            End If
         End Function
 
         ''' <summary>

@@ -120,5 +120,15 @@ Namespace Runtime.Internal.Invokes
 
             Return Runtime.Core.Power(Of Double, Double, Double)(x, y).ToArray
         End Function
+
+        <ExportAPI("max")>
+        Public Function max(x As Array) As Object
+            Return Runtime.asVector(Of Double)(x).AsObjectEnumerator(Of Double).Max
+        End Function
+
+        <ExportAPI("min")>
+        Public Function min(x As Array) As Object
+            Return Runtime.asVector(Of Double)(x).AsObjectEnumerator(Of Double).Min
+        End Function
     End Module
 End Namespace
