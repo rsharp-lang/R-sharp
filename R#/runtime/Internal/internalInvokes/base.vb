@@ -169,6 +169,7 @@ Namespace Runtime.Internal.Invokes
         ''' ``check.names = FALSE``.
         ''' </returns>
         <ExportAPI("data.frame")>
+        <RApiReturn(GetType(dataframe))>
         Public Function Rdataframe(<RListObjectArgument>
                                    <RRawVectorArgument>
                                    columns As Object, Optional envir As Environment = Nothing) As Object
@@ -203,6 +204,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("nrow")>
+        <RApiReturn(GetType(Integer))>
         Public Function nrow(x As Object, Optional env As Environment = Nothing) As Object
             If x Is Nothing Then
                 Return 0
@@ -214,6 +216,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("ncol")>
+        <RApiReturn(GetType(Integer))>
         Public Function ncol(x As Object, Optional env As Environment = Nothing) As Object
             If x Is Nothing Then
                 Return 0
@@ -233,6 +236,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="envir"></param>
         ''' <returns></returns>
         <ExportAPI("list")>
+        <RApiReturn(GetType(list))>
         Public Function Rlist(<RListObjectArgument>
                               <RRawVectorArgument>
                               slots As Object,
@@ -285,7 +289,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="x">an object for which test for empty is desired.</param>
         ''' <returns></returns>
         <ExportAPI("is.empty")>
-        Public Function isEmpty(<RRawVectorArgument> x As Object) As Object
+        Public Function isEmpty(<RRawVectorArgument> x As Object) As Boolean
             ' 20191224
             ' 这个函数虽然申明为object类型的返回值，
             ' 实际上为了统一api的申明，在这里返回的都是一个逻辑值
@@ -401,7 +405,7 @@ Namespace Runtime.Internal.Invokes
         ''' </returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <ExportAPI("any")>
-        Public Function any(<RRawVectorArgument> test As Object, Optional narm As Boolean = False) As Object
+        Public Function any(<RRawVectorArgument> test As Object, Optional narm As Boolean = False) As Boolean
             Return Runtime.asLogical(test).Any(Function(b) b = True)
         End Function
 
@@ -430,7 +434,7 @@ Namespace Runtime.Internal.Invokes
         ''' </returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <ExportAPI("all")>
-        Public Function all(<RRawVectorArgument> test As Object, Optional narm As Boolean = False) As Object
+        Public Function all(<RRawVectorArgument> test As Object, Optional narm As Boolean = False) As Boolean
             Return Runtime.asLogical(test).All(Function(b) b = True)
         End Function
 
@@ -463,6 +467,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("getOption")>
+        <RApiReturn(GetType(String))>
         Public Function getOption(name$,
                                   Optional defaultVal$ = Nothing,
                                   Optional envir As Environment = Nothing) As Object
