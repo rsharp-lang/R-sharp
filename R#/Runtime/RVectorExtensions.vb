@@ -105,6 +105,8 @@ Namespace Runtime
                                 Return .GetValue(i)
                             End If
                         Next
+
+                        Return Nothing
                     Else
                         Return .GetValue(Scan0)
                     End If
