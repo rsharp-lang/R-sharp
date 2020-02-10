@@ -131,6 +131,18 @@ Namespace System.Package
                 End If
             Next
 
+            ' find module initializer
+            Dim init As MethodInfo = package _
+                .GetMethods(bindingAttr:=BindingFlags.Public Or BindingFlags.Static) _
+                .Where(Function(m)
+                           Return Not m.GetCustomAttribute(GetType(RInitializeAttribute)) Is Nothing
+                       End Function) _
+                .FirstOrDefault
+
+            If Not init Is Nothing Then
+                Call init.Invoke(Nothing, {})
+            End If
+
             Return masked
         End Function
 

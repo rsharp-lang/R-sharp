@@ -67,6 +67,16 @@ Namespace Runtime.Interop
     End Class
 
     ''' <summary>
+    ''' 如果使用sub new初始化的话，则在导入程序包的时候sub new里面的代码是不会被自动调用的
+    ''' 对sub new构造函数的调用只在发生实际的api调用的时候才会发生
+    ''' 所以才在这里使用这个属性来标记一些需要在导入程序包的时候自动化运行的代码来进行一些初始化操作
+    ''' </summary>
+    <AttributeUsage(AttributeTargets.Method, AllowMultiple:=False, Inherited:=True)>
+    Public Class RInitializeAttribute : Inherits RInteropAttribute
+
+    End Class
+
+    ''' <summary>
     ''' 这个参数是接受``a(x) &lt;- y``操作之中的``y``结果值的
     ''' </summary>
     <AttributeUsage(AttributeTargets.Parameter, AllowMultiple:=False, Inherited:=True)>

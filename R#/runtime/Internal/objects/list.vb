@@ -83,6 +83,10 @@ Namespace Runtime.Internal.Object
             Next
         End Sub
 
+        Public Function hasName(name As String) As Boolean
+            Return slots.ContainsKey(name)
+        End Function
+
         Public Function getNames() As String() Implements RNames.getNames
             Return slots.Keys.ToArray
         End Function

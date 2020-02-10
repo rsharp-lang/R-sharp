@@ -71,7 +71,7 @@ Namespace Interpreter.SyntaxParser
 
         <Extension>
         Private Function simpleSequence(tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim blocks = tokens.SplitByTopLevelDelimiter(TokenType.sequence)
+            Dim blocks = tokens.SplitByTopLevelDelimiter(TokenType.sequence, includeKeyword:=True)
 
             If blocks = 3 Then
                 Return SyntaxImplements.SequenceLiteral(blocks(Scan0), blocks(2), Nothing, opts)

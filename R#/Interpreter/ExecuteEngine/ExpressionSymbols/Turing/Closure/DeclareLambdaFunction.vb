@@ -128,13 +128,25 @@ Namespace Interpreter.ExecuteEngine
         Public Function CreateLambda(Of T, Out)(parent As Environment) As Func(Of T, Out)
             Return Function(x As T) As Out
                        Using envir As New Environment(parent, name)
-                           Return DeclareNewVariable _
+                           Dim result As Object = DeclareNewVariable _
                                .PushNames(names:=parameter.names,
                                           value:=x,
                                           type:=TypeCodes.generic,
                                           envir:=envir
                                ) _
                                .DoCall(AddressOf closure.Evaluate)
+
+                           ' 20200210 对于lambda函数而言，其是运行时创建的函数
+                           ' 返回的值很可能是一个向量
+                           If Not result Is Nothing Then
+                               Dim type As Type = result.GetType
+
+                               If type.IsArray AndAlso type.GetElementType Is GetType(Out) Then
+                                   result = DirectCast(result, Array).GetValue(Scan0)
+                               End If
+                           End If
+
+                           Return result
                        End Using
                    End Function
         End Function

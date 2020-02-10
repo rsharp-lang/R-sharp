@@ -50,6 +50,7 @@ Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime.Internal
 
 <Package("plot.charts")>
@@ -60,7 +61,8 @@ Module plots
         Return RegressionPlot.Plot(lm)
     End Function
 
-    Sub New()
+    <RInitialize>
+    Sub Main()
         Call REnv.generic.add("plot", GetType(DeclareLambdaFunction), AddressOf plot)
     End Sub
 
@@ -71,6 +73,10 @@ Module plots
     ''' <param name="args"></param>
     ''' <returns></returns>
     Public Function plot(math As DeclareLambdaFunction, args As list, env As Environment) As Object
+        If Not args.hasName("x") Then
+            Return REnv.debug.stop("Missing parameter 'x' for plot function!", env)
+        End If
+
         Dim fx As Func(Of Double, Double) = math.CreateLambda(Of Double, Double)(env)
         Dim x As Double() = vector.asVector(Of Double)(args!x)
         Dim points As PointF() = x.Select(Function(xi) New PointF(xi, fx(xi))).ToArray
