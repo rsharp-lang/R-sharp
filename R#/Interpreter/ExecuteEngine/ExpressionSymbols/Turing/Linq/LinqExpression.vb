@@ -44,11 +44,11 @@
 #End Region
 
 Imports Microsoft.VisualBasic.Emit.Delegates
-Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
 Namespace Interpreter.ExecuteEngine.Linq
 
@@ -83,7 +83,7 @@ Namespace Interpreter.ExecuteEngine.Linq
         ''' <summary>
         ''' 排序之类的操作都被转换为了函数调用
         ''' </summary>
-        Dim output As FunctionInvoke()
+        Friend output As FunctionInvoke()
 
         Sub New(locals As IEnumerable(Of DeclareNewVariable),
                 sequence As Expression,
@@ -103,7 +103,7 @@ Namespace Interpreter.ExecuteEngine.Linq
 
             If sequence Is Nothing Then
                 Return {}
-            ElseIf Interpreter.Program.isException(sequence) Then
+            ElseIf RProgram.isException(sequence) Then
                 Return sequence
             ElseIf sequence.GetType Is GetType(list) Then
                 sequence = DirectCast(sequence, list).slots
@@ -128,30 +128,44 @@ Namespace Interpreter.ExecuteEngine.Linq
         End Function
 
         Public Overrides Function Evaluate(parent As Environment) As Object
-            Dim envir As New Environment(parent, "linq_closure")
+            Dim env As New Environment(parent, "linq_closure")
+            Dim isList As Boolean = False
+            ' 20191105
+            ' 序列的产生需要放在变量申明之前
+            ' 否则linq表达式中的与外部环境中的同名变量会导致NULL错误出现
+            Dim source As Object = produceSequenceVector(Me.sequence, env, isList)
+
+            If RProgram.isException(source) Then
+                Return source
+            End If
+
             Dim result As New List(Of LinqOutputUnit)
+
+            For Each unit In populateOutputs(env, source, isList)
+                If RProgram.isException(unit.value) Then
+                    Return unit.value
+                Else
+                    result.Add(unit)
+                End If
+            Next
+
+            Dim output As Object = Me.populateOutput(result)
+
+            Return output
+        End Function
+
+        Private Iterator Function populateOutputs(env As Environment, source As Object, isList As Boolean) As IEnumerable(Of LinqOutputUnit)
             Dim key$
             Dim from As Expression() = locals(Scan0).names _
                 .Select(Function(name)
                             Return New Literal(name)
                         End Function) _
                 .ToArray
-            Dim isList As Boolean = False
-
-            ' 20191105
-            ' 序列的产生需要放在变量申明之前
-            ' 否则linq表达式中的与外部环境中的同名变量会导致NULL错误出现
-            Dim source As Object = produceSequenceVector(Me.sequence, envir, isList)
-
-            If Interpreter.Program.isException(source) Then
-                Return source
-            End If
-
             Dim sequence As Array = DirectCast(source, Array)
-            Dim getSortKey As Expression = output.Where(Function(e) e.funcName = "sort").FirstOrDefault
+            Dim getSortKey = getOutputSort
 
             For Each local As DeclareNewVariable In locals
-                Call local.Evaluate(envir)
+                Call local.Evaluate(env)
             Next
 
             For i As Integer = 0 To sequence.Length - 1
@@ -167,28 +181,20 @@ Namespace Interpreter.ExecuteEngine.Linq
                 End If
 
                 ' from xxx in sequence
-                ValueAssign.doValueAssign(envir, from, False, item)
+                ValueAssign.doValueAssign(env, from, False, item)
                 ' run program
-                item = program.Evaluate(envir)
+                item = program.Evaluate(env)
                 ' if pass the which filter
                 If Not item Is Nothing AndAlso item.GetType Is GetType(ReturnValue) Then
                     Continue For
                 Else
-                    result += New LinqOutputUnit With {
+                    Yield New LinqOutputUnit With {
                         .key = key,
-                        .value = projection.Evaluate(envir),
-                        .sortKey =
+                        .value = projection.Evaluate(env),
+                        .sortKey = If(getSortKey.indexBy Is Nothing, CObj(1), getSortKey.indexBy.Evaluate(env))
                     }
                 End If
             Next
-
-            If output.isEmpty Then
-                Return result
-            Else
-                envir.Push("$", result)
-
-                Return output.Evaluate(envir)
-            End If
         End Function
     End Class
 End Namespace
