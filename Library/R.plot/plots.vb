@@ -81,6 +81,9 @@ Module plots
         Dim x As Double() = vector.asVector(Of Double)(args!x)
         Dim points As PointF() = x.Select(Function(xi) New PointF(xi, fx(xi))).ToArray
 
-        Return points.Plot(size:=InteropArgumentHelper.getSize(args!size).SizeParser)
+        Return points.Plot(
+            size:=InteropArgumentHelper.getSize(args!size).SizeParser,
+            title:=math.ToString
+        )
     End Function
 End Module
