@@ -57,7 +57,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                                 Optional getKey As RFunction = Nothing,
                                 Optional envir As Environment = Nothing) As Object
 
-            If getKey Is Nothing Then
+            If Not getKey Is Nothing Then
                 Return Rset.getObjectSet(items) _
                    .GroupBy(Function(o)
                                 Dim arg = InvokeParameter.Create(o)
