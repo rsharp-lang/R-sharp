@@ -113,6 +113,8 @@ Namespace Interpreter
 
             globalEnvir = New GlobalEnvironment(Me, envirConf)
             globalEnvir.Push(lastVariableName, Nothing, TypeCodes.generic)
+            globalEnvir.Push("PI", Math.PI, TypeCodes.double)
+            globalEnvir.Push("E", Math.E, TypeCodes.double)
 
             ' config R# interpreter engine
             [strict] = envirConf.strict

@@ -121,6 +121,22 @@ Namespace Runtime.Internal.Invokes
             Return Runtime.Core.Power(Of Double, Double, Double)(x, y).ToArray
         End Function
 
+        <ExportAPI("sqrt")>
+        Public Function sqrt(x As Array) As Double()
+            Return Runtime.asVector(Of Double)(x) _
+                .AsObjectEnumerator(Of Double) _
+                .Select(AddressOf stdNum.Sqrt) _
+                .ToArray
+        End Function
+
+        <ExportAPI("exp")>
+        Public Function exp(x As Array) As Double()
+            Return Runtime.asVector(Of Double)(x) _
+                .AsObjectEnumerator(Of Double) _
+                .Select(AddressOf stdNum.Exp) _
+                .ToArray
+        End Function
+
         <ExportAPI("max")>
         Public Function max(x As Array) As Object
             Return Runtime.asVector(Of Double)(x).AsObjectEnumerator(Of Double).Max
