@@ -268,9 +268,28 @@ Namespace Interpreter.ExecuteEngine
                 End If
             End If
 
-            ' invoke internal R# api
-            Dim argVals As InvokeParameter() = InvokeParameter.Create(parameters)
-            Dim result As Object = Internal.invokeInternals(envir, funcName, argVals)
+            Dim result As Object
+
+            If Internal.invoke.getFunction(funcName) Is Nothing AndAlso Internal.generic.exists(funcName) Then
+                Dim x As Object = parameters(Scan0).Evaluate(envir)
+                Dim args As New list With {
+                    .slots = InvokeParameter.Create(parameters.Skip(1)) _
+                        .DoCall(Function(list)
+                                    Return RListObjectArgumentAttribute.getObjectList(list, envir)
+                                End Function) _
+                        .ToDictionary(Function(a) a.Name,
+                                      Function(a)
+                                          Return a.Value
+                                      End Function)
+                }
+
+                result = Internal.generic.invokeGeneric(funcName, x, args)
+            Else
+                ' create argument models
+                Dim argVals As InvokeParameter() = InvokeParameter.Create(parameters)
+                ' and then invoke the specific internal R# api
+                result = Internal.invokeInternals(envir, funcName, argVals)
+            End If
 
             Return result
         End Function

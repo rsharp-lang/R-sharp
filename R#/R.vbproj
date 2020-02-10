@@ -361,6 +361,7 @@
     <Compile Include="Runtime\Internal\internalInvokes\help.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\etc.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\set.vb" />
+    <Compile Include="Runtime\Internal\generic.vb" />
     <Compile Include="Runtime\Internal\objects\pipeline.vb" />
     <Compile Include="Runtime\Internal\objects\reflector.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\strings.vb" />
