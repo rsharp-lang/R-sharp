@@ -152,6 +152,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -231,10 +232,7 @@
       <Project>{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}</Project>
       <Name>47-dotnet_Microsoft.VisualBasic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\R.graphics\R.graphics.vbproj">
-      <Project>{c5c3428c-d64c-4e79-b239-77adc66b1156}</Project>
-      <Name>R.graphics</Name>
-    </ProjectReference>
   </ItemGroup>
+  <Import Project="..\R_graphic.interop\R_graphic.interop.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

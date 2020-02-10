@@ -47,7 +47,6 @@ Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Scripting.MetaData
-Imports R.graphics
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 ''' <summary>

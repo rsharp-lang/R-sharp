@@ -237,7 +237,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="grDevices.vb" />
-    <Compile Include="InteropArgumentHelper.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -295,5 +294,6 @@
       <Name>R</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="..\R_graphic.interop\R_graphic.interop.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
