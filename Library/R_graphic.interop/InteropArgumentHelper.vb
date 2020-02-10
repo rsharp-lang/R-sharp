@@ -49,7 +49,7 @@ Public Module InteropArgumentHelper
 
     End Function
 
-    Public Function getSize(size As Object, Optional default$ = "3300,2700") As String
+    Public Function getSize(size As Object, Optional default$ = "2700,2000") As String
         If size Is Nothing Then
             Return [default]
         End If
