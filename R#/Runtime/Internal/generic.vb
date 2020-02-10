@@ -13,12 +13,12 @@ Namespace Runtime.Internal
     ''' <remarks>
     ''' 可以将这个机制看作为函数重载
     ''' </remarks>
-    Public Delegate Function GenericFunction(x As Object, args As list) As Object
+    Public Delegate Function GenericFunction(x As Object, args As list, env As Environment) As Object
 
     ''' <summary>
     ''' Typped generic function invoke
     ''' </summary>
-    Module generic
+    Public Module generic
 
         ReadOnly generics As New Dictionary(Of String, Dictionary(Of Type, GenericFunction))
 
@@ -34,10 +34,10 @@ Namespace Runtime.Internal
             Return generics.ContainsKey(funcName)
         End Function
 
-        Friend Function invokeGeneric(funcName$, x As Object, args As list) As Object
+        Friend Function invokeGeneric(funcName$, x As Object, args As list, env As Environment) As Object
             Dim type As Type = x.GetType
             Dim apiCalls As GenericFunction = generics(funcName)(type)
-            Dim result As Object = apiCalls(x, args)
+            Dim result As Object = apiCalls(x, args, env)
 
             Return result
         End Function

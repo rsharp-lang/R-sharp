@@ -192,12 +192,12 @@ Namespace Runtime
 
             If valueType Is typeofT Then
                 Return {DirectCast(value, T)}
+            ElseIf valueType Is GetType(T()) Then
+                Return DirectCast(value, T())
             ElseIf valueType.IsInheritsFrom(GetType(Array)) Then
                 Return typeofT.fromArray(Of T)(value)
             ElseIf valueType Is GetType(Group) Then
                 Return typeofT.fromArray(Of T)(DirectCast(value, Group).group)
-            ElseIf valueType Is GetType(T()) Then
-                Return DirectCast(value, T())
             ElseIf valueType.IsInheritsFrom(GetType(IEnumerable(Of T))) Then
                 Return DirectCast(value, IEnumerable(Of T)).ToArray
             Else

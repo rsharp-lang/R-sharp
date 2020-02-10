@@ -98,6 +98,14 @@ Namespace Interpreter.ExecuteEngine
             End If
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="names">The variable names</param>
+        ''' <param name="value">.NET runtime object value.</param>
+        ''' <param name="type"></param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         Friend Shared Function PushNames(names$(), value As Object, type As TypeCodes, envir As Environment) As Environment
             If names.Length = 1 Then
                 Call envir.Push(names(Scan0), value, type)

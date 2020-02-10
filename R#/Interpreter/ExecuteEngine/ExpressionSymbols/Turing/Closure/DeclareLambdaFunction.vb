@@ -125,6 +125,20 @@ Namespace Interpreter.ExecuteEngine
             End Using
         End Function
 
+        Public Function CreateLambda(Of T, Out)(parent As Environment) As Func(Of T, Out)
+            Return Function(x As T) As Out
+                       Using envir As New Environment(parent, name)
+                           Return DeclareNewVariable _
+                               .PushNames(names:=parameter.names,
+                                          value:=x,
+                                          type:=TypeCodes.generic,
+                                          envir:=envir
+                               ) _
+                               .DoCall(AddressOf closure.Evaluate)
+                       End Using
+                   End Function
+        End Function
+
         Public Overrides Function ToString() As String
             Return name
         End Function

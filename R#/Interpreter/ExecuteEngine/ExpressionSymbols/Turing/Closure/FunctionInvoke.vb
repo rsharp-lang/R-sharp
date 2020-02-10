@@ -283,7 +283,7 @@ Namespace Interpreter.ExecuteEngine
                                       End Function)
                 }
 
-                result = Internal.generic.invokeGeneric(funcName, x, args)
+                result = Internal.generic.invokeGeneric(funcName, x, args, envir)
             Else
                 ' create argument models
                 Dim argVals As InvokeParameter() = InvokeParameter.Create(parameters)

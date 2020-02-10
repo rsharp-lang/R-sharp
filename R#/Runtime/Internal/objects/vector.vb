@@ -252,5 +252,9 @@ Namespace Runtime.Internal.Object
         Public Overrides Function ToString() As String
             Return $"[{length}] vec<{type.ToString}>"
         End Function
+
+        Public Shared Function asVector(Of T)(x As Object) As T()
+            Return Runtime.asVector(Of T)(x)
+        End Function
     End Class
 End Namespace
