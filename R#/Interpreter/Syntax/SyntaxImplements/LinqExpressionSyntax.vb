@@ -70,7 +70,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Next
 
             If sequence Is Nothing Then
-                Return New SyntaxResult(New SyntaxErrorException, opts.debug)
+                Return New SyntaxResult("Missing sequence provider!", opts.debug)
             ElseIf sequence.isException Then
                 Return sequence
             Else
@@ -179,7 +179,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 token = buffer.IteratesALL.ToArray
 
                 If Not token(Scan0).isKeyword("by") Then
-                    Return New SyntaxResult(New SyntaxErrorException, opts.debug)
+                    Return New SyntaxResult("Missing 'by' keyword for sort!", opts.debug)
                 End If
 
                 ' skip first by keyword
@@ -201,7 +201,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
             Private Function project(ByRef projection As Expression) As SyntaxResult
                 If Not projection Is Nothing Then
-                    Return New SyntaxResult(New SyntaxErrorException("Only allows one project function!"), opts.debug)
+                    Return New SyntaxResult("Only allows one project function!", opts.debug)
                 End If
 
                 Do While Not p.EndRead AndAlso Not p.Current.isOneOfKeywords(linqKeywordDelimiters)

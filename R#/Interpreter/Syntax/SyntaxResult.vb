@@ -76,6 +76,10 @@ Namespace Interpreter.SyntaxParser
             End If
         End Sub
 
+        Sub New(err$, debug As Boolean)
+            Call Me.New(New SyntaxErrorException(err), debug)
+        End Sub
+
         Public Overrides Function ToString() As String
             If isException Then
                 Return stackTrace
