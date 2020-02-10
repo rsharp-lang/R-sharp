@@ -267,6 +267,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryInExpression.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Linq\LinqOutput.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxBuilderOptions.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\CommandLine.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\DeclareNewFunctionSyntax.vb" />
@@ -306,7 +307,7 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CLI\CommandLine.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Package\Imports.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\LinqExpression.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Linq\LinqExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\UsingClosure.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareLambdaFunction.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\UnaryNot.vb" />

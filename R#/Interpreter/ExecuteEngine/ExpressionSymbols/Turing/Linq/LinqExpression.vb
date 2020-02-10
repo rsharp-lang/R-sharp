@@ -44,12 +44,13 @@
 #End Region
 
 Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
-Namespace Interpreter.ExecuteEngine
+Namespace Interpreter.ExecuteEngine.Linq
 
     ' from x in seq let y = ... where test select projection order by ... asceding distinct 
 
@@ -79,14 +80,22 @@ Namespace Interpreter.ExecuteEngine
         ''' </summary>
         Dim projection As Expression
 
-        Dim output As ClosureExpression
+        ''' <summary>
+        ''' 排序之类的操作都被转换为了函数调用
+        ''' </summary>
+        Dim output As FunctionInvoke()
 
-        Sub New(locals As IEnumerable(Of DeclareNewVariable), sequence As Expression, program As ClosureExpression, projection As Expression, output As ClosureExpression)
+        Sub New(locals As IEnumerable(Of DeclareNewVariable),
+                sequence As Expression,
+                program As ClosureExpression,
+                projection As Expression,
+                output As IEnumerable(Of FunctionInvoke))
+
             Me.locals = locals.ToArray
             Me.sequence = sequence
             Me.program = program
             Me.projection = projection
-            Me.output = output
+            Me.output = output.ToArray
         End Sub
 
         Friend Shared Function produceSequenceVector(seq As Expression, env As Environment, ByRef isList As Boolean) As Object
@@ -120,7 +129,7 @@ Namespace Interpreter.ExecuteEngine
 
         Public Overrides Function Evaluate(parent As Environment) As Object
             Dim envir As New Environment(parent, "linq_closure")
-            Dim result As New Dictionary(Of String, Object)
+            Dim result As New List(Of LinqOutputUnit)
             Dim key$
             Dim from As Expression() = locals(Scan0).names _
                 .Select(Function(name)
@@ -139,6 +148,7 @@ Namespace Interpreter.ExecuteEngine
             End If
 
             Dim sequence As Array = DirectCast(source, Array)
+            Dim getSortKey As Expression = output.Where(Function(e) e.funcName = "sort").FirstOrDefault
 
             For Each local As DeclareNewVariable In locals
                 Call local.Evaluate(envir)
@@ -160,11 +170,15 @@ Namespace Interpreter.ExecuteEngine
                 ValueAssign.doValueAssign(envir, from, False, item)
                 ' run program
                 item = program.Evaluate(envir)
-
+                ' if pass the which filter
                 If Not item Is Nothing AndAlso item.GetType Is GetType(ReturnValue) Then
                     Continue For
                 Else
-                    result.Add(key, projection.Evaluate(envir))
+                    result += New LinqOutputUnit With {
+                        .key = key,
+                        .value = projection.Evaluate(envir),
+                        .sortKey =
+                    }
                 End If
             Next
 
