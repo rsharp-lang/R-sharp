@@ -163,13 +163,15 @@ Namespace Interpreter.ExecuteEngine.Linq
                 .ToArray
             Dim sequence As Array = DirectCast(source, Array)
             Dim getSortKey = getOutputSort
+            Dim item As Object
+            Dim sortKey As Object
 
             For Each local As DeclareNewVariable In locals
                 Call local.Evaluate(env)
             Next
 
             For i As Integer = 0 To sequence.Length - 1
-                Dim item As Object = sequence.GetValue(i)
+                item = sequence.GetValue(i)
 
                 If isList Then
                     With DirectCast(item, KeyValuePair(Of String, Object))
@@ -188,10 +190,16 @@ Namespace Interpreter.ExecuteEngine.Linq
                 If Not item Is Nothing AndAlso item.GetType Is GetType(ReturnValue) Then
                     Continue For
                 Else
+                    If getSortKey.indexBy Is Nothing Then
+                        sortKey = Nothing
+                    Else
+                        sortKey = getSortKey.indexBy.Evaluate(env)
+                    End If
+
                     Yield New LinqOutputUnit With {
                         .key = key,
                         .value = projection.Evaluate(env),
-                        .sortKey = If(getSortKey.indexBy Is Nothing, CObj(1), getSortKey.indexBy.Evaluate(env))
+                        .sortKey = sortKey
                     }
                 End If
             Next
