@@ -38,6 +38,12 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' Performs set intersection
+        ''' </summary>
+        ''' <param name="x">vectors (of the same mode) containing a sequence of items (conceptually) with no duplicated values.</param>
+        ''' <param name="y">vectors (of the same mode) containing a sequence of items (conceptually) with no duplicated values.</param>
+        ''' <returns></returns>
         <ExportAPI("intersect")>
         Public Function intersect(<RRawVectorArgument> x As Object, <RRawVectorArgument> y As Object) As Object
             Dim index_a As New Index(Of Object)(getObjectSet(x))
@@ -49,6 +55,12 @@ Namespace Runtime.Internal.Invokes
             Return inter
         End Function
 
+        ''' <summary>
+        ''' Performs set union
+        ''' </summary>
+        ''' <param name="x">vectors (of the same mode) containing a sequence of items (conceptually) with no duplicated values.</param>
+        ''' <param name="y">vectors (of the same mode) containing a sequence of items (conceptually) with no duplicated values.</param>
+        ''' <returns></returns>
         <ExportAPI("union")>
         Public Function union(<RRawVectorArgument> x As Object, <RRawVectorArgument> y As Object) As Object
             Dim join As Object() = getObjectSet(x) _

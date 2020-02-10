@@ -48,7 +48,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 
 Namespace Interpreter.ExecuteEngine
 
