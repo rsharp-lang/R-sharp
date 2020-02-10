@@ -41,12 +41,17 @@
 
 Imports System.Drawing
 Imports Microsoft.VisualBasic.Imaging
+Imports Microsoft.VisualBasic.Imaging.Drawing2D
 
 Public Module InteropArgumentHelper
 
-    Public Function getSize(size As Object) As String
+    Public Function getPadding(padding$, Optional default$ = g.DefaultPadding) As String
+
+    End Function
+
+    Public Function getSize(size As Object, Optional default$ = "3300,2700") As String
         If size Is Nothing Then
-            Return Nothing
+            Return [default]
         End If
 
         Select Case size.GetType
@@ -67,7 +72,7 @@ Public Module InteropArgumentHelper
                     Return $"{ .GetValue(0)},{ .GetValue(1)}"
                 End With
             Case Else
-                Return Nothing
+                Return [default]
         End Select
     End Function
 
