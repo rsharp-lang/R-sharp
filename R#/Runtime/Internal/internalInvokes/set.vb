@@ -27,6 +27,7 @@ Namespace Runtime.Internal.Invokes
             If type Is GetType(vector) Then
                 Return DirectCast(x, vector).data.AsObjectEnumerator
             ElseIf type Is GetType(list) Then
+                ' list value as sequence data
                 Return DirectCast(x, list).slots.Values.AsEnumerable
             ElseIf type.ImplementInterface(GetType(IDictionary(Of String, Object))) Then
                 Return DirectCast(x, IDictionary(Of String, Object)).Values.AsEnumerable

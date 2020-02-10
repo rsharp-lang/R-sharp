@@ -48,7 +48,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes
 
 Namespace Interpreter.ExecuteEngine
 
@@ -141,16 +141,7 @@ Namespace Interpreter.ExecuteEngine
 
         Private Function getSequence(env As Environment) As IEnumerable(Of Object)
             Dim rawSeq As Object = sequence.Evaluate(env)
-            Dim data As IEnumerable(Of Object)
-
-            If rawSeq Is Nothing Then
-                Return {}
-            ElseIf rawSeq.GetType Is GetType(list) Then
-                ' list value as sequence data
-                data = DirectCast(rawSeq, list).slots.Values.AsEnumerable
-            Else
-                data = Runtime.asVector(Of Object)(rawSeq).AsObjectEnumerator
-            End If
+            Dim data As IEnumerable(Of Object) = [Rset].getObjectSet(rawSeq)
 
             Return data
         End Function
