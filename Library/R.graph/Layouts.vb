@@ -45,7 +45,6 @@ Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.Data.visualize.Network.Layouts
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
-Imports R.graphics
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 <Package("igraph.layouts")>
