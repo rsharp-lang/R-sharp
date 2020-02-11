@@ -48,7 +48,7 @@ Imports stdNum = System.Math
 Namespace Runtime.Internal.Invokes
 
     ''' <summary>
-    ''' 
+    ''' R# math module
     ''' </summary>
     Module math
 
@@ -94,8 +94,15 @@ Namespace Runtime.Internal.Invokes
                 .ToArray
         End Function
 
+        ''' <summary>
+        ''' #### Sum of Vector Elements
+        ''' 
+        ''' sum returns the sum of all the values present in its arguments.
+        ''' </summary>
+        ''' <param name="x">numeric or complex or logical vectors.</param>
+        ''' <returns></returns>
         <ExportAPI("sum")>
-        Public Function sum(<RRawVectorArgument> x As Object) As Double
+        Public Function sum(<RRawVectorArgument> x As Object, Optional narm As Boolean = False) As Double
             If x Is Nothing Then
                 Return 0
             End If
@@ -129,6 +136,13 @@ Namespace Runtime.Internal.Invokes
                 .ToArray
         End Function
 
+        ''' <summary>
+        ''' #### Logarithms and Exponentials
+        ''' 
+        ''' computes the exponential function.
+        ''' </summary>
+        ''' <param name="x">a numeric or complex vector.</param>
+        ''' <returns></returns>
         <ExportAPI("exp")>
         Public Function exp(x As Array) As Double()
             Return Runtime.asVector(Of Double)(x) _

@@ -43,10 +43,22 @@ Imports System.Drawing
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
 
+''' <summary>
+''' R# graphics argument scripting helper
+''' </summary>
 Public Module InteropArgumentHelper
 
-    Public Function getPadding(padding$, Optional default$ = g.DefaultPadding) As String
+    Public Function getPadding(padding As Object, Optional default$ = g.DefaultPadding) As String
+        If padding Is Nothing Then
+            Return [default]
+        End If
 
+        Select Case padding.GetType
+            Case GetType(String)
+                Return padding
+            Case Else
+                Return [default]
+        End Select
     End Function
 
     Public Function getSize(size As Object, Optional default$ = "2700,2000") As String
