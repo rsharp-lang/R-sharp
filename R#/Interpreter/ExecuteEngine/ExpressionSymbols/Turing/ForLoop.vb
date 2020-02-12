@@ -43,11 +43,13 @@
 
 #End Region
 
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 
 Namespace Interpreter.ExecuteEngine
@@ -56,6 +58,7 @@ Namespace Interpreter.ExecuteEngine
     ''' 在R语言之中，只有for each循环
     ''' </summary>
     Public Class ForLoop : Inherits Expression
+        Implements IRuntimeTrace
 
         ''' <summary>
         ''' 单个变量或者tuple的时候为多个变量
@@ -82,11 +85,14 @@ Namespace Interpreter.ExecuteEngine
             End Get
         End Property
 
-        Sub New(variables$(), sequence As Expression, body As DeclareNewFunction, parallel As Boolean)
+        Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
+
+        Sub New(variables$(), sequence As Expression, body As DeclareNewFunction, parallel As Boolean, stackframe As StackFrame)
             Me.variables = variables
             Me.sequence = sequence
             Me.body = body
             Me.parallel = parallel
+            Me.stackFrame = stackframe
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
@@ -121,18 +127,20 @@ Namespace Interpreter.ExecuteEngine
             Dim result As IEnumerable(Of Object) = getSequence(envir) _
                 .AsParallel _
                 .Select(Function(value, i)
-                            Return RunLoop(value, i, envir)
+                            Dim stackframe As New StackFrame(Me.stackFrame)
+                            stackframe.Method.Method = $"parallel_for_loop_[{i}]"
+                            Return RunLoop(value, stackframe, envir)
                         End Function)
 
             Return result
         End Function
 
-        Private Function RunLoop(value As Object, loopTag$, env As Environment) As Object
+        Private Function RunLoop(value As Object, stackframe As StackFrame, env As Environment) As Object
             Using closure As Environment = DeclareNewVariable.PushNames(
                     names:=variables,
                     value:=value,
                     type:=TypeCodes.generic,
-                    envir:=New Environment(env, $"for__[{loopTag}]")
+                    envir:=New Environment(env, stackframe)
                 )
 
                 Return body.Invoke(closure, {})
@@ -148,9 +156,13 @@ Namespace Interpreter.ExecuteEngine
 
         Private Iterator Function exec(envir As Environment) As IEnumerable(Of Object)
             Dim i As i32 = 1
+            Dim stackframe As New StackFrame(Me.stackFrame)
 
             For Each value As Object In getSequence(envir)
-                Yield RunLoop(value, ++i, envir)
+                stackframe.Method.Method = $"for_loop_[{++i}]"
+                value = RunLoop(value, stackframe, envir)
+
+                Yield value
             Next
         End Function
     End Class

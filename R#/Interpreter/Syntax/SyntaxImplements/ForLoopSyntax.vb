@@ -45,6 +45,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 
 Namespace Interpreter.SyntaxParser.SyntaxImplements
 
@@ -96,8 +97,18 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 funcName:="forloop_internal",
                 params:={}
             )
+            Dim stackframe As New StackFrame With {
+                .File = opts.source.ToString,
+                .Line = blocks.First(Scan0).span.line,
+                .Method = New Method With {
+                    .Method = "forloop",
+                    .[Module] = "forloop",
+                    .[Namespace] = "SMRUCC/R#"
+                }
+            }
+            Dim [for] As New ForLoop(variables, sequence.expression, body, parallel, stackframe)
 
-            Return New SyntaxResult(New ForLoop(variables, sequence.expression, body, parallel))
+            Return New SyntaxResult([for])
         End Function
 
         Private Function ParseLoopBody(tokens As Token(), ByRef isParallel As Boolean, opts As SyntaxBuilderOptions) As SyntaxResult
