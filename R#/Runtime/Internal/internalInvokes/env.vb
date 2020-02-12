@@ -263,5 +263,10 @@ Namespace Runtime.Internal.Invokes
         Public Function CallInternal(call$, args As Object, envir As Environment) As Object
             Return Internal.stop(New NotImplementedException("Call internal functions"), envir)
         End Function
+
+        <ExportAPI("traceback")>
+        Public Function traceback() As Object
+
+        End Function
     End Module
 End Namespace

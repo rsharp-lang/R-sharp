@@ -199,7 +199,7 @@ Namespace Interpreter
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function CreateProgram(Rscript As Rscript, Optional debug As Boolean = False) As Program
             Dim exec As Expression() = Rscript _
-                .GetExpressions(New SyntaxBuilderOptions With {.debug = debug}) _
+                .GetExpressions(New SyntaxBuilderOptions With {.debug = debug, .source = Rscript}) _
                 .ToArray
 
             Return New Program With {
