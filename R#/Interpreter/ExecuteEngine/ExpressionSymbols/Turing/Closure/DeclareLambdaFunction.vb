@@ -1,48 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::80c567895c2c15084d361d5e7574f130, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareLambdaFunction.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class DeclareLambdaFunction
-    ' 
-    '         Properties: name, type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, GetPrintContent, Invoke, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class DeclareLambdaFunction
+' 
+'         Properties: name, type
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate, GetPrintContent, Invoke, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -61,6 +62,7 @@ Namespace Interpreter.ExecuteEngine
     Public Class DeclareLambdaFunction : Inherits Expression
         Implements RFunction
         Implements RPrint
+        Implements IRuntimeTrace
 
         Public Overrides ReadOnly Property type As TypeCodes
             Get
@@ -69,14 +71,16 @@ Namespace Interpreter.ExecuteEngine
         End Property
 
         Public ReadOnly Property name As String Implements RFunction.name
+        Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
 
         Dim parameter As DeclareNewVariable
         Dim closure As Expression
 
-        Sub New(name$, parameter As DeclareNewVariable, closure As Expression)
+        Sub New(name$, parameter As DeclareNewVariable, closure As Expression, stackframe As StackFrame)
             Me.name = name
             Me.parameter = parameter
             Me.closure = closure
+            Me.stackFrame = stackframe
         End Sub
 
         ''' <summary>
@@ -89,7 +93,7 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Public Function Invoke(parent As Environment, arguments() As InvokeParameter) As Object Implements RFunction.Invoke
-            Using envir As New Environment(parent, name)
+            Using envir As New Environment(parent, stackFrame)
                 If parameter.names.Length = 0 Then
                     ' lambda function with no parameter
                     Return closure.Evaluate(envir)
@@ -127,7 +131,7 @@ Namespace Interpreter.ExecuteEngine
 
         Public Function CreateLambda(Of T, Out)(parent As Environment) As Func(Of T, Out)
             Return Function(x As T) As Out
-                       Using envir As New Environment(parent, name)
+                       Using envir As New Environment(parent, stackFrame)
                            Dim result As Object = DeclareNewVariable _
                                .PushNames(names:=parameter.names,
                                           value:=x,

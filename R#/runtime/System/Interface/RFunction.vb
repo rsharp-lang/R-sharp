@@ -44,6 +44,7 @@
 
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 
 Namespace Runtime.Components.Interface
 
@@ -68,6 +69,12 @@ Namespace Runtime.Components.Interface
         ''' <param name="arguments"></param>
         ''' <returns></returns>
         Function Invoke(envir As Environment, arguments As InvokeParameter()) As Object
+
+    End Interface
+
+    Public Interface IRuntimeTrace
+
+        ReadOnly Property stackFrame As StackFrame
 
     End Interface
 End Namespace

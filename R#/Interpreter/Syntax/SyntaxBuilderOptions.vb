@@ -58,7 +58,7 @@ Namespace Interpreter.SyntaxParser
                 .Method = New Method With {
                     .Method = token.text,
                     .[Module] = "n/a",
-                    .[Namespace] = "R#"
+                    .[Namespace] = "SMRUCC/R#"
                 }
             }
         End Function

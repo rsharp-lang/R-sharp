@@ -50,6 +50,7 @@
 Imports System.IO
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -229,13 +230,29 @@ Namespace Interpreter
             Return finalizeResult(program.Execute(globalEnvir))
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="source">The script file name</param>
+        ''' <param name="arguments"></param>
+        ''' <returns></returns>
         Private Function InitializeEnvironment(source$, arguments As NamedValue(Of Object)()) As Environment
             Dim envir As Environment
 
             If source Is Nothing Then
                 envir = globalEnvir
             Else
-                envir = New Environment(globalEnvir, source)
+                envir = New StackFrame With {
+                    .File = source,
+                    .Line = 0,
+                    .Method = New Method With {
+                        .Method = MethodBase.GetCurrentMethod.Name,
+                        .[Module] = "n/a",
+                        .[Namespace] = "SMRUCC/R#"
+                    }
+                }.DoCall(Function(stackframe)
+                             Return New Environment(globalEnvir, stackframe)
+                         End Function)
             End If
 
             For Each var As NamedValue(Of Object) In arguments

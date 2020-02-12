@@ -13,7 +13,7 @@ Namespace Runtime
                     .Method = New Method With {
                         .Method = "%global%",
                         .[Module] = "global",
-                        .[Namespace] = "R#"
+                        .[Namespace] = "SMRUCC/R#"
                     }
                 }
             End Get
