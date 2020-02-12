@@ -379,6 +379,7 @@
     <Compile Include="Runtime\Interop\RInteropAttributes\RSuppressPrintAttribute.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RListObjectArgumentAttribute.vb" />
     <Compile Include="Runtime\Interop\RReturn.vb" />
+    <Compile Include="Runtime\EnvironmentExtensions.vb" />
     <Compile Include="Runtime\RTypeExtensions.vb" />
     <Compile Include="System\Config\Defaults.vb" />
     <Compile Include="Runtime\System\Rscript.vb" />

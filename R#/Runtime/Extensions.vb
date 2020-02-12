@@ -65,19 +65,5 @@ Namespace Runtime
 
             Return GetType(Void)
         End Function
-
-        ''' <summary>
-        ''' 
-        ''' </summary>
-        ''' <param name="func$"></param>
-        ''' <param name="script$"></param>
-        ''' <param name="line%"></param>
-        ''' <returns></returns>
-        ''' <remarks>
-        ''' How to keeps the script path reference?
-        ''' </remarks>
-        Public Function ClosureStackName(func$, script$, line%) As String
-            Return $"<{script.FileName}#{line}::{func}()>"
-        End Function
     End Module
 End Namespace

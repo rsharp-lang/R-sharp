@@ -731,11 +731,7 @@ Namespace Runtime.Internal.Invokes
             Dim frames As New List(Of StackFrame)
 
             Do While Not parent Is Nothing
-                frames += New StackFrame With {
-                    .Method = New Method With {
-                        .Method = parent.stackTag
-                    }
-                }
+                frames += parent.stackFrame
                 parent = parent.parent
             Loop
 

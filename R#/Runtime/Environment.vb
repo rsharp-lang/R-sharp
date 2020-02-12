@@ -49,6 +49,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
@@ -75,7 +76,7 @@ Namespace Runtime
         ''' The name of this current stack closure.(R function name, closure id, etc)
         ''' </summary>
         ''' <returns></returns>
-        Public ReadOnly Property stackTag As String
+        Public ReadOnly Property stackFrame As StackFrame
         Public ReadOnly Property variables As Dictionary(Of Variable)
         Public ReadOnly Property types As Dictionary(Of String, RType)
         ''' <summary>
@@ -158,14 +159,14 @@ Namespace Runtime
             types = New Dictionary(Of String, RType)
             parent = Nothing
             [global] = Nothing
-            stackTag = "<globalEnvironment>"
+            stackFrame = globalStackFrame
         End Sub
 
-        Sub New(parent As Environment, stackTag$)
+        Sub New(parent As Environment, stackFrame As StackFrame)
             Call Me.New()
 
             Me.parent = parent
-            Me.stackTag = stackTag
+            Me.stackFrame = stackFrame
             Me.global = parent.globalEnvironment
         End Sub
 
@@ -174,7 +175,7 @@ Namespace Runtime
 
             Me.parent = globalEnv
             Me.global = globalEnv
-            Me.stackTag = "<globalEnvironment>"
+            Me.stackFrame = globalStackFrame
         End Sub
 
         Public Sub AddMessage(message As Object, Optional level As MSG_TYPES = MSG_TYPES.WRN)
@@ -289,7 +290,7 @@ Namespace Runtime
             If isGlobal Then
                 Return $"Global({NameOf(Environment)})"
             Else
-                Return parent?.ToString & " :> " & stackTag
+                Return GetEnvironmentStackTraceString
             End If
         End Function
 
