@@ -41,6 +41,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Emit.Marshal
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -93,11 +94,27 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Dim p As New Pointer(Of Token())(tokens)
             Dim parser As New LinqSyntaxParser(p, opts)
             Dim [error] As SyntaxResult = parser.doParseLINQProgram(locals, projection, output, program)
+            Dim stackframe As New StackFrame With {
+                .File = opts.source.ToString,
+                .Line = tokens.First()(Scan0).span.line,
+                .Method = New Method With {
+                    .Method = "linq_closure",
+                    .[Module] = "linq_closure",
+                    .[Namespace] = "SMRUCC/R#"
+                }
+            }
 
             If Not [error] Is Nothing AndAlso [error].isException Then
                 Return [error]
             Else
-                Return New LinqExpression(locals, sequence.expression, program, projection, output)
+                Return New LinqExpression(
+                    locals:=locals,
+                    sequence:=sequence.expression,
+                    program:=program,
+                    projection:=projection,
+                    output:=output,
+                    stackframe:=stackframe
+                )
             End If
         End Function
 

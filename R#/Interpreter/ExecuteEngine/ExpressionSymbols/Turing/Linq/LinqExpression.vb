@@ -43,10 +43,12 @@
 
 #End Region
 
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
@@ -55,12 +57,15 @@ Namespace Interpreter.ExecuteEngine.Linq
     ' from x in seq let y = ... where test select projection order by ... asceding distinct 
 
     Public Class LinqExpression : Inherits Expression
+        Implements IRuntimeTrace
 
         Public Overrides ReadOnly Property type As TypeCodes
             Get
                 Return sequence.type
             End Get
         End Property
+
+        Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
 
         ''' <summary>
         ''' in
@@ -89,13 +94,15 @@ Namespace Interpreter.ExecuteEngine.Linq
                 sequence As Expression,
                 program As ClosureExpression,
                 projection As Expression,
-                output As IEnumerable(Of FunctionInvoke))
+                output As IEnumerable(Of FunctionInvoke),
+                stackframe As StackFrame)
 
             Me.locals = locals.ToArray
             Me.sequence = sequence
             Me.program = program
             Me.projection = projection
             Me.output = output.ToArray
+            Me.stackFrame = stackframe
         End Sub
 
         Friend Shared Function produceSequenceVector(seq As Expression, env As Environment, ByRef isList As Boolean) As Object
@@ -128,7 +135,7 @@ Namespace Interpreter.ExecuteEngine.Linq
         End Function
 
         Public Overrides Function Evaluate(parent As Environment) As Object
-            Dim env As New Environment(parent, "linq_closure")
+            Dim env As New Environment(parent, stackFrame)
             Dim isList As Boolean = False
             ' 20191105
             ' 序列的产生需要放在变量申明之前
