@@ -182,7 +182,13 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 ' 即执行trueclosure部分
                 ' 或者添加一个else closure
                 Dim booleanExp As New BinaryExpression(exprSyntax.expression, Literal.FALSE, "==")
-                program += New IfBranch(booleanExp, {New ReturnValue(Literal.NULL)})
+                Dim stackframe As StackFrame = opts.GetStackTrace(buffer.First(Scan0))
+
+                program += New IfBranch(
+                    ifTest:=booleanExp,
+                    trueClosure:={New ReturnValue(Literal.NULL)},
+                    stackframe:=stackframe
+                )
 
                 Return Nothing
             End Function

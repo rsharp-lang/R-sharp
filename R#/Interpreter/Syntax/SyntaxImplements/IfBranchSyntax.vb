@@ -1,45 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::59c10b310f419ca4007817a2dc7bb265, R#\Interpreter\Syntax\SyntaxImplements\IfBranchSyntax.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module IfBranchSyntax
-    ' 
-    '         Function: ElseBranch, ElseIfBranch, IfBranch, IIfExpression
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module IfBranchSyntax
+' 
+'         Function: ElseBranch, ElseIfBranch, IfBranch, IIfExpression
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Language
@@ -87,7 +88,14 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 Return closureInternal
             End If
 
-            Return New SyntaxResult(New IfBranch(ifTest.expression, closureInternal.expression))
+            Dim stackframe As StackFrame = opts.GetStackTrace(blocks(Scan0)(Scan0))
+            Dim [if] As New IfBranch(
+                ifTest:=ifTest.expression,
+                trueClosure:=closureInternal.expression,
+                stackframe:=stackframe
+            )
+
+            Return New SyntaxResult([if])
         End Function
 
         Public Function ElseIfBranch(tokens As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult
@@ -97,7 +105,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 Return [if]
             Else
                 With DirectCast([if].expression, IfBranch)
-                    Return New ElseIfBranch(.ifTest, .trueClosure.body)
+                    Return New ElseIfBranch(.ifTest, .trueClosure.body, .stackFrame)
                 End With
             End If
         End Function
@@ -109,11 +117,12 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 .DoCall(Function(tokens)
                             Return SyntaxImplements.ClosureExpression(tokens, opts)
                         End Function)
+            Dim stackframe As StackFrame = opts.GetStackTrace(code(Scan0))
 
             If syntaxResult.isException Then
                 Return syntaxResult
             Else
-                Return New ElseBranch(syntaxResult.expression)
+                Return New ElseBranch(syntaxResult.expression, stackframe)
             End If
         End Function
     End Module

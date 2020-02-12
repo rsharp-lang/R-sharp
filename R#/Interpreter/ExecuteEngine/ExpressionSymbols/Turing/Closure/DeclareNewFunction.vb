@@ -1,48 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::759543302a47e87ab40a67de087b05de, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewFunction.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class DeclareNewFunction
-    ' 
-    '         Properties: funcName, type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, Invoke, MissingParameters, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class DeclareNewFunction
+' 
+'         Properties: funcName, type
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate, Invoke, MissingParameters, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
@@ -61,6 +62,7 @@ Namespace Interpreter.ExecuteEngine
     ''' </summary>
     Public Class DeclareNewFunction : Inherits Expression
         Implements RFunction
+        Implements IRuntimeTrace
 
         Public Overrides ReadOnly Property type As TypeCodes
             Get
@@ -69,6 +71,7 @@ Namespace Interpreter.ExecuteEngine
         End Property
 
         Public ReadOnly Property funcName As String Implements RFunction.name
+        Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
 
         Friend ReadOnly params As DeclareNewVariable()
         Friend ReadOnly body As ClosureExpression
@@ -77,10 +80,11 @@ Namespace Interpreter.ExecuteEngine
         ''' </summary>
         Friend envir As Environment
 
-        Sub New(funcName$, params As DeclareNewVariable(), body As ClosureExpression)
+        Sub New(funcName$, params As DeclareNewVariable(), body As ClosureExpression, stackframe As StackFrame)
             Me.funcName = funcName
             Me.params = params
             Me.body = body
+            Me.stackFrame = stackframe
         End Sub
 
         Friend Shared Function MissingParameters(var As DeclareNewVariable, funcName$, envir As Environment) As Object
@@ -103,7 +107,7 @@ Namespace Interpreter.ExecuteEngine
             If envir Is Nothing Then
                 envir = parent
             Else
-                envir = New Environment(parent, Me.funcName)
+                envir = New Environment(parent, stackFrame)
             End If
 
             Dim argumentKeys As String()
@@ -167,7 +171,7 @@ Namespace Interpreter.ExecuteEngine
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim result = envir.Push(funcName, Me, TypeCodes.closure)
-            Me.envir = New Environment(envir, funcName)
+            Me.envir = New Environment(envir, stackFrame)
             Return result
         End Function
 

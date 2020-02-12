@@ -92,11 +92,6 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 Return loopBody
             End If
 
-            Dim body As New DeclareNewFunction(
-                body:=loopBody.expression,
-                funcName:="forloop_internal",
-                params:={}
-            )
             Dim stackframe As New StackFrame With {
                 .File = opts.source.ToString,
                 .Line = blocks.First(Scan0).span.line,
@@ -106,6 +101,12 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     .[Namespace] = "SMRUCC/R#"
                 }
             }
+            Dim body As New DeclareNewFunction(
+                body:=loopBody.expression,
+                funcName:="forloop_internal",
+                params:={},
+                stackframe:=stackframe
+            )
             Dim [for] As New ForLoop(variables, sequence.expression, body, parallel, stackframe)
 
             Return New SyntaxResult([for])
