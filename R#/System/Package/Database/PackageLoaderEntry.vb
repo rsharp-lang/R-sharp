@@ -1,0 +1,153 @@
+﻿#Region "Microsoft.VisualBasic::11d8bb5f70dbcf289cd1f33877c5fc9a, R#\System\Package\Database\PackageLoaderEntry.vb"
+
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+
+    ' /********************************************************************************/
+
+    ' Summaries:
+
+    '     Class PackageLoaderEntry
+    ' 
+    '         Properties: [module], [namespace], category, cites, description
+    '                     publisher, revision, url
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    '         Function: FromLoaderInfo, GetLoader, ToString
+    ' 
+    ' 
+    ' /********************************************************************************/
+
+#End Region
+
+Imports System.Runtime.CompilerServices
+Imports System.Xml.Serialization
+Imports Microsoft.VisualBasic.Scripting.MetaData
+
+Namespace System.Package
+
+    <XmlType("package")>
+    Public Class PackageLoaderEntry
+
+        ''' <summary>
+        ''' Package name
+        ''' </summary>
+        ''' <returns></returns>
+        <XmlAttribute>
+        Public Property [namespace] As String
+
+        ''' <summary>
+        ''' Package summary information
+        ''' </summary>
+        ''' <returns></returns>
+        <XmlText>
+        Public Property description As String
+
+        ''' <summary>
+        ''' This plugins project's home page url.
+        ''' </summary>
+        ''' <returns></returns>
+        ''' 
+        <XmlAttribute>
+        Public Property url As String
+
+        ''' <summary>
+        ''' Your name or E-Mail
+        ''' </summary>
+        ''' <returns></returns>
+        ''' 
+        <XmlElement>
+        Public Property publisher As String
+
+        <XmlAttribute>
+        Public Property revision As Integer
+
+        ''' <summary>
+        ''' 这个脚本模块包的文献引用列表
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property cites As String
+
+        <XmlAttribute>
+        Public Property category As APICategories = APICategories.SoftwareTools
+
+        ''' <summary>
+        ''' The package loader entry information
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property [module] As TypeInfo
+
+        Sub New()
+        End Sub
+
+        ''' <summary>
+        ''' Get package loading entry information
+        ''' </summary>
+        ''' <param name="exception"></param>
+        ''' <returns></returns>
+        Public Function GetLoader(ByRef exception As Exception) As Package
+            Dim loader As Type = [module].GetType(
+                knownFirst:=False,
+                throwEx:=False,
+                getException:=exception,
+                searchPath:={$"{App.HOME}/Library"}
+            )
+            Dim info As New PackageAttribute([namespace]) With {
+                .Category = category,
+                .Cites = cites,
+                .Description = description,
+                .Publisher = publisher,
+                .Revision = revision,
+                .Url = url
+            }
+
+            If loader Is Nothing Then
+                Return Nothing
+            Else
+                Return New Package(info, package:=loader)
+            End If
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return [namespace]
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Shared Function FromLoaderInfo(info As Package) As PackageLoaderEntry
+            Return New PackageLoaderEntry With {
+                .category = info.info.Category,
+                .cites = info.info.Cites,
+                .description = info.info.Description,
+                .[module] = New TypeInfo(info.package),
+                .[namespace] = info.info.Namespace,
+                .publisher = info.info.Publisher,
+                .revision = info.info.Revision,
+                .url = info.info.Url
+            }
+        End Function
+    End Class
+End Namespace

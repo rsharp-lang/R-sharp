@@ -1,0 +1,37 @@
+{
+    "name": "Rsharp-language",
+    "displayName": "R# GCModeller Scripting Language",
+    "description": "Support for R# GCModeller Scripting Language",
+    "version": "0.0.1",
+	"author": "xieguigang",
+	"license": "MIT",
+	"publisher": "xieguigang",
+    "engines": {
+        "vscode": "^1.41.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+	"keywords": [
+		"R",
+		"R#",
+		"GCModeller"
+	],
+	"activationEvents": [
+		"onLanguage:r",
+		"workspaceContains:*.r"
+	],
+    "contributes": {
+        "languages": [{
+            "id": "r-sharp",
+            "aliases": ["R# GCModeller Scripting Language", "r-sharp"],
+            "extensions": [".r"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "r-sharp",
+            "scopeName": "main.r",
+            "path": "./syntaxes/r-sharp.tmLanguage.json"
+        }]
+    }
+}
