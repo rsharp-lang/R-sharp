@@ -44,6 +44,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 
 Namespace Interpreter.SyntaxParser.SyntaxImplements
 
@@ -73,7 +74,22 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             If paramsSyntax.isException Then
                 Return paramsSyntax
             Else
-                Return New UsingClosure(paramsSyntax.expression, closureSyntax.expression)
+                Dim stackframe As New StackFrame With {
+                    .File = opts.source.ToString,
+                    .Line = parmPart(Scan0).span.line,
+                    .Method = New Method With {
+                        .Method = $"using({tokens(Scan0).Select(Function(t) t.text).JoinBy(" ")})",
+                        .[Module] = "using_closure",
+                        .[Namespace] = "SMRUCC/R#"
+                    }
+                }
+                Dim [using] As New UsingClosure(
+                    params:=paramsSyntax.expression,
+                    closure:=closureSyntax.expression,
+                    stackframe:=stackframe
+                )
+
+                Return New SyntaxResult([using])
             End If
         End Function
     End Module
