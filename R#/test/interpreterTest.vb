@@ -72,6 +72,7 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+        Call exceptionHandler()
         Call StackTest()
 
         Call listoperationtest()
@@ -151,9 +152,6 @@ Module interpreterTest
         Call testScript()
 
         Call symbolNotFoundTest()
-
-
-        Call exceptionHandler()
 
         Call branchTest()
         Call forLoopTest()
@@ -701,31 +699,46 @@ print(true);
     End Sub
 
     Sub StackTest()
+
+        R.debug = False
+
         Call R.Evaluate("
+
 
 let internal as function() {
 
     let innerPrivate as function() {
         print('This function could not be invoked by code outside the [internal] closure stack!');
+
     }
 
     print('declare a new function inside the [internal] closure stack.');
     print(innerPrivate);
+
+   innerPrivate();
 }
 
 internal();
 
-# innerPrivate();
+innerPrivate();
 
 ")
 
-        Call R.Evaluate("traceback()")
+
 
         Pause()
     End Sub
 
     Sub exceptionHandler()
-        Call R.Evaluate("
+        Call R.Evaluate("   #1
+let err as function(message) {#2
+#3
+    let internal_createHelper as function() {#4
+ stop('demo to create stackframe data.' << message); #5
+   }#6
+  #7
+internal_createHelper(); #8
+}
 
 let tryStop as function(message = 'default exception message') {
 
@@ -737,7 +750,7 @@ let tryStop as function(message = 'default exception message') {
             for(i in [110,20,50,11,9,6]) {
 
                 if (i <= 10) {
-                    stop(message);
+                    err(message);
                 } else {
                        print(`value of i=${  i}...`);
                 }
@@ -756,6 +769,7 @@ let tryStop as function(message = 'default exception message') {
 # tryStop();
 tryStop(['This','is','an','exception', 'test']);
 ")
+        Call R.Evaluate("print(traceback())")
 
         Pause()
     End Sub

@@ -266,13 +266,17 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("traceback")>
-        Public Function traceback(Optional env As Environment = Nothing) As StackFrame()
+        Public Function traceback(Optional env As Environment = Nothing) As ExceptionData
             Dim exception As Message = env.globalEnvironment.lastException
 
             If exception Is Nothing Then
                 Return Nothing
             Else
-                Return exception.environmentStack
+                Return New ExceptionData With {
+                    .StackTrace = exception.environmentStack,
+                    .Message = exception.message,
+                    .TypeFullName = GetType(Message).FullName
+                }
             End If
         End Function
     End Module

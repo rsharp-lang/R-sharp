@@ -11,7 +11,7 @@ Namespace Runtime
                     .File = "<globalEnvironment>",
                     .Line = "n/a",
                     .Method = New Method With {
-                        .Method = "%global%",
+                        .Method = "<globalEnvironment>",
                         .[Module] = "global",
                         .[Namespace] = "SMRUCC/R#"
                     }
