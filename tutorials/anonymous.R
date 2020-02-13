@@ -10,3 +10,10 @@ print(as.data.frame(traceback()));
 	});
 
 
+let a <- function(x) {
+	call(x);
+}
+
+a(function() {
+     print(traceback());
+})
