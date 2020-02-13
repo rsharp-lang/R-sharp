@@ -16,4 +16,6 @@ let a <- function(x) {
 
 a(function() {
      print(traceback());
-})
+});
+
+print(a);
