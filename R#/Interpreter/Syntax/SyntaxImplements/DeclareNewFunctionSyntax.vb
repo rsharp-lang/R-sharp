@@ -88,7 +88,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
             Dim funcName As String = code(1)(Scan0).text
             Dim params As New List(Of DeclareNewVariable)
-            Dim err As SyntaxResult = getParameters(paramPart, params)
+            Dim err As SyntaxResult = getParameters(paramPart, params, opts)
 
             If err IsNot Nothing AndAlso err.isException Then
                 Return err
@@ -113,14 +113,24 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             End If
         End Function
 
-        Private Function getParameters(tokens As Token(), ByRef params As List(Of DeclareNewVariable)) As SyntaxResult
+        Private Function getParameters(tokens As Token(), ByRef params As List(Of DeclareNewVariable), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim parts As Token()() = tokens.SplitByTopLevelDelimiter(TokenType.comma) _
                 .Where(Function(t) Not t.isComma) _
                 .ToArray
 
             For Each syntaxTemp As SyntaxResult In parts _
                 .Select(Function(t)
-                            Return SyntaxImplements.DeclareNewVariable(t)
+                            ' param
+                            ' param = value
+                            Dim syntaxParts = t.SplitByTopLevelDelimiter(TokenType.operator, False, "=")
+
+                            If syntaxParts = 1 Then
+                                Return SyntaxImplements.DeclareNewVariable(t)
+                            ElseIf syntaxParts = 3 Then
+                                Return SyntaxImplements.DeclareNewVariable(syntaxParts(0), syntaxParts(2), opts)
+                            Else
+                                Return New SyntaxResult("syntax error on declare function parameters!", opts.debug)
+                            End If
                         End Function)
 
                 If syntaxTemp.isException Then
