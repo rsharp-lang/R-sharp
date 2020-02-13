@@ -363,6 +363,7 @@
     <Compile Include="Runtime\Internal\internalInvokes\set.vb" />
     <Compile Include="Runtime\Internal\generic.vb" />
     <Compile Include="Runtime\Internal\objects\pipeline.vb" />
+    <Compile Include="Runtime\Internal\objects\RConversion\makeDataframe.vb" />
     <Compile Include="Runtime\Internal\objects\reflector.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\strings.vb" />
     <Compile Include="Runtime\Internal\objects\invisible.vb" />
@@ -395,7 +396,7 @@
     <Compile Include="Runtime\Internal\internalInvokes\Linq\linq.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\math.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\string.vb" />
-    <Compile Include="Runtime\Internal\objects\conversion.vb" />
+    <Compile Include="Runtime\Internal\objects\RConversion\conversion.vb" />
     <Compile Include="Runtime\Internal\printer\classPrinter.vb" />
     <Compile Include="Runtime\Internal\objects\vbObject.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\utils.vb" />

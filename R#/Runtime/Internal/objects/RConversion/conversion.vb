@@ -50,7 +50,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
 
-Namespace Runtime.Internal.Object
+Namespace Runtime.Internal.Object.Converts
 
     Module RConversion
 
@@ -162,6 +162,29 @@ Namespace Runtime.Internal.Object
             End If
 
             Return vec
+        End Function
+
+        ''' <summary>
+        ''' ### Coerce to a Data Frame
+        ''' 
+        ''' Functions to check if an object is a data frame, or coerce it if possible.
+        ''' </summary>
+        ''' <param name="x">any R object.</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("as.data.frame")>
+        Public Function asDataframe(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+            If x Is Nothing Then
+                Return x
+            End If
+
+            Dim type As Type = x.GetType
+
+            If makeDataframe.is_ableConverts(type) Then
+                Return makeDataframe.createDataframe(type, x, env)
+            Else
+                Return Internal.stop(New InvalidProgramException, env)
+            End If
         End Function
 
         ''' <summary>
