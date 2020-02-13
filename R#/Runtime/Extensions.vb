@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::adebdd6b5e435618cd3c181116def115, R#\Runtime\Extensions.vb"
+﻿#Region "Microsoft.VisualBasic::68f702ee3e7befd95e944f80ea5974c2, R#\Runtime\Extensions.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Module Extensions
     ' 
-    '         Function: ClosureStackName, MeasureArrayElementType, TryCatch
+    '         Function: MeasureArrayElementType, TryCatch
     ' 
     ' 
     ' /********************************************************************************/

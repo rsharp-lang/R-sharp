@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7c24f888759cf53858d09c2792050e36, R#\Interpreter\Syntax\SyntaxResult.vb"
+﻿#Region "Microsoft.VisualBasic::ccba6b2794eb160da150a75735d0b723, R#\Interpreter\Syntax\SyntaxResult.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,7 @@
     ' 
     '         Properties: isException
     ' 
-    '         Constructor: (+2 Overloads) Sub New
+    '         Constructor: (+3 Overloads) Sub New
     '         Function: ToString
     ' 
     ' 

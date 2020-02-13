@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c39bf7bbfb01a4c03da03d032e823594, R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\NameMemberReference.vb"
+﻿#Region "Microsoft.VisualBasic::5a5afa5e7322940f3cf8cf53a6b1471c, R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\NameMemberReference.vb"
 
     ' Author:
     ' 
@@ -34,7 +34,7 @@
     '     Class NameMemberReferenceProcessor
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: expression
+    '         Function: createIndexer, expression
     ' 
     ' 
     ' /********************************************************************************/

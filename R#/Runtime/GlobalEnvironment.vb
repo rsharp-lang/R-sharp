@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3d1f6329afad3ae8815a0d61e52bdf36, R#\Runtime\GlobalEnvironment.vb"
+﻿#Region "Microsoft.VisualBasic::9851efc750929eb1a871a3ab2b5c4fe2, R#\Runtime\GlobalEnvironment.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Class GlobalEnvironment
     ' 
-    '         Properties: debugMode, options, packages, Rscript
+    '         Properties: debugMode, lastException, options, packages, Rscript
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: (+2 Overloads) LoadLibrary, MissingPackage

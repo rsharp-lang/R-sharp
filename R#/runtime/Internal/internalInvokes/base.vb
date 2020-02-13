@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9a2c5bbaf5c111827b42f4125e29a748, R#\Runtime\Internal\internalInvokes\base.vb"
+﻿#Region "Microsoft.VisualBasic::28c5ac395e5771dbb52711f5827b2078, R#\Runtime\Internal\internalInvokes\base.vb"
 
     ' Author:
     ' 
@@ -36,9 +36,10 @@
     '         Function: [stop], all, any, append, cat
     '                   colnames, createColumnVector, createDotNetExceptionMessage, CreateMessageInternal, doPrintInternal
     '                   getEnvironmentStack, getOption, invisible, invokeArgument, isEmpty
-    '                   lapply, length, names, neg, options
-    '                   print, Rdataframe, Rlist, rownames, sapply
-    '                   source, str, summary, warning
+    '                   lapply, length, names, ncol, neg
+    '                   nrow, options, print, Rdataframe, rep
+    '                   Rlist, rownames, sapply, source, str
+    '                   summary, warning
     ' 
     '         Sub: q, quit
     ' 

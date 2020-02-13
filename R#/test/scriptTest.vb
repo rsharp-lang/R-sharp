@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f1db4c0b6c9c357bb8d9be9c2e146f43, R#\test\scriptTest.vb"
+﻿#Region "Microsoft.VisualBasic::a90c2b9019b11567166ff51e787e42ba, R#\test\scriptTest.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     ' Module scriptTest
     ' 
-    '     Sub: Main
+    '     Sub: Main, multipleImportsTest, testSource
     ' 
     ' /********************************************************************************/
 

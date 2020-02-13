@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::828383027a52901da605ff52dad44480, R#\Runtime\Internal\objects\list.vb"
+﻿#Region "Microsoft.VisualBasic::db70d3dfe599fe2402a2ceb79ecadebc, R#\Runtime\Internal\objects\list.vb"
 
     ' Author:
     ' 
@@ -36,8 +36,9 @@
     '         Properties: length, slots
     ' 
     '         Constructor: (+2 Overloads) Sub New
-    '         Function: (+2 Overloads) getByIndex, (+2 Overloads) getByName, getNames, GetSlots, namedValues
-    '                   setByindex, setByIndex, (+2 Overloads) setByName, setNames, ToString
+    '         Function: (+2 Overloads) getByIndex, (+2 Overloads) getByName, getNames, GetSlots, hasName
+    '                   namedValues, setByindex, setByIndex, (+2 Overloads) setByName, setNames
+    '                   ToString
     ' 
     ' 
     ' /********************************************************************************/

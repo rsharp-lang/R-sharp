@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a0453949d73c97d79da4f568b6e9e78a, R#\Runtime\Environment.vb"
+﻿#Region "Microsoft.VisualBasic::48adbb38125fbfba159def48b2089462, R#\Runtime\Environment.vb"
 
     ' Author:
     ' 
@@ -34,14 +34,14 @@
     '     Class Environment
     ' 
     '         Properties: globalEnvironment, isGlobal, last, messages, parent
-    '                     stackTag, types, variables
+    '                     stackFrame, types, variables
     ' 
     '         Constructor: (+3 Overloads) Sub New
     ' 
     '         Function: asRVector, Evaluate, FindSymbol, GetEnumerator, IEnumerable_GetEnumerator
     '                   Push, ToString
     ' 
-    '         Sub: AddMessage, Clear, Delete, (+2 Overloads) Dispose
+    '         Sub: AddMessage, Clear, Delete, (+2 Overloads) Dispose, setStackInfo
     ' 
     ' 
     ' /********************************************************************************/
