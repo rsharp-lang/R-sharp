@@ -66,6 +66,12 @@ Namespace Runtime
             End Get
         End Property
 
+        ''' <summary>
+        ''' 用于traceback进行脚本函数调试使用
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property lastException As Message
+
         Sub New(scriptHost As RInterpreter, options As Options)
             Me.options = options
             Me.packages = New PackageManager(options)
