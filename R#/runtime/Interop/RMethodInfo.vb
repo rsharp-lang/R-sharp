@@ -46,6 +46,7 @@
 
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -126,7 +127,7 @@ Namespace Runtime.Interop
         End Function
 
         Public Function GetPackageInfo() As Package
-            Return GetRawDeclares.DeclaringType.ParsePackage
+            Return GetRawDeclares.DeclaringType.ParsePackage(strict:=False)
         End Function
 
         Public Function GetPrintContent() As String Implements RPrint.GetPrintContent
@@ -195,6 +196,17 @@ Namespace Runtime.Interop
 
         Public Function Invoke(envir As Environment, params As InvokeParameter()) As Object Implements RFunction.Invoke
             Dim parameters As Object()
+            Dim apiStackFrame As New StackFrame With {
+                .File = GetRawDeclares.DeclaringType.Assembly.Location.FileName,
+                .Line = "<unknown>",
+                .Method = New Method With {
+                    .Method = name,
+                    .[Module] = "R#.interop_",
+                    .[Namespace] = GetPackageInfo.namespace
+                }
+            }
+
+            envir = New Environment(envir, apiStackFrame)
 
             If Me.parameters.Any(Function(a) a.isObjectList) Then
                 parameters = RArgumentList.CreateObjectListArguments(Me, envir, params).ToArray
