@@ -103,7 +103,10 @@ Namespace Interpreter.ExecuteEngine
                 Return Internal.stop(New NotImplementedException, envir)
             End If
 
-            Return Internal.stop(New NotImplementedException, envir)
+            Return Runtime.asVector(Of Object)(x) _
+                .AsObjectEnumerator _
+                .JoinIterates(Runtime.asVector(Of Object)(y).AsObjectEnumerator) _
+                .ToArray
         End Function
     End Class
 End Namespace

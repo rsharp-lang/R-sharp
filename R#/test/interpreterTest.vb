@@ -700,8 +700,6 @@ print(true);
 
     Sub StackTest()
 
-        R.debug = False
-
         Call R.Evaluate("
 
 
@@ -730,6 +728,8 @@ innerPrivate();
     End Sub
 
     Sub exceptionHandler()
+        R.debug = False
+
         Call R.Evaluate("   #1
 let err as function(message) {#2
 #3
