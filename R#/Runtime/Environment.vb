@@ -184,6 +184,10 @@ Namespace Runtime
                 .DoCall(AddressOf messages.Add)
         End Sub
 
+        Public Sub setStackInfo(stackframe As StackFrame)
+            _stackFrame = stackframe
+        End Sub
+
         Public Sub Clear()
             Call variables.Clear()
             Call types.Clear()

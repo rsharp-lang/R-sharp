@@ -43,10 +43,13 @@
 
 #End Region
 
+Imports System.Reflection
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.System.Package
 
 Namespace Interpreter.ExecuteEngine
@@ -103,6 +106,13 @@ Namespace Interpreter.ExecuteEngine
         Private Function importsLibrary(env As Environment) As Object
             Dim files$() = Runtime.asVector(Of String)(library.Evaluate(env))
             Dim result As Object
+            Dim oldScript As Object = env.FindSymbol("!script")?.value
+            Dim oldStackFrame As StackFrame = env.stackFrame
+            Dim stackframe As StackFrame
+            Dim script As list
+            Dim Rscript As Rscript
+            Dim program As Program
+            Dim R As RInterpreter = env.globalEnvironment.Rscript
 
             ' imports dll/R files
             For Each libFile As String In files
@@ -117,7 +127,31 @@ Namespace Interpreter.ExecuteEngine
                     If Program.isException(result) Then
                         Return result
                     Else
-                        result = env.globalEnvironment.Rscript.Source(result)
+                        ' 20200213 因为source函数是创建了一个新的环境容器
+                        ' 所以函数无法被导入到全局环境之中
+                        ' 在这里imports关键词操作则是使用全局环境
+                        script = CreateSpecialScriptReference(result)
+                        Rscript = Rscript.FromFile(result)
+                        stackframe = New StackFrame With {
+                            .File = Rscript.fileName,
+                            .Line = 0,
+                            .Method = New Method With {
+                                .Method = MethodBase.GetCurrentMethod.Name,
+                                .[Module] = "n/a",
+                                .[Namespace] = "SMRUCC/R#"
+                            }
+                        }
+
+                        env.setStackInfo(stackframe)
+
+                        If env.FindSymbol("!script") Is Nothing Then
+                            env.Push("!script", script)
+                        Else
+                            env.FindSymbol("!script").value = script
+                        End If
+
+                        program = Program.CreateProgram(Rscript, R.debug)
+                        result = program.Execute(env)
                     End If
 
                     If Program.isException(result) Then
@@ -125,6 +159,10 @@ Namespace Interpreter.ExecuteEngine
                     End If
                 End If
             Next
+
+            If Not env.FindSymbol("!script") Is Nothing Then
+                env.FindSymbol("!script").value = oldScript
+            End If
 
             Return Nothing
         End Function

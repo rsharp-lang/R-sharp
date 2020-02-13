@@ -1,5 +1,6 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Runtime
 
@@ -24,5 +25,14 @@ Namespace Runtime
             Return env.parent?.ToString & " :> " & env.stackFrame.Method.ToString
         End Function
 
+        Public Function CreateSpecialScriptReference(filepath As String) As list
+            Return New list With {
+                .slots = New Dictionary(Of String, Object) From {
+                    {"dir", filepath.ParentPath},
+                    {"file", filepath.FileName},
+                    {"fullName", filepath.GetFullPath}
+                }
+            }
+        End Function
     End Module
 End Namespace

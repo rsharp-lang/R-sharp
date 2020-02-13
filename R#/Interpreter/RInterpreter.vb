@@ -262,7 +262,7 @@ Namespace Interpreter
             Return envir
         End Function
 
-        Private Function finalizeResult(result As Object) As Object
+        Friend Function finalizeResult(result As Object) As Object
             Dim last As Variable = Me.globalEnvir(lastVariableName)
 
             ' set last variable in current environment
@@ -309,13 +309,7 @@ Namespace Interpreter
             ' the environment
             ' 
             ' let !script = list(dir = dirname, file = filename, fullName = filepath)
-            Dim script As New list With {
-                .slots = New Dictionary(Of String, Object) From {
-                    {"dir", filepath.ParentPath},
-                    {"file", filepath.FileName},
-                    {"fullName", filepath.GetFullPath}
-                }
-            }
+            Dim script As list = CreateSpecialScriptReference(filepath)
             Dim result As Object
 
             If filepath.FileExists Then
