@@ -72,6 +72,7 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+        Call anonymous()
         Call exceptionHandler()
         Call StackTest()
 
@@ -163,6 +164,18 @@ Module interpreterTest
 
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub anonymous()
+        Call R.Evaluate("let call = FUNC -> FUNC();
+
+# call anonymous function
+call(function() {
+	print('call a anonymous function');
+});
+")
 
         Pause()
     End Sub
