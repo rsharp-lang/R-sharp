@@ -76,36 +76,115 @@ Namespace Interpreter.ExecuteEngine
         Public ReadOnly Property library As Expression
         Public Overrides ReadOnly Property type As TypeCodes
 
-        Sub New(packages As Expression, library As Expression)
+        Public ReadOnly Property scriptSource As String
+
+        Sub New(packages As Expression, library As Expression, source$)
             Me.packages = packages
             Me.library = library
+            Me.scriptSource = source
         End Sub
 
         Public Overrides Function ToString() As String
-            Return $"imports {packages} from {library}"
+            If packages Is Nothing Then
+                Return $"imports {library}"
+            Else
+                Return $"imports {packages} from {library}"
+            End If
         End Function
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim names As Index(Of String) = Runtime.asVector(Of String)(Me.packages.Evaluate(envir)) _
+            If packages Is Nothing Then
+                Dim files$() = Runtime.asVector(Of String)(library.Evaluate(envir))
+                Dim result As Object
+
+                ' imports dll/R files
+                For Each libFile As String In files
+                    If libFile.ExtensionSuffix("dll") Then
+                        ' imports * from lib_dll
+                        ' 简写形式
+                        result = LoadLibrary(GetDllFile(libFile, envir), envir, {"*"})
+                    ElseIf libFile.ExtensionSuffix("R") Then
+                        ' source外部的R#脚本
+                        result = GetExternalScriptFile(libFile, scriptSource, envir)
+
+                    End If
+                Next
+            Else
+                Return importsPackages(envir)
+            End If
+        End Function
+
+        Private Function importsPackages(env As Environment) As Object
+            Dim names As Index(Of String) = Runtime.asVector(Of String)(Me.packages.Evaluate(env)) _
                 .AsObjectEnumerator _
                 .Select(Function(o)
                             Return Scripting.ToString(o, Nothing)
                         End Function) _
                 .ToArray
-            Dim libDll = Scripting.ToString(Runtime.getFirst(library.Evaluate(envir)))
+            Dim libDll As Object = GetDllFile(Runtime.getFirst(library.Evaluate(env)), env)
 
+            If Program.isException(libDll) Then
+                Return libDll
+            End If
+
+load:       Return LoadLibrary(Scripting.ToString(libDll), env, names)
+        End Function
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="libFile"></param>
+        ''' <param name="source">
+        ''' + 如果源文件存在值，则会在source脚本所处的文件夹，其中的R文件夹，当前文件夹进行搜索
+        ''' + 如果源文件是空值，则会在当前文件夹以及当前文件夹中的R文件夹进行搜索
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        Public Shared Function GetExternalScriptFile(libFile As String, source$, env As Environment) As Object
+            If libFile.StringEmpty Then
+                Return Internal.stop("No script module provided!", env)
+            ElseIf Not libFile.FileExists Then
+                If source.StringEmpty Then
+                    For Each location As String In {
+                        $"{App.CurrentDirectory}/{libFile}",
+                        $"{App.CurrentDirectory}/R/{libFile}"
+                    }
+                        If location.FileExists Then
+                            Return location
+                        End If
+                    Next
+                Else
+                    For Each location As String In {
+                        $"{source.ParentPath}/{libFile}",
+                        $"{source.ParentPath}/R/{libFile}",
+                        $"{App.CurrentDirectory}/{libFile}"
+                    }
+                        If location.FileExists Then
+                            Return location
+                        End If
+                    Next
+                End If
+
+                Return Internal.stop($"Missing script file: '{libFile}'!", env)
+            End If
+
+            Return libFile
+        End Function
+
+        Public Shared Function GetDllFile(libDll As String, env As Environment) As Object
             If libDll.StringEmpty Then
-                Return Internal.stop("No package module provided!", envir)
+                Return Internal.stop("No package module provided!", env)
             ElseIf Not libDll.FileExists Then
                 For Each location As String In {$"{App.HOME}/{libDll}", $"{App.HOME}/Library/{libDll}"}
                     If location.FileExists Then
-                        libDll = location
-                        GoTo load
+                        Return location
                     End If
                 Next
+
+                Return Internal.stop($"Missing library file: '{libDll}'!", env)
             End If
 
-load:       Return LoadLibrary(libDll, envir, names)
+            Return libDll
         End Function
 
         Private Shared Function isImportsAllPackages(names As Index(Of String)) As Boolean

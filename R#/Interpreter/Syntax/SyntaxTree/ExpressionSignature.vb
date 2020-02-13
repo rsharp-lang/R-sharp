@@ -288,6 +288,10 @@ Namespace Interpreter.SyntaxParser
         ''' <returns></returns>
         <Extension>
         Public Function isKeyword(tokens As Token(), Optional keyword$ = Nothing) As Boolean
+            If tokens Is Nothing Then
+                Return False
+            End If
+
             If tokens.Length = 1 AndAlso tokens(Scan0).name = TokenType.keyword Then
                 If Not keyword.StringEmpty Then
                     Return tokens(Scan0).text = keyword

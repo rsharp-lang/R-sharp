@@ -72,19 +72,44 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
         Public Function [Imports](code As IEnumerable(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
             With code.ToArray
-                If Not .ElementAt(Scan0).isKeyword("imports") OrElse Not .ElementAt(2).isKeyword("from") Then
-                    Return New SyntaxResult(New SyntaxErrorException, opts.debug)
-                Else
+                If .ElementAt(Scan0).isKeyword("imports") AndAlso .ElementAtOrDefault(2).isKeyword("from") Then
                     Dim packages = .ElementAt(1).DoCall(Function(tokens) Expression.CreateExpression(tokens, opts))
-                    Dim library = .ElementAt(3).DoCall(Function(tokens) Expression.CreateExpression(tokens, opts))
+                    Dim library As SyntaxResult =
+                        .ElementAt(3) _
+                        .DoCall(Function(tokens)
+                                    Return Expression.CreateExpression(tokens, opts)
+                                End Function)
 
                     If packages.isException Then
                         Return packages
                     ElseIf library.isException Then
                         Return library
                     Else
-                        Return New [Imports](packages.expression, library.expression)
+                        Return New [Imports](
+                            packages:=packages.expression,
+                            library:=library.expression,
+                            source:=Nothing
+                        )
                     End If
+                ElseIf .ElementAt(Scan0).isKeyword("imports") Then
+                    ' imports <*.R/*.dll file>
+                    Dim files As SyntaxResult =
+                        .ElementAt(1) _
+                        .DoCall(Function(tokens)
+                                    Return Expression.CreateExpression(tokens, opts)
+                                End Function)
+
+                    If files.isException Then
+                        Return files
+                    Else
+                        Return New [Imports](
+                            packages:=Nothing,
+                            library:=files.expression,
+                            source:=opts.source.source
+                        )
+                    End If
+                Else
+                    Return New SyntaxResult(New SyntaxErrorException, opts.debug)
                 End If
             End With
         End Function

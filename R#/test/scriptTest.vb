@@ -50,8 +50,18 @@ Module scriptTest
     }
 
     Sub Main()
+        Call multipleImportsTest()
+    End Sub
+
+    Sub testSource()
         Call R.globalEnvir.packages.InstallLocals("D:\GCModeller\GCModeller\bin\Library\R.base.dll")
         Call R.Source(script)
         Call Pause()
+    End Sub
+
+    Sub multipleImportsTest()
+        Call R.Evaluate("source(`E:\GCModeller\src\R-sharp\tutorials\Rscript\multiples\app.R`)")
+
+        Pause()
     End Sub
 End Module
