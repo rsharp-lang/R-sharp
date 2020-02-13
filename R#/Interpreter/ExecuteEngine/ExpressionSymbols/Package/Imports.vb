@@ -1,45 +1,45 @@
 ﻿#Region "Microsoft.VisualBasic::17cce4226dbc574df455718c81e8d36a, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Package\Imports.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class [Imports]
-    ' 
-    '         Properties: library, packages, type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, isImportsAllPackages, LoadLibrary, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class [Imports]
+' 
+'         Properties: library, packages, type
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate, isImportsAllPackages, LoadLibrary, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -94,24 +94,39 @@ Namespace Interpreter.ExecuteEngine
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             If packages Is Nothing Then
-                Dim files$() = Runtime.asVector(Of String)(library.Evaluate(envir))
-                Dim result As Object
-
-                ' imports dll/R files
-                For Each libFile As String In files
-                    If libFile.ExtensionSuffix("dll") Then
-                        ' imports * from lib_dll
-                        ' 简写形式
-                        result = LoadLibrary(GetDllFile(libFile, envir), envir, {"*"})
-                    ElseIf libFile.ExtensionSuffix("R") Then
-                        ' source外部的R#脚本
-                        result = GetExternalScriptFile(libFile, scriptSource, envir)
-
-                    End If
-                Next
+                Return importsLibrary(envir)
             Else
                 Return importsPackages(envir)
             End If
+        End Function
+
+        Private Function importsLibrary(env As Environment) As Object
+            Dim files$() = Runtime.asVector(Of String)(library.Evaluate(env))
+            Dim result As Object
+
+            ' imports dll/R files
+            For Each libFile As String In files
+                If libFile.ExtensionSuffix("dll") Then
+                    ' imports * from lib_dll
+                    ' 简写形式
+                    result = LoadLibrary(GetDllFile(libFile, env), env, {"*"})
+                ElseIf libFile.ExtensionSuffix("R") Then
+                    ' source外部的R#脚本
+                    result = GetExternalScriptFile(libFile, scriptSource, env)
+
+                    If Program.isException(result) Then
+                        Return result
+                    Else
+                        result = env.globalEnvironment.Rscript.Source(result)
+                    End If
+
+                    If Program.isException(result) Then
+                        Return result
+                    End If
+                End If
+            Next
+
+            Return Nothing
         End Function
 
         Private Function importsPackages(env As Environment) As Object
