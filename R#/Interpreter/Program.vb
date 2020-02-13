@@ -96,20 +96,25 @@ Namespace Interpreter
                 last = ExecuteCodeLine(expression, envir, breakLoop, debug)
 
                 If breakLoop Then
-                    If Not last Is Nothing AndAlso Program.isException(last) Then
-                        Dim err As Message = last
-
-                        If err.source Is Nothing Then
-                            err.source = expression
-                        End If
-                    End If
-
+                    Call configException(envir, last, expression)
                     Exit For
                 End If
             Next
 
             Return last
         End Function
+
+        Private Sub configException(env As Environment, last As Object, expression As Expression)
+            If Not last Is Nothing AndAlso Program.isException(last) Then
+                Dim err As Message = last
+
+                If err.source Is Nothing Then
+                    err.source = expression
+                End If
+
+                env.globalEnvironment.lastException = err
+            End If
+        End Sub
 
         ''' <summary>
         ''' For execute lambda function
