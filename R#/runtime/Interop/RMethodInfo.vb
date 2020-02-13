@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::e904c09459e1dcdbbd7c8c8bd1da2904, R#\Runtime\Interop\RMethodInfo.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class RMethodInfo
-    ' 
-    '         Properties: invisible, name, parameters, returns
-    ' 
-    '         Constructor: (+3 Overloads) Sub New
-    '         Function: createNormalArguments, CreateParameterArrayFromListArgument, GetPrintContent, GetRawDeclares, getValue
-    '                   (+2 Overloads) Invoke, missingParameter, parseParameters, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class RMethodInfo
+' 
+'         Properties: invisible, name, parameters, returns
+' 
+'         Constructor: (+3 Overloads) Sub New
+'         Function: createNormalArguments, CreateParameterArrayFromListArgument, GetPrintContent, GetRawDeclares, getValue
+'                   (+2 Overloads) Invoke, missingParameter, parseParameters, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -52,6 +52,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.System.Package
 
 Namespace Runtime.Interop
 
@@ -122,6 +123,10 @@ Namespace Runtime.Interop
             Else
                 Return api.TryCast(Of [Delegate]).Method
             End If
+        End Function
+
+        Public Function GetPackageInfo() As Package
+            Return GetRawDeclares.DeclaringType.ParsePackage
         End Function
 
         Public Function GetPrintContent() As String Implements RPrint.GetPrintContent
