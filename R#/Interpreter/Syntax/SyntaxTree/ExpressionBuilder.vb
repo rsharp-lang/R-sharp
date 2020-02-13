@@ -58,7 +58,11 @@ Namespace Interpreter.SyntaxParser
 
             Select Case keyword
                 Case "let"
-                    If code > 4 AndAlso code(3).isKeyword("function") Then
+                    If code > 4 AndAlso code(2).isKeyword("as") AndAlso code(3).isKeyword("function") Then
+                        ' let <name> as function(...) {}
+                        ' 申明一个函数
+                        ' let <name> = function(...) {}
+                        ' 将一个匿名函数赋值给左边的目标变量
                         Return SyntaxImplements.DeclareNewFunction(code, opts)
                     Else
                         Return SyntaxImplements.DeclareNewVariable(code, opts)
