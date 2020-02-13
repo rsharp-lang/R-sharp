@@ -107,6 +107,8 @@ Namespace Interpreter.ExecuteEngine
 
         Public Sub New(ifTest As Expression, trueClosure As ClosureExpression, stackframe As StackFrame)
             MyBase.New(ifTest, trueClosure, stackframe)
+
+            stackframe.Method.Method = "elseif_closure"
         End Sub
     End Class
 End Namespace

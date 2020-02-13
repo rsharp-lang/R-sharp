@@ -51,12 +51,12 @@ Namespace Interpreter.SyntaxParser
         Public debug As Boolean = False
         Public source As Rscript
 
-        Public Function GetStackTrace(token As Token) As StackFrame
+        Public Function GetStackTrace(token As Token, Optional name$ = Nothing) As StackFrame
             Return New StackFrame With {
                 .File = source.fileName,
                 .Line = token.span.line,
                 .Method = New Method With {
-                    .Method = token.text,
+                    .Method = If(name, token.text),
                     .[Module] = "n/a",
                     .[Namespace] = "SMRUCC/R#"
                 }

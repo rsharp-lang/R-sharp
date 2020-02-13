@@ -88,7 +88,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 Return closureInternal
             End If
 
-            Dim stackframe As StackFrame = opts.GetStackTrace(blocks(Scan0)(Scan0))
+            Dim stackframe As StackFrame = opts.GetStackTrace(blocks(Scan0)(Scan0), "if_closure")
             Dim [if] As New IfBranch(
                 ifTest:=ifTest.expression,
                 trueClosure:=closureInternal.expression,
@@ -117,7 +117,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 .DoCall(Function(tokens)
                             Return SyntaxImplements.ClosureExpression(tokens, opts)
                         End Function)
-            Dim stackframe As StackFrame = opts.GetStackTrace(code(Scan0))
+            Dim stackframe As StackFrame = opts.GetStackTrace(code(Scan0), name:="else_false")
 
             If syntaxResult.isException Then
                 Return syntaxResult
