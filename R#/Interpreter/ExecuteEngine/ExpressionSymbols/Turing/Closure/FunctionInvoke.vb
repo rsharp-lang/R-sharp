@@ -45,13 +45,11 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.Scripting.TokenIcer
-Imports SMRUCC.Rsharp.Language
-Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
@@ -69,6 +67,7 @@ Namespace Interpreter.ExecuteEngine
     ''' ```
     ''' </summary>
     Public Class FunctionInvoke : Inherits Expression
+        ' Implements IRuntimeTrace
 
         Public Overrides ReadOnly Property type As TypeCodes
             Get
@@ -77,6 +76,7 @@ Namespace Interpreter.ExecuteEngine
         End Property
 
         Public ReadOnly Property funcName As Expression
+        ' Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
 
         ''' <summary>
         ''' The namespace reference
@@ -108,6 +108,7 @@ Namespace Interpreter.ExecuteEngine
         Sub New(funcVar As Expression, ParamArray parameters As Expression())
             Me.funcName = funcVar
             Me.parameters = parameters.AsList
+            ' Me.stackFrame = StackFrame
         End Sub
 
         Public Overrides Function ToString() As String
