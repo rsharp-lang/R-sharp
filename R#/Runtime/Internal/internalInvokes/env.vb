@@ -265,12 +265,29 @@ Namespace Runtime.Internal.Invokes
             Return Internal.stop(New NotImplementedException("Call internal functions"), envir)
         End Function
 
+        ''' <summary>
+        ''' ### Get and Print Call Stacks
+        ''' 
+        ''' By default traceback() prints the call stack of the last uncaught 
+        ''' error, i.e., the sequence of calls that lead to the error. This 
+        ''' is useful when an error occurs with an unidentifiable error message. 
+        ''' It can also be used to print the current stack or arbitrary lists 
+        ''' of deparsed calls.
+        ''' </summary>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("traceback")>
         Public Function traceback(Optional env As Environment = Nothing) As ExceptionData
             Dim exception As Message = env.globalEnvironment.lastException
 
             If exception Is Nothing Then
-                Return Nothing
+                ' 如果错误消息不存在
+                ' 则返回当前的调用栈信息
+                Return New ExceptionData With {
+                    .StackTrace = env.getEnvironmentStack,
+                    .Message = {"n/a"},
+                    .TypeFullName = "n/a"
+                }
             Else
                 Return New ExceptionData With {
                     .StackTrace = exception.environmentStack,
