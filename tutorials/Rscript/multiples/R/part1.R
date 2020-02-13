@@ -12,7 +12,7 @@ let doLoop as function() {
 	for(i in [1,2]) {
 		if (i == 2) {
 		 # get stack trace information
-        traceback();
+      return  traceback();
 		}
 	}
 

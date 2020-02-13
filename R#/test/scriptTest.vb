@@ -60,6 +60,7 @@ Module scriptTest
     End Sub
 
     Sub multipleImportsTest()
+        R.debug = False
         Call R.Evaluate("source(`E:\GCModeller\src\R-sharp\tutorials\Rscript\multiples\app.R`)")
 
         Pause()

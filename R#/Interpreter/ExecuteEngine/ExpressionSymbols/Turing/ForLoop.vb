@@ -108,6 +108,8 @@ Namespace Interpreter.ExecuteEngine
             For Each item As Object In envir.DoCall(runLoop)
                 If Program.isException(item) Then
                     Return item
+                ElseIf TypeOf item Is ReturnValue Then
+                    Return item
                 Else
                     result += item
                 End If
