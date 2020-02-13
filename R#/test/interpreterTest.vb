@@ -72,6 +72,8 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+        Call StackTest()
+
         Call listoperationtest()
         Call syntaxErrorTest()
 
@@ -149,7 +151,7 @@ Module interpreterTest
         Call testScript()
 
         Call symbolNotFoundTest()
-        Call StackTest()
+
 
         Call exceptionHandler()
 
@@ -713,9 +715,11 @@ let internal as function() {
 
 internal();
 
-innerPrivate();
+# innerPrivate();
 
 ")
+
+        Call R.Evaluate("traceback()")
 
         Pause()
     End Sub
