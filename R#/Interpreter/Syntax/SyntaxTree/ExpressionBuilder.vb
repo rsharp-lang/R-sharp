@@ -72,7 +72,7 @@ Namespace Interpreter.SyntaxParser
                 Case "imports" : Return SyntaxImplements.[Imports](code, opts)
                 Case "function"
                     Dim [let] = New Token() {New Token(TokenType.keyword, "let")}
-                    Dim name = New Token() {New Token(TokenType.identifier, "<$anonymous>")}
+                    Dim name = New Token() {New Token(TokenType.identifier, $"<${App.GetNextUniqueName("anonymous_")}>") With {.span = code(Scan0)(Scan0).span}}
                     Dim [as] = New Token() {New Token(TokenType.keyword, "as")}
 
                     code = ({[let], name, [as]}) + code
