@@ -75,7 +75,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 Else
                     Dim line = .First()(Scan0).span.line
                     Dim stackframe As New StackFrame With {
-                        .File = opts.source.ToString,
+                        .File = opts.source.fileName,
                         .Line = line,
                         .Method = New Method With {
                             .Method = name,

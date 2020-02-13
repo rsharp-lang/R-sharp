@@ -70,7 +70,7 @@ Namespace Runtime.Components
         Public ReadOnly Property fileName As String
             Get
                 If source.StringEmpty Then
-                    Return Nothing
+                    Return $"<in_memory_&{script.GetHashCode.ToHexString}>"
                 Else
                     Return source.FileName
                 End If

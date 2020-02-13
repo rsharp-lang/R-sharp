@@ -94,7 +94,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 Return err
             Else
                 Dim stack As New StackFrame With {
-                    .File = opts.source.ToString,
+                    .File = opts.source.fileName,
                     .Line = code(1)(Scan0).span.line,
                     .Method = New Method With {
                         .Method = funcName,

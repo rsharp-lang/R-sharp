@@ -53,7 +53,7 @@ Namespace Interpreter.SyntaxParser
 
         Public Function GetStackTrace(token As Token) As StackFrame
             Return New StackFrame With {
-                .File = source.ToString,
+                .File = source.fileName,
                 .Line = token.span.line,
                 .Method = New Method With {
                     .Method = token.text,

@@ -75,7 +75,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 Return paramsSyntax
             Else
                 Dim stackframe As New StackFrame With {
-                    .File = opts.source.ToString,
+                    .File = opts.source.fileName,
                     .Line = parmPart(Scan0).span.line,
                     .Method = New Method With {
                         .Method = $"using({tokens(Scan0).Select(Function(t) t.text).JoinBy(" ")})",

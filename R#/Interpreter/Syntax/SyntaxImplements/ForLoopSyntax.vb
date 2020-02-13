@@ -93,7 +93,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             End If
 
             Dim stackframe As New StackFrame With {
-                .File = opts.source.ToString,
+                .File = opts.source.fileName,
                 .Line = blocks.First(Scan0).span.line,
                 .Method = New Method With {
                     .Method = "forloop",
