@@ -56,8 +56,16 @@ Namespace Interpreter.ExecuteEngine
     ''' 
     ''' ```
     ''' imports [namespace] from [module.dll]
+    ''' imports "script.R"
     ''' ```
     ''' </summary>
+    ''' <remarks>
+    ''' ``imports``关键词的功能除了可以导入dll模块之中的包模块以外，也可以导入R脚本。
+    ''' 导入R脚本的功能和``source``函数保持一致，但是存在一些行为上的区别：
+    ''' 
+    ''' + ``source``函数要求脚本文件必须是一个正确的绝对路径或者相对路径
+    ''' + ``imports``关键词则无此要求，因为imports关键词会自动进行脚本文件的搜索操作
+    ''' </remarks>
     Public Class [Imports] : Inherits Expression
 
         Public ReadOnly Property packages As Expression
