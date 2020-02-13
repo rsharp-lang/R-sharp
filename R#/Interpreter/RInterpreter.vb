@@ -319,9 +319,10 @@ Namespace Interpreter
             Dim result As Object
 
             If filepath.FileExists Then
-                globalEnvir.Push("!script", script, TypeCodes.list)
+                arguments = arguments _
+                    .JoinIterates(New NamedValue(Of Object)("!script", script)) _
+                    .ToArray
                 result = RunInternal(Rscript.FromFile(filepath), arguments)
-                globalEnvir.Delete("!script")
             Else
                 result = Internal.stop({
                     $"cannot open the connection.",

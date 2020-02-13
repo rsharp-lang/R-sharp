@@ -460,6 +460,7 @@ Namespace Runtime.Internal.Invokes
 
             Dim args As NamedValue(Of Object)() = RListObjectArgumentAttribute _
                 .getObjectList(arguments, envir) _
+                .Where(Function(a) a.Name <> path) _
                 .ToArray
             Dim R As RInterpreter = envir.globalEnvironment.Rscript
 
