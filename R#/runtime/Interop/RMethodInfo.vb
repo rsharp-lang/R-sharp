@@ -201,7 +201,7 @@ Namespace Runtime.Interop
                 .Line = "<unknown>",
                 .Method = New Method With {
                     .Method = name,
-                    .[Module] = "R#.interop::",
+                    .[Module] = "R#_interop::",
                     .[Namespace] = GetPackageInfo.namespace
                 }
             }
