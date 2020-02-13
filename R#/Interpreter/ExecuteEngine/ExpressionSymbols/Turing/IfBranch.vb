@@ -128,7 +128,10 @@ Namespace Interpreter.ExecuteEngine
             End If
 
             If True = Runtime.asLogical(test)(Scan0) Then
-                Return New IfPromise(trueClosure.Invoke(envir, {}), True)
+                Dim env As New Environment(envir, stackFrame)
+                Dim resultVal As Object = trueClosure.Invoke(env, {})
+
+                Return New IfPromise(resultVal, True)
             Else
                 Return New IfPromise(Nothing, False)
             End If
