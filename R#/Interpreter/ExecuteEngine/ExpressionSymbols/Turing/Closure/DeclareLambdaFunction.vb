@@ -76,6 +76,12 @@ Namespace Interpreter.ExecuteEngine
         Dim parameter As DeclareNewVariable
         Dim closure As Expression
 
+        Public ReadOnly Property parameterNames As String()
+            Get
+                Return parameter.names
+            End Get
+        End Property
+
         Sub New(name$, parameter As DeclareNewVariable, closure As Expression, stackframe As StackFrame)
             Me.name = name
             Me.parameter = parameter

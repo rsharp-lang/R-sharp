@@ -1,12 +1,16 @@
 ﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Math.Calculus
 Imports Microsoft.VisualBasic.Math.Calculus.ODESolver
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime.Internal
+Imports stdVec = Microsoft.VisualBasic.Math.LinearAlgebra.Vector
 
 <Package("base.math")>
 Module math
@@ -44,9 +48,40 @@ Module math
 
     <ExportAPI("deSolve")>
     <RApiReturn(GetType(ODEsOut))>
-    Public Function RK4(system As Object, y0 As list, a#, b#,
+    Public Function RK4(system As DeclareLambdaFunction(), y0 As list, a#, b#,
                         Optional resolution% = 10000,
                         Optional env As Environment = Nothing) As Object
 
+        Dim vector As var() = New var(system.Length - 1) {}
+        Dim i As i32 = Scan0
+        Dim solve As Func(Of Double)
+        Dim names As New Dictionary(Of String, Variable)
+
+        For Each v As NamedValue(Of Object) In y0.namedValues
+            Call env.Push(v.Name, CDbl(v.Value), TypeCodes.double)
+            Call names.Add(v.Name, env.FindSymbol(v.Name, [inherits]:=False))
+        Next
+
+        For Each formula As DeclareLambdaFunction In system
+            Dim lambda As Func(Of Double, Double) = formula.CreateLambda(Of Double, Double)(env)
+            Dim name As String = formula.parameterNames(Scan0)
+            Dim ref As Variable = names(name)
+
+            solve = Function() lambda(CDbl(ref.value))
+            vector(++i) = New var(solve) With {
+                .Name = name,
+                .Value = y0.getByName(.Name)
+            }
+        Next
+
+        Dim df = Sub(dx#, ByRef dy As stdVec)
+                     For Each x As var In vector
+                         dy(x) = x.Evaluate()
+                     Next
+                 End Sub
+        Dim ODEs As New GenericODEs(vector, df)
+        Dim result As ODEsOut = ODEs.Solve(n:=resolution, a:=a, b:=b)
+
+        Return result
     End Function
 End Module
