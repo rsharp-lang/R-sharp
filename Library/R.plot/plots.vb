@@ -89,8 +89,20 @@ Module plots
             .PointSize = 5,
             .Shape = LegendStyles.Circle,
             .Title = title,
-            .Points = New NamedValue(Of Point3D) With {.Name = "xyz", .Value = x.Select(Function(xi, i) New Point3D(xi, y(i), z(i))).ToArray}
+            .Points = x _
+                .Select(Function(xi, i)
+                            Return New Point3D(xi, y(i), z(i))
+                        End Function) _
+                .Select(Function(pt3d)
+                            Return New NamedValue(Of Point3D) With {
+                                .Name = Nothing,
+                                .Value = pt3d
+                            }
+                        End Function) _
+                .ToArray
         }
+
+
     End Function
 
     Public Function plotODEResult(math As ODEOutput, args As list, env As Environment) As Object
