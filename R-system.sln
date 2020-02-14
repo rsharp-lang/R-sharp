@@ -85,9 +85,12 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "application.vnd.openxmlform
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "R.math", "Library\R.math\R.math.vbproj", "{DE1C8D67-3E8E-436A-A88D-A39A050342E2}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "R_graphic.interop", "Library\R_graphic.interop\R_graphic.interop.shproj", "{53AF2B13-CCD5-4F73-94D5-612191E785A9}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Library\R_graphic.interop\R_graphic.interop.projitems*{1579d1a8-73c4-4f97-bb57-3d1e62343599}*SharedItemsImports = 4
+		Library\R_graphic.interop\R_graphic.interop.projitems*{53af2b13-ccd5-4f73-94d5-612191e785a9}*SharedItemsImports = 13
 		Library\R_graphic.interop\R_graphic.interop.projitems*{a4db87f1-8b06-4398-af22-4bf0bafbd87a}*SharedItemsImports = 4
 		Library\R_graphic.interop\R_graphic.interop.projitems*{c5c3428c-d64c-4e79-b239-77adc66b1156}*SharedItemsImports = 4
 	EndGlobalSection
@@ -5103,6 +5106,7 @@ Global
 		{14E0B048-3A0D-4FD6-AA79-9B815D6F1B30} = {0A4DC34E-BE9F-4C9F-901C-E4CF7FE3E54F}
 		{E695D793-C970-422B-BA74-703EE43194FC} = {25FE1207-D2FC-495F-8183-FA4AF2433B87}
 		{DE1C8D67-3E8E-436A-A88D-A39A050342E2} = {D8B65EE7-3052-4B20-8E88-D9415B8A81CD}
+		{53AF2B13-CCD5-4F73-94D5-612191E785A9} = {D8B65EE7-3052-4B20-8E88-D9415B8A81CD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8123FDB5-00CD-4782-B524-D7AE4F3BF1F0}
