@@ -79,7 +79,7 @@ Namespace Runtime.Internal.ConsolePrinter
             RtoString(GetType(vbObject)) = Function(o) DirectCast(o, vbObject).ToString
             RtoString(GetType(RType)) = Function(o) DirectCast(o, RType).ToString
             RtoString(GetType(DateTime)) = Function(o) $"#{DirectCast(o, DateTime).ToString}#"
-            RtoString(GetType(ExceptionData)) = AddressOf debug.PrintRStackTrace
+            RtoString(GetType(ExceptionData)) = AddressOf debug.PrintRExceptionStackTrace
 
             RInternalToString(GetType(Double)) = AddressOf printer.f64_InternalToString
         End Sub

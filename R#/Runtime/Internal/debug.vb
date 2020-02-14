@@ -1,48 +1,48 @@
 ﻿#Region "Microsoft.VisualBasic::8cd7ead7f063564386db550816969927, R#\Runtime\Internal\debug.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class debug
-    ' 
-    '         Properties: verbose
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: [stop], getMessageColor, getMessagePrefix, PrintMessageInternal, PrintRStackTrace
-    ' 
-    '         Sub: write
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class debug
+' 
+'         Properties: verbose
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: [stop], getMessageColor, getMessagePrefix, PrintMessageInternal, PrintRStackTrace
+' 
+'         Sub: write
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -87,10 +87,14 @@ Namespace Runtime.Internal
             Return base.stop(message, envir)
         End Function
 
-        Public Shared Function PrintRStackTrace(err As ExceptionData) As String
+        Public Shared Function PrintRExceptionStackTrace(err As ExceptionData) As String
+            Return PrintRStackTrace(err.StackTrace)
+        End Function
+
+        Public Shared Function PrintRStackTrace(stacktrace As StackFrame()) As String
             Dim info As New StringBuilder
 
-            For Each frame As StackFrame In err.StackTrace
+            For Each frame As StackFrame In stacktrace
                 Call info.AppendLine(frame.ToString)
             Next
 
@@ -115,6 +119,11 @@ Namespace Runtime.Internal
             If Not message.source Is Nothing Then
                 Call Console.WriteLine()
                 Call Console.WriteLine($" R# source: {message.source.ToString}")
+            End If
+
+            If Not message.environmentStack.IsNullOrEmpty Then
+                Call Console.WriteLine()
+                Call Console.WriteLine(debug.PrintRStackTrace(message.environmentStack))
             End If
 
             Console.ForegroundColor = backup
