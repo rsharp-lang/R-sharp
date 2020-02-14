@@ -10,7 +10,12 @@ Module math
 
     <ExportAPI("solve.RK4")>
     <RApiReturn(GetType(ODEOutput))>
-    Public Function RK4(df As Object, Optional y0# = 0, Optional min# = -100, Optional max# = 100, Optional resolution% = 10000, Optional env As Environment = Nothing) As Object
+    Public Function RK4(df As Object,
+                        Optional y0# = 0,
+                        Optional min# = -100,
+                        Optional max# = 100,
+                        Optional resolution% = 10000,
+                        Optional env As Environment = Nothing) As Object
         Dim y As df
 
         If df Is Nothing Then
