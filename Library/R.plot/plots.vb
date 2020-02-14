@@ -43,9 +43,14 @@
 
 Imports System.Drawing
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.Bootstrapping
 Imports Microsoft.VisualBasic.Data.ChartPlots
+Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
+Imports Microsoft.VisualBasic.Data.ChartPlots.Plot3D
 Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics
+Imports Microsoft.VisualBasic.Imaging
+Imports Microsoft.VisualBasic.Imaging.Drawing3D
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Math.Calculus
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -72,7 +77,20 @@ Module plots
     End Sub
 
     Public Function plot_deSolveResult(desolve As ODEsOut, args As list, env As Environment) As Object
-
+        Dim vector As list = args!vector
+        Dim camera As Camera = args!camera
+        Dim color As Color = InteropArgumentHelper.getColor(args!color, "white").TranslateColor
+        Dim title As String = Scripting.ToString(args!title, "Plot deSolve")
+        Dim x As Double() = desolve.y(CStr(vector!x)).value
+        Dim y As Double() = desolve.y(CStr(vector!y)).value
+        Dim z As Double() = desolve.y(CStr(vector!z)).value
+        Dim data As New Serial3D With {
+            .Color = color,
+            .PointSize = 5,
+            .Shape = LegendStyles.Circle,
+            .Title = title,
+            .Points = New NamedValue(Of Point3D) With {.Name = "xyz", .Value = x.Select(Function(xi, i) New Point3D(xi, y(i), z(i))).ToArray}
+        }
     End Function
 
     Public Function plotODEResult(math As ODEOutput, args As list, env As Environment) As Object

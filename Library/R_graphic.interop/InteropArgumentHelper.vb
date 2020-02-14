@@ -109,9 +109,9 @@ Public Module InteropArgumentHelper
         End Select
     End Function
 
-    Public Function getColor(color As Object) As String
+    Public Function getColor(color As Object, Optional default$ = "black") As String
         If color Is Nothing Then
-            Return Nothing
+            Return [default]
         End If
 
         Select Case color.GetType
@@ -126,7 +126,7 @@ Public Module InteropArgumentHelper
             Case GetType(Integer()), GetType(Long()), GetType(Short())
                 Return DirectCast(color, Array).GetValue(Scan0).ToString
             Case Else
-                Return Nothing
+                Return [default]
         End Select
     End Function
 End Module

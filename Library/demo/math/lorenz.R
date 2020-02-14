@@ -14,13 +14,13 @@ let lorenz = [
     z -> x * y - beta * z
 ];
 
-lorenz <- deSolve(lorenz, list(x = 1,y = 1, z = 1), a = 0, b = 120 );
+lorenz <- deSolve(lorenz, list(x = 1,y = 1, z = 1), a = 0, b = 10 );
 
 lorenz
 :> as.data.frame 
 :> write.csv(file = "./lorenz.csv");
 
-let view = camera(viewAngle = [0,0,0]);
+let view = camera(viewAngle = [30,30,30]);
 
 lorenz
 :> plot(vector = list(x = "x", y = "y", z = "z" ), camera = view)
