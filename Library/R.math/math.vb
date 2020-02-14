@@ -87,7 +87,8 @@ Module math
             Dim name As String = formula.parameterNames(Scan0)
             Dim ref As Variable = names(name)
 
-            solve = Function() lambda(DirectCast(ref.value, Double())(Scan0))
+            ref.value = y0.getByName(name)
+            solve = Function() lambda(CDbl(ref.value))
             vector(++i) = New var(solve) With {
                 .Name = name,
                 .Value = y0.getByName(.Name)
@@ -97,6 +98,7 @@ Module math
         Dim df = Sub(dx#, ByRef dy As stdVec)
                      For Each x As var In vector
                          dy(x) = x.Evaluate()
+                         names(x.Name).value = x.Value
                      Next
                  End Sub
         Dim ODEs As New GenericODEs(vector, df)
