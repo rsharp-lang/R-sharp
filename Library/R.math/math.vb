@@ -20,7 +20,9 @@ Module math
     End Sub
 
     Private Function create_deSolve_DataFrame(x As ODEsOut, env As Environment) As dataframe
-        Dim data As New dataframe
+        Dim data As New dataframe With {
+            .columns = New Dictionary(Of String, Array)
+        }
 
         For Each v In x.y
             data.columns.Add(v.Key, v.Value.ToArray)
