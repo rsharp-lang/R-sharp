@@ -142,7 +142,7 @@ Namespace Interpreter.SyntaxParser
                                 ' 可能是一个匿名函数的调用
                                 ' (function(...){})(...)
                                 If splitTokens(1).Length = 1 AndAlso splitTokens(1)(Scan0).text = ")" AndAlso
-                                   splitTokens(2).Length = 1 AndAlso splitTokens(2)(Scan0).text = "(" AndAlso
+                                   splitTokens(2)(Scan0).text = "(" AndAlso
                                    splitTokens.Last.Length = 1 AndAlso splitTokens.Last(Scan0).text = ")" Then
 
                                     Return SyntaxImplements.AnonymousFunctionInvoke(

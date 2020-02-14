@@ -172,12 +172,15 @@ Module interpreterTest
 
         Call R.Evaluate("
 # a <- function(x) {x}
-a();
-(function() {
+# a();
+(function(x) {
 
-print('XXXXXXXXX');
+print(x);
+print(traceback())
+;
+})('XXXXXXXXX');")
 
-})();")
+        Pause()
 
         Call R.Evaluate("let call = FUNC -> FUNC();
 

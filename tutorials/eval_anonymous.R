@@ -1,5 +1,6 @@
-(function() {
+(function(x) {
 
-print('XXXXXXXXX');
+print(x);
+print(traceback());
 
-})();
+})('XXXXXXXXX');
