@@ -79,7 +79,8 @@ Module plots
     Public Function plot_deSolveResult(desolve As ODEsOut, args As list, env As Environment) As Object
         Dim vector As list = args!vector
         Dim camera As Camera = args!camera
-        Dim color As Color = InteropArgumentHelper.getColor(args!color, "white").TranslateColor
+        Dim color As Color = InteropArgumentHelper.getColor(args!color, "black").TranslateColor
+        Dim bg$ = InteropArgumentHelper.getColor(args!bg, "white")
         Dim title As String = Scripting.ToString(args!title, "Plot deSolve")
         Dim x As Double() = desolve.y(CStr(vector!x)).value
         Dim y As Double() = desolve.y(CStr(vector!y)).value
@@ -102,7 +103,7 @@ Module plots
                 .ToArray
         }
 
-
+        Return {data}.Plot(camera, bg:=bg)
     End Function
 
     Public Function plotODEResult(math As ODEOutput, args As list, env As Environment) As Object
