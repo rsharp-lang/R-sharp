@@ -1,4 +1,5 @@
 require(base.math);
+require(grDevices.gr3D);
 require(plot.charts);
 
 setwd(!script$dir);
@@ -13,7 +14,14 @@ let lorenz = [
     z -> x * y - beta * z
 ];
 
-lorenz 
-:> deSolve( list(x = 1,y = 1, z = 1), a = 0, b= 120 ) 
+lorenz <- deSolve(lorenz, list(x = 1,y = 1, z = 1), a = 0, b = 120 );
+
+lorenz
 :> as.data.frame 
 :> write.csv(file = "./lorenz.csv");
+
+let view = camera(viewAngle = [0,0,0]);
+
+lorenz
+:> plot(vector = list(x = "x", y = "y", z = "z" ), camera = view)
+:> save.graphics(file = "./lorenz.png");

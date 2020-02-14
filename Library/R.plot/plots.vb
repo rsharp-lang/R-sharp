@@ -68,7 +68,12 @@ Module plots
     Sub Main()
         Call REnv.generic.add("plot", GetType(DeclareLambdaFunction), AddressOf plotFormula)
         Call REnv.generic.add("plot", GetType(ODEOutput), AddressOf plotODEResult)
+        Call REnv.generic.add("plot", GetType(ODEsOut), AddressOf plot_deSolveResult)
     End Sub
+
+    Public Function plot_deSolveResult(desolve As ODEsOut, args As list, env As Environment) As Object
+
+    End Function
 
     Public Function plotODEResult(math As ODEOutput, args As list, env As Environment) As Object
         Return math.Plot(size:=InteropArgumentHelper.getSize(args!size))
