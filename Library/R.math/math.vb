@@ -4,6 +4,7 @@ Imports Microsoft.VisualBasic.Math.Calculus.ODESolver
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime.Internal
 
@@ -39,5 +40,13 @@ Module math
             .y0 = y0,
             .ID = df.ToString
         }.RK4(resolution, min, max)
+    End Function
+
+    <ExportAPI("deSolve")>
+    <RApiReturn(GetType(ODEsOut))>
+    Public Function RK4(system As Object, y0 As list, a#, b#,
+                        Optional resolution% = 10000,
+                        Optional env As Environment = Nothing) As Object
+
     End Function
 End Module
