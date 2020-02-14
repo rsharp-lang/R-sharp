@@ -19,3 +19,9 @@ a(function() {
 });
 
 print(a);
+
+(function() {
+
+print("XXXXXXXXX");
+
+})();

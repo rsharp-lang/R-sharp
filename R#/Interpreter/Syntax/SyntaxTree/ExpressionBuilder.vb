@@ -75,13 +75,7 @@ Namespace Interpreter.SyntaxParser
                 Case "from" : Return SyntaxImplements.LinqExpression(code, opts)
                 Case "imports" : Return SyntaxImplements.[Imports](code, opts)
                 Case "function"
-                    Dim [let] = New Token() {New Token(TokenType.keyword, "let")}
-                    Dim name = New Token() {New Token(TokenType.identifier, $"<${App.GetNextUniqueName("anonymous_")}>") With {.span = code(Scan0)(Scan0).span}}
-                    Dim [as] = New Token() {New Token(TokenType.keyword, "as")}
-
-                    code = ({[let], name, [as]}) + code
-
-                    Return SyntaxImplements.DeclareNewFunction(code, opts)
+                    Return SyntaxImplements.DeclareAnonymousFunction(code, opts)
                 Case "suppress"
                     Dim evaluate As SyntaxResult = code _
                         .Skip(1) _

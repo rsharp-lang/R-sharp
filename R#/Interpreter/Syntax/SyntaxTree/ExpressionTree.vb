@@ -116,6 +116,7 @@ Namespace Interpreter.SyntaxParser
                     ElseIf openSymbol = "(" Then
                         ' (xxxx)
                         ' (xxxx)[xx]
+                        ' (function(){...})(...)
                         Dim splitTokens = tokens.SplitByTopLevelDelimiter(TokenType.close)
 
                         If splitTokens = 2 Then
@@ -138,7 +139,20 @@ Namespace Interpreter.SyntaxParser
 
                                 Return SyntaxImplements.SymbolIndexer(symbolExpression, indexerExpression, opts)
                             Else
-                                Return New SyntaxResult(New SyntaxErrorException, opts.debug)
+                                ' 可能是一个匿名函数的调用
+                                ' (function(...){})(...)
+                                If splitTokens(1).Length = 1 AndAlso splitTokens(1)(Scan0).text = ")" AndAlso
+                                   splitTokens(2).Length = 1 AndAlso splitTokens(2)(Scan0).text = "(" AndAlso
+                                   splitTokens.Last.Length = 1 AndAlso splitTokens.Last(Scan0).text = ")" Then
+
+                                    Return SyntaxImplements.AnonymousFunctionInvoke(
+                                        anonymous:=splitTokens(Scan0).Skip(1).ToArray,
+                                        invoke:=splitTokens.Skip(2).IteratesALL.ToArray,
+                                        opts:=opts
+                                    )
+                                Else
+                                    Return New SyntaxResult(New SyntaxErrorException, opts.debug)
+                                End If
                             End If
                         Else
                             Throw New NotImplementedException

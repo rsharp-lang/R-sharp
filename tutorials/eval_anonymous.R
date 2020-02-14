@@ -1,0 +1,5 @@
+(function() {
+
+print('XXXXXXXXX');
+
+})();

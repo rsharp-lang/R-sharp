@@ -169,6 +169,16 @@ Module interpreterTest
     End Sub
 
     Sub anonymous()
+
+        Call R.Evaluate("
+# a <- function(x) {x}
+a();
+(function() {
+
+print('XXXXXXXXX');
+
+})();")
+
         Call R.Evaluate("let call = FUNC -> FUNC();
 
 # call anonymous function
