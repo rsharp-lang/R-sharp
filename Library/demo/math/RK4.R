@@ -1,4 +1,8 @@
 require(base.math);
 require(plot.charts);
 
-solve.RK4(x -> x+1) :> plot :> save.graphics(file = "./demo.png");
+setwd(!script$dir);
+
+solve.RK4(x -> x^2 + 1) 
+:> plot 
+:> save.graphics(file = "./demo.png");

@@ -34,6 +34,10 @@ Module math
             Return REnv.debug.stop(New NotSupportedException, env)
         End If
 
-        Return New ODE With {.df = y, .y0 = y0}.RK4(resolution, min, max)
+        Return New ODE With {
+            .df = y,
+            .y0 = y0,
+            .ID = df.ToString
+        }.RK4(resolution, min, max)
     End Function
 End Module
