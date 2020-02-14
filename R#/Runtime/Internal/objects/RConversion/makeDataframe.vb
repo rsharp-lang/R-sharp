@@ -4,12 +4,16 @@ Namespace Runtime.Internal.Object.Converts
 
     Public Delegate Function IMakeDataFrame(x As Object, env As Environment) As dataframe
 
-    Module makeDataframe
+    Public Module makeDataframe
 
         ReadOnly makesDataframe As New Dictionary(Of Type, IMakeDataFrame)
 
         Sub New()
             makesDataframe(GetType(ExceptionData)) = AddressOf TracebackDataFrmae
+        End Sub
+
+        Public Sub [addHandler](type As Type, handler As IMakeDataFrame)
+            makesDataframe(type) = handler
         End Sub
 
         Public Function is_ableConverts(type As Type) As Boolean
@@ -20,7 +24,7 @@ Namespace Runtime.Internal.Object.Converts
             Return makesDataframe(type)(x, env)
         End Function
 
-        Public Function TracebackDataFrmae(data As Object, env As Environment) As dataframe
+        Private Function TracebackDataFrmae(data As Object, env As Environment) As dataframe
             Dim stacktrace As StackFrame()
 
             If TypeOf data Is ExceptionData Then
