@@ -5,8 +5,8 @@ require(plot.charts);
 setwd(!script$dir);
 
 let sigma = 10;
-let rho = 28;
-let beta = 8 / 3;
+let rho   = 28;
+let beta  = 8 / 3;
 
 let lorenz = [
 	x -> sigma * (y - x),
