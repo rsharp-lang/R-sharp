@@ -370,7 +370,7 @@
     <Compile Include="Runtime\Internal\objects\names.vb" />
     <Compile Include="Runtime\Internal\objects\unit.vb" />
     <Compile Include="Runtime\Internal\printer\functionPrinter.vb" />
-    <Compile Include="Runtime\Internal\htmlPrinter.vb" />
+    <Compile Include="Runtime\Internal\printer\htmlPrinter.vb" />
     <Compile Include="Runtime\Internal\printer\enumPrinter.vb" />
     <Compile Include="Runtime\Interop\RArgumentList.vb" />
     <Compile Include="Runtime\Interop\REnum.vb" />
