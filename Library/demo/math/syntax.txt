@@ -1,0 +1,13 @@
+require(&base.math);
+require(&grDevices.gr3D);
+require(&plot.charts);
+Call setwd(&!script[dir]);
+Dim p As generic = 0.03;
+Dim cc As generic = 2;
+Dim beta As generic = 8.8E-06;
+Dim delta As generic = 2.6;
+Dim y0 As generic = Call list(V <- 0.014, T <- 400000000, I <- 0);
+Dim Kinetics_of_influenza_A_virus_infection_in_humans As generic = [[lambda: T -> - beta * T * V], [lambda: I -> beta * T * V - delta * I], [lambda: V -> p * I - cc * V]];
+Call write.csv(Call as.data.frame(Call deSolve(&Kinetics_of_influenza_A_virus_infection_in_humans, &y0, a <- 0, b <- 7)), file <- ./Kinetics_of_influenza_A_virus_infection_in_humans.csv);
+
+
