@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::54a494e901004c9d51041c2b07af3b2d, R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\BinaryExpressionTree.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module BinaryExpressionTree
-    ' 
-    '         Function: joinRemaining, ParseBinaryExpression, processOperators
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module BinaryExpressionTree
+' 
+'         Function: joinRemaining, ParseBinaryExpression, processOperators
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -56,10 +56,13 @@ Namespace Interpreter.SyntaxParser
         ReadOnly logicalOperators As String() = {"&&", "||", "!"}
 
         <Extension>
-        Public Function ParseBinaryExpression(tokenBlocks As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim buf As New List(Of [Variant](Of SyntaxResult, String))
-            Dim oplist As New List(Of String)
-            Dim syntaxResult As New Value(Of SyntaxResult)
+        Private Function joinNegatives(tokenBlocks As List(Of Token()),
+                                       ByRef buf As List(Of [Variant](Of SyntaxResult, String)),
+                                       ByRef oplist As List(Of String),
+                                       opts As SyntaxBuilderOptions) As SyntaxResult
+
+            Dim syntaxResult As SyntaxResult
+            Dim index As i32 = Scan0
 
             If tokenBlocks(Scan0).Length = 1 AndAlso tokenBlocks(Scan0)(Scan0) = (TokenType.operator, {"-", "+"}) Then
                 ' insert a ZERO before
@@ -67,13 +70,30 @@ Namespace Interpreter.SyntaxParser
             End If
 
             For i As Integer = Scan0 To tokenBlocks.Count - 1
-                If i Mod 2 = 0 Then
-                    syntaxResult = Expression.CreateExpression(tokenBlocks(i), opts)
+                If ++index Mod 2 = 0 Then
+                    If tokenBlocks(i).isOperator("+", "-") Then
+                        syntaxResult = Expression.CreateExpression(tokenBlocks(i + 1), opts)
 
-                    If syntaxResult.Value.isException Then
-                        Return syntaxResult
+                        If syntaxResult.isException Then
+                            Return syntaxResult
+                        Else
+                            syntaxResult = New BinaryExpression(
+                                left:=New Literal(0),
+                                right:=syntaxResult.expression,
+                                op:=tokenBlocks(i)(Scan0).text
+                            )
+                            i += 1
+
+                            Call buf.Add(syntaxResult)
+                        End If
                     Else
-                        Call buf.Add(syntaxResult.Value)
+                        syntaxResult = Expression.CreateExpression(tokenBlocks(i), opts)
+
+                        If syntaxResult.isException Then
+                            Return syntaxResult
+                        Else
+                            Call buf.Add(syntaxResult)
+                        End If
                     End If
                 Else
                     Call buf.Add(tokenBlocks(i)(Scan0).text)
@@ -81,12 +101,23 @@ Namespace Interpreter.SyntaxParser
                 End If
             Next
 
+            Return Nothing
+        End Function
+
+        <Extension>
+        Public Function ParseBinaryExpression(tokenBlocks As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
+            Dim buf As New List(Of [Variant](Of SyntaxResult, String))
+            Dim oplist As New List(Of String)
+            Dim syntaxResult As New Value(Of SyntaxResult)
             Dim processors As GenericSymbolOperatorProcessor() = {
                 New NameMemberReferenceProcessor(),
                 New NamespaceReferenceProcessor(),
                 New PipelineProcessor(),     ' pipeline操作符是优先度最高的
                 New VectorAppendProcessor()  ' append操作符
             }
+
+            Call tokenBlocks.joinNegatives(buf, oplist, opts)
+
             Dim queue As New SyntaxQueue With {.buf = buf}
 
             For Each process As GenericSymbolOperatorProcessor In processors

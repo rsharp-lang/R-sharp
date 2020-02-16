@@ -17,9 +17,9 @@ let delta <- 2.6;
 let y0 = list(V=1.4e-2, T=4e8, I=0);
 # create kinetics system
 let Kinetics_of_influenza_A_virus_infection_in_humans = [
-	T -> neg(beta*T*V),
-	I ->  beta*T*V-delta*I,
-	V ->     p*I     -cc*V
+	T -> -beta * T * V,
+	I ->  beta * T * V - delta * I,
+	V ->     p * I     - cc * V
 ];
 
 # do run kinetics system simulation
