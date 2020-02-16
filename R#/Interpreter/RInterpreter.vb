@@ -239,7 +239,7 @@ Namespace Interpreter
         Private Function InitializeEnvironment(source$, arguments As NamedValue(Of Object)()) As Environment
             Dim envir As Environment
 
-            If source Is Nothing Then
+            If source Is Nothing OrElse InStr(source, "<in_memory_") = 1 Then
                 envir = globalEnvir
             Else
                 envir = New StackFrame With {

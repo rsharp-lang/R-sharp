@@ -72,6 +72,9 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+        Call negativeValTest()
+        Call numberLiteralsTest()
+
         Call anonymous()
         Call exceptionHandler()
         Call StackTest()
@@ -164,6 +167,37 @@ Module interpreterTest
 
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub negativeValTest()
+
+        Dim x# = 8
+        Dim y = -x * -2.0E+133
+
+        Call R.Add("R", 555)
+        Call R.Evaluate("let a <- -R * 2E3;")
+        Call R.Evaluate("(-999.54e3)+a")
+        Call R.PrintMemory()
+
+        Pause()
+    End Sub
+
+    Sub numberLiteralsTest()
+        '        Call R.Evaluate("print(1);
+        'print(1.2);
+        '")
+
+        Call R.Evaluate("-3.9E-99")
+
+        Call R.PrintMemory()
+
+        Call R.Evaluate("3.3e-5")
+
+        Call R.Evaluate("print(3e-2);
+print(8.8e-6);
+print(4e8);")
 
         Pause()
     End Sub

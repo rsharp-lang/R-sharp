@@ -330,26 +330,32 @@ Namespace Language.TokenIcer
                 Return Nothing
             Else
                 If Not bufferNext Is Nothing Then
-                    If buffer = 1 Then
-                        Dim c As Char = buffer(Scan0)
-                        Dim t As Char = bufferNext
+                    If bufferNext = "-"c AndAlso (buffer.Last = "e"c OrElse buffer.Last = "E"c) Then
+                        ' xxxE-xxx科学计数法
+                        buffer += bufferNext.Value
+                        Return Nothing
+                    Else
+                        If buffer = 1 Then
+                            Dim c As Char = buffer(Scan0)
+                            Dim t As Char = bufferNext
 
-                        text = c & t
+                            text = c & t
 
-                        If text Like longOperators Then
-                            buffer *= 0
+                            If text Like longOperators Then
+                                buffer *= 0
 
-                            Return New Token With {
-                                .name = TokenType.operator,
-                                .text = text
-                            }
-                        Else
+                                Return New Token With {
+                                    .name = TokenType.operator,
+                                    .text = text
+                                }
+                            Else
 
+                            End If
                         End If
-                    End If
 
-                    text = buffer.PopAll.CharString
-                    buffer += bufferNext.Value
+                        text = buffer.PopAll.CharString
+                        buffer += bufferNext.Value
+                    End If
                 ElseIf buffer = 1 AndAlso buffer(Scan0) = "@"c Then
                     Return Nothing
                 Else
@@ -388,7 +394,7 @@ Namespace Language.TokenIcer
                 Case Else
                     If text.IsPattern("\d+") Then
                         Return New Token With {.name = TokenType.integerLiteral, .text = text}
-                    ElseIf text.IsNumeric Then
+                    ElseIf Double.TryParse(text, Nothing) Then
                         Return New Token With {.name = TokenType.numberLiteral, .text = text}
                     ElseIf text.IsPattern("[a-z][a-z0-9_\.]*") Then
                         Return New Token With {.name = TokenType.identifier, .text = text}
