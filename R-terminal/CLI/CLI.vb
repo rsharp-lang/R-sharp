@@ -48,6 +48,8 @@ Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.System.Configuration
 Imports SMRUCC.Rsharp.System.Package
+Imports RlangScript = SMRUCC.Rsharp.Runtime.Components.Rscript
+Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
 <CLI> Module CLI
 
@@ -94,6 +96,19 @@ Imports SMRUCC.Rsharp.System.Package
         Call RsharpCore.AppSummary(Nothing, Nothing, App.StdOut)
 
         Call App.StdOut.value.Flush()
+
+        Return 0
+    End Function
+
+    <ExportAPI("--syntax")>
+    <Description("Show syntax parser result of the input script.")>
+    <Usage("--syntax /script <script.R>")>
+    Public Function SyntaxText(args As CommandLine) As Integer
+        Dim script$ = args <= "/script"
+        Dim Rscript As RlangScript = RlangScript.FromFile(script)
+        Dim program As RProgram = RProgram.CreateProgram(Rscript, debug:=False)
+
+        Call Console.WriteLine(program.ToString)
 
         Return 0
     End Function
