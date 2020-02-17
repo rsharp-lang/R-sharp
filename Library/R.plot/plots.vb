@@ -42,6 +42,7 @@
 #End Region
 
 Imports System.Drawing
+Imports System.Drawing.Drawing2D
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.Bootstrapping
@@ -74,6 +75,8 @@ Module plots
         Call REnv.generic.add("plot", GetType(DeclareLambdaFunction), AddressOf plotFormula)
         Call REnv.generic.add("plot", GetType(ODEOutput), AddressOf plotODEResult)
         Call REnv.generic.add("plot", GetType(ODEsOut), AddressOf plot_deSolveResult)
+        Call REnv.generic.add("plot", GetType(SerialData()), AddressOf plotSerials)
+        Call REnv.generic.add("plot", GetType(SerialData), AddressOf plotSerials)
     End Sub
 
     Public Function plot_deSolveResult(desolve As ODEsOut, args As list, env As Environment) As Object
@@ -129,5 +132,42 @@ Module plots
             size:=InteropArgumentHelper.getSize(args!size).SizeParser,
             title:=math.ToString
         )
+    End Function
+
+    Public Function plotSerials(data As Object, args As list, env As Environment) As Object
+        If TypeOf data Is SerialData Then
+            data = {DirectCast(data, SerialData)}
+        End If
+
+        Dim serials As SerialData() = DirectCast(data, SerialData())
+        Dim size As Size = InteropArgumentHelper.getSize(args!size).SizeParser
+
+        Return serials.Plot(
+            size:=size
+        )
+    End Function
+
+    <ExportAPI("serial")>
+    Public Function CreateSerial(x As Array, y As Array, Optional name$ = "data serial", Optional color As Object = "black") As SerialData
+        Dim px As Double() = vector.asVector(Of Double)(x)
+        Dim py As Double() = vector.asVector(Of Double)(y)
+        Dim points As PointData() = px _
+            .Select(Function(xi, i)
+                        Return New PointData With {
+                            .pt = New PointF(xi, y(i))
+                        }
+                    End Function) _
+            .ToArray
+        Dim serial As New SerialData With {
+            .color = InteropArgumentHelper.getColor(color).TranslateColor,
+            .lineType = DashStyle.Solid,
+            .PointSize = 5,
+            .pts = points,
+            .Shape = LegendStyles.SolidLine,
+            .title = name,
+            .width = 5
+        }
+
+        Return serial
     End Function
 End Module
