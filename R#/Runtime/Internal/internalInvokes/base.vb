@@ -889,7 +889,10 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="envir"></param>
         ''' <returns></returns>
         <ExportAPI("lapply")>
-        Public Function lapply(<RRawVectorArgument> X As Object, FUN As Object, envir As Environment) As Object
+        Public Function lapply(<RRawVectorArgument> X As Object, FUN As Object,
+                               Optional names As RFunction = Nothing,
+                               Optional envir As Environment = Nothing) As Object
+
             If FUN Is Nothing Then
                 Return Internal.stop({"Missing apply function!"}, envir)
             ElseIf Not FUN.GetType.ImplementInterface(GetType(RFunction)) Then
@@ -912,11 +915,21 @@ Namespace Runtime.Internal.Invokes
                                       Return apply.Invoke(envir, invokeArgument(d.Value))
                                   End Function)
             Else
+                Dim getName As Func(Of SeqValue(Of Object), String)
+
+                If names Is Nothing Then
+                    getName = Function(i) $"[[{i.i + 1}]]"
+                Else
+                    getName = Function(i)
+                                  Return names.Invoke(envir, invokeArgument(i.value))
+                              End Function
+                End If
+
                 list = Runtime.asVector(Of Object)(X) _
                     .AsObjectEnumerator _
                     .SeqIterator _
                     .ToDictionary(Function(i)
-                                      Return $"[[{i.i + 1}]]"
+                                      Return getName(i)
                                   End Function,
                                   Function(d)
                                       Return apply.Invoke(envir, invokeArgument(d.value))
@@ -926,6 +939,11 @@ Namespace Runtime.Internal.Invokes
             Return New list With {.slots = list}
         End Function
 
+        ''' <summary>
+        ''' 主要是应用于单个参数的R运行时函数的调用
+        ''' </summary>
+        ''' <param name="value"></param>
+        ''' <returns></returns>
         Private Function invokeArgument(value As Object) As InvokeParameter()
             Return InvokeParameter.Create(value)
         End Function

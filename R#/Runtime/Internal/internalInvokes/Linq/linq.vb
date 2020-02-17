@@ -149,8 +149,13 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         End Function
 
         <ExportAPI("groupBy")>
-        Private Function groupBy(sequence As Array, getKey As RFunction, envir As Environment) As Object
-            Dim result = sequence.AsObjectEnumerator _
+        Private Function groupBy(<RRawVectorArgument>
+                                 sequence As Object,
+                                 getKey As RFunction,
+                                 Optional envir As Environment = Nothing) As Object
+
+            Dim source As IEnumerable(Of Object) = Rset.getObjectSet(sequence)
+            Dim result As Group() = source _
                 .GroupBy(Function(o)
                              Dim arg = InvokeParameter.Create(o)
                              Return getKey.Invoke(envir, arg)
