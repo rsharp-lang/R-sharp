@@ -151,7 +151,15 @@ Namespace Interpreter.ExecuteEngine
             If indexer.Length = 0 Then
                 Return Nothing
             ElseIf indexer.Length = 1 Then
-                Return obj.GetColumnVector(Scripting.ToString(indexer.GetValue(Scan0)))
+                Dim key As Object = indexer.GetValue(Scan0)
+
+                If key Is Nothing Then
+                    Return Internal.stop("dataframe index could not be nothing!", envir)
+                ElseIf TypeOf key Is Integer Then
+                    Return obj.GetColumnVector(CInt(key))
+                Else
+                    Return obj.GetColumnVector(Scripting.ToString(key))
+                End If
             Else
                 ' dataframe projection
                 Return obj.projectByColumn(indexer)

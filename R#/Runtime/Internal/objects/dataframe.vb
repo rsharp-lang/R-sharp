@@ -83,6 +83,10 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        Public Function GetColumnVector(index As Integer) As Array
+            Return GetColumnVector(columns.Keys.ElementAtOrDefault(index - 1))
+        End Function
+
         ''' <summary>
         ''' ``data[, selector]``
         ''' </summary>
