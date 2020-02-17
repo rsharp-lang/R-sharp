@@ -2,8 +2,6 @@
 # DOI: 10.3390/v7102875
 
 require(base.math);
-require(grDevices.gr3D);
-require(plot.charts);
 
 setwd(!script$dir);
 
