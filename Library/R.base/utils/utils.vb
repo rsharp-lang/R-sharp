@@ -83,6 +83,12 @@ Public Module utils
     ''' file can also be a complete URL. (For the supported URL schemes, 
     ''' see the 'URLs’ section of the help for ``url``.)
     ''' </param>
+    ''' <param name="encoding">
+    ''' encoding to be assumed for input strings. It is used to mark character 
+    ''' strings as known to be in Latin-1 or UTF-8 (see Encoding): it is not 
+    ''' used to re-encode the input, but allows R to handle encoded strings in 
+    ''' their native encoding (if one of those two). 
+    ''' </param>
     ''' <returns></returns>
     <ExportAPI("read.csv")>
     Public Function read_csv(file$, Optional encoding As Object = "unknown") As Rdataframe
@@ -114,11 +120,16 @@ Public Module utils
     ''' either a character string naming a file or a connection open 
     ''' for writing. "" indicates output to the console.
     ''' </param>
+    ''' <param name="fileEncoding">
+    ''' character string: if non-empty declares the encoding to be 
+    ''' used on a file (not a connection) so the character data can 
+    ''' be re-encoded as they are written.
+    ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("write.csv")>
     <RApiReturn(GetType(Boolean))>
-    Public Function write_csv(<RRawVectorArgument> x As Object, file$, env As Environment) As Object
+    Public Function write_csv(<RRawVectorArgument> x As Object, file$, Optional fileEncoding As Object = "", Optional env As Environment = Nothing) As Object
         If x Is Nothing Then
             Return Internal.debug.stop("Empty dataframe object!", env)
         End If
