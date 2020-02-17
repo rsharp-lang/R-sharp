@@ -317,6 +317,16 @@ Namespace Runtime.Internal.Object.Converts
                 Return asObject(obj)
             ElseIf obj.GetType Is GetType(vbObject) AndAlso Not type Is GetType(Object) Then
                 obj = DirectCast(obj, vbObject).target
+
+                If Not obj Is Nothing AndAlso obj.GetType Is type Then
+                    Return obj
+                End If
+            ElseIf obj.GetType Is GetType(RDispose) AndAlso Not type Is GetType(Object) Then
+                obj = DirectCast(obj, RDispose).Value
+
+                If Not obj Is Nothing AndAlso obj.GetType Is type Then
+                    Return obj
+                End If
             ElseIf type.IsEnum Then
                 Return CastToEnum(obj, type, env)
             End If

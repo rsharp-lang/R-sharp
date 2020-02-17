@@ -131,6 +131,12 @@ Module dataframe
         Return row
     End Function
 
+    <ExportAPI("append.row")>
+    Public Function appendRow(table As File, row As RowObject) As File
+        table.Add(row)
+        Return table
+    End Function
+
     <ExportAPI("dataset.colnames")>
     Public Function colnames(dataset As Array, envir As Environment) As Object
         Dim baseElement As Type = Runtime.MeasureArrayElementType(dataset)
