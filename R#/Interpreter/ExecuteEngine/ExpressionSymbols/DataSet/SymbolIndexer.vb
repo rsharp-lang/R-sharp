@@ -155,7 +155,7 @@ Namespace Interpreter.ExecuteEngine
 
                 If key Is Nothing Then
                     Return Internal.stop("dataframe index could not be nothing!", envir)
-                ElseIf TypeOf key Is Integer Then
+                ElseIf key.GetType Like BinaryExpression.integers Then
                     Return obj.GetColumnVector(CInt(key))
                 Else
                     Return obj.GetColumnVector(Scripting.ToString(key))
