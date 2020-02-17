@@ -374,6 +374,7 @@
     <Compile Include="Runtime\Internal\printer\functionPrinter.vb" />
     <Compile Include="Runtime\Internal\printer\htmlPrinter.vb" />
     <Compile Include="Runtime\Internal\printer\enumPrinter.vb" />
+    <Compile Include="Runtime\Interop\RDispose.vb" />
     <Compile Include="Runtime\Interop\RArgumentList.vb" />
     <Compile Include="Runtime\Interop\REnum.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RDefaultValueAttribute.vb" />
