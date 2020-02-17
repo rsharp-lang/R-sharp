@@ -112,6 +112,21 @@ Module dataframe
         Return $"${id} {length} slots {{{keys.Take(3).JoinBy(", ")}..."
     End Function
 
+    <ExportAPI("rows")>
+    Public Function rows(file As File) As RowObject()
+        Return file.ToArray
+    End Function
+
+    <ExportAPI("cells")>
+    Public Function cells(x As RowObject) As String()
+        Return x.ToArray
+    End Function
+
+    <ExportAPI("read.csv.raw")>
+    Public Function readCsvRaw(file$, Optional encoding As Object = "") As File
+        Return csv.Load(file, Rsharp.GetEncoding(encoding))
+    End Function
+
     <ExportAPI("open.csv")>
     Public Function openCsv(file$, Optional encoding As Object = "") As RDispose
         Dim table As New File

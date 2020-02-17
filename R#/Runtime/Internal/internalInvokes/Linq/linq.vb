@@ -52,6 +52,11 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
     Module linq
 
+        <ExportAPI("skip")>
+        Public Function skip(<RRawVectorArgument> items As Object, n%) As Object
+            Return Rset.getObjectSet(items).Skip(n).ToArray
+        End Function
+
         <ExportAPI("unique")>
         Private Function unique(<RRawVectorArgument> items As Object,
                                 Optional getKey As RFunction = Nothing,
