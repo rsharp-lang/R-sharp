@@ -134,6 +134,7 @@ Namespace Interpreter.ExecuteEngine
             If Not target Is Nothing AndAlso target.GetType Is GetType(Message) Then
                 Return target
             Else
+                envir = New Environment(envir, stackFrame)
                 result = doInvokeFuncVar(target, envir)
             End If
 
