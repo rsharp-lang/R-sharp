@@ -45,6 +45,7 @@ Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Text
+Imports SMRUCC
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -84,8 +85,8 @@ Public Module utils
     ''' </param>
     ''' <returns></returns>
     <ExportAPI("read.csv")>
-    Public Function read_csv(file As String) As Rdataframe
-        Dim datafile As File = IO.File.Load(file)
+    Public Function read_csv(file$, Optional encoding As Object = "unknown") As Rdataframe
+        Dim datafile As File = IO.File.Load(file, encoding:=Rsharp.GetEncoding(encoding))
         Dim cols = datafile.Columns.ToArray
         Dim dataframe As New Rdataframe() With {
             .columns = cols _
