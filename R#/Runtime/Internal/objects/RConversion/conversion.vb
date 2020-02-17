@@ -94,7 +94,7 @@ Namespace Runtime.Internal.Object.Converts
                                 .Select(Function(o) New vbObject(o)) _
                                 .ToArray
                         Else
-                            Return New vbObject(obj)
+                            Return New vbObject(obj, type)
                         End If
                 End Select
             End If
