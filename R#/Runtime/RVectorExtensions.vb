@@ -117,6 +117,16 @@ Namespace Runtime
             End If
         End Function
 
+        Public Function [single](x As Object) As Object
+            If Not x Is Nothing Then
+                If x.GetType.IsArray AndAlso DirectCast(x, Array).Length = 1 Then
+                    Return DirectCast(x, Array).GetValue(Scan0)
+                End If
+            End If
+
+            Return x
+        End Function
+
         ''' <summary>
         ''' Ensure that the input <paramref name="value"/> object is a sequence. 
         ''' (This method will decouple the object instance value from vbObject 

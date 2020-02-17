@@ -998,7 +998,7 @@ Namespace Runtime.Internal.Invokes
                 Dim names = list.Keys.ToArray
                 Dim seq As Array = names _
                     .Select(Function(key)
-                                Return apply.Invoke(envir, invokeArgument(list(key)))
+                                Return Runtime.single(apply.Invoke(envir, invokeArgument(list(key))))
                             End Function) _
                     .ToArray
 
@@ -1007,7 +1007,7 @@ Namespace Runtime.Internal.Invokes
                 Dim seq = Runtime.asVector(Of Object)(X) _
                     .AsObjectEnumerator _
                     .Select(Function(d)
-                                Return apply.Invoke(envir, invokeArgument(d))
+                                Return Runtime.single(apply.Invoke(envir, invokeArgument(d)))
                             End Function) _
                     .ToArray
 
