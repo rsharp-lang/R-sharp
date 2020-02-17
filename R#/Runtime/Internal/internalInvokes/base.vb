@@ -944,6 +944,8 @@ Namespace Runtime.Internal.Invokes
         ''' </summary>
         ''' <param name="value"></param>
         ''' <returns></returns>
+        ''' 
+        <DebuggerStepThrough>
         Private Function invokeArgument(value As Object) As InvokeParameter()
             Return InvokeParameter.Create(value)
         End Function

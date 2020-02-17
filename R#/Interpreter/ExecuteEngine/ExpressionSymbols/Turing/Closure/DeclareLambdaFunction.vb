@@ -124,13 +124,16 @@ Namespace Interpreter.ExecuteEngine
                     '
                     ' Due to the reason of syntax rule of only allows one parameter.
                     '
-                    Return DeclareNewVariable _
+                    Dim argVal As Object = arguments(Scan0).Evaluate(envir)
+                    Dim env As Environment = DeclareNewVariable _
                         .PushNames(names:=parameter.names,
-                                   value:=arguments(Scan0).Evaluate(envir),
+                                   value:=argVal,
                                    type:=TypeCodes.generic,
                                    envir:=envir
-                        ) _
-                        .DoCall(AddressOf closure.Evaluate)
+                        )
+                    Dim result As Object = closure.Evaluate(env)
+
+                    Return result
                 End If
             End Using
         End Function
