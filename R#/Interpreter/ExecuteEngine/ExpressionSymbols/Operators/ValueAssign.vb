@@ -261,12 +261,35 @@ Namespace Interpreter.ExecuteEngine
                 Return setVectorElements(targetObj, Runtime.asVector(Of Integer)(index), value, envir)
             End If
 
-            If Not targetObj.GetType.ImplementInterface(GetType(RNameIndex)) Then
-                Return Internal.stop({"Target symbol can not be indexed by name!", $"SymbolName: {symbolIndex.symbol}"}, envir)
-            End If
-
             Dim indexStr As String() = Runtime.asVector(Of String)(index)
             Dim result As Object
+
+            If Not targetObj.GetType.ImplementInterface(GetType(RNameIndex)) Then
+                If targetObj.GetType Is GetType(dataframe) Then
+                    If symbolIndex.indexType = SymbolIndexers.dataframeColumns Then
+                        If indexStr.Length = 1 Then
+                            DirectCast(targetObj, dataframe).columns(indexStr(Scan0)) = value
+                        Else
+                            Dim seqVal As Array = Runtime.asVector(Of Object)(value)
+                            Dim i As i32 = Scan0
+
+                            For Each key As String In indexStr
+                                If seqVal.Length = 1 Then
+                                    DirectCast(targetObj, dataframe).columns(key) = value
+                                Else
+                                    DirectCast(targetObj, dataframe).columns(key) = seqVal.GetValue(++i)
+                                End If
+                            Next
+
+                            Return Internal.stop(New NotImplementedException, envir)
+                        End If
+                    Else
+                        Return Internal.stop(New NotImplementedException, envir)
+                    End If
+                Else
+                    Return Internal.stop({"Target symbol can not be indexed by name!", $"SymbolName: {symbolIndex.symbol}"}, envir)
+                End If
+            End If
 
             If indexStr.IsNullOrEmpty Then
                 Return SymbolIndexer.emptyIndexError(symbolIndex, envir)

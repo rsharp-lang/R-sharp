@@ -55,8 +55,8 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports fsOptions = Microsoft.VisualBasic.FileIO.SearchOption
 Imports BASICString = Microsoft.VisualBasic.Strings
+Imports fsOptions = Microsoft.VisualBasic.FileIO.SearchOption
 
 Namespace Runtime.Internal.Invokes
 

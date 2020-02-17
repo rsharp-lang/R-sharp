@@ -54,8 +54,6 @@
 
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Language
-Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
@@ -175,6 +173,10 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Private Function getByName(obj As Object, indexer As Array, envir As Environment) As Object
+            If obj.GetType.IsArray AndAlso DirectCast(obj, Array).Length = 1 Then
+                obj = DirectCast(obj, Array).GetValue(Scan0)
+            End If
+
             If Not obj.GetType.ImplementInterface(GetType(RNameIndex)) Then
                 Return Internal.stop("Target object can not be indexed by name!", envir)
             ElseIf indexer.Length = 1 Then

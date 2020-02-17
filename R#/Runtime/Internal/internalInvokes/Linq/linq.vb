@@ -170,5 +170,24 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
             Return result
         End Function
+
+        <ExportAPI("orderBy")>
+        Public Function orderBy(<RRawVectorArgument>
+                                sequence As Object,
+                                getKey As RFunction,
+                                Optional envir As Environment = Nothing) As Object
+
+            Dim source As IEnumerable(Of Object) = Rset.getObjectSet(sequence)
+            Dim result As Array = source _
+                .OrderBy(Function(o)
+                             Dim arg = InvokeParameter.Create(o)
+                             Dim index As Object = getKey.Invoke(envir, arg)
+
+                             Return index
+                         End Function) _
+                .ToArray
+
+            Return result
+        End Function
     End Module
 End Namespace
