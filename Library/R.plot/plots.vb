@@ -141,9 +141,12 @@ Module plots
 
         Dim serials As SerialData() = DirectCast(data, SerialData())
         Dim size As Size = InteropArgumentHelper.getSize(args!size).SizeParser
+        Dim padding = InteropArgumentHelper.getPadding(args!padding)
 
         Return serials.Plot(
-            size:=size
+            size:=size, padding:=padding,
+            xlabel:=args("x.lab"),
+            ylabel:=args("y.lab")
         )
     End Function
 

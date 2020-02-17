@@ -77,6 +77,18 @@ Public Module InteropArgumentHelper
         Select Case padding.GetType
             Case GetType(String)
                 Return padding
+            Case GetType(Long()), GetType(Integer())
+                Dim data As Array = padding
+
+                If data.Length = 1 Then
+                    Dim x As String = data.GetValue(Scan0).ToString
+
+                    Return $"padding: {x}px {x}px {x}px {x}px;"
+                ElseIf data.Length = 4 Then
+                    Return $"padding: {data.GetValue(0)}px {data.GetValue(1)}px {data.GetValue(2)}px {data.GetValue(3)}px;"
+                Else
+                    Return [default]
+                End If
             Case Else
                 Return [default]
         End Select
