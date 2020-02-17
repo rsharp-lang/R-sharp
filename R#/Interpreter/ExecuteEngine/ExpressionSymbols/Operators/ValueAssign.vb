@@ -280,9 +280,9 @@ Namespace Interpreter.ExecuteEngine
                                     DirectCast(targetObj, dataframe).columns(key) = seqVal.GetValue(++i)
                                 End If
                             Next
-
-                            Return Internal.stop(New NotImplementedException, envir)
                         End If
+
+                        Return Nothing
                     Else
                         Return Internal.stop(New NotImplementedException, envir)
                     End If
