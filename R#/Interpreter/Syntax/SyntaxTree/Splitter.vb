@@ -59,6 +59,10 @@ Namespace Interpreter.SyntaxParser
             Dim isDelimiter As Func(Of Token, Boolean)
             Dim tokenVector As Token() = tokens.ToArray
 
+            If tokenVector.Length = 1 Then
+                Return blocks + tokenVector
+            End If
+
             If tokenText Is Nothing Then
                 isDelimiter = Function(t) t.name = delimiter
             Else

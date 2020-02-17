@@ -200,7 +200,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 Return Nothing
             End Function
 
-            Private Function sort(outputs As List(Of FunctionInvoke)) As SyntaxResult
+            Private Function sort(outputs As List(Of FunctionInvoke), stacktrace As StackFrame) As SyntaxResult
                 ' order by xxx asc
                 Do While Not p.EndRead AndAlso Not p.Current.isOneOfKeywords(linqKeywordDelimiters)
                     buffer += ++p
@@ -224,12 +224,12 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     Return exprSyntax
                 End If
 
-                outputs += New FunctionInvoke("sort", exprSyntax.expression, New Literal(token.Last.isKeyword("descending")))
+                outputs += New FunctionInvoke("sort", stacktrace, exprSyntax.expression, New Literal(token.Last.isKeyword("descending")))
 
                 Return Nothing
             End Function
 
-            Private Function project(ByRef projection As Expression) As SyntaxResult
+            Private Function project(ByRef projection As Expression, stacktrace As StackFrame) As SyntaxResult
                 If Not projection Is Nothing Then
                     Return New SyntaxResult("Only allows one project function!", opts.debug)
                 End If
@@ -247,7 +247,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 End If
 
                 If TypeOf projection Is VectorLiteral Then
-                    projection = New FunctionInvoke("list", DirectCast(projection, VectorLiteral).ToArray)
+                    projection = New FunctionInvoke("list", stacktrace, DirectCast(projection, VectorLiteral).ToArray)
                 End If
 
                 Return Nothing
@@ -267,6 +267,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                                                ByRef programClosure As ClosureExpression) As SyntaxResult
 
                 Dim syntaxResult As New Value(Of SyntaxResult)
+                Dim stacktrace As StackFrame
 
                 Do While Not p.EndRead
                     buffer *= 0
@@ -274,6 +275,16 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
                     If Not token.isKeyword Then
                         Continue Do
+                    Else
+                        stacktrace = New StackFrame With {
+                            .File = opts.source.fileName,
+                            .Line = token(Scan0).span.line,
+                            .Method = New Method With {
+                                .Method = token(Scan0).text,
+                                .[Module] = "exec_linq",
+                                .[Namespace] = "SMRUCC/R#"
+                            }
+                        }
                     End If
 
                     Select Case token(Scan0).text
@@ -286,13 +297,13 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                                 Return syntaxResult
                             End If
                         Case "distinct"
-                            outputs += New FunctionInvoke("unique", New SymbolReference("$"))
+                            outputs += New FunctionInvoke("unique", stacktrace, New SymbolReference("$"))
                         Case "order"
-                            If Not (syntaxResult = sort(outputs)) Is Nothing Then
+                            If Not (syntaxResult = sort(outputs, stacktrace)) Is Nothing Then
                                 Return syntaxResult
                             End If
                         Case "select"
-                            If Not (syntaxResult = project(projection)) Is Nothing Then
+                            If Not (syntaxResult = project(projection, stacktrace)) Is Nothing Then
                                 Return syntaxResult
                             End If
                         Case "group"

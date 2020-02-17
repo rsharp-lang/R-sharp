@@ -41,11 +41,13 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 
 Namespace Interpreter.SyntaxParser.SyntaxImplements
 
@@ -55,6 +57,15 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Dim funcName As New Literal(tokens(Scan0).text)
             Dim span As CodeSpan = tokens(Scan0).span
             Dim parameters As New List(Of Expression)
+            Dim frame As New StackFrame With {
+                .File = opts.source.fileName,
+                .Line = tokens(Scan0).span.line,
+                .Method = New Method With {
+                    .Method = funcName.value,
+                    .[Module] = "call_function",
+                    .[Namespace] = "SMRUCC/R#"
+                }
+            }
 
             For Each a As SyntaxResult In tokens _
                 .Skip(2) _
@@ -68,7 +79,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 End If
             Next
 
-            Return New FunctionInvoke(funcName, parameters.ToArray)
+            Return New FunctionInvoke(funcName, frame, parameters.ToArray)
         End Function
 
         <Extension>
@@ -108,6 +119,15 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             End If
 
             Dim parameters As New List(Of Expression)
+            Dim frame As New StackFrame With {
+                .File = opts.source.fileName,
+                .Line = anonymous(Scan0).span.line,
+                .Method = New Method With {
+                    .Method = DirectCast(declares.expression, IRuntimeTrace).stackFrame.Method.Method,
+                    .[Module] = "call_function",
+                    .[Namespace] = "SMRUCC/R#"
+                }
+            }
 
             For Each a As SyntaxResult In invoke _
                 .Skip(1) _
@@ -121,7 +141,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 End If
             Next
 
-            Return New FunctionInvoke(declares.expression, parameters.ToArray)
+            Return New FunctionInvoke(declares.expression, frame, parameters.ToArray)
         End Function
     End Module
 End Namespace

@@ -42,6 +42,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
@@ -62,7 +63,7 @@ Namespace Interpreter.SyntaxParser
             ElseIf b.VA.isException Then
                 Return b
             Else
-                pip = buildPipeline(a.VA.expression, b.VA.expression)
+                pip = buildPipeline(a.VA.expression, b.VA.expression, opts)
             End If
 
             If pip Is Nothing Then
@@ -71,7 +72,7 @@ Namespace Interpreter.SyntaxParser
                     Dim calls As New List(Of Expression)
 
                     For Each [call] As Expression In invokes
-                        calls += buildPipeline(a.VA.expression, [call])
+                        calls += buildPipeline(a.VA.expression, [call], opts)
                     Next
 
                     Return New SyntaxResult(New VectorLiteral(calls))
@@ -98,7 +99,7 @@ Namespace Interpreter.SyntaxParser
             Return True
         End Function
 
-        Private Function buildPipeline(a As Expression, b As Expression) As Expression
+        Private Function buildPipeline(a As Expression, b As Expression, opts As SyntaxBuilderOptions) As Expression
             Dim pip As FunctionInvoke
 
             If TypeOf a Is VectorLiteral Then
@@ -113,7 +114,18 @@ Namespace Interpreter.SyntaxParser
                 pip = b
                 pip.parameters.Insert(Scan0, a)
             ElseIf TypeOf b Is SymbolReference Then
-                pip = New FunctionInvoke(DirectCast(b, SymbolReference).symbol, a)
+                Dim name$ = DirectCast(b, SymbolReference).symbol
+                Dim stacktrace As New StackFrame With {
+                    .File = opts.source.fileName,
+                    .Line = "n/a",
+                    .Method = New Method With {
+                        .Method = name,
+                        .[Module] = "call_function",
+                        .[Namespace] = "SMRUCC/R#"
+                    }
+                }
+
+                pip = New FunctionInvoke(name, stacktrace, a)
             Else
                 pip = Nothing
             End If

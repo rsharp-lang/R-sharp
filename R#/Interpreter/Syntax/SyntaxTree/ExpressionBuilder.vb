@@ -132,6 +132,10 @@ Namespace Interpreter.SyntaxParser
                     Return SyntaxImplements.LiteralSyntax(item(Scan0), opts)
                 ElseIf item.isIdentifier Then
                     Return New SymbolReference(item(Scan0))
+                ElseIf item.Length = 1 AndAlso item(Scan0).name = TokenType.annotation Then
+                    If item(Scan0).text = "@stop" Then
+                        Return New SyntaxResult(New BreakPoint)
+                    End If
                 Else
                     Dim ifelse = item.ifElseTriple
 

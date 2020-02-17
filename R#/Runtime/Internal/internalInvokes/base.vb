@@ -925,15 +925,19 @@ Namespace Runtime.Internal.Invokes
                               End Function
                 End If
 
-                list = Runtime.asVector(Of Object)(X) _
-                    .AsObjectEnumerator _
-                    .SeqIterator _
-                    .ToDictionary(Function(i)
-                                      Return getName(i)
-                                  End Function,
-                                  Function(d)
-                                      Return apply.Invoke(envir, invokeArgument(d.value))
-                                  End Function)
+                Try
+                    list = Runtime.asVector(Of Object)(X) _
+                        .AsObjectEnumerator _
+                        .SeqIterator _
+                        .ToDictionary(Function(i)
+                                          Return getName(i)
+                                      End Function,
+                                      Function(d)
+                                          Return apply.Invoke(envir, invokeArgument(d.value))
+                                      End Function)
+                Catch ex As Exception
+                    Return Internal.stop(ex, envir)
+                End Try
             End If
 
             Return New list With {.slots = list}

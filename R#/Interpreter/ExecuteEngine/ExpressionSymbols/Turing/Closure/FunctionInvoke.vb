@@ -67,7 +67,7 @@ Namespace Interpreter.ExecuteEngine
     ''' ```
     ''' </summary>
     Public Class FunctionInvoke : Inherits Expression
-        ' Implements IRuntimeTrace
+        Implements IRuntimeTrace
 
         Public Overrides ReadOnly Property type As TypeCodes
             Get
@@ -76,7 +76,7 @@ Namespace Interpreter.ExecuteEngine
         End Property
 
         Public ReadOnly Property funcName As Expression
-        ' Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
+        Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
 
         ''' <summary>
         ''' The namespace reference
@@ -96,8 +96,8 @@ Namespace Interpreter.ExecuteEngine
         ''' <param name="parameters"></param>
         ''' 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Sub New(funcName$, ParamArray parameters As Expression())
-            Call Me.New(New Literal(funcName), parameters)
+        Sub New(funcName$, stackFrame As StackFrame, ParamArray parameters As Expression())
+            Call Me.New(New Literal(funcName), stackFrame, parameters)
         End Sub
 
         ''' <summary>
@@ -105,10 +105,10 @@ Namespace Interpreter.ExecuteEngine
         ''' </summary>
         ''' <param name="funcVar"></param>
         ''' <param name="parameters"></param>
-        Sub New(funcVar As Expression, ParamArray parameters As Expression())
+        Sub New(funcVar As Expression, stackFrame As StackFrame, ParamArray parameters As Expression())
             Me.funcName = funcVar
             Me.parameters = parameters.AsList
-            ' Me.stackFrame = StackFrame
+            Me.stackFrame = stackFrame
         End Sub
 
         Public Overrides Function ToString() As String

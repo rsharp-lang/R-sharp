@@ -173,11 +173,13 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Private Function getByName(obj As Object, indexer As Array, envir As Environment) As Object
-            If obj.GetType.IsArray AndAlso DirectCast(obj, Array).Length = 1 Then
+            Dim objType As Type = obj.GetType
+
+            If objType.IsArray AndAlso DirectCast(obj, Array).Length = 1 Then
                 obj = DirectCast(obj, Array).GetValue(Scan0)
             End If
 
-            If Not obj.GetType.ImplementInterface(GetType(RNameIndex)) Then
+            If Not objType.ImplementInterface(GetType(RNameIndex)) Then
                 Return Internal.stop("Target object can not be indexed by name!", envir)
             ElseIf indexer.Length = 1 Then
                 Return DirectCast(obj, RNameIndex).getByName(Scripting.ToString(indexer.GetValue(Scan0)))

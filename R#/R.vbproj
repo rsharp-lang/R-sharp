@@ -266,6 +266,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\BreakPoint.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryInExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Linq\LinqOutput.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxBuilderOptions.vb" />
