@@ -523,7 +523,7 @@ Namespace Runtime.Internal.Invokes
                 Next
             ElseIf type.IsArray AndAlso DirectCast(opts, Array).Length = 0 Then
                 ' get all options
-                values = RConversion.asList(configs.getAllConfigs)
+                values = RConversion.asList(configs.getAllConfigs, New InvokeParameter() {}, envir)
             Else
                 values = New list With {
                     .slots = New Dictionary(Of String, Object)

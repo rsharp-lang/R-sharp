@@ -105,6 +105,23 @@ Namespace Runtime.Internal.Object
             Throw New NotImplementedException
         End Function
 
+        Public Function GetRowList(index As Integer) As Dictionary(Of String, Object)
+            Dim slots As New Dictionary(Of String, Object)
+            Dim array As Array
+
+            For Each key As String In columns.Keys
+                array = _columns(key)
+
+                If array.Length = 1 Then
+                    slots.Add(key, array.GetValue(Scan0))
+                Else
+                    slots.Add(key, array.GetValue(index))
+                End If
+            Next
+
+            Return slots
+        End Function
+
         Public Function GetByRowIndex(index As Integer()) As dataframe
             Dim subsetRowNumbers As String() = index _
                 .Select(Function(i, j)
