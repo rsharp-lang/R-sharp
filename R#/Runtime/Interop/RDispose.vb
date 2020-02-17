@@ -3,24 +3,19 @@
     ''' <summary>
     ''' Helper for implements using in R#
     ''' </summary>
-    Public Class RDispose : Implements IDisposable
+    Public Class RDispose : Inherits RReturn
+        Implements IDisposable
 
-        Friend ReadOnly x As Object
         Friend ReadOnly final As Action(Of Object)
 
-        Public ReadOnly Property getObject As Object
-            Get
-                Return x
-            End Get
-        End Property
-
         Sub New(x As Object, final As Action(Of Object))
-            Me.x = x
+            Call MyBase.New(x, invisible:=False)
+
             Me.final = final
         End Sub
 
         Public Overrides Function ToString() As String
-            Return x.ToString
+            Return Value.ToString
         End Function
 
 #Region "IDisposable Support"
@@ -31,7 +26,7 @@
             If Not disposedValue Then
                 If disposing Then
                     ' TODO: dispose managed state (managed objects).
-                    Call final(x)
+                    Call final(Value)
                 End If
 
                 ' TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
