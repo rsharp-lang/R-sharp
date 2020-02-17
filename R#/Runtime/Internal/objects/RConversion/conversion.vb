@@ -50,10 +50,25 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 
 Namespace Runtime.Internal.Object.Converts
 
     Module RConversion
+
+        <ExportAPI("as.Date")>
+        Public Function asDate(<RRawVectorArgument> obj As Object) As Object
+            Return Rset _
+                .getObjectSet(obj) _
+                .Select(Function(o)
+                            If TypeOf o Is Date Then
+                                Return CDate(o)
+                            Else
+                                Return Date.Parse(Scripting.ToString(o))
+                            End If
+                        End Function) _
+                .ToArray
+        End Function
 
         ''' <summary>
         ''' Cast .NET object to R# object
