@@ -107,6 +107,7 @@ Namespace Interpreter.SyntaxParser
         <Extension>
         Public Function ParseBinaryExpression(tokenBlocks As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim buf As New List(Of [Variant](Of SyntaxResult, String))
+            Dim lineNum As Integer = tokenBlocks(Scan0)(Scan0).span.line
             Dim oplist As New List(Of String)
             Dim syntaxResult As New Value(Of SyntaxResult)
             Dim processors As GenericSymbolOperatorProcessor() = {
@@ -147,14 +148,14 @@ Namespace Interpreter.SyntaxParser
             End If
 
             If buf > 1 Then
-                Return buf.joinRemaining(opts)
+                Return buf.joinRemaining(lineNum, opts)
             Else
                 Return buf(Scan0)
             End If
         End Function
 
         <Extension>
-        Private Function joinRemaining(buf As List(Of [Variant](Of SyntaxResult, String)), opts As SyntaxBuilderOptions) As SyntaxResult
+        Private Function joinRemaining(buf As List(Of [Variant](Of SyntaxResult, String)), lineNum%, opts As SyntaxBuilderOptions) As SyntaxResult
             For Each a As [Variant](Of SyntaxResult, String) In buf
                 If a.VA IsNot Nothing AndAlso a.VA.isException Then
                     Return a.VA
@@ -181,6 +182,8 @@ Namespace Interpreter.SyntaxParser
             ElseIf buf = 3 AndAlso tokens(1) Like GetType(String) AndAlso tokens(1).TryCast(Of String) Like ExpressionSignature.valueAssignOperatorSymbols Then
                 ' set value by name
                 Return New MemberValueAssign(tokens(Scan0), tokens(2))
+            ElseIf tokens.isLambdaFunction Then
+                Return SyntaxImplements.DeclareLambdaFunction(tokens(Scan0).VA, tokens(2).VA, lineNum, opts)
             End If
 
             Return New SyntaxResult(New SyntaxErrorException, opts.debug)

@@ -1,45 +1,45 @@
 ﻿#Region "Microsoft.VisualBasic::f272fc550a8786715e5995f1f11cfded, R#\Interpreter\Syntax\SyntaxTree\ExpressionSignature.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module ExpressionSignature
-    ' 
-    '         Function: ifElseTriple, isByRefCall, isComma, isFunctionInvoke, isIdentifier
-    '                   (+2 Overloads) isKeyword, isLambdaFunction, isLiteral, isNamespaceReferenceCall, isOneOfKeywords
-    '                   isOperator, isSequenceSyntax, isSimpleSymbolIndexer, isStackOf, isTuple
-    '                   isValueAssign, parseComplexSymbolIndexer
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module ExpressionSignature
+' 
+'         Function: ifElseTriple, isByRefCall, isComma, isFunctionInvoke, isIdentifier
+'                   (+2 Overloads) isKeyword, isLambdaFunction, isLiteral, isNamespaceReferenceCall, isOneOfKeywords
+'                   isOperator, isSequenceSyntax, isSimpleSymbolIndexer, isStackOf, isTuple
+'                   isValueAssign, parseComplexSymbolIndexer
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -61,6 +61,7 @@ Namespace Interpreter.SyntaxParser
     Module ExpressionSignature
 
         Friend ReadOnly valueAssignOperatorSymbols As Index(Of String) = {"<-", "="}
+        Friend ReadOnly lambdaOperator As Index(Of String) = {"->", "=>"}
         Friend ReadOnly literalTypes As Index(Of TokenType) = {
             TokenType.stringLiteral,
             TokenType.booleanLiteral,
@@ -90,6 +91,18 @@ Namespace Interpreter.SyntaxParser
         <Extension>
         Public Function isLambdaFunction(code As List(Of Token())) As Boolean
             Return code > 2 AndAlso (code(Scan0).isIdentifier OrElse code(Scan0).isTuple) AndAlso code(1).isOperator("->", "=>")
+        End Function
+
+        ''' <summary>
+        ''' The given code tokens is a lambda function?
+        ''' </summary>
+        ''' <param name="code"></param>
+        ''' <returns></returns>
+        ''' 
+        <DebuggerStepThrough>
+        <Extension>
+        Public Function isLambdaFunction(code As [Variant](Of Expression, String)()) As Boolean
+            Return code.Length > 2 AndAlso (TypeOf code(Scan0).VA Is SymbolReference OrElse TypeOf code(Scan0).VA Is VectorLiteral) AndAlso code(1).VB Like lambdaOperator
         End Function
 
         <Extension>
