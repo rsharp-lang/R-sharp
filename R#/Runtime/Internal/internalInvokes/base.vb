@@ -903,6 +903,8 @@ Namespace Runtime.Internal.Invokes
                 Return X
             ElseIf Program.isException(FUN) Then
                 Return FUN
+            ElseIf X.GetType Is GetType(list) Then
+                X = DirectCast(X, list).slots
             End If
 
             Dim apply As RFunction = FUN
