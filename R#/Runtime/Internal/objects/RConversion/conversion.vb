@@ -47,6 +47,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -288,6 +289,28 @@ Namespace Runtime.Internal.Object.Converts
                 Return Runtime.CTypeOfList(Of String)(obj)
             Else
                 Return Runtime.asVector(Of String)(obj)
+            End If
+        End Function
+
+        <ExportAPI("is.character")>
+        Public Function isCharacter(<RRawVectorArgument> obj As Object) As Boolean
+            If obj Is Nothing Then
+                Return False
+            ElseIf obj.GetType Is GetType(vector) Then
+                obj = DirectCast(obj, vector).data
+            ElseIf obj.GetType Is GetType(list) Then
+                ' 只判断list的value
+                obj = DirectCast(obj, list).slots.Values.ToArray
+            ElseIf obj.GetType.ImplementInterface(GetType(IDictionary)) Then
+                obj = DirectCast(obj, IDictionary).Values.AsSet.ToArray
+            End If
+
+            If obj.GetType Like BinaryExpression.characters Then
+                    Return True
+                ElseIf obj.GetType.IsArray AndAlso DirectCast(obj, Array).AsObjectEnumerator.All(Function(x) x.GetType Like BinaryExpression.characters) Then
+                    Return True
+                Else
+                    Return False
             End If
         End Function
 

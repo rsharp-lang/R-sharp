@@ -69,7 +69,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 tokens = parmPart.SplitByTopLevelDelimiter(TokenType.keyword, tokenText:="as")
             End If
 
-            Dim paramsSyntax = SyntaxImplements.DeclareNewVariable(tokens(Scan0), tokens(2), opts)
+            Dim paramsSyntax = SyntaxImplements.DeclareNewVariable(tokens(Scan0), tokens(2), opts, True)
 
             If paramsSyntax.isException Then
                 Return paramsSyntax

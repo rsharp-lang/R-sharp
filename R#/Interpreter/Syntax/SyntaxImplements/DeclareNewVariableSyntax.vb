@@ -115,7 +115,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             }
         End Function
 
-        Public Function DeclareNewVariable(symbol As Token(), value As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
+        Public Function DeclareNewVariable(symbol As Token(), value As Token(), opts As SyntaxBuilderOptions, funcParameter As Boolean) As SyntaxResult
             Dim valSyntaxTemp As SyntaxResult = Expression.CreateExpression(value, opts)
 
             If valSyntaxTemp.isException Then
@@ -126,7 +126,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 .hasInitializeExpression = True,
                 .names = getNames(symbol),
                 .value = valSyntaxTemp.expression,
-                .m_type = .value.type
+                .m_type = If(funcParameter, TypeCodes.generic, .value.type)
             }
         End Function
 

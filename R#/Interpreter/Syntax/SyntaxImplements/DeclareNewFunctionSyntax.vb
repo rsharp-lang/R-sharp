@@ -150,7 +150,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                             If syntaxParts = 1 Then
                                 Return SyntaxImplements.DeclareNewVariable(t)
                             ElseIf syntaxParts = 3 Then
-                                Return SyntaxImplements.DeclareNewVariable(syntaxParts(0), syntaxParts(2), opts)
+                                Return SyntaxImplements.DeclareNewVariable(syntaxParts(0), syntaxParts(2), opts, True)
                             Else
                                 Return New SyntaxResult("syntax error on declare function parameters!", opts.debug)
                             End If
