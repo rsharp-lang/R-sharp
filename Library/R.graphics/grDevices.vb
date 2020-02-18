@@ -47,11 +47,13 @@ Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports REnv = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' The R# Graphics Devices and Support for Colours and Fonts
@@ -225,7 +227,33 @@ break:
     End Function
 
     <ExportAPI("colors")>
-    Public Function colors(term$, Optional n% = 256) As Color()
-        Return Designer.GetColors(term, n)
+    Public Function colors(<RRawVectorArgument> term As Object,
+                           Optional n% = 256,
+                           Optional character As Boolean = False,
+                           Optional env As Environment = Nothing) As Object
+
+        Dim list As Color()
+
+        If term Is Nothing Then
+            Return Nothing
+        ElseIf term.GetType.IsArray Then
+            With DirectCast(term, Array).AsObjectEnumerator.Select(Function(a) Scripting.ToString(a)).ToArray
+                If .Length = 1 Then
+                    list = Designer.GetColors(CStr(.GetValue(Scan0)), n)
+                Else
+                    list = Designer.GetColors(.JoinBy(","), n)
+                End If
+            End With
+        ElseIf term.GetType Is GetType(String) Then
+            list = Designer.GetColors(CStr(term), n)
+        Else
+            Return REnv.debug.stop(New InvalidProgramException(term.GetType.FullName), env)
+        End If
+
+        If character Then
+            Return list.Select(Function(c) c.ToHtmlColor).ToArray
+        Else
+            Return list
+        End If
     End Function
 End Module
