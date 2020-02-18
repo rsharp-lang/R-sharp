@@ -158,6 +158,8 @@ Namespace Interpreter.ExecuteEngine
                         Case "/" : Return Runtime.Core.Divide(Of Double, Double, Double)(a, b).ToArray
                         Case "^" : Return Runtime.Core.Power(Of Double, Double, Double)(a, b).ToArray
                         Case "%" : Return Runtime.Core.Module(Of Double, Double, Double)(a, b).ToArray
+                        Case "!=" : Return Runtime.Core.BinaryCoreInternal(Of Double, Double, Boolean)(a, b, Function(x, y) x <> y).ToArray
+                        Case "==" : Return Runtime.Core.BinaryCoreInternal(Of Double, Double, Boolean)(a, b, Function(x, y) x = y).ToArray
                         Case ">=" : Return Runtime.Core.BinaryCoreInternal(Of Double, Double, Boolean)(a, b, Function(x, y) x >= y).ToArray
                         Case "<=" : Return Runtime.Core.BinaryCoreInternal(Of Double, Double, Boolean)(a, b, Function(x, y) x <= y).ToArray
                     End Select
