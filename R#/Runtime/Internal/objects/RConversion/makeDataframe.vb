@@ -2,7 +2,7 @@
 
 Namespace Runtime.Internal.Object.Converts
 
-    Public Delegate Function IMakeDataFrame(x As Object, env As Environment) As dataframe
+    Public Delegate Function IMakeDataFrame(x As Object, args As list, env As Environment) As dataframe
 
     Public Module makeDataframe
 
@@ -20,11 +20,11 @@ Namespace Runtime.Internal.Object.Converts
             Return makesDataframe.ContainsKey(type)
         End Function
 
-        Public Function createDataframe(type As Type, x As Object, env As Environment) As dataframe
-            Return makesDataframe(type)(x, env)
+        Public Function createDataframe(type As Type, x As Object, args As list, env As Environment) As dataframe
+            Return makesDataframe(type)(x, args, env)
         End Function
 
-        Private Function TracebackDataFrmae(data As Object, env As Environment) As dataframe
+        Private Function TracebackDataFrmae(data As Object, args As list, env As Environment) As dataframe
             Dim stacktrace As StackFrame()
 
             If TypeOf data Is ExceptionData Then

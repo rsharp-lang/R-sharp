@@ -21,18 +21,23 @@ Module math
         REnv.Object.Converts.makeDataframe.addHandler(GetType(ODEsOut), AddressOf create_deSolve_DataFrame)
     End Sub
 
-    Private Function create_deSolve_DataFrame(x As ODEsOut, env As Environment) As dataframe
+    Private Function create_deSolve_DataFrame(x As ODEsOut, args As list, env As Environment) As dataframe
         Dim data As New dataframe With {
             .columns = New Dictionary(Of String, Array)
         }
+        Dim dx As String() = x.x _
+            .Select(Function(d) CStr(d)) _
+            .ToArray
+
+        If args.hasName("x.lab") Then
+            data.columns.Add(args("x.lab"), dx)
+        End If
 
         For Each v In x.y
             data.columns.Add(v.Key, v.Value.ToArray)
         Next
 
-        data.rownames = x.x _
-            .Select(Function(d) CStr(d)) _
-            .ToArray
+        data.rownames = dx
 
         Return data
     End Function

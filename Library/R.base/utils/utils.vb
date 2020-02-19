@@ -126,10 +126,19 @@ Public Module utils
     ''' be re-encoded as they are written.
     ''' </param>
     ''' <param name="env"></param>
+    ''' <param name="row_names">
+    ''' either a logical value indicating whether the row names of 
+    ''' x are to be written along with x, or a character vector of 
+    ''' row names to be written.
+    ''' </param>
     ''' <returns></returns>
     <ExportAPI("write.csv")>
     <RApiReturn(GetType(Boolean))>
-    Public Function write_csv(<RRawVectorArgument> x As Object, file$, Optional fileEncoding As Object = "", Optional env As Environment = Nothing) As Object
+    Public Function write_csv(<RRawVectorArgument> x As Object, file$,
+                              Optional row_names As Boolean = True,
+                              Optional fileEncoding As Object = "",
+                              Optional env As Environment = Nothing) As Object
+
         If x Is Nothing Then
             Return Internal.debug.stop("Empty dataframe object!", env)
         End If
@@ -137,8 +146,15 @@ Public Module utils
         Dim type As Type = x.GetType
 
         If type Is GetType(Rdataframe) Then
-            Dim matrix As String()() = DirectCast(x, Rdataframe).GetTable(env.globalEnvironment, printContent:=False)
-            Dim rows = matrix.Select(Function(r) New RowObject(r))
+            Dim matrix As String()() = DirectCast(x, Rdataframe) _
+                .GetTable(
+                    env:=env.globalEnvironment,
+                    printContent:=False,
+                    showRowNames:=row_names
+                )
+            Dim rows As IEnumerable(Of RowObject) = matrix _
+                .Select(Function(r) New RowObject(r)) _
+                .ToArray
             Dim dataframe As New File(rows)
 
             Return dataframe.Save(path:=file, encoding:=Encodings.UTF8WithoutBOM, silent:=True)

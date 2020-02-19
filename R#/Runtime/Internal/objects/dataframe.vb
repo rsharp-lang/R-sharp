@@ -155,15 +155,18 @@ Namespace Runtime.Internal.Object
         ''' Each element in a return result array is a row in table matrix
         ''' </summary>
         ''' <returns></returns>
-        Public Function GetTable(env As GlobalEnvironment, Optional printContent As Boolean = True) As String()()
+        Public Function GetTable(env As GlobalEnvironment, Optional printContent As Boolean = True, Optional showRowNames As Boolean = True) As String()()
             Dim table As String()() = New String(nrows)() {}
-            Dim row As String()
             Dim rIndex As Integer
             Dim colNames$() = columns.Keys.ToArray
             Dim col As Array
+            Dim row As String() = {""}.Join(colNames)
 
-            row = {""}.Join(colNames)
-            table(Scan0) = row.ToArray
+            If showRowNames Then
+                table(Scan0) = row.ToArray
+            Else
+                table(Scan0) = row.Skip(1).ToArray
+            End If
 
             If rownames.IsNullOrEmpty Then
                 rownames = table _
@@ -173,7 +176,9 @@ Namespace Runtime.Internal.Object
             End If
 
             Dim elementTypes As Type() = colNames _
-                .Select(Function(key) columns(key).GetType.GetElementType) _
+                .Select(Function(key)
+                            Return columns(key).GetType.GetElementType
+                        End Function) _
                 .ToArray
             Dim formatters As IStringBuilder() = elementTypes _
                 .Select(Function(type)
@@ -195,7 +200,11 @@ Namespace Runtime.Internal.Object
                     End If
                 Next
 
-                table(i) = row.ToArray
+                If showRowNames Then
+                    table(i) = row.ToArray
+                Else
+                    table(i) = row.Skip(1).ToArray
+                End If
             Next
 
             Return table

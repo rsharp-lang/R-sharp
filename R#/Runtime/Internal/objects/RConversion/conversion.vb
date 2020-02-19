@@ -47,6 +47,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
@@ -190,15 +191,23 @@ Namespace Runtime.Internal.Object.Converts
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("as.data.frame")>
-        Public Function asDataframe(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+        Public Function asDataframe(<RRawVectorArgument> x As Object,
+                                    <RListObjectArgument> args As Object,
+                                    Optional env As Environment = Nothing) As Object
             If x Is Nothing Then
                 Return x
+            Else
+                args = base.Rlist(args, env)
+
+                If Program.isException(args) Then
+                    Return args
+                End If
             End If
 
             Dim type As Type = x.GetType
 
             If makeDataframe.is_ableConverts(type) Then
-                Return makeDataframe.createDataframe(type, x, env)
+                Return makeDataframe.createDataframe(type, x, args, env)
             Else
                 Return Internal.stop(New InvalidProgramException, env)
             End If
@@ -306,11 +315,11 @@ Namespace Runtime.Internal.Object.Converts
             End If
 
             If obj.GetType Like BinaryExpression.characters Then
-                    Return True
-                ElseIf obj.GetType.IsArray AndAlso DirectCast(obj, Array).AsObjectEnumerator.All(Function(x) x.GetType Like BinaryExpression.characters) Then
-                    Return True
-                Else
-                    Return False
+                Return True
+            ElseIf obj.GetType.IsArray AndAlso DirectCast(obj, Array).AsObjectEnumerator.All(Function(x) x.GetType Like BinaryExpression.characters) Then
+                Return True
+            Else
+                Return False
             End If
         End Function
 
