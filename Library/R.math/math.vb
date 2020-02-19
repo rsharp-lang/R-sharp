@@ -70,6 +70,7 @@ Module math
     <RApiReturn(GetType(ODEsOut))>
     Public Function RK4(system As DeclareLambdaFunction(), y0 As list, a#, b#,
                         Optional resolution% = 10000,
+                        Optional tick As Action(Of Environment) = Nothing,
                         Optional env As Environment = Nothing) As Object
 
         Dim vector As var() = New var(system.Length - 1) {}
@@ -102,7 +103,13 @@ Module math
                      Next
                  End Sub
         Dim ODEs As New GenericODEs(vector, df)
-        Dim result As ODEsOut = ODEs.Solve(n:=resolution, a:=a, b:=b)
+        Dim result As Object
+
+        If tick Is Nothing Then
+            result = ODEs.Solve(n:=resolution, a:=a, b:=b)
+        Else
+            result = New SolverIterator(New RungeKutta4(ODEs)).Config(ODEs.GetY0(False), resolution, a, b)
+        End If
 
         Return result
     End Function
