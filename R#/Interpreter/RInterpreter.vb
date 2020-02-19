@@ -107,6 +107,10 @@ Namespace Interpreter
 
         Public Const lastVariableName$ = "$"
 
+        ''' <summary>
+        ''' 直接无参数调用这个构造函数，则会使用默认的配置文件创建R#脚本解释器引擎实例
+        ''' </summary>
+        ''' <param name="envirConf"></param>
         Sub New(Optional envirConf As Options = Nothing)
             If envirConf Is Nothing Then
                 envirConf = New Options(ConfigFile.localConfigs)
