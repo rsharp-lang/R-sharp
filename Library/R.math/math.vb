@@ -11,14 +11,14 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports REnv = SMRUCC.Rsharp.Runtime.Internal
+Imports REnv = SMRUCC.Rsharp.Runtime
 Imports stdVec = Microsoft.VisualBasic.Math.LinearAlgebra.Vector
 
 <Package("base.math")>
 Module math
 
     Sub New()
-        REnv.Object.Converts.makeDataframe.addHandler(GetType(ODEsOut), AddressOf create_deSolve_DataFrame)
+        REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(ODEsOut), AddressOf create_deSolve_DataFrame)
     End Sub
 
     Private Function create_deSolve_DataFrame(x As ODEsOut, args As list, env As Environment) As dataframe
@@ -53,7 +53,7 @@ Module math
         Dim y As df
 
         If df Is Nothing Then
-            Return REnv.debug.stop("Missing ``dy/dt``!", env)
+            Return REnv.Internal.debug.stop("Missing ``dy/dt``!", env)
         End If
 
         If TypeOf df Is df Then
@@ -63,7 +63,7 @@ Module math
                 y = Function(x, x1) .Invoke(x)
             End With
         Else
-            Return REnv.debug.stop(New NotSupportedException, env)
+            Return REnv.Internal.debug.stop(New NotSupportedException, env)
         End If
 
         Return New ODE With {
@@ -86,7 +86,7 @@ Module math
         Dim names As New Dictionary(Of String, Variable)
 
         For Each v As NamedValue(Of Object) In y0.namedValues
-            Call env.Push(v.Name, CDbl(v.Value), TypeCodes.double)
+            Call env.Push(v.Name, REnv.asVector(Of Double)(v.Value), TypeCodes.double)
             Call names.Add(v.Name, env.FindSymbol(v.Name, [inherits]:=False))
         Next
 
@@ -95,11 +95,11 @@ Module math
             Dim name As String = formula.parameterNames(Scan0)
             Dim ref As Variable = names(name)
 
-            ref.value = y0.getByName(name)
+            ref.value = REnv.getFirst(y0.getByName(name))
             solve = Function() lambda(CDbl(ref.value))
             vector(++i) = New var(solve) With {
                 .Name = name,
-                .Value = y0.getByName(.Name)
+                .Value = REnv.getFirst(y0.getByName(.Name))
             }
         Next
 
