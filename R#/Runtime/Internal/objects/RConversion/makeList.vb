@@ -37,8 +37,8 @@ Namespace Runtime.Internal.Object.Converts
 
             For i As Integer = 0 To data.nrows - 1
                 index = i
-                row = columns.ToDictionary(Function(col) col, Function(col) getVals(col)(i))
-                rows.Add($"[[{i + 1}]]", New list With {.slots = row})
+                row = columns.ToDictionary(Function(col) col, Function(col) getVals(col)(index))
+                rows.Add($"[[{index + 1}]]", New list With {.slots = row})
             Next
 
             Return New list With {.slots = rows}
