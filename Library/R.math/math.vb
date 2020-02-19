@@ -115,7 +115,11 @@ Module math
         If tick Is Nothing Then
             result = ODEs.Solve(n:=resolution, a:=a, b:=b)
         Else
-            result = New SolverIterator(New RungeKutta4(ODEs)).Config(ODEs.GetY0(False), resolution, a, b)
+            result = New SolverIterator(New RungeKutta4(ODEs)) _
+                .Config(ODEs.GetY0(False), resolution, a, b) _
+                .Bind(Sub()
+                          Call tick(env)
+                      End Sub)
         End If
 
         Return result
