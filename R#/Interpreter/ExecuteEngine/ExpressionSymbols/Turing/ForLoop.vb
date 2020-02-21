@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a6fbc9d70db6ddb39d73b5c49dd83ba7, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ForLoop.vb"
+﻿#Region "Microsoft.VisualBasic::15ebc1efdd04acc8d706e89f29e58c74, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ForLoop.vb"
 
     ' Author:
     ' 
@@ -33,10 +33,10 @@
 
     '     Class ForLoop
     ' 
-    '         Properties: type
+    '         Properties: stackFrame, type
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, exec, execParallel, ParseLoopBody, RunLoop
+    '         Function: Evaluate, exec, execParallel, getSequence, RunLoop
     '                   ToString
     ' 
     ' 
@@ -44,13 +44,14 @@
 
 #End Region
 
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
-Imports SMRUCC.Rsharp.Language
-Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 
 Namespace Interpreter.ExecuteEngine
 
@@ -58,6 +59,7 @@ Namespace Interpreter.ExecuteEngine
     ''' 在R语言之中，只有for each循环
     ''' </summary>
     Public Class ForLoop : Inherits Expression
+        Implements IRuntimeTrace
 
         ''' <summary>
         ''' 单个变量或者tuple的时候为多个变量
@@ -84,47 +86,15 @@ Namespace Interpreter.ExecuteEngine
             End Get
         End Property
 
-        Sub New(tokens As IEnumerable(Of Token))
-            Dim blocks = tokens.SplitByTopLevelDelimiter(TokenType.close)
-            Dim [loop] = blocks(Scan0).Skip(1).SplitByTopLevelDelimiter(TokenType.keyword)
-            Dim vars As Token() = [loop](Scan0)
+        Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
 
-            If vars.Length = 1 Then
-                variables = {vars(Scan0).text}
-            Else
-                variables = vars _
-                    .Skip(1) _
-                    .Take(vars.Length - 2) _
-                    .Where(Function(x) Not x.name = TokenType.comma) _
-                    .Select(Function(x) x.text) _
-                    .ToArray
-            End If
-
-            Me.sequence = Expression.CreateExpression([loop].Skip(2).IteratesALL)
-            Me.body = New DeclareNewFunction With {
-                .body = ParseLoopBody(blocks(2), isParallel:=parallel),
-                .funcName = "forloop_internal",
-                .params = {}
-            }
+        Sub New(variables$(), sequence As Expression, body As DeclareNewFunction, parallel As Boolean, stackframe As StackFrame)
+            Me.variables = variables
+            Me.sequence = sequence
+            Me.body = body
+            Me.parallel = parallel
+            Me.stackFrame = stackframe
         End Sub
-
-        Private Shared Function ParseLoopBody(tokens As Token(), ByRef isParallel As Boolean) As ClosureExpression
-            If tokens(Scan0) = (TokenType.open, "{") Then
-                Return tokens _
-                    .Skip(1) _
-                    .DoCall(AddressOf ClosureExpression.ParseExpressionTree)
-            ElseIf tokens(Scan0) = (TokenType.operator, "%") AndAlso
-                   tokens(1) = (TokenType.identifier, "dopar") AndAlso
-                   tokens(2) = (TokenType.operator, "%") Then
-                isParallel = True
-
-                Return tokens _
-                    .Skip(4) _
-                    .DoCall(AddressOf ClosureExpression.ParseExpressionTree)
-            Else
-                Throw New SyntaxErrorException
-            End If
-        End Function
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim result As New List(Of Object)
@@ -138,6 +108,8 @@ Namespace Interpreter.ExecuteEngine
 
             For Each item As Object In envir.DoCall(runLoop)
                 If Program.isException(item) Then
+                    Return item
+                ElseIf TypeOf item Is ReturnValue Then
                     Return item
                 Else
                     result += item
@@ -155,35 +127,45 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Private Function execParallel(envir As Environment) As IEnumerable(Of Object)
-            Dim data As Array = Runtime.asVector(Of Object)(sequence.Evaluate(envir))
-            Dim result As IEnumerable(Of Object) = data _
-                .AsObjectEnumerator _
+            Dim result As IEnumerable(Of Object) = getSequence(envir) _
                 .AsParallel _
                 .Select(Function(value, i)
-                            Return RunLoop(value, i, envir)
+                            Dim stackframe As New StackFrame(Me.stackFrame)
+                            stackframe.Method.Method = $"parallel_for_loop_[{i}]"
+                            Return RunLoop(value, stackframe, envir)
                         End Function)
 
             Return result
         End Function
 
-        Private Function RunLoop(value As Object, loopTag$, env As Environment) As Object
+        Private Function RunLoop(value As Object, stackframe As StackFrame, env As Environment) As Object
             Using closure As Environment = DeclareNewVariable.PushNames(
                     names:=variables,
                     value:=value,
                     type:=TypeCodes.generic,
-                    envir:=New Environment(env, $"for__[{loopTag}]")
+                    envir:=New Environment(env, stackframe)
                 )
 
                 Return body.Invoke(closure, {})
             End Using
         End Function
 
-        Private Iterator Function exec(envir As Environment) As IEnumerable(Of Object)
-            Dim data As Array = Runtime.asVector(Of Object)(sequence.Evaluate(envir))
-            Dim i As i32 = 1
+        Private Function getSequence(env As Environment) As IEnumerable(Of Object)
+            Dim rawSeq As Object = sequence.Evaluate(env)
+            Dim data As IEnumerable(Of Object) = [Rset].getObjectSet(rawSeq)
 
-            For Each value As Object In data
-                Yield RunLoop(value, ++i, envir)
+            Return data
+        End Function
+
+        Private Iterator Function exec(envir As Environment) As IEnumerable(Of Object)
+            Dim i As i32 = 1
+            Dim stackframe As New StackFrame(Me.stackFrame)
+
+            For Each value As Object In getSequence(envir)
+                stackframe.Method.Method = $"for_loop_[{++i}]"
+                value = RunLoop(value, stackframe, envir)
+
+                Yield value
             Next
         End Function
     End Class

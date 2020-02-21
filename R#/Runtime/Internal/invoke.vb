@@ -1,47 +1,46 @@
-﻿#Region "Microsoft.VisualBasic::19caddffdbd16bb1c203e0b4de2dc72b, R#\Runtime\Internal\invoke.vb"
+﻿#Region "Microsoft.VisualBasic::15560535af7af3677082c05007ac0f69, R#\Runtime\Internal\invoke.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module invoke
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: [stop], getFunction, invalidParameter, invokeInternals, missingParameter
-    '                   Rdataframe
-    ' 
-    '         Sub: pushEnvir
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module invoke
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: [stop], getFunction, invalidParameter, invokeInternals, missingParameter
+' 
+'         Sub: pushEnvir
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -49,7 +48,7 @@ Imports System.Runtime.CompilerServices
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
-Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Package
 
@@ -77,6 +76,7 @@ Namespace Runtime.Internal
             Call GetType(math).pushEnvir
             Call GetType(help).pushEnvir
             Call GetType(etc).pushEnvir
+            Call GetType([set]).pushEnvir
         End Sub
 
         <Extension>

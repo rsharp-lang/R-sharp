@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bae16f9d02920d4d1362cf64fc34fb14, R#\Runtime\GlobalEnvironment.vb"
+﻿#Region "Microsoft.VisualBasic::9851efc750929eb1a871a3ab2b5c4fe2, R#\Runtime\GlobalEnvironment.vb"
 
     ' Author:
     ' 
@@ -33,10 +33,10 @@
 
     '     Class GlobalEnvironment
     ' 
-    '         Properties: debugMode, options, packages, Rscript
+    '         Properties: debugMode, lastException, options, packages, Rscript
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: LoadLibrary, MissingPackage
+    '         Function: (+2 Overloads) LoadLibrary, MissingPackage
     ' 
     ' 
     ' /********************************************************************************/
@@ -66,6 +66,12 @@ Namespace Runtime
             End Get
         End Property
 
+        ''' <summary>
+        ''' 用于traceback进行脚本函数调试使用
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property lastException As Message
+
         Sub New(scriptHost As RInterpreter, options As Options)
             Me.options = options
             Me.packages = New PackageManager(options)
@@ -76,7 +82,6 @@ Namespace Runtime
         Public Function LoadLibrary(packageName As String) As Message
             Dim exception As Exception = Nothing
             Dim package As RPkg = packages.FindPackage(packageName, exception)
-            Dim masked As String()
 
             If Not packageName Like packages.loadedPackages Then
                 Call Console.WriteLine($"Loading required package: {packageName}")
@@ -87,18 +92,31 @@ Namespace Runtime
             If package Is Nothing Then
                 Return MissingPackage(packageName, exception)
             Else
-                masked = ImportsPackage _
-                    .ImportsStatic(Me, package.package) _
-                    .ToArray
+                Return LoadLibrary(package.package, packageName)
+            End If
+        End Function
 
-                If masked.Length > 0 Then
-                    Call Console.WriteLine($"Attaching package: '{packageName}'")
-                    Call Console.WriteLine()
-                    Call Console.WriteLine($"The following object is masked from 'package:{packageName}':")
-                    Call Console.WriteLine()
+        ''' <summary>
+        ''' Imports static api function from given package module
+        ''' </summary>
+        ''' <param name="package"></param>
+        ''' <returns></returns>
+        Public Function LoadLibrary(package As Type, Optional packageName$ = Nothing) As Message
+            Dim masked As String() = ImportsPackage _
+                .ImportsStatic(Me, package) _
+                .ToArray
 
-                    Call printer.printContentArray(masked, ", ", "    ")
+            If masked.Length > 0 Then
+                If packageName.StringEmpty Then
+                    packageName = package.NamespaceEntry.Namespace
                 End If
+
+                Call Console.WriteLine($"Attaching package: '{packageName}'")
+                Call Console.WriteLine()
+                Call Console.WriteLine($"The following object is masked from 'package:{packageName}':")
+                Call Console.WriteLine()
+
+                Call printer.printContentArray(masked, ", ", "    ")
             End If
 
             Return Nothing

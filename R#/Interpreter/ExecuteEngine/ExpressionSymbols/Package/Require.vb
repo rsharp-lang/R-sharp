@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c7790f9eb6eaa53a393c94d25cbecf78, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Package\Require.vb"
+﻿#Region "Microsoft.VisualBasic::9cdea2276568d257d90e328bbf78fe8b, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Package\Require.vb"
 
     ' Author:
     ' 
@@ -43,27 +43,30 @@
 
 #End Region
 
-Imports SMRUCC.Rsharp.Language
-Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Interpreter.ExecuteEngine
 
+    ''' <summary>
+    ''' Loading/Attaching and Listing of Packages
+    ''' </summary>
     Public Class Require : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
 
         Public Property packages As Expression()
 
-        Sub New(names As Token())
-            packages = names _
-                .SplitByTopLevelDelimiter(TokenType.comma) _
-                .Where(Function(b) Not b.isComma) _
-                .Select(AddressOf Expression.CreateExpression) _
-                .ToArray
+        Sub New(names As Expression())
+            packages = names
         End Sub
 
+        ''' <summary>
+        ''' require returns (invisibly) a logical indicating whether the 
+        ''' required package is available.
+        ''' </summary>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim names As New List(Of String)
             Dim [global] As GlobalEnvironment = envir.globalEnvironment

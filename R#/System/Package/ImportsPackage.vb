@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ee3fb879e85cb38d9a2f7096a4978709, R#\System\Package\ImportsPackage.vb"
+﻿#Region "Microsoft.VisualBasic::420d9475db14f1345af97064fda6c594, R#\System\Package\ImportsPackage.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Module ImportsPackage
     ' 
-    '         Function: GetAllApi, ImportsStatic
+    '         Function: (+2 Overloads) GetAllApi, ImportsStatic
     ' 
     '         Sub: ImportsInstance
     ' 
@@ -130,6 +130,18 @@ Namespace System.Package
                     masked += symbol.name
                 End If
             Next
+
+            ' find module initializer
+            Dim init As MethodInfo = package _
+                .GetMethods(bindingAttr:=BindingFlags.Public Or BindingFlags.Static) _
+                .Where(Function(m)
+                           Return Not m.GetCustomAttribute(GetType(RInitializeAttribute)) Is Nothing
+                       End Function) _
+                .FirstOrDefault
+
+            If Not init Is Nothing Then
+                Call init.Invoke(Nothing, {})
+            End If
 
             Return masked
         End Function

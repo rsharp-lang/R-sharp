@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ca9f79cdc039cc26f8f8f41a69285047, R#\Interpreter\Extensions.vb"
+﻿#Region "Microsoft.VisualBasic::dd03daf1b941200c5879b44bb4d3a5b6, R#\Interpreter\Extensions.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,9 @@
 
     '     Module Extensions
     ' 
-    '         Function: GetExpressions, isTerminator, RunProgram
+    '         Function: (+2 Overloads) GetExpressions, isTerminator
+    ' 
+    '         Sub: SyntaxErrorHelper
     ' 
     ' 
     ' /********************************************************************************/
@@ -44,18 +46,14 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.SyntaxParser
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
-Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Interpreter
 
     <HideModuleName> Module Extensions
-
-        <Extension>
-        Public Function RunProgram(code As Token(), envir As Environment) As Object
-            Return Program.CreateProgram(code).Execute(envir)
-        End Function
 
         ReadOnly ignores As Index(Of TokenType) = {
             TokenType.comment,
@@ -70,8 +68,13 @@ Namespace Interpreter
         End Function
 
         <Extension>
-        Public Iterator Function GetExpressions(code As Token()) As IEnumerable(Of Expression)
-            For Each block In code.SplitByTopLevelDelimiter(TokenType.terminator)
+        Public Function GetExpressions(Rscript As Rscript, opts As SyntaxBuilderOptions) As IEnumerable(Of Expression)
+            Return Rscript.GetTokens.GetExpressions(Rscript, Nothing, opts)
+        End Function
+
+        <Extension>
+        Public Iterator Function GetExpressions(tokens As Token(), Rscript As Rscript, errHandler As Action(Of SyntaxResult), opts As SyntaxBuilderOptions) As IEnumerable(Of Expression)
+            For Each block In tokens.SplitByTopLevelDelimiter(TokenType.terminator)
                 If block.Length = 0 OrElse block.isTerminator Then
                     ' skip code comments
                     ' do nothing
@@ -82,16 +85,45 @@ Namespace Interpreter
                         .Where(Function(t) Not t.name = TokenType.comment) _
                         .SplitByTopLevelDelimiter(TokenType.close,, "}") _
                         .Split(2)
-                    Dim expr As Expression
+                    Dim expr As SyntaxResult
 
                     For Each joinBlock In parts
                         block = joinBlock(Scan0).JoinIterates(joinBlock.ElementAtOrDefault(1)).ToArray
-                        expr = Expression.CreateExpression(block)
+                        expr = Expression.CreateExpression(block, opts)
 
-                        Yield expr
+                        If expr.isException Then
+                            If errHandler Is Nothing Then
+                                Call SyntaxErrorHelper(
+                                    syntaxResult:=expr,
+                                    Rscript:=Rscript,
+                                    tokens:=block
+                                )
+                            Else
+                                Call errHandler(expr)
+                                Exit For
+                            End If
+                        Else
+                            Yield expr.expression
+                        End If
                     Next
                 End If
             Next
         End Function
+
+        Private Sub SyntaxErrorHelper(Rscript As Rscript, tokens As Token(), syntaxResult As SyntaxResult)
+            Dim rawText As String = Rscript.GetRawText(tokens)
+            Dim err As Exception = syntaxResult.error
+            Dim message As String = err.ToString
+
+            message &= vbCrLf & vbCrLf & "Syntax error nearby:"
+            message &= vbCrLf & vbCrLf & rawText
+            message &= vbCrLf & vbCrLf & $"Range from {tokens.First.span.start} at line {tokens.First.span.line}, to {tokens.Last.span.stops} at line {tokens.Last.span.line}."
+            message &= vbCrLf & vbCrLf & "The parser stack trace:"
+            message &= vbCrLf & vbCrLf & syntaxResult.stackTrace
+            message &= vbCrLf & vbCrLf & "   --=== End of the R# Parser StackTrace ===--"
+            message &= vbCrLf & vbCrLf
+
+            Throw New Exception(message)
+        End Sub
     End Module
 End Namespace

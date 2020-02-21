@@ -243,6 +243,27 @@
     <PlatformTarget>x64</PlatformTarget>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Surveillance-of-infectious-diseases|AnyCPU'">
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Surveillance-of-infectious-diseases\</OutputPath>
+    <DocumentationFile>REnv.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Surveillance-of-infectious-diseases|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x64\Surveillance-of-infectious-diseases\</OutputPath>
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
+    <DocumentationFile>REnv.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -266,8 +287,35 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\BreakPoint.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryInExpression.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Linq\LinqOutput.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxBuilderOptions.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\CommandLine.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\DeclareNewFunctionSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\ClosureExpressionSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\DeclareNewVariableSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\DeclareLambdaFunctionSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\ForLoopSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\IfBranchSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\LinqExpressionSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\UsingClosureSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\ValueAssignSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\RequireSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\VectorLiteral.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\StringInterpolationSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\SymbolIndexer.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\FunctionInvokeSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\PipelineProcessor.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\VectorAppendProcessor.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\NamespaceReference.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\GenericSymbolOperatorProcessor.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\NameMemberReference.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxTree\ExpressionBuilder.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxTree\Splitter.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxResult.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryExpression.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\ByRefFunctionCall.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\ByRefFunctionCall.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CLI\CommandLineArgument.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\AppendOperator.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\ModeOf.vb" />
@@ -278,32 +326,33 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Package\Require.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Suppress.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\MemberValueAssign.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\SymbolIndexer.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CLI\CommandLine.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Package\Imports.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\LinqExpression.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DeclareLambdaFunction.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Linq\LinqExpression.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\UsingClosure.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareLambdaFunction.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\UnaryNot.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ContinuteFor.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ElseBranch.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ForLoop.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\ReturnValue.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DeclareNewFunction.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\ClosureExpression.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ReturnValue.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewFunction.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\ClosureExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\StringInterpolation.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\IfBranch.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CodeComment.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\FunctionInvoke.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\FunctionInvoke.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SequenceLiteral.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\IIfExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssign.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolReference.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\VectorLiteral.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DeclareNewVariable.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionTree.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSignature.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\BinaryExpressionTree.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewVariable.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxTree\ExpressionTree.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxTree\ExpressionSignature.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\BinaryExpressionTree.vb" />
     <Compile Include="Interpreter\Extensions.vb" />
     <Compile Include="Interpreter\Program.vb" />
     <Compile Include="Interpreter\RInterpreter.vb" />
@@ -333,20 +382,29 @@
     <Compile Include="Runtime\Internal\internalInvokes\env.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\help.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\etc.vb" />
+    <Compile Include="Runtime\Internal\internalInvokes\set.vb" />
+    <Compile Include="Runtime\Internal\generic.vb" />
+    <Compile Include="Runtime\Internal\objects\pipeline.vb" />
+    <Compile Include="Runtime\Internal\objects\RConversion\makeDataframe.vb" />
+    <Compile Include="Runtime\Internal\objects\RConversion\makeList.vb" />
     <Compile Include="Runtime\Internal\objects\reflector.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\strings.vb" />
     <Compile Include="Runtime\Internal\objects\invisible.vb" />
     <Compile Include="Runtime\Internal\objects\names.vb" />
     <Compile Include="Runtime\Internal\objects\unit.vb" />
     <Compile Include="Runtime\Internal\printer\functionPrinter.vb" />
-    <Compile Include="Runtime\Internal\htmlPrinter.vb" />
+    <Compile Include="Runtime\Internal\printer\htmlPrinter.vb" />
     <Compile Include="Runtime\Internal\printer\enumPrinter.vb" />
+    <Compile Include="Runtime\Interop\RDispose.vb" />
     <Compile Include="Runtime\Interop\RArgumentList.vb" />
     <Compile Include="Runtime\Interop\REnum.vb" />
+    <Compile Include="Runtime\Interop\RInteropAttributes\RDefaultValueAttribute.vb" />
+    <Compile Include="Runtime\Interop\RInteropAttributes\RRawVectorArgumentAttribute.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RSymbolTextArgumentAttribute.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RSuppressPrintAttribute.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RListObjectArgumentAttribute.vb" />
     <Compile Include="Runtime\Interop\RReturn.vb" />
+    <Compile Include="Runtime\EnvironmentExtensions.vb" />
     <Compile Include="Runtime\RTypeExtensions.vb" />
     <Compile Include="System\Config\Defaults.vb" />
     <Compile Include="Runtime\System\Rscript.vb" />
@@ -362,7 +420,7 @@
     <Compile Include="Runtime\Internal\internalInvokes\Linq\linq.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\math.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\string.vb" />
-    <Compile Include="Runtime\Internal\objects\conversion.vb" />
+    <Compile Include="Runtime\Internal\objects\RConversion\conversion.vb" />
     <Compile Include="Runtime\Internal\printer\classPrinter.vb" />
     <Compile Include="Runtime\Internal\objects\vbObject.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\utils.vb" />
@@ -403,6 +461,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Designer.cd" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -426,5 +485,6 @@
   <ItemGroup>
     <None Include="Resources\contributions.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

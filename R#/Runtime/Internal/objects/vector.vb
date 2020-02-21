@@ -1,52 +1,56 @@
-﻿#Region "Microsoft.VisualBasic::e7b2be643713d382ab3d4c684be30b9a, R#\Runtime\Internal\objects\vector.vb"
+﻿#Region "Microsoft.VisualBasic::ee06ea80311389ac00738b8d726239f5, R#\Runtime\Internal\objects\vector.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class vector
-    ' 
-    '         Properties: data, length
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: (+2 Overloads) getByIndex, getNames, setByindex, setByIndex, setNames
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class vector
+' 
+'         Properties: data, length, type, unit
+' 
+'         Constructor: (+3 Overloads) Sub New
+'         Function: asVector, (+2 Overloads) getByIndex, getNames, setByindex, setByIndex
+'                   setNames, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Object
 
@@ -61,13 +65,68 @@ Namespace Runtime.Internal.Object
             End Get
         End Property
 
+        Public ReadOnly Property type As RType
+            Get
+                Return data _
+                    .GetType _
+                    .GetElementType _
+                    .DoCall(AddressOf RType.GetRSharpType)
+            End Get
+        End Property
+
         Dim names As String()
         Dim nameIndex As Index(Of String)
 
         Sub New()
         End Sub
 
+        ''' <summary>
+        ''' Create a vector from a pipeline model and given array element <paramref name="model"/> type
+        ''' </summary>
+        ''' <param name="model">element type of the array</param>
+        ''' <param name="input"></param>
+        Sub New(model As Type, input As IEnumerable, env As Environment)
+            Dim i As i32 = Scan0
+            ' create an empty vector with 
+            ' allocable data buffer
+            Dim buffer As Array = Array.CreateInstance(model, BufferSize)
+
+            For Each obj As Object In input
+                If Not obj Is Nothing Then
+                    If obj.GetType Is model Then
+                        ' do nothing
+                    ElseIf obj.GetType.IsInheritsFrom(model) Then
+                        obj = RConversion.CTypeDynamic(obj, model, env)
+                    End If
+                End If
+
+                Call buffer.SetValue(obj, CInt(i))
+
+                If ++i = buffer.Length Then
+                    ' resize vector buffer
+                    data = buffer
+                    buffer = Array.CreateInstance(model, BufferSize + buffer.Length)
+                    Array.ConstrainedCopy(data, Scan0, buffer, Scan0, data.Length)
+                End If
+            Next
+
+            ' trim the vector to its acutal size
+            data = Array.CreateInstance(model, length:=i)
+            Array.ConstrainedCopy(buffer, Scan0, data, Scan0, data.Length)
+        End Sub
+
         Sub New(names As String(), data As Array, envir As Environment)
+            If data.AsObjectEnumerator _
+                   .All(Function(a)
+                            Return Not a Is Nothing AndAlso a.GetType.IsArray AndAlso DirectCast(a, Array).Length = 1
+                        End Function) Then
+
+                data = data _
+                    .AsObjectEnumerator _
+                    .Select(Function(a) DirectCast(a, Array).GetValue(Scan0)) _
+                    .ToArray
+            End If
+
             Me.data = data
             Me.setNames(names, envir)
         End Sub
@@ -98,18 +157,33 @@ Namespace Runtime.Internal.Object
             Return names
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="i">
+        ''' 这个下标值应该是从1开始的
+        ''' </param>
+        ''' <returns></returns>
         Public Function getByIndex(i As Integer) As Object Implements RIndex.getByIndex
             If i < 0 Then
                 i = data.Length + i
             End If
 
-            If i >= data.Length OrElse i < 0 Then
+            If i > data.Length OrElse i < 0 Then
                 Return Nothing
             Else
-                Return data.GetValue(i)
+                ' 下标是从1开始的
+                Return data.GetValue(i - 1)
             End If
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="i">
+        ''' 这个下标值应该是从1开始的
+        ''' </param>
+        ''' <returns></returns>
         Public Function getByIndex(i() As Integer) As Object() Implements RIndex.getByIndex
             Return i.Select(AddressOf getByIndex).ToArray
         End Function
@@ -174,6 +248,14 @@ Namespace Runtime.Internal.Object
             Next
 
             Return result.ToArray
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return $"[{length}] vec<{type.ToString}>"
+        End Function
+
+        Public Shared Function asVector(Of T)(x As Object) As T()
+            Return Runtime.asVector(Of T)(x)
         End Function
     End Class
 End Namespace

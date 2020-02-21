@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7c4ae3edf3f09c94ee95e535d691193e, R#\System\Package\PackageLoader.vb"
+﻿#Region "Microsoft.VisualBasic::25c702fc0fb4aa70fc61ffdb0f084a88, R#\System\Package\PackageLoader.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Module PackageLoader
     ' 
-    '         Function: ParsePackages, ScanDllFiles
+    '         Function: ParsePackage, parsePackageInternal, ParsePackages, ScanDllFiles
     ' 
     ' 
     ' /********************************************************************************/
@@ -42,6 +42,7 @@
 
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Scripting.MetaData
 
@@ -58,23 +59,46 @@ Namespace System.Package
         <Extension>
         Public Iterator Function ParsePackages(dll$, Optional strict As Boolean = True) As IEnumerable(Of Package)
             Dim types As Type() = Assembly.LoadFrom(dll.GetFullPath).GetTypes
-            Dim package As PackageAttribute
+            Dim package As New Value(Of Package)
 
             For Each type As Type In types
-                package = type.GetCustomAttribute(Of PackageAttribute)
-
-                If package Is Nothing Then
-                    If strict Then
-                        Continue For
-                    Else
-                        package = New PackageAttribute(type.Name) With {
-                            .Description = type.Description
-                        }
-                    End If
+                If Not (package = parsePackageInternal(type)) Is Nothing Then
+                    Yield CType(package, Package)
                 End If
-
-                Yield New Package(package, package:=type)
             Next
+        End Function
+
+        ''' <summary>
+        ''' 这个函数会将包信息缓存下来
+        ''' </summary>
+        ''' <param name="type"></param>
+        ''' <param name="strict"></param>
+        ''' <returns></returns>
+        <Extension>
+        Public Function ParsePackage(type As Type, Optional strict As Boolean = True) As Package
+            Static packages As New Dictionary(Of Type, Package)
+
+            Return packages.ComputeIfAbsent(
+                key:=type,
+                lazyValue:=Function()
+                               Return parsePackageInternal(type, strict)
+                           End Function)
+        End Function
+
+        Private Function parsePackageInternal(type As Type, Optional strict As Boolean = True) As Package
+            Dim package As PackageAttribute = type.GetCustomAttribute(Of PackageAttribute)
+
+            If package Is Nothing Then
+                If strict Then
+                    Return Nothing
+                Else
+                    package = New PackageAttribute(type.Name) With {
+                        .Description = type.Description
+                    }
+                End If
+            End If
+
+            Return New Package(package, package:=type)
         End Function
 
         ''' <summary>

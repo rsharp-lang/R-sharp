@@ -1,61 +1,61 @@
-﻿#Region "Microsoft.VisualBasic::a6e3c6ffc206cf73b3cd49240312d733, R#\test\interpreterTest.vb"
+﻿#Region "Microsoft.VisualBasic::1724b52eb52eb4771a7cdaf0e8ddcb25, R#\test\interpreterTest.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-' Module interpreterTest
-' 
-'     Sub: appendTest, booleanCLIArgumentTest, closureEnvironmentTest, closureTest, isEmptyTest
-'          lastSymbolTest, Main, markdownTest, missingSymbolInStringInterpolate, moduleTest
-'          objClasstest, orDefaultTest, printClassTest, sequenceGeneratorTest, suppressTest
-'          unaryNegTest
-' module test1
-' 
-'     Sub: boolLiteralTest, branchTest, cliTest, commandLineArgumentTest, dataframeTest
-'          declareFunctionTest, declareTest, elementIndexerTest, exceptionHandler, forLoop2
-'          forLoopTest, genericTest, iifTest, ImportsDll, inTest
-'          invokeTest, lambdaTest, linqPipelineTest, linqTest, listTest
-'          logicalTest, nameAccessorTest, namespaceTest, namesTest, optionsTest
-'          parameterTest, pipelineParameterBugTest, pipelineTest, sourceFunctionTest, sourceScripttest
-'          StackTest, stringInterpolateTest, symbolNotFoundTest, testScript, tupleTest
-'          whichTest
-' module test2
-' 
-' 
-' 
-' 
-' 
-' 
-' 
-' /********************************************************************************/
+    ' Module interpreterTest
+    ' 
+    '     Sub: appendTest, booleanCLIArgumentTest, closureEnvironmentTest, closureTest, isEmptyTest
+    '          lastSymbolTest, Main, markdownTest, missingSymbolInStringInterpolate, moduleTest
+    '          objClasstest, orDefaultTest, printClassTest, sequenceGeneratorTest, suppressTest
+    '          syntaxErrorTest, unaryNegTest, usingTest
+    ' module test1
+    ' 
+    '     Sub: boolLiteralTest, branchTest, cliTest, commandLineArgumentTest, dataframeIndexTest
+    '          dataframeTest, declareFunctionTest, declareTest, elementIndexerTest, exceptionHandler
+    '          forLoop2, forLoopTest, genericTest, iifTest, ImportsDll
+    '          inTest, invokeTest, lambdaTest, lambdaTest2, linqPipelineTest
+    '          linqTest, listoperationtest, listTest, logicalTest, nameAccessorTest
+    '          namespaceTest, namesTest, optionsTest, packageTest, parameterTest
+    '          pipelineParameterBugTest, pipelineTest, sourceFunctionTest, sourceScripttest, StackTest
+    '          stringInterpolateTest, symbolNotFoundTest, testScript, tupleTest, whichTest
+    ' module test2
+    ' 
+    ' 
+    ' 
+    ' 
+    ' 
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -65,12 +65,26 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Module interpreterTest
 
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+        Call negativeValTest()
+        Call numberLiteralsTest()
+
+        Call anonymous()
+        Call exceptionHandler()
+        Call StackTest()
+
+        Call listoperationtest()
+        Call syntaxErrorTest()
+
+        Call usingTest()
+        Call dataframeIndexTest()
+
         Call dataframeTest()
         Call lambdaTest2()
 
@@ -142,9 +156,6 @@ Module interpreterTest
         Call testScript()
 
         Call symbolNotFoundTest()
-        Call StackTest()
-
-        Call exceptionHandler()
 
         Call branchTest()
         Call forLoopTest()
@@ -156,6 +167,84 @@ Module interpreterTest
 
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub negativeValTest()
+
+        Dim x# = 8
+        Dim y = -x * -2.0E+133
+
+        Call R.Add("R", 555)
+        Call R.Evaluate("let a <- -R * 2E3;")
+        Call R.Evaluate("(-999.54e3)+a")
+        Call R.PrintMemory()
+
+        Pause()
+    End Sub
+
+    Sub numberLiteralsTest()
+        '        Call R.Evaluate("print(1);
+        'print(1.2);
+        '")
+
+        Call R.Evaluate("-3.9E-99")
+
+        Call R.PrintMemory()
+
+        Call R.Evaluate("3.3e-5")
+
+        Call R.Evaluate("print(3e-2);
+print(8.8e-6);
+print(4e8);")
+
+        Pause()
+    End Sub
+
+    Sub anonymous()
+
+        Call R.Evaluate("
+# a <- function(x) {x}
+# a();
+(function(x) {
+
+print(x);
+print(traceback())
+;
+})('XXXXXXXXX');")
+
+        Pause()
+
+        Call R.Evaluate("let call = FUNC -> FUNC();
+
+# call anonymous function
+call(function() {
+	print('call a anonymous function');
+});
+")
+
+        Pause()
+    End Sub
+
+    Sub syntaxErrorTest()
+        Call R.Evaluate("let a as string = '123'
+
+print(a);")
+    End Sub
+
+    Sub usingTest()
+        Call R.Evaluate("using a as file('./test.txt') {
+	# call System.IDispose
+	# operations with variable a
+	print((a :> as.object)$Name);
+}
+
+# call a$Dispose()
+# and then delete a from the current environment
+let a as string = 'abc: ';
+
+print(a);")
 
         Pause()
     End Sub
@@ -466,6 +555,17 @@ test1::println('123');
         Pause()
     End Sub
 
+    Sub dataframeIndexTest()
+        R.Add("x", New dataframe With {.columns = New Dictionary(Of String, Array) From {
+              {"A", {1, 2, 3, 4, 5}},
+              {"BB", {False}}
+        }})
+
+        Call R.Evaluate("x[, 'BB']")
+
+        Pause()
+    End Sub
+
     Sub dataframeTest()
         Call R.Evaluate("print(data.frame(a = 1, b = ['g','h','eee'], c = T, [TRUE,FALSE,FALSE]))")
 
@@ -659,16 +759,21 @@ print(true);
     End Sub
 
     Sub StackTest()
+
         Call R.Evaluate("
+
 
 let internal as function() {
 
     let innerPrivate as function() {
         print('This function could not be invoked by code outside the [internal] closure stack!');
+
     }
 
     print('declare a new function inside the [internal] closure stack.');
     print(innerPrivate);
+
+   innerPrivate();
 }
 
 internal();
@@ -677,11 +782,23 @@ innerPrivate();
 
 ")
 
+
+
         Pause()
     End Sub
 
     Sub exceptionHandler()
-        Call R.Evaluate("
+        R.debug = False
+
+        Call R.Evaluate("   #1
+let err as function(message) {#2
+#3
+    let internal_createHelper as function() {#4
+ stop('demo to create stackframe data.' << message); #5
+   }#6
+  #7
+internal_createHelper(); #8
+}
 
 let tryStop as function(message = 'default exception message') {
 
@@ -693,7 +810,7 @@ let tryStop as function(message = 'default exception message') {
             for(i in [110,20,50,11,9,6]) {
 
                 if (i <= 10) {
-                    stop(message);
+                    err(message);
                 } else {
                        print(`value of i=${  i}...`);
                 }
@@ -712,6 +829,13 @@ let tryStop as function(message = 'default exception message') {
 # tryStop();
 tryStop(['This','is','an','exception', 'test']);
 ")
+        Call R.Evaluate("print(traceback())")
+
+        Pause()
+    End Sub
+
+    Sub listoperationtest()
+        Call R.Source("D:\GCModeller\src\R-sharp\tutorials\data\listValue.R")
 
         Pause()
     End Sub

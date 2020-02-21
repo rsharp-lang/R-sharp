@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6e1df57810f6dca83d76d68bad943684, Library\R.graph\Visualize.vb"
+﻿#Region "Microsoft.VisualBasic::0fab0c653b51683fbc0c4705d5cae0ca, Library\R.graph\Visualize.vb"
 
     ' Author:
     ' 
@@ -47,7 +47,6 @@ Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Scripting.MetaData
-Imports R.graphics
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 ''' <summary>

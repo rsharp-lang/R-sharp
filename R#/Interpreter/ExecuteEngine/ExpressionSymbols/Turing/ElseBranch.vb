@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::337dd020f953b329d562c6c6468eb47d, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ElseBranch.vb"
+﻿#Region "Microsoft.VisualBasic::d16abb60c5b2c5fca18beca8d950c71e, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ElseBranch.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Class ElseBranch
     ' 
-    '         Properties: type
+    '         Properties: stackFrame, type
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: Evaluate, ToString
@@ -47,14 +47,15 @@
 
 #End Region
 
-Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Language.TokenIcer
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 
 Namespace Interpreter.ExecuteEngine
 
     Public Class ElseBranch : Inherits Expression
+        Implements IRuntimeTrace
 
         Public Overrides ReadOnly Property type As TypeCodes
             Get
@@ -62,17 +63,17 @@ Namespace Interpreter.ExecuteEngine
             End Get
         End Property
 
+        Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
+
         Dim closure As DeclareNewFunction
 
-        Sub New(code As Token())
-            closure = New DeclareNewFunction With {
-                .body = code _
-                    .Skip(1) _
-                    .Take(code.Length - 2) _
-                    .DoCall(AddressOf ClosureExpression.ParseExpressionTree),
-                .funcName = "else_branch_internal",
-                .params = {}
-            }
+        Sub New(bodyClosure As ClosureExpression, stackframe As StackFrame)
+            closure = New DeclareNewFunction(
+                body:=bodyClosure,
+                funcName:="else_branch_internal",
+                params:={},
+                stackframe:=stackframe
+            )
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
@@ -104,8 +105,10 @@ Namespace Interpreter.ExecuteEngine
 
     Public Class ElseIfBranch : Inherits IfBranch
 
-        Public Sub New(tokens As IEnumerable(Of Token))
-            MyBase.New(tokens)
+        Public Sub New(ifTest As Expression, trueClosure As ClosureExpression, stackframe As StackFrame)
+            MyBase.New(ifTest, trueClosure, stackframe)
+
+            stackframe.Method.Method = "elseif_closure"
         End Sub
     End Class
 End Namespace

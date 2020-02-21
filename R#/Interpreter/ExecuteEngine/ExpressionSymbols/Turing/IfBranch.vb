@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::215a95ebbf91d0784f5f9b9b92b5afb8, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\IfBranch.vb"
+﻿#Region "Microsoft.VisualBasic::7273f4975941a97e97abc88c64775acd, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\IfBranch.vb"
 
     ' Author:
     ' 
@@ -33,9 +33,9 @@
 
     '     Class IfBranch
     ' 
-    '         Properties: type
+    '         Properties: stackFrame, type
     ' 
-    '         Constructor: (+2 Overloads) Sub New
+    '         Constructor: (+1 Overloads) Sub New
     '         Function: Evaluate, ToString
     '         Class IfPromise
     ' 
@@ -51,23 +51,29 @@
 
 #End Region
 
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
-Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Language
-Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 
 Namespace Interpreter.ExecuteEngine
 
     Public Class IfBranch : Inherits Expression
+        Implements IRuntimeTrace
 
         Public Overrides ReadOnly Property type As TypeCodes
+            Get
+                Return trueClosure.type
+            End Get
+        End Property
 
-        Dim ifTest As Expression
-        Dim trueClosure As DeclareNewFunction
+        Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
+
+        Friend ReadOnly ifTest As Expression
+        Friend ReadOnly trueClosure As DeclareNewFunction
 
         Friend Class IfPromise
 
@@ -96,26 +102,15 @@ Namespace Interpreter.ExecuteEngine
             End Function
         End Class
 
-        Sub New(tokens As IEnumerable(Of Token))
-            Dim blocks = tokens.SplitByTopLevelDelimiter(TokenType.close)
-
-            ifTest = Expression.CreateExpression(blocks(Scan0).Skip(1))
-            trueClosure = New DeclareNewFunction With {
-                .funcName = "if_closure_internal",
-                .params = {},
-                .body = blocks(2) _
-                    .Skip(1) _
-                    .DoCall(AddressOf ClosureExpression.ParseExpressionTree)
-            }
-        End Sub
-
-        Sub New(ifTest As Expression, trueClosure As ClosureExpression)
+        Sub New(ifTest As Expression, trueClosure As ClosureExpression, stackframe As StackFrame)
             Me.ifTest = ifTest
-            Me.trueClosure = New DeclareNewFunction With {
-                .funcName = "if_closure_internal",
-                .params = {},
-                .body = trueClosure
-            }
+            Me.trueClosure = New DeclareNewFunction(
+                funcName:="if_closure_internal",
+                params:={},
+                body:=trueClosure,
+                stackframe:=stackframe
+            )
+            Me.stackFrame = stackframe
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
@@ -133,7 +128,10 @@ Namespace Interpreter.ExecuteEngine
             End If
 
             If True = Runtime.asLogical(test)(Scan0) Then
-                Return New IfPromise(trueClosure.Invoke(envir, {}), True)
+                Dim env As New Environment(envir, stackFrame)
+                Dim resultVal As Object = trueClosure.Invoke(env, {})
+
+                Return New IfPromise(resultVal, True)
             Else
                 Return New IfPromise(Nothing, False)
             End If

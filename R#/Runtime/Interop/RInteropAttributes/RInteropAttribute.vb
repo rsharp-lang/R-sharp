@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c17b840f1c20d6e3f4a0b6914db20e1b, R#\Runtime\Interop\RInteropAttributes\RInteropAttribute.vb"
+﻿#Region "Microsoft.VisualBasic::2a51aeb16ba15cc86c7e816c3a452b97, R#\Runtime\Interop\RInteropAttributes\RInteropAttribute.vb"
 
     ' Author:
     ' 
@@ -35,11 +35,11 @@
     ' 
     ' 
     ' 
+    '     Class RInitializeAttribute
+    ' 
+    ' 
+    ' 
     '     Class RByRefValueAssignAttribute
-    ' 
-    ' 
-    ' 
-    '     Class RRawVectorArgumentAttribute
     ' 
     ' 
     ' 
@@ -50,10 +50,19 @@
     '         Constructor: (+1 Overloads) Sub New
     '         Function: ToString
     ' 
+    '     Class RApiReturnAttribute
+    ' 
+    '         Properties: returnType
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    '         Function: GetActualReturnType, ToString
+    ' 
     ' 
     ' /********************************************************************************/
 
 #End Region
+
+Imports System.Reflection
 
 Namespace Runtime.Interop
 
@@ -62,17 +71,20 @@ Namespace Runtime.Interop
     End Class
 
     ''' <summary>
+    ''' 如果使用sub new初始化的话，则在导入程序包的时候sub new里面的代码是不会被自动调用的
+    ''' 对sub new构造函数的调用只在发生实际的api调用的时候才会发生
+    ''' 所以才在这里使用这个属性来标记一些需要在导入程序包的时候自动化运行的代码来进行一些初始化操作
+    ''' </summary>
+    <AttributeUsage(AttributeTargets.Method, AllowMultiple:=False, Inherited:=True)>
+    Public Class RInitializeAttribute : Inherits RInteropAttribute
+
+    End Class
+
+    ''' <summary>
     ''' 这个参数是接受``a(x) &lt;- y``操作之中的``y``结果值的
     ''' </summary>
     <AttributeUsage(AttributeTargets.Parameter, AllowMultiple:=False, Inherited:=True)>
     Public Class RByRefValueAssignAttribute : Inherits RInteropAttribute
-    End Class
-
-    ''' <summary>
-    ''' 表示这个参数是一个数组，环境系统不应该自动调用getFirst取第一个值
-    ''' </summary>
-    <AttributeUsage(AttributeTargets.Parameter, AllowMultiple:=False, Inherited:=True)>
-    Public Class RRawVectorArgumentAttribute : Inherits RInteropAttribute
     End Class
 
     <AttributeUsage(AttributeTargets.Parameter, AllowMultiple:=False, Inherited:=True)>
@@ -86,6 +98,35 @@ Namespace Runtime.Interop
 
         Public Overrides Function ToString() As String
             Return [alias]
+        End Function
+    End Class
+
+    ''' <summary>
+    ''' For make compatibale with return value and exception message or R# object wrapper
+    ''' The .NET api is usually declare as returns object value, then we could use this
+    ''' attribute to let user known the actual returns type of the target api function
+    ''' </summary>
+    <AttributeUsage(AttributeTargets.Method, AllowMultiple:=False, Inherited:=True)>
+    Public Class RApiReturnAttribute : Inherits RInteropAttribute
+
+        Public ReadOnly Property returnType As Type
+
+        Sub New(type As Type)
+            returnType = type
+        End Sub
+
+        Public Overrides Function ToString() As String
+            Return $"fun() -> {returnType.Name}"
+        End Function
+
+        Public Shared Function GetActualReturnType(api As MethodInfo) As Type
+            Dim tag As RApiReturnAttribute = api.GetCustomAttribute(Of RApiReturnAttribute)
+
+            If tag Is Nothing Then
+                Return api.ReturnType
+            Else
+                Return tag.returnType
+            End If
         End Function
     End Class
 End Namespace

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3f1c062e33b7deab339370d541a1f93c, R#\Interpreter\ExecuteEngine\ExpressionSymbols\CLI\CommandLine.vb"
+﻿#Region "Microsoft.VisualBasic::fdb2301a621415447d9f66053ce14ffe, R#\Interpreter\ExecuteEngine\ExpressionSymbols\CLI\CommandLine.vb"
 
     ' Author:
     ' 
@@ -36,18 +36,17 @@
     '         Properties: type
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, isInterpolation, possibleInterpolationFailure
+    '         Function: Evaluate, possibleInterpolationFailure
     ' 
     ' 
     ' /********************************************************************************/
 
 #End Region
 
-Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Language.TokenIcer
+Imports SMRUCC.Rsharp.Interpreter.SyntaxParser
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
@@ -69,25 +68,9 @@ Namespace Interpreter.ExecuteEngine
 
         Dim cli As Expression
 
-        Const InterpolatePattern$ = "[$]\{.+?\}"
-
-        Sub New(shell As Token)
-            If Not shell.text _
-                .Match(InterpolatePattern, RegexOptions.Singleline) _
-                .StringEmpty Then
-
-                ' 如果是字符串插值，在Windows平台上会需要注意转义问题
-                ' 因为windows平台上文件夹符号为\
-                ' 可能会对$产生转义，从而导致字符串插值失败
-                cli = New StringInterpolation(shell)
-            Else
-                cli = New Literal(shell)
-            End If
+        Sub New(shell As Expression)
+            cli = shell
         End Sub
-
-        Private Shared Function isInterpolation(text As String) As Boolean
-            Return Not text.Match(InterpolatePattern, RegexOptions.Singleline).StringEmpty
-        End Function
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim commandline$ = Runtime.getFirst(cli.Evaluate(envir))
@@ -95,7 +78,7 @@ Namespace Interpreter.ExecuteEngine
             Dim std_out$
             Dim error_code%
 
-            If commandline.DoCall(AddressOf isInterpolation) Then
+            If commandline.DoCall(AddressOf SyntaxImplements.isInterpolation) Then
                 Call commandline _
                     .DoCall(Function(cli)
                                 Return possibleInterpolationFailure(cli, envir)

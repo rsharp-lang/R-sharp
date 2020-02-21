@@ -1,56 +1,57 @@
-﻿#Region "Microsoft.VisualBasic::a57d3419a150764a637dd3f93bf8cd50, R#\Runtime\Internal\printer\printer.vb"
+﻿#Region "Microsoft.VisualBasic::eab65a57264f565fee274922e83f2ff5, R#\Runtime\Internal\printer\printer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Delegate Function
-    ' 
-    ' 
-    '     Module printer
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: f64_InternalToString, getStrings, ToString, ValueToString
-    ' 
-    '         Sub: AttachConsoleFormatter, AttachInternalConsoleFormatter, printArray, printContentArray, printInternal
-    '              printList
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Delegate Function
+' 
+' 
+'     Module printer
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: f64_InternalToString, getStrings, ToString, ValueToString
+' 
+'         Sub: AttachConsoleFormatter, AttachInternalConsoleFormatter, printArray, printContentArray, printInternal
+'              printList
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Drawing
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging
@@ -58,6 +59,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Configuration
 
 Namespace Runtime.Internal.ConsolePrinter
@@ -75,9 +77,23 @@ Namespace Runtime.Internal.ConsolePrinter
         Sub New()
             RtoString(GetType(Color)) = Function(c) DirectCast(c, Color).ToHtmlColor.ToLower
             RtoString(GetType(vbObject)) = Function(o) DirectCast(o, vbObject).ToString
+            RtoString(GetType(RType)) = Function(o) DirectCast(o, RType).ToString
+            RtoString(GetType(DateTime)) = AddressOf DateToString
+            RtoString(GetType(ExceptionData)) = AddressOf debug.PrintRExceptionStackTrace
 
             RInternalToString(GetType(Double)) = AddressOf printer.f64_InternalToString
         End Sub
+
+        Private Function DateToString(x As Date) As String
+            Dim yy = x.Year.ToString.FormatZero("0000")
+            Dim mm = x.Month.ToString.FormatZero("00")
+            Dim dd = x.Day.ToString.FormatZero("00")
+            Dim h = x.Hour.ToString.FormatZero("00")
+            Dim m = x.Minute.ToString.FormatZero("00")
+            Dim s = x.Second.ToString.FormatZero("00")
+
+            Return $"#{yy}-{mm}-{dd} {h}:{m}:{s}#"
+        End Function
 
         Private Function f64_InternalToString(env As GlobalEnvironment) As IStringBuilder
             Dim opts As Options = env.globalEnvironment.options
@@ -186,7 +202,7 @@ printSingleElement:
         ''' <returns></returns>
         <Extension>
         Public Function ValueToString(x As Object, env As GlobalEnvironment) As String
-            Return printer.ToString(x.GetType, env)(x)
+            Return printer.ToString(x.GetType, env, True)(x)
         End Function
 
         ''' <summary>
@@ -195,7 +211,7 @@ printSingleElement:
         ''' <param name="elementType"></param>
         ''' <returns></returns>
         <Extension>
-        Friend Function ToString(elementType As Type, env As GlobalEnvironment) As IStringBuilder
+        Friend Function ToString(elementType As Type, env As GlobalEnvironment, printContent As Boolean) As IStringBuilder
             If RtoString.ContainsKey(elementType) Then
                 Return RtoString(elementType)
             ElseIf RInternalToString.ContainsKey(elementType) Then
@@ -204,14 +220,18 @@ printSingleElement:
                 Return Function(o) As String
                            If o Is Nothing Then
                                Return "NULL"
-                           Else
+                           ElseIf printContent Then
                                Return $"""{o}"""
+                           Else
+                               Return CStr(o)
                            End If
                        End Function
             ElseIf Not (elementType.Namespace.StartsWith("System.") OrElse elementType.Namespace = "System") Then
                 Return AddressOf classPrinter.printClass
             ElseIf elementType = GetType(Boolean) Then
                 Return Function(b) b.ToString.ToUpper
+            ElseIf elementType.IsEnum Then
+                Return AddressOf enumPrinter.printEnumValue(elementType).Invoke
             Else
                 Return Function(obj) Scripting.ToString(obj, "NULL", True)
             End If
@@ -219,7 +239,7 @@ printSingleElement:
 
         Friend Function getStrings(xVec As Array, env As GlobalEnvironment) As IEnumerable(Of String)
             Dim elementType As Type = Runtime.MeasureArrayElementType(xVec)
-            Dim toString As IStringBuilder = printer.ToString(elementType, env)
+            Dim toString As IStringBuilder = printer.ToString(elementType, env, True)
 
             Return From element As Object
                    In xVec.AsQueryable

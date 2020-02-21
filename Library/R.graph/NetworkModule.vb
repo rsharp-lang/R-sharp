@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f2d5b09c2674e2d823961958a684cbe9, Library\R.graph\NetworkModule.vb"
+﻿#Region "Microsoft.VisualBasic::1f5aeecb944cf4263db87266c9471105, Library\R.graph\NetworkModule.vb"
 
     ' Author:
     ' 
@@ -54,7 +54,6 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
-Imports R.graphics
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface

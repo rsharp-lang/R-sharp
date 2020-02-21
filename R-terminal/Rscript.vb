@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::31597e5bdd581d6f83b4bd8df0688835, R-terminal\Rscript.vb"
+﻿#Region "Microsoft.VisualBasic::6a5e6e08c174a31945b995dfdffc4627, R-terminal\Rscript.vb"
 
     ' Author:
     ' 
@@ -115,4 +115,3 @@ Module Rscript
         Return TypeOf program.Last Is ValueAssign OrElse TypeOf program.Last Is DeclareNewVariable
     End Function
 End Module
-

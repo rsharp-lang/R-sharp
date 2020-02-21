@@ -1,0 +1,159 @@
+﻿<!DOCTYPE html><html lang="zh-CN">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+    <title>base</title>
+    <meta name="author" content="xie.guigang@gcmodeller.org" />
+    <meta name="copyright" content="SMRUCC genomics Copyright (c) 2020" />
+    <meta name="keywords" content="GCModeller; Xanthomonas; Artificial Life" />
+    <meta name="generator" content="https://github.com/xieguigang/xDoc" />
+    <meta name="theme-color" content="#333" />
+    <meta name="last-update" content="1/15/2020 6:01:08 PM" />
+    <meta name="description" content="A software system aim at Artificial Life system design and analysis." />
+    <meta class="foundation-data-attribute-namespace" />
+    <meta class="foundation-mq-xxlarge" />
+    <meta class="foundation-mq-xlarge" />
+    <meta class="foundation-mq-large" />
+    <meta class="foundation-mq-medium" />
+    <meta class="foundation-mq-small" />
+    <meta class="foundation-mq-topbar" />
+  </head>
+  <body>
+    <table width="100%" summary="page for {base}">
+      <tbody>
+        <tr>
+          <td>{base}</td>
+          <td style="text-align: right;">R# Documentation</td>
+        </tr>
+      </tbody>
+    </table>
+    <h1>base</h1>
+    <hr />
+    <p><h4>The R Base Package</h4>
+
+<p>This package contains the basic functions which let R function as a language: <br />
+ arithmetic, input/output, basic programming support, etc. Its contents are <br />
+ available through inheritance from any environment.</p>
+
+<p>For a complete list of functions, use <code>ls("base")</code>.</p></p>
+    <div id="main-wrapper">
+                           <div>
+  <h2 id="load">load</h2>
+  <hr />
+  <p>
+                    <h3>Reload Saved Datasets</h3>
+
+<p>Reload datasets written with the function <code>save</code>.</p>  
+                
+                    <pre><p>let <code>load</code> as function(<code>file</code> as string, [<code>&lt;Environment&gt;</code>], <code>verbose</code> as boolean = FALSE) -> <code>&lt;generic&gt; Object</code> {
+    #
+    # .NET API information
+    #
+    # module: SMRUCC.Rsharp.Packages.base
+    # LibPath: D:/GCModeller/src/R-sharp/App
+    # library: R.base.dll
+    # package: "base"
+    #
+    return call <code>R&#35;.interop_[base::load]</code>(...);
+}</p></pre>
+
+                    <div>
+  <h4>Arguments</h4>
+  <ul>
+                   <li>
+  <code>file</code>: a (readable binary-mode) connection or a character <br />
+ string giving the name of the file to load (when tilde expansion is <br />
+ done).
+                </li>
+<li>
+  <code>envir</code>: the environment where the data should be loaded.
+                </li>
+<li>
+  <code>verbose</code>: should item names be printed during loading?
+                </li>
+                </ul>
+</div>
+                       
+                    <h4>Value</h4><p>A character vector of the names of objects created, invisibly.</p>
+
+                    <span style="font-size:0.9em; display: block"><h4>Details</h4><blockquote><p>load can load R objects saved in the current or any earlier format. <br />
+ It can read a compressed file (see save) directly from a file or from <br />
+ a suitable connection (including a call to url).</p>
+
+<p>A Not-open connection will be opened in mode "rb" And closed after <br />
+ use. Any connection other than a gzfile Or gzcon connection will be <br />
+ wrapped in gzcon to allow compressed saves to be handled: note that <br />
+ this leaves the connection In an altered state (In particular, <br />
+ binary-only), And that it needs To be closed explicitly (it will <br />
+ Not be garbage-collected).</p>
+
+<p>Only R objects saved In the current format (used since R 1.4.0) can <br />
+ be read from a connection. If no input Is available On a connection <br />
+ a warning will be given, but any input Not In the current format <br />
+ will result In a Error.</p>
+
+<p>Loading from an earlier version will give a warning about the 'magic number’: <br />
+ magic numbers 1971:1977 are from R &lt; 0.99.0, and RD[ABX]1 from <br />
+ R 0.99.0 to R 1.3.1. These are all obsolete, and you are strongly <br />
+ recommended to re-save such files in a current format.</p>
+
+<p>The verbose argument Is mainly intended For debugging. If it Is True, <br />
+ Then As objects from the file are loaded, their names will be printed <br />
+ To the console. If verbose Is Set To an Integer value greater than <br />
+ one, additional names corresponding To attributes And other parts Of <br />
+ individual objects will also be printed. Larger values will print names <br />
+ To a greater depth.</p>
+
+<p>Objects can be saved With references To namespaces, usually As part Of <br />
+ the environment Of a Function Or formula. Such objects can be loaded <br />
+ even If the Namespace Is Not available: it Is replaced by a reference <br />
+ to the global environment with a warning. The warning identifies the <br />
+ first object with such a reference (but there may be more than one).</p></blockquote></span></p>
+</div><br /><div>
+  <h2 id="save">save</h2>
+  <hr />
+  <p>
+                    <h3>Save R Objects</h3>
+
+<p>writes an external representation of R objects to the specified file. <br />
+ The objects can be read back from the file at a later date by using <br />
+ the function load or attach (or data in some cases).</p>  
+                
+                    <pre><p>let <code>save</code> as function(..., <code>file</code> as string, [<code>&lt;Environment&gt;</code>]) -> <code>&lt;generic&gt; Object</code> {
+    #
+    # .NET API information
+    #
+    # module: SMRUCC.Rsharp.Packages.base
+    # LibPath: D:/GCModeller/src/R-sharp/App
+    # library: R.base.dll
+    # package: "base"
+    #
+    return call <code>R&#35;.interop_[base::save]</code>(...);
+}</p></pre>
+
+                    <div>
+  <h4>Arguments</h4>
+  <ul>
+                   <li>
+  <code>objects</code>: the names of the objects to be saved (as symbols or character strings).
+                </li>
+<li>
+  <code>file</code>: a (writable binary-mode) connection or the name of the file where <br />
+ the data will be saved (when tilde expansion is done). Must be a <br />
+ file name for save.image or version = 1.
+                </li>
+<li>
+  <code>envir</code>: environment to search for objects to be saved.
+                </li>
+                </ul>
+</div>
+                       
+                    
+
+                    <span style="font-size:0.9em; display: none"><h4>Details</h4><blockquote></blockquote></span></p>
+</div>
+                       </div>
+  </body>
+</html>

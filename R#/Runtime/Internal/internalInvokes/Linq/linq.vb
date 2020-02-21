@@ -1,42 +1,42 @@
-﻿#Region "Microsoft.VisualBasic::a19e21776e5d6ce31637e21e5bef0ba6, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
+﻿#Region "Microsoft.VisualBasic::31643bb76740e59001ce76e4dac65e63, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module linq
-    ' 
-    '         Function: first, groupBy, projectAs, unique, where
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module linq
+' 
+'         Function: first, groupBy, projectAs, unique, where
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -46,20 +46,40 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 
 Namespace Runtime.Internal.Invokes.LinqPipeline
 
     Module linq
 
-        <ExportAPI("unique")>
-        Private Function unique(items As Array, envir As Environment)
-            Dim distinct As Object() = items _
-                .AsObjectEnumerator _
-                .GroupBy(Function(o) o) _
-                .Select(Function(g) g.Key) _
-                .ToArray
+        <ExportAPI("skip")>
+        Public Function skip(<RRawVectorArgument> items As Object, n%) As Object
+            Return Rset.getObjectSet(items).Skip(n).ToArray
+        End Function
 
-            Return distinct
+        <ExportAPI("unique")>
+        Private Function unique(<RRawVectorArgument> items As Object,
+                                Optional getKey As RFunction = Nothing,
+                                Optional envir As Environment = Nothing) As Object
+
+            If Not getKey Is Nothing Then
+                Return Rset.getObjectSet(items) _
+                   .GroupBy(Function(o)
+                                Dim arg = InvokeParameter.Create(o)
+                                Return getKey.Invoke(envir, arg)
+                            End Function) _
+                   .Select(Function(g)
+                               Return g.First
+                           End Function) _
+                   .ToArray
+            Else
+                Return Rset.getObjectSet(items) _
+                   .GroupBy(Function(o)
+                                Return o
+                            End Function) _
+                   .Select(Function(g) g.Key) _
+                   .ToArray
+            End If
         End Function
 
         <ExportAPI("projectAs")>
@@ -80,7 +100,15 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' <returns></returns>
         ''' 
         <ExportAPI("which")>
-        Private Function where(sequence As Array, test As RFunction, envir As Environment) As Object
+        Private Function where(sequence As Array,
+                               Optional test As RFunction = Nothing,
+                               Optional envir As Environment = Nothing) As Object
+
+            If test Is Nothing Then
+                ' test for which index
+                Return Which.IsTrue(Runtime.asLogical(sequence))
+            End If
+
             Dim pass As Boolean
             Dim arg As InvokeParameter()
             Dim filter As New List(Of Object)
@@ -98,9 +126,20 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         End Function
 
         <ExportAPI("first")>
-        Private Function first(sequence As Array, test As RFunction, envir As Environment) As Object
+        Private Function first(sequence As Array,
+                               Optional test As RFunction = Nothing,
+                               Optional envir As Environment = Nothing) As Object
+
             Dim pass As Boolean
             Dim arg As InvokeParameter()
+
+            If test Is Nothing Then
+                If sequence.Length = 0 Then
+                    Return Nothing
+                Else
+                    Return sequence.GetValue(Scan0)
+                End If
+            End If
 
             For Each item As Object In sequence
                 arg = InvokeParameter.Create(item)
@@ -115,8 +154,13 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         End Function
 
         <ExportAPI("groupBy")>
-        Private Function groupBy(sequence As Array, getKey As RFunction, envir As Environment) As Object
-            Dim result = sequence.AsObjectEnumerator _
+        Private Function groupBy(<RRawVectorArgument>
+                                 sequence As Object,
+                                 getKey As RFunction,
+                                 Optional envir As Environment = Nothing) As Object
+
+            Dim source As IEnumerable(Of Object) = Rset.getObjectSet(sequence)
+            Dim result As Group() = source _
                 .GroupBy(Function(o)
                              Dim arg = InvokeParameter.Create(o)
                              Return getKey.Invoke(envir, arg)
@@ -127,6 +171,31 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                                 .group = group.ToArray
                             }
                         End Function) _
+                .ToArray
+
+            Return result
+        End Function
+
+        <ExportAPI("orderBy")>
+        Public Function orderBy(<RRawVectorArgument>
+                                sequence As Object,
+                                getKey As RFunction,
+                                Optional envir As Environment = Nothing) As Object
+
+            Dim source As Object() = Rset.getObjectSet(sequence).ToArray
+            Dim result As Array = source _
+                .OrderBy(Function(o)
+                             Dim arg = InvokeParameter.Create(o)
+                             Dim index As Object = getKey.Invoke(envir, arg)
+
+                             If index Is Nothing Then
+                                 Return Nothing
+                             ElseIf index.GetType.IsArray Then
+                                 Return DirectCast(index, Array).GetValue(Scan0)
+                             Else
+                                 Return index
+                             End If
+                         End Function) _
                 .ToArray
 
             Return result

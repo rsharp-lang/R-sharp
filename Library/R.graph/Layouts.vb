@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::77783f837b6e743412f45a339d2fb0c2, Library\R.graph\Layouts.vb"
+﻿#Region "Microsoft.VisualBasic::7ae2984d5ba899b8a9f94d57bb47a6a9, Library\R.graph\Layouts.vb"
 
     ' Author:
     ' 
@@ -45,7 +45,6 @@ Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.Data.visualize.Network.Layouts
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
-Imports R.graphics
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 <Package("igraph.layouts")>

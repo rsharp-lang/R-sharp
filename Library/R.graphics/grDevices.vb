@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::6a1270f61de62100df2483d56d43ac9f, Library\R.graphics\grDevices.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module grDevices
-    ' 
-    '     Function: colorPopulator, devCur, devOff, imageAttrs, rgb
-    '               saveImage
-    ' 
-    ' /********************************************************************************/
+' Module grDevices
+' 
+'     Function: colorPopulator, devCur, devOff, imageAttrs, rgb
+'               saveImage
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -44,13 +44,16 @@ Imports System.Drawing
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Imaging
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports REnv = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' The R# Graphics Devices and Support for Colours and Fonts
@@ -221,5 +224,36 @@ Public Module grDevices
         Next
 break:
         ' exit iterator loops
+    End Function
+
+    <ExportAPI("colors")>
+    Public Function colors(<RRawVectorArgument> term As Object,
+                           Optional n% = 256,
+                           Optional character As Boolean = False,
+                           Optional env As Environment = Nothing) As Object
+
+        Dim list As Color()
+
+        If term Is Nothing Then
+            Return Nothing
+        ElseIf term.GetType.IsArray Then
+            With DirectCast(term, Array).AsObjectEnumerator.Select(Function(a) Scripting.ToString(a)).ToArray
+                If .Length = 1 Then
+                    list = Designer.GetColors(CStr(.GetValue(Scan0)), n)
+                Else
+                    list = Designer.GetColors(.JoinBy(","), n)
+                End If
+            End With
+        ElseIf term.GetType Is GetType(String) Then
+            list = Designer.GetColors(CStr(term), n)
+        Else
+            Return REnv.debug.stop(New InvalidProgramException(term.GetType.FullName), env)
+        End If
+
+        If character Then
+            Return list.Select(Function(c) c.ToHtmlColor).ToArray
+        Else
+            Return list
+        End If
     End Function
 End Module

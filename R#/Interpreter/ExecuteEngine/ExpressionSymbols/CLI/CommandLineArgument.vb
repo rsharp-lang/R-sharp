@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5abd762d554473910452ee49e18d6ba7, R#\Interpreter\ExecuteEngine\ExpressionSymbols\CLI\CommandLineArgument.vb"
+﻿#Region "Microsoft.VisualBasic::f893612f2db17fe73ef941bec6fad2a6, R#\Interpreter\ExecuteEngine\ExpressionSymbols\CLI\CommandLineArgument.vb"
 
     ' Author:
     ' 
@@ -44,9 +44,6 @@
 #End Region
 
 Imports Microsoft.VisualBasic.Language.Default
-Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Language
-Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 
@@ -73,14 +70,8 @@ Namespace Interpreter.ExecuteEngine
         ''' <returns></returns>
         Public ReadOnly Property name As Expression
 
-        Sub New(tokens As Token())
-            If tokens.First = TokenType.iif Then
-                name = tokens _
-                    .Skip(1) _
-                    .DoCall(AddressOf Expression.CreateExpression)
-            Else
-                name = Expression.CreateExpression(tokens)
-            End If
+        Sub New(name As Expression)
+            Me.name = name
         End Sub
 
         Public Overrides Function ToString() As String

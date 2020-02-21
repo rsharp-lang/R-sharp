@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::43db86a19a7c001357b98b8bb7fac536, R#\Interpreter\RInterpreter.vb"
+﻿#Region "Microsoft.VisualBasic::9cf7cff2e82dc759f5777360c35c3001, R#\Interpreter\RInterpreter.vb"
 
     ' Author:
     ' 
@@ -33,12 +33,12 @@
 
     '     Class RInterpreter
     ' 
-    '         Properties: debug, globalEnvir, Rsharp, warnings
+    '         Properties: debug, globalEnvir, Rsharp, strict, warnings
     ' 
     '         Constructor: (+1 Overloads) Sub New
     ' 
     '         Function: (+2 Overloads) Evaluate, finalizeResult, FromEnvironmentConfiguration, InitializeEnvironment, Invoke
-    '                   LoadLibrary, Run, RunInternal, Source
+    '                   (+2 Overloads) LoadLibrary, Run, RunInternal, Source
     ' 
     '         Sub: (+3 Overloads) Add, Print, PrintMemory
     ' 
@@ -50,6 +50,7 @@
 Imports System.IO
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -106,6 +107,10 @@ Namespace Interpreter
 
         Public Const lastVariableName$ = "$"
 
+        ''' <summary>
+        ''' 直接无参数调用这个构造函数，则会使用默认的配置文件创建R#脚本解释器引擎实例
+        ''' </summary>
+        ''' <param name="envirConf"></param>
         Sub New(Optional envirConf As Options = Nothing)
             If envirConf Is Nothing Then
                 envirConf = New Options(ConfigFile.localConfigs)
@@ -113,6 +118,8 @@ Namespace Interpreter
 
             globalEnvir = New GlobalEnvironment(Me, envirConf)
             globalEnvir.Push(lastVariableName, Nothing, TypeCodes.generic)
+            globalEnvir.Push("PI", Math.PI, TypeCodes.double)
+            globalEnvir.Push("E", Math.E, TypeCodes.double)
 
             ' config R# interpreter engine
             [strict] = envirConf.strict
@@ -176,6 +183,11 @@ Namespace Interpreter
             Return Me
         End Function
 
+        Public Function LoadLibrary(package As Type) As RInterpreter
+            Call globalEnvir.LoadLibrary(package)
+            Return Me
+        End Function
+
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
         Public Sub Add(name$, value As Object, Optional type As TypeCodes = TypeCodes.generic)
@@ -222,13 +234,29 @@ Namespace Interpreter
             Return finalizeResult(program.Execute(globalEnvir))
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="source">The script file name</param>
+        ''' <param name="arguments"></param>
+        ''' <returns></returns>
         Private Function InitializeEnvironment(source$, arguments As NamedValue(Of Object)()) As Environment
             Dim envir As Environment
 
-            If source Is Nothing Then
+            If source Is Nothing OrElse InStr(source, "<in_memory_") = 1 Then
                 envir = globalEnvir
             Else
-                envir = New Environment(globalEnvir, source)
+                envir = New StackFrame With {
+                    .File = source,
+                    .Line = 0,
+                    .Method = New Method With {
+                        .Method = MethodBase.GetCurrentMethod.Name,
+                        .[Module] = "n/a",
+                        .[Namespace] = "SMRUCC/R#"
+                    }
+                }.DoCall(Function(stackframe)
+                             Return New Environment(globalEnvir, stackframe)
+                         End Function)
             End If
 
             For Each var As NamedValue(Of Object) In arguments
@@ -238,7 +266,7 @@ Namespace Interpreter
             Return envir
         End Function
 
-        Private Function finalizeResult(result As Object) As Object
+        Friend Function finalizeResult(result As Object) As Object
             Dim last As Variable = Me.globalEnvir(lastVariableName)
 
             ' set last variable in current environment
@@ -264,7 +292,7 @@ Namespace Interpreter
 
         Private Function RunInternal(Rscript As Rscript, arguments As NamedValue(Of Object)()) As Object
             Dim globalEnvir As Environment = InitializeEnvironment(Rscript.fileName, arguments)
-            Dim program As Program = Program.CreateProgram(Rscript)
+            Dim program As Program = Program.CreateProgram(Rscript, debug:=debug)
             Dim result As Object = program.Execute(globalEnvir)
 
             Return finalizeResult(result)
@@ -285,19 +313,14 @@ Namespace Interpreter
             ' the environment
             ' 
             ' let !script = list(dir = dirname, file = filename, fullName = filepath)
-            Dim script As New list With {
-                .slots = New Dictionary(Of String, Object) From {
-                    {"dir", filepath.ParentPath},
-                    {"file", filepath.FileName},
-                    {"fullName", filepath.GetFullPath}
-                }
-            }
+            Dim script As list = CreateSpecialScriptReference(filepath)
             Dim result As Object
 
             If filepath.FileExists Then
-                globalEnvir.Push("!script", script, TypeCodes.list)
+                arguments = arguments _
+                    .JoinIterates(New NamedValue(Of Object)("!script", script)) _
+                    .ToArray
                 result = RunInternal(Rscript.FromFile(filepath), arguments)
-                globalEnvir.Delete("!script")
             Else
                 result = Internal.stop({
                     $"cannot open the connection.",

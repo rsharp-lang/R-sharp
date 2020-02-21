@@ -66,6 +66,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Return Function(x) DirectCast(x, Group).ToString(env)
         End Function
 
+        Public Overrides Function ToString() As String
+            Return Scripting.ToString(key)
+        End Function
+
         Public Overloads Function ToString(env As Environment) As String
             Dim globalEnv As GlobalEnvironment = env.globalEnvironment
 

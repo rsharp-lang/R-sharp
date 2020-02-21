@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ee44803f1c42c3f43bad820befbe286b, R#\Runtime\Interop\RInteropAttributes\RListObjectArgumentAttribute.vb"
+﻿#Region "Microsoft.VisualBasic::3249b36f6139234b5438cddb17718897, R#\Runtime\Interop\RInteropAttributes\RListObjectArgumentAttribute.vb"
 
     ' Author:
     ' 
@@ -33,13 +33,14 @@
 
     '     Class RListObjectArgumentAttribute
     ' 
-    '         Function: getObjectList, ToString
+    '         Function: CreateArgumentModel, getObjectList, ToString
     ' 
     ' 
     ' /********************************************************************************/
 
 #End Region
 
+Imports System.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -71,8 +72,8 @@ Namespace Runtime.Interop
                 type = objects.GetType
             End If
 
-            If type Is GetType(List) Then
-                objects = DirectCast(objects, List).slots
+            If type Is GetType(list) Then
+                objects = DirectCast(objects, list).slots
                 type = GetType(Dictionary(Of String, Object))
             End If
 
@@ -93,6 +94,32 @@ Namespace Runtime.Interop
             Else
                 Throw New NotImplementedException
             End If
+        End Function
+
+        Public Shared Function CreateArgumentModel(Of T As {New, Class})(list As Dictionary(Of String, Object)) As T
+            Dim args As Object = New T()
+            Dim schema = DataFramework.Schema(Of T)(PropertyAccess.Writeable, True)
+            Dim value As Object
+            Dim target As PropertyInfo
+
+            For Each slotKey As String In schema.Keys
+                If list.ContainsKey(slotKey) Then
+                    value = list(slotKey)
+                    target = schema(slotKey)
+
+                    If DataFramework.IsPrimitive(target.PropertyType) Then
+                        value = Runtime.getFirst(value)
+                    ElseIf target.PropertyType.IsArray Then
+                        Throw New NotImplementedException
+                    Else
+                        Throw New NotImplementedException
+                    End If
+
+                    target.SetValue(args, value)
+                End If
+            Next
+
+            Return DirectCast(args, T)
         End Function
     End Class
 End Namespace

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a0453949d73c97d79da4f568b6e9e78a, R#\Runtime\Environment.vb"
+﻿#Region "Microsoft.VisualBasic::48adbb38125fbfba159def48b2089462, R#\Runtime\Environment.vb"
 
     ' Author:
     ' 
@@ -34,14 +34,14 @@
     '     Class Environment
     ' 
     '         Properties: globalEnvironment, isGlobal, last, messages, parent
-    '                     stackTag, types, variables
+    '                     stackFrame, types, variables
     ' 
     '         Constructor: (+3 Overloads) Sub New
     ' 
     '         Function: asRVector, Evaluate, FindSymbol, GetEnumerator, IEnumerable_GetEnumerator
     '                   Push, ToString
     ' 
-    '         Sub: AddMessage, Clear, Delete, (+2 Overloads) Dispose
+    '         Sub: AddMessage, Clear, Delete, (+2 Overloads) Dispose, setStackInfo
     ' 
     ' 
     ' /********************************************************************************/
@@ -49,6 +49,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
@@ -75,7 +76,7 @@ Namespace Runtime
         ''' The name of this current stack closure.(R function name, closure id, etc)
         ''' </summary>
         ''' <returns></returns>
-        Public ReadOnly Property stackTag As String
+        Public ReadOnly Property stackFrame As StackFrame
         Public ReadOnly Property variables As Dictionary(Of Variable)
         Public ReadOnly Property types As Dictionary(Of String, RType)
         ''' <summary>
@@ -158,14 +159,14 @@ Namespace Runtime
             types = New Dictionary(Of String, RType)
             parent = Nothing
             [global] = Nothing
-            stackTag = "<globalEnvironment>"
+            stackFrame = globalStackFrame
         End Sub
 
-        Sub New(parent As Environment, stackTag$)
+        Sub New(parent As Environment, stackFrame As StackFrame)
             Call Me.New()
 
             Me.parent = parent
-            Me.stackTag = stackTag
+            Me.stackFrame = stackFrame
             Me.global = parent.globalEnvironment
         End Sub
 
@@ -174,13 +175,17 @@ Namespace Runtime
 
             Me.parent = globalEnv
             Me.global = globalEnv
-            Me.stackTag = "<globalEnvironment>"
+            Me.stackFrame = globalStackFrame
         End Sub
 
         Public Sub AddMessage(message As Object, Optional level As MSG_TYPES = MSG_TYPES.WRN)
             Internal.Invokes _
                 .CreateMessageInternal(message, Me, level) _
                 .DoCall(AddressOf messages.Add)
+        End Sub
+
+        Public Sub setStackInfo(stackframe As StackFrame)
+            _stackFrame = stackframe
         End Sub
 
         Public Sub Clear()
@@ -289,7 +294,7 @@ Namespace Runtime
             If isGlobal Then
                 Return $"Global({NameOf(Environment)})"
             Else
-                Return parent?.ToString & " :> " & stackTag
+                Return GetEnvironmentStackTraceString
             End If
         End Function
 

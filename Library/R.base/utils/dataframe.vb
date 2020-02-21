@@ -1,46 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::f7b9d30802df393f5b24f628ff2f65de, Library\R.base\utils\dataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module dataframe
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: colnames, printTable, project, readDataSet, RowToString
-    '               vector
-    ' 
-    ' /********************************************************************************/
+' Module dataframe
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: colnames, printTable, project, readDataSet, RowToString
+'               vector
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.csv
@@ -109,6 +110,46 @@ Module dataframe
         End If
 
         Return $"${id} {length} slots {{{keys.Take(3).JoinBy(", ")}..."
+    End Function
+
+    <ExportAPI("rows")>
+    Public Function rows(file As File) As RowObject()
+        Return file.ToArray
+    End Function
+
+    <ExportAPI("cells")>
+    Public Function cells(x As RowObject) As String()
+        Return x.ToArray
+    End Function
+
+    <ExportAPI("read.csv.raw")>
+    Public Function readCsvRaw(file$, Optional encoding As Object = "") As File
+        Return csv.Load(file, Rsharp.GetEncoding(encoding))
+    End Function
+
+    <ExportAPI("open.csv")>
+    Public Function openCsv(file$, Optional encoding As Object = "") As RDispose
+        Dim table As New File
+        Dim textEncode As Encoding = Rsharp.GetEncoding(encoding)
+
+        Return New RDispose(table, Sub() table.Save(file, textEncode))
+    End Function
+
+    <ExportAPI("row")>
+    Public Function CreateRowObject(Optional vals As Array = Nothing) As RowObject
+        Return New RowObject(vals.AsObjectEnumerator.Select(AddressOf Scripting.ToString))
+    End Function
+
+    <ExportAPI("append.cells")>
+    Public Function appendCells(row As RowObject, cells As Array) As RowObject
+        row.AddRange(cells.AsObjectEnumerator.Select(AddressOf Scripting.ToString))
+        Return row
+    End Function
+
+    <ExportAPI("append.row")>
+    Public Function appendRow(table As File, row As RowObject) As File
+        table.Add(row)
+        Return table
     End Function
 
     <ExportAPI("dataset.colnames")>

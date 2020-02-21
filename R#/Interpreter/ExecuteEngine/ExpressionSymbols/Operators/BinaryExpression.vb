@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::20798e80163418eb2efb69334741c9a5, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryExpression.vb"
+﻿#Region "Microsoft.VisualBasic::8813043bc281796276bcde2431b41fde, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryExpression.vb"
 
 ' Author:
 ' 
@@ -36,7 +36,7 @@
 '         Properties: type
 ' 
 '         Constructor: (+1 Overloads) Sub New
-'         Function: DoStringBinary, Evaluate, getStringArray, ToString
+'         Function: Evaluate, ToString
 ' 
 ' 
 ' /********************************************************************************/
@@ -46,6 +46,7 @@
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Interpreter.ExecuteEngine
 
@@ -53,7 +54,7 @@ Namespace Interpreter.ExecuteEngine
 
         Public Overrides ReadOnly Property type As TypeCodes
 
-        Dim left, right As Expression
+        Friend left, right As Expression
         Dim [operator] As String
 
         Sub New(left As Expression, right As Expression, op$)
@@ -85,14 +86,22 @@ Namespace Interpreter.ExecuteEngine
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim a As Object = left.Evaluate(envir)
             Dim b As Object = right.Evaluate(envir)
-            Dim ta = a.GetType
-            Dim tb = b.GetType
 
             If Program.isException(a) Then
                 Return a
             ElseIf Program.isException(b) Then
                 Return b
             End If
+
+            If TypeOf a Is vector Then
+                a = Runtime.asVector(Of Double)(DirectCast(a, vector).data)
+            End If
+            If TypeOf b Is vector Then
+                b = Runtime.asVector(Of Double)(DirectCast(b, vector).data)
+            End If
+
+            Dim ta = a.GetType
+            Dim tb = b.GetType
 
             If ta Like integers Then
                 If tb Like integers Then
@@ -117,6 +126,12 @@ Namespace Interpreter.ExecuteEngine
                         Case "*" : Return Runtime.Core.Multiply(Of Long, Double, Double)(a, b).ToArray
                         Case "/" : Return Runtime.Core.Divide(Of Long, Double, Double)(a, b).ToArray
                         Case "^" : Return Runtime.Core.Power(Of Long, Double, Double)(a, b).ToArray
+                        Case ">" : Return Runtime.Core.BinaryCoreInternal(Of Long, Double, Boolean)(a, b, Function(x, y) x > y).ToArray
+                        Case "<" : Return Runtime.Core.BinaryCoreInternal(Of Long, Double, Boolean)(a, b, Function(x, y) x < y).ToArray
+                        Case "!=" : Return Runtime.Core.BinaryCoreInternal(Of Long, Double, Boolean)(a, b, Function(x, y) x <> y).ToArray
+                        Case "==" : Return Runtime.Core.BinaryCoreInternal(Of Long, Double, Boolean)(a, b, Function(x, y) x = y).ToArray
+                        Case ">=" : Return Runtime.Core.BinaryCoreInternal(Of Long, Double, Boolean)(a, b, Function(x, y) x >= y).ToArray
+                        Case "<=" : Return Runtime.Core.BinaryCoreInternal(Of Long, Double, Boolean)(a, b, Function(x, y) x <= y).ToArray
                     End Select
                 End If
             ElseIf ta Like floats Then
@@ -128,7 +143,12 @@ Namespace Interpreter.ExecuteEngine
                         Case "*" : Return Runtime.Core.Multiply(Of Double, Long, Double)(a, b).ToArray
                         Case "/" : Return Runtime.Core.Divide(Of Double, Long, Double)(a, b).ToArray
                         Case "^" : Return Runtime.Core.Power(Of Double, Long, Double)(a, b).ToArray
-
+                        Case ">" : Return Runtime.Core.BinaryCoreInternal(Of Double, Long, Boolean)(a, b, Function(x, y) x > y).ToArray
+                        Case "<" : Return Runtime.Core.BinaryCoreInternal(Of Double, Long, Boolean)(a, b, Function(x, y) x < y).ToArray
+                        Case "!=" : Return Runtime.Core.BinaryCoreInternal(Of Double, Long, Boolean)(a, b, Function(x, y) x <> y).ToArray
+                        Case "==" : Return Runtime.Core.BinaryCoreInternal(Of Double, Long, Boolean)(a, b, Function(x, y) x = y).ToArray
+                        Case ">=" : Return Runtime.Core.BinaryCoreInternal(Of Double, Long, Boolean)(a, b, Function(x, y) x >= y).ToArray
+                        Case "<=" : Return Runtime.Core.BinaryCoreInternal(Of Double, Long, Boolean)(a, b, Function(x, y) x <= y).ToArray
                     End Select
                 ElseIf tb Like floats Then
                     Select Case [operator]
@@ -138,6 +158,8 @@ Namespace Interpreter.ExecuteEngine
                         Case "/" : Return Runtime.Core.Divide(Of Double, Double, Double)(a, b).ToArray
                         Case "^" : Return Runtime.Core.Power(Of Double, Double, Double)(a, b).ToArray
                         Case "%" : Return Runtime.Core.Module(Of Double, Double, Double)(a, b).ToArray
+                        Case "!=" : Return Runtime.Core.BinaryCoreInternal(Of Double, Double, Boolean)(a, b, Function(x, y) x <> y).ToArray
+                        Case "==" : Return Runtime.Core.BinaryCoreInternal(Of Double, Double, Boolean)(a, b, Function(x, y) x = y).ToArray
                         Case ">=" : Return Runtime.Core.BinaryCoreInternal(Of Double, Double, Boolean)(a, b, Function(x, y) x >= y).ToArray
                         Case "<=" : Return Runtime.Core.BinaryCoreInternal(Of Double, Double, Boolean)(a, b, Function(x, y) x <= y).ToArray
                     End Select

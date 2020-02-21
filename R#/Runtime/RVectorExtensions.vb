@@ -1,43 +1,43 @@
-﻿#Region "Microsoft.VisualBasic::662090053221b9673f0ad0734f648a42, R#\Runtime\RVectorExtensions.vb"
+﻿#Region "Microsoft.VisualBasic::5cad6f04d43b46335512aec4c06fe59e, R#\Runtime\RVectorExtensions.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module RVectorExtensions
-    ' 
-    '         Function: (+2 Overloads) asVector, createArray, CTypeOfList, fromArray, getFirst
-    '                   isVector
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module RVectorExtensions
+' 
+'         Function: (+2 Overloads) asVector, createArray, CTypeOfList, fromArray, getFirst
+'                   isVector
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -46,6 +46,7 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 
 Namespace Runtime
 
@@ -88,6 +89,10 @@ Namespace Runtime
             If value Is Nothing Then
                 Return Nothing
             Else
+                If value.GetType Is GetType(vector) Then
+                    value = DirectCast(value, vector).data
+                End If
+
                 valueType = value.GetType
             End If
 
@@ -101,6 +106,8 @@ Namespace Runtime
                                 Return .GetValue(i)
                             End If
                         Next
+
+                        Return Nothing
                     Else
                         Return .GetValue(Scan0)
                     End If
@@ -108,6 +115,16 @@ Namespace Runtime
             Else
                 Return value
             End If
+        End Function
+
+        Public Function [single](x As Object) As Object
+            If Not x Is Nothing Then
+                If x.GetType.IsArray AndAlso DirectCast(x, Array).Length = 1 Then
+                    Return DirectCast(x, Array).GetValue(Scan0)
+                End If
+            End If
+
+            Return x
         End Function
 
         ''' <summary>
@@ -126,6 +143,10 @@ Namespace Runtime
             If value Is Nothing Then
                 Return Nothing
             Else
+                If value.GetType Is GetType(vector) Then
+                    value = DirectCast(value, vector).data
+                End If
+
                 valueType = value.GetType
             End If
 
@@ -173,17 +194,21 @@ Namespace Runtime
             If value Is Nothing Then
                 Return {}
             Else
+                If value.GetType Is GetType(vector) Then
+                    value = DirectCast(value, vector).data
+                End If
+
                 valueType = value.GetType
             End If
 
             If valueType Is typeofT Then
                 Return {DirectCast(value, T)}
+            ElseIf valueType Is GetType(T()) Then
+                Return DirectCast(value, T())
             ElseIf valueType.IsInheritsFrom(GetType(Array)) Then
                 Return typeofT.fromArray(Of T)(value)
             ElseIf valueType Is GetType(Group) Then
                 Return typeofT.fromArray(Of T)(DirectCast(value, Group).group)
-            ElseIf valueType Is GetType(T()) Then
-                Return DirectCast(value, T())
             ElseIf valueType.IsInheritsFrom(GetType(IEnumerable(Of T))) Then
                 Return DirectCast(value, IEnumerable(Of T)).ToArray
             Else

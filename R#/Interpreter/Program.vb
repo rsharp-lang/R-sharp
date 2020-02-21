@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f9c6bb27f363f9775f8b57bc18cc69c5, R#\Interpreter\Program.vb"
+﻿#Region "Microsoft.VisualBasic::7aef1574e3517fdbd7405b7034d4cf4f, R#\Interpreter\Program.vb"
 
     ' Author:
     ' 
@@ -34,8 +34,11 @@
     '     Class Program
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: BuildProgram, (+2 Overloads) CreateProgram, EndWithFuncCalls, Execute, ExecuteCodeLine
+    ' 
+    '         Function: BuildProgram, CreateProgram, EndWithFuncCalls, Execute, ExecuteCodeLine
     '                   GetEnumerator, IEnumerable_GetEnumerator, isException, ToString
+    ' 
+    '         Sub: configException
     ' 
     ' 
     ' /********************************************************************************/
@@ -46,7 +49,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
-Imports SMRUCC.Rsharp.Language.TokenIcer
+Imports SMRUCC.Rsharp.Interpreter.SyntaxParser
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -96,20 +99,25 @@ Namespace Interpreter
                 last = ExecuteCodeLine(expression, envir, breakLoop, debug)
 
                 If breakLoop Then
-                    If Not last Is Nothing AndAlso Program.isException(last) Then
-                        Dim err As Message = last
-
-                        If err.source Is Nothing Then
-                            err.source = expression
-                        End If
-                    End If
-
+                    Call configException(envir, last, expression)
                     Exit For
                 End If
             Next
 
             Return last
         End Function
+
+        Private Sub configException(env As Environment, last As Object, expression As Expression)
+            If Not last Is Nothing AndAlso Program.isException(last) Then
+                Dim err As Message = last
+
+                If err.source Is Nothing Then
+                    err.source = expression
+                End If
+
+                env.globalEnvironment.lastException = err
+            End If
+        End Sub
 
         ''' <summary>
         ''' For execute lambda function
@@ -191,23 +199,15 @@ Namespace Interpreter
         End Function
 
         Public Overrides Function ToString() As String
-            Return execQueue.Select(Function(exp) exp.ToString & ";").JoinBy(vbCrLf)
+            Return execQueue _
+                .Select(Function(exp) exp.ToString & ";") _
+                .JoinBy(vbCrLf)
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        <DebuggerStepThrough>
-        Public Shared Function CreateProgram(tokens As Token()) As Program
-            Return New Program With {
-                .Rscript = Nothing,
-                .execQueue = tokens.GetExpressions.ToArray
-            }
-        End Function
-
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Shared Function CreateProgram(Rscript As Rscript) As Program
-            Dim tokens As Token() = Rscript.GetTokens
-            Dim exec As Expression() = tokens.ToArray _
-                .GetExpressions _
+        Public Shared Function CreateProgram(Rscript As Rscript, Optional debug As Boolean = False) As Program
+            Dim exec As Expression() = Rscript _
+                .GetExpressions(New SyntaxBuilderOptions With {.debug = debug, .source = Rscript}) _
                 .ToArray
 
             Return New Program With {
@@ -234,10 +234,12 @@ Namespace Interpreter
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
-        Public Shared Function BuildProgram(scriptText As String) As Program
+        Public Shared Function BuildProgram(scriptText As String, Optional debug As Boolean = False) As Program
             Return Rscript _
                 .AutoHandleScript(scriptText) _
-                .DoCall(AddressOf CreateProgram)
+                .DoCall(Function(script)
+                            Return CreateProgram(script, debug)
+                        End Function)
         End Function
 
         Public Iterator Function GetEnumerator() As IEnumerator(Of Expression) Implements IEnumerable(Of Expression).GetEnumerator

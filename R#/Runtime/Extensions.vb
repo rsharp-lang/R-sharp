@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::adebdd6b5e435618cd3c181116def115, R#\Runtime\Extensions.vb"
+﻿#Region "Microsoft.VisualBasic::68f702ee3e7befd95e944f80ea5974c2, R#\Runtime\Extensions.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Module Extensions
     ' 
-    '         Function: ClosureStackName, MeasureArrayElementType, TryCatch
+    '         Function: MeasureArrayElementType, TryCatch
     ' 
     ' 
     ' /********************************************************************************/
@@ -64,20 +64,6 @@ Namespace Runtime
             Next
 
             Return GetType(Void)
-        End Function
-
-        ''' <summary>
-        ''' 
-        ''' </summary>
-        ''' <param name="func$"></param>
-        ''' <param name="script$"></param>
-        ''' <param name="line%"></param>
-        ''' <returns></returns>
-        ''' <remarks>
-        ''' How to keeps the script path reference?
-        ''' </remarks>
-        Public Function ClosureStackName(func$, script$, line%) As String
-            Return $"<{script.FileName}#{line}::{func}()>"
         End Function
     End Module
 End Namespace

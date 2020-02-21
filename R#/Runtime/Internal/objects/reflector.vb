@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::816a47248918825e960b6e314b564149, R#\Runtime\Internal\objects\reflector.vb"
+﻿#Region "Microsoft.VisualBasic::a15c0203d8d5ed308ead4c49997a332f, R#\Runtime\Internal\objects\reflector.vb"
 
     ' Author:
     ' 
@@ -33,13 +33,14 @@
 
     '     Module reflector
     ' 
-    '         Function: GetStructure, strVector
+    '         Function: dataframe, GetStructure, printSlots, strList, strVector
     ' 
     ' 
     ' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
@@ -66,9 +67,9 @@ Namespace Runtime.Internal.Object
             ElseIf Runtime.IsPrimitive(code, includeComplexList:=False) Then
                 Return strVector(Runtime.asVector(Of Object)(x), type, env)
             ElseIf type Is GetType(dataframe) Then
-                Return dataframe(x, env)
+                Return dataframe(x, env, indent)
             Else
-                Return classPrinter.printClass(x)
+                Return printer.ValueToString(x, env)
             End If
         End Function
 
@@ -76,24 +77,72 @@ Namespace Runtime.Internal.Object
             Dim value As Object
             Dim sb As New StringBuilder
             Dim i As i32 = 1
+            Dim keyValues As New List(Of (key$, value$))
+
+            If list.Count = 0 Then
+                Return $"{indent}list()"
+            End If
 
             Call sb.AppendLine("List of " & list.Count)
 
-            For Each slotKey As Object In list.Keys
+            For Each slotKey As Object In (From x In list.Keys.AsQueryable Select x Take 100)
                 value = list(slotKey)
 
                 If ++i = CInt(Val(slotKey.ToString)) Then
                     slotKey = $"[{slotKey}]"
                 End If
 
-                sb.AppendLine($"{indent}$ {slotKey}: {GetStructure(value, env, indent & "..")}")
+                keyValues.Add(($"{indent}$ {slotKey}", GetStructure(value, env, indent & "..")))
             Next
+
+            Dim truncated$ = Nothing
+
+            If list.Count > 100 Then
+                truncated = $"{indent}[list output truncated]"
+            End If
+
+            Return sb.printSlots(keyValues, truncated)
+        End Function
+
+        <Extension>
+        Private Function printSlots(sb As StringBuilder, keyValues As List(Of (key$, value$)), truncated$) As String
+            Dim maxPrefixSize As Integer = keyValues _
+                .Select(Function(s) s.key) _
+                .MaxLengthString _
+                .Length
+
+            For Each slot In keyValues
+                Call sb.AppendLine($"{slot.key}{New String(" "c, maxPrefixSize - slot.key.Length)} : {slot.value}")
+            Next
+
+            If Not truncated.StringEmpty Then
+                Call sb.AppendLine(truncated)
+            End If
 
             Return sb.ToString
         End Function
 
-        Private Function dataframe(d As dataframe, env As GlobalEnvironment) As String
-            Throw New NotImplementedException
+        Private Function dataframe(d As dataframe, env As GlobalEnvironment, indent$) As String
+            Dim sb As New StringBuilder()
+            Dim value As Array
+            Dim i As i32 = 1
+            Dim slotKey As String
+            Dim keyValues As New List(Of (key$, value$))
+
+            Call sb.AppendLine($"'data.frame':	{d.nrows} obs. of  {d.ncols} variables:")
+
+            For Each col As KeyValuePair(Of String, Array) In d.columns
+                value = col.Value
+                slotKey = col.Key
+
+                If ++i = CInt(Val(slotKey.ToString)) Then
+                    slotKey = $"[{slotKey}]"
+                End If
+
+                keyValues.Add(($"{indent}$ {slotKey}", GetStructure(value, env, indent & "..")))
+            Next
+
+            Return sb.printSlots(keyValues, Nothing)
         End Function
 
         Private Function strVector(a As Array, type As Type, env As GlobalEnvironment) As String
