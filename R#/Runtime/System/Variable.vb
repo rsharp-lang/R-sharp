@@ -160,9 +160,20 @@ Namespace Runtime.Components
             Me.constraint = constraint
         End Sub
 
-        Public Sub SetValue(x As Object)
-            m_val = x
+        Sub New(value As Object, Optional constraint As TypeCodes = TypeCodes.generic)
+            Me.New(constraint)
+            Me.m_val = value
         End Sub
+
+        Public Function SetValue(x As Object, env As Environment) As Message
+            If [readonly] Then
+                Return Internal.stop("Can not modify the constant value!", env)
+            Else
+                m_val = x
+            End If
+
+            Return x
+        End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function ToString() As String

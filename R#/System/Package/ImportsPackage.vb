@@ -126,7 +126,7 @@ Namespace System.Package
                     [global].Push(api.name, api, TypeCodes.closure)
                 Else
                     ' overrides and masked by current package
-                    symbol.value = api
+                    symbol.SetValue(api, envir)
                     masked += symbol.name
                 End If
             Next

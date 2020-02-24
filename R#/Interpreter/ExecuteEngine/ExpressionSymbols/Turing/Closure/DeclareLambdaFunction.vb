@@ -154,7 +154,7 @@ Namespace Interpreter.ExecuteEngine
             Return Function(x As T) As Out
                        Dim result As Object
 
-                       v.value = x
+                       v.SetValue(x, envir)
                        result = closure.Evaluate(envir)
 
                        ' 20200210 对于lambda函数而言，其是运行时创建的函数

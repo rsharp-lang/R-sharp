@@ -270,7 +270,7 @@ Namespace Interpreter
             Dim last As Variable = Me.globalEnvir(lastVariableName)
 
             ' set last variable in current environment
-            last.value = result
+            Call last.SetValue(result, globalEnvir)
 
             If Program.isException(result) Then
                 Call VBDebugger.WaitOutput()

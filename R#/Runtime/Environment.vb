@@ -135,9 +135,7 @@ Namespace Runtime
                 Dim symbol As Variable = FindSymbol(name)
 
                 If symbol Is Nothing Then
-                    Return New Variable With {
-                        .value = Message.SymbolNotFound(Me, name, TypeCodes.generic)
-                    }
+                    Return New Variable(Message.SymbolNotFound(Me, name, TypeCodes.generic))
                 Else
                     Return symbol
                 End If
@@ -248,9 +246,10 @@ Namespace Runtime
             End If
 
             With New Variable(type) With {
-                .name = name,
-                .value = value
+                .name = name
             }
+                Call .SetValue(value, Me)
+
                 If Not .constraintValid Then
                     Return Internal.stop(New Exception(String.Format(ConstraintInvalid, .typeCode, type)), Me)
                 Else

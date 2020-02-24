@@ -135,7 +135,7 @@ Namespace Interpreter.ExecuteEngine
             Call env.setStackInfo(oldStackFrame)
 
             If Not env.FindSymbol("!script") Is Nothing Then
-                env.FindSymbol("!script").value = oldScript
+                env.FindSymbol("!script").SetValue(oldScript, env)
             End If
 
             Return Nothing
@@ -165,7 +165,7 @@ Namespace Interpreter.ExecuteEngine
             If env.FindSymbol("!script") Is Nothing Then
                 env.Push("!script", script)
             Else
-                env.FindSymbol("!script").value = script
+                env.FindSymbol("!script").SetValue(script, env)
             End If
 
             program = Program.CreateProgram(Rscript, R.debug)
