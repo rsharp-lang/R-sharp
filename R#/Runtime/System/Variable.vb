@@ -172,7 +172,7 @@ Namespace Runtime.Components
                 m_val = x
             End If
 
-            Return x
+            Return Nothing
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
