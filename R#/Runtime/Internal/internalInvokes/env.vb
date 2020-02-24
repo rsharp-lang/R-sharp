@@ -77,7 +77,7 @@ Namespace Runtime.Internal.Invokes
                 Return Internal.stop("NULL value provided for object name!", envir)
             End If
 
-            Dim symbol As Variable = envir.FindSymbol(name, [inherits])
+            Dim symbol As Symbol = envir.FindSymbol(name, [inherits])
 
             If symbol Is Nothing Then
                 Return Message.SymbolNotFound(envir, name, TypeCodes.generic)

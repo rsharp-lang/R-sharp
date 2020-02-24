@@ -95,7 +95,7 @@ Namespace Interpreter
         Public Property strict As Boolean = True
 
         ''' <summary>
-        ''' Get value of a <see cref="Variable"/>
+        ''' Get value of a <see cref="Symbol"/>
         ''' </summary>
         ''' <param name="name"></param>
         ''' <returns></returns>
@@ -128,7 +128,7 @@ Namespace Interpreter
         Public Sub PrintMemory(Optional dev As TextWriter = Nothing)
             Dim table$()() = globalEnvir _
                 .Select(Function(v)
-                            Dim value$ = Variable.GetValueViewString(v)
+                            Dim value$ = Symbol.GetValueViewString(v)
 
                             Return {
                                 v.name,
@@ -267,7 +267,7 @@ Namespace Interpreter
         End Function
 
         Friend Function finalizeResult(result As Object) As Object
-            Dim last As Variable = Me.globalEnvir(lastVariableName)
+            Dim last As Symbol = Me.globalEnvir(lastVariableName)
 
             ' set last variable in current environment
             Call last.SetValue(result, globalEnvir)

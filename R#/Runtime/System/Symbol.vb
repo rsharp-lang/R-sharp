@@ -56,7 +56,7 @@ Namespace Runtime.Components
     ''' <summary>
     ''' The variable model in R# language
     ''' </summary>
-    Public Class Variable : Implements INamedValue, Value(Of Object).IValueOf
+    Public Class Symbol : Implements INamedValue, Value(Of Object).IValueOf
 
         Public Property name As String Implements IKeyedEntity(Of String).Key
 
@@ -181,7 +181,7 @@ Namespace Runtime.Components
             Return $"Dim {name} As ({typeCode}){Me.typeof.FullName} = {GetValueViewString(Me)}"
         End Function
 
-        Public Shared Function GetValueViewString(var As Variable) As String
+        Public Shared Function GetValueViewString(var As Symbol) As String
             Dim value = var.ToVector()
             Dim str$
 

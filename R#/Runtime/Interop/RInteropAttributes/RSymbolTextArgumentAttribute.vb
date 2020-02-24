@@ -63,7 +63,7 @@ Namespace Runtime.Interop
                     Return DirectCast(symbol, Literal).value
                 Case GetType(SymbolReference)
                     Dim symbolName$ = DirectCast(symbol, SymbolReference).symbol
-                    Dim var As Variable = env.FindSymbol(symbolName)
+                    Dim var As Symbol = env.FindSymbol(symbolName)
 
                     If var Is Nothing Then
                         Return symbolName

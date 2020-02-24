@@ -449,7 +449,7 @@
     <Compile Include="Runtime\Internal\objects\vector.vb" />
     <Compile Include="Runtime\Internal\objects\dataframe.vb" />
     <Compile Include="Runtime\Internal\objects\list.vb" />
-    <Compile Include="Runtime\System\Variable.vb" />
+    <Compile Include="Runtime\System\Symbol.vb" />
     <Compile Include="Runtime\System\TypeCode.vb" />
     <Compile Include="System\Package\PackageLoader.vb" />
   </ItemGroup>

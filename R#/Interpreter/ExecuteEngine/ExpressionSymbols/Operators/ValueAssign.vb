@@ -315,7 +315,7 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Private Shared Function assignSymbol(envir As Environment, symbolName As Expression, isByRef As Boolean, value As Object) As Message
-            Dim target As Variable = Nothing
+            Dim target As Symbol = Nothing
 
             Select Case symbolName.GetType
                 Case GetType(Literal)

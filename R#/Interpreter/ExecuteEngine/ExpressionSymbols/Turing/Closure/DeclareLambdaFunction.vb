@@ -141,7 +141,7 @@ Namespace Interpreter.ExecuteEngine
 
         Public Function CreateLambda(Of T, Out)(parent As Environment) As Func(Of T, Out)
             Dim envir = New Environment(parent, stackFrame)
-            Dim v As Variable
+            Dim v As Symbol
 
             Call DeclareNewVariable _
                 .PushNames(names:=parameter.names,
