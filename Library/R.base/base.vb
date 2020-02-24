@@ -39,6 +39,7 @@
 
 #End Region
 
+Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Math.DataFrame.Impute
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -62,6 +63,8 @@ Public Module base
     ''' <param name="byRow"></param>
     ''' <param name="infer"></param>
     ''' <returns></returns>
+    ''' 
+    <ExportAPI("impute")>
     Public Function impute(rawMatrix As DataSet(), Optional byRow As Boolean = True, Optional infer As InferMethods = InferMethods.Average) As DataSet()
         Return rawMatrix.SimulateMissingValues(byRow, infer).ToArray
     End Function
