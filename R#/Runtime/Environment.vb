@@ -246,10 +246,13 @@ Namespace Runtime
             End If
 
             With New Symbol(type) With {
-                .name = name,
-                .[readonly] = [readonly]
+                .name = name
             }
                 Call .SetValue(value, Me)
+
+                ' 只读开关应该在设置了初始值之后
+                ' 再进行设置，否则会无法设置初始值的
+                .[readonly] = [readonly]
 
                 If Not .constraintValid Then
                     Return Internal.stop(New Exception(String.Format(ConstraintInvalid, .typeCode, type)), Me)
