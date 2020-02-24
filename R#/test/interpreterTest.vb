@@ -175,7 +175,11 @@ Module interpreterTest
     End Sub
 
     Sub regexpTest()
+        Call R.Evaluate("print(['123', 'abc'] like $'\d+');")
+        Call R.Evaluate("print(['abc', 'ABC'] like $'[a-z]');")
+        Call R.Evaluate("print(['123', '5466'] == $'\d{3}');")
 
+        Pause()
     End Sub
 
     Sub negativeValTest()
