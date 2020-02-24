@@ -60,18 +60,28 @@ Namespace Runtime.Components
 
         Public Property name As String Implements IKeyedEntity(Of String).Key
 
+        Dim m_val As Object
+
         ''' <summary>
         ''' 变量值对于基础类型而言，都是以数组的形式存储的
         ''' 非基础类型则为其值本身
         ''' </summary>
         ''' <returns></returns>
-        Public Overridable Property value As Object Implements Value(Of Object).IValueOf.Value
+        Public Property value As Object Implements Value(Of Object).IValueOf.Value
+            Get
+                Return m_val
+            End Get
+            Private Set(value As Object)
+                ' do nothing
+            End Set
+        End Property
 
         ''' <summary>
         ''' 当前的这个变量被约束的类型
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property constraint As TypeCodes
+        Public ReadOnly Property [readonly] As Boolean
 
         ''' <summary>
         ''' <see cref="RType.fullName"/>, key for <see cref="Environment.types"/>
@@ -148,6 +158,10 @@ Namespace Runtime.Components
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Sub New(Optional constraint As TypeCodes = TypeCodes.generic)
             Me.constraint = constraint
+        End Sub
+
+        Public Sub SetValue(x As Object)
+            m_val = x
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
