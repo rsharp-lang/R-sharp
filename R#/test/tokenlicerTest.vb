@@ -50,9 +50,11 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Module tokenlicerTest
 
     Sub Main()
+        Call regexpLiteral()
+
         Call customOperatorTest()
 
-        Call regexpLiteral()
+
         Call numberUnittest()
         Call sourceScriptTest()
 
@@ -83,7 +85,8 @@ Module tokenlicerTest
     End Sub
 
     Sub regexpLiteral()
-        Dim tokens = New Scanner("let s = !'\d+'('123,123,444,555,999,14523333','ig')").GetTokens.ToArray
+        ' Dim cli = New Scanner("@'hello'").GetTokens.ToArray
+        Dim tokens = New Scanner("$'\d{,5}';").GetTokens.ToArray
 
         Pause()
     End Sub

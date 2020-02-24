@@ -72,6 +72,9 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+
+        Call regexpTest()
+
         Call negativeValTest()
         Call numberLiteralsTest()
 
@@ -169,6 +172,10 @@ Module interpreterTest
 
 
         Pause()
+    End Sub
+
+    Sub regexpTest()
+
     End Sub
 
     Sub negativeValTest()
