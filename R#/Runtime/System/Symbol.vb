@@ -168,7 +168,7 @@ Namespace Runtime.Components
 
         Public Function SetValue(x As Object, env As Environment) As Message
             If [readonly] Then
-                Return Internal.stop("Can not modify the constant value!", env)
+                Return Internal.stop($"cannot change value of locked binding for '{name}'", env)
             Else
                 m_val = x
             End If
