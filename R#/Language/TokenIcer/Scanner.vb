@@ -70,6 +70,7 @@ Namespace Language.TokenIcer
         ''' 当前的代码行号
         ''' </summary>
         Dim lineNumber As Integer = 1
+        Dim lastPopoutToken As Token
 
         Friend Class Escapes
 
@@ -153,12 +154,14 @@ Namespace Language.TokenIcer
                 .line = lineNumber
             }
             start = code.Position
+            lastPopoutToken = token
 
             If token.name = TokenType.comment Then
                 escape.comment = False
             ElseIf token.name = TokenType.stringLiteral OrElse
                    token.name = TokenType.stringInterpolation OrElse
-                   token.name = TokenType.cliShellInvoke Then
+                   token.name = TokenType.cliShellInvoke OrElse
+                   token.name = TokenType.regexp Then
 
                 escape.string = False
             End If
@@ -166,6 +169,7 @@ Namespace Language.TokenIcer
             Return token
         End Function
 
+        ReadOnly stringLiteralSymbols As Index(Of Char) = {""""c, "'"c, "`"c}
         ReadOnly delimiter As Index(Of Char) = {" "c, ASCII.TAB, ASCII.CR, ASCII.LF, "="c}
         ReadOnly open As Index(Of Char) = {"[", "{", "("}
         ReadOnly close As Index(Of Char) = {"]", "}", ")"}
@@ -223,6 +227,8 @@ Namespace Language.TokenIcer
                         If buffer(Scan0) = "@"c Then
                             ' cli shell invoke
                             expressionType = TokenType.cliShellInvoke
+                        ElseIf buffer(Scan0) = "$"c Then
+                            expressionType = TokenType.regexp
                         Else
                             expressionType = If(escape.stringEscape = "`"c, TokenType.stringInterpolation, TokenType.stringLiteral)
                         End If
@@ -304,6 +310,24 @@ Namespace Language.TokenIcer
             ElseIf c = ":"c Then
                 Return New Token With {.name = TokenType.sequence, .text = ":"}
             ElseIf c Like shortOperators Then
+                Dim peekNext As Char = code.Current
+
+                If c = "$"c AndAlso peekNext Like stringLiteralSymbols Then
+                    Static [like] As (TokenType, String) = (TokenType.keyword, "like")
+
+                    If lastPopoutToken Is Nothing OrElse
+                       lastPopoutToken.name = TokenType.comma OrElse
+                       lastPopoutToken.name = TokenType.open OrElse
+                       lastPopoutToken.name = TokenType.operator OrElse
+                       lastPopoutToken.name = TokenType.terminator OrElse
+                       lastPopoutToken = [like] Then
+
+                        buffer += "$"
+
+                        Return Nothing
+                    End If
+                End If
+
                 Return New Token With {.name = TokenType.operator, .text = c}
             ElseIf c Like delimiter Then
                 ' token delimiter
@@ -369,7 +393,7 @@ Namespace Language.TokenIcer
                         text = buffer.PopAll.CharString
                         buffer += bufferNext.Value
                     End If
-                ElseIf buffer = 1 AndAlso buffer(Scan0) = "@"c Then
+                ElseIf buffer = 1 AndAlso buffer(Scan0) = "@"c OrElse buffer(Scan0) = "$"c Then
                     Return Nothing
                 Else
                     text = buffer.PopAll.CharString

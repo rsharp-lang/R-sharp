@@ -86,6 +86,7 @@ Namespace Language
         ''' 命令行调用语法
         ''' </summary>
         cliShellInvoke
+        regexp
 
         ''' <summary>
         ''' NULL, NA, Inf

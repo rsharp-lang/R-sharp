@@ -72,6 +72,9 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+
+        Call regexpTest()
+
         Call negativeValTest()
         Call numberLiteralsTest()
 
@@ -167,6 +170,14 @@ Module interpreterTest
 
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub regexpTest()
+        Call R.Evaluate("print(['123', 'abc'] like $'\d+');")
+        Call R.Evaluate("print(['abc', 'ABC'] like $'[a-z]');")
+        Call R.Evaluate("print(['123', '5466'] == $'\d{3}');")
 
         Pause()
     End Sub
