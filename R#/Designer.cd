@@ -794,7 +794,7 @@
   <Delegate Name="SMRUCC.Rsharp.Runtime.Internal.Object.Converts.IMakeDataFrame" Collapsed="true">
     <Position X="99" Y="17.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAQAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAIAAAAQAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
       <FileName>Runtime\Internal\objects\RConversion\makeDataframe.vb</FileName>
     </TypeIdentifier>
   </Delegate>
@@ -1128,7 +1128,7 @@
   <Module Name="SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline.linq" Collapsed="true">
     <Position X="99" Y="9.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAhAAAAAEAAQAAAAAAAIAAAAAAAACAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAhAAAAAEAAQAAAAAAAIAAAAAQAACAAAA=</HashCode>
       <FileName>Runtime\Internal\internalInvokes\Linq\linq.vb</FileName>
     </TypeIdentifier>
   </Module>
@@ -1149,7 +1149,7 @@
   <Module Name="SMRUCC.Rsharp.Runtime.Internal.Object.Converts.RConversion" Collapsed="true">
     <Position X="102.5" Y="10.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAgAIIACAAgAAAAABACQAABAAgIAAAAAAAAAAQA=</HashCode>
+      <HashCode>AAAAAAgAIIACAAgAAAAABACQAEBAAgIAAAAAAAAAAQA=</HashCode>
       <FileName>Runtime\Internal\objects\RConversion\conversion.vb</FileName>
     </TypeIdentifier>
   </Module>

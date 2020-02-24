@@ -44,7 +44,7 @@
 Imports System.Runtime.CompilerServices
 
 ''' <summary>
-''' Information about this VisualBasic App framework code module.
+''' Information about the ``R#`` interpreter code module.
 ''' </summary>
 Public Module LICENSE
 
