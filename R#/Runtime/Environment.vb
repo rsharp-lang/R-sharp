@@ -238,7 +238,7 @@ Namespace Runtime
         ''' <param name="value"></param>
         ''' <param name="type"></param>
         ''' <returns></returns>
-        Public Function Push(name$, value As Object, Optional type As TypeCodes = TypeCodes.generic) As Object
+        Public Function Push(name$, value As Object, [readonly] As Boolean, Optional type As TypeCodes = TypeCodes.generic) As Object
             If variables.ContainsKey(name) Then
                 Return Internal.stop({String.Format(AlreadyExists, name)}, Me)
             ElseIf Not value Is Nothing Then
@@ -246,7 +246,8 @@ Namespace Runtime
             End If
 
             With New Variable(type) With {
-                .name = name
+                .name = name,
+                .[readonly] = [readonly]
             }
                 Call .SetValue(value, Me)
 

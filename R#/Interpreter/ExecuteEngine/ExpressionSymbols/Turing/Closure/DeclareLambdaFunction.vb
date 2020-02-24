@@ -129,7 +129,8 @@ Namespace Interpreter.ExecuteEngine
                         .PushNames(names:=parameter.names,
                                    value:=argVal,
                                    type:=TypeCodes.generic,
-                                   envir:=envir
+                                   envir:=envir,
+                                   [readonly]:=True
                         )
                     Dim result As Object = closure.Evaluate(env)
 
@@ -146,7 +147,8 @@ Namespace Interpreter.ExecuteEngine
                 .PushNames(names:=parameter.names,
                            value:=Nothing,
                            type:=GetType(T).GetRTypeCode,
-                           envir:=envir
+                           envir:=envir,
+                           [readonly]:=False
             )
 
             v = envir.FindSymbol(parameter.names(Scan0), [inherits]:=False)

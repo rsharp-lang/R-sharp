@@ -163,7 +163,7 @@ Namespace Interpreter.ExecuteEngine
             env.setStackInfo(stackframe)
 
             If env.FindSymbol("!script") Is Nothing Then
-                env.Push("!script", script)
+                env.Push("!script", script, [readonly]:=False)
             Else
                 env.FindSymbol("!script").SetValue(script, env)
             End If

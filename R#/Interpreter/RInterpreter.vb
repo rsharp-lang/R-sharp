@@ -260,7 +260,7 @@ Namespace Interpreter
             End If
 
             For Each var As NamedValue(Of Object) In arguments
-                Call envir.Push(var.Name, var.Value)
+                Call envir.Push(var.Name, var.Value, [readonly]:=False)
             Next
 
             Return envir

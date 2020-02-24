@@ -143,7 +143,8 @@ Namespace Interpreter.ExecuteEngine
                     names:=variables,
                     value:=value,
                     type:=TypeCodes.generic,
-                    envir:=New Environment(env, stackframe)
+                    envir:=New Environment(env, stackframe),
+                    [readonly]:=False
                 )
 
                 Return body.Invoke(closure, {})

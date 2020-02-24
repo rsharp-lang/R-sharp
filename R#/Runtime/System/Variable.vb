@@ -81,7 +81,8 @@ Namespace Runtime.Components
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property constraint As TypeCodes
-        Public ReadOnly Property [readonly] As Boolean
+
+        Public Property [readonly] As Boolean
 
         ''' <summary>
         ''' <see cref="RType.fullName"/>, key for <see cref="Environment.types"/>

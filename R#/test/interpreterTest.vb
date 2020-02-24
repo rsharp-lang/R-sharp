@@ -72,7 +72,7 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
-
+        Call constantTest()
         Call regexpTest()
 
         Call negativeValTest()
@@ -939,6 +939,20 @@ print( 'This is false result');
 
 print(`value of the x='${x}'`);
 ")
+        Pause()
+    End Sub
+
+    Sub constantTest()
+        Call R.Evaluate("let a = 999")
+        Call R.Evaluate("print(a)")
+        Call R.Evaluate("a = $'[a-z]+'")
+        Call R.Evaluate("print(a)")
+
+        Call R.Evaluate("const b = [999, 888.98]")
+        Call R.Evaluate("print(b)")
+        Call R.Evaluate("b = $'[a-z]+'")
+        Call R.Evaluate("print(b)")
+
         Pause()
     End Sub
 

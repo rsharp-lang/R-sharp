@@ -57,7 +57,7 @@ Namespace Interpreter.SyntaxParser
             Dim keyword As String = code(Scan0)(Scan0).text
 
             Select Case keyword
-                Case "let"
+                Case "let", "const"
                     If code > 4 AndAlso code(2).isKeyword("as") AndAlso code(3).isKeyword("function") Then
                         ' let <name> as function(...) {}
                         ' 申明一个函数
@@ -65,7 +65,7 @@ Namespace Interpreter.SyntaxParser
                         ' 将一个匿名函数赋值给左边的目标变量
                         Return SyntaxImplements.DeclareNewFunction(code, opts)
                     Else
-                        Return SyntaxImplements.DeclareNewVariable(code, opts)
+                        Return SyntaxImplements.DeclareNewVariable(code, keyword = "const", opts)
                     End If
                 Case "if" : Return SyntaxImplements.IfBranch(code.Skip(1).IteratesALL, opts)
                 Case "else" : Return code.Skip(1).IteratesALL.ToArray.DoCall(Function(tokens) SyntaxImplements.ElseBranch(tokens, opts))
