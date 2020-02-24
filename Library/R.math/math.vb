@@ -83,7 +83,7 @@ Module math
         Dim vector As var() = New var(system.Length - 1) {}
         Dim i As i32 = Scan0
         Dim solve As Func(Of Double)
-        Dim names As New Dictionary(Of String, Variable)
+        Dim names As New Dictionary(Of String, Symbol)
 
         For Each v As NamedValue(Of Object) In y0.namedValues
             Call env.Push(v.Name, REnv.asVector(Of Double)(v.Value), TypeCodes.double)
@@ -93,9 +93,9 @@ Module math
         For Each formula As DeclareLambdaFunction In system
             Dim lambda As Func(Of Double, Double) = formula.CreateLambda(Of Double, Double)(env)
             Dim name As String = formula.parameterNames(Scan0)
-            Dim ref As Variable = names(name)
+            Dim ref As Symbol = names(name)
 
-            ref.value = REnv.getFirst(y0.getByName(name))
+            ref.SetValue(REnv.getFirst(y0.getByName(name)), env)
             solve = Function() lambda(CDbl(ref.value))
             vector(++i) = New var(solve) With {
                 .Name = name,
@@ -106,7 +106,7 @@ Module math
         Dim df = Sub(dx#, ByRef dy As stdVec)
                      For Each x As var In vector
                          dy(x) = x.Evaluate()
-                         names(x.Name).value = x.Value
+                         names(x.Name).SetValue(x.Value, env)
                      Next
                  End Sub
         Dim ODEs As New GenericODEs(vector, df)
