@@ -177,6 +177,8 @@ Module interpreterTest
     Sub regexpTest()
 
         Call R.Evaluate("$'(\d{3})|[a-z]'(['123', '54668t665a888','888','000']) :> str ;")
+        ' stacktrace test
+        Call R.Evaluate("$'\d'(stop(123))")
 
         Call R.Evaluate("print(['123', 'abc'] like $'\d+');")
         Call R.Evaluate("print(['abc', 'ABC'] like $'[a-z]');")
