@@ -158,7 +158,7 @@ Namespace Interpreter.SyntaxParser
         ''' <returns></returns>
         <Extension>
         Public Function isFunctionInvoke(tokens As Token()) As Boolean
-            If Not tokens(Scan0).name = TokenType.identifier Then
+            If Not (tokens(Scan0).name = TokenType.identifier OrElse tokens(Scan0).name = TokenType.regexp) Then
                 Return False
             ElseIf Not tokens(1) = (TokenType.open, "(") OrElse Not tokens.Last = (TokenType.close, ")") Then
                 Return False
