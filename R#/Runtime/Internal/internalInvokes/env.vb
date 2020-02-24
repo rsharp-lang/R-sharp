@@ -296,5 +296,45 @@ Namespace Runtime.Internal.Invokes
                 }
             End If
         End Function
+
+        ''' <summary>
+        ''' Binding and Environment Locking, Active Bindings
+        ''' </summary>
+        ''' <param name="sym">a name object or character string.</param>
+        ''' <param name="env">an environment.</param>
+        ''' <returns></returns>
+        <ExportAPI("lockBinding")>
+        Public Function lockBinding(sym As String(), Optional env As Environment = Nothing) As Object
+            Dim symbolObj As Symbol
+
+            For Each name As String In sym
+                symbolObj = env.FindSymbol(name)
+
+                If symbolObj Is Nothing Then
+                    Return Message.SymbolNotFound(env, name, TypeCodes.NA)
+                Else
+                    symbolObj.readonly = True
+                End If
+            Next
+
+            Return Nothing
+        End Function
+
+        <ExportAPI("unlockBinding")>
+        Public Function unlockBinding(sym As String(), Optional env As Environment = Nothing) As Object
+            Dim symbolObj As Symbol
+
+            For Each name As String In sym
+                symbolObj = env.FindSymbol(name)
+
+                If symbolObj Is Nothing Then
+                    Return Message.SymbolNotFound(env, name, TypeCodes.NA)
+                Else
+                    symbolObj.readonly = False
+                End If
+            Next
+
+            Return Nothing
+        End Function
     End Module
 End Namespace
