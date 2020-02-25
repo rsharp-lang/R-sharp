@@ -78,16 +78,5 @@ Namespace Runtime
                 }
             }
         End Function
-
-        ''' <summary>
-        ''' 
-        ''' </summary>
-        ''' <param name="env">The parent <see cref="Environment"/></param>
-        ''' <returns></returns>
-        ''' 
-        <Extension>
-        Friend Function EnvironmentInherits(env As Environment, stackframe As StackFrame) As Environment
-
-        End Function
     End Module
 End Namespace

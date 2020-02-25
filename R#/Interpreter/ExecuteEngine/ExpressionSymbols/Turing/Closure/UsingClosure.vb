@@ -72,7 +72,7 @@ Namespace Interpreter.ExecuteEngine
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Using env As New Environment(envir, stackFrame)
+            Using env As New Environment(envir, stackFrame, isInherits:=False)
                 Dim resource As Object = params.Evaluate(env)
                 Dim result As Object
 

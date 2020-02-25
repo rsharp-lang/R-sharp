@@ -135,7 +135,7 @@ Namespace Interpreter.ExecuteEngine.Linq
         End Function
 
         Public Overrides Function Evaluate(parent As Environment) As Object
-            Dim env As New Environment(parent, stackFrame)
+            Dim env As New Environment(parent, stackFrame, isInherits:=False)
             Dim isList As Boolean = False
             ' 20191105
             ' 序列的产生需要放在变量申明之前

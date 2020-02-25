@@ -256,7 +256,7 @@ Namespace Interpreter
                         .[Namespace] = "SMRUCC/R#"
                     }
                 }.DoCall(Function(stackframe)
-                             Return New Environment(globalEnvir, stackframe)
+                             Return New Environment(globalEnvir, stackframe, isInherits:=True)
                          End Function)
             End If
 

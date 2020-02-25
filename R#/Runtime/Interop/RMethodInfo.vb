@@ -207,7 +207,7 @@ Namespace Runtime.Interop
                 }
             }
 
-            envir = envir.EnvironmentInherits(apiStackFrame)
+            envir = New Environment(envir, apiStackFrame, isInherits:=True)
 
             If Me.parameters.Any(Function(a) a.isObjectList) Then
                 parameters = RArgumentList.CreateObjectListArguments(Me, envir, params).ToArray
