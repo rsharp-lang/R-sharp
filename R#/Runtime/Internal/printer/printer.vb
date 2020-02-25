@@ -80,6 +80,8 @@ Namespace Runtime.Internal.ConsolePrinter
             RtoString(GetType(RType)) = Function(o) DirectCast(o, RType).ToString
             RtoString(GetType(DateTime)) = AddressOf DateToString
             RtoString(GetType(ExceptionData)) = AddressOf debug.PrintRExceptionStackTrace
+            RtoString(GetType(Environment)) = Function(o) DirectCast(o, Environment).ToString
+            RtoString(GetType(GlobalEnvironment)) = Function(o) DirectCast(o, GlobalEnvironment).ToString
 
             RInternalToString(GetType(Double)) = AddressOf printer.f64_InternalToString
         End Sub
