@@ -50,6 +50,8 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Module tokenlicerTest
 
     Sub Main()
+        Call specialNameTest()
+
         Call regexpLiteral()
 
         Call customOperatorTest()
@@ -58,7 +60,7 @@ Module tokenlicerTest
         Call numberUnittest()
         Call sourceScriptTest()
 
-        Call specialNameTest()
+
         Call elementIndexer()
         Call cliInvoke()
 
@@ -106,6 +108,7 @@ Module tokenlicerTest
     End Sub
 
     Sub specialNameTest()
+        Dim names = Rscript.FromText(".GlobalEnv + _ae86").GetTokens
         Dim tokens As Token() = Rscript.FromText("let x as string = (!script)$dir;").GetTokens
 
         Pause()
