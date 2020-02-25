@@ -99,7 +99,7 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Public Function Invoke(parent As Environment, arguments() As InvokeParameter) As Object Implements RFunction.Invoke
-            Using envir As New Environment(parent, stackFrame)
+            Using envir As New Environment(parent, stackFrame, isInherits:=False)
                 If parameter.names.Length = 0 Then
                     ' lambda function with no parameter
                     Return closure.Evaluate(envir)
@@ -140,7 +140,7 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Public Function CreateLambda(Of T, Out)(parent As Environment) As Func(Of T, Out)
-            Dim envir = New Environment(parent, stackFrame)
+            Dim envir = New Environment(parent, stackFrame, isInherits:=False)
             Dim v As Symbol
 
             Call DeclareNewVariable _

@@ -160,12 +160,26 @@ Namespace Runtime
             stackFrame = globalStackFrame
         End Sub
 
-        Sub New(parent As Environment, stackFrame As StackFrame)
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="parent"></param>
+        ''' <param name="stackFrame"></param>
+        ''' <param name="isInherits">
+        ''' If is inherits mode, then all of the modification in sub-environment will affects the <paramref name="parent"/> environment.
+        ''' Otherwise, the modification in sub-environment will do nothing to the <paramref name="parent"/> environment.
+        ''' </param>
+        Sub New(parent As Environment, stackFrame As StackFrame, isInherits As Boolean)
             Call Me.New()
 
             Me.parent = parent
             Me.stackFrame = stackFrame
             Me.global = parent.globalEnvironment
+
+            If isInherits Then
+                variables = parent.variables
+                types = parent.types
+            End If
         End Sub
 
         Sub New(globalEnv As GlobalEnvironment)

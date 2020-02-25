@@ -107,7 +107,7 @@ Namespace Interpreter.ExecuteEngine
             If envir Is Nothing Then
                 envir = parent
             Else
-                envir = New Environment(parent, stackFrame)
+                envir = New Environment(parent, stackFrame, isInherits:=False)
             End If
 
             Dim argumentKeys As String()
@@ -171,7 +171,7 @@ Namespace Interpreter.ExecuteEngine
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim result = envir.Push(funcName, Me, TypeCodes.closure)
-            Me.envir = New Environment(envir, stackFrame)
+            Me.envir = New Environment(envir, stackFrame, isInherits:=True)
             Return result
         End Function
 

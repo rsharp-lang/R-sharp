@@ -120,6 +120,7 @@ Namespace Interpreter
             globalEnvir.Push(lastVariableName, Nothing, False, TypeCodes.generic)
             globalEnvir.Push("PI", Math.PI, True, TypeCodes.double)
             globalEnvir.Push("E", Math.E, True, TypeCodes.double)
+            globalEnvir.Push(".GlobalEnv", globalEnvir, True, TypeCodes.generic)
 
             ' config R# interpreter engine
             [strict] = envirConf.strict
@@ -255,7 +256,7 @@ Namespace Interpreter
                         .[Namespace] = "SMRUCC/R#"
                     }
                 }.DoCall(Function(stackframe)
-                             Return New Environment(globalEnvir, stackframe)
+                             Return New Environment(globalEnvir, stackframe, isInherits:=True)
                          End Function)
             End If
 

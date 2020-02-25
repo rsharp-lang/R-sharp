@@ -143,7 +143,7 @@ Namespace Interpreter.ExecuteEngine
                     names:=variables,
                     value:=value,
                     type:=TypeCodes.generic,
-                    envir:=New Environment(env, stackframe),
+                    envir:=New Environment(env, stackframe, isInherits:=False),
                     [readonly]:=False
                 )
 

@@ -135,7 +135,7 @@ Namespace Interpreter.ExecuteEngine
             If Not target Is Nothing AndAlso target.GetType Is GetType(Message) Then
                 Return target
             Else
-                envir = New Environment(envir, stackFrame)
+                envir = New Environment(envir, stackFrame, isInherits:=True)
             End If
 
             If TypeOf target Is Regex Then
@@ -178,11 +178,16 @@ Namespace Interpreter.ExecuteEngine
         ''' <param name="funcName"></param>
         ''' <param name="namespace"></param>
         ''' <param name="envir"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' This function returns a R api function or regex object for do string matches
+        ''' 
+        ''' + 1. <see cref="RFunction"/>
+        ''' + 2. <see cref="Regex"/>
+        ''' </returns>
         Friend Shared Function getFuncVar(funcName As Expression, namespace$, envir As Environment) As Object
             ' 当前环境中的函数符号的优先度要高于
             ' 系统环境下的函数符号
-            Dim funcVar As RFunction
+            Dim funcVar As Object
 
             If Not [namespace].StringEmpty Then
                 Return NamespaceFunctionSymbolReference.getPackageApiImpl(
@@ -193,17 +198,13 @@ Namespace Interpreter.ExecuteEngine
             End If
 
             If TypeOf funcName Is Literal Then
-                Dim symbol = envir.FindSymbol(DirectCast(funcName, Literal).ToString)?.value
+                Dim symbol As Object = envir.FindSymbol(DirectCast(funcName, Literal).ToString)?.value
 
                 If symbol Is Nothing Then
                     funcVar = Nothing
-                    'ElseIf symbol.GetType Is GetType(Internal.envir) Then
-                    '    funcVar = DirectCast(symbol, Internal.envir).declare
                 Else
                     funcVar = symbol
                 End If
-            ElseIf TypeOf funcName Is Regexp Then
-                Return funcName.Evaluate(envir)
             Else
                 funcVar = funcName.Evaluate(envir)
             End If
