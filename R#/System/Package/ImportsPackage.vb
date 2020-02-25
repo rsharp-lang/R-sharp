@@ -109,8 +109,26 @@ Namespace System.Package
         ''' <returns></returns>
         <Extension>
         Public Function ImportsStatic(envir As Environment, package As Type, Optional strict As Boolean = True) As IEnumerable(Of String)
+            Try
+                Return ImportsStaticInternalImpl(envir, package, strict:=strict)
+            Catch ex As Exception
+                If TypeOf ex Is MissingMethodException Then
+                    With DirectCast(ex, MissingMethodException)
+                        If .Message = ".ctor" AndAlso InStr(ex.StackTrace, "GetCustomAttribute") > 0 Then
+                            Throw New TypeLoadException($"Unable to load R# package module '{package.FullName}', due to the reason of obsolete assembly file! Please re-compile your package under the latest R#/sciBASIC.NET runtime!", ex)
+                        Else
+                            Throw
+                        End If
+                    End With
+                Else
+                    Throw
+                End If
+            End Try
+        End Function
+
+        <Extension>
+        Public Function ImportsStaticInternalImpl(envir As Environment, package As Type, Optional strict As Boolean = True) As IEnumerable(Of String)
             Dim [global] As GlobalEnvironment = envir.globalEnvironment
-            Dim docs As ProjectType = [global].packages.packageDocs.GetAnnotations(package)
             Dim symbol As Symbol
             Dim Rmethods As RMethodInfo() = ImportsPackage _
                 .GetAllApi(package, strict) _
