@@ -128,7 +128,7 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <returns></returns>
         <ExportAPI("ls")>
-        Private Function ls(<RSymbolTextArgument> Optional name$ = Nothing, Optional env As Environment = Nothing) As Object
+        Private Function ls(<RSymbolTextArgument> Optional name$ = Nothing, Optional env As Environment = Nothing) As String()
             If name.StringEmpty Then
                 ' list all of the objects in current 
                 ' R# runtime environment
@@ -157,7 +157,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("objects")>
-        Private Function objects(env As Environment) As Object
+        Private Function objects(env As Environment) As String()
             Return env.variables.Keys.ToArray
         End Function
 
