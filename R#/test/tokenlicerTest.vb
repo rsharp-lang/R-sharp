@@ -50,6 +50,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Module tokenlicerTest
 
     Sub Main()
+        Call lambdaTest()
         Call specialNameTest()
 
         Call regexpLiteral()
@@ -67,8 +68,6 @@ Module tokenlicerTest
         Call stringValueAssign()
         Call linqQueryTest()
         Call pipelineTest()
-
-        Call lambdaTest()
 
         Call sequnceTest()
         Call operatorTest()
@@ -148,6 +147,8 @@ Module tokenlicerTest
     End Sub
 
     Sub lambdaTest()
+        Dim t = New Scanner("([]->x)()").GetTokens.ToArray
+
         Dim tokens = New Scanner("lapply(l, x -> x * 100)").GetTokens.ToArray
 
 
