@@ -147,11 +147,7 @@ Namespace Interpreter.SyntaxParser
                                    splitTokens(2)(Scan0).text = "(" AndAlso
                                    splitTokens.Last.Length = 1 AndAlso splitTokens.Last(Scan0).text = ")" Then
 
-                                    Return SyntaxImplements.AnonymousFunctionInvoke(
-                                        anonymous:=splitTokens(Scan0).Skip(1).ToArray,
-                                        invoke:=splitTokens.Skip(2).IteratesALL.ToArray,
-                                        opts:=opts
-                                    )
+                                    Return splitTokens.ObjectInvoke(opts)
                                 Else
                                     Return New SyntaxResult(New SyntaxErrorException, opts.debug)
                                 End If
@@ -177,6 +173,29 @@ Namespace Interpreter.SyntaxParser
             End If
 
             Return New SyntaxResult(New NotImplementedException, opts.debug)
+        End Function
+
+        <Extension>
+        Private Function ObjectInvoke(splitTokens As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
+            Dim invokeTarget = splitTokens(Scan0).Skip(1).ToArray
+            Dim invoke = splitTokens.Skip(2).IteratesALL.ToArray
+
+            If splitTokens(Scan0)(1) = (TokenType.keyword, "function") Then
+                Return SyntaxImplements.AnonymousFunctionInvoke(
+                    anonymous:=invokeTarget,
+                    invoke:=invoke,
+                    opts:=opts
+                )
+            Else
+                splitTokens = invokeTarget.SplitByTopLevelDelimiter(TokenType.operator, includeKeyword:=True)
+
+                If splitTokens.isLambdaFunction Then
+                    ' is a lambda function
+                    Return SyntaxImplements.DeclareLambdaFunction(splitTokens, opts)
+                End If
+
+                Return New SyntaxResult(New NotImplementedException, opts.debug)
+            End If
         End Function
     End Module
 End Namespace
