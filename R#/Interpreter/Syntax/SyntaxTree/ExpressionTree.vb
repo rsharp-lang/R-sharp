@@ -93,6 +93,8 @@ Namespace Interpreter.SyntaxParser
                     Return SyntaxImplements.CommandLine(tokens(Scan0), opts)
                 ElseIf tokens(Scan0) = (TokenType.operator, "$") Then
                     Return New SymbolReference("$")
+                ElseIf tokens(Scan0).name = TokenType.regexp Then
+                    Return New Regexp(tokens(Scan0).text)
                 Else
                     blocks = New List(Of Token()) From {tokens}
                 End If

@@ -53,15 +53,23 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
     Module FunctionInvokeSyntax
 
+        Private Function getNameRef(token As Token) As Expression
+            If token.name = TokenType.regexp Then
+                Return New Regexp(token.text)
+            Else
+                Return New Literal(token.text)
+            End If
+        End Function
+
         Public Function FunctionInvoke(tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim funcName As New Literal(tokens(Scan0).text)
+            Dim funcName As Expression = getNameRef(tokens(Scan0))
             Dim span As CodeSpan = tokens(Scan0).span
             Dim parameters As New List(Of Expression)
             Dim frame As New StackFrame With {
                 .File = opts.source.fileName,
                 .Line = tokens(Scan0).span.line,
                 .Method = New Method With {
-                    .Method = funcName.value,
+                    .Method = funcName.ToString,
                     .[Module] = "call_function",
                     .[Namespace] = "SMRUCC/R#"
                 }

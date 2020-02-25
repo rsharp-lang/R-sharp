@@ -111,7 +111,7 @@ Namespace System.Package
         Public Function ImportsStatic(envir As Environment, package As Type, Optional strict As Boolean = True) As IEnumerable(Of String)
             Dim [global] As GlobalEnvironment = envir.globalEnvironment
             Dim docs As ProjectType = [global].packages.packageDocs.GetAnnotations(package)
-            Dim symbol As Variable
+            Dim symbol As Symbol
             Dim Rmethods As RMethodInfo() = ImportsPackage _
                 .GetAllApi(package, strict) _
                 .Select(Function(m) New RMethodInfo(m)) _
@@ -126,7 +126,7 @@ Namespace System.Package
                     [global].Push(api.name, api, TypeCodes.closure)
                 Else
                     ' overrides and masked by current package
-                    symbol.value = api
+                    symbol.SetValue(api, envir)
                     masked += symbol.name
                 End If
             Next

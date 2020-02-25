@@ -57,11 +57,22 @@ Public Module Extensions
         Return New RReturn(x)
     End Function
 
+    ''' <summary>
+    ''' Create a specific .NET object from given data
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <param name="list">the object property data value collection.</param>
+    ''' <returns></returns>
     <Extension>
     Public Function GetObject(Of T As {New, Class})(list As list) As T
         Return RListObjectArgumentAttribute.CreateArgumentModel(Of T)(list.slots)
     End Function
 
+    ''' <summary>
+    ''' Get text encoding value
+    ''' </summary>
+    ''' <param name="val"></param>
+    ''' <returns></returns>
     Public Function GetEncoding(val As Object) As Encoding
         If val Is Nothing Then
             Return Encoding.Default

@@ -315,7 +315,7 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Private Shared Function assignSymbol(envir As Environment, symbolName As Expression, isByRef As Boolean, value As Object) As Message
-            Dim target As Variable = Nothing
+            Dim target As Symbol = Nothing
 
             Select Case symbolName.GetType
                 Case GetType(Literal)
@@ -333,16 +333,14 @@ Namespace Interpreter.ExecuteEngine
             End If
 
             If isByRef Then
-                target.value = value
+                Return target.SetValue(value, envir)
             Else
                 If Not value Is Nothing AndAlso value.GetType.IsInheritsFrom(GetType(Array)) Then
-                    target.value = DirectCast(value, Array).Clone
+                    Return target.SetValue(DirectCast(value, Array).Clone, envir)
                 Else
-                    target.value = value
+                    Return target.SetValue(value, envir)
                 End If
             End If
-
-            Return Nothing
         End Function
 
         Private Shared Function setVectorElements(ByRef target As Object, index As Integer(), value As Object, env As Environment) As Message

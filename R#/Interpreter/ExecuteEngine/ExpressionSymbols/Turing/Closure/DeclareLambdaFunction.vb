@@ -129,7 +129,8 @@ Namespace Interpreter.ExecuteEngine
                         .PushNames(names:=parameter.names,
                                    value:=argVal,
                                    type:=TypeCodes.generic,
-                                   envir:=envir
+                                   envir:=envir,
+                                   [readonly]:=True
                         )
                     Dim result As Object = closure.Evaluate(env)
 
@@ -140,13 +141,14 @@ Namespace Interpreter.ExecuteEngine
 
         Public Function CreateLambda(Of T, Out)(parent As Environment) As Func(Of T, Out)
             Dim envir = New Environment(parent, stackFrame)
-            Dim v As Variable
+            Dim v As Symbol
 
             Call DeclareNewVariable _
                 .PushNames(names:=parameter.names,
                            value:=Nothing,
                            type:=GetType(T).GetRTypeCode,
-                           envir:=envir
+                           envir:=envir,
+                           [readonly]:=False
             )
 
             v = envir.FindSymbol(parameter.names(Scan0), [inherits]:=False)
@@ -154,7 +156,7 @@ Namespace Interpreter.ExecuteEngine
             Return Function(x As T) As Out
                        Dim result As Object
 
-                       v.value = x
+                       v.SetValue(x, envir)
                        result = closure.Evaluate(envir)
 
                        ' 20200210 对于lambda函数而言，其是运行时创建的函数

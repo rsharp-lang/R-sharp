@@ -64,7 +64,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         End Function
 
         <Extension>
-        Public Function DeclareNewVariable(code As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
+        Public Function DeclareNewVariable(code As List(Of Token()), [readonly] As Boolean, opts As SyntaxBuilderOptions) As SyntaxResult
             Dim var As New DeclareNewVariable
             Dim valSyntaxtemp As SyntaxResult = Nothing
 
@@ -72,6 +72,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             ' let var [as type [= ...]]
             var.names = getNames(code(1))
             var.hasInitializeExpression = True
+            var.is_readonly = [readonly]
 
             If code = 2 Then
                 var.m_type = TypeCodes.generic
@@ -103,7 +104,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         Public Function DeclareNewVariable(code As List(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult
             Return code _
                 .SplitByTopLevelDelimiter(TokenType.operator, includeKeyword:=True) _
-                .DeclareNewVariable(opts)
+                .DeclareNewVariable(False, opts)
         End Function
 
         Public Function DeclareNewVariable(singleToken As Token()) As SyntaxResult

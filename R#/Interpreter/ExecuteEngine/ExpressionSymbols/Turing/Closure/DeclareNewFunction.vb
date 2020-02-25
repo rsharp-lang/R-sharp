@@ -162,7 +162,7 @@ Namespace Interpreter.ExecuteEngine
                     Call ValueAssign.doValueAssign(envir, names, True, value)
                 Else
                     ' 不存在，则插入新的
-                    Call DeclareNewVariable.PushNames(var.names, value, var.type, envir)
+                    Call DeclareNewVariable.PushNames(var.names, value, var.type, False, envir)
                 End If
             Next
 

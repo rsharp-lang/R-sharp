@@ -63,6 +63,7 @@ Namespace Interpreter.ExecuteEngine
         Friend value As Expression
         Friend hasInitializeExpression As Boolean = False
         Friend m_type As TypeCodes
+        Friend is_readonly As Boolean
 
         Public Overrides ReadOnly Property type As TypeCodes
             Get
@@ -92,7 +93,7 @@ Namespace Interpreter.ExecuteEngine
             Else
                 ' add new symbol into the given environment stack
                 ' and then returns the value result
-                Call PushNames(names, value, type, envir)
+                Call PushNames(names, value, type, is_readonly, envir)
 
                 Return value
             End If
@@ -106,30 +107,30 @@ Namespace Interpreter.ExecuteEngine
         ''' <param name="type"></param>
         ''' <param name="envir"></param>
         ''' <returns></returns>
-        Friend Shared Function PushNames(names$(), value As Object, type As TypeCodes, envir As Environment) As Environment
+        Friend Shared Function PushNames(names$(), value As Object, type As TypeCodes, [readonly] As Boolean, envir As Environment) As Environment
             If names.Length = 1 Then
-                Call envir.Push(names(Scan0), value, type)
+                Call envir.Push(names(Scan0), value, [readonly], type)
             Else
                 ' tuple
-                Call PushTuple(names, value, type, envir)
+                Call PushTuple(names, value, type, [readonly], envir)
             End If
 
             Return envir
         End Function
 
-        Private Shared Sub PushTuple(names$(), value As Object, type As TypeCodes, envir As Environment)
+        Private Shared Sub PushTuple(names$(), value As Object, type As TypeCodes, [readonly] As Boolean, envir As Environment)
             If Not value Is Nothing AndAlso value.GetType.IsArray Then
                 Dim vector As Array = value
 
                 If vector.Length = 1 Then
                     ' all set with one value
                     For Each name As String In names
-                        Call envir.Push(name, value)
+                        Call envir.Push(name, value, [readonly])
                     Next
                 ElseIf vector.Length = names.Length Then
                     ' declare one by one
                     For i As Integer = 0 To vector.Length - 1
-                        Call envir.Push(names(i), vector.GetValue(i))
+                        Call envir.Push(names(i), vector.GetValue(i), [readonly])
                     Next
                 Else
                     Throw New SyntaxErrorException
@@ -137,7 +138,7 @@ Namespace Interpreter.ExecuteEngine
             Else
                 ' all set with one value
                 For Each name As String In names
-                    Call envir.Push(name, value)
+                    Call envir.Push(name, value, [readonly])
                 Next
             End If
         End Sub
