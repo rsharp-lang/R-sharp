@@ -135,7 +135,7 @@ Namespace Interpreter.ExecuteEngine
             If Not target Is Nothing AndAlso target.GetType Is GetType(Message) Then
                 Return target
             Else
-                envir = New Environment(envir, stackFrame)
+                envir = envir.EnvironmentInherits(stackFrame)
             End If
 
             If TypeOf target Is Regex Then
