@@ -677,7 +677,10 @@ let div as function(x ,y) {
     End Sub
 
     Sub lambdaTest3()
-        Call R.Evaluate("([]->111111.1)()")
+        Call R.Evaluate("([]->traceback())()")
+        Call R.Print("$")
+        Call R.PrintMemory()
+
         Pause()
     End Sub
 

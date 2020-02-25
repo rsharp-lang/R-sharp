@@ -124,12 +124,21 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
             If declares.isException Then
                 Return declares
+            Else
+                Return declares.AnonymousFunctionInvoke(
+                    invoke:=invoke,
+                    lineNum:=anonymous(Scan0).span.line,
+                    opts:=opts
+                )
             End If
+        End Function
 
+        <Extension>
+        Public Function AnonymousFunctionInvoke(declares As SyntaxResult, invoke As Token(), lineNum%, opts As SyntaxBuilderOptions) As SyntaxResult
             Dim parameters As New List(Of Expression)
             Dim frame As New StackFrame With {
                 .File = opts.source.fileName,
-                .Line = anonymous(Scan0).span.line,
+                .Line = lineNum,
                 .Method = New Method With {
                     .Method = DirectCast(declares.expression, IRuntimeTrace).stackFrame.Method.Method,
                     .[Module] = "call_function",
