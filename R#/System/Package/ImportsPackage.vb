@@ -100,6 +100,8 @@ Namespace System.Package
             Next
         End Function
 
+        Const obsoleteAssemblyImage$ = "Unable to load R# package module '{0}', due to the reason of obsolete assembly file! Please re-compile your package under the latest R#/sciBASIC.NET runtime!"
+
         ''' <summary>
         ''' This function returns a list of object which is masked by the new imports <paramref name="package"/>
         ''' </summary>
@@ -115,7 +117,7 @@ Namespace System.Package
                 If TypeOf ex Is MissingMethodException Then
                     With DirectCast(ex, MissingMethodException)
                         If .Message = ".ctor" AndAlso InStr(ex.StackTrace, "GetCustomAttribute") > 0 Then
-                            Throw New TypeLoadException($"Unable to load R# package module '{package.FullName}', due to the reason of obsolete assembly file! Please re-compile your package under the latest R#/sciBASIC.NET runtime!", ex)
+                            Throw New TypeLoadException(String.Format(obsoleteAssemblyImage, package.FullName), ex)
                         Else
                             Throw
                         End If
