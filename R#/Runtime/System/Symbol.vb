@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::86ba3076a1f739bd7c3659f3da0b03e7, R#\Runtime\System\Variable.vb"
+﻿#Region "Microsoft.VisualBasic::14eff588ce2c3be74f81d8856012e1a3, R#\Runtime\System\Symbol.vb"
 
     ' Author:
     ' 
@@ -31,13 +31,13 @@
 
     ' Summaries:
 
-    '     Class Variable
+    '     Class Symbol
     ' 
-    '         Properties: [typeof], constraint, constraintValid, length, name
-    '                     typeCode, typeId, value
+    '         Properties: [readonly], [typeof], constraint, constraintValid, length
+    '                     name, typeCode, typeId, value
     ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: GetValueViewString, ToString, ToVector
+    '         Constructor: (+2 Overloads) Sub New
+    '         Function: GetValueViewString, SetValue, ToString, ToVector
     ' 
     ' 
     ' /********************************************************************************/

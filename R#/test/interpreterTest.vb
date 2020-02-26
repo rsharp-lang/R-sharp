@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1724b52eb52eb4771a7cdaf0e8ddcb25, R#\test\interpreterTest.vb"
+﻿#Region "Microsoft.VisualBasic::4b6000a3dcc5e4663f6db6b33277552a, R#\test\interpreterTest.vb"
 
     ' Author:
     ' 
@@ -33,20 +33,22 @@
 
     ' Module interpreterTest
     ' 
-    '     Sub: appendTest, booleanCLIArgumentTest, closureEnvironmentTest, closureTest, isEmptyTest
-    '          lastSymbolTest, Main, markdownTest, missingSymbolInStringInterpolate, moduleTest
-    '          objClasstest, orDefaultTest, printClassTest, sequenceGeneratorTest, suppressTest
-    '          syntaxErrorTest, unaryNegTest, usingTest
+    '     Sub: anonymous, appendTest, booleanCLIArgumentTest, closureEnvironmentTest, closureTest
+    '          isEmptyTest, lastSymbolTest, Main, markdownTest, missingSymbolInStringInterpolate
+    '          moduleTest, negativeValTest, numberLiteralsTest, objClasstest, orDefaultTest
+    '          printClassTest, regexpTest, sequenceGeneratorTest, suppressTest, syntaxErrorTest
+    '          unaryNegTest, usingTest
     ' module test1
     ' 
-    '     Sub: boolLiteralTest, branchTest, cliTest, commandLineArgumentTest, dataframeIndexTest
-    '          dataframeTest, declareFunctionTest, declareTest, elementIndexerTest, exceptionHandler
-    '          forLoop2, forLoopTest, genericTest, iifTest, ImportsDll
-    '          inTest, invokeTest, lambdaTest, lambdaTest2, linqPipelineTest
-    '          linqTest, listoperationtest, listTest, logicalTest, nameAccessorTest
-    '          namespaceTest, namesTest, optionsTest, packageTest, parameterTest
-    '          pipelineParameterBugTest, pipelineTest, sourceFunctionTest, sourceScripttest, StackTest
-    '          stringInterpolateTest, symbolNotFoundTest, testScript, tupleTest, whichTest
+    '     Sub: boolLiteralTest, branchTest, cliTest, commandLineArgumentTest, constantTest
+    '          dataframeIndexTest, dataframeTest, declareFunctionTest, declareTest, elementIndexerTest
+    '          exceptionHandler, forLoop2, forLoopTest, genericTest, iifTest
+    '          ImportsDll, inTest, invokeTest, lambdaTest, lambdaTest2
+    '          lambdaTest3, linqPipelineTest, linqTest, listoperationtest, listTest
+    '          logicalTest, nameAccessorTest, namespaceTest, namesTest, optionsTest
+    '          packageTest, parameterTest, pipelineParameterBugTest, pipelineTest, sourceFunctionTest
+    '          sourceScripttest, StackTest, stringInterpolateTest, symbolNotFoundTest, testScript
+    '          tupleTest, whichTest
     ' module test2
     ' 
     ' 

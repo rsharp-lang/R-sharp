@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::19bf4b6e2d78b5fb37d253f6089e081a, R-terminal\CLI\CLI.vb"
+﻿#Region "Microsoft.VisualBasic::c82fc52c5e23900f9e1cfb877ed02530, R-terminal\CLI\CLI.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     ' Module CLI
     ' 
-    '     Function: Info, Install, Version
+    '     Function: Info, Install, SyntaxText, Version
     ' 
     ' /********************************************************************************/
 

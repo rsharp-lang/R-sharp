@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::48adbb38125fbfba159def48b2089462, R#\Runtime\Environment.vb"
+﻿#Region "Microsoft.VisualBasic::c4d396f327973fd528cad57e2d3d43da, R#\Runtime\Environment.vb"
 
     ' Author:
     ' 

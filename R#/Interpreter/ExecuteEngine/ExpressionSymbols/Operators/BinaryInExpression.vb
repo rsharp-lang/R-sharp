@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::af2c2af6e011636cf1762f012c75681f, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryInExpression.vb"
+﻿#Region "Microsoft.VisualBasic::6920a781cd991f949a7742b782a0d922, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryInExpression.vb"
 
     ' Author:
     ' 
@@ -42,7 +42,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.Linq

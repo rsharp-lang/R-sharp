@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7647c5f962d3d256369376483026ca35, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\UsingClosure.vb"
+﻿#Region "Microsoft.VisualBasic::489b39a66f7772a1d436e92fcb1a46fe, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\UsingClosure.vb"
 
     ' Author:
     ' 

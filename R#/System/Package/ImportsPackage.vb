@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::420d9475db14f1345af97064fda6c594, R#\System\Package\ImportsPackage.vb"
+﻿#Region "Microsoft.VisualBasic::19366075470fda764f9a00e56b77d0c3, R#\System\Package\ImportsPackage.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Module ImportsPackage
     ' 
-    '         Function: (+2 Overloads) GetAllApi, ImportsStatic
+    '         Function: (+2 Overloads) GetAllApi, ImportsStatic, ImportsStaticInternalImpl
     ' 
     '         Sub: ImportsInstance
     ' 
