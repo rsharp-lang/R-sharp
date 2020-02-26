@@ -59,6 +59,7 @@ Imports Microsoft.VisualBasic.Math.Calculus.Dynamics.Data
 Imports Microsoft.VisualBasic.Math.Distributions.BinBox
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
+Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -85,7 +86,10 @@ Module plots
 
     Public Function plot_binBox(data As DataBinBox(Of Double)(), args As list, env As Environment) As Object
         Dim step! = CSng(REnv.getFirst(args!steps))
-        Dim title$ = If(args.hasName("title"), Scripting.ToString(REnv.getFirst(args!title)), "Histogram Plot")
+        Dim title$ = args.GetString("title", "Histogram Plot")
+        Dim xlab$ = args.GetString("x.lab", "X")
+        Dim ylab$ = args.GetString("y.lab", "Y")
+        Dim padding$ = InteropArgumentHelper.getPadding(args!padding)
 
         If [step] <= 0 Then
             ' guess step value from binbox width
@@ -96,7 +100,13 @@ Module plots
                 .Average
         End If
 
-        Return data.HistogramPlot([step]:=[step])
+        Return data.HistogramPlot(
+            [step]:=[step],
+            serialsTitle:=title,
+            xLabel:=xlab,
+            yLabel:=ylab,
+            padding:=padding
+        )
     End Function
 
     Public Function plot_deSolveResult(desolve As ODEsOut, args As list, env As Environment) As Object

@@ -101,6 +101,33 @@ Namespace Runtime.Internal.Invokes
             Return Repeats(x, times)
         End Function
 
+        <ExportAPI("replace")>
+        Public Function replace(x As Array, find As Object, [as] As Object) As Object
+            Dim type As Type = x.GetType.GetElementType
+
+            If type Is GetType(Object) Then
+                type = Runtime.MeasureArrayElementType(x)
+            End If
+
+            find = Conversion.CTypeDynamic(find, type)
+            [as] = Conversion.CTypeDynamic([as], type)
+
+            Dim copy As Array = Array.CreateInstance(type, x.Length)
+            Dim xi As Object
+
+            For i As Integer = 0 To x.Length - 1
+                xi = x.GetValue(i)
+
+                If xi.Equals(find) Then
+                    copy.SetValue([as], i)
+                Else
+                    copy.SetValue(xi, i)
+                End If
+            Next
+
+            Return copy
+        End Function
+
         ''' <summary>
         ''' # Change the Print Mode to Invisible
         ''' 

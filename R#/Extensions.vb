@@ -89,4 +89,13 @@ Public Module Extensions
             Return Encoding.Default
         End If
     End Function
+
+    <Extension>
+    Public Function GetString(list As list, key$, Optional default$ = Nothing) As String
+        If Not list.hasName(key) Then
+            Return [default]
+        Else
+            Return Scripting.ToString(Runtime.getFirst(list(key)))
+        End If
+    End Function
 End Module
