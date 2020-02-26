@@ -57,7 +57,15 @@ The like pattern should following this syntax rule: ``<string-text-to-test> like
 
 #### is pattern
 
-The is pattern should following this syntax rule: ``<string-text-to-test> (==|!=) [patterns]``, example as:
+The definition of the ``is pattern`` match test in R# could be: the regular expression matched result of the given string is equals to the original input string value. Such string pattern test is espacially useful in . The ``is pattern`` for the string pattern test should following this syntax rule: ``<string-text-to-test> (==|!=) [patterns]``, example as:
 
+```R
+# is pattern match test only allowes regular expression
+["123", "55555", "234.999"] == $"\d+"
+# [1] TRUE TRUE FALSE
+
+["123", "55555", "234.999"] != $"\d+"
+# [1] FALSE FALSE TRUE
+```
 
 
