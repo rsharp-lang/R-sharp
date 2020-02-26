@@ -1,6 +1,6 @@
-# Declare R# function
+# Declare ``R#`` function
 
-### Declare a function in R
+## Declare a function in R
 
 ```R
 a <- function(...) {
@@ -8,7 +8,7 @@ a <- function(...) {
 }
 ```
 
-### Declare a function in R#
+## Declare a function in ``R#``
 
 ```R
 let a <- function(...) {
@@ -20,7 +20,7 @@ let a as function(...) {
 }
 ```
 
-### anonymous function in R#
+## anonymous function in ``R#``
 
 ```R
 a <- function(...) {
