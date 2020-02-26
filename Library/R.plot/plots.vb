@@ -85,7 +85,7 @@ Module plots
 
     Public Function plot_binBox(data As DataBinBox(Of Double)(), args As list, env As Environment) As Object
         Dim step! = CSng(REnv.getFirst(args!steps))
-        Dim title$ = If(args!title, "Histogram Plot")
+        Dim title$ = If(args.hasName("title"), Scripting.ToString(REnv.getFirst(args!title)), "Histogram Plot")
 
         If [step] <= 0 Then
             ' guess step value from binbox width
