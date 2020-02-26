@@ -1,10 +1,13 @@
 ﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math.Calculus
 Imports Microsoft.VisualBasic.Math.Calculus.Dynamics
 Imports Microsoft.VisualBasic.Math.Calculus.Dynamics.Data
 Imports Microsoft.VisualBasic.Math.Calculus.ODESolver
+Imports Microsoft.VisualBasic.Math.Distributions
+Imports Microsoft.VisualBasic.Math.Distributions.BinBox
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
@@ -123,5 +126,12 @@ Module math
         End If
 
         Return result
+    End Function
+
+    <ExportAPI("hist")>
+    Public Function Hist(data As Array, Optional step! = 1) As DataBinBox(Of Double)()
+        Return DirectCast(REnv.asVector(Of Double)(data), Double()) _
+            .Hist([step]) _
+            .ToArray
     End Function
 End Module
