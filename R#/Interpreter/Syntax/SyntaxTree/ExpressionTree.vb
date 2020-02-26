@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::d290de33c6afb02c305b44e3eb37b84c, R#\Interpreter\Syntax\SyntaxTree\ExpressionTree.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module ExpressionTree
-    ' 
-    '         Function: CreateTree, ParseExpressionTree, simpleSequence
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module ExpressionTree
+' 
+'         Function: CreateTree, ParseExpressionTree, simpleSequence
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -44,6 +44,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.SyntaxParser.SyntaxImplements
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 
@@ -147,11 +148,7 @@ Namespace Interpreter.SyntaxParser
                                    splitTokens(2)(Scan0).text = "(" AndAlso
                                    splitTokens.Last.Length = 1 AndAlso splitTokens.Last(Scan0).text = ")" Then
 
-                                    Return SyntaxImplements.AnonymousFunctionInvoke(
-                                        anonymous:=splitTokens(Scan0).Skip(1).ToArray,
-                                        invoke:=splitTokens.Skip(2).IteratesALL.ToArray,
-                                        opts:=opts
-                                    )
+                                    Return splitTokens.ObjectInvoke(opts)
                                 Else
                                     Return New SyntaxResult(New SyntaxErrorException, opts.debug)
                                 End If
@@ -177,6 +174,28 @@ Namespace Interpreter.SyntaxParser
             End If
 
             Return New SyntaxResult(New NotImplementedException, opts.debug)
+        End Function
+
+        <Extension>
+        Private Function ObjectInvoke(splitTokens As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
+            Dim invokeTarget = splitTokens(Scan0).Skip(1).ToArray
+            Dim invoke = splitTokens.Skip(2).IteratesALL.ToArray
+
+            If splitTokens(Scan0)(1) = (TokenType.keyword, "function") Then
+                Return SyntaxImplements.AnonymousFunctionInvoke(
+                    anonymous:=invokeTarget,
+                    invoke:=invoke,
+                    opts:=opts
+                )
+            Else
+                Dim target As SyntaxResult = Expression.CreateExpression(invokeTarget, opts)
+
+                If target.isException Then
+                    Return target
+                Else
+                    Return target.AnonymousFunctionInvoke(invoke, invokeTarget(Scan0).span.line, opts)
+                End If
+            End If
         End Function
     End Module
 End Namespace

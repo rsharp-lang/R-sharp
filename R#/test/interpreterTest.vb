@@ -72,6 +72,7 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+        Call lambdaTest3()
         Call constantTest()
         Call regexpTest()
 
@@ -671,6 +672,14 @@ let div as function(x ,y) {
 
         Call R.Evaluate("print(file.exists(deletions) ? readLines(deletions) : NULL);")
         Call R.Evaluate("print(1 > 0 ? 999 : 777)")
+
+        Pause()
+    End Sub
+
+    Sub lambdaTest3()
+        Call R.Evaluate("([]->traceback())()")
+        Call R.Print("$")
+        Call R.PrintMemory()
 
         Pause()
     End Sub
