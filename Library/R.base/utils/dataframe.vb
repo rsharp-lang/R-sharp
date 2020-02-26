@@ -118,8 +118,25 @@ Module dataframe
     End Function
 
     <ExportAPI("cells")>
-    Public Function cells(x As RowObject) As String()
-        Return x.ToArray
+    Public Function cells(x As Object, Optional env As Environment = Nothing) As Object
+        Dim type As Type
+
+        If x Is Nothing Then
+            Return New String() {}
+        Else
+            type = x.GetType
+        End If
+
+        Select Case type
+            Case GetType(RowObject)
+                Return DirectCast(x, RowObject).ToArray
+            Case GetType(DataSet)
+                Return DirectCast(x, DataSet).Properties.Values.ToArray
+            Case GetType(EntityObject)
+                Return DirectCast(x, EntityObject).Properties.Values.ToArray
+            Case Else
+                Return Internal.debug.stop(New InvalidCastException(type.FullName), env)
+        End Select
     End Function
 
     <ExportAPI("read.csv.raw")>
