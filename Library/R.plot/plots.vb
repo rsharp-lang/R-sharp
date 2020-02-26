@@ -63,7 +63,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports REnv = SMRUCC.Rsharp.Runtime.Internal
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 <Package("plot.charts")>
 Module plots
@@ -75,16 +75,16 @@ Module plots
 
     <RInitialize>
     Sub Main()
-        Call REnv.generic.add("plot", GetType(DeclareLambdaFunction), AddressOf plotFormula)
-        Call REnv.generic.add("plot", GetType(ODEOutput), AddressOf plotODEResult)
-        Call REnv.generic.add("plot", GetType(ODEsOut), AddressOf plot_deSolveResult)
-        Call REnv.generic.add("plot", GetType(SerialData()), AddressOf plotSerials)
-        Call REnv.generic.add("plot", GetType(SerialData), AddressOf plotSerials)
-        Call REnv.generic.add("plot", GetType(DataBinBox(Of Double)()), AddressOf plot_binBox)
+        Call REnv.Internal.generic.add("plot", GetType(DeclareLambdaFunction), AddressOf plotFormula)
+        Call REnv.Internal.generic.add("plot", GetType(ODEOutput), AddressOf plotODEResult)
+        Call REnv.Internal.generic.add("plot", GetType(ODEsOut), AddressOf plot_deSolveResult)
+        Call REnv.Internal.generic.add("plot", GetType(SerialData()), AddressOf plotSerials)
+        Call REnv.Internal.generic.add("plot", GetType(SerialData), AddressOf plotSerials)
+        Call REnv.Internal.generic.add("plot", GetType(DataBinBox(Of Double)()), AddressOf plot_binBox)
     End Sub
 
     Public Function plot_binBox(data As DataBinBox(Of Double)(), args As list, env As Environment) As Object
-        Dim step! = args!steps
+        Dim step! = CSng(REnv.getFirst(args!steps))
         Dim title$ = If(args!title, "Histogram Plot")
 
         If [step] <= 0 Then
@@ -141,7 +141,7 @@ Module plots
     ''' <returns></returns>
     Public Function plotFormula(math As DeclareLambdaFunction, args As list, env As Environment) As Object
         If Not args.hasName("x") Then
-            Return REnv.debug.stop("Missing parameter 'x' for plot function!", env)
+            Return REnv.Internal.debug.stop("Missing parameter 'x' for plot function!", env)
         End If
 
         Dim fx As Func(Of Double, Double) = math.CreateLambda(Of Double, Double)(env)
