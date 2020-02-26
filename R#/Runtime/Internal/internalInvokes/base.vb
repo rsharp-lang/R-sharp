@@ -101,6 +101,33 @@ Namespace Runtime.Internal.Invokes
             Return Repeats(x, times)
         End Function
 
+        <ExportAPI("replace")>
+        Public Function replace(x As Array, find As Object, [as] As Object) As Object
+            Dim type As Type = x.GetType.GetElementType
+
+            If type Is GetType(Object) Then
+                type = Runtime.MeasureArrayElementType(x)
+            End If
+
+            find = Conversion.CTypeDynamic(find, type)
+            [as] = Conversion.CTypeDynamic([as], type)
+
+            Dim copy As Array = Array.CreateInstance(type, x.Length)
+            Dim xi As Object
+
+            For i As Integer = 0 To x.Length - 1
+                xi = x.GetValue(i)
+
+                If xi.Equals(find) Then
+                    copy.SetValue([as], i)
+                Else
+                    copy.SetValue(xi, i)
+                End If
+            Next
+
+            Return copy
+        End Function
+
         ''' <summary>
         ''' # Change the Print Mode to Invisible
         ''' 
@@ -175,34 +202,27 @@ Namespace Runtime.Internal.Invokes
         Public Function Rdataframe(<RListObjectArgument>
                                    <RRawVectorArgument>
                                    columns As Object, Optional envir As Environment = Nothing) As Object
+
             ' data.frame(a = 1, b = ["g","h","eee"], c = T)
             Dim parameters As InvokeParameter() = columns
-            Dim dataframe As New dataframe With {
-                .columns = parameters _
-                    .SeqIterator _
-                    .ToDictionary(Function(a)
-                                      If a.value.haveSymbolName Then
-                                          Return a.value.name
-                                      Else
-                                          Return "X" & (a.i + 1)
-                                      End If
-                                  End Function,
-                                  Function(a)
-                                      Return envir.createColumnVector(a.value.Evaluate(envir))
-                                  End Function)
-            }
+            Dim values As IEnumerable(Of NamedValue(Of Object)) = parameters _
+                .SeqIterator _
+                .Select(Function(a)
+                            Dim name$
 
-            Return dataframe
-        End Function
+                            If a.value.haveSymbolName Then
+                                name = a.value.name
+                            Else
+                                name = "X" & (a.i + 1)
+                            End If
 
-        <Extension>
-        Private Function createColumnVector(env As Environment, a As Object) As Array
-            ' 假设dataframe之中每一列数据的类型都是相同的
-            ' 则我们直接使用第一个元素的类型作为列的数据类型
-            Dim first As Object = Runtime.getFirst(a, nonNULL:=True)
-            Dim colVec As Array = Runtime.asVector(a, first.GetType, env)
+                            Return New NamedValue(Of Object) With {
+                                .Name = name,
+                                .Value = a.value.Evaluate(envir)
+                            }
+                        End Function)
 
-            Return colVec
+            Return values.RDataframe(envir)
         End Function
 
         <ExportAPI("nrow")>
