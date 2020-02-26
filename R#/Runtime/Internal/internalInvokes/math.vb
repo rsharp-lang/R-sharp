@@ -45,6 +45,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.Correlations
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports stdNum = System.Math
@@ -171,13 +172,17 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("pearson")>
-        Public Function pearson(x As Array, y As Array) As list
+        Public Function pearson(x As Array, y As Array, Optional MAXIT As Integer = 5000) As list
             Dim data1 As Double() = Runtime.asVector(Of Double)(x)
             Dim data2 As Double() = Runtime.asVector(Of Double)(y)
             Dim p1#
             Dim p2#
             Dim z#
-            Dim cor# = GetPearson(data1, data2, p1, p2, z)
+            Dim cor#
+
+            Beta.MAXIT = MAXIT
+
+            cor = GetPearson(data1, data2, p1, p2, z, throwMaxIterError:=False)
 
             Return New list With {
                 .slots = New Dictionary(Of String, Object) From {
