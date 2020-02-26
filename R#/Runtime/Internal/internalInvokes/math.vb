@@ -44,6 +44,8 @@
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math
+Imports Microsoft.VisualBasic.Math.Correlations
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports stdNum = System.Math
 
@@ -166,6 +168,25 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("RSD")>
         Public Function rsd(x As Array) As Double
             Return Runtime.asVector(Of Double)(x).AsObjectEnumerator(Of Double).RSD
+        End Function
+
+        <ExportAPI("pearson")>
+        Public Function pearson(x As Array, y As Array) As list
+            Dim data1 As Double() = Runtime.asVector(Of Double)(x)
+            Dim data2 As Double() = Runtime.asVector(Of Double)(y)
+            Dim p1#
+            Dim p2#
+            Dim z#
+            Dim cor# = GetPearson(data1, data2, p1, p2, z)
+
+            Return New list With {
+                .slots = New Dictionary(Of String, Object) From {
+                    {"cor", cor},
+                    {"p-value", p1},
+                    {"prob2", p2},
+                    {"z", z}
+                }
+            }
         End Function
     End Module
 End Namespace
