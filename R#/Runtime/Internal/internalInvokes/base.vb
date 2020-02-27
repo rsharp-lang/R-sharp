@@ -811,8 +811,9 @@ Namespace Runtime.Internal.Invokes
             Dim strs As String
 
             If vec.Length = 1 AndAlso TypeOf vec(Scan0) Is dataframe Then
+                sep = sprintf(sep)
                 strs = DirectCast(vec(Scan0), dataframe) _
-                    .GetTable(env, printContent:=False, True) _
+                    .GetTable(env.globalEnvironment, printContent:=False, True) _
                     .Select(Function(row)
                                 Return row.JoinBy(sep)
                             End Function) _
@@ -820,7 +821,7 @@ Namespace Runtime.Internal.Invokes
             Else
                 strs = vec _
                     .Select(Function(o) Scripting.ToString(o, "")) _
-                    .JoinBy(sep) _
+                    .JoinBy(sprintf(sep)) _
                     .DoCall(AddressOf sprintf)
             End If
 
