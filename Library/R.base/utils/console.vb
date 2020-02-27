@@ -53,6 +53,13 @@ Imports CMD = System.Console
 <Package("console", Category:=APICategories.SoftwareTools)>
 Module console
 
+    ''' <summary>
+    ''' Writes the specified string value to the standard output stream.
+    ''' </summary>
+    ''' <param name="message">The message text value to write.</param>
+    ''' <param name="fore_color">sets the foreground color of the console.</param>
+    ''' <param name="back_color">sets the background color of the console.</param>
+    ''' <returns>The message text value</returns>
     <ExportAPI("log")>
     Public Function log(message As String, Optional fore_color As ConsoleColor? = Nothing, Optional back_color As ConsoleColor? = Nothing) As String
         Dim foreBackup = CMD.ForegroundColor

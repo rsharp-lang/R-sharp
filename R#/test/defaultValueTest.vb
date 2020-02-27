@@ -53,8 +53,16 @@ Module defaultValueTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+        Call nullableTest()
+
         Call R.LoadLibrary(GetType(defaultValueTest))
         Call R.Print("testApi")
+
+        Pause()
+    End Sub
+
+    Sub nullableTest()
+        Dim type = RType.GetRSharpType(GetType(ConsoleColor?))
 
         Pause()
     End Sub

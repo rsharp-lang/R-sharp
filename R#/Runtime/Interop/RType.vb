@@ -119,6 +119,14 @@ Namespace Runtime.Interop
         Dim names As String()
 
         Private Sub New(raw As Type)
+            If raw.IsValueType AndAlso
+               raw.Namespace = "System" AndAlso
+               raw.GenericTypeArguments.Length = 1 AndAlso
+               raw.Name = GetType(Nullable(Of )).Name Then
+
+                raw = raw.GenericTypeArguments.First
+            End If
+
             Me.raw = raw
             Me.names = populateNames _
                 .Distinct _
