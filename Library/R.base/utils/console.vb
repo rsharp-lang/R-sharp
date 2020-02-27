@@ -47,8 +47,31 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Terminal.ProgressBar
 Imports CMD = System.Console
 
+''' <summary>
+''' R# console utilities
+''' </summary>
 <Package("console", Category:=APICategories.SoftwareTools)>
 Module console
+
+    <ExportAPI("log")>
+    Public Function log(message As String, Optional fore_color As ConsoleColor? = Nothing, Optional back_color As ConsoleColor? = Nothing) As String
+        Dim foreBackup = CMD.ForegroundColor
+        Dim backBackup = CMD.BackgroundColor
+
+        If Not fore_color Is Nothing Then
+            CMD.ForegroundColor = fore_color
+        End If
+        If Not back_color Is Nothing Then
+            CMD.BackgroundColor = back_color
+        End If
+
+        Call CMD.Write(message)
+
+        CMD.ForegroundColor = foreBackup
+        CMD.BackgroundColor = backBackup
+
+        Return message
+    End Function
 
     <ExportAPI("progressbar")>
     Public Function CreateProgressBar(title$, Optional Y% = -1, Optional CLS As Boolean = False, Optional theme As ColorTheme = Nothing) As ProgressBar
@@ -76,25 +99,23 @@ Module console
         ProgressBar.ClearPinnedTop()
     End Sub
 
-    ReadOnly names As Dictionary(Of String, ConsoleColor) = Enums(Of ConsoleColor).ToDictionary(Function(cl) cl.ToString.ToLower)
-
     <ExportAPI("fore.color")>
-    Public Function ConsoleForeColor(Optional color$ = Nothing) As String
-        If color.StringEmpty Then
+    Public Function ConsoleForeColor(Optional color As ConsoleColor? = Nothing) As String
+        If color Is Nothing Then
             color = CMD.ForegroundColor.ToString.ToLower
         Else
-            CMD.ForegroundColor = names.TryGetValue(color.ToLower, [default]:=ConsoleColor.White)
+            CMD.ForegroundColor = color
         End If
 
         Return color
     End Function
 
     <ExportAPI("back.color")>
-    Public Function ConsoleBackColor(Optional color$ = Nothing) As String
-        If color.StringEmpty Then
+    Public Function ConsoleBackColor(Optional color As ConsoleColor? = Nothing) As String
+        If color Is Nothing Then
             color = CMD.BackgroundColor.ToString.ToLower
         Else
-            CMD.BackgroundColor = names.TryGetValue(color.ToLower, [default]:=ConsoleColor.White)
+            CMD.BackgroundColor = color
         End If
 
         Return color
