@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::578d1387aa42edae39a5f1b39b35405e, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewFunction.vb"
+﻿#Region "Microsoft.VisualBasic::11510f63e1202c109f1abbf53b9ac198, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewFunction.vb"
 
     ' Author:
     ' 
