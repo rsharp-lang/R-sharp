@@ -802,13 +802,27 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("cat")>
         Public Function cat(<RRawVectorArgument> values As Object,
                             Optional file$ = Nothing,
-                            Optional sep$ = " ") As Object
+                            Optional sep$ = " ",
+                            Optional env As Environment = Nothing) As Object
 
-            Dim strs = Runtime.asVector(Of Object)(values) _
+            Dim vec As Object() = Runtime.asVector(Of Object)(values) _
                 .AsObjectEnumerator _
-                .Select(Function(o) Scripting.ToString(o, "")) _
-                .JoinBy(sep) _
-                .DoCall(AddressOf sprintf)
+                .ToArray
+            Dim strs As String
+
+            If vec.Length = 1 AndAlso TypeOf vec(Scan0) Is dataframe Then
+                strs = DirectCast(vec(Scan0), dataframe) _
+                    .GetTable(env, printContent:=False, True) _
+                    .Select(Function(row)
+                                Return row.JoinBy(sep)
+                            End Function) _
+                    .JoinBy(vbCrLf)
+            Else
+                strs = vec _
+                    .Select(Function(o) Scripting.ToString(o, "")) _
+                    .JoinBy(sep) _
+                    .DoCall(AddressOf sprintf)
+            End If
 
             If Not file.StringEmpty Then
                 Call strs.SaveTo(file)
