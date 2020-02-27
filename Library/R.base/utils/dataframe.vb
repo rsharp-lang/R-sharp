@@ -1,50 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::55380f44dc356b7df735e11015d7a565, Library\R.base\utils\dataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module dataframe
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: appendCells, appendRow, cells, colnames, CreateRowObject
-    '               openCsv, printTable, project, readCsvRaw, readDataSet
-    '               rows, RowToString, vector
-    ' 
-    ' /********************************************************************************/
+' Module dataframe
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: appendCells, appendRow, cells, colnames, CreateRowObject
+'               openCsv, printTable, project, readCsvRaw, readDataSet
+'               rows, RowToString, vector
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Linq
@@ -170,24 +171,51 @@ Module dataframe
         Return table
     End Function
 
+    ''' <summary>
+    ''' Get/Set column names of the given <paramref name="dataset"/>
+    ''' </summary>
+    ''' <param name="dataset"></param>
+    ''' <param name="values"></param>
+    ''' <param name="envir"></param>
+    ''' <returns></returns>
     <ExportAPI("dataset.colnames")>
-    Public Function colnames(dataset As Array, envir As Environment) As Object
+    Public Function colnames(dataset As Array, <RByRefValueAssign> Optional values As Array = Nothing, Optional envir As Environment = Nothing) As Object
         Dim baseElement As Type = Runtime.MeasureArrayElementType(dataset)
 
-        If baseElement Is GetType(EntityObject) Then
-            Return dataset.AsObjectEnumerator _
-                .Select(Function(d)
-                            Return DirectCast(d, EntityObject)
-                        End Function) _
-                .PropertyNames
-        ElseIf baseElement Is GetType(DataSet) Then
-            Return dataset.AsObjectEnumerator _
-                .Select(Function(d)
-                            Return DirectCast(d, DataSet)
-                        End Function) _
-                .PropertyNames
+        If values Is Nothing OrElse values.Length = 0 Then
+            If baseElement Is GetType(EntityObject) Then
+                Return dataset.AsObjectEnumerator _
+                    .Select(Function(d)
+                                Return DirectCast(d, EntityObject)
+                            End Function) _
+                    .PropertyNames
+            ElseIf baseElement Is GetType(DataSet) Then
+                Return dataset.AsObjectEnumerator _
+                    .Select(Function(d)
+                                Return DirectCast(d, DataSet)
+                            End Function) _
+                    .PropertyNames
+            Else
+                Return Internal.debug.stop(New InvalidProgramException, envir)
+            End If
         Else
-            Return Internal.debug.stop(New InvalidProgramException, envir)
+            Dim names As String() = DirectCast(Runtime.asVector(Of String)(values), String())
+
+            If baseElement Is GetType(EntityObject) Then
+                Return dataset.AsObjectEnumerator(Of EntityObject) _
+                    .ColRenames(names) _
+                    .Select(Function(a)
+                                Return DirectCast(a, EntityObject)
+                            End Function) _
+                    .ToArray
+            Else
+                Return dataset.AsObjectEnumerator(Of DataSet) _
+                    .ColRenames(names) _
+                    .Select(Function(a)
+                                Return DirectCast(a, DataSet)
+                            End Function) _
+                    .ToArray
+            End If
         End If
     End Function
 

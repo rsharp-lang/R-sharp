@@ -83,6 +83,13 @@ Namespace Interpreter.ExecuteEngine
             GetType(Char), GetType(Char())
         }
 
+        Private Shared Function vectorCast(x As vector, env As Environment) As Array
+            Dim type As Type = Runtime.MeasureArrayElementType(x.data)
+            Dim data As Array = Runtime.asVector(x.data, type, env)
+
+            Return data
+        End Function
+
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim a As Object = left.Evaluate(envir)
             Dim b As Object = right.Evaluate(envir)
@@ -94,10 +101,10 @@ Namespace Interpreter.ExecuteEngine
             End If
 
             If TypeOf a Is vector Then
-                a = Runtime.asVector(Of Double)(DirectCast(a, vector).data)
+                a = vectorCast(DirectCast(a, vector), envir)
             End If
             If TypeOf b Is vector Then
-                b = Runtime.asVector(Of Double)(DirectCast(b, vector).data)
+                b = vectorCast(DirectCast(b, vector), envir)
             End If
 
             Dim ta = a.GetType

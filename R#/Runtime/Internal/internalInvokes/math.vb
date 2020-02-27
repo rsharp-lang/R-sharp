@@ -45,7 +45,6 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.Correlations
-Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports stdNum = System.Math
@@ -157,13 +156,29 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("max")>
-        Public Function max(x As Array) As Object
+        Public Function max(x As Array) As Double
             Return Runtime.asVector(Of Double)(x).AsObjectEnumerator(Of Double).Max
         End Function
 
         <ExportAPI("min")>
-        Public Function min(x As Array) As Object
+        Public Function min(x As Array) As Double
             Return Runtime.asVector(Of Double)(x).AsObjectEnumerator(Of Double).Min
+        End Function
+
+        ''' <summary>
+        ''' Arithmetic Mean
+        ''' </summary>
+        ''' <param name="x">An R object. Currently there are methods for numeric/logical 
+        ''' vectors and date, date-time and time interval objects. Complex vectors are 
+        ''' allowed for trim = 0, only.</param>
+        ''' <returns></returns>
+        <ExportAPI("mean")>
+        Public Function mean(x As Array) As Double
+            If x Is Nothing OrElse x.Length = 0 Then
+                Return 0
+            Else
+                Return Runtime.asVector(Of Double)(x).AsObjectEnumerator(Of Double).Average
+            End If
         End Function
 
         <ExportAPI("RSD")>
