@@ -166,6 +166,15 @@ Namespace Runtime.Internal.Invokes
             Return Runtime.asVector(Of Double)(x).AsObjectEnumerator(Of Double).Min
         End Function
 
+        <ExportAPI("mean")>
+        Public Function mean(x As Array) As Object
+            If x Is Nothing OrElse x.Length = 0 Then
+                Return 0
+            Else
+                Return Runtime.asVector(Of Double)(x).AsObjectEnumerator(Of Double).Average
+            End If
+        End Function
+
         <ExportAPI("RSD")>
         Public Function rsd(x As Array) As Double
             Return Runtime.asVector(Of Double)(x).AsObjectEnumerator(Of Double).RSD
