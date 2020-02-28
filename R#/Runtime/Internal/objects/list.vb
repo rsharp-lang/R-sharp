@@ -54,7 +54,7 @@ Namespace Runtime.Internal.Object
 
     Public Class list : Implements RNames, RIndex, RNameIndex
 
-        Public Property slots As IDictionary(Of String, Object)
+        Public Property slots As Dictionary(Of String, Object)
 
         Public ReadOnly Property length As Integer Implements RIndex.length
             Get
@@ -228,7 +228,7 @@ Namespace Runtime.Internal.Object
             Return result.ToArray
         End Function
 
-        Public Shared Function GetSlots(any As Object) As IDictionary(Of String, Object)
+        Public Shared Function GetSlots(any As Object) As Dictionary(Of String, Object)
             If any Is Nothing Then
                 Return Nothing
             End If
