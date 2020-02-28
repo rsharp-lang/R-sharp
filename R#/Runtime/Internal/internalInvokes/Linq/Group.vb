@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0e6f9b7a0108134cc7a57a1232605636, R#\Runtime\Internal\internalInvokes\Linq\Group.vb"
+﻿#Region "Microsoft.VisualBasic::5949f90c9a2e398cb51cd2900226701c, R#\Runtime\Internal\internalInvokes\Linq\Group.vb"
 
     ' Author:
     ' 
@@ -34,7 +34,7 @@
     '     Structure Group
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: (+2 Overloads) getByName, getNames, InternalToString, (+2 Overloads) setByName, ToString
+    '         Function: (+2 Overloads) getByName, getNames, InternalToString, (+2 Overloads) setByName, (+2 Overloads) ToString
     ' 
     ' 
     ' /********************************************************************************/

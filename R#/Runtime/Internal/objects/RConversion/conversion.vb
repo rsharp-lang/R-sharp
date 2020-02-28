@@ -1,44 +1,44 @@
-﻿#Region "Microsoft.VisualBasic::bd0dffe8cf8e5ed984bd537bbe4435ca, R#\Runtime\Internal\objects\conversion.vb"
+﻿#Region "Microsoft.VisualBasic::834574090ae48f43c3d63ae012509942, R#\Runtime\Internal\objects\RConversion\conversion.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Module RConversion
-' 
-'         Function: asCharacters, asInteger, asList, asLogicals, asNumeric
-'                   asObject, CastToEnum, CTypeDynamic, listInternal, unlist
-'                   unlistOfRList
-' 
-' 
-' /********************************************************************************/
+    '     Module RConversion
+    ' 
+    '         Function: asCharacters, asDataframe, asDate, asInteger, asList
+    '                   asLogicals, asNumeric, asObject, CastToEnum, CTypeDynamic
+    '                   isCharacter, listInternal, unlist, unlistOfRList
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -361,6 +361,11 @@ Namespace Runtime.Internal.Object.Converts
                 End If
             ElseIf type.IsEnum Then
                 Return CastToEnum(obj, type, env)
+            ElseIf obj.GetType Is GetType(Environment) AndAlso type Is GetType(GlobalEnvironment) Then
+                ' fix the type mismatch bugs for passing value to 
+                ' a API parameter which its data type is a global 
+                ' environment.
+                Return DirectCast(obj, Environment).globalEnvironment
             End If
 
             Return Conversion.CTypeDynamic(obj, type)

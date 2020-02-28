@@ -1,45 +1,45 @@
-﻿#Region "Microsoft.VisualBasic::362f43236d7e228b58e121be4d52402c, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareLambdaFunction.vb"
+﻿#Region "Microsoft.VisualBasic::6594f9087cdaa5fccbce8fb93c418392, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareLambdaFunction.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class DeclareLambdaFunction
-' 
-'         Properties: name, stackFrame, type
-' 
-'         Constructor: (+1 Overloads) Sub New
-'         Function: CreateLambda, Evaluate, GetPrintContent, Invoke, ToString
-' 
-' 
-' /********************************************************************************/
+    '     Class DeclareLambdaFunction
+    ' 
+    '         Properties: name, parameterNames, stackFrame, type
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    '         Function: CreateLambda, Evaluate, GetPrintContent, Invoke, ToString
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -99,7 +99,7 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Public Function Invoke(parent As Environment, arguments() As InvokeParameter) As Object Implements RFunction.Invoke
-            Using envir As New Environment(parent, stackFrame)
+            Using envir As New Environment(parent, stackFrame, isInherits:=False)
                 If parameter.names.Length = 0 Then
                     ' lambda function with no parameter
                     Return closure.Evaluate(envir)
@@ -129,7 +129,8 @@ Namespace Interpreter.ExecuteEngine
                         .PushNames(names:=parameter.names,
                                    value:=argVal,
                                    type:=TypeCodes.generic,
-                                   envir:=envir
+                                   envir:=envir,
+                                   [readonly]:=True
                         )
                     Dim result As Object = closure.Evaluate(env)
 
@@ -139,14 +140,15 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Public Function CreateLambda(Of T, Out)(parent As Environment) As Func(Of T, Out)
-            Dim envir = New Environment(parent, stackFrame)
-            Dim v As Variable
+            Dim envir = New Environment(parent, stackFrame, isInherits:=False)
+            Dim v As Symbol
 
             Call DeclareNewVariable _
                 .PushNames(names:=parameter.names,
                            value:=Nothing,
                            type:=GetType(T).GetRTypeCode,
-                           envir:=envir
+                           envir:=envir,
+                           [readonly]:=False
             )
 
             v = envir.FindSymbol(parameter.names(Scan0), [inherits]:=False)
@@ -154,7 +156,7 @@ Namespace Interpreter.ExecuteEngine
             Return Function(x As T) As Out
                        Dim result As Object
 
-                       v.value = x
+                       v.SetValue(x, envir)
                        result = closure.Evaluate(envir)
 
                        ' 20200210 对于lambda函数而言，其是运行时创建的函数

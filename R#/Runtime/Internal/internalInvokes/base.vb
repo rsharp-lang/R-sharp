@@ -1,50 +1,50 @@
-﻿#Region "Microsoft.VisualBasic::28c5ac395e5771dbb52711f5827b2078, R#\Runtime\Internal\internalInvokes\base.vb"
+﻿#Region "Microsoft.VisualBasic::fac315e9169ab766b7637706131dc937, R#\Runtime\Internal\internalInvokes\base.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Module base
-' 
-'         Function: [stop], all, any, append, cat
-'                   colnames, createColumnVector, createDotNetExceptionMessage, CreateMessageInternal, doPrintInternal
-'                   getEnvironmentStack, getOption, invisible, invokeArgument, isEmpty
-'                   lapply, length, names, ncol, neg
-'                   nrow, options, print, Rdataframe, rep
-'                   Rlist, rownames, sapply, source, str
-'                   summary, warning
-' 
-'         Sub: q, quit
-' 
-' 
-' /********************************************************************************/
+    '     Module base
+    ' 
+    '         Function: [stop], all, any, append, cat
+    '                   colnames, createDotNetExceptionMessage, CreateMessageInternal, doPrintInternal, getEnvironmentStack
+    '                   getOption, invisible, invokeArgument, isEmpty, lapply
+    '                   length, names, ncol, neg, nrow
+    '                   options, print, Rdataframe, rep, replace
+    '                   Rlist, rownames, sapply, source, str
+    '                   summary, warning
+    ' 
+    '         Sub: q, quit
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -99,6 +99,33 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("rep")>
         Public Function rep(x As Object, times As Integer) As Object
             Return Repeats(x, times)
+        End Function
+
+        <ExportAPI("replace")>
+        Public Function replace(x As Array, find As Object, [as] As Object) As Object
+            Dim type As Type = x.GetType.GetElementType
+
+            If type Is GetType(Object) Then
+                type = Runtime.MeasureArrayElementType(x)
+            End If
+
+            find = Conversion.CTypeDynamic(find, type)
+            [as] = Conversion.CTypeDynamic([as], type)
+
+            Dim copy As Array = Array.CreateInstance(type, x.Length)
+            Dim xi As Object
+
+            For i As Integer = 0 To x.Length - 1
+                xi = x.GetValue(i)
+
+                If xi.Equals(find) Then
+                    copy.SetValue([as], i)
+                Else
+                    copy.SetValue(xi, i)
+                End If
+            Next
+
+            Return copy
         End Function
 
         ''' <summary>
@@ -175,34 +202,27 @@ Namespace Runtime.Internal.Invokes
         Public Function Rdataframe(<RListObjectArgument>
                                    <RRawVectorArgument>
                                    columns As Object, Optional envir As Environment = Nothing) As Object
+
             ' data.frame(a = 1, b = ["g","h","eee"], c = T)
             Dim parameters As InvokeParameter() = columns
-            Dim dataframe As New dataframe With {
-                .columns = parameters _
-                    .SeqIterator _
-                    .ToDictionary(Function(a)
-                                      If a.value.haveSymbolName Then
-                                          Return a.value.name
-                                      Else
-                                          Return "X" & (a.i + 1)
-                                      End If
-                                  End Function,
-                                  Function(a)
-                                      Return envir.createColumnVector(a.value.Evaluate(envir))
-                                  End Function)
-            }
+            Dim values As IEnumerable(Of NamedValue(Of Object)) = parameters _
+                .SeqIterator _
+                .Select(Function(a)
+                            Dim name$
 
-            Return dataframe
-        End Function
+                            If a.value.haveSymbolName Then
+                                name = a.value.name
+                            Else
+                                name = "X" & (a.i + 1)
+                            End If
 
-        <Extension>
-        Private Function createColumnVector(env As Environment, a As Object) As Array
-            ' 假设dataframe之中每一列数据的类型都是相同的
-            ' 则我们直接使用第一个元素的类型作为列的数据类型
-            Dim first As Object = Runtime.getFirst(a, nonNULL:=True)
-            Dim colVec As Array = Runtime.asVector(a, first.GetType, env)
+                            Return New NamedValue(Of Object) With {
+                                .Name = name,
+                                .Value = a.value.Evaluate(envir)
+                            }
+                        End Function)
 
-            Return colVec
+            Return values.RDataframe(envir)
         End Function
 
         <ExportAPI("nrow")>
@@ -782,13 +802,28 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("cat")>
         Public Function cat(<RRawVectorArgument> values As Object,
                             Optional file$ = Nothing,
-                            Optional sep$ = " ") As Object
+                            Optional sep$ = " ",
+                            Optional env As Environment = Nothing) As Object
 
-            Dim strs = Runtime.asVector(Of Object)(values) _
+            Dim vec As Object() = Runtime.asVector(Of Object)(values) _
                 .AsObjectEnumerator _
-                .Select(Function(o) Scripting.ToString(o, "")) _
-                .JoinBy(sep) _
-                .DoCall(AddressOf sprintf)
+                .ToArray
+            Dim strs As String
+
+            If vec.Length = 1 AndAlso TypeOf vec(Scan0) Is dataframe Then
+                sep = sprintf(sep)
+                strs = DirectCast(vec(Scan0), dataframe) _
+                    .GetTable(env.globalEnvironment, printContent:=False, True) _
+                    .Select(Function(row)
+                                Return row.JoinBy(sep)
+                            End Function) _
+                    .JoinBy(vbCrLf)
+            Else
+                strs = vec _
+                    .Select(Function(o) Scripting.ToString(o, "")) _
+                    .JoinBy(sprintf(sep)) _
+                    .DoCall(AddressOf sprintf)
+            End If
 
             If Not file.StringEmpty Then
                 Call strs.SaveTo(file)

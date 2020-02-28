@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f7345624f2f540d8677cdd359111307d, R#\Runtime\Internal\objects\dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::0c9087daa37f7d26616510f83787a04a, R#\Runtime\Internal\objects\dataframe.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,8 @@
     ' 
     '         Properties: columns, ncols, nrows, rownames
     ' 
-    '         Function: GetByRowIndex, GetColumnVector, GetTable, projectByColumn, sliceByRow
+    '         Function: GetByRowIndex, (+2 Overloads) GetColumnVector, GetRowList, GetTable, projectByColumn
+    '                   sliceByRow
     ' 
     ' 
     ' /********************************************************************************/

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::420d9475db14f1345af97064fda6c594, R#\System\Package\ImportsPackage.vb"
+﻿#Region "Microsoft.VisualBasic::19366075470fda764f9a00e56b77d0c3, R#\System\Package\ImportsPackage.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Module ImportsPackage
     ' 
-    '         Function: (+2 Overloads) GetAllApi, ImportsStatic
+    '         Function: (+2 Overloads) GetAllApi, ImportsStatic, ImportsStaticInternalImpl
     ' 
     '         Sub: ImportsInstance
     ' 
@@ -100,6 +100,8 @@ Namespace System.Package
             Next
         End Function
 
+        Const obsoleteAssemblyImage$ = "Unable to load R# package module '{0}', due to the reason of obsolete assembly file! Please re-compile your package under the latest R#/sciBASIC.NET runtime!"
+
         ''' <summary>
         ''' This function returns a list of object which is masked by the new imports <paramref name="package"/>
         ''' </summary>
@@ -109,9 +111,27 @@ Namespace System.Package
         ''' <returns></returns>
         <Extension>
         Public Function ImportsStatic(envir As Environment, package As Type, Optional strict As Boolean = True) As IEnumerable(Of String)
+            Try
+                Return ImportsStaticInternalImpl(envir, package, strict:=strict)
+            Catch ex As Exception
+                If TypeOf ex Is MissingMethodException Then
+                    With DirectCast(ex, MissingMethodException)
+                        If .Message = ".ctor" AndAlso InStr(ex.StackTrace, "GetCustomAttribute") > 0 Then
+                            Throw New TypeLoadException(String.Format(obsoleteAssemblyImage, package.FullName), ex)
+                        Else
+                            Throw
+                        End If
+                    End With
+                Else
+                    Throw
+                End If
+            End Try
+        End Function
+
+        <Extension>
+        Public Function ImportsStaticInternalImpl(envir As Environment, package As Type, Optional strict As Boolean = True) As IEnumerable(Of String)
             Dim [global] As GlobalEnvironment = envir.globalEnvironment
-            Dim docs As ProjectType = [global].packages.packageDocs.GetAnnotations(package)
-            Dim symbol As Variable
+            Dim symbol As Symbol
             Dim Rmethods As RMethodInfo() = ImportsPackage _
                 .GetAllApi(package, strict) _
                 .Select(Function(m) New RMethodInfo(m)) _
@@ -126,7 +146,7 @@ Namespace System.Package
                     [global].Push(api.name, api, TypeCodes.closure)
                 Else
                     ' overrides and masked by current package
-                    symbol.value = api
+                    symbol.SetValue(api, envir)
                     masked += symbol.name
                 End If
             Next

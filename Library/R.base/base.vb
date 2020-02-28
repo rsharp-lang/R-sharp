@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::90402734e5741d4b20636ad5f31832f0, Library\R.base\base.vb"
+﻿#Region "Microsoft.VisualBasic::f6b9991a7e093d836dc58990ad3287a4, Library\R.base\base.vb"
 
     ' Author:
     ' 
@@ -33,12 +33,15 @@
 
     ' Module base
     ' 
-    ' 
+    '     Function: impute
     ' 
     ' /********************************************************************************/
 
 #End Region
 
+Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Data.csv.IO
+Imports Microsoft.VisualBasic.Math.DataFrame.Impute
 Imports Microsoft.VisualBasic.Scripting.MetaData
 
 ''' <summary>
@@ -53,4 +56,16 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 <Package("base", Category:=APICategories.UtilityTools, Publisher:="xie.guigang@gcmodeller.org")>
 Public Module base
 
+    ''' <summary>
+    ''' impute for missing values
+    ''' </summary>
+    ''' <param name="rawMatrix"></param>
+    ''' <param name="byRow"></param>
+    ''' <param name="infer"></param>
+    ''' <returns></returns>
+    ''' 
+    <ExportAPI("impute")>
+    Public Function impute(rawMatrix As DataSet(), Optional byRow As Boolean = True, Optional infer As InferMethods = InferMethods.Average) As DataSet()
+        Return rawMatrix.SimulateMissingValues(byRow, infer).ToArray
+    End Function
 End Module

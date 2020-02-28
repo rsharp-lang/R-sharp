@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f7b9d30802df393f5b24f628ff2f65de, Library\R.base\utils\dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::55380f44dc356b7df735e11015d7a565, Library\R.base\utils\dataframe.vb"
 
 ' Author:
 ' 
@@ -34,8 +34,9 @@
 ' Module dataframe
 ' 
 '     Constructor: (+1 Overloads) Sub New
-'     Function: colnames, printTable, project, readDataSet, RowToString
-'               vector
+'     Function: appendCells, appendRow, cells, colnames, CreateRowObject
+'               openCsv, printTable, project, readCsvRaw, readDataSet
+'               rows, RowToString, vector
 ' 
 ' /********************************************************************************/
 
@@ -44,6 +45,7 @@
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Linq
@@ -118,8 +120,25 @@ Module dataframe
     End Function
 
     <ExportAPI("cells")>
-    Public Function cells(x As RowObject) As String()
-        Return x.ToArray
+    Public Function cells(x As Object, Optional env As Environment = Nothing) As Object
+        Dim type As Type
+
+        If x Is Nothing Then
+            Return New String() {}
+        Else
+            type = x.GetType
+        End If
+
+        Select Case type
+            Case GetType(RowObject)
+                Return DirectCast(x, RowObject).ToArray
+            Case GetType(DataSet)
+                Return DirectCast(x, DataSet).Properties.Values.ToArray
+            Case GetType(EntityObject)
+                Return DirectCast(x, EntityObject).Properties.Values.ToArray
+            Case Else
+                Return Internal.debug.stop(New InvalidCastException(type.FullName), env)
+        End Select
     End Function
 
     <ExportAPI("read.csv.raw")>
@@ -152,24 +171,51 @@ Module dataframe
         Return table
     End Function
 
+    ''' <summary>
+    ''' Get/Set column names of the given <paramref name="dataset"/>
+    ''' </summary>
+    ''' <param name="dataset"></param>
+    ''' <param name="values"></param>
+    ''' <param name="envir"></param>
+    ''' <returns></returns>
     <ExportAPI("dataset.colnames")>
-    Public Function colnames(dataset As Array, envir As Environment) As Object
+    Public Function colnames(dataset As Array, <RByRefValueAssign> Optional values As Array = Nothing, Optional envir As Environment = Nothing) As Object
         Dim baseElement As Type = Runtime.MeasureArrayElementType(dataset)
 
-        If baseElement Is GetType(EntityObject) Then
-            Return dataset.AsObjectEnumerator _
-                .Select(Function(d)
-                            Return DirectCast(d, EntityObject)
-                        End Function) _
-                .PropertyNames
-        ElseIf baseElement Is GetType(DataSet) Then
-            Return dataset.AsObjectEnumerator _
-                .Select(Function(d)
-                            Return DirectCast(d, DataSet)
-                        End Function) _
-                .PropertyNames
+        If values Is Nothing OrElse values.Length = 0 Then
+            If baseElement Is GetType(EntityObject) Then
+                Return dataset.AsObjectEnumerator _
+                    .Select(Function(d)
+                                Return DirectCast(d, EntityObject)
+                            End Function) _
+                    .PropertyNames
+            ElseIf baseElement Is GetType(DataSet) Then
+                Return dataset.AsObjectEnumerator _
+                    .Select(Function(d)
+                                Return DirectCast(d, DataSet)
+                            End Function) _
+                    .PropertyNames
+            Else
+                Return Internal.debug.stop(New InvalidProgramException, envir)
+            End If
         Else
-            Return Internal.debug.stop(New InvalidProgramException, envir)
+            Dim names As String() = DirectCast(Runtime.asVector(Of String)(values), String())
+
+            If baseElement Is GetType(EntityObject) Then
+                Return dataset.AsObjectEnumerator(Of EntityObject) _
+                    .ColRenames(names) _
+                    .Select(Function(a)
+                                Return DirectCast(a, EntityObject)
+                            End Function) _
+                    .ToArray
+            Else
+                Return dataset.AsObjectEnumerator(Of DataSet) _
+                    .ColRenames(names) _
+                    .Select(Function(a)
+                                Return DirectCast(a, DataSet)
+                            End Function) _
+                    .ToArray
+            End If
         End If
     End Function
 

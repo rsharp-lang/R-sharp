@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::72065fe30d01700226cdf5cf8b32c42c, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\FunctionInvoke.vb"
+﻿#Region "Microsoft.VisualBasic::c42b407a4a0a87c022522db38263523c, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\FunctionInvoke.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Class FunctionInvoke
     ' 
-    '         Properties: [namespace], funcName, type
+    '         Properties: [namespace], funcName, stackFrame, type
     ' 
     '         Constructor: (+2 Overloads) Sub New
     '         Function: allIsValueAssign, doInvokeFuncVar, Evaluate, getFuncVar, invokeRInternal
@@ -45,6 +45,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ComponentModel.Collection
@@ -134,7 +135,13 @@ Namespace Interpreter.ExecuteEngine
             If Not target Is Nothing AndAlso target.GetType Is GetType(Message) Then
                 Return target
             Else
-                envir = New Environment(envir, stackFrame)
+                envir = New Environment(envir, stackFrame, isInherits:=True)
+            End If
+
+            If TypeOf target Is Regex Then
+                ' regexp match
+                result = Regexp.Matches(target, parameters(Scan0), envir)
+            Else
                 result = doInvokeFuncVar(target, envir)
             End If
 
@@ -171,11 +178,16 @@ Namespace Interpreter.ExecuteEngine
         ''' <param name="funcName"></param>
         ''' <param name="namespace"></param>
         ''' <param name="envir"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' This function returns a R api function or regex object for do string matches
+        ''' 
+        ''' + 1. <see cref="RFunction"/>
+        ''' + 2. <see cref="Regex"/>
+        ''' </returns>
         Friend Shared Function getFuncVar(funcName As Expression, namespace$, envir As Environment) As Object
             ' 当前环境中的函数符号的优先度要高于
             ' 系统环境下的函数符号
-            Dim funcVar As RFunction
+            Dim funcVar As Object
 
             If Not [namespace].StringEmpty Then
                 Return NamespaceFunctionSymbolReference.getPackageApiImpl(
@@ -186,12 +198,10 @@ Namespace Interpreter.ExecuteEngine
             End If
 
             If TypeOf funcName Is Literal Then
-                Dim symbol = envir.FindSymbol(DirectCast(funcName, Literal).ToString)?.value
+                Dim symbol As Object = envir.FindSymbol(DirectCast(funcName, Literal).ToString)?.value
 
                 If symbol Is Nothing Then
                     funcVar = Nothing
-                    'ElseIf symbol.GetType Is GetType(Internal.envir) Then
-                    '    funcVar = DirectCast(symbol, Internal.envir).declare
                 Else
                     funcVar = symbol
                 End If

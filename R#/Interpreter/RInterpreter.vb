@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9cf7cff2e82dc759f5777360c35c3001, R#\Interpreter\RInterpreter.vb"
+﻿#Region "Microsoft.VisualBasic::deccfc390d884546bb0ac9269d839e54, R#\Interpreter\RInterpreter.vb"
 
     ' Author:
     ' 
@@ -95,7 +95,7 @@ Namespace Interpreter
         Public Property strict As Boolean = True
 
         ''' <summary>
-        ''' Get value of a <see cref="Variable"/>
+        ''' Get value of a <see cref="Symbol"/>
         ''' </summary>
         ''' <param name="name"></param>
         ''' <returns></returns>
@@ -117,9 +117,10 @@ Namespace Interpreter
             End If
 
             globalEnvir = New GlobalEnvironment(Me, envirConf)
-            globalEnvir.Push(lastVariableName, Nothing, TypeCodes.generic)
-            globalEnvir.Push("PI", Math.PI, TypeCodes.double)
-            globalEnvir.Push("E", Math.E, TypeCodes.double)
+            globalEnvir.Push(lastVariableName, Nothing, False, TypeCodes.generic)
+            globalEnvir.Push("PI", Math.PI, True, TypeCodes.double)
+            globalEnvir.Push("E", Math.E, True, TypeCodes.double)
+            globalEnvir.Push(".GlobalEnv", globalEnvir, True, TypeCodes.generic)
 
             ' config R# interpreter engine
             [strict] = envirConf.strict
@@ -128,7 +129,7 @@ Namespace Interpreter
         Public Sub PrintMemory(Optional dev As TextWriter = Nothing)
             Dim table$()() = globalEnvir _
                 .Select(Function(v)
-                            Dim value$ = Variable.GetValueViewString(v)
+                            Dim value$ = Symbol.GetValueViewString(v)
 
                             Return {
                                 v.name,
@@ -255,22 +256,22 @@ Namespace Interpreter
                         .[Namespace] = "SMRUCC/R#"
                     }
                 }.DoCall(Function(stackframe)
-                             Return New Environment(globalEnvir, stackframe)
+                             Return New Environment(globalEnvir, stackframe, isInherits:=True)
                          End Function)
             End If
 
             For Each var As NamedValue(Of Object) In arguments
-                Call envir.Push(var.Name, var.Value)
+                Call envir.Push(var.Name, var.Value, [readonly]:=False)
             Next
 
             Return envir
         End Function
 
         Friend Function finalizeResult(result As Object) As Object
-            Dim last As Variable = Me.globalEnvir(lastVariableName)
+            Dim last As Symbol = Me.globalEnvir(lastVariableName)
 
             ' set last variable in current environment
-            last.value = result
+            Call last.SetValue(result, globalEnvir)
 
             If Program.isException(result) Then
                 Call VBDebugger.WaitOutput()

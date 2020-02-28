@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8d4cf1ac5a906629adcf73076586aa80, R#\Language\TokenType.vb"
+﻿#Region "Microsoft.VisualBasic::07d4ad955f4f3d70d9c4578e94b03ab2, R#\Language\TokenType.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,8 @@
     '         [operator], annotation, booleanLiteral, cliShellInvoke, close
     '         comma, comment, identifier, iif, integerLiteral
     '         invalid, keyword, missingLiteral, newLine, numberLiteral
-    '         open, sequence, stringInterpolation, stringLiteral, terminator
+    '         open, regexp, sequence, stringInterpolation, stringLiteral
+    '         terminator
     ' 
     '  
     ' 
@@ -86,6 +87,7 @@ Namespace Language
         ''' 命令行调用语法
         ''' </summary>
         cliShellInvoke
+        regexp
 
         ''' <summary>
         ''' NULL, NA, Inf

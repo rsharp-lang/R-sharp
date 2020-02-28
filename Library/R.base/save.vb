@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ae1b2fde9ecc5e43f844f372814e828d, Library\R.base\save.vb"
+﻿#Region "Microsoft.VisualBasic::ac84d9e7c828be35d805b483d1b22ebf, Library\R.base\save.vb"
 
     ' Author:
     ' 
@@ -52,7 +52,7 @@ Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports cdfAttribute = Microsoft.VisualBasic.Data.IO.netCDF.Components.attribute
-Imports RVariable = SMRUCC.Rsharp.Runtime.Components.Variable
+Imports RSymbol = SMRUCC.Rsharp.Runtime.Components.Symbol
 
 Partial Module base
 
@@ -123,7 +123,7 @@ Partial Module base
             Dim objectNames = reader.getDataVariable("R#.objects").decodeStringVector
             Dim numOfObjects As Integer = reader("numOfObjects")
             Dim value As CDFData
-            Dim var As RVariable
+            Dim var As RSymbol
 
             If objectNames.Length <> numOfObjects Then
                 Return Internal.debug.stop({"Invalid file format!", "file=" & file}, envir)
@@ -134,17 +134,17 @@ Partial Module base
                 var = envir.FindSymbol(name)
 
                 If var Is Nothing Then
-                    var = New RVariable With {
+                    var = New RSymbol With {
                         .name = name,
-                        .value = Nothing
+                        .[readonly] = False
                     }
                     envir.variables.Add(name, var)
                 End If
 
                 If value.cdfDataType = CDFDataTypes.CHAR Then
-                    var.value = value.decodeStringVector
+                    var.SetValue(value.decodeStringVector, envir)
                 Else
-                    var.value = value.genericValue
+                    var.SetValue(value.genericValue, envir)
                 End If
             Next
 

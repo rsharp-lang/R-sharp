@@ -1,42 +1,42 @@
-﻿#Region "Microsoft.VisualBasic::8735b9a6807618f521cd137e90fa5119, R#\Interpreter\Syntax\SyntaxImplements\FunctionInvokeSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::3121cc270e0db45ef2523f3d141a6d33, R#\Interpreter\Syntax\SyntaxImplements\FunctionInvokeSyntax.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Module FunctionInvokeSyntax
-' 
-'         Function: FunctionInvoke
-' 
-' 
-' /********************************************************************************/
+    '     Module FunctionInvokeSyntax
+    ' 
+    '         Function: (+2 Overloads) AnonymousFunctionInvoke, FunctionInvoke, getInvokeParameters, getNameRef
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -53,15 +53,23 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
     Module FunctionInvokeSyntax
 
+        Private Function getNameRef(token As Token) As Expression
+            If token.name = TokenType.regexp Then
+                Return New Regexp(token.text)
+            Else
+                Return New Literal(token.text)
+            End If
+        End Function
+
         Public Function FunctionInvoke(tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim funcName As New Literal(tokens(Scan0).text)
+            Dim funcName As Expression = getNameRef(tokens(Scan0))
             Dim span As CodeSpan = tokens(Scan0).span
             Dim parameters As New List(Of Expression)
             Dim frame As New StackFrame With {
                 .File = opts.source.fileName,
                 .Line = tokens(Scan0).span.line,
                 .Method = New Method With {
-                    .Method = funcName.value,
+                    .Method = funcName.ToString,
                     .[Module] = "call_function",
                     .[Namespace] = "SMRUCC/R#"
                 }
@@ -116,12 +124,21 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
             If declares.isException Then
                 Return declares
+            Else
+                Return declares.AnonymousFunctionInvoke(
+                    invoke:=invoke,
+                    lineNum:=anonymous(Scan0).span.line,
+                    opts:=opts
+                )
             End If
+        End Function
 
+        <Extension>
+        Public Function AnonymousFunctionInvoke(declares As SyntaxResult, invoke As Token(), lineNum%, opts As SyntaxBuilderOptions) As SyntaxResult
             Dim parameters As New List(Of Expression)
             Dim frame As New StackFrame With {
                 .File = opts.source.fileName,
-                .Line = anonymous(Scan0).span.line,
+                .Line = lineNum,
                 .Method = New Method With {
                     .Method = DirectCast(declares.expression, IRuntimeTrace).stackFrame.Method.Method,
                     .[Module] = "call_function",

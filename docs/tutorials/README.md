@@ -8,3 +8,4 @@ Here are a list of R# tutorials for some bioinformatics analysis based on the GC
 
 1. [SequenceLogo Drawer](01.sequence_logo)
 2. [String in R#](02.string)
+3. [Function in R#](03.function)

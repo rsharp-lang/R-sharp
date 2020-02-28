@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c96e7d98c62b2f7188025f2c87f34725, R#\Runtime\Internal\internalInvokes\math.vb"
+﻿#Region "Microsoft.VisualBasic::cb3401c6746ef9ec1ff421515ab5ac85, R#\Runtime\Internal\internalInvokes\math.vb"
 
     ' Author:
     ' 
@@ -33,8 +33,8 @@
 
     '     Module math
     ' 
-    '         Function: exp, log, max, min, pow
-    '                   round, sqrt, sum
+    '         Function: exp, log, max, min, pearson
+    '                   pow, round, rsd, sqrt, sum
     ' 
     ' 
     ' /********************************************************************************/
@@ -43,6 +43,9 @@
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Math
+Imports Microsoft.VisualBasic.Math.Correlations
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports stdNum = System.Math
 
@@ -153,13 +156,57 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("max")>
-        Public Function max(x As Array) As Object
+        Public Function max(x As Array) As Double
             Return Runtime.asVector(Of Double)(x).AsObjectEnumerator(Of Double).Max
         End Function
 
         <ExportAPI("min")>
-        Public Function min(x As Array) As Object
+        Public Function min(x As Array) As Double
             Return Runtime.asVector(Of Double)(x).AsObjectEnumerator(Of Double).Min
+        End Function
+
+        ''' <summary>
+        ''' Arithmetic Mean
+        ''' </summary>
+        ''' <param name="x">An R object. Currently there are methods for numeric/logical 
+        ''' vectors and date, date-time and time interval objects. Complex vectors are 
+        ''' allowed for trim = 0, only.</param>
+        ''' <returns></returns>
+        <ExportAPI("mean")>
+        Public Function mean(x As Array) As Double
+            If x Is Nothing OrElse x.Length = 0 Then
+                Return 0
+            Else
+                Return Runtime.asVector(Of Double)(x).AsObjectEnumerator(Of Double).Average
+            End If
+        End Function
+
+        <ExportAPI("RSD")>
+        Public Function rsd(x As Array) As Double
+            Return Runtime.asVector(Of Double)(x).AsObjectEnumerator(Of Double).RSD
+        End Function
+
+        <ExportAPI("pearson")>
+        Public Function pearson(x As Array, y As Array, Optional MAXIT As Integer = 5000) As list
+            Dim data1 As Double() = Runtime.asVector(Of Double)(x)
+            Dim data2 As Double() = Runtime.asVector(Of Double)(y)
+            Dim p1#
+            Dim p2#
+            Dim z#
+            Dim cor#
+
+            Beta.MAXIT = MAXIT
+
+            cor = GetPearson(data1, data2, p1, p2, z, throwMaxIterError:=False)
+
+            Return New list With {
+                .slots = New Dictionary(Of String, Object) From {
+                    {"cor", cor},
+                    {"p-value", p1},
+                    {"prob2", p2},
+                    {"z", z}
+                }
+            }
         End Function
     End Module
 End Namespace

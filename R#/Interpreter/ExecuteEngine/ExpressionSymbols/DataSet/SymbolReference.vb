@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fd7479606f69f1e8d2076f154480fd8e, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolReference.vb"
+﻿#Region "Microsoft.VisualBasic::2d7381675a4add057a8760661cc54dd8, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolReference.vb"
 
     ' Author:
     ' 
@@ -83,14 +83,14 @@ Namespace Interpreter.ExecuteEngine
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim symbol As [Variant](Of Variable, RMethodInfo) = envir.FindSymbol(Me.symbol)
+            Dim symbol As [Variant](Of Symbol, RMethodInfo) = envir.FindSymbol(Me.symbol)
 
             If symbol Is Nothing OrElse Not symbol.HasValue Then
                 symbol = REnv.invoke.getFunction(Me.symbol)
             End If
             If symbol Is Nothing OrElse Not symbol.HasValue Then
                 Return Message.SymbolNotFound(envir, Me.symbol, TypeCodes.generic)
-            ElseIf symbol Like GetType(Variable) Then
+            ElseIf symbol Like GetType(Symbol) Then
                 Return symbol.VA.value
             Else
                 Return symbol.Value

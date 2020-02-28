@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7647c5f962d3d256369376483026ca35, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\UsingClosure.vb"
+﻿#Region "Microsoft.VisualBasic::489b39a66f7772a1d436e92fcb1a46fe, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\UsingClosure.vb"
 
     ' Author:
     ' 
@@ -72,7 +72,7 @@ Namespace Interpreter.ExecuteEngine
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Using env As New Environment(envir, stackFrame)
+            Using env As New Environment(envir, stackFrame, isInherits:=False)
                 Dim resource As Object = params.Evaluate(env)
                 Dim result As Object
 

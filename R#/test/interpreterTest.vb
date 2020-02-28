@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1724b52eb52eb4771a7cdaf0e8ddcb25, R#\test\interpreterTest.vb"
+﻿#Region "Microsoft.VisualBasic::4b6000a3dcc5e4663f6db6b33277552a, R#\test\interpreterTest.vb"
 
     ' Author:
     ' 
@@ -33,20 +33,22 @@
 
     ' Module interpreterTest
     ' 
-    '     Sub: appendTest, booleanCLIArgumentTest, closureEnvironmentTest, closureTest, isEmptyTest
-    '          lastSymbolTest, Main, markdownTest, missingSymbolInStringInterpolate, moduleTest
-    '          objClasstest, orDefaultTest, printClassTest, sequenceGeneratorTest, suppressTest
-    '          syntaxErrorTest, unaryNegTest, usingTest
+    '     Sub: anonymous, appendTest, booleanCLIArgumentTest, closureEnvironmentTest, closureTest
+    '          isEmptyTest, lastSymbolTest, Main, markdownTest, missingSymbolInStringInterpolate
+    '          moduleTest, negativeValTest, numberLiteralsTest, objClasstest, orDefaultTest
+    '          printClassTest, regexpTest, sequenceGeneratorTest, suppressTest, syntaxErrorTest
+    '          unaryNegTest, usingTest
     ' module test1
     ' 
-    '     Sub: boolLiteralTest, branchTest, cliTest, commandLineArgumentTest, dataframeIndexTest
-    '          dataframeTest, declareFunctionTest, declareTest, elementIndexerTest, exceptionHandler
-    '          forLoop2, forLoopTest, genericTest, iifTest, ImportsDll
-    '          inTest, invokeTest, lambdaTest, lambdaTest2, linqPipelineTest
-    '          linqTest, listoperationtest, listTest, logicalTest, nameAccessorTest
-    '          namespaceTest, namesTest, optionsTest, packageTest, parameterTest
-    '          pipelineParameterBugTest, pipelineTest, sourceFunctionTest, sourceScripttest, StackTest
-    '          stringInterpolateTest, symbolNotFoundTest, testScript, tupleTest, whichTest
+    '     Sub: boolLiteralTest, branchTest, cliTest, commandLineArgumentTest, constantTest
+    '          dataframeIndexTest, dataframeTest, declareFunctionTest, declareTest, elementIndexerTest
+    '          exceptionHandler, forLoop2, forLoopTest, genericTest, iifTest
+    '          ImportsDll, inTest, invokeTest, lambdaTest, lambdaTest2
+    '          lambdaTest3, linqPipelineTest, linqTest, listoperationtest, listTest
+    '          logicalTest, nameAccessorTest, namespaceTest, namesTest, optionsTest
+    '          packageTest, parameterTest, pipelineParameterBugTest, pipelineTest, sourceFunctionTest
+    '          sourceScripttest, StackTest, stringInterpolateTest, symbolNotFoundTest, testScript
+    '          tupleTest, whichTest
     ' module test2
     ' 
     ' 
@@ -72,6 +74,10 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+        Call lambdaTest3()
+        Call constantTest()
+        Call regexpTest()
+
         Call negativeValTest()
         Call numberLiteralsTest()
 
@@ -167,6 +173,19 @@ Module interpreterTest
 
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub regexpTest()
+
+        Call R.Evaluate("$'(\d{3})|[a-z]'(['123', '54668t665a888','888','000']) :> str ;")
+        ' stacktrace test
+        Call R.Evaluate("$'\d'(stop(123))")
+
+        Call R.Evaluate("print(['123', 'abc'] like $'\d+');")
+        Call R.Evaluate("print(['abc', 'ABC'] like $'[a-z]');")
+        Call R.Evaluate("print(['123', '5466','888','000'] == $'\d{3}');")
 
         Pause()
     End Sub
@@ -659,6 +678,14 @@ let div as function(x ,y) {
         Pause()
     End Sub
 
+    Sub lambdaTest3()
+        Call R.Evaluate("([]->traceback())()")
+        Call R.Print("$")
+        Call R.PrintMemory()
+
+        Pause()
+    End Sub
+
     Sub lambdaTest2()
         Call R.Evaluate("let pop5 = function() 5;")
         Call R.Evaluate("let add233 = function(x) x+233;")
@@ -923,6 +950,20 @@ print( 'This is false result');
 
 print(`value of the x='${x}'`);
 ")
+        Pause()
+    End Sub
+
+    Sub constantTest()
+        Call R.Evaluate("let a = 999")
+        Call R.Evaluate("print(a)")
+        Call R.Evaluate("a = $'[a-z]+'")
+        Call R.Evaluate("print(a)")
+
+        Call R.Evaluate("const b = [999, 888.98]")
+        Call R.Evaluate("print(b)")
+        Call R.Evaluate("b = $'[a-z]+'")
+        Call R.Evaluate("print(b)")
+
         Pause()
     End Sub
 

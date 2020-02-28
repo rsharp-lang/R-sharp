@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7273f4975941a97e97abc88c64775acd, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\IfBranch.vb"
+﻿#Region "Microsoft.VisualBasic::3350a637c94bea12437607c48d26dbe6, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\IfBranch.vb"
 
     ' Author:
     ' 
@@ -128,7 +128,7 @@ Namespace Interpreter.ExecuteEngine
             End If
 
             If True = Runtime.asLogical(test)(Scan0) Then
-                Dim env As New Environment(envir, stackFrame)
+                Dim env As New Environment(envir, stackFrame, isInherits:=False)
                 Dim resultVal As Object = trueClosure.Invoke(env, {})
 
                 Return New IfPromise(resultVal, True)

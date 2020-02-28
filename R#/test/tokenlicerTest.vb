@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6b5d6d17264eb2ea3792cd8c2f84c023, R#\test\tokenlicerTest.vb"
+﻿#Region "Microsoft.VisualBasic::481a0d7b20c4e61101c570750dbd7244, R#\test\tokenlicerTest.vb"
 
     ' Author:
     ' 
@@ -50,21 +50,24 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Module tokenlicerTest
 
     Sub Main()
-        Call customOperatorTest()
+        Call lambdaTest()
+        Call specialNameTest()
 
         Call regexpLiteral()
+
+        Call customOperatorTest()
+
+
         Call numberUnittest()
         Call sourceScriptTest()
 
-        Call specialNameTest()
+
         Call elementIndexer()
         Call cliInvoke()
 
         Call stringValueAssign()
         Call linqQueryTest()
         Call pipelineTest()
-
-        Call lambdaTest()
 
         Call sequnceTest()
         Call operatorTest()
@@ -83,7 +86,8 @@ Module tokenlicerTest
     End Sub
 
     Sub regexpLiteral()
-        Dim tokens = New Scanner("let s = !'\d+'('123,123,444,555,999,14523333','ig')").GetTokens.ToArray
+        ' Dim cli = New Scanner("@'hello'").GetTokens.ToArray
+        Dim tokens = New Scanner("$'\d{,5}';").GetTokens.ToArray
 
         Pause()
     End Sub
@@ -103,6 +107,7 @@ Module tokenlicerTest
     End Sub
 
     Sub specialNameTest()
+        Dim names = Rscript.FromText(".GlobalEnv + _ae86").GetTokens
         Dim tokens As Token() = Rscript.FromText("let x as string = (!script)$dir;").GetTokens
 
         Pause()
@@ -142,6 +147,8 @@ Module tokenlicerTest
     End Sub
 
     Sub lambdaTest()
+        Dim t = New Scanner("([]->x)()").GetTokens.ToArray
+
         Dim tokens = New Scanner("lapply(l, x -> x * 100)").GetTokens.ToArray
 
 

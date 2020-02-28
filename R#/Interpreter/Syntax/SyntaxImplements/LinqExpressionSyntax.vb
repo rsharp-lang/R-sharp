@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d1a80e061ccc3f40625670ec1cebf8ed, R#\Interpreter\Syntax\SyntaxImplements\LinqExpressionSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::1150f5ed2c15943954030465a49e42ae, R#\Interpreter\Syntax\SyntaxImplements\LinqExpressionSyntax.vb"
 
     ' Author:
     ' 
@@ -151,7 +151,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     .IteratesALL _
                     .SplitByTopLevelDelimiter(TokenType.operator, True) _
                     .DoCall(Function(blocks)
-                                Return SyntaxImplements.DeclareNewVariable(blocks, opts)
+                                Return SyntaxImplements.DeclareNewVariable(blocks, False, opts)
                             End Function)
 
                 If declares.isException Then

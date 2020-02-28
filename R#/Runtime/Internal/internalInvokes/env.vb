@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::caa191200f98f4c8609f001a3fea3e5b, R#\Runtime\Internal\internalInvokes\env.vb"
+﻿#Region "Microsoft.VisualBasic::4adb06cef364f2b2d70d6b9ec16a4ed2, R#\Runtime\Internal\internalInvokes\env.vb"
 
     ' Author:
     ' 
@@ -34,7 +34,8 @@
     '     Module env
     ' 
     '         Function: [get], CallInternal, doCall, environment, globalenv
-    '                   ls, objects, objectSize, traceback
+    '                   lockBinding, ls, objects, objectSize, traceback
+    '                   unlockBinding
     ' 
     ' 
     ' /********************************************************************************/
@@ -77,7 +78,7 @@ Namespace Runtime.Internal.Invokes
                 Return Internal.stop("NULL value provided for object name!", envir)
             End If
 
-            Dim symbol As Variable = envir.FindSymbol(name, [inherits])
+            Dim symbol As Symbol = envir.FindSymbol(name, [inherits])
 
             If symbol Is Nothing Then
                 Return Message.SymbolNotFound(envir, name, TypeCodes.generic)
@@ -128,7 +129,7 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <returns></returns>
         <ExportAPI("ls")>
-        Private Function ls(<RSymbolTextArgument> Optional name$ = Nothing, Optional env As Environment = Nothing) As Object
+        Private Function ls(<RSymbolTextArgument> Optional name$ = Nothing, Optional env As Environment = Nothing) As String()
             If name.StringEmpty Then
                 ' list all of the objects in current 
                 ' R# runtime environment
@@ -157,7 +158,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("objects")>
-        Private Function objects(env As Environment) As Object
+        Private Function objects(env As Environment) As String()
             Return env.variables.Keys.ToArray
         End Function
 
@@ -295,6 +296,46 @@ Namespace Runtime.Internal.Invokes
                     .TypeFullName = GetType(Message).FullName
                 }
             End If
+        End Function
+
+        ''' <summary>
+        ''' Binding and Environment Locking, Active Bindings
+        ''' </summary>
+        ''' <param name="sym">a name object or character string.</param>
+        ''' <param name="env">an environment.</param>
+        ''' <returns></returns>
+        <ExportAPI("lockBinding")>
+        Public Function lockBinding(sym As String(), Optional env As Environment = Nothing) As Object
+            Dim symbolObj As Symbol
+
+            For Each name As String In sym
+                symbolObj = env.FindSymbol(name)
+
+                If symbolObj Is Nothing Then
+                    Return Message.SymbolNotFound(env, name, TypeCodes.NA)
+                Else
+                    symbolObj.readonly = True
+                End If
+            Next
+
+            Return Nothing
+        End Function
+
+        <ExportAPI("unlockBinding")>
+        Public Function unlockBinding(sym As String(), Optional env As Environment = Nothing) As Object
+            Dim symbolObj As Symbol
+
+            For Each name As String In sym
+                symbolObj = env.FindSymbol(name)
+
+                If symbolObj Is Nothing Then
+                    Return Message.SymbolNotFound(env, name, TypeCodes.NA)
+                Else
+                    symbolObj.readonly = False
+                End If
+            Next
+
+            Return Nothing
         End Function
     End Module
 End Namespace

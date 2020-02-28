@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::59c28691cf24cb374dbd4f6967d5232c, R#\Runtime\Interop\RMethodArgument.vb"
+﻿#Region "Microsoft.VisualBasic::0e748b0d5b8038b336db6d37edd0b26b, R#\Runtime\Interop\RMethodArgument.vb"
 
     ' Author:
     ' 
@@ -122,16 +122,22 @@ Namespace Runtime.Interop
         End Function
 
         Public Shared Function ParseArgument(p As ParameterInfo) As RMethodArgument
+            ' System.MissingMethodException: .ctor 
+            Dim rawVectorFlag = p.GetCustomAttribute(Of RRawVectorArgumentAttribute)
+            Dim [default] = p.GetCustomAttribute(Of RDefaultValueAttribute)
+            Dim isObj As Boolean = Not p.GetCustomAttribute(Of RListObjectArgumentAttribute) Is Nothing
+            Dim isByref As Boolean = Not p.GetCustomAttribute(Of RByRefValueAssignAttribute) Is Nothing
+
             Return New RMethodArgument With {
                 .name = p.Name,
                 .type = RType.GetRSharpType(p.ParameterType),
-                .rawVectorFlag = p.GetCustomAttribute(Of RRawVectorArgumentAttribute),
-                .defaultScriptValue = p.GetCustomAttribute(Of RDefaultValueAttribute),
+                .rawVectorFlag = rawVectorFlag,
+                .defaultScriptValue = [default],
                 .[default] = getDefaultValue(.rawVectorFlag, .defaultScriptValue, p.ParameterType, p.DefaultValue),
                 .isOptional = p.HasDefaultValue,
-                .isObjectList = Not p.GetCustomAttribute(Of RListObjectArgumentAttribute) Is Nothing,
+                .isObjectList = isObj,
                 .isRequireRawVector = Not .rawVectorFlag Is Nothing,
-                .isByrefValueParameter = Not p.GetCustomAttribute(Of RByRefValueAssignAttribute) Is Nothing
+                .isByrefValueParameter = isByref
             }
         End Function
 

@@ -1,43 +1,44 @@
-﻿#Region "Microsoft.VisualBasic::865fe1ab5bcd13121d0403bcf207ec4a, Library\R.plot\plots.vb"
+﻿#Region "Microsoft.VisualBasic::1818e206c8d2f76f536d43e205390d17, Library\R.plot\plots.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-' Module plots
-' 
-'     Function: linearRegression, plot
-' 
-'     Sub: Main
-' 
-' /********************************************************************************/
+    ' Module plots
+    ' 
+    '     Function: CreateSerial, linearRegression, plot_binBox, plot_deSolveResult, plotFormula
+    '               plotODEResult, plotSerials
+    ' 
+    '     Sub: Main
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -47,6 +48,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.Bootstrapping
 Imports Microsoft.VisualBasic.Data.ChartPlots
+Imports Microsoft.VisualBasic.Data.ChartPlots.BarPlot.Histogram
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
 Imports Microsoft.VisualBasic.Data.ChartPlots.Plot3D
 Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics
@@ -55,13 +57,15 @@ Imports Microsoft.VisualBasic.Imaging.Drawing3D
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Math.Calculus
 Imports Microsoft.VisualBasic.Math.Calculus.Dynamics.Data
+Imports Microsoft.VisualBasic.Math.Distributions.BinBox
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
+Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports REnv = SMRUCC.Rsharp.Runtime.Internal
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 <Package("plot.charts")>
 Module plots
@@ -73,12 +77,38 @@ Module plots
 
     <RInitialize>
     Sub Main()
-        Call REnv.generic.add("plot", GetType(DeclareLambdaFunction), AddressOf plotFormula)
-        Call REnv.generic.add("plot", GetType(ODEOutput), AddressOf plotODEResult)
-        Call REnv.generic.add("plot", GetType(ODEsOut), AddressOf plot_deSolveResult)
-        Call REnv.generic.add("plot", GetType(SerialData()), AddressOf plotSerials)
-        Call REnv.generic.add("plot", GetType(SerialData), AddressOf plotSerials)
+        Call REnv.Internal.generic.add("plot", GetType(DeclareLambdaFunction), AddressOf plotFormula)
+        Call REnv.Internal.generic.add("plot", GetType(ODEOutput), AddressOf plotODEResult)
+        Call REnv.Internal.generic.add("plot", GetType(ODEsOut), AddressOf plot_deSolveResult)
+        Call REnv.Internal.generic.add("plot", GetType(SerialData()), AddressOf plotSerials)
+        Call REnv.Internal.generic.add("plot", GetType(SerialData), AddressOf plotSerials)
+        Call REnv.Internal.generic.add("plot", GetType(DataBinBox(Of Double)()), AddressOf plot_binBox)
     End Sub
+
+    Public Function plot_binBox(data As DataBinBox(Of Double)(), args As list, env As Environment) As Object
+        Dim step! = CSng(REnv.getFirst(args!steps))
+        Dim title$ = args.GetString("title", "Histogram Plot")
+        Dim xlab$ = args.GetString("x.lab", "X")
+        Dim ylab$ = args.GetString("y.lab", "Y")
+        Dim padding$ = InteropArgumentHelper.getPadding(args!padding)
+
+        If [step] <= 0 Then
+            ' guess step value from binbox width
+            [step] = data _
+                .Select(Function(bin)
+                            Return bin.Raw.Range.Length
+                        End Function) _
+                .Average
+        End If
+
+        Return data.HistogramPlot(
+            [step]:=[step],
+            serialsTitle:=title,
+            xLabel:=xlab,
+            yLabel:=ylab,
+            padding:=padding
+        )
+    End Function
 
     Public Function plot_deSolveResult(desolve As ODEsOut, args As list, env As Environment) As Object
         Dim vector As list = args!vector
@@ -122,7 +152,7 @@ Module plots
     ''' <returns></returns>
     Public Function plotFormula(math As DeclareLambdaFunction, args As list, env As Environment) As Object
         If Not args.hasName("x") Then
-            Return REnv.debug.stop("Missing parameter 'x' for plot function!", env)
+            Return REnv.Internal.debug.stop("Missing parameter 'x' for plot function!", env)
         End If
 
         Dim fx As Func(Of Double, Double) = math.CreateLambda(Of Double, Double)(env)

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::578d1387aa42edae39a5f1b39b35405e, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewFunction.vb"
+﻿#Region "Microsoft.VisualBasic::11510f63e1202c109f1abbf53b9ac198, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewFunction.vb"
 
     ' Author:
     ' 
@@ -107,7 +107,7 @@ Namespace Interpreter.ExecuteEngine
             If envir Is Nothing Then
                 envir = parent
             Else
-                envir = New Environment(parent, stackFrame)
+                envir = New Environment(parent, stackFrame, isInherits:=False)
             End If
 
             Dim argumentKeys As String()
@@ -162,7 +162,7 @@ Namespace Interpreter.ExecuteEngine
                     Call ValueAssign.doValueAssign(envir, names, True, value)
                 Else
                     ' 不存在，则插入新的
-                    Call DeclareNewVariable.PushNames(var.names, value, var.type, envir)
+                    Call DeclareNewVariable.PushNames(var.names, value, var.type, False, envir)
                 End If
             Next
 
@@ -171,7 +171,7 @@ Namespace Interpreter.ExecuteEngine
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim result = envir.Push(funcName, Me, TypeCodes.closure)
-            Me.envir = New Environment(envir, stackFrame)
+            Me.envir = New Environment(envir, stackFrame, isInherits:=True)
             Return result
         End Function
 

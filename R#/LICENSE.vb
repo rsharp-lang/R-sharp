@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::94e6f87e936c67ef2de65f6344b9c02f, R#\LICENSE.vb"
+﻿#Region "Microsoft.VisualBasic::4606b8530e6810cf84938f7a43cb73c9, R#\LICENSE.vb"
 
     ' Author:
     ' 
@@ -44,7 +44,7 @@
 Imports System.Runtime.CompilerServices
 
 ''' <summary>
-''' Information about this VisualBasic App framework code module.
+''' Information about the ``R#`` interpreter code module.
 ''' </summary>
 Public Module LICENSE
 

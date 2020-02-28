@@ -1,50 +1,50 @@
-﻿#Region "Microsoft.VisualBasic::c839398f1b1932fe5cf23d5e9e415619, R#\Language\TokenIcer\Scanner.vb"
+﻿#Region "Microsoft.VisualBasic::311e922df92dbfa0aa6b08d502c01c67, R#\Language\TokenIcer\Scanner.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class Scanner
-' 
-'         Properties: lastCharIsEscapeSplash
-' 
-'         Constructor: (+1 Overloads) Sub New
-'         Function: finalizeToken, GetTokens, populateToken, walkChar
-'         Class Escapes
-' 
-'             Function: ToString
-' 
-' 
-' 
-' 
-' /********************************************************************************/
+    '     Class Scanner
+    ' 
+    '         Properties: lastCharIsEscapeSplash
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    '         Function: finalizeToken, GetTokens, populateToken, walkChar
+    '         Class Escapes
+    ' 
+    '             Function: ToString
+    ' 
+    ' 
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -70,6 +70,7 @@ Namespace Language.TokenIcer
         ''' 当前的代码行号
         ''' </summary>
         Dim lineNumber As Integer = 1
+        Dim lastPopoutToken As Token
 
         Friend Class Escapes
 
@@ -153,12 +154,14 @@ Namespace Language.TokenIcer
                 .line = lineNumber
             }
             start = code.Position
+            lastPopoutToken = token
 
             If token.name = TokenType.comment Then
                 escape.comment = False
             ElseIf token.name = TokenType.stringLiteral OrElse
                    token.name = TokenType.stringInterpolation OrElse
-                   token.name = TokenType.cliShellInvoke Then
+                   token.name = TokenType.cliShellInvoke OrElse
+                   token.name = TokenType.regexp Then
 
                 escape.string = False
             End If
@@ -166,6 +169,7 @@ Namespace Language.TokenIcer
             Return token
         End Function
 
+        ReadOnly stringLiteralSymbols As Index(Of Char) = {""""c, "'"c, "`"c}
         ReadOnly delimiter As Index(Of Char) = {" "c, ASCII.TAB, ASCII.CR, ASCII.LF, "="c}
         ReadOnly open As Index(Of Char) = {"[", "{", "("}
         ReadOnly close As Index(Of Char) = {"]", "}", ")"}
@@ -223,6 +227,8 @@ Namespace Language.TokenIcer
                         If buffer(Scan0) = "@"c Then
                             ' cli shell invoke
                             expressionType = TokenType.cliShellInvoke
+                        ElseIf buffer(Scan0) = "$"c Then
+                            expressionType = TokenType.regexp
                         Else
                             expressionType = If(escape.stringEscape = "`"c, TokenType.stringInterpolation, TokenType.stringLiteral)
                         End If
@@ -304,6 +310,24 @@ Namespace Language.TokenIcer
             ElseIf c = ":"c Then
                 Return New Token With {.name = TokenType.sequence, .text = ":"}
             ElseIf c Like shortOperators Then
+                Dim peekNext As Char = code.Current
+
+                If c = "$"c AndAlso peekNext Like stringLiteralSymbols Then
+                    Static [like] As (TokenType, String) = (TokenType.keyword, "like")
+
+                    If lastPopoutToken Is Nothing OrElse
+                       lastPopoutToken.name = TokenType.comma OrElse
+                       lastPopoutToken.name = TokenType.open OrElse
+                       lastPopoutToken.name = TokenType.operator OrElse
+                       lastPopoutToken.name = TokenType.terminator OrElse
+                       lastPopoutToken = [like] Then
+
+                        buffer += "$"
+
+                        Return Nothing
+                    End If
+                End If
+
                 Return New Token With {.name = TokenType.operator, .text = c}
             ElseIf c Like delimiter Then
                 ' token delimiter
@@ -369,7 +393,7 @@ Namespace Language.TokenIcer
                         text = buffer.PopAll.CharString
                         buffer += bufferNext.Value
                     End If
-                ElseIf buffer = 1 AndAlso buffer(Scan0) = "@"c Then
+                ElseIf buffer = 1 AndAlso buffer(Scan0) = "@"c OrElse buffer(Scan0) = "$"c Then
                     Return Nothing
                 Else
                     text = buffer.PopAll.CharString
@@ -418,7 +442,7 @@ Namespace Language.TokenIcer
                         Return New Token With {.name = TokenType.integerLiteral, .text = text}
                     ElseIf Double.TryParse(text, Nothing) Then
                         Return New Token With {.name = TokenType.numberLiteral, .text = text}
-                    ElseIf text.IsPattern("[a-z][a-z0-9_\.]*") Then
+                    ElseIf text.IsPattern("([_\.])?[a-z][a-z0-9_\.]*") Then
                         Return New Token With {.name = TokenType.identifier, .text = text}
                     End If
 #If DEBUG Then

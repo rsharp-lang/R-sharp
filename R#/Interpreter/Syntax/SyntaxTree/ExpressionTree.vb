@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d290de33c6afb02c305b44e3eb37b84c, R#\Interpreter\Syntax\SyntaxTree\ExpressionTree.vb"
+﻿#Region "Microsoft.VisualBasic::5856c15739abe6db61d8342725a8f808, R#\Interpreter\Syntax\SyntaxTree\ExpressionTree.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Module ExpressionTree
     ' 
-    '         Function: CreateTree, ParseExpressionTree, simpleSequence
+    '         Function: CreateTree, ObjectInvoke, ParseExpressionTree, simpleSequence
     ' 
     ' 
     ' /********************************************************************************/
@@ -44,6 +44,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.SyntaxParser.SyntaxImplements
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 
@@ -93,6 +94,8 @@ Namespace Interpreter.SyntaxParser
                     Return SyntaxImplements.CommandLine(tokens(Scan0), opts)
                 ElseIf tokens(Scan0) = (TokenType.operator, "$") Then
                     Return New SymbolReference("$")
+                ElseIf tokens(Scan0).name = TokenType.regexp Then
+                    Return New Regexp(tokens(Scan0).text)
                 Else
                     blocks = New List(Of Token()) From {tokens}
                 End If
@@ -145,11 +148,7 @@ Namespace Interpreter.SyntaxParser
                                    splitTokens(2)(Scan0).text = "(" AndAlso
                                    splitTokens.Last.Length = 1 AndAlso splitTokens.Last(Scan0).text = ")" Then
 
-                                    Return SyntaxImplements.AnonymousFunctionInvoke(
-                                        anonymous:=splitTokens(Scan0).Skip(1).ToArray,
-                                        invoke:=splitTokens.Skip(2).IteratesALL.ToArray,
-                                        opts:=opts
-                                    )
+                                    Return splitTokens.ObjectInvoke(opts)
                                 Else
                                     Return New SyntaxResult(New SyntaxErrorException, opts.debug)
                                 End If
@@ -175,6 +174,28 @@ Namespace Interpreter.SyntaxParser
             End If
 
             Return New SyntaxResult(New NotImplementedException, opts.debug)
+        End Function
+
+        <Extension>
+        Private Function ObjectInvoke(splitTokens As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
+            Dim invokeTarget = splitTokens(Scan0).Skip(1).ToArray
+            Dim invoke = splitTokens.Skip(2).IteratesALL.ToArray
+
+            If splitTokens(Scan0)(1) = (TokenType.keyword, "function") Then
+                Return SyntaxImplements.AnonymousFunctionInvoke(
+                    anonymous:=invokeTarget,
+                    invoke:=invoke,
+                    opts:=opts
+                )
+            Else
+                Dim target As SyntaxResult = Expression.CreateExpression(invokeTarget, opts)
+
+                If target.isException Then
+                    Return target
+                Else
+                    Return target.AnonymousFunctionInvoke(invoke, invokeTarget(Scan0).span.line, opts)
+                End If
+            End If
         End Function
     End Module
 End Namespace

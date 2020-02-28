@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::86ba3076a1f739bd7c3659f3da0b03e7, R#\Runtime\System\Variable.vb"
+﻿#Region "Microsoft.VisualBasic::14eff588ce2c3be74f81d8856012e1a3, R#\Runtime\System\Symbol.vb"
 
     ' Author:
     ' 
@@ -31,13 +31,13 @@
 
     ' Summaries:
 
-    '     Class Variable
+    '     Class Symbol
     ' 
-    '         Properties: [typeof], constraint, constraintValid, length, name
-    '                     typeCode, typeId, value
+    '         Properties: [readonly], [typeof], constraint, constraintValid, length
+    '                     name, typeCode, typeId, value
     ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: GetValueViewString, ToString, ToVector
+    '         Constructor: (+2 Overloads) Sub New
+    '         Function: GetValueViewString, SetValue, ToString, ToVector
     ' 
     ' 
     ' /********************************************************************************/
@@ -56,22 +56,33 @@ Namespace Runtime.Components
     ''' <summary>
     ''' The variable model in R# language
     ''' </summary>
-    Public Class Variable : Implements INamedValue, Value(Of Object).IValueOf
+    Public Class Symbol : Implements INamedValue, Value(Of Object).IValueOf
 
         Public Property name As String Implements IKeyedEntity(Of String).Key
+
+        Dim m_val As Object
 
         ''' <summary>
         ''' 变量值对于基础类型而言，都是以数组的形式存储的
         ''' 非基础类型则为其值本身
         ''' </summary>
         ''' <returns></returns>
-        Public Overridable Property value As Object Implements Value(Of Object).IValueOf.Value
+        Public Property value As Object Implements Value(Of Object).IValueOf.Value
+            Get
+                Return m_val
+            End Get
+            Private Set(value As Object)
+                ' do nothing
+            End Set
+        End Property
 
         ''' <summary>
         ''' 当前的这个变量被约束的类型
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property constraint As TypeCodes
+
+        Public Property [readonly] As Boolean
 
         ''' <summary>
         ''' <see cref="RType.fullName"/>, key for <see cref="Environment.types"/>
@@ -150,12 +161,27 @@ Namespace Runtime.Components
             Me.constraint = constraint
         End Sub
 
+        Sub New(value As Object, Optional constraint As TypeCodes = TypeCodes.generic)
+            Me.New(constraint)
+            Me.m_val = value
+        End Sub
+
+        Public Function SetValue(x As Object, env As Environment) As Message
+            If [readonly] Then
+                Return Internal.stop($"cannot change value of locked binding for '{name}'", env)
+            Else
+                m_val = x
+            End If
+
+            Return Nothing
+        End Function
+
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function ToString() As String
             Return $"Dim {name} As ({typeCode}){Me.typeof.FullName} = {GetValueViewString(Me)}"
         End Function
 
-        Public Shared Function GetValueViewString(var As Variable) As String
+        Public Shared Function GetValueViewString(var As Symbol) As String
             Dim value = var.ToVector()
             Dim str$
 

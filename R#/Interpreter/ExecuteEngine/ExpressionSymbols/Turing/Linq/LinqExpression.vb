@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c6a0f5210a3e1483a12986b3a3df14df, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Linq\LinqExpression.vb"
+﻿#Region "Microsoft.VisualBasic::4db69cac4eb328961ea66dddf43a7b51, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Linq\LinqExpression.vb"
 
     ' Author:
     ' 
@@ -135,7 +135,7 @@ Namespace Interpreter.ExecuteEngine.Linq
         End Function
 
         Public Overrides Function Evaluate(parent As Environment) As Object
-            Dim env As New Environment(parent, stackFrame)
+            Dim env As New Environment(parent, stackFrame, isInherits:=False)
             Dim isList As Boolean = False
             ' 20191105
             ' 序列的产生需要放在变量申明之前

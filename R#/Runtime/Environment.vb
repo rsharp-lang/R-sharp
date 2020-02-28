@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::48adbb38125fbfba159def48b2089462, R#\Runtime\Environment.vb"
+﻿#Region "Microsoft.VisualBasic::c4d396f327973fd528cad57e2d3d43da, R#\Runtime\Environment.vb"
 
     ' Author:
     ' 
@@ -64,7 +64,7 @@ Namespace Runtime
     ''' <summary>
     ''' 在一个环境对象容器之中，所有的对象都是以变量来表示的
     ''' </summary>
-    Public Class Environment : Implements IEnumerable(Of Variable)
+    Public Class Environment : Implements IEnumerable(Of Symbol)
         Implements IDisposable
 
         ''' <summary>
@@ -77,7 +77,7 @@ Namespace Runtime
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property stackFrame As StackFrame
-        Public ReadOnly Property variables As Dictionary(Of Variable)
+        Public ReadOnly Property variables As Dictionary(Of Symbol)
         Public ReadOnly Property types As Dictionary(Of String, RType)
         ''' <summary>
         ''' 主要是存储警告消息
@@ -130,19 +130,17 @@ Namespace Runtime
         ''' If the current stack does not contains the target variable, then the program will try to find the variable in his parent
         ''' if variable in format like [var], then it means a global or parent environment variable
         ''' </remarks>
-        Default Public Property value(name As String) As Variable
+        Default Public Property value(name As String) As Symbol
             Get
-                Dim symbol As Variable = FindSymbol(name)
+                Dim symbol As Symbol = FindSymbol(name)
 
                 If symbol Is Nothing Then
-                    Return New Variable With {
-                        .value = Message.SymbolNotFound(Me, name, TypeCodes.generic)
-                    }
+                    Return New Symbol(Message.SymbolNotFound(Me, name, TypeCodes.generic))
                 Else
                     Return symbol
                 End If
             End Get
-            Set(value As Variable)
+            Set(value As Symbol)
                 If name.First = "["c AndAlso name.Last = "]"c Then
                     globalEnvironment(name.GetStackValue("[", "]")) = value
                 Else
@@ -155,19 +153,33 @@ Namespace Runtime
         Const ConstraintInvalid$ = "Value can not match the type constraint!!! ({0} <--> {1})"
 
         Sub New()
-            variables = New Dictionary(Of Variable)
+            variables = New Dictionary(Of Symbol)
             types = New Dictionary(Of String, RType)
             parent = Nothing
             [global] = Nothing
             stackFrame = globalStackFrame
         End Sub
 
-        Sub New(parent As Environment, stackFrame As StackFrame)
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="parent"></param>
+        ''' <param name="stackFrame"></param>
+        ''' <param name="isInherits">
+        ''' If is inherits mode, then all of the modification in sub-environment will affects the <paramref name="parent"/> environment.
+        ''' Otherwise, the modification in sub-environment will do nothing to the <paramref name="parent"/> environment.
+        ''' </param>
+        Sub New(parent As Environment, stackFrame As StackFrame, isInherits As Boolean)
             Call Me.New()
 
             Me.parent = parent
             Me.stackFrame = stackFrame
             Me.global = parent.globalEnvironment
+
+            If isInherits Then
+                variables = parent.variables
+                types = parent.types
+            End If
         End Sub
 
         Sub New(globalEnv As GlobalEnvironment)
@@ -200,7 +212,7 @@ Namespace Runtime
         ''' </summary>
         ''' <param name="name"></param>
         ''' <returns></returns>
-        Public Function FindSymbol(name As String, Optional [inherits] As Boolean = True) As Variable
+        Public Function FindSymbol(name As String, Optional [inherits] As Boolean = True) As Symbol
             If (name.First = "["c AndAlso name.Last = "]"c) Then
                 Return globalEnvironment.FindSymbol(name.GetStackValue("[", "]"))
             End If
@@ -240,17 +252,22 @@ Namespace Runtime
         ''' <param name="value"></param>
         ''' <param name="type"></param>
         ''' <returns></returns>
-        Public Function Push(name$, value As Object, Optional type As TypeCodes = TypeCodes.generic) As Object
+        Public Function Push(name$, value As Object, [readonly] As Boolean, Optional type As TypeCodes = TypeCodes.generic) As Object
             If variables.ContainsKey(name) Then
                 Return Internal.stop({String.Format(AlreadyExists, name)}, Me)
             ElseIf Not value Is Nothing Then
                 value = asRVector(type, value)
             End If
 
-            With New Variable(type) With {
-                .name = name,
-                .value = value
+            With New Symbol(type) With {
+                .name = name
             }
+                Call .SetValue(value, Me)
+
+                ' 只读开关应该在设置了初始值之后
+                ' 再进行设置，否则会无法设置初始值的
+                .[readonly] = [readonly]
+
                 If Not .constraintValid Then
                     Return Internal.stop(New Exception(String.Format(ConstraintInvalid, .typeCode, type)), Me)
                 Else
@@ -298,8 +315,8 @@ Namespace Runtime
             End If
         End Function
 
-        Public Iterator Function GetEnumerator() As IEnumerator(Of Variable) Implements IEnumerable(Of Variable).GetEnumerator
-            For Each var As Variable In variables.Values
+        Public Iterator Function GetEnumerator() As IEnumerator(Of Symbol) Implements IEnumerable(Of Symbol).GetEnumerator
+            For Each var As Symbol In variables.Values
                 Yield var
             Next
         End Function
