@@ -110,8 +110,7 @@ Module docs
     ReadOnly markdown As New MarkdownHTML
 
     <ExportAPI("markdown.docs")>
-    Public Function makeMarkdownDocs(package$, Optional env As Environment = Nothing) As String
-        Dim globalEnv As GlobalEnvironment = env.globalEnvironment
+    Public Function makeMarkdownDocs(package$, Optional globalEnv As GlobalEnvironment = Nothing) As String
         Dim apis As NamedValue(Of MethodInfo)() = globalEnv.packages _
             .FindPackage(package, Nothing) _
             .DoCall(AddressOf ImportsPackage.GetAllApi) _
@@ -133,14 +132,13 @@ Module docs
     ''' Create html help document for the specific package module
     ''' </summary>
     ''' <param name="package">The package name</param>
-    ''' <param name="env"></param>
+    ''' <param name="globalEnv"></param>
     ''' <returns></returns>
     ''' <remarks>
     ''' This method create a single html help page file for generates pdf help manual file.
     ''' </remarks>
     <ExportAPI("makehtml.docs")>
-    Public Function makeHtmlDocs(package$, Optional template$ = Nothing, Optional env As Environment = Nothing) As String
-        Dim globalEnv As GlobalEnvironment = env.globalEnvironment
+    Public Function makeHtmlDocs(package$, Optional template$ = Nothing, Optional globalEnv As GlobalEnvironment = Nothing) As String
         Dim apis As NamedValue(Of MethodInfo)() = globalEnv.packages _
             .FindPackage(package, Nothing) _
             .DoCall(AddressOf ImportsPackage.GetAllApi) _
