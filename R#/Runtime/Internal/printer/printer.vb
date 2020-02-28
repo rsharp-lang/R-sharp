@@ -164,7 +164,7 @@ Namespace Runtime.Internal.ConsolePrinter
                 Call DirectCast(x, list) _
                     .slots _
                     .DoCall(Sub(list)
-                                list.printList(listPrefix, maxPrint, env)
+                                DirectCast(list, IDictionary).printList(listPrefix, maxPrint, env)
                             End Sub)
             ElseIf valueType Is GetType(dataframe) Then
                 Call DirectCast(x, dataframe) _
