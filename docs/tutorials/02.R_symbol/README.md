@@ -1,4 +1,4 @@
-# Declare a symbol in ``R#``
+# Symbol object in ``R#``
 
 A symbol in R# language is a concept which is corresponding to a variable in other programming language. In R language you can use a symbol without declare it explicitly, but the R# not allowes such implicit declaration on create a new symbol, which means all of the symbol that you used in your script must declared first. There are two key words that can be used for declare a new symbol, ``let`` and ``const``:
 
