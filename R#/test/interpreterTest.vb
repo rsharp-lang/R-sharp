@@ -74,6 +74,9 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+
+        Call headTest()
+
         Call lambdaTest3()
         Call constantTest()
         Call regexpTest()
@@ -174,6 +177,11 @@ Module interpreterTest
         Call stringInterpolateTest()
 
 
+        Pause()
+    End Sub
+
+    Sub headTest()
+        Call R.Evaluate("print(head(1:100))")
         Pause()
     End Sub
 

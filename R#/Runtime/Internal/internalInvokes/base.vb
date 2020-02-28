@@ -1,50 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::fac315e9169ab766b7637706131dc937, R#\Runtime\Internal\internalInvokes\base.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module base
-    ' 
-    '         Function: [stop], all, any, append, cat
-    '                   colnames, createDotNetExceptionMessage, CreateMessageInternal, doPrintInternal, getEnvironmentStack
-    '                   getOption, invisible, invokeArgument, isEmpty, lapply
-    '                   length, names, ncol, neg, nrow
-    '                   options, print, Rdataframe, rep, replace
-    '                   Rlist, rownames, sapply, source, str
-    '                   summary, warning
-    ' 
-    '         Sub: q, quit
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module base
+' 
+'         Function: [stop], all, any, append, cat
+'                   colnames, createDotNetExceptionMessage, CreateMessageInternal, doPrintInternal, getEnvironmentStack
+'                   getOption, invisible, invokeArgument, isEmpty, lapply
+'                   length, names, ncol, neg, nrow
+'                   options, print, Rdataframe, rep, replace
+'                   Rlist, rownames, sapply, source, str
+'                   summary, warning
+' 
+'         Sub: q, quit
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -71,6 +71,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Configuration
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports RObj = SMRUCC.Rsharp.Runtime.Internal.Object
+Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 
 Namespace Runtime.Internal.Invokes
 
@@ -856,6 +857,86 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         Dim markdown As MarkdownRender = MarkdownRender.DefaultStyleRender
+
+        <ExportAPI("head")>
+        Public Function head(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+            If x Is Nothing Then
+                Return x
+            ElseIf x.GetType.IsArray Then
+                x = New vector With {.data = x}
+            ElseIf x.GetType.ImplementInterface(GetType(IDictionary(Of String, Object))) Then
+                x = New list With {.slots = x}
+            End If
+
+            Dim type As Type = x.GetType
+            Dim length% = 6
+
+            If type Is GetType(vector) Then
+                Dim v As vector = DirectCast(x, vector)
+
+                If v.length <= length Then
+                    Return x
+                Else
+                    Dim data As Array = Array.CreateInstance(v.type.raw, length)
+
+                    For i As Integer = 0 To data.Length - 1
+                        data.SetValue(v.data.GetValue(i), i)
+                    Next
+
+                    Return New vector With {.data = data}
+                End If
+            ElseIf type Is GetType(list) Then
+                Dim l As list = DirectCast(x, list)
+
+                If l.length <= length Then
+                    Return l
+                Else
+                    Return New list With {
+                        .slots = l.slots.Keys _
+                            .Take(length) _
+                            .ToDictionary(Function(key) key,
+                                          Function(key)
+                                              Return l.slots(key)
+                                          End Function)
+                    }
+                End If
+            ElseIf type Is GetType(dataframe) Then
+                Dim df As dataframe = DirectCast(x, dataframe)
+
+                If df.nrows <= length Then
+                    Return df
+                Else
+                    Dim data As New Dictionary(Of String, Array)
+                    Dim colVal As Array
+                    Dim colSubset As Array
+
+                    For Each col In df.columns
+                        If col.Value.Length = 1 Then
+                            data.Add(col.Key, col.Value)
+                        Else
+                            colVal = col.Value
+                            colSubset = Array.CreateInstance(colVal.GetType.GetElementType, length)
+
+                            For i As Integer = 0 To length - 1
+                                colSubset.SetValue(colVal.GetValue(i), i)
+                            Next
+
+                            data.Add(col.Key, colSubset)
+                        End If
+                    Next
+
+                    Return New dataframe With {
+                        .columns = data,
+                        .rownames = df.rownames _
+                            .SafeQuery _
+                            .Take(length) _
+                            .ToArray
+                    }
+                End If
+            Else
+                Return x
+            End If
+        End Function
 
         ''' <summary>
         ''' # Print Values
