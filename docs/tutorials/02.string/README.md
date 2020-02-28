@@ -1,6 +1,6 @@
 [&lt; Back to index](../)
 
-# String in R#
+# String in ``R#``
 
 ### Literal a string
 
@@ -28,14 +28,35 @@ sprintf("Hello %s!", c("World", "User"))
 ### Regular Expression
 
 ```R
-# Please notice that, the ``string`` type is a kind of 
+# Please notice that, the ``string`` type is a kind of
 # primitive type(character vector type) in R# language
 let text as string = ["ABC", "123", "333"];
+# and then we could
+# do sub-string matches by the given regex pattern:
 let numbers = $"\d+"(text);
 # [3] "" "123" "333"
 ```
 
 The syntax of declare a regular expression in R# language is much simple, you just required put a ``$`` symbol in front of your pattern string, example as ``$"\d"`` is a regular expression literal in R# language. For make the R# code more readable, using the string interpolation for the literal of regular expression pattern string is not allowed, so the syntax of <code>$`\d+`</code> is illegal.
+
+#### Regular Expression options?
+
+There is no way to use literal syntax for create a new regular expression pattern object with tweaks of some options, such as ignore case, multiple line mode, etc. The regular expression object literal syntax in R# language is a kind of syntax sugar for the internal api ``base::regexp(pattern, options)``. So if you want to create a new regular expression object with tweaks of the pattern, please do following:
+
+```R
+# The regex pattern object will match all alphabets
+# character with ignore case options.
+let alphabets = base::regexp("[a-z]", "i");
+
+# The example demo show above is not equals to the 
+# object literal demo:
+# The lowercase_alphabets literal object have the same 
+# pattern input with the alphabets symbol. But due to
+# the reason of missing i option in lowercase_alphabets 
+# literal object, the regexp lowercase_alphabets can only 
+# match the lower case alphabets.
+let lowercase_alphabets = $"[a-z]";
+```
 
 ### String pattern comparision
 
