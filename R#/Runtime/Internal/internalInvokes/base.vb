@@ -879,7 +879,7 @@ Namespace Runtime.Internal.Invokes
                 Else
                     Dim data As Array = Array.CreateInstance(v.type.raw, length)
 
-                    For i As Integer = 0 To data.Length
+                    For i As Integer = 0 To data.Length - 1
                         data.SetValue(v.data.GetValue(i), i)
                     Next
 
