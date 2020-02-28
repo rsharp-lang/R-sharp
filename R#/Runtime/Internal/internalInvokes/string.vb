@@ -88,11 +88,15 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("json")>
-        Public Function json(<RRawVectorArgument> x As Object, env As Environment) As Object
+        Public Function json(<RRawVectorArgument>
+                             x As Object,
+                             Optional compress As Boolean = True,
+                             Optional env As Environment = Nothing) As Object
+
             If x Is Nothing Then
                 Return "null"
             Else
-                Return JsonContract.GetObjectJson(x.GetType, x)
+                Return JsonContract.GetObjectJson(x.GetType, x, indent:=Not compress)
             End If
         End Function
 
