@@ -1,5 +1,7 @@
 # Symbol object in ``R#``
 
+## Declare a new symbol
+
 A symbol in R# language is a concept which is corresponding to a variable in other programming language. In R language you can use a symbol without declare it explicitly, but the R# not allowes such implicit declaration on create a new symbol, which means all of the symbol that you used in your script must declared first. There are two key words that can be used for declare a new symbol, ``let`` and ``const``:
 
 ```R
@@ -90,7 +92,7 @@ print(c);
 # [1] 1 2 3 4 5
 ```
 
-#### Syntax suger tips
+### Syntax suger tips
 
 The R# language is not allowes declares multiple symbol in one expression, such as
 
@@ -105,3 +107,37 @@ If you want to declares multiple symbols in one expression, you should use the t
 ```R
 let [a, b, c];
 ```
+
+## ByRef or ByVal
+
+There are two symbol that you can use for assign value to a given symbol in R language, they are both the same in R language, example as:
+
+```R
+a <- 9;
+b = 99;
+```
+
+But these two symbol for doing value assign in R# have different effects: ``<-`` means value assign(byval), and ``=`` means value reference(byref), example as:
+
+```R
+a <- 9;
+# byval: do value assign
+b <- a;
+
+a[2] <- 8;
+print(a);
+# [1] 9 8
+print(b);
+# [1] 9
+
+# byref: do assign of the value object reference
+b = a;
+b[3] <- 7;
+a[4] <- 6;
+print(a);
+# [1] 9 8 7 6
+print(b);
+# [1] 9 8 7 6
+```
+
+> Please note that, the byref and byval is only affect the **primitive vector type and ``list`` type** in R# language. 
