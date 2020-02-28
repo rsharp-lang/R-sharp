@@ -34,61 +34,44 @@
 
 ##  2. <a name='Variable'></a>Variable
 
-Variable in ``R#`` should be declared by a ``local``/``global`` keyword, and using ``<-`` or ``=`` operator for value initialize by a expression. If the variable declaration not follow by a value initialize expression, then by default its value is set to ``NULL``:
+Variable in ``R#`` should be declared by a ``let``/``const`` keyword, and using ``<-`` or ``=`` operator for value initialize by a expression. If the variable declaration not follow by a value initialize expression, then by default its value is set to ``NULL``:
 
 ```R
-local s <- "12345";
-local x <- |1, 2, 3, 4, 5|;
+let s <- "12345";
+const x <- [1, 2, 3, 4, 5];
 
-global matrix <-
-  [|1, 2, 3|,
-   |4, 5, 6|,
-   |7, 8, 9|];
+let matrix <- [
+   [1, 2, 3],
+   [4, 5, 6],
+   [7, 8, 9]
+];
 
-local x;
+let x;
 # is equals to
-local x <- NULL;
+let x <- NULL;
 ```
 
-> + ``local`` keyword is allowed appears in a closure(function/if/loop, etc) body or top level scope
-> + ``global`` keyword is not allowed used in any closure body for variable decalred, ``global`` is only allowed used in top level scope.
-> + If a variable in a top level scope is declared as ``local``, then it will not accessable in a function closure body, but if/loop closure will works.
-> + If a variable in a top level scope is declared as ``global``, then it can be access in any scope, for access such global variable in a function body, use ``[]`` wrap the variable name to mark it as global.
+> + ``let`` keyword is allowed appears in a closure(function/if/loop, etc) body or top level scope
+> + ``const`` keyword is almost doing the same thing as the ``let`` keyword it does, but the different of ``const`` keyword it does is mark the target symbol is readonly. Run ``lockBinding`` on target symbol automatically.
 
 ```R
-# An example about variable declare/access
+let x = 9;
 
-# This is the top level scope
-# both local/global are working
+print(x);
+# [1] 9
+x <- FALSE;
+print(x);
+# [1] FALSE
 
-# local x only can be accessed in current top level scope
-local x <- 9;
+const y = 9;
 
-test1 <- function() {
-    # object x not found error
-    return x;
-}
-
-# global y can be accessed at everywhere
-global y <- TRUE;
-
-test2 <- function() {
-    # success
-    return y;
-}
-
-test3 <- function() {
-    local y <- |888,888,88|;
-
-    # print a local variable y
-    print(y);
-    # print a global variable y
-    print([y]);
-}
-
+print(y);
+#[1] 9
+y <- FALSE;
+# error, symbol y is readonly
 ```
 
-Delcare a vector or matrix will no longer required of the ``c(...)`` function or ``matrix`` function. Almost keeps the same as the VisualBasic language it does:
+Delcare a vector or matrix will no longer required of the ``c(...)`` function or ``matrix()`` function. Almost keeps the same as the VB.NET language it does:
 
 ```vbnet
 Dim s = "12345"
@@ -100,14 +83,23 @@ Dim m = {
 }
 ```
 
+```R
+let s = "12345";
+let x = [1, 2, 3, 4, 5];
+let m = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+];
+```
+
 By default, all of the primitive types in R# is an vector, and user defined type is a single value. So that in R#, ``integer`` means an integer type vector, ``char`` means a character type vector, or string value. ``string`` type in R# is a ``character`` vector.
 
 In the traditional R language, you can using both ``=`` or ``<-`` operator for value assign, all of these two operator are both OK. But in ``R#`` language these two operator have slightly difference: value asssign using ``<-`` operator means ``ByVal``, and value assign using ``=`` operator means ``ByRef``:
 
 ```R
-local a <- |1, 2, 3, 4, 5|;
-
-local b1, b2;
+let a <- [1, 2, 3, 4, 5];
+let b1, b2 as integer;
 
 b1 <- a;  # ByVal
 b2 =  a;  # ByRef
@@ -174,7 +166,7 @@ Generally, the R language is not designed as an OOP language, and the R# languag
 
 ```R
 # it works, but too verbose
-local obj <- list();
+let obj <- list();
 
 obj$a <- 123;
 obj$b <- "+++";
@@ -182,10 +174,10 @@ obj$b <- "+++";
 # it also works, but this statement is not elegant when you have 
 # a lot of list property slot required to put into the R# list object
 # variable.
-var obj <- list(a = 123, b = "+++");
+let obj <- list(a = 123, b = "+++");
 
 # using with for object property initialize
-var obj <- list(list = |TRUE, TRUE, TRUE, FALSE|, flag = 0) with {
+let obj <- list(list = [TRUE, TRUE, TRUE, FALSE], flag = 0) with {
     $a <- 123;
     $b <- "+++";
 }
@@ -203,7 +195,7 @@ Dim obj As New <userType> With {
 Using the ``with{}`` closure you can also using for dynamics add/modify property value in a more brief way:
 
 ```R
-create_Foo <- function() {
+let create_Foo as function() {
 	return list() with {
 
 		# please notice that, this operator required of the $name property in this user type
@@ -215,12 +207,12 @@ create_Foo <- function() {
 	}
 }
 
-using_my_name <- function() {
+let using_my_name as function() {
 	return create_Foo() with {
 		$name <- "123";
 	}
 }
-using_selected_name <- function(names as string) {
+let using_selected_name as function(names as string) {
 	return create_Foo() with {
 		$name <- names;
 	}
@@ -228,8 +220,8 @@ using_selected_name <- function(names as string) {
 
 # The ``with{}`` closure which show above is equivalent to this code
 # But this code function is too verbose
-using_selected_name <- function(names as string) {
-	var o <- create_Foo();
+let using_selected_name as function(names as string) {
+	let o <- create_Foo();
 	o$name <- name;
 	return o;
 }
@@ -238,14 +230,15 @@ using_selected_name <- function(names as string) {
 generally, the parameter in a R# function is generic type, so that a function its definition like:
 
 ```R
-test <- function(x) {
+let test as function(x) {
+    # ...
 }
 ```
 
 can accept any type you have input. but you can using the ``param as <type>`` for constraint the type to a specific type(currently the user type that produced by ``list()`` function is not supported by this type constraint feature):
 
 ```R
-test.integer <- function(x as integer) {
+let test.integer as function(x as integer) {
     # the type constraint means the parameter only allow the integer vector type
     # if the parameter is a string vector, then the interpreter will throw exceptions.
 }
