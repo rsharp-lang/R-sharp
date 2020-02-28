@@ -388,6 +388,7 @@
     <Compile Include="Runtime\Internal\objects\pipeline.vb" />
     <Compile Include="Runtime\Internal\objects\RConversion\makeDataframe.vb" />
     <Compile Include="Runtime\Internal\objects\RConversion\makeList.vb" />
+    <Compile Include="Runtime\Internal\objects\RConversion\castList.vb" />
     <Compile Include="Runtime\Internal\objects\reflector.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\strings.vb" />
     <Compile Include="Runtime\Internal\objects\invisible.vb" />
