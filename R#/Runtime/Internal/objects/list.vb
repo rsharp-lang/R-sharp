@@ -1,47 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::db70d3dfe599fe2402a2ceb79ecadebc, R#\Runtime\Internal\objects\list.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class list
-    ' 
-    '         Properties: length, slots
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: (+2 Overloads) getByIndex, (+2 Overloads) getByName, getNames, GetSlots, hasName
-    '                   namedValues, setByindex, setByIndex, (+2 Overloads) setByName, setNames
-    '                   ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class list
+' 
+'         Properties: length, slots
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: (+2 Overloads) getByIndex, (+2 Overloads) getByName, getNames, GetSlots, hasName
+'                   namedValues, setByindex, setByIndex, (+2 Overloads) setByName, setNames
+'                   ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -54,7 +54,7 @@ Namespace Runtime.Internal.Object
 
     Public Class list : Implements RNames, RIndex, RNameIndex
 
-        Public Property slots As Dictionary(Of String, Object)
+        Public Property slots As IDictionary(Of String, Object)
 
         Public ReadOnly Property length As Integer Implements RIndex.length
             Get
@@ -228,7 +228,7 @@ Namespace Runtime.Internal.Object
             Return result.ToArray
         End Function
 
-        Public Shared Function GetSlots(any As Object) As Dictionary(Of String, Object)
+        Public Shared Function GetSlots(any As Object) As IDictionary(Of String, Object)
             If any Is Nothing Then
                 Return Nothing
             End If
@@ -237,7 +237,7 @@ Namespace Runtime.Internal.Object
 
             If type Is GetType(list) Then
                 Return DirectCast(any, list).slots
-            ElseIf type Is GetType(Dictionary(Of String, Object)) Then
+            ElseIf type Is GetType(IDictionary(Of String, Object)) Then
                 Return any
             Else
                 Return Nothing
