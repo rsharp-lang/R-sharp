@@ -361,6 +361,11 @@ Namespace Runtime.Internal.Object.Converts
                 End If
             ElseIf type.IsEnum Then
                 Return CastToEnum(obj, type, env)
+            ElseIf obj.GetType Is GetType(Environment) AndAlso type Is GetType(GlobalEnvironment) Then
+                ' fix the type mismatch bugs for passing value to 
+                ' a API parameter which its data type is a global 
+                ' environment.
+                Return DirectCast(obj, Environment).globalEnvironment
             End If
 
             Return Conversion.CTypeDynamic(obj, type)

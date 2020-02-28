@@ -132,9 +132,12 @@ Module docs
     ''' <summary>
     ''' Create html help document for the specific package module
     ''' </summary>
-    ''' <param name="package$"></param>
+    ''' <param name="package">The package name</param>
     ''' <param name="env"></param>
     ''' <returns></returns>
+    ''' <remarks>
+    ''' This method create a single html help page file for generates pdf help manual file.
+    ''' </remarks>
     <ExportAPI("makehtml.docs")>
     Public Function makeHtmlDocs(package$, Optional template$ = Nothing, Optional env As Environment = Nothing) As String
         Dim globalEnv As GlobalEnvironment = env.globalEnvironment
@@ -254,5 +257,9 @@ Module docs
             .JoinBy(vbCrLf)
 
         Return list.ToString
+    End Function
+
+    Public Function PackageIndex()
+
     End Function
 End Module
