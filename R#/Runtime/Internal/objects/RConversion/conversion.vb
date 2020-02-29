@@ -361,7 +361,7 @@ Namespace Runtime.Internal.Object.Converts
                 End If
             ElseIf obj.GetType Is GetType(list) AndAlso type.GetGenericTypeDefinition Is GetType(Dictionary(Of ,)) Then
                 ' cast R# list object to any dictionary table object???
-                Throw New NotImplementedException
+                Return DirectCast(obj, list).CTypeList(type, env)
             ElseIf type.IsEnum Then
                 Return CastToEnum(obj, type, env)
             ElseIf obj.GetType Is GetType(Environment) AndAlso type Is GetType(GlobalEnvironment) Then
