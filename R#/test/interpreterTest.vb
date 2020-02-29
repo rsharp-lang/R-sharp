@@ -74,7 +74,7 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
-
+        Call withTest()
         Call headTest()
 
         Call lambdaTest3()
@@ -176,6 +176,22 @@ Module interpreterTest
 
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub withTest()
+        Call R.Evaluate("let x <- list() with {
+   a <- 999;
+   b <- [FALSE, TRUE];
+    c <- function() {
+   a + 1;
+}
+}")
+        Call R.Print("x$a")
+        Call R.Print("x$b")
+        Call R.Print("x$c")
+        Call R.Print("x$c()")
 
         Pause()
     End Sub
