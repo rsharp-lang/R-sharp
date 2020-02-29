@@ -1207,5 +1207,36 @@ Namespace Runtime.Internal.Invokes
 
             Call App.Exit(status)
         End Sub
+
+        <ExportAPI("auto")>
+        <RApiReturn(GetType(RDispose))>
+        Public Function autoDispose(x As Object, dispose As Object, Optional env As Environment = Nothing) As Object
+            ' using a as x :> auto(o -> ...) {
+            '    ...
+            ' }
+            Dim final As Action(Of Object)
+
+            If dispose Is Nothing Then
+                final = Sub()
+                            ' do nothing
+                        End Sub
+            ElseIf TypeOf dispose Is Action Then
+                final = Sub() Call DirectCast(dispose, Action)()
+            ElseIf TypeOf dispose Is Action(Of Object) Then
+                final = DirectCast(dispose, Action(Of Object))
+            ElseIf TypeOf dispose Is RMethodInfo Then
+                final = Sub(obj)
+                            Call DirectCast(dispose, RMethodInfo).Invoke(env, invokeArgument(obj))
+                        End Sub
+            ElseIf dispose.GetType.ImplementInterface(GetType(RFunction)) Then
+                final = Sub(obj)
+                            Call DirectCast(dispose, RFunction).Invoke(env, invokeArgument(obj))
+                        End Sub
+            Else
+                Return Internal.stop(New InvalidProgramException(dispose.GetType.FullName), env)
+            End If
+
+            Return New RDispose(x, final)
+        End Function
     End Module
 End Namespace

@@ -50,6 +50,13 @@ Namespace Interpreter.SyntaxParser
 
         Public debug As Boolean = False
         Public source As Rscript
+        Public [error] As String
+
+        Public ReadOnly Property haveSyntaxErr As Boolean
+            Get
+                Return Not [error].StringEmpty
+            End Get
+        End Property
 
         Public Function GetStackTrace(token As Token, Optional name$ = Nothing) As StackFrame
             Return New StackFrame With {

@@ -205,15 +205,21 @@ Namespace Interpreter
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Shared Function CreateProgram(Rscript As Rscript, Optional debug As Boolean = False) As Program
+        Public Shared Function CreateProgram(Rscript As Rscript, Optional debug As Boolean = False, Optional ByRef error$ = Nothing) As Program
+            Dim opts As New SyntaxBuilderOptions With {.debug = debug, .source = Rscript}
             Dim exec As Expression() = Rscript _
-                .GetExpressions(New SyntaxBuilderOptions With {.debug = debug, .source = Rscript}) _
+                .GetExpressions(opts) _
                 .ToArray
 
-            Return New Program With {
-                .execQueue = exec,
-                .Rscript = Rscript
-            }
+            If opts.haveSyntaxErr Then
+                [error] = opts.error
+                Return Nothing
+            Else
+                Return New Program With {
+                    .execQueue = exec,
+                    .Rscript = Rscript
+                }
+            End If
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
@@ -234,12 +240,11 @@ Namespace Interpreter
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
-        Public Shared Function BuildProgram(scriptText As String, Optional debug As Boolean = False) As Program
-            Return Rscript _
-                .AutoHandleScript(scriptText) _
-                .DoCall(Function(script)
-                            Return CreateProgram(script, debug)
-                        End Function)
+        Public Shared Function BuildProgram(scriptText As String, Optional debug As Boolean = False, Optional ByRef error$ = Nothing) As Program
+            Dim script = Rscript.AutoHandleScript(scriptText)
+            Dim program As Program = CreateProgram(script, debug, [error])
+
+            Return program
         End Function
 
         Public Iterator Function GetEnumerator() As IEnumerator(Of Expression) Implements IEnumerable(Of Expression).GetEnumerator
