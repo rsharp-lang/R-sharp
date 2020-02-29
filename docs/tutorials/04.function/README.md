@@ -52,3 +52,4 @@ a <- x => ...;
 ```
 
 ### difference between lambda function and the closure function
+
