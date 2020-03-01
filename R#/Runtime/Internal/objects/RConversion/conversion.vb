@@ -1,48 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::834574090ae48f43c3d63ae012509942, R#\Runtime\Internal\objects\RConversion\conversion.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module RConversion
-    ' 
-    '         Function: asCharacters, asDataframe, asDate, asInteger, asList
-    '                   asLogicals, asNumeric, asObject, CastToEnum, CTypeDynamic
-    '                   isCharacter, listInternal, unlist, unlistOfRList
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module RConversion
+' 
+'         Function: asCharacters, asDataframe, asDate, asInteger, asList
+'                   asLogicals, asNumeric, asObject, CastToEnum, CTypeDynamic
+'                   isCharacter, listInternal, unlist, unlistOfRList
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Reflection
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
@@ -213,6 +215,66 @@ Namespace Runtime.Internal.Object.Converts
             End If
         End Function
 
+        <ExportAPI("as.vector")>
+        Public Function asVector(obj As Object, Optional env As Environment = Nothing) As Object
+            If obj Is Nothing Then
+                Return obj
+            End If
+
+            If TypeOf obj Is vector Then
+                Return obj
+            ElseIf obj.GetType.IsArray Then
+                Return New vector With {.data = obj}
+            Else
+                Dim interfaces = obj.GetType.GetInterfaces
+
+                ' array of <T>
+                For Each type In interfaces
+                    If type.GetGenericTypeDefinition Is GetType(IEnumerable(Of )) Then
+                        Dim generic As Type = type.GenericTypeArguments(Scan0)
+                        Dim buffer As Object = Activator.CreateInstance(GetType(List(Of )).MakeGenericType(generic))
+                        Dim add As MethodInfo = buffer.GetType.GetMethod("Add", BindingFlags.Public Or BindingFlags.Instance)
+
+                        ' get element count by list
+                        For Each x As Object In DirectCast(obj, IEnumerable)
+                            Call add.Invoke(buffer, {x})
+                        Next
+
+                        ' write buffered data to vector
+                        Dim vec As Array = Array.CreateInstance(generic, DirectCast(buffer, IList).Count)
+                        Dim i As i32 = Scan0
+
+                        For Each x As Object In DirectCast(buffer, IEnumerable)
+                            vec.SetValue(x, ++i)
+                        Next
+
+                        Return New vector With {.data = vec}
+
+                    ElseIf type.GetGenericTypeDefinition Is GetType(Enumeration(Of )) Then
+                        ' not supports?
+                    End If
+                Next
+
+                ' array of object
+                For Each type In interfaces
+                    If type Is GetType(IEnumerable) Then
+                        Dim buffer As New List(Of Object)
+
+                        For Each x As Object In DirectCast(obj, IEnumerable)
+                            buffer.Add(x)
+                        Next
+
+                        Return New vector With {.data = buffer.ToArray}
+                    End If
+                Next
+
+                ' obj is not a vector type
+                env.AddMessage($"target object of '{obj.GetType.FullName}' can not be convert to a vector.", MSG_TYPES.WRN)
+
+                Return obj
+            End If
+        End Function
+
         ''' <summary>
         ''' Cast the raw dictionary object to R# list object
         ''' </summary>
@@ -225,42 +287,6 @@ Namespace Runtime.Internal.Object.Converts
             Else
                 Return listInternal(obj, base.Rlist(args, envir))
             End If
-        End Function
-
-        Private Function listInternal(obj As Object, args As list) As list
-            Dim type As Type = obj.GetType
-
-            Select Case type
-                Case GetType(Dictionary(Of String, Object))
-                    Return New list With {.slots = obj}
-                Case GetType(list)
-                    Return obj
-                Case GetType(vbObject)
-                    ' object property as list data
-                    Return DirectCast(obj, vbObject).toList
-                Case GetType(dataframe)
-                    Dim byRow As Boolean = Runtime.asLogical(args!byrow)(Scan0)
-
-                    If byRow Then
-                        Return DirectCast(obj, dataframe).listByRows
-                    Else
-                        Return DirectCast(obj, dataframe).listByColumns
-                    End If
-                Case Else
-                    If type.ImplementInterface(GetType(IDictionary)) Then
-                        Dim objList As New Dictionary(Of String, Object)
-
-                        With DirectCast(obj, IDictionary)
-                            For Each key As Object In .Keys
-                                Call objList.Add(Scripting.ToString(key), .Item(key))
-                            Next
-                        End With
-
-                        Return New list With {.slots = objList}
-                    Else
-                        Throw New NotImplementedException
-                    End If
-            End Select
         End Function
 
         ''' <summary>

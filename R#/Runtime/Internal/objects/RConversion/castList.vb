@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Emit.Delegates
 
 Namespace Runtime.Internal.Object.Converts
 
@@ -24,5 +25,40 @@ Namespace Runtime.Internal.Object.Converts
             Return table
         End Function
 
+        Friend Function listInternal(obj As Object, args As list) As list
+            Dim type As Type = obj.GetType
+
+            Select Case type
+                Case GetType(Dictionary(Of String, Object))
+                    Return New list With {.slots = obj}
+                Case GetType(list)
+                    Return obj
+                Case GetType(vbObject)
+                    ' object property as list data
+                    Return DirectCast(obj, vbObject).toList
+                Case GetType(dataframe)
+                    Dim byRow As Boolean = Runtime.asLogical(args!byrow)(Scan0)
+
+                    If byRow Then
+                        Return DirectCast(obj, dataframe).listByRows
+                    Else
+                        Return DirectCast(obj, dataframe).listByColumns
+                    End If
+                Case Else
+                    If type.ImplementInterface(GetType(IDictionary)) Then
+                        Dim objList As New Dictionary(Of String, Object)
+
+                        With DirectCast(obj, IDictionary)
+                            For Each key As Object In .Keys
+                                Call objList.Add(Scripting.ToString(key), .Item(key))
+                            Next
+                        End With
+
+                        Return New list With {.slots = objList}
+                    Else
+                        Throw New NotImplementedException
+                    End If
+            End Select
+        End Function
     End Module
 End Namespace
