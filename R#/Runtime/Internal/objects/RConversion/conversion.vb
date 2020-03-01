@@ -230,15 +230,19 @@ Namespace Runtime.Internal.Object.Converts
 
                 ' array of <T>
                 For Each type In interfaces
-                    If type.GetGenericTypeDefinition Is GetType(IEnumerable(Of )) Then
+                    If type.GenericTypeArguments.Length > 0 AndAlso type.ImplementInterface(Of IEnumerable) Then
                         Dim generic As Type = type.GenericTypeArguments(Scan0)
                         Dim buffer As Object = Activator.CreateInstance(GetType(List(Of )).MakeGenericType(generic))
                         Dim add As MethodInfo = buffer.GetType.GetMethod("Add", BindingFlags.Public Or BindingFlags.Instance)
+                        Dim source As IEnumerator = DirectCast(obj, IEnumerable).GetEnumerator
+
+                        source.MoveNext()
+                        source = source.Current
 
                         ' get element count by list
-                        For Each x As Object In DirectCast(obj, IEnumerable)
-                            Call add.Invoke(buffer, {x})
-                        Next
+                        Do While source.MoveNext
+                            Call add.Invoke(buffer, {source.Current})
+                        Loop
 
                         ' write buffered data to vector
                         Dim vec As Array = Array.CreateInstance(generic, DirectCast(buffer, IList).Count)
@@ -249,9 +253,6 @@ Namespace Runtime.Internal.Object.Converts
                         Next
 
                         Return New vector With {.data = vec}
-
-                    ElseIf type.GetGenericTypeDefinition Is GetType(Enumeration(Of )) Then
-                        ' not supports?
                     End If
                 Next
 
