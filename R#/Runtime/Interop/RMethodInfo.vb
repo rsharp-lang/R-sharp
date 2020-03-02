@@ -275,11 +275,11 @@ Namespace Runtime.Interop
         End Function
 
         ''' <summary>
-        ''' 
+        ''' Get type converted object value for match the parameter type. 
         ''' </summary>
         ''' <param name="arg"></param>
         ''' <param name="value"></param>
-        ''' <param name="trace$"></param>
+        ''' <param name="trace"></param>
         ''' <param name="envir"></param>
         ''' <param name="trygetListParam">
         ''' Fix bugs for list arguments when the parameter input have no symbol name
