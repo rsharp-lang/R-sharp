@@ -72,17 +72,22 @@ Namespace Runtime.Interop
         End Function
 
         Public Shared Function CalcMethodScore(method As MethodInfo, params As NamedValue(Of Object)()) As Double
-
+            Throw New NotImplementedException
         End Function
 
         ''' <summary>
         ''' 
         ''' </summary>
         ''' <param name="envir"></param>
-        ''' <param name="arguments">Object list parameter is not allowed!</param>
+        ''' <param name="arguments">
+        ''' Object list parameter is not allowed for calculate overloads method score!
+        ''' </param>
         ''' <returns></returns>
         Public Function Invoke(envir As Environment, arguments() As InvokeParameter) As Object Implements RFunction.Invoke
-            Dim params As NamedValue(Of Object)() = InvokeParameter.CreateArguments(envir, arguments).NamedValues.ToArray
+            Dim params As NamedValue(Of Object)() = InvokeParameter _
+                .CreateArguments(envir, arguments, hasObjectList:=False) _
+                .NamedValues _
+                .ToArray
             Dim method As MethodInfo = GetMethod(params)
             ' Dim result As Object = method.Invoke(Nothing,)
 

@@ -213,7 +213,7 @@ Namespace Runtime.Interop
                 parameters = RArgumentList.CreateObjectListArguments(Me, envir, params).ToArray
             Else
                 parameters = InvokeParameter _
-                    .CreateArguments(envir, params) _
+                    .CreateArguments(envir, params, hasObjectList:=False) _
                     .DoCall(Function(args)
                                 Return createNormalArguments(envir, args)
                             End Function) _

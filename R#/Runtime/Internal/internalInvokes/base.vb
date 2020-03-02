@@ -211,7 +211,7 @@ Namespace Runtime.Internal.Invokes
                 .Select(Function(a)
                             Dim name$
 
-                            If a.value.haveSymbolName Then
+                            If a.value.haveSymbolName(hasObjectList:=True) Then
                                 name = a.value.name
                             Else
                                 name = "X" & (a.i + 1)
@@ -274,7 +274,7 @@ Namespace Runtime.Internal.Invokes
             For i As Integer = 0 To parameters.Length - 1
                 slot = parameters(i)
 
-                If slot.haveSymbolName Then
+                If slot.haveSymbolName(hasObjectList:=True) Then
                     ' 不支持tuple
                     key = slot.name
                     value = slot.Evaluate(envir)

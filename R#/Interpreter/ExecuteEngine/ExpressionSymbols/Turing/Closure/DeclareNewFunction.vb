@@ -115,7 +115,7 @@ Namespace Interpreter.ExecuteEngine
 
             ' function parameter should be evaluate 
             ' from the parent environment.
-            arguments = InvokeParameter.CreateArguments(parent, params)
+            arguments = InvokeParameter.CreateArguments(parent, params, hasObjectList:=True)
             argumentKeys = arguments.Keys.ToArray
 
             ' initialize environment
