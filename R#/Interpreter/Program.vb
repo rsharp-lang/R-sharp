@@ -130,11 +130,13 @@ Namespace Interpreter
                                                Optional ByRef breakLoop As Boolean = False,
                                                Optional debug As Boolean = False) As Object
 
-            Dim last As Object = expression.Evaluate(envir)
+            Dim last As Object
 
             If debug Then
                 Call Console.WriteLine(expression.ToString)
             End If
+
+            last = expression.Evaluate(envir)
 
             ' next keyword will break current closure 
             ' and then goto execute next iteration loop
