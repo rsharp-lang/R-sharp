@@ -105,6 +105,10 @@ Namespace Runtime.Interop
         End Function
     End Class
 
+    ''' <summary>
+    ''' 1. 字符串类型默认使用``|``作为分隔符
+    ''' 2. 数值类型默认使用``,``作为分隔符
+    ''' </summary>
     Public Structure DefaultVectorParser : Implements IVectorExpressionLiteral
 
         Public Function ParseVector(default$, schema As Type) As Array Implements IVectorExpressionLiteral.ParseVector

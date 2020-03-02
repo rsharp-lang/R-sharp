@@ -48,6 +48,7 @@ Imports Microsoft.VisualBasic.Scripting.Runtime
 Namespace Runtime.Interop
 
     ''' <summary>
+    ''' 这个需要在目标类型与字符串之间存在有一个隐式转换的操作符定义
     ''' param as type = "xxxxxx"
     ''' </summary>
     <AttributeUsage(AttributeTargets.Parameter)>

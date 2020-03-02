@@ -299,6 +299,10 @@ Namespace Runtime.Interop
                 Return Runtime.asVector(value, arg.rawVectorFlag.vector, envir)
             End If
 
+            If arg.type.raw Is GetType(Object) Then
+                Return value
+            End If
+
             Try
                 Return RConversion.CTypeDynamic(value, arg.type.raw, env:=envir)
             Catch ex As Exception When trygetListParam
