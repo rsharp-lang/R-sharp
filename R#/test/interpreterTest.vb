@@ -74,6 +74,7 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+        Call tupleValueAssignTest()
         Call withTest()
         Call headTest()
 
@@ -935,6 +936,18 @@ return 999;
 
         Call R.Evaluate("print(s);")
         Call R.Evaluate("print([1,2,3,4,5] + 4);")
+
+        Call R.PrintMemory()
+
+        Pause()
+    End Sub
+
+    Sub tupleValueAssignTest()
+        Call R.Evaluate("let a")
+        Call R.Evaluate("let b")
+        Call R.Add("val", New Func(Of String, Double)(AddressOf Val))
+        Call R.Add("int", New Func(Of String, Integer)(AddressOf Integer.Parse))
+        Call R.Evaluate("[a, b] = '1234' :> [val, int]")
 
         Call R.PrintMemory()
 
