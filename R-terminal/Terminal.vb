@@ -82,6 +82,7 @@ Type 'q()' to quit R.
         Call R.LoadLibrary("base")
         Call R.LoadLibrary("utils")
         Call R.LoadLibrary("grDevices")
+        Call R.LoadLibrary("stats")
 
         Console.WriteLine()
         Console.Title = "R# language"

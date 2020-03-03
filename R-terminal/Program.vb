@@ -79,6 +79,7 @@ Module Program
         Call R.LoadLibrary("base")
         Call R.LoadLibrary("utils")
         Call R.LoadLibrary("grDevices")
+        Call R.LoadLibrary("stats")
 
         Call Console.WriteLine()
 
