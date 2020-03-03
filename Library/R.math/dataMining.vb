@@ -33,11 +33,28 @@ Module dataMining
         End If
     End Function
 
+    ''' <summary>
+    ''' K-Means Clustering
+    ''' </summary>
+    ''' <param name="dataset">
+    ''' numeric matrix of data, or an object that can be coerced 
+    ''' to such a matrix (such as a numeric vector or a data 
+    ''' frame with all numeric columns).
+    ''' </param>
+    ''' <param name="centers">
+    ''' either the number of clusters, say k, or a set of initial 
+    ''' (distinct) cluster centres. If a number, a random set of 
+    ''' (distinct) rows in x is chosen as the initial centres.
+    ''' </param>
+    ''' <param name="parallel"></param>
+    ''' <param name="debug"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("kmeans")>
     <RApiReturn(GetType(EntityClusterModel()))>
     Public Function Kmeans(<RRawVectorArgument>
                            dataset As Object,
-                           Optional expected% = 3,
+                           Optional centers% = 3,
                            Optional parallel As Boolean = True,
                            Optional debug As Boolean = False,
                            Optional env As Environment = Nothing) As Object
@@ -59,6 +76,6 @@ Module dataMining
             Return REnv.Internal.debug.stop(New InvalidProgramException(dataset.GetType.FullName), env)
         End If
 
-        Return model.Kmeans(expected, debug, parallel).ToArray
+        Return model.Kmeans(centers, debug, parallel).ToArray
     End Function
 End Module

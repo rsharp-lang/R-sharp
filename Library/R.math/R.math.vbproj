@@ -151,6 +151,7 @@
   <ItemGroup>
     <Compile Include="math.vb" />
     <Compile Include="dataMining.vb" />
+    <Compile Include="stats.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
