@@ -66,12 +66,16 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
-        ''' Converts ``R#`` object to text
+        ''' Convert an R Object to a Character String
+        ''' 
+        ''' This is a helper function for format to produce a 
+        ''' single character string describing an R object.
         ''' </summary>
-        ''' <param name="x"></param>
+        ''' <param name="x">The object to be converted.</param>
         ''' <param name="env"></param>
         ''' <returns></returns>
-        <ExportAPI("string")>
+        <ExportAPI("toString")>
+        <RApiReturn(GetType(String))>
         Public Function [string](<RRawVectorArgument> x As Object, env As Environment) As Object
             If x Is Nothing Then
                 Return ""
