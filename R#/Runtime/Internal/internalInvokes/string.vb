@@ -65,12 +65,20 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' Converts ``R#`` object to text
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("string")>
         Public Function [string](<RRawVectorArgument> x As Object, env As Environment) As Object
             If x Is Nothing Then
                 Return ""
-            Else
+            ElseIf x.GetType.IsArray Then
                 Return printer.getStrings(x, env.globalEnvironment).ToArray
+            Else
+                Return printer.ToString(x.GetType, env.globalEnvironment, True)
             End If
         End Function
 
