@@ -61,7 +61,7 @@ Namespace Runtime.Internal.Object.Converts
     Module RConversion
 
         <ExportAPI("as.Date")>
-        Public Function asDate(<RRawVectorArgument> obj As Object) As Object
+        Public Function asDate(<RRawVectorArgument> obj As Object) As Date()
             Return Rset _
                 .getObjectSet(obj) _
                 .Select(Function(o)
@@ -193,6 +193,7 @@ Namespace Runtime.Internal.Object.Converts
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("as.data.frame")>
+        <RApiReturn(GetType(dataframe))>
         Public Function asDataframe(<RRawVectorArgument> x As Object,
                                     <RListObjectArgument> args As Object,
                                     Optional env As Environment = Nothing) As Object
@@ -296,6 +297,7 @@ Namespace Runtime.Internal.Object.Converts
         ''' <param name="obj"></param>
         ''' <returns></returns>
         <ExportAPI("as.integer")>
+        <RApiReturn(GetType(Long))>
         Public Function asInteger(<RRawVectorArgument> obj As Object) As Object
             If obj Is Nothing Then
                 Return 0
@@ -307,6 +309,7 @@ Namespace Runtime.Internal.Object.Converts
         End Function
 
         <ExportAPI("as.numeric")>
+        <RApiReturn(GetType(Double))>
         Public Function asNumeric(<RRawVectorArgument> obj As Object) As Object
             If obj Is Nothing Then
                 Return 0
@@ -318,6 +321,7 @@ Namespace Runtime.Internal.Object.Converts
         End Function
 
         <ExportAPI("as.character")>
+        <RApiReturn(GetType(String))>
         Public Function asCharacters(<RRawVectorArgument> obj As Object) As Object
             If obj Is Nothing Then
                 Return Nothing
@@ -351,6 +355,7 @@ Namespace Runtime.Internal.Object.Converts
         End Function
 
         <ExportAPI("as.logical")>
+        <RApiReturn(GetType(Boolean))>
         Public Function asLogicals(<RRawVectorArgument> obj As Object) As Object
             If obj Is Nothing Then
                 Return Nothing

@@ -63,7 +63,7 @@ Module grSVG
         Dim args = DirectCast(styles, InvokeParameter()).Skip(1).ToArray
         Dim stylesVal As list
 
-        If args.Length = 1 AndAlso Not args(Scan0).haveSymbolName AndAlso TypeOf args(Scan0).value Is FunctionInvoke Then
+        If args.Length = 1 AndAlso Not args(Scan0).haveSymbolName(hasObjectList:=False) AndAlso TypeOf args(Scan0).value Is FunctionInvoke Then
             Dim list As FunctionInvoke = args(Scan0).value
 
             If TypeOf list.funcName Is Literal AndAlso DirectCast(list.funcName, Literal).Evaluate(env) = "list" Then

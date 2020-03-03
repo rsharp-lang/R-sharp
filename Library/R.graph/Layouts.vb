@@ -47,14 +47,17 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
 
-<Package("igraph.layouts")>
+''' <summary>
+''' Do network layouts
+''' </summary>
+<Package("igraph.layouts", Category:=APICategories.UtilityTools, Publisher:="xie.guigang@gmail.com")>
 Module Layouts
 
     ''' <summary>
     ''' Do force directed layout
     ''' </summary>
-    ''' <param name="g"></param>
-    ''' <param name="iterations"></param>
+    ''' <param name="g">A network graph object.</param>
+    ''' <param name="iterations">The number of layout iterations.</param>
     ''' <param name="clearScreen">
     ''' Clear of the console screen when display the progress bar.
     ''' </param>

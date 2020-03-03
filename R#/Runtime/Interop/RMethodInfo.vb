@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::1293e5d36218351d966ba1be5f1ca3bb, R#\Runtime\Interop\RMethodInfo.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class RMethodInfo
-    ' 
-    '         Properties: invisible, name, parameters, returns
-    ' 
-    '         Constructor: (+3 Overloads) Sub New
-    '         Function: createNormalArguments, CreateParameterArrayFromListArgument, GetPackageInfo, GetPrintContent, GetRawDeclares
-    '                   getValue, (+2 Overloads) Invoke, missingParameter, parseParameters, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class RMethodInfo
+' 
+'         Properties: invisible, name, parameters, returns
+' 
+'         Constructor: (+3 Overloads) Sub New
+'         Function: createNormalArguments, CreateParameterArrayFromListArgument, GetPackageInfo, GetPrintContent, GetRawDeclares
+'                   getValue, (+2 Overloads) Invoke, missingParameter, parseParameters, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -213,7 +213,7 @@ Namespace Runtime.Interop
                 parameters = RArgumentList.CreateObjectListArguments(Me, envir, params).ToArray
             Else
                 parameters = InvokeParameter _
-                    .CreateArguments(envir, params) _
+                    .CreateArguments(envir, params, hasObjectList:=False) _
                     .DoCall(Function(args)
                                 Return createNormalArguments(envir, args)
                             End Function) _
@@ -256,7 +256,11 @@ Namespace Runtime.Interop
                     If arguments.ContainsKey(nameKey) Then
                         Yield getValue(arg, arguments(nameKey), apiTrace, envir, False)
                     Else
-                        Yield getValue(arg, arguments(keys(i)), apiTrace, envir, False)
+                        If arg.isOptional Then
+                            Yield arg.default
+                        Else
+                            Yield missingParameter(arg, envir, name)
+                        End If
                     End If
                 End If
             Next
@@ -275,11 +279,11 @@ Namespace Runtime.Interop
         End Function
 
         ''' <summary>
-        ''' 
+        ''' Get type converted object value for match the parameter type. 
         ''' </summary>
         ''' <param name="arg"></param>
         ''' <param name="value"></param>
-        ''' <param name="trace$"></param>
+        ''' <param name="trace"></param>
         ''' <param name="envir"></param>
         ''' <param name="trygetListParam">
         ''' Fix bugs for list arguments when the parameter input have no symbol name
