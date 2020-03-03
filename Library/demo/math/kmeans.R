@@ -2,6 +2,7 @@ imports "stats.clustering" from "R.math.dll";
 
 require(dataframe);
 
+print(ls());
 setwd(!script$dir);
 
 ["bezdekIris.csv"]
