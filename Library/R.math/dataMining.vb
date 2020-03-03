@@ -1,8 +1,10 @@
 ﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.DataMining.KMeans
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -10,12 +12,25 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 Module dataMining
 
     Sub New()
-
+        Call REnv.Internal.generic.add("summary", GetType(EntityClusterModel()), AddressOf clusterSummary)
     End Sub
 
-    <ExportAPI("")>
-    Public Function clusterSummary(<RRawVectorArgument> result As Object) As Object
-
+    Public Function clusterSummary(result As Object, args As list, env As Environment) As Object
+        If TypeOf result Is EntityClusterModel() Then
+            Return DirectCast(result, EntityClusterModel()) _
+                .GroupBy(Function(d) d.Cluster) _
+                .ToDictionary(Function(d) d.Key,
+                              Function(cluster) As Object
+                                  Return cluster.Select(Function(d) d.ID).ToArray
+                              End Function) _
+                .DoCall(Function(slots)
+                            Return New list With {
+                                .slots = slots
+                            }
+                        End Function)
+        Else
+            Throw New NotImplementedException
+        End If
     End Function
 
     <ExportAPI("kmeans")>
