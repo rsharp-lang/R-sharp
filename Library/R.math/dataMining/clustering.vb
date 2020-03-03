@@ -8,8 +8,8 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
 
-<Package("base.dataMining")>
-Module dataMining
+<Package("stats.clustering")>
+Module clustering
 
     Sub New()
         Call REnv.Internal.generic.add("summary", GetType(EntityClusterModel()), AddressOf clusterSummary)
