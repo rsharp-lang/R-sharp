@@ -298,7 +298,10 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <returns></returns>
         <ExportAPI("summary")>
-        Public Function summary([object] As Object, <RListObjectArgument, RRawVectorArgument> args As Object, Optional env As Environment = Nothing) As Object
+        Public Function summary(<RRawVectorArgument> [object] As Object,
+                                <RRawVectorArgument, RListObjectArgument> args As Object,
+                                Optional env As Environment = Nothing) As Object
+
             ' summary is similar to str or print function
             ' but summary just returns simple data summary information
             ' and str function returns the data structure information
