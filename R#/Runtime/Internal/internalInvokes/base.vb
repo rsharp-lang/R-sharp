@@ -260,11 +260,7 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("list")>
         <RApiReturn(GetType(list))>
-        Public Function Rlist(<RListObjectArgument>
-                              <RRawVectorArgument>
-                              slots As Object,
-                              Optional envir As Environment = Nothing) As Object
-
+        Public Function Rlist(<RListObjectArgument, RRawVectorArgument> slots As Object, Optional envir As Environment = Nothing) As Object
             Dim list As New Dictionary(Of String, Object)
             Dim slot As InvokeParameter
             Dim key As String
@@ -302,8 +298,13 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <returns></returns>
         <ExportAPI("summary")>
-        Public Function summary([object] As Object) As Object
-            Throw New NotImplementedException
+        Public Function summary([object] As Object, <RListObjectArgument, RRawVectorArgument> args As Object, Optional env As Environment = Nothing) As Object
+            ' summary is similar to str or print function
+            ' but summary just returns simple data summary information
+            ' and str function returns the data structure information
+            ' about the given dataset object.
+            ' the print function is print the data details
+            Return DirectCast(Rlist(args, env), list).invokeGeneric([object], env)
         End Function
 
         ''' <summary>

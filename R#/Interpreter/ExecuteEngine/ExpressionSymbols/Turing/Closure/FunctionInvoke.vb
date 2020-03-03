@@ -246,64 +246,48 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Private Function invokeRInternal(funcName$, envir As Environment) As Object
-            If funcName = "options" Then
-                If Not parameters.DoCall(AddressOf allIsValueAssign) Then
-                    Dim names As String()
-
-                    If parameters.Count = 1 Then
-                        Dim firstInput = parameters(Scan0).Evaluate(envir)
-
-                        If firstInput.GetType Is GetType(list) Then
-                            Return base.options(firstInput, envir)
-                        ElseIf Program.isException(firstInput) Then
-                            Return firstInput
-                        Else
-                            names = Runtime.asVector(Of String)(firstInput)
-                        End If
-                    Else
-                        Dim vector As Object() = parameters _
-                            .Select(Function(exp)
-                                        Return exp.Evaluate(envir)
-                                    End Function) _
-                            .ToArray
-
-                        For Each element As Object In vector
-                            If Program.isException(element) Then
-                                Return element
-                            End If
-                        Next
-
-                        names = Runtime.asVector(Of String)(vector)
-                    End If
-
-                    Return base.options(names, envir)
-                End If
-            End If
-
-            Dim result As Object
-
-            If Internal.invoke.getFunction(funcName) Is Nothing AndAlso Internal.generic.exists(funcName) Then
-                Dim x As Object = parameters(Scan0).Evaluate(envir)
-                Dim args As New list With {
-                    .slots = InvokeParameter.Create(parameters.Skip(1)) _
-                        .DoCall(Function(list)
-                                    Return RListObjectArgumentAttribute.getObjectList(list, envir)
-                                End Function) _
-                        .ToDictionary(Function(a) a.Name,
-                                      Function(a)
-                                          Return a.Value
-                                      End Function)
-                }
-
-                result = Internal.generic.invokeGeneric(funcName, x, args, envir)
+            If funcName = "options" AndAlso Not parameters.DoCall(AddressOf allIsValueAssign) Then
+                Return runOptions(envir)
             Else
                 ' create argument models
                 Dim argVals As InvokeParameter() = InvokeParameter.Create(parameters)
                 ' and then invoke the specific internal R# api
-                result = Internal.invokeInternals(envir, funcName, argVals)
+                Dim result As Object = Internal.invokeInternals(envir, funcName, argVals)
+
+                Return result
+            End If
+        End Function
+
+        Private Function runOptions(env As Environment) As Object
+            Dim names As String()
+
+            If parameters.Count = 1 Then
+                Dim firstInput = parameters(Scan0).Evaluate(env)
+
+                If firstInput.GetType Is GetType(list) Then
+                    Return base.options(firstInput, env)
+                ElseIf Program.isException(firstInput) Then
+                    Return firstInput
+                Else
+                    names = Runtime.asVector(Of String)(firstInput)
+                End If
+            Else
+                Dim vector As Object() = parameters _
+                    .Select(Function(exp)
+                                Return exp.Evaluate(env)
+                            End Function) _
+                    .ToArray
+
+                For Each element As Object In vector
+                    If Program.isException(element) Then
+                        Return element
+                    End If
+                Next
+
+                names = Runtime.asVector(Of String)(vector)
             End If
 
-            Return result
+            Return base.options(names, env)
         End Function
 
         <DebuggerStepThrough>
