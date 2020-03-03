@@ -82,7 +82,7 @@ Namespace Runtime.Internal.Invokes
             ElseIf x.GetType.IsArray Then
                 Return printer.getStrings(x, env.globalEnvironment).ToArray
             Else
-                Return printer.ToString(x.GetType, env.globalEnvironment, True)
+                Return printer.ToString(x.GetType, env.globalEnvironment, True)(x)
             End If
         End Function
 
