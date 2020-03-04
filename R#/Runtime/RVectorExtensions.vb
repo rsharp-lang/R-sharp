@@ -205,7 +205,7 @@ Namespace Runtime
                 Return {DirectCast(value, T)}
             ElseIf valueType Is GetType(T()) Then
                 Return DirectCast(value, T())
-            ElseIf valueType.IsInheritsFrom(GetType(Array)) Then
+            ElseIf valueType.IsArray Then
                 Return typeofT.fromArray(Of T)(value)
             ElseIf valueType Is GetType(Group) Then
                 Return typeofT.fromArray(Of T)(DirectCast(value, Group).group)
