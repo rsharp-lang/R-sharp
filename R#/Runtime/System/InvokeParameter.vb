@@ -109,10 +109,18 @@ Namespace Runtime.Components
                     Return False
                 ElseIf TypeOf value Is ValueAssign Then
                     Return True
-                ElseIf TypeOf value Is VectorLiteral Then
-                    Return DirectCast(value, VectorLiteral).type = TypeCodes.string
                 ElseIf hasObjectList AndAlso TypeOf value Is SymbolReference Then
                     Return True
+                Else
+                    Return False
+                End If
+            End Get
+        End Property
+
+        Public ReadOnly Property isProbablyVectorNameTuple As Boolean
+            Get
+                If TypeOf value Is VectorLiteral Then
+                    Return DirectCast(value, VectorLiteral).type = TypeCodes.string
                 Else
                     Return False
                 End If

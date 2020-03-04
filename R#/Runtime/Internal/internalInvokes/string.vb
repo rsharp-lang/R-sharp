@@ -65,12 +65,24 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
-        <ExportAPI("string")>
+        ''' <summary>
+        ''' Convert an R Object to a Character String
+        ''' 
+        ''' This is a helper function for format to produce a 
+        ''' single character string describing an R object.
+        ''' </summary>
+        ''' <param name="x">The object to be converted.</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("toString")>
+        <RApiReturn(GetType(String))>
         Public Function [string](<RRawVectorArgument> x As Object, env As Environment) As Object
             If x Is Nothing Then
                 Return ""
-            Else
+            ElseIf x.GetType.IsArray Then
                 Return printer.getStrings(x, env.globalEnvironment).ToArray
+            Else
+                Return printer.ToString(x.GetType, env.globalEnvironment, True)(x)
             End If
         End Function
 
