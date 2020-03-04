@@ -147,8 +147,31 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="pattern">the specified regular expression</param>
         ''' <returns></returns>
         <ExportAPI("regexp")>
-        Public Function regexp(pattern As String) As Object
-            Return New Regex(pattern)
+        <RApiReturn(GetType(Regex))>
+        Public Function regexp(pattern$, Optional options$ = Nothing, Optional env As Environment = Nothing) As Object
+            If pattern.StringEmpty Then
+                Return Internal.stop("the input regular expression could not be empty!", env)
+            Else
+                Dim opts As RegexOptions = RegexOptions.None
+
+                If Not options Is Nothing Then
+                    If options.IndexOf("i") Then
+                        opts = opts Or RegexOptions.IgnoreCase
+                    End If
+                    If options.IndexOf("m") Then
+                        opts = opts Or RegexOptions.Multiline
+                    End If
+                    If options.IndexOf("s") Then
+                        opts = opts Or RegexOptions.Singleline
+                    End If
+                    If options.IndexOf("r") Then
+                        ' reverse
+                        opts = opts Or RegexOptions.RightToLeft
+                    End If
+                End If
+
+                Return New Regex(pattern, opts)
+            End If
         End Function
 
         ''' <summary>
