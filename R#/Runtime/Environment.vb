@@ -77,7 +77,7 @@ Namespace Runtime
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property stackFrame As StackFrame
-        Public ReadOnly Property variables As Dictionary(Of Symbol)
+        Public ReadOnly Property symbols As Dictionary(Of Symbol)
         Public ReadOnly Property types As Dictionary(Of String, RType)
         ''' <summary>
         ''' 主要是存储警告消息
@@ -144,7 +144,7 @@ Namespace Runtime
                 If name.First = "["c AndAlso name.Last = "]"c Then
                     globalEnvironment(name.GetStackValue("[", "]")) = value
                 Else
-                    variables(name) = value
+                    symbols(name) = value
                 End If
             End Set
         End Property
@@ -153,7 +153,7 @@ Namespace Runtime
         Const ConstraintInvalid$ = "Value can not match the type constraint!!! ({0} <--> {1})"
 
         Sub New()
-            variables = New Dictionary(Of Symbol)
+            symbols = New Dictionary(Of Symbol)
             types = New Dictionary(Of String, RType)
             parent = Nothing
             [global] = Nothing
@@ -177,7 +177,7 @@ Namespace Runtime
             Me.global = parent.globalEnvironment
 
             If isInherits Then
-                variables = parent.variables
+                symbols = parent.symbols
                 types = parent.types
             End If
         End Sub
@@ -201,8 +201,14 @@ Namespace Runtime
         End Sub
 
         Public Sub Clear()
-            Call variables.Clear()
-            Call types.Clear()
+            ' 20200304 fix bugs for environment inherits mode
+            If Not symbols Is parent.symbols Then
+                Call symbols.Clear()
+            End If
+            If Not types Is parent.types Then
+                Call types.Clear()
+            End If
+
             Call ifPromise.Clear()
             Call messages.Clear()
         End Sub
@@ -217,8 +223,8 @@ Namespace Runtime
                 Return globalEnvironment.FindSymbol(name.GetStackValue("[", "]"))
             End If
 
-            If variables.ContainsKey(name) Then
-                Return variables(name)
+            If symbols.ContainsKey(name) Then
+                Return symbols(name)
             ElseIf [inherits] AndAlso Not parent Is Nothing Then
                 Return parent.FindSymbol(name)
             Else
@@ -231,8 +237,8 @@ Namespace Runtime
                 Return
             End If
 
-            If variables.ContainsKey(name) Then
-                Call variables.Remove(name)
+            If symbols.ContainsKey(name) Then
+                Call symbols.Remove(name)
             ElseIf Not parent Is Nothing Then
                 Call parent.Delete(name)
             End If
@@ -253,7 +259,7 @@ Namespace Runtime
         ''' <param name="type"></param>
         ''' <returns></returns>
         Public Function Push(name$, value As Object, [readonly] As Boolean, Optional type As TypeCodes = TypeCodes.generic) As Object
-            If variables.ContainsKey(name) Then
+            If symbols.ContainsKey(name) Then
                 Return Internal.stop({String.Format(AlreadyExists, name)}, Me)
             ElseIf Not value Is Nothing Then
                 value = asRVector(type, value)
@@ -271,7 +277,7 @@ Namespace Runtime
                 If Not .constraintValid Then
                     Return Internal.stop(New Exception(String.Format(ConstraintInvalid, .typeCode, type)), Me)
                 Else
-                    Call .DoCall(AddressOf variables.Add)
+                    Call .DoCall(AddressOf symbols.Add)
                 End If
 
                 Return value
@@ -316,7 +322,7 @@ Namespace Runtime
         End Function
 
         Public Iterator Function GetEnumerator() As IEnumerator(Of Symbol) Implements IEnumerable(Of Symbol).GetEnumerator
-            For Each var As Symbol In variables.Values
+            For Each var As Symbol In symbols.Values
                 Yield var
             Next
         End Function

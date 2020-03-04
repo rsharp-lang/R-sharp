@@ -138,7 +138,7 @@ Partial Module base
                         .name = name,
                         .[readonly] = False
                     }
-                    envir.variables.Add(name, var)
+                    envir.symbols.Add(name, var)
                 End If
 
                 If value.cdfDataType = CDFDataTypes.CHAR Then
