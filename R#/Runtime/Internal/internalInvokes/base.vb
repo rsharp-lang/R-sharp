@@ -1044,16 +1044,20 @@ Namespace Runtime.Internal.Invokes
             End If
 
             Dim apply As RFunction = FUN
-            Dim list As Dictionary(Of String, Object)
+            Dim list As New Dictionary(Of String, Object)
 
             If X.GetType Is GetType(Dictionary(Of String, Object)) Then
-                list = DirectCast(X, Dictionary(Of String, Object)) _
-                    .ToDictionary(Function(d) d.Key,
-                                  Function(d)
-                                      Return apply.Invoke(envir, invokeArgument(d.Value))
-                                  End Function)
+                For Each d In DirectCast(X, Dictionary(Of String, Object))
+                    list(d.Key) = apply.Invoke(envir, invokeArgument(d.Value))
+
+                    If Program.isException(list(d.Key)) Then
+                        Return list(d.Key)
+                    End If
+                Next
             Else
                 Dim getName As Func(Of SeqValue(Of Object), String)
+                Dim keyName$
+                Dim value As Object
 
                 If names Is Nothing Then
                     getName = Function(i) $"[[{i.i + 1}]]"
@@ -1063,19 +1067,19 @@ Namespace Runtime.Internal.Invokes
                               End Function
                 End If
 
-                Try
-                    list = Runtime.asVector(Of Object)(X) _
-                        .AsObjectEnumerator _
-                        .SeqIterator _
-                        .ToDictionary(Function(i)
-                                          Return getName(i)
-                                      End Function,
-                                      Function(d)
-                                          Return apply.Invoke(envir, invokeArgument(d.value))
-                                      End Function)
-                Catch ex As Exception
-                    Return Internal.stop(ex, envir)
-                End Try
+                For Each d In Runtime.asVector(Of Object)(X) _
+                    .AsObjectEnumerator _
+                    .SeqIterator
+
+                    keyName = getName(d)
+                    value = apply.Invoke(envir, invokeArgument(d.value))
+
+                    If Program.isException(value) Then
+                        Return value
+                    Else
+                        list(keyName) = value
+                    End If
+                Next
             End If
 
             Return New list With {.slots = list}
