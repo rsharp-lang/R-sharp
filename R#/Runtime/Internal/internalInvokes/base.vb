@@ -805,7 +805,9 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("warning")>
         <DebuggerStepThrough>
         Public Function warning(<RRawVectorArgument> message As Object, Optional envir As Environment = Nothing) As Message
-            Return CreateMessageInternal(message, envir, level:=MSG_TYPES.WRN)
+            Dim msg As Message = CreateMessageInternal(message, envir, level:=MSG_TYPES.WRN)
+            envir.messages.Add(msg)
+            Return msg
         End Function
 
         ''' <summary>

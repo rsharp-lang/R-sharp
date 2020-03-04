@@ -134,41 +134,41 @@ Namespace Interpreter.ExecuteEngine
 
             If Not target Is Nothing AndAlso target.GetType Is GetType(Message) Then
                 Return target
-            Else
-                envir = New Environment(envir, stackFrame, isInherits:=True)
             End If
 
-            If TypeOf target Is Regex Then
-                ' regexp match
-                result = Regexp.Matches(target, parameters(Scan0), envir)
-            Else
-                result = doInvokeFuncVar(target, envir)
-            End If
-
-            If result Is Nothing Then
-                Return Nothing
-            ElseIf Program.isException(result) Then
-                Return result
-            ElseIf result.GetType Is GetType(RReturn) Then
-                Dim returns As RReturn = DirectCast(result, RReturn)
-                Dim messages = envir.globalEnvironment.messages
-
-                If returns.HasValue Then
-                    messages.AddRange(returns.messages)
-                    Return returns.Value
-                ElseIf returns.isError Then
-                    returns.messages.Where(Function(m) m.level <> MSG_TYPES.ERR).DoCall(AddressOf messages.AddRange)
-                    Return returns.messages.Where(Function(m) m.level = MSG_TYPES.ERR)
+            Using env As New Environment(envir, stackFrame, isInherits:=True)
+                If TypeOf target Is Regex Then
+                    ' regexp match
+                    result = Regexp.Matches(target, parameters(Scan0), env)
                 Else
-                    ' 2019-12-15
-                    ' isError的时候也会导致hasValue为false
-                    ' 所以null的情况不可以和warning的情况合并在一起处理
-                    messages.AddRange(returns.messages)
-                    Return Nothing
+                    result = doInvokeFuncVar(target, env)
                 End If
-            Else
-                Return result
-            End If
+
+                If result Is Nothing Then
+                    Return Nothing
+                ElseIf Program.isException(result) Then
+                    Return result
+                ElseIf result.GetType Is GetType(RReturn) Then
+                    Dim returns As RReturn = DirectCast(result, RReturn)
+                    Dim messages = env.globalEnvironment.messages
+
+                    If returns.HasValue Then
+                        messages.AddRange(returns.messages)
+                        Return returns.Value
+                    ElseIf returns.isError Then
+                        returns.messages.Where(Function(m) m.level <> MSG_TYPES.ERR).DoCall(AddressOf messages.AddRange)
+                        Return returns.messages.Where(Function(m) m.level = MSG_TYPES.ERR)
+                    Else
+                        ' 2019-12-15
+                        ' isError的时候也会导致hasValue为false
+                        ' 所以null的情况不可以和warning的情况合并在一起处理
+                        messages.AddRange(returns.messages)
+                        Return Nothing
+                    End If
+                Else
+                    Return result
+                End If
+            End Using
         End Function
 
         ''' <summary>
