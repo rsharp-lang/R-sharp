@@ -108,6 +108,12 @@ Namespace Interpreter
 
         Public Const lastVariableName$ = "$"
 
+        Public ReadOnly Property configFile As ConfigFile
+            Get
+                Return globalEnvir.options.file
+            End Get
+        End Property
+
         ''' <summary>
         ''' 直接无参数调用这个构造函数，则会使用默认的配置文件创建R#脚本解释器引擎实例
         ''' </summary>

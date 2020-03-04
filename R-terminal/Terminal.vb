@@ -79,10 +79,13 @@ Type 'q()' to quit R.
     Public Function RunTerminal() As Integer
         R = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
 
-        Call R.LoadLibrary("base")
-        Call R.LoadLibrary("utils")
-        Call R.LoadLibrary("grDevices")
-        Call R.LoadLibrary("stats")
+        ' Call R.LoadLibrary("base")
+        ' Call R.LoadLibrary("utils")
+        ' Call R.LoadLibrary("grDevices")
+        ' Call R.LoadLibrary("stats")
+        For Each pkgName As String In R.configFile.GetStartupLoadingPackages
+            Call R.LoadLibrary(packageName:=pkgName)
+        Next
 
         Console.WriteLine()
         Console.Title = "R# language"
