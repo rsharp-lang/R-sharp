@@ -314,6 +314,12 @@ Namespace Interpreter
             Dim program As Program = Program.CreateProgram(Rscript, debug:=debug)
             Dim result As Object = program.Execute(globalEnvir)
 
+            ' fix bugs of warning message populates
+            ' to upper global environment
+            If Not globalEnvir Is Me.globalEnvir Then
+                Call globalEnvir.Dispose()
+            End If
+
             Return finalizeResult(result)
         End Function
 
