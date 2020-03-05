@@ -57,8 +57,8 @@ Module Comparison
     ''' <param name="b"></param>
     ''' <returns></returns>
     <ExportAPI("node.cos")>
-    Public Function similarity(a As Node, b As Node, Optional topologyCos As Boolean = False) As Double
-        Return Analysis.NodeSimilarity(a, b, topologyCos)
+    Public Function similarity(a As Node, b As Node, Optional classEquivalent As Func(Of String, String, Double) = Nothing, Optional topologyCos As Boolean = False) As Double
+        Return Analysis.NodeSimilarity(a, b, classEquivalent, topologyCos)
     End Function
 
     ''' <summary>
@@ -69,7 +69,11 @@ Module Comparison
     ''' <param name="cutoff#"></param>
     ''' <returns></returns>
     <ExportAPI("graph.jaccard")>
-    Public Function similarity(a As NetworkGraph, b As NetworkGraph, Optional cutoff# = 0.85, Optional topologyCos As Boolean = False) As Double
-        Return Analysis.GraphSimilarity(a, b, cutoff, topologyCos)
+    Public Function similarity(a As NetworkGraph, b As NetworkGraph,
+                               Optional cutoff# = 0.85,
+                               Optional classEquivalent As Func(Of String, String, Double) = Nothing,
+                               Optional topologyCos As Boolean = False) As Double
+
+        Return Analysis.GraphSimilarity(a, b, cutoff, classEquivalent, topologyCos)
     End Function
 End Module
