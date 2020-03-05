@@ -1,63 +1,65 @@
 ﻿#Region "Microsoft.VisualBasic::7c75580c7d63ac2b499e6d5722093e0e, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Enum SymbolIndexers
-    ' 
-    '         dataframeColumns, dataframeRanges, dataframeRows, nameIndex, vectorIndex
-    ' 
-    '  
-    ' 
-    ' 
-    ' 
-    '     Class SymbolIndexer
-    ' 
-    '         Properties: type
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: emptyIndexError, Evaluate, getByIndex, getByName, getColumn
-    '                   ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Enum SymbolIndexers
+' 
+'         dataframeColumns, dataframeRanges, dataframeRows, nameIndex, vectorIndex
+' 
+'  
+' 
+' 
+' 
+'     Class SymbolIndexer
+' 
+'         Properties: type
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: emptyIndexError, Evaluate, getByIndex, getByName, getColumn
+'                   ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Interpreter.ExecuteEngine
 
@@ -212,13 +214,40 @@ Namespace Interpreter.ExecuteEngine
 
                 If sequence.Length = 0 Then
                     Return Nothing
-                ElseIf sequence.Length = 1 AndAlso sequence.GetValue(Scan0).GetType.ImplementInterface(GetType(RIndex)) Then
-                    Rarray = sequence.GetValue(Scan0)
+                ElseIf sequence.Length = 1 Then
+                    Dim tmp = sequence.GetValue(Scan0)
+                    Dim type As RType = RType.GetRSharpType(tmp.GetType)
 
-                    '' by element index
-                    'If Not sequence.GetType.ImplementInterface(GetType(RIndex)) Then
-                    '    Return Internal.stop("Target object can not be indexed!", envir)
-                    'End If
+                    If type.raw.ImplementInterface(GetType(RIndex)) Then
+                        Rarray = tmp
+
+                        '' by element index
+                        'If Not sequence.GetType.ImplementInterface(GetType(RIndex)) Then
+                        '    Return Internal.stop("Target object can not be indexed!", envir)
+                        'End If
+                    Else
+                        Dim count As Integer
+                        Dim item As Func(Of Integer, Object)
+
+                        If Not (type.getCount Is Nothing OrElse type.getItem Is Nothing) Then
+                            count = type.getCount.GetValue(tmp)
+                            item = Function(i)
+                                       If i > count Then
+                                           Return Nothing
+                                       ElseIf i < 0 Then
+                                           i = count + i
+                                       End If
+
+                                       Return type.getItem.GetValue(tmp, {i - 1})
+                                   End Function
+
+                            Return DirectCast(asVector(Of Integer)(indexer), Integer()) _
+                                .Select(item) _
+                                .ToArray
+                        Else
+                            Rarray = New vector With {.data = sequence}
+                        End If
+                    End If
                 Else
                     Rarray = New vector With {.data = sequence}
                 End If
