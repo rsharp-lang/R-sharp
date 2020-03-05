@@ -152,7 +152,7 @@ Namespace Interpreter.ExecuteEngine
                 ' 20191120 对于函数对象而言，由于拥有自己的环境，在构建闭包之后
                 ' 多次调用函数会重复利用之前的环境参数
                 ' 所以在这里只需要判断一下更新值或者插入新的变量
-                If var.names.Any(AddressOf envir.variables.ContainsKey) Then
+                If var.names.Any(AddressOf envir.symbols.ContainsKey) Then
                     ' 只检查自己的环境中的变量
                     ' 因为函数参数是只属于自己的环境之中的符号
                     Dim names As Literal() = var.names _

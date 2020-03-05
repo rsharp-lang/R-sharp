@@ -786,10 +786,28 @@ Namespace Runtime.Internal.Invokes
             }
         End Function
 
+        ''' <summary>
+        ''' ### Warning Messages
+        ''' 
+        ''' Generates a warning message that corresponds to 
+        ''' its argument(s) and (optionally) the expression 
+        ''' or function from which it was called.
+        ''' </summary>
+        ''' <param name="message">
+        ''' zero Or more objects which can be coerced to 
+        ''' character (And which are pasted together with 
+        ''' no separator) Or a single condition object.
+        ''' </param>
+        ''' <param name="envir"></param>
+        ''' <returns>
+        ''' The warning message as character string, invisibly.
+        ''' </returns>
         <ExportAPI("warning")>
         <DebuggerStepThrough>
         Public Function warning(<RRawVectorArgument> message As Object, Optional envir As Environment = Nothing) As Message
-            Return CreateMessageInternal(message, envir, level:=MSG_TYPES.WRN)
+            Dim msg As Message = CreateMessageInternal(message, envir, level:=MSG_TYPES.WRN)
+            envir.messages.Add(msg)
+            Return msg
         End Function
 
         ''' <summary>

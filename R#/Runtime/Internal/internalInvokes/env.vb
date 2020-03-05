@@ -133,7 +133,7 @@ Namespace Runtime.Internal.Invokes
             If name.StringEmpty Then
                 ' list all of the objects in current 
                 ' R# runtime environment
-                Return env.variables.Keys.ToArray
+                Return env.symbols.Keys.ToArray
             Else
                 Dim globalEnv As GlobalEnvironment = env.globalEnvironment
                 Dim pkgMgr As PackageManager = globalEnv.packages
@@ -159,7 +159,7 @@ Namespace Runtime.Internal.Invokes
 
         <ExportAPI("objects")>
         Private Function objects(env As Environment) As String()
-            Return env.variables.Keys.ToArray
+            Return env.symbols.Keys.ToArray
         End Function
 
         ''' <summary>

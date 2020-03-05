@@ -207,20 +207,20 @@ Namespace Runtime.Interop
                 }
             }
 
-            envir = New Environment(envir, apiStackFrame, isInherits:=True)
+            Using env As New Environment(envir, apiStackFrame, isInherits:=True)
+                If Me.parameters.Any(Function(a) a.isObjectList) Then
+                    parameters = RArgumentList.CreateObjectListArguments(Me, env, params).ToArray
+                Else
+                    parameters = InvokeParameter _
+                        .CreateArguments(env, params, hasObjectList:=False) _
+                        .DoCall(Function(args)
+                                    Return createNormalArguments(env, args)
+                                End Function) _
+                        .ToArray
+                End If
 
-            If Me.parameters.Any(Function(a) a.isObjectList) Then
-                parameters = RArgumentList.CreateObjectListArguments(Me, envir, params).ToArray
-            Else
-                parameters = InvokeParameter _
-                    .CreateArguments(envir, params, hasObjectList:=False) _
-                    .DoCall(Function(args)
-                                Return createNormalArguments(envir, args)
-                            End Function) _
-                    .ToArray
-            End If
-
-            Return Invoke(parameters)
+                Return Invoke(parameters)
+            End Using
         End Function
 
         Private Iterator Function createNormalArguments(envir As Environment, arguments As Dictionary(Of String, Object)) As IEnumerable(Of Object)
