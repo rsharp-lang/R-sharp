@@ -149,29 +149,55 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("regexp")>
         <RApiReturn(GetType(Regex))>
         Public Function regexp(pattern$, Optional options$ = Nothing, Optional env As Environment = Nothing) As Object
+            Dim opts As RegexOptions = RegexOptions.None
+
             If pattern.StringEmpty Then
                 Return Internal.stop("the input regular expression could not be empty!", env)
-            Else
-                Dim opts As RegexOptions = RegexOptions.None
-
-                If Not options Is Nothing Then
-                    If options.IndexOf("i") Then
-                        opts = opts Or RegexOptions.IgnoreCase
-                    End If
-                    If options.IndexOf("m") Then
-                        opts = opts Or RegexOptions.Multiline
-                    End If
-                    If options.IndexOf("s") Then
-                        opts = opts Or RegexOptions.Singleline
-                    End If
-                    If options.IndexOf("r") Then
-                        ' reverse
-                        opts = opts Or RegexOptions.RightToLeft
-                    End If
-                End If
-
-                Return New Regex(pattern, opts)
             End If
+
+            If Not options Is Nothing Then
+                If options.IndexOf("i") Then
+                    opts = opts Or RegexOptions.IgnoreCase
+                End If
+                If options.IndexOf("m") Then
+                    opts = opts Or RegexOptions.Multiline
+                End If
+                If options.IndexOf("s") Then
+                    opts = opts Or RegexOptions.Singleline
+                End If
+                If options.IndexOf("r") Then
+                    ' reverse
+                    opts = opts Or RegexOptions.RightToLeft
+                End If
+            End If
+
+            Return New Regex(pattern, opts)
+        End Function
+
+        ''' <summary>
+        ''' Searches the specified input string for the first 
+        ''' occurrence of the regular expression specified in 
+        ''' the System.Text.RegularExpressions.Regex 
+        ''' constructor.
+        ''' </summary>
+        ''' <param name="regexp">Represents an immutable regular expression.
+        ''' To browse the .NET Framework source code for this type, 
+        ''' see the Reference Source.</param>
+        ''' <param name="strings">The string to search for a match.</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("match")>
+        Public Function match(regexp As Regex, <RRawVectorArgument> strings As Object, Optional env As Environment = Nothing) As Object
+            If regexp Is Nothing Then
+                Return Internal.stop("regular expression object can not be null!", env)
+            End If
+
+            Return asVector(Of String)(strings) _
+                .AsObjectEnumerator(Of String) _
+                .Select(Function(str)
+                            Return regexp.Match(str).Value
+                        End Function) _
+                .ToArray
         End Function
 
         ''' <summary>

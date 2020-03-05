@@ -10,7 +10,7 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTitle("R# language runtime and script interpreter")>
 <Assembly: AssemblyDescription("R# language runtime and script interpreter")>
-<Assembly: AssemblyCompany("SMRUCC")>
+<Assembly: AssemblyCompany("SMRUCC genomics Institute <genomics@SMRUCC.org>")>
 <Assembly: AssemblyProduct("GCModeller")>
 <Assembly: AssemblyCopyright("Copyright © xie.guigang@gcmodeller.org 2019")>
 <Assembly: AssemblyTrademark("R#")>
