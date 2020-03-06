@@ -199,17 +199,17 @@ Namespace Interpreter
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
         Public Sub Add(name$, value As Object, Optional type As TypeCodes = TypeCodes.generic)
-            Call globalEnvir.Push(name, value, type)
+            Call globalEnvir.Push(name, value, [readonly]:=False, mode:=type)
         End Sub
 
         <DebuggerStepThrough>
         Public Sub Add(name$, closure As [Delegate])
-            globalEnvir.Push(name, New RMethodInfo(name, closure), TypeCodes.closure)
+            globalEnvir.Push(name, New RMethodInfo(name, closure), [readonly]:=False, mode:=TypeCodes.closure)
         End Sub
 
         <DebuggerStepThrough>
         Public Sub Add(name$, closure As MethodInfo, Optional target As Object = Nothing)
-            globalEnvir.Push(name, New RMethodInfo(name, closure, target), TypeCodes.closure)
+            globalEnvir.Push(name, New RMethodInfo(name, closure, target), [readonly]:=False, mode:=TypeCodes.closure)
         End Sub
 
         Public Function Invoke(funcName$, ParamArray args As Object()) As Object
@@ -311,7 +311,8 @@ Namespace Interpreter
 
         Private Function RunInternal(Rscript As Rscript, arguments As NamedValue(Of Object)()) As Object
             Dim globalEnvir As Environment = InitializeEnvironment(Rscript.fileName, arguments)
-            Dim program As Program = Program.CreateProgram(Rscript, debug:=debug)
+            Dim error$ = Nothing
+            Dim program As Program = Program.CreateProgram(Rscript, debug:=debug, [error]:=[error])
             Dim result As Object = program.Execute(globalEnvir)
 
             ' fix bugs of warning message populates
@@ -371,7 +372,7 @@ Namespace Interpreter
                             name = var.Name
                             value = var.Value
 
-                            Call .globalEnvir.Push(name, value, NameOf(TypeCodes.generic))
+                            Call .globalEnvir.Push(name, value, [readonly]:=False, mode:=TypeCodes.generic)
                         Next
                     End If
 

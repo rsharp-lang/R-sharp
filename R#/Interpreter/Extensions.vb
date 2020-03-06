@@ -114,14 +114,12 @@ Namespace Interpreter
         Private Sub SyntaxErrorHelper(Rscript As Rscript, tokens As Token(), syntaxResult As SyntaxResult, opts As SyntaxBuilderOptions)
             Dim rawText As String = Rscript.GetRawText(tokens)
             Dim err As Exception = syntaxResult.error
-            Dim message As String = ""
-
-            If opts.debug Then
-                message = err.ToString
-            End If
+            Dim message As String = err.ToString
+            Dim errorsPromptLine = New String("~"c, rawText.LineTokens.MaxLengthString.Length)
 
             message &= vbCrLf & vbCrLf & "Syntax error nearby:"
             message &= vbCrLf & vbCrLf & rawText
+            message &= vbCrLf & errorsPromptLine
             message &= vbCrLf & vbCrLf & $"Range from {tokens.First.span.start} at line {tokens.First.span.line}, to {tokens.Last.span.stops} at line {tokens.Last.span.line}."
 
             If opts.debug Then

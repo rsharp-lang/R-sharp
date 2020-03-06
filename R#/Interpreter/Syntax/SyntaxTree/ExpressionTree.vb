@@ -173,7 +173,7 @@ Namespace Interpreter.SyntaxParser
                 Return ParseBinaryExpression(blocks, opts)
             End If
 
-            Return New SyntaxResult(New NotImplementedException, opts.debug)
+            Return New SyntaxResult(New NotImplementedException($"Unsure for parse: '{tokens.Select(Function(t) t.text).JoinBy(" ")}'!"), opts.debug)
         End Function
 
         <Extension>

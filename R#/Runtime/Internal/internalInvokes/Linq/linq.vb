@@ -126,6 +126,30 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Return filter.ToArray
         End Function
 
+        <ExportAPI("which.max")>
+        Public Function whichMax(<RRawVectorArgument> sequence As Object, Optional eval As Object = Nothing, Optional env As Environment = Nothing) As Integer
+            If eval Is Nothing Then
+                Return Which.Max(DirectCast(asVector(Of Double)(Rset.getObjectSet(sequence)), Double()))
+            Else
+                Dim lambda = LinqPipeline.lambda.CreateProjectLambda(Of Double)(eval, env)
+                Dim scores = Rset.getObjectSet(sequence).Select(lambda).ToArray
+
+                Return Which.Max(scores)
+            End If
+        End Function
+
+        <ExportAPI("which.min")>
+        Public Function whichMin(<RRawVectorArgument> sequence As Object, Optional eval As Object = Nothing, Optional env As Environment = Nothing) As Integer
+            If eval Is Nothing Then
+                Return Which.Min(DirectCast(asVector(Of Double)(Rset.getObjectSet(sequence)), Double()))
+            Else
+                Dim lambda = LinqPipeline.lambda.CreateProjectLambda(Of Double)(eval, env)
+                Dim scores = Rset.getObjectSet(sequence).Select(lambda).ToArray
+
+                Return Which.Min(scores)
+            End If
+        End Function
+
         <ExportAPI("first")>
         Private Function first(sequence As Array,
                                Optional test As RFunction = Nothing,

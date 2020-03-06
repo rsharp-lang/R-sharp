@@ -391,7 +391,7 @@ Namespace Runtime.Internal.Object.Converts
                 If Not obj Is Nothing AndAlso obj.GetType Is type Then
                     Return obj
                 End If
-            ElseIf obj.GetType Is GetType(list) AndAlso type.GetGenericTypeDefinition Is GetType(Dictionary(Of ,)) Then
+            ElseIf obj.GetType Is GetType(list) AndAlso type.ImplementInterface(GetType(IDictionary)) Then
                 ' cast R# list object to any dictionary table object???
                 Return DirectCast(obj, list).CTypeList(type, env)
             ElseIf type.IsEnum Then

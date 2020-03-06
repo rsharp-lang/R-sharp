@@ -256,16 +256,16 @@ Namespace Runtime
         ''' </summary>
         ''' <param name="name$"></param>
         ''' <param name="value"></param>
-        ''' <param name="type"></param>
+        ''' <param name="mode"></param>
         ''' <returns></returns>
-        Public Function Push(name$, value As Object, [readonly] As Boolean, Optional type As TypeCodes = TypeCodes.generic) As Object
+        Public Function Push(name$, value As Object, [readonly] As Boolean, Optional mode As TypeCodes = TypeCodes.generic) As Object
             If symbols.ContainsKey(name) Then
                 Return Internal.stop({String.Format(AlreadyExists, name)}, Me)
             ElseIf Not value Is Nothing Then
-                value = asRVector(type, value)
+                value = asRVector(mode, value)
             End If
 
-            With New Symbol(type) With {
+            With New Symbol(mode) With {
                 .name = name
             }
                 Call .SetValue(value, Me)
@@ -275,7 +275,7 @@ Namespace Runtime
                 .[readonly] = [readonly]
 
                 If Not .constraintValid Then
-                    Return Internal.stop(New Exception(String.Format(ConstraintInvalid, .typeCode, type)), Me)
+                    Return Internal.stop(New Exception(String.Format(ConstraintInvalid, .typeCode, mode)), Me)
                 Else
                     Call .DoCall(AddressOf symbols.Add)
                 End If
