@@ -100,6 +100,11 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        <DebuggerStepThrough>
+        Public Shared Function CreateFromPopulator(Of T)(upstream As IEnumerable(Of T)) As pipeline
+            Return New pipeline(upstream, GetType(T))
+        End Function
+
         Public Shared Widening Operator CType([error] As Message) As pipeline
             Return New pipeline([error], GetType(Message))
         End Operator
