@@ -73,6 +73,15 @@ Namespace Runtime.Internal.Object
             elementType = RType.GetRSharpType(type)
         End Sub
 
+        ''' <summary>
+        ''' Only suite for small set of data
+        ''' </summary>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' If the data in current pipeline is super large, then
+        ''' the program will be crashed.
+        ''' </remarks>
         Public Function createVector(env As Environment) As vector
             Return New vector(elementType, pipeline, env)
         End Function
