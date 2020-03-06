@@ -385,6 +385,7 @@
     <Compile Include="Runtime\Internal\internalInvokes\help.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\etc.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\graphics.vb" />
+    <Compile Include="Runtime\Internal\internalInvokes\Linq\lambda.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\set.vb" />
     <Compile Include="Runtime\Internal\generic.vb" />
     <Compile Include="Runtime\Internal\objects\pipeline.vb" />
