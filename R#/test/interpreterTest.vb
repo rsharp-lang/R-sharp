@@ -74,6 +74,9 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+
+        Call functiondeclaretest2()
+
         Call tupleValueAssignTest()
         Call withTest()
         Call headTest()
@@ -177,6 +180,29 @@ Module interpreterTest
 
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub functiondeclaretest2()
+        R.debug = False
+
+        Call R.Evaluate("let plot_ionRaws as function(MRM, mzML, tolerance, export) {
+	for(ion in getIonsSampleRaw(MRM, mzML. tolerance)) {
+		ion$chromatograms 
+		:> MRM.chromatogramPeaks.plot(
+			fill              = FALSE, 
+			gridFill          = 'white', 
+			lineStyle         = 'stroke: black; stroke-width: 5px; stroke-dash: solid;',
+			size              = [1600, 900],
+			relativeTimeScale = NULL,
+			parallel          = TRUE
+		)
+		:> save.graphics(file = `${export}/${ion$id}.png`)
+		;
+	}
+}
+")
 
         Pause()
     End Sub

@@ -311,7 +311,8 @@ Namespace Interpreter
 
         Private Function RunInternal(Rscript As Rscript, arguments As NamedValue(Of Object)()) As Object
             Dim globalEnvir As Environment = InitializeEnvironment(Rscript.fileName, arguments)
-            Dim program As Program = Program.CreateProgram(Rscript, debug:=debug)
+            Dim error$ = Nothing
+            Dim program As Program = Program.CreateProgram(Rscript, debug:=debug, [error]:=[error])
             Dim result As Object = program.Execute(globalEnvir)
 
             ' fix bugs of warning message populates
