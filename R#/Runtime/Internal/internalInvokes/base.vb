@@ -102,6 +102,21 @@ Namespace Runtime.Internal.Invokes
             Return Repeats(x, times)
         End Function
 
+        ''' <summary>
+        ''' create an empty vector with specific count of null value filled
+        ''' </summary>
+        ''' <param name="size"></param>
+        ''' <returns></returns>
+        <ExportAPI("allocate")>
+        Public Function allocate(size As Integer) As vector
+            Dim a As Object() = New Object(size - 1) {}
+            Dim v As New vector With {
+                .data = a
+            }
+
+            Return v
+        End Function
+
         <ExportAPI("replace")>
         Public Function replace(x As Array, find As Object, [as] As Object) As Object
             Dim type As Type = x.GetType.GetElementType
