@@ -1,46 +1,48 @@
 ﻿#Region "Microsoft.VisualBasic::b93da7c5de4e0d12747ce99cdbbb53cb, R#\Runtime\Internal\objects\pipeline.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class pipeline
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: createVector, populates, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class pipeline
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: createVector, populates, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Object
@@ -50,8 +52,21 @@ Namespace Runtime.Internal.Object
     ''' </summary>
     Public Class pipeline
 
+        Public ReadOnly Property elementType As RType
+
         ReadOnly pipeline As IEnumerable
-        ReadOnly elementType As RType
+
+        Public ReadOnly Property isError As Boolean
+            Get
+                Return TypeOf pipeline Is Message AndAlso DirectCast(pipeline, Message).level = MSG_TYPES.ERR
+            End Get
+        End Property
+
+        Public ReadOnly Property isMessage As Boolean
+            Get
+                Return TypeOf pipeline Is Message AndAlso GetType(Message) Is elementType
+            End Get
+        End Property
 
         Sub New(input As IEnumerable, type As Type)
             pipeline = input
@@ -69,7 +84,16 @@ Namespace Runtime.Internal.Object
         End Function
 
         Public Overrides Function ToString() As String
-            Return $"pipeline[{elementType.ToString}]"
+            If isError Then
+                Return DirectCast(pipeline, Message).ToString
+            Else
+                Return $"pipeline[{elementType.ToString}]"
+            End If
         End Function
+
+        Public Shared Widening Operator CType([error] As Message) As pipeline
+            Return New pipeline([error], GetType(Message))
+        End Operator
+
     End Class
 End Namespace
