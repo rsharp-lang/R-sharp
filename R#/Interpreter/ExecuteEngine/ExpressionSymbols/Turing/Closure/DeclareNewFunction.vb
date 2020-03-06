@@ -170,7 +170,7 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim result = envir.Push(funcName, Me, TypeCodes.closure)
+            Dim result = envir.Push(funcName, Me, [readonly]:=False, mode:=TypeCodes.closure)
             Me.envir = New Environment(envir, stackFrame, isInherits:=True)
             Return result
         End Function
