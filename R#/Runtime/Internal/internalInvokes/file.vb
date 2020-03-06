@@ -302,6 +302,12 @@ Namespace Runtime.Internal.Invokes
             Return files.Select(AddressOf FileExists).ToArray
         End Function
 
+        <ExportAPI("dir.create")>
+        Public Function dirCreate(path$, Optional showWarnings As Boolean = True, Optional recursive As Boolean = False, Optional mode$ = "0777") As Boolean
+            Call path.MkDIR
+            Return True
+        End Function
+
         ''' <summary>
         ''' dir.exists returns a logical vector of TRUE or FALSE values (without names).
         ''' </summary>
