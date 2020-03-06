@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::19d490c6cd35d7f2d2f8f9b249a714f8, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Package\Imports.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class [Imports]
-    ' 
-    '         Properties: library, packages, scriptSource, type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, GetDllFile, GetExternalScriptFile, importsExternalScript, importsLibrary
-    '                   importsPackages, isImportsAllPackages, LoadLibrary, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class [Imports]
+' 
+'         Properties: library, packages, scriptSource, type
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate, GetDllFile, GetExternalScriptFile, importsExternalScript, importsLibrary
+'                   importsPackages, isImportsAllPackages, LoadLibrary, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -48,6 +48,7 @@ Imports System.Reflection
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -144,6 +145,7 @@ Namespace Interpreter.ExecuteEngine
         Private Function importsExternalScript(result As Object, env As Environment) As Object
             Dim R As RInterpreter = env.globalEnvironment.Rscript
             Dim program As Program
+            Dim error$ = Nothing
 
             ' 20200213 因为source函数是创建了一个新的环境容器
             ' 所以函数无法被导入到全局环境之中
@@ -168,8 +170,15 @@ Namespace Interpreter.ExecuteEngine
                 env.FindSymbol("!script").SetValue(script, env)
             End If
 
-            program = Program.CreateProgram(Rscript, R.debug)
-            result = program.Execute(env)
+            program = Program.CreateProgram(Rscript, R.debug, [error]:=[error])
+
+            If program Is Nothing Then
+                ' there are syntax error in the external script
+                ' for current imports action
+                result = Internal.stop([error].Trim(ASCII.CR, ASCII.LF, " "c, ASCII.TAB), env)
+            Else
+                result = program.Execute(env)
+            End If
 
             Return result
         End Function
