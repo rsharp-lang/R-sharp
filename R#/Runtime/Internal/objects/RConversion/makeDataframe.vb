@@ -50,7 +50,6 @@
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
-Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -69,6 +68,11 @@ Namespace Runtime.Internal.Object.Converts
             makesDataframe(GetType(ExceptionData)) = AddressOf TracebackDataFrmae
         End Sub
 
+        ''' <summary>
+        ''' Public <see cref="Global.System.Delegate"/> Function IMakeDataFrame(x As <see cref="Object"/>, args As <see cref="list"/>, env As <see cref="Environment"/>) As <see cref="dataframe"/>
+        ''' </summary>
+        ''' <param name="type"></param>
+        ''' <param name="handler"></param>
         Public Sub [addHandler](type As Type, handler As IMakeDataFrame)
             makesDataframe(type) = handler
         End Sub
