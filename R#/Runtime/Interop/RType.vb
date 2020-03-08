@@ -223,5 +223,11 @@ Namespace Runtime.Interop
         Public Shared Narrowing Operator CType(type As RType) As Type
             Return type.raw
         End Operator
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
+        Public Shared Operator Like(rtype As RType, type As Type) As Boolean
+            Return rtype.raw Is type
+        End Operator
     End Class
 End Namespace
