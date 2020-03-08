@@ -294,7 +294,11 @@ Namespace Runtime.Internal.Invokes
                     value = slot.Evaluate(envir)
                 End If
 
-                Call list.Add(key, value)
+                If Program.isException(value) Then
+                    Return value
+                Else
+                    list.Add(key, value)
+                End If
             Next
 
             Return New list With {.slots = list}
