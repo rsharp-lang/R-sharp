@@ -1080,7 +1080,7 @@ Namespace Runtime.Internal.Invokes
                     getName = Function(i) $"[[{i.i + 1}]]"
                 Else
                     getName = Function(i)
-                                  Return names.Invoke(envir, invokeArgument(i.value))
+                                  Return getFirst(RConversion.asCharacters(names.Invoke(envir, invokeArgument(i.value))))
                               End Function
                 End If
 
