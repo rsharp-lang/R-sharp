@@ -404,7 +404,7 @@ Namespace Runtime.Internal.Invokes
             Dim listType As Type = list.GetType
 
             If listType Is GetType(list) Then
-                json = DirectCast(list, list).slots.GetJson
+                json = DirectCast(list, list).slots.GetJson(knownTypes:=listKnownTypes)
             ElseIf listType.ImplementInterface(GetType(IDictionary)) AndAlso
                 listType.GenericTypeArguments.Length > 0 AndAlso
                 listType.GenericTypeArguments(Scan0) Is GetType(String) Then
