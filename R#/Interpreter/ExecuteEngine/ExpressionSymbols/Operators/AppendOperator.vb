@@ -108,5 +108,9 @@ Namespace Interpreter.ExecuteEngine
                 .JoinIterates(Runtime.asVector(Of Object)(y).AsObjectEnumerator) _
                 .ToArray
         End Function
+
+        Public Overrides Function ToString() As String
+            Return $"Call base::vec::append({a}, {b})"
+        End Function
     End Class
 End Namespace

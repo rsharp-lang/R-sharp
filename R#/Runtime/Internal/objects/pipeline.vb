@@ -73,6 +73,14 @@ Namespace Runtime.Internal.Object
             elementType = RType.GetRSharpType(type)
         End Sub
 
+        Public Function getError() As Message
+            If isError Then
+                Return DirectCast(CObj(pipeline), Message)
+            Else
+                Return Nothing
+            End If
+        End Function
+
         ''' <summary>
         ''' Only suite for small set of data
         ''' </summary>

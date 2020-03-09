@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::c42b407a4a0a87c022522db38263523c, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\FunctionInvoke.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class FunctionInvoke
-    ' 
-    '         Properties: [namespace], funcName, stackFrame, type
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: allIsValueAssign, doInvokeFuncVar, Evaluate, getFuncVar, invokeRInternal
-    '                   ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class FunctionInvoke
+' 
+'         Properties: [namespace], funcName, stackFrame, type
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: allIsValueAssign, doInvokeFuncVar, Evaluate, getFuncVar, invokeRInternal
+'                   ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -144,11 +144,18 @@ Namespace Interpreter.ExecuteEngine
                     result = doInvokeFuncVar(target, env)
                 End If
 
+                ' check the function invoke returns values
+                ' for 
+                '
+                ' 1. error message
+                ' 2. invisible
+                ' 3. returns expression, break expression
+                '
                 If result Is Nothing Then
                     Return Nothing
                 ElseIf Program.isException(result) Then
                     Return result
-                ElseIf result.GetType Is GetType(RReturn) Then
+                ElseIf TypeOf result Is RReturn Then
                     Dim returns As RReturn = DirectCast(result, RReturn)
                     Dim messages = env.globalEnvironment.messages
 
@@ -165,6 +172,8 @@ Namespace Interpreter.ExecuteEngine
                         messages.AddRange(returns.messages)
                         Return Nothing
                     End If
+                ElseIf TypeOf result Is pipeline AndAlso DirectCast(result, pipeline).isError Then
+                    Return DirectCast(result, pipeline).getError
                 Else
                     Return result
                 End If

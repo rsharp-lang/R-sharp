@@ -370,13 +370,13 @@ Namespace Interpreter.ExecuteEngine
 
             For Each i As Integer In DirectCast(index, Integer())
                 ' 动态调整数组的大小
-                If targetVector.Length > i Then
-                    targetVector.SetValue(getValue(), i)
+                If targetVector.Length >= i Then
+                    targetVector.SetValue(getValue(), i - 1)
                 Else
-                    Dim newVec As Array = Array.CreateInstance(elementType, i + 1)
+                    Dim newVec As Array = Array.CreateInstance(elementType, i - 1)
 
                     Array.ConstrainedCopy(targetVector, Scan0, newVec, Scan0, targetVector.Length)
-                    newVec.SetValue(getValue(), i)
+                    newVec.SetValue(getValue(), i - 1)
                     targetVector = newVec
                 End If
             Next

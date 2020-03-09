@@ -64,7 +64,8 @@ Namespace Interpreter.ExecuteEngine
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim names As String() = Runtime.asVector(Of String)(memberReference.index.Evaluate(envir))
-            Dim list As RNameIndex = Runtime.getFirst(memberReference.symbol.Evaluate(envir))
+            Dim target As Object = memberReference.symbol.Evaluate(envir)
+            Dim list As RNameIndex = Runtime.getFirst(target)
             Dim value As Array = Runtime.asVector(Of Object)(Me.value.Evaluate(envir))
 
             If TypeOf list Is list AndAlso names.Length = 1 Then
