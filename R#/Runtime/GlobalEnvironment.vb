@@ -117,6 +117,7 @@ Namespace Runtime
                 Call Console.WriteLine()
 
                 Call printer.printContentArray(masked, ", ", "    ")
+                Call Console.WriteLine()
             End If
 
             Return Nothing
