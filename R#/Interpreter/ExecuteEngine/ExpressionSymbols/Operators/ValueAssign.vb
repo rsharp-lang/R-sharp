@@ -107,6 +107,11 @@ Namespace Interpreter.ExecuteEngine
                 DirectCast(value, IfBranch.IfPromise).assignTo = Me
                 Return value
             Else
+                If Not value Is Nothing AndAlso TypeOf value Is invisible Then
+                    ' value assign will break the invisible
+                    value = DirectCast(value, invisible).value
+                End If
+
                 Return doValueAssign(envir, targetSymbols, isByRef, value)
             End If
         End Function
