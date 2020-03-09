@@ -66,7 +66,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Dim variables As New List(Of String)
             Dim i As Integer = 0
             Dim sequence As SyntaxResult = Nothing
-            Dim locals As New List(Of DeclareNewVariable)
+            Dim locals As New List(Of DeclareNewSymbol)
 
             For i = 1 To tokens.Count - 1
                 If tokens(i).isIdentifier Then
@@ -83,7 +83,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 Return sequence
             Else
                 i += 2
-                locals = New DeclareNewVariable With {
+                locals = New DeclareNewSymbol With {
                     .names = variables.ToArray,
                     .hasInitializeExpression = False,
                     .value = Nothing
@@ -140,7 +140,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 Me.opts = opts
             End Sub
 
-            Private Function local(locals As List(Of DeclareNewVariable)) As SyntaxResult
+            Private Function local(locals As List(Of DeclareNewSymbol)) As SyntaxResult
                 buffer += token
 
                 Do While Not p.EndRead AndAlso Not p.Current.isOneOfKeywords(linqKeywordDelimiters)
@@ -158,7 +158,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     Return declares
                 End If
 
-                Dim [declare] As DeclareNewVariable = declares.expression
+                Dim [declare] As DeclareNewSymbol = declares.expression
 
                 program += New ValueAssign([declare].names, [declare].value)
                 locals += [declare]
@@ -261,7 +261,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 Return New SyntaxResult(New NotImplementedException, opts.debug)
             End Function
 
-            Friend Function doParseLINQProgram(locals As List(Of DeclareNewVariable),
+            Friend Function doParseLINQProgram(locals As List(Of DeclareNewSymbol),
                                                ByRef projection As Expression,
                                                ByRef outputs As List(Of FunctionInvoke),
                                                ByRef programClosure As ClosureExpression) As SyntaxResult

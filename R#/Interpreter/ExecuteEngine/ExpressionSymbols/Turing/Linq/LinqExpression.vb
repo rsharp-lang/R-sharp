@@ -78,7 +78,7 @@ Namespace Interpreter.ExecuteEngine.Linq
         ''' 第一个元素是from申明的
         ''' 剩余的元素都是let语句申明的
         ''' </remarks>
-        Dim locals As DeclareNewVariable()
+        Dim locals As DeclareNewSymbol()
         Dim program As ClosureExpression
         ''' <summary>
         ''' select
@@ -90,7 +90,7 @@ Namespace Interpreter.ExecuteEngine.Linq
         ''' </summary>
         Friend output As FunctionInvoke()
 
-        Sub New(locals As IEnumerable(Of DeclareNewVariable),
+        Sub New(locals As IEnumerable(Of DeclareNewSymbol),
                 sequence As Expression,
                 program As ClosureExpression,
                 projection As Expression,
@@ -173,7 +173,7 @@ Namespace Interpreter.ExecuteEngine.Linq
             Dim item As Object
             Dim sortKey As Object
 
-            For Each local As DeclareNewVariable In locals
+            For Each local As DeclareNewSymbol In locals
                 Call local.Evaluate(env)
             Next
 

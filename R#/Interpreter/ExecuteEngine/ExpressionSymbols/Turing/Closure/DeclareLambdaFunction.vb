@@ -73,7 +73,7 @@ Namespace Interpreter.ExecuteEngine
         Public ReadOnly Property name As String Implements RFunction.name
         Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
 
-        Dim parameter As DeclareNewVariable
+        Dim parameter As DeclareNewSymbol
         Dim closure As Expression
 
         Public ReadOnly Property parameterNames As String()
@@ -82,7 +82,7 @@ Namespace Interpreter.ExecuteEngine
             End Get
         End Property
 
-        Sub New(name$, parameter As DeclareNewVariable, closure As Expression, stackframe As StackFrame)
+        Sub New(name$, parameter As DeclareNewSymbol, closure As Expression, stackframe As StackFrame)
             Me.name = name
             Me.parameter = parameter
             Me.closure = closure
@@ -125,7 +125,7 @@ Namespace Interpreter.ExecuteEngine
                     ' Due to the reason of syntax rule of only allows one parameter.
                     '
                     Dim argVal As Object = arguments(Scan0).Evaluate(envir)
-                    Dim env As Environment = DeclareNewVariable _
+                    Dim env As Environment = DeclareNewSymbol _
                         .PushNames(names:=parameter.names,
                                    value:=argVal,
                                    type:=TypeCodes.generic,
@@ -143,7 +143,7 @@ Namespace Interpreter.ExecuteEngine
             Dim envir = New Environment(parent, stackFrame, isInherits:=False)
             Dim v As Symbol
 
-            Call DeclareNewVariable _
+            Call DeclareNewSymbol _
                 .PushNames(names:=parameter.names,
                            value:=Nothing,
                            type:=GetType(T).GetRTypeCode,

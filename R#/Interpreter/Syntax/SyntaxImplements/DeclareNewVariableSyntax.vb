@@ -65,7 +65,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
         <Extension>
         Public Function DeclareNewVariable(code As List(Of Token()), [readonly] As Boolean, opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim var As New DeclareNewVariable
+            Dim var As New DeclareNewSymbol
             Dim valSyntaxtemp As SyntaxResult = Nothing
 
             ' 0   1    2   3    4 5
@@ -108,7 +108,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         End Function
 
         Public Function DeclareNewVariable(singleToken As Token()) As SyntaxResult
-            Return New DeclareNewVariable With {
+            Return New DeclareNewSymbol With {
                 .names = getNames(singleToken),
                 .m_type = TypeCodes.generic,
                 .hasInitializeExpression = False,
@@ -123,7 +123,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 Return valSyntaxTemp
             End If
 
-            Return New DeclareNewVariable With {
+            Return New DeclareNewSymbol With {
                 .hasInitializeExpression = True,
                 .names = getNames(symbol),
                 .value = valSyntaxTemp.expression,
