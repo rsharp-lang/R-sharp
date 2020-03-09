@@ -110,7 +110,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             End If
 
             Dim funcName As String = code(1)(Scan0).text
-            Dim params As New List(Of DeclareNewVariable)
+            Dim params As New List(Of DeclareNewSymbol)
             Dim err As SyntaxResult = getParameters(paramPart, params, opts)
 
             If err IsNot Nothing AndAlso err.isException Then
@@ -136,7 +136,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             End If
         End Function
 
-        Private Function getParameters(tokens As Token(), ByRef params As List(Of DeclareNewVariable), opts As SyntaxBuilderOptions) As SyntaxResult
+        Private Function getParameters(tokens As Token(), ByRef params As List(Of DeclareNewSymbol), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim parts As Token()() = tokens.SplitByTopLevelDelimiter(TokenType.comma) _
                 .Where(Function(t) Not t.isComma) _
                 .ToArray

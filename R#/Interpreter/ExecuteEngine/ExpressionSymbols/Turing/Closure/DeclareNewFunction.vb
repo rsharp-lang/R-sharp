@@ -73,21 +73,21 @@ Namespace Interpreter.ExecuteEngine
         Public ReadOnly Property funcName As String Implements RFunction.name
         Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
 
-        Friend ReadOnly params As DeclareNewVariable()
+        Friend ReadOnly params As DeclareNewSymbol()
         Friend ReadOnly body As ClosureExpression
         ''' <summary>
         ''' The environment of current function closure
         ''' </summary>
         Friend envir As Environment
 
-        Sub New(funcName$, params As DeclareNewVariable(), body As ClosureExpression, stackframe As StackFrame)
+        Sub New(funcName$, params As DeclareNewSymbol(), body As ClosureExpression, stackframe As StackFrame)
             Me.funcName = funcName
             Me.params = params
             Me.body = body
             Me.stackFrame = stackframe
         End Sub
 
-        Friend Shared Function MissingParameters(var As DeclareNewVariable, funcName$, envir As Environment) As Object
+        Friend Shared Function MissingParameters(var As DeclareNewSymbol, funcName$, envir As Environment) As Object
             Dim message As String() = {
                 $"argument ""{var.names.GetJson}"" is missing, with no default",
                 $"function: {funcName}",
@@ -99,7 +99,7 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Public Function Invoke(parent As Environment, params As InvokeParameter()) As Object Implements RFunction.Invoke
-            Dim var As DeclareNewVariable
+            Dim var As DeclareNewSymbol
             Dim value As Object
             Dim arguments As Dictionary(Of String, Object)
             Dim envir As Environment = Me.envir
@@ -162,7 +162,7 @@ Namespace Interpreter.ExecuteEngine
                     Call ValueAssign.doValueAssign(envir, names, True, value)
                 Else
                     ' 不存在，则插入新的
-                    Call DeclareNewVariable.PushNames(var.names, value, var.type, False, envir)
+                    Call DeclareNewSymbol.PushNames(var.names, value, var.type, False, envir)
                 End If
             Next
 
@@ -176,7 +176,7 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Public Overrides Function ToString() As String
-            Return $"declare function '${funcName}'({params.Select(AddressOf DeclareNewVariable.getParameterView).JoinBy(", ")}) {{
+            Return $"declare function '${funcName}'({params.Select(AddressOf DeclareNewSymbol.getParameterView).JoinBy(", ")}) {{
     # function_internal
     {body}
 }}"

@@ -163,7 +163,7 @@ Namespace Runtime.Internal.Invokes
         ''' </returns>
         <ExportAPI("invisible")>
         Public Function invisible(x As Object) As <RSuppressPrint> Object
-            Return x
+            Return New invisible With {.value = x}
         End Function
 
         <ExportAPI("neg")>
@@ -515,8 +515,11 @@ Namespace Runtime.Internal.Invokes
                 .Where(Function(a) a.Name <> path) _
                 .ToArray
             Dim R As RInterpreter = envir.globalEnvironment.Rscript
+            Dim result As Object = R.Source(path, args)
 
-            Return R.Source(path, args)
+            Return New invisible() With {
+                .value = result
+            }
         End Function
 
         <ExportAPI("getOption")>
