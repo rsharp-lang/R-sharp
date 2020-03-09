@@ -86,6 +86,19 @@ Namespace Interpreter.SyntaxParser
 
                             Call buf.Add(syntaxResult)
                         End If
+                    ElseIf tokenBlocks(i).isOperator("!") Then
+                        ' not ...
+                        syntaxResult = Expression.CreateExpression(tokenBlocks(i + 1), opts)
+
+                        If syntaxResult.isException Then
+                            Return syntaxResult
+                        Else
+                            syntaxResult = New UnaryNot(syntaxResult.expression)
+                            i += 1
+
+                            Call buf.Add(syntaxResult)
+                        End If
+
                     Else
                         syntaxResult = Expression.CreateExpression(tokenBlocks(i), opts)
 
