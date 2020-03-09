@@ -70,5 +70,10 @@ Namespace Runtime.Internal.Invokes
             Call Console.WriteLine(My.Resources.contributions)
             Return Nothing
         End Function
+
+        <ExportAPI("demo")>
+        Public Sub demo()
+
+        End Sub
     End Module
 End Namespace
