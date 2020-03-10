@@ -252,7 +252,9 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Dim result As Group() = source _
                 .GroupBy(Function(o)
                              Dim arg = InvokeParameter.Create(o)
-                             Return getKey.Invoke(envir, arg)
+                             Dim keyVal As Object = Runtime.single(getKey.Invoke(envir, arg))
+
+                             Return keyVal
                          End Function) _
                 .Select(Function(group)
                             Return New Group With {

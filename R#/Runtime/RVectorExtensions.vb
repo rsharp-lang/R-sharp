@@ -117,6 +117,15 @@ Namespace Runtime
             End If
         End Function
 
+        ''' <summary>
+        ''' Try get a single element
+        ''' </summary>
+        ''' <param name="x">
+        ''' If the input object x is an array with just one element, 
+        ''' then the single value will be populate, otherwise will 
+        ''' populate the input x
+        ''' </param>
+        ''' <returns></returns>
         Public Function [single](x As Object) As Object
             If Not x Is Nothing Then
                 If x.GetType.IsArray AndAlso DirectCast(x, Array).Length = 1 Then
