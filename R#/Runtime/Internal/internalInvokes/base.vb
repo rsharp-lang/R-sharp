@@ -432,65 +432,6 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
-        ''' # Are Some Values True?
-        ''' 
-        ''' Given a set of logical vectors, is at least one of the values true?
-        ''' </summary>
-        ''' <param name="test">
-        ''' zero or more logical vectors. Other objects of zero length are ignored, 
-        ''' and the rest are coerced to logical ignoring any class.
-        ''' </param>
-        ''' <param name="narm">
-        ''' logical. If true NA values are removed before the result Is computed.
-        ''' </param>
-        ''' <returns>
-        ''' The value is a logical vector of length one.
-        '''
-        ''' Let x denote the concatenation of all the logical vectors in ... 
-        ''' (after coercion), after removing NAs if requested by na.rm = TRUE.
-        ''' 
-        ''' The value returned Is True If at least one Of the values In x Is True, 
-        ''' And False If all Of the values In x are False (including If there are 
-        ''' no values). Otherwise the value Is NA (which can only occur If 
-        ''' na.rm = False And ... contains no True values And at least one NA 
-        ''' value).
-        ''' </returns>
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        <ExportAPI("any")>
-        Public Function any(<RRawVectorArgument> test As Object, Optional narm As Boolean = False) As Boolean
-            Return Runtime.asLogical(test).Any(Function(b) b = True)
-        End Function
-
-        ''' <summary>
-        ''' # Are All Values True?
-        ''' 
-        ''' Given a set of logical vectors, are all of the values true?
-        ''' </summary>
-        ''' <param name="test">zero or more logical vectors. Other objects of zero 
-        ''' length are ignored, and the rest are coerced to logical ignoring any 
-        ''' class.</param>
-        ''' <param name="narm">
-        ''' logical. If true NA values are removed before the result is computed.
-        ''' </param>
-        ''' <returns>
-        ''' The value is a logical vector of length one.
-        '''
-        ''' Let x denote the concatenation of all the logical vectors in ... 
-        ''' (after coercion), after removing NAs if requested by na.rm = TRUE.
-        '''
-        ''' The value returned Is True If all Of the values In x are True 
-        ''' (including If there are no values), And False If at least one Of 
-        ''' the values In x Is False. Otherwise the value Is NA (which can 
-        ''' only occur If na.rm = False And ... contains no False values And 
-        ''' at least one NA value).
-        ''' </returns>
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        <ExportAPI("all")>
-        Public Function all(<RRawVectorArgument> test As Object, Optional narm As Boolean = False) As Boolean
-            Return Runtime.asLogical(test).All(Function(b) b = True)
-        End Function
-
-        ''' <summary>
         ''' ## Run the external R# script. Read R Code from a File, a Connection or Expressions
         ''' 
         ''' causes R to accept its input from the named file or URL or connection or expressions directly. 

@@ -1,46 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::43ed8c72fee8d18a4c1c5319f3500258, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module linq
-    ' 
-    '         Function: first, groupBy, orderBy, projectAs, skip
-    '                   unique, where
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module linq
+' 
+'         Function: first, groupBy, orderBy, projectAs, skip
+'                   unique, where
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -52,6 +53,11 @@ Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 Namespace Runtime.Internal.Invokes.LinqPipeline
 
     Module linq
+
+        <ExportAPI("take")>
+        Public Function take(<RRawVectorArgument> items As Object, n%) As Object
+            Return Rset.getObjectSet(items).Take(n).ToArray
+        End Function
 
         <ExportAPI("skip")>
         Public Function skip(<RRawVectorArgument> items As Object, n%) As Object
@@ -224,6 +230,74 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 .ToArray
 
             Return result
+        End Function
+
+        ''' <summary>
+        ''' # Are Some Values True?
+        ''' 
+        ''' Given a set of logical vectors, is at least one of the values true?
+        ''' </summary>
+        ''' <param name="test">
+        ''' zero or more logical vectors. Other objects of zero length are ignored, 
+        ''' and the rest are coerced to logical ignoring any class.
+        ''' </param>
+        ''' <param name="narm">
+        ''' logical. If true NA values are removed before the result Is computed.
+        ''' </param>
+        ''' <returns>
+        ''' The value is a logical vector of length one.
+        '''
+        ''' Let x denote the concatenation of all the logical vectors in ... 
+        ''' (after coercion), after removing NAs if requested by na.rm = TRUE.
+        ''' 
+        ''' The value returned Is True If at least one Of the values In x Is True, 
+        ''' And False If all Of the values In x are False (including If there are 
+        ''' no values). Otherwise the value Is NA (which can only occur If 
+        ''' na.rm = False And ... contains no True values And at least one NA 
+        ''' value).
+        ''' </returns>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <ExportAPI("any")>
+        Public Function any(<RRawVectorArgument> test As Object, Optional narm As Boolean = False) As Boolean
+            Return Runtime.asLogical(test).Any(Function(b) b = True)
+        End Function
+
+        ''' <summary>
+        ''' # Are All Values True?
+        ''' 
+        ''' Given a set of logical vectors, are all of the values true?
+        ''' </summary>
+        ''' <param name="test">zero or more logical vectors. Other objects of zero 
+        ''' length are ignored, and the rest are coerced to logical ignoring any 
+        ''' class.</param>
+        ''' <param name="narm">
+        ''' logical. If true NA values are removed before the result is computed.
+        ''' </param>
+        ''' <returns>
+        ''' The value is a logical vector of length one.
+        '''
+        ''' Let x denote the concatenation of all the logical vectors in ... 
+        ''' (after coercion), after removing NAs if requested by na.rm = TRUE.
+        '''
+        ''' The value returned Is True If all Of the values In x are True 
+        ''' (including If there are no values), And False If at least one Of 
+        ''' the values In x Is False. Otherwise the value Is NA (which can 
+        ''' only occur If na.rm = False And ... contains no False values And 
+        ''' at least one NA value).
+        ''' </returns>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <ExportAPI("all")>
+        Public Function all(<RRawVectorArgument> test As Object, Optional narm As Boolean = False) As Boolean
+            Return Runtime.asLogical(test).All(Function(b) b = True)
+        End Function
+
+        <ExportAPI("while")>
+        Public Function doWhile(<RRawVectorArgument>
+                                seq As Object,
+                                predicate As RFunction,
+                                Optional action$ = "take",
+                                Optional env As Environment = Nothing) As Object
+
         End Function
     End Module
 End Namespace
