@@ -149,7 +149,11 @@ Namespace Runtime.Internal.Invokes
                     Dim package As Package = pkgMgr.FindPackage(name, Nothing)
 
                     If package Is Nothing Then
-                        Return {}
+                        If name = "REnv" Then
+                            Return Internal.invoke.ls
+                        Else
+                            Return {}
+                        End If
                     Else
                         Return package.ls
                     End If
