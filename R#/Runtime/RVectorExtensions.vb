@@ -186,8 +186,15 @@ Namespace Runtime
             Return array
         End Function
 
-        Public Function CTypeOfList(Of T)(list As IDictionary) As Dictionary(Of String, T)
-            Throw New NotImplementedException
+        Public Function CTypeOfList(Of T)(list As IDictionary, env As Environment) As Dictionary(Of String, T)
+            Dim ofList As New Dictionary(Of String, T)
+            Dim elementType As Type = GetType(T)
+
+            For Each key As Object In list.Keys
+                ofList(Scripting.ToString(key)) = RConversion.CTypeDynamic(list.Item(key), elementType, env)
+            Next
+
+            Return ofList
         End Function
 
         ''' <summary>
