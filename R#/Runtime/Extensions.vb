@@ -44,6 +44,12 @@ Namespace Runtime
 
     <HideModuleName> Public Module Extensions
 
+        ''' <summary>
+        ''' If exception happens, then this function will catch 
+        ''' the exceptin object and then returns the error.
+        ''' </summary>
+        ''' <param name="runScript"></param>
+        ''' <returns></returns>
         Public Function TryCatch(runScript As Func(Of Object)) As Object
             Try
                 Return runScript()
