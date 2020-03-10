@@ -183,7 +183,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Dim pass As Boolean
             Dim arg As InvokeParameter()
 
-            For Each item As Object In Rset.getObjectSet(sequence)
+            For Each item As Object In sequence
                 arg = InvokeParameter.Create(item)
                 pass = Runtime.asLogical(test.Invoke(env, arg))(Scan0)
 
