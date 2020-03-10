@@ -61,8 +61,19 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
     Module linq
 
         <ExportAPI("take")>
-        Public Function take(<RRawVectorArgument> items As Object, n%) As Object
-            Return Rset.getObjectSet(items).Take(n).ToArray
+        Public Function take(<RRawVectorArgument> sequence As Object, n%) As Object
+            If sequence Is Nothing Then
+                Return Nothing
+            ElseIf TypeOf sequence Is pipeline Then
+                Return DirectCast(sequence, pipeline) _
+                    .populates(Of Object) _
+                    .Take(n) _
+                    .DoCall(Function(seq)
+                                Return New pipeline(seq, DirectCast(sequence(), pipeline).elementType)
+                            End Function)
+            Else
+                Return Rset.getObjectSet(sequence).Take(n).ToArray
+            End If
         End Function
 
         ''' <summary>
