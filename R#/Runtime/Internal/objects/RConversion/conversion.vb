@@ -313,10 +313,16 @@ Namespace Runtime.Internal.Object.Converts
         Public Function asNumeric(<RRawVectorArgument> obj As Object) As Object
             If obj Is Nothing Then
                 Return 0
-            ElseIf obj.GetType.ImplementInterface(GetType(IDictionary)) Then
-                Return Runtime.CTypeOfList(Of Double)(obj)
-            Else
-                Return Runtime.asVector(Of Double)(obj)
+            End If
+
+            If TypeOf obj Is list Then
+                obj = DirectCast(obj, list).slots
+            End If
+
+            If obj.GetType.ImplementInterface(GetType(IDictionary)) Then
+                    Return Runtime.CTypeOfList(Of Double)(obj)
+                Else
+                    Return Runtime.asVector(Of Double)(obj)
             End If
         End Function
 
