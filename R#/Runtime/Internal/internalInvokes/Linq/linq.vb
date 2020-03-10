@@ -267,27 +267,45 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Return result
         End Function
 
+        ''' <summary>
+        ''' Sorts the elements of a sequence in ascending order according to a key.
+        ''' </summary>
+        ''' <param name="sequence">A sequence of values to order.</param>
+        ''' <param name="getKey">A function to extract a key from an element.</param>
+        ''' <param name="envir"></param>
+        ''' <returns>An System.Linq.IOrderedEnumerable`1 whose elements are sorted according to a
+        ''' key.</returns>
         <ExportAPI("orderBy")>
         Public Function orderBy(<RRawVectorArgument>
                                 sequence As Object,
-                                getKey As RFunction,
+                                Optional getKey As RFunction = Nothing,
+                                Optional desc As Boolean = False,
                                 Optional envir As Environment = Nothing) As Object
 
             Dim source As Object() = Rset.getObjectSet(sequence).ToArray
-            Dim result As Array = source _
-                .OrderBy(Function(o)
-                             Dim arg = InvokeParameter.Create(o)
-                             Dim index As Object = getKey.Invoke(envir, arg)
+            Dim getKeyFunc As Func(Of Object, Object)
+            Dim result As Array
 
-                             If index Is Nothing Then
-                                 Return Nothing
-                             ElseIf index.GetType.IsArray Then
-                                 Return DirectCast(index, Array).GetValue(Scan0)
-                             Else
+            If getKey Is Nothing Then
+                getKeyFunc = Function(o) o
+            Else
+                getKeyFunc = Function(o)
+                                 Dim arg = InvokeParameter.Create(o)
+                                 Dim index As Object = getKey.Invoke(envir, arg)
+
                                  Return index
-                             End If
-                         End Function) _
-                .ToArray
+                             End Function
+            End If
+
+            If desc Then
+                result = source _
+                    .OrderByDescending(Function(o) Runtime.single(getKeyFunc(o))) _
+                    .ToArray
+            Else
+                result = source _
+                    .OrderBy(Function(o) Runtime.single(getKeyFunc(o))) _
+                    .ToArray
+            End If
 
             Return result
         End Function
