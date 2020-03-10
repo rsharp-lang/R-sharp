@@ -57,6 +57,10 @@ Namespace Runtime.Internal.Object
     Public Class vector : Implements RNames, RIndex
 
         Public Property data As Array
+        ''' <summary>
+        ''' do conversion from current vector to another scale.
+        ''' </summary>
+        ''' <returns></returns>
         Public Property unit As unit
 
         Public ReadOnly Property length As Integer Implements RIndex.length

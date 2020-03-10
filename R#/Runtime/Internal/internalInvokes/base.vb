@@ -117,6 +117,12 @@ Namespace Runtime.Internal.Invokes
             Return v
         End Function
 
+        <ExportAPI("unit")>
+        Public Function unitOfT(x As vector, unit As unit) As vector
+            x.unit = unit
+            Return x
+        End Function
+
         <ExportAPI("replace")>
         Public Function replace(x As Array, find As Object, [as] As Object) As Object
             Dim type As Type = x.GetType.GetElementType
