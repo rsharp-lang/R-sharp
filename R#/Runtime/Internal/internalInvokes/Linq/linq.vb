@@ -1,51 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::43ed8c72fee8d18a4c1c5319f3500258, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module linq
-    ' 
-    '         Function: first, groupBy, orderBy, projectAs, skip
-    '                   unique, where
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module linq
+' 
+'         Function: first, groupBy, orderBy, projectAs, skip
+'                   unique, where
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 
@@ -55,7 +56,18 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
         <ExportAPI("skip")>
         Public Function skip(<RRawVectorArgument> items As Object, n%) As Object
-            Return Rset.getObjectSet(items).Skip(n).ToArray
+            If items Is Nothing Then
+                Return Nothing
+            ElseIf TypeOf items Is pipeline Then
+                Return DirectCast(items, pipeline) _
+                    .populates(Of Object) _
+                    .Skip(n) _
+                    .DoCall(Function(seq)
+                                Return New pipeline(seq, DirectCast(items, pipeline).elementType)
+                            End Function)
+            Else
+                Return Rset.getObjectSet(items).Skip(n).ToArray
+            End If
         End Function
 
         <ExportAPI("unique")>
@@ -84,14 +96,32 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         End Function
 
         <ExportAPI("projectAs")>
-        Private Function projectAs(sequence As Array, project As RFunction, envir As Environment) As Object
-            Dim doProject As Func(Of Object, Object) = Function(o) project.Invoke(envir, InvokeParameter.Create(o))
-            Dim result As Object() = sequence _
-                .AsObjectEnumerator _
-                .Select(doProject) _
-                .ToArray
+        Private Function projectAs(<RRawVectorArgument>
+                                   sequence As Object,
+                                   project As RFunction,
+                                   Optional envir As Environment = Nothing) As Object
 
-            Return result
+            If sequence Is Nothing Then
+                Return Nothing
+            End If
+
+            Dim doProject As Func(Of Object, Object) = Function(o) project.Invoke(envir, InvokeParameter.Create(o))
+
+            If TypeOf sequence Is pipeline Then
+                ' run in pipeline mode
+                Dim seq As pipeline = DirectCast(sequence, pipeline)
+                Dim projection As IEnumerable(Of Object) = seq _
+                    .populates(Of Object) _
+                    .Select(doProject)
+
+                Return New pipeline(projection, GetType(Object))
+            Else
+                Dim result As Object() = Rset.getObjectSet(sequence) _
+                    .Select(doProject) _
+                    .ToArray
+
+                Return result
+            End If
         End Function
 
         ''' <summary>
@@ -101,29 +131,42 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' <returns></returns>
         ''' 
         <ExportAPI("which")>
-        Private Function where(sequence As Array,
+        Private Function where(<RRawVectorArgument>
+                               sequence As Object,
                                Optional test As RFunction = Nothing,
                                Optional envir As Environment = Nothing) As Object
 
             If test Is Nothing Then
                 ' test for which index
                 Return Which.IsTrue(Runtime.asLogical(sequence))
+            ElseIf TypeOf sequence Is pipeline Then
+                ' run in pipeline mode
+                Return DirectCast(sequence, pipeline) _
+                    .populates(Of Object) _
+                    .runWhichFilter(test, envir) _
+                    .DoCall(Function(seq)
+                                Return New pipeline(seq, DirectCast(sequence, pipeline).elementType)
+                            End Function)
+            Else
+                Return Rset.getObjectSet(sequence) _
+                    .runWhichFilter(test, envir) _
+                    .ToArray
             End If
+        End Function
 
+        <Extension>
+        Private Iterator Function runWhichFilter(sequence As IEnumerable(Of Object), test As RFunction, env As Environment) As IEnumerable(Of Object)
             Dim pass As Boolean
             Dim arg As InvokeParameter()
-            Dim filter As New List(Of Object)
 
-            For Each item As Object In sequence
+            For Each item As Object In Rset.getObjectSet(sequence)
                 arg = InvokeParameter.Create(item)
-                pass = Runtime.asLogical(test.Invoke(envir, arg))(Scan0)
+                pass = Runtime.asLogical(test.Invoke(env, arg))(Scan0)
 
                 If pass Then
-                    Call filter.Add(item)
+                    Yield item
                 End If
             Next
-
-            Return filter.ToArray
         End Function
 
         <ExportAPI("which.max")>
@@ -151,7 +194,8 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         End Function
 
         <ExportAPI("first")>
-        Private Function first(sequence As Array,
+        Private Function first(<RRawVectorArgument>
+                               sequence As Object,
                                Optional test As RFunction = Nothing,
                                Optional envir As Environment = Nothing) As Object
 
@@ -159,14 +203,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Dim arg As InvokeParameter()
 
             If test Is Nothing Then
-                If sequence.Length = 0 Then
-                    Return Nothing
-                Else
-                    Return sequence.GetValue(Scan0)
-                End If
+                Return Rset.getObjectSet(sequence).FirstOrDefault
             End If
 
-            For Each item As Object In sequence
+            For Each item As Object In Rset.getObjectSet(sequence)
                 arg = InvokeParameter.Create(item)
                 pass = Runtime.asLogical(test.Invoke(envir, arg))(Scan0)
 
