@@ -44,6 +44,7 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -52,26 +53,49 @@ Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 
 Namespace Runtime.Internal.Invokes.LinqPipeline
 
+    ''' <summary>
+    ''' Provides a set of static (Shared in Visual Basic) methods for querying objects
+    ''' that implement System.Collections.Generic.IEnumerable`1.
+    ''' </summary>
+    <Package("linq", Category:=APICategories.SoftwareTools, Publisher:="xie.guigang@live.com")>
     Module linq
 
+        ''' <summary>
+        ''' Bypasses a specified number of elements in a sequence and then 
+        ''' returns the remaining elements.
+        ''' </summary>
+        ''' <param name="sequence">An System.Collections.Generic.IEnumerable`1 to return elements from.</param>
+        ''' <param name="n">The number of elements to skip before returning the remaining elements.</param>
+        ''' <returns>An System.Collections.Generic.IEnumerable`1 that contains the elements that occur
+        ''' after the specified index in the input sequence.</returns>
         <ExportAPI("skip")>
-        Public Function skip(<RRawVectorArgument> items As Object, n%) As Object
-            If items Is Nothing Then
+        Public Function skip(<RRawVectorArgument> sequence As Object, n%) As Object
+            If sequence Is Nothing Then
                 Return Nothing
-            ElseIf TypeOf items Is pipeline Then
-                Return DirectCast(items, pipeline) _
+            ElseIf TypeOf sequence Is pipeline Then
+                Return DirectCast(sequence, pipeline) _
                     .populates(Of Object) _
                     .Skip(n) _
                     .DoCall(Function(seq)
-                                Return New pipeline(seq, DirectCast(items, pipeline).elementType)
+                                Return New pipeline(seq, DirectCast(sequence, pipeline).elementType)
                             End Function)
             Else
-                Return Rset.getObjectSet(items).Skip(n).ToArray
+                Return Rset.getObjectSet(sequence).Skip(n).ToArray
             End If
         End Function
 
+        ''' <summary>
+        ''' Returns distinct elements from a sequence by using a specified System.Collections.Generic.IEqualityComparer`1
+        ''' to compare values.
+        ''' </summary>
+        ''' <param name="items">The sequence to remove duplicate elements from.</param>
+        ''' <param name="getKey">An System.Collections.Generic.IEqualityComparer`1 to compare values.</param>
+        ''' <param name="envir"></param>
+        ''' <returns>An System.Collections.Generic.IEnumerable`1 that contains distinct elements from
+        ''' the source sequence.</returns>
         <ExportAPI("unique")>
-        Private Function unique(<RRawVectorArgument> items As Object,
+        Private Function unique(<RRawVectorArgument>
+                                items As Object,
                                 Optional getKey As RFunction = Nothing,
                                 Optional envir As Environment = Nothing) As Object
 
