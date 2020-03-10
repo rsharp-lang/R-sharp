@@ -49,6 +49,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Package
@@ -65,9 +66,29 @@ Namespace Runtime.Internal
         ''' </summary>
         Shared ReadOnly index As New Dictionary(Of String, RMethodInfo)
 
-        Public Shared ReadOnly Property ls As String()
+        Public Shared ReadOnly Property ls As list
             Get
-                Return index.Keys.ToArray
+                Return index.Values _
+                    .GroupBy(Function(api)
+                                 Return api.GetRawDeclares _
+                                    .DeclaringType _
+                                    .NamespaceEntry _
+                                    .Namespace
+                             End Function) _
+                    .ToDictionary(Function(pkg) pkg.Key,
+                                  Function(group)
+                                      Return group _
+                                         .Select(Function(api) api.name) _
+                                         .ToArray _
+                                         .DoCall(Function(l)
+                                                     Return CObj(l)
+                                                 End Function)
+                                  End Function) _
+                    .DoCall(Function(list)
+                                Return New list With {
+                                    .slots = list
+                                }
+                            End Function)
             End Get
         End Property
 

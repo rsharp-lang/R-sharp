@@ -129,7 +129,8 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <returns></returns>
         <ExportAPI("ls")>
-        Private Function ls(<RSymbolTextArgument> Optional name$ = Nothing, Optional env As Environment = Nothing) As String()
+        <RApiReturn(GetType(String))>
+        Private Function ls(<RSymbolTextArgument> Optional name$ = Nothing, Optional env As Environment = Nothing) As Object
             If name.StringEmpty Then
                 ' list all of the objects in current 
                 ' R# runtime environment

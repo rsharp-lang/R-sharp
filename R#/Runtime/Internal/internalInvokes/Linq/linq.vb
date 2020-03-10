@@ -326,6 +326,11 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Return result
         End Function
 
+        <ExportAPI("reverse")>
+        Public Function reverse(<RRawVectorArgument> sequence As Object) As Object
+
+        End Function
+
         ''' <summary>
         ''' # Are Some Values True?
         ''' 

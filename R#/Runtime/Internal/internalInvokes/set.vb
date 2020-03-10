@@ -113,5 +113,9 @@ Namespace Runtime.Internal.Invokes
                 .ToArray
             Return join
         End Function
+
+        Public Function diff(<RRawVectorArgument> x As Object, <RRawVectorArgument> y As Object) As Object
+
+        End Function
     End Module
 End Namespace
