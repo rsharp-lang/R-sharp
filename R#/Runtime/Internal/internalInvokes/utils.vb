@@ -93,7 +93,7 @@ Namespace Runtime.Internal.Invokes
                 If pkgName.FileExists Then
                     namespaces += pkgMgr.InstallLocals(pkgName)
                 Else
-                    Return Internal.stop($"Library module '{pkgName.GetFullPath}' is not exists on your file system!", envir)
+                    Return Internal.debug.stop($"Library module '{pkgName.GetFullPath}' is not exists on your file system!", envir)
                 End If
             Next
 
@@ -205,7 +205,7 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("wget")>
         Public Function wget(url As String, Optional save As String = Nothing, Optional env As Environment = Nothing) As Object
             If url.StringEmpty Then
-                Return Internal.stop({"Missing url data source for file get!"}, env)
+                Return Internal.debug.stop({"Missing url data source for file get!"}, env)
             ElseIf save.StringEmpty Then
                 save = App.CurrentDirectory & "/" & url.Split("?"c).First.BaseName.NormalizePathString(False)
             End If

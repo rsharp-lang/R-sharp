@@ -127,7 +127,7 @@ Namespace Runtime
             Dim message As Message
 
             exception = If(exception, New Exception($"No packages named '{packageName}' is installed..."))
-            message = Internal.stop(exception, Me)
+            message = Internal.debug.stop(exception, Me)
             message.message = {
                 $"there is no package called ‘{packageName}’",
                 $"package: {packageName}"

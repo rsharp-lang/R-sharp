@@ -132,7 +132,7 @@ Namespace Runtime.Internal.Object.Converts
                             [typeof] = RType.raw
                         End If
                     Case Else
-                        Return Internal.stop(New NotImplementedException, env)
+                        Return Internal.debug.stop(New NotImplementedException, env)
                 End Select
             End If
 
@@ -141,7 +141,7 @@ Namespace Runtime.Internal.Object.Converts
             ElseIf list.GetType.ImplementInterface(GetType(IDictionary)) Then
                 Return New list(list).unlistOfRList([typeof], env)
             Else
-                Return Internal.stop(New InvalidCastException(list.GetType.FullName), env)
+                Return Internal.debug.stop(New InvalidCastException(list.GetType.FullName), env)
             End If
         End Function
 
@@ -212,7 +212,7 @@ Namespace Runtime.Internal.Object.Converts
             If makeDataframe.is_ableConverts(type) Then
                 Return makeDataframe.createDataframe(type, x, args, env)
             Else
-                Return Internal.stop(New InvalidProgramException, env)
+                Return Internal.debug.stop(New InvalidProgramException, env)
             End If
         End Function
 

@@ -98,7 +98,7 @@ Namespace Runtime.Internal.Object
                         Return keys
                     End If
 
-                    Return Internal.stop({"unsupported!", "func: names"}, envir)
+                    Return Internal.debug.stop({"unsupported!", "func: names"}, envir)
             End Select
         End Function
 
@@ -117,7 +117,7 @@ Namespace Runtime.Internal.Object
                 Case GetType(list), GetType(dataframe)
                     Return DirectCast([object], RNames).setNames(namelist, envir)
                 Case Else
-                    Return Internal.stop({"unsupported!", "func: names"}, envir)
+                    Return Internal.debug.stop({"unsupported!", "func: names"}, envir)
             End Select
         End Function
 

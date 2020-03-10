@@ -107,7 +107,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             ElseIf name = NameOf(group) Then
                 group = Runtime.asVector(Of Object)(value)
             Else
-                Return Internal.stop(New InvalidOperationException, envir)
+                Return Internal.debug.stop(New InvalidOperationException, envir)
             End If
 
             Return value

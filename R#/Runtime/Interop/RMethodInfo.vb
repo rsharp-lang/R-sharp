@@ -275,7 +275,7 @@ Namespace Runtime.Interop
                 $"environment: {envir.ToString}"
             }
 
-            Return Internal.stop(messages, envir)
+            Return Internal.debug.stop(messages, envir)
         End Function
 
         ''' <summary>
@@ -312,7 +312,7 @@ Namespace Runtime.Interop
             Catch ex As Exception When trygetListParam
                 Return GetType(Void)
             Catch ex As Exception
-                Return Internal.stop(New InvalidCastException("Api: " & trace, ex), envir)
+                Return Internal.debug.stop(New InvalidCastException("Api: " & trace, ex), envir)
             End Try
         End Function
 

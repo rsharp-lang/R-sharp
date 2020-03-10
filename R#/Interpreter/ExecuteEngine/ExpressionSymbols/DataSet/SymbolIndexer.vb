@@ -143,7 +143,7 @@ Namespace Interpreter.ExecuteEngine
             ElseIf indexType = SymbolIndexers.dataframeColumns Then
                 Return getColumn(obj, indexer, envir)
             Else
-                Return Internal.stop(New NotImplementedException(indexType.ToString), envir)
+                Return Internal.debug.stop(New NotImplementedException(indexType.ToString), envir)
             End If
         End Function
 
@@ -154,7 +154,7 @@ Namespace Interpreter.ExecuteEngine
                 Dim key As Object = indexer.GetValue(Scan0)
 
                 If key Is Nothing Then
-                    Return Internal.stop("dataframe index could not be nothing!", envir)
+                    Return Internal.debug.stop("dataframe index could not be nothing!", envir)
                 ElseIf key.GetType Like BinaryExpression.integers Then
                     Return obj.GetColumnVector(CInt(key))
                 Else
@@ -167,7 +167,7 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Friend Shared Function emptyIndexError(symbol As SymbolIndexer, env As Environment) As Message
-            Return Internal.stop({
+            Return Internal.debug.stop({
                 $"attempt to select less than one element in OneIndex!",
                 $"SymbolName: {symbol.symbol}",
                 $"Index: {symbol.index}"
@@ -182,7 +182,7 @@ Namespace Interpreter.ExecuteEngine
             End If
 
             If Not objType.ImplementInterface(GetType(RNameIndex)) Then
-                Return Internal.stop("Target object can not be indexed by name!", envir)
+                Return Internal.debug.stop("Target object can not be indexed by name!", envir)
             ElseIf indexer.Length = 1 Then
                 Return DirectCast(obj, RNameIndex).getByName(Scripting.ToString(indexer.GetValue(Scan0)))
             Else
@@ -223,7 +223,7 @@ Namespace Interpreter.ExecuteEngine
 
                         '' by element index
                         'If Not sequence.GetType.ImplementInterface(GetType(RIndex)) Then
-                        '    Return Internal.stop("Target object can not be indexed!", envir)
+                        '    Return Internal.debug.stop("Target object can not be indexed!", envir)
                         'End If
                     Else
                         Dim count As Integer

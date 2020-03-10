@@ -77,7 +77,7 @@ Namespace Interpreter.ExecuteEngine
                 Dim result As Object
 
                 If resource Is Nothing Then
-                    Return Internal.stop("Target is nothing!", env)
+                    Return Internal.debug.stop("Target is nothing!", env)
                 ElseIf Program.isException(resource) Then
                     Return resource
                 ElseIf Not resource.GetType.ImplementInterface(GetType(IDisposable)) Then

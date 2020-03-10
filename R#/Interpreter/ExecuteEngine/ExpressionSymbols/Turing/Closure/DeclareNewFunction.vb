@@ -95,7 +95,7 @@ Namespace Interpreter.ExecuteEngine
                 $"type: {var.type.Description}"
             }
 
-            Return Internal.stop(message, envir)
+            Return Internal.debug.stop(message, envir)
         End Function
 
         Public Function Invoke(parent As Environment, params As InvokeParameter()) As Object Implements RFunction.Invoke

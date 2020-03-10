@@ -175,7 +175,7 @@ Namespace Interpreter.ExecuteEngine
             If program Is Nothing Then
                 ' there are syntax error in the external script
                 ' for current imports action
-                result = Internal.stop([error].Trim(ASCII.CR, ASCII.LF, " "c, ASCII.TAB), env)
+                result = Internal.debug.stop([error].Trim(ASCII.CR, ASCII.LF, " "c, ASCII.TAB), env)
             Else
                 result = program.Execute(env)
             End If
@@ -211,7 +211,7 @@ load:       Return LoadLibrary(Scripting.ToString(libDll), env, names)
         ''' <returns></returns>
         Public Shared Function GetExternalScriptFile(libFile As String, source$, env As Environment) As Object
             If libFile.StringEmpty Then
-                Return Internal.stop("No script module provided!", env)
+                Return Internal.debug.stop("No script module provided!", env)
             ElseIf Not libFile.FileExists Then
                 If source.StringEmpty Then
                     For Each location As String In {
@@ -234,7 +234,7 @@ load:       Return LoadLibrary(Scripting.ToString(libDll), env, names)
                     Next
                 End If
 
-                Return Internal.stop($"Missing script file: '{libFile}'!", env)
+                Return Internal.debug.stop($"Missing script file: '{libFile}'!", env)
             End If
 
             Return libFile
@@ -242,7 +242,7 @@ load:       Return LoadLibrary(Scripting.ToString(libDll), env, names)
 
         Public Shared Function GetDllFile(libDll As String, env As Environment) As Object
             If libDll.StringEmpty Then
-                Return Internal.stop("No package module provided!", env)
+                Return Internal.debug.stop("No package module provided!", env)
             ElseIf Not libDll.FileExists Then
                 For Each location As String In {$"{App.HOME}/{libDll}", $"{App.HOME}/Library/{libDll}"}
                     If location.FileExists Then
@@ -250,7 +250,7 @@ load:       Return LoadLibrary(Scripting.ToString(libDll), env, names)
                     End If
                 Next
 
-                Return Internal.stop($"Missing library file: '{libDll}'!", env)
+                Return Internal.debug.stop($"Missing library file: '{libDll}'!", env)
             End If
 
             Return libDll
@@ -293,7 +293,7 @@ load:       Return LoadLibrary(Scripting.ToString(libDll), env, names)
                     If packages.ContainsKey(required) Then
                         Call ImportsPackage.ImportsStatic(globalEnv, packages(required).package)
                     Else
-                        Return Internal.stop({
+                        Return Internal.debug.stop({
                             $"There is no package named '{required}' in given module!",
                             $"namespace: {required}",
                             $"library module: {libDll}"}, envir

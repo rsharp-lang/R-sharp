@@ -75,7 +75,7 @@ Namespace Runtime.Internal.Invokes
                         End Function)
 
             If name.StringEmpty Then
-                Return Internal.stop("NULL value provided for object name!", envir)
+                Return Internal.debug.stop("NULL value provided for object name!", envir)
             End If
 
             Dim symbol As Symbol = envir.FindSymbol(name, [inherits])
@@ -230,7 +230,7 @@ Namespace Runtime.Internal.Invokes
                                Optional envir As Environment = Nothing) As Object
 
             If what Is Nothing OrElse calls.StringEmpty Then
-                Return Internal.stop("Nothing to call!", envir)
+                Return Internal.debug.stop("Nothing to call!", envir)
             ElseIf what.GetType Is GetType(String) Then
                 ' call static api by name
                 Return CallInternal(what, args, envir)
@@ -245,7 +245,7 @@ Namespace Runtime.Internal.Invokes
 
                 If Not Robj.existsName(calls) Then
                     ' throw exception for invoke missing member from .NET object?
-                    Return Internal.stop({$"Missing member '{calls}' in target {what}", "type: " & Robj.type.fullName, "member name: " & calls}, envir)
+                    Return Internal.debug.stop({$"Missing member '{calls}' in target {what}", "type: " & Robj.type.fullName, "member name: " & calls}, envir)
                 Else
                     member = Robj.getByName(name:=calls)
                 End If
@@ -262,12 +262,12 @@ Namespace Runtime.Internal.Invokes
             ElseIf targetType Is GetType(list) Then
                 Throw New NotImplementedException
             Else
-                Return Internal.stop(New NotImplementedException(targetType.FullName), envir)
+                Return Internal.debug.stop(New NotImplementedException(targetType.FullName), envir)
             End If
         End Function
 
         Public Function CallInternal(call$, args As Object, envir As Environment) As Object
-            Return Internal.stop(New NotImplementedException("Call internal functions"), envir)
+            Return Internal.debug.stop(New NotImplementedException("Call internal functions"), envir)
         End Function
 
         ''' <summary>
