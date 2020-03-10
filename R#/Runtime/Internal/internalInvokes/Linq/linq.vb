@@ -43,15 +43,21 @@
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 
 Namespace Runtime.Internal.Invokes.LinqPipeline
 
+    ''' <summary>
+    ''' Provides a set of static (Shared in Visual Basic) methods for querying objects
+    ''' that implement System.Collections.Generic.IEnumerable`1.
+    ''' </summary>
+    <Package("linq", Category:=APICategories.SoftwareTools, Publisher:="xie.guigang@live.com")>
     Module linq
 
         <ExportAPI("take")>
@@ -59,13 +65,42 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Return Rset.getObjectSet(items).Take(n).ToArray
         End Function
 
+        ''' <summary>
+        ''' Bypasses a specified number of elements in a sequence and then 
+        ''' returns the remaining elements.
+        ''' </summary>
+        ''' <param name="sequence">An System.Collections.Generic.IEnumerable`1 to return elements from.</param>
+        ''' <param name="n">The number of elements to skip before returning the remaining elements.</param>
+        ''' <returns>An System.Collections.Generic.IEnumerable`1 that contains the elements that occur
+        ''' after the specified index in the input sequence.</returns>
         <ExportAPI("skip")>
-        Public Function skip(<RRawVectorArgument> items As Object, n%) As Object
-            Return Rset.getObjectSet(items).Skip(n).ToArray
+        Public Function skip(<RRawVectorArgument> sequence As Object, n%) As Object
+            If sequence Is Nothing Then
+                Return Nothing
+            ElseIf TypeOf sequence Is pipeline Then
+                Return DirectCast(sequence, pipeline) _
+                    .populates(Of Object) _
+                    .Skip(n) _
+                    .DoCall(Function(seq)
+                                Return New pipeline(seq, DirectCast(sequence, pipeline).elementType)
+                            End Function)
+            Else
+                Return Rset.getObjectSet(sequence).Skip(n).ToArray
+            End If
         End Function
 
+        ''' <summary>
+        ''' Returns distinct elements from a sequence by using a specified System.Collections.Generic.IEqualityComparer`1
+        ''' to compare values.
+        ''' </summary>
+        ''' <param name="items">The sequence to remove duplicate elements from.</param>
+        ''' <param name="getKey">An System.Collections.Generic.IEqualityComparer`1 to compare values.</param>
+        ''' <param name="envir"></param>
+        ''' <returns>An System.Collections.Generic.IEnumerable`1 that contains distinct elements from
+        ''' the source sequence.</returns>
         <ExportAPI("unique")>
-        Private Function unique(<RRawVectorArgument> items As Object,
+        Private Function unique(<RRawVectorArgument>
+                                items As Object,
                                 Optional getKey As RFunction = Nothing,
                                 Optional envir As Environment = Nothing) As Object
 
@@ -90,14 +125,32 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         End Function
 
         <ExportAPI("projectAs")>
-        Private Function projectAs(sequence As Array, project As RFunction, envir As Environment) As Object
-            Dim doProject As Func(Of Object, Object) = Function(o) project.Invoke(envir, InvokeParameter.Create(o))
-            Dim result As Object() = sequence _
-                .AsObjectEnumerator _
-                .Select(doProject) _
-                .ToArray
+        Private Function projectAs(<RRawVectorArgument>
+                                   sequence As Object,
+                                   project As RFunction,
+                                   Optional envir As Environment = Nothing) As Object
 
-            Return result
+            If sequence Is Nothing Then
+                Return Nothing
+            End If
+
+            Dim doProject As Func(Of Object, Object) = Function(o) project.Invoke(envir, InvokeParameter.Create(o))
+
+            If TypeOf sequence Is pipeline Then
+                ' run in pipeline mode
+                Dim seq As pipeline = DirectCast(sequence, pipeline)
+                Dim projection As IEnumerable(Of Object) = seq _
+                    .populates(Of Object) _
+                    .Select(doProject)
+
+                Return New pipeline(projection, GetType(Object))
+            Else
+                Dim result As Object() = Rset.getObjectSet(sequence) _
+                    .Select(doProject) _
+                    .ToArray
+
+                Return result
+            End If
         End Function
 
         ''' <summary>
@@ -107,29 +160,42 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' <returns></returns>
         ''' 
         <ExportAPI("which")>
-        Private Function where(sequence As Array,
+        Private Function where(<RRawVectorArgument>
+                               sequence As Object,
                                Optional test As RFunction = Nothing,
                                Optional envir As Environment = Nothing) As Object
 
             If test Is Nothing Then
                 ' test for which index
                 Return Which.IsTrue(Runtime.asLogical(sequence))
+            ElseIf TypeOf sequence Is pipeline Then
+                ' run in pipeline mode
+                Return DirectCast(sequence, pipeline) _
+                    .populates(Of Object) _
+                    .runWhichFilter(test, envir) _
+                    .DoCall(Function(seq)
+                                Return New pipeline(seq, DirectCast(sequence, pipeline).elementType)
+                            End Function)
+            Else
+                Return Rset.getObjectSet(sequence) _
+                    .runWhichFilter(test, envir) _
+                    .ToArray
             End If
+        End Function
 
+        <Extension>
+        Private Iterator Function runWhichFilter(sequence As IEnumerable(Of Object), test As RFunction, env As Environment) As IEnumerable(Of Object)
             Dim pass As Boolean
             Dim arg As InvokeParameter()
-            Dim filter As New List(Of Object)
 
             For Each item As Object In sequence
                 arg = InvokeParameter.Create(item)
-                pass = Runtime.asLogical(test.Invoke(envir, arg))(Scan0)
+                pass = Runtime.asLogical(test.Invoke(env, arg))(Scan0)
 
                 If pass Then
-                    Call filter.Add(item)
+                    Yield item
                 End If
             Next
-
-            Return filter.ToArray
         End Function
 
         <ExportAPI("which.max")>
@@ -157,7 +223,8 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         End Function
 
         <ExportAPI("first")>
-        Private Function first(sequence As Array,
+        Private Function first(<RRawVectorArgument>
+                               sequence As Object,
                                Optional test As RFunction = Nothing,
                                Optional envir As Environment = Nothing) As Object
 
@@ -165,14 +232,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Dim arg As InvokeParameter()
 
             If test Is Nothing Then
-                If sequence.Length = 0 Then
-                    Return Nothing
-                Else
-                    Return sequence.GetValue(Scan0)
-                End If
+                Return Rset.getObjectSet(sequence).FirstOrDefault
             End If
 
-            For Each item As Object In sequence
+            For Each item As Object In Rset.getObjectSet(sequence)
                 arg = InvokeParameter.Create(item)
                 pass = Runtime.asLogical(test.Invoke(envir, arg))(Scan0)
 
@@ -194,7 +257,9 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Dim result As Group() = source _
                 .GroupBy(Function(o)
                              Dim arg = InvokeParameter.Create(o)
-                             Return getKey.Invoke(envir, arg)
+                             Dim keyVal As Object = Runtime.single(getKey.Invoke(envir, arg))
+
+                             Return keyVal
                          End Function) _
                 .Select(Function(group)
                             Return New Group With {
@@ -207,27 +272,45 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Return result
         End Function
 
+        ''' <summary>
+        ''' Sorts the elements of a sequence in ascending order according to a key.
+        ''' </summary>
+        ''' <param name="sequence">A sequence of values to order.</param>
+        ''' <param name="getKey">A function to extract a key from an element.</param>
+        ''' <param name="envir"></param>
+        ''' <returns>An System.Linq.IOrderedEnumerable`1 whose elements are sorted according to a
+        ''' key.</returns>
         <ExportAPI("orderBy")>
         Public Function orderBy(<RRawVectorArgument>
                                 sequence As Object,
-                                getKey As RFunction,
+                                Optional getKey As RFunction = Nothing,
+                                Optional desc As Boolean = False,
                                 Optional envir As Environment = Nothing) As Object
 
             Dim source As Object() = Rset.getObjectSet(sequence).ToArray
-            Dim result As Array = source _
-                .OrderBy(Function(o)
-                             Dim arg = InvokeParameter.Create(o)
-                             Dim index As Object = getKey.Invoke(envir, arg)
+            Dim getKeyFunc As Func(Of Object, Object)
+            Dim result As Array
 
-                             If index Is Nothing Then
-                                 Return Nothing
-                             ElseIf index.GetType.IsArray Then
-                                 Return DirectCast(index, Array).GetValue(Scan0)
-                             Else
+            If getKey Is Nothing Then
+                getKeyFunc = Function(o) o
+            Else
+                getKeyFunc = Function(o)
+                                 Dim arg = InvokeParameter.Create(o)
+                                 Dim index As Object = getKey.Invoke(envir, arg)
+
                                  Return index
-                             End If
-                         End Function) _
-                .ToArray
+                             End Function
+            End If
+
+            If desc Then
+                result = source _
+                    .OrderByDescending(Function(o) Runtime.single(getKeyFunc(o))) _
+                    .ToArray
+            Else
+                result = source _
+                    .OrderBy(Function(o) Runtime.single(getKeyFunc(o))) _
+                    .ToArray
+            End If
 
             Return result
         End Function

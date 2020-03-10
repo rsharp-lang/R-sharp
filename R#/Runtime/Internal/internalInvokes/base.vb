@@ -65,6 +65,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -418,16 +419,22 @@ Namespace Runtime.Internal.Invokes
         Public Function length(<RRawVectorArgument> x As Object, <RByRefValueAssign> Optional newSize As Integer = -1) As Integer
             If x Is Nothing Then
                 Return 0
-            ElseIf x.GetType.IsArray Then
-                Return DirectCast(x, Array).Length
-            ElseIf x.GetType.ImplementInterface(GetType(RIndex)) Then
-                Return DirectCast(x, RIndex).length
-            ElseIf x.GetType.ImplementInterface(GetType(IDictionary)) Then
-                Return DirectCast(x, IDictionary).Count
-            ElseIf x.GetType Is GetType(dataframe) Then
-                Return DirectCast(x, dataframe).ncols
             Else
-                Return 1
+                Dim type As Type = x.GetType
+
+                If type.IsArray Then
+                    Return DirectCast(x, Array).Length
+                ElseIf type.ImplementInterface(GetType(RIndex)) Then
+                    Return DirectCast(x, RIndex).length
+                ElseIf type.ImplementInterface(GetType(IDictionary)) Then
+                    Return DirectCast(x, IDictionary).Count
+                ElseIf type Is GetType(dataframe) Then
+                    Return DirectCast(x, dataframe).ncols
+                ElseIf type Is GetType(Group) Then
+                    Return DirectCast(x, Group).length
+                Else
+                    Return 1
+                End If
             End If
         End Function
 

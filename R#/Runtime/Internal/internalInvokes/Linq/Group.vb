@@ -58,6 +58,12 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         Public key As Object
         Public group As Array
 
+        Public ReadOnly Property length As Integer
+            Get
+                Return group.Length
+            End Get
+        End Property
+
         Shared Sub New()
             Call printer.AttachInternalConsoleFormatter(Of Group)(AddressOf InternalToString)
         End Sub

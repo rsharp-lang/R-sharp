@@ -73,6 +73,11 @@ Namespace Runtime.Internal.Object
             elementType = RType.GetRSharpType(type)
         End Sub
 
+        Sub New(input As IEnumerable, type As RType)
+            pipeline = input
+            elementType = type
+        End Sub
+
         Public Function getError() As Message
             If isError Then
                 Return DirectCast(CObj(pipeline), Message)
