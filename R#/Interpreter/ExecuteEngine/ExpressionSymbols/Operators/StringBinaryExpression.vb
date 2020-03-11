@@ -97,7 +97,7 @@ Namespace Interpreter.ExecuteEngine
 
             End Select
 
-            Return Internal.stop(New NotImplementedException($"<{a.GetType.FullName}> {[operator]} <{b.GetType.FullName}>"), env)
+            Return Internal.debug.stop(New NotImplementedException($"<{a.GetType.FullName}> {[operator]} <{b.GetType.FullName}>"), env)
         End Function
 
         Public Function DoStringBinary(Of Out)(a As Object, b As Object, op As Func(Of Object, Object, Object)) As Out()

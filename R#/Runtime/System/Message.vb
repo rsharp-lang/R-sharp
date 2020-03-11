@@ -78,7 +78,7 @@ Namespace Runtime.Components
                 "symbol: " & symbolName
             }
 
-            Return Internal.stop(messages, envir)
+            Return Internal.debug.stop(messages, envir)
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
@@ -87,7 +87,7 @@ Namespace Runtime.Components
                 "The specific syntax is not yet implemented...",
                 "operation: " & operation
             }.DoCall(Function(msg)
-                         Return Internal.stop(msg, envir)
+                         Return Internal.debug.stop(msg, envir)
                      End Function)
         End Function
 
@@ -97,7 +97,7 @@ Namespace Runtime.Components
                 "required: " & require.FullName,
                 "given: " & given.FullName
             }.DoCall(Function(msg)
-                         Return Internal.stop(msg, envir)
+                         Return Internal.debug.stop(msg, envir)
                      End Function)
         End Function
 

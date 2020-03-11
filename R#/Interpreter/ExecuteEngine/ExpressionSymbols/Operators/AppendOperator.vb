@@ -98,9 +98,9 @@ Namespace Interpreter.ExecuteEngine
                 If type2 Is GetType(list) Then
                 ElseIf type2.IsArray Then
                 Else
-                    Return Internal.stop(New InvalidProgramException(type2.FullName), envir)
+                    Return Internal.debug.stop(New InvalidProgramException(type2.FullName), envir)
                 End If
-                Return Internal.stop(New NotImplementedException, envir)
+                Return Internal.debug.stop(New NotImplementedException, envir)
             End If
 
             Return Runtime.asVector(Of Object)(x) _

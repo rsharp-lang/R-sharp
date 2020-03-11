@@ -88,7 +88,7 @@ Namespace Runtime.Internal.Invokes
 
                 Return New list With {.slots = data}
             Else
-                Return Internal.stop(New NotImplementedException, env)
+                Return Internal.debug.stop(New NotImplementedException, env)
             End If
         End Function
 
@@ -133,7 +133,7 @@ Namespace Runtime.Internal.Invokes
                     End If
                 Next
             ElseIf from.Length <> [to].Length Then
-                Return Internal.stop("number of from files is not equals to the number of target file locations!", env)
+                Return Internal.debug.stop("number of from files is not equals to the number of target file locations!", env)
             Else
                 For i As Integer = 0 To from.Length - 1
                     If from(i).FileCopy([to](i)) Then
@@ -161,7 +161,7 @@ Namespace Runtime.Internal.Invokes
         <RApiReturn(GetType(String()))>
         Public Function normalizePath(fileNames$(), envir As Environment) As Object
             If fileNames.IsNullOrEmpty Then
-                Return Internal.stop("no file names provided!", envir)
+                Return Internal.debug.stop("no file names provided!", envir)
             Else
                 Return fileNames _
                     .Select(Function(path)
@@ -411,7 +411,7 @@ Namespace Runtime.Internal.Invokes
 
                 json = JsonContract.GetObjectJson(listType, list, True, True, listKnownTypes)
             Else
-                Return Internal.stop(New NotSupportedException(listType.FullName), envir)
+                Return Internal.debug.stop(New NotSupportedException(listType.FullName), envir)
             End If
 
             Return json.SaveTo(file)
@@ -446,7 +446,7 @@ Namespace Runtime.Internal.Invokes
                 Case "any"
                     Return file.LoadJsonFile(Of Dictionary(Of String, Object))(knownTypes:=listKnownTypes)
                 Case Else
-                    Return Internal.stop($"Invalid data mode: '{mode}'!", envir)
+                    Return Internal.debug.stop($"Invalid data mode: '{mode}'!", envir)
             End Select
         End Function
 

@@ -85,7 +85,20 @@ Namespace Runtime.Internal
         <Extension>
         Friend Function invokeGeneric(args As list, x As Object, env As Environment, <CallerMemberName> Optional funcName$ = Nothing) As Object
             Dim type As Type = x.GetType
-            Dim apiCalls As GenericFunction = generics(funcName)(type)
+            Dim apiCalls As GenericFunction
+
+            If Not generics.ContainsKey(funcName) Then
+                Return debug.stop({$"missing loader entry for generic function '{funcName}'!", "consider load required package at first!"}, env)
+            ElseIf Not generics(funcName).ContainsKey(type) Then
+                Return debug.stop({
+                    $"missing loader entry for generic function '{funcName}'!",
+                    $"missing implementation for overloads type: {type.FullName}!",
+                    "consider load required package at first!"
+                }, env)
+            Else
+                apiCalls = generics(funcName)(type)
+            End If
+
             Dim result As Object = apiCalls(x, args, env)
 
             Return result

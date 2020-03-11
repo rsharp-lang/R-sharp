@@ -148,7 +148,7 @@ Namespace Runtime.Internal.Object
         Public Function setNames(names() As String, envir As Environment) As Object Implements RNames.setNames
             If Not names.IsNullOrEmpty Then
                 If names.Length <> data.Length Then
-                    Return Internal.stop($"vector names is not equals in length with the vector element data!", envir)
+                    Return Internal.debug.stop($"vector names is not equals in length with the vector element data!", envir)
                 Else
                     Me.names = names
                     Me.nameIndex = names.Indexing
@@ -198,7 +198,7 @@ Namespace Runtime.Internal.Object
             End If
 
             If i < 0 Then
-                Return Internal.stop($"Invalid element index value '{i}'!", envir)
+                Return Internal.debug.stop($"Invalid element index value '{i}'!", envir)
             End If
 
             Dim delta = i - data.Length
@@ -226,7 +226,7 @@ Namespace Runtime.Internal.Object
                            End Function
             Else
                 If i.Length <> value.Length Then
-                    Return Internal.stop({
+                    Return Internal.debug.stop({
                         $"Number of items to replace is not equals to replacement length!",
                         $"length(index): {i.Length}",
                         $"length(value): {value.Length}"

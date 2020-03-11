@@ -76,20 +76,20 @@ Namespace Interpreter.ExecuteEngine
 
             If funcVar Is Nothing Then
                 ' symbol not found
-                Return REnv.stop($"Function symbol not found base on the evaluation: '{funcRef.ToString}'", envir)
+                Return REnv.debug.stop($"Function symbol not found base on the evaluation: '{funcRef.ToString}'", envir)
             ElseIf funcVar.GetType Is GetType(Message) Then
                 Return funcVar
             End If
 
             If Not funcVar.GetType Is GetType(RMethodInfo) Then
-                Return REnv.stop(New NotSupportedException("Only supports .NET api function with custom attribute <RByRefValueAssignAttribute> tagged!"), envir)
+                Return REnv.debug.stop(New NotSupportedException("Only supports .NET api function with custom attribute <RByRefValueAssignAttribute> tagged!"), envir)
             End If
 
             Dim api As RMethodInfo = funcVar
             Dim [byref] As RMethodArgument = api.parameters.FirstOrDefault(Function(a) a.isByrefValueParameter)
 
             If [byref] Is Nothing Then
-                Return REnv.stop(New NotSupportedException($"api '{api}' is not supports byref calls!"), envir)
+                Return REnv.debug.stop(New NotSupportedException($"api '{api}' is not supports byref calls!"), envir)
             Else
                 Return api.Invoke(envir, InvokeParameter.Create(expressions:={target, value}))
             End If
@@ -99,7 +99,7 @@ Namespace Interpreter.ExecuteEngine
             Dim var As Object = FunctionInvoke.getFuncVar(funcRef, Nothing, env)
 
             If var Is Nothing Then
-                var = REnv.getFunction(DirectCast(funcRef, Literal).value)
+                var = REnv.invoke.getFunction(DirectCast(funcRef, Literal).value)
             ElseIf var.GetType Is GetType(Message) Then
                 Return var
             End If

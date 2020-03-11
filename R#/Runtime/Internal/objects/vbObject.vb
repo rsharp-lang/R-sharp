@@ -166,12 +166,12 @@ Namespace Runtime.Internal.Object
 
                     Call properties(name).SetValue(target, value)
                 Else
-                    Return Internal.stop($"Target property '{name}' is not writeable!", envir)
+                    Return Internal.debug.stop($"Target property '{name}' is not writeable!", envir)
                 End If
             ElseIf type.haveDynamicsProperty Then
                 Call DirectCast(target, IDynamicsObject).SetValue(name, value)
             Else
-                Return Internal.stop($"Missing property '{name}'", envir)
+                Return Internal.debug.stop($"Missing property '{name}'", envir)
             End If
 
             Return value
@@ -192,7 +192,7 @@ Namespace Runtime.Internal.Object
             ElseIf names.Length = 1 Then
                 Return setByName(names(Scan0), Runtime.getFirst(value), envir)
             Else
-                Return Internal.stop(New InvalidProgramException("You can not set multiple property for one VisualBasic.NET class object at once!"), envir)
+                Return Internal.debug.stop(New InvalidProgramException("You can not set multiple property for one VisualBasic.NET class object at once!"), envir)
             End If
         End Function
 

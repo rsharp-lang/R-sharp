@@ -167,7 +167,7 @@ Namespace Interpreter.ExecuteEngine
                 Next
             Else
                 ' 数量不对
-                Return Internal.stop(New InvalidCastException, envir)
+                Return Internal.debug.stop(New InvalidCastException, envir)
             End If
 
             Return Nothing
@@ -180,7 +180,7 @@ Namespace Interpreter.ExecuteEngine
             If list.length = 1 Then
                 ' 设置tuple的值的时候
                 ' list必须要有相同的元素数量
-                Return Internal.stop("Number of list element is not identical to the tuple elements...", envir)
+                Return Internal.debug.stop("Number of list element is not identical to the tuple elements...", envir)
             ElseIf list.length = targetSymbols.Length Then
                 Dim name$
 
@@ -201,7 +201,7 @@ Namespace Interpreter.ExecuteEngine
                 Next
             Else
                 ' 数量不对
-                Return Internal.stop(New InvalidCastException, envir)
+                Return Internal.debug.stop(New InvalidCastException, envir)
             End If
 
             Return Nothing
@@ -232,7 +232,7 @@ Namespace Interpreter.ExecuteEngine
                 Return setFromObjectList(envir, targetSymbols, isByRef, value)
 
             Else
-                Return Internal.stop(New NotImplementedException, envir)
+                Return Internal.debug.stop(New NotImplementedException, envir)
             End If
 
             Return Nothing
@@ -259,7 +259,7 @@ Namespace Interpreter.ExecuteEngine
             End If
 
             If targetObj Is Nothing Then
-                Return Internal.stop({"Target symbol is nothing!", $"SymbolName: {symbolIndex.symbol}"}, envir)
+                Return Internal.debug.stop({"Target symbol is nothing!", $"SymbolName: {symbolIndex.symbol}"}, envir)
             End If
 
             If symbolIndex.indexType = SymbolIndexers.vectorIndex AndAlso index.GetType Like BinaryExpression.integers Then
@@ -289,10 +289,10 @@ Namespace Interpreter.ExecuteEngine
 
                         Return Nothing
                     Else
-                        Return Internal.stop(New NotImplementedException, envir)
+                        Return Internal.debug.stop(New NotImplementedException, envir)
                     End If
                 Else
-                    Return Internal.stop({"Target symbol can not be indexed by name!", $"SymbolName: {symbolIndex.symbol}"}, envir)
+                    Return Internal.debug.stop({"Target symbol can not be indexed by name!", $"SymbolName: {symbolIndex.symbol}"}, envir)
                 End If
             End If
 

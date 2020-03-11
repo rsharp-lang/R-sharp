@@ -191,7 +191,7 @@ Namespace Runtime.Internal.Object.Converts
 
                         matrix.rownames = rownames
                     ElseIf listColumns > 0 AndAlso matrix.columns.Count > 0 Then
-                        Return Internal.stop(New InvalidCastException, env)
+                        Return Internal.debug.stop(New InvalidCastException, env)
                     End If
 
                     Return matrix

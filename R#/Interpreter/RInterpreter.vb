@@ -348,7 +348,7 @@ Namespace Interpreter
                     .ToArray
                 result = RunInternal(Rscript.FromFile(filepath), arguments)
             Else
-                result = Internal.stop({
+                result = Internal.debug.stop({
                     $"cannot open the connection.",
                     $"cannot open file '{filepath.FileName}': No such file or directory",
                     $"file: {filepath.GetFullPath}",

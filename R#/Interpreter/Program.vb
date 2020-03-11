@@ -232,7 +232,7 @@ Namespace Interpreter
                 Return DirectCast(result, Message).level = MSG_TYPES.ERR
             ElseIf Not envir Is Nothing AndAlso result.GetType.IsInheritsFrom(GetType(Exception)) Then
                 isDotNETException = True
-                result = Internal.stop(result, envir)
+                result = Internal.debug.stop(result, envir)
 
                 Return True
             Else

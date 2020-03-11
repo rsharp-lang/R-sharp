@@ -94,7 +94,7 @@ Namespace Runtime.Internal.Invokes
                 Try
                     Return XmlExtensions.GetXml(x, x.GetType)
                 Catch ex As Exception
-                    Return Internal.stop(ex, env)
+                    Return Internal.debug.stop(ex, env)
                 End Try
             End If
         End Function
@@ -152,7 +152,7 @@ Namespace Runtime.Internal.Invokes
             Dim opts As RegexOptions = RegexOptions.None
 
             If pattern.StringEmpty Then
-                Return Internal.stop("the input regular expression could not be empty!", env)
+                Return Internal.debug.stop("the input regular expression could not be empty!", env)
             End If
 
             If Not options Is Nothing Then
@@ -189,7 +189,7 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("match")>
         Public Function match(regexp As Regex, <RRawVectorArgument> strings As Object, Optional env As Environment = Nothing) As Object
             If regexp Is Nothing Then
-                Return Internal.stop("regular expression object can not be null!", env)
+                Return Internal.debug.stop("regular expression object can not be null!", env)
             End If
 
             Return asVector(Of String)(strings) _

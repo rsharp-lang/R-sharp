@@ -267,7 +267,7 @@ Namespace Runtime
         ''' <returns></returns>
         Public Function Push(name$, value As Object, [readonly] As Boolean, Optional mode As TypeCodes = TypeCodes.generic) As Object
             If symbols.ContainsKey(name) Then
-                Return Internal.stop({String.Format(AlreadyExists, name)}, Me)
+                Return Internal.debug.stop({String.Format(AlreadyExists, name)}, Me)
             ElseIf Not value Is Nothing Then
                 value = asRVector(mode, value)
             End If
@@ -282,7 +282,7 @@ Namespace Runtime
                 .[readonly] = [readonly]
 
                 If Not .constraintValid Then
-                    Return Internal.stop(New Exception(String.Format(ConstraintInvalid, .typeCode, mode)), Me)
+                    Return Internal.debug.stop(New Exception(String.Format(ConstraintInvalid, .typeCode, mode)), Me)
                 Else
                     Call .DoCall(AddressOf symbols.Add)
                 End If

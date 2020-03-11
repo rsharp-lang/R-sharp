@@ -132,7 +132,7 @@ Namespace Runtime.Internal.Object.Converts
                             [typeof] = RType.raw
                         End If
                     Case Else
-                        Return Internal.stop(New NotImplementedException, env)
+                        Return Internal.debug.stop(New NotImplementedException, env)
                 End Select
             End If
 
@@ -141,7 +141,7 @@ Namespace Runtime.Internal.Object.Converts
             ElseIf list.GetType.ImplementInterface(GetType(IDictionary)) Then
                 Return New list(list).unlistOfRList([typeof], env)
             Else
-                Return Internal.stop(New InvalidCastException(list.GetType.FullName), env)
+                Return Internal.debug.stop(New InvalidCastException(list.GetType.FullName), env)
             End If
         End Function
 
@@ -212,7 +212,7 @@ Namespace Runtime.Internal.Object.Converts
             If makeDataframe.is_ableConverts(type) Then
                 Return makeDataframe.createDataframe(type, x, args, env)
             Else
-                Return Internal.stop(New InvalidProgramException, env)
+                Return Internal.debug.stop(New InvalidProgramException, env)
             End If
         End Function
 
@@ -298,11 +298,11 @@ Namespace Runtime.Internal.Object.Converts
         ''' <returns></returns>
         <ExportAPI("as.integer")>
         <RApiReturn(GetType(Long))>
-        Public Function asInteger(<RRawVectorArgument> obj As Object) As Object
+        Public Function asInteger(<RRawVectorArgument> obj As Object, Optional env As Environment = Nothing) As Object
             If obj Is Nothing Then
                 Return 0
             ElseIf obj.GetType.ImplementInterface(GetType(IDictionary)) Then
-                Return Runtime.CTypeOfList(Of Long)(obj)
+                Return Runtime.CTypeOfList(Of Long)(obj, env)
             Else
                 Return Runtime.asVector(Of Long)(obj)
             End If
@@ -310,7 +310,7 @@ Namespace Runtime.Internal.Object.Converts
 
         <ExportAPI("as.numeric")>
         <RApiReturn(GetType(Double))>
-        Public Function asNumeric(<RRawVectorArgument> obj As Object) As Object
+        Public Function asNumeric(<RRawVectorArgument> obj As Object, Optional env As Environment = Nothing) As Object
             If obj Is Nothing Then
                 Return 0
             End If
@@ -320,19 +320,19 @@ Namespace Runtime.Internal.Object.Converts
             End If
 
             If obj.GetType.ImplementInterface(GetType(IDictionary)) Then
-                    Return Runtime.CTypeOfList(Of Double)(obj)
-                Else
-                    Return Runtime.asVector(Of Double)(obj)
+                Return Runtime.CTypeOfList(Of Double)(obj, env)
+            Else
+                Return Runtime.asVector(Of Double)(obj)
             End If
         End Function
 
         <ExportAPI("as.character")>
         <RApiReturn(GetType(String))>
-        Public Function asCharacters(<RRawVectorArgument> obj As Object) As Object
+        Public Function asCharacters(<RRawVectorArgument> obj As Object, Optional env As Environment = Nothing) As Object
             If obj Is Nothing Then
                 Return Nothing
             ElseIf obj.GetType.ImplementInterface(GetType(IDictionary)) Then
-                Return Runtime.CTypeOfList(Of String)(obj)
+                Return Runtime.CTypeOfList(Of String)(obj, env)
             Else
                 Return Runtime.asVector(Of String)(obj)
             End If
@@ -362,11 +362,11 @@ Namespace Runtime.Internal.Object.Converts
 
         <ExportAPI("as.logical")>
         <RApiReturn(GetType(Boolean))>
-        Public Function asLogicals(<RRawVectorArgument> obj As Object) As Object
+        Public Function asLogicals(<RRawVectorArgument> obj As Object, Optional env As Environment = Nothing) As Object
             If obj Is Nothing Then
                 Return Nothing
             ElseIf obj.GetType.ImplementInterface(GetType(IDictionary)) Then
-                Return Runtime.CTypeOfList(Of Boolean)(obj)
+                Return Runtime.CTypeOfList(Of Boolean)(obj, env)
             Else
                 Return Runtime.asLogical(obj)
             End If

@@ -256,7 +256,7 @@ Namespace Runtime.Internal.Invokes
             ElseIf x.GetType Is GetType(dataframe) Then
                 Return DirectCast(x, dataframe).nrows
             Else
-                Return Internal.stop(RType.GetRSharpType(x).ToString & " is not a dataframe!", env)
+                Return Internal.debug.stop(RType.GetRSharpType(x).ToString & " is not a dataframe!", env)
             End If
         End Function
 
@@ -268,7 +268,7 @@ Namespace Runtime.Internal.Invokes
             ElseIf x.GetType Is GetType(dataframe) Then
                 Return DirectCast(x, dataframe).ncols
             Else
-                Return Internal.stop(RType.GetRSharpType(x).ToString & " is not a dataframe!", env)
+                Return Internal.debug.stop(RType.GetRSharpType(x).ToString & " is not a dataframe!", env)
             End If
         End Function
 
@@ -439,65 +439,6 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
-        ''' # Are Some Values True?
-        ''' 
-        ''' Given a set of logical vectors, is at least one of the values true?
-        ''' </summary>
-        ''' <param name="test">
-        ''' zero or more logical vectors. Other objects of zero length are ignored, 
-        ''' and the rest are coerced to logical ignoring any class.
-        ''' </param>
-        ''' <param name="narm">
-        ''' logical. If true NA values are removed before the result Is computed.
-        ''' </param>
-        ''' <returns>
-        ''' The value is a logical vector of length one.
-        '''
-        ''' Let x denote the concatenation of all the logical vectors in ... 
-        ''' (after coercion), after removing NAs if requested by na.rm = TRUE.
-        ''' 
-        ''' The value returned Is True If at least one Of the values In x Is True, 
-        ''' And False If all Of the values In x are False (including If there are 
-        ''' no values). Otherwise the value Is NA (which can only occur If 
-        ''' na.rm = False And ... contains no True values And at least one NA 
-        ''' value).
-        ''' </returns>
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        <ExportAPI("any")>
-        Public Function any(<RRawVectorArgument> test As Object, Optional narm As Boolean = False) As Boolean
-            Return Runtime.asLogical(test).Any(Function(b) b = True)
-        End Function
-
-        ''' <summary>
-        ''' # Are All Values True?
-        ''' 
-        ''' Given a set of logical vectors, are all of the values true?
-        ''' </summary>
-        ''' <param name="test">zero or more logical vectors. Other objects of zero 
-        ''' length are ignored, and the rest are coerced to logical ignoring any 
-        ''' class.</param>
-        ''' <param name="narm">
-        ''' logical. If true NA values are removed before the result is computed.
-        ''' </param>
-        ''' <returns>
-        ''' The value is a logical vector of length one.
-        '''
-        ''' Let x denote the concatenation of all the logical vectors in ... 
-        ''' (after coercion), after removing NAs if requested by na.rm = TRUE.
-        '''
-        ''' The value returned Is True If all Of the values In x are True 
-        ''' (including If there are no values), And False If at least one Of 
-        ''' the values In x Is False. Otherwise the value Is NA (which can 
-        ''' only occur If na.rm = False And ... contains no False values And 
-        ''' at least one NA value).
-        ''' </returns>
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        <ExportAPI("all")>
-        Public Function all(<RRawVectorArgument> test As Object, Optional narm As Boolean = False) As Boolean
-            Return Runtime.asLogical(test).All(Function(b) b = True)
-        End Function
-
-        ''' <summary>
         ''' ## Run the external R# script. Read R Code from a File, a Connection or Expressions
         ''' 
         ''' causes R to accept its input from the named file or URL or connection or expressions directly. 
@@ -578,7 +519,7 @@ Namespace Runtime.Internal.Invokes
                     Try
                         configs.setOption(value.Key, value.Value)
                     Catch ex As Exception
-                        Return Internal.stop(ex, envir)
+                        Return Internal.debug.stop(ex, envir)
                     End Try
                 Next
             ElseIf type.IsArray AndAlso DirectCast(opts, Array).Length = 0 Then
@@ -597,7 +538,7 @@ Namespace Runtime.Internal.Invokes
                     Try
                         values.slots(name) = configs.setOption(name, Scripting.ToString(cfgValue))
                     Catch ex As Exception
-                        Return Internal.stop(ex, envir)
+                        Return Internal.debug.stop(ex, envir)
                     End Try
                 Next
             End If
@@ -1032,7 +973,7 @@ Namespace Runtime.Internal.Invokes
                 Try
                     Call markdown.DoPrint(DirectCast(x, RPrint).GetPrintContent, 0)
                 Catch ex As Exception
-                    Return Internal.stop(ex, envir)
+                    Return Internal.debug.stop(ex, envir)
                 End Try
             ElseIf type Is GetType(Message) Then
                 Return x
@@ -1067,9 +1008,9 @@ Namespace Runtime.Internal.Invokes
                                Optional envir As Environment = Nothing) As Object
 
             If FUN Is Nothing Then
-                Return Internal.stop({"Missing apply function!"}, envir)
+                Return Internal.debug.stop({"Missing apply function!"}, envir)
             ElseIf Not FUN.GetType.ImplementInterface(GetType(RFunction)) Then
-                Return Internal.stop({"Target is not a function!"}, envir)
+                Return Internal.debug.stop({"Target is not a function!"}, envir)
             End If
 
             If Program.isException(X) Then
@@ -1155,9 +1096,9 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("sapply")>
         Public Function sapply(<RRawVectorArgument> X As Object, FUN As Object, envir As Environment) As Object
             If FUN Is Nothing Then
-                Return Internal.stop({"Missing apply function!"}, envir)
+                Return Internal.debug.stop({"Missing apply function!"}, envir)
             ElseIf Not FUN.GetType.ImplementInterface(GetType(RFunction)) Then
-                Return Internal.stop({"Target is not a function!"}, envir)
+                Return Internal.debug.stop({"Target is not a function!"}, envir)
             End If
 
             If Program.isException(X) Then
@@ -1294,7 +1235,7 @@ Namespace Runtime.Internal.Invokes
                             Call DirectCast(dispose, RFunction).Invoke(env, invokeArgument(obj))
                         End Sub
             Else
-                Return Internal.stop(New InvalidProgramException(dispose.GetType.FullName), env)
+                Return Internal.debug.stop(New InvalidProgramException(dispose.GetType.FullName), env)
             End If
 
             Return New RDispose(x, final)

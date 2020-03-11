@@ -261,7 +261,7 @@ Namespace Interpreter.ExecuteEngine
                 ' create argument models
                 Dim argVals As InvokeParameter() = InvokeParameter.Create(parameters)
                 ' and then invoke the specific internal R# api
-                Dim result As Object = Internal.invokeInternals(envir, funcName, argVals)
+                Dim result As Object = Internal.invoke.invokeInternals(envir, funcName, argVals)
 
                 Return result
             End If

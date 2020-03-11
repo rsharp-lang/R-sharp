@@ -60,6 +60,22 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
     <Package("linq", Category:=APICategories.SoftwareTools, Publisher:="xie.guigang@live.com")>
     Module linq
 
+        <ExportAPI("take")>
+        Public Function take(<RRawVectorArgument> sequence As Object, n%) As Object
+            If sequence Is Nothing Then
+                Return Nothing
+            ElseIf TypeOf sequence Is pipeline Then
+                Return DirectCast(sequence, pipeline) _
+                    .populates(Of Object) _
+                    .Take(n) _
+                    .DoCall(Function(seq)
+                                Return New pipeline(seq, DirectCast(sequence(), pipeline).elementType)
+                            End Function)
+            Else
+                Return Rset.getObjectSet(sequence).Take(n).ToArray
+            End If
+        End Function
+
         ''' <summary>
         ''' Bypasses a specified number of elements in a sequence and then 
         ''' returns the remaining elements.
@@ -308,6 +324,79 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             End If
 
             Return result
+        End Function
+
+        <ExportAPI("reverse")>
+        Public Function reverse(<RRawVectorArgument> sequence As Object) As Object
+
+        End Function
+
+        ''' <summary>
+        ''' # Are Some Values True?
+        ''' 
+        ''' Given a set of logical vectors, is at least one of the values true?
+        ''' </summary>
+        ''' <param name="test">
+        ''' zero or more logical vectors. Other objects of zero length are ignored, 
+        ''' and the rest are coerced to logical ignoring any class.
+        ''' </param>
+        ''' <param name="narm">
+        ''' logical. If true NA values are removed before the result Is computed.
+        ''' </param>
+        ''' <returns>
+        ''' The value is a logical vector of length one.
+        '''
+        ''' Let x denote the concatenation of all the logical vectors in ... 
+        ''' (after coercion), after removing NAs if requested by na.rm = TRUE.
+        ''' 
+        ''' The value returned Is True If at least one Of the values In x Is True, 
+        ''' And False If all Of the values In x are False (including If there are 
+        ''' no values). Otherwise the value Is NA (which can only occur If 
+        ''' na.rm = False And ... contains no True values And at least one NA 
+        ''' value).
+        ''' </returns>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <ExportAPI("any")>
+        Public Function any(<RRawVectorArgument> test As Object, Optional narm As Boolean = False) As Boolean
+            Return Runtime.asLogical(test).Any(Function(b) b = True)
+        End Function
+
+        ''' <summary>
+        ''' # Are All Values True?
+        ''' 
+        ''' Given a set of logical vectors, are all of the values true?
+        ''' </summary>
+        ''' <param name="test">zero or more logical vectors. Other objects of zero 
+        ''' length are ignored, and the rest are coerced to logical ignoring any 
+        ''' class.</param>
+        ''' <param name="narm">
+        ''' logical. If true NA values are removed before the result is computed.
+        ''' </param>
+        ''' <returns>
+        ''' The value is a logical vector of length one.
+        '''
+        ''' Let x denote the concatenation of all the logical vectors in ... 
+        ''' (after coercion), after removing NAs if requested by na.rm = TRUE.
+        '''
+        ''' The value returned Is True If all Of the values In x are True 
+        ''' (including If there are no values), And False If at least one Of 
+        ''' the values In x Is False. Otherwise the value Is NA (which can 
+        ''' only occur If na.rm = False And ... contains no False values And 
+        ''' at least one NA value).
+        ''' </returns>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <ExportAPI("all")>
+        Public Function all(<RRawVectorArgument> test As Object, Optional narm As Boolean = False) As Boolean
+            Return Runtime.asLogical(test).All(Function(b) b = True)
+        End Function
+
+        <ExportAPI("while")>
+        Public Function doWhile(<RRawVectorArgument>
+                                seq As Object,
+                                predicate As RFunction,
+                                Optional action$ = "take",
+                                Optional env As Environment = Nothing) As Object
+
         End Function
     End Module
 End Namespace
