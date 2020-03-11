@@ -283,11 +283,11 @@ Namespace Runtime.Internal.Object.Converts
         ''' <param name="obj"></param>
         ''' <returns></returns>
         <ExportAPI("as.list")>
-        Public Function asList(obj As Object, <RListObjectArgument> args As Object, Optional envir As Environment = Nothing) As list
+        Public Function asList(obj As Object, <RListObjectArgument> args As Object, Optional env As Environment = Nothing) As list
             If obj Is Nothing Then
                 Return Nothing
             Else
-                Return listInternal(obj, base.Rlist(args, envir))
+                Return listInternal(obj, base.Rlist(args, env))
             End If
         End Function
 
