@@ -49,6 +49,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 
 Namespace Runtime.Internal.Object
 
@@ -123,6 +124,10 @@ Namespace Runtime.Internal.Object
             slots = newSlots
 
             Return names
+        End Function
+
+        Public Function getValue(Of T)(name As String, env As Environment) As T
+            Return RConversion.CTypeDynamic(slots.TryGetValue(name), GetType(T), env)
         End Function
 
         Public Overrides Function ToString() As String
