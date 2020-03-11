@@ -92,8 +92,15 @@ Public Module utils
     ''' <returns></returns>
     <ExportAPI("read.csv")>
     <RApiReturn(GetType(Rdataframe))>
-    Public Function read_csv(file$, Optional encoding As Object = "unknown", Optional env As Environment = Nothing) As Object
-        Dim datafile As Object = REnv.TryCatch(Function() IO.File.Load(file, encoding:=Rsharp.GetEncoding(encoding)))
+    Public Function read_csv(file$, Optional encoding As Object = "unknown", Optional tsv As Boolean = False, Optional env As Environment = Nothing) As Object
+        Dim datafile As Object = REnv _
+            .TryCatch(Function()
+                          If tsv Then
+                              Return IO.File.LoadTsv(file, encoding:=Rsharp.GetEncoding(encoding))
+                          Else
+                              Return IO.File.Load(file, encoding:=Rsharp.GetEncoding(encoding))
+                          End If
+                      End Function)
 
         If Not TypeOf datafile Is File Then
             Return Internal.debug.stop(datafile, env)
