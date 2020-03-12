@@ -59,6 +59,9 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports stdVec = Microsoft.VisualBasic.Math.LinearAlgebra.Vector
 
+''' <summary>
+''' the R# math module
+''' </summary>
 <Package("base.math")>
 Module math
 
@@ -175,6 +178,22 @@ Module math
         Return DirectCast(REnv.asVector(Of Double)(data), Double()) _
             .Hist([step]) _
             .ToArray
+    End Function
+
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="formula"></param>
+    ''' <param name="data"></param>
+    ''' <param name="weights"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("lm")>
+    Public Function lm(formula As Object, data As Object,
+                       <RRawVectorArgument>
+                       Optional weights As Object = Nothing,
+                       Optional env As Environment = Nothing) As Object
+
     End Function
 End Module
 
