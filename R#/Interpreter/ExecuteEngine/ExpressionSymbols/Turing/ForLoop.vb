@@ -112,7 +112,7 @@ Namespace Interpreter.ExecuteEngine
                 ElseIf TypeOf item Is ReturnValue Then
                     Return item
                 Else
-                    result += item
+                    result += Runtime.single(item)
                 End If
             Next
 
