@@ -308,7 +308,7 @@ Namespace Runtime.Interop
             End If
 
             Try
-                Return RConversion.CTypeDynamic(value, arg.type.raw, env:=envir)
+                Return RCType.CTypeDynamic(value, arg.type.raw, env:=envir)
             Catch ex As Exception When trygetListParam
                 Return GetType(Void)
             Catch ex As Exception

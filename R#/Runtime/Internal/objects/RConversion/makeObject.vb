@@ -31,7 +31,7 @@ Namespace Runtime.Internal.Object.Converts
 
                 If propertyVals.hasName([property].Name) Then
                     val = propertyVals.getByName([property].Name)
-                    val = RConversion.CTypeDynamic(val, [property].PropertyType, env)
+                    val = RCType.CTypeDynamic(val, [property].PropertyType, env)
 
                     [property].SetValue(obj, val)
                 End If

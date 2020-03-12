@@ -18,7 +18,7 @@ Namespace Runtime.Internal.Object.Converts
 
             For Each item In list.slots
                 key = Scripting.CTypeDynamic(item.Key, keyType)
-                val = RConversion.CTypeDynamic(item.Value, valType, env)
+                val = RCType.CTypeDynamic(item.Value, valType, env)
                 table.Add(key, val)
             Next
 
