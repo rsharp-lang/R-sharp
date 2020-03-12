@@ -8,6 +8,9 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
 
+''' <summary>
+''' R# data clustering tools
+''' </summary>
 <Package("stats.clustering")>
 Module clustering
 

@@ -86,6 +86,12 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' Convert most of the R# object or VB.NET object to xml document string. 
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("xml")>
         Public Function xml(<RRawVectorArgument> x As Object, env As Environment) As Object
             If x Is Nothing Then
@@ -99,6 +105,13 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' Convert most of the R# object or VB.NET object to json string. 
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <param name="compress"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("json")>
         Public Function json(<RRawVectorArgument>
                              x As Object,
@@ -108,7 +121,13 @@ Namespace Runtime.Internal.Invokes
             If x Is Nothing Then
                 Return "null"
             Else
-                Return JsonContract.GetObjectJson(x.GetType, x, indent:=Not compress)
+                Dim type As Type = x.GetType
+
+                Try
+                    Return JsonContract.GetObjectJson(type, x, indent:=Not compress)
+                Catch ex As Exception
+                    Return debug.stop(ex, env)
+                End Try
             End If
         End Function
 
@@ -209,12 +228,12 @@ Namespace Runtime.Internal.Invokes
         ''' </summary>
         ''' <param name="format"></param>
         ''' <param name="arguments"></param>
-        ''' <param name="envir"></param>
+        ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("sprintf")>
-        Public Function Csprintf(format As Array, <RListObjectArgument> arguments As Object, Optional envir As Environment = Nothing) As Object
+        Public Function Csprintf(format As Array, <RListObjectArgument> arguments As Object, Optional env As Environment = Nothing) As Object
             Dim sprintf As Func(Of String, Object(), String) = AddressOf CLangStringFormatProvider.sprintf
-            Dim args As Array() = DirectCast(base.Rlist(arguments, envir), list).slots.Values _
+            Dim args As Array() = DirectCast(base.Rlist(arguments, env), list).slots.Values _
                 .Skip(1) _
                 .Select(Function(a)
                             Return Runtime.asVector(Of Object)(a)
@@ -256,7 +275,11 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("strsplit")>
-        Friend Function strsplit(text$(), Optional delimiter$ = " ", Optional envir As Environment = Nothing) As Object
+        Friend Function strsplit(text$(), Optional delimiter$ = " ", Optional env As Environment = Nothing) As Object
+            If delimiter Is Nothing Then
+                Return debug.stop("the given delimiter is nothing!", env)
+            End If
+
             If text.IsNullOrEmpty Then
                 Return Nothing
             ElseIf text.Length = 1 Then
