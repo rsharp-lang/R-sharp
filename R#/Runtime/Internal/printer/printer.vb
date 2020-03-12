@@ -1,51 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::8dad7d6f88c8200ae612537c13f4817c, R#\Runtime\Internal\printer\printer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Delegate Function
-    ' 
-    ' 
-    '     Module printer
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: DateToString, f64_InternalToString, getStrings, ToString, ValueToString
-    ' 
-    '         Sub: AttachConsoleFormatter, AttachInternalConsoleFormatter, printArray, printContentArray, printInternal
-    '              printList
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Delegate Function
+' 
+' 
+'     Module printer
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: DateToString, f64_InternalToString, getStrings, ToString, ValueToString
+' 
+'         Sub: AttachConsoleFormatter, AttachInternalConsoleFormatter, printArray, printContentArray, printInternal
+'              printList
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -164,7 +164,7 @@ Namespace Runtime.Internal.ConsolePrinter
                 Call DirectCast(x, list) _
                     .slots _
                     .DoCall(Sub(list)
-                                list.printList(listPrefix, maxPrint, env)
+                                DirectCast(list, IDictionary).printList(listPrefix, maxPrint, env)
                             End Sub)
             ElseIf valueType Is GetType(dataframe) Then
                 Call DirectCast(x, dataframe) _
@@ -272,6 +272,7 @@ printSingleElement:
             Dim unitWidth As Integer = contents.Max(Function(c) c.Length) + 1
             Dim divSize As Integer = maxColumns \ unitWidth - 3
             Dim i As i32 = 1 - divSize
+            Dim cell As String
 
             If divSize <= 0 Then
                 divSize = 1
@@ -284,12 +285,14 @@ printSingleElement:
                     Call Console.Write(indentPrefix)
                 End If
 
-                For Each c As String In row
-                    Call Console.Write(c)
+                For j As Integer = 0 To row.Length - 1
+                    cell = row(j)
+
+                    Call Console.Write(cell)
 
                     If deli Is Nothing Then
-                        Call Console.Write(New String(" "c, unitWidth - c.Length))
-                    Else
+                        Call Console.Write(New String(" "c, unitWidth - cell.Length))
+                    ElseIf Not j = row.Length - 1 Then
                         Call Console.Write(deli)
                     End If
                 Next

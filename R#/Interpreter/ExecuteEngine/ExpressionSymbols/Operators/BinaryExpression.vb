@@ -199,7 +199,7 @@ Namespace Interpreter.ExecuteEngine
                 End If
             End If
 
-            Return Internal.stop(New NotImplementedException($"<{ta.FullName}> {[operator]} <{tb.FullName}>"), envir)
+            Return Internal.debug.stop(New NotImplementedException($"<{ta.FullName}> {[operator]} <{tb.FullName}>"), envir)
         End Function
 
         Public Overrides Function ToString() As String

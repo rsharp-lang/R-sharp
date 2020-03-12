@@ -1,50 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::c4d396f327973fd528cad57e2d3d43da, R#\Runtime\Environment.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class Environment
-    ' 
-    '         Properties: globalEnvironment, isGlobal, last, messages, parent
-    '                     stackFrame, types, variables
-    ' 
-    '         Constructor: (+3 Overloads) Sub New
-    ' 
-    '         Function: asRVector, Evaluate, FindSymbol, GetEnumerator, IEnumerable_GetEnumerator
-    '                   Push, ToString
-    ' 
-    '         Sub: AddMessage, Clear, Delete, (+2 Overloads) Dispose, setStackInfo
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class Environment
+' 
+'         Properties: globalEnvironment, isGlobal, last, messages, parent
+'                     stackFrame, types, variables
+' 
+'         Constructor: (+3 Overloads) Sub New
+' 
+'         Function: asRVector, Evaluate, FindSymbol, GetEnumerator, IEnumerable_GetEnumerator
+'                   Push, ToString
+' 
+'         Sub: AddMessage, Clear, Delete, (+2 Overloads) Dispose, setStackInfo
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -57,6 +57,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime
@@ -77,7 +78,13 @@ Namespace Runtime
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property stackFrame As StackFrame
-        Public ReadOnly Property variables As Dictionary(Of Symbol)
+        Public ReadOnly Property stackTrace As StackFrame()
+            Get
+                Return Me.getEnvironmentStack
+            End Get
+        End Property
+
+        Public ReadOnly Property symbols As Dictionary(Of Symbol)
         Public ReadOnly Property types As Dictionary(Of String, RType)
         ''' <summary>
         ''' 主要是存储警告消息
@@ -144,7 +151,7 @@ Namespace Runtime
                 If name.First = "["c AndAlso name.Last = "]"c Then
                     globalEnvironment(name.GetStackValue("[", "]")) = value
                 Else
-                    variables(name) = value
+                    symbols(name) = value
                 End If
             End Set
         End Property
@@ -153,7 +160,7 @@ Namespace Runtime
         Const ConstraintInvalid$ = "Value can not match the type constraint!!! ({0} <--> {1})"
 
         Sub New()
-            variables = New Dictionary(Of Symbol)
+            symbols = New Dictionary(Of Symbol)
             types = New Dictionary(Of String, RType)
             parent = Nothing
             [global] = Nothing
@@ -177,7 +184,7 @@ Namespace Runtime
             Me.global = parent.globalEnvironment
 
             If isInherits Then
-                variables = parent.variables
+                symbols = parent.symbols
                 types = parent.types
             End If
         End Sub
@@ -201,8 +208,14 @@ Namespace Runtime
         End Sub
 
         Public Sub Clear()
-            Call variables.Clear()
-            Call types.Clear()
+            ' 20200304 fix bugs for environment inherits mode
+            If Not symbols Is parent.symbols Then
+                Call symbols.Clear()
+            End If
+            If Not types Is parent.types Then
+                Call types.Clear()
+            End If
+
             Call ifPromise.Clear()
             Call messages.Clear()
         End Sub
@@ -217,8 +230,8 @@ Namespace Runtime
                 Return globalEnvironment.FindSymbol(name.GetStackValue("[", "]"))
             End If
 
-            If variables.ContainsKey(name) Then
-                Return variables(name)
+            If symbols.ContainsKey(name) Then
+                Return symbols(name)
             ElseIf [inherits] AndAlso Not parent Is Nothing Then
                 Return parent.FindSymbol(name)
             Else
@@ -231,8 +244,8 @@ Namespace Runtime
                 Return
             End If
 
-            If variables.ContainsKey(name) Then
-                Call variables.Remove(name)
+            If symbols.ContainsKey(name) Then
+                Call symbols.Remove(name)
             ElseIf Not parent Is Nothing Then
                 Call parent.Delete(name)
             End If
@@ -250,16 +263,16 @@ Namespace Runtime
         ''' </summary>
         ''' <param name="name$"></param>
         ''' <param name="value"></param>
-        ''' <param name="type"></param>
+        ''' <param name="mode"></param>
         ''' <returns></returns>
-        Public Function Push(name$, value As Object, [readonly] As Boolean, Optional type As TypeCodes = TypeCodes.generic) As Object
-            If variables.ContainsKey(name) Then
-                Return Internal.stop({String.Format(AlreadyExists, name)}, Me)
+        Public Function Push(name$, value As Object, [readonly] As Boolean, Optional mode As TypeCodes = TypeCodes.generic) As Object
+            If symbols.ContainsKey(name) Then
+                Return Internal.debug.stop({String.Format(AlreadyExists, name)}, Me)
             ElseIf Not value Is Nothing Then
-                value = asRVector(type, value)
+                value = asRVector(mode, value)
             End If
 
-            With New Symbol(type) With {
+            With New Symbol(mode) With {
                 .name = name
             }
                 Call .SetValue(value, Me)
@@ -269,9 +282,9 @@ Namespace Runtime
                 .[readonly] = [readonly]
 
                 If Not .constraintValid Then
-                    Return Internal.stop(New Exception(String.Format(ConstraintInvalid, .typeCode, type)), Me)
+                    Return Internal.debug.stop(New Exception(String.Format(ConstraintInvalid, .typeCode, mode)), Me)
                 Else
-                    Call .DoCall(AddressOf variables.Add)
+                    Call .DoCall(AddressOf symbols.Add)
                 End If
 
                 Return value
@@ -316,7 +329,7 @@ Namespace Runtime
         End Function
 
         Public Iterator Function GetEnumerator() As IEnumerator(Of Symbol) Implements IEnumerable(Of Symbol).GetEnumerator
-            For Each var As Symbol In variables.Values
+            For Each var As Symbol In symbols.Values
                 Yield var
             Next
         End Function

@@ -50,6 +50,16 @@ Imports Microsoft.VisualBasic.Text.Xml.Models
 
 Namespace System.Configuration
 
+    Public Class StartupConfigs
+
+        Public Property loadingPackages As String()
+
+        Public Shared Function DefaultLoadingPackages() As String()
+            Return {"base", "utils", "grDevices", "stats"}
+        End Function
+
+    End Class
+
     Public Class ConfigFile : Inherits XmlDataModel
         Implements IList(Of NamedValue)
 
@@ -66,8 +76,19 @@ Namespace System.Configuration
 
         <XmlElement> Public Property system As AssemblyInfo
         <XmlElement> Public Property config As NamedValue()
+        <XmlElement> Public Property startups As StartupConfigs
 
         Public Shared ReadOnly Property localConfigs As String = App.LocalData & "/R#.configs.xml"
+
+        Public Function GetStartupLoadingPackages() As String()
+            If startups Is Nothing Then
+                Return StartupConfigs.DefaultLoadingPackages
+            ElseIf startups.loadingPackages.IsNullOrEmpty Then
+                Return StartupConfigs.DefaultLoadingPackages
+            Else
+                Return startups.loadingPackages
+            End If
+        End Function
 
         Public Shared Function EmptyConfigs() As ConfigFile
             Return New ConfigFile With {

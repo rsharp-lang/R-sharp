@@ -118,6 +118,9 @@ Namespace Runtime.Interop
 
         Dim names As String()
 
+        Public ReadOnly Property getCount As PropertyInfo
+        Public ReadOnly Property getItem As PropertyInfo
+
         Private Sub New(raw As Type)
             If raw.IsValueType AndAlso
                raw.Namespace = "System" AndAlso
@@ -137,6 +140,24 @@ Namespace Runtime.Interop
             Me.isCollection = raw.ImplementInterface(GetType(IEnumerable)) AndAlso Not raw Is GetType(String)
             Me.mode = raw.GetRTypeCode
             Me.isEnvironment = raw.IsInheritsFrom(GetType(Environment), strict:=False)
+            Me.getCount = raw _
+                .GetProperties(PublicProperty) _
+                .Where(Function(p)
+                           Return p.CanRead AndAlso
+                                  p.Name = "Count" AndAlso
+                                  p.PropertyType Is GetType(Integer) AndAlso
+                                  p.GetIndexParameters.IsNullOrEmpty
+                       End Function) _
+                .FirstOrDefault
+            Me.getItem = raw _
+                .GetProperties(PublicProperty) _
+                .Where(Function(p)
+                           Return p.Name = "Item" AndAlso
+                                  p.CanRead AndAlso
+                                  p.GetIndexParameters.Length = 1 AndAlso
+                                  p.GetIndexParameters(Scan0).ParameterType Is GetType(Integer)
+                       End Function) _
+                .FirstOrDefault
         End Sub
 
         Public Function GetRawElementType() As Type
@@ -201,6 +222,12 @@ Namespace Runtime.Interop
         <DebuggerStepThrough>
         Public Shared Narrowing Operator CType(type As RType) As Type
             Return type.raw
+        End Operator
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
+        Public Shared Operator Like(rtype As RType, type As Type) As Boolean
+            Return rtype.raw Is type
         End Operator
     End Class
 End Namespace

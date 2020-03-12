@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::c42b407a4a0a87c022522db38263523c, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\FunctionInvoke.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class FunctionInvoke
-    ' 
-    '         Properties: [namespace], funcName, stackFrame, type
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: allIsValueAssign, doInvokeFuncVar, Evaluate, getFuncVar, invokeRInternal
-    '                   ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class FunctionInvoke
+' 
+'         Properties: [namespace], funcName, stackFrame, type
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: allIsValueAssign, doInvokeFuncVar, Evaluate, getFuncVar, invokeRInternal
+'                   ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -134,41 +134,50 @@ Namespace Interpreter.ExecuteEngine
 
             If Not target Is Nothing AndAlso target.GetType Is GetType(Message) Then
                 Return target
-            Else
-                envir = New Environment(envir, stackFrame, isInherits:=True)
             End If
 
-            If TypeOf target Is Regex Then
-                ' regexp match
-                result = Regexp.Matches(target, parameters(Scan0), envir)
-            Else
-                result = doInvokeFuncVar(target, envir)
-            End If
-
-            If result Is Nothing Then
-                Return Nothing
-            ElseIf Program.isException(result) Then
-                Return result
-            ElseIf result.GetType Is GetType(RReturn) Then
-                Dim returns As RReturn = DirectCast(result, RReturn)
-                Dim messages = envir.globalEnvironment.messages
-
-                If returns.HasValue Then
-                    messages.AddRange(returns.messages)
-                    Return returns.Value
-                ElseIf returns.isError Then
-                    returns.messages.Where(Function(m) m.level <> MSG_TYPES.ERR).DoCall(AddressOf messages.AddRange)
-                    Return returns.messages.Where(Function(m) m.level = MSG_TYPES.ERR)
+            Using env As New Environment(envir, stackFrame, isInherits:=True)
+                If TypeOf target Is Regex Then
+                    ' regexp match
+                    result = Regexp.Matches(target, parameters(Scan0), env)
                 Else
-                    ' 2019-12-15
-                    ' isError的时候也会导致hasValue为false
-                    ' 所以null的情况不可以和warning的情况合并在一起处理
-                    messages.AddRange(returns.messages)
-                    Return Nothing
+                    result = doInvokeFuncVar(target, env)
                 End If
-            Else
-                Return result
-            End If
+
+                ' check the function invoke returns values
+                ' for 
+                '
+                ' 1. error message
+                ' 2. invisible
+                ' 3. returns expression, break expression
+                '
+                If result Is Nothing Then
+                    Return Nothing
+                ElseIf Program.isException(result) Then
+                    Return result
+                ElseIf TypeOf result Is RReturn Then
+                    Dim returns As RReturn = DirectCast(result, RReturn)
+                    Dim messages = env.globalEnvironment.messages
+
+                    If returns.HasValue Then
+                        messages.AddRange(returns.messages)
+                        Return returns.Value
+                    ElseIf returns.isError Then
+                        returns.messages.Where(Function(m) m.level <> MSG_TYPES.ERR).DoCall(AddressOf messages.AddRange)
+                        Return returns.messages.Where(Function(m) m.level = MSG_TYPES.ERR)
+                    Else
+                        ' 2019-12-15
+                        ' isError的时候也会导致hasValue为false
+                        ' 所以null的情况不可以和warning的情况合并在一起处理
+                        messages.AddRange(returns.messages)
+                        Return Nothing
+                    End If
+                ElseIf TypeOf result Is pipeline AndAlso DirectCast(result, pipeline).isError Then
+                    Return DirectCast(result, pipeline).getError
+                Else
+                    Return result
+                End If
+            End Using
         End Function
 
         ''' <summary>
@@ -246,64 +255,48 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Private Function invokeRInternal(funcName$, envir As Environment) As Object
-            If funcName = "options" Then
-                If Not parameters.DoCall(AddressOf allIsValueAssign) Then
-                    Dim names As String()
-
-                    If parameters.Count = 1 Then
-                        Dim firstInput = parameters(Scan0).Evaluate(envir)
-
-                        If firstInput.GetType Is GetType(list) Then
-                            Return base.options(firstInput, envir)
-                        ElseIf Program.isException(firstInput) Then
-                            Return firstInput
-                        Else
-                            names = Runtime.asVector(Of String)(firstInput)
-                        End If
-                    Else
-                        Dim vector As Object() = parameters _
-                            .Select(Function(exp)
-                                        Return exp.Evaluate(envir)
-                                    End Function) _
-                            .ToArray
-
-                        For Each element As Object In vector
-                            If Program.isException(element) Then
-                                Return element
-                            End If
-                        Next
-
-                        names = Runtime.asVector(Of String)(vector)
-                    End If
-
-                    Return base.options(names, envir)
-                End If
-            End If
-
-            Dim result As Object
-
-            If Internal.invoke.getFunction(funcName) Is Nothing AndAlso Internal.generic.exists(funcName) Then
-                Dim x As Object = parameters(Scan0).Evaluate(envir)
-                Dim args As New list With {
-                    .slots = InvokeParameter.Create(parameters.Skip(1)) _
-                        .DoCall(Function(list)
-                                    Return RListObjectArgumentAttribute.getObjectList(list, envir)
-                                End Function) _
-                        .ToDictionary(Function(a) a.Name,
-                                      Function(a)
-                                          Return a.Value
-                                      End Function)
-                }
-
-                result = Internal.generic.invokeGeneric(funcName, x, args, envir)
+            If funcName = "options" AndAlso Not parameters.DoCall(AddressOf allIsValueAssign) Then
+                Return runOptions(envir)
             Else
                 ' create argument models
                 Dim argVals As InvokeParameter() = InvokeParameter.Create(parameters)
                 ' and then invoke the specific internal R# api
-                result = Internal.invokeInternals(envir, funcName, argVals)
+                Dim result As Object = Internal.invoke.invokeInternals(envir, funcName, argVals)
+
+                Return result
+            End If
+        End Function
+
+        Private Function runOptions(env As Environment) As Object
+            Dim names As String()
+
+            If parameters.Count = 1 Then
+                Dim firstInput = parameters(Scan0).Evaluate(env)
+
+                If firstInput.GetType Is GetType(list) Then
+                    Return base.options(firstInput, env)
+                ElseIf Program.isException(firstInput) Then
+                    Return firstInput
+                Else
+                    names = Runtime.asVector(Of String)(firstInput)
+                End If
+            Else
+                Dim vector As Object() = parameters _
+                    .Select(Function(exp)
+                                Return exp.Evaluate(env)
+                            End Function) _
+                    .ToArray
+
+                For Each element As Object In vector
+                    If Program.isException(element) Then
+                        Return element
+                    End If
+                Next
+
+                names = Runtime.asVector(Of String)(vector)
             End If
 
-            Return result
+            Return base.options(names, env)
         End Function
 
         <DebuggerStepThrough>

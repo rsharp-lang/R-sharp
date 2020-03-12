@@ -59,7 +59,7 @@ Namespace System.Configuration
     ''' </summary>
     Public Class Options : Implements IFileReference, IDisposable
 
-        ReadOnly file As ConfigFile
+        Friend ReadOnly file As ConfigFile
 
         ''' <summary>
         ''' The memory cache value of the configuration.

@@ -94,6 +94,7 @@ Namespace Interpreter
                         If expr.isException Then
                             If errHandler Is Nothing Then
                                 Call SyntaxErrorHelper(
+                                    opts:=opts,
                                     syntaxResult:=expr,
                                     Rscript:=Rscript,
                                     tokens:=block
@@ -110,20 +111,29 @@ Namespace Interpreter
             Next
         End Function
 
-        Private Sub SyntaxErrorHelper(Rscript As Rscript, tokens As Token(), syntaxResult As SyntaxResult)
+        Private Sub SyntaxErrorHelper(Rscript As Rscript, tokens As Token(), syntaxResult As SyntaxResult, opts As SyntaxBuilderOptions)
             Dim rawText As String = Rscript.GetRawText(tokens)
             Dim err As Exception = syntaxResult.error
             Dim message As String = err.ToString
+            Dim errorsPromptLine = New String("~"c, rawText.LineTokens.MaxLengthString.Length)
 
             message &= vbCrLf & vbCrLf & "Syntax error nearby:"
             message &= vbCrLf & vbCrLf & rawText
+            message &= vbCrLf & errorsPromptLine
             message &= vbCrLf & vbCrLf & $"Range from {tokens.First.span.start} at line {tokens.First.span.line}, to {tokens.Last.span.stops} at line {tokens.Last.span.line}."
-            message &= vbCrLf & vbCrLf & "The parser stack trace:"
-            message &= vbCrLf & vbCrLf & syntaxResult.stackTrace
-            message &= vbCrLf & vbCrLf & "   --=== End of the R# Parser StackTrace ===--"
-            message &= vbCrLf & vbCrLf
 
-            Throw New Exception(message)
+            If opts.debug Then
+                message &= vbCrLf & vbCrLf & "The parser stack trace:"
+                message &= vbCrLf & vbCrLf & syntaxResult.stackTrace
+                message &= vbCrLf & vbCrLf & "   --=== End of the R# Parser StackTrace ===--"
+                message &= vbCrLf & vbCrLf
+            End If
+
+            If Not opts.debug Then
+                opts.error = message
+            Else
+                Throw New Exception(message)
+            End If
         End Sub
     End Module
 End Namespace

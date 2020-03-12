@@ -202,7 +202,7 @@ Binary:
             ' tuple value assign
             ' or member reference assign
             Dim target As Token() = code(Scan0)
-            Dim value As Token() = code(2)
+            Dim value As Token() = code.Skip(2).IteratesALL.ToArray
             Dim symbol As Expression()
 
             If target.isSimpleSymbolIndexer Then

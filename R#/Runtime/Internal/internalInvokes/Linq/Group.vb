@@ -58,6 +58,12 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         Public key As Object
         Public group As Array
 
+        Public ReadOnly Property length As Integer
+            Get
+                Return group.Length
+            End Get
+        End Property
+
         Shared Sub New()
             Call printer.AttachInternalConsoleFormatter(Of Group)(AddressOf InternalToString)
         End Sub
@@ -101,7 +107,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             ElseIf name = NameOf(group) Then
                 group = Runtime.asVector(Of Object)(value)
             Else
-                Return Internal.stop(New InvalidOperationException, envir)
+                Return Internal.debug.stop(New InvalidOperationException, envir)
             End If
 
             Return value

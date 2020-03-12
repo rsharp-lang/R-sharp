@@ -45,12 +45,12 @@ Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Text
-Imports SMRUCC
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
 ''' The R Utils Package 
@@ -91,9 +91,26 @@ Public Module utils
     ''' </param>
     ''' <returns></returns>
     <ExportAPI("read.csv")>
-    Public Function read_csv(file$, Optional encoding As Object = "unknown") As Rdataframe
-        Dim datafile As File = IO.File.Load(file, encoding:=Rsharp.GetEncoding(encoding))
-        Dim cols = datafile.Columns.ToArray
+    <RApiReturn(GetType(Rdataframe))>
+    Public Function read_csv(file$,
+                             Optional encoding As Object = "unknown",
+                             Optional tsv As Boolean = False,
+                             Optional env As Environment = Nothing) As Object
+
+        Dim datafile As Object = REnv _
+            .TryCatch(Function()
+                          If tsv Then
+                              Return IO.File.LoadTsv(file, encoding:=Rsharp.GetEncoding(encoding))
+                          Else
+                              Return IO.File.Load(file, encoding:=Rsharp.GetEncoding(encoding))
+                          End If
+                      End Function)
+
+        If Not TypeOf datafile Is File Then
+            Return Internal.debug.stop(datafile, env)
+        End If
+
+        Dim cols() = DirectCast(datafile, File).Columns.ToArray
         Dim dataframe As New Rdataframe() With {
             .columns = cols _
                 .ToDictionary(Function(col) col(Scan0),
@@ -141,6 +158,13 @@ Public Module utils
 
         If x Is Nothing Then
             Return Internal.debug.stop("Empty dataframe object!", env)
+        Else
+            ' test if the target table file is not locked by excel
+            Dim err As Object = REnv.TryCatch(Function() "".SaveTo(file))
+
+            If Not TypeOf err Is Boolean Then
+                Return Internal.debug.stop(err, env)
+            End If
         End If
 
         Dim type As Type = x.GetType

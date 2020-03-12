@@ -95,13 +95,31 @@ Namespace Runtime.Components
             End Get
         End Property
 
-        Public ReadOnly Property haveSymbolName As Boolean
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="hasObjectList">
+        ''' If allows hasObjectList, then <see cref="SymbolReference"/> will be used as list slot symbol name
+        ''' otherwise only allows get symbol name from parameter name reference pattern ``a &lt;- b``.
+        ''' </param>
+        ''' <returns></returns>
+        Public ReadOnly Property haveSymbolName(hasObjectList As Boolean) As Boolean
             Get
                 If value Is Nothing Then
                     Return False
-                ElseIf TypeOf value Is SymbolReference OrElse TypeOf value Is ValueAssign Then
+                ElseIf TypeOf value Is ValueAssign Then
                     Return True
-                ElseIf TypeOf value Is VectorLiteral Then
+                ElseIf hasObjectList AndAlso TypeOf value Is SymbolReference Then
+                    Return True
+                Else
+                    Return False
+                End If
+            End Get
+        End Property
+
+        Public ReadOnly Property isProbablyVectorNameTuple As Boolean
+            Get
+                If TypeOf value Is VectorLiteral Then
                     Return DirectCast(value, VectorLiteral).type = TypeCodes.string
                 Else
                     Return False
@@ -144,12 +162,21 @@ Namespace Runtime.Components
                 .ToArray
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="envir"></param>
+        ''' <param name="arguments"></param>
+        ''' <param name="hasObjectList">
+        ''' If has object list argument, then use the symbol name as slot name
+        ''' </param>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Shared Function CreateArguments(envir As Environment, arguments As IEnumerable(Of InvokeParameter)) As Dictionary(Of String, Object)
+        Public Shared Function CreateArguments(envir As Environment, arguments As IEnumerable(Of InvokeParameter), hasObjectList As Boolean) As Dictionary(Of String, Object)
             Return arguments _
                 .SeqIterator _
                 .ToDictionary(Function(a)
-                                  If a.value.haveSymbolName Then
+                                  If a.value.haveSymbolName(hasObjectList) Then
                                       Return a.value.name
                                   Else
                                       Return "$" & a.i

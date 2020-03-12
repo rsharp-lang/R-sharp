@@ -143,7 +143,7 @@ Namespace System.Package
 
                 If symbol Is Nothing Then
                     ' add new
-                    [global].Push(api.name, api, TypeCodes.closure)
+                    [global].Push(api.name, api, [readonly]:=False, mode:=TypeCodes.closure)
                 Else
                     ' overrides and masked by current package
                     symbol.SetValue(api, envir)
@@ -180,7 +180,7 @@ Namespace System.Package
             Dim [global] As GlobalEnvironment = envir.globalEnvironment
 
             For Each api As RMethodInfo In Rmethods
-                Call [global].Push(api.name, api, TypeCodes.closure)
+                Call [global].Push(api.name, api, [readonly]:=False, mode:=TypeCodes.closure)
             Next
         End Sub
     End Module

@@ -1,50 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::fac315e9169ab766b7637706131dc937, R#\Runtime\Internal\internalInvokes\base.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module base
-    ' 
-    '         Function: [stop], all, any, append, cat
-    '                   colnames, createDotNetExceptionMessage, CreateMessageInternal, doPrintInternal, getEnvironmentStack
-    '                   getOption, invisible, invokeArgument, isEmpty, lapply
-    '                   length, names, ncol, neg, nrow
-    '                   options, print, Rdataframe, rep, replace
-    '                   Rlist, rownames, sapply, source, str
-    '                   summary, warning
-    ' 
-    '         Sub: q, quit
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module base
+' 
+'         Function: [stop], all, any, append, cat
+'                   colnames, createDotNetExceptionMessage, CreateMessageInternal, doPrintInternal, getEnvironmentStack
+'                   getOption, invisible, invokeArgument, isEmpty, lapply
+'                   length, names, ncol, neg, nrow
+'                   options, print, Rdataframe, rep, replace
+'                   Rlist, rownames, sapply, source, str
+'                   summary, warning
+' 
+'         Sub: q, quit
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -65,12 +65,14 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Configuration
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports RObj = SMRUCC.Rsharp.Runtime.Internal.Object
+Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 
 Namespace Runtime.Internal.Invokes
 
@@ -99,6 +101,27 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("rep")>
         Public Function rep(x As Object, times As Integer) As Object
             Return Repeats(x, times)
+        End Function
+
+        ''' <summary>
+        ''' create an empty vector with specific count of null value filled
+        ''' </summary>
+        ''' <param name="size"></param>
+        ''' <returns></returns>
+        <ExportAPI("allocate")>
+        Public Function allocate(size As Integer) As vector
+            Dim a As Object() = New Object(size - 1) {}
+            Dim v As New vector With {
+                .data = a
+            }
+
+            Return v
+        End Function
+
+        <ExportAPI("unit")>
+        Public Function unitOfT(x As vector, unit As unit) As vector
+            x.unit = unit
+            Return x
         End Function
 
         <ExportAPI("replace")>
@@ -141,7 +164,7 @@ Namespace Runtime.Internal.Invokes
         ''' </returns>
         <ExportAPI("invisible")>
         Public Function invisible(x As Object) As <RSuppressPrint> Object
-            Return x
+            Return New invisible With {.value = x}
         End Function
 
         <ExportAPI("neg")>
@@ -210,7 +233,7 @@ Namespace Runtime.Internal.Invokes
                 .Select(Function(a)
                             Dim name$
 
-                            If a.value.haveSymbolName Then
+                            If a.value.haveSymbolName(hasObjectList:=True) Then
                                 name = a.value.name
                             Else
                                 name = "X" & (a.i + 1)
@@ -233,7 +256,7 @@ Namespace Runtime.Internal.Invokes
             ElseIf x.GetType Is GetType(dataframe) Then
                 Return DirectCast(x, dataframe).nrows
             Else
-                Return Internal.stop(RType.GetRSharpType(x).ToString & " is not a dataframe!", env)
+                Return Internal.debug.stop(RType.GetRSharpType(x).ToString & " is not a dataframe!", env)
             End If
         End Function
 
@@ -245,7 +268,7 @@ Namespace Runtime.Internal.Invokes
             ElseIf x.GetType Is GetType(dataframe) Then
                 Return DirectCast(x, dataframe).ncols
             Else
-                Return Internal.stop(RType.GetRSharpType(x).ToString & " is not a dataframe!", env)
+                Return Internal.debug.stop(RType.GetRSharpType(x).ToString & " is not a dataframe!", env)
             End If
         End Function
 
@@ -259,11 +282,7 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("list")>
         <RApiReturn(GetType(list))>
-        Public Function Rlist(<RListObjectArgument>
-                              <RRawVectorArgument>
-                              slots As Object,
-                              Optional envir As Environment = Nothing) As Object
-
+        Public Function Rlist(<RListObjectArgument, RRawVectorArgument> slots As Object, Optional envir As Environment = Nothing) As Object
             Dim list As New Dictionary(Of String, Object)
             Dim slot As InvokeParameter
             Dim key As String
@@ -273,7 +292,7 @@ Namespace Runtime.Internal.Invokes
             For i As Integer = 0 To parameters.Length - 1
                 slot = parameters(i)
 
-                If slot.haveSymbolName Then
+                If slot.haveSymbolName(hasObjectList:=True) Then
                     ' 不支持tuple
                     key = slot.name
                     value = slot.Evaluate(envir)
@@ -282,7 +301,11 @@ Namespace Runtime.Internal.Invokes
                     value = slot.Evaluate(envir)
                 End If
 
-                Call list.Add(key, value)
+                If Program.isException(value) Then
+                    Return value
+                Else
+                    list.Add(key, value)
+                End If
             Next
 
             Return New list With {.slots = list}
@@ -301,8 +324,16 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <returns></returns>
         <ExportAPI("summary")>
-        Public Function summary([object] As Object) As Object
-            Throw New NotImplementedException
+        Public Function summary(<RRawVectorArgument> [object] As Object,
+                                <RRawVectorArgument, RListObjectArgument> args As Object,
+                                Optional env As Environment = Nothing) As Object
+
+            ' summary is similar to str or print function
+            ' but summary just returns simple data summary information
+            ' and str function returns the data structure information
+            ' about the given dataset object.
+            ' the print function is print the data details
+            Return DirectCast(Rlist(args, env), list).invokeGeneric([object], env)
         End Function
 
         ''' <summary>
@@ -388,76 +419,23 @@ Namespace Runtime.Internal.Invokes
         Public Function length(<RRawVectorArgument> x As Object, <RByRefValueAssign> Optional newSize As Integer = -1) As Integer
             If x Is Nothing Then
                 Return 0
-            ElseIf x.GetType.IsArray Then
-                Return DirectCast(x, Array).Length
-            ElseIf x.GetType.ImplementInterface(GetType(RIndex)) Then
-                Return DirectCast(x, RIndex).length
-            ElseIf x.GetType.ImplementInterface(GetType(IDictionary)) Then
-                Return DirectCast(x, IDictionary).Count
-            ElseIf x.GetType Is GetType(dataframe) Then
-                Return DirectCast(x, dataframe).ncols
             Else
-                Return 1
+                Dim type As Type = x.GetType
+
+                If type.IsArray Then
+                    Return DirectCast(x, Array).Length
+                ElseIf type.ImplementInterface(GetType(RIndex)) Then
+                    Return DirectCast(x, RIndex).length
+                ElseIf type.ImplementInterface(GetType(IDictionary)) Then
+                    Return DirectCast(x, IDictionary).Count
+                ElseIf type Is GetType(dataframe) Then
+                    Return DirectCast(x, dataframe).ncols
+                ElseIf type Is GetType(Group) Then
+                    Return DirectCast(x, Group).length
+                Else
+                    Return 1
+                End If
             End If
-        End Function
-
-        ''' <summary>
-        ''' # Are Some Values True?
-        ''' 
-        ''' Given a set of logical vectors, is at least one of the values true?
-        ''' </summary>
-        ''' <param name="test">
-        ''' zero or more logical vectors. Other objects of zero length are ignored, 
-        ''' and the rest are coerced to logical ignoring any class.
-        ''' </param>
-        ''' <param name="narm">
-        ''' logical. If true NA values are removed before the result Is computed.
-        ''' </param>
-        ''' <returns>
-        ''' The value is a logical vector of length one.
-        '''
-        ''' Let x denote the concatenation of all the logical vectors in ... 
-        ''' (after coercion), after removing NAs if requested by na.rm = TRUE.
-        ''' 
-        ''' The value returned Is True If at least one Of the values In x Is True, 
-        ''' And False If all Of the values In x are False (including If there are 
-        ''' no values). Otherwise the value Is NA (which can only occur If 
-        ''' na.rm = False And ... contains no True values And at least one NA 
-        ''' value).
-        ''' </returns>
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        <ExportAPI("any")>
-        Public Function any(<RRawVectorArgument> test As Object, Optional narm As Boolean = False) As Boolean
-            Return Runtime.asLogical(test).Any(Function(b) b = True)
-        End Function
-
-        ''' <summary>
-        ''' # Are All Values True?
-        ''' 
-        ''' Given a set of logical vectors, are all of the values true?
-        ''' </summary>
-        ''' <param name="test">zero or more logical vectors. Other objects of zero 
-        ''' length are ignored, and the rest are coerced to logical ignoring any 
-        ''' class.</param>
-        ''' <param name="narm">
-        ''' logical. If true NA values are removed before the result is computed.
-        ''' </param>
-        ''' <returns>
-        ''' The value is a logical vector of length one.
-        '''
-        ''' Let x denote the concatenation of all the logical vectors in ... 
-        ''' (after coercion), after removing NAs if requested by na.rm = TRUE.
-        '''
-        ''' The value returned Is True If all Of the values In x are True 
-        ''' (including If there are no values), And False If at least one Of 
-        ''' the values In x Is False. Otherwise the value Is NA (which can 
-        ''' only occur If na.rm = False And ... contains no False values And 
-        ''' at least one NA value).
-        ''' </returns>
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        <ExportAPI("all")>
-        Public Function all(<RRawVectorArgument> test As Object, Optional narm As Boolean = False) As Boolean
-            Return Runtime.asLogical(test).All(Function(b) b = True)
         End Function
 
         ''' <summary>
@@ -485,8 +463,11 @@ Namespace Runtime.Internal.Invokes
                 .Where(Function(a) a.Name <> path) _
                 .ToArray
             Dim R As RInterpreter = envir.globalEnvironment.Rscript
+            Dim result As Object = R.Source(path, args)
 
-            Return R.Source(path, args)
+            Return New invisible() With {
+                .value = result
+            }
         End Function
 
         <ExportAPI("getOption")>
@@ -538,7 +519,7 @@ Namespace Runtime.Internal.Invokes
                     Try
                         configs.setOption(value.Key, value.Value)
                     Catch ex As Exception
-                        Return Internal.stop(ex, envir)
+                        Return Internal.debug.stop(ex, envir)
                     End Try
                 Next
             ElseIf type.IsArray AndAlso DirectCast(opts, Array).Length = 0 Then
@@ -557,7 +538,7 @@ Namespace Runtime.Internal.Invokes
                     Try
                         values.slots(name) = configs.setOption(name, Scripting.ToString(cfgValue))
                     Catch ex As Exception
-                        Return Internal.stop(ex, envir)
+                        Return Internal.debug.stop(ex, envir)
                     End Try
                 Next
             End If
@@ -781,10 +762,28 @@ Namespace Runtime.Internal.Invokes
             }
         End Function
 
+        ''' <summary>
+        ''' ### Warning Messages
+        ''' 
+        ''' Generates a warning message that corresponds to 
+        ''' its argument(s) and (optionally) the expression 
+        ''' or function from which it was called.
+        ''' </summary>
+        ''' <param name="message">
+        ''' zero Or more objects which can be coerced to 
+        ''' character (And which are pasted together with 
+        ''' no separator) Or a single condition object.
+        ''' </param>
+        ''' <param name="envir"></param>
+        ''' <returns>
+        ''' The warning message as character string, invisibly.
+        ''' </returns>
         <ExportAPI("warning")>
         <DebuggerStepThrough>
         Public Function warning(<RRawVectorArgument> message As Object, Optional envir As Environment = Nothing) As Message
-            Return CreateMessageInternal(message, envir, level:=MSG_TYPES.WRN)
+            Dim msg As Message = CreateMessageInternal(message, envir, level:=MSG_TYPES.WRN)
+            envir.messages.Add(msg)
+            Return msg
         End Function
 
         ''' <summary>
@@ -857,6 +856,86 @@ Namespace Runtime.Internal.Invokes
 
         Dim markdown As MarkdownRender = MarkdownRender.DefaultStyleRender
 
+        <ExportAPI("head")>
+        Public Function head(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+            If x Is Nothing Then
+                Return x
+            ElseIf x.GetType.IsArray Then
+                x = New vector With {.data = x}
+            ElseIf x.GetType.ImplementInterface(GetType(IDictionary(Of String, Object))) Then
+                x = New list With {.slots = x}
+            End If
+
+            Dim type As Type = x.GetType
+            Dim length% = 6
+
+            If type Is GetType(vector) Then
+                Dim v As vector = DirectCast(x, vector)
+
+                If v.length <= length Then
+                    Return x
+                Else
+                    Dim data As Array = Array.CreateInstance(v.type.raw, length)
+
+                    For i As Integer = 0 To data.Length - 1
+                        data.SetValue(v.data.GetValue(i), i)
+                    Next
+
+                    Return New vector With {.data = data}
+                End If
+            ElseIf type Is GetType(list) Then
+                Dim l As list = DirectCast(x, list)
+
+                If l.length <= length Then
+                    Return l
+                Else
+                    Return New list With {
+                        .slots = l.slots.Keys _
+                            .Take(length) _
+                            .ToDictionary(Function(key) key,
+                                          Function(key)
+                                              Return l.slots(key)
+                                          End Function)
+                    }
+                End If
+            ElseIf type Is GetType(dataframe) Then
+                Dim df As dataframe = DirectCast(x, dataframe)
+
+                If df.nrows <= length Then
+                    Return df
+                Else
+                    Dim data As New Dictionary(Of String, Array)
+                    Dim colVal As Array
+                    Dim colSubset As Array
+
+                    For Each col In df.columns
+                        If col.Value.Length = 1 Then
+                            data.Add(col.Key, col.Value)
+                        Else
+                            colVal = col.Value
+                            colSubset = Array.CreateInstance(colVal.GetType.GetElementType, length)
+
+                            For i As Integer = 0 To length - 1
+                                colSubset.SetValue(colVal.GetValue(i), i)
+                            Next
+
+                            data.Add(col.Key, colSubset)
+                        End If
+                    Next
+
+                    Return New dataframe With {
+                        .columns = data,
+                        .rownames = df.rownames _
+                            .SafeQuery _
+                            .Take(length) _
+                            .ToArray
+                    }
+                End If
+            Else
+                Return x
+            End If
+        End Function
+
         ''' <summary>
         ''' # Print Values
         ''' 
@@ -894,7 +973,7 @@ Namespace Runtime.Internal.Invokes
                 Try
                     Call markdown.DoPrint(DirectCast(x, RPrint).GetPrintContent, 0)
                 Catch ex As Exception
-                    Return Internal.stop(ex, envir)
+                    Return Internal.debug.stop(ex, envir)
                 End Try
             ElseIf type Is GetType(Message) Then
                 Return x
@@ -929,9 +1008,9 @@ Namespace Runtime.Internal.Invokes
                                Optional envir As Environment = Nothing) As Object
 
             If FUN Is Nothing Then
-                Return Internal.stop({"Missing apply function!"}, envir)
+                Return Internal.debug.stop({"Missing apply function!"}, envir)
             ElseIf Not FUN.GetType.ImplementInterface(GetType(RFunction)) Then
-                Return Internal.stop({"Target is not a function!"}, envir)
+                Return Internal.debug.stop({"Target is not a function!"}, envir)
             End If
 
             If Program.isException(X) Then
@@ -943,38 +1022,42 @@ Namespace Runtime.Internal.Invokes
             End If
 
             Dim apply As RFunction = FUN
-            Dim list As Dictionary(Of String, Object)
+            Dim list As New Dictionary(Of String, Object)
 
             If X.GetType Is GetType(Dictionary(Of String, Object)) Then
-                list = DirectCast(X, Dictionary(Of String, Object)) _
-                    .ToDictionary(Function(d) d.Key,
-                                  Function(d)
-                                      Return apply.Invoke(envir, invokeArgument(d.Value))
-                                  End Function)
+                For Each d In DirectCast(X, Dictionary(Of String, Object))
+                    list(d.Key) = apply.Invoke(envir, invokeArgument(d.Value))
+
+                    If Program.isException(list(d.Key)) Then
+                        Return list(d.Key)
+                    End If
+                Next
             Else
                 Dim getName As Func(Of SeqValue(Of Object), String)
+                Dim keyName$
+                Dim value As Object
 
                 If names Is Nothing Then
                     getName = Function(i) $"[[{i.i + 1}]]"
                 Else
                     getName = Function(i)
-                                  Return names.Invoke(envir, invokeArgument(i.value))
+                                  Return getFirst(RConversion.asCharacters(names.Invoke(envir, invokeArgument(i.value))))
                               End Function
                 End If
 
-                Try
-                    list = Runtime.asVector(Of Object)(X) _
-                        .AsObjectEnumerator _
-                        .SeqIterator _
-                        .ToDictionary(Function(i)
-                                          Return getName(i)
-                                      End Function,
-                                      Function(d)
-                                          Return apply.Invoke(envir, invokeArgument(d.value))
-                                      End Function)
-                Catch ex As Exception
-                    Return Internal.stop(ex, envir)
-                End Try
+                For Each d In Runtime.asVector(Of Object)(X) _
+                    .AsObjectEnumerator _
+                    .SeqIterator
+
+                    keyName = getName(d)
+                    value = apply.Invoke(envir, invokeArgument(d.value))
+
+                    If Program.isException(value) Then
+                        Return value
+                    Else
+                        list(keyName) = value
+                    End If
+                Next
             End If
 
             Return New list With {.slots = list}
@@ -1013,9 +1096,9 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("sapply")>
         Public Function sapply(<RRawVectorArgument> X As Object, FUN As Object, envir As Environment) As Object
             If FUN Is Nothing Then
-                Return Internal.stop({"Missing apply function!"}, envir)
+                Return Internal.debug.stop({"Missing apply function!"}, envir)
             ElseIf Not FUN.GetType.ImplementInterface(GetType(RFunction)) Then
-                Return Internal.stop({"Target is not a function!"}, envir)
+                Return Internal.debug.stop({"Target is not a function!"}, envir)
             End If
 
             If Program.isException(X) Then
@@ -1126,5 +1209,36 @@ Namespace Runtime.Internal.Invokes
 
             Call App.Exit(status)
         End Sub
+
+        <ExportAPI("auto")>
+        <RApiReturn(GetType(RDispose))>
+        Public Function autoDispose(x As Object, dispose As Object, Optional env As Environment = Nothing) As Object
+            ' using a as x :> auto(o -> ...) {
+            '    ...
+            ' }
+            Dim final As Action(Of Object)
+
+            If dispose Is Nothing Then
+                final = Sub()
+                            ' do nothing
+                        End Sub
+            ElseIf TypeOf dispose Is Action Then
+                final = Sub() Call DirectCast(dispose, Action)()
+            ElseIf TypeOf dispose Is Action(Of Object) Then
+                final = DirectCast(dispose, Action(Of Object))
+            ElseIf TypeOf dispose Is RMethodInfo Then
+                final = Sub(obj)
+                            Call DirectCast(dispose, RMethodInfo).Invoke(env, invokeArgument(obj))
+                        End Sub
+            ElseIf dispose.GetType.ImplementInterface(GetType(RFunction)) Then
+                final = Sub(obj)
+                            Call DirectCast(dispose, RFunction).Invoke(env, invokeArgument(obj))
+                        End Sub
+            Else
+                Return Internal.debug.stop(New InvalidProgramException(dispose.GetType.FullName), env)
+            End If
+
+            Return New RDispose(x, final)
+        End Function
     End Module
 End Namespace

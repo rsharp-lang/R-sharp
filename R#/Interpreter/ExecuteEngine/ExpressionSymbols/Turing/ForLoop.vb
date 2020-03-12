@@ -139,7 +139,7 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Private Function RunLoop(value As Object, stackframe As StackFrame, env As Environment) As Object
-            Using closure As Environment = DeclareNewVariable.PushNames(
+            Using closure As Environment = DeclareNewSymbol.PushNames(
                     names:=variables,
                     value:=value,
                     type:=TypeCodes.generic,

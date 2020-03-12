@@ -1,47 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::db70d3dfe599fe2402a2ceb79ecadebc, R#\Runtime\Internal\objects\list.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class list
-    ' 
-    '         Properties: length, slots
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: (+2 Overloads) getByIndex, (+2 Overloads) getByName, getNames, GetSlots, hasName
-    '                   namedValues, setByindex, setByIndex, (+2 Overloads) setByName, setNames
-    '                   ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class list
+' 
+'         Properties: length, slots
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: (+2 Overloads) getByIndex, (+2 Overloads) getByName, getNames, GetSlots, hasName
+'                   namedValues, setByindex, setByIndex, (+2 Overloads) setByName, setNames
+'                   ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -49,6 +49,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 
 Namespace Runtime.Internal.Object
 
@@ -111,7 +112,7 @@ Namespace Runtime.Internal.Object
                     .Select(Function(null, i) $"[[{i + 1}]]") _
                     .ToArray
             ElseIf oldNames.Length <> names.Length Then
-                Return Internal.stop("Inconsist name list length!", envir)
+                Return Internal.debug.stop("Inconsist name list length!", envir)
             End If
 
             newSlots = oldNames _
@@ -123,6 +124,10 @@ Namespace Runtime.Internal.Object
             slots = newSlots
 
             Return names
+        End Function
+
+        Public Function getValue(Of T)(name As String, env As Environment) As T
+            Return RConversion.CTypeDynamic(slots.TryGetValue(name), GetType(T), env)
         End Function
 
         Public Overrides Function ToString() As String
@@ -200,7 +205,7 @@ Namespace Runtime.Internal.Object
                            End Function
             Else
                 If names.Length <> value.Length Then
-                    Return Internal.stop({
+                    Return Internal.debug.stop({
                         $"Number of items to replace is not equals to replacement length!",
                         $"length(names): {names.Length}",
                         $"length(value): {value.Length}"
@@ -237,7 +242,7 @@ Namespace Runtime.Internal.Object
 
             If type Is GetType(list) Then
                 Return DirectCast(any, list).slots
-            ElseIf type Is GetType(Dictionary(Of String, Object)) Then
+            ElseIf type Is GetType(IDictionary(Of String, Object)) Then
                 Return any
             Else
                 Return Nothing

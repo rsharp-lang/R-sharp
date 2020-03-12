@@ -75,6 +75,8 @@ Namespace Runtime.Internal.Invokes
                 Return DirectCast(x, IDictionary(Of String, Object)).Values.AsEnumerable
             ElseIf type.IsArray Then
                 Return DirectCast(x, Array).AsObjectEnumerator
+            ElseIf type Is GetType(pipeline) Then
+                Return DirectCast(x, pipeline).populates(Of Object)
             Else
                 Return {x}
             End If
@@ -110,6 +112,10 @@ Namespace Runtime.Internal.Invokes
                 .Distinct _
                 .ToArray
             Return join
+        End Function
+
+        Public Function diff(<RRawVectorArgument> x As Object, <RRawVectorArgument> y As Object) As Object
+
         End Function
     End Module
 End Namespace

@@ -73,21 +73,21 @@ Namespace Interpreter.ExecuteEngine
         Public ReadOnly Property funcName As String Implements RFunction.name
         Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
 
-        Friend ReadOnly params As DeclareNewVariable()
+        Friend ReadOnly params As DeclareNewSymbol()
         Friend ReadOnly body As ClosureExpression
         ''' <summary>
         ''' The environment of current function closure
         ''' </summary>
         Friend envir As Environment
 
-        Sub New(funcName$, params As DeclareNewVariable(), body As ClosureExpression, stackframe As StackFrame)
+        Sub New(funcName$, params As DeclareNewSymbol(), body As ClosureExpression, stackframe As StackFrame)
             Me.funcName = funcName
             Me.params = params
             Me.body = body
             Me.stackFrame = stackframe
         End Sub
 
-        Friend Shared Function MissingParameters(var As DeclareNewVariable, funcName$, envir As Environment) As Object
+        Friend Shared Function MissingParameters(var As DeclareNewSymbol, funcName$, envir As Environment) As Object
             Dim message As String() = {
                 $"argument ""{var.names.GetJson}"" is missing, with no default",
                 $"function: {funcName}",
@@ -95,11 +95,11 @@ Namespace Interpreter.ExecuteEngine
                 $"type: {var.type.Description}"
             }
 
-            Return Internal.stop(message, envir)
+            Return Internal.debug.stop(message, envir)
         End Function
 
         Public Function Invoke(parent As Environment, params As InvokeParameter()) As Object Implements RFunction.Invoke
-            Dim var As DeclareNewVariable
+            Dim var As DeclareNewSymbol
             Dim value As Object
             Dim arguments As Dictionary(Of String, Object)
             Dim envir As Environment = Me.envir
@@ -115,7 +115,7 @@ Namespace Interpreter.ExecuteEngine
 
             ' function parameter should be evaluate 
             ' from the parent environment.
-            arguments = InvokeParameter.CreateArguments(parent, params)
+            arguments = InvokeParameter.CreateArguments(parent, params, hasObjectList:=True)
             argumentKeys = arguments.Keys.ToArray
 
             ' initialize environment
@@ -152,7 +152,7 @@ Namespace Interpreter.ExecuteEngine
                 ' 20191120 对于函数对象而言，由于拥有自己的环境，在构建闭包之后
                 ' 多次调用函数会重复利用之前的环境参数
                 ' 所以在这里只需要判断一下更新值或者插入新的变量
-                If var.names.Any(AddressOf envir.variables.ContainsKey) Then
+                If var.names.Any(AddressOf envir.symbols.ContainsKey) Then
                     ' 只检查自己的环境中的变量
                     ' 因为函数参数是只属于自己的环境之中的符号
                     Dim names As Literal() = var.names _
@@ -162,7 +162,7 @@ Namespace Interpreter.ExecuteEngine
                     Call ValueAssign.doValueAssign(envir, names, True, value)
                 Else
                     ' 不存在，则插入新的
-                    Call DeclareNewVariable.PushNames(var.names, value, var.type, False, envir)
+                    Call DeclareNewSymbol.PushNames(var.names, value, var.type, False, envir)
                 End If
             Next
 
@@ -170,13 +170,13 @@ Namespace Interpreter.ExecuteEngine
         End Function
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim result = envir.Push(funcName, Me, TypeCodes.closure)
+            Dim result = envir.Push(funcName, Me, [readonly]:=False, mode:=TypeCodes.closure)
             Me.envir = New Environment(envir, stackFrame, isInherits:=True)
             Return result
         End Function
 
         Public Overrides Function ToString() As String
-            Return $"declare function '${funcName}'({params.Select(AddressOf DeclareNewVariable.getParameterView).JoinBy(", ")}) {{
+            Return $"declare function '${funcName}'({params.Select(AddressOf DeclareNewSymbol.getParameterView).JoinBy(", ")}) {{
     # function_internal
     {body}
 }}"

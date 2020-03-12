@@ -65,15 +65,33 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
-        <ExportAPI("string")>
+        ''' <summary>
+        ''' Convert an R Object to a Character String
+        ''' 
+        ''' This is a helper function for format to produce a 
+        ''' single character string describing an R object.
+        ''' </summary>
+        ''' <param name="x">The object to be converted.</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("toString")>
+        <RApiReturn(GetType(String))>
         Public Function [string](<RRawVectorArgument> x As Object, env As Environment) As Object
             If x Is Nothing Then
                 Return ""
-            Else
+            ElseIf x.GetType.IsArray Then
                 Return printer.getStrings(x, env.globalEnvironment).ToArray
+            Else
+                Return printer.ToString(x.GetType, env.globalEnvironment, True)(x)
             End If
         End Function
 
+        ''' <summary>
+        ''' Convert most of the R# object or VB.NET object to xml document string. 
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("xml")>
         Public Function xml(<RRawVectorArgument> x As Object, env As Environment) As Object
             If x Is Nothing Then
@@ -82,11 +100,18 @@ Namespace Runtime.Internal.Invokes
                 Try
                     Return XmlExtensions.GetXml(x, x.GetType)
                 Catch ex As Exception
-                    Return Internal.stop(ex, env)
+                    Return Internal.debug.stop(ex, env)
                 End Try
             End If
         End Function
 
+        ''' <summary>
+        ''' Convert most of the R# object or VB.NET object to json string. 
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <param name="compress"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("json")>
         Public Function json(<RRawVectorArgument>
                              x As Object,
@@ -96,7 +121,13 @@ Namespace Runtime.Internal.Invokes
             If x Is Nothing Then
                 Return "null"
             Else
-                Return JsonContract.GetObjectJson(x.GetType, x, indent:=Not compress)
+                Dim type As Type = x.GetType
+
+                Try
+                    Return JsonContract.GetObjectJson(type, x, indent:=Not compress)
+                Catch ex As Exception
+                    Return debug.stop(ex, env)
+                End Try
             End If
         End Function
 
@@ -135,8 +166,57 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="pattern">the specified regular expression</param>
         ''' <returns></returns>
         <ExportAPI("regexp")>
-        Public Function regexp(pattern As String) As Object
-            Return New Regex(pattern)
+        <RApiReturn(GetType(Regex))>
+        Public Function regexp(pattern$, Optional options$ = Nothing, Optional env As Environment = Nothing) As Object
+            Dim opts As RegexOptions = RegexOptions.None
+
+            If pattern.StringEmpty Then
+                Return Internal.debug.stop("the input regular expression could not be empty!", env)
+            End If
+
+            If Not options Is Nothing Then
+                If options.IndexOf("i") Then
+                    opts = opts Or RegexOptions.IgnoreCase
+                End If
+                If options.IndexOf("m") Then
+                    opts = opts Or RegexOptions.Multiline
+                End If
+                If options.IndexOf("s") Then
+                    opts = opts Or RegexOptions.Singleline
+                End If
+                If options.IndexOf("r") Then
+                    ' reverse
+                    opts = opts Or RegexOptions.RightToLeft
+                End If
+            End If
+
+            Return New Regex(pattern, opts)
+        End Function
+
+        ''' <summary>
+        ''' Searches the specified input string for the first 
+        ''' occurrence of the regular expression specified in 
+        ''' the System.Text.RegularExpressions.Regex 
+        ''' constructor.
+        ''' </summary>
+        ''' <param name="regexp">Represents an immutable regular expression.
+        ''' To browse the .NET Framework source code for this type, 
+        ''' see the Reference Source.</param>
+        ''' <param name="strings">The string to search for a match.</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("match")>
+        Public Function match(regexp As Regex, <RRawVectorArgument> strings As Object, Optional env As Environment = Nothing) As Object
+            If regexp Is Nothing Then
+                Return Internal.debug.stop("regular expression object can not be null!", env)
+            End If
+
+            Return asVector(Of String)(strings) _
+                .AsObjectEnumerator(Of String) _
+                .Select(Function(str)
+                            Return regexp.Match(str).Value
+                        End Function) _
+                .ToArray
         End Function
 
         ''' <summary>
@@ -148,12 +228,12 @@ Namespace Runtime.Internal.Invokes
         ''' </summary>
         ''' <param name="format"></param>
         ''' <param name="arguments"></param>
-        ''' <param name="envir"></param>
+        ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("sprintf")>
-        Public Function Csprintf(format As Array, <RListObjectArgument> arguments As Object, Optional envir As Environment = Nothing) As Object
+        Public Function Csprintf(format As Array, <RListObjectArgument> arguments As Object, Optional env As Environment = Nothing) As Object
             Dim sprintf As Func(Of String, Object(), String) = AddressOf CLangStringFormatProvider.sprintf
-            Dim args As Array() = DirectCast(base.Rlist(arguments, envir), list).slots.Values _
+            Dim args As Array() = DirectCast(base.Rlist(arguments, env), list).slots.Values _
                 .Skip(1) _
                 .Select(Function(a)
                             Return Runtime.asVector(Of Object)(a)
@@ -195,7 +275,11 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("strsplit")>
-        Friend Function strsplit(text$(), Optional delimiter$ = " ", Optional envir As Environment = Nothing) As Object
+        Friend Function strsplit(text$(), Optional delimiter$ = " ", Optional env As Environment = Nothing) As Object
+            If delimiter Is Nothing Then
+                Return debug.stop("the given delimiter is nothing!", env)
+            End If
+
             If text.IsNullOrEmpty Then
                 Return Nothing
             ElseIf text.Length = 1 Then

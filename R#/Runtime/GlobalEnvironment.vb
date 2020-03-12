@@ -117,6 +117,7 @@ Namespace Runtime
                 Call Console.WriteLine()
 
                 Call printer.printContentArray(masked, ", ", "    ")
+                Call Console.WriteLine()
             End If
 
             Return Nothing
@@ -125,8 +126,8 @@ Namespace Runtime
         Private Function MissingPackage(packageName$, exception As Exception) As Message
             Dim message As Message
 
-            exception = If(exception, New Exception("No packages installed..."))
-            message = Internal.stop(exception, Me)
+            exception = If(exception, New Exception($"No packages named '{packageName}' is installed..."))
+            message = Internal.debug.stop(exception, Me)
             message.message = {
                 $"there is no package called ‘{packageName}’",
                 $"package: {packageName}"

@@ -132,7 +132,7 @@ Namespace Runtime.Internal.Invokes
             If strings.IsNullOrEmpty Then
                 Return Nothing
             ElseIf characters Is Nothing Then
-                Return Internal.stop("characters component part for trimmed could not be NULL!", env)
+                Return Internal.debug.stop("characters component part for trimmed could not be NULL!", env)
             End If
 
             Dim chars As Char() = characters.ToArray()
@@ -170,7 +170,7 @@ Namespace Runtime.Internal.Invokes
             If strings.IsNullOrEmpty Then
                 Return Nothing
             ElseIf substr Is Nothing Then
-                Return Internal.stop("sub-string component part could not be NULL!", envir)
+                Return Internal.debug.stop("sub-string component part could not be NULL!", envir)
             Else
                 Dim method As CompareMethod
 
@@ -220,7 +220,7 @@ Namespace Runtime.Internal.Invokes
                                       End Function)
                 }
             Else
-                Return Internal.stop(New InvalidProgramException(type.FullName), envir)
+                Return Internal.debug.stop(New InvalidProgramException(type.FullName), envir)
             End If
         End Function
     End Module

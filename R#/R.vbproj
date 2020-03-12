@@ -63,6 +63,7 @@
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <DefineTrace>true</DefineTrace>
@@ -350,7 +351,7 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolReference.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\VectorLiteral.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewVariable.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewSymbol.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxTree\ExpressionTree.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxTree\ExpressionSignature.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\BinaryExpressionTree.vb" />
@@ -383,11 +384,15 @@
     <Compile Include="Runtime\Internal\internalInvokes\env.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\help.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\etc.vb" />
+    <Compile Include="Runtime\Internal\internalInvokes\graphics.vb" />
+    <Compile Include="Runtime\Internal\internalInvokes\Linq\lambda.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\set.vb" />
     <Compile Include="Runtime\Internal\generic.vb" />
     <Compile Include="Runtime\Internal\objects\pipeline.vb" />
+    <Compile Include="Runtime\Internal\objects\RConversion\makeObject.vb" />
     <Compile Include="Runtime\Internal\objects\RConversion\makeDataframe.vb" />
     <Compile Include="Runtime\Internal\objects\RConversion\makeList.vb" />
+    <Compile Include="Runtime\Internal\objects\RConversion\castList.vb" />
     <Compile Include="Runtime\Internal\objects\reflector.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\strings.vb" />
     <Compile Include="Runtime\Internal\objects\invisible.vb" />

@@ -107,6 +107,11 @@ Namespace Interpreter.ExecuteEngine
                 DirectCast(value, IfBranch.IfPromise).assignTo = Me
                 Return value
             Else
+                If Not value Is Nothing AndAlso TypeOf value Is invisible Then
+                    ' value assign will break the invisible
+                    value = DirectCast(value, invisible).value
+                End If
+
                 Return doValueAssign(envir, targetSymbols, isByRef, value)
             End If
         End Function
@@ -162,7 +167,7 @@ Namespace Interpreter.ExecuteEngine
                 Next
             Else
                 ' 数量不对
-                Return Internal.stop(New InvalidCastException, envir)
+                Return Internal.debug.stop(New InvalidCastException, envir)
             End If
 
             Return Nothing
@@ -175,7 +180,7 @@ Namespace Interpreter.ExecuteEngine
             If list.length = 1 Then
                 ' 设置tuple的值的时候
                 ' list必须要有相同的元素数量
-                Return Internal.stop("Number of list element is not identical to the tuple elements...", envir)
+                Return Internal.debug.stop("Number of list element is not identical to the tuple elements...", envir)
             ElseIf list.length = targetSymbols.Length Then
                 Dim name$
 
@@ -196,7 +201,7 @@ Namespace Interpreter.ExecuteEngine
                 Next
             Else
                 ' 数量不对
-                Return Internal.stop(New InvalidCastException, envir)
+                Return Internal.debug.stop(New InvalidCastException, envir)
             End If
 
             Return Nothing
@@ -227,7 +232,7 @@ Namespace Interpreter.ExecuteEngine
                 Return setFromObjectList(envir, targetSymbols, isByRef, value)
 
             Else
-                Return Internal.stop(New NotImplementedException, envir)
+                Return Internal.debug.stop(New NotImplementedException, envir)
             End If
 
             Return Nothing
@@ -254,7 +259,7 @@ Namespace Interpreter.ExecuteEngine
             End If
 
             If targetObj Is Nothing Then
-                Return Internal.stop({"Target symbol is nothing!", $"SymbolName: {symbolIndex.symbol}"}, envir)
+                Return Internal.debug.stop({"Target symbol is nothing!", $"SymbolName: {symbolIndex.symbol}"}, envir)
             End If
 
             If symbolIndex.indexType = SymbolIndexers.vectorIndex AndAlso index.GetType Like BinaryExpression.integers Then
@@ -284,10 +289,10 @@ Namespace Interpreter.ExecuteEngine
 
                         Return Nothing
                     Else
-                        Return Internal.stop(New NotImplementedException, envir)
+                        Return Internal.debug.stop(New NotImplementedException, envir)
                     End If
                 Else
-                    Return Internal.stop({"Target symbol can not be indexed by name!", $"SymbolName: {symbolIndex.symbol}"}, envir)
+                    Return Internal.debug.stop({"Target symbol can not be indexed by name!", $"SymbolName: {symbolIndex.symbol}"}, envir)
                 End If
             End If
 
@@ -370,13 +375,13 @@ Namespace Interpreter.ExecuteEngine
 
             For Each i As Integer In DirectCast(index, Integer())
                 ' 动态调整数组的大小
-                If targetVector.Length > i Then
-                    targetVector.SetValue(getValue(), i)
+                If targetVector.Length >= i Then
+                    targetVector.SetValue(getValue(), i - 1)
                 Else
-                    Dim newVec As Array = Array.CreateInstance(elementType, i + 1)
+                    Dim newVec As Array = Array.CreateInstance(elementType, i - 1)
 
                     Array.ConstrainedCopy(targetVector, Scan0, newVec, Scan0, targetVector.Length)
-                    newVec.SetValue(getValue(), i)
+                    newVec.SetValue(getValue(), i - 1)
                     targetVector = newVec
                 End If
             Next

@@ -79,9 +79,13 @@ Type 'q()' to quit R.
     Public Function RunTerminal() As Integer
         R = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
 
-        Call R.LoadLibrary("base")
-        Call R.LoadLibrary("utils")
-        Call R.LoadLibrary("grDevices")
+        ' Call R.LoadLibrary("base")
+        ' Call R.LoadLibrary("utils")
+        ' Call R.LoadLibrary("grDevices")
+        ' Call R.LoadLibrary("stats")
+        For Each pkgName As String In R.configFile.GetStartupLoadingPackages
+            Call R.LoadLibrary(packageName:=pkgName)
+        Next
 
         Console.WriteLine()
         Console.Title = "R# language"
@@ -105,8 +109,15 @@ Type 'q()' to quit R.
     End Sub
 
     Private Sub doRunScript(script As String)
-        Dim program As RProgram = RProgram.BuildProgram(script)
-        Dim result As Object = REnv.TryCatch(Function() R.Run(program))
+        Dim error$ = Nothing
+        Dim program As RProgram = RProgram.BuildProgram(script, [error]:=[error])
+        Dim result As Object
+
+        If Not [error].StringEmpty Then
+            result = REnv.Internal.debug.stop([error], R.globalEnvir)
+        Else
+            result = REnv.TryCatch(Function() R.Run(program))
+        End If
 
         Call Rscript.handleResult(result, R.globalEnvir, program)
     End Sub

@@ -55,7 +55,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         ''' </summary>
         Public Function DeclareLambdaFunction(args As SymbolReference, expression As Expression, lineNum%, opts As SyntaxBuilderOptions) As SyntaxResult
             Dim name$ = $"[lambda: {args} -> {expression}]"
-            Dim parameter As New DeclareNewVariable() With {
+            Dim parameter As New DeclareNewSymbol() With {
                 .hasInitializeExpression = False,
                 .m_type = TypeCodes.generic,
                 .names = {args.symbol},

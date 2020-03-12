@@ -7,5 +7,6 @@ Due to the reason of R# language its language syntax is derived from the ``R lan
 Here are a list of R# tutorials for some bioinformatics analysis based on the GCModeller libraries that you could use to learn R# programming:
 
 1. [SequenceLogo Drawer](01.sequence_logo)
-2. [String in R#](02.string)
-3. [Function in R#](03.function)
+2. [Symbol object in ``R#``](02.R_symbol)
+3. [String in R#](03.string)
+4. [Function in R#](04.function)

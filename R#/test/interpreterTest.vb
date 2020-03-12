@@ -74,6 +74,13 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+
+        Call functiondeclaretest2()
+
+        Call tupleValueAssignTest()
+        Call withTest()
+        Call headTest()
+
         Call lambdaTest3()
         Call constantTest()
         Call regexpTest()
@@ -174,6 +181,50 @@ Module interpreterTest
         Call stringInterpolateTest()
 
 
+        Pause()
+    End Sub
+
+    Sub functiondeclaretest2()
+        R.debug = False
+
+        Call R.Evaluate("let plot_ionRaws as function(MRM, mzML, tolerance, export) {
+	for(ion in getIonsSampleRaw(MRM, mzML. tolerance)) {
+		ion$chromatograms 
+		:> MRM.chromatogramPeaks.plot(
+			fill              = FALSE, 
+			gridFill          = 'white', 
+			lineStyle         = 'stroke: black; stroke-width: 5px; stroke-dash: solid;',
+			size              = [1600, 900],
+			relativeTimeScale = NULL,
+			parallel          = TRUE
+		)
+		:> save.graphics(file = `${export}/${ion$id}.png`)
+		;
+	}
+}
+")
+
+        Pause()
+    End Sub
+
+    Sub withTest()
+        Call R.Evaluate("let x <- list() with {
+   a <- 999;
+   b <- [FALSE, TRUE];
+    c <- function() {
+   a + 1;
+}
+}")
+        Call R.Print("x$a")
+        Call R.Print("x$b")
+        Call R.Print("x$c")
+        Call R.Print("x$c()")
+
+        Pause()
+    End Sub
+
+    Sub headTest()
+        Call R.Evaluate("print(head(1:100))")
         Pause()
     End Sub
 
@@ -911,6 +962,18 @@ return 999;
 
         Call R.Evaluate("print(s);")
         Call R.Evaluate("print([1,2,3,4,5] + 4);")
+
+        Call R.PrintMemory()
+
+        Pause()
+    End Sub
+
+    Sub tupleValueAssignTest()
+        Call R.Evaluate("let a")
+        Call R.Evaluate("let b")
+        Call R.Add("val", New Func(Of String, Double)(AddressOf Val))
+        Call R.Add("int", New Func(Of String, Integer)(AddressOf Integer.Parse))
+        Call R.Evaluate("[a, b] = '1234' :> [val, int]")
 
         Call R.PrintMemory()
 

@@ -117,6 +117,15 @@ Namespace Runtime
             End If
         End Function
 
+        ''' <summary>
+        ''' Try get a single element
+        ''' </summary>
+        ''' <param name="x">
+        ''' If the input object x is an array with just one element, 
+        ''' then the single value will be populate, otherwise will 
+        ''' populate the input x
+        ''' </param>
+        ''' <returns></returns>
         Public Function [single](x As Object) As Object
             If Not x Is Nothing Then
                 If x.GetType.IsArray AndAlso DirectCast(x, Array).Length = 1 Then
@@ -177,8 +186,15 @@ Namespace Runtime
             Return array
         End Function
 
-        Public Function CTypeOfList(Of T)(list As IDictionary) As Dictionary(Of String, T)
-            Throw New NotImplementedException
+        Public Function CTypeOfList(Of T)(list As IDictionary, env As Environment) As Dictionary(Of String, T)
+            Dim ofList As New Dictionary(Of String, T)
+            Dim elementType As Type = GetType(T)
+
+            For Each key As Object In list.Keys
+                ofList(Scripting.ToString(key)) = RConversion.CTypeDynamic(list.Item(key), elementType, env)
+            Next
+
+            Return ofList
         End Function
 
         ''' <summary>
@@ -205,7 +221,7 @@ Namespace Runtime
                 Return {DirectCast(value, T)}
             ElseIf valueType Is GetType(T()) Then
                 Return DirectCast(value, T())
-            ElseIf valueType.IsInheritsFrom(GetType(Array)) Then
+            ElseIf valueType.IsArray Then
                 Return typeofT.fromArray(Of T)(value)
             ElseIf valueType Is GetType(Group) Then
                 Return typeofT.fromArray(Of T)(DirectCast(value, Group).group)

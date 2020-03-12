@@ -53,23 +53,32 @@ Module Comparison
     ''' <summary>
     ''' calculate node similarity cos score.
     ''' </summary>
-    ''' <param name="a"></param>
-    ''' <param name="b"></param>
-    ''' <returns></returns>
+    ''' <param name="a">A graph node model</param>
+    ''' <param name="b">Another graph node model</param>
+    ''' <returns>The node cos similarity value.</returns>
     <ExportAPI("node.cos")>
-    Public Function similarity(a As Node, b As Node, Optional topologyCos As Boolean = False) As Double
-        Return Analysis.NodeSimilarity(a, b, topologyCos)
+    Public Function similarityOfNode(a As Node, b As Node,
+                                     Optional classEquivalent As Func(Of String, String, Double) = Nothing,
+                                     Optional topologyCos As Boolean = False) As Double
+
+        Return Analysis.NodeSimilarity(a, b, classEquivalent, topologyCos)
     End Function
 
     ''' <summary>
+    ''' ### Graph Jaccard Similarity
+    ''' 
     ''' calculate graph jaccard similarity based on the nodes' cos score.
     ''' </summary>
-    ''' <param name="a"></param>
-    ''' <param name="b"></param>
-    ''' <param name="cutoff#"></param>
-    ''' <returns></returns>
+    ''' <param name="a">A network graph model</param>
+    ''' <param name="b">Another network graph model</param>
+    ''' <param name="cutoff">The similarity cutoff value of the node cos silimarity compares.</param>
+    ''' <returns>The graph similarity value.</returns>
     <ExportAPI("graph.jaccard")>
-    Public Function similarity(a As NetworkGraph, b As NetworkGraph, Optional cutoff# = 0.85, Optional topologyCos As Boolean = False) As Double
-        Return Analysis.GraphSimilarity(a, b, cutoff, topologyCos)
+    Public Function similarity(a As NetworkGraph, b As NetworkGraph,
+                               Optional cutoff# = 0.85,
+                               Optional classEquivalent As Func(Of String, String, Double) = Nothing,
+                               Optional topologyCos As Boolean = False) As Double
+
+        Return Analysis.GraphSimilarity(a, b, cutoff, classEquivalent, topologyCos)
     End Function
 End Module

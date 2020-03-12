@@ -130,11 +130,13 @@ Namespace Interpreter
                                                Optional ByRef breakLoop As Boolean = False,
                                                Optional debug As Boolean = False) As Object
 
-            Dim last As Object = expression.Evaluate(envir)
+            Dim last As Object
 
             If debug Then
                 Call Console.WriteLine(expression.ToString)
             End If
+
+            last = expression.Evaluate(envir)
 
             ' next keyword will break current closure 
             ' and then goto execute next iteration loop
@@ -205,15 +207,21 @@ Namespace Interpreter
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Shared Function CreateProgram(Rscript As Rscript, Optional debug As Boolean = False) As Program
+        Public Shared Function CreateProgram(Rscript As Rscript, Optional debug As Boolean = False, Optional ByRef error$ = Nothing) As Program
+            Dim opts As New SyntaxBuilderOptions With {.debug = debug, .source = Rscript}
             Dim exec As Expression() = Rscript _
-                .GetExpressions(New SyntaxBuilderOptions With {.debug = debug, .source = Rscript}) _
+                .GetExpressions(opts) _
                 .ToArray
 
-            Return New Program With {
-                .execQueue = exec,
-                .Rscript = Rscript
-            }
+            If opts.haveSyntaxErr Then
+                [error] = opts.error
+                Return Nothing
+            Else
+                Return New Program With {
+                    .execQueue = exec,
+                    .Rscript = Rscript
+                }
+            End If
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
@@ -224,7 +232,7 @@ Namespace Interpreter
                 Return DirectCast(result, Message).level = MSG_TYPES.ERR
             ElseIf Not envir Is Nothing AndAlso result.GetType.IsInheritsFrom(GetType(Exception)) Then
                 isDotNETException = True
-                result = Internal.stop(result, envir)
+                result = Internal.debug.stop(result, envir)
 
                 Return True
             Else
@@ -234,12 +242,11 @@ Namespace Interpreter
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
-        Public Shared Function BuildProgram(scriptText As String, Optional debug As Boolean = False) As Program
-            Return Rscript _
-                .AutoHandleScript(scriptText) _
-                .DoCall(Function(script)
-                            Return CreateProgram(script, debug)
-                        End Function)
+        Public Shared Function BuildProgram(scriptText As String, Optional debug As Boolean = False, Optional ByRef error$ = Nothing) As Program
+            Dim script = Rscript.AutoHandleScript(scriptText)
+            Dim program As Program = CreateProgram(script, debug, [error])
+
+            Return program
         End Function
 
         Public Iterator Function GetEnumerator() As IEnumerator(Of Expression) Implements IEnumerable(Of Expression).GetEnumerator

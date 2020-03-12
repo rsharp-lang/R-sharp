@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::1293e5d36218351d966ba1be5f1ca3bb, R#\Runtime\Interop\RMethodInfo.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class RMethodInfo
-    ' 
-    '         Properties: invisible, name, parameters, returns
-    ' 
-    '         Constructor: (+3 Overloads) Sub New
-    '         Function: createNormalArguments, CreateParameterArrayFromListArgument, GetPackageInfo, GetPrintContent, GetRawDeclares
-    '                   getValue, (+2 Overloads) Invoke, missingParameter, parseParameters, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class RMethodInfo
+' 
+'         Properties: invisible, name, parameters, returns
+' 
+'         Constructor: (+3 Overloads) Sub New
+'         Function: createNormalArguments, CreateParameterArrayFromListArgument, GetPackageInfo, GetPrintContent, GetRawDeclares
+'                   getValue, (+2 Overloads) Invoke, missingParameter, parseParameters, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -207,20 +207,20 @@ Namespace Runtime.Interop
                 }
             }
 
-            envir = New Environment(envir, apiStackFrame, isInherits:=True)
+            Using env As New Environment(envir, apiStackFrame, isInherits:=True)
+                If Me.parameters.Any(Function(a) a.isObjectList) Then
+                    parameters = RArgumentList.CreateObjectListArguments(Me, env, params).ToArray
+                Else
+                    parameters = InvokeParameter _
+                        .CreateArguments(env, params, hasObjectList:=False) _
+                        .DoCall(Function(args)
+                                    Return createNormalArguments(env, args)
+                                End Function) _
+                        .ToArray
+                End If
 
-            If Me.parameters.Any(Function(a) a.isObjectList) Then
-                parameters = RArgumentList.CreateObjectListArguments(Me, envir, params).ToArray
-            Else
-                parameters = InvokeParameter _
-                    .CreateArguments(envir, params) _
-                    .DoCall(Function(args)
-                                Return createNormalArguments(envir, args)
-                            End Function) _
-                    .ToArray
-            End If
-
-            Return Invoke(parameters)
+                Return Invoke(parameters)
+            End Using
         End Function
 
         Private Iterator Function createNormalArguments(envir As Environment, arguments As Dictionary(Of String, Object)) As IEnumerable(Of Object)
@@ -256,7 +256,11 @@ Namespace Runtime.Interop
                     If arguments.ContainsKey(nameKey) Then
                         Yield getValue(arg, arguments(nameKey), apiTrace, envir, False)
                     Else
-                        Yield getValue(arg, arguments(keys(i)), apiTrace, envir, False)
+                        If arg.isOptional Then
+                            Yield arg.default
+                        Else
+                            Yield missingParameter(arg, envir, name)
+                        End If
                     End If
                 End If
             Next
@@ -271,15 +275,15 @@ Namespace Runtime.Interop
                 $"environment: {envir.ToString}"
             }
 
-            Return Internal.stop(messages, envir)
+            Return Internal.debug.stop(messages, envir)
         End Function
 
         ''' <summary>
-        ''' 
+        ''' Get type converted object value for match the parameter type. 
         ''' </summary>
         ''' <param name="arg"></param>
         ''' <param name="value"></param>
-        ''' <param name="trace$"></param>
+        ''' <param name="trace"></param>
         ''' <param name="envir"></param>
         ''' <param name="trygetListParam">
         ''' Fix bugs for list arguments when the parameter input have no symbol name
@@ -299,12 +303,16 @@ Namespace Runtime.Interop
                 Return Runtime.asVector(value, arg.rawVectorFlag.vector, envir)
             End If
 
+            If arg.type.raw Is GetType(Object) Then
+                Return value
+            End If
+
             Try
                 Return RConversion.CTypeDynamic(value, arg.type.raw, env:=envir)
             Catch ex As Exception When trygetListParam
                 Return GetType(Void)
             Catch ex As Exception
-                Return Internal.stop(New InvalidCastException("Api: " & trace, ex), envir)
+                Return Internal.debug.stop(New InvalidCastException("Api: " & trace, ex), envir)
             End Try
         End Function
 

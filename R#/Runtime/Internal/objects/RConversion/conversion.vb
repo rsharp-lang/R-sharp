@@ -1,48 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::834574090ae48f43c3d63ae012509942, R#\Runtime\Internal\objects\RConversion\conversion.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module RConversion
-    ' 
-    '         Function: asCharacters, asDataframe, asDate, asInteger, asList
-    '                   asLogicals, asNumeric, asObject, CastToEnum, CTypeDynamic
-    '                   isCharacter, listInternal, unlist, unlistOfRList
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module RConversion
+' 
+'         Function: asCharacters, asDataframe, asDate, asInteger, asList
+'                   asLogicals, asNumeric, asObject, CastToEnum, CTypeDynamic
+'                   isCharacter, listInternal, unlist, unlistOfRList
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Reflection
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
@@ -59,7 +61,7 @@ Namespace Runtime.Internal.Object.Converts
     Module RConversion
 
         <ExportAPI("as.Date")>
-        Public Function asDate(<RRawVectorArgument> obj As Object) As Object
+        Public Function asDate(<RRawVectorArgument> obj As Object) As Date()
             Return Rset _
                 .getObjectSet(obj) _
                 .Select(Function(o)
@@ -130,7 +132,7 @@ Namespace Runtime.Internal.Object.Converts
                             [typeof] = RType.raw
                         End If
                     Case Else
-                        Return Internal.stop(New NotImplementedException, env)
+                        Return Internal.debug.stop(New NotImplementedException, env)
                 End Select
             End If
 
@@ -139,7 +141,7 @@ Namespace Runtime.Internal.Object.Converts
             ElseIf list.GetType.ImplementInterface(GetType(IDictionary)) Then
                 Return New list(list).unlistOfRList([typeof], env)
             Else
-                Return Internal.stop(New InvalidCastException(list.GetType.FullName), env)
+                Return Internal.debug.stop(New InvalidCastException(list.GetType.FullName), env)
             End If
         End Function
 
@@ -191,6 +193,7 @@ Namespace Runtime.Internal.Object.Converts
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("as.data.frame")>
+        <RApiReturn(GetType(dataframe))>
         Public Function asDataframe(<RRawVectorArgument> x As Object,
                                     <RListObjectArgument> args As Object,
                                     Optional env As Environment = Nothing) As Object
@@ -209,7 +212,68 @@ Namespace Runtime.Internal.Object.Converts
             If makeDataframe.is_ableConverts(type) Then
                 Return makeDataframe.createDataframe(type, x, args, env)
             Else
-                Return Internal.stop(New InvalidProgramException, env)
+                Return Internal.debug.stop(New InvalidProgramException, env)
+            End If
+        End Function
+
+        <ExportAPI("as.vector")>
+        Public Function asVector(obj As Object, Optional env As Environment = Nothing) As Object
+            If obj Is Nothing Then
+                Return obj
+            End If
+
+            If TypeOf obj Is vector Then
+                Return obj
+            ElseIf obj.GetType.IsArray Then
+                Return New vector With {.data = obj}
+            Else
+                Dim interfaces = obj.GetType.GetInterfaces
+
+                ' array of <T>
+                For Each type In interfaces
+                    If type.GenericTypeArguments.Length > 0 AndAlso type.ImplementInterface(Of IEnumerable) Then
+                        Dim generic As Type = type.GenericTypeArguments(Scan0)
+                        Dim buffer As Object = Activator.CreateInstance(GetType(List(Of )).MakeGenericType(generic))
+                        Dim add As MethodInfo = buffer.GetType.GetMethod("Add", BindingFlags.Public Or BindingFlags.Instance)
+                        Dim source As IEnumerator = DirectCast(obj, IEnumerable).GetEnumerator
+
+                        source.MoveNext()
+                        source = source.Current
+
+                        ' get element count by list
+                        Do While source.MoveNext
+                            Call add.Invoke(buffer, {source.Current})
+                        Loop
+
+                        ' write buffered data to vector
+                        Dim vec As Array = Array.CreateInstance(generic, DirectCast(buffer, IList).Count)
+                        Dim i As i32 = Scan0
+
+                        For Each x As Object In DirectCast(buffer, IEnumerable)
+                            vec.SetValue(x, ++i)
+                        Next
+
+                        Return New vector With {.data = vec}
+                    End If
+                Next
+
+                ' array of object
+                For Each type In interfaces
+                    If type Is GetType(IEnumerable) Then
+                        Dim buffer As New List(Of Object)
+
+                        For Each x As Object In DirectCast(obj, IEnumerable)
+                            buffer.Add(x)
+                        Next
+
+                        Return New vector With {.data = buffer.ToArray}
+                    End If
+                Next
+
+                ' obj is not a vector type
+                env.AddMessage($"target object of '{obj.GetType.FullName}' can not be convert to a vector.", MSG_TYPES.WRN)
+
+                Return obj
             End If
         End Function
 
@@ -219,48 +283,12 @@ Namespace Runtime.Internal.Object.Converts
         ''' <param name="obj"></param>
         ''' <returns></returns>
         <ExportAPI("as.list")>
-        Public Function asList(obj As Object, <RListObjectArgument> args As Object, Optional envir As Environment = Nothing) As list
+        Public Function asList(obj As Object, <RListObjectArgument> args As Object, Optional env As Environment = Nothing) As list
             If obj Is Nothing Then
                 Return Nothing
             Else
-                Return listInternal(obj, base.Rlist(args, envir))
+                Return listInternal(obj, base.Rlist(args, env))
             End If
-        End Function
-
-        Private Function listInternal(obj As Object, args As list) As list
-            Dim type As Type = obj.GetType
-
-            Select Case type
-                Case GetType(Dictionary(Of String, Object))
-                    Return New list With {.slots = obj}
-                Case GetType(list)
-                    Return obj
-                Case GetType(vbObject)
-                    ' object property as list data
-                    Return DirectCast(obj, vbObject).toList
-                Case GetType(dataframe)
-                    Dim byRow As Boolean = Runtime.asLogical(args!byrow)(Scan0)
-
-                    If byRow Then
-                        Return DirectCast(obj, dataframe).listByRows
-                    Else
-                        Return DirectCast(obj, dataframe).listByColumns
-                    End If
-                Case Else
-                    If type.ImplementInterface(GetType(IDictionary)) Then
-                        Dim objList As New Dictionary(Of String, Object)
-
-                        With DirectCast(obj, IDictionary)
-                            For Each key As Object In .Keys
-                                Call objList.Add(Scripting.ToString(key), .Item(key))
-                            Next
-                        End With
-
-                        Return New list With {.slots = objList}
-                    Else
-                        Throw New NotImplementedException
-                    End If
-            End Select
         End Function
 
         ''' <summary>
@@ -269,33 +297,42 @@ Namespace Runtime.Internal.Object.Converts
         ''' <param name="obj"></param>
         ''' <returns></returns>
         <ExportAPI("as.integer")>
-        Public Function asInteger(<RRawVectorArgument> obj As Object) As Object
+        <RApiReturn(GetType(Long))>
+        Public Function asInteger(<RRawVectorArgument> obj As Object, Optional env As Environment = Nothing) As Object
             If obj Is Nothing Then
                 Return 0
             ElseIf obj.GetType.ImplementInterface(GetType(IDictionary)) Then
-                Return Runtime.CTypeOfList(Of Long)(obj)
+                Return Runtime.CTypeOfList(Of Long)(obj, env)
             Else
                 Return Runtime.asVector(Of Long)(obj)
             End If
         End Function
 
         <ExportAPI("as.numeric")>
-        Public Function asNumeric(<RRawVectorArgument> obj As Object) As Object
+        <RApiReturn(GetType(Double))>
+        Public Function asNumeric(<RRawVectorArgument> obj As Object, Optional env As Environment = Nothing) As Object
             If obj Is Nothing Then
                 Return 0
-            ElseIf obj.GetType.ImplementInterface(GetType(IDictionary)) Then
-                Return Runtime.CTypeOfList(Of Double)(obj)
+            End If
+
+            If TypeOf obj Is list Then
+                obj = DirectCast(obj, list).slots
+            End If
+
+            If obj.GetType.ImplementInterface(GetType(IDictionary)) Then
+                Return Runtime.CTypeOfList(Of Double)(obj, env)
             Else
                 Return Runtime.asVector(Of Double)(obj)
             End If
         End Function
 
         <ExportAPI("as.character")>
-        Public Function asCharacters(<RRawVectorArgument> obj As Object) As Object
+        <RApiReturn(GetType(String))>
+        Public Function asCharacters(<RRawVectorArgument> obj As Object, Optional env As Environment = Nothing) As Object
             If obj Is Nothing Then
                 Return Nothing
             ElseIf obj.GetType.ImplementInterface(GetType(IDictionary)) Then
-                Return Runtime.CTypeOfList(Of String)(obj)
+                Return Runtime.CTypeOfList(Of String)(obj, env)
             Else
                 Return Runtime.asVector(Of String)(obj)
             End If
@@ -324,11 +361,12 @@ Namespace Runtime.Internal.Object.Converts
         End Function
 
         <ExportAPI("as.logical")>
-        Public Function asLogicals(<RRawVectorArgument> obj As Object) As Object
+        <RApiReturn(GetType(Boolean))>
+        Public Function asLogicals(<RRawVectorArgument> obj As Object, Optional env As Environment = Nothing) As Object
             If obj Is Nothing Then
                 Return Nothing
             ElseIf obj.GetType.ImplementInterface(GetType(IDictionary)) Then
-                Return Runtime.CTypeOfList(Of Boolean)(obj)
+                Return Runtime.CTypeOfList(Of Boolean)(obj, env)
             Else
                 Return Runtime.asLogical(obj)
             End If
@@ -347,25 +385,34 @@ Namespace Runtime.Internal.Object.Converts
                 Return Nothing
             ElseIf type Is GetType(vbObject) Then
                 Return asObject(obj)
-            ElseIf obj.GetType Is GetType(vbObject) AndAlso Not type Is GetType(Object) Then
+            End If
+
+            Dim objType As Type = obj.GetType
+
+            If objType Is GetType(vbObject) AndAlso Not type Is GetType(Object) Then
                 obj = DirectCast(obj, vbObject).target
 
                 If Not obj Is Nothing AndAlso obj.GetType Is type Then
                     Return obj
                 End If
-            ElseIf obj.GetType Is GetType(RDispose) AndAlso Not type Is GetType(Object) Then
+            ElseIf objType Is GetType(RDispose) AndAlso Not type Is GetType(Object) Then
                 obj = DirectCast(obj, RDispose).Value
 
                 If Not obj Is Nothing AndAlso obj.GetType Is type Then
                     Return obj
                 End If
+            ElseIf objType Is GetType(list) AndAlso type.ImplementInterface(GetType(IDictionary)) Then
+                ' cast R# list object to any dictionary table object???
+                Return DirectCast(obj, list).CTypeList(type, env)
             ElseIf type.IsEnum Then
                 Return CastToEnum(obj, type, env)
-            ElseIf obj.GetType Is GetType(Environment) AndAlso type Is GetType(GlobalEnvironment) Then
+            ElseIf objType Is GetType(Environment) AndAlso type Is GetType(GlobalEnvironment) Then
                 ' fix the type mismatch bugs for passing value to 
                 ' a API parameter which its data type is a global 
                 ' environment.
                 Return DirectCast(obj, Environment).globalEnvironment
+            ElseIf makeObject.isObjectConversion(type, obj) Then
+                Return makeObject.createObject(type, obj, env)
             End If
 
             Return Conversion.CTypeDynamic(obj, type)

@@ -1,49 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::deccfc390d884546bb0ac9269d839e54, R#\Interpreter\RInterpreter.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class RInterpreter
-    ' 
-    '         Properties: debug, globalEnvir, Rsharp, strict, warnings
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: (+2 Overloads) Evaluate, finalizeResult, FromEnvironmentConfiguration, InitializeEnvironment, Invoke
-    '                   (+2 Overloads) LoadLibrary, Run, RunInternal, Source
-    ' 
-    '         Sub: (+3 Overloads) Add, Print, PrintMemory
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class RInterpreter
+' 
+'         Properties: debug, globalEnvir, Rsharp, strict, warnings
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: (+2 Overloads) Evaluate, finalizeResult, FromEnvironmentConfiguration, InitializeEnvironment, Invoke
+'                   (+2 Overloads) LoadLibrary, Run, RunInternal, Source
+' 
+'         Sub: (+3 Overloads) Add, Print, PrintMemory
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -56,6 +56,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -106,6 +107,12 @@ Namespace Interpreter
         End Property
 
         Public Const lastVariableName$ = "$"
+
+        Public ReadOnly Property configFile As ConfigFile
+            Get
+                Return globalEnvir.options.file
+            End Get
+        End Property
 
         ''' <summary>
         ''' 直接无参数调用这个构造函数，则会使用默认的配置文件创建R#脚本解释器引擎实例
@@ -192,17 +199,17 @@ Namespace Interpreter
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
         Public Sub Add(name$, value As Object, Optional type As TypeCodes = TypeCodes.generic)
-            Call globalEnvir.Push(name, value, type)
+            Call globalEnvir.Push(name, value, [readonly]:=False, mode:=type)
         End Sub
 
         <DebuggerStepThrough>
         Public Sub Add(name$, closure As [Delegate])
-            globalEnvir.Push(name, New RMethodInfo(name, closure), TypeCodes.closure)
+            globalEnvir.Push(name, New RMethodInfo(name, closure), [readonly]:=False, mode:=TypeCodes.closure)
         End Sub
 
         <DebuggerStepThrough>
         Public Sub Add(name$, closure As MethodInfo, Optional target As Object = Nothing)
-            globalEnvir.Push(name, New RMethodInfo(name, closure, target), TypeCodes.closure)
+            globalEnvir.Push(name, New RMethodInfo(name, closure, target), [readonly]:=False, mode:=TypeCodes.closure)
         End Sub
 
         Public Function Invoke(funcName$, ParamArray args As Object()) As Object
@@ -242,12 +249,12 @@ Namespace Interpreter
         ''' <param name="arguments"></param>
         ''' <returns></returns>
         Private Function InitializeEnvironment(source$, arguments As NamedValue(Of Object)()) As Environment
-            Dim envir As Environment
+            Dim env As Environment
 
             If source Is Nothing OrElse InStr(source, "<in_memory_") = 1 Then
-                envir = globalEnvir
+                env = globalEnvir
             Else
-                envir = New StackFrame With {
+                env = New StackFrame With {
                     .File = source,
                     .Line = 0,
                     .Method = New Method With {
@@ -260,11 +267,22 @@ Namespace Interpreter
                          End Function)
             End If
 
+            Dim symbol$
+            Dim obj As Object
+
             For Each var As NamedValue(Of Object) In arguments
-                Call envir.Push(var.Name, var.Value, [readonly]:=False)
+                symbol = var.Name
+                obj = var.Value
+
+                Call env.Push(symbol, obj, [readonly]:=False)
             Next
 
-            Return envir
+            If debug AndAlso arguments.Length > 0 Then
+                Call "Initialize of the environment with pre-define symbols:".__DEBUG_ECHO
+                Call arguments.Keys.GetJson.__INFO_ECHO
+            End If
+
+            Return env
         End Function
 
         Friend Function finalizeResult(result As Object) As Object
@@ -293,8 +311,15 @@ Namespace Interpreter
 
         Private Function RunInternal(Rscript As Rscript, arguments As NamedValue(Of Object)()) As Object
             Dim globalEnvir As Environment = InitializeEnvironment(Rscript.fileName, arguments)
-            Dim program As Program = Program.CreateProgram(Rscript, debug:=debug)
+            Dim error$ = Nothing
+            Dim program As Program = Program.CreateProgram(Rscript, debug:=debug, [error]:=[error])
             Dim result As Object = program.Execute(globalEnvir)
+
+            ' fix bugs of warning message populates
+            ' to upper global environment
+            If Not globalEnvir Is Me.globalEnvir Then
+                Call globalEnvir.Dispose()
+            End If
 
             Return finalizeResult(result)
         End Function
@@ -323,7 +348,7 @@ Namespace Interpreter
                     .ToArray
                 result = RunInternal(Rscript.FromFile(filepath), arguments)
             Else
-                result = Internal.stop({
+                result = Internal.debug.stop({
                     $"cannot open the connection.",
                     $"cannot open file '{filepath.FileName}': No such file or directory",
                     $"file: {filepath.GetFullPath}",
@@ -347,7 +372,7 @@ Namespace Interpreter
                             name = var.Name
                             value = var.Value
 
-                            Call .globalEnvir.Push(name, value, NameOf(TypeCodes.generic))
+                            Call .globalEnvir.Push(name, value, [readonly]:=False, mode:=TypeCodes.generic)
                         Next
                     End If
 

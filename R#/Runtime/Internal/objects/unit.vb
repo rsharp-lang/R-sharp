@@ -44,5 +44,10 @@ Namespace Runtime.Internal.Object
 
     Public Class unit
 
+        Public Property name As String
+
+        Public Overrides Function ToString() As String
+            Return name
+        End Function
     End Class
 End Namespace

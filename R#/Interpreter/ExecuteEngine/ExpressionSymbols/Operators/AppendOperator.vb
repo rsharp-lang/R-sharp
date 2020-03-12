@@ -98,15 +98,19 @@ Namespace Interpreter.ExecuteEngine
                 If type2 Is GetType(list) Then
                 ElseIf type2.IsArray Then
                 Else
-                    Return Internal.stop(New InvalidProgramException(type2.FullName), envir)
+                    Return Internal.debug.stop(New InvalidProgramException(type2.FullName), envir)
                 End If
-                Return Internal.stop(New NotImplementedException, envir)
+                Return Internal.debug.stop(New NotImplementedException, envir)
             End If
 
             Return Runtime.asVector(Of Object)(x) _
                 .AsObjectEnumerator _
                 .JoinIterates(Runtime.asVector(Of Object)(y).AsObjectEnumerator) _
                 .ToArray
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return $"Call base::vec::append({a}, {b})"
         End Function
     End Class
 End Namespace

@@ -57,14 +57,14 @@ Public Module Compiler
 
         For Each line As RExpression In program
             Select Case line.GetType
-                Case GetType(DeclareNewVariable)
-                    buffer = DirectCast(line, DeclareNewVariable).DeclareNewVariable
+                Case GetType(DeclareNewSymbol)
+                    buffer = DirectCast(line, DeclareNewSymbol).DeclareNewVariable
             End Select
         Next
     End Function
 
     <Extension>
-    Private Function DeclareNewVariable(declares As DeclareNewVariable) As variable()
+    Private Function DeclareNewVariable(declares As DeclareNewSymbol) As variable()
         Dim [let] As New variable
         ' Dim names = declares.
     End Function

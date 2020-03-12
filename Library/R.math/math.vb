@@ -131,7 +131,7 @@ Module math
         Dim names As New Dictionary(Of String, Symbol)
 
         For Each v As NamedValue(Of Object) In y0.namedValues
-            Call env.Push(v.Name, REnv.asVector(Of Double)(v.Value), TypeCodes.double)
+            Call env.Push(v.Name, REnv.asVector(Of Double)(v.Value), [readonly]:=False, mode:=TypeCodes.double)
             Call names.Add(v.Name, env.FindSymbol(v.Name, [inherits]:=False))
         Next
 

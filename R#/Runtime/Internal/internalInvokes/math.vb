@@ -48,6 +48,7 @@ Imports Microsoft.VisualBasic.Math.Correlations
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports stdNum = System.Math
+Imports randf = Microsoft.VisualBasic.Math.RandomExtensions
 
 Namespace Runtime.Internal.Invokes
 
@@ -207,6 +208,35 @@ Namespace Runtime.Internal.Invokes
                     {"z", z}
                 }
             }
+        End Function
+
+        <ExportAPI("set.seed")>
+        Public Sub set_seed(seed As Integer)
+            randf.SetSeed(seed)
+        End Sub
+
+        <ExportAPI("runif")>
+        Public Function runif(n$, Optional min# = 0, Optional max# = 1) As Double()
+            Dim rnd As Random = randf.seeds
+            Dim [if] As New List(Of Double)
+
+            For i As Integer = 0 To n - 1
+                [if].Add(rnd.NextDouble(min, max))
+            Next
+
+            Return [if].ToArray
+        End Function
+
+        <ExportAPI("rnorm")>
+        Public Function rnorm(n%, Optional mean# = 0, Optional sd# = 1) As Double()
+            Dim rnd As Random = randf.seeds
+            Dim gauss As New List(Of Double)
+
+            For i As Integer = 0 To n - 1
+                gauss.Add(rnd.NextGaussian(mean, sd))
+            Next
+
+            Return gauss.ToArray
         End Function
     End Module
 End Namespace
