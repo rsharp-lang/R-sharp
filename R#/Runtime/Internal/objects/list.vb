@@ -127,7 +127,7 @@ Namespace Runtime.Internal.Object
         End Function
 
         Public Function getValue(Of T)(name As String, env As Environment) As T
-            Return RConversion.CTypeDynamic(slots.TryGetValue(name), GetType(T), env)
+            Return RCType.CTypeDynamic(slots.TryGetValue(name), GetType(T), env)
         End Function
 
         Public Overrides Function ToString() As String

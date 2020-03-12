@@ -14,10 +14,23 @@ Module stats
     ''' </summary>
     ''' <returns></returns>
     <ExportAPI("spline")>
-    Public Function spline(<RRawVectorArgument> data As Object, Optional algorithm As SplineAlgorithms = SplineAlgorithms.BSpline, Optional env As Environment = Nothing) As Object
+    Public Function spline(<RRawVectorArgument> data As Object,
+                           Optional algorithm As SplineAlgorithms = SplineAlgorithms.BSpline,
+                           Optional env As Environment = Nothing) As Object
+
         If data Is Nothing Then
             Return Nothing
         End If
+
+        Select Case algorithm
+            Case SplineAlgorithms.Bezier
+            Case SplineAlgorithms.BSpline
+            Case SplineAlgorithms.CatmullRom
+            Case SplineAlgorithms.CubiSpline
+
+        End Select
+
+        Return Internal.debug.stop($"unsupported spline algorithm: {algorithm.ToString}", env)
     End Function
 
     ''' <summary>

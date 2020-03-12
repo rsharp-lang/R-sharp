@@ -161,7 +161,7 @@ Namespace Runtime.Internal.Object
                     If targetType.IsArray Then
                         value = asVector(value, targetType.GetElementType, envir)
                     Else
-                        value = RConversion.CTypeDynamic(value, targetType, envir)
+                        value = RCType.CTypeDynamic(value, targetType, envir)
                     End If
 
                     Call properties(name).SetValue(target, value)

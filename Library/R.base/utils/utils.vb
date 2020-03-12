@@ -92,7 +92,11 @@ Public Module utils
     ''' <returns></returns>
     <ExportAPI("read.csv")>
     <RApiReturn(GetType(Rdataframe))>
-    Public Function read_csv(file$, Optional encoding As Object = "unknown", Optional tsv As Boolean = False, Optional env As Environment = Nothing) As Object
+    Public Function read_csv(file$,
+                             Optional encoding As Object = "unknown",
+                             Optional tsv As Boolean = False,
+                             Optional env As Environment = Nothing) As Object
+
         Dim datafile As Object = REnv _
             .TryCatch(Function()
                           If tsv Then

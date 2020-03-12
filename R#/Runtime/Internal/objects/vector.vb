@@ -100,7 +100,7 @@ Namespace Runtime.Internal.Object
                     If obj.GetType Is model Then
                         ' do nothing
                     ElseIf obj.GetType.IsInheritsFrom(model) Then
-                        obj = RConversion.CTypeDynamic(obj, model, env)
+                        obj = RCType.CTypeDynamic(obj, model, env)
                     End If
                 End If
 

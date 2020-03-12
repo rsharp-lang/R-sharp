@@ -291,8 +291,10 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\BreakPoint.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Regexp.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryInExpression.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\WhileLoop.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Linq\LinqOutput.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxBuilderOptions.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\WhileLoopSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\CommandLine.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\DeclareNewFunctionSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\ClosureExpressionSyntax.vb" />
@@ -389,6 +391,8 @@
     <Compile Include="Runtime\Internal\internalInvokes\set.vb" />
     <Compile Include="Runtime\Internal\generic.vb" />
     <Compile Include="Runtime\Internal\objects\pipeline.vb" />
+    <Compile Include="Runtime\Internal\objects\RConversion\RCType.vb" />
+    <Compile Include="Runtime\Internal\objects\RConversion\makeObject.vb" />
     <Compile Include="Runtime\Internal\objects\RConversion\makeDataframe.vb" />
     <Compile Include="Runtime\Internal\objects\RConversion\makeList.vb" />
     <Compile Include="Runtime\Internal\objects\RConversion\castList.vb" />

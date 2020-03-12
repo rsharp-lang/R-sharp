@@ -17,7 +17,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 Dim declares As RFunction = DirectCast(func, RFunction)
 
                 Return Function(x, i)
-                           Return RConversion.CTypeDynamic(declares.Invoke(env, InvokeParameter.Create(x, i)), GetType(Out), env)
+                           Return RCType.CTypeDynamic(declares.Invoke(env, InvokeParameter.Create(x, i)), GetType(Out), env)
                        End Function
             ElseIf TypeOf func Is Func(Of Object, Out) Then
                 Dim lambda As Func(Of Object, Out) = func

@@ -166,7 +166,7 @@ Namespace Runtime
                     Return type.createArray(DirectCast(value, Group).group, env)
                 Else
                     Dim array As Array = Array.CreateInstance(type, 1)
-                    array.SetValue(RConversion.CTypeDynamic(value, type, env), Scan0)
+                    array.SetValue(RCType.CTypeDynamic(value, type, env), Scan0)
                     Return array
                 End If
             Else
@@ -180,7 +180,7 @@ Namespace Runtime
             Dim array As Array = Array.CreateInstance(type, src.Length)
 
             For i As Integer = 0 To array.Length - 1
-                array.SetValue(RConversion.CTypeDynamic(src.GetValue(i), type, env), i)
+                array.SetValue(RCType.CTypeDynamic(src.GetValue(i), type, env), i)
             Next
 
             Return array
@@ -191,7 +191,7 @@ Namespace Runtime
             Dim elementType As Type = GetType(T)
 
             For Each key As Object In list.Keys
-                ofList(Scripting.ToString(key)) = RConversion.CTypeDynamic(list.Item(key), elementType, env)
+                ofList(Scripting.ToString(key)) = RCType.CTypeDynamic(list.Item(key), elementType, env)
             Next
 
             Return ofList
