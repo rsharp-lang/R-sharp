@@ -293,6 +293,7 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryInExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Linq\LinqOutput.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxBuilderOptions.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\WhileLoopSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\CommandLine.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\DeclareNewFunctionSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\ClosureExpressionSyntax.vb" />
