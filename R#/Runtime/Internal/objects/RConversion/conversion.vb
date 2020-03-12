@@ -385,28 +385,34 @@ Namespace Runtime.Internal.Object.Converts
                 Return Nothing
             ElseIf type Is GetType(vbObject) Then
                 Return asObject(obj)
-            ElseIf obj.GetType Is GetType(vbObject) AndAlso Not type Is GetType(Object) Then
+            End If
+
+            Dim objType As Type = obj.GetType
+
+            If objType Is GetType(vbObject) AndAlso Not type Is GetType(Object) Then
                 obj = DirectCast(obj, vbObject).target
 
                 If Not obj Is Nothing AndAlso obj.GetType Is type Then
                     Return obj
                 End If
-            ElseIf obj.GetType Is GetType(RDispose) AndAlso Not type Is GetType(Object) Then
+            ElseIf objType Is GetType(RDispose) AndAlso Not type Is GetType(Object) Then
                 obj = DirectCast(obj, RDispose).Value
 
                 If Not obj Is Nothing AndAlso obj.GetType Is type Then
                     Return obj
                 End If
-            ElseIf obj.GetType Is GetType(list) AndAlso type.ImplementInterface(GetType(IDictionary)) Then
+            ElseIf objType Is GetType(list) AndAlso type.ImplementInterface(GetType(IDictionary)) Then
                 ' cast R# list object to any dictionary table object???
                 Return DirectCast(obj, list).CTypeList(type, env)
             ElseIf type.IsEnum Then
                 Return CastToEnum(obj, type, env)
-            ElseIf obj.GetType Is GetType(Environment) AndAlso type Is GetType(GlobalEnvironment) Then
+            ElseIf objType Is GetType(Environment) AndAlso type Is GetType(GlobalEnvironment) Then
                 ' fix the type mismatch bugs for passing value to 
                 ' a API parameter which its data type is a global 
                 ' environment.
                 Return DirectCast(obj, Environment).globalEnvironment
+            ElseIf makeObject.isObjectConversion(type, obj) Then
+                Return makeObject.createObject(type, obj, env)
             End If
 
             Return Conversion.CTypeDynamic(obj, type)

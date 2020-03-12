@@ -389,6 +389,7 @@
     <Compile Include="Runtime\Internal\internalInvokes\set.vb" />
     <Compile Include="Runtime\Internal\generic.vb" />
     <Compile Include="Runtime\Internal\objects\pipeline.vb" />
+    <Compile Include="Runtime\Internal\objects\RConversion\makeObject.vb" />
     <Compile Include="Runtime\Internal\objects\RConversion\makeDataframe.vb" />
     <Compile Include="Runtime\Internal\objects\RConversion\makeList.vb" />
     <Compile Include="Runtime\Internal\objects\RConversion\castList.vb" />
