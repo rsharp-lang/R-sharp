@@ -291,6 +291,7 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\BreakPoint.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Regexp.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryInExpression.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\WhileLoop.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Linq\LinqOutput.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxBuilderOptions.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\CommandLine.vb" />
