@@ -150,7 +150,7 @@ Namespace Interpreter.ExecuteEngine
             ' 20200213 因为source函数是创建了一个新的环境容器
             ' 所以函数无法被导入到全局环境之中
             ' 在这里imports关键词操作则是使用全局环境
-            Dim script As list = CreateSpecialScriptReference(result)
+            Dim script As list = CreateSpecialScriptReference(result, R)
             Dim Rscript As Rscript = Rscript.FromFile(result)
             Dim stackframe As New StackFrame With {
                 .File = Rscript.fileName,
