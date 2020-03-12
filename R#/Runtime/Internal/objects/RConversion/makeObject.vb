@@ -1,4 +1,5 @@
-﻿Imports System.Runtime.CompilerServices
+﻿Imports System.Reflection
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 
 Namespace Runtime.Internal.Object.Converts
@@ -19,7 +20,24 @@ Namespace Runtime.Internal.Object.Converts
         End Function
 
         Public Function createObject(type As Type, propertyVals As list, env As Environment) As Object
+            Dim obj As Object = Activator.CreateInstance(type)
+            Dim val As Object
 
+            For Each [property] As PropertyInfo In type _
+                .GetProperties(PublicProperty) _
+                .Where(Function(pi)
+                           Return pi.CanWrite AndAlso pi.GetIndexParameters.IsNullOrEmpty
+                       End Function)
+
+                If propertyVals.hasName([property].Name) Then
+                    val = propertyVals.getByName([property].Name)
+                    val = RConversion.CTypeDynamic(val, [property].PropertyType, env)
+
+                    [property].SetValue(obj, val)
+                End If
+            Next
+
+            Return obj
         End Function
     End Module
 End Namespace
