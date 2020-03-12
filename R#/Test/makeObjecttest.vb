@@ -8,6 +8,7 @@ Module makeObjecttest
     <ExportAPI("debug_echo")>
     Public Sub createArguments(args As arguments)
         Call Console.WriteLine(args.GetJson)
+        Call Console.WriteLine(args.GetType.FullName)
     End Sub
 End Module
 

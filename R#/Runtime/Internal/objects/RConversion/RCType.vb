@@ -52,6 +52,10 @@ Namespace Runtime.Internal.Object.Converts
                 Return makeObject.createObject(type, obj, env)
             ElseIf objType.IsArray AndAlso type.IsArray Then
                 Return Runtime.asVector(obj, type.GetElementType, env)
+            ElseIf type.IsArray AndAlso type.GetElementType Is objType Then
+                Dim array As Array = Array.CreateInstance(objType, 1)
+                array.SetValue(obj, Scan0)
+                Return array
             End If
 
             Return Conversion.CTypeDynamic(obj, type)
