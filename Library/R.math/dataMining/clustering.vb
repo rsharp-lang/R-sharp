@@ -1,4 +1,5 @@
 ﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.DataMining.KMeans
 Imports Microsoft.VisualBasic.Linq
@@ -6,6 +7,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
@@ -16,6 +18,8 @@ Module clustering
 
     Sub New()
         Call REnv.Internal.generic.add("summary", GetType(EntityClusterModel()), AddressOf clusterSummary)
+
+        Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(EntityClusterModel()), AddressOf clusterResultDataFrame)
     End Sub
 
     Public Function clusterSummary(result As Object, args As list, env As Environment) As Object
@@ -34,6 +38,19 @@ Module clustering
         Else
             Throw New NotImplementedException
         End If
+    End Function
+
+    Public Function clusterResultDataFrame(data As EntityClusterModel(), args As list, env As Environment) As Rdataframe
+        Dim table As File = data.ToCsvDoc
+        Dim matrix As New Rdataframe With {
+            .columns = New Dictionary(Of String, Array)
+        }
+
+        For Each column As String() In table.Columns
+            matrix.columns.Add(column(Scan0), column.Skip(1).ToArray)
+        Next
+
+        Return matrix
     End Function
 
     ''' <summary>
