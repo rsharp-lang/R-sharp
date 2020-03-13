@@ -76,7 +76,7 @@ Namespace Runtime
                     {"dir", filepath.ParentPath},
                     {"file", filepath.FileName},
                     {"fullName", filepath.GetFullPath},
-                    {"startup.time", Now.ToString}
+                    {"startup.time", Now.ToString},
                     {"debug", R.debug}
                 }
             }
