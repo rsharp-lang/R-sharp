@@ -63,6 +63,9 @@ Namespace Interpreter.ExecuteEngine
     ''' imports [namespace] from [module.dll]
     ''' imports "script.R"
     ''' ```
+    ''' 
+    ''' if the module file is missing file extension name, then the file extension name 
+    ''' ``dll`` will be used as default. 
     ''' </summary>
     ''' <remarks>
     ''' ``imports``关键词的功能除了可以导入dll模块之中的包模块以外，也可以导入R脚本。
@@ -75,7 +78,7 @@ Namespace Interpreter.ExecuteEngine
 
         Public ReadOnly Property packages As Expression
         ''' <summary>
-        ''' ``*.dll`` file name
+        ''' ``*.dll/*.R`` file name
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property library As Expression
@@ -150,7 +153,7 @@ Namespace Interpreter.ExecuteEngine
             ' 20200213 因为source函数是创建了一个新的环境容器
             ' 所以函数无法被导入到全局环境之中
             ' 在这里imports关键词操作则是使用全局环境
-            Dim script As list = CreateMagicScriptSymbol(result)
+            Dim script As list = CreateMagicScriptSymbol(result, R)
             Dim Rscript As Rscript = Rscript.FromFile(result)
             Dim stackframe As New StackFrame With {
                 .File = Rscript.fileName,
@@ -183,6 +186,11 @@ Namespace Interpreter.ExecuteEngine
             Return result
         End Function
 
+        ''' <summary>
+        ''' imports packages from dll file
+        ''' </summary>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         Private Function importsPackages(env As Environment) As Object
             Dim names As Index(Of String) = Runtime.asVector(Of String)(Me.packages.Evaluate(env)) _
                 .AsObjectEnumerator _
@@ -244,11 +252,29 @@ load:       Return LoadLibrary(Scripting.ToString(libDll), env, names)
             If libDll.StringEmpty Then
                 Return Internal.debug.stop("No package module provided!", env)
             ElseIf Not libDll.FileExists Then
-                For Each location As String In {$"{App.HOME}/{libDll}", $"{App.HOME}/Library/{libDll}"}
+                For Each location As String In {
+                    $"{App.HOME}/{libDll}",
+                    $"{App.HOME}/Library/{libDll}",
+                    $"{App.HOME}/../lib/{libDll}"
+                }
                     If location.FileExists Then
                         Return location
                     End If
                 Next
+
+                ' if file not found then we test if the dll 
+                ' file extension Is Missing Or Not?
+                If Not libDll.ExtensionSuffix("exe", "dll") Then
+                    For Each location As String In {
+                        $"{App.HOME}/{libDll}.dll",
+                        $"{App.HOME}/Library/{libDll}.dll",
+                        $"{App.HOME}/../lib/{libDll}.dll"
+                    }
+                        If location.FileExists Then
+                            Return location
+                        End If
+                    Next
+                End If
 
                 Return Internal.debug.stop($"Missing library file: '{libDll}'!", env)
             End If

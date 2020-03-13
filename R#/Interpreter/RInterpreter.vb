@@ -339,7 +339,7 @@ Namespace Interpreter
             ' the environment
             ' 
             ' let !script = list(dir = dirname, file = filename, fullName = filepath)
-            Dim script As list = CreateMagicScriptSymbol(filepath)
+            Dim script As list = CreateMagicScriptSymbol(filepath, R:=Me)
             Dim result As Object
 
             If filepath.FileExists Then
