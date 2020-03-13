@@ -69,12 +69,13 @@ Namespace Runtime
             Return env.parent?.ToString & " :> " & env.stackFrame.Method.ToString
         End Function
 
-        Public Function CreateSpecialScriptReference(filepath As String) As list
+        Public Function CreateMagicScriptSymbol(filepath As String) As list
             Return New list With {
                 .slots = New Dictionary(Of String, Object) From {
                     {"dir", filepath.ParentPath},
                     {"file", filepath.FileName},
-                    {"fullName", filepath.GetFullPath}
+                    {"fullName", filepath.GetFullPath},
+                    {"startup.time", Now.ToString}
                 }
             }
         End Function
