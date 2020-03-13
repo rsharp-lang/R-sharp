@@ -74,7 +74,7 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
-
+        Call whileTest()
         Call functiondeclaretest2()
 
         Call tupleValueAssignTest()
@@ -180,6 +180,15 @@ Module interpreterTest
 
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub whileTest()
+        Call R.Evaluate("while (TRUE) {
+sleep(1000);
+print(1);
+}")
 
         Pause()
     End Sub

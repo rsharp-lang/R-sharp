@@ -104,6 +104,8 @@ Namespace Interpreter.SyntaxParser
                     Return New ContinuteFor
                 Case "using"
                     Return SyntaxImplements.UsingClosure(code.Skip(1), opts)
+                Case "while"
+                    Return SyntaxImplements.WhileLoopSyntax.CreateLoopExpression(code, opts)
                 Case Else
                     ' may be it is using keyword as identifier name
                     Return Nothing
