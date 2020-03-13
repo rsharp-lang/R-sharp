@@ -102,6 +102,8 @@ Namespace Interpreter.SyntaxParser
                 Case "next"
                     ' continute for
                     Return New ContinuteFor
+                Case "break"
+                    Return New BreakLoop
                 Case "using"
                     Return SyntaxImplements.UsingClosure(code.Skip(1), opts)
                 Case "while"

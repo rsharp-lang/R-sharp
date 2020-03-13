@@ -170,6 +170,8 @@ Namespace Interpreter
 
             If TypeOf expression Is ContinuteFor Then
                 breakLoop = True
+            ElseIf TypeOf expression Is BreakLoop Then
+                breakLoop = True
             End If
 
             If Not last Is Nothing Then

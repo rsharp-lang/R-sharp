@@ -28,7 +28,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             If loopBody.isException Then
                 Return loopBody
             Else
-
+                Return New WhileLoop(test.expression, loopBody.expression, stackframe)
             End If
         End Function
     End Module

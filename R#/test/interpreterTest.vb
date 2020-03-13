@@ -185,10 +185,23 @@ Module interpreterTest
     End Sub
 
     Sub whileTest()
-        Call R.Evaluate("while (TRUE) {
-sleep(1000);
-print(1);
-}")
+        Call R.Evaluate("
+let i as integer = 1;
+
+let gg <- while (TRUE) {
+sleep(2);
+print(i);
+
+if (i < 10) {
+    i <- i + 1;
+} else {
+    break;
+}
+}
+
+print(gg);
+
+")
 
         Pause()
     End Sub
