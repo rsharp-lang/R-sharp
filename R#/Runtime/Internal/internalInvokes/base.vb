@@ -1113,16 +1113,17 @@ Namespace Runtime.Internal.Invokes
                 X = DirectCast(X, list).slots
             End If
 
-            If X.GetType Is GetType(Dictionary(Of String, Object)) Then
-                Dim list = DirectCast(X, Dictionary(Of String, Object))
-                Dim names = list.Keys.ToArray
-                Dim seq As Array = names _
-                    .Select(Function(key)
-                                Return Runtime.single(apply.Invoke(envir, invokeArgument(list(key))))
-                            End Function) _
-                    .ToArray
+            If X.GetType.ImplementInterface(GetType(IDictionary)) Then
+                Dim list = DirectCast(X, IDictionary)
+                Dim seq As New List(Of Object)
+                Dim names As New List(Of String)
 
-                Return New RObj.vector(names, seq, envir)
+                For Each key As Object In list.Keys
+                    seq.Add(Runtime.single(apply.Invoke(envir, invokeArgument(list(key)))))
+                    names.Add(Scripting.ToString(key))
+                Next
+
+                Return New RObj.vector(names, seq.ToArray, envir)
             Else
                 Dim seq = Runtime.asVector(Of Object)(X) _
                     .AsObjectEnumerator _
