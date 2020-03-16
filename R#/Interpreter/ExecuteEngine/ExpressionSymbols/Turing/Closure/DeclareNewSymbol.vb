@@ -58,13 +58,10 @@ Namespace Interpreter.ExecuteEngine
         ''' 对于tuple类型，会存在多个变量
         ''' </summary>
         Friend names As String()
-        ''' <summary>
-        ''' 初始值
-        ''' </summary>
-        Public ReadOnly Property value As Expression
 
         Public ReadOnly Property hasInitializeExpression As Boolean = False
 
+        Friend m_value As Expression
         Friend m_type As TypeCodes
         Friend is_readonly As Boolean
 
@@ -74,9 +71,18 @@ Namespace Interpreter.ExecuteEngine
             End Get
         End Property
 
+        ''' <summary>
+        ''' 初始值
+        ''' </summary>
+        Public ReadOnly Property value As Expression
+            Get
+                Return m_value
+            End Get
+        End Property
+
         Sub New(names$(), value As Expression, type As TypeCodes, [readonly] As Boolean)
             Me.names = names
-            Me.value = value
+            Me.m_value = value
             Me.m_type = type
             Me.is_readonly = [readonly]
 
