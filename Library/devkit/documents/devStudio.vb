@@ -61,6 +61,28 @@ Module devStudio
                     Call getRequiredPackages(line, packageNames, solveSymbols)
                 Next
 
+            Case GetType(IfBranch)
+
+                Dim ifClosure As IfBranch = DirectCast(code, IfBranch)
+
+                Call getRequiredPackages(ifClosure.ifTest, packageNames, solveSymbols)
+                Call getRequiredPackages(ifClosure.trueClosure, packageNames, solveSymbols)
+
+            Case GetType(ForLoop)
+
+                Dim forLoop As ForLoop = DirectCast(code, ForLoop)
+
+                Call getRequiredPackages(forLoop.sequence, packageNames, solveSymbols)
+                Call getRequiredPackages(forLoop.body, packageNames, solveSymbols)
+
+            Case GetType(DeclareNewSymbol)
+
+                Dim letSymbol As DeclareNewSymbol = DirectCast(code, DeclareNewSymbol)
+
+                If letSymbol.hasInitializeExpression Then
+                    Call getRequiredPackages(letSymbol.value, packageNames, solveSymbols)
+                End If
+
             Case Else
                 Throw New NotImplementedException(code.GetType.FullName)
         End Select

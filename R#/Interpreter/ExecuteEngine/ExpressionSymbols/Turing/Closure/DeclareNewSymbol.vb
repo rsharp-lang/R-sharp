@@ -61,8 +61,10 @@ Namespace Interpreter.ExecuteEngine
         ''' <summary>
         ''' 初始值
         ''' </summary>
-        Friend value As Expression
-        Friend hasInitializeExpression As Boolean = False
+        Public ReadOnly Property value As Expression
+
+        Public ReadOnly Property hasInitializeExpression As Boolean = False
+
         Friend m_type As TypeCodes
         Friend is_readonly As Boolean
 

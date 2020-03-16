@@ -72,8 +72,8 @@ Namespace Interpreter.ExecuteEngine
 
         Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
 
-        Friend ReadOnly ifTest As Expression
-        Friend ReadOnly trueClosure As DeclareNewFunction
+        Public ReadOnly Property ifTest As Expression
+        Public ReadOnly Property trueClosure As DeclareNewFunction
 
         Friend Class IfPromise
 
