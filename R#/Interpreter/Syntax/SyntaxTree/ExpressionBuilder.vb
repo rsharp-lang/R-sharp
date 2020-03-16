@@ -67,9 +67,9 @@ Namespace Interpreter.SyntaxParser
                     Else
                         Return SyntaxImplements.DeclareNewSymbol(code, keyword = "const", opts)
                     End If
-                Case "if" : Return SyntaxImplements.IfBranch(code.Skip(1).IteratesALL, opts)
-                Case "else" : Return code.Skip(1).IteratesALL.ToArray.DoCall(Function(tokens) SyntaxImplements.ElseBranch(tokens, opts))
-                Case "elseif" : Return code.Skip(1).IteratesALL.DoCall(Function(tokens) SyntaxImplements.ElseIfBranch(tokens, opts))
+                Case "if" : Return SyntaxImplements.IfClosure(code.Skip(1).IteratesALL, opts)
+                Case "else" : Return code.Skip(1).IteratesALL.ToArray.DoCall(Function(tokens) SyntaxImplements.ElseClosure(tokens, opts))
+                Case "elseif" : Return code.Skip(1).IteratesALL.DoCall(Function(tokens) SyntaxImplements.ElseIfClosure(tokens, opts))
                 Case "return" : Return SyntaxImplements.ReturnValue(code.Skip(1).IteratesALL, opts)
                 Case "for" : Return SyntaxImplements.ForLoop(code.Skip(1).IteratesALL, opts)
                 Case "from" : Return SyntaxImplements.LinqExpression(code, opts)

@@ -70,7 +70,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             End If
         End Function
 
-        Public Function IfBranch(tokens As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult
+        Public Function IfClosure(tokens As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim blocks = tokens.SplitByTopLevelDelimiter(TokenType.close)
             Dim ifTest = Expression.CreateExpression(blocks(Scan0).Skip(1), opts)
 
@@ -98,8 +98,8 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Return New SyntaxResult([if])
         End Function
 
-        Public Function ElseIfBranch(tokens As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim [if] As SyntaxResult = IfBranch(tokens, opts)
+        Public Function ElseIfClosure(tokens As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult
+            Dim [if] As SyntaxResult = IfClosure(tokens, opts)
 
             If [if].isException Then
                 Return [if]
@@ -110,7 +110,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             End If
         End Function
 
-        Public Function ElseBranch(code As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
+        Public Function ElseClosure(code As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim syntaxResult As SyntaxResult = code _
                 .Skip(1) _
                 .Take(code.Length - 2) _
