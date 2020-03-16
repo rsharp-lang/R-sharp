@@ -65,11 +65,13 @@ Namespace Interpreter.ExecuteEngine
         ''' 单个变量或者tuple的时候为多个变量
         ''' </summary>
         Dim variables$()
-        Dim sequence As Expression
+
+        Public ReadOnly Property sequence As Expression
+
         ''' <summary>
         ''' 为了兼容tuple的赋值，在这里这个函数体就没有参数了
         ''' </summary>
-        Dim body As DeclareNewFunction
+        Public ReadOnly Property body As DeclareNewFunction
 
         ''' <summary>
         ''' ``%dopar%``

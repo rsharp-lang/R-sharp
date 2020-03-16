@@ -73,8 +73,10 @@ Namespace Interpreter.ExecuteEngine
         Public ReadOnly Property funcName As String Implements RFunction.name
         Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
 
-        Friend ReadOnly params As DeclareNewSymbol()
-        Friend ReadOnly body As ClosureExpression
+        Public ReadOnly Property params As DeclareNewSymbol()
+
+        Public ReadOnly Property body As ClosureExpression
+
         ''' <summary>
         ''' The environment of current function closure
         ''' </summary>

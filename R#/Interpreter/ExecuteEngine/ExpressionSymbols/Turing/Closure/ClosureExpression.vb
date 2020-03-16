@@ -83,6 +83,12 @@ Namespace Interpreter.ExecuteEngine
             Return program.Execute(envir)
         End Function
 
+        Public Iterator Function EnumerateCodeLines() As IEnumerable(Of Expression)
+            For Each line As Expression In program
+                Yield line
+            Next
+        End Function
+
         Public Overrides Function ToString() As String
             Return program.ToString
         End Function
