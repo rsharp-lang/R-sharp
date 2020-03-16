@@ -109,6 +109,7 @@
     <Compile Include="devkit.vb" />
     <Compile Include="documents\docs.vb" />
     <Compile Include="documents\commentDocs.vb" />
+    <Compile Include="documents\devStudio.vb" />
     <Compile Include="github.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">

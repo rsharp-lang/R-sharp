@@ -112,6 +112,12 @@ Namespace Interpreter.ExecuteEngine
             Me.stackFrame = stackFrame
         End Sub
 
+        Public Iterator Function EnumerateInvokedParameters() As IEnumerable(Of Expression)
+            For Each a In parameters
+                Yield a
+            Next
+        End Function
+
         Public Overrides Function ToString() As String
             If [namespace].StringEmpty Then
                 Return $"Call {funcName}({parameters.JoinBy(", ")})"

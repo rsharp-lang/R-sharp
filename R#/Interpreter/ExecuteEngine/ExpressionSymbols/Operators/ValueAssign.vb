@@ -74,7 +74,8 @@ Namespace Interpreter.ExecuteEngine
         ''' </summary>
         Friend targetSymbols As Expression()
         Friend isByRef As Boolean
-        Friend value As Expression
+
+        Public ReadOnly Property value As Expression
 
         Public ReadOnly Property symbolSize As Integer
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
