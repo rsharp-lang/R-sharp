@@ -73,7 +73,11 @@ Namespace Interpreter
         End Function
 
         <Extension>
-        Public Iterator Function GetExpressions(tokens As Token(), Rscript As Rscript, errHandler As Action(Of SyntaxResult), opts As SyntaxBuilderOptions) As IEnumerable(Of Expression)
+        Public Iterator Function GetExpressions(tokens As Token(),
+                                                Rscript As Rscript,
+                                                errHandler As Action(Of SyntaxResult),
+                                                opts As SyntaxBuilderOptions) As IEnumerable(Of Expression)
+
             For Each block In tokens.SplitByTopLevelDelimiter(TokenType.terminator)
                 If block.Length = 0 OrElse block.isTerminator Then
                     ' skip code comments

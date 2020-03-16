@@ -47,6 +47,14 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
     Module ClosureExpressionSyntax
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="tokens">
+        ''' 应该是去掉了最外层的``{}``的
+        ''' </param>
+        ''' <param name="opts"></param>
+        ''' <returns></returns>
         Public Function ClosureExpression(tokens As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim [error] As SyntaxResult = Nothing
             Dim lines As Expression() = Interpreter _
