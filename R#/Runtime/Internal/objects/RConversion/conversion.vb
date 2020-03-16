@@ -370,5 +370,10 @@ Namespace Runtime.Internal.Object.Converts
                 Return Runtime.asLogical(obj)
             End If
         End Function
+
+        <ExportAPI("as.raw")>
+        Public Function asRaw(<RRawVectorArgument> obj As Object, Optional env As Environment = Nothing) As Byte()
+
+        End Function
     End Module
 End Namespace
