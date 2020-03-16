@@ -65,40 +65,44 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
         <Extension>
         Public Function DeclareNewVariable(code As List(Of Token()), [readonly] As Boolean, opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim var As New DeclareNewSymbol
             Dim valSyntaxtemp As SyntaxResult = Nothing
 
             ' 0   1    2   3    4 5
             ' let var [as type [= ...]]
-            var.names = getNames(code(1))
-            var.hasInitializeExpression = True
-            var.is_readonly = [readonly]
+            Dim symbolNames = getNames(code(1))
+            Dim type As TypeCodes
+            Dim value As Expression = Nothing
 
             If code = 2 Then
-                var.m_type = TypeCodes.generic
+                type = TypeCodes.generic
             ElseIf code(2).isKeyword("as") Then
-                var.m_type = code(3)(Scan0).text.GetRTypeCode
+                type = code(3)(Scan0).text.GetRTypeCode
 
                 If code.Count > 4 AndAlso code(4).isOperator("=", "<-") Then
                     valSyntaxtemp = code.Skip(5).AsList.ParseExpression(opts)
                 End If
             Else
-                var.m_type = TypeCodes.generic
+                type = TypeCodes.generic
 
                 If code > 2 AndAlso code(2).isOperator("=", "<-") Then
                     valSyntaxtemp = code.Skip(3).AsList.ParseExpression(opts)
                 End If
             End If
 
-            If valSyntaxtemp Is Nothing Then
-                var.hasInitializeExpression = False
-            ElseIf valSyntaxtemp.isException Then
+            If (Not valSyntaxtemp Is Nothing) AndAlso valSyntaxtemp.isException Then
                 Return valSyntaxtemp
             Else
-                var.value = valSyntaxtemp.expression
+                value = valSyntaxtemp?.expression
             End If
 
-            Return New SyntaxResult(var)
+            Dim symbol As New DeclareNewSymbol(
+                names:=symbolNames,
+                value:=value,
+                type:=type,
+                [readonly]:=[readonly]
+            )
+
+            Return New SyntaxResult(symbol)
         End Function
 
         Public Function DeclareNewVariable(code As List(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult
@@ -108,12 +112,12 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         End Function
 
         Public Function DeclareNewVariable(singleToken As Token()) As SyntaxResult
-            Return New DeclareNewSymbol With {
-                .names = getNames(singleToken),
-                .m_type = TypeCodes.generic,
-                .hasInitializeExpression = False,
-                .value = Nothing
-            }
+            Return New DeclareNewSymbol(
+                names:=getNames(singleToken),
+                value:=Nothing,
+                type:=TypeCodes.generic,
+                [readonly]:=False
+            )
         End Function
 
         Public Function DeclareNewVariable(symbol As Token(), value As Token(), opts As SyntaxBuilderOptions, funcParameter As Boolean) As SyntaxResult
@@ -123,12 +127,20 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 Return valSyntaxTemp
             End If
 
-            Return New DeclareNewSymbol With {
-                .hasInitializeExpression = True,
-                .names = getNames(symbol),
-                .value = valSyntaxTemp.expression,
-                .m_type = If(funcParameter, TypeCodes.generic, .value.type)
-            }
+            Dim type As TypeCodes
+
+            If funcParameter Then
+                type = TypeCodes.generic
+            Else
+                type = valSyntaxTemp.expression.type
+            End If
+
+            Return New DeclareNewSymbol(
+                names:=getNames(symbol),
+                value:=valSyntaxTemp.expression,
+                type:=type,
+                [readonly]:=False
+            )
         End Function
 
         Friend Function getNames(code As Token()) As String()

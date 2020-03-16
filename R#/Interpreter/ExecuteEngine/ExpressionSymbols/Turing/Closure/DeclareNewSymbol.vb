@@ -74,7 +74,15 @@ Namespace Interpreter.ExecuteEngine
             End Get
         End Property
 
-        Sub New()
+        Sub New(names$(), value As Expression, type As TypeCodes, [readonly] As Boolean)
+            Me.names = names
+            Me.value = value
+            Me.m_type = type
+            Me.is_readonly = [readonly]
+
+            If Not value Is Nothing Then
+                hasInitializeExpression = True
+            End If
         End Sub
 
         ''' <summary>
