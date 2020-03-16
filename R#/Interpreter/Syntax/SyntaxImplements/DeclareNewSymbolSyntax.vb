@@ -51,7 +51,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Interpreter.SyntaxParser.SyntaxImplements
 
-    Module DeclareNewVariableSyntax
+    Module DeclareNewSymbolSyntax
 
         Public Function ModeOf(keyword$, target As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim ObjTarget = Expression.CreateExpression(target, opts)
@@ -64,7 +64,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         End Function
 
         <Extension>
-        Public Function DeclareNewVariable(code As List(Of Token()), [readonly] As Boolean, opts As SyntaxBuilderOptions) As SyntaxResult
+        Public Function DeclareNewSymbol(code As List(Of Token()), [readonly] As Boolean, opts As SyntaxBuilderOptions) As SyntaxResult
             Dim valSyntaxtemp As SyntaxResult = Nothing
 
             ' 0   1    2   3    4 5
@@ -105,13 +105,13 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Return New SyntaxResult(symbol)
         End Function
 
-        Public Function DeclareNewVariable(code As List(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult
+        Public Function DeclareNewSymbol(code As List(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult
             Return code _
                 .SplitByTopLevelDelimiter(TokenType.operator, includeKeyword:=True) _
-                .DeclareNewVariable(False, opts)
+                .DeclareNewSymbol(False, opts)
         End Function
 
-        Public Function DeclareNewVariable(singleToken As Token()) As SyntaxResult
+        Public Function DeclareNewSymbol(singleToken As Token()) As SyntaxResult
             Return New DeclareNewSymbol(
                 names:=getNames(singleToken),
                 value:=Nothing,
@@ -120,7 +120,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             )
         End Function
 
-        Public Function DeclareNewVariable(symbol As Token(), value As Token(), opts As SyntaxBuilderOptions, funcParameter As Boolean) As SyntaxResult
+        Public Function DeclareNewSymbol(symbol As Token(), value As Token(), opts As SyntaxBuilderOptions, funcParameter As Boolean) As SyntaxResult
             Dim valSyntaxTemp As SyntaxResult = Expression.CreateExpression(value, opts)
 
             If valSyntaxTemp.isException Then

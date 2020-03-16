@@ -65,7 +65,7 @@ Namespace Interpreter.SyntaxParser
                         ' 将一个匿名函数赋值给左边的目标变量
                         Return SyntaxImplements.DeclareNewFunction(code, opts)
                     Else
-                        Return SyntaxImplements.DeclareNewVariable(code, keyword = "const", opts)
+                        Return SyntaxImplements.DeclareNewSymbol(code, keyword = "const", opts)
                     End If
                 Case "if" : Return SyntaxImplements.IfBranch(code.Skip(1).IteratesALL, opts)
                 Case "else" : Return code.Skip(1).IteratesALL.ToArray.DoCall(Function(tokens) SyntaxImplements.ElseBranch(tokens, opts))

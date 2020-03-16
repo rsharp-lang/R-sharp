@@ -153,7 +153,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     .IteratesALL _
                     .SplitByTopLevelDelimiter(TokenType.operator, True) _
                     .DoCall(Function(blocks)
-                                Return SyntaxImplements.DeclareNewVariable(blocks, False, opts)
+                                Return SyntaxImplements.DeclareNewSymbol(blocks, False, opts)
                             End Function)
 
                 If declares.isException Then

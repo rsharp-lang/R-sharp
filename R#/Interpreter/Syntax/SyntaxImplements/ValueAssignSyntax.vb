@@ -50,7 +50,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
     Module ValueAssignSyntax
 
         Public Function ValueAssign(tokens As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim targetSymbols = DeclareNewVariableSyntax _
+            Dim targetSymbols = DeclareNewSymbolSyntax _
                 .getNames(tokens(Scan0)) _
                 .Select(Function(name) New Literal(name)) _
                 .ToArray
