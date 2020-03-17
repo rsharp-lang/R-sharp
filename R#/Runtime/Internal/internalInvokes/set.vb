@@ -117,5 +117,17 @@ Namespace Runtime.Internal.Invokes
         Public Function diff(<RRawVectorArgument> x As Object, <RRawVectorArgument> y As Object) As Object
 
         End Function
+
+        <ExportAPI("index.of")>
+        Public Function indexOf(<RRawVectorArgument> x As Object, Optional getKey As Object = Nothing, Optional env As Environment = Nothing) As Object
+            If x Is Nothing Then
+                Return Nothing
+            ElseIf x.GetType Is GetType(vector) Then
+                x = DirectCast(x, vector).data
+            End If
+
+            Dim typeofX As Type = x.GetType
+
+        End Function
     End Module
 End Namespace
