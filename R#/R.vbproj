@@ -299,7 +299,7 @@
     <Compile Include="Interpreter\Syntax\SyntaxImplements\CommandLine.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\DeclareNewFunctionSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\ClosureExpressionSyntax.vb" />
-    <Compile Include="Interpreter\Syntax\SyntaxImplements\DeclareNewVariableSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\DeclareNewSymbolSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\DeclareLambdaFunctionSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\ForLoopSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\IfBranchSyntax.vb" />
@@ -435,7 +435,6 @@
     <Compile Include="Runtime\Internal\objects\vbObject.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\utils.vb" />
     <Compile Include="Runtime\Internal\printer\printer.vb" />
-    <Compile Include="Runtime\Interop\RMethodOverloads.vb" />
     <Compile Include="Runtime\Interop\MethodInvoke.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RInteropAttribute.vb" />
     <Compile Include="Runtime\Interop\RMethodArgument.vb" />

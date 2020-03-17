@@ -44,7 +44,6 @@
 #End Region
 
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
-Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
@@ -72,15 +71,15 @@ Namespace Interpreter.ExecuteEngine
 
         Public ReadOnly Property name As String Implements RFunction.name
         Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
-
-        Dim parameter As DeclareNewSymbol
-        Dim closure As Expression
+        Public ReadOnly Property closure As Expression
 
         Public ReadOnly Property parameterNames As String()
             Get
                 Return parameter.names
             End Get
         End Property
+
+        Dim parameter As DeclareNewSymbol
 
         Sub New(name$, parameter As DeclareNewSymbol, closure As Expression, stackframe As StackFrame)
             Me.name = name

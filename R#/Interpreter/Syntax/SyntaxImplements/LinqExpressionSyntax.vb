@@ -1,49 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::1150f5ed2c15943954030465a49e42ae, R#\Interpreter\Syntax\SyntaxImplements\LinqExpressionSyntax.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module LinqExpressionSyntax
-    ' 
-    '         Function: LinqExpression
-    '         Class LinqSyntaxParser
-    ' 
-    '             Constructor: (+1 Overloads) Sub New
-    '             Function: doParseLINQProgram, groupBy, local, project, sort
-    '                       which
-    ' 
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module LinqExpressionSyntax
+' 
+'         Function: LinqExpression
+'         Class LinqSyntaxParser
+' 
+'             Constructor: (+1 Overloads) Sub New
+'             Function: doParseLINQProgram, groupBy, local, project, sort
+'                       which
+' 
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -56,6 +56,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.Linq
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
+Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Interpreter.SyntaxParser.SyntaxImplements
 
@@ -83,11 +84,12 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 Return sequence
             Else
                 i += 2
-                locals = New DeclareNewSymbol With {
-                    .names = variables.ToArray,
-                    .hasInitializeExpression = False,
-                    .value = Nothing
-                }
+                locals = New DeclareNewSymbol(
+                    names:=variables.ToArray,
+                    value:=Nothing,
+                    type:=TypeCodes.generic,
+                    [readonly]:=False
+                )
             End If
 
             tokens = tokens _
@@ -151,7 +153,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     .IteratesALL _
                     .SplitByTopLevelDelimiter(TokenType.operator, True) _
                     .DoCall(Function(blocks)
-                                Return SyntaxImplements.DeclareNewVariable(blocks, False, opts)
+                                Return SyntaxImplements.DeclareNewSymbol(blocks, False, opts)
                             End Function)
 
                 If declares.isException Then
@@ -162,7 +164,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
                 program += New ValueAssign([declare].names, [declare].value)
                 locals += [declare]
-                [declare].value = Nothing
+                [declare].m_value = Nothing
 
                 Return Nothing
             End Function
