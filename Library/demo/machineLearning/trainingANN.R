@@ -1,7 +1,12 @@
 imports "machineLearning" from "R.math";
 
-"D:\biodeep\biodeepdb_v3\Rscript\metacluster\training.XML"
+let dataset = "D:\biodeep\biodeepdb_v3\Rscript\metacluster\training.XML"
 :> read.ML_model
+;
+
+print(check.ML_model(dataset));
+
+dataset
 :> training.ANN(
 	hiddenSize     = [200,300, 50, 10], 
 	learnRate      = 0.1, 
