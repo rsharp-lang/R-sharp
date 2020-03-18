@@ -23,6 +23,7 @@ Module machineLearning
     End Function
 
     <ExportAPI("training.ANN")>
+    <RApiReturn(GetType(StoreProcedure.NeuralNetwork), GetType(Network))>
     Public Function runANNTraining(model As StoreProcedure.DataSet,
                                    <RRawVectorArgument(GetType(Integer))>
                                    Optional hiddenSize As Object = "25,100,30",
@@ -37,7 +38,8 @@ Module machineLearning
                                    Optional selectiveMode As Boolean = False,
                                    Optional maxIterations As Integer = 10000,
                                    Optional minErr As Double = 0.01,
-                                   Optional parallel As Boolean = True) As StoreProcedure.NeuralNetwork
+                                   Optional parallel As Boolean = True,
+                                   Optional outputSnapshot As Boolean = False) As Object
 
         Dim w0 As Func(Of Double)
 
@@ -71,7 +73,11 @@ Module machineLearning
                             End Sub) _
             .Train(parallel)
 
-        Return trainingHelper.TakeSnapshot
+        If outputSnapshot Then
+            Return trainingHelper.TakeSnapshot
+        Else
+            Return trainingHelper.NeuronNetwork
+        End If
     End Function
 End Module
 
