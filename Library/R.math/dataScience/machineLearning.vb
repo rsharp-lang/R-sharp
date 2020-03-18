@@ -91,7 +91,7 @@ Module machineLearning
         trainingHelper.Truncate = truncate
 
         For Each sample As Sample In model.PopulateNormalizedSamples(method:=normalMethod)
-            Call trainingHelper.Add(sample.status, sample.target)
+            Call trainingHelper.Add(sample.vector, sample.target)
         Next
 
         Helpers.MaxEpochs = maxIterations
