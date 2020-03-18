@@ -1,6 +1,8 @@
 imports "machineLearning" from "R.math";
 
-let dataset = "D:\biodeep\biodeepdb_v3\Rscript\metacluster\training.XML"
+let inputFile as string = ?"--data" || "D:\biodeep\biodeepdb_v3\Rscript\metacluster\training.XML";
+let output as string    = ?"--save" || `${dirname(inputFile)}/${basename(inputFile)}.ANN_trained/`;
+let dataset = inputFile
 :> read.ML_model
 ;
 
@@ -16,5 +18,5 @@ dataset
 	parallel       = TRUE,
 	outputSnapshot = TRUE
 )
-:> write.ANN_network("D:\biodeep\biodeepdb_v3\Rscript\metacluster\ANN")
+:> write.ANN_network(output)
 ;
