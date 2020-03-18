@@ -52,6 +52,7 @@
 Imports System.Drawing
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging
@@ -82,6 +83,7 @@ Namespace Runtime.Internal.ConsolePrinter
             RtoString(GetType(ExceptionData)) = AddressOf debug.PrintRExceptionStackTrace
             RtoString(GetType(Environment)) = Function(o) DirectCast(o, Environment).ToString
             RtoString(GetType(GlobalEnvironment)) = Function(o) DirectCast(o, GlobalEnvironment).ToString
+            RtoString(GetType(LogEntry)) = Function(o) DirectCast(o, LogEntry).ToString
 
             RInternalToString(GetType(Double)) = AddressOf printer.f64_InternalToString
         End Sub

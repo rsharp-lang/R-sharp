@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
+﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.DataMining.ComponentModel.Normalizer
 Imports Microsoft.VisualBasic.Language.Default
@@ -20,6 +21,11 @@ Module machineLearning
     <ExportAPI("read.ML_model")>
     Public Function readModelDataset(file As String) As StoreProcedure.DataSet
         Return file.LoadXml(Of StoreProcedure.DataSet)
+    End Function
+
+    <ExportAPI("check.ML_model")>
+    Public Function checkModelDataset(dataset As StoreProcedure.DataSet) As LogEntry()
+        Return StoreProcedure.Diagnostics.CheckDataSet(dataset).ToArray
     End Function
 
     <ExportAPI("training.ANN")>
