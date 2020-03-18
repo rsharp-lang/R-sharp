@@ -54,7 +54,8 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Object
 
-    Public Class vector : Implements RNames, RIndex
+    Public Class vector : Inherits RsharpDataObject
+        Implements RNames, RIndex
 
         Public Property data As Array
         ''' <summary>
@@ -66,15 +67,6 @@ Namespace Runtime.Internal.Object
         Public ReadOnly Property length As Integer Implements RIndex.length
             Get
                 Return data.Length
-            End Get
-        End Property
-
-        Public ReadOnly Property type As RType
-            Get
-                Return data _
-                    .GetType _
-                    .GetElementType _
-                    .DoCall(AddressOf RType.GetRSharpType)
             End Get
         End Property
 
@@ -114,8 +106,10 @@ Namespace Runtime.Internal.Object
                 End If
             Next
 
+            elementType = RType.GetRSharpType(model)
             ' trim the vector to its acutal size
             data = Array.CreateInstance(model, length:=i)
+            ' do buffer memory copy
             Array.ConstrainedCopy(buffer, Scan0, data, Scan0, data.Length)
         End Sub
 
@@ -133,6 +127,9 @@ Namespace Runtime.Internal.Object
 
             Me.data = data
             Me.setNames(names, envir)
+            Me.elementType = Runtime _
+                .MeasureArrayElementType(data) _
+                .DoCall(AddressOf RType.GetRSharpType)
         End Sub
 
         Public Function getNames() As String() Implements RNames.getNames
@@ -255,7 +252,7 @@ Namespace Runtime.Internal.Object
         End Function
 
         Public Overrides Function ToString() As String
-            Return $"[{length}] vec<{type.ToString}>"
+            Return $"[{length}] vec<{m_type.ToString}>"
         End Function
 
         Public Shared Function asVector(Of T)(x As Object) As T()

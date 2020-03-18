@@ -50,9 +50,7 @@ Namespace Runtime.Internal.Object
     ''' <summary>
     ''' The R# pipeline
     ''' </summary>
-    Public Class pipeline
-
-        Public ReadOnly Property elementType As RType
+    Public Class pipeline : Inherits RsharpDataObject
 
         ReadOnly pipeline As IEnumerable
 

@@ -391,7 +391,8 @@
     <Compile Include="Runtime\Internal\internalInvokes\Linq\lambda.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\set.vb" />
     <Compile Include="Runtime\Internal\generic.vb" />
-    <Compile Include="Runtime\Internal\objects\pipeline.vb" />
+    <Compile Include="Runtime\System\RsharpDataObject.vb" />
+    <Compile Include="Runtime\Internal\objects\dataset\pipeline.vb" />
     <Compile Include="Runtime\Internal\objects\RConversion\RCType.vb" />
     <Compile Include="Runtime\Internal\objects\RConversion\makeObject.vb" />
     <Compile Include="Runtime\Internal\objects\RConversion\makeDataframe.vb" />
@@ -432,7 +433,7 @@
     <Compile Include="Runtime\Internal\internalInvokes\string.vb" />
     <Compile Include="Runtime\Internal\objects\RConversion\conversion.vb" />
     <Compile Include="Runtime\Internal\printer\classPrinter.vb" />
-    <Compile Include="Runtime\Internal\objects\vbObject.vb" />
+    <Compile Include="Runtime\Internal\objects\dataset\vbObject.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\utils.vb" />
     <Compile Include="Runtime\Internal\printer\printer.vb" />
     <Compile Include="Runtime\Interop\MethodInvoke.vb" />
@@ -454,9 +455,9 @@
     <Compile Include="Runtime\Environment.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\base.vb" />
     <Compile Include="Runtime\Internal\invoke.vb" />
-    <Compile Include="Runtime\Internal\objects\vector.vb" />
-    <Compile Include="Runtime\Internal\objects\dataframe.vb" />
-    <Compile Include="Runtime\Internal\objects\list.vb" />
+    <Compile Include="Runtime\Internal\objects\dataset\vector.vb" />
+    <Compile Include="Runtime\Internal\objects\dataset\dataframe.vb" />
+    <Compile Include="Runtime\Internal\objects\dataset\list.vb" />
     <Compile Include="Runtime\System\Symbol.vb" />
     <Compile Include="Runtime\System\TypeCode.vb" />
     <Compile Include="System\Package\PackageLoader.vb" />
