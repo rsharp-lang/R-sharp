@@ -109,23 +109,23 @@ Namespace Runtime.Interop
     <AttributeUsage(AttributeTargets.Method, AllowMultiple:=False, Inherited:=True)>
     Public Class RApiReturnAttribute : Inherits RInteropAttribute
 
-        Public ReadOnly Property returnType As Type
+        Public ReadOnly Property returnTypes As Type()
 
-        Sub New(type As Type)
-            returnType = type
+        Sub New(ParamArray type As Type())
+            returnTypes = type
         End Sub
 
         Public Overrides Function ToString() As String
-            Return $"fun() -> {returnType.Name}"
+            Return $"fun() -> {returnTypes.Select(Function(type) type.Name).JoinBy("|")}"
         End Function
 
-        Public Shared Function GetActualReturnType(api As MethodInfo) As Type
+        Public Shared Function GetActualReturnType(api As MethodInfo) As Type()
             Dim tag As RApiReturnAttribute = api.GetCustomAttribute(Of RApiReturnAttribute)
 
             If tag Is Nothing Then
-                Return api.ReturnType
+                Return {api.ReturnType}
             Else
-                Return tag.returnType
+                Return tag.returnTypes
             End If
         End Function
     End Class

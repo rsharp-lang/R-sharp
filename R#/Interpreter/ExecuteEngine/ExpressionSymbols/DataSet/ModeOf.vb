@@ -98,7 +98,8 @@ Namespace Interpreter.ExecuteEngine
                     Return DirectCast(value, RMethodInfo) _
                         .GetRawDeclares _
                         .DoCall(AddressOf RApiReturnAttribute.GetActualReturnType) _
-                        .DoCall(AddressOf RType.GetRSharpType)
+                        .Select(AddressOf RType.GetRSharpType) _
+                        .ToArray
                 Else
                     Return Message.InCompatibleType(GetType(RMethodInfo), value.GetType, envir)
                 End If

@@ -60,8 +60,15 @@ Module Program
 
     Private Function RunExpression(args As CommandLine) As Integer
         Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
-        Dim program As RProgram = RProgram.BuildProgram(args.cli)
-        Dim result As Object = REnv.TryCatch(Function() R.Run(program))
+        Dim [error] As String = Nothing
+        Dim program As RProgram = RProgram.BuildProgram(args.cli, [error]:=[error])
+        Dim result As Object
+
+        If Not [error] Is Nothing Then
+            result = REnv.Internal.debug.stop([error], R.globalEnvir)
+        Else
+            result = REnv.TryCatch(Function() R.Run(program))
+        End If
 
         Return Rscript.handleResult(result, R.globalEnvir, program)
     End Function
