@@ -448,7 +448,11 @@ Namespace Language.TokenIcer
 #If DEBUG Then
                     Throw New NotImplementedException(text)
 #Else
-                    Throw New SyntaxErrorException(text)
+                    ' Throw New SyntaxErrorException(text)
+                    Return New Token With {
+                        .name = TokenType.invalid,
+                        .text = text
+                    }
 #End If
             End Select
         End Function

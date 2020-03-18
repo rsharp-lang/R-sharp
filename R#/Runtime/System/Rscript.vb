@@ -81,6 +81,10 @@ Namespace Runtime.Components
         Private Sub New()
         End Sub
 
+        Public Function GetByLineNumber(line As Integer) As String
+            Return script.LineTokens.Skip(line - 1).FirstOrDefault
+        End Function
+
         ''' <summary>
         ''' Get language <see cref="Scanner"/> tokens
         ''' </summary>
