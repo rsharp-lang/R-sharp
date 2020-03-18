@@ -40,7 +40,7 @@ Module machineLearning
             If Not scattered Then
                 Return .GetXml.SaveTo(file)
             Else
-                Return .ScatteredStore(file.TrimSuffix)
+                Return .ScatteredStore(file)
             End If
         End With
     End Function
@@ -73,7 +73,7 @@ Module machineLearning
         End If
 
         Dim trainingHelper As New TrainingUtils(
-            model.Size.Width, hiddenSize,
+            model.Size.Width, REnv.asVector(Of Integer)(hiddenSize),
             model.OutputSize,
             learnRate,
             momentum,
