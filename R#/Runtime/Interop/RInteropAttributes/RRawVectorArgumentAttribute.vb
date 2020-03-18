@@ -116,7 +116,13 @@ Namespace Runtime.Interop
                 Case GetType(String)
                     Return [default]?.Split("|"c)
                 Case GetType(Double)
-                    Return [default]?.Split(","c).Select(AddressOf Val).ToArray
+                    Return [default]?.Split(","c) _
+                        .Select(AddressOf Val) _
+                        .ToArray
+                Case GetType(Integer)
+                    Return [default]?.Split(","c) _
+                        .Select(AddressOf Integer.Parse) _
+                        .ToArray
                 Case Else
                     Throw New NotImplementedException(schema.FullName)
             End Select

@@ -50,16 +50,16 @@ Imports Microsoft.VisualBasic.Math.Calculus.Dynamics.Data
 Imports Microsoft.VisualBasic.Math.Calculus.ODESolver
 Imports Microsoft.VisualBasic.Math.Distributions
 Imports Microsoft.VisualBasic.Math.Distributions.BinBox
+Imports Microsoft.VisualBasic.Math.LinearAlgebra
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports baseMath = Microsoft.VisualBasic.Math
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports stdVec = Microsoft.VisualBasic.Math.LinearAlgebra.Vector
-Imports baseMath = Microsoft.VisualBasic.Math
-Imports Microsoft.VisualBasic.Math.LinearAlgebra
 
 ''' <summary>
 ''' the R# math module
