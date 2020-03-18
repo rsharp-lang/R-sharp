@@ -60,11 +60,12 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 Imports stdVec = Microsoft.VisualBasic.Math.LinearAlgebra.Vector
 Imports baseMath = Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.LinearAlgebra
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 
 ''' <summary>
 ''' the R# math module
 ''' </summary>
-<Package("math")>
+<Package("math", Category:=APICategories.ResearchTools, Publisher:="xie.guigang@live.com")>
 Module math
 
     Sub New()
@@ -175,19 +176,25 @@ Module math
         Return result
     End Function
 
+    ''' <summary>
+    ''' Do fixed width cut bins
+    ''' </summary>
+    ''' <param name="data">A numeric vector data sequence</param>
+    ''' <param name="step">The width of the bin box.</param>
+    ''' <returns></returns>
     <ExportAPI("hist")>
-    Public Function Hist(data As Array, Optional step! = 1) As DataBinBox(Of Double)()
+    Public Function Hist(<RRawVectorArgument> data As Object, Optional step! = 1) As DataBinBox(Of Double)()
         Return DirectCast(REnv.asVector(Of Double)(data), Double()) _
             .Hist([step]) _
             .ToArray
     End Function
 
     ''' <summary>
-    ''' 
+    ''' do linear modelling
     ''' </summary>
     ''' <param name="formula"></param>
-    ''' <param name="data"></param>
-    ''' <param name="weights"></param>
+    ''' <param name="data">A dataframe for provides the data source for doing the linear modelling.</param>
+    ''' <param name="weights">A numeric vector for provides weight value for the points in the linear modelling processing.</param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("lm")>
@@ -196,8 +203,21 @@ Module math
                        Optional weights As Object = Nothing,
                        Optional env As Environment = Nothing) As Object
 
+        If Not base.isEmpty(weights) Then
+
+        End If
+
+        Throw New NotImplementedException
     End Function
 
+    ''' <summary>
+    ''' Evaluate cos similarity of two vector
+    ''' 
+    ''' the given vector x and y should be contains the elements in the same length.
+    ''' </summary>
+    ''' <param name="x">a numeric data sequence</param>
+    ''' <param name="y">another numeric data sequence</param>
+    ''' <returns></returns>
     <ExportAPI("ssm")>
     Public Function ssm(<RRawVectorArgument> x As Object, <RRawVectorArgument> y As Object) As Double
         Dim vx As Double() = DirectCast(REnv.asVector(Of Double)(x), Double())
