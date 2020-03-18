@@ -4,6 +4,7 @@ let dataset = "D:\biodeep\biodeepdb_v3\Rscript\metacluster\training.XML"
 :> read.ML_model
 ;
 
+print("checking of the ML dataset...");
 print(check.ML_model(dataset));
 
 dataset
