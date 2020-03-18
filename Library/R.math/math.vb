@@ -151,7 +151,7 @@ Module math
             ref.SetValue(REnv.getFirst(y0.getByName(name)), env)
             solve = Function() lambda(CDbl(ref.value))
             vector(++i) = New var(solve) With {
-                .name = name,
+                .Name = name,
                 .Value = REnv.getFirst(y0.getByName(.Name))
             }
         Next
