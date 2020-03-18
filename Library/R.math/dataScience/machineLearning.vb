@@ -8,6 +8,7 @@ Imports Microsoft.VisualBasic.MachineLearning.NeuralNetwork.Activations
 Imports Microsoft.VisualBasic.MachineLearning.NeuralNetwork.StoreProcedure
 Imports Microsoft.VisualBasic.MachineLearning.StoreProcedure
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -20,6 +21,28 @@ Module machineLearning
     <ExportAPI("read.ML_model")>
     Public Function readModelDataset(file As String) As StoreProcedure.DataSet
         Return file.LoadXml(Of StoreProcedure.DataSet)
+    End Function
+
+    <ExportAPI("write.ANN_network")>
+    Public Function writeANNNetwork(model As Object, file$, Optional scattered As Boolean = True, Optional env As Environment = Nothing) As Object
+        If model Is Nothing Then
+            Return False
+        ElseIf TypeOf model Is Network Then
+            model = StoreProcedure.NeuralNetwork.Snapshot(DirectCast(model, Network))
+        ElseIf Not TypeOf model Is NeuralNetwork Then
+            Return Internal.debug.stop({
+                $"invalid data type for save: {model.GetType.FullName}",
+                $"required: {GetType(NeuralNetwork).FullName}"
+            }, env)
+        End If
+
+        With DirectCast(model, NeuralNetwork)
+            If Not scattered Then
+                Return .GetXml.SaveTo(file)
+            Else
+                Return .ScatteredStore(file.TrimSuffix)
+            End If
+        End With
     End Function
 
     <ExportAPI("training.ANN")>
