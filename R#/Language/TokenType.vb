@@ -54,7 +54,12 @@ Namespace Language
     ''' Language syntax token types
     ''' </summary>
     Public Enum TokenType As Byte
+
+        ''' <summary>
+        ''' Syntax error
+        ''' </summary>
         invalid
+
         newLine
 
         comment

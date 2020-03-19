@@ -57,9 +57,7 @@ Module Rscript
         Dim requirePrintErr As Boolean = False
 
         If RProgram.isException(result, globalEnv, isDotNETException:=requirePrintErr) Then
-            If requirePrintErr Then
-                Call REnv.Internal.debug.PrintMessageInternal(result)
-            End If
+            Call REnv.Internal.debug.PrintMessageInternal(result)
 
             Return 500
         End If

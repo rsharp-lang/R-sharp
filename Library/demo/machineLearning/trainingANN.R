@@ -1,14 +1,25 @@
 imports "machineLearning" from "R.math";
 
-"D:\biodeep\biodeepdb_v3\Rscript\metacluster\training.XML"
+options(progress_bar = "disabled");
+
+let inputFile as string = ?"--data" || "D:\biodeep\biodeepdb_v3\Rscript\metacluster\training.XML";
+let output as string    = ?"--save" || `${dirname(inputFile)}/${basename(inputFile)}.ANN_trained/`;
+let dataset = inputFile
 :> read.ML_model
+;
+
+print("checking of the ML dataset...");
+print(check.ML_model(dataset));
+
+dataset
 :> training.ANN(
-	hiddenSize     = [200,300, 50, 10], 
+	hiddenSize     = [100, 300, 30, 10], 
 	learnRate      = 0.1, 
 	momentum       = 0.9, 
 	minErr         = 0.05, 
 	parallel       = TRUE,
-	outputSnapshot = TRUE
+	outputSnapshot = TRUE,
+	maxIterations  = 100
 )
-:> write.ANN_network("D:\biodeep\biodeepdb_v3\Rscript\metacluster\ANN")
+:> write.ANN_network(output)
 ;

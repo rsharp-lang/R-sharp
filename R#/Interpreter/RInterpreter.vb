@@ -291,10 +291,10 @@ Namespace Interpreter
             ' set last variable in current environment
             Call last.SetValue(result, globalEnvir)
 
-            If Program.isException(result) Then
-                Call VBDebugger.WaitOutput()
-                Call Internal.debug.PrintMessageInternal(message:=result)
-            End If
+            'If Program.isException(result) Then
+            '    Call VBDebugger.WaitOutput()
+            '    Call Internal.debug.PrintMessageInternal(message:=result)
+            'End If
 
             If globalEnvir.messages > 0 Then
                 Call VBDebugger.WaitOutput()

@@ -237,7 +237,7 @@
       <Name>47_dotnet_ms-vb_data.framework</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\DataMining\DataMining\DataMining.vbproj">
-      <Project>{1B42809B-603F-4CEA-A0DB-91276582B9CA}</Project>
+      <Project>{1b42809b-603f-4cea-a0db-91276582b9ca}</Project>
       <Name>DataMining</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\MachineLearning\MachineLearning\MachineLearning.vbproj">
