@@ -102,6 +102,33 @@ Module machineLearning
         End With
     End Function
 
+    <ExportAPI("open.debugger")>
+    <RApiReturn(GetType(ANNDebugger))>
+    Public Function openDebugger(ANN As Object, file$, Optional env As Environment = Nothing) As Object
+        Dim model As Network
+
+        If ANN Is Nothing Then
+            Return Internal.debug.stop("the ANN network model can not be nothing!", env)
+        ElseIf TypeOf ANN Is TrainingUtils Then
+            ANN = DirectCast(ANN, TrainingUtils).NeuronNetwork
+        End If
+
+        If Not TypeOf ANN Is Network Then
+            Return Internal.debug.stop({
+                $"unsupported object type: {ANN.GetType.FullName}!",
+                $"required: {GetType(Network).FullName}"
+            }, env)
+        Else
+            model = ANN
+        End If
+
+        Return New RDispose(
+            x:=New ANNDebugger(model),
+            final:=Sub(debugger)
+                       DirectCast(debugger, ANNDebugger).Save(file, model)
+                   End Sub)
+    End Function
+
     ''' <summary>
     ''' do ANN model training
     ''' </summary>

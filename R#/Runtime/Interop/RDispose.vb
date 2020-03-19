@@ -54,6 +54,13 @@ Namespace Runtime.Interop
 
         Friend ReadOnly final As Action(Of Object)
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <param name="final">
+        ''' this finallize method is running on the input <paramref name="x"/> object.
+        ''' </param>
         Sub New(x As Object, final As Action(Of Object))
             Call MyBase.New(x, invisible:=False)
 
