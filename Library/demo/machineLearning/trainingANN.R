@@ -1,5 +1,7 @@
 imports "machineLearning" from "R.math";
 
+options(progress_bar = "disabled");
+
 let inputFile as string = ?"--data" || "D:\biodeep\biodeepdb_v3\Rscript\metacluster\training.XML";
 let output as string    = ?"--save" || `${dirname(inputFile)}/${basename(inputFile)}.ANN_trained/`;
 let dataset = inputFile
