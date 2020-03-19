@@ -62,16 +62,18 @@ Module Rscript
             Return 500
         End If
 
-        If program.EndWithFuncCalls(echo.Objects) Then
-            ' do nothing
-            Dim funcName As Literal = DirectCast(program.Last, FunctionInvoke).funcName
+        If Not program Is Nothing Then
+            If program.EndWithFuncCalls(echo.Objects) Then
+                ' do nothing
+                Dim funcName As Literal = DirectCast(program.Last, FunctionInvoke).funcName
 
-            If funcName = "cat" Then
-                Call Console.WriteLine()
-            End If
-        ElseIf Not program.isValueAssign AndAlso Not program.isImports Then
-            If Not isInvisible(result) Then
-                Call base.print(result, globalEnv)
+                If funcName = "cat" Then
+                    Call Console.WriteLine()
+                End If
+            ElseIf Not program.isValueAssign AndAlso Not program.isImports Then
+                If Not isInvisible(result) Then
+                    Call base.print(result, globalEnv)
+                End If
             End If
         End If
 
