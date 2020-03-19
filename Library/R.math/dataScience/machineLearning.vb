@@ -1,16 +1,21 @@
 ﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.DataMining.ComponentModel.Normalizer
 Imports Microsoft.VisualBasic.Language.Default
 Imports Microsoft.VisualBasic.MachineLearning
+Imports Microsoft.VisualBasic.MachineLearning.Debugger
 Imports Microsoft.VisualBasic.MachineLearning.NeuralNetwork
 Imports Microsoft.VisualBasic.MachineLearning.NeuralNetwork.Activations
 Imports Microsoft.VisualBasic.MachineLearning.NeuralNetwork.StoreProcedure
 Imports Microsoft.VisualBasic.MachineLearning.StoreProcedure
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports DataTable = Microsoft.VisualBasic.Data.csv.IO.DataSet
+Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
@@ -18,6 +23,34 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 ''' </summary>
 <Package("machineLearning", Category:=APICategories.ResearchTools, Publisher:="xie.guigang@gcmodeller.org")>
 Module machineLearning
+
+    Sub New()
+        REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(StoreProcedure.DataSet), AddressOf Tabular)
+    End Sub
+
+    Public Function Tabular(x As StoreProcedure.DataSet, args As list, env As Environment) As Rdataframe
+        Dim markOuput As Boolean = args.getValue(Of Boolean)("mark.output", env)
+        Dim table As DataTable() = x.ToTable(markOuput).ToArray
+        Dim a As Array
+        Dim dataframe As New Rdataframe With {
+            .rownames = table.Keys,
+            .columns = New Dictionary(Of String, Array) From {
+                {NameOf(DataTable.ID), .rownames}
+            }
+        }
+
+        For Each col As String In table.PropertyNames
+            a = table.Vector(col)
+            dataframe.columns.Add(col, a)
+        Next
+
+        Return dataframe
+    End Function
+
+    <ExportAPI("as.tabular")>
+    Public Function Tabular(x As StoreProcedure.DataSet, Optional markOuput As Boolean = True) As DataTable()
+        Return x.ToTable(markOuput).ToArray
+    End Function
 
     ''' <summary>
     ''' read the dataset for training the machine learning model
@@ -36,7 +69,7 @@ Module machineLearning
     ''' <returns></returns>
     <ExportAPI("check.ML_model")>
     Public Function checkModelDataset(dataset As StoreProcedure.DataSet) As LogEntry()
-        Return StoreProcedure.Diagnostics.CheckDataSet(dataset).ToArray
+        Return Diagnostics.CheckDataSet(dataset).ToArray
     End Function
 
     ''' <summary>
