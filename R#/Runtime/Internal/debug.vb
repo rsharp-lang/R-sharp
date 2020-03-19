@@ -135,6 +135,8 @@ Namespace Runtime.Internal
                 Call dev.WriteLine(debug.PrintRStackTrace(message.environmentStack))
             End If
 
+            Call dev.Flush()
+
             Console.ForegroundColor = backup
 
             Return Nothing
