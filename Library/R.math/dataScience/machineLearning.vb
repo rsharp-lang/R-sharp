@@ -144,6 +144,7 @@ Module machineLearning
                                    Optional outputSnapshot As Boolean = False) As Object
 
         Dim w0 As Func(Of Double)
+        Dim sizeVec As Integer() = REnv.asVector(Of Integer)(hiddenSize)
 
         If weight0 Is Nothing OrElse Scripting.ToString(REnv.getFirst(weight0)) = "random" Then
             w0 = Helpers.RandomWeightInitializer
@@ -152,7 +153,7 @@ Module machineLearning
         End If
 
         Dim trainingHelper As New TrainingUtils(
-            trainSet.Size.Width, REnv.asVector(Of Integer)(hiddenSize),
+            trainSet.Size.Width, sizeVec,
             trainSet.OutputSize,
             learnRate,
             momentum,
