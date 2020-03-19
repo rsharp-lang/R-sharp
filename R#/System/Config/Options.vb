@@ -55,7 +55,9 @@ Imports SMRUCC.Rsharp.System.Package
 Namespace System.Configuration
 
     ''' <summary>
-    ''' Data reader of <see cref="ConfigFile"/>
+    ''' Data reader of <see cref="ConfigFile"/>. The operations in this module will modify 
+    ''' the environment configuration of the R# scripting engine and it also controls 
+    ''' some of the behaviour of the sciBASIC.NET framework.
     ''' </summary>
     Public Class Options : Implements IFileReference, IDisposable
 
@@ -133,6 +135,10 @@ Namespace System.Configuration
                               Function(cfg)
                                   Return cfg.text
                               End Function)
+
+            For Each config In configValues
+                Call App.JoinVariable(config.Key, config.Value)
+            Next
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
@@ -166,6 +172,10 @@ Namespace System.Configuration
         ''' <param name="opt$"></param>
         ''' <param name="value$"></param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' This method will also join/update a variable into the 
+        ''' sciBASIC.NET framework runtime.
+        ''' </remarks>
         Public Function setOption(opt$, value$) As Object
             If configValues.ContainsKey(opt) Then
                 configValues(opt) = value
@@ -176,6 +186,7 @@ Namespace System.Configuration
             End If
 
             Call flush()
+            Call App.JoinVariable(opt, value)
 
             Return value
         End Function

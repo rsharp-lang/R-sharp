@@ -16,7 +16,8 @@ dataset
 	momentum       = 0.9, 
 	minErr         = 0.05, 
 	parallel       = TRUE,
-	outputSnapshot = TRUE
+	outputSnapshot = TRUE,
+	maxIterations  = 100
 )
 :> write.ANN_network(output)
 ;
