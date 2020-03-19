@@ -120,8 +120,8 @@ Module machineLearning
         End If
 
         Dim trainingHelper As New TrainingUtils(
-            model.Size.Width, sizeVec,
-            model.OutputSize,
+            trainSet.Size.Width, sizeVec,
+            trainSet.OutputSize,
             learnRate,
             momentum,
             active.CreateActivations,

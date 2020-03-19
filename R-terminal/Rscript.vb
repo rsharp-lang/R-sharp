@@ -77,8 +77,9 @@ Module Rscript
                     Call base.print(result, globalEnv)
                 End If
             End If
+        End If
 
-            Return 0
+        Return 0
     End Function
 
     Private Function isInvisible(result As Object) As Boolean
