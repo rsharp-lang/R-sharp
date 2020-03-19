@@ -269,10 +269,16 @@ printSingleElement:
 
         <Extension>
         Friend Sub printContentArray(contents$(), deli$, indentPrefix$)
-            Dim maxColumns As Integer = Console.WindowWidth - 1
+            Dim maxColumns As Integer = If(App.IsConsoleApp, Console.WindowWidth, Integer.MaxValue) - 1
             ' maxsize / average size
             Dim unitWidth As Integer = contents.Max(Function(c) c.Length) + 1
             Dim divSize As Integer = maxColumns \ unitWidth - 3
+
+            ' 20200319 fix the bugs for io redirect on the linux platform
+            If divSize >= SByte.MaxValue Then
+                divSize = SByte.MaxValue
+            End If
+
             Dim i As i32 = 1 - divSize
             Dim cell As String
 

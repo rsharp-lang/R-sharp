@@ -168,7 +168,7 @@ Namespace Runtime.Interop
                 .ToArray
         End Function
 
-        Public Function Invoke(parameters As Object()) As Object
+        Public Function Invoke(parameters As Object(), env As Environment) As Object
             Dim result As Object
 
             For Each arg In parameters
@@ -177,11 +177,15 @@ Namespace Runtime.Interop
                 End If
             Next
 
-            If api Like GetType(MethodInvoke) Then
-                result = api.TryCast(Of MethodInvoke).Invoke(parameters)
-            Else
-                result = api.VB.Method.Invoke(Nothing, parameters.ToArray)
-            End If
+            Try
+                If api Like GetType(MethodInvoke) Then
+                    result = api.TryCast(Of MethodInvoke).Invoke(parameters)
+                Else
+                    result = api.VB.Method.Invoke(Nothing, parameters.ToArray)
+                End If
+            Catch ex As Exception
+                Return Internal.debug.stop(ex, env)
+            End Try
 
             If invisible Then
                 Return New invisible With {
@@ -220,7 +224,7 @@ Namespace Runtime.Interop
                         .ToArray
                 End If
 
-                Return Invoke(parameters)
+                Return Invoke(parameters, env)
             End Using
         End Function
 
