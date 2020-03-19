@@ -1,34 +1,85 @@
 ﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.DataMining.ComponentModel.Normalizer
 Imports Microsoft.VisualBasic.Language.Default
 Imports Microsoft.VisualBasic.MachineLearning
+Imports Microsoft.VisualBasic.MachineLearning.Debugger
 Imports Microsoft.VisualBasic.MachineLearning.NeuralNetwork
 Imports Microsoft.VisualBasic.MachineLearning.NeuralNetwork.Activations
 Imports Microsoft.VisualBasic.MachineLearning.NeuralNetwork.StoreProcedure
 Imports Microsoft.VisualBasic.MachineLearning.StoreProcedure
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports DataTable = Microsoft.VisualBasic.Data.csv.IO.DataSet
+Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
 ''' R# machine learning library
 ''' </summary>
-<Package("machineLearning")>
+<Package("machineLearning", Category:=APICategories.ResearchTools, Publisher:="xie.guigang@gcmodeller.org")>
 Module machineLearning
 
+    Sub New()
+        REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(StoreProcedure.DataSet), AddressOf Tabular)
+    End Sub
+
+    Public Function Tabular(x As StoreProcedure.DataSet, args As list, env As Environment) As Rdataframe
+        Dim markOuput As Boolean = args.getValue(Of Boolean)("mark.output", env)
+        Dim table As DataTable() = x.ToTable(markOuput).ToArray
+        Dim a As Array
+        Dim dataframe As New Rdataframe With {
+            .rownames = table.Keys,
+            .columns = New Dictionary(Of String, Array) From {
+                {NameOf(DataTable.ID), .rownames}
+            }
+        }
+
+        For Each col As String In table.PropertyNames
+            a = table.Vector(col)
+            dataframe.columns.Add(col, a)
+        Next
+
+        Return dataframe
+    End Function
+
+    <ExportAPI("as.tabular")>
+    Public Function Tabular(x As StoreProcedure.DataSet, Optional markOuput As Boolean = True) As DataTable()
+        Return x.ToTable(markOuput).ToArray
+    End Function
+
+    ''' <summary>
+    ''' read the dataset for training the machine learning model
+    ''' </summary>
+    ''' <param name="file"></param>
+    ''' <returns></returns>
     <ExportAPI("read.ML_model")>
     Public Function readModelDataset(file As String) As StoreProcedure.DataSet
         Return file.LoadXml(Of StoreProcedure.DataSet)
     End Function
 
+    ''' <summary>
+    ''' check the errors that may exists in the dataset file.
+    ''' </summary>
+    ''' <param name="dataset"></param>
+    ''' <returns></returns>
     <ExportAPI("check.ML_model")>
     Public Function checkModelDataset(dataset As StoreProcedure.DataSet) As LogEntry()
-        Return StoreProcedure.Diagnostics.CheckDataSet(dataset).ToArray
+        Return Diagnostics.CheckDataSet(dataset).ToArray
     End Function
 
+    ''' <summary>
+    ''' save a trained ANN network model into a given xml files.
+    ''' </summary>
+    ''' <param name="model"></param>
+    ''' <param name="file$"></param>
+    ''' <param name="scattered"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("write.ANN_network")>
     Public Function writeANNNetwork(model As Object, file$, Optional scattered As Boolean = True, Optional env As Environment = Nothing) As Object
         If model Is Nothing Then
@@ -51,9 +102,58 @@ Module machineLearning
         End With
     End Function
 
+    <ExportAPI("open.debugger")>
+    <RApiReturn(GetType(ANNDebugger))>
+    Public Function openDebugger(ANN As Object, file$, Optional env As Environment = Nothing) As Object
+        Dim model As Network
+
+        If ANN Is Nothing Then
+            Return Internal.debug.stop("the ANN network model can not be nothing!", env)
+        ElseIf TypeOf ANN Is TrainingUtils Then
+            ANN = DirectCast(ANN, TrainingUtils).NeuronNetwork
+        End If
+
+        If Not TypeOf ANN Is Network Then
+            Return Internal.debug.stop({
+                $"unsupported object type: {ANN.GetType.FullName}!",
+                $"required: {GetType(Network).FullName}"
+            }, env)
+        Else
+            model = ANN
+        End If
+
+        Return New RDispose(
+            x:=New ANNDebugger(model),
+            final:=Sub(debugger)
+                       DirectCast(debugger, ANNDebugger).Save(file, model)
+                   End Sub)
+    End Function
+
+    ''' <summary>
+    ''' do ANN model training
+    ''' </summary>
+    ''' <param name="trainSet">A dataset object that used for ANN model training.</param>
+    ''' <param name="hiddenSize">An integer vector for indicates the network size of the hidden layers in the ANN network.</param>
+    ''' <param name="learnRate"></param>
+    ''' <param name="momentum"></param>
+    ''' <param name="weight0">weight method for initialize the ANN network model.</param>
+    ''' <param name="active"></param>
+    ''' <param name="normalMethod"></param>
+    ''' <param name="learnRateDecay"></param>
+    ''' <param name="truncate"></param>
+    ''' <param name="selectiveMode"></param>
+    ''' <param name="maxIterations"></param>
+    ''' <param name="minErr"></param>
+    ''' <param name="parallel"></param>
+    ''' <param name="outputSnapshot">
+    ''' this parameter will config the output object type. this function is returns the raw ANN model 
+    ''' by default, and you can change the output type to file model by set this parameter value to 
+    ''' ``TRUE``. 
+    ''' </param>
+    ''' <returns></returns>
     <ExportAPI("training.ANN")>
     <RApiReturn(GetType(StoreProcedure.NeuralNetwork), GetType(Network))>
-    Public Function runANNTraining(model As StoreProcedure.DataSet,
+    Public Function runANNTraining(trainSet As StoreProcedure.DataSet,
                                    <RRawVectorArgument(GetType(Integer))>
                                    Optional hiddenSize As Object = "25,100,30",
                                    Optional learnRate As Double = 0.1,
@@ -71,6 +171,7 @@ Module machineLearning
                                    Optional outputSnapshot As Boolean = False) As Object
 
         Dim w0 As Func(Of Double)
+        Dim sizeVec As Integer() = REnv.asVector(Of Integer)(hiddenSize)
 
         If weight0 Is Nothing OrElse Scripting.ToString(REnv.getFirst(weight0)) = "random" Then
             w0 = Helpers.RandomWeightInitializer
@@ -79,8 +180,8 @@ Module machineLearning
         End If
 
         Dim trainingHelper As New TrainingUtils(
-            model.Size.Width, REnv.asVector(Of Integer)(hiddenSize),
-            model.OutputSize,
+            trainSet.Size.Width, sizeVec,
+            trainSet.OutputSize,
             learnRate,
             momentum,
             active.CreateActivations,
@@ -90,7 +191,7 @@ Module machineLearning
         trainingHelper.NeuronNetwork.LearnRateDecay = learnRateDecay
         trainingHelper.Truncate = truncate
 
-        For Each sample As Sample In model.PopulateNormalizedSamples(method:=normalMethod)
+        For Each sample As Sample In trainSet.PopulateNormalizedSamples(method:=normalMethod)
             Call trainingHelper.Add(sample.vector, sample.target)
         Next
 

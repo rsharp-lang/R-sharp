@@ -95,10 +95,6 @@ Module Program
 
         Dim result As Object = R.Source(filepath)
 
-        If Not result Is Nothing AndAlso result.GetType Is GetType(Message) Then
-            Return DirectCast(result, Message).level
-        Else
-            Return 0
-        End If
+        Return Rscript.handleResult(result, R.globalEnvir, Nothing)
     End Function
 End Module
