@@ -216,9 +216,9 @@ Namespace Interpreter
             Dim symbol = globalEnvir.FindSymbol(funcName)
 
             If symbol Is Nothing Then
-                Throw New EntryPointNotFoundException($"No object named '{funcName}' could be found in global environment!")
+                Return Internal.invoke.stop(New EntryPointNotFoundException($"No object named '{funcName}' could be found in global environment!"), globalEnvir)
             ElseIf symbol.typeCode <> TypeCodes.closure OrElse Not symbol.typeof.ImplementInterface(GetType(RFunction)) Then
-                Throw New InvalidProgramException($"Object '{funcName}' is not a function!")
+                Return Internal.invoke.stop(New InvalidProgramException($"Object '{funcName}' is not a function!"), globalEnvir)
             End If
 
             Return DirectCast(symbol.value, RFunction).Invoke(globalEnvir, args)
