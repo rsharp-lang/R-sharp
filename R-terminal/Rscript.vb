@@ -1,41 +1,41 @@
 ﻿#Region "Microsoft.VisualBasic::6a5e6e08c174a31945b995dfdffc4627, R-terminal\Rscript.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module Rscript
-    ' 
-    '     Function: handleResult, isImports, isInvisible, isValueAssign
-    ' 
-    ' /********************************************************************************/
+' Module Rscript
+' 
+'     Function: handleResult, isImports, isInvisible, isValueAssign
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -62,22 +62,23 @@ Module Rscript
             Return 500
         End If
 
-        If program.EndWithFuncCalls(echo.Objects) Then
-            ' do nothing
-            Dim funcName As Literal = DirectCast(program.Last, FunctionInvoke).funcName
+        If Not program Is Nothing Then
+            If program.EndWithFuncCalls(echo.Objects) Then
+                ' do nothing
+                Dim funcName As Literal = DirectCast(program.Last, FunctionInvoke).funcName
 
-            If funcName = "cat" Then
-                Call Console.WriteLine()
+                If funcName = "cat" Then
+                    Call Console.WriteLine()
+                End If
+            ElseIf program.Count = 0 Then
+                ' do nothing 
+            ElseIf Not program.isValueAssign AndAlso Not program.isImports Then
+                If Not isInvisible(result) Then
+                    Call base.print(result, globalEnv)
+                End If
             End If
-        ElseIf program.Count = 0 Then
-            ' do nothing 
-        ElseIf Not program.isValueAssign AndAlso Not program.isImports Then
-            If Not isInvisible(result) Then
-                Call base.print(result, globalEnv)
-            End If
-        End If
 
-        Return 0
+            Return 0
     End Function
 
     Private Function isInvisible(result As Object) As Boolean

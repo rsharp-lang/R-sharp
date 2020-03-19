@@ -16,19 +16,37 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 ''' <summary>
 ''' R# machine learning library
 ''' </summary>
-<Package("machineLearning")>
+<Package("machineLearning", Category:=APICategories.ResearchTools, Publisher:="xie.guigang@gcmodeller.org")>
 Module machineLearning
 
+    ''' <summary>
+    ''' read the dataset for training the machine learning model
+    ''' </summary>
+    ''' <param name="file"></param>
+    ''' <returns></returns>
     <ExportAPI("read.ML_model")>
     Public Function readModelDataset(file As String) As StoreProcedure.DataSet
         Return file.LoadXml(Of StoreProcedure.DataSet)
     End Function
 
+    ''' <summary>
+    ''' check the errors that may exists in the dataset file.
+    ''' </summary>
+    ''' <param name="dataset"></param>
+    ''' <returns></returns>
     <ExportAPI("check.ML_model")>
     Public Function checkModelDataset(dataset As StoreProcedure.DataSet) As LogEntry()
         Return StoreProcedure.Diagnostics.CheckDataSet(dataset).ToArray
     End Function
 
+    ''' <summary>
+    ''' save a trained ANN network model into a given xml files.
+    ''' </summary>
+    ''' <param name="model"></param>
+    ''' <param name="file$"></param>
+    ''' <param name="scattered"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("write.ANN_network")>
     Public Function writeANNNetwork(model As Object, file$, Optional scattered As Boolean = True, Optional env As Environment = Nothing) As Object
         If model Is Nothing Then
@@ -51,9 +69,31 @@ Module machineLearning
         End With
     End Function
 
+    ''' <summary>
+    ''' do ANN model training
+    ''' </summary>
+    ''' <param name="trainSet">A dataset object that used for ANN model training.</param>
+    ''' <param name="hiddenSize">An integer vector for indicates the network size of the hidden layers in the ANN network.</param>
+    ''' <param name="learnRate"></param>
+    ''' <param name="momentum"></param>
+    ''' <param name="weight0">weight method for initialize the ANN network model.</param>
+    ''' <param name="active"></param>
+    ''' <param name="normalMethod"></param>
+    ''' <param name="learnRateDecay"></param>
+    ''' <param name="truncate"></param>
+    ''' <param name="selectiveMode"></param>
+    ''' <param name="maxIterations"></param>
+    ''' <param name="minErr"></param>
+    ''' <param name="parallel"></param>
+    ''' <param name="outputSnapshot">
+    ''' this parameter will config the output object type. this function is returns the raw ANN model 
+    ''' by default, and you can change the output type to file model by set this parameter value to 
+    ''' ``TRUE``. 
+    ''' </param>
+    ''' <returns></returns>
     <ExportAPI("training.ANN")>
     <RApiReturn(GetType(StoreProcedure.NeuralNetwork), GetType(Network))>
-    Public Function runANNTraining(model As StoreProcedure.DataSet,
+    Public Function runANNTraining(trainSet As StoreProcedure.DataSet,
                                    <RRawVectorArgument(GetType(Integer))>
                                    Optional hiddenSize As Object = "25,100,30",
                                    Optional learnRate As Double = 0.1,
@@ -91,7 +131,7 @@ Module machineLearning
         trainingHelper.NeuronNetwork.LearnRateDecay = learnRateDecay
         trainingHelper.Truncate = truncate
 
-        For Each sample As Sample In model.PopulateNormalizedSamples(method:=normalMethod)
+        For Each sample As Sample In trainSet.PopulateNormalizedSamples(method:=normalMethod)
             Call trainingHelper.Add(sample.vector, sample.target)
         Next
 
