@@ -69,6 +69,8 @@ Module Rscript
             If funcName = "cat" Then
                 Call Console.WriteLine()
             End If
+        ElseIf program.Count = 0 Then
+            ' do nothing 
         ElseIf Not program.isValueAssign AndAlso Not program.isImports Then
             If Not isInvisible(result) Then
                 Call base.print(result, globalEnv)
