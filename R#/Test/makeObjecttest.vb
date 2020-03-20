@@ -11,6 +11,7 @@ Module makeObjecttest
     Sub Main()
         Call R.LoadLibrary(GetType(makeObjecttest))
 
+        Call R.Print("tuple")
         Call R.Evaluate("tuple(list(a=1,b= '99999', c=TRUE,d = [599,3.3,9987.01]))")
 
         Pause()
