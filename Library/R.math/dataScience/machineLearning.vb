@@ -129,6 +129,41 @@ Module machineLearning
                    End Sub)
     End Function
 
+    <ExportAPI("ANN.training_model")>
+    Public Function CreateANNTrainer(inputSize%, outputSize%,
+                                     <RRawVectorArgument(GetType(Integer))>
+                                     Optional hiddenSize As Object = "25,100,30",
+                                     Optional learnRate As Double = 0.1,
+                                     Optional momentum As Double = 0.9,
+                                     Optional active As activation = Nothing,
+                                     Optional weight0 As Object = "random",
+                                     Optional learnRateDecay As Double = 0.0000000001,
+                                     Optional truncate As Double = -1,
+                                     Optional selectiveMode As Boolean = False) As TrainingUtils
+        Dim w0 As Func(Of Double)
+        Dim sizeVec As Integer() = REnv.asVector(Of Integer)(hiddenSize)
+
+        If weight0 Is Nothing OrElse Scripting.ToString(REnv.getFirst(weight0)) = "random" Then
+            w0 = Helpers.RandomWeightInitializer
+        Else
+            w0 = Helpers.UnifyWeightInitializer(REnv.asVector(Of Double)(weight0).GetValue(Scan0))
+        End If
+
+        Dim trainingHelper As New TrainingUtils(
+            inputSize, sizeVec,
+            outputSize,
+            learnRate,
+            momentum,
+            active.CreateActivations,
+            weightInit:=w0
+        ) With {.Selective = selectiveMode}
+
+        trainingHelper.NeuronNetwork.LearnRateDecay = learnRateDecay
+        trainingHelper.Truncate = truncate
+
+        Return trainingHelper
+    End Function
+
     ''' <summary>
     ''' do ANN model training
     ''' </summary>
@@ -170,26 +205,18 @@ Module machineLearning
                                    Optional parallel As Boolean = True,
                                    Optional outputSnapshot As Boolean = False) As Object
 
-        Dim w0 As Func(Of Double)
-        Dim sizeVec As Integer() = REnv.asVector(Of Integer)(hiddenSize)
-
-        If weight0 Is Nothing OrElse Scripting.ToString(REnv.getFirst(weight0)) = "random" Then
-            w0 = Helpers.RandomWeightInitializer
-        Else
-            w0 = Helpers.UnifyWeightInitializer(REnv.asVector(Of Double)(weight0).GetValue(Scan0))
-        End If
-
-        Dim trainingHelper As New TrainingUtils(
-            trainSet.Size.Width, sizeVec,
-            trainSet.OutputSize,
-            learnRate,
-            momentum,
-            active.CreateActivations,
-            weightInit:=w0
-        ) With {.Selective = selectiveMode}
-
-        trainingHelper.NeuronNetwork.LearnRateDecay = learnRateDecay
-        trainingHelper.Truncate = truncate
+        Dim trainingHelper As TrainingUtils = CreateANNTrainer(
+            inputSize:=trainSet.Size.Width,
+            outputSize:=trainSet.OutputSize,
+            hiddenSize:=hiddenSize,
+            learnRate:=learnRate,
+            momentum:=momentum,
+            weight0:=weight0,
+            learnRateDecay:=learnRateDecay,
+            truncate:=truncate,
+            selectiveMode:=selectiveMode,
+            active:=active
+        )
 
         For Each sample As Sample In trainSet.PopulateNormalizedSamples(method:=normalMethod)
             Call trainingHelper.Add(sample.vector, sample.target)
