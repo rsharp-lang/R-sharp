@@ -6,7 +6,7 @@ Imports SMRUCC.Rsharp.Interpreter
 <Package("makeObject")>
 Module makeObjecttest
 
-    Dim R As New RInterpreter With {.debug = False}
+    Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
         Call R.LoadLibrary(GetType(makeObjecttest))
