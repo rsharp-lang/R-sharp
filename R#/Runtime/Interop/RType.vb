@@ -188,6 +188,8 @@ Namespace Runtime.Interop
                 Return $"list[{GetRSharpType(raw.GenericTypeArguments(1)).ToString}]"
             ElseIf raw.IsEnum Then
                 Return $"<integer> {raw.Name}"
+            ElseIf raw.IsInheritsFrom(GetType(ValueTuple), strict:=False) Then
+                Return $"({raw.GenericTypeArguments.Select(AddressOf GetRSharpType).JoinBy(", ")})"
             Else
                 Return $"<{mode.Description}> {raw.Name}"
             End If

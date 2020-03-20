@@ -53,6 +53,8 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Namespace Runtime.Components.Interface
 
     ''' <summary>
+    ''' the abstract model of these:
+    ''' 
     ''' 1. <see cref="DeclareLambdaFunction"/>
     ''' 2. <see cref="DeclareNewFunction"/>
     ''' 3. <see cref="RMethodInfo"/>
