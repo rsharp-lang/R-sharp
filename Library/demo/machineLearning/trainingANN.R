@@ -13,7 +13,7 @@ print(check.ML_model(dataset));
 
 dataset
 :> training.ANN(
-	hiddenSize     = [300, 500, 250, 100], 
+	hiddenSize     = [1000, 800, 250, 100], 
 	learnRate      = 0.125, 
 	momentum       = 0.9, 
 	minErr         = 0.05, 
