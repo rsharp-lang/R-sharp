@@ -326,10 +326,24 @@ Namespace Runtime.Internal.Invokes
             Return strings.JoinBy(deli)
         End Function
 
-        <ExportAPI("string.replace")>
-        Friend Function replace(subj$(), search$,
-                                Optional replaceAs$ = "",
-                                Optional regexp As Boolean = False) As Object
+        ''' <summary>
+        ''' Pattern Matching and Replacement
+        ''' </summary>
+        ''' <param name="subj$"></param>
+        ''' <param name="search$"></param>
+        ''' <param name="replaceAs$"></param>
+        ''' <param name="regexp"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("gsub")>
+        Friend Function str_replace(subj$(), search$,
+                                    Optional replaceAs$ = "",
+                                    Optional regexp As Boolean = False,
+                                    Optional env As Environment = Nothing) As Object
+            If search Is Nothing Then
+                Return Internal.debug.stop("the search pattern can not be nothing!", env)
+            End If
+
             If regexp Then
                 Return subj.Select(Function(s) s.StringReplace(search, replaceAs)).ToArray
             Else

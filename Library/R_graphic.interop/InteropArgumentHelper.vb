@@ -1,41 +1,41 @@
 ﻿#Region "Microsoft.VisualBasic::46d00760d10ad5246979ca71e77e156d, Library\R_graphic.interop\InteropArgumentHelper.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module InteropArgumentHelper
-    ' 
-    '     Function: getColor, getPadding, getSize, getVector3D
-    ' 
-    ' /********************************************************************************/
+' Module InteropArgumentHelper
+' 
+'     Function: getColor, getPadding, getSize, getVector3D
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -48,6 +48,26 @@ Imports Microsoft.VisualBasic.Imaging.Drawing3D
 ''' R# graphics argument scripting helper
 ''' </summary>
 Public Module InteropArgumentHelper
+
+    Public Function getVector2D(obj As Object) As PointF
+        If obj Is Nothing Then
+            Return New PointF
+        ElseIf TypeOf obj Is PointF Then
+            Return DirectCast(obj, PointF)
+        ElseIf TypeOf obj Is Point Then
+            Return DirectCast(obj, Point).PointF
+        ElseIf TypeOf obj Is Double() Then
+            With DirectCast(obj, Double())
+                If .Length >= 2 Then
+                    Return New PointF(.GetValue(0), .GetValue(1))
+                Else
+                    Return Nothing
+                End If
+            End With
+        End If
+
+        Return Nothing
+    End Function
 
     Public Function getVector3D(obj As Object) As Point3D
         If obj Is Nothing Then

@@ -12,11 +12,19 @@ for(xlab in colnames(dataTbl)) {
 			let y <- as.numeric(dataTbl[, ylab]);
 			let main as string = `${xlab} ~ ${ylab}`;
 			let line <- serial(x,y, main, color = "blue");
-			let save.png as string <- `${dirname(data)}/${basename(data)}/${main :> replace($"(\\|/)", "_")}.png`;
+			let save.png as string <- `${dirname(data)}/${basename(data)}/${main :> gsub("(\\|/)", "_", regexp =TRUE)}.png`;
 			
 			print(save.png);
 			
-			plot(line) :> save.graphics(file = save.png);
+			plot(line, 
+				 padding = "padding: 250px 125px 200px 250px;",
+				 x.lab   = xlab,
+				 y.lab   = ylab,
+				 legend.anchor = [1900.0, 1450.0],
+				 legendBgFill = "white"
+			) 
+			:> save.graphics(file = save.png)
+			;
 		}
 	}
 }

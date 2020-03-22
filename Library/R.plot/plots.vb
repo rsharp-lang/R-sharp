@@ -48,6 +48,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.Bootstrapping
 Imports Microsoft.VisualBasic.Data.ChartPlots
+Imports Scatter2D = Microsoft.VisualBasic.Data.ChartPlots.Scatter
 Imports Microsoft.VisualBasic.Data.ChartPlots.BarPlot
 Imports Microsoft.VisualBasic.Data.ChartPlots.BarPlot.Data
 Imports Microsoft.VisualBasic.Data.ChartPlots.BarPlot.Histogram
@@ -195,13 +196,16 @@ Module plots
         End If
 
         Dim serials As SerialData() = DirectCast(data, SerialData())
-        Dim size As Size = InteropArgumentHelper.getSize(args!size).SizeParser
+        Dim size As String = InteropArgumentHelper.getSize(args!size)
         Dim padding = InteropArgumentHelper.getPadding(args!padding)
 
-        Return serials.Plot(
+        Return Scatter2D.Plot(
+            c:=serials,
             size:=size, padding:=padding,
-            xlabel:=args("x.lab"),
-            ylabel:=args("y.lab")
+            Xlabel:=getFirst(REnv.asVector(Of String)(args("x.lab"))),
+            Ylabel:=getFirst(REnv.asVector(Of String)(args("y.lab"))),
+            drawLine:=False,' getFirst(asLogical(args!line))
+            legendBgFill:=InteropArgumentHelper.getColor(args!legendBgFill, Nothing)
         )
     End Function
 
