@@ -263,9 +263,10 @@ Module plots
                                 Optional size$ = Canvas.Resolution2K.Size,
                                 Optional margin$ = Canvas.Resolution2K.PaddingWithTopTitle,
                                 Optional bg$ = "white",
-                                Optional colorset$ = DesignerTerms.TSFShellColors,
-                                Optional Ylabel$ = "y axis",
+                                Optional colorSet$ = DesignerTerms.TSFShellColors,
+                                Optional ylab$ = "y axis",
                                 Optional title$ = "Volin Plot",
+                                Optional labelAngle As Double = -45,
                                 Optional env As Environment = Nothing) As Object
 
         If dataset Is Nothing Then
@@ -280,9 +281,10 @@ Module plots
                 size:=size,
                 margin:=margin,
                 bg:=bg,
-                colorset:=colorset,
-                Ylabel:=Ylabel,
-                title:=title
+                colorset:=colorSet,
+                Ylabel:=ylab,
+                title:=title,
+                labelAngle:=labelAngle
             )
         Else
             Dim data As New NamedCollection(Of Double) With {
@@ -295,9 +297,10 @@ Module plots
                 size:=size,
                 margin:=margin,
                 bg:=bg,
-                colorset:=colorset,
-                Ylabel:=Ylabel,
-                title:=title
+                colorset:=colorSet,
+                Ylabel:=ylab,
+                title:=title,
+                labelAngle:=labelAngle
             )
         End If
     End Function

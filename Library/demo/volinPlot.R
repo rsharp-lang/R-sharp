@@ -32,21 +32,22 @@ print(colnames(dataTbl));
 # }
 
 for(ylab in colnames(dataTbl)) {
-	let y <- as.numeric(dataTbl[, ylab]);
-	let x <- 1:length(y);
-	let line <- serial(x,y, ylab, color = "black", ptSize = 8);
+	let y <- as.numeric(dataTbl[, ylab]);	
 	let save.png as string <- `${dirname(data)}/${basename(data)}1/${ylab :> gsub("(\\|/)", "_", regexp =TRUE)}.png`;
 	
 	print(save.png);
 	
-	plot(line, 
-		 padding = "padding: 300px 125px 200px 250px;",
+	volinPlot(y, 
+		 margin = "padding: 300px 150px 200px 300px;",
+		 size   = "2700,2700",
 		 x.lab   = "X",
-		 y.lab   = ylab,
+		 ylab   = ylab,
 		 legend.anchor = [1900.0, 1450.0],
 		 legendBgFill = "white",
 		 showLegend = FALSE,
-		 title = ylab
+		 title = `volin plot of ${ylab}`,
+		 labelAngle = 0,
+		 colorSet = "#94cac1"
 	) 
 	:> save.graphics(file = save.png)
 	;
