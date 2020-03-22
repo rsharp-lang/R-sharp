@@ -259,22 +259,46 @@ Module plots
     End Function
 
     <ExportAPI("volinPlot")>
-    Public Function doVolinPlot(dataset As DataSet(),
+    Public Function doVolinPlot(dataset As Array,
                                 Optional size$ = Canvas.Resolution2K.Size,
                                 Optional margin$ = Canvas.Resolution2K.PaddingWithTopTitle,
                                 Optional bg$ = "white",
                                 Optional colorset$ = DesignerTerms.TSFShellColors,
                                 Optional Ylabel$ = "y axis",
-                                Optional title$ = "Volin Plot") As Object
+                                Optional title$ = "Volin Plot",
+                                Optional env As Environment = Nothing) As Object
 
-        Return VolinPlot.Plot(
-            dataset:=dataset,
-            size:=size,
-            margin:=margin,
-            bg:=bg,
-            colorset:=colorset,
-            Ylabel:=Ylabel,
-            title:=title
-        )
+        If dataset Is Nothing Then
+            Return Internal.debug.stop("the required dataset is nothing!", env)
+        End If
+
+        Dim type As Type = REnv.MeasureArrayElementType(dataset)
+
+        If type Is GetType(DataSet) Then
+            Return VolinPlot.Plot(
+                dataset:=DirectCast(REnv.asVector(Of DataSet)(dataset), DataSet()),
+                size:=size,
+                margin:=margin,
+                bg:=bg,
+                colorset:=colorset,
+                Ylabel:=Ylabel,
+                title:=title
+            )
+        Else
+            Dim data As New NamedCollection(Of Double) With {
+                .name = title,
+                .value = REnv.asVector(Of Double)(dataset)
+            }
+
+            Return VolinPlot.Plot(
+                dataset:={data},
+                size:=size,
+                margin:=margin,
+                bg:=bg,
+                colorset:=colorset,
+                Ylabel:=Ylabel,
+                title:=title
+            )
+        End If
     End Function
 End Module
