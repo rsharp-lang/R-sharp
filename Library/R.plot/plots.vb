@@ -205,6 +205,14 @@ Module plots
         )
     End Function
 
+    ''' <summary>
+    ''' create a new serial for scatter plot
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="y"></param>
+    ''' <param name="name$"></param>
+    ''' <param name="color"></param>
+    ''' <returns></returns>
     <ExportAPI("serial")>
     Public Function CreateSerial(x As Array, y As Array, Optional name$ = "data serial", Optional color As Object = "black") As SerialData
         Dim px As Double() = vector.asVector(Of Double)(x)
