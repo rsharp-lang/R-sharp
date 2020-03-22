@@ -21,7 +21,8 @@ for(xlab in colnames(dataTbl)) {
 				 x.lab   = xlab,
 				 y.lab   = ylab,
 				 legend.anchor = [1900.0, 1450.0],
-				 legendBgFill = "white"
+				 legendBgFill = "white",
+				 showLegend = FALSE
 			) 
 			:> save.graphics(file = save.png)
 			;

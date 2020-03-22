@@ -313,7 +313,13 @@ Namespace Interpreter
             Dim globalEnvir As Environment = InitializeEnvironment(Rscript.fileName, arguments)
             Dim error$ = Nothing
             Dim program As Program = Program.CreateProgram(Rscript, debug:=debug, [error]:=[error])
-            Dim result As Object = program.Execute(globalEnvir)
+            Dim result As Object
+
+            If Not [error].StringEmpty Then
+                result = Internal.debug.stop([error], globalEnvir)
+            Else
+                result = program.Execute(globalEnvir)
+            End If
 
             ' fix bugs of warning message populates
             ' to upper global environment

@@ -48,7 +48,6 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.Bootstrapping
 Imports Microsoft.VisualBasic.Data.ChartPlots
-Imports Scatter2D = Microsoft.VisualBasic.Data.ChartPlots.Scatter
 Imports Microsoft.VisualBasic.Data.ChartPlots.BarPlot
 Imports Microsoft.VisualBasic.Data.ChartPlots.BarPlot.Data
 Imports Microsoft.VisualBasic.Data.ChartPlots.BarPlot.Histogram
@@ -69,6 +68,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports Scatter2D = Microsoft.VisualBasic.Data.ChartPlots.Scatter
 
 <Package("plot.charts")>
 Module plots
@@ -198,6 +198,13 @@ Module plots
         Dim serials As SerialData() = DirectCast(data, SerialData())
         Dim size As String = InteropArgumentHelper.getSize(args!size)
         Dim padding = InteropArgumentHelper.getPadding(args!padding)
+        Dim showLegend As Boolean
+
+        If args.hasName("showLegend") Then
+            showLegend = getFirst(asLogical(args!showLegend))
+        Else
+            showLegend = True
+        End If
 
         Return Scatter2D.Plot(
             c:=serials,
@@ -205,7 +212,8 @@ Module plots
             Xlabel:=getFirst(REnv.asVector(Of String)(args("x.lab"))),
             Ylabel:=getFirst(REnv.asVector(Of String)(args("y.lab"))),
             drawLine:=False,' getFirst(asLogical(args!line))
-            legendBgFill:=InteropArgumentHelper.getColor(args!legendBgFill, Nothing)
+            legendBgFill:=InteropArgumentHelper.getColor(args!legendBgFill, Nothing),
+            showLegend:=showLegend
         )
     End Function
 
