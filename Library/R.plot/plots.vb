@@ -51,10 +51,13 @@ Imports Microsoft.VisualBasic.Data.ChartPlots
 Imports Microsoft.VisualBasic.Data.ChartPlots.BarPlot
 Imports Microsoft.VisualBasic.Data.ChartPlots.BarPlot.Data
 Imports Microsoft.VisualBasic.Data.ChartPlots.BarPlot.Histogram
+Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
 Imports Microsoft.VisualBasic.Data.ChartPlots.Plot3D
 Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics
+Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Imaging
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Math.Calculus
@@ -98,7 +101,7 @@ Module plots
             .Select(Function(bar)
                         Return New BarDataSample With {
                             .data = {bar.Value},
-                            .Tag = bar.Key
+                            .tag = bar.Key
                         }
                     End Function) _
             .ToArray
@@ -253,5 +256,25 @@ Module plots
         }
 
         Return serial
+    End Function
+
+    <ExportAPI("volinPlot")>
+    Public Function doVolinPlot(dataset As DataSet(),
+                                Optional size$ = Canvas.Resolution2K.Size,
+                                Optional margin$ = Canvas.Resolution2K.PaddingWithTopTitle,
+                                Optional bg$ = "white",
+                                Optional colorset$ = DesignerTerms.TSFShellColors,
+                                Optional Ylabel$ = "y axis",
+                                Optional title$ = "Volin Plot") As Object
+
+        Return VolinPlot.Plot(
+            dataset:=dataset,
+            size:=size,
+            margin:=margin,
+            bg:=bg,
+            colorset:=colorset,
+            Ylabel:=Ylabel,
+            title:=title
+        )
     End Function
 End Module
