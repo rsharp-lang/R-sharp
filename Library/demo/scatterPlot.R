@@ -11,18 +11,19 @@ for(xlab in colnames(dataTbl)) {
 			let x <- as.numeric(dataTbl[, xlab]);
 			let y <- as.numeric(dataTbl[, ylab]);
 			let main as string = `${xlab} ~ ${ylab}`;
-			let line <- serial(x,y, main, color = "blue");
+			let line <- serial(x,y, main, color = "black", ptSize = 8);
 			let save.png as string <- `${dirname(data)}/${basename(data)}/${main :> gsub("(\\|/)", "_", regexp =TRUE)}.png`;
 			
 			print(save.png);
 			
 			plot(line, 
-				 padding = "padding: 250px 125px 200px 250px;",
+				 padding = "padding: 300px 125px 200px 250px;",
 				 x.lab   = xlab,
 				 y.lab   = ylab,
 				 legend.anchor = [1900.0, 1450.0],
 				 legendBgFill = "white",
-				 showLegend = FALSE
+				 showLegend = FALSE,
+				 title = main
 			) 
 			:> save.graphics(file = save.png)
 			;

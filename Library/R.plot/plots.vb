@@ -140,7 +140,7 @@ Module plots
         Dim camera As Camera = args!camera
         Dim color As Color = InteropArgumentHelper.getColor(args!color, "black").TranslateColor
         Dim bg$ = InteropArgumentHelper.getColor(args!bg, "white")
-        Dim title As String = Scripting.ToString(args!title, "Plot deSolve")
+        Dim title As String = Scripting.ToString(getFirst(args!title), "Plot deSolve")
         Dim x As Double() = desolve.y(CStr(vector!x)).value
         Dim y As Double() = desolve.y(CStr(vector!y)).value
         Dim z As Double() = desolve.y(CStr(vector!z)).value
@@ -198,6 +198,7 @@ Module plots
         Dim serials As SerialData() = DirectCast(data, SerialData())
         Dim size As String = InteropArgumentHelper.getSize(args!size)
         Dim padding = InteropArgumentHelper.getPadding(args!padding)
+        Dim title As String = Scripting.ToString(getFirst(args!title), "Scatter Plot")
         Dim showLegend As Boolean
 
         If args.hasName("showLegend") Then
@@ -213,7 +214,8 @@ Module plots
             Ylabel:=getFirst(REnv.asVector(Of String)(args("y.lab"))),
             drawLine:=False,' getFirst(asLogical(args!line))
             legendBgFill:=InteropArgumentHelper.getColor(args!legendBgFill, Nothing),
-            showLegend:=showLegend
+            showLegend:=showLegend,
+            title:=title
         )
     End Function
 
@@ -226,7 +228,11 @@ Module plots
     ''' <param name="color"></param>
     ''' <returns></returns>
     <ExportAPI("serial")>
-    Public Function CreateSerial(x As Array, y As Array, Optional name$ = "data serial", Optional color As Object = "black") As SerialData
+    Public Function CreateSerial(x As Array, y As Array,
+                                 Optional name$ = "data serial",
+                                 Optional color As Object = "black",
+                                 Optional ptSize As Integer = 5) As SerialData
+
         Dim px As Double() = vector.asVector(Of Double)(x)
         Dim py As Double() = vector.asVector(Of Double)(y)
         Dim points As PointData() = px _
@@ -239,7 +245,7 @@ Module plots
         Dim serial As New SerialData With {
             .color = InteropArgumentHelper.getColor(color).TranslateColor,
             .lineType = DashStyle.Solid,
-            .PointSize = 5,
+            .PointSize = ptSize,
             .pts = points,
             .Shape = LegendStyles.SolidLine,
             .title = name,
