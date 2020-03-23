@@ -47,6 +47,12 @@ Module machineLearning
         Return dataframe
     End Function
 
+    ''' <summary>
+    ''' convert machine learning dataset to dataframe table.
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="markOuput"></param>
+    ''' <returns></returns>
     <ExportAPI("as.tabular")>
     Public Function Tabular(x As StoreProcedure.DataSet, Optional markOuput As Boolean = True) As DataTable()
         Return x.ToTable(markOuput).ToArray
