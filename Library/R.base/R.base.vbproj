@@ -256,6 +256,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="base.vb" />
+    <Compile Include="rawSerializer.vb" />
     <Compile Include="utils\dataframe.vb" />
     <Compile Include="utils\console.vb" />
     <Compile Include="utils\xlsx.vb" />
