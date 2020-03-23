@@ -4,6 +4,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.DataMining.ComponentModel.Normalizer
 Imports Microsoft.VisualBasic.Language.Default
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning
 Imports Microsoft.VisualBasic.MachineLearning.Debugger
 Imports Microsoft.VisualBasic.MachineLearning.NeuralNetwork
@@ -75,7 +76,12 @@ Module machineLearning
             Sub(d)
                 Dim dataset As StoreProcedure.DataSet = DirectCast(d, StoreProcedure.DataSet)
 
-                ' dataset.NormalizeMatrix
+                dataset.NormalizeMatrix = NormalizeMatrix.CreateFromSamples(
+                    samples:=dataset.DataSamples.items,
+                    names:=dataset.width _
+                        .Sequence _
+                        .Select(Function(i) $"X_{i}")
+                )
                 dataset _
                     .GetXml _
                     .SaveTo(file)
@@ -159,7 +165,7 @@ Module machineLearning
         Dim model As Network
 
         If ANN Is Nothing Then
-            Return Internal.debug.stop("the ANN network model can not be nothing!", env)
+            Return Internal.debug.stop("the ANN network model can Not be nothing!", env)
         ElseIf TypeOf ANN Is TrainingUtils Then
             ANN = DirectCast(ANN, TrainingUtils).NeuronNetwork
         End If
