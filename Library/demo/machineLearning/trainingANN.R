@@ -13,13 +13,13 @@ print(check.ML_model(dataset));
 
 dataset
 :> training.ANN(
-	hiddenSize     = [100, 300, 30, 10], 
-	learnRate      = 0.1, 
+	hiddenSize     = [300, 500, 250, 100], 
+	learnRate      = 0.125, 
 	momentum       = 0.9, 
 	minErr         = 0.05, 
 	parallel       = TRUE,
 	outputSnapshot = TRUE,
-	maxIterations  = 100
+	maxIterations  = 10000
 )
 :> write.ANN_network(output)
 ;

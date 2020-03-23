@@ -51,10 +51,13 @@ Imports Microsoft.VisualBasic.Data.ChartPlots
 Imports Microsoft.VisualBasic.Data.ChartPlots.BarPlot
 Imports Microsoft.VisualBasic.Data.ChartPlots.BarPlot.Data
 Imports Microsoft.VisualBasic.Data.ChartPlots.BarPlot.Histogram
+Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
 Imports Microsoft.VisualBasic.Data.ChartPlots.Plot3D
 Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics
+Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Imaging
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Math.Calculus
@@ -68,6 +71,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports Scatter2D = Microsoft.VisualBasic.Data.ChartPlots.Scatter
 
 <Package("plot.charts")>
 Module plots
@@ -97,7 +101,7 @@ Module plots
             .Select(Function(bar)
                         Return New BarDataSample With {
                             .data = {bar.Value},
-                            .Tag = bar.Key
+                            .tag = bar.Key
                         }
                     End Function) _
             .ToArray
@@ -139,7 +143,7 @@ Module plots
         Dim camera As Camera = args!camera
         Dim color As Color = InteropArgumentHelper.getColor(args!color, "black").TranslateColor
         Dim bg$ = InteropArgumentHelper.getColor(args!bg, "white")
-        Dim title As String = Scripting.ToString(args!title, "Plot deSolve")
+        Dim title As String = Scripting.ToString(getFirst(args!title), "Plot deSolve")
         Dim x As Double() = desolve.y(CStr(vector!x)).value
         Dim y As Double() = desolve.y(CStr(vector!y)).value
         Dim z As Double() = desolve.y(CStr(vector!z)).value
@@ -195,18 +199,43 @@ Module plots
         End If
 
         Dim serials As SerialData() = DirectCast(data, SerialData())
-        Dim size As Size = InteropArgumentHelper.getSize(args!size).SizeParser
+        Dim size As String = InteropArgumentHelper.getSize(args!size)
         Dim padding = InteropArgumentHelper.getPadding(args!padding)
+        Dim title As String = Scripting.ToString(getFirst(args!title), "Scatter Plot")
+        Dim showLegend As Boolean
 
-        Return serials.Plot(
+        If args.hasName("showLegend") Then
+            showLegend = getFirst(asLogical(args!showLegend))
+        Else
+            showLegend = True
+        End If
+
+        Return Scatter2D.Plot(
+            c:=serials,
             size:=size, padding:=padding,
-            xlabel:=args("x.lab"),
-            ylabel:=args("y.lab")
+            Xlabel:=getFirst(REnv.asVector(Of String)(args("x.lab"))),
+            Ylabel:=getFirst(REnv.asVector(Of String)(args("y.lab"))),
+            drawLine:=False,' getFirst(asLogical(args!line))
+            legendBgFill:=InteropArgumentHelper.getColor(args!legendBgFill, Nothing),
+            showLegend:=showLegend,
+            title:=title
         )
     End Function
 
+    ''' <summary>
+    ''' create a new serial for scatter plot
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="y"></param>
+    ''' <param name="name$"></param>
+    ''' <param name="color"></param>
+    ''' <returns></returns>
     <ExportAPI("serial")>
-    Public Function CreateSerial(x As Array, y As Array, Optional name$ = "data serial", Optional color As Object = "black") As SerialData
+    Public Function CreateSerial(x As Array, y As Array,
+                                 Optional name$ = "data serial",
+                                 Optional color As Object = "black",
+                                 Optional ptSize As Integer = 5) As SerialData
+
         Dim px As Double() = vector.asVector(Of Double)(x)
         Dim py As Double() = vector.asVector(Of Double)(y)
         Dim points As PointData() = px _
@@ -219,7 +248,7 @@ Module plots
         Dim serial As New SerialData With {
             .color = InteropArgumentHelper.getColor(color).TranslateColor,
             .lineType = DashStyle.Solid,
-            .PointSize = 5,
+            .PointSize = ptSize,
             .pts = points,
             .Shape = LegendStyles.SolidLine,
             .title = name,
@@ -227,5 +256,52 @@ Module plots
         }
 
         Return serial
+    End Function
+
+    <ExportAPI("volinPlot")>
+    Public Function doVolinPlot(dataset As Array,
+                                Optional size$ = Canvas.Resolution2K.Size,
+                                Optional margin$ = Canvas.Resolution2K.PaddingWithTopTitle,
+                                Optional bg$ = "white",
+                                Optional colorSet$ = DesignerTerms.TSFShellColors,
+                                Optional ylab$ = "y axis",
+                                Optional title$ = "Volin Plot",
+                                Optional labelAngle As Double = -45,
+                                Optional env As Environment = Nothing) As Object
+
+        If dataset Is Nothing Then
+            Return Internal.debug.stop("the required dataset is nothing!", env)
+        End If
+
+        Dim type As Type = REnv.MeasureArrayElementType(dataset)
+
+        If type Is GetType(DataSet) Then
+            Return VolinPlot.Plot(
+                dataset:=DirectCast(REnv.asVector(Of DataSet)(dataset), DataSet()),
+                size:=size,
+                margin:=margin,
+                bg:=bg,
+                colorset:=colorSet,
+                Ylabel:=ylab,
+                title:=title,
+                labelAngle:=labelAngle
+            )
+        Else
+            Dim data As New NamedCollection(Of Double) With {
+                .name = title,
+                .value = REnv.asVector(Of Double)(dataset)
+            }
+
+            Return VolinPlot.Plot(
+                dataset:={data},
+                size:=size,
+                margin:=margin,
+                bg:=bg,
+                colorset:=colorSet,
+                Ylabel:=ylab,
+                title:=title,
+                labelAngle:=labelAngle
+            )
+        End If
     End Function
 End Module
