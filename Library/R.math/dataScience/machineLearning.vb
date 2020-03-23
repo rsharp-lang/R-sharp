@@ -68,6 +68,51 @@ Module machineLearning
         Return file.LoadXml(Of StoreProcedure.DataSet)
     End Function
 
+    <ExportAPI("new.ML_model")>
+    Public Function createEmptyMLDataset(file As String) As RDispose
+        Return New RDispose(
+            New StoreProcedure.DataSet With {.DataSamples = New SampleList},
+            Sub(d)
+                Dim dataset As StoreProcedure.DataSet = DirectCast(d, StoreProcedure.DataSet)
+
+                ' dataset.NormalizeMatrix
+                dataset _
+                    .GetXml _
+                    .SaveTo(file)
+            End Sub)
+    End Function
+
+    <ExportAPI("add")>
+    Public Function addTrainingSample(model As Object, input As Double(), output As Double(), Optional env As Environment = Nothing) As Object
+        Dim dataset As StoreProcedure.DataSet
+
+        If model Is Nothing Then
+            Return Nothing
+        ElseIf TypeOf model Is RDispose Then
+            With DirectCast(model, RDispose)
+                If .type Like GetType(StoreProcedure.DataSet) Then
+                    dataset = .Value
+                Else
+                    Return Internal.debug.stop({
+                        $"invalid model data type: { .type}!",
+                        $"required: {GetType(StoreProcedure.DataSet).FullName}"
+                    }, env)
+                End If
+            End With
+        ElseIf TypeOf model Is StoreProcedure.DataSet Then
+            dataset = model
+        Else
+            Return Internal.debug.stop({
+                $"invalid model data type: {model.GetType.FullName}!",
+                $"required: {GetType(StoreProcedure.DataSet).FullName}"
+            }, env)
+        End If
+
+        dataset.DataSamples.items.Add(New Sample(input) With {.ID = App.NextTempName, .target = output})
+
+        Return model
+    End Function
+
     ''' <summary>
     ''' check the errors that may exists in the dataset file.
     ''' </summary>
