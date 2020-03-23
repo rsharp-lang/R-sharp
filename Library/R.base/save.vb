@@ -245,4 +245,50 @@ Partial Module base
 
         Return objList.Keys.ToArray
     End Function
+
+    ''' <summary>
+    ''' Serialization Interface for Single Objects
+    ''' 
+    ''' Functions to write a single R object to a file, and to restore it.
+    ''' </summary>
+    ''' <param name="object">R object to serialize.</param>
+    ''' <param name="file">
+    ''' a connection Or the name Of the file where the R Object 
+    ''' Is saved To Or read from.</param>
+    ''' <param name="ascii"></param>
+    ''' <param name="version"></param>
+    ''' <param name="compress"></param>
+    ''' <param name="refhook">
+    ''' a hook function for handling reference objects.
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("saveRDS")>
+    Public Function saveRDS([object] As Object,
+                            Optional file$ = "",
+                            Optional ascii As Boolean = False,
+                            Optional version$ = Nothing,
+                            Optional compress As Boolean = True,
+                            Optional refhook$ = Nothing,
+                            Optional env As Environment = Nothing) As Boolean
+
+    End Function
+
+    ''' <summary>
+    ''' Serialization Interface for Single Objects
+    ''' 
+    ''' Functions to write a single R object to a file, and to restore it.
+    ''' </summary>
+    ''' <param name="file">
+    ''' a connection Or the name Of the file where the R Object 
+    ''' Is saved To Or read from.</param>
+    ''' <param name="refhook">
+    ''' a hook function for handling reference objects.
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("readRDS")>
+    Public Function readRDS(file$, Optional refhook As Object = Nothing, Optional env As Environment = Nothing) As Object
+
+    End Function
 End Module
