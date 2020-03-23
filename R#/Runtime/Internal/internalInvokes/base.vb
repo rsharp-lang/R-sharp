@@ -328,12 +328,18 @@ Namespace Runtime.Internal.Invokes
                                 <RRawVectorArgument, RListObjectArgument> args As Object,
                                 Optional env As Environment = Nothing) As Object
 
-            ' summary is similar to str or print function
-            ' but summary just returns simple data summary information
-            ' and str function returns the data structure information
-            ' about the given dataset object.
-            ' the print function is print the data details
-            Return DirectCast(Rlist(args, env), list).invokeGeneric([object], env)
+            Dim argumentsVal As Object = base.Rlist(args, env)
+
+            If Program.isException(argumentsVal) Then
+                Return argumentsVal
+            Else
+                ' summary is similar to str or print function
+                ' but summary just returns simple data summary information
+                ' and str function returns the data structure information
+                ' about the given dataset object.
+                ' the print function is print the data details
+                Return DirectCast(argumentsVal, list).invokeGeneric([object], env)
+            End If
         End Function
 
         ''' <summary>

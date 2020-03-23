@@ -147,7 +147,7 @@ Namespace Runtime.Interop
                 params = parameters.JoinBy(", ")
             End If
 
-            Return $"let ``{name}`` as function({params}) -> ``{returns.JoinBy("|")}`` {{d
+            Return $"let ``{name}`` as function({params}) -> ``{returns.JoinBy("|")}`` {{
     #
     # .NET API information
     #
