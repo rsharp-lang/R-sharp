@@ -99,14 +99,9 @@ Namespace Runtime.Internal
                         .data
                     type = x.GetType
 
-                    If Not generics(funcName).ContainsKey(type) Then
-                        Return debug.stop({
-                            $"missing loader entry for generic function '{funcName}'!",
-                            $"missing implementation for overloads type: {type.FullName}!",
-                            "consider load required package at first!"
-                        }, env)
-                    Else
+                    If generics(funcName).ContainsKey(type) Then
                         apiCalls = generics(funcName)(type)
+                        GoTo RUN_GENERIC
                     End If
                 End If
 
@@ -118,7 +113,7 @@ Namespace Runtime.Internal
             Else
                 apiCalls = generics(funcName)(type)
             End If
-
+RUN_GENERIC:
             Dim result As Object = apiCalls(x, args, env)
 
             Return result
