@@ -86,6 +86,10 @@ Module plots
         Return RegressionPlot.Plot(lm)
     End Function
 
+    Sub New()
+        REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of SerialData)(Function(line) line.ToString)
+    End Sub
+
     <RInitialize>
     Sub Main()
         Call REnv.Internal.generic.add("plot", GetType(DeclareLambdaFunction), AddressOf plotFormula)
@@ -239,6 +243,7 @@ Module plots
     Public Function CreateSerial(x As Array, y As Array,
                                  Optional name$ = "data serial",
                                  Optional color As Object = "black",
+                                 Optional alpha As Integer = 255,
                                  Optional ptSize As Integer = 5) As SerialData
 
         Dim px As Double() = vector.asVector(Of Double)(x)
@@ -251,7 +256,7 @@ Module plots
                     End Function) _
             .ToArray
         Dim serial As New SerialData With {
-            .color = InteropArgumentHelper.getColor(color).TranslateColor,
+            .color = InteropArgumentHelper.getColor(color).TranslateColor.Alpha(alpha),
             .lineType = DashStyle.Solid,
             .pointSize = ptSize,
             .pts = points,

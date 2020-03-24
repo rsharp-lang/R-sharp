@@ -15,7 +15,7 @@ data <- [];
 for(j in 1:length(keys)) {
 	let name <- keys[j];
 	let i <- name == names;
-	let subset <- serial(X[i], Y[i], name = name, color = colorList[j], ptSize = 13);
+	let subset <- serial(X[i], Y[i], name = name, color = colorList[j], ptSize = 25, alpha = 150);
 	
 	print(subset);
 	
