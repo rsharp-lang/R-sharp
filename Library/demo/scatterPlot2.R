@@ -8,7 +8,7 @@ let names <- data[, "EigenValue"];
 let keys <- unique(names);
 let X <- as.numeric(data[, "X"]);
 let Y <- as.numeric(data[, "Y"]);
-let colorList <- colors("Paired:c8", length(keys));
+let colorList <- colors("d3.scale.category20b()", length(keys));
 
 data <- [];
 
