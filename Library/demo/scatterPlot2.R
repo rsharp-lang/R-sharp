@@ -32,5 +32,6 @@ plot(data,
 	x.lab = "PC1 (93.124%)",
 	y.lab = "PC2 (82.057%)",
 	legend.font = "font-style: normal; font-size: 20; font-family: Bookman Old Style",
-	legend.block = 7# abline = [X, Y]
+	legend.block = 7,# abline = [X, Y]
+	convexHull = ["China"]
 ) :> save.graphics(file = "K:\20200226\20200321\PCA2D.png");

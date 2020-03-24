@@ -231,7 +231,8 @@ Module plots
             showLegend:=showLegend,
             title:=title,
             legendSplit:=args.getValue(Of Integer)("legend.block", env),
-            ablines:=args.getValue(Of Line())("abline", env)
+            ablines:=args.getValue(Of Line())("abline", env),
+            hullConvexList:=args.getValue(Of String())("convexHull", env)
         )
     End Function
 
