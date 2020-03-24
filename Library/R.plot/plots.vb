@@ -76,6 +76,11 @@ Imports Scatter2D = Microsoft.VisualBasic.Data.ChartPlots.Scatter
 <Package("plot.charts")>
 Module plots
 
+    ''' <summary>
+    ''' do plot of the linear regression result
+    ''' </summary>
+    ''' <param name="lm">the linear model</param>
+    ''' <returns></returns>
     <ExportAPI("linear.regression")>
     Public Function linearRegression(lm As IFitted) As GraphicsData
         Return RegressionPlot.Plot(lm)
