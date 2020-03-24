@@ -253,9 +253,9 @@ Module plots
         Dim serial As New SerialData With {
             .color = InteropArgumentHelper.getColor(color).TranslateColor,
             .lineType = DashStyle.Solid,
-            .PointSize = ptSize,
+            .pointSize = ptSize,
             .pts = points,
-            .Shape = LegendStyles.SolidLine,
+            .shape = LegendStyles.SolidLine,
             .title = name,
             .width = 5
         }

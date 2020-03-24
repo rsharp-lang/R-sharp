@@ -64,10 +64,17 @@ Public Module grDevices
     Dim devlist As New Dictionary(Of Integer, IGraphics)
     Dim curDev As IGraphics
 
+    ''' <summary>
+    ''' save the graphics plot object as image file
+    ''' </summary>
+    ''' <param name="graphics">a graphics plot object</param>
+    ''' <param name="file">the file path for save the image file.</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("save.graphics")>
-    Public Function saveImage(graphics As Object, file$, envir As Environment) As Object
+    Public Function saveImage(graphics As Object, file$, Optional env As Environment = Nothing) As Object
         If graphics Is Nothing Then
-            Return Internal.debug.stop("Graphics data is NULL!", envir)
+            Return Internal.debug.stop("Graphics data is NULL!", env)
         ElseIf graphics.GetType Is GetType(Image) Then
             Return DirectCast(graphics, Image).SaveAs(file)
         ElseIf graphics.GetType Is GetType(Bitmap) Then
@@ -75,7 +82,7 @@ Public Module grDevices
         ElseIf graphics.GetType.IsInheritsFrom(GetType(GraphicsData)) Then
             Return DirectCast(graphics, GraphicsData).Save(file)
         Else
-            Return Internal.debug.stop(New InvalidProgramException($"'{graphics.GetType.Name}' is not a graphics data object!"), envir)
+            Return Internal.debug.stop(New InvalidProgramException($"'{graphics.GetType.Name}' is not a graphics data object!"), env)
         End If
     End Function
 
@@ -226,6 +233,16 @@ break:
         ' exit iterator loops
     End Function
 
+    ''' <summary>
+    ''' get color set
+    ''' </summary>
+    ''' <param name="term">the color set name</param>
+    ''' <param name="n">number of colors from the given color set</param>
+    ''' <param name="character">function returns a color object sequence 
+    ''' or html color code string vector if this parameter value is set to ``TRUE``
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("colors")>
     Public Function colors(<RRawVectorArgument> term As Object,
                            Optional n% = 256,
@@ -237,7 +254,11 @@ break:
         If term Is Nothing Then
             Return Nothing
         ElseIf term.GetType.IsArray Then
-            With DirectCast(term, Array).AsObjectEnumerator.Select(Function(a) Scripting.ToString(a)).ToArray
+            With DirectCast(term, Array) _
+                .AsObjectEnumerator _
+                .Select(Function(a) Scripting.ToString(a)) _
+                .ToArray
+
                 If .Length = 1 Then
                     list = Designer.GetColors(CStr(.GetValue(Scan0)), n)
                 Else
