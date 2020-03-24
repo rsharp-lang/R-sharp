@@ -41,6 +41,8 @@
 #End Region
 
 Imports System.Drawing
+Imports Microsoft.VisualBasic.ApplicationServices.Development
+Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Imaging
@@ -254,6 +256,23 @@ break:
 
         Dim list As Color()
 
+        Static printHelp As Boolean = False
+
+        If Not printHelp Then
+            printHelp = True
+
+            GetType(grDevices).Assembly _
+                .FromAssembly _
+                .DoCall(Sub(asm)
+                            Call CLITools.AppSummary(
+                                assem:=asm,
+                                description:="Welcome to use the sciBASIC.NET Color Designer",
+                                SYNOPSIS:=DesignerTerms.TermHelpInfo,
+                                write:=App.StdOut
+                            )
+                        End Sub)
+        End If
+
         If term Is Nothing Then
             Return Nothing
         ElseIf term.GetType.IsArray Then
@@ -282,7 +301,7 @@ break:
     End Function
 
     <ExportAPI("line2D")>
-    Public Function line2D(a As Object, b As Object, Optional stroke As Object = Stroke.AxisStroke) As Line
+    Public Function line2D(<RRawVectorArgument> a As Object, <RRawVectorArgument> b As Object, Optional stroke As Object = Stroke.AxisStroke) As Line
         Dim p1 As PointF = InteropArgumentHelper.getVector2D(a)
         Dim p2 As PointF = InteropArgumentHelper.getVector2D(b)
         Dim penCSS As String = InteropArgumentHelper.getStrokePenCSS(stroke)

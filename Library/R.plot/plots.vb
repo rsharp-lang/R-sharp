@@ -58,6 +58,7 @@ Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.Shapes
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Math.Calculus
@@ -229,7 +230,8 @@ Module plots
             legendFontCSS:=InteropArgumentHelper.getFontCSS(args("legend.font")),
             showLegend:=showLegend,
             title:=title,
-            legendSplit:=args.getValue(Of Integer)("legend.block", env)
+            legendSplit:=args.getValue(Of Integer)("legend.block", env),
+            ablines:=args.getValue(Of Line())("abline", env)
         )
     End Function
 

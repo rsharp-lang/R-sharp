@@ -22,6 +22,9 @@ for(j in 1:length(keys)) {
 	data <- data << subset;
 }
 
+X <- line2D([-0.75, 0], [2.5, 0]);
+Y <- line2D([0, 0.4], [0, -1.6]);
+
 plot(data, 
 	size = [3200, 2700], 
 	padding = [250,150,250,250], 
@@ -29,5 +32,5 @@ plot(data,
 	x.lab = "PC1 (93.124%)",
 	y.lab = "PC2 (82.057%)",
 	legend.font = "font-style: normal; font-size: 20; font-family: Bookman Old Style",
-	legend.block = 7
+	legend.block = 7# abline = [X, Y]
 ) :> save.graphics(file = "K:\20200226\20200321\PCA2D.png");
