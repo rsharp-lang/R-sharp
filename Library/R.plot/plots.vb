@@ -228,7 +228,8 @@ Module plots
             legendBgFill:=InteropArgumentHelper.getColor(args!legendBgFill, Nothing),
             legendFontCSS:=InteropArgumentHelper.getFontCSS(args("legend.font")),
             showLegend:=showLegend,
-            title:=title
+            title:=title,
+            legendSplit:=args.getValue(Of Integer)("legend.block", env)
         )
     End Function
 

@@ -181,4 +181,31 @@ Public Module InteropArgumentHelper
                 Return [default]
         End Select
     End Function
+
+    ''' <summary>
+    ''' <see cref="Stroke"/>
+    ''' </summary>
+    ''' <param name="stroke"></param>
+    ''' <param name="default"></param>
+    ''' <returns></returns>
+    Public Function getStrokePenCSS(stroke As Object, Optional default$ = Stroke.AxisStroke) As String
+        If stroke Is Nothing Then
+            Return [default]
+        End If
+
+        Select Case stroke.GetType
+            Case GetType(String)
+                Return stroke
+            Case GetType(String())
+                Return DirectCast(stroke, String()).GetValue(Scan0)
+            Case GetType(Stroke)
+                Return DirectCast(stroke, Stroke).ToString
+            Case GetType(Pen)
+                Return New Stroke(DirectCast(stroke, Pen)).ToString
+            Case GetType(Single), GetType(Double), GetType(Integer)
+                Return New Stroke(CDbl(stroke)).ToString
+            Case Else
+                Return [default]
+        End Select
+    End Function
 End Module
