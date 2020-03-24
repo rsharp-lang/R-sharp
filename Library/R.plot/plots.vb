@@ -226,6 +226,7 @@ Module plots
             Ylabel:=getFirst(REnv.asVector(Of String)(args("y.lab"))),
             drawLine:=False,' getFirst(asLogical(args!line))
             legendBgFill:=InteropArgumentHelper.getColor(args!legendBgFill, Nothing),
+            legendFontCSS:=InteropArgumentHelper.getFontCSS(args("legend.font")),
             showLegend:=showLegend,
             title:=title
         )

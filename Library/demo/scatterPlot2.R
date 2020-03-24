@@ -27,5 +27,6 @@ plot(data,
 	padding = [250,150,250,250], 
 	title = "PCA 2D",
 	x.lab = "PC1",
-	y.lab = "PC2"
+	y.lab = "PC2",
+	legend.font = "font-style: normal; font-size: 20; font-family: Bookman Old Style"
 ) :> save.graphics(file = "K:\20200226\20200321\PCA2D.png");
