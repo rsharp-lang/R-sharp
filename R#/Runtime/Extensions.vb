@@ -58,6 +58,11 @@ Namespace Runtime
             End Try
         End Function
 
+        ''' <summary>
+        ''' 这个函数只会尝试第一个不为空的元素的类型
+        ''' </summary>
+        ''' <param name="array"></param>
+        ''' <returns></returns>
         Public Function MeasureArrayElementType(array As Array) As Type
             Dim x As Object
 
@@ -70,6 +75,34 @@ Namespace Runtime
             Next
 
             Return GetType(Void)
+        End Function
+
+        Public Function MeasureRealElementType(array As Array) As Type
+            Dim arrayType As Type = array.GetType
+            Dim x As Object
+            Dim types As New List(Of Type)
+
+            If arrayType.HasElementType AndAlso Not arrayType.GetElementType Is GetType(Object) Then
+                Return arrayType.GetElementType
+            End If
+
+            For i As Integer = 0 To array.Length - 1
+                x = array.GetValue(i)
+
+                If Not x Is Nothing Then
+                    types.Add(x.GetType)
+                End If
+            Next
+
+            If types.Count = 0 Then
+                Return GetType(Void)
+            Else
+                Return types _
+                    .GroupBy(Function(t) t.FullName) _
+                    .OrderByDescending(Function(k) k.Count) _
+                    .First _
+                    .First
+            End If
         End Function
     End Module
 End Namespace
