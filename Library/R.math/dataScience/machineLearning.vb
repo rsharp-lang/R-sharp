@@ -4,6 +4,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.DataMining.ComponentModel.Normalizer
 Imports Microsoft.VisualBasic.Language.Default
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning
 Imports Microsoft.VisualBasic.MachineLearning.Debugger
 Imports Microsoft.VisualBasic.MachineLearning.NeuralNetwork
@@ -47,6 +48,12 @@ Module machineLearning
         Return dataframe
     End Function
 
+    ''' <summary>
+    ''' convert machine learning dataset to dataframe table.
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="markOuput"></param>
+    ''' <returns></returns>
     <ExportAPI("as.tabular")>
     Public Function Tabular(x As StoreProcedure.DataSet, Optional markOuput As Boolean = True) As DataTable()
         Return x.ToTable(markOuput).ToArray
@@ -60,6 +67,56 @@ Module machineLearning
     <ExportAPI("read.ML_model")>
     Public Function readModelDataset(file As String) As StoreProcedure.DataSet
         Return file.LoadXml(Of StoreProcedure.DataSet)
+    End Function
+
+    <ExportAPI("new.ML_model")>
+    Public Function createEmptyMLDataset(file As String) As RDispose
+        Return New RDispose(
+            New StoreProcedure.DataSet With {.DataSamples = New SampleList},
+            Sub(d)
+                Dim dataset As StoreProcedure.DataSet = DirectCast(d, StoreProcedure.DataSet)
+
+                dataset.NormalizeMatrix = NormalizeMatrix.CreateFromSamples(
+                    samples:=dataset.DataSamples.items,
+                    names:=dataset.width _
+                        .Sequence _
+                        .Select(Function(i) $"X_{i}")
+                )
+                dataset _
+                    .GetXml _
+                    .SaveTo(file)
+            End Sub)
+    End Function
+
+    <ExportAPI("add")>
+    Public Function addTrainingSample(model As Object, input As Double(), output As Double(), Optional env As Environment = Nothing) As Object
+        Dim dataset As StoreProcedure.DataSet
+
+        If model Is Nothing Then
+            Return Nothing
+        ElseIf TypeOf model Is RDispose Then
+            With DirectCast(model, RDispose)
+                If .type Like GetType(StoreProcedure.DataSet) Then
+                    dataset = .Value
+                Else
+                    Return Internal.debug.stop({
+                        $"invalid model data type: { .type}!",
+                        $"required: {GetType(StoreProcedure.DataSet).FullName}"
+                    }, env)
+                End If
+            End With
+        ElseIf TypeOf model Is StoreProcedure.DataSet Then
+            dataset = model
+        Else
+            Return Internal.debug.stop({
+                $"invalid model data type: {model.GetType.FullName}!",
+                $"required: {GetType(StoreProcedure.DataSet).FullName}"
+            }, env)
+        End If
+
+        dataset.DataSamples.items.Add(New Sample(input) With {.ID = App.NextTempName, .target = output})
+
+        Return model
     End Function
 
     ''' <summary>
@@ -108,7 +165,7 @@ Module machineLearning
         Dim model As Network
 
         If ANN Is Nothing Then
-            Return Internal.debug.stop("the ANN network model can not be nothing!", env)
+            Return Internal.debug.stop("the ANN network model can Not be nothing!", env)
         ElseIf TypeOf ANN Is TrainingUtils Then
             ANN = DirectCast(ANN, TrainingUtils).NeuronNetwork
         End If

@@ -158,6 +158,17 @@ Partial Module base
         Return value.chars.DecodeBase64.LoadJSON(Of String())
     End Function
 
+    Public Enum RData
+        ''' <summary>
+        ''' 单个对象序列化
+        ''' </summary>
+        RDS
+        ''' <summary>
+        ''' 多个对象序列化
+        ''' </summary>
+        RDA
+    End Enum
+
     ''' <summary>
     ''' ### Save R Objects
     ''' 
@@ -185,9 +196,7 @@ Partial Module base
 
         ' 先保存为cdf文件
         Dim tmp As String = App.GetAppSysTempFile(".cdf", App.PID, prefix:=RandomASCIIString(5, True)).TrimSuffix & "/R#.Data"
-        Dim value As CDFData
         Dim maxChartSize As Integer = 2048
-        Dim length As cdfAttribute
         Dim objList As NamedValue(Of Object)() = RListObjectArgumentAttribute _
             .getObjectList(objects, envir) _
             .ToArray
@@ -195,7 +204,8 @@ Partial Module base
         Using cdf As CDFWriter = New CDFWriter(tmp).GlobalAttributes(
             New cdfAttribute With {.name = "program", .type = CDFDataTypes.CHAR, .value = "SMRUCC/R#"},
             New cdfAttribute With {.name = "numOfObjects", .type = CDFDataTypes.INT, .value = objList.Length},
-            New cdfAttribute With {.name = "maxCharSize", .type = CDFDataTypes.INT, .value = maxChartSize}
+            New cdfAttribute With {.name = "maxCharSize", .type = CDFDataTypes.INT, .value = maxChartSize},
+            New cdfAttribute With {.name = "level", .type = CDFDataTypes.INT, .value = CInt(RData.RDA)}
         ).Dimensions(Dimension.Byte,
                      Dimension.Double,
                      Dimension.Float,
@@ -210,33 +220,7 @@ Partial Module base
             }
 
             For Each obj As NamedValue(Of Object) In objList.JoinIterates(Robjects)
-                Dim vector As Array = Runtime.asVector(Of Object)(obj.Value)
-                Dim elTypes = vector.AsObjectEnumerator _
-                    .Select(Function(o) o.GetType) _
-                    .GroupBy(Function(t) t.FullName) _
-                    .ToArray _
-                    .OrderByDescending(Function(g) g.Count) _
-                    .First _
-                    .First
-
-                If elTypes Is GetType(String) Then
-                    value = New CDFData With {
-                        .chars = vector _
-                            .AsObjectEnumerator _
-                            .Select(AddressOf Scripting.ToString) _
-                            .GetJson _
-                            .Base64String
-                    }
-                Else
-                    value = (CObj(vector), elTypes.GetCDFTypeCode)
-                End If
-
-                length = New cdfAttribute With {
-                    .name = "lengthOf",
-                    .type = CDFDataTypes.INT,
-                    .value = vector.Length
-                }
-                cdf.AddVariable(obj.Name, value, {cdf.getDimension(elTypes.FullName)}, {length})
+                Call cdf.writeObject(obj.Name, obj.Value)
             Next
         End Using
 
@@ -244,5 +228,51 @@ Partial Module base
         Call ZipLib.FileArchive(tmp, file, ArchiveAction.Replace, Overwrite.Always, CompressionLevel.Fastest)
 
         Return objList.Keys.ToArray
+    End Function
+
+    ''' <summary>
+    ''' Serialization Interface for Single Objects
+    ''' 
+    ''' Functions to write a single R object to a file, and to restore it.
+    ''' </summary>
+    ''' <param name="object">R object to serialize.</param>
+    ''' <param name="file">
+    ''' a connection Or the name Of the file where the R Object 
+    ''' Is saved To Or read from.</param>
+    ''' <param name="ascii"></param>
+    ''' <param name="version"></param>
+    ''' <param name="compress"></param>
+    ''' <param name="refhook">
+    ''' a hook function for handling reference objects.
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("saveRDS")>
+    Public Function saveRDS([object] As Object,
+                            Optional file$ = "",
+                            Optional ascii As Boolean = False,
+                            Optional version$ = Nothing,
+                            Optional compress As Boolean = True,
+                            Optional refhook$ = Nothing,
+                            Optional env As Environment = Nothing) As Boolean
+
+    End Function
+
+    ''' <summary>
+    ''' Serialization Interface for Single Objects
+    ''' 
+    ''' Functions to write a single R object to a file, and to restore it.
+    ''' </summary>
+    ''' <param name="file">
+    ''' a connection Or the name Of the file where the R Object 
+    ''' Is saved To Or read from.</param>
+    ''' <param name="refhook">
+    ''' a hook function for handling reference objects.
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("readRDS")>
+    Public Function readRDS(file$, Optional refhook As Object = Nothing, Optional env As Environment = Nothing) As Object
+
     End Function
 End Module

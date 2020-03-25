@@ -1,53 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::fca9f2622d962b4b5fdbf9c97f310430, Library\R.graphics\grDevices.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module grDevices
-    ' 
-    '     Function: colorPopulator, colors, devCur, devOff, imageAttrs
-    '               rgb, saveImage
-    ' 
-    ' /********************************************************************************/
+' Module grDevices
+' 
+'     Function: colorPopulator, colors, devCur, devOff, imageAttrs
+'               rgb, saveImage
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Drawing
+Imports Microsoft.VisualBasic.ApplicationServices.Development
+Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.Shapes
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.MIME.Markup
+Imports Microsoft.VisualBasic.MIME.Markup.HTML.CSS
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
@@ -64,10 +69,17 @@ Public Module grDevices
     Dim devlist As New Dictionary(Of Integer, IGraphics)
     Dim curDev As IGraphics
 
+    ''' <summary>
+    ''' save the graphics plot object as image file
+    ''' </summary>
+    ''' <param name="graphics">a graphics plot object</param>
+    ''' <param name="file">the file path for save the image file.</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("save.graphics")>
-    Public Function saveImage(graphics As Object, file$, envir As Environment) As Object
+    Public Function saveImage(graphics As Object, file$, Optional env As Environment = Nothing) As Object
         If graphics Is Nothing Then
-            Return Internal.debug.stop("Graphics data is NULL!", envir)
+            Return Internal.debug.stop("Graphics data is NULL!", env)
         ElseIf graphics.GetType Is GetType(Image) Then
             Return DirectCast(graphics, Image).SaveAs(file)
         ElseIf graphics.GetType Is GetType(Bitmap) Then
@@ -75,7 +87,7 @@ Public Module grDevices
         ElseIf graphics.GetType.IsInheritsFrom(GetType(GraphicsData)) Then
             Return DirectCast(graphics, GraphicsData).Save(file)
         Else
-            Return Internal.debug.stop(New InvalidProgramException($"'{graphics.GetType.Name}' is not a graphics data object!"), envir)
+            Return Internal.debug.stop(New InvalidProgramException($"'{graphics.GetType.Name}' is not a graphics data object!"), env)
         End If
     End Function
 
@@ -226,6 +238,16 @@ break:
         ' exit iterator loops
     End Function
 
+    ''' <summary>
+    ''' get color set
+    ''' </summary>
+    ''' <param name="term">the color set name</param>
+    ''' <param name="n">number of colors from the given color set</param>
+    ''' <param name="character">function returns a color object sequence 
+    ''' or html color code string vector if this parameter value is set to ``TRUE``
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("colors")>
     Public Function colors(<RRawVectorArgument> term As Object,
                            Optional n% = 256,
@@ -234,10 +256,31 @@ break:
 
         Dim list As Color()
 
+        Static printHelp As Boolean = False
+
+        If Not printHelp Then
+            printHelp = True
+
+            GetType(grDevices).Assembly _
+                .FromAssembly _
+                .DoCall(Sub(asm)
+                            Call CLITools.AppSummary(
+                                assem:=asm,
+                                description:="Welcome to use the sciBASIC.NET Color Designer",
+                                SYNOPSIS:=DesignerTerms.TermHelpInfo,
+                                write:=App.StdOut
+                            )
+                        End Sub)
+        End If
+
         If term Is Nothing Then
             Return Nothing
         ElseIf term.GetType.IsArray Then
-            With DirectCast(term, Array).AsObjectEnumerator.Select(Function(a) Scripting.ToString(a)).ToArray
+            With DirectCast(term, Array) _
+                .AsObjectEnumerator _
+                .Select(Function(a) Scripting.ToString(a)) _
+                .ToArray
+
                 If .Length = 1 Then
                     list = Designer.GetColors(CStr(.GetValue(Scan0)), n)
                 Else
@@ -255,5 +298,14 @@ break:
         Else
             Return list
         End If
+    End Function
+
+    <ExportAPI("line2D")>
+    Public Function line2D(<RRawVectorArgument> a As Object, <RRawVectorArgument> b As Object, Optional stroke As Object = Stroke.AxisStroke) As Line
+        Dim p1 As PointF = InteropArgumentHelper.getVector2D(a)
+        Dim p2 As PointF = InteropArgumentHelper.getVector2D(b)
+        Dim penCSS As String = InteropArgumentHelper.getStrokePenCSS(stroke)
+
+        Return New Line(p1, p2, HTML.CSS.Stroke.TryParse(penCSS))
     End Function
 End Module

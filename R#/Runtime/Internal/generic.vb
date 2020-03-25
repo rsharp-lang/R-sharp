@@ -47,6 +47,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Runtime.Internal
@@ -90,6 +91,20 @@ Namespace Runtime.Internal
             If Not generics.ContainsKey(funcName) Then
                 Return debug.stop({$"missing loader entry for generic function '{funcName}'!", "consider load required package at first!"}, env)
             ElseIf Not generics(funcName).ContainsKey(type) Then
+                If TypeOf x Is Object() Then
+                    x = MeasureRealElementType(DirectCast(x, Array)) _
+                        .DoCall(Function(constrain)
+                                    Return New vector(constrain, DirectCast(x, Array), env)
+                                End Function) _
+                        .data
+                    type = x.GetType
+
+                    If generics(funcName).ContainsKey(type) Then
+                        apiCalls = generics(funcName)(type)
+                        GoTo RUN_GENERIC
+                    End If
+                End If
+
                 Return debug.stop({
                     $"missing loader entry for generic function '{funcName}'!",
                     $"missing implementation for overloads type: {type.FullName}!",
@@ -98,7 +113,7 @@ Namespace Runtime.Internal
             Else
                 apiCalls = generics(funcName)(type)
             End If
-
+RUN_GENERIC:
             Dim result As Object = apiCalls(x, args, env)
 
             Return result
