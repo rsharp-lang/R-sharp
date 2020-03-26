@@ -14,7 +14,7 @@ let keys <- unique(groups);
 let colorList <- colors("d3.scale.category20b()", length(keys));
 
 let data <- [];
-let shapes <- loop([
+let shape <- loop([
 	"Rectangle","Circle","Diamond","Triangle","Hexagon","Pentacle","Square","RoundRectangle"
 ]);
 
@@ -27,7 +27,8 @@ for(j in 1:length(keys)) {
 		name = key, 
 		color = colorList[j], 
 		alpha = 200, 
-		ptSize = 25
+		ptSize = 25,
+		shape = shape()
 	);
 		
 	data <- data << s;	
