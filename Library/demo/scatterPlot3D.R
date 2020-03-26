@@ -11,7 +11,7 @@ let z <- as.numeric(matrix[, "Z"]);
 
 let groups <- matrix[, "EigenValue"];
 let keys <- unique(groups);
-let colorList <- colors("d3.scale.category20b()", length(keys));
+let colorList <- colors("material", length(keys));
 
 let data <- [];
 let shape <- loop([
@@ -34,7 +34,7 @@ for(j in 1:length(keys)) {
 	data <- data << s;	
 }
 
-let view = camera([30,60,-57], 1000, 500000, [2560, 1440]); 
+let view = camera([120,120,30], 1500, 500000, [2560, 1440]); 
 let png = `${dirname(file)}/${basename(file)}.PCA3D.png`;
 
 print("camera view of the scatter plot:");

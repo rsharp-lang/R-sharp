@@ -75,7 +75,7 @@ Module plot3D
                 .DoCall(AddressOf TranslateColor) _
                 .Alpha(alpha),
             .PointSize = ptSize,
-            .Shape = LegendStyles.Circle,
+            .Shape = shape,
             .Title = name,
             .Points = points.ToArray
         }
