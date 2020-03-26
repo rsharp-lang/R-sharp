@@ -24,6 +24,8 @@ Module plot3D
     Private Function plotScatter3D(input As Object, args As list, env As Environment) As GraphicsData
         Dim data As Serial3D()
         Dim camera As Camera = args.getValue(Of Camera)("camera", env)
+        Dim bg$ = InteropArgumentHelper.getColor(args!bg, "white")
+        Dim title As String = Scripting.ToString(getFirst(args!title), "Plot deSolve")
 
         If TypeOf input Is Serial3D Then
             data = {DirectCast(input, Serial3D)}
@@ -33,7 +35,8 @@ Module plot3D
 
         Return scatter3D.Plot(
             serials:=data,
-            camera:=camera
+            camera:=camera,
+            bg:=bg
         )
     End Function
 

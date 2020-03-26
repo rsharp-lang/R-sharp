@@ -42,14 +42,13 @@
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
+Imports Microsoft.VisualBasic.Imaging.Drawing3D.Models
+Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.MIME.Markup.HTML.CSS
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
-Imports REnv = SMRUCC.Rsharp.Runtime.Internal
-Imports SMRUCC.Rsharp.Runtime
-Imports Microsoft.VisualBasic.Imaging.Drawing3D.Models
-Imports Microsoft.VisualBasic.MIME.Markup.HTML.CSS
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports Microsoft.VisualBasic.Linq
+Imports REnv = SMRUCC.Rsharp.Runtime.Internal
 
 <Package("grDevices.gr3D", Category:=APICategories.UtilityTools)>
 Module gr3D
