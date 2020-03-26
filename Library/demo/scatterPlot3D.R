@@ -31,6 +31,6 @@ for(key in keys) {
 let view = camera([0,0,0], -40, 256, [2560, 1440]); 
 let png = `${dirname(file)}/${basename(file)}.PCA3D.png`;
 
-plot(data, camera = camera)
+plot(data, camera = view)
 :> save.graphics(file = png)
 ;
