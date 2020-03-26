@@ -11,6 +11,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports scatter3D = Microsoft.VisualBasic.Data.ChartPlots.Plot3D.Scatter
 
 <Package("chart3D", Category:=APICategories.SoftwareTools)>
 Module plot3D
@@ -21,7 +22,19 @@ Module plot3D
     End Sub
 
     Private Function plotScatter3D(input As Object, args As list, env As Environment) As GraphicsData
+        Dim data As Serial3D()
+        Dim camera As Camera = args.getValue(Of Camera)("camera", env)
 
+        If TypeOf input Is Serial3D Then
+            data = {DirectCast(input, Serial3D)}
+        Else
+            data = input
+        End If
+
+        Return scatter3D.Plot(
+            serials:=data,
+            camera:=camera
+        )
     End Function
 
     <ExportAPI("serial3D")>
