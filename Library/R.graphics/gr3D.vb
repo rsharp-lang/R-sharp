@@ -91,9 +91,11 @@ Module gr3D
     ''' <param name="size"></param>
     ''' <returns></returns>
     <ExportAPI("camera")>
-    Public Function camera(Optional viewAngle As Object = Nothing,
+    Public Function camera(<RRawVectorArgument>
+                           Optional viewAngle As Object = Nothing,
                            Optional viewDistance# = -40,
                            Optional fov# = 256,
+                           <RRawVectorArgument>
                            Optional size As Object = "2560,1440") As Camera
 
         Return New Camera(InteropArgumentHelper.getVector3D(viewAngle)) With {
