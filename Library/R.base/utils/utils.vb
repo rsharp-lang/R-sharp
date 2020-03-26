@@ -1,41 +1,41 @@
 ﻿#Region "Microsoft.VisualBasic::b1917a6a07b4ea42c5ef1afbaf57a1a1, Library\R.base\utils\utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module utils
-    ' 
-    '     Function: read_csv, saveGeneric, write_csv
-    ' 
-    ' /********************************************************************************/
+' Module utils
+' 
+'     Function: read_csv, saveGeneric, write_csv
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -177,19 +177,21 @@ Public Module utils
                     showRowNames:=row_names
                 )
             Dim rows As IEnumerable(Of RowObject) = matrix _
-                .Select(Function(r) New RowObject(r)) _
+                .Select(Function(r)
+                            Return New RowObject(r)
+                        End Function) _
                 .ToArray
             Dim dataframe As New File(rows)
 
             Return dataframe.Save(path:=file, encoding:=Encodings.UTF8WithoutBOM, silent:=True)
         ElseIf type Is GetType(File) Then
             Return DirectCast(x, File).Save(path:=file, encoding:=Encodings.UTF8WithoutBOM, silent:=True)
-        ElseIf type Is GetType(IO.DataFrame) Then
-            Return DirectCast(x, IO.DataFrame).Save(path:=file, encoding:=Encodings.UTF8WithoutBOM, silent:=True)
-        ElseIf Runtime.isVector(Of EntityObject)(x) Then
-            Return DirectCast(Runtime.asVector(Of EntityObject)(x), EntityObject()).SaveTo(path:=file, encoding:=Encodings.UTF8WithoutBOM.CodePage, silent:=True)
-        ElseIf Runtime.isVector(Of DataSet)(x) Then
-            Return DirectCast(Runtime.asVector(Of DataSet)(x), DataSet()).SaveTo(path:=file, encoding:=Encodings.UTF8WithoutBOM.CodePage, silent:=True)
+        ElseIf type Is GetType(Microsoft.VisualBasic.Data.csv.IO.DataFrame) Then
+            Return DirectCast(x, Microsoft.VisualBasic.Data.csv.IO.DataFrame).Save(path:=file, encoding:=Encodings.UTF8WithoutBOM, silent:=True)
+        ElseIf REnv.isVector(Of EntityObject)(x) Then
+            Return DirectCast(REnv.asVector(Of EntityObject)(x), EntityObject()).SaveTo(path:=file, encoding:=Encodings.UTF8WithoutBOM.CodePage, silent:=True)
+        ElseIf REnv.isVector(Of DataSet)(x) Then
+            Return DirectCast(REnv.asVector(Of DataSet)(x), DataSet()).SaveTo(path:=file, encoding:=Encodings.UTF8WithoutBOM.CodePage, silent:=True)
         ElseIf type.IsArray OrElse type Is GetType(vector) Then
             Return saveGeneric(x, type, file, env)
         Else
