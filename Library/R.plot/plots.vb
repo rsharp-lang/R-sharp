@@ -58,6 +58,7 @@ Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.Shapes
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Math.Calculus
@@ -76,10 +77,19 @@ Imports Scatter2D = Microsoft.VisualBasic.Data.ChartPlots.Scatter
 <Package("plot.charts")>
 Module plots
 
+    ''' <summary>
+    ''' do plot of the linear regression result
+    ''' </summary>
+    ''' <param name="lm">the linear model</param>
+    ''' <returns></returns>
     <ExportAPI("linear.regression")>
     Public Function linearRegression(lm As IFitted) As GraphicsData
         Return RegressionPlot.Plot(lm)
     End Function
+
+    Sub New()
+        REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of SerialData)(Function(line) line.ToString)
+    End Sub
 
     <RInitialize>
     Sub Main()
@@ -217,8 +227,12 @@ Module plots
             Ylabel:=getFirst(REnv.asVector(Of String)(args("y.lab"))),
             drawLine:=False,' getFirst(asLogical(args!line))
             legendBgFill:=InteropArgumentHelper.getColor(args!legendBgFill, Nothing),
+            legendFontCSS:=InteropArgumentHelper.getFontCSS(args("legend.font")),
             showLegend:=showLegend,
-            title:=title
+            title:=title,
+            legendSplit:=args.getValue(Of Integer)("legend.block", env),
+            ablines:=args.getValue(Of Line())("abline", env),
+            hullConvexList:=args.getValue(Of String())("convexHull", env)
         )
     End Function
 
@@ -234,6 +248,7 @@ Module plots
     Public Function CreateSerial(x As Array, y As Array,
                                  Optional name$ = "data serial",
                                  Optional color As Object = "black",
+                                 Optional alpha As Integer = 255,
                                  Optional ptSize As Integer = 5) As SerialData
 
         Dim px As Double() = vector.asVector(Of Double)(x)
@@ -246,11 +261,11 @@ Module plots
                     End Function) _
             .ToArray
         Dim serial As New SerialData With {
-            .color = InteropArgumentHelper.getColor(color).TranslateColor,
+            .color = InteropArgumentHelper.getColor(color).TranslateColor.Alpha(alpha),
             .lineType = DashStyle.Solid,
-            .PointSize = ptSize,
+            .pointSize = ptSize,
             .pts = points,
-            .Shape = LegendStyles.SolidLine,
+            .shape = LegendStyles.SolidLine,
             .title = name,
             .width = 5
         }

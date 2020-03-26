@@ -43,6 +43,7 @@ Imports System.Drawing
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
+Imports Microsoft.VisualBasic.MIME.Markup.HTML.CSS
 
 ''' <summary>
 ''' R# graphics argument scripting helper
@@ -157,6 +158,52 @@ Public Module InteropArgumentHelper
                 Return color.ToString
             Case GetType(Integer()), GetType(Long()), GetType(Short())
                 Return DirectCast(color, Array).GetValue(Scan0).ToString
+            Case Else
+                Return [default]
+        End Select
+    End Function
+
+    Public Function getFontCSS(font As Object, Optional default$ = CSSFont.Win7Large) As String
+        If font Is Nothing Then
+            Return [default]
+        End If
+
+        Select Case font.GetType
+            Case GetType(String)
+                Return font
+            Case GetType(Font)
+                Return New CSSFont(DirectCast(font, Font)).ToString
+            Case GetType(CSSFont)
+                Return DirectCast(font, CSSFont).ToString
+            Case GetType(String())
+                Return DirectCast(font, String()).GetValue(Scan0)
+            Case Else
+                Return [default]
+        End Select
+    End Function
+
+    ''' <summary>
+    ''' <see cref="Stroke"/>
+    ''' </summary>
+    ''' <param name="stroke"></param>
+    ''' <param name="default"></param>
+    ''' <returns></returns>
+    Public Function getStrokePenCSS(stroke As Object, Optional default$ = Stroke.AxisStroke) As String
+        If stroke Is Nothing Then
+            Return [default]
+        End If
+
+        Select Case stroke.GetType
+            Case GetType(String)
+                Return stroke
+            Case GetType(String())
+                Return DirectCast(stroke, String()).GetValue(Scan0)
+            Case GetType(Stroke)
+                Return DirectCast(stroke, Stroke).ToString
+            Case GetType(Pen)
+                Return New Stroke(DirectCast(stroke, Pen)).ToString
+            Case GetType(Single), GetType(Double), GetType(Integer)
+                Return New Stroke(CDbl(stroke)).ToString
             Case Else
                 Return [default]
         End Select
