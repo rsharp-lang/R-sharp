@@ -59,6 +59,4 @@ Module devkit
     Public Function AssemblyInfo(dllfile As String) As AssemblyInfo
         Return Assembly.UnsafeLoadFrom(dllfile.GetFullPath).FromAssembly
     End Function
-
-
 End Module

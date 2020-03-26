@@ -257,6 +257,7 @@
   <ItemGroup>
     <Compile Include="base.vb" />
     <Compile Include="rawSerializer.vb" />
+    <Compile Include="base\IO.vb" />
     <Compile Include="utils\dataframe.vb" />
     <Compile Include="utils\console.vb" />
     <Compile Include="utils\xlsx.vb" />
@@ -332,8 +333,6 @@
       <Name>R</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="base\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
