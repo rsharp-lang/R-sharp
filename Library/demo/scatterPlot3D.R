@@ -14,6 +14,9 @@ let keys <- unique(groups);
 let colorList <- colors("d3.scale.category20b()", length(keys));
 
 let data <- [];
+let shapes <- loop([
+	"Rectangle","Circle","Diamond","Triangle","Hexagon","Pentacle","Square","RoundRectangle"
+]);
 
 for(j in 1:length(keys)) {
 	let key <- keys[j];
@@ -30,7 +33,7 @@ for(j in 1:length(keys)) {
 	data <- data << s;	
 }
 
-let view = camera([30,30,-30], -1, 256, [2560, 1440]); 
+let view = camera([30,60,-57], 1000, 500000, [2560, 1440]); 
 let png = `${dirname(file)}/${basename(file)}.PCA3D.png`;
 
 print("camera view of the scatter plot:");
