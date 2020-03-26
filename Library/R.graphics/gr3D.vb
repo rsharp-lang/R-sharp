@@ -51,7 +51,7 @@ Imports Microsoft.VisualBasic.MIME.Markup.HTML.CSS
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports Microsoft.VisualBasic.Linq
 
-<Package("grDevices.gr3D")>
+<Package("grDevices.gr3D", Category:=APICategories.UtilityTools)>
 Module gr3D
 
     Sub New()
