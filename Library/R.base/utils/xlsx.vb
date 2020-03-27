@@ -50,7 +50,7 @@ Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 ''' <summary>
 ''' 
 ''' </summary>
-<Package("xlsx")>
+<Package("xlsx", Category:=APICategories.UtilityTools)>
 Module xlsx
 
     ''' <summary>
