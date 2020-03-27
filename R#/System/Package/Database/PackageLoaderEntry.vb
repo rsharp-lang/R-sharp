@@ -101,6 +101,8 @@ Namespace System.Package
         ''' <returns></returns>
         Public Property [module] As TypeInfo
 
+        Public Property symbols As String()
+
         Sub New()
         End Sub
 
@@ -146,7 +148,8 @@ Namespace System.Package
                 .[namespace] = info.info.Namespace,
                 .publisher = info.info.Publisher,
                 .revision = info.info.Revision,
-                .url = info.info.Url
+                .url = info.info.Url,
+                .symbols = info.ls
             }
         End Function
     End Class
