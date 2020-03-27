@@ -108,7 +108,11 @@ Namespace System.Package
         ''' <param name="dllFile"></param>
         ''' <returns></returns>
         Public Function InstallLocals(dllFile As String) As String()
-            Dim packageIndex = pkgDb.packages.ToDictionary(Function(pkg) pkg.namespace)
+            Dim packageIndex As Dictionary(Of String, PackageLoaderEntry) = pkgDb.packages _
+                .AsEnumerable _
+                .ToDictionary(Function(pkg)
+                                  Return pkg.namespace
+                              End Function)
             Dim names As New List(Of String)
 
             For Each pkg As Package In PackageLoader.ParsePackages(dll:=dllFile)

@@ -1,45 +1,45 @@
 ﻿#Region "Microsoft.VisualBasic::b8f6022048995bc5ba579f741c1e1152, R#\System\Package\Database\LocalPackageDatabase.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class LocalPackageDatabase
-    ' 
-    '         Properties: localDb, numOfpackages, packages, system
-    ' 
-    '         Function: Build, EmptyRepository, FindPackage, GenericEnumerator, GetEnumerator
-    '                   hasLibFile, Load
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class LocalPackageDatabase
+' 
+'         Properties: localDb, numOfpackages, packages, system
+' 
+'         Function: Build, EmptyRepository, FindPackage, GenericEnumerator, GetEnumerator
+'                   hasLibFile, Load
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -67,7 +67,7 @@ Namespace System.Package
         <XmlElement> Public Property system As AssemblyInfo
 
         <XmlArray>
-        Public Property packages As PackageLoaderEntry()
+        Public Property packages As XmlList(Of PackageLoaderEntry)
 
         ''' <summary>
         ''' Check if the given dll module <paramref name="libraryFileName"/> is exists in database or not.
@@ -75,7 +75,7 @@ Namespace System.Package
         ''' <param name="libraryFileName"></param>
         ''' <returns></returns>
         Public Function hasLibFile(libraryFileName As String) As Boolean
-            Return packages.Any(Function(pkg) pkg.module.assembly = libraryFileName)
+            Return packages.items.Any(Function(pkg) pkg.module.assembly = libraryFileName)
         End Function
 
         ''' <summary>
@@ -86,7 +86,7 @@ Namespace System.Package
         ''' <param name="exception"></param>
         ''' <returns></returns>
         Public Function FindPackage(packageName As String, ByRef exception As Exception) As Package
-            Dim entry As PackageLoaderEntry = packages _
+            Dim entry As PackageLoaderEntry = packages.items _
                 .Where(Function(pkg)
                            Return pkg.namespace = packageName
                        End Function) _
