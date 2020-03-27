@@ -309,5 +309,38 @@ Namespace Runtime
         Public Function [Module](Of TX As IComparable(Of TX), TY As IComparable(Of TY), TOut)(x, y) As IEnumerable(Of TOut)
             Return BinaryCoreInternal(Of TX, TY, TOut)(x, y, Function(a, b) a Mod b)
         End Function
+
+        ''' <summary>
+        ''' 将所有的数组都转换为等长的数组
+        ''' </summary>
+        ''' <param name="a"></param>
+        ''' <returns></returns>
+        Public Iterator Function VectorAlignment(ParamArray a As Array()) As IEnumerable(Of Array)
+            Dim allSize As Integer() = a.Select(Function(v) v.Length).Where(Function(l) l <> 1).ToArray
+            Dim alignSize As Integer
+
+            If Not allSize.All(Function(l) l = allSize(Scan0)) Then
+                Throw New InvalidCastException
+            Else
+                alignSize = allSize(Scan0)
+            End If
+
+            For Each v As Array In a
+                If v.Length = 0 Then
+                    Yield Array.CreateInstance(v.GetType.GetElementType, alignSize)
+                ElseIf v.Length = 1 Then
+                    Dim [single] As Object = v.GetValue(Scan0)
+                    Dim full As Array = Array.CreateInstance(v.GetType.GetElementType, alignSize)
+
+                    For i As Integer = 0 To alignSize - 1
+                        full.SetValue([single], i)
+                    Next
+
+                    Yield full
+                Else
+                    Yield v
+                End If
+            Next
+        End Function
     End Module
 End Namespace

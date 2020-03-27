@@ -44,6 +44,7 @@ Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
 Imports Microsoft.VisualBasic.MIME.Markup.HTML.CSS
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
 ''' R# graphics argument scripting helper
@@ -75,8 +76,8 @@ Public Module InteropArgumentHelper
             Return New Point3D
         ElseIf TypeOf obj Is Point3D Then
             Return DirectCast(obj, Point3D)
-        ElseIf TypeOf obj Is Double() Then
-            With DirectCast(obj, Double())
+        ElseIf TypeOf obj Is Double() OrElse TypeOf obj Is Integer() OrElse TypeOf obj Is Long() Then
+            With DirectCast(REnv.asVector(Of Double)(obj), Double())
                 If .Length >= 3 Then
                     Return New Point3D(.GetValue(0), .GetValue(1), .GetValue(2))
                 ElseIf .Length = 2 Then

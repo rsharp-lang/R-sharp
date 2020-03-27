@@ -181,7 +181,7 @@ Namespace Runtime.Interop
                 If api Like GetType(MethodInvoke) Then
                     result = api.TryCast(Of MethodInvoke).Invoke(parameters)
                 Else
-                    result = api.VB.Method.Invoke(Nothing, parameters.ToArray)
+                    result = api.VB.Method.Invoke(api.VB.Target, parameters.ToArray)
                 End If
             Catch ex As Exception
                 Return Internal.debug.stop(ex, env)
