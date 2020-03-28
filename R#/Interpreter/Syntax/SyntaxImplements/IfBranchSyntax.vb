@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b76b1aef347fc1f04a73fc126d32b6e0, R#\Interpreter\Syntax\SyntaxImplements\IfBranchSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::f70133c6f532c9b829cc6bf52c1fd7ee, R#\Interpreter\Syntax\SyntaxImplements\IfBranchSyntax.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Module IfBranchSyntax
     ' 
-    '         Function: ElseBranch, ElseIfBranch, IfBranch, IIfExpression
+    '         Function: ElseClosure, ElseIfClosure, IfClosure, IIfExpression
     ' 
     ' 
     ' /********************************************************************************/

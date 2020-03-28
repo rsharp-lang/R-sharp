@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::31b9064ffab4504498989d6e20441355, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssign.vb"
+﻿#Region "Microsoft.VisualBasic::6e272377fad33d69684558ca0a0564dc, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssign.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Class ValueAssign
     ' 
-    '         Properties: symbolSize, type
+    '         Properties: symbolSize, type, value
     ' 
     '         Constructor: (+2 Overloads) Sub New
     '         Function: assignSymbol, assignTuples, doValueAssign, DoValueAssign, Evaluate

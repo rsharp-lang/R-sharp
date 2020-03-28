@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::60cd584a86a5d24ac126394613a00b5a, Library\R.graph\Comparison.vb"
+﻿#Region "Microsoft.VisualBasic::2cf830dc3f1efae9e565db3f9124f25e, Library\R.graph\Comparison.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     ' Module Comparison
     ' 
-    '     Function: (+2 Overloads) similarity
+    '     Function: similarity, similarityOfNode
     ' 
     ' /********************************************************************************/
 

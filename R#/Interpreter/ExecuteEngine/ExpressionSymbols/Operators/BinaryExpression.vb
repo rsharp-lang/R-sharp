@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3adac5ea071514f6379c30e4b43b91b3, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryExpression.vb"
+﻿#Region "Microsoft.VisualBasic::7cbab11d3760b87580643abe05a145aa, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryExpression.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,7 @@
     '         Properties: type
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, ToString
+    '         Function: Evaluate, ToString, vectorCast
     ' 
     ' 
     ' /********************************************************************************/

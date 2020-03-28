@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2a51aeb16ba15cc86c7e816c3a452b97, R#\Runtime\Interop\RInteropAttributes\RInteropAttribute.vb"
+﻿#Region "Microsoft.VisualBasic::d52c37b40afba1db089277bd399ac472, R#\Runtime\Interop\RInteropAttributes\RInteropAttribute.vb"
 
     ' Author:
     ' 
@@ -52,7 +52,7 @@
     ' 
     '     Class RApiReturnAttribute
     ' 
-    '         Properties: returnType
+    '         Properties: returnTypes
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: GetActualReturnType, ToString

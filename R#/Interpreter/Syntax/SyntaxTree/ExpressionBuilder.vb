@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4c88e4cfc7f0693eec7dc0d628c9af89, R#\Interpreter\Syntax\SyntaxTree\ExpressionBuilder.vb"
+﻿#Region "Microsoft.VisualBasic::6ff9fcfb8704704c436c35471c2d097f, R#\Interpreter\Syntax\SyntaxTree\ExpressionBuilder.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Module ExpressionBuilder
     ' 
-    '         Function: getTupleSymbols, getValueAssign, keywordExpressionHandler, ParseExpression
+    '         Function: getTupleSymbols, getValueAssign, keywordExpressionHandler, ParseExpression, parseInvoke
     ' 
     ' 
     ' /********************************************************************************/

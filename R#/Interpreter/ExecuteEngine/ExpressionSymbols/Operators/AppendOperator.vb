@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::28b7f848a54e8573a282a40c5e5d8263, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\AppendOperator.vb"
+﻿#Region "Microsoft.VisualBasic::11f1c152ca8d280a6f41f14b89879356, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\AppendOperator.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,7 @@
     '         Properties: type
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate
+    '         Function: Evaluate, ToString
     ' 
     ' 
     ' /********************************************************************************/

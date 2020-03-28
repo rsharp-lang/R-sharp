@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f9ca69e0bfb3b11e43cfb07023ec2d65, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ForLoop.vb"
+﻿#Region "Microsoft.VisualBasic::dcd2eabc54199043f8bbf88ee66c51a5, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\ForLoop.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Class ForLoop
     ' 
-    '         Properties: stackFrame, type
+    '         Properties: body, sequence, stackFrame, type
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: Evaluate, exec, execParallel, getSequence, RunLoop
