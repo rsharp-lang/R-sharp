@@ -52,7 +52,6 @@
 
 #End Region
 
-Imports System.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime
@@ -182,7 +181,30 @@ Namespace Interpreter.ExecuteEngine
             End If
 
             If Not objType.ImplementInterface(GetType(RNameIndex)) Then
-                Return Internal.debug.stop("Target object can not be indexed by name!", envir)
+                If objType.ImplementInterface(Of IDictionary) AndAlso objType.GenericTypeArguments(Scan0) Is GetType(String) Then
+                    Dim keys As String() = asVector(Of String)(indexer)
+                    Dim table As IDictionary = DirectCast(obj, IDictionary)
+
+                    If indexer.Length = 1 Then
+                        If table.Contains(keys(Scan0)) Then
+                            Return table.Item(keys(Scan0))
+                        Else
+                            Return Nothing
+                        End If
+                    Else
+                        Return Iterator Function() As IEnumerable(Of Object)
+                                   For Each key As String In keys
+                                       If table.Contains(key) Then
+                                           Yield table.Item(key)
+                                       Else
+                                           Yield Nothing
+                                       End If
+                                   Next
+                               End Function().ToArray
+                    End If
+                Else
+                    Return Internal.debug.stop("Target object can not be indexed by name!", envir)
+                End If
             ElseIf indexer.Length = 1 Then
                 Return DirectCast(obj, RNameIndex).getByName(Scripting.ToString(indexer.GetValue(Scan0)))
             Else

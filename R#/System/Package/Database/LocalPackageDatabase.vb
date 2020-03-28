@@ -64,9 +64,8 @@ Namespace System.Package
             End Set
         End Property
 
-        <XmlElement> Public Property system As AssemblyInfo
-
-        <XmlArray>
+        <XmlElement>
+        Public Property system As AssemblyInfo
         Public Property packages As XmlList(Of PackageLoaderEntry)
 
         ''' <summary>
@@ -131,7 +130,7 @@ Namespace System.Package
         End Function
 
         Public Iterator Function GenericEnumerator() As IEnumerator(Of PackageLoaderEntry) Implements Enumeration(Of PackageLoaderEntry).GenericEnumerator
-            For Each package As PackageLoaderEntry In packages
+            For Each package As PackageLoaderEntry In packages.AsEnumerable
                 Yield package
             Next
         End Function
