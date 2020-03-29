@@ -158,17 +158,6 @@ Partial Module base
         Return value.chars.DecodeBase64.LoadJSON(Of String())
     End Function
 
-    Public Enum RData
-        ''' <summary>
-        ''' 单个对象序列化
-        ''' </summary>
-        RDS
-        ''' <summary>
-        ''' 多个对象序列化
-        ''' </summary>
-        RDA
-    End Enum
-
     ''' <summary>
     ''' ### Save R Objects
     ''' 
