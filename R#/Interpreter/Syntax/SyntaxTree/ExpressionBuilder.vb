@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4c88e4cfc7f0693eec7dc0d628c9af89, R#\Interpreter\Syntax\SyntaxTree\ExpressionBuilder.vb"
+﻿#Region "Microsoft.VisualBasic::6ff9fcfb8704704c436c35471c2d097f, R#\Interpreter\Syntax\SyntaxTree\ExpressionBuilder.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Module ExpressionBuilder
     ' 
-    '         Function: getTupleSymbols, getValueAssign, keywordExpressionHandler, ParseExpression
+    '         Function: getTupleSymbols, getValueAssign, keywordExpressionHandler, ParseExpression, parseInvoke
     ' 
     ' 
     ' /********************************************************************************/
@@ -161,6 +161,12 @@ Namespace Interpreter.SyntaxParser
                     If opText = "=" OrElse opText = "<-" Then
                         Return SyntaxImplements.ValueAssign(code, opts)
                     End If
+                ElseIf code = 2 Then
+                    Dim result = parseInvoke(code, opts)
+
+                    If Not result Is Nothing Then
+                        Return result
+                    End If
                 End If
             ElseIf code(1).isOperator("=", "<-") Then
                 Return getValueAssign(code, opts)
@@ -175,6 +181,12 @@ Namespace Interpreter.SyntaxParser
                         Return valExpression
                     Else
                         Return New UnaryNot(valExpression.expression)
+                    End If
+                ElseIf code(Scan0).isIdentifier OrElse code(Scan0).isKeyword Then
+                    Dim result = parseInvoke(code, opts)
+
+                    If Not result Is Nothing Then
+                        Return result
                     End If
                 End If
             ElseIf code = 3 Then
@@ -200,6 +212,26 @@ Namespace Interpreter.SyntaxParser
             End If
 Binary:
             Return code.ParseBinaryExpression(opts)
+        End Function
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="code">code block with 2 elements</param>
+        ''' <param name="opts"></param>
+        ''' <returns></returns>
+        Private Function parseInvoke(code As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
+            Dim part2 As Token() = code(1)
+
+            If part2(Scan0) = (TokenType.open, "(") AndAlso part2.Last = (TokenType.close, ")") Then
+                Dim invoke = part2.SplitByTopLevelDelimiter(TokenType.close)
+
+                If invoke = 2 Then
+                    Return SyntaxImplements.FunctionInvoke(code(Scan0)(Scan0), part2, opts)
+                End If
+            End If
+
+            Return Nothing
         End Function
 
         Private Function getValueAssign(code As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult

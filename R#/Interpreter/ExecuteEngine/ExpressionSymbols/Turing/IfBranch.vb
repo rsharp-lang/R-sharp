@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3350a637c94bea12437607c48d26dbe6, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\IfBranch.vb"
+﻿#Region "Microsoft.VisualBasic::fb0121ee954dc57a32b1acecb6fb1ba0, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\IfBranch.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Class IfBranch
     ' 
-    '         Properties: stackFrame, type
+    '         Properties: ifTest, stackFrame, trueClosure, type
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: Evaluate, ToString

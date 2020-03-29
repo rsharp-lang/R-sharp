@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0435efd9eb79999751b756ca8320759c, R.exec\Compiler.vb"
+﻿#Region "Microsoft.VisualBasic::046d63cad7cfb516715cb527c54d36c4, Library\R.base\base\IO.vb"
 
     ' Author:
     ' 
@@ -31,41 +31,22 @@
 
     ' Summaries:
 
-    ' Module Compiler
+    ' Module RawIO
     ' 
-    '     Function: Build, DeclareNewVariable
+    ' 
     ' 
     ' /********************************************************************************/
 
 #End Region
 
-Imports System.Runtime.CompilerServices
-Imports Microsoft.VisualBasic.Data.IO.netCDF.Components
-Imports SMRUCC.Rsharp.Interpreter
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
-Imports RExpression = SMRUCC.Rsharp.Interpreter.ExecuteEngine.Expression
+Imports Microsoft.VisualBasic.Scripting.MetaData
 
 ''' <summary>
-''' R# executable file format and script compiler
+''' R# raw I/O api module
 ''' </summary>
-Public Module Compiler
+<Package("IO", Category:=APICategories.UtilityTools, Publisher:="xie.guigang@gmail.com")>
+Module RawIO
 
-    Public Iterator Function Build(script As String) As IEnumerable(Of variable)
-        Dim program As Program = Program.BuildProgram(script)
-        Dim buffer As variable()
-        Dim i32ptr As Integer = Scan0
 
-        For Each line As RExpression In program
-            Select Case line.GetType
-                Case GetType(DeclareNewSymbol)
-                    buffer = DirectCast(line, DeclareNewSymbol).DeclareNewVariable
-            End Select
-        Next
-    End Function
-
-    <Extension>
-    Private Function DeclareNewVariable(declares As DeclareNewSymbol) As variable()
-        Dim [let] As New variable
-        ' Dim names = declares.
-    End Function
 End Module
+

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b8f6022048995bc5ba579f741c1e1152, R#\System\Package\Database\LocalPackageDatabase.vb"
+﻿#Region "Microsoft.VisualBasic::81dbe328fe0aa8294c32112183f829c7, R#\System\Package\Database\LocalPackageDatabase.vb"
 
     ' Author:
     ' 
@@ -64,10 +64,9 @@ Namespace System.Package
             End Set
         End Property
 
-        <XmlElement> Public Property system As AssemblyInfo
-
-        <XmlArray>
-        Public Property packages As PackageLoaderEntry()
+        <XmlElement>
+        Public Property system As AssemblyInfo
+        Public Property packages As XmlList(Of PackageLoaderEntry)
 
         ''' <summary>
         ''' Check if the given dll module <paramref name="libraryFileName"/> is exists in database or not.
@@ -75,7 +74,7 @@ Namespace System.Package
         ''' <param name="libraryFileName"></param>
         ''' <returns></returns>
         Public Function hasLibFile(libraryFileName As String) As Boolean
-            Return packages.Any(Function(pkg) pkg.module.assembly = libraryFileName)
+            Return packages.items.Any(Function(pkg) pkg.module.assembly = libraryFileName)
         End Function
 
         ''' <summary>
@@ -86,7 +85,7 @@ Namespace System.Package
         ''' <param name="exception"></param>
         ''' <returns></returns>
         Public Function FindPackage(packageName As String, ByRef exception As Exception) As Package
-            Dim entry As PackageLoaderEntry = packages _
+            Dim entry As PackageLoaderEntry = packages.items _
                 .Where(Function(pkg)
                            Return pkg.namespace = packageName
                        End Function) _
@@ -131,7 +130,7 @@ Namespace System.Package
         End Function
 
         Public Iterator Function GenericEnumerator() As IEnumerator(Of PackageLoaderEntry) Implements Enumeration(Of PackageLoaderEntry).GenericEnumerator
-            For Each package As PackageLoaderEntry In packages
+            For Each package As PackageLoaderEntry In packages.AsEnumerable
                 Yield package
             Next
         End Function

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ccd590d330ec6d618dd5179e950e3d4f, R#\Interpreter\Syntax\SyntaxBuilderOptions.vb"
+﻿#Region "Microsoft.VisualBasic::a73c75cd42b4f84f004289ea238f2598, R#\Interpreter\Syntax\SyntaxBuilderOptions.vb"
 
     ' Author:
     ' 
@@ -32,6 +32,8 @@
     ' Summaries:
 
     '     Class SyntaxBuilderOptions
+    ' 
+    '         Properties: haveSyntaxErr
     ' 
     '         Function: GetStackTrace
     ' 

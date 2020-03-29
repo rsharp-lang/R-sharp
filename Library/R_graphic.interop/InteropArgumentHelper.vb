@@ -1,41 +1,42 @@
-﻿#Region "Microsoft.VisualBasic::46d00760d10ad5246979ca71e77e156d, Library\R_graphic.interop\InteropArgumentHelper.vb"
+﻿#Region "Microsoft.VisualBasic::b33a7ea37aacc30bd61c77202f57a155, Library\R_graphic.interop\InteropArgumentHelper.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-' Module InteropArgumentHelper
-' 
-'     Function: getColor, getPadding, getSize, getVector3D
-' 
-' /********************************************************************************/
+    ' Module InteropArgumentHelper
+    ' 
+    '     Function: getColor, getFontCSS, getPadding, getSize, getStrokePenCSS
+    '               getVector2D, getVector3D
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -44,6 +45,7 @@ Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
 Imports Microsoft.VisualBasic.MIME.Markup.HTML.CSS
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
 ''' R# graphics argument scripting helper
@@ -75,8 +77,8 @@ Public Module InteropArgumentHelper
             Return New Point3D
         ElseIf TypeOf obj Is Point3D Then
             Return DirectCast(obj, Point3D)
-        ElseIf TypeOf obj Is Double() Then
-            With DirectCast(obj, Double())
+        ElseIf TypeOf obj Is Double() OrElse TypeOf obj Is Integer() OrElse TypeOf obj Is Long() Then
+            With DirectCast(REnv.asVector(Of Double)(obj), Double())
                 If .Length >= 3 Then
                     Return New Point3D(.GetValue(0), .GetValue(1), .GetValue(2))
                 ElseIf .Length = 2 Then

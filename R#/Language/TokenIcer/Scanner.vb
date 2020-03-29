@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::311e922df92dbfa0aa6b08d502c01c67, R#\Language\TokenIcer\Scanner.vb"
+﻿#Region "Microsoft.VisualBasic::6e812dc72ed1118800970bf39e28b4ba, R#\Language\TokenIcer\Scanner.vb"
 
     ' Author:
     ' 

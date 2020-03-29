@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7aef1574e3517fdbd7405b7034d4cf4f, R#\Interpreter\Program.vb"
+﻿#Region "Microsoft.VisualBasic::c48fb2b352590aa43e1ee51977e0ed78, R#\Interpreter\Program.vb"
 
     ' Author:
     ' 
@@ -31,6 +31,14 @@
 
     ' Summaries:
 
+    '     Enum ExecuteBreaks
+    ' 
+    '         BreakLoop, ContinuteNext, ReturnValue
+    ' 
+    '  
+    ' 
+    ' 
+    ' 
     '     Class Program
     ' 
     '         Constructor: (+1 Overloads) Sub New

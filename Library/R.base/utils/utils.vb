@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b1917a6a07b4ea42c5ef1afbaf57a1a1, Library\R.base\utils\utils.vb"
+﻿#Region "Microsoft.VisualBasic::a4188998b1bd2d521135705e8f28a9bb, Library\R.base\utils\utils.vb"
 
     ' Author:
     ' 
@@ -177,19 +177,21 @@ Public Module utils
                     showRowNames:=row_names
                 )
             Dim rows As IEnumerable(Of RowObject) = matrix _
-                .Select(Function(r) New RowObject(r)) _
+                .Select(Function(r)
+                            Return New RowObject(r)
+                        End Function) _
                 .ToArray
             Dim dataframe As New File(rows)
 
             Return dataframe.Save(path:=file, encoding:=Encodings.UTF8WithoutBOM, silent:=True)
         ElseIf type Is GetType(File) Then
             Return DirectCast(x, File).Save(path:=file, encoding:=Encodings.UTF8WithoutBOM, silent:=True)
-        ElseIf type Is GetType(IO.DataFrame) Then
-            Return DirectCast(x, IO.DataFrame).Save(path:=file, encoding:=Encodings.UTF8WithoutBOM, silent:=True)
-        ElseIf Runtime.isVector(Of EntityObject)(x) Then
-            Return DirectCast(Runtime.asVector(Of EntityObject)(x), EntityObject()).SaveTo(path:=file, encoding:=Encodings.UTF8WithoutBOM.CodePage, silent:=True)
-        ElseIf Runtime.isVector(Of DataSet)(x) Then
-            Return DirectCast(Runtime.asVector(Of DataSet)(x), DataSet()).SaveTo(path:=file, encoding:=Encodings.UTF8WithoutBOM.CodePage, silent:=True)
+        ElseIf type Is GetType(Microsoft.VisualBasic.Data.csv.IO.DataFrame) Then
+            Return DirectCast(x, Microsoft.VisualBasic.Data.csv.IO.DataFrame).Save(path:=file, encoding:=Encodings.UTF8WithoutBOM, silent:=True)
+        ElseIf REnv.isVector(Of EntityObject)(x) Then
+            Return DirectCast(REnv.asVector(Of EntityObject)(x), EntityObject()).SaveTo(path:=file, encoding:=Encodings.UTF8WithoutBOM.CodePage, silent:=True)
+        ElseIf REnv.isVector(Of DataSet)(x) Then
+            Return DirectCast(REnv.asVector(Of DataSet)(x), DataSet()).SaveTo(path:=file, encoding:=Encodings.UTF8WithoutBOM.CodePage, silent:=True)
         ElseIf type.IsArray OrElse type Is GetType(vector) Then
             Return saveGeneric(x, type, file, env)
         Else

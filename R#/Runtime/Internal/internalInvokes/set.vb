@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9a205f9f05fdd7ea058afbd855776415, R#\Runtime\Internal\internalInvokes\set.vb"
+﻿#Region "Microsoft.VisualBasic::2a84c15380ba7b33400b724f6b083c57, R#\Runtime\Internal\internalInvokes\set.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,8 @@
 
     '     Module [set]
     ' 
-    '         Function: getObjectSet, intersect, union
+    '         Function: createLoop, diff, getObjectSet, indexOf, intersect
+    '                   union
     ' 
     ' 
     ' /********************************************************************************/
@@ -42,6 +43,7 @@
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.ComponentModel.DataStructures
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -128,6 +130,14 @@ Namespace Runtime.Internal.Invokes
 
             Dim typeofX As Type = x.GetType
 
+        End Function
+
+        <ExportAPI("loop")>
+        Public Function createLoop(<RRawVectorArgument> x As Object) As RMethodInfo
+            Dim loops As New LoopArray(Of Object)(asVector(Of Object)(x).AsObjectEnumerator)
+            Dim populator As Func(Of Object) = AddressOf loops.Next
+
+            Return New RMethodInfo(App.NextTempName, populator)
         End Function
     End Module
 End Namespace

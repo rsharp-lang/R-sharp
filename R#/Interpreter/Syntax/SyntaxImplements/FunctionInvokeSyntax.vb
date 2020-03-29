@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3121cc270e0db45ef2523f3d141a6d33, R#\Interpreter\Syntax\SyntaxImplements\FunctionInvokeSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::cc065b2749aba894e8ac34004658572d, R#\Interpreter\Syntax\SyntaxImplements\FunctionInvokeSyntax.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Module FunctionInvokeSyntax
     ' 
-    '         Function: (+2 Overloads) AnonymousFunctionInvoke, FunctionInvoke, getInvokeParameters, getNameRef
+    '         Function: (+2 Overloads) AnonymousFunctionInvoke, (+2 Overloads) FunctionInvoke, getInvokeParameters, getNameRef
     ' 
     ' 
     ' /********************************************************************************/
@@ -61,13 +61,13 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             End If
         End Function
 
-        Public Function FunctionInvoke(tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim funcName As Expression = getNameRef(tokens(Scan0))
-            Dim span As CodeSpan = tokens(Scan0).span
+        Public Function FunctionInvoke(nameToken As Token, invokeTokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
+            Dim funcName As Expression = getNameRef(nameToken)
+            Dim span As CodeSpan = nameToken.span
             Dim parameters As New List(Of Expression)
             Dim frame As New StackFrame With {
                 .File = opts.source.fileName,
-                .Line = tokens(Scan0).span.line,
+                .Line = nameToken.span.line,
                 .Method = New Method With {
                     .Method = funcName.ToString,
                     .[Module] = "call_function",
@@ -75,9 +75,9 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 }
             }
 
-            For Each a As SyntaxResult In tokens _
-                .Skip(2) _
-                .Take(tokens.Length - 3) _
+            For Each a As SyntaxResult In invokeTokens _
+                .Skip(1) _
+                .Take(invokeTokens.Length - 2) _
                 .getInvokeParameters(opts)
 
                 If a.isException Then
@@ -88,6 +88,10 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Next
 
             Return New FunctionInvoke(funcName, frame, parameters.ToArray)
+        End Function
+
+        Public Function FunctionInvoke(tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
+            Return FunctionInvoke(tokens(Scan0), tokens.Skip(1).ToArray, opts)
         End Function
 
         <Extension>

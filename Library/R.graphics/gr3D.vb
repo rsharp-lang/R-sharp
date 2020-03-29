@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1efb12b8d8860d4874652149fb614213, Library\R.graphics\gr3D.vb"
+﻿#Region "Microsoft.VisualBasic::3c10bb2113c1567df1a93b94c99a7f6f, Library\R.graphics\gr3D.vb"
 
     ' Author:
     ' 
@@ -33,20 +33,29 @@
 
     ' Module gr3D
     ' 
-    '     Function: camera, vector3D
+    '     Constructor: (+1 Overloads) Sub New
+    '     Function: camera, line3D, vector3D
     ' 
     ' /********************************************************************************/
 
 #End Region
 
-
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
+Imports Microsoft.VisualBasic.Imaging.Drawing3D.Models
+Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.MIME.Markup.HTML.CSS
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
+Imports SMRUCC.Rsharp.Runtime.Interop
+Imports REnv = SMRUCC.Rsharp.Runtime.Internal
 
-<Package("grDevices.gr3D")>
+<Package("grDevices.gr3D", Category:=APICategories.UtilityTools)>
 Module gr3D
+
+    Sub New()
+        REnv.ConsolePrinter.AttachConsoleFormatter(Of Camera)(Function(c) c.ToString)
+    End Sub
 
     ''' <summary>
     ''' Create a new 3D point
@@ -64,6 +73,15 @@ Module gr3D
         }
     End Function
 
+    <ExportAPI("line3D")>
+    Public Function line3D(<RRawVectorArgument> a As Object, <RRawVectorArgument> b As Object, Optional pen As Object = Stroke.AxisStroke) As Line3D
+        Return New Line3D With {
+            .a = InteropArgumentHelper.getVector3D(a),
+            .b = InteropArgumentHelper.getVector3D(b),
+            .pen = InteropArgumentHelper.getStrokePenCSS(pen).DoCall(AddressOf Stroke.TryParse)
+        }
+    End Function
+
     ''' <summary>
     ''' Create a new 3D camera object.
     ''' </summary>
@@ -73,16 +91,17 @@ Module gr3D
     ''' <param name="size"></param>
     ''' <returns></returns>
     <ExportAPI("camera")>
-    Public Function camera(Optional viewAngle As Object = Nothing,
+    Public Function camera(<RRawVectorArgument>
+                           Optional viewAngle As Object = Nothing,
                            Optional viewDistance# = -40,
                            Optional fov# = 256,
+                           <RRawVectorArgument>
                            Optional size As Object = "2560,1440") As Camera
 
         Return New Camera(InteropArgumentHelper.getVector3D(viewAngle)) With {
-            .ViewDistance = viewDistance,
+            .viewDistance = viewDistance,
             .fov = fov,
             .screen = InteropArgumentHelper.getSize(size).SizeParser
         }
     End Function
 End Module
-

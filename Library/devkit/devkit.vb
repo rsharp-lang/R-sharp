@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6172ac2105533361bc60c1830a742883, Library\devkit\devkit.vb"
+﻿#Region "Microsoft.VisualBasic::59b124aa280df039d9f23477bcb5258b, Library\devkit\devkit.vb"
 
     ' Author:
     ' 
@@ -59,6 +59,4 @@ Module devkit
     Public Function AssemblyInfo(dllfile As String) As AssemblyInfo
         Return Assembly.UnsafeLoadFrom(dllfile.GetFullPath).FromAssembly
     End Function
-
-
 End Module

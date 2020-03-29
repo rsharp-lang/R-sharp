@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ce1d7d7bf7e623a2f01d47ac68f88e21, R#\Interpreter\Syntax\SyntaxImplements\DeclareNewVariableSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::2a3359abbd60657aab480c35f573adbb, R#\Interpreter\Syntax\SyntaxImplements\DeclareNewSymbolSyntax.vb"
 
     ' Author:
     ' 
@@ -31,9 +31,9 @@
 
     ' Summaries:
 
-    '     Module DeclareNewVariableSyntax
+    '     Module DeclareNewSymbolSyntax
     ' 
-    '         Function: (+4 Overloads) DeclareNewVariable, getNames, ModeOf
+    '         Function: (+4 Overloads) DeclareNewSymbol, getNames, ModeOf
     ' 
     ' 
     ' /********************************************************************************/

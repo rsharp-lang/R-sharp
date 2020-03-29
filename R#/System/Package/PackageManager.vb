@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::24a07cabb79cd2bab35208bc413d7f77, R#\System\Package\PackageManager.vb"
+﻿#Region "Microsoft.VisualBasic::90703acd457499ae38dc2017deb09328, R#\System\Package\PackageManager.vb"
 
     ' Author:
     ' 
@@ -108,7 +108,11 @@ Namespace System.Package
         ''' <param name="dllFile"></param>
         ''' <returns></returns>
         Public Function InstallLocals(dllFile As String) As String()
-            Dim packageIndex = pkgDb.packages.ToDictionary(Function(pkg) pkg.namespace)
+            Dim packageIndex As Dictionary(Of String, PackageLoaderEntry) = pkgDb.packages _
+                .AsEnumerable _
+                .ToDictionary(Function(pkg)
+                                  Return pkg.namespace
+                              End Function)
             Dim names As New List(Of String)
 
             For Each pkg As Package In PackageLoader.ParsePackages(dll:=dllFile)
@@ -170,7 +174,7 @@ Namespace System.Package
         Public Iterator Function GenericEnumerator() As IEnumerator(Of Package) Implements Enumeration(Of Package).GenericEnumerator
             Dim pkg As Package
 
-            For Each loader As PackageLoaderEntry In pkgDb.packages
+            For Each loader As PackageLoaderEntry In pkgDb.packages.AsEnumerable
                 pkg = loader.GetLoader(Nothing)
 
                 If pkg Is Nothing Then
