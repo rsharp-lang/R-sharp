@@ -213,10 +213,16 @@ Namespace Runtime.Internal.Invokes
                 pattern = {"*.*"}
             End If
 
-            If recursive Then
-                Return (ls - l - r - pattern <= dir).ToArray
+            If dir.ExtensionSuffix("zip") AndAlso dir.FileLength > 0 Then
+                Using zip As New ZipFolder(dir)
+                    Return Search.DoFileNameGreps(ls - l - r - pattern, zip.ls)
+                End Using
             Else
-                Return (ls - l - pattern <= dir).ToArray
+                If recursive Then
+                    Return (ls - l - r - pattern <= dir).ToArray
+                Else
+                    Return (ls - l - pattern <= dir).ToArray
+                End If
             End If
         End Function
 
@@ -476,8 +482,13 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("open.zip")>
-        Public Function openZip(file As String) As ZipFolder
-
+        <RApiReturn(GetType(ZipFolder))>
+        Public Function openZip(file As String, Optional env As Environment = Nothing) As Object
+            If Not file.FileExists Then
+                Return debug.stop({"target file is not exists on your file system!", "file: " & file}, env)
+            Else
+                Return New ZipFolder(file)
+            End If
         End Function
     End Module
 End Namespace

@@ -1,6 +1,45 @@
-﻿Namespace System.Components
+﻿Imports System.IO
+Imports System.IO.Compression
+Imports Microsoft.VisualBasic.ApplicationServices.Zip
+
+Namespace System.Components
 
     Public Class ZipFolder : Implements IDisposable
+
+        Default Public ReadOnly Property Item(fileName As String) As Stream
+            Get
+                If allFiles.ContainsKey(fileName) Then
+                    Return ZipStreamReader.Decompress(allFiles(fileName))
+                Else
+                    Return Nothing
+                End If
+            End Get
+        End Property
+
+        ReadOnly zip As ZipArchive
+        ReadOnly allFiles As Dictionary(Of String, ZipArchiveEntry)
+
+        ''' <summary>
+        ''' populate all files inside internal of this zip file.
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property ls As String()
+            Get
+                Return allFiles.Keys.ToArray
+            End Get
+        End Property
+
+        Sub New(zipFile As String)
+            zip = New ZipArchive(zipFile.Open(doClear:=False), ZipArchiveMode.Read)
+            allFiles = zip.Entries _
+                .ToDictionary(Function(file)
+                                  Return file.Name.TrimStart("/"c, "\"c)
+                              End Function)
+        End Sub
+
+        Public Overrides Function ToString() As String
+            Return zip.ToString
+        End Function
 
 #Region "IDisposable Support"
         Private disposedValue As Boolean ' 要检测冗余调用
@@ -10,6 +49,7 @@
             If Not disposedValue Then
                 If disposing Then
                     ' TODO: 释放托管状态(托管对象)。
+                    zip.Dispose()
                 End If
 
                 ' TODO: 释放未托管资源(未托管对象)并在以下内容中替代 Finalize()。
