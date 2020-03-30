@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::07d4ad955f4f3d70d9c4578e94b03ab2, R#\Language\TokenType.vb"
+﻿#Region "Microsoft.VisualBasic::4d271bd9c7c19dedb149e9b59a568a34, R#\Language\TokenType.vb"
 
     ' Author:
     ' 

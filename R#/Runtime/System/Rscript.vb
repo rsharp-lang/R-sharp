@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::941fe15893aa67b4a10dc1706f09738d, R#\Runtime\System\Rscript.vb"
+﻿#Region "Microsoft.VisualBasic::3ee61866d4bf8767c9a398b03e67564a, R#\Runtime\System\Rscript.vb"
 
     ' Author:
     ' 
@@ -36,8 +36,8 @@
     '         Properties: fileName, script, source
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: AutoHandleScript, FromFile, FromText, (+2 Overloads) GetRawText, GetSourceDirectory
-    '                   GetTokens, ToString
+    '         Function: AutoHandleScript, FromFile, FromText, GetByLineNumber, (+2 Overloads) GetRawText
+    '                   GetSourceDirectory, GetTokens, ToString
     ' 
     ' 
     ' /********************************************************************************/

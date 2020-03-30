@@ -255,14 +255,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="base.vb" />
-    <Compile Include="rawSerializer.vb" />
+    <Compile Include="save\RData.vb" />
+    <Compile Include="save\rawDeserializer.vb" />
+    <Compile Include="save\rawSerializer.vb" />
     <Compile Include="base\IO.vb" />
     <Compile Include="utils\dataframe.vb" />
     <Compile Include="utils\console.vb" />
     <Compile Include="utils\xlsx.vb" />
     <Compile Include="utils\strings.vb" />
     <Compile Include="utils\utils.vb" />
-    <Compile Include="save.vb" />
+    <Compile Include="save\save.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>

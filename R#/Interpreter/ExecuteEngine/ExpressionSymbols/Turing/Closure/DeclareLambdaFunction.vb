@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6594f9087cdaa5fccbce8fb93c418392, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareLambdaFunction.vb"
+﻿#Region "Microsoft.VisualBasic::dd9975e6bdaab255bf62133a02b2292f, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareLambdaFunction.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Class DeclareLambdaFunction
     ' 
-    '         Properties: name, parameterNames, stackFrame, type
+    '         Properties: closure, name, parameterNames, stackFrame, type
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: CreateLambda, Evaluate, GetPrintContent, Invoke, ToString

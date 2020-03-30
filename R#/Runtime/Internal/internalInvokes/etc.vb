@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cc40945dc59cb68999e7b8792a7455ef, R#\Runtime\Internal\internalInvokes\etc.vb"
+﻿#Region "Microsoft.VisualBasic::d1fc2044b06206e91c590abd9f7ca56f, R#\Runtime\Internal\internalInvokes\etc.vb"
 
     ' Author:
     ' 
@@ -34,6 +34,8 @@
     '     Module etc
     ' 
     '         Function: contributors, license
+    ' 
+    '         Sub: demo
     ' 
     ' 
     ' /********************************************************************************/

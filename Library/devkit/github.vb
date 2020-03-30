@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::22edb1578afe5f9e62568e8358534cce, Library\devkit\github.vb"
+﻿#Region "Microsoft.VisualBasic::a77eca48134caf61fd0f18e0fe48c84b, Library\devkit\github.vb"
 
     ' Author:
     ' 
@@ -45,4 +45,3 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Module github
 
 End Module
-

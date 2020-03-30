@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ac84d9e7c828be35d805b483d1b22ebf, Library\R.base\save.vb"
+﻿#Region "Microsoft.VisualBasic::3773f3863534f3717a9b4c135f8ea791, Library\R.base\save.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,16 @@
 
     ' Module base
     ' 
-    '     Function: decodeStringVector, load, save
+    '     Function: decodeStringVector, load
+    '     Enum RData
+    ' 
+    '         RDA, RDS
+    ' 
+    ' 
+    ' 
+    '  
+    ' 
+    '     Function: readRDS, save, saveRDS
     ' 
     ' /********************************************************************************/
 
@@ -157,17 +166,6 @@ Partial Module base
     Private Function decodeStringVector(value As CDFData) As Object
         Return value.chars.DecodeBase64.LoadJSON(Of String())
     End Function
-
-    Public Enum RData
-        ''' <summary>
-        ''' 单个对象序列化
-        ''' </summary>
-        RDS
-        ''' <summary>
-        ''' 多个对象序列化
-        ''' </summary>
-        RDA
-    End Enum
 
     ''' <summary>
     ''' ### Save R Objects

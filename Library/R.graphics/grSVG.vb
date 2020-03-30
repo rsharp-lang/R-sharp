@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::66673ac21eb20ff9b7720edf26f63a86, Library\R.graphics\grSVG.vb"
+﻿#Region "Microsoft.VisualBasic::8b803f482fdd376f5b3c9d3d7836ec6a, Library\R.graphics\grSVG.vb"
 
     ' Author:
     ' 
@@ -84,4 +84,3 @@ Module grSVG
         Return svg
     End Function
 End Module
-

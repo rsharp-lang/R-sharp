@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c900b2c2644308dae3f7527921b49e11, R#\test\defaultValueTest.vb"
+﻿#Region "Microsoft.VisualBasic::e8f98689b924093360ea2894db149d66, R#\test\defaultValueTest.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     ' Module defaultValueTest
     ' 
-    '     Sub: Main, testApi
+    '     Sub: Main, nullableTest, testApi
     ' 
     ' Class defaultVector
     ' 

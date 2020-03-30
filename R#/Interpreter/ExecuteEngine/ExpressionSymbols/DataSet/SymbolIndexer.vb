@@ -1,58 +1,57 @@
-﻿#Region "Microsoft.VisualBasic::7c75580c7d63ac2b499e6d5722093e0e, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer.vb"
+﻿#Region "Microsoft.VisualBasic::dce22a1384bf370d76c95b29c6f95506, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Enum SymbolIndexers
-' 
-'         dataframeColumns, dataframeRanges, dataframeRows, nameIndex, vectorIndex
-' 
-'  
-' 
-' 
-' 
-'     Class SymbolIndexer
-' 
-'         Properties: type
-' 
-'         Constructor: (+2 Overloads) Sub New
-'         Function: emptyIndexError, Evaluate, getByIndex, getByName, getColumn
-'                   ToString
-' 
-' 
-' /********************************************************************************/
+    '     Enum SymbolIndexers
+    ' 
+    '         dataframeColumns, dataframeRanges, dataframeRows, nameIndex, vectorIndex
+    ' 
+    '  
+    ' 
+    ' 
+    ' 
+    '     Class SymbolIndexer
+    ' 
+    '         Properties: type
+    ' 
+    '         Constructor: (+2 Overloads) Sub New
+    '         Function: emptyIndexError, Evaluate, getByIndex, getByName, getColumn
+    '                   ToString
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
-Imports System.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime
@@ -182,7 +181,30 @@ Namespace Interpreter.ExecuteEngine
             End If
 
             If Not objType.ImplementInterface(GetType(RNameIndex)) Then
-                Return Internal.debug.stop("Target object can not be indexed by name!", envir)
+                If objType.ImplementInterface(Of IDictionary) AndAlso objType.GenericTypeArguments(Scan0) Is GetType(String) Then
+                    Dim keys As String() = asVector(Of String)(indexer)
+                    Dim table As IDictionary = DirectCast(obj, IDictionary)
+
+                    If indexer.Length = 1 Then
+                        If table.Contains(keys(Scan0)) Then
+                            Return table.Item(keys(Scan0))
+                        Else
+                            Return Nothing
+                        End If
+                    Else
+                        Return Iterator Function() As IEnumerable(Of Object)
+                                   For Each key As String In keys
+                                       If table.Contains(key) Then
+                                           Yield table.Item(key)
+                                       Else
+                                           Yield Nothing
+                                       End If
+                                   Next
+                               End Function().ToArray
+                    End If
+                Else
+                    Return Internal.debug.stop("Target object can not be indexed by name!", envir)
+                End If
             ElseIf indexer.Length = 1 Then
                 Return DirectCast(obj, RNameIndex).getByName(Scripting.ToString(indexer.GetValue(Scan0)))
             Else

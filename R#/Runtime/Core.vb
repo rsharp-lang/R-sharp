@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1729450697e1d816118889094649ec19, R#\Runtime\Core.vb"
+﻿#Region "Microsoft.VisualBasic::450805c0a27dfa1c797c562cc755aa28, R#\Runtime\Core.vb"
 
     ' Author:
     ' 
@@ -35,6 +35,7 @@
     ' 
     '         Function: [Module], Add, asLogical, BinaryCoreInternal, Divide
     '                   Minus, Multiply, op_In, Power, UnaryCoreInternal
+    '                   VectorAlignment
     '         Class typedefine
     ' 
     '             Constructor: (+2 Overloads) Sub New
