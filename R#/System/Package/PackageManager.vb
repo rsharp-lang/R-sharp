@@ -174,7 +174,7 @@ Namespace System.Package
         Public Iterator Function GenericEnumerator() As IEnumerator(Of Package) Implements Enumeration(Of Package).GenericEnumerator
             Dim pkg As Package
 
-            For Each loader As PackageLoaderEntry In pkgDb.packages
+            For Each loader As PackageLoaderEntry In pkgDb.packages.AsEnumerable
                 pkg = loader.GetLoader(Nothing)
 
                 If pkg Is Nothing Then

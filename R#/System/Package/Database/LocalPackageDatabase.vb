@@ -64,9 +64,8 @@ Namespace System.Package
             End Set
         End Property
 
-        <XmlElement> Public Property system As AssemblyInfo
-
-        <XmlArray>
+        <XmlElement>
+        Public Property system As AssemblyInfo
         Public Property packages As XmlList(Of PackageLoaderEntry)
 
         ''' <summary>
