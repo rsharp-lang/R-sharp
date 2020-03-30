@@ -418,6 +418,7 @@
     <Compile Include="Runtime\Interop\RReturn.vb" />
     <Compile Include="Runtime\EnvironmentExtensions.vb" />
     <Compile Include="Runtime\RTypeExtensions.vb" />
+    <Compile Include="System\Components\ZipFolder.vb" />
     <Compile Include="System\Config\Defaults.vb" />
     <Compile Include="Runtime\System\Rscript.vb" />
     <Compile Include="Runtime\System\Interface\RNames.vb" />
