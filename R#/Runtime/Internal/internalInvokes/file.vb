@@ -1,45 +1,45 @@
 ﻿#Region "Microsoft.VisualBasic::9ddd5dd592ff617af09e467cd4d9cab1, R#\Runtime\Internal\internalInvokes\file.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module file
-    ' 
-    '         Function: basename, dir_exists, dirCreate, dirname, exists
-    '                   file, filecopy, fileinfo, getwd, listDirs
-    '                   listFiles, loadListInternal, normalizeFileName, normalizePath, readLines
-    '                   readList, Rhome, saveList, setwd, writeLines
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module file
+' 
+'         Function: basename, dir_exists, dirCreate, dirname, exists
+'                   file, filecopy, fileinfo, getwd, listDirs
+'                   listFiles, loadListInternal, normalizeFileName, normalizePath, readLines
+'                   readList, Rhome, saveList, setwd, writeLines
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -55,6 +55,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.System.Components
 Imports BASICString = Microsoft.VisualBasic.Strings
 Imports fsOptions = Microsoft.VisualBasic.FileIO.SearchOption
 
@@ -212,10 +213,16 @@ Namespace Runtime.Internal.Invokes
                 pattern = {"*.*"}
             End If
 
-            If recursive Then
-                Return (ls - l - r - pattern <= dir).ToArray
+            If dir.ExtensionSuffix("zip") AndAlso dir.FileLength > 0 Then
+                Using zip As New ZipFolder(dir)
+                    Return Search.DoFileNameGreps(ls - l - r - pattern, zip.ls).ToArray
+                End Using
             Else
-                Return (ls - l - pattern <= dir).ToArray
+                If recursive Then
+                    Return (ls - l - r - pattern <= dir).ToArray
+                Else
+                    Return (ls - l - pattern <= dir).ToArray
+                End If
             End If
         End Function
 
@@ -472,6 +479,16 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("file")>
         Public Function file(description$, Optional open As FileMode = FileMode.OpenOrCreate) As FileStream
             Return description.Open(open, doClear:=FileMode.Truncate)
+        End Function
+
+        <ExportAPI("open.zip")>
+        <RApiReturn(GetType(ZipFolder))>
+        Public Function openZip(file As String, Optional env As Environment = Nothing) As Object
+            If Not file.FileExists Then
+                Return debug.stop({"target file is not exists on your file system!", "file: " & file}, env)
+            Else
+                Return New ZipFolder(file)
+            End If
         End Function
     End Module
 End Namespace

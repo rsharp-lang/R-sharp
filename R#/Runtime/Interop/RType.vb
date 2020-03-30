@@ -227,6 +227,12 @@ Namespace Runtime.Interop
             Return type.raw
         End Operator
 
+        ''' <summary>
+        ''' <see cref="raw"/> type is given target <paramref name="type"/>?
+        ''' </summary>
+        ''' <param name="rtype"></param>
+        ''' <param name="type"></param>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
         Public Shared Operator Like(rtype As RType, type As Type) As Boolean

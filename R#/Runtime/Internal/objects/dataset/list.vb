@@ -148,7 +148,8 @@ Namespace Runtime.Internal.Object
             Return slots(key)
         End Function
 
-        Public Function getByIndex(i() As Integer) As Object() Implements RIndex.getByIndex
+        Public Function getByIndex(i() As Integer) As Array Implements RIndex.getByIndex
+            ' 20200330 list对象只能够返回object数组
             Return i.Select(AddressOf getByIndex).ToArray
         End Function
 

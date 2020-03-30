@@ -692,6 +692,8 @@ Namespace Runtime.Internal.Invokes
             Dim debugMode As Boolean = envir.globalEnvironment.debugMode
 
             If Not message Is Nothing AndAlso message.GetType.IsInheritsFrom(GetType(Exception), strict:=False) Then
+                Call App.LogException(DirectCast(message, Exception), trace:=envir.getEnvironmentStack.JoinBy(vbCrLf))
+
                 If debugMode Then
                     Throw DirectCast(message, Exception)
                 Else
@@ -1111,6 +1113,8 @@ Namespace Runtime.Internal.Invokes
                 Return X
             ElseIf Program.isException(FUN) Then
                 Return FUN
+            ElseIf X Is Nothing Then
+                Return Nothing
             End If
 
             Dim apply As RFunction = FUN

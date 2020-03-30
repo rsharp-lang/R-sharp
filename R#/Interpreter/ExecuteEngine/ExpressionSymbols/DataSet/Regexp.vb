@@ -79,6 +79,8 @@ Namespace Interpreter.ExecuteEngine
 
             If Program.isException(strData) Then
                 Return strData
+            ElseIf strData Is Nothing Then
+                Return Nothing
             End If
 
             Dim inputs As String() = Runtime.asVector(Of String)(strData)

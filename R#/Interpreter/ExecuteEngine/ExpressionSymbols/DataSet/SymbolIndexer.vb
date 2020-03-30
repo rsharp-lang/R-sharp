@@ -1,54 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::dce22a1384bf370d76c95b29c6f95506, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Enum SymbolIndexers
-    ' 
-    '         dataframeColumns, dataframeRanges, dataframeRows, nameIndex, vectorIndex
-    ' 
-    '  
-    ' 
-    ' 
-    ' 
-    '     Class SymbolIndexer
-    ' 
-    '         Properties: type
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: emptyIndexError, Evaluate, getByIndex, getByName, getColumn
-    '                   ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Enum SymbolIndexers
+' 
+'         dataframeColumns, dataframeRanges, dataframeRows, nameIndex, vectorIndex
+' 
+'  
+' 
+' 
+' 
+'     Class SymbolIndexer
+' 
+'         Properties: type
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: emptyIndexError, Evaluate, getByIndex, getByName, getColumn
+'                   ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -59,6 +59,8 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.DataFramework
+Imports System.Reflection
 
 Namespace Interpreter.ExecuteEngine
 
@@ -203,6 +205,31 @@ Namespace Interpreter.ExecuteEngine
                                End Function().ToArray
                     End If
                 Else
+                    Dim readDefault As PropertyInfo = objType _
+                        .GetProperties(PublicProperty) _
+                        .Where(Function(p)
+                                   Return p.CanRead AndAlso
+                                          p.Name = "Item" AndAlso
+                                      Not p.GetIndexParameters.IsNullOrEmpty AndAlso
+                                          p.GetIndexParameters.Length = 1 AndAlso
+                                          p.GetIndexParameters(Scan0).ParameterType Is GetType(String)
+                               End Function) _
+                        .FirstOrDefault
+
+                    If Not readDefault Is Nothing Then
+                        Dim keys As String() = asVector(Of String)(indexer)
+
+                        If indexer.Length = 1 Then
+                            Return readDefault.GetValue(obj, {keys(Scan0)})
+                        Else
+                            Return Iterator Function() As IEnumerable(Of Object)
+                                       For Each key As String In keys
+                                           Yield readDefault.GetValue(obj, {key})
+                                       Next
+                                   End Function().ToArray
+                        End If
+                    End If
+
                     Return Internal.debug.stop("Target object can not be indexed by name!", envir)
                 End If
             ElseIf indexer.Length = 1 Then
@@ -227,8 +254,21 @@ Namespace Interpreter.ExecuteEngine
                     ' get by names
                     Return list.getByName(Runtime.asVector(Of String)(indexer))
                 Else
-                    ' get by index
-                    Return list.getByIndex(Runtime.asVector(Of Integer)(indexer))
+                    If TypeOf indexer Is Boolean() OrElse MeasureArrayElementType(indexer) Is GetType(Boolean) Then
+                        Dim i As New List(Of Integer)
+
+                        For Each flag As SeqValue(Of Boolean) In DirectCast(asVector(Of Boolean)(indexer), Boolean()).SeqIterator(offset:=1)
+                            If flag.value Then
+                                i.Add(flag.i)
+                            End If
+                        Next
+
+                        ' get by index
+                        Return list.getByIndex(i.ToArray)
+                    Else
+                        ' get by index
+                        Return list.getByIndex(Runtime.asVector(Of Integer)(indexer))
+                    End If
                 End If
             Else
                 Dim sequence As Array = Runtime.asVector(Of Object)(obj)
