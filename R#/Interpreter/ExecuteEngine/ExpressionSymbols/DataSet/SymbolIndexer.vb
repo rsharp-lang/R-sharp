@@ -254,8 +254,21 @@ Namespace Interpreter.ExecuteEngine
                     ' get by names
                     Return list.getByName(Runtime.asVector(Of String)(indexer))
                 Else
-                    ' get by index
-                    Return list.getByIndex(Runtime.asVector(Of Integer)(indexer))
+                    If TypeOf indexer Is Boolean() OrElse MeasureArrayElementType(indexer) Is GetType(Boolean) Then
+                        Dim i As New List(Of Integer)
+
+                        For Each flag As SeqValue(Of Boolean) In DirectCast(asVector(Of Boolean)(indexer), Boolean()).SeqIterator(offset:=1)
+                            If flag.value Then
+                                i.Add(flag.i)
+                            End If
+                        Next
+
+                        ' get by index
+                        Return list.getByIndex(i.ToArray)
+                    Else
+                        ' get by index
+                        Return list.getByIndex(Runtime.asVector(Of Integer)(indexer))
+                    End If
                 End If
             Else
                 Dim sequence As Array = Runtime.asVector(Of Object)(obj)

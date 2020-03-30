@@ -185,6 +185,14 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        <ExportAPI("abs")>
+        Public Function abs(x As Array) As Double()
+            Return asVector(Of Double)(x) _
+                .AsObjectEnumerator(Of Double) _
+                .Select(AddressOf stdNum.Abs) _
+                .ToArray
+        End Function
+
         <ExportAPI("RSD")>
         Public Function rsd(x As Array) As Double
             Return Runtime.asVector(Of Double)(x).AsObjectEnumerator(Of Double).RSD
