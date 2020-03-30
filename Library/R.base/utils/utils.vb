@@ -1,41 +1,41 @@
 ﻿#Region "Microsoft.VisualBasic::a4188998b1bd2d521135705e8f28a9bb, Library\R.base\utils\utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module utils
-    ' 
-    '     Function: read_csv, saveGeneric, write_csv
-    ' 
-    ' /********************************************************************************/
+' Module utils
+' 
+'     Function: read_csv, saveGeneric, write_csv
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -51,6 +51,9 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports fileStream = System.IO.Stream
+Imports textStream = System.IO.StreamReader
+Imports Microsoft.VisualBasic.Linq
 
 ''' <summary>
 ''' The R Utils Package 
@@ -92,19 +95,34 @@ Public Module utils
     ''' <returns></returns>
     <ExportAPI("read.csv")>
     <RApiReturn(GetType(Rdataframe))>
-    Public Function read_csv(file$,
+    Public Function read_csv(file As Object,
                              Optional encoding As Object = "unknown",
                              Optional tsv As Boolean = False,
                              Optional env As Environment = Nothing) As Object
 
-        Dim datafile As Object = REnv _
-            .TryCatch(Function()
-                          If tsv Then
-                              Return IO.File.LoadTsv(file, encoding:=Rsharp.GetEncoding(encoding))
-                          Else
-                              Return IO.File.Load(file, encoding:=Rsharp.GetEncoding(encoding))
-                          End If
-                      End Function)
+        Dim datafile As Object
+
+        If TypeOf file Is String Then
+            datafile = REnv _
+                .TryCatch(Function()
+                              If tsv Then
+                                  Return IO.File.LoadTsv(file, encoding:=Rsharp.GetEncoding(encoding))
+                              Else
+                                  Return IO.File.Load(file, encoding:=Rsharp.GetEncoding(encoding))
+                              End If
+                          End Function)
+        ElseIf TypeOf file Is fileStream Then
+            Using reader As New textStream(DirectCast(file, fileStream))
+                datafile = reader.ReadToEnd _
+                    .LineTokens _
+                    .DoCall(Function(lines) FileLoader.Load(lines, False, Nothing)) _
+                    .DoCall(Function(ls)
+                                Return New File(ls)
+                            End Function)
+            End Using
+        Else
+            Return Internal.debug.stop("invalid file content type!", env)
+        End If
 
         If Not TypeOf datafile Is File Then
             Return Internal.debug.stop(datafile, env)
