@@ -1113,6 +1113,8 @@ Namespace Runtime.Internal.Invokes
                 Return X
             ElseIf Program.isException(FUN) Then
                 Return FUN
+            ElseIf X Is Nothing Then
+                Return Nothing
             End If
 
             Dim apply As RFunction = FUN
