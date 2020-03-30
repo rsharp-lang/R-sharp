@@ -215,7 +215,7 @@ Namespace Runtime.Internal.Invokes
 
             If dir.ExtensionSuffix("zip") AndAlso dir.FileLength > 0 Then
                 Using zip As New ZipFolder(dir)
-                    Return Search.DoFileNameGreps(ls - l - r - pattern, zip.ls)
+                    Return Search.DoFileNameGreps(ls - l - r - pattern, zip.ls).ToArray
                 End Using
             Else
                 If recursive Then
