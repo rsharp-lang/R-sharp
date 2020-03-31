@@ -305,6 +305,10 @@ Namespace Runtime.Interop
         ''' </param>
         ''' <returns></returns>
         Friend Shared Function getValue(arg As RMethodArgument, value As Object, trace$, ByRef envir As Environment, trygetListParam As Boolean) As Object
+            If arg.type Like GetType(Environment) Then
+                Return envir
+            End If
+
             If arg.type.isArray Then
                 value = CObj(Runtime.asVector(value, arg.type.GetRawElementType, env:=envir))
             ElseIf arg.type.isCollection Then
@@ -316,7 +320,7 @@ Namespace Runtime.Interop
                 Return Runtime.asVector(value, arg.rawVectorFlag.vector, envir)
             End If
 
-            If arg.type.raw Is GetType(Object) Then
+            If arg.type Like GetType(Object) Then
                 Return value
             End If
 
