@@ -48,6 +48,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text.Xml.Models
+Imports SMRUCC.Rsharp.System.Configuration
 
 Namespace System.Package
 
@@ -98,7 +99,11 @@ Namespace System.Package
             End If
         End Function
 
-        Public Shared ReadOnly Property localDb As String = App.LocalData & "/packages.xml"
+        Public Shared ReadOnly Property localDb As String
+
+        Shared Sub New()
+            localDb = $"{ConfigFile.GCModellerSettings}/packages.xml"
+        End Sub
 
         Public Shared Function EmptyRepository() As LocalPackageDatabase
             Return New LocalPackageDatabase With {

@@ -84,7 +84,17 @@ Namespace System.Configuration
         <XmlElement> Public Property config As NamedValue()
         <XmlElement> Public Property startups As StartupConfigs
 
-        Public Shared ReadOnly Property localConfigs As String = App.LocalData & "/R#.configs.xml"
+        Public Shared ReadOnly Property localConfigs As String
+        ''' <summary>
+        ''' the directory path for save common config file of the GCModeller products. 
+        ''' </summary>
+        ''' <returns></returns>
+        Public Shared ReadOnly Property GCModellerSettings As String
+
+        Shared Sub New()
+            GCModellerSettings = $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}/{App.ProductName}/.settings"
+            localConfigs = $"{GCModellerSettings}/R#.configs.xml".GetFullPath
+        End Sub
 
         Public Function GetStartupLoadingPackages() As String()
             If startups Is Nothing Then
