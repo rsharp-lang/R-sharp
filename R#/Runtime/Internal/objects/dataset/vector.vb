@@ -185,8 +185,18 @@ Namespace Runtime.Internal.Object
         ''' 这个下标值应该是从1开始的
         ''' </param>
         ''' <returns></returns>
-        Public Function getByIndex(i() As Integer) As Object() Implements RIndex.getByIndex
-            Return i.Select(AddressOf getByIndex).ToArray
+        Public Function getByIndex(i() As Integer) As Array Implements RIndex.getByIndex
+            If elementType Is Nothing OrElse elementType Like GetType(Object) Then
+                Return i.Select(AddressOf getByIndex).ToArray
+            Else
+                Dim vec As Array = Array.CreateInstance(elementType.raw, i.Length)
+
+                For j As Integer = 0 To i.Length - 1
+                    vec.SetValue(getByIndex(i(j)), j)
+                Next
+
+                Return vec
+            End If
         End Function
 
         Public Function setByIndex(i As Integer, value As Object, envir As Environment) As Object Implements RIndex.setByIndex

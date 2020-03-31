@@ -74,7 +74,7 @@ Namespace Runtime.Components.Interface
         ReadOnly Property length As Integer
 
         Function getByIndex(i As Integer) As Object
-        Function getByIndex(i As Integer()) As Object()
+        Function getByIndex(i As Integer()) As Array
         Function setByIndex(i As Integer, value As Object, envir As Environment) As Object
         Function setByindex(i As Integer(), value As Array, envir As Environment) As Object
 

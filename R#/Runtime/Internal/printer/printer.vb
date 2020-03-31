@@ -279,11 +279,14 @@ printSingleElement:
                 divSize = SByte.MaxValue
             End If
 
-            Dim i As i32 = 1 - divSize
+            Dim i As i32
             Dim cell As String
 
             If divSize <= 0 Then
                 divSize = 1
+                i = 0
+            Else
+                i = 1 - divSize
             End If
 
             For Each row As String() In contents.Split(partitionSize:=divSize)
