@@ -159,6 +159,10 @@ Namespace Runtime
                 valueType = value.GetType
             End If
 
+            'If valueType Is GetType(list) Then
+            '    ' list value as vector?
+            'End If
+
             If Not valueType Is arrayType Then
                 If valueType.IsArray Then
                     Return type.createArray(value, env)

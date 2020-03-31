@@ -52,6 +52,9 @@ Namespace Runtime.Interop
         ''' <summary>
         ''' Create argument value for <see cref="MethodInfo.Invoke(Object, Object())"/>
         ''' </summary>
+        ''' <param name="params">
+        ''' required of replace dot(.) to underline(_)?
+        ''' </param>
         ''' <returns></returns>
         Public Shared Function CreateObjectListArguments([declare] As RMethodInfo, env As Environment, params As InvokeParameter()) As IEnumerable(Of Object)
             Dim parameterVals As Object() = New Object([declare].parameters.Length - 1) {}
