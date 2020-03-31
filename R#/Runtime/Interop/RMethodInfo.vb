@@ -228,6 +228,14 @@ Namespace Runtime.Interop
             End Using
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="envir"></param>
+        ''' <param name="arguments">
+        ''' required of replace dot(.) to underline(_)?
+        ''' </param>
+        ''' <returns></returns>
         Private Iterator Function createNormalArguments(envir As Environment, arguments As Dictionary(Of String, Object)) As IEnumerable(Of Object)
             Dim arg As RMethodArgument
             Dim keys As String() = arguments.Keys.ToArray
