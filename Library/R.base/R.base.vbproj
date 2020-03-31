@@ -255,6 +255,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="base.vb" />
+    <Compile Include="base\netCDFutils.vb" />
     <Compile Include="save\RData.vb" />
     <Compile Include="save\rawDeserializer.vb" />
     <Compile Include="save\rawSerializer.vb" />
