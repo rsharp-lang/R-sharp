@@ -290,9 +290,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\BreakPoint.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\NamespaceFunctionSymbolReference.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\ObjectWith.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Regexp.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryInExpression.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssignOperator\dataframeValueAssign.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\BreakLoop.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\WhileLoop.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Linq\LinqOutput.vb" />
@@ -352,7 +354,7 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\FunctionInvoke.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SequenceLiteral.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\IIfExpression.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssign.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssignOperator\ValueAssign.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolReference.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\VectorLiteral.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal.vb" />
@@ -391,8 +393,11 @@
     <Compile Include="Runtime\Internal\internalInvokes\etc.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\graphics.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\Linq\lambda.vb" />
+    <Compile Include="Runtime\Internal\internalInvokes\applys.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\set.vb" />
     <Compile Include="Runtime\Internal\generic.vb" />
+    <Compile Include="Runtime\Internal\lambdaExtensions.vb" />
+    <Compile Include="Runtime\Internal\objects\doApply.vb" />
     <Compile Include="Runtime\System\RsharpDataObject.vb" />
     <Compile Include="Runtime\Internal\objects\dataset\pipeline.vb" />
     <Compile Include="Runtime\Internal\objects\RConversion\RCType.vb" />

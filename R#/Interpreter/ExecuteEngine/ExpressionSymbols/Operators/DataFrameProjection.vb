@@ -48,14 +48,39 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Namespace Interpreter.ExecuteEngine
 
     ''' <summary>
-    ''' ``data[, selector]``
+    ''' get value of ``data[, selector]``
     ''' </summary>
     Public Class DataFrameProjection : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
 
+        Dim dataframe As Expression
+        Dim projector As Expression
+
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Throw New NotImplementedException()
+            Dim dataframe As Object = Me.dataframe.Evaluate(envir)
+            Dim projectorVal As Object = Me.projector.Evaluate(envir)
+
+            If Program.isException(dataframe) Then
+                Return dataframe
+            ElseIf dataframe Is Nothing Then
+                Return Internal.debug.stop(New NullReferenceException, envir)
+            End If
+
+            If Program.isException(projectorVal) Then
+                Return projectorVal
+            ElseIf projectorVal Is Nothing Then
+                Return Internal.debug.stop(New NullReferenceException, envir)
+            End If
+
+            Dim projector As Array = asVector(Of Object)(projectorVal)
+            Dim projectorType As Type = MeasureRealElementType(projector)
+
+            If projectorType Is GetType(String) Then
+                ' select by row names
+            Else
+                ' select by row index
+            End If
         End Function
     End Class
 End Namespace
