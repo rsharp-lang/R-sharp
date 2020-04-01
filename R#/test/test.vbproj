@@ -123,6 +123,7 @@
     <Compile Include="defaultValueTest.vb" />
     <Compile Include="makeObjecttest.vb" />
     <Compile Include="argumentSequencetest.vb" />
+    <Compile Include="listObjectArgumentTest.vb" />
     <Compile Include="scriptTest.vb" />
     <Compile Include="tokenlicerTest.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />

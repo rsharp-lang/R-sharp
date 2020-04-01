@@ -414,7 +414,7 @@
     <Compile Include="Runtime\Internal\printer\htmlPrinter.vb" />
     <Compile Include="Runtime\Internal\printer\enumPrinter.vb" />
     <Compile Include="Runtime\Interop\RDispose.vb" />
-    <Compile Include="Runtime\Interop\RArgumentList.vb" />
+    <Compile Include="Runtime\Interop\RsharpApi\RArgumentList.vb" />
     <Compile Include="Runtime\Interop\REnum.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RDefaultValueAttribute.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RRawVectorArgumentAttribute.vb" />
@@ -444,9 +444,9 @@
     <Compile Include="Runtime\Internal\objects\dataset\vbObject.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\utils.vb" />
     <Compile Include="Runtime\Internal\printer\printer.vb" />
-    <Compile Include="Runtime\Interop\MethodInvoke.vb" />
+    <Compile Include="Runtime\Interop\RsharpApi\MethodInvoke.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RInteropAttribute.vb" />
-    <Compile Include="Runtime\Interop\RMethodArgument.vb" />
+    <Compile Include="Runtime\Interop\RsharpApi\RMethodArgument.vb" />
     <Compile Include="Runtime\System\InvokeParameter.vb" />
     <Compile Include="Runtime\RVectorExtensions.vb" />
     <Compile Include="System\Package\AnnotationDocs.vb" />
@@ -456,7 +456,7 @@
     <Compile Include="System\Package\Package.vb" />
     <Compile Include="System\Package\ImportsPackage.vb" />
     <Compile Include="Runtime\System\Message.vb" />
-    <Compile Include="Runtime\Interop\RMethodInfo.vb" />
+    <Compile Include="Runtime\Interop\RsharpApi\RMethodInfo.vb" />
     <Compile Include="Runtime\Core.vb" />
     <Compile Include="Runtime\Interop\RType.vb" />
     <Compile Include="Runtime\Extensions.vb" />
