@@ -132,32 +132,7 @@ Namespace Runtime.Interop
         End Function
 
         Public Function GetPrintContent() As String Implements RPrint.GetPrintContent
-            Dim raw As Type = GetRawDeclares().DeclaringType
-            Dim rawDeclare$ = raw.FullName
-            Dim packageName$ = raw.NamespaceEntry(True).Namespace
-            Dim params$
-            Dim returns As RType() = RApiReturnAttribute _
-                .GetActualReturnType(GetRawDeclares) _
-                .Select(AddressOf RType.GetRSharpType) _
-                .ToArray
-
-            If parameters.Length > 3 Then
-                params = parameters.JoinBy(", " & vbCrLf)
-            Else
-                params = parameters.JoinBy(", ")
-            End If
-
-            Return $"let ``{name}`` as function({params}) -> ``{returns.JoinBy("|")}`` {{
-    #
-    # .NET API information
-    #
-    # module: {rawDeclare}
-    # LibPath: {raw.Assembly.Location.ParentPath}
-    # library: {raw.Assembly.Location.FileName}
-    # package: ""{packageName}""
-    #
-    return call ``R#.interop_[{raw.Name}::{GetRawDeclares().Name}]``(...);
-}}"
+            Return markdown
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
