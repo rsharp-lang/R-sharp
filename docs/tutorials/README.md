@@ -10,3 +10,4 @@ Here are a list of R# tutorials for some bioinformatics analysis based on the GC
 2. [Symbol object in ``R#``](02.R_symbol)
 3. [String in R#](03.string)
 4. [Function in R#](04.function)
+5. [05.special_closures](05.special_closures)
