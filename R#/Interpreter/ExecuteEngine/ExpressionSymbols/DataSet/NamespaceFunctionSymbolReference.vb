@@ -6,6 +6,9 @@ Imports RPkg = SMRUCC.Rsharp.System.Package.Package
 
 Namespace Interpreter.ExecuteEngine
 
+    ''' <summary>
+    ''' ``namespace::function(xxx)``
+    ''' </summary>
     Public Class NamespaceFunctionSymbolReference : Inherits Expression
 
         Public ReadOnly Property [namespace] As String
