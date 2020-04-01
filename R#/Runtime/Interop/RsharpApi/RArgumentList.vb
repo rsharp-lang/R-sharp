@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::e962f50a45420d04d8f4a3b31e8d37c0, R#\Runtime\Interop\RArgumentList.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class RArgumentList
-    ' 
-    '         Function: CreateObjectListArguments
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class RArgumentList
+' 
+'         Function: CreateObjectListArguments
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -47,7 +47,10 @@ Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Runtime.Interop
 
-    Public Class RArgumentList
+    Public NotInheritable Class RArgumentList
+
+        Private Sub New()
+        End Sub
 
         ''' <summary>
         ''' get index of list argument
@@ -63,7 +66,35 @@ Namespace Runtime.Interop
                 End If
             Next
 
-            Throw New InvalidProgramException("this exception will never happends!")
+            Return -1
+        End Function
+
+        Public Shared Function objectListArgumentMargin([declare] As RMethodInfo) As ListObjectArgumentMargin
+            Dim index As Integer = objectListArgumentIndex([declare])
+
+            If index = -1 Then
+                Return ListObjectArgumentMargin.none
+            ElseIf index = Scan0 Then
+                Return ListObjectArgumentMargin.left
+            ElseIf index = [declare].parameters.Length - 1 Then
+                Return ListObjectArgumentMargin.right
+            Else
+                If [declare].parameters.Last.type.isEnvironment AndAlso [declare].parameters.Length > 2 Then
+                    If index = [declare].parameters.Length - 2 Then
+                        Return ListObjectArgumentMargin.right
+                    End If
+                End If
+            End If
+
+            Return ListObjectArgumentMargin.invalid
+        End Function
+
+        Private Shared Function CreateLeftMarginArguments([declare] As RMethodInfo, env As Environment, params As InvokeParameter()) As IEnumerable(Of Object)
+
+        End Function
+
+        Private Shared Function CreateRightMarginArguments([declare] As RMethodInfo, env As Environment, params As InvokeParameter()) As IEnumerable(Of Object)
+
         End Function
 
         ''' <summary>
@@ -73,7 +104,13 @@ Namespace Runtime.Interop
         ''' required of replace dot(.) to underline(_)?
         ''' </param>
         ''' <returns></returns>
-        Public Shared Function CreateObjectListArguments([declare] As RMethodInfo, env As Environment, params As InvokeParameter()) As IEnumerable(Of Object)
+        Friend Shared Function CreateObjectListArguments([declare] As RMethodInfo, env As Environment, params As InvokeParameter()) As IEnumerable(Of Object)
+            If [declare].listObjectMargin = ListObjectArgumentMargin.left Then
+                Return CreateLeftMarginArguments([declare], env, params)
+            Else
+                Return CreateRightMarginArguments([declare], env, params)
+            End If
+
             Dim parameterVals As Object() = New Object([declare].parameters.Length - 1) {}
             Dim declareArguments = [declare].parameters.ToDictionary(Function(a) a.name)
             Dim declareNameIndex As Index(Of String) = [declare].parameters.Keys.Indexing

@@ -1,21 +1,13 @@
-﻿Imports System.Reflection
-Imports System.Runtime.CompilerServices
-Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
-Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
-Imports Microsoft.VisualBasic.Language
+﻿Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Components.Interface
-Imports SMRUCC.Rsharp.Runtime.Internal.Object
-Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
-Imports SMRUCC.Rsharp.System.Package
+Imports Microsoft.VisualBasic.Serialization
+Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 
 Namespace Runtime.Interop
 
     Module ApiDocumentHelper
 
-        <Extension>
-        Public Function markdown(api As RMethodInfo) As String
+        <Extension> Public Function markdown(api As RMethodInfo) As String
             Dim raw As Type = api.GetRawDeclares().DeclaringType
             Dim rawDeclare$ = raw.FullName
             Dim packageName$ = raw.NamespaceEntry(True).Namespace
@@ -42,6 +34,40 @@ Namespace Runtime.Interop
     #
     return call ``R#.interop_[{raw.Name}::{api.GetRawDeclares().Name}]``(...);
 }}"
+        End Function
+
+        <Extension> Public Function markdown(arg As RMethodArgument) As String
+            Dim defaultValue As String = "``<NULL>``"
+
+            If arg.[default] Is Nothing Then
+                defaultValue = "``<NULL>``"
+            ElseIf arg.isOptional Then
+                If arg.[default].GetType Is GetType(String) Then
+                    defaultValue = $"""{arg.[default]}"""
+                ElseIf arg.type.raw.IsEnum Then
+                    defaultValue = enumPrinter.defaultValueToString(arg.[default], arg.type)
+                ElseIf Not arg.defaultScriptValue Is Nothing Then
+                    defaultValue = $"'{arg.defaultScriptValue.defaultValue}'"
+                ElseIf arg.[default].GetType.IsArray Then
+                    defaultValue = JSON.GetObjectJson(arg.[default].GetType, arg.[default], indent:=False)
+                Else
+                    defaultValue = arg.[default].ToString.ToUpper
+                End If
+            End If
+
+            If arg.isObjectList Then
+                Return "..."
+            End If
+
+            If arg.type.isEnvironment Then
+                Return $"[``<Environment>``]"
+            End If
+
+            If arg.isOptional Then
+                Return $"``{arg.name}`` as {arg.type} = {defaultValue}"
+            Else
+                Return $"``{arg.name}`` as {arg.type}"
+            End If
         End Function
     End Module
 End Namespace

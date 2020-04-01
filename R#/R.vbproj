@@ -399,6 +399,7 @@
     <Compile Include="Runtime\Internal\lambdaExtensions.vb" />
     <Compile Include="Runtime\Internal\objects\doApply.vb" />
     <Compile Include="Runtime\Interop\RsharpApi\ApiDocumentHelper.vb" />
+    <Compile Include="Runtime\Interop\RsharpApi\ListObjectArgumentMargin.vb" />
     <Compile Include="Runtime\System\RsharpDataObject.vb" />
     <Compile Include="Runtime\Internal\objects\dataset\pipeline.vb" />
     <Compile Include="Runtime\Internal\objects\RConversion\RCType.vb" />

@@ -45,8 +45,6 @@
 
 Imports System.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
-Imports Microsoft.VisualBasic.Serialization
-Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 
 Namespace Runtime.Interop
 
@@ -88,37 +86,7 @@ Namespace Runtime.Interop
         End Function
 
         Public Overrides Function ToString() As String
-            Dim defaultValue As String = "``<NULL>``"
-
-            If [default] Is Nothing Then
-                defaultValue = "``<NULL>``"
-            ElseIf isOptional Then
-                If [default].GetType Is GetType(String) Then
-                    defaultValue = $"""{[default]}"""
-                ElseIf type.raw.IsEnum Then
-                    defaultValue = enumPrinter.defaultValueToString([default], type)
-                ElseIf Not defaultScriptValue Is Nothing Then
-                    defaultValue = $"'{defaultScriptValue.defaultValue}'"
-                ElseIf [default].GetType.IsArray Then
-                    defaultValue = JSON.GetObjectJson([default].GetType, [default], indent:=False)
-                Else
-                    defaultValue = [default].ToString.ToUpper
-                End If
-            End If
-
-            If isObjectList Then
-                Return "..."
-            End If
-
-            If type.isEnvironment Then
-                Return $"[``<Environment>``]"
-            End If
-
-            If isOptional Then
-                Return $"``{name}`` as {type} = {defaultValue}"
-            Else
-                Return $"``{name}`` as {type}"
-            End If
+            Return markdown()
         End Function
 
         Public Shared Function ParseArgument(p As ParameterInfo) As RMethodArgument
