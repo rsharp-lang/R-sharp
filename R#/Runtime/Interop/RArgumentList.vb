@@ -50,6 +50,23 @@ Namespace Runtime.Interop
     Public Class RArgumentList
 
         ''' <summary>
+        ''' get index of list argument
+        ''' </summary>
+        ''' <param name="[declare]"></param>
+        ''' <returns></returns>
+        Private Shared Function objectListArgumentIndex([declare] As RMethodInfo) As Integer
+            Dim args As RMethodArgument() = [declare].parameters
+
+            For i As Integer = 0 To args.Length - 1
+                If args(i).isObjectList Then
+                    Return i
+                End If
+            Next
+
+            Throw New InvalidProgramException("this exception will never happends!")
+        End Function
+
+        ''' <summary>
         ''' Create argument value for <see cref="MethodInfo.Invoke(Object, Object())"/>
         ''' </summary>
         ''' <param name="params">
@@ -61,68 +78,48 @@ Namespace Runtime.Interop
             Dim declareArguments = [declare].parameters.ToDictionary(Function(a) a.name)
             Dim declareNameIndex As Index(Of String) = [declare].parameters.Keys.Indexing
             Dim listObject As New List(Of InvokeParameter)
-            Dim i As Integer
+            Dim i As Integer = Scan0
             Dim sequenceIndex As Integer = Scan0
             Dim paramVal As Object
+            Dim index As Integer = RArgumentList.objectListArgumentIndex([declare])
 
             For Each arg As InvokeParameter In params
-                If declareArguments.ContainsKey(arg.name) OrElse Not arg.isSymbolAssign Then
-                    i = declareNameIndex(arg.name)
+                If sequenceIndex = index Then
+                    If declareArguments.ContainsKey(arg.name) Then
+                        ' move next
+                        sequenceIndex += 1
 
-                    If i > -1 Then
-                        paramVal = RMethodInfo.getValue(
-                            arg:=declareArguments(arg.name),
-                            value:=arg.Evaluate(env),
-                            trace:=[declare].name,
-                            envir:=env,
-                            trygetListParam:=False
-                        )
-                        parameterVals(i) = paramVal
-                        declareArguments.Remove(arg.name)
+                        GoTo SET_VALUE
                     Else
-                        paramVal = declareArguments _
-                            .First _
-                            .DoCall(Function(a)
-                                        Return RMethodInfo.getValue(
-                                            arg:=a.Value,
-                                            value:=arg.Evaluate(env),
-                                            trace:=[declare].name,
-                                            envir:=env,
-                                            trygetListParam:=True
-                                        )
-                                    End Function)
-
-                        If paramVal Is GetType(Void) Then
-                            ' do nothing
-                            ' this parameter input is possibly a list argument
-                        Else
-                            parameterVals(sequenceIndex) = paramVal
-                            declareArguments.Remove(declareArguments.First.Key)
-                        End If
-
+                        ' 当前的参数为list object
                         listObject.Add(arg)
                     End If
+                Else
+SET_VALUE:
+                    paramVal = RMethodInfo.getValue(
+                        arg:=declareArguments(arg.name),
+                        value:=arg.Evaluate(env),
+                        trace:=[declare].name,
+                        envir:=env,
+                        trygetListParam:=False
+                    )
 
                     If Not paramVal Is Nothing AndAlso paramVal.GetType Is GetType(Message) Then
                         Return {paramVal}
                     End If
-                Else
-                    Call listObject.Add(arg)
-                End If
 
-                sequenceIndex += 1
+                    parameterVals(sequenceIndex) = paramVal
+                    sequenceIndex = sequenceIndex + 1
+                End If
             Next
 
-            ' get index of list argument
-            i = [declare].parameters _
-                .First(Function(a) a.isObjectList).name _
-                .DoCall(Function(a)
-                            Call declareArguments.Remove(a)
-                            Return declareNameIndex.IndexOf(a)
-                        End Function)
-            parameterVals(i) = listObject.ToArray
+            parameterVals(index) = listObject.ToArray
 
-            If declareArguments.Count > 0 Then
+            If sequenceIndex = index Then
+                sequenceIndex += 1
+            End If
+
+            If sequenceIndex < parameterVals.Length Then
                 Dim envirArgument As RMethodArgument = declareArguments _
                     .Values _
                     .Where(Function(a)

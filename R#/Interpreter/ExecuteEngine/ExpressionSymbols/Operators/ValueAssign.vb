@@ -274,7 +274,18 @@ Namespace Interpreter.ExecuteEngine
                 If targetObj.GetType Is GetType(dataframe) Then
                     If symbolIndex.indexType = SymbolIndexers.dataframeColumns Then
                         If indexStr.Length = 1 Then
-                            DirectCast(targetObj, dataframe).columns(indexStr(Scan0)) = value
+                            If value Is Nothing Then
+                                ' removes column
+                                DirectCast(targetObj, dataframe).columns.Remove(indexStr(Scan0))
+                            Else
+                                If Not value.GetType.IsArray Then
+                                    Dim a As Array = Array.CreateInstance(value.GetType, 1)
+                                    a.SetValue(value, Scan0)
+                                    value = a
+                                End If
+
+                                DirectCast(targetObj, dataframe).columns(indexStr(Scan0)) = value
+                            End If
                         Else
                             Dim seqVal As Array = Runtime.asVector(Of Object)(value)
                             Dim i As i32 = Scan0
