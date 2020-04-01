@@ -1,0 +1,220 @@
+﻿#Region "Microsoft.VisualBasic::82e5d5b5d94d058529f0da05a622ccc0, R#\Runtime\Internal\internalInvokes\base.vb"
+
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+
+' /********************************************************************************/
+
+' Summaries:
+
+'     Module base
+' 
+'         Function: [stop], allocate, append, autoDispose, cat
+'                   colnames, createDotNetExceptionMessage, CreateMessageInternal, doPrintInternal, getEnvironmentStack
+'                   getOption, head, invisible, invokeArgument, isEmpty
+'                   lapply, length, names, ncol, neg
+'                   nrow, options, print, Rdataframe, rep
+'                   replace, Rlist, rownames, sapply, source
+'                   str, summary, unitOfT, warning
+' 
+'         Sub: q, quit
+' 
+' 
+' /********************************************************************************/
+
+#End Region
+
+Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
+Imports SMRUCC.Rsharp.Runtime.Interop
+Imports RObj = SMRUCC.Rsharp.Runtime.Internal.Object
+
+Namespace Runtime.Internal.Invokes
+
+    Module applys
+
+        <ExportAPI("apply")>
+        Public Function apply(x As Object, margin As margins, FUN As Object, Optional env As Environment = Nothing) As Object
+            If x Is Nothing Then
+                Return x
+            ElseIf TypeOf x Is dataframe Then
+                Return doApply.apply(DirectCast(x, dataframe), margin, FUN, env)
+            Else
+                Return debug.stop(New InvalidProgramException, env)
+            End If
+        End Function
+
+        ''' <summary>
+        ''' # Apply a Function over a List or Vector
+        ''' 
+        ''' sapply is a user-friendly version and wrapper of lapply by default 
+        ''' returning a vector, matrix or, if simplify = "array", an array 
+        ''' if appropriate, by applying simplify2array(). sapply(x, f, simplify 
+        ''' = FALSE, USE.NAMES = FALSE) is the same as lapply(x, f).
+        ''' </summary>
+        ''' <param name="X">
+        ''' a vector (atomic or list) or an expression object. Other objects 
+        ''' (including classed objects) will be coerced by ``base::as.list``.
+        ''' </param>
+        ''' <param name="FUN">
+        ''' the Function to be applied To Each element Of X: see 'Details’. 
+        ''' In the case of functions like +, %*%, the function name must be 
+        ''' backquoted or quoted.
+        ''' </param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
+        <ExportAPI("sapply")>
+        Public Function sapply(<RRawVectorArgument> X As Object, FUN As Object, envir As Environment) As Object
+            If FUN Is Nothing Then
+                Return Internal.debug.stop({"Missing apply function!"}, envir)
+            ElseIf Not FUN.GetType.ImplementInterface(GetType(RFunction)) Then
+                Return Internal.debug.stop({"Target is not a function!"}, envir)
+            End If
+
+            If Program.isException(X) Then
+                Return X
+            ElseIf Program.isException(FUN) Then
+                Return FUN
+            ElseIf X Is Nothing Then
+                Return Nothing
+            End If
+
+            Dim apply As RFunction = FUN
+
+            If X.GetType Is GetType(list) Then
+                X = DirectCast(X, list).slots
+            End If
+
+            If X.GetType.ImplementInterface(GetType(IDictionary)) Then
+                Dim list = DirectCast(X, IDictionary)
+                Dim seq As New List(Of Object)
+                Dim names As New List(Of String)
+
+                For Each key As Object In list.Keys
+                    seq.Add(Runtime.single(apply.Invoke(envir, invokeArgument(list(key)))))
+                    names.Add(Scripting.ToString(key))
+                Next
+
+                Return New RObj.vector(names, seq.ToArray, envir)
+            Else
+                Dim seq = Runtime.asVector(Of Object)(X) _
+                    .AsObjectEnumerator _
+                    .Select(Function(d)
+                                Return Runtime.single(apply.Invoke(envir, invokeArgument(d)))
+                            End Function) _
+                    .ToArray
+
+                Return New RObj.vector With {.Data = seq}
+            End If
+        End Function
+
+        ''' <summary>
+        ''' # Apply a Function over a List or Vector
+        ''' 
+        ''' lapply returns a list of the same length as X, each element of 
+        ''' which is the result of applying FUN to the corresponding 
+        ''' element of X.
+        ''' </summary>
+        ''' <param name="X">
+        ''' a vector (atomic or list) or an expression object. Other objects 
+        ''' (including classed objects) will be coerced by ``base::as.list``.
+        ''' </param>
+        ''' <param name="FUN">
+        ''' the Function to be applied To Each element Of X: see 'Details’. 
+        ''' In the case of functions like +, %*%, the function name must be 
+        ''' backquoted or quoted.
+        ''' </param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
+        <ExportAPI("lapply")>
+        Public Function lapply(<RRawVectorArgument> X As Object, FUN As Object,
+                               Optional names As RFunction = Nothing,
+                               Optional envir As Environment = Nothing) As Object
+
+            If FUN Is Nothing Then
+                Return Internal.debug.stop({"Missing apply function!"}, envir)
+            ElseIf Not FUN.GetType.ImplementInterface(GetType(RFunction)) Then
+                Return Internal.debug.stop({"Target is not a function!"}, envir)
+            End If
+
+            If Program.isException(X) Then
+                Return X
+            ElseIf Program.isException(FUN) Then
+                Return FUN
+            ElseIf X.GetType Is GetType(list) Then
+                X = DirectCast(X, list).slots
+            End If
+
+            Dim apply As RFunction = FUN
+            Dim list As New Dictionary(Of String, Object)
+
+            If X.GetType Is GetType(Dictionary(Of String, Object)) Then
+                For Each d In DirectCast(X, Dictionary(Of String, Object))
+                    list(d.Key) = apply.Invoke(envir, invokeArgument(d.Value))
+
+                    If Program.isException(list(d.Key)) Then
+                        Return list(d.Key)
+                    End If
+                Next
+            Else
+                Dim getName As Func(Of SeqValue(Of Object), String)
+                Dim keyName$
+                Dim value As Object
+
+                If names Is Nothing Then
+                    getName = Function(i) $"[[{i.i + 1}]]"
+                Else
+                    getName = Function(i)
+                                  Return getFirst(RConversion.asCharacters(names.Invoke(envir, invokeArgument(i.value))))
+                              End Function
+                End If
+
+                For Each d In Runtime.asVector(Of Object)(X) _
+                    .AsObjectEnumerator _
+                    .SeqIterator
+
+                    keyName = getName(d)
+                    value = apply.Invoke(envir, invokeArgument(d.value))
+
+                    If Program.isException(value) Then
+                        Return value
+                    Else
+                        list(keyName) = value
+                    End If
+                Next
+            End If
+
+            Return New list With {.slots = list}
+        End Function
+    End Module
+End Namespace
