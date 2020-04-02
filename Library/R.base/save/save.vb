@@ -49,15 +49,12 @@
 #End Region
 
 Imports System.IO.Compression
-Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Zip
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.IO.netCDF
 Imports Microsoft.VisualBasic.Data.IO.netCDF.Components
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.Net.Http
-Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports cdfAttribute = Microsoft.VisualBasic.Data.IO.netCDF.Components.attribute
@@ -117,7 +114,7 @@ Partial Module base
     ''' </remarks>
     <ExportAPI("load")>
     Public Function load(file As String,
-                         Optional envir As Environment = Nothing,
+                         Optional envir As GlobalEnvironment = Nothing,
                          Optional verbose As Boolean = False) As Object
 
         If Not file.FileExists Then
@@ -131,40 +128,30 @@ Partial Module base
         Using reader As New netCDFReader(tmp & "/R#.Data")
             Dim objectNames = reader.getDataVariable("R#.objects").decodeStringVector
             Dim numOfObjects As Integer = reader("numOfObjects")
-            Dim value As CDFData
-            Dim var As RSymbol
+            Dim objects As NamedValue(Of Object)() = rawDeserializer.loadObject(reader, objectNames).ToArray
 
-            If objectNames.Length <> numOfObjects Then
+            If objects.Length <> numOfObjects Then
                 Return Internal.debug.stop({"Invalid file format!", "file=" & file}, envir)
+            Else
+                Return objects
             End If
 
-            For Each name As String In objectNames
-                value = reader.getDataVariable(name)
-                var = envir.FindSymbol(name)
+            For Each obj As NamedValue(Of Object) In objects
+                Dim var As RSymbol = envir.FindSymbol(obj.Name)
 
                 If var Is Nothing Then
                     var = New RSymbol With {
-                        .name = name,
+                        .name = obj.Name,
                         .[readonly] = False
                     }
-                    envir.symbols.Add(name, var)
+                    envir.symbols.Add(obj.Name, var)
                 End If
 
-                If value.cdfDataType = CDFDataTypes.CHAR Then
-                    var.SetValue(value.decodeStringVector, envir)
-                Else
-                    var.SetValue(value.genericValue, envir)
-                End If
+                Call var.SetValue(obj.Value, envir)
             Next
 
             Return objectNames
         End Using
-    End Function
-
-    <MethodImpl(MethodImplOptions.AggressiveInlining)>
-    <Extension>
-    Private Function decodeStringVector(value As CDFData) As Object
-        Return value.chars.DecodeBase64.LoadJSON(Of String())
     End Function
 
     ''' <summary>
