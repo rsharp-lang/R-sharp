@@ -103,10 +103,6 @@ Module rawSerializer
     <Extension>
     Private Sub writeString(cdf As CDFWriter, symbolRef$, strings As String())
         Using buffer As New MemoryStream, sb As New BinaryDataWriter(buffer)
-            If strings Is Nothing Then
-                strings = {}
-            End If
-
             For Each str As String In strings
                 Call sb.Write(str, BinaryStringFormat.DwordLengthPrefix)
             Next
@@ -139,7 +135,15 @@ Module rawSerializer
         ' write colnames
         Call cdf.writeString($"{symbolRef}\colnames", table.columns.Keys.ToArray)
         ' write rownames
-        Call cdf.writeString($"{symbolRef}\rownames", table.rownames)
+        If table.rownames.IsNullOrEmpty Then
+            Call cdf.writeString($"{symbolRef}\rownames", table.nrows _
+                    .Sequence(offset:=1) _
+                    .Select(Function(r) $"[{r}, ]") _
+                    .ToArray
+            )
+        Else
+            Call cdf.writeString($"{symbolRef}\rownames", table.rownames)
+        End If
 
         ' write column values
         For Each name As String In table.columns.Keys
