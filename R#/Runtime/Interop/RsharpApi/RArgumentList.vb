@@ -93,8 +93,73 @@ Namespace Runtime.Interop
 
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="[declare]"></param>
+        ''' <param name="env"></param>
+        ''' <param name="params">
+        ''' ```
+        ''' (a,b,c = xxx, ...)
+        ''' ```
+        ''' 
+        ''' 1. (1,c =2, b=33, d=5,cc=66)
+        ''' 2. (1,2,3, d=5, cc=66)
+        ''' </param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' 处理参数在最后或者倒数第二个的情况
+        ''' </remarks>
         Private Shared Function CreateRightMarginArguments([declare] As RMethodInfo, env As Environment, params As InvokeParameter()) As IEnumerable(Of Object)
+            Dim parameterVals As Object() = New Object([declare].parameters.Length - 1) {}
+            Dim declareArguments = [declare].parameters.ToDictionary(Function(a) a.name)
+            Dim declareNameIndex As Index(Of String) = [declare].parameters.Keys.Indexing
+            Dim listObject As New List(Of InvokeParameter)
+            Dim sequenceIndex As Integer = Scan0
+            Dim listIndex As Integer = parameterVals.Length - 1
 
+            If [declare].parameters.Last.type.isEnvironment Then
+                listIndex = listIndex - 1
+            End If
+
+            Dim i As Integer
+            Dim arg As InvokeParameter
+
+            For i = 0 To params.Length - 1
+                arg = params(i)
+
+                If arg.isSymbolAssign Then
+                    parameterVals(declareNameIndex(arg.name)) = RMethodInfo.getValue(
+                        arg:=declareArguments(arg.name),
+                        value:=arg.Evaluate(env),
+                        trace:=[declare].name,
+                        envir:=env,
+                        trygetListParam:=False
+                    )
+                Else
+                    parameterVals(sequenceIndex) = RMethodInfo.getValue(
+                        arg:=[declare].parameters(sequenceIndex),
+                        value:=arg.Evaluate(env),
+                        trace:=[declare].name,
+                        envir:=env,
+                        trygetListParam:=False
+                    )
+                End If
+
+                sequenceIndex += 1
+
+                If sequenceIndex = listIndex Then
+                    Exit For
+                End If
+            Next
+
+            For j As Integer = i To params.Length - 1
+                listObject.Add(params(j))
+            Next
+
+            parameterVals(listIndex) = listObject.ToArray
+
+            Return parameterVals
         End Function
 
         ''' <summary>
