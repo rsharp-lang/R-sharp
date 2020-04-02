@@ -82,6 +82,11 @@ Namespace Runtime.Interop
         ''' <summary>
         ''' 
         ''' </summary>
+        Friend ReadOnly listObjectMargin As ListObjectArgumentMargin = ListObjectArgumentMargin.none
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
         ''' <param name="name"></param>
         ''' <param name="closure">
         ''' Runtime generated .NET method
@@ -91,6 +96,7 @@ Namespace Runtime.Interop
             Me.api = closure
             Me.returns = RType.GetRSharpType(closure.Method.ReturnType)
             Me.parameters = closure.Method.DoCall(AddressOf parseParameters)
+            Me.listObjectMargin = RArgumentList.objectListArgumentMargin(Me)
         End Sub
 
         ''' <summary>
@@ -113,6 +119,7 @@ Namespace Runtime.Interop
             Me.returns = RType.GetRSharpType(closure.ReturnType)
             Me.parameters = closure.DoCall(AddressOf parseParameters)
             Me.invisible = RSuppressPrintAttribute.IsPrintInvisible(closure)
+            Me.listObjectMargin = RArgumentList.objectListArgumentMargin(Me)
         End Sub
 
         ''' <summary>
@@ -132,32 +139,7 @@ Namespace Runtime.Interop
         End Function
 
         Public Function GetPrintContent() As String Implements RPrint.GetPrintContent
-            Dim raw As Type = GetRawDeclares().DeclaringType
-            Dim rawDeclare$ = raw.FullName
-            Dim packageName$ = raw.NamespaceEntry(True).Namespace
-            Dim params$
-            Dim returns As RType() = RApiReturnAttribute _
-                .GetActualReturnType(GetRawDeclares) _
-                .Select(AddressOf RType.GetRSharpType) _
-                .ToArray
-
-            If parameters.Length > 3 Then
-                params = parameters.JoinBy(", " & vbCrLf)
-            Else
-                params = parameters.JoinBy(", ")
-            End If
-
-            Return $"let ``{name}`` as function({params}) -> ``{returns.JoinBy("|")}`` {{
-    #
-    # .NET API information
-    #
-    # module: {rawDeclare}
-    # LibPath: {raw.Assembly.Location.ParentPath}
-    # library: {raw.Assembly.Location.FileName}
-    # package: ""{packageName}""
-    #
-    return call ``R#.interop_[{raw.Name}::{GetRawDeclares().Name}]``(...);
-}}"
+            Return markdown
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
@@ -213,7 +195,7 @@ Namespace Runtime.Interop
             }
 
             Using env As New Environment(envir, apiStackFrame, isInherits:=True)
-                If Me.parameters.Any(Function(a) a.isObjectList) Then
+                If listObjectMargin <> ListObjectArgumentMargin.none Then
                     parameters = RArgumentList.CreateObjectListArguments(Me, env, params).ToArray
                 Else
                     parameters = InvokeParameter _
