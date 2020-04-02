@@ -44,6 +44,7 @@
 #End Region
 
 Imports System.IO
+Imports System.IO.Compression
 Imports System.Reflection
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
@@ -477,8 +478,15 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <returns></returns>
         <ExportAPI("file")>
-        Public Function file(description$, Optional open As FileMode = FileMode.OpenOrCreate) As FileStream
-            Return description.Open(open, doClear:=FileMode.Truncate)
+        Public Function file(description$,
+                             Optional open As FileMode = FileMode.OpenOrCreate,
+                             Optional truncate As Boolean = False) As FileStream
+
+            If open = FileMode.Truncate OrElse open = FileMode.CreateNew Then
+                Return description.Open(open, doClear:=truncate)
+            Else
+                Return description.Open(open, doClear:=False)
+            End If
         End Function
 
         <ExportAPI("open.zip")>
@@ -489,6 +497,19 @@ Namespace Runtime.Internal.Invokes
             Else
                 Return New ZipFolder(file)
             End If
+        End Function
+
+        <ExportAPI("open.gzip")>
+        Public Function openGzip(file As String) As Stream
+            Using originalFileStream As FileStream = file.Open(FileMode.Open, doClear:=False)
+                Dim deflate As New MemoryStream
+
+                Using decompressionStream As New GZipStream(originalFileStream, CompressionMode.Decompress)
+                    decompressionStream.CopyTo(deflate)
+                End Using
+
+                Return deflate
+            End Using
         End Function
     End Module
 End Namespace
