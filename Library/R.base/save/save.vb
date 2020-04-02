@@ -246,14 +246,47 @@ Partial Module base
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("saveRDS")>
-    Public Function saveRDS([object] As Object,
-                            Optional file$ = "",
+    <RApiReturn(GetType(Boolean))>
+    Public Function saveRDS(<RRawVectorArgument>
+                            [object] As Object,
+                            file$,
                             Optional ascii As Boolean = False,
-                            Optional version$ = Nothing,
+                            Optional version$ = "classic",
                             Optional compress As Boolean = True,
                             Optional refhook$ = Nothing,
-                            Optional env As Environment = Nothing) As Boolean
+                            Optional env As Environment = Nothing) As Object
 
+        ' 数据将会被保存为netCDF文件然后进行zip压缩保存
+        If file.StringEmpty Then
+            Return Internal.debug.stop("'file' must be specified!", env)
+        ElseIf [object] Is Nothing Then
+            Return Internal.debug.stop("'object' is nothing!", env)
+        End If
+
+        ' 先保存为cdf文件
+        Dim tmp As String = App.GetAppSysTempFile(".cdf", App.PID, prefix:=RandomASCIIString(5, True)).TrimSuffix & "/R#.Data"
+        Dim maxChartSize As Integer = 2048
+
+        Using cdf As CDFWriter = New CDFWriter(tmp).GlobalAttributes(
+            New cdfAttribute With {.name = "program", .type = CDFDataTypes.CHAR, .value = "SMRUCC/R#"},
+            New cdfAttribute With {.name = "maxCharSize", .type = CDFDataTypes.INT, .value = maxChartSize},
+            New cdfAttribute With {.name = "level", .type = CDFDataTypes.INT, .value = CInt(RData.RDS)},
+            New cdfAttribute With {.name = "version", .type = CDFDataTypes.CHAR, .value = version}
+        ).Dimensions(Dimension.Byte,
+                     Dimension.Double,
+                     Dimension.Float,
+                     Dimension.Integer,
+                     Dimension.Long,
+                     Dimension.Short,
+                     Dimension.Text(maxChartSize))
+
+            Call cdf.writeObject("data", [object])
+        End Using
+
+        ' copy to target file
+        Call ZipLib.FileArchive(tmp, file, ArchiveAction.Replace, Overwrite.Always, CompressionLevel.Fastest)
+
+        Return True
     End Function
 
     ''' <summary>
