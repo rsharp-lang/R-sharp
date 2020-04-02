@@ -261,12 +261,12 @@ Namespace Runtime.Interop
             Next
         End Function
 
-        Friend Shared Function missingParameter(arg As RMethodArgument, envir As Environment, name$) As Object
+        Friend Shared Function missingParameter(arg As RMethodArgument, envir As Environment, funcName$) As Object
             Dim messages$() = {
                 $"Missing parameter value for '{arg.name}'!",
                 $"parameter: {arg.name}",
                 $"type: {arg.type.raw.FullName}",
-                $"function: {name}",
+                $"function: {funcName}",
                 $"environment: {envir.ToString}"
             }
 
