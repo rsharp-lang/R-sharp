@@ -203,8 +203,11 @@ Partial Module base
             New cdfAttribute With {.name = "program", .type = CDFDataTypes.CHAR, .value = "SMRUCC/R#"},
             New cdfAttribute With {.name = "numOfObjects", .type = CDFDataTypes.INT, .value = objList.Length},
             New cdfAttribute With {.name = "maxCharSize", .type = CDFDataTypes.INT, .value = maxChartSize},
-            New cdfAttribute With {.name = "level", .type = CDFDataTypes.INT, .value = CInt(RData.RDA)}
+            New cdfAttribute With {.name = "level", .type = CDFDataTypes.INT, .value = CInt(RData.RDA)},
+            New cdfAttribute With {.name = "time", .type = CDFDataTypes.DOUBLE, .value = UnixTimeStamp},
+            New cdfAttribute With {.name = "github", .type = CDFDataTypes.CHAR, .value = LICENSE.githubURL}
         ).Dimensions(Dimension.Byte,
+                     Dimension.Boolean,
                      Dimension.Double,
                      Dimension.Float,
                      Dimension.Integer,

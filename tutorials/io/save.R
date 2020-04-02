@@ -1,3 +1,5 @@
+setwd(!script$dir);
+
 # create two data sequence object
 let x = 1:100;
 let word = ["world", "R#"];

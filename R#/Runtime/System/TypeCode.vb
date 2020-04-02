@@ -98,6 +98,7 @@ Namespace Runtime.Components
         ''' <see cref="Boolean"/> vector
         ''' </summary>
         [boolean]
+        [dataframe]
 #End Region
     End Enum
 End Namespace

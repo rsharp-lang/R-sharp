@@ -1,41 +1,41 @@
 ﻿#Region "Microsoft.VisualBasic::6a9dc6d697806b73323cd77d77e734ce, Library\R.base\rawSerializer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module rawSerializer
-    ' 
-    '     Sub: writeList, writeObject, writeString
-    ' 
-    ' /********************************************************************************/
+' Module rawSerializer
+' 
+'     Sub: writeList, writeObject, writeString
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -51,6 +51,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports cdfAttribute = Microsoft.VisualBasic.Data.IO.netCDF.Components.attribute
+Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 
 Module rawSerializer
 
@@ -61,6 +62,8 @@ Module rawSerializer
             Return
         ElseIf TypeOf obj Is list Then
             Call cdf.writeList(symbolRef, DirectCast(obj, list).slots)
+        ElseIf TypeOf obj Is Rdataframe Then
+            Call cdf.writeDataframe(symbolRef, DirectCast(obj, Rdataframe))
         ElseIf TypeOf obj Is Dictionary(Of String, Object) Then
             Call cdf.writeList(symbolRef, obj)
         ElseIf obj.GetType.ImplementInterface(Of IDictionary) Then
@@ -90,8 +93,9 @@ Module rawSerializer
                     New cdfAttribute With {.name = "length", .type = CDFDataTypes.INT, .value = vector.Length},
                     New cdfAttribute With {.name = "type", .type = CDFDataTypes.INT, .value = CInt(elTypes.GetRTypeCode)}
                 }
+                Dim dims As Dimension() = {cdf.getDimension(elTypes.FullName)}
 
-                cdf.AddVariable(obj.Name, value, {cdf.getDimension(elTypes.FullName)}, attributes)
+                Call cdf.AddVariable(symbolRef, value, dims, attributes)
             End If
         End If
     End Sub
@@ -113,6 +117,38 @@ Module rawSerializer
 
             cdf.AddVariable(symbolRef, value, {cdf.getDimension(GetType(String).FullName)}, attributes)
         End Using
+    End Sub
+
+    <Extension>
+    Private Sub writeDataframe(cdf As CDFWriter, symbolRef$, table As Rdataframe)
+        ' write symbol
+        Dim attributes As cdfAttribute() = {
+            New cdfAttribute With {.name = "length", .type = CDFDataTypes.INT, .value = table.ncols}，
+            New cdfAttribute With {.name = "type", .type = CDFDataTypes.INT, .value = CInt(TypeCodes.dataframe)},
+            New cdfAttribute With {.name = "ncols", .type = CDFDataTypes.INT, .value = table.ncols},
+            New cdfAttribute With {.name = "nrows", .type = CDFDataTypes.INT, .value = table.nrows}
+        }
+        Dim symbolVal As CDFData = {CInt(TypeCodes.dataframe)}
+
+        Call cdf.AddVariable(symbolRef, symbolVal, {cdf.getDimension(GetType(Integer).FullName)}, attributes)
+
+        ' write colnames
+        Call cdf.writeString($"{symbolRef}\colnames", table.columns.Keys.ToArray)
+        ' write rownames
+        If table.rownames.IsNullOrEmpty Then
+            Call cdf.writeString($"{symbolRef}\rownames", table.nrows _
+                    .Sequence(offset:=1) _
+                    .Select(Function(r) $"[{r}, ]") _
+                    .ToArray
+            )
+        Else
+            Call cdf.writeString($"{symbolRef}\rownames", table.rownames)
+        End If
+
+        ' write column values
+        For Each name As String In table.columns.Keys
+            Call cdf.writeObject($"{symbolRef}\slots\{name}", table.columns(name))
+        Next
     End Sub
 
     <Extension>

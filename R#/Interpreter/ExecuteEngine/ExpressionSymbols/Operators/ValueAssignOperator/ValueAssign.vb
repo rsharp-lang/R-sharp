@@ -272,37 +272,7 @@ Namespace Interpreter.ExecuteEngine
 
             If Not targetObj.GetType.ImplementInterface(GetType(RNameIndex)) Then
                 If targetObj.GetType Is GetType(dataframe) Then
-                    If symbolIndex.indexType = SymbolIndexers.dataframeColumns Then
-                        If indexStr.Length = 1 Then
-                            If value Is Nothing Then
-                                ' removes column
-                                DirectCast(targetObj, dataframe).columns.Remove(indexStr(Scan0))
-                            Else
-                                If Not value.GetType.IsArray Then
-                                    Dim a As Array = Array.CreateInstance(value.GetType, 1)
-                                    a.SetValue(value, Scan0)
-                                    value = a
-                                End If
-
-                                DirectCast(targetObj, dataframe).columns(indexStr(Scan0)) = value
-                            End If
-                        Else
-                            Dim seqVal As Array = Runtime.asVector(Of Object)(value)
-                            Dim i As i32 = Scan0
-
-                            For Each key As String In indexStr
-                                If seqVal.Length = 1 Then
-                                    DirectCast(targetObj, dataframe).columns(key) = value
-                                Else
-                                    DirectCast(targetObj, dataframe).columns(key) = seqVal.GetValue(++i)
-                                End If
-                            Next
-                        End If
-
-                        Return Nothing
-                    Else
-                        Return Internal.debug.stop(New NotImplementedException, envir)
-                    End If
+                    Return dataframeValueAssign.ValueAssign(symbolIndex, indexStr, targetObj, value, envir)
                 Else
                     Return Internal.debug.stop({"Target symbol can not be indexed by name!", $"SymbolName: {symbolIndex.symbol}"}, envir)
                 End If

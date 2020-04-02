@@ -48,14 +48,39 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Namespace Interpreter.ExecuteEngine
 
     ''' <summary>
-    ''' ``data[selector, ]``
+    ''' get value of ``data[selector, ]``
     ''' </summary>
     Public Class DataFrameSlice : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
 
+        Dim dataframe As Expression
+        Dim selector As Expression
+
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Throw New NotImplementedException()
+            Dim dataframe As Object = Me.dataframe.Evaluate(envir)
+            Dim selectorVal As Object = Me.selector.Evaluate(envir)
+
+            If Program.isException(dataframe) Then
+                Return dataframe
+            ElseIf dataframe Is Nothing Then
+                Return Internal.debug.stop(New NullReferenceException, envir)
+            End If
+
+            If Program.isException(selectorVal) Then
+                Return selectorVal
+            ElseIf selectorVal Is Nothing Then
+                Return Internal.debug.stop(New NullReferenceException, envir)
+            End If
+
+            Dim selector As Array = asVector(Of Object)(selectorVal)
+            Dim selectorType As Type = MeasureRealElementType(selector)
+
+            If selectorType Is GetType(String) Then
+                ' select by row names
+            Else
+                ' select by row index
+            End If
         End Function
     End Class
 End Namespace

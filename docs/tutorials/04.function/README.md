@@ -53,3 +53,68 @@ a <- x => ...;
 
 ### difference between lambda function and the closure function
 
+The lambda function object it contains no environment information, so it just some kind of ``formula`` to finish some kind of job. here is a example for examine the difference between the lambda function and the closure function:
+
+```R
+let y = 99;
+let createLambda as function() {
+    # due to the reason of lambda function contains no 
+    # associated environment information, so that the 
+    # non-paramenter symbol y its value is depends of 
+    # the context when we call this lambda function
+    x -> x + y + 1;
+} 
+let createClosure as function(y) {
+    function(x) x + y + 1;
+}
+
+let fun1 = createLambda();
+let fun2 = createClosure(-99); 
+
+fun1(0);
+# [1] 100
+fun2(0);
+# [1] -98
+```
+
+due to the reason of lambda function contains no associated environment information, so that the non-paramenter symbol y its value is depends of the context when we call this lambda function. so the ``y`` value in ``fun1`` is reference to the symbol ``y`` in the current global environment context, so its value expression is ``0 + 99 + 1 = 100``. for function ``fun2``, its ``y`` value is reference to the inner closure environment of the ``createClosure`` function instance, so that as we invoke the ``createClosure`` with y parameter value -99, not the y symbol in global environment context, so its value expression is ``0 + -99 + 1 = -98``. 
+
+### the list object argument
+
+there is a special kind of parameter in R and R# function: list object argument(``...``). the list object argument can only apears on the margin side in the parameter list, middle side is not allowed:
+
+```R
+# valid: on the left margin side
+function(..., file, compress)
+# valid: on the right margin side
+function(file, encoding, ...)
+# not allowed: in the middle side
+function(file, ..., encoding)
+```
+
+the list object argument allowes you passing multiple named value tuple parameter to the function for passing the additional arguments. for gets the value from the list object argument, you can just simply use with the ``base::list`` function, example as:
+
+```R
+let show as function(...) {
+    str(list(...));
+}
+
+show(a = 1, b= [5,5,6], c= FALSE);
+```
+
+the list object argument is also can makes the function parameter passing to internal function more easily:
+
+```R
+let internal as function(a, b, c) {
+    a + b + c;
+}
+
+let outside as function(label, ...) {
+    cat(label);
+
+    # list object argument makes it simple
+    internal(...);
+}
+
+outside(label = "A", a = 1, b= 2, c= 3);
+```
