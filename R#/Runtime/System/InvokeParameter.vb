@@ -83,7 +83,9 @@ Namespace Runtime.Components
         End Property
 
         ''' <summary>
-        ''' 主要是应用于生成list的参数列表
+        ''' is syntax of ``a &lt;- b``?
+        ''' 
+        ''' (主要是应用于生成list的参数列表)
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property isSymbolAssign As Boolean

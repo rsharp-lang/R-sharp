@@ -49,15 +49,12 @@
 
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.DataMining.ComponentModel.Normalizer
-Imports Microsoft.VisualBasic.Language.Default
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning
 Imports Microsoft.VisualBasic.MachineLearning.Debugger
 Imports Microsoft.VisualBasic.MachineLearning.NeuralNetwork
-Imports Microsoft.VisualBasic.MachineLearning.NeuralNetwork.Activations
 Imports Microsoft.VisualBasic.MachineLearning.NeuralNetwork.StoreProcedure
 Imports Microsoft.VisualBasic.MachineLearning.StoreProcedure
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -118,6 +115,11 @@ Module machineLearning
         Return file.LoadXml(Of StoreProcedure.DataSet)
     End Function
 
+    ''' <summary>
+    ''' create a new model dataset
+    ''' </summary>
+    ''' <param name="file"></param>
+    ''' <returns></returns>
     <ExportAPI("new.ML_model")>
     Public Function createEmptyMLDataset(file As String) As RDispose
         Return New RDispose(
@@ -137,6 +139,14 @@ Module machineLearning
             End Sub)
     End Function
 
+    ''' <summary>
+    ''' add new training sample into the model dataset
+    ''' </summary>
+    ''' <param name="model"></param>
+    ''' <param name="input"></param>
+    ''' <param name="output"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("add")>
     Public Function addTrainingSample(model As Object, input As Double(), output As Double(), Optional env As Environment = Nothing) As Object
         Dim dataset As StoreProcedure.DataSet
@@ -208,6 +218,13 @@ Module machineLearning
         End With
     End Function
 
+    ''' <summary>
+    ''' open a file connection to the model debug file.
+    ''' </summary>
+    ''' <param name="ANN"></param>
+    ''' <param name="file">the file path to the debug file.</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("open.debugger")>
     <RApiReturn(GetType(ANNDebugger))>
     Public Function openDebugger(ANN As Object, file$, Optional env As Environment = Nothing) As Object
@@ -235,6 +252,20 @@ Module machineLearning
                    End Sub)
     End Function
 
+    ''' <summary>
+    ''' create a new ANN training model
+    ''' </summary>
+    ''' <param name="inputSize">the number of nodes for the input layer</param>
+    ''' <param name="outputSize">the number of nodes for the output layer</param>
+    ''' <param name="hiddenSize">the hiden size of nodes for each hidden layers</param>
+    ''' <param name="learnRate"></param>
+    ''' <param name="momentum"></param>
+    ''' <param name="active"></param>
+    ''' <param name="weight0"></param>
+    ''' <param name="learnRateDecay"></param>
+    ''' <param name="truncate"></param>
+    ''' <param name="selectiveMode"></param>
+    ''' <returns></returns>
     <ExportAPI("ANN.training_model")>
     Public Function CreateANNTrainer(inputSize%, outputSize%,
                                      <RRawVectorArgument(GetType(Integer))>
@@ -343,35 +374,4 @@ Module machineLearning
         End If
     End Function
 End Module
-
-Public Class activation
-
-    Public Property hidden As String
-    Public Property output As String
-
-    Public Function CreateActivations() As LayerActives
-        Dim defaultActive As [Default](Of String) = ActiveFunction.Sigmoid
-
-        Return New LayerActives With {
-            .hiddens = ActiveFunction.Parse(hidden Or defaultActive),
-            .output = ActiveFunction.Parse(output Or defaultActive),
-            .input = ActiveFunction.Parse(defaultActive)
-        }
-    End Function
-
-    Public Overloads Shared Widening Operator CType([default] As String) As activation
-        Dim tokens As String() = [default].StringSplit(";\s*")
-        Dim actives As New activation
-        Dim configs As NamedValue(Of String)() = tokens _
-            .Select(Function(str)
-                        Return str.GetTagValue(":", trim:=True)
-                    End Function) _
-            .ToArray
-
-        actives.hidden = configs.Where(Function(a) a.Name.TextEquals(NameOf(activation.hidden))).FirstOrDefault.Value
-        actives.output = configs.Where(Function(a) a.Name.TextEquals(NameOf(activation.output))).FirstOrDefault.Value
-
-        Return actives
-    End Operator
-End Class
 

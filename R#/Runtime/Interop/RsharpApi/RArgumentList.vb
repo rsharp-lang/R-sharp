@@ -89,8 +89,111 @@ Namespace Runtime.Interop
             Return ListObjectArgumentMargin.invalid
         End Function
 
-        Private Shared Function CreateLeftMarginArguments([declare] As RMethodInfo, env As Environment, params As InvokeParameter()) As IEnumerable(Of Object)
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="[declare]">
+        ''' the first argument in api parameters is the list object argument
+        ''' all of the argument 
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <param name="params">
+        ''' parameter declares example as: ``(..., file, env)``
+        ''' 
+        ''' valids syntax:
+        ''' 
+        ''' 1. ``(a,b,c,d,e,f,g, file = "...")``
+        ''' 2. ``(a= 1, b=2, c=a, d= 55, bb, ee, file = "...")``
+        ''' </param>
+        ''' <returns></returns>
+        Private Shared Function CreateLeftMarginArguments([declare] As RMethodInfo, params As InvokeParameter(), env As Environment) As IEnumerable(Of Object)
+            Dim parameterVals As Object() = New Object([declare].parameters.Length - 1) {}
+            ' the parameter name of the list object argument has been removed
+            ' so all of the index value should be move forward 1 unit.
+            Dim parameterNames As Index(Of String) = [declare].parameters.Skip(1).Keys
+            Dim declareArguments = [declare].parameters.ToDictionary(Function(a) a.name)
+            Dim listObject As New List(Of InvokeParameter)
+            Dim skipListObject As Boolean = False
+            Dim normalNames As New List(Of String)
+            Dim sequenceIndex As Integer = Scan0
 
+            For Each arg As InvokeParameter In params
+                If arg.isSymbolAssign AndAlso arg.name Like parameterNames Then
+                    skipListObject = True
+                    parameterVals(parameterNames(arg.name) + 1) = RMethodInfo.getValue(
+                        arg:=declareArguments(arg.name),
+                        value:=arg.Evaluate(env),
+                        trace:=[declare].name,
+                        envir:=env,
+                        trygetListParam:=False
+                    )
+                    normalNames.Add(arg.name)
+                    sequenceIndex += 1
+                ElseIf skipListObject Then
+                    ' normal parameters
+                    If arg.isSymbolAssign Then
+                        ' but arg.name is not one of the parameterNames
+                        ' syntax error?
+                        Dim syntaxError = Internal.debug.stop({
+                            "syntax error!",
+                            "the argument is not expected at here!",
+                            "argument name: " & arg.name
+                        }, env)
+
+                        Return New Object() {syntaxError}
+                    Else
+                        If Not parameterVals(sequenceIndex) Is Nothing Then
+                            ' is already have value at here
+                            ' syntax error
+                            Dim syntaxError = Internal.debug.stop({
+                                "syntax error!",
+                                "the argument is not expected at here!",
+                                "argument expression: " & arg.value.ToString
+                            }, env)
+
+                            Return New Object() {syntaxError}
+                        Else
+                            parameterVals(sequenceIndex) = RMethodInfo.getValue(
+                                arg:=[declare].parameters(sequenceIndex),
+                                value:=arg.Evaluate(env),
+                                trace:=[declare].name,
+                                envir:=env,
+                                trygetListParam:=False
+                            )
+                            normalNames.Add([declare].parameters(sequenceIndex).name)
+                            sequenceIndex += 1
+                        End If
+                    End If
+                Else
+                    ' still a list object argument
+                    ' 当前的参数为list object
+                    listObject.Add(arg)
+                End If
+            Next
+
+            For Each name As String In normalNames
+                Call declareArguments.Remove(name)
+            Next
+
+            parameterVals(Scan0) = listObject.ToArray
+
+            For Each arg As RMethodArgument In declareArguments.Values
+                If arg.isOptional Then
+                    If arg.type.isEnvironment Then
+                        parameterVals(parameterNames(arg.name) + 1) = env
+                    Else
+                        parameterVals(parameterNames(arg.name) + 1) = arg.default
+                    End If
+                ElseIf arg.type.isEnvironment Then
+                    parameterVals(parameterNames(arg.name) + 1) = env
+                ElseIf Not arg.isObjectList Then
+                    Return New Object() {
+                        RMethodInfo.missingParameter(arg, env, [declare].name)
+                    }
+                End If
+            Next
+
+            Return parameterVals
         End Function
 
         ''' <summary>
@@ -171,9 +274,9 @@ Namespace Runtime.Interop
         ''' <returns></returns>
         Friend Shared Function CreateObjectListArguments([declare] As RMethodInfo, env As Environment, params As InvokeParameter()) As IEnumerable(Of Object)
             If [declare].listObjectMargin = ListObjectArgumentMargin.left Then
-                Return CreateLeftMarginArguments([declare], env, params)
+                Return CreateLeftMarginArguments([declare], params, env)
             Else
-                Return CreateRightMarginArguments([declare], env, params)
+                Return CreateRightMarginArguments([declare], params, env)
             End If
 
             Dim parameterVals As Object() = New Object([declare].parameters.Length - 1) {}

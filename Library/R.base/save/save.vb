@@ -49,15 +49,12 @@
 #End Region
 
 Imports System.IO.Compression
-Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Zip
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.IO.netCDF
 Imports Microsoft.VisualBasic.Data.IO.netCDF.Components
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.Net.Http
-Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports cdfAttribute = Microsoft.VisualBasic.Data.IO.netCDF.Components.attribute
@@ -117,7 +114,7 @@ Partial Module base
     ''' </remarks>
     <ExportAPI("load")>
     Public Function load(file As String,
-                         Optional envir As Environment = Nothing,
+                         Optional envir As GlobalEnvironment = Nothing,
                          Optional verbose As Boolean = False) As Object
 
         If Not file.FileExists Then
@@ -131,40 +128,30 @@ Partial Module base
         Using reader As New netCDFReader(tmp & "/R#.Data")
             Dim objectNames = reader.getDataVariable("R#.objects").decodeStringVector
             Dim numOfObjects As Integer = reader("numOfObjects")
-            Dim value As CDFData
-            Dim var As RSymbol
+            Dim objects As NamedValue(Of Object)() = rawDeserializer.loadObject(reader, objectNames).ToArray
 
-            If objectNames.Length <> numOfObjects Then
+            If objects.Length <> numOfObjects Then
                 Return Internal.debug.stop({"Invalid file format!", "file=" & file}, envir)
+            Else
+                Return objects
             End If
 
-            For Each name As String In objectNames
-                value = reader.getDataVariable(name)
-                var = envir.FindSymbol(name)
+            For Each obj As NamedValue(Of Object) In objects
+                Dim var As RSymbol = envir.FindSymbol(obj.Name)
 
                 If var Is Nothing Then
                     var = New RSymbol With {
-                        .name = name,
+                        .name = obj.Name,
                         .[readonly] = False
                     }
-                    envir.symbols.Add(name, var)
+                    envir.symbols.Add(obj.Name, var)
                 End If
 
-                If value.cdfDataType = CDFDataTypes.CHAR Then
-                    var.SetValue(value.decodeStringVector, envir)
-                Else
-                    var.SetValue(value.genericValue, envir)
-                End If
+                Call var.SetValue(obj.Value, envir)
             Next
 
             Return objectNames
         End Using
-    End Function
-
-    <MethodImpl(MethodImplOptions.AggressiveInlining)>
-    <Extension>
-    Private Function decodeStringVector(value As CDFData) As Object
-        Return value.chars.DecodeBase64.LoadJSON(Of String())
     End Function
 
     ''' <summary>
@@ -203,8 +190,11 @@ Partial Module base
             New cdfAttribute With {.name = "program", .type = CDFDataTypes.CHAR, .value = "SMRUCC/R#"},
             New cdfAttribute With {.name = "numOfObjects", .type = CDFDataTypes.INT, .value = objList.Length},
             New cdfAttribute With {.name = "maxCharSize", .type = CDFDataTypes.INT, .value = maxChartSize},
-            New cdfAttribute With {.name = "level", .type = CDFDataTypes.INT, .value = CInt(RData.RDA)}
+            New cdfAttribute With {.name = "level", .type = CDFDataTypes.INT, .value = CInt(RData.RDA)},
+            New cdfAttribute With {.name = "time", .type = CDFDataTypes.DOUBLE, .value = UnixTimeStamp},
+            New cdfAttribute With {.name = "github", .type = CDFDataTypes.CHAR, .value = LICENSE.githubURL}
         ).Dimensions(Dimension.Byte,
+                     Dimension.Boolean,
                      Dimension.Double,
                      Dimension.Float,
                      Dimension.Integer,
@@ -246,14 +236,47 @@ Partial Module base
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("saveRDS")>
-    Public Function saveRDS([object] As Object,
-                            Optional file$ = "",
+    <RApiReturn(GetType(Boolean))>
+    Public Function saveRDS(<RRawVectorArgument>
+                            [object] As Object,
+                            file$,
                             Optional ascii As Boolean = False,
-                            Optional version$ = Nothing,
+                            Optional version$ = "classic",
                             Optional compress As Boolean = True,
                             Optional refhook$ = Nothing,
-                            Optional env As Environment = Nothing) As Boolean
+                            Optional env As Environment = Nothing) As Object
 
+        ' 数据将会被保存为netCDF文件然后进行zip压缩保存
+        If file.StringEmpty Then
+            Return Internal.debug.stop("'file' must be specified!", env)
+        ElseIf [object] Is Nothing Then
+            Return Internal.debug.stop("'object' is nothing!", env)
+        End If
+
+        ' 先保存为cdf文件
+        Dim tmp As String = App.GetAppSysTempFile(".cdf", App.PID, prefix:=RandomASCIIString(5, True)).TrimSuffix & "/R#.Data"
+        Dim maxChartSize As Integer = 2048
+
+        Using cdf As CDFWriter = New CDFWriter(tmp).GlobalAttributes(
+            New cdfAttribute With {.name = "program", .type = CDFDataTypes.CHAR, .value = "SMRUCC/R#"},
+            New cdfAttribute With {.name = "maxCharSize", .type = CDFDataTypes.INT, .value = maxChartSize},
+            New cdfAttribute With {.name = "level", .type = CDFDataTypes.INT, .value = CInt(RData.RDS)},
+            New cdfAttribute With {.name = "version", .type = CDFDataTypes.CHAR, .value = version}
+        ).Dimensions(Dimension.Byte,
+                     Dimension.Double,
+                     Dimension.Float,
+                     Dimension.Integer,
+                     Dimension.Long,
+                     Dimension.Short,
+                     Dimension.Text(maxChartSize))
+
+            Call cdf.writeObject("data", [object])
+        End Using
+
+        ' copy to target file
+        Call ZipLib.FileArchive(tmp, file, ArchiveAction.Replace, Overwrite.Always, CompressionLevel.Fastest)
+
+        Return True
     End Function
 
     ''' <summary>
