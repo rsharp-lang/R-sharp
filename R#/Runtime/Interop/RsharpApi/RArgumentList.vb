@@ -175,6 +175,8 @@ Namespace Runtime.Interop
                 Call declareArguments.Remove(name)
             Next
 
+            parameterVals(Scan0) = listObject.ToArray
+
             For Each arg As RMethodArgument In declareArguments.Values
                 If arg.isOptional Then
                     If arg.type.isEnvironment Then
@@ -184,7 +186,7 @@ Namespace Runtime.Interop
                     End If
                 ElseIf arg.type.isEnvironment Then
                     parameterVals(parameterNames(arg.name) + 1) = env
-                Else
+                ElseIf Not arg.isObjectList Then
                     Return New Object() {
                         RMethodInfo.missingParameter(arg, env, [declare].name)
                     }

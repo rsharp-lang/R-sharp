@@ -205,6 +205,7 @@ Partial Module base
             New cdfAttribute With {.name = "maxCharSize", .type = CDFDataTypes.INT, .value = maxChartSize},
             New cdfAttribute With {.name = "level", .type = CDFDataTypes.INT, .value = CInt(RData.RDA)}
         ).Dimensions(Dimension.Byte,
+                     Dimension.Boolean,
                      Dimension.Double,
                      Dimension.Float,
                      Dimension.Integer,
