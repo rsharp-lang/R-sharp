@@ -5,6 +5,9 @@ Imports Microsoft.VisualBasic.Data.IO.netCDF.Components
 Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports REnv = SMRUCC.Rsharp.Runtime
+Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 
 Module rawDeserializer
 
@@ -16,36 +19,95 @@ Module rawDeserializer
 
     Public Iterator Function loadObject(file As netCDFReader, symbols As String()) As IEnumerable(Of NamedValue(Of Object))
         For Each name As String In symbols
-            Dim data = file.getDataVariable(name)
-            Dim type As TypeCodes = Integer.Parse(file.getDataVariableEntry(name).FindAttribute("type").value)
-            Dim value As Object
-
-            Select Case type
-                Case TypeCodes.boolean : value = loadElse()
-                Case TypeCodes.dataframe : value = loadDataframe()
-                Case TypeCodes.double : value = loadElse()
-                Case TypeCodes.integer : value = loadElse()
-                Case TypeCodes.list : value = loadList()
-                Case TypeCodes.string : value = loadStrings()
-                Case Else
-                    Throw New InvalidProgramException
-            End Select
+            Yield New NamedValue(Of Object) With {
+                .Name = name,
+                .Value = file.loadObject(name)
+            }
         Next
     End Function
 
-    Public Function loadList() As Object
+    <Extension>
+    Public Function loadObject(file As netCDFReader, name As String) As Object
+        Dim data = file.getDataVariable(name)
+        Dim type As TypeCodes = Integer.Parse(file.getDataVariableEntry(name).FindAttribute("type").value)
+        Dim value As Object
 
+        Select Case type
+            Case TypeCodes.boolean : value = file.loadElse(name, TypeCodes.boolean)
+            Case TypeCodes.dataframe : value = file.loadDataframe(name)
+            Case TypeCodes.double : value = file.loadElse(name, TypeCodes.double)
+            Case TypeCodes.integer : value = file.loadElse(name, TypeCodes.integer)
+            Case TypeCodes.list : value = file.loadList(name)
+            Case TypeCodes.string : value = file.loadStrings(name)
+            Case Else
+                Throw New InvalidProgramException
+        End Select
+
+        Return value
     End Function
 
-    Public Function loadDataframe() As Object
+    <Extension>
+    Public Function loadList(file As netCDFReader, symbolRef As String) As Object
+        Dim names As String() = file.loadStrings($"{symbolRef}\names")
+        Dim list As New list With {.slots = New Dictionary(Of String, Object)}
+        Dim slotRef As String
+        Dim value As Object
 
+        For Each name As String In names
+            slotRef = $"{symbolRef}\slots\{name}"
+            value = file.loadObject(slotRef)
+            list.slots.Add(name, value)
+        Next
+
+        Return list
     End Function
 
-    Public Function loadStrings() As Object
+    <Extension>
+    Public Function loadDataframe(file As netCDFReader, symbolRef As String) As Object
+        Dim data As String() = file.getDataVariable($"{symbolRef}\colnames").decodeStringVector
+        Dim rownames As String() = file.getDataVariable($"{symbolRef}\rownames").decodeStringVector
+        Dim table As New Rdataframe With {
+            .columns = New Dictionary(Of String, Array),
+            .rownames = rownames
+        }
+        Dim colKey As String
+        Dim colVec As Array
 
+        For Each colname As String In data
+            colKey = $"{symbolRef}\slots\{colname}"
+            colVec = file.loadObject(colKey)
+            table.columns.Add(colname, colVec)
+        Next
+
+        Return table
     End Function
 
-    Public Function loadElse() As Object
+    <Extension>
+    Public Function loadStrings(file As netCDFReader, symbolRef As String) As Object
+        Dim data As CDFData = file.getDataVariable(symbolRef)
+        Dim strings As String() = data.decodeStringVector
 
+        Return strings
+    End Function
+
+    <Extension>
+    Public Function loadElse(file As netCDFReader, symbolRef As String, type As TypeCodes) As Object
+        Dim data As CDFData = file.getDataVariable(symbolRef)
+        Dim value As Object
+
+        If type = TypeCodes.boolean Then
+
+        Else
+            Select Case type
+                Case TypeCodes.double
+                    value = REnv.asVector(Of Double)(data.genericValue)
+                Case TypeCodes.integer
+                    value = REnv.asVector(Of Long)(data.genericValue)
+                Case Else
+                    Throw New InvalidCastException
+            End Select
+        End If
+
+        Return value
     End Function
 End Module
