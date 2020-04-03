@@ -196,8 +196,73 @@ Namespace Runtime.Interop
             Return parameterVals
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="[declare]"></param>
+        ''' <param name="env"></param>
+        ''' <param name="params">
+        ''' ```
+        ''' (a,b,c = xxx, ...)
+        ''' ```
+        ''' 
+        ''' 1. (1,c =2, b=33, d=5,cc=66)
+        ''' 2. (1,2,3, d=5, cc=66)
+        ''' </param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' 处理参数在最后或者倒数第二个的情况
+        ''' </remarks>
         Private Shared Function CreateRightMarginArguments([declare] As RMethodInfo, params As InvokeParameter(), env As Environment) As IEnumerable(Of Object)
-            Throw New NotImplementedException
+            Dim parameterVals As Object() = New Object([declare].parameters.Length - 1) {}
+            Dim declareArguments = [declare].parameters.ToDictionary(Function(a) a.name)
+            Dim declareNameIndex As Index(Of String) = [declare].parameters.Keys.Indexing
+            Dim listObject As New List(Of InvokeParameter)
+            Dim sequenceIndex As Integer = Scan0
+            Dim listIndex As Integer = parameterVals.Length - 1
+
+            If [declare].parameters.Last.type.isEnvironment Then
+                listIndex = listIndex - 1
+            End If
+
+            Dim i As Integer
+            Dim arg As InvokeParameter
+
+            For i = 0 To params.Length - 1
+                arg = params(i)
+
+                If arg.isSymbolAssign Then
+                    parameterVals(declareNameIndex(arg.name)) = RMethodInfo.getValue(
+                        arg:=declareArguments(arg.name),
+                        value:=arg.Evaluate(env),
+                        trace:=[declare].name,
+                        envir:=env,
+                        trygetListParam:=False
+                    )
+                Else
+                    parameterVals(sequenceIndex) = RMethodInfo.getValue(
+                        arg:=[declare].parameters(sequenceIndex),
+                        value:=arg.Evaluate(env),
+                        trace:=[declare].name,
+                        envir:=env,
+                        trygetListParam:=False
+                    )
+                End If
+
+                sequenceIndex += 1
+
+                If sequenceIndex = listIndex Then
+                    Exit For
+                End If
+            Next
+
+            For j As Integer = i To params.Length - 1
+                listObject.Add(params(j))
+            Next
+
+            parameterVals(listIndex) = listObject.ToArray
+
+            Return parameterVals
         End Function
 
         ''' <summary>
@@ -212,78 +277,6 @@ Namespace Runtime.Interop
                 Return CreateLeftMarginArguments([declare], params, env)
             Else
                 Return CreateRightMarginArguments([declare], params, env)
-            End If
-
-            Dim parameterVals As Object() = New Object([declare].parameters.Length - 1) {}
-            Dim declareArguments = [declare].parameters.ToDictionary(Function(a) a.name)
-            Dim declareNameIndex As Index(Of String) = [declare].parameters.Keys.Indexing
-            Dim listObject As New List(Of InvokeParameter)
-            Dim i As Integer = Scan0
-            Dim sequenceIndex As Integer = Scan0
-            Dim paramVal As Object
-            Dim index As Integer = RArgumentList.objectListArgumentIndex([declare])
-
-            For Each arg As InvokeParameter In params
-                If sequenceIndex = index Then
-                    If declareArguments.ContainsKey(arg.name) Then
-                        ' move next
-                        sequenceIndex += 1
-
-                        GoTo SET_VALUE
-                    Else
-                        ' 当前的参数为list object
-                        listObject.Add(arg)
-                    End If
-                Else
-SET_VALUE:
-                    paramVal = RMethodInfo.getValue(
-                        arg:=declareArguments(arg.name),
-                        value:=arg.Evaluate(env),
-                        trace:=[declare].name,
-                        envir:=env,
-                        trygetListParam:=False
-                    )
-
-                    If Not paramVal Is Nothing AndAlso paramVal.GetType Is GetType(Message) Then
-                        Return {paramVal}
-                    End If
-
-                    parameterVals(sequenceIndex) = paramVal
-                    sequenceIndex = sequenceIndex + 1
-                End If
-            Next
-
-            parameterVals(index) = listObject.ToArray
-
-            If sequenceIndex = index Then
-                sequenceIndex += 1
-            End If
-
-            If sequenceIndex < parameterVals.Length Then
-                Dim envirArgument As RMethodArgument = declareArguments _
-                    .Values _
-                    .Where(Function(a)
-                               Return a.type.raw Is GetType(Environment)
-                           End Function) _
-                    .FirstOrDefault
-
-                If Not envirArgument Is Nothing Then
-                    i = declareNameIndex(envirArgument.name)
-                    parameterVals(i) = env
-                    declareArguments.Remove(envirArgument.name)
-                End If
-            End If
-
-            If declareArguments.Count > 0 Then
-                Return {
-                    declareArguments.Values _
-                        .First _
-                        .DoCall(Function(a)
-                                    Return RMethodInfo.missingParameter(a, env, [declare].name)
-                                End Function)
-                }
-            Else
-                Return parameterVals
             End If
         End Function
     End Class
