@@ -6,8 +6,8 @@ Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
-Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Module rawDeserializer
 
@@ -95,18 +95,16 @@ Module rawDeserializer
         Dim data As CDFData = file.getDataVariable(symbolRef)
         Dim value As Object
 
-        If type = TypeCodes.boolean Then
-
-        Else
-            Select Case type
-                Case TypeCodes.double
-                    value = REnv.asVector(Of Double)(data.genericValue)
-                Case TypeCodes.integer
-                    value = REnv.asVector(Of Long)(data.genericValue)
-                Case Else
-                    Throw New InvalidCastException
-            End Select
-        End If
+        Select Case type
+            Case TypeCodes.double
+                value = REnv.asVector(Of Double)(data.genericValue)
+            Case TypeCodes.integer
+                value = REnv.asVector(Of Long)(data.genericValue)
+            Case TypeCodes.boolean
+                value = REnv.asVector(Of Boolean)(data.genericValue)
+            Case Else
+                Throw New InvalidCastException
+        End Select
 
         Return value
     End Function
