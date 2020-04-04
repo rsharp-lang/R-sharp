@@ -64,7 +64,7 @@ Namespace Language.TokenIcer
     Public Class Scanner
 
         Dim code As CharPtr
-        Dim buffer As New List(Of Char)
+        Dim buffer As New CharBuffer
         Dim escape As New Escapes
         ''' <summary>
         ''' 当前的代码行号
@@ -90,7 +90,7 @@ Namespace Language.TokenIcer
 
         Private ReadOnly Property lastCharIsEscapeSplash As Boolean
             Get
-                Return buffer.LastOrDefault = "\"c
+                Return buffer.GetLastOrDefault = "\"c
             End Get
         End Property
 
@@ -209,7 +209,7 @@ Namespace Language.TokenIcer
                 If c = ASCII.CR OrElse c = ASCII.LF Then
                     Return New Token With {
                         .name = TokenType.comment,
-                        .text = buffer.PopAll.CharString
+                        .text = New String(buffer.PopAllChars)
                     }
                 Else
                     buffer += c
@@ -237,7 +237,7 @@ Namespace Language.TokenIcer
                         Return New Token With {
                             .name = expressionType,
                             .text = buffer _
-                                .PopAll _
+                                .PopAllChars _
                                 .CharString _
                                 .GetStackValue(escape.stringEscape, escape.stringEscape)
                         }
@@ -322,7 +322,7 @@ Namespace Language.TokenIcer
                        lastPopoutToken.name = TokenType.terminator OrElse
                        lastPopoutToken = [like] Then
 
-                        buffer += "$"
+                        buffer += "$"c
 
                         Return Nothing
                     End If
@@ -361,7 +361,7 @@ Namespace Language.TokenIcer
 
             If buffer = 0 Then
                 If Not bufferNext Is Nothing Then
-                    Call buffer.Add(bufferNext)
+                    buffer += bufferNext
                 End If
 
                 Return Nothing
@@ -390,13 +390,13 @@ Namespace Language.TokenIcer
                             End If
                         End If
 
-                        text = buffer.PopAll.CharString
+                        text = New String(buffer.PopAllChars)
                         buffer += bufferNext.Value
                     End If
                 ElseIf buffer = 1 AndAlso buffer(Scan0) = "@"c OrElse buffer(Scan0) = "$"c Then
                     Return Nothing
                 Else
-                    text = buffer.PopAll.CharString
+                    text = New String(buffer.PopAllChars)
                 End If
             End If
 
