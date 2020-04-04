@@ -268,7 +268,7 @@ Namespace Runtime.Interop
                 End If
             Next
 
-            For j As Integer = i To params.Length - 1
+            For j As Integer = i + 1 To params.Length - 1
                 listObject.Add(params(j))
             Next
 
