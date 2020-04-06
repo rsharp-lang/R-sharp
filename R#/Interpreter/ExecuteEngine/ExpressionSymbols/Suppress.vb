@@ -47,7 +47,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 
-Namespace Interpreter.ExecuteEngine
+Namespace Interpreter.ExecuteEngine.ExpressionSymbols
 
     Public Class Suppress : Inherits Expression
 

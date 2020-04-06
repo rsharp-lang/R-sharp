@@ -48,7 +48,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.Linq
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 
-Namespace Interpreter.ExecuteEngine
+Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
     Public Class BinaryInExpression : Inherits Expression
 

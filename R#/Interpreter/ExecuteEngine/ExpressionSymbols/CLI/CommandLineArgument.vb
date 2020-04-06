@@ -47,7 +47,7 @@ Imports Microsoft.VisualBasic.Language.Default
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 
-Namespace Interpreter.ExecuteEngine
+Namespace Interpreter.ExecuteEngine.ExpressionSymbols
 
     ''' <summary>
     ''' Get commandline argument value by name

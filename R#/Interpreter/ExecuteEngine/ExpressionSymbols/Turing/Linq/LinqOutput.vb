@@ -46,7 +46,7 @@
 
 Imports System.Runtime.CompilerServices
 
-Namespace Interpreter.ExecuteEngine.Linq
+Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Linq
 
     Module LinqOutput
 

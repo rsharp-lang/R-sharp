@@ -53,7 +53,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 
-Namespace Interpreter.ExecuteEngine
+Namespace Interpreter.ExecuteEngine.ExpressionSymbols
 
     ''' <summary>
     ''' External commandline invoke

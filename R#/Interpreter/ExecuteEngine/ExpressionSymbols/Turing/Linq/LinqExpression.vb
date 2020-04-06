@@ -52,7 +52,7 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
-Namespace Interpreter.ExecuteEngine.Linq
+Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Linq
 
     ' from x in seq let y = ... where test select projection order by ... asceding distinct 
 

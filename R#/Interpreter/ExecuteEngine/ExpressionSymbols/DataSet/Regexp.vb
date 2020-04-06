@@ -50,7 +50,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports r = System.Text.RegularExpressions.Regex
 
-Namespace Interpreter.ExecuteEngine
+Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
     Public Class Regexp : Inherits Expression
 

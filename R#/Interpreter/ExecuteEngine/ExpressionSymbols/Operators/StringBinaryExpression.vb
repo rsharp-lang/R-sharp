@@ -45,7 +45,7 @@ Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.Text.Patterns
 Imports SMRUCC.Rsharp.Runtime
 
-Namespace Interpreter.ExecuteEngine
+Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
     Module StringBinaryExpression
 
