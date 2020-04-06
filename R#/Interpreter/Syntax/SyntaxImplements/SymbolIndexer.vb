@@ -191,7 +191,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     End If
                 Next
 
-                index = New ExecuteEngine.VectorLiteral(elements.ToArray)
+                index = New VectorLiteral(elements.ToArray)
             End If
         End Sub
     End Module
