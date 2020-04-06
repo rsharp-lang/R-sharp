@@ -126,8 +126,20 @@ Namespace Runtime.Internal.Object
             Return names
         End Function
 
-        Public Function getValue(Of T)(name As String, env As Environment) As T
-            Return RCType.CTypeDynamic(slots.TryGetValue(name), GetType(T), env)
+        ''' <summary>
+        ''' get value or default
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="name"></param>
+        ''' <param name="env"></param>
+        ''' <param name="default">the default value.</param>
+        ''' <returns></returns>
+        Public Function getValue(Of T)(name As String, env As Environment, Optional [default] As T = Nothing) As T
+            If Not slots.ContainsKey(name) Then
+                Return [default]
+            Else
+                Return RCType.CTypeDynamic(slots.TryGetValue(name), GetType(T), env)
+            End If
         End Function
 
         Public Overrides Function ToString() As String

@@ -51,7 +51,7 @@ Namespace Interpreter.SyntaxParser
 
     Module BinaryExpressionTree
 
-        ReadOnly operatorPriority As String() = {"^", "*/", "+-"}
+        ReadOnly operatorPriority As String() = {"^", "*/%", "+-"}
         ReadOnly comparisonOperators As String() = {"<", ">", "<=", ">=", "==", "!=", "in", "like"}
         ReadOnly logicalOperators As String() = {"&&", "||", "!"}
 

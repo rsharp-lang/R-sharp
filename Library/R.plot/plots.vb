@@ -215,6 +215,7 @@ Module plots
         Dim padding = InteropArgumentHelper.getPadding(args!padding)
         Dim title As String = Scripting.ToString(getFirst(args!title), "Scatter Plot")
         Dim showLegend As Boolean
+        Dim spline As Splines = args.getValue(Of Splines)("interplot", env, Splines.None)
 
         If args.hasName("showLegend") Then
             showLegend = getFirst(asLogical(args!showLegend))
@@ -227,14 +228,17 @@ Module plots
             size:=size, padding:=padding,
             Xlabel:=getFirst(REnv.asVector(Of String)(args("x.lab"))),
             Ylabel:=getFirst(REnv.asVector(Of String)(args("y.lab"))),
-            drawLine:=False,' getFirst(asLogical(args!line))
+            drawLine:=getFirst(asLogical(args!line)),
             legendBgFill:=InteropArgumentHelper.getColor(args!legendBgFill, Nothing),
             legendFontCSS:=InteropArgumentHelper.getFontCSS(args("legend.font")),
             showLegend:=showLegend,
             title:=title,
             legendSplit:=args.getValue(Of Integer)("legend.block", env),
             ablines:=args.getValue(Of Line())("abline", env),
-            hullConvexList:=args.getValue(Of String())("convexHull", env)
+            hullConvexList:=args.getValue(Of String())("convexHull", env),
+            XtickFormat:=args.getValue(Of String)("x.format", env, "F2"),
+            YtickFormat:=args.getValue(Of String)("y.format", env, "F2"),
+            interplot:=spline
         )
     End Function
 
