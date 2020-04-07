@@ -1,55 +1,55 @@
 ﻿#Region "Microsoft.VisualBasic::c48fb2b352590aa43e1ee51977e0ed78, R#\Interpreter\Program.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Enum ExecuteBreaks
-    ' 
-    '         BreakLoop, ContinuteNext, ReturnValue
-    ' 
-    '  
-    ' 
-    ' 
-    ' 
-    '     Class Program
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: BuildProgram, CreateProgram, EndWithFuncCalls, Execute, ExecuteCodeLine
-    '                   GetEnumerator, IEnumerable_GetEnumerator, isException, ToString
-    ' 
-    '         Sub: configException
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Enum ExecuteBreaks
+' 
+'         BreakLoop, ContinuteNext, ReturnValue
+' 
+'  
+' 
+' 
+' 
+'     Class Program
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: BuildProgram, CreateProgram, EndWithFuncCalls, Execute, ExecuteCodeLine
+'                   GetEnumerator, IEnumerable_GetEnumerator, isException, ToString
+' 
+'         Sub: configException
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -57,30 +57,16 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Interpreter.SyntaxParser
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Interpreter
-
-    ''' <summary>
-    ''' Enumerations of breaks the executation of the current code closure.
-    ''' </summary>
-    Public Enum ExecuteBreaks
-        ''' <summary>
-        ''' returns value for function
-        ''' </summary>
-        ReturnValue
-        ''' <summary>
-        ''' continute to next for/while/loop
-        ''' </summary>
-        ContinuteNext
-        ''' <summary>
-        ''' break of while/loop
-        ''' </summary>
-        BreakLoop
-    End Enum
 
     Public Class Program : Implements IEnumerable(Of Expression)
 

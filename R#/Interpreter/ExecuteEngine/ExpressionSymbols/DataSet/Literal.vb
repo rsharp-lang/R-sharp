@@ -48,7 +48,7 @@ Imports System.Runtime.CompilerServices
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 
-Namespace Interpreter.ExecuteEngine
+Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
     Public Class Literal : Inherits Expression
 

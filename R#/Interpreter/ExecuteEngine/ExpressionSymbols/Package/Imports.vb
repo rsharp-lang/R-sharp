@@ -54,7 +54,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.System.Package
 
-Namespace Interpreter.ExecuteEngine
+Namespace Interpreter.ExecuteEngine.ExpressionSymbols
 
     ''' <summary>
     ''' A syntax from imports new package namespace from the external module assembly. 

@@ -48,7 +48,7 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 
-Namespace Interpreter.ExecuteEngine
+Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
     ''' <summary>
     ''' 其实就是一段拥有自己的<see cref="Environment"/>的没有名称的匿名函数

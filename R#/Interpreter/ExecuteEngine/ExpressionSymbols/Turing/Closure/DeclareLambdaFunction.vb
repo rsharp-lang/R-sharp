@@ -48,7 +48,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 
-Namespace Interpreter.ExecuteEngine
+Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
     ''' <summary>
     ''' 只允许简单的表达式出现在这里

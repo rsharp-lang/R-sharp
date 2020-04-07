@@ -1,9 +1,10 @@
 ﻿Imports Microsoft.VisualBasic.Language
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
-Namespace Interpreter.ExecuteEngine
+Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
     Module dataframeValueAssign
 

@@ -42,7 +42,6 @@
 
 Imports System.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
-Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Runtime.Interop
@@ -171,24 +170,34 @@ Namespace Runtime.Interop
                 End If
             Next
 
+            parameterVals(Scan0) = listObject.ToArray
+
+            Return fillOptionalArguments(parameterVals, normalNames, declareArguments, parameterNames, [declare].name, 1, env)
+        End Function
+
+        Private Shared Function fillOptionalArguments(parameterVals As Object(),
+                                                      normalNames As IEnumerable(Of String),
+                                                      declareArguments As Dictionary(Of String, RMethodArgument),
+                                                      parameterNames As Index(Of String),
+                                                      funcName$,
+                                                      offset As Integer,
+                                                      env As Environment) As Object()
             For Each name As String In normalNames
                 Call declareArguments.Remove(name)
             Next
 
-            parameterVals(Scan0) = listObject.ToArray
-
             For Each arg As RMethodArgument In declareArguments.Values
                 If arg.isOptional Then
                     If arg.type.isEnvironment Then
-                        parameterVals(parameterNames(arg.name) + 1) = env
+                        parameterVals(parameterNames(arg.name) + offset) = env
                     Else
-                        parameterVals(parameterNames(arg.name) + 1) = arg.default
+                        parameterVals(parameterNames(arg.name) + offset) = arg.default
                     End If
                 ElseIf arg.type.isEnvironment Then
-                    parameterVals(parameterNames(arg.name) + 1) = env
+                    parameterVals(parameterNames(arg.name) + offset) = env
                 ElseIf Not arg.isObjectList Then
                     Return New Object() {
-                        RMethodInfo.missingParameter(arg, env, [declare].name)
+                        RMethodInfo.missingParameter(arg, env, funcName)
                     }
                 End If
             Next
@@ -227,6 +236,7 @@ Namespace Runtime.Interop
 
             Dim i As Integer
             Dim arg As InvokeParameter
+            Dim normalNames As New List(Of String)
 
             For i = 0 To params.Length - 1
                 arg = params(i)
@@ -239,6 +249,7 @@ Namespace Runtime.Interop
                         envir:=env,
                         trygetListParam:=False
                     )
+                    normalNames.Add(arg.name)
                 Else
                     parameterVals(sequenceIndex) = RMethodInfo.getValue(
                         arg:=[declare].parameters(sequenceIndex),
@@ -247,6 +258,7 @@ Namespace Runtime.Interop
                         envir:=env,
                         trygetListParam:=False
                     )
+                    normalNames.Add([declare].parameters(sequenceIndex).name)
                 End If
 
                 sequenceIndex += 1
@@ -256,13 +268,13 @@ Namespace Runtime.Interop
                 End If
             Next
 
-            For j As Integer = i To params.Length - 1
+            For j As Integer = i + 1 To params.Length - 1
                 listObject.Add(params(j))
             Next
 
             parameterVals(listIndex) = listObject.ToArray
 
-            Return parameterVals
+            Return fillOptionalArguments(parameterVals, normalNames, declareArguments, declareNameIndex, [declare].name, 0, env)
         End Function
 
         ''' <summary>
