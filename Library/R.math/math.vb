@@ -124,6 +124,17 @@ Module math
         }.RK4(resolution, min, max)
     End Function
 
+    ''' <summary>
+    ''' solve a given ODE system
+    ''' </summary>
+    ''' <param name="system">a collection of the lambda expression</param>
+    ''' <param name="y0">a list of the initialize values of the variables</param>
+    ''' <param name="a">from</param>
+    ''' <param name="b">to</param>
+    ''' <param name="resolution%"></param>
+    ''' <param name="tick">handler after each solver iteration in the solver loop</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("deSolve")>
     <RApiReturn(GetType(ODEsOut))>
     Public Function RK4(system As DeclareLambdaFunction(), y0 As list, a#, b#,
