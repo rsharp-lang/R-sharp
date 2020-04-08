@@ -53,6 +53,7 @@ Imports Microsoft.VisualBasic.Math.Distributions
 Imports Microsoft.VisualBasic.Math.LinearAlgebra
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -146,6 +147,26 @@ Module stats
         If x Is Nothing Then
             Return Internal.debug.stop("'data' must be of a vector type, was 'NULL'", env)
         End If
+
+        Dim matrix As Double()()
+
+        If TypeOf x Is dataframe Then
+            With DirectCast(x, dataframe)
+                matrix = .nrows _
+                    .Sequence _
+                    .Select(Function(i)
+                                Return REnv.asVector(Of Double)(.getRowList(i, drop:=False))
+                            End Function) _
+                    .Select(Function(v) DirectCast(v, Double())) _
+                    .ToArray
+            End With
+        Else
+            Throw New NotImplementedException
+        End If
+
+        Dim PCA As New PCA(matrix, center, scale)
+
+        Return PCA
     End Function
 End Module
 

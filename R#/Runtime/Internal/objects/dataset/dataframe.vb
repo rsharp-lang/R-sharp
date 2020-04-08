@@ -59,7 +59,10 @@ Namespace Runtime.Internal.Object
 
         Public ReadOnly Property nrows As Integer
             Get
-                Return Aggregate col In columns.Values Let len = col.Length Into Max(len)
+                Return Aggregate col As Array
+                       In columns.Values
+                       Let len = col.Length
+                       Into Max(len)
             End Get
         End Property
 
@@ -69,7 +72,7 @@ Namespace Runtime.Internal.Object
             End Get
         End Property
 
-        Public Function GetColumnVector(columnName As String) As Array
+        Public Function getColumnVector(columnName As String) As Array
             Dim n As Integer = nrows
             Dim col As Array = columns.TryGetValue(columnName)
 
@@ -84,8 +87,8 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
-        Public Function GetColumnVector(index As Integer) As Array
-            Return GetColumnVector(columns.Keys.ElementAtOrDefault(index - 1))
+        Public Function getColumnVector(index As Integer) As Array
+            Return getColumnVector(columns.Keys.ElementAtOrDefault(index - 1))
         End Function
 
         ''' <summary>
@@ -106,7 +109,16 @@ Namespace Runtime.Internal.Object
             Throw New NotImplementedException
         End Function
 
-        Public Function GetRowList(index As Integer) As Dictionary(Of String, Object)
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="index"></param>
+        ''' <param name="drop">
+        ''' 当drop参数为false的时候，返回一个数组向量
+        ''' 反之返回一个list
+        ''' </param>
+        ''' <returns></returns>
+        Public Function getRowList(index As Integer, Optional drop As Boolean = False) As Object
             Dim slots As New Dictionary(Of String, Object)
             Dim array As Array
 
@@ -120,7 +132,13 @@ Namespace Runtime.Internal.Object
                 End If
             Next
 
-            Return slots
+            If drop Then
+                Return slots
+            Else
+                Return columns.Keys _
+                    .Select(Function(key) slots(key)) _
+                    .ToArray
+            End If
         End Function
 
         Public Function GetByRowIndex(index As Integer()) As dataframe
