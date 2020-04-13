@@ -402,6 +402,7 @@
     <Compile Include="Runtime\Interop\RsharpApi\ApiDocumentHelper.vb" />
     <Compile Include="Runtime\Interop\RsharpApi\ListObjectArgumentMargin.vb" />
     <Compile Include="Runtime\Interop\RsharpOperator\BinaryIndex.vb" />
+    <Compile Include="Runtime\Interop\RsharpOperator\BinaryOperator.vb" />
     <Compile Include="Runtime\System\RsharpDataObject.vb" />
     <Compile Include="Runtime\Internal\objects\dataset\pipeline.vb" />
     <Compile Include="Runtime\Internal\objects\RConversion\RCType.vb" />
