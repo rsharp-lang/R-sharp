@@ -19,10 +19,4 @@
         End Function
 
     End Class
-
-    Public Module BinaryOperatorEngine
-
-
-
-    End Module
 End Namespace
