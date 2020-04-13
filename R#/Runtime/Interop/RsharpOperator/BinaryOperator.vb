@@ -8,7 +8,7 @@
         Public Property left As RType
         Public Property right As RType
 
-        ReadOnly operation As IBinaryOperator
+        Friend ReadOnly operation As IBinaryOperator
 
         Sub New(op As IBinaryOperator)
             operation = op
@@ -19,4 +19,10 @@
         End Function
 
     End Class
+
+    Public Module BinaryOperatorEngine
+
+
+
+    End Module
 End Namespace
