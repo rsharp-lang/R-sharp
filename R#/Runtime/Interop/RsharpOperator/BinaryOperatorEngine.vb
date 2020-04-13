@@ -11,7 +11,7 @@ Namespace Runtime.Interop
             If index.ContainsKey(symbol) Then
                 Return index(symbol)
             Else
-                Return Internal.debug.stop("", env)
+                Return Internal.debug.stop({$"missing operator '{symbol}'", $"symbol: {symbol}"}, env)
             End If
         End Function
 
