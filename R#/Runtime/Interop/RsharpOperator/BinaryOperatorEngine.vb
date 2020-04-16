@@ -15,9 +15,13 @@ Namespace Runtime.Interop
             End If
         End Function
 
-        Public Function addBinary(left As RType, right As RType, symbol As String, op As IBinaryOperator) As Message
+        Public Sub addBinary(left As RType, right As RType, symbol As String, op As IBinaryOperator, env As Environment)
+            If Not index.ContainsKey(symbol) Then
+                index.Add(symbol, New BinaryIndex(symbol))
+            End If
 
-        End Function
+            Call index(symbol).addOperator(left, right, op, env)
+        End Sub
 
     End Module
 End Namespace

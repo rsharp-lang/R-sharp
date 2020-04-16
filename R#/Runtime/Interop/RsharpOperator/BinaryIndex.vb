@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
+﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.Linq
 
 Namespace Runtime.Interop
@@ -20,6 +21,23 @@ Namespace Runtime.Interop
 
         Sub New(symbol As String)
             Me.symbol = symbol
+        End Sub
+
+        Public Sub addOperator(left As RType, right As RType, [operator] As IBinaryOperator, env As Environment)
+            Dim hashKey As String = $"{left.GetHashCode}|{right.GetHashCode}"
+            Dim bin As New BinaryOperator([operator]) With {
+                .left = left,
+                .right = right,
+                .operatorSymbol = symbol
+            }
+
+            If hashIndexCache.ContainsKey(hashKey) Then
+                env.AddMessage($"operator '{hashKey}' is replace by {bin}", MSG_TYPES.WRN)
+                hashIndexCache.Remove(hashKey)
+            End If
+
+            operators.Add(bin)
+            hashIndexCache.Add(hashKey, bin)
         End Sub
 
         Public Function Evaluate(left As Object, right As Object, env As Environment) As Object

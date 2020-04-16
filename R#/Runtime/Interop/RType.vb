@@ -246,7 +246,11 @@ Namespace Runtime.Interop
         ''' <param name="baseType"></param>
         ''' <returns></returns>
         Public Shared Operator Like(type As RType, baseType As RType) As Boolean
-
+            If type.raw Is baseType.raw Then
+                Return True
+            Else
+                Return type.raw.IsInheritsFrom(baseType.raw)
+            End If
         End Operator
     End Class
 End Namespace
