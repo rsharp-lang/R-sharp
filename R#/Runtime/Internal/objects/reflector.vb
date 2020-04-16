@@ -44,9 +44,9 @@ Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Object
 
@@ -148,11 +148,11 @@ Namespace Runtime.Internal.Object
         Private Function strVector(a As Array, type As Type, env As GlobalEnvironment) As String
             Dim typeCode$
 
-            If type Like BinaryExpression.integers Then
+            If type Like RType.integers Then
                 typeCode = "int"
-            ElseIf type Like BinaryExpression.characters Then
+            ElseIf type Like RType.characters Then
                 typeCode = "chr"
-            ElseIf type Like BinaryExpression.floats Then
+            ElseIf type Like RType.floats Then
                 typeCode = "num"
             Else
                 typeCode = "logical"

@@ -157,7 +157,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
                 If key Is Nothing Then
                     Return Internal.debug.stop("dataframe index could not be nothing!", envir)
-                ElseIf key.GetType Like BinaryExpression.integers Then
+                ElseIf key.GetType Like RType.integers Then
                     Return obj.getColumnVector(CInt(key))
                 Else
                     Return obj.getColumnVector(Scripting.ToString(key))
