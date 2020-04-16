@@ -32,7 +32,14 @@ Namespace Runtime.Interop
             }
 
             If hashIndexCache.ContainsKey(hashKey) Then
-                env.AddMessage($"operator '{hashKey}' is replace by {bin}", MSG_TYPES.WRN)
+                If Not env Is Nothing Then
+                    Call env.AddMessage({
+                        $"operator '{hashKey}' is replace by {bin}",
+                        $"hash key: {hashKey}",
+                        $"binary: {bin}"
+                    }, MSG_TYPES.WRN)
+                End If
+
                 hashIndexCache.Remove(hashKey)
             End If
 
