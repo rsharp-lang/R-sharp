@@ -58,7 +58,6 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -67,6 +66,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Configuration
 Imports REnv = SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports stdNum = System.Math
 
 Namespace Interpreter
 
@@ -127,8 +127,8 @@ Namespace Interpreter
 
             globalEnvir = New GlobalEnvironment(Me, envirConf)
             globalEnvir.Push(lastVariableName, Nothing, False, TypeCodes.generic)
-            globalEnvir.Push("PI", Math.PI, True, TypeCodes.double)
-            globalEnvir.Push("E", Math.E, True, TypeCodes.double)
+            globalEnvir.Push("PI", stdNum.PI, True, TypeCodes.double)
+            globalEnvir.Push("E", stdNum.E, True, TypeCodes.double)
             globalEnvir.Push(".GlobalEnv", globalEnvir, True, TypeCodes.generic)
 
             ' config R# interpreter engine

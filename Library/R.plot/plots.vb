@@ -182,7 +182,7 @@ Module plots
     End Function
 
     Public Function plotODEResult(math As ODEOutput, args As list, env As Environment) As Object
-        Return math.Plot(size:=InteropArgumentHelper.getSize(args!size))
+        Return stdNum.Plot(size:=InteropArgumentHelper.getSize(args!size))
     End Function
 
     ''' <summary>
@@ -196,7 +196,7 @@ Module plots
             Return REnv.Internal.debug.stop("Missing parameter 'x' for plot function!", env)
         End If
 
-        Dim fx As Func(Of Double, Double) = math.CreateLambda(Of Double, Double)(env)
+        Dim fx As Func(Of Double, Double) = stdNum.CreateLambda(Of Double, Double)(env)
         Dim x As Double() = vector.asVector(Of Double)(args!x)
         Dim points As PointF() = x.Select(Function(xi) New PointF(xi, fx(xi))).ToArray
 
