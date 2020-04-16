@@ -1,52 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::7cbab11d3760b87580643abe05a145aa, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryExpression.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class BinaryExpression
-    ' 
-    '         Properties: type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, ToString, vectorCast
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class BinaryExpression
+' 
+'         Properties: type
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate, ToString, vectorCast
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
-Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
@@ -62,26 +62,6 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             Me.right = right
             Me.operator = op
         End Sub
-
-        Friend Shared ReadOnly integers As Index(Of Type) = {
-            GetType(Integer), GetType(Integer()),
-            GetType(Long), GetType(Long())
-        }
-
-        Friend Shared ReadOnly floats As Index(Of Type) = {
-            GetType(Single), GetType(Single()),
-            GetType(Double), GetType(Double())
-        }
-
-        Friend Shared ReadOnly logicals As Index(Of Type) = {
-            GetType(Boolean),
-            GetType(Boolean())
-        }
-
-        Friend Shared ReadOnly characters As Index(Of Type) = {
-            GetType(String), GetType(String()),
-            GetType(Char), GetType(Char())
-        }
 
         Private Shared Function vectorCast(x As vector, env As Environment) As Array
             Dim type As Type = Runtime.MeasureArrayElementType(x.data)
@@ -100,106 +80,52 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 Return b
             End If
 
+            Dim tleft, tright As RType
+
             If TypeOf a Is vector Then
-                a = vectorCast(DirectCast(a, vector), envir)
+                tleft = DirectCast(a, vector).elementType
+            Else
+                tleft = RType.GetRSharpType(a.GetType)
             End If
             If TypeOf b Is vector Then
-                b = vectorCast(DirectCast(b, vector), envir)
-            End If
-
-            Dim ta = a.GetType
-            Dim tb = b.GetType
-
-            If ta Like integers Then
-                If tb Like integers Then
-                    Select Case [operator]
-                        Case "+" : Return Runtime.Core.Add(Of Long, Long, Long)(a, b).ToArray
-                        Case "-" : Return Runtime.Core.Minus(Of Long, Long, Long)(a, b).ToArray
-                        Case "*" : Return Runtime.Core.Multiply(Of Long, Long, Long)(a, b).ToArray
-                        Case "/" : Return Runtime.Core.Divide(Of Long, Long, Double)(a, b).ToArray
-                        Case "%" : Return Runtime.Core.Module(Of Long, Long, Double)(a, b).ToArray
-                        Case "^" : Return Runtime.Core.Power(Of Long, Long, Double)(a, b).ToArray
-                        Case ">" : Return Runtime.Core.BinaryCoreInternal(Of Long, Long, Boolean)(a, b, Function(x, y) x > y).ToArray
-                        Case "<" : Return Runtime.Core.BinaryCoreInternal(Of Long, Long, Boolean)(a, b, Function(x, y) x < y).ToArray
-                        Case "!=" : Return Runtime.Core.BinaryCoreInternal(Of Long, Long, Boolean)(a, b, Function(x, y) x <> y).ToArray
-                        Case "==" : Return Runtime.Core.BinaryCoreInternal(Of Long, Long, Boolean)(a, b, Function(x, y) x = y).ToArray
-                        Case ">=" : Return Runtime.Core.BinaryCoreInternal(Of Long, Long, Boolean)(a, b, Function(x, y) x >= y).ToArray
-                        Case "<=" : Return Runtime.Core.BinaryCoreInternal(Of Long, Long, Boolean)(a, b, Function(x, y) x <= y).ToArray
-                    End Select
-                ElseIf tb Is GetType(Double) OrElse tb Is GetType(Double()) Then
-                    Select Case [operator]
-                        Case "+" : Return Runtime.Core.Add(Of Long, Double, Double)(a, b).ToArray
-                        Case "-" : Return Runtime.Core.Minus(Of Long, Double, Double)(a, b).ToArray
-                        Case "*" : Return Runtime.Core.Multiply(Of Long, Double, Double)(a, b).ToArray
-                        Case "/" : Return Runtime.Core.Divide(Of Long, Double, Double)(a, b).ToArray
-                        Case "^" : Return Runtime.Core.Power(Of Long, Double, Double)(a, b).ToArray
-                        Case ">" : Return Runtime.Core.BinaryCoreInternal(Of Long, Double, Boolean)(a, b, Function(x, y) x > y).ToArray
-                        Case "<" : Return Runtime.Core.BinaryCoreInternal(Of Long, Double, Boolean)(a, b, Function(x, y) x < y).ToArray
-                        Case "!=" : Return Runtime.Core.BinaryCoreInternal(Of Long, Double, Boolean)(a, b, Function(x, y) x <> y).ToArray
-                        Case "==" : Return Runtime.Core.BinaryCoreInternal(Of Long, Double, Boolean)(a, b, Function(x, y) x = y).ToArray
-                        Case ">=" : Return Runtime.Core.BinaryCoreInternal(Of Long, Double, Boolean)(a, b, Function(x, y) x >= y).ToArray
-                        Case "<=" : Return Runtime.Core.BinaryCoreInternal(Of Long, Double, Boolean)(a, b, Function(x, y) x <= y).ToArray
-                    End Select
-                End If
-            ElseIf ta Like floats Then
-                If tb Like integers Then
-
-                    Select Case [operator]
-                        Case "+" : Return Runtime.Core.Add(Of Double, Long, Double)(a, b).ToArray
-                        Case "-" : Return Runtime.Core.Minus(Of Double, Long, Double)(a, b).ToArray
-                        Case "*" : Return Runtime.Core.Multiply(Of Double, Long, Double)(a, b).ToArray
-                        Case "/" : Return Runtime.Core.Divide(Of Double, Long, Double)(a, b).ToArray
-                        Case "^" : Return Runtime.Core.Power(Of Double, Long, Double)(a, b).ToArray
-                        Case ">" : Return Runtime.Core.BinaryCoreInternal(Of Double, Long, Boolean)(a, b, Function(x, y) x > y).ToArray
-                        Case "<" : Return Runtime.Core.BinaryCoreInternal(Of Double, Long, Boolean)(a, b, Function(x, y) x < y).ToArray
-                        Case "!=" : Return Runtime.Core.BinaryCoreInternal(Of Double, Long, Boolean)(a, b, Function(x, y) x <> y).ToArray
-                        Case "==" : Return Runtime.Core.BinaryCoreInternal(Of Double, Long, Boolean)(a, b, Function(x, y) x = y).ToArray
-                        Case ">=" : Return Runtime.Core.BinaryCoreInternal(Of Double, Long, Boolean)(a, b, Function(x, y) x >= y).ToArray
-                        Case "<=" : Return Runtime.Core.BinaryCoreInternal(Of Double, Long, Boolean)(a, b, Function(x, y) x <= y).ToArray
-                    End Select
-                ElseIf tb Like floats Then
-                    Select Case [operator]
-                        Case "+" : Return Runtime.Core.Add(Of Double, Double, Double)(a, b).ToArray
-                        Case "-" : Return Runtime.Core.Minus(Of Double, Double, Double)(a, b).ToArray
-                        Case "*" : Return Runtime.Core.Multiply(Of Double, Double, Double)(a, b).ToArray
-                        Case "/" : Return Runtime.Core.Divide(Of Double, Double, Double)(a, b).ToArray
-                        Case "^" : Return Runtime.Core.Power(Of Double, Double, Double)(a, b).ToArray
-                        Case "%" : Return Runtime.Core.Module(Of Double, Double, Double)(a, b).ToArray
-                        Case "!=" : Return Runtime.Core.BinaryCoreInternal(Of Double, Double, Boolean)(a, b, Function(x, y) x <> y).ToArray
-                        Case "==" : Return Runtime.Core.BinaryCoreInternal(Of Double, Double, Boolean)(a, b, Function(x, y) x = y).ToArray
-                        Case ">=" : Return Runtime.Core.BinaryCoreInternal(Of Double, Double, Boolean)(a, b, Function(x, y) x >= y).ToArray
-                        Case "<=" : Return Runtime.Core.BinaryCoreInternal(Of Double, Double, Boolean)(a, b, Function(x, y) x <= y).ToArray
-                    End Select
-                End If
-            ElseIf ta Like characters OrElse tb Like characters Then
-                Return StringBinaryOperator(envir, a, b, [operator])
+                tright = DirectCast(b, vector).elementType
             Else
-                If ta Like logicals AndAlso tb Like logicals Then
-                    Select Case [operator]
-                        Case "=="
-                            Return Runtime.Core.BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
-                                x:=Runtime.asVector(Of Boolean)(a),
-                                y:=Runtime.asVector(Of Boolean)(b),
-                                [do]:=Function(x, y) x = y
-                            ).ToArray
-                        Case "!="
-                            Return Runtime.Core.BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
-                                x:=Runtime.asVector(Of Boolean)(a),
-                                y:=Runtime.asVector(Of Boolean)(b),
-                                [do]:=Function(x, y) x <> y
-                            ).ToArray
-                        Case "&&"
-                            Return Runtime.Core _
-                                .BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
-                                    x:=Core.asLogical(a),
-                                    y:=Core.asLogical(b),
-                                    [do]:=Function(x, y) x AndAlso y
-                                ).ToArray
-                    End Select
-                End If
+                tright = RType.GetRSharpType(b.GetType)
             End If
 
-            Return Internal.debug.stop(New NotImplementedException($"<{ta.FullName}> {[operator]} <{tb.FullName}>"), envir)
+            If tleft.raw Like RType.characters OrElse tright.raw Like RType.characters Then
+                Return StringBinaryOperator(envir, a, b, [operator])
+            ElseIf tleft.raw Like RType.logicals AndAlso tright.raw Like RType.logicals Then
+                Select Case [operator]
+                    Case "=="
+                        Return Runtime.Core.BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
+                            x:=Runtime.asVector(Of Boolean)(a),
+                            y:=Runtime.asVector(Of Boolean)(b),
+                            [do]:=Function(x, y) x = y
+                        ).ToArray
+                    Case "!="
+                        Return Runtime.Core.BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
+                            x:=Runtime.asVector(Of Boolean)(a),
+                            y:=Runtime.asVector(Of Boolean)(b),
+                            [do]:=Function(x, y) x <> y
+                        ).ToArray
+                    Case "&&"
+                        Return Runtime.Core _
+                            .BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
+                                x:=Core.asLogical(a),
+                                y:=Core.asLogical(b),
+                                [do]:=Function(x, y) x AndAlso y
+                            ).ToArray
+                End Select
+            End If
+
+            Dim handleResult = BinaryOperatorEngine.getOperator([operator], envir)
+
+            If handleResult Like GetType(Message) Then
+                Return handleResult.TryCast(Of Message)
+            Else
+                Return handleResult.TryCast(Of BinaryIndex).Evaluate(a, b, envir)
+            End If
         End Function
 
         Public Overrides Function ToString() As String
