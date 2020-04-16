@@ -238,5 +238,15 @@ Namespace Runtime.Interop
         Public Shared Operator Like(rtype As RType, type As Type) As Boolean
             Return rtype.raw Is type
         End Operator
+
+        ''' <summary>
+        ''' does <paramref name="type"/> can be convert to the <paramref name="baseType"/>?
+        ''' </summary>
+        ''' <param name="type"></param>
+        ''' <param name="baseType"></param>
+        ''' <returns></returns>
+        Public Shared Operator Like(type As RType, baseType As RType) As Boolean
+
+        End Operator
     End Class
 End Namespace

@@ -40,13 +40,38 @@ Namespace Runtime.Interop
                     Return hashIndexCache(hashKey).operation(left, right, env)
                 Else
                     ' do type match and then create hashKey index cache
+                    For Each op As BinaryOperator In operators
+                        If t1 Like op.left AndAlso t2 Like op.right Then
+                            hashIndexCache.Add(hashKey, op)
+                            Return hashIndexCache(hashKey).operation(left, right, env)
+                        End If
+                    Next
 
+                    Return Internal.debug.stop({
+                        $"operator symbol '{symbol}' is not defined for binary expression ({t1} {symbol} {t2})",
+                        $"symbol: {symbol}",
+                        $"typeof left: {t1}",
+                        $"typeof right: {t2}"
+                    }, env)
                 End If
             End If
         End Function
 
         Private Function rightNull(left As Object, env As Environment) As Object
+            Dim t As RType = left.GetType.DoCall(AddressOf RType.GetRSharpType)
 
+            For Each op As BinaryOperator In operators
+                If t Like op.left Then
+                    Return op.operation(left, Nothing, env)
+                End If
+            Next
+
+            Return Internal.debug.stop({
+                $"operator symbol '{symbol}' is not defined for binary expression ({t} {symbol} NA)",
+                $"symbol: {symbol}",
+                $"typeof left: {t}",
+                $"typeof right: NA"
+            }, env)
         End Function
 
         Private Function noneValue(env As Environment) As Object
@@ -56,12 +81,28 @@ Namespace Runtime.Interop
             If hashIndexCache.ContainsKey(hashKey) Then
                 Return hashIndexCache(hashKey).operation(Nothing, Nothing, env)
             Else
-                Return Internal.debug.stop($"operator symbol '{symbol}' is not defined for binary expression (NULL {symbol} NULL)", env)
+                Return Internal.debug.stop({
+                     $"operator symbol '{symbol}' is not defined for binary expression (NULL {symbol} NULL)",
+                     $"symbol: {symbol}"
+                }, env)
             End If
         End Function
 
         Private Function leftNull(right As Object, env As Environment) As Object
+            Dim t As RType = right.GetType.DoCall(AddressOf RType.GetRSharpType)
 
+            For Each op As BinaryOperator In operators
+                If t Like op.right Then
+                    Return op.operation(Nothing, right, env)
+                End If
+            Next
+
+            Return Internal.debug.stop({
+                $"operator symbol '{symbol}' is not defined for binary expression (NA {symbol} {t})",
+                $"symbol: {symbol}",
+                $"typeof left: NA",
+                $"typeof right: {t}"
+            }, env)
         End Function
     End Class
 End Namespace
