@@ -24,7 +24,7 @@ Namespace Runtime.Interop
         End Sub
 
         Public Sub addOperator(left As RType, right As RType, [operator] As IBinaryOperator, env As Environment)
-            Dim hashKey As String = $"{left.GetHashCode}|{right.GetHashCode}"
+            Dim hashKey As String = $"{left}|{right}"
             Dim bin As New BinaryOperator([operator]) With {
                 .left = left,
                 .right = right,
@@ -59,7 +59,7 @@ Namespace Runtime.Interop
             Else
                 Dim t1 As RType = left.GetType.DoCall(AddressOf RType.GetRSharpType)
                 Dim t2 As RType = right.GetType.DoCall(AddressOf RType.GetRSharpType)
-                Dim hashKey As String = $"{t1.GetHashCode}|{t2.GetHashCode}"
+                Dim hashKey As String = $"{t1}|{t2}"
 
                 If hashIndexCache.ContainsKey(hashKey) Then
                     Return hashIndexCache(hashKey).operation(left, right, env)
@@ -101,7 +101,7 @@ Namespace Runtime.Interop
 
         Private Function noneValue(env As Environment) As Object
             Dim tVoid As RType = RType.GetRSharpType(GetType(Void))
-            Dim hashKey As String = $"{tVoid.GetHashCode}|{tVoid.GetHashCode}"
+            Dim hashKey As String = $"{tVoid}|{tVoid}"
 
             If hashIndexCache.ContainsKey(hashKey) Then
                 Return hashIndexCache(hashKey).operation(Nothing, Nothing, env)
