@@ -12,7 +12,13 @@ Module operatorTest
 
         R.Print("x+y")
         R.Print("x *2")
+        R.Print("x*2.0")
+        R.Print("typeof (1+1)")
+        R.Print("typeof (x*2.0)")
 
+        R.Print("x %y")
+
+        R.Print("TRUE || ![TRUE, FALSE,FALSE,FALSE,TRUE]")
 
         Pause()
     End Sub
