@@ -289,6 +289,10 @@ Namespace Runtime.Internal.Invokes
             Dim value As Object
             Dim parameters As InvokeParameter() = slots
 
+            If parameters Is Nothing Then
+                parameters = {}
+            End If
+
             For i As Integer = 0 To parameters.Length - 1
                 slot = parameters(i)
 
