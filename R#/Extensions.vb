@@ -80,7 +80,7 @@ Public Module Extensions
             Return val
         ElseIf TypeOf val Is Encodings Then
             Return DirectCast(val, Encodings).CodePage
-        ElseIf val.GetType Like BinaryExpression.characters Then
+        ElseIf val.GetType Like RType.characters Then
             Dim encodingName$ = Scripting.ToString(Runtime.asVector(Of String)(val).AsObjectEnumerator.First)
             Dim encodingVal As Encoding = TextEncodings.ParseEncodingsName(encodingName).CodePage
 

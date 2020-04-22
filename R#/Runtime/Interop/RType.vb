@@ -1,53 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::083237f93a928999119424a4f94d1380, R#\Runtime\Interop\RType.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class RType
-    ' 
-    '         Properties: fullName, getCount, getItem, haveDynamicsProperty, isArray
-    '                     isCollection, isEnvironment, isGenericListObject, mode, raw
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: [GetType], getNames, GetRawElementType, GetRSharpType, populateNames
-    '                   ToString
-    '         Operators: (+2 Overloads) Like
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class RType
+' 
+'         Properties: fullName, getCount, getItem, haveDynamicsProperty, isArray
+'                     isCollection, isEnvironment, isGenericListObject, mode, raw
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: [GetType], getNames, GetRawElementType, GetRSharpType, populateNames
+'                   ToString
+'         Operators: (+2 Overloads) Like
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -121,6 +122,26 @@ Namespace Runtime.Interop
 
         Public ReadOnly Property getCount As PropertyInfo
         Public ReadOnly Property getItem As PropertyInfo
+
+        Friend Shared ReadOnly Property integers As Index(Of Type) = {
+            GetType(Integer), GetType(Integer()),
+            GetType(Long), GetType(Long())
+        }
+
+        Friend Shared ReadOnly Property floats As Index(Of Type) = {
+            GetType(Single), GetType(Single()),
+            GetType(Double), GetType(Double())
+        }
+
+        Friend Shared ReadOnly Property logicals As Index(Of Type) = {
+            GetType(Boolean),
+            GetType(Boolean())
+        }
+
+        Friend Shared ReadOnly Property characters As Index(Of Type) = {
+            GetType(String), GetType(String()),
+            GetType(Char), GetType(Char())
+        }
 
         Private Sub New(raw As Type)
             If raw.IsValueType AndAlso
@@ -237,6 +258,22 @@ Namespace Runtime.Interop
         <DebuggerStepThrough>
         Public Shared Operator Like(rtype As RType, type As Type) As Boolean
             Return rtype.raw Is type
+        End Operator
+
+        ''' <summary>
+        ''' does <paramref name="type"/> can be convert to the <paramref name="baseType"/>?
+        ''' </summary>
+        ''' <param name="type"></param>
+        ''' <param name="baseType"></param>
+        ''' <returns></returns>
+        Public Shared Operator Like(type As RType, baseType As RType) As Boolean
+            If type.raw Is baseType.raw Then
+                Return True
+            ElseIf type.mode = baseType.mode Then
+                Return True
+            Else
+                Return type.raw.IsInheritsFrom(baseType.raw)
+            End If
         End Operator
     End Class
 End Namespace

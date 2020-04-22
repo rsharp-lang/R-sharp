@@ -45,9 +45,9 @@
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Language
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
@@ -73,7 +73,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 .Any(Function(num)
                          Dim ntype As Type = num.GetType
 
-                         If ntype Like BinaryExpression.floats Then
+                         If ntype Like RType.floats Then
                              Return True
                          Else
                              Return False

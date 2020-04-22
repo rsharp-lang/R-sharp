@@ -56,6 +56,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
@@ -265,7 +266,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 Return Internal.debug.stop({"Target symbol is nothing!", $"SymbolName: {symbolIndex.symbol}"}, envir)
             End If
 
-            If symbolIndex.indexType = SymbolIndexers.vectorIndex AndAlso index.GetType Like BinaryExpression.integers Then
+            If symbolIndex.indexType = SymbolIndexers.vectorIndex AndAlso index.GetType Like RType.integers Then
                 Return setVectorElements(targetObj, Runtime.asVector(Of Integer)(index), value, envir)
             End If
 

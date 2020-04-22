@@ -361,9 +361,9 @@ Namespace Runtime.Internal.Object.Converts
                 obj = DirectCast(obj, IDictionary).Values.AsSet.ToArray
             End If
 
-            If obj.GetType Like BinaryExpression.characters Then
+            If obj.GetType Like RType.characters Then
                 Return True
-            ElseIf obj.GetType.IsArray AndAlso DirectCast(obj, Array).AsObjectEnumerator.All(Function(x) x.GetType Like BinaryExpression.characters) Then
+            ElseIf obj.GetType.IsArray AndAlso DirectCast(obj, Array).AsObjectEnumerator.All(Function(x) x.GetType Like RType.characters) Then
                 Return True
             Else
                 Return False

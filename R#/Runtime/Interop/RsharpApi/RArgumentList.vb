@@ -190,8 +190,10 @@ Namespace Runtime.Interop
                 If arg.isOptional Then
                     If arg.type.isEnvironment Then
                         parameterVals(parameterNames(arg.name) + offset) = env
-                    Else
+                    ElseIf Not arg.isObjectList Then
                         parameterVals(parameterNames(arg.name) + offset) = arg.default
+                    Else
+                        ' skip of the optional <argument_list>
                     End If
                 ElseIf arg.type.isEnvironment Then
                     parameterVals(parameterNames(arg.name) + offset) = env
