@@ -67,7 +67,7 @@ Namespace Runtime.Internal.Invokes
     ''' 
     ''' These functions provide a low-level interface to the computer's file system.
     ''' </summary>
-    Module file
+    Public Module file
 
         <ExportAPI("file.info")>
         Public Function fileinfo(files As String(), Optional env As Environment = Nothing) As Object
