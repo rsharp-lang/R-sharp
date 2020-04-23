@@ -204,7 +204,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BioDeep_database|x64'">
     <DebugSymbols>true</DebugSymbols>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>..\..\..\..\biodeep\biodeepdb_v3\Rscript\R\</OutputPath>
+    <OutputPath>..\..\..\..\..\biodeep\biodeepdb_v3\Rscript\R\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <DocumentationFile>R#.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
