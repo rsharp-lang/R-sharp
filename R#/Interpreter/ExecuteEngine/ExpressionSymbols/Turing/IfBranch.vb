@@ -127,6 +127,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
                     .environmentStack = envir.getEnvironmentStack,
                     .trace = devtools.ExceptionData.GetCurrentStackTrace
                 }
+            ElseIf Program.isException(test) Then
+                Return test
             End If
 
             If True = Runtime.asLogical(test)(Scan0) Then
