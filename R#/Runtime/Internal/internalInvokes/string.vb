@@ -382,5 +382,48 @@ Namespace Runtime.Internal.Invokes
                 Return subj.Select(Function(s) s.Replace(search, replaceAs)).ToArray
             End If
         End Function
+
+        ''' <summary>
+        ''' Pad A String.
+        ''' </summary>
+        ''' <param name="string">A character vector.</param>
+        ''' <param name="width">Minimum width of padded strings.</param>
+        ''' <param name="side">Side on which padding character is added (left, right or both).</param>
+        ''' <param name="pad">Single padding character (default is a space).</param>
+        ''' <returns></returns>
+        <ExportAPI("str_pad")>
+        Public Function str_pad([string] As String(), width%, Optional side As str_padSides = str_padSides.left, Optional pad As Char = " "c) As String()
+            Return [string] _
+                .SafeQuery _
+                .Select(Function(s)
+                            If s.StringEmpty Then
+                                Return New String(pad, width)
+                            End If
+
+                            If side = str_padSides.left Then
+                                Return s.PadLeft(width, pad)
+                            ElseIf side = str_padSides.right Then
+                                Return s.PadRight(width, pad)
+                            Else
+                                Dim l As Integer = s.Length
+                                Dim left As Integer = (width - l) / 2
+                                Dim right As Integer = width - l - left
+
+                                If left <= 0 Then
+                                    Return s
+                                Else
+                                    Return New String(pad, left) & s & New String(pad, right)
+                                End If
+                            End If
+                        End Function) _
+                .ToArray
+        End Function
+
     End Module
+
+    Public Enum str_padSides
+        left
+        right
+        both
+    End Enum
 End Namespace
