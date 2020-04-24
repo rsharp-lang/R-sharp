@@ -302,8 +302,31 @@ Namespace Runtime.Internal.Invokes
             Return result
         End Function
 
+        ''' <summary>
+        ''' ### Split the Elements of a Character Vector
+        ''' 
+        ''' Split the elements of a character vector x into substrings
+        ''' according to the matches to substring split within them.
+        ''' </summary>
+        ''' <param name="text">
+        ''' character vector, each element of which is to be split. Other inputs, 
+        ''' including a factor, will give an error.
+        ''' </param>
+        ''' <param name="delimiter">
+        ''' character vector (or object which can be coerced to such) containing 
+        ''' regular expression(s) (unless fixed = TRUE) to use for splitting. 
+        ''' If empty matches occur, in particular if split has length 0, x is 
+        ''' split into single characters. If split has length greater than 1, 
+        ''' it is re-cycled along x.
+        ''' </param>
+        ''' <param name="fixed">
+        ''' logical. If TRUE match split exactly, otherwise use regular expressions. 
+        ''' Has priority over perl.</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("strsplit")>
-        Friend Function strsplit(text$(), Optional delimiter$ = " ", Optional env As Environment = Nothing) As Object
+        <RApiReturn(GetType(String))>
+        Friend Function strsplit(text$(), Optional delimiter$ = " ", Optional fixed As Boolean = False, Optional env As Environment = Nothing) As Object
             If delimiter Is Nothing Then
                 Return debug.stop("the given delimiter is nothing!", env)
             End If
@@ -311,12 +334,21 @@ Namespace Runtime.Internal.Invokes
             If text.IsNullOrEmpty Then
                 Return Nothing
             ElseIf text.Length = 1 Then
-                Return VBStr.Split(text(Scan0), delimiter)
+                If fixed Then
+                    Return VBStr.Split(text(Scan0), delimiter)
+                Else
+                    Return text(Scan0).StringSplit(delimiter)
+                End If
             Else
-                Return text.SeqIterator _
+                Return text _
+                    .SeqIterator _
                     .ToDictionary(Function(i) $"[[{i.i + 1}]]",
                                   Function(i)
-                                      Return VBStr.Split(i.value, delimiter)
+                                      If fixed Then
+                                          Return VBStr.Split(i.value, delimiter)
+                                      Else
+                                          Return i.value.StringSplit(delimiter)
+                                      End If
                                   End Function)
             End If
         End Function
