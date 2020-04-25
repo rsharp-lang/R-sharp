@@ -67,7 +67,7 @@ Namespace Runtime.Internal.Invokes
     ''' 
     ''' These functions provide a low-level interface to the computer's file system.
     ''' </summary>
-    Module file
+    Public Module file
 
         ''' <summary>
         ''' Extract File Information

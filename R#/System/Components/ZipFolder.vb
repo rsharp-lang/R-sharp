@@ -4,6 +4,9 @@ Imports Microsoft.VisualBasic.ApplicationServices.Zip
 
 Namespace System.Components
 
+    ''' <summary>
+    ''' open zip for read data.
+    ''' </summary>
     Public Class ZipFolder : Implements IDisposable
 
         Default Public ReadOnly Property Item(fileName As String) As Stream
@@ -29,8 +32,12 @@ Namespace System.Components
             End Get
         End Property
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="zipFile"></param>
         Sub New(zipFile As String)
-            zip = New ZipArchive(zipFile.Open(doClear:=False), ZipArchiveMode.Read)
+            zip = New ZipArchive(zipFile.Open(doClear:=False, [readOnly]:=True), ZipArchiveMode.Read)
             allFiles = zip.Entries _
                 .ToDictionary(Function(file)
                                   Return file.Name.TrimStart("/"c, "\"c)
