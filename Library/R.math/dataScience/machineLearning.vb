@@ -95,6 +95,11 @@ Module machineLearning
         Return dataframe
     End Function
 
+    <ExportAPI("raw_samples")>
+    Public Function getRawSamples(x As StoreProcedure.DataSet) As Sample()
+        Return x.DataSamples.items
+    End Function
+
     ''' <summary>
     ''' convert machine learning dataset to dataframe table.
     ''' </summary>

@@ -2,13 +2,13 @@
 <DataSet xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <!--
      model:     Microsoft.VisualBasic.MachineLearning.StoreProcedure.DataSet
-     assembly:  Microsoft.VisualBasic.MachineLearning, Version=1.10.7421.20850, Culture=neutral, PublicKeyToken=null
-     version:   1.10.7421.20850
-     built:     4/26/2020 11:35:00 AM
-     md5:       ac8184b10d623a3a74017392769d33e5
-     timestamp: 4/26/2020 11:35:01 AM
+     assembly:  Microsoft.VisualBasic.MachineLearning, Version=1.10.7421.25016, Culture=neutral, PublicKeyToken=null
+     version:   1.10.7421.25016
+     built:     4/26/2020 1:53:52 PM
+     md5:       d4169264c03af618fd3e74b8a200f9db
+     timestamp: 4/26/2020 1:53:54 PM
   -->
-  <sample size="30">
+  <sample size="60">
     <sample id="tmp0000a" target="1 1 1">
       <status>H4sIAAAAAAAEAGNgAIEP9gxUogFH+whdUAAAAA==</status>
     </sample>
@@ -99,35 +99,125 @@
     <sample id="tmp0000D" target="0 0 0">
       <status>H4sIAAAAAAAEAGNgQAYf7CmlAYxVWyFQAAAA</status>
     </sample>
+    <sample id="tmp0000E" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//X0ogii8l0D9vrbOUt9bpP63GN2dW48s/BZMwcIJJuD9GmW/9osznP7zHsf/d49g/o63hntHW4D+amjv1TM3NP+xMNwh2pps/aGij1TO04T8AZ93VUAAAAA==</status>
+    </sample>
+    <sample id="tmp0000F" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//zHE59OW4vD9DHqtWIY/VP2sXOFa1C7w/t6+zjNvX6T+9Ibuy3pDtP+6LPQL3xb4/PIg55R3E3D/rHepb9Q7lPyYd/uKSDu8/WQxqpCwG5T8HsL3fUAAAAA==</status>
+    </sample>
+    <sample id="tmp0000G" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//uIG23NtA6z8DjLSHAUbqP6XNKk/SZtU/OXfjT5y74T+8xO8qXuLnPzOiN2IZ0cs/ut4hOF3vkD98KqsbPpXlP12hZrCuUOM/ugK7x1yB7T+otx78UAAAAA==</status>
+    </sample>
+    <sample id="tmp0000H" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//JVQxahKquD/Iez0l5L3OPyW3+3KS2+0/CZrhvwTN4D8epjnjDtPsP2nzJ6C0+aM/kR4omkgPxD/bajF8bbXIP4FPIUvAp8A/Gshu4gxk5z9tmFCeUAAAAA==</status>
+    </sample>
+    <sample id="tmp0000I" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//bCss/rUV1j9aT3/frKfvP9Ffu0jor90/+yR3RH2S6z83yvdnG+XrP8uJJkTlRKM/R3U/V6O63z9BwDloIOC8PyNtulaRNu0/2AG2AewA2z+u48tUUAAAAA==</status>
+    </sample>
+    <sample id="tmp0000J" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//ry8jYNeXcT8523CwnG3oP3DNK8y35rU/lso590rl7D8XjLpSC0btP1kyt3osmds/Oo082pxG3j9zeupJOT3lP0mbLEakTdY/ubDhpFzY4D9aU/CZUAAAAA==</status>
+    </sample>
+    <sample id="tmp0000K" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//0KkvLOjU1z8ngzaDk0HrP0lF6IykIuQ/b701RLfeuj/Ge7oQ4z3dP0fPN7Wj5+s/+a+zcPzX2T/kaOXqcbTiP5kJeqnMBO0/h6K4aENR7D8FM6zqUAAAAA==</status>
+    </sample>
+    <sample id="tmp0000L" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//2am9uezU7j/O0iAnZ2nQPwvKIUkF5eA/MFQ9Ahiqzj9H7adKo/bTP14yN/0umes/Nritxhrc1j+wgzzG10HePwKt6+eA1uU/IFyt1g+u5j9BhyUhUAAAAA==</status>
+    </sample>
+    <sample id="tmp0000M" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//6S3urPQW5z/u1rncduvsP1q98MSsXug/xYEuvuJAxz9avPoYLV7tP5aeqjlLT9U/EJUnP4jKwz/fkT1478ieP/MNJ235huM/4xm8S/EM3j/cYxniUAAAAA==</status>
+    </sample>
+    <sample id="tmp0000N" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//mjjk3Ewc4j9jGj+5MY3fPxIN9juJBus/J6PmbZNR4z9j5q2YMfPWPx4lv/eOkt8/IRQupRAK1z918K13OvjWPy/OM3gX59k/7/q/snf97z8jo71+UAAAAA==</status>
+    </sample>
+    <sample id="tmp0000O" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//oJDoG1BI5D/AUbrA3yjtP7u5NI7dXMo/fFM5wL2pnD8lrjqOElfdP/jcLxt87uc/u0Q8nV0izj+iJPb4UBLrP/PT5VH56eI/i5s1WMXNqj9tPbIkUAAAAA==</status>
+    </sample>
+    <sample id="tmp0000P" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//jugl0Eb0sj+gKCYAUBQzP3HN/mG4Zu8/hfFoTMJ45D/QgvP3Z8HpP/X7u3L6/d0/bC4u8jUXtz+vSbm616TcP07tLz6n9sc/v3Q/XF+6vz95FpcDUAAAAA==</status>
+    </sample>
+    <sample id="tmp0000Q" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//A+ptpQH15j/b1i95bevXP/Favn14Le8/UPk3B6j82z/a06gX7WnUP085PLqnHN4/qbg0r1Rc2j/kJjvbcZPtP9phODTtMOw/FGR0KQoy6j9GHO97UAAAAA==</status>
+    </sample>
+    <sample id="tmp0000R" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//TSigqiYU4D/g438n8PHvPwLWIjgBa7E/ErIrNQnZ5T/8WybW/S2zPyrcM+wU7uk/f6gseT9U5j++8u7WXnnnP19JbmivJOc/iH0r98O+xT8rgeKrUAAAAA==</status>
+    </sample>
+    <sample id="tmp0000S" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//4/AxrHH4uD9EgactosDTPzkxuFOcGNw/OrSjFx3a4T+/n7KX30/ZP9Uz5FLqGeI/wb+geuBf4D83bjS+GzfKP1cg83UrkOk/N/X4kpt67D/hpvWeUAAAAA==</status>
+    </sample>
+    <sample id="tmp0000T" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//g5kze8HM2T85ZTp1nDLtP5vzK7HN+cU///AjoX/40T/YIaQa7BDSP2VKob4ypdA/z/b7Qmf77T/HMfFf45joP69gLWJXsOY/azr/aTWd7z92EGobUAAAAA==</status>
+    </sample>
+    <sample id="tmp0000U" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//RwErh6OA1T+W1CcYS+rTP8jCvcRj4e4/3m9xKO+36D9rMeOqtZjhP4vJJpTFZLM/Bar7YgLV7T+9NqZZXhvTPwUmpJECE+I/pqa/C1PT7z8rMsC2UAAAAA==</status>
+    </sample>
+    <sample id="tmp0000V" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//fFUxwL2q6D8gpq3OD9PWP3lb7nS8Lec/NH4jOBq/kT9uDzbAtgebP8JSNB1hKdo/0dK7kmjp7T9uTTXMtqbaP4fMKnxDZqU/GDbwOAwb6D9r5BJ6UAAAAA==</status>
+    </sample>
+    <sample id="tmp0000W" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//51x9YnOu7j8bAzWgjYHKPzMaIJUZDcA/o2w/oVG27z+mLrXXUpfaPxTDZTWK4eI/+eY0u3xz6j9BYnJWIDHpP01Cs08modk/TSZ0WyYT6j/kPb/4UAAAAA==</status>
+    </sample>
+    <sample id="tmp0000X" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//W+U3qa3y6z+4djsZXLvtP91BMpjuIJk/9A5v/nmH5z++XjU6X6/qP9FTcqnoKek/tfsrpNr91T++qGoBX1TlP7azIDDbWYA/XO2oMq521D/TXkt1UAAAAA==</status>
+    </sample>
+    <sample id="tmp0000Y" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//0Ino7+dE5D+KkTY3xUjLP4n16F3EeuQ/sXkzati86T/d/TyW7n6+PxubL2SNzac/ACcwAYATyD/Vgydq6sHDPwiQIDUESNA/i+e3fsXz6z8uHugAUAAAAA==</status>
+    </sample>
+    <sample id="tmp0000Z" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//w6QpmWHS1D8YUOHcC6jgP/6ELih/Quc/lio9KUuV7j+CsDvwQNidP3P/IG65f8A/+Y4vm3zHxz8kVn4jEivvPxexLXmL2NY/V259dSu37j86UIWDUAAAAA==</status>
+    </sample>
+    <sample id="tmp00010" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//4Mg/3W/kzz8QHyUyiI/CPzh6+QQcvew/uP8vNtz/5z9WCj4UKwW/P8Pe9aZh7+o/AoIq5QBB1T+FTH92QqbvP830Ll5mesc/qHI9MlS5zj84HHz1UAAAAA==</status>
+    </sample>
+    <sample id="tmp00011" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//NFwh5BmusD8mVKIiEyrRP9BHtPLnI9o/GjZuHg0b5z9FYj1IIrG+P4S4rxRC3Oc/PkskCp8l4j+4GSn224zUP+jMd85z5us/QjsvK6Gd1z+nGGY5UAAAAA==</status>
+    </sample>
+    <sample id="tmp00012" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//qXIzalS52T8EBqsgAoPlPzwa4jseDeE/m7khqc3c4D/Wp74d61PfP4cqrZhDldY/6MYzxHPjyT/FOyNc4p2xP3Ax7fa3mOY/4h6t3nCP5j9XH+hOUAAAAA==</status>
+    </sample>
+    <sample id="tmp00013" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//E3Cmggk44z9tTy9dtqfXP2Wgp4ky0NM/f0cxdL+jqD+yIyQQ2RGyPxiEvsYLQt8/VVSokSoq1D/Q9bgn6HrsP2a4qwcz3OU/8YGjV/jA0T/aiWIqUAAAAA==</status>
+    </sample>
+    <sample id="tmp00014" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//sbitY1jc5j/s9DIndnrJP8Ij/gLhEe8/h9Y6gENrjT8FvDNCAt7pP+eEOrRzQq0/fmE5HL+wvD8KcifgBLlzP05+NeAmv+o/AEqk5f8k0j/JK73MUAAAAA==</status>
+    </sample>
+    <sample id="tmp00015" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//n/RjUU/64T/iVrcrcavrP+VJNKjyJLo/6jr/JnWd7z8DtWNAgdrhPzTspNYZduI/iC2n0MOW4z85ga+3nMDXP5tXoU7Nq9A/BywxlgOW6D+4iHFLUAAAAA==</status>
+    </sample>
+    <sample id="tmp00016" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//Ce3otYR25D8RsyFOiNnQPyo2JP8UG9I/ozy9cVGe3j+X7OiJS3bkP9CD7A3oQeY/4Vl9TPCs7j/gHi4EcA/XP6SxafzR2OQ/PWqoZR415D+Y5b4dUAAAAA==</status>
+    </sample>
+    <sample id="tmp00017" target="1 0 0">
+      <status>H4sIAAAAAAAEAAFQAK//sxy3l1mO2z9uVWvitqrlP3bUaPM6auQ/7wumovcF4z/w5OkxePLkP2XwM60y+Mk/QuKsHSFx5j/iLuEtcZfgP5f97WbL/uY/OVc3p5yr2z/COse/UAAAAA==</status>
+    </sample>
   </sample>
   <normalization>
     <!--
      model:     Microsoft.VisualBasic.MachineLearning.StoreProcedure.NormalizeMatrix
-     assembly:  Microsoft.VisualBasic.MachineLearning, Version=1.10.7421.20850, Culture=neutral, PublicKeyToken=null
-     version:   1.10.7421.20850
-     built:     4/26/2020 11:35:00 AM
-     md5:       ac8184b10d623a3a74017392769d33e5
-     timestamp: 4/26/2020 11:35:01 AM
+     assembly:  Microsoft.VisualBasic.MachineLearning, Version=1.10.7421.25016, Culture=neutral, PublicKeyToken=null
+     version:   1.10.7421.25016
+     built:     4/26/2020 1:53:52 PM
+     md5:       d4169264c03af618fd3e74b8a200f9db
+     timestamp: 4/26/2020 1:53:54 PM
   -->
     <matrix size="10">
       <!--
      model:     Microsoft.VisualBasic.Math.Distributions.SampleDistribution
-     assembly:  Microsoft.VisualBasic.Math.Core, Version=10.1.7421.20847, Culture=neutral, PublicKeyToken=null
-     version:   10.1.7421.20847
-     built:     4/26/2020 11:34:54 AM
-     md5:       c9bdd6259219f70d5e10e45bc8c3de06
-     timestamp: 4/26/2020 11:34:56 AM
+     assembly:  Microsoft.VisualBasic.Math.Core, Version=10.1.7421.25015, Culture=neutral, PublicKeyToken=null
+     version:   10.1.7421.25015
+     built:     4/26/2020 1:53:50 PM
+     md5:       779db37631a2569c640c06fa04cc8d7f
+     timestamp: 4/26/2020 1:53:51 PM
   -->
-      <item min="0" max="1" average="0.66666666666666663" stdErr="0.47140452079103173" size="30" quantile="0 0 1 1 1" />
-      <item min="1" max="1" average="1" stdErr="0" size="30" quantile="1 1 1 1 1" />
-      <item min="1" max="1" average="1" stdErr="0" size="30" quantile="1 1 1 1 1" />
-      <item min="1" max="1" average="1" stdErr="0" size="30" quantile="1 1 1 1 1" />
-      <item min="1" max="1" average="1" stdErr="0" size="30" quantile="1 1 1 1 1" />
-      <item min="1" max="1" average="1" stdErr="0" size="30" quantile="1 1 1 1 1" />
-      <item min="1" max="1" average="1" stdErr="0" size="30" quantile="1 1 1 1 1" />
-      <item min="1" max="1" average="1" stdErr="0" size="30" quantile="1 1 1 1 1" />
-      <item min="1" max="1" average="1" stdErr="0" size="30" quantile="1 1 1 1 1" />
-      <item min="0" max="1" average="0.66666666666666663" stdErr="0.47140452079103162" size="30" quantile="0 0 1 1 1" />
+      <item min="0" max="1" average="0.57124053129828856" stdErr="0.39812858701071913" size="60" quantile="0 0.09754095510465137 0.63341137749767462 1 1" />
+      <item min="0.000291127711670067" max="1" average="0.76607506050079854" stdErr="0.31714354105245857" size="60" quantile="0.000291127711670067 0.37374436220794188 0.99828345980415278 1 1" />
+      <item min="0.024539688147855777" max="1" average="0.75161484654602362" stdErr="0.3347062376597873" size="60" quantile="0.024539688147855777 0.4638615331909906 0.98128909244262108 1 1" />
+      <item min="0.014364745474590336" max="1" average="0.76501761460599993" stdErr="0.32177743108180229" size="60" quantile="0.014364745474590336 0.55787520043452976 0.99100572103215645 1 1" />
+      <item min="0.026396613580359433" max="1" average="0.74861457667559439" stdErr="0.32880562226523963" size="60" quantile="0.026396613580359433 0.45843948258945694 0.92393431576152063 1 1" />
+      <item min="0.037635006493718835" max="1" average="0.71859256599653776" stdErr="0.340807145956998" size="60" quantile="0.037635006493718835 0.43122398361155018 0.872026304189128 1 1" />
+      <item min="0.016538101721805566" max="1" average="0.72481745418230248" stdErr="0.3351579555725151" size="60" quantile="0.016538101721805566 0.40380774503751088 0.95861067714104931 1 1" />
+      <item min="0.0048151197865675763" max="1" average="0.74544765886173014" stdErr="0.32764002855849034" size="60" quantile="0.0048151197865675763 0.4475611995195789 0.98904536384579045 1 1" />
+      <item min="0.0079838871061726872" max="1" average="0.7670769583979048" stdErr="0.30991364315856995" size="60" quantile="0.0079838871061726872 0.60359892323780751 0.97052902540682306 1 1" />
+      <item min="0" max="1" average="0.63900125336631575" stdErr="0.38943674025163727" size="60" quantile="0 0.2774029594275183 0.76831225714102025 1 1" />
     </matrix>
     <names>
       <string>X_1</string>

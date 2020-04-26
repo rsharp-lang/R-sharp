@@ -19,7 +19,7 @@ Module validation
     Public Function Tabular(x As Object, args As list, env As Environment) As Rdataframe
         Dim input As Evaluation.Validation() = DirectCast(x, Evaluation.Validation())
         Dim dataframe As New Rdataframe With {
-            .rownames = input.Select(Function(r) r.Threshold),
+            .rownames = input.Select(Function(r) CStr(r.Threshold)).ToArray,
             .columns = New Dictionary(Of String, Array) From {
                 {"threshold", .rownames},
                 {"specificity", input.Select(Function(r) r.Specificity).ToArray},
@@ -30,7 +30,7 @@ Module validation
                 {"FPR", input.Select(Function(r) r.FPR).ToArray},
                 {"NPV", input.Select(Function(r) r.NPV).ToArray},
                 {"F1Score", input.Select(Function(r) r.F1Score).ToArray},
-                {"F1Score", input.Select(Function(r) r.F1Score).ToArray},
+                {"F2Score", input.Select(Function(r) r.FbetaScore(2)).ToArray},
                 {"All", input.Select(Function(r) r.All).ToArray},
                 {"TP", input.Select(Function(r) r.TP).ToArray},
                 {"FP", input.Select(Function(r) r.FP).ToArray},
@@ -43,7 +43,7 @@ Module validation
     End Function
 
     <ExportAPI("ANN.ROC")>
-    Public Function ANN_ROC(ANN As Network, validateSet As IEnumerable(Of TrainingSample), range As Double(), attribute%, Optional n% = 20) As Evaluation.Validation()
+    Public Function ANN_ROC(ANN As Network, validateSet As TrainingSample(), range As Double(), attribute%, Optional n% = 20) As Evaluation.Validation()
         Return ANN.CreateValidateResult(validateSet).ROC(range, attribute, n)
     End Function
 
