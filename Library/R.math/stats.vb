@@ -57,6 +57,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 
 <Package("stats")>
 Module stats
@@ -151,8 +152,8 @@ Module stats
 
         Dim matrix As Double()()
 
-        If TypeOf x Is dataframe Then
-            With DirectCast(x, dataframe)
+        If TypeOf x Is Rdataframe Then
+            With DirectCast(x, Rdataframe)
                 matrix = .nrows _
                     .Sequence _
                     .Select(Function(i)
