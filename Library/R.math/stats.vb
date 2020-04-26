@@ -48,6 +48,7 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math.Distributions
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Prcomp
@@ -167,6 +168,15 @@ Module stats
         Dim PCA As New PCA(matrix, center, scale)
 
         Return PCA
+    End Function
+
+    <ExportAPI("dist")>
+    Public Function dist(<RRawVectorArgument> x As Object,
+                         Optional method$ = "euclidean",
+                         Optional diag As Boolean = False,
+                         Optional upper As Boolean = False,
+                         Optional p% = 2) As DataSet()
+
     End Function
 End Module
 

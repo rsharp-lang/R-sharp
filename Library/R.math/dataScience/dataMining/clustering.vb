@@ -1,49 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::7d5b938fa597d384dbe4e71595eb9d9c, Library\R.math\dataScience\dataMining\clustering.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module clustering
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: clusterResultDataFrame, clusterSummary, Kmeans
-    ' 
-    ' /********************************************************************************/
+' Module clustering
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: clusterResultDataFrame, clusterSummary, Kmeans
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
+Imports Microsoft.VisualBasic.DataMining.DBSCAN
 Imports Microsoft.VisualBasic.DataMining.KMeans
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
@@ -173,8 +175,59 @@ Module clustering
     ''' </param>
     ''' <returns></returns>
     <ExportAPI("dbscan")>
-    Public Function dbscan(<RRawVectorArgument> data As Object, eps As Double, Optional MinPts As Integer = 5, Optional scale As Boolean = False, Optional method As dbScanMethods = dbScanMethods.hybrid, Optional seeds As Boolean = True, Optional countmode As Object = Nothing)
+    Public Function dbscan(<RRawVectorArgument> data As Object,
+                           eps As Double,
+                           Optional MinPts As Integer = 5,
+                           Optional scale As Boolean = False,
+                           Optional method As dbScanMethods = dbScanMethods.raw,
+                           Optional seeds As Boolean = True,
+                           Optional countmode As Object = Nothing) As dbscanResult
+        Dim x As DataSet()
 
+        If data Is Nothing Then
+            Return Nothing
+        ElseIf TypeOf data Is Rdataframe Then
+            With DirectCast(data, Rdataframe)
+                x = .nrows _
+                    .Sequence _
+                    .Select(Function(i)
+                                Dim id As String = .rownames.ElementAtOrDefault(i, i + 1)
+                                Dim row As Dictionary(Of String, Object) = .getRowList(i, drop:=True)
+                                Dim r As New DataSet With {
+                                    .ID = id,
+                                    .Properties = row.AsNumeric
+                                }
+
+                                Return r
+                            End Function)
+            End With
+        Else
+            Throw New NotImplementedException
+        End If
+
+        Dim dist As Func(Of DataSet, DataSet, Double)
+
+        Select Case method
+            Case dbScanMethods.dist
+                x = stats.dist(x)
+                dist = Function(a, b) a(b.ID)
+            Case dbScanMethods.raw
+                Dim all As String() = x.PropertyNames
+                dist = Function(a, b) a.Vector.EuclideanDistance(b.Vector)
+            Case dbScanMethods.hybrid
+                Throw New NotImplementedException
+            Case Else
+                Throw New NotImplementedException
+        End Select
+
+        Dim result = New DbscanAlgorithm(Of DataSet)(dist).ComputeClusterDbscan(x, eps, MinPts)
+
+        Return New dbscanResult With {
+            .cluster = result,
+            .eps = eps,
+            .MinPts = MinPts,
+            .isseed = Nothing
+        }
     End Function
 
     Public Enum dbScanMethods
@@ -184,3 +237,9 @@ Module clustering
     End Enum
 End Module
 
+Public Class dbscanResult
+    Public Property cluster
+    Public Property isseed
+    Public Property eps As Double
+    Public Property MinPts As Integer
+End Class
