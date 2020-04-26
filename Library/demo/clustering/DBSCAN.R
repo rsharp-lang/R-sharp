@@ -7,8 +7,8 @@ let raw = read.csv("multishapes.csv")[, ["x","y"]];
 print("previews of the raw input data:");
 print(head(raw));
 
-let result = as.object(dbscan(raw, 0.01))$cluster;
+let result = as.object(dbscan(raw, 0.15))$cluster;
 
-summary(result);
+str(summary(result));
 
-as.data.frame(result) :> write.csv(file = "multishapes_dbscan.csv");
+as.data.frame(result) :> write.csv(file = "multishapes_dbscan.csv", row_names = FALSE);
