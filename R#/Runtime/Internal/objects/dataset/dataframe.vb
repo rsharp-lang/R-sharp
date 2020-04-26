@@ -1,50 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::0c9087daa37f7d26616510f83787a04a, R#\Runtime\Internal\objects\dataset\dataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class dataframe
-    ' 
-    '         Properties: columns, ncols, nrows, rownames
-    ' 
-    '         Function: GetByRowIndex, (+2 Overloads) GetColumnVector, GetRowList, GetTable, projectByColumn
-    '                   sliceByRow
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class dataframe
+' 
+'         Properties: columns, ncols, nrows, rownames
+' 
+'         Function: GetByRowIndex, (+2 Overloads) GetColumnVector, GetRowList, GetTable, projectByColumn
+'                   sliceByRow
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.Serialization
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Object
 
@@ -97,7 +98,24 @@ Namespace Runtime.Internal.Object
         ''' <param name="selector"></param>
         ''' <returns></returns>
         Public Function projectByColumn(selector As Array) As dataframe
-            Throw New NotImplementedException
+            Dim indexType As Type = MeasureRealElementType(selector)
+
+            If indexType Like RType.characters Then
+                Return New dataframe With {
+                    .rownames = rownames,
+                    .columns = DirectCast(asVector(Of String)(selector), String()) _
+                        .ToDictionary(Function(colName) colName,
+                                      Function(key)
+                                          Return columns(key)
+                                      End Function)
+                }
+            ElseIf indexType Like RType.integers Then
+                Throw New InvalidCastException
+            ElseIf indexType Like RType.logicals Then
+                Throw New InvalidCastException
+            Else
+                Throw New InvalidCastException
+            End If
         End Function
 
         ''' <summary>
@@ -152,7 +170,7 @@ Namespace Runtime.Internal.Object
                               Function(c)
                                   If c.Value.Length = 1 Then
                                       ' single value
-                                      Return DirectCast(c.Value.getvalue(Scan0), Array)
+                                      Return DirectCast(c.Value.GetValue(Scan0), Array)
                                   End If
 
                                   Dim vec = index _
