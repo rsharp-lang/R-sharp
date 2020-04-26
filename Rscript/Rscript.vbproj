@@ -192,10 +192,6 @@
       <Project>{0c2eb77c-39f2-460d-a3f8-ce905f867637}</Project>
       <Name>R</Name>
     </ProjectReference>
-    <ProjectReference Include="..\R.exec\R.exec.vbproj">
-      <Project>{e0fbb76c-5f1b-4018-87f6-bd7a9a505f30}</Project>
-      <Name>R.exec</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

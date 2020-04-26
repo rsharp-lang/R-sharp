@@ -86,6 +86,27 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
         Return 0
     End Function
 
+    <ExportAPI("--setup")>
+    <Description("Initialize the R# runtime environment.")>
+    Public Function InitializeEnvironment(args As CommandLine) As Integer
+        Dim config As New Options(ConfigFile.localConfigs)
+
+        Internal.debug.verbose = args("--verbose")
+        Internal.debug.write($"load config file: {ConfigFile.localConfigs}")
+        Internal.debug.write($"load package registry: {config.lib}")
+
+        App.CurrentDirectory = App.HOME
+
+        Using pkgMgr As New PackageManager(config)
+            For Each file As String In {"R.base.dll", "R.graph.dll", "R.graphics.dll", "R.math.dll", "R.plot.dll"}
+                Call pkgMgr.InstallLocals(dllFile:=file)
+                Call pkgMgr.Flush()
+            Next
+        End Using
+
+        Return 0
+    End Function
+
     <ExportAPI("--info")>
     <Description("Print R# interpreter version information and R# terminal version information.")>
     Public Function Info(args As CommandLine) As Integer

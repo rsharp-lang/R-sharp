@@ -141,7 +141,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'mzkit|x64'">
     <DebugSymbols>true</DebugSymbols>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>..\..\..\..\..\MassSpectrum-toolkits\dist\bin\</OutputPath>
+    <OutputPath>..\..\..\..\..\mzkit\dist\bin\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <DocumentationFile>R.graph.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>

@@ -289,6 +289,10 @@ Namespace Runtime.Interop
         Friend Shared Function getValue(arg As RMethodArgument, value As Object, trace$, ByRef envir As Environment, trygetListParam As Boolean) As Object
             If arg.type Like GetType(Environment) Then
                 Return envir
+            ElseIf value Is Nothing Then
+                Return Nothing
+            ElseIf value.GetType Is arg.type.raw Then
+                Return value
             End If
 
             If arg.type.isArray Then

@@ -86,9 +86,15 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
                 If envir.ifPromise.Last.Result = True Then
                     last = envir.ifPromise.Pop
                 Else
-                    last = New IfBranch.IfPromise(closure.Invoke(envir, {}), False) With {
-                        .assignTo = envir.ifPromise.Last.assignTo
-                    }
+                    Dim resultVal As Object = closure.Invoke(envir, {})
+
+                    If Program.isException(resultVal) Then
+                        Return resultVal
+                    Else
+                        last = New IfBranch.IfPromise(resultVal, False) With {
+                            .assignTo = envir.ifPromise.Last.assignTo
+                        }
+                    End If
                 End If
 
                 Call last.DoValueAssign(envir)

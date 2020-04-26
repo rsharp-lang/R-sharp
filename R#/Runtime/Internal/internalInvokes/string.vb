@@ -302,8 +302,31 @@ Namespace Runtime.Internal.Invokes
             Return result
         End Function
 
+        ''' <summary>
+        ''' ### Split the Elements of a Character Vector
+        ''' 
+        ''' Split the elements of a character vector x into substrings
+        ''' according to the matches to substring split within them.
+        ''' </summary>
+        ''' <param name="text">
+        ''' character vector, each element of which is to be split. Other inputs, 
+        ''' including a factor, will give an error.
+        ''' </param>
+        ''' <param name="delimiter">
+        ''' character vector (or object which can be coerced to such) containing 
+        ''' regular expression(s) (unless fixed = TRUE) to use for splitting. 
+        ''' If empty matches occur, in particular if split has length 0, x is 
+        ''' split into single characters. If split has length greater than 1, 
+        ''' it is re-cycled along x.
+        ''' </param>
+        ''' <param name="fixed">
+        ''' logical. If TRUE match split exactly, otherwise use regular expressions. 
+        ''' Has priority over perl.</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("strsplit")>
-        Friend Function strsplit(text$(), Optional delimiter$ = " ", Optional env As Environment = Nothing) As Object
+        <RApiReturn(GetType(String))>
+        Friend Function strsplit(text$(), Optional delimiter$ = " ", Optional fixed As Boolean = False, Optional env As Environment = Nothing) As Object
             If delimiter Is Nothing Then
                 Return debug.stop("the given delimiter is nothing!", env)
             End If
@@ -311,12 +334,21 @@ Namespace Runtime.Internal.Invokes
             If text.IsNullOrEmpty Then
                 Return Nothing
             ElseIf text.Length = 1 Then
-                Return VBStr.Split(text(Scan0), delimiter)
+                If fixed Then
+                    Return VBStr.Split(text(Scan0), delimiter)
+                Else
+                    Return text(Scan0).StringSplit(delimiter)
+                End If
             Else
-                Return text.SeqIterator _
+                Return text _
+                    .SeqIterator _
                     .ToDictionary(Function(i) $"[[{i.i + 1}]]",
                                   Function(i)
-                                      Return VBStr.Split(i.value, delimiter)
+                                      If fixed Then
+                                          Return VBStr.Split(i.value, delimiter)
+                                      Else
+                                          Return i.value.StringSplit(delimiter)
+                                      End If
                                   End Function)
             End If
         End Function
@@ -350,5 +382,48 @@ Namespace Runtime.Internal.Invokes
                 Return subj.Select(Function(s) s.Replace(search, replaceAs)).ToArray
             End If
         End Function
+
+        ''' <summary>
+        ''' Pad A String.
+        ''' </summary>
+        ''' <param name="string">A character vector.</param>
+        ''' <param name="width">Minimum width of padded strings.</param>
+        ''' <param name="side">Side on which padding character is added (left, right or both).</param>
+        ''' <param name="pad">Single padding character (default is a space).</param>
+        ''' <returns></returns>
+        <ExportAPI("str_pad")>
+        Public Function str_pad([string] As String(), width%, Optional side As str_padSides = str_padSides.left, Optional pad As Char = " "c) As String()
+            Return [string] _
+                .SafeQuery _
+                .Select(Function(s)
+                            If s.StringEmpty Then
+                                Return New String(pad, width)
+                            End If
+
+                            If side = str_padSides.left Then
+                                Return s.PadLeft(width, pad)
+                            ElseIf side = str_padSides.right Then
+                                Return s.PadRight(width, pad)
+                            Else
+                                Dim l As Integer = s.Length
+                                Dim left As Integer = (width - l) / 2
+                                Dim right As Integer = width - l - left
+
+                                If left <= 0 Then
+                                    Return s
+                                Else
+                                    Return New String(pad, left) & s & New String(pad, right)
+                                End If
+                            End If
+                        End Function) _
+                .ToArray
+        End Function
+
     End Module
+
+    Public Enum str_padSides
+        left
+        right
+        both
+    End Enum
 End Namespace
