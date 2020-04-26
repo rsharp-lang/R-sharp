@@ -123,21 +123,25 @@ Module machineLearning
     <ExportAPI("new.ML_model")>
     Public Function createEmptyMLDataset(file As String) As RDispose
         Return New RDispose(
-            New StoreProcedure.DataSet With {.DataSamples = New SampleList},
+            New StoreProcedure.DataSet With {
+                .DataSamples = New SampleList
+            },
             Sub(d)
-                Dim dataset As StoreProcedure.DataSet = DirectCast(d, StoreProcedure.DataSet)
-
-                dataset.NormalizeMatrix = NormalizeMatrix.CreateFromSamples(
-                    samples:=dataset.DataSamples.items,
-                    names:=dataset.width _
-                        .Sequence _
-                        .Select(Function(i) $"X_{i}")
-                )
-                dataset _
-                    .GetXml _
-                    .SaveTo(file)
+                doFileSave(DirectCast(d, StoreProcedure.DataSet), file)
             End Sub)
     End Function
+
+    Private Sub doFileSave(dataset As StoreProcedure.DataSet, file As String)
+        dataset.NormalizeMatrix = NormalizeMatrix.CreateFromSamples(
+            samples:=dataset.DataSamples.items,
+            names:=dataset.width _
+                .Sequence _
+                .Select(Function(i) $"X_{i}")
+        )
+        dataset _
+            .GetXml _
+            .SaveTo(file)
+    End Sub
 
     ''' <summary>
     ''' add new training sample into the model dataset
