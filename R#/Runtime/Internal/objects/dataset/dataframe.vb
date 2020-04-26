@@ -43,6 +43,7 @@
 
 #End Region
 
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -124,7 +125,42 @@ Namespace Runtime.Internal.Object
         ''' <param name="selector"></param>
         ''' <returns></returns>
         Public Function sliceByRow(selector As Array) As dataframe
-            Throw New NotImplementedException
+            Dim indexType As Type = MeasureRealElementType(selector)
+
+            If indexType Like RType.logicals Then
+                Dim bools As Integer() = Which.IsTrue(asLogical(selector))
+                Dim subset As New dataframe With {
+                    .rownames = bools _
+                        .Select(Function(i, j) rownames.ElementAtOrDefault(i, j + 1)) _
+                        .ToArray,
+                    .columns = New Dictionary(Of String, Array)
+                }
+
+                For Each col In columns
+                    subset.columns(col.Key) =
+                        Function() As Array
+                            Dim a As Array
+                            Dim vec As Array = col.Value
+
+                            If vec.Length = 1 Then
+                                a = Array.CreateInstance(vec.GetValue(Scan0).GetType, 1)
+                                a.SetValue(vec.GetValue(Scan0), Scan0)
+                            Else
+                                a = Array.CreateInstance(MeasureRealElementType(vec), bools.Length)
+
+                                For Each i In bools.SeqIterator
+                                    a.SetValue(vec.GetValue(i.value), i)
+                                Next
+                            End If
+
+                            Return a
+                        End Function()
+                Next
+
+                Return subset
+            Else
+                Throw New NotImplementedException(indexType.FullName)
+            End If
         End Function
 
         ''' <summary>

@@ -1,4 +1,5 @@
 imports "stats.clustering" from "R.math";
+imports "plot.charts" from "R.plot";
 
 setwd(!script$dir);
 
@@ -11,4 +12,26 @@ let result = as.object(dbscan(raw, 1))$cluster;
 
 str(summary(result));
 
-as.data.frame(result) :> write.csv(file = "multishapes_dbscan.csv", row_names = FALSE);
+let table = as.data.frame(result);
+
+table :> head :> print;
+table :> write.csv(file = "multishapes_dbscan.csv", row_names = FALSE);
+
+let cluster = table[, "Cluster"];
+let unique_clusters = unique(cluster);
+let points = [];
+let colorSet = colors("Clusters") :> loop;
+
+for(id in unique_clusters) {
+	let partition = table[cluster == id, ];
+	let x = as.numeric(partition[, "x"]);
+	let y = as.numeric(partition[, "y"]);
+	
+	points = points << serial(x,y, name = id, color = colorSet());
+}
+
+points
+:> plot
+:> save.graphics(file = "multishapes_dbscan.png")
+;
+
