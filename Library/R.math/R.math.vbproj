@@ -195,6 +195,7 @@
   <ItemGroup>
     <Compile Include="dataScience\activation.vb" />
     <Compile Include="dataScience\machineLearning.vb" />
+    <Compile Include="dataScience\validation.vb" />
     <Compile Include="math.vb" />
     <Compile Include="dataScience\dataMining\clustering.vb" />
     <Compile Include="stats.vb" />
