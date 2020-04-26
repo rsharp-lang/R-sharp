@@ -41,6 +41,7 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.DataMining.DBSCAN
@@ -220,13 +221,27 @@ Module clustering
                 Throw New NotImplementedException
         End Select
 
-        Dim result = New DbscanAlgorithm(Of DataSet)(dist).ComputeClusterDbscan(x, eps, MinPts)
+        Dim isseed As Integer() = Nothing
+        Dim result = New DbscanAlgorithm(Of DataSet)(dist).ComputeClusterDBSCAN(x, eps, MinPts, isseed)
+        Dim clusterData As EntityClusterModel() = result _
+            .Select(Function(c)
+                        Return c _
+                            .Select(Function(r)
+                                        Return New EntityClusterModel With {
+                                            .Cluster = c.name,
+                                            .ID = r.ID,
+                                            .Properties = r.Properties
+                                        }
+                                    End Function)
+                    End Function) _
+            .IteratesALL _
+            .ToArray
 
         Return New dbscanResult With {
-            .cluster = result,
+            .cluster = clusterData,
             .eps = eps,
             .MinPts = MinPts,
-            .isseed = Nothing
+            .isseed = isseed.Select(Function(i) x(i).ID).ToArray
         }
     End Function
 
@@ -238,8 +253,8 @@ Module clustering
 End Module
 
 Public Class dbscanResult
-    Public Property cluster
-    Public Property isseed
+    Public Property cluster As EntityClusterModel()
+    Public Property isseed As String()
     Public Property eps As Double
     Public Property MinPts As Integer
 End Class
