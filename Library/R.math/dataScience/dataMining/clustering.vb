@@ -199,7 +199,8 @@ Module clustering
                                 }
 
                                 Return r
-                            End Function)
+                            End Function) _
+                    .ToArray
             End With
         Else
             Throw New NotImplementedException
