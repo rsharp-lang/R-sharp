@@ -136,7 +136,7 @@ Module machineLearning
             samples:=dataset.DataSamples.items,
             names:=dataset.width _
                 .Sequence _
-                .Select(Function(i) $"X_{i}")
+                .Select(Function(i) $"X_{i + 1}")
         )
         dataset _
             .GetXml _

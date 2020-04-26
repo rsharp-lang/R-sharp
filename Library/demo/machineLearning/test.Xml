@@ -130,7 +130,6 @@
       <item min="0" max="1" average="0.66666666666666663" stdErr="0.47140452079103162" size="30" quantile="0 0 1 1 1" />
     </matrix>
     <names>
-      <string>X_0</string>
       <string>X_1</string>
       <string>X_2</string>
       <string>X_3</string>
@@ -140,6 +139,7 @@
       <string>X_7</string>
       <string>X_8</string>
       <string>X_9</string>
+      <string>X_10</string>
     </names>
   </normalization>
 </DataSet>
