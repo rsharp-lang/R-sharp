@@ -140,5 +140,47 @@ Module clustering
 
         Return model.Kmeans(centers, debug, parallel).ToArray
     End Function
+
+    ''' <summary>
+    ''' ### DBSCAN density reachability and connectivity clustering
+    ''' 
+    ''' Generates a density based clustering of arbitrary shape as 
+    ''' introduced in Ester et al. (1996).
+    ''' 
+    ''' Clusters require a minimum no of points (MinPts) within a maximum 
+    ''' distance (eps) around one of its members (the seed). Any point 
+    ''' within eps around any point which satisfies the seed condition 
+    ''' is a cluster member (recursively). Some points may not belong to 
+    ''' any clusters (noise).
+    ''' </summary>
+    ''' <param name="data">data matrix, data.frame, dissimilarity matrix 
+    ''' or dist-object. Specify method="dist" if the data should be 
+    ''' interpreted as dissimilarity matrix or object. Otherwise Euclidean 
+    ''' distances will be used.</param>
+    ''' <param name="eps">Reachability distance, see Ester et al. (1996).</param>
+    ''' <param name="MinPts">Reachability minimum no. Of points, see Ester et al. (1996).</param>
+    ''' <param name="scale">scale the data if TRUE.</param>
+    ''' <param name="method">
+    ''' "dist" treats data as distance matrix (relatively fast but memory 
+    ''' expensive), "raw" treats data as raw data and avoids calculating a 
+    ''' distance matrix (saves memory but may be slow), "hybrid" expects 
+    ''' also raw data, but calculates partial distance matrices (very fast 
+    ''' with moderate memory requirements).
+    ''' </param>
+    ''' <param name="seeds">FALSE to not include the isseed-vector in the dbscan-object.</param>
+    ''' <param name="countmode">
+    ''' NULL or vector of point numbers at which to report progress.
+    ''' </param>
+    ''' <returns></returns>
+    <ExportAPI("dbscan")>
+    Public Function dbscan(<RRawVectorArgument> data As Object, eps As Double, Optional MinPts As Integer = 5, Optional scale As Boolean = False, Optional method As dbScanMethods = dbScanMethods.hybrid, Optional seeds As Boolean = True, Optional countmode As Object = Nothing)
+
+    End Function
+
+    Public Enum dbScanMethods
+        hybrid
+        raw
+        dist
+    End Enum
 End Module
 
