@@ -2,13 +2,13 @@
 <DataSet xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <!--
      model:     Microsoft.VisualBasic.MachineLearning.StoreProcedure.DataSet
-     assembly:  Microsoft.VisualBasic.MachineLearning, Version=1.10.7387.30417, Culture=neutral, PublicKeyToken=null
-     version:   1.10.7387.30417
-     built:     2020/3/23 星期一 下午 4:53:54
-     md5:       9b5d9b2ad0efce997c57b855093d666b
-     timestamp: 2020/3/23 星期一 下午 4:53:55
+     assembly:  Microsoft.VisualBasic.MachineLearning, Version=1.10.7421.20850, Culture=neutral, PublicKeyToken=null
+     version:   1.10.7421.20850
+     built:     4/26/2020 11:35:00 AM
+     md5:       ac8184b10d623a3a74017392769d33e5
+     timestamp: 4/26/2020 11:35:01 AM
   -->
-  <sample size="5">
+  <sample size="30">
     <sample id="tmp0000a" target="1 1 1">
       <status>H4sIAAAAAAAEAGNgAIEP9gxUogFH+whdUAAAAA==</status>
     </sample>
@@ -24,35 +24,110 @@
     <sample id="tmp0000e" target="1 1 1">
       <status>H4sIAAAAAAAEAGNgAIEP9gxUogFH+whdUAAAAA==</status>
     </sample>
+    <sample id="tmp0000f" target="1 1 1">
+      <status>H4sIAAAAAAAEAGNgAIEP9gxUogFH+whdUAAAAA==</status>
+    </sample>
+    <sample id="tmp0000g" target="1 1 1">
+      <status>H4sIAAAAAAAEAGNgAIEP9gxUogFH+whdUAAAAA==</status>
+    </sample>
+    <sample id="tmp0000h" target="1 1 1">
+      <status>H4sIAAAAAAAEAGNgAIEP9gxUogFH+whdUAAAAA==</status>
+    </sample>
+    <sample id="tmp0000i" target="1 1 1">
+      <status>H4sIAAAAAAAEAGNgAIEP9gxUogFH+whdUAAAAA==</status>
+    </sample>
+    <sample id="tmp0000j" target="1 1 1">
+      <status>H4sIAAAAAAAEAGNgAIEP9gxUogFH+whdUAAAAA==</status>
+    </sample>
+    <sample id="tmp0000k" target="0 0 1">
+      <status>H4sIAAAAAAAEAGNgAIEP9gxUoRkYAMc30v9QAAAA</status>
+    </sample>
+    <sample id="tmp0000l" target="0 0 1">
+      <status>H4sIAAAAAAAEAGNgAIEP9gxUoRkYAMc30v9QAAAA</status>
+    </sample>
+    <sample id="tmp0000m" target="0 0 1">
+      <status>H4sIAAAAAAAEAGNgAIEP9gxUoRkYAMc30v9QAAAA</status>
+    </sample>
+    <sample id="tmp0000n" target="0 0 1">
+      <status>H4sIAAAAAAAEAGNgAIEP9gxUoRkYAMc30v9QAAAA</status>
+    </sample>
+    <sample id="tmp0000o" target="0 0 1">
+      <status>H4sIAAAAAAAEAGNgAIEP9gxUoRkYAMc30v9QAAAA</status>
+    </sample>
+    <sample id="tmp0000p" target="0 0 1">
+      <status>H4sIAAAAAAAEAGNgAIEP9gxUoRkYAMc30v9QAAAA</status>
+    </sample>
+    <sample id="tmp0000q" target="0 0 1">
+      <status>H4sIAAAAAAAEAGNgAIEP9gxUoRkYAMc30v9QAAAA</status>
+    </sample>
+    <sample id="tmp0000r" target="0 0 1">
+      <status>H4sIAAAAAAAEAGNgAIEP9gxUoRkYAMc30v9QAAAA</status>
+    </sample>
+    <sample id="tmp0000s" target="0 0 1">
+      <status>H4sIAAAAAAAEAGNgAIEP9gxUoRkYAMc30v9QAAAA</status>
+    </sample>
+    <sample id="tmp0000t" target="0 0 1">
+      <status>H4sIAAAAAAAEAGNgAIEP9gxUoRkYAMc30v9QAAAA</status>
+    </sample>
+    <sample id="tmp0000u" target="0 0 0">
+      <status>H4sIAAAAAAAEAGNgQAYf7CmlAYxVWyFQAAAA</status>
+    </sample>
+    <sample id="tmp0000v" target="0 0 0">
+      <status>H4sIAAAAAAAEAGNgQAYf7CmlAYxVWyFQAAAA</status>
+    </sample>
+    <sample id="tmp0000w" target="0 0 0">
+      <status>H4sIAAAAAAAEAGNgQAYf7CmlAYxVWyFQAAAA</status>
+    </sample>
+    <sample id="tmp0000x" target="0 0 0">
+      <status>H4sIAAAAAAAEAGNgQAYf7CmlAYxVWyFQAAAA</status>
+    </sample>
+    <sample id="tmp0000y" target="0 0 0">
+      <status>H4sIAAAAAAAEAGNgQAYf7CmlAYxVWyFQAAAA</status>
+    </sample>
+    <sample id="tmp0000z" target="0 0 0">
+      <status>H4sIAAAAAAAEAGNgQAYf7CmlAYxVWyFQAAAA</status>
+    </sample>
+    <sample id="tmp0000A" target="0 0 0">
+      <status>H4sIAAAAAAAEAGNgQAYf7CmlAYxVWyFQAAAA</status>
+    </sample>
+    <sample id="tmp0000B" target="0 0 0">
+      <status>H4sIAAAAAAAEAGNgQAYf7CmlAYxVWyFQAAAA</status>
+    </sample>
+    <sample id="tmp0000C" target="0 0 0">
+      <status>H4sIAAAAAAAEAGNgQAYf7CmlAYxVWyFQAAAA</status>
+    </sample>
+    <sample id="tmp0000D" target="0 0 0">
+      <status>H4sIAAAAAAAEAGNgQAYf7CmlAYxVWyFQAAAA</status>
+    </sample>
   </sample>
   <normalization>
     <!--
      model:     Microsoft.VisualBasic.MachineLearning.StoreProcedure.NormalizeMatrix
-     assembly:  Microsoft.VisualBasic.MachineLearning, Version=1.10.7387.30417, Culture=neutral, PublicKeyToken=null
-     version:   1.10.7387.30417
-     built:     2020/3/23 星期一 下午 4:53:54
-     md5:       9b5d9b2ad0efce997c57b855093d666b
-     timestamp: 2020/3/23 星期一 下午 4:53:55
+     assembly:  Microsoft.VisualBasic.MachineLearning, Version=1.10.7421.20850, Culture=neutral, PublicKeyToken=null
+     version:   1.10.7421.20850
+     built:     4/26/2020 11:35:00 AM
+     md5:       ac8184b10d623a3a74017392769d33e5
+     timestamp: 4/26/2020 11:35:01 AM
   -->
     <matrix size="10">
       <!--
      model:     Microsoft.VisualBasic.Math.Distributions.SampleDistribution
-     assembly:  Microsoft.VisualBasic.Math.Core, Version=10.1.7387.30415, Culture=neutral, PublicKeyToken=null
-     version:   10.1.7387.30415
-     built:     2020/3/23 星期一 下午 4:53:50
-     md5:       0a9d0df4d06c548d52fb77f6052eb121
-     timestamp: 2020/3/23 星期一 下午 4:53:51
+     assembly:  Microsoft.VisualBasic.Math.Core, Version=10.1.7421.20847, Culture=neutral, PublicKeyToken=null
+     version:   10.1.7421.20847
+     built:     4/26/2020 11:34:54 AM
+     md5:       c9bdd6259219f70d5e10e45bc8c3de06
+     timestamp: 4/26/2020 11:34:56 AM
   -->
-      <item min="1" max="1" average="1" stdErr="0" size="5" quantile="1 1 1 1 1" />
-      <item min="1" max="1" average="1" stdErr="0" size="5" quantile="1 1 1 1 1" />
-      <item min="1" max="1" average="1" stdErr="0" size="5" quantile="1 1 1 1 1" />
-      <item min="1" max="1" average="1" stdErr="0" size="5" quantile="1 1 1 1 1" />
-      <item min="1" max="1" average="1" stdErr="0" size="5" quantile="1 1 1 1 1" />
-      <item min="1" max="1" average="1" stdErr="0" size="5" quantile="1 1 1 1 1" />
-      <item min="1" max="1" average="1" stdErr="0" size="5" quantile="1 1 1 1 1" />
-      <item min="1" max="1" average="1" stdErr="0" size="5" quantile="1 1 1 1 1" />
-      <item min="1" max="1" average="1" stdErr="0" size="5" quantile="1 1 1 1 1" />
-      <item min="1" max="1" average="1" stdErr="0" size="5" quantile="1 1 1 1 1" />
+      <item min="0" max="1" average="0.66666666666666663" stdErr="0.47140452079103173" size="30" quantile="0 0 1 1 1" />
+      <item min="1" max="1" average="1" stdErr="0" size="30" quantile="1 1 1 1 1" />
+      <item min="1" max="1" average="1" stdErr="0" size="30" quantile="1 1 1 1 1" />
+      <item min="1" max="1" average="1" stdErr="0" size="30" quantile="1 1 1 1 1" />
+      <item min="1" max="1" average="1" stdErr="0" size="30" quantile="1 1 1 1 1" />
+      <item min="1" max="1" average="1" stdErr="0" size="30" quantile="1 1 1 1 1" />
+      <item min="1" max="1" average="1" stdErr="0" size="30" quantile="1 1 1 1 1" />
+      <item min="1" max="1" average="1" stdErr="0" size="30" quantile="1 1 1 1 1" />
+      <item min="1" max="1" average="1" stdErr="0" size="30" quantile="1 1 1 1 1" />
+      <item min="0" max="1" average="0.66666666666666663" stdErr="0.47140452079103162" size="30" quantile="0 0 1 1 1" />
     </matrix>
     <names>
       <string>X_0</string>
