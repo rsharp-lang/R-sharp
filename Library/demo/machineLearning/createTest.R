@@ -17,6 +17,6 @@ using data as new.ML_model("test.Xml") {
 	}
 	
 	for(i in 1:30) {
-		data :> add(runif(10), [1,0,0])
+		data :> add(runif(10, 0, 0.6), [1,0,0])
 	}
 }
