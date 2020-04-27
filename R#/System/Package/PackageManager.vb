@@ -1,49 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::90703acd457499ae38dc2017deb09328, R#\System\Package\PackageManager.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class PackageManager
-    ' 
-    '         Properties: loadedPackages, packageDocs
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: FindPackage, GenericEnumerator, GetEnumerator, GetPackageDocuments, hasLibFile
-    '                   InstallLocals
-    ' 
-    '         Sub: (+2 Overloads) Dispose, Flush
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class PackageManager
+' 
+'         Properties: loadedPackages, packageDocs
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: FindPackage, GenericEnumerator, GetEnumerator, GetPackageDocuments, hasLibFile
+'                   InstallLocals
+' 
+'         Sub: (+2 Overloads) Dispose, Flush
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -53,6 +53,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.System.Configuration
 
 Namespace System.Package
@@ -135,6 +136,47 @@ Namespace System.Package
         ''' 将程序包数据库更新到硬盘文件之上
         ''' </summary>
         Public Sub Flush()
+            ' 20200427 try to fix bugs on linux mono platform when 
+            ' initialize the runtime environment in New environment
+
+            ' [root@izbp1anxq3o4vzei3wfddjz R_sharp]# ./R# --setup
+
+            ' [ERROR 4/27/2020 8:40:05 PM]<Print>::System.Exception: Print
+
+            ' System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
+            ' System.Exception: SMRUCC.Rsharp.System.Package.LocalPackageDatabase
+            ' System.InvalidOperationException: There was an error generating the XML document.
+            ' System.NullReferenceException: Object reference not set to an instance of an object
+
+            ' at (wrapper managed-to-native) System.Reflection.MonoMethod.InternalInvoke(System.Reflection.MonoMethod,object,object[],System.Exception&)
+            ' at System.Reflection.MonoMethod.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <47d423fd1d4342b9832b2fe1f5d431eb>:0
+            ' --- End of inner exception stack trace ---
+            ' at System.Xml.Serialization.XmlSerializer.Serialize (System.Xml.XmlWriter xmlWriter, System.Object o, System.Xml.Serialization.XmlSerializerNamespaces namespaces, System.String encodingStyle, System.String id) [0x000f4] in <b29965903c6446b8a29a70b44766d725>:0
+            ' at System.Xml.Serialization.XmlSerializer.Serialize (System.Xml.XmlWriter xmlWriter, System.Object o, System.Xml.Serialization.XmlSerializerNamespaces namespaces, System.String encodingStyle) [0x00000] in <b29965903c6446b8a29a70b44766d725>:0
+            ' at System.Xml.Serialization.XmlSerializer.Serialize (System.Xml.XmlWriter xmlWriter, System.Object o, System.Xml.Serialization.XmlSerializerNamespaces namespaces) [0x00000] in <b29965903c6446b8a29a70b44766d725>:0
+            ' at System.Xml.Serialization.XmlSerializer.Serialize (System.IO.TextWriter textWriter, System.Object o, System.Xml.Serialization.XmlSerializerNamespaces namespaces) [0x00015] in <b29965903c6446b8a29a70b44766d725>:0
+            ' at System.Xml.Serialization.XmlSerializer.Serialize (System.IO.TextWriter textWriter, System.Object o) [0x00000] in <b29965903c6446b8a29a70b44766d725>:0
+            ' at Microsoft.VisualBasic.XmlExtensions.GetXml (System.Object obj, System.Type type, System.Boolean throwEx, Microsoft.VisualBasic.Text.Xml.XmlEncodings xmlEncoding) [0x00068] in <3242cfcec0124178b1264c731fceb926>:0
+            ' --- End of inner exception stack trace ---
+            ' at (wrapper managed-to-native) System.Reflection.MonoMethod.InternalInvoke(System.Reflection.MonoMethod,object,object[],System.Exception&)
+            ' at System.Reflection.MonoMethod.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <47d423fd1d4342b9832b2fe1f5d431eb>:0
+            ' --- End of inner exception stack trace ---
+            ' at System.Reflection.MonoMethod.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x00083] in <47d423fd1d4342b9832b2fe1f5d431eb>:0
+            ' at System.Reflection.MethodBase.Invoke (System.Object obj, System.Object[] parameters) [0x00000] in <47d423fd1d4342b9832b2fe1f5d431eb>:0
+            ' at Microsoft.VisualBasic.CommandLine.Reflection.EntryPoints.APIEntryPoint.handleUnexpectedErrorCalls (System.Object[] callParameters, System.Object target, System.Boolean throw) [0x0000e] in <3242cfcec0124178b1264c731fceb926>:0
+            ' --- End of inner exception stack trace ---
+
+            ' [INFOM 4/27/2020 8:40:05 PM] [Log] /root/.local/share/GCModeller/R#/.logs/err/2020-04-27, 20-40-05_0000c.log
+
+            If pkgDb.packages Is Nothing Then
+                pkgDb.packages = New XmlList(Of PackageLoaderEntry) With {
+                    .items = {}
+                }
+            End If
+            If pkgDb.system Is Nothing Then
+                pkgDb.system = New AssemblyInfo
+            End If
+
             Call pkgDb.GetXml.SaveTo(config.lib)
         End Sub
 
