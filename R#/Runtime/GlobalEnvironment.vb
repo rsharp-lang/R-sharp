@@ -79,11 +79,11 @@ Namespace Runtime
             Me.Rscript = scriptHost
         End Sub
 
-        Public Function LoadLibrary(packageName As String) As Message
+        Public Function LoadLibrary(packageName As String, Optional silent As Boolean = False) As Message
             Dim exception As Exception = Nothing
             Dim package As RPkg = packages.FindPackage(packageName, exception)
 
-            If Not packageName Like packages.loadedPackages Then
+            If Not silent AndAlso Not packageName Like packages.loadedPackages Then
                 Call Console.WriteLine($"Loading required package: {packageName}")
             Else
                 Return Nothing
