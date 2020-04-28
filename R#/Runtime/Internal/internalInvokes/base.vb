@@ -838,8 +838,10 @@ Namespace Runtime.Internal.Invokes
 
             If Not file.StringEmpty Then
                 Call strs.SaveTo(file)
-            Else
+            ElseIf env.globalEnvironment.stdout Is Nothing Then
                 Call Console.Write(strs)
+            Else
+                Call env.globalEnvironment.stdout.Write(strs)
             End If
 
             Return strs
@@ -862,7 +864,7 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("str")>
         Public Function str(<RRawVectorArgument> [object] As Object, Optional env As Environment = Nothing) As Object
-            Call Console.WriteLine(reflector.GetStructure([object], env.globalEnvironment, " "))
+            Call env.WriteLine(reflector.GetStructure([object], env.globalEnvironment, " "))
             Return Nothing
         End Function
 
@@ -961,7 +963,7 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("print")>
         Public Function print(<RRawVectorArgument> x As Object, envir As Environment) As Object
             If x Is Nothing Then
-                Call Console.WriteLine("NULL")
+                Call envir.WriteLine("NULL")
 
                 ' just returns nothing literal
                 Return Nothing
@@ -980,7 +982,7 @@ Namespace Runtime.Internal.Invokes
                     .packageDocs _
                     .PrintHelp(x)
             ElseIf type Is GetType(DeclareNewFunction) Then
-                Call Console.WriteLine(x.ToString)
+                Call envir.WriteLine(x.ToString)
             ElseIf type.ImplementInterface(GetType(RPrint)) Then
                 Try
                     Call markdown.DoPrint(DirectCast(x, RPrint).GetPrintContent, 0)

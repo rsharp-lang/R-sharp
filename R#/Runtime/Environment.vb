@@ -204,11 +204,27 @@ Namespace Runtime
         ''' <param name="message">
         ''' The string to write. If value is null, only the line terminator is written.
         ''' </param>
-        Public Sub WriteLine(message As String)
+        Public Sub WriteLine(Optional message As String = Nothing)
             If globalEnvironment.stdout Is Nothing Then
-                Call Console.WriteLine(message)
+                If message Is Nothing Then
+                    Call Console.WriteLine()
+                Else
+                    Call Console.WriteLine(message)
+                End If
             Else
-                Call globalEnvironment.stdout.WriteLine(message)
+                If message Is Nothing Then
+                    Call globalEnvironment.stdout.WriteLine()
+                Else
+                    Call globalEnvironment.stdout.WriteLine(message)
+                End If
+            End If
+        End Sub
+
+        Public Sub Write(message As String)
+            If globalEnvironment.stdout Is Nothing Then
+                Call Console.Write(message)
+            Else
+                Call globalEnvironment.stdout.Write(message)
             End If
         End Sub
 

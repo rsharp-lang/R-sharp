@@ -92,7 +92,7 @@ Namespace Runtime
 
             If Not packageName Like packages.loadedPackages Then
                 If Not silent Then
-                    Call Console.WriteLine($"Loading required package: {packageName}")
+                    Call WriteLine($"Loading required package: {packageName}")
                 End If
             Else
                 Return Nothing
@@ -120,13 +120,13 @@ Namespace Runtime
                     packageName = package.NamespaceEntry.Namespace
                 End If
 
-                Call Console.WriteLine($"Attaching package: '{packageName}'")
-                Call Console.WriteLine()
-                Call Console.WriteLine($"The following object is masked from 'package:{packageName}':")
-                Call Console.WriteLine()
+                Call WriteLine($"Attaching package: '{packageName}'")
+                Call WriteLine()
+                Call WriteLine($"The following object is masked from 'package:{packageName}':")
+                Call WriteLine()
 
-                Call printer.printContentArray(masked, ", ", "    ")
-                Call Console.WriteLine()
+                Call printer.printContentArray(masked, ", ", "    ", Me)
+                Call WriteLine()
             End If
 
             Return Nothing

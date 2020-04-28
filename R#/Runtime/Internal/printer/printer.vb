@@ -137,20 +137,20 @@ Namespace Runtime.Internal.ConsolePrinter
             Dim valueType As Type
 
             If x Is Nothing Then
-                Call Console.WriteLine("NULL")
+                Call env.WriteLine("NULL")
                 Return
             Else
                 valueType = x.GetType
             End If
 
             If RtoString.ContainsKey(valueType) Then
-                Call Console.WriteLine(RtoString(valueType)(x))
+                Call env.WriteLine(RtoString(valueType)(x))
             ElseIf valueType.IsInheritsFrom(GetType(Array)) Then
                 With DirectCast(x, Array)
                     If .Length > 1 Then
                         Call .printArray(maxPrint, env)
                     ElseIf .Length = 0 Then
-                        Call Console.WriteLine("NULL")
+                        Call env.WriteLine("NULL")
                     Else
                         x = .GetValue(Scan0)
                         ' get the first value and then print its
@@ -172,12 +172,12 @@ Namespace Runtime.Internal.ConsolePrinter
                 Call DirectCast(x, dataframe) _
                     .GetTable(env) _
                     .Print(addBorder:=False) _
-                    .DoCall(AddressOf Console.WriteLine)
+                    .DoCall(AddressOf env.WriteLine)
             ElseIf valueType Is GetType(vbObject) Then
-                Call DirectCast(x, vbObject).ToString.DoCall(AddressOf Console.WriteLine)
+                Call DirectCast(x, vbObject).ToString.DoCall(AddressOf env.WriteLine)
             Else
 printSingleElement:
-                Call Console.WriteLine("[1] " & printer.ValueToString(x, env))
+                Call env.WriteLine("[1] " & printer.ValueToString(x, env))
             End If
         End Sub
 
@@ -193,9 +193,9 @@ printSingleElement:
                     key = $"{listPrefix}${key}"
                 End If
 
-                Call Console.WriteLine(key)
+                Call env.WriteLine(key)
                 Call printer.printInternal(slotValue, key, maxPrint, env)
-                Call Console.WriteLine()
+                Call env.WriteLine()
             Next
         End Sub
 
@@ -260,15 +260,15 @@ printSingleElement:
             Dim stringVec As IEnumerable(Of String) = getStrings(xvec, env)
             Dim contents As String() = stringVec.Take(maxPrint).ToArray
 
-            Call contents.printContentArray(Nothing, Nothing)
+            Call contents.printContentArray(Nothing, Nothing, env)
 
             If xvec.Length > maxPrint Then
-                Call Console.WriteLine($"[ reached getOption(""max.print"") -- omitted {xvec.Length - contents.Length} entries ]")
+                Call env.WriteLine($"[ reached getOption(""max.print"") -- omitted {xvec.Length - contents.Length} entries ]")
             End If
         End Sub
 
         <Extension>
-        Friend Sub printContentArray(contents$(), deli$, indentPrefix$)
+        Friend Sub printContentArray(contents$(), deli$, indentPrefix$, env As Environment)
             Dim maxColumns As Integer = If(App.IsConsoleApp, Console.WindowWidth, Integer.MaxValue) - 1
             ' maxsize / average size
             Dim unitWidth As Integer = contents.Max(Function(c) c.Length) + 1
@@ -291,24 +291,24 @@ printSingleElement:
 
             For Each row As String() In contents.Split(partitionSize:=divSize)
                 If indentPrefix Is Nothing Then
-                    Call Console.Write($"[{i = i + divSize}]{vbTab}")
+                    Call env.Write($"[{i = i + divSize}]{vbTab}")
                 Else
-                    Call Console.Write(indentPrefix)
+                    Call env.Write(indentPrefix)
                 End If
 
                 For j As Integer = 0 To row.Length - 1
                     cell = row(j)
 
-                    Call Console.Write(cell)
+                    Call env.Write(cell)
 
                     If deli Is Nothing Then
-                        Call Console.Write(New String(" "c, unitWidth - cell.Length))
+                        Call env.Write(New String(" "c, unitWidth - cell.Length))
                     ElseIf Not j = row.Length - 1 Then
-                        Call Console.Write(deli)
+                        Call env.Write(deli)
                     End If
                 Next
 
-                Call Console.WriteLine()
+                Call env.WriteLine()
             Next
         End Sub
     End Module
