@@ -1,9 +1,11 @@
-﻿Imports System.IO
+﻿Imports System.Collections.Specialized
+Imports System.IO
 Imports System.Net.Sockets
 Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.System.Configuration
 Imports SMRUCC.WebCloud.HTTPInternal.Core
@@ -28,6 +30,10 @@ Module Program
 
 End Module
 
+''' <summary>
+''' Rweb is not design for general web programming, it is 
+''' design for running a background data task.
+''' </summary>
 Public Class Rweb : Inherits HttpServer
 
     Dim Rweb As String
@@ -47,16 +53,27 @@ Public Class Rweb : Inherits HttpServer
             If Not Rscript.FileExists Then
                 Call p.writeFailure(404, "file not found!")
             Else
-                Call runRweb(Rscript, response)
+                Call runRweb(Rscript, request.URLParameters, response)
             End If
         End Using
     End Sub
 
-    Private Sub runRweb(Rscript As String, response As HttpResponse)
+    Private Sub runRweb(Rscript As String, args As NameValueCollection, response As HttpResponse)
         Using output As New MemoryStream(), Rstd_out As New StreamWriter(output)
             Dim result As Object
             Dim code As Integer
             Dim content_type As String
+            Dim http As NamedValue(Of Object)() = args _
+                .ToDictionary(True) _
+                .VA _
+                .Select(Function(t)
+                            Return New NamedValue(Of Object) With {
+                                .Name = t.Key,
+                                .Value = t.Value,
+                                .Description = t.Value
+                            }
+                        End Function) _
+                .ToArray
 
             ' run rscript
             Using R As RInterpreter = RInterpreter _
@@ -69,7 +86,7 @@ Public Class Rweb : Inherits HttpServer
                     Call R.LoadLibrary(packageName:=pkgName, silent:=True)
                 Next
 
-                result = R.Source(Rscript)
+                result = R.Source(Rscript, http)
                 code = Rserve.Rscript.handleResult(result, R.globalEnvir, Nothing)
 
                 If R.globalEnvir.stdout.recommendType Is Nothing Then
