@@ -70,15 +70,13 @@ Namespace Runtime
             Return env.parent?.ToString & " :> " & env.stackFrame.Method.ToString
         End Function
 
-        Public Function CreateMagicScriptSymbol(filepath As String, R As RInterpreter) As list
-            Return New list With {
-                .slots = New Dictionary(Of String, Object) From {
-                    {"dir", filepath.ParentPath},
-                    {"file", filepath.FileName},
-                    {"fullName", filepath.GetFullPath},
-                    {"startup.time", Now.ToString},
-                    {"debug", R.debug}
-                }
+        Public Function CreateMagicScriptSymbol(filepath As String, R As RInterpreter) As MagicScriptSymbol
+            Return New MagicScriptSymbol With {
+                .dir = filepath.ParentPath,
+                .file = filepath.FileName,
+                .fullName = filepath.GetFullPath,
+                .startup_time = Now.ToString,
+                .debug = R.debug
             }
         End Function
     End Module

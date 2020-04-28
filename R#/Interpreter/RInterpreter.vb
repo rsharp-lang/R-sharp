@@ -70,7 +70,7 @@ Imports stdNum = System.Math
 
 Namespace Interpreter
 
-    Public Class RInterpreter
+    Public Class RInterpreter : Implements IDisposable
 
         ''' <summary>
         ''' Global runtime environment.(全局环境)
@@ -88,6 +88,7 @@ Namespace Interpreter
         ''' 但是在调试模式下面，stop函数则会令程序抛出异常方便开发人员进行错误的定位
         ''' </remarks>
         Public Property debug As Boolean = False
+        Public Property silent As Boolean = False
 
         ''' <summary>
         ''' 是否在严格模式下运行R#脚本？默认为严格模式，即：
@@ -134,6 +135,11 @@ Namespace Interpreter
             ' config R# interpreter engine
             [strict] = envirConf.strict
         End Sub
+
+        Public Function RedirectOutput(out As StreamWriter) As RInterpreter
+            Call globalEnvir.RedirectOutput(out)
+            Return Me
+        End Function
 
         Public Sub PrintMemory(Optional dev As TextWriter = Nothing)
             Dim table$()() = globalEnvir _
@@ -347,12 +353,12 @@ Namespace Interpreter
             ' the environment
             ' 
             ' let !script = list(dir = dirname, file = filename, fullName = filepath)
-            Dim script As list = CreateMagicScriptSymbol(filepath, R:=Me)
+            Dim script As MagicScriptSymbol = CreateMagicScriptSymbol(filepath, R:=Me)
             Dim result As Object
 
             If filepath.FileExists Then
                 arguments = arguments _
-                    .JoinIterates(New NamedValue(Of Object)("!script", script)) _
+                    .JoinIterates(New NamedValue(Of Object)("!script", New vbObject(script))) _
                     .ToArray
                 result = RunInternal(Rscript.FromFile(filepath), arguments)
             Else
@@ -393,5 +399,34 @@ Namespace Interpreter
         Public Shared Function FromEnvironmentConfiguration(configs As String) As RInterpreter
             Return New RInterpreter(New Options(configs))
         End Function
+
+        Private disposedValue As Boolean
+
+        Protected Overridable Sub Dispose(disposing As Boolean)
+            If Not disposedValue Then
+                If disposing Then
+                    ' TODO: dispose managed state (managed objects)
+                    Call warnings.Clear()
+                    Call globalEnvir.Dispose()
+                End If
+
+                ' TODO: free unmanaged resources (unmanaged objects) and override finalizer
+                ' TODO: set large fields to null
+                disposedValue = True
+            End If
+        End Sub
+
+        ' ' TODO: override finalizer only if 'Dispose(disposing As Boolean)' has code to free unmanaged resources
+        ' Protected Overrides Sub Finalize()
+        '     ' Do not change this code. Put cleanup code in 'Dispose(disposing As Boolean)' method
+        '     Dispose(disposing:=False)
+        '     MyBase.Finalize()
+        ' End Sub
+
+        Public Sub Dispose() Implements IDisposable.Dispose
+            ' Do not change this code. Put cleanup code in 'Dispose(disposing As Boolean)' method
+            Dispose(disposing:=True)
+            GC.SuppressFinalize(Me)
+        End Sub
     End Class
 End Namespace

@@ -43,6 +43,7 @@
 
 #End Region
 
+Imports System.IO
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
@@ -60,6 +61,8 @@ Namespace Runtime
         Public ReadOnly Property options As Options
         Public ReadOnly Property packages As PackageManager
         Public ReadOnly Property Rscript As RInterpreter
+        Public ReadOnly Property stdout As RContentOutput
+
         Public ReadOnly Property debugMode As Boolean
             Get
                 Return Rscript.debug
@@ -77,6 +80,11 @@ Namespace Runtime
             Me.packages = New PackageManager(options)
             Me.global = Me
             Me.Rscript = scriptHost
+            Me.stdout = New RContentOutput(App.StdOut.DefaultValue)
+        End Sub
+
+        Public Sub RedirectOutput(out As StreamWriter)
+            _stdout = New RContentOutput(out)
         End Sub
 
         Public Function LoadLibrary(packageName As String, Optional silent As Boolean = False) As Message
@@ -85,7 +93,7 @@ Namespace Runtime
 
             If Not packageName Like packages.loadedPackages Then
                 If Not silent Then
-                    Call Console.WriteLine($"Loading required package: {packageName}")
+                    Call _stdout.WriteLine($"Loading required package: {packageName}")
                 End If
             Else
                 Return Nothing
@@ -113,13 +121,13 @@ Namespace Runtime
                     packageName = package.NamespaceEntry.Namespace
                 End If
 
-                Call Console.WriteLine($"Attaching package: '{packageName}'")
-                Call Console.WriteLine()
-                Call Console.WriteLine($"The following object is masked from 'package:{packageName}':")
-                Call Console.WriteLine()
+                Call _stdout.WriteLine($"Attaching package: '{packageName}'")
+                Call _stdout.WriteLine()
+                Call _stdout.WriteLine($"The following object is masked from 'package:{packageName}':")
+                Call _stdout.WriteLine()
 
-                Call printer.printContentArray(masked, ", ", "    ")
-                Call Console.WriteLine()
+                Call printer.printContentArray(masked, ", ", "    ", Me)
+                Call _stdout.WriteLine()
             End If
 
             Return Nothing
@@ -137,5 +145,13 @@ Namespace Runtime
 
             Return message
         End Function
+
+        Protected Overrides Sub Dispose(disposing As Boolean)
+            If Not stdout Is Nothing Then
+                Call stdout.Flush()
+            End If
+
+            MyBase.Dispose(disposing)
+        End Sub
     End Class
 End Namespace

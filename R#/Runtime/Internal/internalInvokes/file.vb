@@ -374,11 +374,19 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="sep">character string. A string to be written to the connection after each line of text.</param>
         ''' <returns></returns>
         <ExportAPI("writeLines")>
-        Public Function writeLines(text$(), Optional con$ = Nothing, Optional sep$ = vbCrLf) As Object
+        Public Function writeLines(text$(), Optional con$ = Nothing, Optional sep$ = vbCrLf, Optional env As Environment = Nothing) As Object
             If con.StringEmpty Then
+                Dim stdOut As Action(Of String)
+
+                If env.globalEnvironment.stdout Is Nothing Then
+                    stdOut = AddressOf Console.WriteLine
+                Else
+                    stdOut = AddressOf env.globalEnvironment.stdout.WriteLine
+                End If
+
                 Call text.AsObjectEnumerator _
                     .JoinBy(sep) _
-                    .DoCall(AddressOf Console.WriteLine)
+                    .DoCall(stdOut)
             Else
                 Call text.AsObjectEnumerator _
                     .JoinBy(sep) _

@@ -838,8 +838,10 @@ Namespace Runtime.Internal.Invokes
 
             If Not file.StringEmpty Then
                 Call strs.SaveTo(file)
-            Else
+            ElseIf env.globalEnvironment.stdout Is Nothing Then
                 Call Console.Write(strs)
+            Else
+                Call env.globalEnvironment.stdout.Write(strs)
             End If
 
             Return strs
@@ -862,7 +864,8 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("str")>
         Public Function str(<RRawVectorArgument> [object] As Object, Optional env As Environment = Nothing) As Object
-            Call Console.WriteLine(reflector.GetStructure([object], env.globalEnvironment, " "))
+            Dim structure$ = reflector.GetStructure([object], env.globalEnvironment, " ")
+            Call env.globalEnvironment.stdout.WriteLine([structure])
             Return Nothing
         End Function
 
@@ -956,22 +959,22 @@ Namespace Runtime.Internal.Invokes
         ''' easily added for new classes.
         ''' </summary>
         ''' <param name="x">an object used to select a method.</param>
-        ''' <param name="envir"></param>
+        ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("print")>
-        Public Function print(<RRawVectorArgument> x As Object, envir As Environment) As Object
+        Public Function print(<RRawVectorArgument> x As Object, env As Environment) As Object
             If x Is Nothing Then
-                Call Console.WriteLine("NULL")
+                Call env.globalEnvironment.stdout.WriteLine("NULL")
 
                 ' just returns nothing literal
                 Return Nothing
             Else
-                Return doPrintInternal(x, x.GetType, envir)
+                Return doPrintInternal(x, x.GetType, env)
             End If
         End Function
 
-        Private Function doPrintInternal(x As Object, type As Type, envir As Environment) As Object
-            Dim globalEnv As GlobalEnvironment = envir.globalEnvironment
+        Private Function doPrintInternal(x As Object, type As Type, env As Environment) As Object
+            Dim globalEnv As GlobalEnvironment = env.globalEnvironment
             Dim maxPrint% = globalEnv.options.maxPrint
 
             If type Is GetType(RMethodInfo) Then
@@ -980,12 +983,12 @@ Namespace Runtime.Internal.Invokes
                     .packageDocs _
                     .PrintHelp(x)
             ElseIf type Is GetType(DeclareNewFunction) Then
-                Call Console.WriteLine(x.ToString)
+                Call env.globalEnvironment.stdout.WriteLine(x.ToString)
             ElseIf type.ImplementInterface(GetType(RPrint)) Then
                 Try
                     Call markdown.DoPrint(DirectCast(x, RPrint).GetPrintContent, 0)
                 Catch ex As Exception
-                    Return Internal.debug.stop(ex, envir)
+                    Return Internal.debug.stop(ex, env)
                 End Try
             ElseIf type Is GetType(Message) Then
                 Return x
