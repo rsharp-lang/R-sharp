@@ -80,14 +80,19 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim arg As String = Runtime.getFirst(name.Evaluate(envir))
             Dim value As Object
+            Dim arguments = App.CommandLine
 
-            If App.CommandLine.ContainsParameter(arg) Then
-                value = CType(App.CommandLine(arg), String)
+            If arguments.ContainsParameter(arg) OrElse arguments.HavebFlag(arg) Then
+                value = CType(arguments(arg), String)
             Else
                 Dim symbol As Symbol = envir.FindSymbol(arg)
 
                 If symbol Is Nothing Then
-                    value = Nothing
+                    ' 20200428
+                    ' 在这里为了保持和之前的行为一致
+                    ' 之前的版本之中，查找失败的命令行参数返回false
+                    ' 在这里将无法查找到的都设置为false 
+                    value = False
                 Else
                     value = symbol.value
                 End If
