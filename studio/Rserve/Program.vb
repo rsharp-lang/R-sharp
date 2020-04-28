@@ -6,6 +6,7 @@ Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.System.Configuration
@@ -71,9 +72,8 @@ Public Class Rweb : Inherits HttpServer
             Dim result As Object
             Dim code As Integer
             Dim content_type As String
-            Dim http As NamedValue(Of Object)() = args _
-                .ToDictionary(allStrings:=False) _
-                .VA _
+            Dim raw_args As Dictionary(Of String, String) = args.ToDictionary(allStrings:=False)
+            Dim http As NamedValue(Of Object)() = raw_args _
                 .Select(Function(t)
                             Return New NamedValue(Of Object) With {
                                 .Name = t.Key,
@@ -82,6 +82,8 @@ Public Class Rweb : Inherits HttpServer
                             }
                         End Function) _
                 .ToArray
+
+            Call raw_args.GetJson.__DEBUG_ECHO
 
             ' run rscript
             Using R As RInterpreter = RInterpreter _
