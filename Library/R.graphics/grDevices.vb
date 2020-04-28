@@ -272,7 +272,7 @@ break:
 
         Static printHelp As Boolean = False
 
-        If Not printHelp Then
+        If (Not env.globalEnvironment.Rscript.silent) AndAlso (Not printHelp) Then
             printHelp = True
 
             GetType(grDevices).Assembly _

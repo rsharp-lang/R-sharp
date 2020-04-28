@@ -88,6 +88,7 @@ Namespace Interpreter
         ''' 但是在调试模式下面，stop函数则会令程序抛出异常方便开发人员进行错误的定位
         ''' </remarks>
         Public Property debug As Boolean = False
+        Public Property silent As Boolean = False
 
         ''' <summary>
         ''' 是否在严格模式下运行R#脚本？默认为严格模式，即：

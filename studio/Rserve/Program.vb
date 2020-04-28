@@ -63,6 +63,8 @@ Public Class Rweb : Inherits HttpServer
                 .FromEnvironmentConfiguration(ConfigFile.localConfigs) _
                 .RedirectOutput(Rstd_out)
 
+                R.silent = True
+
                 For Each pkgName As String In R.configFile.GetStartupLoadingPackages
                     Call R.LoadLibrary(packageName:=pkgName, silent:=True)
                 Next
