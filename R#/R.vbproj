@@ -389,6 +389,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Interpreter\ExecuteEngine\Expression.vb" />
+    <Compile Include="Runtime\Environment\RContentOutput.vb" />
     <Compile Include="Runtime\MagicScriptSymbol.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\env.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\help.vb" />

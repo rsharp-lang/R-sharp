@@ -48,8 +48,6 @@
 
 #End Region
 
-Imports System.Drawing
-Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
@@ -198,56 +196,6 @@ Namespace Runtime
             Me.parent = globalEnv
             Me.global = globalEnv
             Me.stackFrame = globalStackFrame
-        End Sub
-
-        ''' <summary>
-        ''' Writes a string followed by a line terminator to the text string or stream.
-        ''' </summary>
-        ''' <param name="message">
-        ''' The string to write. If value is null, only the line terminator is written.
-        ''' </param>
-        Public Sub WriteLine(Optional message As String = Nothing)
-            If globalEnvironment.stdout Is Nothing Then
-                If message Is Nothing Then
-                    Call Console.WriteLine()
-                Else
-                    Call Console.WriteLine(message)
-                End If
-            Else
-                If message Is Nothing Then
-                    Call globalEnvironment.stdout.WriteLine()
-                Else
-                    Call globalEnvironment.stdout.WriteLine(message)
-                End If
-            End If
-        End Sub
-
-        Public Sub Write(message As String)
-            If globalEnvironment.stdout Is Nothing Then
-                Call Console.Write(message)
-            Else
-                Call globalEnvironment.stdout.Write(message)
-            End If
-        End Sub
-
-        Public Sub Write(data As IEnumerable(Of Byte))
-            If globalEnvironment.stdout Is Nothing Then
-                Call CType(App.StdOut, StreamWriter).Write(data.ToArray)
-            Else
-                Call globalEnvironment.stdout.Write(data.ToArray)
-            End If
-        End Sub
-
-        Public Sub Write(image As Image)
-            Using buffer As New MemoryStream
-                Call image.Save(buffer, Imaging.ImageFormat.Png)
-
-                If globalEnvironment.stdout Is Nothing Then
-                    Call CType(App.StdOut, StreamWriter).Write(buffer.ToArray)
-                Else
-                    Call globalEnvironment.stdout.Write(buffer.ToArray)
-                End If
-            End Using
         End Sub
 
         Public Sub AddMessage(message As Object, Optional level As MSG_TYPES = MSG_TYPES.WRN)
