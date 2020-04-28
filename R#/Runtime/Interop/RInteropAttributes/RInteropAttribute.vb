@@ -87,8 +87,8 @@ Namespace Runtime.Interop
     Public Class RByRefValueAssignAttribute : Inherits RInteropAttribute
     End Class
 
-    <AttributeUsage(AttributeTargets.Parameter, AllowMultiple:=False, Inherited:=True)>
-    Public Class RParameterNameAliasAttribute : Inherits RInteropAttribute
+    <AttributeUsage(AttributeTargets.Parameter Or AttributeTargets.Property, AllowMultiple:=False, Inherited:=True)>
+    Public Class RNameAliasAttribute : Inherits RInteropAttribute
 
         Public ReadOnly Property [alias] As String
 

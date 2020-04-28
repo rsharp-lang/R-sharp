@@ -99,6 +99,10 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
         Using pkgMgr As New PackageManager(config)
             For Each file As String In {"R.base.dll", "R.graph.dll", "R.graphics.dll", "R.math.dll", "R.plot.dll"}
+                If Not file.FileExists Then
+                    file = "Library/" & file
+                End If
+
                 Call pkgMgr.InstallLocals(dllFile:=file)
                 Call pkgMgr.Flush()
             Next

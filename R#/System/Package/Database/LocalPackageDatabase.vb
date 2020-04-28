@@ -87,6 +87,7 @@ Namespace System.Package
         ''' <returns></returns>
         Public Function FindPackage(packageName As String, ByRef exception As Exception) As Package
             Dim entry As PackageLoaderEntry = packages.items _
+                .SafeQuery _
                 .Where(Function(pkg)
                            Return pkg.namespace = packageName
                        End Function) _
