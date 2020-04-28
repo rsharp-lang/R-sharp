@@ -15,10 +15,10 @@ Module Program
     End Function
 
     <ExportAPI("--start")>
-    <Usage("--start --port 7452 --Rweb <directory> [--n_threads <max_threads, default=8>]")>
+    <Usage("--start [--port <port number, default=7452> --Rweb <directory, default=./Rweb> --n_threads <max_threads, default=8>]")>
     Public Function start(args As CommandLine) As Integer
-        Dim port As Integer = args <= "--port"
-        Dim Rweb As String = args <= "--Rweb"
+        Dim port As Integer = args("--port") Or 7452
+        Dim Rweb As String = args("--Rweb") Or App.CurrentDirectory & "/Rweb"
         Dim n_threads As Integer = args("--n_threads") Or 8
 
         Using http As New Rweb(Rweb, port, threads:=n_threads)
