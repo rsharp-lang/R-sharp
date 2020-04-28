@@ -101,7 +101,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             If name.isException Then
                 Return name
             Else
-                Return New CommandLineArgument(name.expression)
+                Return New ArgumentValue(name.expression)
             End If
         End Function
     End Module

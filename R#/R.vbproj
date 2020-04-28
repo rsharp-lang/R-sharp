@@ -326,7 +326,7 @@
     <Compile Include="Interpreter\Syntax\SyntaxResult.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\ByRefFunctionCall.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CLI\CommandLineArgument.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CLI\ArgumentValue.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\AppendOperator.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\ModeOf.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryOrExpression.vb" />
