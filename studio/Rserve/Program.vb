@@ -56,6 +56,7 @@ Public Class Rweb : Inherits HttpServer
         Using output As New MemoryStream(), Rstd_out As New StreamWriter(output)
             Dim result As Object
             Dim code As Integer
+            Dim content_type As String
 
             ' run rscript
             Using R As RInterpreter = RInterpreter _
@@ -68,6 +69,12 @@ Public Class Rweb : Inherits HttpServer
 
                 result = R.Source(Rscript)
                 code = Rserve.Rscript.handleResult(result, R.globalEnvir, Nothing)
+
+                If R.globalEnvir.stdout.recommendType Is Nothing Then
+                    content_type = "text/html"
+                Else
+                    content_type = R.globalEnvir.stdout.recommendType
+                End If
             End Using
 
             Call Rstd_out.Flush()
@@ -75,7 +82,7 @@ Public Class Rweb : Inherits HttpServer
             If code <> 0 Then
                 Call response.WriteError(code, Encoding.UTF8.GetString(output.ToArray))
             Else
-                Call response.WriteHeader("application/octet-stream", output.Length)
+                Call response.WriteHeader(content_type, output.Length)
                 Call response.Write(output.ToArray)
             End If
         End Using
