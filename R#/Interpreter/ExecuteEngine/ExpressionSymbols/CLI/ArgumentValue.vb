@@ -92,7 +92,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
                     ' 在这里为了保持和之前的行为一致
                     ' 之前的版本之中，查找失败的命令行参数返回false
                     ' 在这里将无法查找到的都设置为false 
-                    value = False
+                    value = CType(arguments(arg), String)
                 Else
                     value = symbol.value
                 End If
