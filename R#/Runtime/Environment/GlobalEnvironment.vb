@@ -61,7 +61,7 @@ Namespace Runtime
         Public ReadOnly Property options As Options
         Public ReadOnly Property packages As PackageManager
         Public ReadOnly Property Rscript As RInterpreter
-        Public ReadOnly Property stdout As StreamWriter
+        Public ReadOnly Property stdout As RContentOutput
 
         Public ReadOnly Property debugMode As Boolean
             Get
@@ -80,10 +80,11 @@ Namespace Runtime
             Me.packages = New PackageManager(options)
             Me.global = Me
             Me.Rscript = scriptHost
+            Me.stdout = New RContentOutput(App.StdOut.DefaultValue)
         End Sub
 
         Public Sub RedirectOutput(out As StreamWriter)
-            _stdout = out
+            _stdout = New RContentOutput(out)
         End Sub
 
         Public Function LoadLibrary(packageName As String, Optional silent As Boolean = False) As Message
@@ -92,7 +93,7 @@ Namespace Runtime
 
             If Not packageName Like packages.loadedPackages Then
                 If Not silent Then
-                    Call WriteLine($"Loading required package: {packageName}")
+                    Call _stdout.WriteLine($"Loading required package: {packageName}")
                 End If
             Else
                 Return Nothing
@@ -120,13 +121,13 @@ Namespace Runtime
                     packageName = package.NamespaceEntry.Namespace
                 End If
 
-                Call WriteLine($"Attaching package: '{packageName}'")
-                Call WriteLine()
-                Call WriteLine($"The following object is masked from 'package:{packageName}':")
-                Call WriteLine()
+                Call _stdout.WriteLine($"Attaching package: '{packageName}'")
+                Call _stdout.WriteLine()
+                Call _stdout.WriteLine($"The following object is masked from 'package:{packageName}':")
+                Call _stdout.WriteLine()
 
                 Call printer.printContentArray(masked, ", ", "    ", Me)
-                Call WriteLine()
+                Call _stdout.WriteLine()
             End If
 
             Return Nothing
