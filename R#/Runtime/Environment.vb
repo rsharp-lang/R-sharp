@@ -198,6 +198,20 @@ Namespace Runtime
             Me.stackFrame = globalStackFrame
         End Sub
 
+        ''' <summary>
+        ''' Writes a string followed by a line terminator to the text string or stream.
+        ''' </summary>
+        ''' <param name="message">
+        ''' The string to write. If value is null, only the line terminator is written.
+        ''' </param>
+        Public Sub WriteLine(message As String)
+            If globalEnvironment.stdout Is Nothing Then
+                Call Console.WriteLine(message)
+            Else
+                Call globalEnvironment.stdout.WriteLine(message)
+            End If
+        End Sub
+
         Public Sub AddMessage(message As Object, Optional level As MSG_TYPES = MSG_TYPES.WRN)
             Internal.Invokes _
                 .CreateMessageInternal(message, Me, level) _
