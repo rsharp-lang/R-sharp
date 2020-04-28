@@ -10,6 +10,11 @@ Namespace Runtime
     Public Class RContentOutput
 
         Public ReadOnly Property recommendType As String
+        Public ReadOnly Property stream As Stream
+            Get
+                Return stdout.BaseStream
+            End Get
+        End Property
 
         Dim stdout As StreamWriter
 
