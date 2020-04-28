@@ -1,5 +1,6 @@
 ﻿Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports SMRUCC.WebCloud.HTTPInternal.Platform
 
 Module Program
 
@@ -13,7 +14,14 @@ Module Program
         Dim port As Integer = args <= "--port"
         Dim Rweb As String = args <= "--Rweb"
         Dim n_threads As Integer = args("--n_threads") Or 8
+        Dim http As New PlatformEngine(
+            HOME, port,
+            nullExists:=True,
+            threads:=n_threads,
+            cache:=False
+        )
 
+        Return http.Run()
     End Function
 
 End Module
