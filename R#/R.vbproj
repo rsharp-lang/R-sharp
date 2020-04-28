@@ -429,13 +429,13 @@
     <Compile Include="Runtime\Interop\RInteropAttributes\RSuppressPrintAttribute.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RListObjectArgumentAttribute.vb" />
     <Compile Include="Runtime\Interop\RReturn.vb" />
-    <Compile Include="Runtime\EnvironmentExtensions.vb" />
+    <Compile Include="Runtime\Environment\EnvironmentExtensions.vb" />
     <Compile Include="Runtime\RTypeExtensions.vb" />
     <Compile Include="System\Components\ZipFolder.vb" />
     <Compile Include="System\Config\Defaults.vb" />
     <Compile Include="Runtime\System\Rscript.vb" />
     <Compile Include="Runtime\System\Interface\RNames.vb" />
-    <Compile Include="Runtime\GlobalEnvironment.vb" />
+    <Compile Include="Runtime\Environment\GlobalEnvironment.vb" />
     <Compile Include="System\Config\Options.vb" />
     <Compile Include="System\Config\ConfigFile.vb" />
     <Compile Include="Runtime\System\Interface\RPrint.vb" />
@@ -467,7 +467,7 @@
     <Compile Include="Runtime\Core.vb" />
     <Compile Include="Runtime\Interop\RType.vb" />
     <Compile Include="Runtime\Extensions.vb" />
-    <Compile Include="Runtime\Environment.vb" />
+    <Compile Include="Runtime\Environment\Environment.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\base.vb" />
     <Compile Include="Runtime\Internal\invoke.vb" />
     <Compile Include="Runtime\Internal\objects\dataset\vector.vb" />

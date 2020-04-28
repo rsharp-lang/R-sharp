@@ -48,6 +48,8 @@
 
 #End Region
 
+Imports System.Drawing
+Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
@@ -226,6 +228,26 @@ Namespace Runtime
             Else
                 Call globalEnvironment.stdout.Write(message)
             End If
+        End Sub
+
+        Public Sub Write(data As IEnumerable(Of Byte))
+            If globalEnvironment.stdout Is Nothing Then
+                Call CType(App.StdOut, StreamWriter).Write(data.ToArray)
+            Else
+                Call globalEnvironment.stdout.Write(data.ToArray)
+            End If
+        End Sub
+
+        Public Sub Write(image As Image)
+            Using buffer As New MemoryStream
+                Call image.Save(buffer, Imaging.ImageFormat.Png)
+
+                If globalEnvironment.stdout Is Nothing Then
+                    Call CType(App.StdOut, StreamWriter).Write(buffer.ToArray)
+                Else
+                    Call globalEnvironment.stdout.Write(buffer.ToArray)
+                End If
+            End Using
         End Sub
 
         Public Sub AddMessage(message As Object, Optional level As MSG_TYPES = MSG_TYPES.WRN)
