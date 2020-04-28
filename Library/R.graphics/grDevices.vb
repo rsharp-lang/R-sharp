@@ -282,13 +282,25 @@ break:
                 .ToArray
 
                 If .Length = 1 Then
-                    list = Designer.GetColors(CStr(.GetValue(Scan0)), n)
+                    If n > 0 Then
+                        list = Designer.GetColors(CStr(.GetValue(Scan0)), n)
+                    Else
+                        list = Designer.GetColors(CStr(.GetValue(Scan0)))
+                    End If
                 Else
-                    list = Designer.GetColors(.JoinBy(","), n)
+                    If n > 0 Then
+                        list = Designer.GetColors(.JoinBy(","), n)
+                    Else
+                        list = Designer.GetColors(.JoinBy(","))
+                    End If
                 End If
             End With
         ElseIf term.GetType Is GetType(String) Then
-            list = Designer.GetColors(CStr(term), n)
+            If n > 0 Then
+                list = Designer.GetColors(CStr(term), n)
+            Else
+                list = Designer.GetColors(CStr(term))
+            End If
         Else
             Return REnv.debug.stop(New InvalidProgramException(term.GetType.FullName), env)
         End If

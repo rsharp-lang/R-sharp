@@ -159,13 +159,25 @@ Namespace Runtime.Internal.Invokes
                 .ToArray
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <param name="na_rm">a logical indicating whether missing values should be removed.</param>
+        ''' <returns></returns>
         <ExportAPI("max")>
-        Public Function max(x As Array) As Double
+        Public Function max(x As Array, Optional na_rm As Boolean = False) As Double
             Return Runtime.asVector(Of Double)(x).AsObjectEnumerator(Of Double).Max
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <param name="na_rm">a logical indicating whether missing values should be removed.</param>
+        ''' <returns></returns>
         <ExportAPI("min")>
-        Public Function min(x As Array) As Double
+        Public Function min(x As Array, Optional na_rm As Boolean = False) As Double
             Return Runtime.asVector(Of Double)(x).AsObjectEnumerator(Of Double).Min
         End Function
 
@@ -185,6 +197,11 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' abs(x) computes the absolute value of x
+        ''' </summary>
+        ''' <param name="x">a numeric Or complex vector Or array.</param>
+        ''' <returns></returns>
         <ExportAPI("abs")>
         Public Function abs(x As Array) As Double()
             Return asVector(Of Double)(x) _
@@ -221,11 +238,27 @@ Namespace Runtime.Internal.Invokes
             }
         End Function
 
+        ''' <summary>
+        ''' set.seed is the recommended way to specify seeds.
+        ''' </summary>
+        ''' <param name="seed">a single value, interpreted as an integer, or NULL (see ‘Details’).</param>
+        ''' <remarks>
+        ''' set.seed returns NULL, invisibly.
+        ''' </remarks>
         <ExportAPI("set.seed")>
         Public Sub set_seed(seed As Integer)
             randf.SetSeed(seed)
         End Sub
 
+        ''' <summary>
+        ''' runif generates random deviates.
+        ''' </summary>
+        ''' <param name="n">
+        ''' number of observations. If length(n) > 1, the length is taken to be the number required.
+        ''' </param>
+        ''' <param name="min">lower And upper limits of the distribution. Must be finite.</param>
+        ''' <param name="max">lower And upper limits of the distribution. Must be finite.</param>
+        ''' <returns></returns>
         <ExportAPI("runif")>
         Public Function runif(n$, Optional min# = 0, Optional max# = 1) As Double()
             Dim rnd As Random = randf.seeds

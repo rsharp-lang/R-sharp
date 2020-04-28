@@ -144,6 +144,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 Return getByIndex(obj, indexer, envir)
             ElseIf indexType = SymbolIndexers.dataframeColumns Then
                 Return getColumn(obj, indexer, envir)
+            ElseIf indexType = SymbolIndexers.dataframeRows Then
+                Return DirectCast(obj, dataframe).sliceByRow(indexer)
             Else
                 Return Internal.debug.stop(New NotImplementedException(indexType.ToString), envir)
             End If

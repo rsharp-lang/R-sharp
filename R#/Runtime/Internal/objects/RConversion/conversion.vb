@@ -313,6 +313,34 @@ Namespace Runtime.Internal.Object.Converts
                 Return 0
             ElseIf obj.GetType.ImplementInterface(GetType(IDictionary)) Then
                 Return Runtime.CTypeOfList(Of Long)(obj, env)
+            ElseIf obj.GetType.IsArray Then
+                Dim type As Type = MeasureRealElementType(obj)
+
+                If type Is GetType(String) Then
+                    ' 20200427 try to fix bugs on linux platform 
+                    ' 
+                    ' Error in <globalEnvironment> -> InitializeEnvironment -> str_pad -> str_pad -> as.integer -> as.integer
+                    ' 1. TargetInvocationException: Exception has been thrown by the target of an invocation.
+                    ' 2. DllNotFoundException: kernel32
+                    ' 3. stackFrames: 
+                    ' at System.Reflection.MonoMethod.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x00083] in <47d423fd1d4342b9832b2fe1f5d431eb>:0 
+                    ' at System.Reflection.MethodBase.Invoke (System.Object obj, System.Object[] parameters) [0x00000] in <47d423fd1d4342b9832b2fe1f5d431eb>:0 
+                    ' at SMRUCC.Rsharp.Runtime.Interop.RMethodInfo.Invoke (System.Object[] parameters, SMRUCC.Rsharp.Runtime.Environment env) [0x00073] in <f2d41b7896b5443b8d9c40b31555c1b7>:0 
+
+                    ' R# source: mapId <- Call str_pad(Call as.integer(Call /\d+/(&mapId)), 5, left, 0)
+
+                    ' RConversion.R#_interop::.as.integer at REnv.dll:line <unknown>
+                    ' SMRUCC/R#.call_function.as.integer at renderMap_CLI.R:line 17
+                    ' stringr.R#_interop::.str_pad at REnv.dll:line <unknown>
+                    ' SMRUCC/R#.call_function.str_pad at renderMap_CLI.R:line 17
+                    ' SMRUCC/R#.n/a.InitializeEnvironment at renderMap_CLI.R:line 0
+                    ' SMRUCC/R#.global.<globalEnvironment> at <globalEnvironment>:line n/a
+                    Return DirectCast(Runtime.asVector(Of String)(obj), String()) _
+                        .Select(AddressOf Long.Parse) _
+                        .ToArray
+                Else
+                    Return Runtime.asVector(Of Long)(obj)
+                End If
             Else
                 Return Runtime.asVector(Of Long)(obj)
             End If

@@ -48,6 +48,7 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math.Distributions
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Prcomp
@@ -56,6 +57,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 
 <Package("stats")>
 Module stats
@@ -150,8 +152,8 @@ Module stats
 
         Dim matrix As Double()()
 
-        If TypeOf x Is dataframe Then
-            With DirectCast(x, dataframe)
+        If TypeOf x Is Rdataframe Then
+            With DirectCast(x, Rdataframe)
                 matrix = .nrows _
                     .Sequence _
                     .Select(Function(i)
@@ -167,6 +169,15 @@ Module stats
         Dim PCA As New PCA(matrix, center, scale)
 
         Return PCA
+    End Function
+
+    <ExportAPI("dist")>
+    Public Function dist(<RRawVectorArgument> x As Object,
+                         Optional method$ = "euclidean",
+                         Optional diag As Boolean = False,
+                         Optional upper As Boolean = False,
+                         Optional p% = 2) As DataSet()
+
     End Function
 End Module
 

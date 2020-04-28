@@ -69,6 +69,14 @@ Namespace Runtime.Internal.Invokes
     ''' </summary>
     Public Module file
 
+        ''' <summary>
+        ''' Extract File Information
+        ''' 
+        ''' Utility function to extract information about files on the user's file systems.
+        ''' </summary>
+        ''' <param name="files"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("file.info")>
         Public Function fileinfo(files As String(), Optional env As Environment = Nothing) As Object
             If files.IsNullOrEmpty Then
@@ -177,6 +185,19 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' Return the R Home Directory
+        ''' 
+        ''' Return the R home directory, or the full path to a 
+        ''' component of the R installation.
+        ''' 
+        ''' The R home directory is the top-level directory of the R installation being run.
+        '''
+        ''' The R home directory Is often referred To As R_HOME, And Is the value Of an 
+        ''' environment variable Of that name In an R session. It can be found outside 
+        ''' an R session by R RHOME.
+        ''' </summary>
+        ''' <returns></returns>
         <ExportAPI("R.home")>
         Public Function Rhome() As String
             Return GetType(file).Assembly.Location.ParentPath
