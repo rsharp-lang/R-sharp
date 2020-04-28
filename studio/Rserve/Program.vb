@@ -8,6 +8,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.System.Configuration
+Imports SMRUCC.WebCloud.HTTPInternal.AppEngine
 Imports SMRUCC.WebCloud.HTTPInternal.Core
 
 Module Program
@@ -49,6 +50,12 @@ Public Class Rweb : Inherits HttpServer
             ' /<scriptFileName>?...args
             Dim request As New HttpRequest(p)
             Dim Rscript As String = Rweb & "/" & Strings.Trim(request.URL.Split("?"c).FirstOrDefault).Trim("."c, "/"c) & ".R"
+            Dim application As String = "", api As String = "", parameters As String = ""
+            Dim url As String = request.URL
+
+            Call APPEngine.GetParameter(url, application, api, parameters)
+
+            request.URLParameters = parameters.QueryStringParameters
 
             If Not Rscript.FileExists Then
                 Call p.writeFailure(404, "file not found!")
@@ -64,7 +71,7 @@ Public Class Rweb : Inherits HttpServer
             Dim code As Integer
             Dim content_type As String
             Dim http As NamedValue(Of Object)() = args _
-                .ToDictionary(True) _
+                .ToDictionary(allStrings:=False) _
                 .VA _
                 .Select(Function(t)
                             Return New NamedValue(Of Object) With {
