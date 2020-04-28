@@ -47,31 +47,35 @@ Public Class Rweb : Inherits HttpServer
             If Not Rscript.FileExists Then
                 Call p.writeFailure(404, "file not found!")
             Else
-                Using output As New MemoryStream(), Rstd_out As New StreamWriter(output)
-                    Dim result As Object
-                    Dim code As Integer
+                Call runRweb(Rscript, response)
+            End If
+        End Using
+    End Sub
 
-                    ' run rscript
-                    Using R As RInterpreter = RInterpreter _
-                        .FromEnvironmentConfiguration(ConfigFile.localConfigs) _
-                        .RedirectOutput(Rstd_out)
+    Private Sub runRweb(Rscript As String, response As HttpResponse)
+        Using output As New MemoryStream(), Rstd_out As New StreamWriter(output)
+            Dim result As Object
+            Dim code As Integer
 
-                        For Each pkgName As String In R.configFile.GetStartupLoadingPackages
-                            Call R.LoadLibrary(packageName:=pkgName, silent:=True)
-                        Next
+            ' run rscript
+            Using R As RInterpreter = RInterpreter _
+                .FromEnvironmentConfiguration(ConfigFile.localConfigs) _
+                .RedirectOutput(Rstd_out)
 
-                        result = R.Source(Rscript)
-                        code = Rserve.Rscript.handleResult(result, R.globalEnvir, Nothing)
-                    End Using
+                For Each pkgName As String In R.configFile.GetStartupLoadingPackages
+                    Call R.LoadLibrary(packageName:=pkgName, silent:=True)
+                Next
 
-                    Call Rstd_out.Flush()
+                result = R.Source(Rscript)
+                code = Rserve.Rscript.handleResult(result, R.globalEnvir, Nothing)
+            End Using
 
-                    If code <> 0 Then
-                        Call response.WriteError(code, Encoding.UTF8.GetString(output.ToArray))
-                    Else
-                        Call response.Write(output.ToArray)
-                    End If
-                End Using
+            Call Rstd_out.Flush()
+
+            If code <> 0 Then
+                Call response.WriteError(code, Encoding.UTF8.GetString(output.ToArray))
+            Else
+                Call response.Write(output.ToArray)
             End If
         End Using
     End Sub
