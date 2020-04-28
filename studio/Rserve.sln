@@ -15,7 +15,14 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "R", "..\R#\R.vbproj", "{0C2
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "R-cmd", "R-terminal\R-cmd.vbproj", "{3A35AC34-F313-4F72-89E9-EACCA217BC8D}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rstudio.common", "Rstudio.common\Rstudio.common.shproj", "{14010B90-BC3B-42D9-A52C-30CA537D3C11}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Rstudio.common\Rstudio.common.projitems*{14010b90-bc3b-42d9-a52c-30ca537d3c11}*SharedItemsImports = 13
+		Rstudio.common\Rstudio.common.projitems*{3a35ac34-f313-4f72-89e9-eacca217bc8d}*SharedItemsImports = 4
+		Rstudio.common\Rstudio.common.projitems*{6fc88360-095e-460c-b659-700719070b84}*SharedItemsImports = 4
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		BioDeep_database|Any CPU = BioDeep_database|Any CPU
 		BioDeep_database|x64 = BioDeep_database|x64
@@ -820,6 +827,7 @@ Global
 		{FBFC1455-B232-4F16-AFC7-4054A8B864AB} = {6DBCAF55-1067-45FD-B821-622863CA900F}
 		{0C2EB77C-39F2-460D-A3F8-CE905F867637} = {6DBCAF55-1067-45FD-B821-622863CA900F}
 		{3A35AC34-F313-4F72-89E9-EACCA217BC8D} = {6DBCAF55-1067-45FD-B821-622863CA900F}
+		{14010B90-BC3B-42D9-A52C-30CA537D3C11} = {6DBCAF55-1067-45FD-B821-622863CA900F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DA56C6F1-5D7F-4A0B-9EBB-8F723A418AA1}

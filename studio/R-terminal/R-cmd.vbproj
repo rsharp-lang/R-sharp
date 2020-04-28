@@ -305,7 +305,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CLI\CLI.vb" />
-    <Compile Include="Rscript.vb" />
     <Compile Include="Terminal.vb" />
     <Compile Include="Program.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -357,5 +356,6 @@
       <Name>R</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="..\Rstudio.common\Rstudio.common.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
