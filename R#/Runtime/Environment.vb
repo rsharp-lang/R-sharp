@@ -239,12 +239,14 @@ Namespace Runtime
         End Sub
 
         Public Sub Clear()
-            ' 20200304 fix bugs for environment inherits mode
-            If Not symbols Is parent.symbols Then
-                Call symbols.Clear()
-            End If
-            If Not types Is parent.types Then
-                Call types.Clear()
+            If Not parent Is Nothing Then
+                ' 20200304 fix bugs for environment inherits mode
+                If Not symbols Is parent.symbols Then
+                    Call symbols.Clear()
+                End If
+                If Not types Is parent.types Then
+                    Call types.Clear()
+                End If
             End If
 
             Call ifPromise.Clear()
