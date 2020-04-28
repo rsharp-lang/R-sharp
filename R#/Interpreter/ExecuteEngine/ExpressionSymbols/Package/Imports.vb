@@ -153,7 +153,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
             ' 20200213 因为source函数是创建了一个新的环境容器
             ' 所以函数无法被导入到全局环境之中
             ' 在这里imports关键词操作则是使用全局环境
-            Dim script As list = CreateMagicScriptSymbol(result, R)
+            Dim script As MagicScriptSymbol = CreateMagicScriptSymbol(result, R)
             Dim Rscript As Rscript = Rscript.FromFile(result)
             Dim stackframe As New StackFrame With {
                 .File = Rscript.fileName,
@@ -168,9 +168,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
             env.setStackInfo(stackframe)
 
             If env.FindSymbol("!script") Is Nothing Then
-                env.Push("!script", script, [readonly]:=False)
+                env.Push("!script", New vbObject(script), [readonly]:=False)
             Else
-                env.FindSymbol("!script").SetValue(script, env)
+                env.FindSymbol("!script").SetValue(New vbObject(script), env)
             End If
 
             program = Program.CreateProgram(Rscript, R.debug, [error]:=[error])

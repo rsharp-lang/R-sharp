@@ -347,12 +347,12 @@ Namespace Interpreter
             ' the environment
             ' 
             ' let !script = list(dir = dirname, file = filename, fullName = filepath)
-            Dim script As list = CreateMagicScriptSymbol(filepath, R:=Me)
+            Dim script As MagicScriptSymbol = CreateMagicScriptSymbol(filepath, R:=Me)
             Dim result As Object
 
             If filepath.FileExists Then
                 arguments = arguments _
-                    .JoinIterates(New NamedValue(Of Object)("!script", script)) _
+                    .JoinIterates(New NamedValue(Of Object)("!script", New vbObject(script))) _
                     .ToArray
                 result = RunInternal(Rscript.FromFile(filepath), arguments)
             Else
