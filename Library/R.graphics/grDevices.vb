@@ -93,11 +93,13 @@ Public Module grDevices
                 Return DirectCast(graphics, Bitmap).SaveAs(file)
             End If
         ElseIf graphics.GetType.IsInheritsFrom(GetType(GraphicsData)) Then
-            If file.StringEmpty Then
-                DirectCast(graphics, GraphicsData).Save(env.globalEnvironment.stdout.stream)
-            Else
-                Return DirectCast(graphics, GraphicsData).Save(file)
-            End If
+            With DirectCast(graphics, GraphicsData)
+                If file.StringEmpty Then
+                    env.globalEnvironment.stdout.WriteStream(AddressOf .Save, .content_type)
+                Else
+                    Return .Save(file)
+                End If
+            End With
         Else
             Return Internal.debug.stop(New InvalidProgramException($"'{graphics.GetType.Name}' is not a graphics data object!"), env)
         End If

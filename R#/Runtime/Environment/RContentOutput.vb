@@ -71,5 +71,10 @@ Namespace Runtime
                 Call stdout.Write(buffer.ToArray)
             End Using
         End Sub
+
+        Public Sub WriteStream(writeTo As Action(Of Stream), content_type As String)
+            _recommendType = content_type
+            Call writeTo(stream)
+        End Sub
     End Class
 End Namespace
