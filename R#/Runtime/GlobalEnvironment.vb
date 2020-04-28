@@ -43,6 +43,7 @@
 
 #End Region
 
+Imports System.IO
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
@@ -60,6 +61,8 @@ Namespace Runtime
         Public ReadOnly Property options As Options
         Public ReadOnly Property packages As PackageManager
         Public ReadOnly Property Rscript As RInterpreter
+        Public ReadOnly Property stdout As StreamWriter
+
         Public ReadOnly Property debugMode As Boolean
             Get
                 Return Rscript.debug
@@ -77,6 +80,10 @@ Namespace Runtime
             Me.packages = New PackageManager(options)
             Me.global = Me
             Me.Rscript = scriptHost
+        End Sub
+
+        Public Sub RedirectOutput(out As StreamWriter)
+            _stdout = out
         End Sub
 
         Public Function LoadLibrary(packageName As String, Optional silent As Boolean = False) As Message
@@ -137,5 +144,13 @@ Namespace Runtime
 
             Return message
         End Function
+
+        Protected Overrides Sub Dispose(disposing As Boolean)
+            If Not stdout Is Nothing Then
+                Call stdout.Flush()
+            End If
+
+            MyBase.Dispose(disposing)
+        End Sub
     End Class
 End Namespace
