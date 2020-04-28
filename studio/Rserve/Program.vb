@@ -75,6 +75,7 @@ Public Class Rweb : Inherits HttpServer
             If code <> 0 Then
                 Call response.WriteError(code, Encoding.UTF8.GetString(output.ToArray))
             Else
+                Call response.WriteHeader("application/octet-stream", output.Length)
                 Call response.Write(output.ToArray)
             End If
         End Using
