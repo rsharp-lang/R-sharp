@@ -6,6 +6,7 @@ Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.System.Configuration
 Imports SMRUCC.WebCloud.HTTPInternal.AppEngine
@@ -66,7 +67,7 @@ Public Class Rweb : Inherits HttpServer
     End Sub
 
     Private Sub runRweb(Rscript As String, args As NameValueCollection, response As HttpResponse)
-        Using output As New MemoryStream(), Rstd_out As New StreamWriter(output)
+        Using output As New MemoryStream(), Rstd_out As New StreamWriter(output, Encodings.UTF8WithoutBOM.CodePage)
             Dim result As Object
             Dim code As Integer
             Dim content_type As String
