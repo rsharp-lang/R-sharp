@@ -103,22 +103,31 @@ Namespace Runtime.Internal
             Return info.ToString
         End Function
 
-        Public Shared Function PrintMessageInternal(message As Message) As Object
+        Public Shared Function PrintMessageInternal(message As Message, globalEnv As GlobalEnvironment) As Object
             Dim execRoutine$ = message.environmentStack _
                 .Reverse _
                 .Select(Function(frame) frame.Method.Method) _
                 .JoinBy(" -> ")
             Dim i As i32 = 1
-            Dim backup = Console.ForegroundColor
+            Dim backup As ConsoleColor
             Dim dev As StreamWriter
 
-            If message.level = MSG_TYPES.ERR Then
-                dev = App.StdErr
-            Else
-                dev = App.StdOut
+            If App.IsConsoleApp Then
+                backup = Console.ForegroundColor
             End If
 
-            Console.ForegroundColor = message.DoCall(AddressOf getMessageColor)
+            Call globalEnv.stdout.Flush()
+
+            If message.level = MSG_TYPES.ERR AndAlso Not globalEnv.Rscript.redirectError2stdout Then
+                dev = App.StdErr
+            Else
+                dev = New StreamWriter(globalEnv.stdout.stream)
+            End If
+
+            If App.IsConsoleApp Then
+                Console.ForegroundColor = message.DoCall(AddressOf getMessageColor)
+            End If
+
             dev.WriteLine($" {message.DoCall(AddressOf getMessagePrefix)} in {execRoutine}")
 
             For Each msg As String In message
@@ -137,7 +146,9 @@ Namespace Runtime.Internal
 
             Call dev.Flush()
 
-            Console.ForegroundColor = backup
+            If App.IsConsoleApp Then
+                Console.ForegroundColor = backup
+            End If
 
             Return Nothing
         End Function

@@ -212,7 +212,7 @@ Namespace Runtime
             Dim typeofT As Type = GetType(T)
 
             If value Is Nothing Then
-                Return {}
+                Return New T() {}
             Else
                 If value.GetType Is GetType(vector) Then
                     value = DirectCast(value, vector).data
