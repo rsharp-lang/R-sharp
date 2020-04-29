@@ -89,6 +89,7 @@ Namespace Interpreter
         ''' </remarks>
         Public Property debug As Boolean = False
         Public Property silent As Boolean = False
+        Public Property redirectError2stdout As Boolean = False
 
         ''' <summary>
         ''' 是否在严格模式下运行R#脚本？默认为严格模式，即：
@@ -192,7 +193,7 @@ Namespace Interpreter
                 Dim result As Message = globalEnvir.LoadLibrary(packageName, silent)
 
                 If Not result Is Nothing Then
-                    Call Internal.debug.PrintMessageInternal(result)
+                    Call Internal.debug.PrintMessageInternal(result, globalEnvir)
                 End If
             End If
 
@@ -308,7 +309,7 @@ Namespace Interpreter
                 Call VBDebugger.WaitOutput()
 
                 For Each message As Message In globalEnvir.messages
-                    Call message.DoCall(AddressOf Internal.debug.PrintMessageInternal)
+                    Call Internal.debug.PrintMessageInternal(message, globalEnvir)
                 Next
 
                 Call globalEnvir.messages.Clear()

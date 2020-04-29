@@ -20,13 +20,14 @@ Module Program
     End Function
 
     <ExportAPI("--start")>
-    <Usage("--start [--port <port number, default=7452> --Rweb <directory, default=./Rweb> --n_threads <max_threads, default=8>]")>
+    <Usage("--start [--port <port number, default=7452> --Rweb <directory, default=./Rweb> --show_error --n_threads <max_threads, default=8>]")>
     Public Function start(args As CommandLine) As Integer
         Dim port As Integer = args("--port") Or 7452
         Dim Rweb As String = args("--Rweb") Or App.CurrentDirectory & "/Rweb"
         Dim n_threads As Integer = args("--n_threads") Or 8
+        Dim show_error As Boolean = args("--show_error")
 
-        Using http As New Rweb(Rweb, port, threads:=n_threads)
+        Using http As New Rweb(Rweb, port, show_error, threads:=n_threads)
             Return http.Run()
         End Using
     End Function
@@ -40,11 +41,13 @@ End Module
 Public Class Rweb : Inherits HttpServer
 
     Dim Rweb As String
+    Dim showError As Boolean
 
-    Public Sub New(Rweb$, port As Integer, Optional threads As Integer = -1)
+    Public Sub New(Rweb$, port As Integer, show_error As Boolean, Optional threads As Integer = -1)
         MyBase.New(port, threads)
 
         Me.Rweb = Rweb
+        Me.showError = show_error
     End Sub
 
     Public Overrides Sub handleGETRequest(p As HttpProcessor)
@@ -91,6 +94,7 @@ Public Class Rweb : Inherits HttpServer
                 .RedirectOutput(Rstd_out)
 
                 R.silent = True
+                R.redirectError2stdout = showError
 
                 For Each pkgName As String In R.configFile.GetStartupLoadingPackages
                     Call R.LoadLibrary(packageName:=pkgName, silent:=True)
@@ -109,7 +113,13 @@ Public Class Rweb : Inherits HttpServer
             Call Rstd_out.Flush()
 
             If code <> 0 Then
-                Call response.WriteError(code, Encoding.UTF8.GetString(output.ToArray))
+                Dim err As String = Encoding.UTF8.GetString(output.ToArray)
+
+                If showError Then
+                    Call response.WriteHTML(err)
+                Else
+                    Call response.WriteError(code, err)
+                End If
             Else
                 Call response.WriteHeader(content_type, output.Length)
                 Call response.Write(output.ToArray)
