@@ -296,4 +296,40 @@ Partial Module base
     Public Function readRDS(file$, Optional refhook As Object = Nothing, Optional env As Environment = Nothing) As Object
 
     End Function
+
+    ''' <summary>
+    ''' ### Save R Objects
+    ''' 
+    ''' ``save.image()`` is just a short-cut for ‘save my current workspace’, 
+    ''' i.e., save(list = ls(all.names = TRUE), file = ".RData", envir = .GlobalEnv). 
+    ''' It is also what happens with q("yes").
+    ''' </summary>
+    ''' <param name="file">a (writable binary-mode) connection or the name of the file 
+    ''' where the data will be saved (when tilde expansion is done). Must be a file 
+    ''' name for save.image or version = 1.</param>
+    ''' <param name="version">the workspace format version to use. NULL specifies the 
+    ''' current default format (2). Version 1 was the default from R 0.99.0 to R 1.3.1 
+    ''' and version 2 from R 1.4.0. Version 3 is supported from R 3.5.0.</param>
+    ''' <param name="ascii">if TRUE, an ASCII representation of the data is written. 
+    ''' The default value of ascii is FALSE which leads to a binary file being written. 
+    ''' If NA and version >= 2, a different ASCII representation is used which writes 
+    ''' double/complex numbers as binary fractions.</param>
+    ''' <param name="compress">logical Or character string specifying whether saving to 
+    ''' a named file Is to use compression. TRUE corresponds to gzip compression, And 
+    ''' character strings "gzip", "bzip2" Or "xz" specify the type of compression. Ignored 
+    ''' when file Is a connection And for workspace format version 1.</param>
+    ''' <param name="safe">logical. If TRUE, a temporary file is used for creating the 
+    ''' saved workspace. The temporary file is renamed to file if the save succeeds. This 
+    ''' preserves an existing workspace file if the save fails, but at the cost of using 
+    ''' extra disk space during the save.</param>
+    ''' <param name="envir">environment to search for objects to be saved.</param>
+    <ExportAPI("save.image")>
+    Public Sub saveImage(Optional file$ = ".RData",
+                         Optional version$ = Nothing,
+                         Optional ascii As Boolean = False,
+                         Optional compress As Object = "!ascii",
+                         Optional safe As Boolean = True,
+                         Optional envir As Environment = Nothing)
+
+    End Sub
 End Module
