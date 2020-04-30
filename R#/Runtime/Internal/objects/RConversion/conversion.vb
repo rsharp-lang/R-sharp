@@ -227,7 +227,7 @@ Namespace Runtime.Internal.Object.Converts
         End Function
 
         <ExportAPI("as.vector")>
-        Public Function asVector(obj As Object, Optional env As Environment = Nothing) As Object
+        Public Function asVector(<RRawVectorArgument> obj As Object, Optional env As Environment = Nothing) As Object
             If obj Is Nothing Then
                 Return obj
             End If
