@@ -239,6 +239,15 @@ printSingleElement:
                 Return Function(b) b.ToString.ToUpper
             ElseIf elementType.IsEnum Then
                 Return AddressOf enumPrinter.printEnumValue(elementType).Invoke
+            ElseIf elementType.IsArray Then
+                Return Function(o) As String
+                           Return DirectCast(o, Array) _
+                              .AsObjectEnumerator _
+                              .Select(Function(obj)
+                                          Return Scripting.ToString(obj, "NULL", True)
+                                      End Function) _
+                              .JoinBy(", ")
+                       End Function
             Else
                 Return Function(obj) Scripting.ToString(obj, "NULL", True)
             End If

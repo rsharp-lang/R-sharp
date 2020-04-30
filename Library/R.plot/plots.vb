@@ -77,7 +77,10 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Scatter2D = Microsoft.VisualBasic.Data.ChartPlots.Scatter
 
-<Package("plot.charts")>
+''' <summary>
+''' chartting plots for R#
+''' </summary>
+<Package("charts", Category:=APICategories.UtilityTools, Publisher:="xie.guigang@gmail.com")>
 Module plots
 
     ''' <summary>
@@ -282,8 +285,8 @@ Module plots
 
     <ExportAPI("volinPlot")>
     Public Function doVolinPlot(dataset As Array,
-                                Optional size$ = Canvas.Resolution2K.Size,
-                                Optional margin$ = Canvas.Resolution2K.PaddingWithTopTitle,
+                                <RRawVectorArgument> Optional size As Object = Canvas.Resolution2K.Size,
+                                <RRawVectorArgument> Optional margin As Object = Canvas.Resolution2K.PaddingWithTopTitle,
                                 Optional bg$ = "white",
                                 Optional colorSet$ = DesignerTerms.TSFShellColors,
                                 Optional ylab$ = "y axis",
@@ -296,6 +299,9 @@ Module plots
         End If
 
         Dim type As Type = REnv.MeasureArrayElementType(dataset)
+
+        size = InteropArgumentHelper.getSize(size)
+        margin = InteropArgumentHelper.getPadding(margin)
 
         If type Is GetType(DataSet) Then
             Return VolinPlot.Plot(

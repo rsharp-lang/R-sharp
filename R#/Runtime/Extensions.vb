@@ -97,11 +97,16 @@ Namespace Runtime
             If types.Count = 0 Then
                 Return GetType(Void)
             Else
-                Return types _
+                Dim tg = types _
                     .GroupBy(Function(t) t.FullName) _
                     .OrderByDescending(Function(k) k.Count) _
-                    .First _
-                    .First
+                    .ToArray
+
+                If tg(Scan0).Count < array.Length / 2 Then
+                    Return GetType(Object)
+                Else
+                    Return tg(Scan0).First
+                End If
             End If
         End Function
     End Module
