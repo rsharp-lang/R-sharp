@@ -23,6 +23,10 @@ Namespace Runtime.Interop
             Me.symbol = symbol
         End Sub
 
+        Public Function hasOperator(left As RType, right As RType) As Boolean
+            Return hashIndexCache.ContainsKey($"{left}|{right}")
+        End Function
+
         Public Sub addOperator(left As RType, right As RType, [operator] As IBinaryOperator, env As Environment)
             Dim hashKey As String = $"{left}|{right}"
             Dim bin As New BinaryOperator([operator]) With {
