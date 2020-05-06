@@ -56,7 +56,6 @@ Imports System.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.DataFramework
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
@@ -64,29 +63,6 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
-
-    Public Enum SymbolIndexers
-        ''' <summary>
-        ''' a[x]
-        ''' </summary>
-        vectorIndex
-        ''' <summary>
-        ''' a[[x]], a$x
-        ''' </summary>
-        nameIndex
-        ''' <summary>
-        ''' a[, x]
-        ''' </summary>
-        dataframeColumns
-        ''' <summary>
-        ''' a[x, ]
-        ''' </summary>
-        dataframeRows
-        ''' <summary>
-        ''' a[x,y]
-        ''' </summary>
-        dataframeRanges
-    End Enum
 
     ''' <summary>
     ''' get/set elements by index 
@@ -233,7 +209,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                         End If
                     End If
 
-                    Return Internal.debug.stop("Target object can not be indexed by name!", envir)
+                    Return Internal.debug.stop({
+                         "Target object can not be indexed by name!",
+                         "required: " & GetType(RNameIndex).FullName,
+                         "given: " & objType.FullName
+                    }, envir)
                 End If
             ElseIf indexer.Length = 1 Then
                 Return DirectCast(obj, RNameIndex).getByName(Scripting.ToString(indexer.GetValue(Scan0)))
