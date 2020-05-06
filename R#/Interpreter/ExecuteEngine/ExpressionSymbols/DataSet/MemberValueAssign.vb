@@ -1,45 +1,45 @@
 ﻿#Region "Microsoft.VisualBasic::29bb98c8f8ada50adcaf4cdca2aaf731, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\MemberValueAssign.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class MemberValueAssign
-    ' 
-    '         Properties: memberReference, type, value
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class MemberValueAssign
+' 
+'         Properties: memberReference, type, value
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -66,12 +66,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Dim names As String() = Runtime.asVector(Of String)(memberReference.index.Evaluate(envir))
             Dim target As Object = memberReference.symbol.Evaluate(envir)
             Dim list As RNameIndex = Runtime.getFirst(target)
-            Dim value As Array = Runtime.asVector(Of Object)(Me.value.Evaluate(envir))
+            Dim result As Object = Me.value.Evaluate(envir)
 
             If TypeOf list Is list AndAlso names.Length = 1 Then
-                Return list.setByName(names(Scan0), value, envir)
+                Return list.setByName(names(Scan0), result, envir)
             Else
-                Return list.setByName(names, value, envir)
+                Return list.setByName(names, Runtime.asVector(Of Object)(result), envir)
             End If
         End Function
 
