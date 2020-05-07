@@ -52,6 +52,13 @@ Namespace Runtime.Internal.Object
 
     Module reflector
 
+        ''' <summary>
+        ''' a helper method for view data structure of the given object
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <param name="env"></param>
+        ''' <param name="indent$"></param>
+        ''' <returns></returns>
         Public Function GetStructure(x As Object, env As GlobalEnvironment, indent$) As String
             If x Is Nothing Then
                 Return "<NULL>"
@@ -62,9 +69,15 @@ Namespace Runtime.Internal.Object
             Dim type As Type = x.GetType
             Dim code As TypeCodes = type.GetRTypeCode
 
+            If TypeOf x Is vector Then
+                type = DirectCast(x, vector).data.GetType
+                code = type.GetRTypeCode
+                x = DirectCast(x, vector).data
+            End If
+
             If type.ImplementInterface(GetType(IDictionary)) Then
                 Return strList(list:=x, env:=env, indent:=indent)
-            ElseIf Runtime.IsPrimitive(code, includeComplexList:=False) Then
+            ElseIf Runtime.IsPrimitive(code, includeComplexList:=False) OrElse type.IsArray Then
                 Return strVector(Runtime.asVector(Of Object)(x), type, env)
             ElseIf type Is GetType(dataframe) Then
                 Return dataframe(x, env, indent)
@@ -145,6 +158,13 @@ Namespace Runtime.Internal.Object
             Return sb.printSlots(keyValues, Nothing)
         End Function
 
+        ''' <summary>
+        ''' inspect the vector data structure
+        ''' </summary>
+        ''' <param name="a"></param>
+        ''' <param name="type"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         Private Function strVector(a As Array, type As Type, env As GlobalEnvironment) As String
             Dim typeCode$
 
@@ -154,8 +174,10 @@ Namespace Runtime.Internal.Object
                 typeCode = "chr"
             ElseIf type Like RType.floats Then
                 typeCode = "num"
-            Else
+            ElseIf type Like RType.logicals Then
                 typeCode = "logical"
+            Else
+                typeCode = "any"
             End If
 
             If a.Length = 1 Then

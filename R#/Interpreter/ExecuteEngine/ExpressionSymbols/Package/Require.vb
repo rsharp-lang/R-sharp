@@ -79,7 +79,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
                 message = [global].LoadLibrary(pkgName)
 
                 If Not message Is Nothing Then
-                    Call Internal.debug.PrintMessageInternal(message)
+                    Call Internal.debug.PrintMessageInternal(message, envir.globalEnvironment)
                 End If
             Next
 

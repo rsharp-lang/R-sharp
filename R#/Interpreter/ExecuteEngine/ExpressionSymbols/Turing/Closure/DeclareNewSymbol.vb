@@ -108,9 +108,19 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             If Program.isException(value) Then
                 Return value
             Else
-                ' add new symbol into the given environment stack
-                ' and then returns the value result
-                Call PushNames(names, value, type, is_readonly, envir)
+                Try
+                    ' add new symbol into the given environment stack
+                    ' and then returns the value result
+                    Call PushNames(names, value, type, is_readonly, envir)
+                Catch ex As Exception
+                    value = Internal.debug.stop({
+                        ex.Message,
+                        "symbols: " & names.JoinBy(","),
+                        "value: " & If(value, GetType(Void), value.GetType).FullName,
+                        "required: " & type.Description,
+                        "is_readonly: " & is_readonly
+                    }, envir)
+                End Try
 
                 Return value
             End If
@@ -123,7 +133,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         ''' <param name="value">.NET runtime object value.</param>
         ''' <param name="type"></param>
         ''' <param name="envir"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' 用于初始化环境对象
+        ''' </returns>
         Friend Shared Function PushNames(names$(), value As Object, type As TypeCodes, [readonly] As Boolean, envir As Environment) As Environment
             If Not value Is Nothing AndAlso TypeOf value Is invisible Then
                 value = DirectCast(value, invisible).value

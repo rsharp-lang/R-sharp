@@ -13,26 +13,25 @@ Namespace Runtime.Interop
         End Sub
 
         Private Sub arithmeticOperators()
-            Dim left, right As RType
+            Dim numerics As RType() = New Type() {
+                GetType(Long),
+                GetType(Double)
+            }.Select(AddressOf RType.GetRSharpType) _
+             .ToArray
 
-            left = RType.GetRSharpType(GetType(Long))
-            right = RType.GetRSharpType(GetType(Long))
+            Call addIntegerOperators()
+            Call addFloatOperators()
 
-            Call addBinary(left, right, "+", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Long)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y) DirectCast(x, Long) + DirectCast(y, Long)).ToArray, Nothing)
-            Call addBinary(left, right, "-", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Long)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y) DirectCast(x, Long) - DirectCast(y, Long)).ToArray, Nothing)
-            Call addBinary(left, right, "*", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Long)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y) DirectCast(x, Long) * DirectCast(y, Long)).ToArray, Nothing)
-            Call addBinary(left, right, "/", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Double)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y) DirectCast(x, Long) / DirectCast(y, Long)).ToArray, Nothing)
-            Call addBinary(left, right, "%", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Long)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y) DirectCast(x, Long) Mod DirectCast(y, Long)).ToArray, Nothing)
-            Call addBinary(left, right, "^", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Double)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y) DirectCast(x, Long) ^ DirectCast(y, Long)).ToArray, Nothing)
-            Call addBinary(left, right, "<", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Boolean)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y) DirectCast(x, Long) < DirectCast(y, Long)).ToArray, Nothing)
-            Call addBinary(left, right, ">", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Boolean)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y) DirectCast(x, Long) > DirectCast(y, Long)).ToArray, Nothing)
-            Call addBinary(left, right, "<=", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Boolean)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y) DirectCast(x, Long) <= DirectCast(y, Long)).ToArray, Nothing)
-            Call addBinary(left, right, ">=", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Boolean)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y) DirectCast(x, Long) >= DirectCast(y, Long)).ToArray, Nothing)
-            Call addBinary(left, right, "==", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Boolean)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y) DirectCast(x, Long) = DirectCast(y, Long)).ToArray, Nothing)
-            Call addBinary(left, right, "!=", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Boolean)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y) DirectCast(x, Long) <> DirectCast(y, Long)).ToArray, Nothing)
+            For Each left As RType In numerics
+                For Each right As RType In numerics
+                    Call addMixedOperators(left, right)
+                Next
+            Next
+        End Sub
 
-            left = RType.GetRSharpType(GetType(Double))
-            right = RType.GetRSharpType(GetType(Double))
+        Private Sub addFloatOperators()
+            Dim left As RType = RType.GetRSharpType(GetType(Double))
+            Dim right As RType = RType.GetRSharpType(GetType(Double))
 
             Call addBinary(left, right, "+", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Double)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) + DirectCast(y, Double)).ToArray, Nothing)
             Call addBinary(left, right, "-", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Double)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) - DirectCast(y, Double)).ToArray, Nothing)
@@ -46,29 +45,39 @@ Namespace Runtime.Interop
             Call addBinary(left, right, ">=", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Boolean)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) >= DirectCast(y, Double)).ToArray, Nothing)
             Call addBinary(left, right, "==", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Boolean)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) = DirectCast(y, Double)).ToArray, Nothing)
             Call addBinary(left, right, "!=", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Boolean)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) <> DirectCast(y, Double)).ToArray, Nothing)
+        End Sub
 
-            Dim numerics As RType() = New Type() {
-                GetType(Long),
-                GetType(Double)
-            }.Select(AddressOf RType.GetRSharpType) _
-             .ToArray
+        Private Sub addIntegerOperators()
+            Dim left As RType = RType.GetRSharpType(GetType(Long))
+            Dim right As RType = RType.GetRSharpType(GetType(Long))
 
-            For Each left In numerics
-                For Each right In numerics
-                    Call addBinary(left, right, "+", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Double)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) + DirectCast(y, Double)).ToArray, Nothing)
-                    Call addBinary(left, right, "-", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Double)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) - DirectCast(y, Double)).ToArray, Nothing)
-                    Call addBinary(left, right, "*", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Double)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) * DirectCast(y, Double)).ToArray, Nothing)
-                    Call addBinary(left, right, "/", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Double)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) / DirectCast(y, Double)).ToArray, Nothing)
-                    Call addBinary(left, right, "%", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Double)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) Mod DirectCast(y, Double)).ToArray, Nothing)
-                    Call addBinary(left, right, "^", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Double)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) ^ DirectCast(y, Double)).ToArray, Nothing)
-                    Call addBinary(left, right, "<", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Boolean)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) < DirectCast(y, Double)).ToArray, Nothing)
-                    Call addBinary(left, right, ">", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Boolean)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) > DirectCast(y, Double)).ToArray, Nothing)
-                    Call addBinary(left, right, "<=", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Boolean)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) <= DirectCast(y, Double)).ToArray, Nothing)
-                    Call addBinary(left, right, ">=", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Boolean)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) >= DirectCast(y, Double)).ToArray, Nothing)
-                    Call addBinary(left, right, "==", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Boolean)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) = DirectCast(y, Double)).ToArray, Nothing)
-                    Call addBinary(left, right, "!=", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Boolean)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) <> DirectCast(y, Double)).ToArray, Nothing)
-                Next
-            Next
+            Call addBinary(left, right, "+", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Long)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y) DirectCast(x, Long) + DirectCast(y, Long)).ToArray, Nothing)
+            Call addBinary(left, right, "-", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Long)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y) DirectCast(x, Long) - DirectCast(y, Long)).ToArray, Nothing)
+            Call addBinary(left, right, "*", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Long)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y) DirectCast(x, Long) * DirectCast(y, Long)).ToArray, Nothing)
+            Call addBinary(left, right, "/", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Double)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y) DirectCast(x, Long) / DirectCast(y, Long)).ToArray, Nothing)
+            Call addBinary(left, right, "%", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Long)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y) DirectCast(x, Long) Mod DirectCast(y, Long)).ToArray, Nothing)
+            Call addBinary(left, right, "^", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Double)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y) DirectCast(x, Long) ^ DirectCast(y, Long)).ToArray, Nothing)
+            Call addBinary(left, right, "<", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Boolean)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y) DirectCast(x, Long) < DirectCast(y, Long)).ToArray, Nothing)
+            Call addBinary(left, right, ">", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Boolean)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y) DirectCast(x, Long) > DirectCast(y, Long)).ToArray, Nothing)
+            Call addBinary(left, right, "<=", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Boolean)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y) DirectCast(x, Long) <= DirectCast(y, Long)).ToArray, Nothing)
+            Call addBinary(left, right, ">=", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Boolean)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y) DirectCast(x, Long) >= DirectCast(y, Long)).ToArray, Nothing)
+            Call addBinary(left, right, "==", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Boolean)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y) DirectCast(x, Long) = DirectCast(y, Long)).ToArray, Nothing)
+            Call addBinary(left, right, "!=", Function(a, b, env) BinaryCoreInternal(Of Long, Long, Boolean)(asVector(Of Long)(a), asVector(Of Long)(b), Function(x, y) DirectCast(x, Long) <> DirectCast(y, Long)).ToArray, Nothing)
+        End Sub
+
+        Private Sub addMixedOperators(left As RType, right As RType)
+            Call addBinary(left, right, "+", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Double)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) + DirectCast(y, Double)).ToArray, Nothing, [overrides]:=False)
+            Call addBinary(left, right, "-", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Double)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) - DirectCast(y, Double)).ToArray, Nothing, [overrides]:=False)
+            Call addBinary(left, right, "*", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Double)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) * DirectCast(y, Double)).ToArray, Nothing, [overrides]:=False)
+            Call addBinary(left, right, "/", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Double)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) / DirectCast(y, Double)).ToArray, Nothing, [overrides]:=False)
+            Call addBinary(left, right, "%", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Double)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) Mod DirectCast(y, Double)).ToArray, Nothing, [overrides]:=False)
+            Call addBinary(left, right, "^", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Double)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) ^ DirectCast(y, Double)).ToArray, Nothing, [overrides]:=False)
+            Call addBinary(left, right, "<", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Boolean)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) < DirectCast(y, Double)).ToArray, Nothing, [overrides]:=False)
+            Call addBinary(left, right, ">", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Boolean)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) > DirectCast(y, Double)).ToArray, Nothing, [overrides]:=False)
+            Call addBinary(left, right, "<=", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Boolean)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) <= DirectCast(y, Double)).ToArray, Nothing, [overrides]:=False)
+            Call addBinary(left, right, ">=", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Boolean)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) >= DirectCast(y, Double)).ToArray, Nothing, [overrides]:=False)
+            Call addBinary(left, right, "==", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Boolean)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) = DirectCast(y, Double)).ToArray, Nothing, [overrides]:=False)
+            Call addBinary(left, right, "!=", Function(a, b, env) BinaryCoreInternal(Of Double, Double, Boolean)(asVector(Of Double)(a), asVector(Of Double)(b), Function(x, y) DirectCast(x, Double) <> DirectCast(y, Double)).ToArray, Nothing, [overrides]:=False)
         End Sub
 
         Public Function getOperator(symbol As String, env As Environment) As [Variant](Of BinaryIndex, Message)
@@ -79,12 +88,16 @@ Namespace Runtime.Interop
             End If
         End Function
 
-        Public Sub addBinary(left As RType, right As RType, symbol As String, op As IBinaryOperator, env As Environment)
+        Public Sub addBinary(left As RType, right As RType, symbol As String, op As IBinaryOperator, env As Environment, Optional [overrides] As Boolean = True)
             If Not index.ContainsKey(symbol) Then
                 index.Add(symbol, New BinaryIndex(symbol))
             End If
 
-            Call index(symbol).addOperator(left, right, op, env)
+            If Not [overrides] AndAlso index(symbol).hasOperator(left, right) Then
+                Return
+            Else
+                Call index(symbol).addOperator(left, right, op, env)
+            End If
         End Sub
 
     End Module

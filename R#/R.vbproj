@@ -265,6 +265,27 @@
     <PlatformTarget>x64</PlatformTarget>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'GCModeller%28UNIX-Release_X64%29|AnyCPU'">
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\GCModeller%28UNIX-Release_X64%29\</OutputPath>
+    <DocumentationFile>REnv.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'GCModeller%28UNIX-Release_X64%29|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>..\..\..\GCModeller\bin\</OutputPath>
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
+    <DocumentationFile>REnv.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -326,7 +347,7 @@
     <Compile Include="Interpreter\Syntax\SyntaxResult.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\ByRefFunctionCall.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CLI\CommandLineArgument.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CLI\ArgumentValue.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\AppendOperator.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\ModeOf.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryOrExpression.vb" />
@@ -389,6 +410,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Interpreter\ExecuteEngine\Expression.vb" />
+    <Compile Include="Runtime\Environment\RContentOutput.vb" />
     <Compile Include="Runtime\MagicScriptSymbol.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\env.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\help.vb" />
@@ -429,13 +451,13 @@
     <Compile Include="Runtime\Interop\RInteropAttributes\RSuppressPrintAttribute.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RListObjectArgumentAttribute.vb" />
     <Compile Include="Runtime\Interop\RReturn.vb" />
-    <Compile Include="Runtime\EnvironmentExtensions.vb" />
+    <Compile Include="Runtime\Environment\EnvironmentExtensions.vb" />
     <Compile Include="Runtime\RTypeExtensions.vb" />
     <Compile Include="System\Components\ZipFolder.vb" />
     <Compile Include="System\Config\Defaults.vb" />
     <Compile Include="Runtime\System\Rscript.vb" />
     <Compile Include="Runtime\System\Interface\RNames.vb" />
-    <Compile Include="Runtime\GlobalEnvironment.vb" />
+    <Compile Include="Runtime\Environment\GlobalEnvironment.vb" />
     <Compile Include="System\Config\Options.vb" />
     <Compile Include="System\Config\ConfigFile.vb" />
     <Compile Include="Runtime\System\Interface\RPrint.vb" />
@@ -467,7 +489,7 @@
     <Compile Include="Runtime\Core.vb" />
     <Compile Include="Runtime\Interop\RType.vb" />
     <Compile Include="Runtime\Extensions.vb" />
-    <Compile Include="Runtime\Environment.vb" />
+    <Compile Include="Runtime\Environment\Environment.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\base.vb" />
     <Compile Include="Runtime\Internal\invoke.vb" />
     <Compile Include="Runtime\Internal\objects\dataset\vector.vb" />

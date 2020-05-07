@@ -130,6 +130,8 @@ Namespace Runtime
             If Not x Is Nothing Then
                 If x.GetType.IsArray AndAlso DirectCast(x, Array).Length = 1 Then
                     Return DirectCast(x, Array).GetValue(Scan0)
+                ElseIf x.GetType Is GetType(vector) AndAlso DirectCast(x, vector).length = 1 Then
+                    Return DirectCast(x, vector).data.GetValue(Scan0)
                 End If
             End If
 
@@ -212,7 +214,7 @@ Namespace Runtime
             Dim typeofT As Type = GetType(T)
 
             If value Is Nothing Then
-                Return {}
+                Return New T() {}
             Else
                 If value.GetType Is GetType(vector) Then
                     value = DirectCast(value, vector).data

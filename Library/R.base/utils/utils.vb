@@ -169,14 +169,15 @@ Public Module utils
     ''' <returns></returns>
     <ExportAPI("write.csv")>
     <RApiReturn(GetType(Boolean))>
-    Public Function write_csv(<RRawVectorArgument> x As Object, file$,
+    Public Function write_csv(<RRawVectorArgument> x As Object,
+                              Optional file$ = Nothing,
                               Optional row_names As Boolean = True,
                               Optional fileEncoding As Object = "",
                               Optional env As Environment = Nothing) As Object
 
         If x Is Nothing Then
             Return Internal.debug.stop("Empty dataframe object!", env)
-        Else
+        ElseIf Not file.StringEmpty Then
             ' test if the target table file is not locked by excel
             Dim err As Object = REnv.TryCatch(Function() "".SaveTo(file))
 

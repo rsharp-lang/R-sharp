@@ -23,6 +23,18 @@ Namespace Runtime.Interop
             Me.symbol = symbol
         End Sub
 
+        Public Function hasOperator(left As RType, right As RType) As Boolean
+            Return hashIndexCache.ContainsKey($"{left}|{right}")
+        End Function
+
+        ''' <summary>
+        ''' 请注意，因为这个函数不会进行重复判断，所以在调用这个函数之前可以通过<see cref="hasOperator(RType, RType)"/>
+        ''' 函数来判断是否重复从而决定是否对之前的操作符进行覆盖还是抛出错误信息
+        ''' </summary>
+        ''' <param name="left"></param>
+        ''' <param name="right"></param>
+        ''' <param name="[operator]"></param>
+        ''' <param name="env"></param>
         Public Sub addOperator(left As RType, right As RType, [operator] As IBinaryOperator, env As Environment)
             Dim hashKey As String = $"{left}|{right}"
             Dim bin As New BinaryOperator([operator]) With {

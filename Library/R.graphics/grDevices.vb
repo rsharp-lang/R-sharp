@@ -77,18 +77,34 @@ Public Module grDevices
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("save.graphics")>
-    Public Function saveImage(graphics As Object, file$, Optional env As Environment = Nothing) As Object
+    Public Function saveImage(graphics As Object, Optional file$ = Nothing, Optional env As Environment = Nothing) As Object
         If graphics Is Nothing Then
             Return Internal.debug.stop("Graphics data is NULL!", env)
         ElseIf graphics.GetType Is GetType(Image) Then
-            Return DirectCast(graphics, Image).SaveAs(file)
+            If file.StringEmpty Then
+                env.globalEnvironment.stdout.Write(DirectCast(graphics, Image))
+            Else
+                Return DirectCast(graphics, Image).SaveAs(file)
+            End If
         ElseIf graphics.GetType Is GetType(Bitmap) Then
-            Return DirectCast(graphics, Bitmap).SaveAs(file)
+            If file.StringEmpty Then
+                env.globalEnvironment.stdout.Write(DirectCast(graphics, Bitmap))
+            Else
+                Return DirectCast(graphics, Bitmap).SaveAs(file)
+            End If
         ElseIf graphics.GetType.IsInheritsFrom(GetType(GraphicsData)) Then
-            Return DirectCast(graphics, GraphicsData).Save(file)
+            With DirectCast(graphics, GraphicsData)
+                If file.StringEmpty Then
+                    env.globalEnvironment.stdout.WriteStream(AddressOf .Save, .content_type)
+                Else
+                    Return .Save(file)
+                End If
+            End With
         Else
             Return Internal.debug.stop(New InvalidProgramException($"'{graphics.GetType.Name}' is not a graphics data object!"), env)
         End If
+
+        Return Nothing
     End Function
 
     <ExportAPI("graphics.attrs")>
@@ -258,7 +274,7 @@ break:
 
         Static printHelp As Boolean = False
 
-        If Not printHelp Then
+        If (Not env.globalEnvironment.Rscript.silent) AndAlso (Not printHelp) Then
             printHelp = True
 
             GetType(grDevices).Assembly _

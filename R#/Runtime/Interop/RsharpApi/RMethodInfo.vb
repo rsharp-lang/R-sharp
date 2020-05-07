@@ -159,15 +159,23 @@ Namespace Runtime.Interop
                 End If
             Next
 
-            Try
+            If env.globalEnvironment.Rscript.debug Then
                 If api Like GetType(MethodInvoke) Then
                     result = api.TryCast(Of MethodInvoke).Invoke(parameters)
                 Else
                     result = api.VB.Method.Invoke(api.VB.Target, parameters.ToArray)
                 End If
-            Catch ex As Exception
-                Return Internal.debug.stop(ex, env)
-            End Try
+            Else
+                Try
+                    If api Like GetType(MethodInvoke) Then
+                        result = api.TryCast(Of MethodInvoke).Invoke(parameters)
+                    Else
+                        result = api.VB.Method.Invoke(api.VB.Target, parameters.ToArray)
+                    End If
+                Catch ex As Exception
+                    Return Internal.debug.stop(ex, env)
+                End Try
+            End If
 
             If invisible Then
                 Return New invisible With {

@@ -317,10 +317,19 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     Rarray = New vector With {.data = sequence}
                 End If
 
-                If indexer.Length = 1 Then
-                    Return Rarray.getByIndex(CInt(indexer.GetValue(Scan0)))
-                ElseIf Runtime.isVector(Of Boolean)(indexer) Then
+                ' 20200429 但indexer的长度为1个元素，并且类型为boolean逻辑值的时候
+                ' 假设If indexer.Length = 1 Then分支在前面，则indexer逻辑值会被强制转换为integer
+                ' 可能会产生错误：
+                '
+                ' System.IndexOutOfRangeException: Index has to be between upper and lower bound of the array.
+                '
+                ' at System.Array.GetValue(System.Int32 index) [0x0002a] in <d50a1f2f14b642d2b936cb144b307343>:0
+                ' at SMRUCC.Rsharp.Runtime.Internal.Object.vector.getByIndex(System.Int32 i) [0x0003e] in <e6d99a935c2a4c6a89f70a13664e6034>:0
+                '
+                If Runtime.isVector(Of Boolean)(indexer) Then
                     Return Rarray.getByIndex(Which.IsTrue(Runtime.asLogical(indexer), offset:=1))
+                ElseIf indexer.Length = 1 Then
+                    Return Rarray.getByIndex(CInt(indexer.GetValue(Scan0)))
                 Else
                     Return Rarray.getByIndex(Runtime.asVector(Of Integer)(indexer))
                 End If

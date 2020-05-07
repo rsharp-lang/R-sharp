@@ -215,6 +215,11 @@ Namespace Runtime.Internal.Invokes
             Return Runtime.asVector(Of Double)(x).AsObjectEnumerator(Of Double).RSD
         End Function
 
+        <ExportAPI("sd")>
+        Public Function sd(x As Array) As Double
+            Return DirectCast(asVector(Of Double)(x), Double()).StdError
+        End Function
+
         <ExportAPI("pearson")>
         Public Function pearson(x As Array, y As Array, Optional MAXIT As Integer = 5000) As list
             Dim data1 As Double() = Runtime.asVector(Of Double)(x)

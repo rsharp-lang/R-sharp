@@ -1,12 +1,18 @@
-﻿Imports System.IO
+﻿Imports System.Collections.Specialized
+Imports System.IO
 Imports System.Net.Sockets
 Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Flute.Http.Core
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Serialization.JSON
+Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.System.Configuration
+Imports SMRUCC.WebCloud.HTTPInternal.AppEngine
+Imports SMRUCC.WebCloud.HTTPInternal.Core
 
 Module Program
 
@@ -15,27 +21,34 @@ Module Program
     End Function
 
     <ExportAPI("--start")>
-    <Usage("--start --port 7452 --Rweb <directory> [--n_threads <max_threads, default=8>]")>
+    <Usage("--start [--port <port number, default=7452> --Rweb <directory, default=./Rweb> --show_error --n_threads <max_threads, default=8>]")>
     Public Function start(args As CommandLine) As Integer
-        Dim port As Integer = args <= "--port"
-        Dim Rweb As String = args <= "--Rweb"
+        Dim port As Integer = args("--port") Or 7452
+        Dim Rweb As String = args("--Rweb") Or App.CurrentDirectory & "/Rweb"
         Dim n_threads As Integer = args("--n_threads") Or 8
+        Dim show_error As Boolean = args("--show_error")
 
-        Using http As New Rweb(Rweb, port, threads:=n_threads)
+        Using http As New Rweb(Rweb, port, show_error, threads:=n_threads)
             Return http.Run()
         End Using
     End Function
 
 End Module
 
+''' <summary>
+''' Rweb is not design for general web programming, it is 
+''' design for running a background data task.
+''' </summary>
 Public Class Rweb : Inherits HttpServer
 
     Dim Rweb As String
+    Dim showError As Boolean
 
-    Public Sub New(Rweb$, port As Integer, Optional threads As Integer = -1)
+    Public Sub New(Rweb$, port As Integer, show_error As Boolean, Optional threads As Integer = -1)
         MyBase.New(port, threads)
 
         Me.Rweb = Rweb
+        Me.showError = show_error
     End Sub
 
     Public Overrides Sub handleGETRequest(p As HttpProcessor)
@@ -43,38 +56,73 @@ Public Class Rweb : Inherits HttpServer
             ' /<scriptFileName>?...args
             Dim request As New HttpRequest(p)
             Dim Rscript As String = Rweb & "/" & Strings.Trim(request.URL.Split("?"c).FirstOrDefault).Trim("."c, "/"c) & ".R"
+            Dim application As String = "", api As String = "", parameters As String = ""
+            Dim url As String = request.URL
+
+            Call APPEngine.GetParameter(url, application, api, parameters)
+
+            request.URLParameters = parameters.QueryStringParameters
 
             If Not Rscript.FileExists Then
                 Call p.writeFailure(404, "file not found!")
             Else
-                Call runRweb(Rscript, response)
+                Call runRweb(Rscript, request.URLParameters, response)
             End If
         End Using
     End Sub
 
-    Private Sub runRweb(Rscript As String, response As HttpResponse)
-        Using output As New MemoryStream(), Rstd_out As New StreamWriter(output)
+    Private Sub runRweb(Rscript As String, args As NameValueCollection, response As HttpResponse)
+        Using output As New MemoryStream(), Rstd_out As New StreamWriter(output, Encodings.UTF8WithoutBOM.CodePage)
             Dim result As Object
             Dim code As Integer
+            Dim content_type As String
+            Dim raw_args As Dictionary(Of String, String) = args.ToDictionary(allStrings:=False)
+            Dim http As NamedValue(Of Object)() = raw_args _
+                .Select(Function(t)
+                            Return New NamedValue(Of Object) With {
+                                .Name = t.Key,
+                                .Value = t.Value,
+                                .Description = t.Value
+                            }
+                        End Function) _
+                .ToArray
+
+            Call raw_args.GetJson.__DEBUG_ECHO
 
             ' run rscript
             Using R As RInterpreter = RInterpreter _
                 .FromEnvironmentConfiguration(ConfigFile.localConfigs) _
                 .RedirectOutput(Rstd_out)
 
+                R.silent = True
+                R.redirectError2stdout = showError
+
                 For Each pkgName As String In R.configFile.GetStartupLoadingPackages
                     Call R.LoadLibrary(packageName:=pkgName, silent:=True)
                 Next
 
-                result = R.Source(Rscript)
+                result = R.Source(Rscript, http)
                 code = Rserve.Rscript.handleResult(result, R.globalEnvir, Nothing)
+
+                If R.globalEnvir.stdout.recommendType Is Nothing Then
+                    content_type = "text/html"
+                Else
+                    content_type = R.globalEnvir.stdout.recommendType
+                End If
             End Using
 
             Call Rstd_out.Flush()
 
             If code <> 0 Then
-                Call response.WriteError(code, Encoding.UTF8.GetString(output.ToArray))
+                Dim err As String = Encoding.UTF8.GetString(output.ToArray)
+
+                If showError Then
+                    Call response.WriteHTML(err)
+                Else
+                    Call response.WriteError(code, err)
+                End If
             Else
+                Call response.WriteHeader(content_type, output.Length)
                 Call response.Write(output.ToArray)
             End If
         End Using

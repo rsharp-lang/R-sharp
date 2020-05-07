@@ -130,7 +130,22 @@ Namespace Runtime.Internal.Object
         End Function
 
         Public Function setRowNames([object] As Object, namelist As Array, envir As Environment) As Object
-            Throw New NotImplementedException
+            If TypeOf [object] Is dataframe Then
+                Dim data As dataframe = DirectCast([object], dataframe)
+
+                If data.nrows <> namelist.Length Then
+                    Return Internal.debug.stop({
+                        "row size is not matched!",
+                        "nrows: " & data.nrows,
+                        "given size: " & namelist.Length
+                    }, envir)
+                Else
+                    data.rownames = asVector(Of String)(namelist)
+                    Return data.rownames
+                End If
+            Else
+                Throw New NotImplementedException
+            End If
         End Function
 
         Public Function getColNames([object] As Object, envir As Environment) As Object
