@@ -138,6 +138,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RSession.vb" />
+    <Compile Include="Rweb.vb" />
     <Compile Include="Program.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -176,9 +178,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\runtime\httpd\WebCloud\SMRUCC.HTTPInternal\SMRUCC.WebCloud.HTTPInternal.vbproj">
-      <Project>{FBFC1455-B232-4F16-AFC7-4054A8B864AB}</Project>
-      <Name>SMRUCC.WebCloud.HTTPInternal</Name>
+    <ProjectReference Include="..\..\..\runtime\httpd\Flute\Flute.vbproj">
+      <Project>{05db9b3d-3456-4005-8e95-7d854cdc6c69}</Project>
+      <Name>Flute</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\47-dotnet_Microsoft.VisualBasic.vbproj">
       <Project>{fecce1fd-e1d4-49e3-a668-60bb5e7aed99}</Project>
