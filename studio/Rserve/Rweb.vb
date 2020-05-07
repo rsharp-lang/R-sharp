@@ -1,12 +1,10 @@
 ﻿Imports System.Collections.Specialized
-Imports System.ComponentModel
 Imports System.IO
 Imports System.Net.Sockets
 Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Flute.Http.Core
-Imports Microsoft.VisualBasic.CommandLine
-Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Flute.Http.Core.Message
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text
@@ -33,29 +31,22 @@ Public Class Rweb : Inherits HttpServer
         Using response As New HttpResponse(p.outputStream, AddressOf p.writeFailure)
             ' /<scriptFileName>?...args
             Dim request As New HttpRequest(p)
-            Dim Rscript As String = Rweb & "/" & Strings.Trim(request.URL.Split("?"c).FirstOrDefault).Trim("."c, "/"c) & ".R"
-            Dim application As String = "", api As String = "", parameters As String = ""
-            Dim url As String = request.URL
-
-            Call APPEngine.GetParameter(url, application, api, parameters)
-
-            request.URLParameters = parameters.QueryStringParameters
+            Dim Rscript As String = Rweb & "/" & request.URL.path & ".R"
 
             If Not Rscript.FileExists Then
                 Call p.writeFailure(404, "file not found!")
             Else
-                Call runRweb(Rscript, request.URLParameters, response)
+                Call runRweb(Rscript, request.URL.query, response)
             End If
         End Using
     End Sub
 
-    Private Sub runRweb(Rscript As String, args As NameValueCollection, response As HttpResponse)
+    Private Sub runRweb(Rscript As String, args As Dictionary(Of String, String), response As HttpResponse)
         Using output As New MemoryStream(), Rstd_out As New StreamWriter(output, Encodings.UTF8WithoutBOM.CodePage)
             Dim result As Object
             Dim code As Integer
             Dim content_type As String
-            Dim raw_args As Dictionary(Of String, String) = args.ToDictionary(allStrings:=False)
-            Dim http As NamedValue(Of Object)() = raw_args _
+            Dim http As NamedValue(Of Object)() = args _
                 .Select(Function(t)
                             Return New NamedValue(Of Object) With {
                                 .Name = t.Key,
@@ -65,7 +56,7 @@ Public Class Rweb : Inherits HttpServer
                         End Function) _
                 .ToArray
 
-            Call raw_args.GetJson.__DEBUG_ECHO
+            Call args.GetJson.__DEBUG_ECHO
 
             ' run rscript
             Using R As RInterpreter = RInterpreter _
@@ -115,8 +106,8 @@ Public Class Rweb : Inherits HttpServer
     End Sub
 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
-    Protected Overrides Function httpProcessor(client As TcpClient) As HttpProcessor
-        Return New HttpProcessor(client, Me, MAX_POST_SIZE:=App.BufferSize) With {
+    Protected Overrides Function getHttpProcessor(client As TcpClient, bufferSize%) As HttpProcessor
+        Return New HttpProcessor(client, Me, MAX_POST_SIZE:=bufferSize) With {
             ._404Page = Function() "404 Not Found"
         }
     End Function

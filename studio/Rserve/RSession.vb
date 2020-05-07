@@ -15,4 +15,23 @@ Imports SMRUCC.Rsharp.System.Configuration
 
 Public Class RSession : Inherits HttpServer
 
+    Public Sub New(port As Integer, Optional threads As Integer = -1)
+        MyBase.New(port, threads)
+    End Sub
+
+    Public Overrides Sub handleGETRequest(p As HttpProcessor)
+        Throw New NotImplementedException()
+    End Sub
+
+    Public Overrides Sub handlePOSTRequest(p As HttpProcessor, inputData As String)
+        Throw New NotImplementedException()
+    End Sub
+
+    Public Overrides Sub handleOtherMethod(p As HttpProcessor)
+        Throw New NotImplementedException()
+    End Sub
+
+    Protected Overrides Function getHttpProcessor(client As TcpClient, bufferSize As Integer) As HttpProcessor
+        Throw New NotImplementedException()
+    End Function
 End Class
