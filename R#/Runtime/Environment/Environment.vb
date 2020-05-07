@@ -54,6 +54,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.My
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
@@ -166,6 +167,9 @@ Namespace Runtime
             parent = Nothing
             [global] = Nothing
             stackFrame = globalStackFrame
+
+            Log4VB.redirectError = AddressOf redirectError
+            Log4VB.redirectWarning = AddressOf redirectWarning
         End Sub
 
         ''' <summary>
@@ -188,6 +192,9 @@ Namespace Runtime
                 symbols = parent.symbols
                 types = parent.types
             End If
+
+            Log4VB.redirectError = AddressOf redirectError
+            Log4VB.redirectWarning = AddressOf redirectWarning
         End Sub
 
         Sub New(globalEnv As GlobalEnvironment)
@@ -196,6 +203,17 @@ Namespace Runtime
             Me.parent = globalEnv
             Me.global = globalEnv
             Me.stackFrame = globalStackFrame
+
+            Log4VB.redirectError = AddressOf redirectError
+            Log4VB.redirectWarning = AddressOf redirectWarning
+        End Sub
+
+        Protected Sub redirectError(obj$, msg$, level As MSG_TYPES)
+            Call Internal.debug.stop({msg, "location: " & obj}, Me)
+        End Sub
+
+        Protected Sub redirectWarning(obj$, msg$, level As MSG_TYPES)
+            Call AddMessage({msg, "location: " & obj})
         End Sub
 
         Public Sub AddMessage(message As Object, Optional level As MSG_TYPES = MSG_TYPES.WRN)
@@ -353,6 +371,9 @@ Namespace Runtime
                         ' 将当前环境中所产生的诸如警告消息之类的信息
                         ' 传递到顶层的全局环境之中
                         Call parent.messages.AddRange(messages)
+
+                        Log4VB.redirectError = AddressOf parent.redirectError
+                        Log4VB.redirectWarning = AddressOf parent.redirectWarning
                     End If
 
                     Call Clear()
