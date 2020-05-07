@@ -41,7 +41,7 @@ Public Class Rweb : Inherits HttpServer
         End Using
     End Sub
 
-    Private Sub runRweb(Rscript As String, args As Dictionary(Of String, String), response As HttpResponse)
+    Private Sub runRweb(Rscript As String, args As Dictionary(Of String, String()), response As HttpResponse)
         Using output As New MemoryStream(), Rstd_out As New StreamWriter(output, Encodings.UTF8WithoutBOM.CodePage)
             Dim result As Object
             Dim code As Integer
@@ -50,8 +50,7 @@ Public Class Rweb : Inherits HttpServer
                 .Select(Function(t)
                             Return New NamedValue(Of Object) With {
                                 .Name = t.Key,
-                                .Value = t.Value,
-                                .Description = t.Value
+                                .Value = t.Value
                             }
                         End Function) _
                 .ToArray
