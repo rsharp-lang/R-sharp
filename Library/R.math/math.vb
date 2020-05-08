@@ -142,7 +142,7 @@ Module math
                         Optional tick As Action(Of Environment) = Nothing,
                         Optional env As Environment = Nothing) As Object
 
-        Dim vector As var() = New var(system.Length - 1) {}
+        Dim vector As NonlinearVar() = New NonlinearVar(system.Length - 1) {}
         Dim i As i32 = Scan0
         Dim solve As Func(Of Double)
         Dim names As New Dictionary(Of String, Symbol)
@@ -159,14 +159,14 @@ Module math
 
             ref.SetValue(REnv.getFirst(y0.getByName(name)), env)
             solve = Function() lambda(CDbl(ref.value))
-            vector(++i) = New var(solve) With {
+            vector(++i) = New NonlinearVar(solve) With {
                 .Name = name,
                 .Value = REnv.getFirst(y0.getByName(.Name))
             }
         Next
 
         Dim df = Sub(dx#, ByRef dy As stdVec)
-                     For Each x As var In vector
+                     For Each x As NonlinearVar In vector
                          dy(x) = x.Evaluate()
                          names(x.Name).SetValue(x.Value, env)
                      Next
