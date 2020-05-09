@@ -42,9 +42,11 @@
 
 #End Region
 
+Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports Win32 = System.Environment
 
 Namespace Runtime.Internal.Invokes
 
@@ -95,13 +97,55 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' ### Version Information
         ''' 
+        ''' R.Version() provides detailed information about the version of R running.
         ''' </summary>
         ''' <param name="env"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' R.Version returns a list with character-string components
+        '''
+        ''' + ``platform`` the platform For which R was built. A triplet Of the form 
+        '''    CPU-VENDOR-OS, As determined by the configure script. E.g, 
+        '''    "i686-unknown-linux-gnu" Or "i386-pc-mingw32".
+        ''' + ``arch`` the architecture(CPU) R was built On/For.
+        ''' + ``os`` the underlying operating system.
+        ''' + ``system`` CPU And OS, separated by a comma.
+        ''' + ``status`` the status Of the version (e.g., "alpha")
+        ''' + ``major`` the major version number
+        ''' + ``minor`` the minor version number, including the patchlevel
+        ''' + ``year`` the year the version was released
+        ''' + ``month`` the month the version was released
+        ''' + ``day`` the day the version was released
+        ''' + ``svn rev`` the Subversion revision number, which should be either "unknown" 
+        '''    Or a Single number. (A range Of numbers Or a number With M Or S appended 
+        '''    indicates inconsistencies In the sources used To build this version Of R.)
+        ''' + ``language`` always "R".
+        ''' </returns>
         <ExportAPI("R.Version")>
         Public Function RVer(env As Environment) As list
+            Dim core As AssemblyInfo = GetType(Environment).Assembly.FromAssembly
+            Dim version As Version = Version.Parse(core.AssemblyVersion)
+            Dim built As DateTime = core.BuiltTime
 
+            Return New list With {
+                .slots = New Dictionary(Of String, Object) From {
+                    {"platform", "Microsoft VisualStudio 2019/.NET Framework v4.8/Microsoft VisualBasic.NET"},
+                    {"arch", "x86_64"},
+                    {"os", ".NET Framework v4.8"},
+                    {"system", Win32.OSVersion.VersionString},
+                    {"status", Win32.OSVersion.ServicePack},
+                    {"major", version.Major},
+                    {"minor", version.Minor},
+                    {"year", built.Year},
+                    {"month", built.Month},
+                    {"day", built.Day},
+                    {"svn rev", version.Revision},
+                    {"language", "R#"},
+                    {"version.string", $"R version {core.AssemblyVersion} ({built.ToString})"},
+                    {"nickname", "R-sharp"}
+                }
+            }
         End Function
     End Module
 
