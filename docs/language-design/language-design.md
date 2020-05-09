@@ -244,6 +244,25 @@ let test.integer as function(x as integer) {
 }
 ```
 
+### 3.1 imports .NET type
+
+you can use the ``new`` keyword for create the imported .NET type in R# language:
+
+```R
+let a = new <name>(...);
+let b = new <name>() with {
+    $a = ...;
+    $b = ...;
+    $c = $a + $b;
+};
+```
+
+for implements such programming feature, then you should make sure about something:
+
+1. the .NET object type should be public visible
+2. target .NET object type should have one parameterless constructor
+3. export type at the top of your package module.
+
 ##  4. <a name='GetSetvalue'></a>Get/Set value
 
 Get/Set property value keeps the same as the R language: 
