@@ -71,6 +71,10 @@ Namespace System.Package
             Me.config = config
         End Sub
 
+        Public Function EnumerateAttachedPackages() As IEnumerable(Of Package)
+
+        End Function
+
         ''' <summary>
         ''' Check if the given dll module <paramref name="libraryFileName"/> is exists in database or not.
         ''' </summary>

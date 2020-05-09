@@ -113,6 +113,8 @@ Namespace Runtime.Internal.Invokes
                 .slots = New Dictionary(Of String, Object)
             }
         End Function
+
+        ''' <summary>
         ''' ### Collect Information About the Current R Session
         ''' 
         ''' Print version information about R, the OS and attached or 
