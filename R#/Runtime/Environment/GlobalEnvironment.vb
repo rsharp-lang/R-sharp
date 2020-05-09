@@ -95,6 +95,8 @@ Namespace Runtime
                 If Not silent Then
                     Call _stdout.WriteLine($"Loading required package: {packageName}")
                 End If
+
+                Call packages.addAttached(package)
             Else
                 Return Nothing
             End If
