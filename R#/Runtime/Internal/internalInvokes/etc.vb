@@ -42,6 +42,7 @@
 
 #End Region
 
+Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -92,8 +93,13 @@ Namespace Runtime.Internal.Invokes
         ''' print and toLatex methods. This is a list with components
         ''' </returns>
         <ExportAPI("sessionInfo")>
-        Public Function sessionInfo(env As Environment) As RSessionInfo
+        <RApiReturn(GetType(RSessionInfo))>
+        Public Function sessionInfo(env As Environment) As vbObject
+            Dim info As New RSessionInfo With {
+                .Rversion = RVer(env)
+            }
 
+            Return New vbObject(info)
         End Function
 
         ''' <summary>
@@ -183,7 +189,7 @@ Namespace Runtime.Internal.Invokes
         ''' a character vector of base packages which are attached.
         ''' </summary>
         ''' <returns></returns>
-        Public Property basePkgs As String
+        Public Property basePkgs As String()
         ''' <summary>
         ''' (not always present): a named list of the results of calling 
         ''' packageDescription on packages whose namespaces are loaded 
@@ -208,7 +214,16 @@ Namespace Runtime.Internal.Invokes
         Public Property LAPACK As String
 
         Public Overrides Function ToString() As String
-            Return MyBase.ToString()
+            Dim info As New StringBuilder
+
+            Call info.AppendLine(Rversion.GetString("version.string"))
+            Call info.AppendLine($"Platform: {Rversion.GetString("platform")} ({Rversion.GetString("arch")})")
+            Call info.AppendLine($"Running under: {Rversion.GetString("system")}")
+            Call info.AppendLine()
+            Call info.AppendLine($"Matrix products: {matprod}")
+            Call info.AppendLine()
+
+            Return info.ToString
         End Function
     End Class
 End Namespace
