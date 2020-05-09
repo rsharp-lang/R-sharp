@@ -53,6 +53,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
@@ -69,6 +70,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.System.Components
 Imports SMRUCC.Rsharp.System.Configuration
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports RObj = SMRUCC.Rsharp.Runtime.Internal.Object
@@ -1079,9 +1081,20 @@ Namespace Runtime.Internal.Invokes
             Call App.Exit(status)
         End Sub
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="x"><see cref="ISaveHandle"/> object or any other object.</param>
+        ''' <param name="dispose">
+        ''' the dispose handler, for type of parameter x is <see cref="ISaveHandle"/>,
+        ''' this parameter value should be a file path. for other type, this parameter
+        ''' value should be a function object.
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("auto")>
         <RApiReturn(GetType(RDispose))>
-        Public Function autoDispose(x As Object, dispose As Object, Optional env As Environment = Nothing) As Object
+        Public Function autoDispose(x As Object, Optional dispose As Object = Nothing, Optional env As Environment = Nothing) As Object
             ' using a as x :> auto(o -> ...) {
             '    ...
             ' }
@@ -1103,6 +1116,15 @@ Namespace Runtime.Internal.Invokes
                 final = Sub(obj)
                             Call DirectCast(dispose, RFunction).Invoke(env, invokeArgument(obj))
                         End Sub
+            ElseIf TypeOf dispose Is String Then
+                If TypeOf x Is ISaveHandle Then
+                    Return New AutoFileSave With {
+                        .data = x,
+                        .filePath = dispose
+                    }
+                Else
+                    Return Internal.debug.stop(New InvalidProgramException(dispose.GetType.FullName), env)
+                End If
             Else
                 Return Internal.debug.stop(New InvalidProgramException(dispose.GetType.FullName), env)
             End If
