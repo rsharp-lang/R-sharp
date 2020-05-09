@@ -66,10 +66,21 @@ Namespace System.Package
         Public ReadOnly Property packageDocs As New AnnotationDocs
         Public ReadOnly Property loadedPackages As New Index(Of String)
 
+        Friend ReadOnly attached As New Dictionary(Of String, Package)
+
         Sub New(config As Options)
             Me.pkgDb = LocalPackageDatabase.Load(config.lib)
             Me.config = config
         End Sub
+
+        Public Sub addAttached(pkg As Package)
+            Call loadedPackages.Add(pkg.namespace)
+            Call attached.Add(pkg.namespace, pkg)
+        End Sub
+
+        Public Function EnumerateAttachedPackages() As IEnumerable(Of Package)
+            Return attached.Values
+        End Function
 
         ''' <summary>
         ''' Check if the given dll module <paramref name="libraryFileName"/> is exists in database or not.
