@@ -97,7 +97,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         End Function
 
         <Extension>
-        Private Iterator Function getInvokeParameters(params As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As IEnumerable(Of SyntaxResult)
+        Friend Iterator Function getInvokeParameters(params As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As IEnumerable(Of SyntaxResult)
             For Each token As SyntaxResult In params _
                 .SplitByTopLevelDelimiter(TokenType.comma) _
                 .Where(Function(t) Not t.isComma) _

@@ -107,6 +107,9 @@ Namespace Interpreter.SyntaxParser
                 Case "next"
                     ' continute for
                     Return New ContinuteFor
+                Case "new"
+                    ' create new object
+                    Return SyntaxImplements.CreateNewObject(code(Scan0)(Scan0), code.Skip(1).IteratesALL.ToArray, opts)
                 Case "break"
                     Return New BreakLoop
                 Case "using"
