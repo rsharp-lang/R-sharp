@@ -62,13 +62,19 @@ Namespace System.Package
         Public ReadOnly Property info As PackageAttribute
         Public ReadOnly Property package As Type
 
+        Public ReadOnly Property is_basePackage As Boolean
+            Get
+                Return TypeOf info Is RBasePackageAttribute
+            End Get
+        End Property
+
         Public ReadOnly Property [namespace] As String
             Get
                 Return info.Namespace
             End Get
         End Property
 
-        Public ReadOnly Property LibPath As String
+        Public ReadOnly Property libPath As String
             Get
                 Return package.Assembly.Location
             End Get
