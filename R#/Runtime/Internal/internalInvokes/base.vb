@@ -1117,7 +1117,7 @@ Namespace Runtime.Internal.Invokes
                             Call DirectCast(dispose, RFunction).Invoke(env, invokeArgument(obj))
                         End Sub
             ElseIf TypeOf dispose Is String Then
-                If TypeOf x Is ISaveHandle Then
+                If x.GetType.ImplementInterface(GetType(ISaveHandle)) Then
                     Return New AutoFileSave With {
                         .data = x,
                         .filePath = dispose
