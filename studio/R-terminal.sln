@@ -12,6 +12,9 @@ EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "R-cmd", "R-Terminal\R-cmd.vbproj", "{3A35AC34-F313-4F72-89E9-EACCA217BC8D}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Rstudio.common\Rstudio.common.projitems*{3a35ac34-f313-4f72-89e9-eacca217bc8d}*SharedItemsImports = 4
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Biodeep|Any CPU = Biodeep|Any CPU
 		Biodeep|x64 = Biodeep|x64
