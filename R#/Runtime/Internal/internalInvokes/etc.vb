@@ -146,7 +146,8 @@ Namespace Runtime.Internal.Invokes
                     .EnumerateAttachedPackages _
                     .Select(Function(a) a.namespace) _
                     .ToArray,
-                .locale = Sys_getlocale()
+                .locale = Sys_getlocale(),
+                .matprod = "default"
             }
 
             Return New vbObject(info)

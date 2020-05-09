@@ -77,9 +77,9 @@ Namespace System.Package
             Call loadedPackages.Add(pkg.namespace)
             Call attached.Add(pkg.namespace, pkg)
         End Sub
-        
-        Public Function EnumerateAttachedPackages() As IEnumerable(Of Package)
 
+        Public Function EnumerateAttachedPackages() As IEnumerable(Of Package)
+            Return attached.Values
         End Function
 
         ''' <summary>
