@@ -45,6 +45,7 @@
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports Win32 = System.Environment
@@ -114,6 +115,18 @@ Namespace Runtime.Internal.Invokes
             }
         End Function
 
+        <ExportAPI("Sys.getlocale")>
+        Public Function Sys_getlocale() As list
+            Return New list With {
+                .slots = New Dictionary(Of String, Object) From {
+                    {"name", InvariantCulture.Name},
+                    {"ISO_name", InvariantCulture.TwoLetterISOLanguageName},
+                    {"fullName", InvariantCulture.DisplayName},
+                    {"LC_ID", InvariantCulture.LCID}
+                }
+            }
+        End Function
+
         ''' <summary>
         ''' ### Collect Information About the Current R Session
         ''' 
@@ -128,7 +141,12 @@ Namespace Runtime.Internal.Invokes
         <RApiReturn(GetType(RSessionInfo))>
         Public Function sessionInfo(env As Environment) As vbObject
             Dim info As New RSessionInfo With {
-                .Rversion = RVer(env)
+                .Rversion = RVer(env),
+                .basePkgs = env.globalEnvironment.packages _
+                    .EnumerateAttachedPackages _
+                    .Select(Function(a) a.namespace) _
+                    .ToArray,
+                .locale = Sys_getlocale()
             }
 
             Return New vbObject(info)
@@ -206,7 +224,7 @@ Namespace Runtime.Internal.Invokes
         ''' a character string, the result of calling Sys.getlocale().
         ''' </summary>
         ''' <returns></returns>
-        Public Property locale As String
+        Public Property locale As list
         ''' <summary>
         ''' a character string (or possibly NULL), the same as osVersion, see below.
         ''' </summary>
@@ -254,6 +272,11 @@ Namespace Runtime.Internal.Invokes
             Call info.AppendLine()
             Call info.AppendLine($"Matrix products: {matprod}")
             Call info.AppendLine()
+            Call info.AppendLine("locale:")
+
+            For Each attr In locale.slots.SeqIterator
+                Call info.AppendLine($"[{attr.i + 1}] {attr.value.Key}={attr.value.Value}")
+            Next
 
             Return info.ToString
         End Function
