@@ -138,6 +138,7 @@ Namespace Runtime.Interop
         End Sub
     End Class
 
+    <AttributeUsage(AttributeTargets.Class, AllowMultiple:=True, Inherited:=True)>
     Public Class RTypeExportAttribute : Inherits RInteropAttribute
 
         ''' <summary>
