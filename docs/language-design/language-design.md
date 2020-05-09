@@ -575,20 +575,20 @@ The right shift write operator is based on the data type of object ``x``:
 Example as:
 
 ```R
-local vector = |1,2,3,4,5,6|
+let vector = [1,2,3,4,5,6];
 
-vector >> "./index.json"
-vector >> "./index.csv"
-vector >> "./index.txt"
+vector >> "./index.json";
+vector >> "./index.csv";
+vector >> "./index.txt";
 
-local matrix = 
+let matrix = 
     [|1,2,3|,
      |4,5,6|,
-     |8,8,8|]
+     |8,8,8|];
 
-colnames(matrix) <- |"A","B","C"|
-matrix >> "./matrix.csv" # A csv file will be generated.
-matrix >> "./matrix.txt" # A tsv file will be generated.
+colnames(matrix) <- |"A","B","C"|;
+matrix >> "./matrix.csv"; # A csv file will be generated.
+matrix >> "./matrix.txt"; # A tsv file will be generated.
 ```
 
 ###  8.1. <a name='Simpleexternalcalls'></a>Simple external calls
@@ -596,11 +596,11 @@ matrix >> "./matrix.txt" # A tsv file will be generated.
 The ``R#`` language makes more easier for calling external command from CLI, apply a ``@`` operator on a string vector will makes an external system calls:
 
 ```R
-var [exitCode, stdout] <- @'/bin/GCModeller/localblast /blastp /query "{query.fasta}" /subject "{COG_myva}" /out "{COG_myva.csv}"';
+let [exitCode, stdout] <- @'/bin/GCModeller/localblast /blastp /query "{query.fasta}" /subject "{COG_myva}" /out "{COG_myva.csv}"';
 
 # or makes it more clear to read
-var CLI <- '/bin/GCModeller/localblast /blastp /query "{query.fasta}" /subject "{COG_myva}" /out "{COG_myva.csv}"';
-var [exitCode, stdout] <- @CLI;
+let CLI <- '/bin/GCModeller/localblast /blastp /query "{query.fasta}" /subject "{COG_myva}" /out "{COG_myva.csv}"';
+let [exitCode, stdout] <- @CLI;
 ```
 
 ##  9. <a name='Usingtuple'></a>Using tuple
@@ -619,8 +619,8 @@ let [a, b, c] <- tuple.test(3, 2);
 if (a == 3) {
     c <- c + a + b;
     # or using pipeline
-    c <- |a, b, c|
-         |sum()
+    c <- [a, b, c]
+         :> sum
 	 ;
 }
 ```
@@ -642,32 +642,32 @@ End If
 You can naturally convert the object as tuple value. The member in the tuple their name should matched the names in an object, so that you can doing something like this example in ``R#``:
 
 ```R
-var obj <- list() with {
+let obj <- list() with {
     $a <- 333;
     $b <- 999;
 }
 # the tuple its member name should match the property name in you custom object type
 # no order required in your tuple declaration: 
-var [a, b] <- obj;
+let [a, b] <- obj;
 ```
 
 But, wait, if the property in an object is not a valid identifier name in ``R#``? Don't worried, you can using alias:
 
 ```R
-var obj <- list() with {
+let obj <- list() with {
     $"112233+5" <- 999;
     $x <- 1;
 }
-var [a as "112233+5", b as "x"] <- obj;
+let [a as "112233+5", b as "x"] <- obj;
 ```
 
 The tuple feature is espacially useful in operates the dataframe:
 
 ```R
-var d <- data.frame(
-    a = |   1,    2,     3|,
-    b = | "a",  "g",   "y"|,
-    t = |TRUE, TRUE, FALSE|);
+let d <- data.frame(
+    a = [   1,    2,     3],
+    b = [ "a",  "g",   "y"],
+    t = [TRUE, TRUE, FALSE]);
 
 # in a for loop, the tuple its member value is the cell value in dataframe
 for([a, b, c as "t"] in d) {
@@ -680,7 +680,7 @@ for([a, b, c as "t"] in d) {
 
 # if directly convert the dataframe as tuple, 
 # then the tuple member its value is the column value in the dataframe 
-var [a, b, booleans as "t"] <- d;
+let [a, b, booleans as "t"] <- d;
 
 a;
 # [3] 1 2 3
