@@ -137,4 +137,24 @@ Namespace Runtime.Interop
             Call MyBase.New([Namespace])
         End Sub
     End Class
+
+    Public Class RTypeExportAttribute : Inherits RInteropAttribute
+
+        ''' <summary>
+        ''' type name
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property name As String
+        Public ReadOnly Property model As Type
+
+        Sub New(name As String, target As Type)
+            Me.name = name
+            Me.model = target
+        End Sub
+
+        Public Overrides Function ToString() As String
+            Return $"imports '{name}' = {model.FullName}"
+        End Function
+
+    End Class
 End Namespace
