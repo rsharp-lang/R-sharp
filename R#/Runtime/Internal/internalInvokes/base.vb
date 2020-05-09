@@ -1058,9 +1058,14 @@ Namespace Runtime.Internal.Invokes
             End If
 
             If input = "y" Then
+                ' save image for yes
+                Dim saveImage As Symbol = envir.FindSymbol("save.image")
 
+                If Not saveImage Is Nothing AndAlso TypeOf saveImage.value Is RMethodInfo Then
+                    Call DirectCast(saveImage.value, RMethodInfo).Invoke(envir, {})
+                End If
             Else
-
+                ' do nothing for no
             End If
 
             If runLast Then
