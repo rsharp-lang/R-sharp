@@ -2,6 +2,7 @@
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
@@ -28,7 +29,20 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Throw New NotImplementedException()
+            Dim type As RType = envir.globalEnvironment.types.TryGetValue(name)
+
+            If type Is Nothing Then
+                Return Internal.debug.stop({"missing required type information...", "type: " & name}, envir)
+            End If
+
+            Dim obj As Object = Activator.CreateInstance(type.raw)
+
+            ' initialize the property
+            For Each prop As Expression In constructor
+
+            Next
+
+            Return obj
         End Function
 
         Public Overrides Function ToString() As String
