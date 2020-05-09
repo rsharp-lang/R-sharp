@@ -1,5 +1,4 @@
-﻿Imports System.Collections.Specialized
-Imports System.IO
+﻿Imports System.IO
 Imports System.Net.Sockets
 Imports System.Runtime.CompilerServices
 Imports System.Text
@@ -106,8 +105,6 @@ Public Class Rweb : Inherits HttpServer
 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Protected Overrides Function getHttpProcessor(client As TcpClient, bufferSize%) As HttpProcessor
-        Return New HttpProcessor(client, Me, MAX_POST_SIZE:=bufferSize) With {
-            ._404Page = Function() "404 Not Found"
-        }
+        Return New HttpProcessor(client, Me, MAX_POST_SIZE:=bufferSize)
     End Function
 End Class
