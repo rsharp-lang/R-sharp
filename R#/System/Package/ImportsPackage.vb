@@ -150,6 +150,15 @@ Namespace System.Package
                 End If
             Next
 
+            ' load types
+            Dim types As RTypeExportAttribute() = package _
+                .GetCustomAttributes(Of RTypeExportAttribute) _
+                .ToArray
+
+            For Each type As RTypeExportAttribute In types
+                envir.globalEnvironment.types(type.name) = RType.GetRSharpType(type.model)
+            Next
+
             ' find module initializer
             Dim init As MethodInfo = package _
                 .GetMethods(bindingAttr:=BindingFlags.Public Or BindingFlags.Static) _

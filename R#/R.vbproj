@@ -323,6 +323,7 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\WhileLoop.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Linq\LinqOutput.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxBuilderOptions.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\CreateObjectSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\WhileLoopSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\CommandLine.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\DeclareNewFunctionSyntax.vb" />
@@ -455,6 +456,7 @@
     <Compile Include="Runtime\Interop\RReturn.vb" />
     <Compile Include="Runtime\Environment\EnvironmentExtensions.vb" />
     <Compile Include="Runtime\RTypeExtensions.vb" />
+    <Compile Include="System\Components\AutoFileSave.vb" />
     <Compile Include="System\Components\ZipFolder.vb" />
     <Compile Include="System\Config\Defaults.vb" />
     <Compile Include="Runtime\System\Rscript.vb" />
