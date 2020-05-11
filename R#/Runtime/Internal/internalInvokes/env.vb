@@ -1,50 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::07c352a436b133486498fa2beb2962e4, R#\Runtime\Internal\internalInvokes\env.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module env
-    ' 
-    '         Function: [get], CallInternal, doCall, environment, globalenv
-    '                   lockBinding, ls, objects, objectSize, traceback
-    '                   unlockBinding
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module env
+' 
+'         Function: [get], CallInternal, doCall, environment, globalenv
+'                   lockBinding, ls, objects, objectSize, traceback
+'                   unlockBinding
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -131,35 +132,62 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("ls")>
         <RApiReturn(GetType(String))>
         Private Function ls(<RSymbolTextArgument> Optional name$ = Nothing, Optional env As Environment = Nothing) As Object
+            Dim opt As NamedValue(Of String) = name.GetTagValue(":", trim:=True)
+            Dim globalEnv As GlobalEnvironment = env.globalEnvironment
+            Dim pkgMgr As PackageManager = globalEnv.packages
+
             If name.StringEmpty Then
                 ' list all of the objects in current 
                 ' R# runtime environment
                 Return env.symbols.Keys.ToArray
-            Else
-                Dim globalEnv As GlobalEnvironment = env.globalEnvironment
-                Dim pkgMgr As PackageManager = globalEnv.packages
+            ElseIf opt.Name.StringEmpty Then
+                If opt.Value = "REnv" Then
+                    Return Internal.invoke.ls
+                ElseIf opt.Value = "Activator" Then
+                    Dim names As Array = globalEnv.types.Keys.ToArray
+                    Dim fullName As Array = DirectCast(names, String()) _
+                        .Select(Function(key)
+                                    Return globalEnv.types(key).fullName
+                                End Function) _
+                        .ToArray
 
-                If pkgMgr.hasLibFile(name.FileName) Then
+                    Return New dataframe With {
+                        .columns = New Dictionary(Of String, Array) From {
+                            {"name", names},
+                            {"fullName", fullName}
+                        },
+                        .rownames = names
+                    }
+                ElseIf opt.Value.DirectoryExists Then
+                    ' list dir?
+                    Return opt.Value _
+                        .ListFiles _
+                        .Select(AddressOf FileName) _
+                        .ToArray
+                ElseIf pkgMgr.hasLibFile(name.FileName) Then
                     ' list all of the package names in current dll module
                     Return PackageLoader _
                         .ParsePackages(dll:=name) _
                         .Select(Function(pkg) pkg.namespace) _
                         .ToArray
                 Else
+                    Return debug.stop({"invalid query term!", "term: " & name}, env)
+                End If
+            End If
+
+            Select Case opt.Name.ToLower
+                Case "package"
                     ' list all of the function api names in current package
-                    Dim package As Package = pkgMgr.FindPackage(name, Nothing)
+                    Dim package As Package = pkgMgr.FindPackage(opt.Value, Nothing)
 
                     If package Is Nothing Then
-                        If name = "REnv" Then
-                            Return Internal.invoke.ls
-                        Else
-                            Return {}
-                        End If
+                        Return debug.stop({"missing required package for query...", "package: " & opt.Value}, env)
                     Else
                         Return package.ls
                     End If
-                End If
-            End If
+                Case Else
+                    Return debug.stop(New NotSupportedException(name), env)
+            End Select
         End Function
 
         <ExportAPI("objects")>
