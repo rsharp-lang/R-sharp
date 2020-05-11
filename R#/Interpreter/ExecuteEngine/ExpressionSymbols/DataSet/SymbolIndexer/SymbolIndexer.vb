@@ -136,9 +136,21 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 If key Is Nothing Then
                     Return Internal.debug.stop("dataframe index could not be nothing!", envir)
                 ElseIf key.GetType Like RType.integers Then
-                    Return obj.getColumnVector(CInt(key))
+                    Dim strKey As String = obj.getKeyByIndex(CInt(key))
+
+                    If strKey Is Nothing Then
+                        Return Internal.debug.stop({"index outside the bounds!", "index: " & key}, envir)
+                    Else
+                        Return obj.getColumnVector(strKey)
+                    End If
                 Else
-                    Return obj.getColumnVector(Scripting.ToString(key))
+                    Dim strKey As String = Scripting.ToString(key)
+
+                    If obj.columns.ContainsKey(strKey) Then
+                        Return obj.getColumnVector(strKey)
+                    Else
+                        Return Internal.debug.stop({"undefined columns selected", "column key: " & strKey}, envir)
+                    End If
                 End If
             Else
                 ' dataframe projection
