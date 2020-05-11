@@ -47,6 +47,11 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 
 Namespace Interpreter.SyntaxParser
 
+    ''' <summary>
+    ''' The R# expression syntax build result, the result of this 
+    ''' model could be an error or resulted expression model 
+    ''' object. 
+    ''' </summary>
     Friend Class SyntaxResult
 
         Public ReadOnly [error] As Exception
