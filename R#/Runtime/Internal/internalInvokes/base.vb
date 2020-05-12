@@ -129,7 +129,7 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("unit")>
         Public Function unitOfT(<RRawVectorArgument> x As Object,
                                 <RByRefValueAssign>
-                                Optional unit As unit = Nothing,
+                                Optional unit As Object = Nothing,
                                 Optional env As Environment = Nothing) As Object
 
             If unit Is Nothing Then
@@ -139,6 +139,13 @@ Namespace Runtime.Internal.Invokes
                     Return Nothing
                 End If
             Else
+                If TypeOf unit Is vbObject Then
+                    unit = DirectCast(unit, vbObject).target
+                End If
+                If TypeOf unit Is String Then
+                    unit = New unit With {.name = unit}
+                End If
+
                 If Not x Is Nothing AndAlso Not TypeOf x Is vector Then
                     With asVector(Of Object)(x)
                         x = New vector(.DoCall(AddressOf MeasureRealElementType), .ByRef, env)
