@@ -84,6 +84,7 @@ Namespace Runtime.Internal.ConsolePrinter
             RtoString(GetType(Environment)) = Function(o) DirectCast(o, Environment).ToString
             RtoString(GetType(GlobalEnvironment)) = Function(o) DirectCast(o, GlobalEnvironment).ToString
             RtoString(GetType(LogEntry)) = Function(o) DirectCast(o, LogEntry).ToString
+            RtoString(GetType(unit)) = Function(o) DirectCast(o, unit).ToString
 
             RInternalToString(GetType(Double)) = AddressOf printer.f64_InternalToString
         End Sub
