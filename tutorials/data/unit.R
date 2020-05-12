@@ -1,12 +1,20 @@
-let x as integer = [1024,2,3,4,5];
+let x as integer = [1024, 2, 3, 4, 5];
 let s as integer = 100;
 
 # create unit by R# activator
 unit(x) = new unit(name = "kg");
 unit(s) = new unit(name = "m");
 
-let density = x / (s ^ 2);
+let density = [weight, width] => weight / (width ^ 2);
 
+print("formula: ");
+print(density);
+print("result of the given formula is:");
+print(density(x, s));
+
+cat("\n\n\n");
+
+density = x / (s^2);
 print(density);
 
 # create unit by name directly
