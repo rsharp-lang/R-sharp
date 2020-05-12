@@ -1,4 +1,5 @@
 ﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Runtime.Interop
@@ -41,7 +42,27 @@ Namespace Runtime.Interop
                 If unitL Is Nothing Then
                     unit = unitR
                 ElseIf unitR Is Nothing Then
-                    unit = unitL
+                    If operatorSymbol = "^" Then
+                        Dim type = right.GetType.GetRTypeCode
+
+                        ' 在这里主要是为了自动化生成单位转换，例如
+                        ' s^-1或者m^2
+                        If type = TypeCodes.double OrElse type = TypeCodes.integer Then
+                            right = asVector(Of Object)(right)
+
+                            If DirectCast(right, Array).Length = 1 Then
+                                unit = New unit With {
+                                    .name = $"{unitL.name}^{DirectCast(right, Array).GetValue(Scan0)}"
+                                }
+                            Else
+                                unit = unitL
+                            End If
+                        Else
+                            unit = unitL
+                        End If
+                    Else
+                        unit = unitL
+                    End If
                 Else
                     unit = New unit With {
                         .name = $"{unitL.name}{operatorSymbol}{unitR.name}"

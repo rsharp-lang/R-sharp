@@ -161,7 +161,14 @@ Namespace Runtime.Internal.ConsolePrinter
                     End If
                 End With
             ElseIf valueType Is GetType(vector) Then
-                Call DirectCast(x, vector).data.printArray(maxPrint, env)
+                Dim vec As vector = DirectCast(x, vector)
+
+                Call vec.data.printArray(maxPrint, env)
+
+                If Not vec.unit Is Nothing Then
+                    Call output.WriteLine($"unit: {vec.unit}")
+                End If
+
             ElseIf valueType.ImplementInterface(GetType(IDictionary)) Then
                 Call DirectCast(x, IDictionary).printList(listPrefix, maxPrint, env)
             ElseIf valueType Is GetType(list) Then
