@@ -132,20 +132,26 @@ Namespace Runtime.Internal.Invokes
                                 Optional unit As unit = Nothing,
                                 Optional env As Environment = Nothing) As Object
 
-            If Not x Is Nothing AndAlso Not TypeOf x Is vector Then
-                With asVector(Of Object)(x)
-                    x = New vector(.DoCall(AddressOf MeasureRealElementType), .ByRef, env)
-                End With
+            If unit Is Nothing Then
+                If TypeOf x Is vector Then
+                    Return DirectCast(x, vector).unit
+                Else
+                    Return Nothing
+                End If
+            Else
+                If Not x Is Nothing AndAlso Not TypeOf x Is vector Then
+                    With asVector(Of Object)(x)
+                        x = New vector(.DoCall(AddressOf MeasureRealElementType), .ByRef, env)
+                    End With
 
-                Call env.AddMessage({
-                    "value x is not a vector",
-                    "it will be convert to vector automatically..."
-                }, MSG_TYPES.WRN)
+                    Call env.AddMessage({
+                        "value x is not a vector",
+                        "it will be convert to vector automatically..."
+                    }, MSG_TYPES.WRN)
+                End If
             End If
 
-            If unit Is Nothing Then
-                Return DirectCast(x, vector)?.unit
-            ElseIf x Is Nothing Then
+            If x Is Nothing Then
                 x = New vector With {.data = {}, .unit = unit}
             Else
                 DirectCast(x, vector).unit = unit
