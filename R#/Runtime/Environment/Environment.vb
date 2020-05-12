@@ -60,6 +60,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime
@@ -324,18 +325,22 @@ Namespace Runtime
             If type = TypeCodes.generic Then
                 ' 没有定义as type做类型约束的时候
                 ' 会需要通过值来推断
-                type = value.GetType.GetRTypeCode
+                type = RType.TypeOf(value).mode
+            End If
+
+            If vector.isVectorOf(value, type) Then
+                Return value
             End If
 
             Select Case type
                 Case TypeCodes.boolean
-                    value = Runtime.asVector(Of Boolean)(value)
+                    value = vector.asVector(Of Boolean)(asVector(Of Boolean)(value))
                 Case TypeCodes.double
-                    value = Runtime.asVector(Of Double)(value)
+                    value = vector.asVector(Of Double)(asVector(Of Double)(value))
                 Case TypeCodes.integer
-                    value = Runtime.asVector(Of Long)(value)
+                    value = vector.asVector(Of Long)(asVector(Of Long)(value))
                 Case TypeCodes.string
-                    value = Runtime.asVector(Of String)(value)
+                    value = vector.asVector(Of String)(asVector(Of String)(value))
             End Select
 
             Return value

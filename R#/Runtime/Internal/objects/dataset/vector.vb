@@ -268,8 +268,15 @@ Namespace Runtime.Internal.Object
             Return $"[{length}] vec<{m_type.ToString}>"
         End Function
 
-        Public Shared Function asVector(Of T)(x As Object) As T()
-            Return Runtime.asVector(Of T)(x)
+        Public Shared Function asVector(Of T)(x As IEnumerable(Of T)) As vector
+            Return New vector With {
+                .data = x.ToArray,
+                .elementType = RType.GetRSharpType(GetType(T))
+            }
+        End Function
+
+        Public Shared Function isVectorOf(x As Object, type As TypeCodes) As Boolean
+            Return TypeOf x Is vector AndAlso DirectCast(x, vector).elementType Like RType.GetType(type)
         End Function
     End Class
 End Namespace
