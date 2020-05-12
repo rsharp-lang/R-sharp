@@ -3,9 +3,9 @@
 <!-- vscode-markdown-toc -->
 * 1. [Code comments](#Codecomments)
 * 2. [Variable](#Variable)
-		* 2.1. [Append Vector](#AppendVector)
-* 3. [Types](#Types)
-	* 3.1. [1.3.1. imports .NET type](#imports.NETtype)
+		* 2.1. [ Append Vector](#AppendVector)
+* 3. [ Types](#Types)
+	* 3.1. [ imports .NET type](#imports.NETtype)
 * 4. [Get/Set value](#GetSetvalue)
 * 5. [1.5. Function and lambda function](#Functionandlambdafunction)
 * 6. [String](#String)
@@ -136,7 +136,7 @@ a;
 # [1] 88  2  3  4  5 99
 ```
 
-####  2.1. <a name='AppendVector'></a>Append Vector
+####  2.1. <a name='AppendVector'></a> Append Vector
 
 You can using ``append()`` function for append a vector in R language, and in R# you can using both ``append()`` function and left shift ``<<`` operator for append a vector:
 
@@ -151,7 +151,7 @@ NOTE: As the ``R#`` language is not designed for general programming, the most u
 + The ``<<`` operator is usually used for array push liked operation in ``R#`` language; 
 + And the ``>>`` operator is usually used for data file save operation.
 
-##  3. <a name='Types'></a>Types
+##  3. <a name='Types'></a> Types
 
 ``R#`` language have several primitive type, **by default all of them are vector type**:
 
@@ -246,7 +246,7 @@ let test.integer as function(x as integer) {
 }
 ```
 
-###  3.1. <a name='imports.NETtype'></a>1.3.1. imports .NET type
+###  3.1. <a name='imports.NETtype'></a> imports .NET type
 
 you can use the ``new`` keyword for create the imported .NET type in R# language:
 
@@ -264,6 +264,20 @@ for implements such programming feature, then you should make sure about somethi
 1. the .NET object type should be public visible
 2. target .NET object type should have one parameterless constructor
 3. export type at the top of your package module.
+
+### unit type
+
+There is a unit type R# language feature can let you mark the numeric data
+
+```R
+let x as integer = [1024, 2, 3, 4, 5];
+let s as integer = 30;
+
+unit(x) <- "GB";
+unit(s) <- "sec";
+
+print(x /s);
+```
 
 ##  4. <a name='GetSetvalue'></a>Get/Set value
 
