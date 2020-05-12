@@ -1,7 +1,10 @@
 ﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.Language
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
@@ -30,16 +33,34 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim type As RType = envir.globalEnvironment.types.TryGetValue(name)
+            Dim obj As vbObject
 
             If type Is Nothing Then
                 Return Internal.debug.stop({"missing required type information...", "type: " & name}, envir)
+            Else
+                obj = vbObject.CreateInstance(type.raw)
             End If
 
-            Dim obj As Object = Activator.CreateInstance(type.raw)
+            Dim err As New Value(Of Object)
 
             ' initialize the property
             For Each prop As Expression In constructor
+                If Not TypeOf prop Is ValueAssign Then
+                    Return Internal.debug.stop({
+                         $"invalid expression: {prop} !",
+                         $"require: " & GetType(ValueAssign).Name,
+                         $"but given: " & prop.expressionName
+                    }, envir)
+                Else
+                    With DirectCast(prop, ValueAssign)
+                        Dim name = .targetSymbols(Scan0).Evaluate(envir)
+                        Dim value = .value.Evaluate(envir)
 
+                        If TypeOf (err = obj.setByName(name, value, envir)) Is Message Then
+                            Return err.Value
+                        End If
+                    End With
+                End If
             Next
 
             Return obj

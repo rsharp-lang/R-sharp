@@ -229,5 +229,10 @@ Namespace Runtime.Internal.Object
 
             Return New list With {.slots = list}
         End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Shared Function CreateInstance(type As Type) As vbObject
+            Return New vbObject(Activator.CreateInstance(type))
+        End Function
     End Class
 End Namespace

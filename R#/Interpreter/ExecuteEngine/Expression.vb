@@ -51,6 +51,9 @@ Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Interpreter.ExecuteEngine
 
+    ''' <summary>
+    ''' An expression object model in R# language interpreter
+    ''' </summary>
     Public MustInherit Class Expression
 
         ''' <summary>
@@ -59,14 +62,29 @@ Namespace Interpreter.ExecuteEngine
         ''' <returns></returns>
         Public MustOverride ReadOnly Property type As TypeCodes
 
+        ''' <summary>
+        ''' debug used...
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property expressionName As String
             Get
                 Return MyClass.GetType.Name
             End Get
         End Property
 
+        ''' <summary>
+        ''' Evaluate the R# expression for get its runtime value result.
+        ''' </summary>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         Public MustOverride Function Evaluate(envir As Environment) As Object
 
+        ''' <summary>
+        ''' Create a new expression model from the given R# code token collection.
+        ''' </summary>
+        ''' <param name="code"></param>
+        ''' <param name="opts"></param>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
         Friend Shared Function CreateExpression(code As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult

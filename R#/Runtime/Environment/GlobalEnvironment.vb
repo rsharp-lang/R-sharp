@@ -47,6 +47,8 @@ Imports System.IO
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Configuration
 Imports SMRUCC.Rsharp.System.Package
 Imports RPkg = SMRUCC.Rsharp.System.Package.Package
@@ -81,6 +83,8 @@ Namespace Runtime
             Me.global = Me
             Me.Rscript = scriptHost
             Me.stdout = New RContentOutput(App.StdOut.DefaultValue)
+
+            MyBase.types.Add("unit", RType.GetRSharpType(GetType(unit)))
         End Sub
 
         Public Sub RedirectOutput(out As StreamWriter)

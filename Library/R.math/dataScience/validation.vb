@@ -44,7 +44,7 @@ Module validation
 
     <ExportAPI("ANN.ROC")>
     Public Function ANN_ROC(ANN As Network, validateSet As TrainingSample(), range As Double(), attribute%, Optional n% = 20) As Evaluation.Validation()
-        Return ANN.CreateValidateResult(validateSet).ROC(range, attribute, n)
+        ' Return ANN.CreateValidateResult(validateSet).ROC(range, attribute, n)
     End Function
 
     <ExportAPI("as.validation")>

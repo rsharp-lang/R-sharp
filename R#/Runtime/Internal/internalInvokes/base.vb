@@ -120,9 +120,50 @@ Namespace Runtime.Internal.Invokes
             Return v
         End Function
 
+        ''' <summary>
+        ''' get or set unit to a given vector
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <param name="unit"></param>
+        ''' <returns></returns>
         <ExportAPI("unit")>
-        Public Function unitOfT(x As vector, unit As unit) As vector
-            x.unit = unit
+        Public Function unitOfT(<RRawVectorArgument> x As Object,
+                                <RByRefValueAssign>
+                                Optional unit As Object = Nothing,
+                                Optional env As Environment = Nothing) As Object
+
+            If unit Is Nothing Then
+                If TypeOf x Is vector Then
+                    Return DirectCast(x, vector).unit
+                Else
+                    Return Nothing
+                End If
+            Else
+                If TypeOf unit Is vbObject Then
+                    unit = DirectCast(unit, vbObject).target
+                End If
+                If TypeOf unit Is String Then
+                    unit = New unit With {.name = unit}
+                End If
+
+                If Not x Is Nothing AndAlso Not TypeOf x Is vector Then
+                    With asVector(Of Object)(x)
+                        x = New vector(.DoCall(AddressOf MeasureRealElementType), .ByRef, env)
+                    End With
+
+                    Call env.AddMessage({
+                        "value x is not a vector",
+                        "it will be convert to vector automatically..."
+                    }, MSG_TYPES.WRN)
+                End If
+            End If
+
+            If x Is Nothing Then
+                x = New vector With {.data = {}, .unit = unit}
+            Else
+                DirectCast(x, vector).unit = unit
+            End If
+
             Return x
         End Function
 

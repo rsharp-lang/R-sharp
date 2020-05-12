@@ -54,6 +54,7 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Runtime.Interop
 
@@ -142,6 +143,8 @@ Namespace Runtime.Interop
             GetType(String), GetType(String()),
             GetType(Char), GetType(Char())
         }
+
+        Friend Shared ReadOnly Property any As RType = GetRSharpType(GetType(Object))
 
         Private Sub New(raw As Type)
             If raw.IsValueType AndAlso
@@ -240,6 +243,16 @@ Namespace Runtime.Interop
 
         Public Overloads Shared Function [GetType](code As TypeCodes) As RType
             Return GetRSharpType(Runtime.GetType(code))
+        End Function
+
+        Public Shared Function [TypeOf](x As Object) As RType
+            If x Is Nothing Then
+                Return any
+            ElseIf TypeOf x Is vector Then
+                Return DirectCast(x, vector).elementType
+            Else
+                Return GetRSharpType(x.GetType)
+            End If
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>

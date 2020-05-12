@@ -1,6 +1,7 @@
 ﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Runtime.Interop
 
@@ -69,18 +70,18 @@ Namespace Runtime.Interop
             ElseIf right Is Nothing Then
                 Return rightNull(left, env)
             Else
-                Dim t1 As RType = left.GetType.DoCall(AddressOf RType.GetRSharpType)
-                Dim t2 As RType = right.GetType.DoCall(AddressOf RType.GetRSharpType)
+                Dim t1 As RType = typeOfImpl(left)
+                Dim t2 As RType = typeOfImpl(right)
                 Dim hashKey As String = $"{t1}|{t2}"
 
                 If hashIndexCache.ContainsKey(hashKey) Then
-                    Return hashIndexCache(hashKey).operation(left, right, env)
+                    Return hashIndexCache(hashKey).Execute(left, right, env)
                 Else
                     ' do type match and then create hashKey index cache
                     For Each op As BinaryOperator In operators
                         If t1 Like op.left AndAlso t2 Like op.right Then
                             hashIndexCache.Add(hashKey, op)
-                            Return hashIndexCache(hashKey).operation(left, right, env)
+                            Return hashIndexCache(hashKey).Execute(left, right, env)
                         End If
                     Next
 
@@ -94,12 +95,20 @@ Namespace Runtime.Interop
             End If
         End Function
 
+        Private Shared Function typeOfImpl(x As Object) As RType
+            If TypeOf x Is vector Then
+                Return DirectCast(x, vector).elementType
+            Else
+                Return x.GetType.DoCall(AddressOf RType.GetRSharpType)
+            End If
+        End Function
+
         Private Function rightNull(left As Object, env As Environment) As Object
-            Dim t As RType = left.GetType.DoCall(AddressOf RType.GetRSharpType)
+            Dim t As RType = typeOfImpl(left)
 
             For Each op As BinaryOperator In operators
                 If t Like op.left Then
-                    Return op.operation(left, Nothing, env)
+                    Return op.Execute(left, Nothing, env)
                 End If
             Next
 
@@ -116,7 +125,7 @@ Namespace Runtime.Interop
             Dim hashKey As String = $"{tVoid}|{tVoid}"
 
             If hashIndexCache.ContainsKey(hashKey) Then
-                Return hashIndexCache(hashKey).operation(Nothing, Nothing, env)
+                Return hashIndexCache(hashKey).Execute(Nothing, Nothing, env)
             Else
                 Return Internal.debug.stop({
                      $"operator symbol '{symbol}' is not defined for binary expression (NULL {symbol} NULL)",
@@ -126,11 +135,11 @@ Namespace Runtime.Interop
         End Function
 
         Private Function leftNull(right As Object, env As Environment) As Object
-            Dim t As RType = right.GetType.DoCall(AddressOf RType.GetRSharpType)
+            Dim t As RType = typeOfImpl(right)
 
             For Each op As BinaryOperator In operators
                 If t Like op.right Then
-                    Return op.operation(Nothing, right, env)
+                    Return op.Execute(Nothing, right, env)
                 End If
             Next
 

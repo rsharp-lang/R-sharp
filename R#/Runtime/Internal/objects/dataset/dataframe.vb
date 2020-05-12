@@ -89,8 +89,12 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        Public Function getKeyByIndex(index As Integer) As String
+            Return columns.Keys.ElementAtOrDefault(index - 1)
+        End Function
+
         Public Function getColumnVector(index As Integer) As Array
-            Return getColumnVector(columns.Keys.ElementAtOrDefault(index - 1))
+            Return getColumnVector(getKeyByIndex(index))
         End Function
 
         ''' <summary>

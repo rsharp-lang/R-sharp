@@ -77,7 +77,7 @@ Namespace Runtime.Interop
         ''' <returns></returns>
         Public ReadOnly Property invisible As Boolean
 
-        ReadOnly api As [Variant](Of MethodInvoke, [Delegate])
+        ReadOnly api As MethodInvoke
 
         ''' <summary>
         ''' 
@@ -93,7 +93,10 @@ Namespace Runtime.Interop
         ''' </param>
         Sub New(name$, closure As [Delegate])
             Me.name = name
-            Me.api = closure
+            Me.api = New MethodInvoke With {
+                .method = closure.Method,
+                .target = closure.Target
+            }
             Me.returns = RType.GetRSharpType(closure.Method.ReturnType)
             Me.parameters = closure.Method.DoCall(AddressOf parseParameters)
             Me.listObjectMargin = RArgumentList.objectListArgumentMargin(Me)
@@ -127,11 +130,7 @@ Namespace Runtime.Interop
         ''' </summary>
         ''' <returns></returns>
         Public Function GetRawDeclares() As MethodInfo
-            If api Like GetType(MethodInvoke) Then
-                Return api.TryCast(Of MethodInvoke).method
-            Else
-                Return api.TryCast(Of [Delegate]).Method
-            End If
+            Return api.method
         End Function
 
         Public Function GetPackageInfo() As Package
@@ -160,18 +159,10 @@ Namespace Runtime.Interop
             Next
 
             If env.globalEnvironment.Rscript.debug Then
-                If api Like GetType(MethodInvoke) Then
-                    result = api.TryCast(Of MethodInvoke).Invoke(parameters)
-                Else
-                    result = api.VB.Method.Invoke(api.VB.Target, parameters.ToArray)
-                End If
+                result = api.Invoke(parameters)
             Else
                 Try
-                    If api Like GetType(MethodInvoke) Then
-                        result = api.TryCast(Of MethodInvoke).Invoke(parameters)
-                    Else
-                        result = api.VB.Method.Invoke(api.VB.Target, parameters.ToArray)
-                    End If
+                    result = api.Invoke(parameters)
                 Catch ex As Exception
                     Return Internal.debug.stop(ex, env)
                 End Try
