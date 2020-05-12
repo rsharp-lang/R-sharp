@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::96fb0c220914c4746884cd82fc1d9498, R#\test\argumentSequencetest.vb"
+﻿#Region "Microsoft.VisualBasic::5b3870cf17d49df2992308aa743c9f9d, R#\test\argumentSequencetest.vb"
 
     ' Author:
     ' 
@@ -63,4 +63,3 @@ Module argumentSequencetest
         Call Console.WriteLine({a, b, c, d}.GetJson)
     End Sub
 End Module
-

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2d7381675a4add057a8760661cc54dd8, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolReference.vb"
+﻿#Region "Microsoft.VisualBasic::8268a611dd13b01983638d925f22861a, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolReference.vb"
 
     ' Author:
     ' 
@@ -37,13 +37,6 @@
     ' 
     '         Constructor: (+2 Overloads) Sub New
     '         Function: Evaluate, ToString
-    ' 
-    '     Class NamespaceFunctionSymbolReference
-    ' 
-    '         Properties: [namespace], symbol, type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, getFuncNameSymbolText, getPackageApiImpl, ToString
     ' 
     ' 
     ' /********************************************************************************/

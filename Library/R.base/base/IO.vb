@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::046d63cad7cfb516715cb527c54d36c4, Library\R.base\base\IO.vb"
+﻿#Region "Microsoft.VisualBasic::37d9df43295e44ab01cbb61ce984997c, Library\R.base\base\IO.vb"
 
     ' Author:
     ' 
@@ -49,4 +49,3 @@ Module RawIO
 
 
 End Module
-

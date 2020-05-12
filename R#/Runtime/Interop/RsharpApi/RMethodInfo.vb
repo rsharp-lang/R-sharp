@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6cf097d94c38e7baa7581474d27a6a39, R#\Runtime\Interop\RMethodInfo.vb"
+﻿#Region "Microsoft.VisualBasic::30276d0c0252caea06abd7ae41f3fb8d, R#\Runtime\Interop\RsharpApi\RMethodInfo.vb"
 
     ' Author:
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fec28716e227c6519e5461da18a364e9, R.exec\File\Expression.vb"
+﻿#Region "Microsoft.VisualBasic::fec28716e227c6519e5461da18a364e9, studio\R.exec\File\Expression.vb"
 
     ' Author:
     ' 
