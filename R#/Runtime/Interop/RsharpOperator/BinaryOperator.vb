@@ -8,11 +8,17 @@
         Public Property left As RType
         Public Property right As RType
 
-        Friend ReadOnly operation As IBinaryOperator
+        ReadOnly operation As IBinaryOperator
 
         Sub New(op As IBinaryOperator)
             operation = op
         End Sub
+
+        Public Function Execute(left As Object, right As Object, env As Environment) As Object
+            Dim result As Object = operation(left, right, env)
+
+            Return result
+        End Function
 
         Public Overrides Function ToString() As String
             Return $"({left} {operatorSymbol} {right})"
