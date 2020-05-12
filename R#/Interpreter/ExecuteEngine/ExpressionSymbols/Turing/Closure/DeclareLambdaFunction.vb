@@ -123,15 +123,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     '
                     ' Due to the reason of syntax rule of only allows one parameter.
                     '
-                    Dim argVal As Object = arguments(Scan0).Evaluate(envir)
-                    Dim env As Environment = DeclareNewSymbol _
-                        .PushNames(names:=parameter.names,
-                                   value:=argVal,
-                                   type:=TypeCodes.generic,
-                                   envir:=envir,
-                                   [readonly]:=True
-                        )
-                    Dim result As Object = closure.Evaluate(env)
+                    Dim argVal As Object
+
+                    For i As Integer = 0 To parameter.names.Length - 1
+                        argVal = arguments(i).Evaluate(envir)
+                        envir.Push(parameter.names(i), argVal, True, TypeCodes.generic)
+                    Next
+
+                    Dim result As Object = closure.Evaluate(envir)
 
                     Return result
                 End If
