@@ -1,14 +1,40 @@
 # 1. R# language design
 
-<!-- TOC -->autoauto- [1. R# language design](#1-r-language-design)auto    - [1.1. <a name='Codecomments'></a>Code comments](#11-a-namecodecommentsacode-comments)auto    - [1.2. <a name='Variable'></a>Variable](#12-a-namevariableavariable)auto            - [1.2.0.1. <a name='AppendVector'></a>Append Vector](#1201-a-nameappendvectoraappend-vector)auto    - [1.3. <a name='Types'></a>Types](#13-a-nametypesatypes)auto        - [1.3.1. imports .NET type](#131-imports-net-type)auto    - [1.4. <a name='GetSetvalue'></a>Get/Set value](#14-a-namegetsetvalueagetset-value)auto    - [1.5. Function and lambda function](#15-function-and-lambda-function)auto    - [1.6. <a name='String'></a>String](#16-a-namestringastring)auto    - [1.7. <a name='OperatorsinR'></a>Operators in R](#17-a-nameoperatorsinraoperators-in-r)auto        - [1.7.1. <a name='Logicaloperators'></a>Logical operators](#171-a-namelogicaloperatorsalogical-operators)auto        - [1.7.2. <a name='DynamicsOperatorBinding'></a>Dynamics Operator Binding](#172-a-namedynamicsoperatorbindingadynamics-operator-binding)auto            - [1.7.2.1. <a name='Useroperator'></a>User operator](#1721-a-nameuseroperatorauser-operator)auto        - [1.7.3. <a name='pipelineoperator'></a>pipeline operator](#173-a-namepipelineoperatorapipeline-operator)auto        - [1.7.4. <a name='INoperator'></a>IN operator](#174-a-nameinoperatorain-operator)auto            - [1.7.4.1. <a name='combinewithWhichoperator'></a>combine with ``Which`` operator](#1741-a-namecombinewithwhichoperatoracombine-with-which-operator)auto    - [1.8. <a name='bracketinRlanguage'></a>``[]`` bracket in R language](#18-a-namebracketinrlanguagea-bracket-in-r-language)auto    - [1.9. <a name='IOoperation'></a>IO operation](#19-a-nameiooperationaio-operation)auto        - [1.9.1. <a name='Simpleexternalcalls'></a>Simple external calls](#191-a-namesimpleexternalcallsasimple-external-calls)auto    - [1.10. <a name='Usingtuple'></a>Using tuple](#110-a-nameusingtupleausing-tuple)auto        - [1.10.1. <a name='Robjecttotuple'></a>R object to tuple](#1101-a-namerobjecttotuplear-object-to-tuple)autoauto<!-- /TOC -->
+<!-- vscode-markdown-toc -->
+* 1. [Code comments](#Codecomments)
+* 2. [Variable](#Variable)
+		* 2.1. [Append Vector](#AppendVector)
+* 3. [Types](#Types)
+	* 3.1. [1.3.1. imports .NET type](#imports.NETtype)
+* 4. [Get/Set value](#GetSetvalue)
+* 5. [1.5. Function and lambda function](#Functionandlambdafunction)
+* 6. [String](#String)
+* 7. [Operators in R#](#OperatorsinR)
+	* 7.1. [Logical operators](#Logicaloperators)
+	* 7.2. [Dynamics Operator Binding](#DynamicsOperatorBinding)
+		* 7.2.1. [User operator](#Useroperator)
+	* 7.3. [pipeline operator](#pipelineoperator)
+	* 7.4. [IN operator](#INoperator)
+		* 7.4.1. [combine with ``Which`` operator](#combinewithWhichoperator)
+* 8. [``[]`` bracket in R language](#bracketinRlanguage)
+* 9. [IO operation](#IOoperation)
+	* 9.1. [Simple external calls](#Simpleexternalcalls)
+* 10. [Using tuple](#Usingtuple)
+	* 10.1. [R object to tuple](#Robjecttotuple)
 
-## 1.1. <a name='Codecomments'></a>Code comments
+<!-- vscode-markdown-toc-config
+	numbering=true
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->
+
+##  1. <a name='Codecomments'></a>Code comments
 
 ```R
 ## This is code comments, it just only allow single line comments.
 ```
 
-## 1.2. <a name='Variable'></a>Variable
+##  2. <a name='Variable'></a>Variable
 
 Variable in ``R#`` should be declared by a ``let``/``const`` keyword, and using ``<-`` or ``=`` operator for value initialize by a expression. If the variable declaration not follow by a value initialize expression, then by default its value is set to ``NULL``:
 
@@ -110,7 +136,7 @@ a;
 # [1] 88  2  3  4  5 99
 ```
 
-#### 1.2.0.1. <a name='AppendVector'></a>Append Vector
+####  2.1. <a name='AppendVector'></a>Append Vector
 
 You can using ``append()`` function for append a vector in R language, and in R# you can using both ``append()`` function and left shift ``<<`` operator for append a vector:
 
@@ -125,7 +151,7 @@ NOTE: As the ``R#`` language is not designed for general programming, the most u
 + The ``<<`` operator is usually used for array push liked operation in ``R#`` language; 
 + And the ``>>`` operator is usually used for data file save operation.
 
-## 1.3. <a name='Types'></a>Types
+##  3. <a name='Types'></a>Types
 
 ``R#`` language have several primitive type, **by default all of them are vector type**:
 
@@ -220,7 +246,7 @@ let test.integer as function(x as integer) {
 }
 ```
 
-### 1.3.1. imports .NET type
+###  3.1. <a name='imports.NETtype'></a>1.3.1. imports .NET type
 
 you can use the ``new`` keyword for create the imported .NET type in R# language:
 
@@ -239,7 +265,7 @@ for implements such programming feature, then you should make sure about somethi
 2. target .NET object type should have one parameterless constructor
 3. export type at the top of your package module.
 
-## 1.4. <a name='GetSetvalue'></a>Get/Set value
+##  4. <a name='GetSetvalue'></a>Get/Set value
 
 Get/Set property value keeps the same as the R language: 
 
@@ -250,7 +276,7 @@ let new.names <- ["a", "b", "c"];
 dataframe[, "name"] <- new.names;
 ```
 
-## 1.5. Function and lambda function
+##  5. <a name='Functionandlambdafunction'></a>1.5. Function and lambda function
 
 For declare a function, use
 
@@ -267,7 +293,7 @@ The lambda function is more light weight and elegant than the normal function. T
 let add.lambda = [a,b] -> a+b;
 ```
 
-## 1.6. <a name='String'></a>String
+##  6. <a name='String'></a>String
 
 Add new string contact and string interploate feature for ``R#``, makes you more easier in the string manipulation:
 
@@ -280,9 +306,9 @@ let my.name  <- `${first.name} ${last.name}`;
 let his.name <- sprintf("%s %s", first.name, last.name); 
 ```
 
-## 1.7. <a name='OperatorsinR'></a>Operators in R#
+##  7. <a name='OperatorsinR'></a>Operators in R#
 
-### 1.7.1. <a name='Logicaloperators'></a>Logical operators
+###  7.1. <a name='Logicaloperators'></a>Logical operators
 
 The ``R#`` language using the VisualBasic logical operator system, as the ``&`` operator is conflicts with the string contact and ``|`` operator is conflicts with the pipeline operator.
 
@@ -298,7 +324,7 @@ if (x <= 10 andalso y != 99) {
 }
 ```
 
-### 1.7.2. <a name='DynamicsOperatorBinding'></a>Dynamics Operator Binding
+###  7.2. <a name='DynamicsOperatorBinding'></a>Dynamics Operator Binding
 
 Allows you binding operator on your custom type in dynamics way when you create a user objec from ``list()`` function:
 
@@ -337,7 +363,7 @@ Allows user operator
 |``in``   | collection set      |
 |``which``| index list for true |
 
-#### 1.7.2.1. <a name='Useroperator'></a>User operator
+####  7.2.1. <a name='Useroperator'></a>User operator
 
 In the R language, you can define a user operator, example like:
 
@@ -363,7 +389,7 @@ x;
 # [1] 400
 ```
 
-### 1.7.3. <a name='pipelineoperator'></a>pipeline operator
+###  7.3. <a name='pipelineoperator'></a>pipeline operator
 
 Extension caller chain in VisualBasic is also named as function pipeline
 
@@ -462,7 +488,7 @@ foo_value
 ;
 ```
 
-### 1.7.4. <a name='INoperator'></a>IN operator
+###  7.4. <a name='INoperator'></a>IN operator
 
 The ``in`` operator means does the element in the target collection? returns a boolean vector for indicate exists or not exists.
 
@@ -474,7 +500,7 @@ local booleans <- name in names(obj);
 local booleans <- x in [min, max];
 ```
 
-#### 1.7.4.1. <a name='combinewithWhichoperator'></a>combine with ``Which`` operator 
+####  7.4.1. <a name='combinewithWhichoperator'></a>combine with ``Which`` operator 
 
 The ``which`` operator gets the index of the value ``TRUE`` in a boolean vector:
 
@@ -483,7 +509,7 @@ local x <- |1, 2, 3, 4, 5|;
 local indices.true <- which x in [min, max];
 ```
 
-## 1.8. <a name='bracketinRlanguage'></a>``[]`` bracket in R language
+##  8. <a name='bracketinRlanguage'></a>``[]`` bracket in R language
 
 Global variable:
 
@@ -551,7 +577,7 @@ l[&1];
 
 Please notice that the term ``"1"`` is totaly differently with ``%1%``, as the term ``"1"`` means accessor by property name, and the term ``%1%`` means accessor by vector element index.
 
-## 1.9. <a name='IOoperation'></a>IO operation
+##  9. <a name='IOoperation'></a>IO operation
 
 ```R
 ## You can using right shift operator for write data into file
@@ -586,7 +612,7 @@ matrix >> "./matrix.csv"; # A csv file will be generated.
 matrix >> "./matrix.txt"; # A tsv file will be generated.
 ```
 
-### 1.9.1. <a name='Simpleexternalcalls'></a>Simple external calls
+###  9.1. <a name='Simpleexternalcalls'></a>Simple external calls
 
 The ``R#`` language makes more easier for calling external command from CLI, apply a ``@`` operator on a string vector will makes an external system calls:
 
@@ -598,7 +624,7 @@ let CLI <- '/bin/GCModeller/localblast /blastp /query "{query.fasta}" /subject "
 let [exitCode, stdout] <- @CLI;
 ```
 
-## 1.10. <a name='Usingtuple'></a>Using tuple
+##  10. <a name='Usingtuple'></a>Using tuple
 
 Tuple enable the R function returns multiple value at once:
 
@@ -632,7 +658,7 @@ If x.a = 3 Then
 End If
 ```
 
-### 1.10.1. <a name='Robjecttotuple'></a>R object to tuple
+###  10.1. <a name='Robjecttotuple'></a>R object to tuple
 
 You can naturally convert the object as tuple value. The member in the tuple their name should matched the names in an object, so that you can doing something like this example in ``R#``:
 
