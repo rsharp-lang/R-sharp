@@ -200,7 +200,7 @@ Module plots
         End If
 
         Dim fx As Func(Of Double, Double) = math.CreateLambda(Of Double, Double)(env)
-        Dim x As Double() = vector.asVector(Of Double)(args!x)
+        Dim x As Double() = asVector(Of Double)(args!x)
         Dim points As PointF() = x.Select(Function(xi) New PointF(xi, fx(xi))).ToArray
 
         Return points.Plot(
@@ -261,8 +261,8 @@ Module plots
                                  Optional alpha As Integer = 255,
                                  Optional ptSize As Integer = 5) As SerialData
 
-        Dim px As Double() = vector.asVector(Of Double)(x)
-        Dim py As Double() = vector.asVector(Of Double)(y)
+        Dim px As Double() = asVector(Of Double)(x)
+        Dim py As Double() = asVector(Of Double)(y)
         Dim points As PointData() = px _
             .Select(Function(xi, i)
                         Return New PointData With {
