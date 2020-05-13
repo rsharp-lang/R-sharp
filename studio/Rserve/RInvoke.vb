@@ -12,5 +12,6 @@ Public Class RInvoke
     Public Property warnings As Message()
     Public Property err As Message
     Public Property code As Integer
+    Public Property server_time As Date = Now
 
 End Class
