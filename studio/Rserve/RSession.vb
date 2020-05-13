@@ -15,8 +15,12 @@ Imports SMRUCC.Rsharp.System.Configuration
 
 Public Class RSession : Inherits HttpServer
 
-    Public Sub New(port As Integer, Optional threads As Integer = -1)
-        MyBase.New(port, threads)
+    ReadOnly workspace$
+
+    Public Sub New(port As Integer, Optional workspace$ = "./")
+        Call MyBase.New(port, 1)
+
+        Me.workspace = workspace
     End Sub
 
     Public Overrides Sub handleGETRequest(p As HttpProcessor)
