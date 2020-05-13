@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f2721bf469e192a38a39af965443677b, R#\Runtime\System\TypeCode.vb"
+﻿#Region "Microsoft.VisualBasic::025b193f8a51ac699ec52f7caf4bc333, R#\Runtime\System\TypeCode.vb"
 
     ' Author:
     ' 
@@ -33,8 +33,8 @@
 
     '     Enum TypeCodes
     ' 
-    '         [boolean], [closure], [double], [integer], [ref]
-    '         [string]
+    '         [boolean], [closure], [dataframe], [double], [integer]
+    '         [ref], [string]
     ' 
     '  
     ' 

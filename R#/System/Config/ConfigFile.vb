@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5ce1c54ec1660ab542c42e9fe8dfa31f, R#\System\Config\ConfigFile.vb"
+﻿#Region "Microsoft.VisualBasic::61d9eb50ecb5c9fa5810671ea8753042, R#\System\Config\ConfigFile.vb"
 
     ' Author:
     ' 
@@ -39,8 +39,10 @@
     ' 
     '     Class ConfigFile
     ' 
-    '         Properties: config, localConfigs, size, startups, system
+    '         Properties: config, GCModellerSettings, localConfigs, size, startups
+    '                     system
     ' 
+    '         Constructor: (+1 Overloads) Sub New
     '         Function: EmptyConfigs, GenericEnumerator, GetEnumerator, GetStartupLoadingPackages, Load
     ' 
     ' 

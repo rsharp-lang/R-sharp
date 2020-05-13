@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a0689cdf98c09acdf41256c63ee961f6, R#\Runtime\Internal\internalInvokes\string.vb"
+﻿#Region "Microsoft.VisualBasic::333fc3b377562705be1a590a4180b0b6, R#\Runtime\Internal\internalInvokes\string.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,15 @@
     ' 
     '         Function: [string], Csprintf, grep, html, json
     '                   match, nchar, paste, regexp, sprintfSingle
-    '                   str_replace, strsplit, xml
+    '                   str_pad, str_replace, strsplit, xml
+    ' 
+    '     Enum str_padSides
+    ' 
+    '         both, left, right
+    ' 
+    '  
+    ' 
+    ' 
     ' 
     ' 
     ' /********************************************************************************/

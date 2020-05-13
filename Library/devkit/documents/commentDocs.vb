@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2b0ef3d255f2d9096e556cf676b5fd27, Library\devkit\documents\commentDocs.vb"
+﻿#Region "Microsoft.VisualBasic::e2e1d67ca21f700423c65d821055d726, Library\devkit\documents\commentDocs.vb"
 
     ' Author:
     ' 
@@ -45,4 +45,3 @@
 Module commentDocs
 
 End Module
-
