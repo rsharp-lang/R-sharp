@@ -45,13 +45,15 @@
 
 Imports System.IO
 Imports System.Net.Sockets
-Imports System.Text
 Imports Flute.Http.Core
 Imports Flute.Http.Core.Message
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.System.Configuration
 Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
@@ -118,7 +120,8 @@ Public Class RSession : Inherits HttpServer
             invokeRtvl.content_type = content_type
         End Using
 
-        Dim json As String = invokeRtvl.GetJson
+        ' Dim json As String = invokeRtvl.GetJson(knownTypes:={GetType(Message), GetType(MSG_TYPES), GetType(StackFrame)})
+        Dim json As String = JSONSerializer.GetJson(invokeRtvl)
         Dim buffer As Byte() = Encodings.UTF8WithoutBOM.CodePage.GetBytes(json)
 
         Call response.WriteHeader("application/json", buffer.Length)
