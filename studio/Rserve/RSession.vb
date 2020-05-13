@@ -1,87 +1,136 @@
 ﻿#Region "Microsoft.VisualBasic::44747715f0b0aeb1ac1dd1a772767cf2, studio\Rserve\RSession.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Class RSession
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: getHttpProcessor
-    ' 
-    '     Sub: handleGETRequest, handleOtherMethod, handlePOSTRequest
-    ' 
-    ' /********************************************************************************/
+' Class RSession
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: getHttpProcessor
+' 
+'     Sub: handleGETRequest, handleOtherMethod, handlePOSTRequest
+' 
+' /********************************************************************************/
 
 #End Region
 
-Imports System.Collections.Specialized
-Imports System.ComponentModel
 Imports System.IO
 Imports System.Net.Sockets
-Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Flute.Http.Core
-Imports Microsoft.VisualBasic.CommandLine
-Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
-Imports Microsoft.VisualBasic.Serialization.JSON
+Imports Flute.Http.Core.Message
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.System.Configuration
 
 Public Class RSession : Inherits HttpServer
 
-    ReadOnly workspace$
+    ReadOnly R As RInterpreter
 
-    Public Sub New(port As Integer, Optional workspace$ = "./")
-        Call MyBase.New(port, 1)
+    Public Sub New(port As Integer,
+                   Optional workspace$ = "./",
+                   Optional showError As Boolean = True)
 
-        Me.workspace = workspace
+        Call MyBase.New(port, App.CPUCoreNumbers)
+
+        Me.R = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
+        Me.R.silent = True
+        Me.R.redirectError2stdout = showError
+
+        For Each pkgName As String In R.configFile.GetStartupLoadingPackages
+            Call R.LoadLibrary(packageName:=pkgName, silent:=True)
+        Next
+
+        With $""
+
+        End With
     End Sub
 
     Public Overrides Sub handleGETRequest(p As HttpProcessor)
-        Throw New NotImplementedException()
+        Dim request As New HttpRequest(p)
+
+        Select Case request.URL.path
+            Case "exec"
+                Call runCode(request.URL("script"), New HttpResponse(p.outputStream, AddressOf p.writeFailure))
+        End Select
+    End Sub
+
+    Private Sub runCode(scriptText As String, response As HttpResponse)
+        Using output As New MemoryStream(), Rstd_out As New StreamWriter(output, Encodings.UTF8WithoutBOM.CodePage)
+            Dim result As Object
+            Dim code As Integer
+            Dim content_type As String
+
+            result = R.RedirectOutput(Rstd_out).Evaluate(scriptText)
+            code = Rscript.handleResult(result, R.globalEnvir, Nothing)
+
+            If R.globalEnvir.stdout.recommendType Is Nothing Then
+                content_type = "text/html"
+            Else
+                content_type = R.globalEnvir.stdout.recommendType
+            End If
+
+            Call Rstd_out.Flush()
+
+            If code <> 0 Then
+                Dim err As String = Encoding.UTF8.GetString(output.ToArray)
+
+                If R.redirectError2stdout Then
+                    Call response.WriteHTML(err)
+                Else
+                    Call response.WriteError(code, err)
+                End If
+            Else
+                Call response.WriteHeader(content_type, output.Length)
+                Call response.Write(output.ToArray)
+            End If
+        End Using
     End Sub
 
     Public Overrides Sub handlePOSTRequest(p As HttpProcessor, inputData As String)
-        Throw New NotImplementedException()
+        Dim post As New HttpPOSTRequest(p, inputData)
+
+        Select Case post.URL.path
+            Case "exec"
+
+        End Select
     End Sub
 
     Public Overrides Sub handleOtherMethod(p As HttpProcessor)
-        Throw New NotImplementedException()
+        Call p.writeFailure(404, "method not found")
     End Sub
 
     Protected Overrides Function getHttpProcessor(client As TcpClient, bufferSize As Integer) As HttpProcessor
-        Throw New NotImplementedException()
+        Return New HttpProcessor(client, Me, bufferSize)
     End Function
 End Class
 
