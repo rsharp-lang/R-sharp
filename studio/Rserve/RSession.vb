@@ -115,7 +115,7 @@ Public Class RSession : Inherits HttpServer
 
             Call Rstd_out.Flush()
 
-            invokeRtvl.stdOut = output.ToArray.ToBase64String
+            invokeRtvl.info = output.ToArray.ToBase64String
             invokeRtvl.warnings = R.globalEnvir.messages.PopAll
             invokeRtvl.content_type = content_type
         End Using
