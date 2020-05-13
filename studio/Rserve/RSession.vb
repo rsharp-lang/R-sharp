@@ -45,6 +45,7 @@
 
 Imports System.IO
 Imports System.Net.Sockets
+Imports System.Text
 Imports Flute.Http.Core
 Imports Flute.Http.Core.Message
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
@@ -87,7 +88,13 @@ Public Class RSession : Inherits HttpServer
 
         Select Case request.URL.path
             Case "exec"
-                Call runCode(request.URL("script"), New HttpResponse(p.outputStream, AddressOf p.writeFailure))
+                Dim script As New StringBuilder
+
+                For Each line As String In request.URL.GetValues("script")
+                    script.AppendLine(line & ";")
+                Next
+
+                Call runCode(script.ToString, New HttpResponse(p.outputStream, AddressOf p.writeFailure))
         End Select
     End Sub
 
