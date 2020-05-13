@@ -138,6 +138,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RInvoke.vb" />
     <Compile Include="RSession.vb" />
     <Compile Include="Rweb.vb" />
     <Compile Include="Program.vb" />

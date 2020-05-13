@@ -48,9 +48,12 @@ Imports System.Net.Sockets
 Imports System.Text
 Imports Flute.Http.Core
 Imports Flute.Http.Core.Message
+Imports Microsoft.VisualBasic.Net.Http
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.System.Configuration
+Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
 Public Class RSession : Inherits HttpServer
 
@@ -70,8 +73,10 @@ Public Class RSession : Inherits HttpServer
             Call R.LoadLibrary(packageName:=pkgName, silent:=True)
         Next
 
-        With $""
+        With $"{workspace}/.RData"
+            If .FileExists(True) Then
 
+            End If
         End With
     End Sub
 
@@ -85,13 +90,20 @@ Public Class RSession : Inherits HttpServer
     End Sub
 
     Private Sub runCode(scriptText As String, response As HttpResponse)
+        Dim invokeRtvl As New RInvoke
+
         Using output As New MemoryStream(), Rstd_out As New StreamWriter(output, Encodings.UTF8WithoutBOM.CodePage)
             Dim result As Object
-            Dim code As Integer
             Dim content_type As String
 
             result = R.RedirectOutput(Rstd_out).Evaluate(scriptText)
-            code = Rscript.handleResult(result, R.globalEnvir, Nothing)
+
+            If RProgram.isException(result) Then
+                invokeRtvl.code = 500
+                invokeRtvl.err = result
+            Else
+                invokeRtvl.code = 0
+            End If
 
             If R.globalEnvir.stdout.recommendType Is Nothing Then
                 content_type = "text/html"
@@ -101,19 +113,16 @@ Public Class RSession : Inherits HttpServer
 
             Call Rstd_out.Flush()
 
-            If code <> 0 Then
-                Dim err As String = Encoding.UTF8.GetString(output.ToArray)
-
-                If R.redirectError2stdout Then
-                    Call response.WriteHTML(err)
-                Else
-                    Call response.WriteError(code, err)
-                End If
-            Else
-                Call response.WriteHeader(content_type, output.Length)
-                Call response.Write(output.ToArray)
-            End If
+            invokeRtvl.stdOut = output.ToArray.ToBase64String
+            invokeRtvl.warnings = R.globalEnvir.messages.PopAll
+            invokeRtvl.content_type = content_type
         End Using
+
+        Dim json As String = invokeRtvl.GetJson
+        Dim buffer As Byte() = Encodings.UTF8WithoutBOM.CodePage.GetBytes(json)
+
+        Call response.WriteHeader("application/json", buffer.Length)
+        Call response.Write(buffer)
     End Sub
 
     Public Overrides Sub handlePOSTRequest(p As HttpProcessor, inputData As String)
