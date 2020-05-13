@@ -75,6 +75,9 @@ Module Program
         Dim port As Integer = args("--port") Or 8848
         Dim workspace As String = args("--workspace") Or "./"
 
+        Using http As New RSession(port, workspace)
+            Return http.Run
+        End Using
     End Function
 
 End Module

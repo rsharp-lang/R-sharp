@@ -115,7 +115,12 @@ Namespace Interpreter.SyntaxParser
 
             If TypeOf b Is FunctionInvoke Then
                 pip = b
-                pip.parameters.Insert(Scan0, a)
+                pip.parameters = pip.parameters _
+                    .AsList _
+                    .With(Sub(list)
+                              Call list.Insert(Scan0, a)
+                          End Sub) _
+                    .ToArray
             ElseIf TypeOf b Is SymbolReference Then
                 Dim name$ = DirectCast(b, SymbolReference).symbol
                 Dim stacktrace As New StackFrame With {

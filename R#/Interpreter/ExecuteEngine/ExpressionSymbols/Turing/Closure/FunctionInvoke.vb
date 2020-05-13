@@ -87,10 +87,19 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         ''' <returns></returns>
         Public Property [namespace] As String
 
+        Dim m_parameters As Expression()
+
         ''' <summary>
         ''' The parameters expression that passing to the target invoked function.
         ''' </summary>
-        Friend ReadOnly parameters As List(Of Expression)
+        Public Property parameters As Expression()
+            Get
+                Return m_parameters
+            End Get
+            Friend Set(value As Expression())
+                m_parameters = value
+            End Set
+        End Property
 
         ''' <summary>
         ''' Use for create pipeline calls from identifier target
@@ -242,7 +251,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 ' loop, then returns result will be wrapped as return runtime literal value
                 ' so we needs to break such wrapper at here
                 ' or ctype error will happends
-                Dim result As Object = DirectCast(funcVar, RFunction).Invoke(envir, InvokeParameter.Create(parameters))
+                Dim result As Object = DirectCast(funcVar, RFunction).Invoke(envir, InvokeParameter.Create(expressions:=parameters))
 
                 If Not result Is Nothing Then
                     If result.GetType Is GetType(ReturnValue) AndAlso DirectCast(result, ReturnValue).IsRuntimeFunctionReturnWrapper Then
@@ -254,7 +263,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     Return Nothing
                 End If
             Else
-                Dim args = InvokeParameter.Create(parameters)
+                Dim args = InvokeParameter.Create(expressions:=parameters)
                 Dim interop As RMethodInfo = DirectCast(funcVar, RMethodInfo)
 
                 ' invoke .NET package method
@@ -267,7 +276,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 Return runOptions(envir)
             Else
                 ' create argument models
-                Dim argVals As InvokeParameter() = InvokeParameter.Create(parameters)
+                Dim argVals As InvokeParameter() = InvokeParameter.Create(expressions:=parameters)
                 ' and then invoke the specific internal R# api
                 Dim result As Object = Internal.invoke.invokeInternals(envir, funcName, argVals)
 
