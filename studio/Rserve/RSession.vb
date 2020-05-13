@@ -121,7 +121,7 @@ Public Class RSession : Inherits HttpServer
         End Using
 
         ' Dim json As String = invokeRtvl.GetJson(knownTypes:={GetType(Message), GetType(MSG_TYPES), GetType(StackFrame)})
-        Dim json As String = JSONSerializer.GetJson(invokeRtvl)
+        Dim json As String = JSONSerializer.GetJson(invokeRtvl, enumToStr:=True)
         Dim buffer As Byte() = Encodings.UTF8WithoutBOM.CodePage.GetBytes(json)
 
         Call response.WriteHeader("application/json", buffer.Length)
