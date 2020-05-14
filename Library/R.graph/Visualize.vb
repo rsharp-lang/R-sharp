@@ -49,10 +49,10 @@ Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports stdNum = System.Math
 
 ''' <summary>
@@ -77,7 +77,8 @@ Module Visualize
                                Optional defaultNodeSize! = 10,
                                Optional nodeSize As Object = Nothing,
                                Optional labelerIterations% = 0,
-                               Optional env As Environment = Nothing) As Object
+                               Optional env As Environment = Nothing,
+                               Optional driver As Drivers = Drivers.GDI) As Object
 
         Dim nodeRadius As [Variant](Of Func(Of Node, Single), Single) = Nothing
 
@@ -123,7 +124,9 @@ Module Visualize
             padding:=InteropArgumentHelper.getPadding(padding),
             labelerIterations:=labelerIterations,
             defaultColor:=InteropArgumentHelper.getColor(defaultColor),
-            nodeRadius:=nodeRadius
+            nodeRadius:=nodeRadius,
+            labelTextStroke:=Nothing,
+            driver:=driver
         )
     End Function
 
