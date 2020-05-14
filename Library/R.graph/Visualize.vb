@@ -77,9 +77,10 @@ Module Visualize
                                Optional minNodeSize! = 10,
                                Optional minLinkWidth! = 2,
                                Optional nodeSize As Object = Nothing,
-                               Optional labelerIterations% = 0,
-                               Optional env As Environment = Nothing,
-                               Optional driver As Drivers = Drivers.GDI) As Object
+                               Optional labelerIterations% = 100,
+                               Optional showLabelerProgress As Boolean = False,
+                               Optional driver As Drivers = Drivers.GDI,
+                               Optional env As Environment = Nothing) As Object
 
         Dim nodeRadius As [Variant](Of Func(Of Node, Single), Single) = Nothing
 
@@ -128,7 +129,8 @@ Module Visualize
             nodeRadius:=nodeRadius,
             labelTextStroke:=Nothing,
             driver:=driver,
-            minLinkWidth:=minLinkWidth
+            minLinkWidth:=minLinkWidth,
+            showLabelerProgress:=showLabelerProgress
         )
     End Function
 

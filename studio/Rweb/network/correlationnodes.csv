@@ -1,0 +1,70 @@
+"","names","degree","p","fdr","log2FC"
+"Glycine","Glycine",4,0.0628,0.152,1.08
+"Succinic acid","Succinic acid",5,0.188,0.297,0.346
+"Serine","Serine",5,0.79,0.882,0.0804
+"Threonine","Threonine",7,0.0473,0.138,0.551
+"myo-inositol","myo-inositol",5,0.0776,0.164,-0.555
+"Galactosylglycerol","Galactosylglycerol",5,0.217,0.336,-0.485
+"Salicylic acid","Salicylic acid",1,0.0211,0.079,-1.49
+"Phosphoric acid","Phosphoric acid",12,0.000368,0.007,0.976
+"Ethanolamine","Ethanolamine",14,0.000828,0.0126,0.742
+"Glyceric acid","Glyceric acid",8,0.00183,0.015,0.959
+"Fumaric acid","Fumaric acid",11,0.00714,0.0388,0.367
+"Adipic acid","Adipic acid",5,0.0218,0.079,0.492
+"Tyrosine","Tyrosine",13,0.00217,0.015,-2.17
+"Glucaric acid","Glucaric acid",15,1.95e-05,0.00148,1.39
+"Leucine","Leucine",12,0.0117,0.0555,-1.33
+"Isoleucine","Isoleucine",10,0.0265,0.0908,-0.767
+"Pyroglutamate","Pyroglutamate",12,0.256,0.36,-0.492
+"Asparagine","Asparagine",11,0.0556,0.146,-1.41
+"Arabinose","Arabinose",8,0.165,0.273,-0.728
+"Glutamine","Glutamine",13,0.112,0.224,-1.22
+"Shikimic acid","Shikimic acid",14,0.0641,0.152,0.536
+"Citric acid","Citric acid",2,0.945,0.963,0.0133
+"Lysine","Lysine",12,0.121,0.227,-0.935
+"9-(Z)-Octadecenoic acid","9-(Z)-Octadecenoic acid",10,0.493,0.599,0.163
+"Caffeic acid","Caffeic acid",2,0.00433,0.0253,-1.62
+"3-trans-Caffeoylquinic acid","3-trans-Caffeoylquinic acid",2,0.0558,0.146,-3.56
+"Glycerol","Glycerol",8,0.879,0.955,-0.0255
+"Itaconic acid","Itaconic acid",8,0.624,0.73,-0.142
+"Nonanoic acid","Nonanoic acid",10,0.247,0.36,-0.245
+"beta-Alanine","beta-Alanine",10,0.231,0.347,-0.22
+"Putrescine","Putrescine",9,0.338,0.428,-0.171
+"Azelaic acid","Azelaic acid",7,0.148,0.252,-0.304
+"Hexadecanoic acid","Hexadecanoic acid",9,0.579,0.687,0.0895
+"1-Monohexadecanoylglycerol","1-Monohexadecanoylglycerol",8,0.129,0.227,-0.315
+"Eicosanoic acid","Eicosanoic acid",11,0.00301,0.0191,1.05
+"Docosanoic acid","Docosanoic acid",12,0.000997,0.0126,1.51
+"Tetracosanoic acid","Tetracosanoic acid",13,0.00199,0.015,0.979
+"Gluconic acid","Gluconic acid",4,0.336,0.428,-0.951
+"Fructose","Fructose",8,0.681,0.785,0.119
+"Glutaric acid","Glutaric acid",10,0.000333,0.007,1.14
+"Octadecanoic acid","Octadecanoic acid",10,0.0139,0.0555,0.514
+"Docosanol","Docosanol",11,0.00142,0.015,1.64
+"Glutamate","Glutamate",7,0.000356,0.007,0.767
+"Aspartic acid","Aspartic acid",9,0.00164,0.015,0.672
+"Heptadecanoic acid","Heptadecanoic acid",8,0.0361,0.114,0.446
+"2,4,6-Tri-tert.-butylbenzenethiol","2,4,6-Tri-tert.-butylbenzenethiol",4,0.0464,0.138,-0.442
+"Gulose","Gulose",4,0.0632,0.152,-0.836
+"Methionine","Methionine",4,0.0275,0.0908,-0.418
+"Threonic acid","Threonic acid",3,0.0138,0.0555,-1.34
+"Maltose","Maltose",3,0.0131,0.0555,-1.08
+"Dehydroascorbic acid dimer","Dehydroascorbic acid dimer",6,0.916,0.963,0.0423
+"Quinic acid","Quinic acid",7,0.873,0.955,-0.077
+"Phenylalanine","Phenylalanine",2,0.101,0.208,-0.439
+"Ribonic acid ","Ribonic acid ",2,0.26,0.36,0.225
+"IS","IS",7,0.937,0.963,0.0135
+"Galactinol","Galactinol",3,0.0737,0.164,-0.35
+"Adenosine","Adenosine",7,0.33,0.428,-0.756
+"Glucose","Glucose",4,0.304,0.412,-0.354
+"Galactose","Galactose",3,0.318,0.424,-0.33
+"Nonadecanoic acid","Nonadecanoic acid",6,0.077,0.164,0.495
+"Alanine","Alanine",6,0.233,0.347,0.474
+"Oxalic acid ","Oxalic acid ",2,0.0533,0.146,-1.43
+"Heptanoic acid","Heptanoic acid",1,0.128,0.227,0.183
+"Monomethyl phosphate","Monomethyl phosphate",7,0.0132,0.0555,0.525
+"Valine","Valine",11,0.18,0.292,-0.434
+"Urea","Urea",2,0.149,0.252,-0.857
+"Benzoic acid","Benzoic acid",8,0.257,0.36,-0.238
+"Malic acid","Malic acid",3,0.95,0.963,0.0202
+"4-amino Butyric acid","4-amino Butyric acid",1,0.12,0.227,-0.565
