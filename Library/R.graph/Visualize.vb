@@ -53,6 +53,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports stdNum = System.Math
 
 ''' <summary>
 ''' Rendering png or svg image from a given network graph model.
@@ -90,7 +91,7 @@ Module Visualize
                     nodeRadius = New Func(Of Node, Single)(
                         Function(node As Node) As Single
                             If list.slots.ContainsKey(node.label) Then
-                                Return CSng(Val(list.slots(node.label)))
+                                Return stdNum.Max(CSng(Val(list.slots(node.label))), defaultNodeSize)
                             Else
                                 Return defaultNodeSize
                             End If
@@ -139,6 +140,28 @@ Module Visualize
                     End Sub)
 
         Return g
+    End Function
+
+    <ExportAPI("node.colors")>
+    <RApiReturn(GetType(NetworkGraph), GetType(list))>
+    Public Function setNodeColors(g As NetworkGraph, Optional colors As list = Nothing) As Object
+        If colors Is Nothing Then
+            Return New list With {
+                .slots = g.vertex _
+                    .ToDictionary(Function(n) n.label,
+                                  Function(n)
+                                      Return CObj(DirectCast(n.data.color, SolidBrush).Color)
+                                  End Function)
+            }
+        Else
+            For Each node As Node In g.vertex
+                If colors.slots.ContainsKey(node.label) Then
+                    node.data.color = InteropArgumentHelper.getColor(colors.slots(node.label)).GetBrush
+                End If
+            Next
+
+            Return g
+        End If
     End Function
 
 End Module
