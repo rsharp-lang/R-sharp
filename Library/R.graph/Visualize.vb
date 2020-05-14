@@ -74,7 +74,8 @@ Module Visualize
                                Optional canvasSize As Object = "1024,768",
                                Optional padding$ = g.DefaultPadding,
                                Optional defaultColor$ = "skyblue",
-                               Optional defaultNodeSize! = 10,
+                               Optional minNodeSize! = 10,
+                               Optional minLinkWidth! = 2,
                                Optional nodeSize As Object = Nothing,
                                Optional labelerIterations% = 0,
                                Optional env As Environment = Nothing,
@@ -83,7 +84,7 @@ Module Visualize
         Dim nodeRadius As [Variant](Of Func(Of Node, Single), Single) = Nothing
 
         If nodeSize Is Nothing Then
-            nodeRadius = defaultNodeSize
+            nodeRadius = minNodeSize
         Else
             Select Case nodeSize.GetType
                 Case GetType(list)
@@ -92,9 +93,9 @@ Module Visualize
                     nodeRadius = New Func(Of Node, Single)(
                         Function(node As Node) As Single
                             If list.slots.ContainsKey(node.label) Then
-                                Return stdNum.Max(CSng(Val(list.slots(node.label))), defaultNodeSize)
+                                Return stdNum.Max(CSng(Val(list.slots(node.label))), minNodeSize)
                             Else
-                                Return defaultNodeSize
+                                Return minNodeSize
                             End If
                         End Function
                     )
@@ -126,7 +127,8 @@ Module Visualize
             defaultColor:=InteropArgumentHelper.getColor(defaultColor),
             nodeRadius:=nodeRadius,
             labelTextStroke:=Nothing,
-            driver:=driver
+            driver:=driver,
+            minLinkWidth:=minLinkWidth
         )
     End Function
 

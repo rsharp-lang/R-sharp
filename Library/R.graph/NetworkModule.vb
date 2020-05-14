@@ -204,14 +204,18 @@ Public Module NetworkModule
     ''' <param name="tuples">a given node label tuple list</param>
     ''' <returns></returns>
     <ExportAPI("add.edges")>
-    Public Function addEdges(g As NetworkGraph, tuples As Object) As NetworkGraph
+    Public Function addEdges(g As NetworkGraph, tuples As Object, <RRawVectorArgument> Optional weight As Object = Nothing) As NetworkGraph
         Dim nodeLabels As String()
         Dim edge As Edge
         Dim i As i32 = 1
+        Dim weights As Double() = REnv.asVector(Of Double)(weight)
+        Dim w As Double
 
         For Each tuple As NamedValue(Of Object) In list.GetSlots(tuples).IterateNameValues
             nodeLabels = REnv.asVector(Of String)(tuple.Value)
+            w = weights.ElementAtOrDefault(CInt(i) - 1)
             edge = g.CreateEdge(nodeLabels(0), nodeLabels(1))
+            edge.weight = w
 
             ' 20191226
             ' 如果使用数字作为边的编号的话
