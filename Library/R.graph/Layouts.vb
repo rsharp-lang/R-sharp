@@ -65,10 +65,11 @@ Module Layouts
     <ExportAPI("layout.force_directed")>
     Public Function forceDirect(g As NetworkGraph,
                                 Optional iterations% = 1000,
-                                Optional clearScreen As Boolean = False) As NetworkGraph
+                                Optional clearScreen As Boolean = False,
+                                Optional showProgress As Boolean = True) As NetworkGraph
 
         Return g.doForceLayout(
-            showProgress:=True,
+            showProgress:=showProgress,
             iterations:=iterations,
             clearScreen:=clearScreen
         )
