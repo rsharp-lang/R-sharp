@@ -63,6 +63,7 @@ Imports node = Microsoft.VisualBasic.Data.visualize.Network.Graph.Node
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 <Package("igraph")>
+<RTypeExport("graph", GetType(NetworkGraph))>
 Public Module NetworkModule
 
     Sub New()
