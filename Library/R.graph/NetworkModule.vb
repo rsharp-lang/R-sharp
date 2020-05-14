@@ -126,6 +126,17 @@ Public Module NetworkModule
         Return g.ComputeNodeDegrees
     End Function
 
+    ''' <summary>
+    ''' compute network properties' data
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <returns></returns>
+    <ExportAPI("compute.network")>
+    Public Function computeNetwork(g As NetworkGraph) As NetworkGraph
+        Call g.ComputeNodeDegrees
+        Return g
+    End Function
+
     <ExportAPI("add.nodes")>
     Public Function addNodes(g As NetworkGraph, labels$()) As NetworkGraph
         For Each label As String In labels
