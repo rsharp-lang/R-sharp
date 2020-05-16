@@ -140,13 +140,15 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         Public Function CreateLambda(Of T, Out)(parent As Environment) As Func(Of T, Out)
             Dim envir = New Environment(parent, stackFrame, isInherits:=False)
             Dim v As Symbol
+            Dim err As Message = Nothing
 
             Call DeclareNewSymbol _
                 .PushNames(names:=parameter.names,
                            value:=Nothing,
                            type:=GetType(T).GetRTypeCode,
                            envir:=envir,
-                           [readonly]:=False
+                           [readonly]:=False,
+                           err:=err
             )
 
             v = envir.FindSymbol(parameter.names(Scan0), [inherits]:=False)

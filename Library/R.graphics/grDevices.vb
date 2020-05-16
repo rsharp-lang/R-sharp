@@ -73,7 +73,11 @@ Public Module grDevices
     ''' save the graphics plot object as image file
     ''' </summary>
     ''' <param name="graphics">a graphics plot object</param>
-    ''' <param name="file">the file path for save the image file.</param>
+    ''' <param name="file">the file path for save the image file. 
+    ''' (if this file path parameter is nothing, then the resulted 
+    ''' image object will be flush to the standard output stream 
+    ''' of R# environment.)
+    ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("save.graphics")>

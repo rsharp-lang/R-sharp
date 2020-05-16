@@ -143,13 +143,20 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
         End Function
 
         Private Function RunLoop(value As Object, stackframe As StackFrame, env As Environment) As Object
+            Dim err As Message = Nothing
+
             Using closure As Environment = DeclareNewSymbol.PushNames(
                     names:=variables,
                     value:=value,
                     type:=TypeCodes.generic,
                     envir:=New Environment(env, stackframe, isInherits:=False),
-                    [readonly]:=False
+                    [readonly]:=False,
+                    err:=err
                 )
+
+                If Not err Is Nothing Then
+                    Return err
+                End If
 
                 Return body.Invoke(closure, {})
             End Using

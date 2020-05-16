@@ -63,6 +63,7 @@ Imports node = Microsoft.VisualBasic.Data.visualize.Network.Graph.Node
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 <Package("igraph")>
+<RTypeExport("graph", GetType(NetworkGraph))>
 Public Module NetworkModule
 
     Sub New()
@@ -123,6 +124,17 @@ Public Module NetworkModule
     <ExportAPI("degree")>
     Public Function degree(g As NetworkGraph) As Dictionary(Of String, Integer)
         Return g.ComputeNodeDegrees
+    End Function
+
+    ''' <summary>
+    ''' compute network properties' data
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <returns></returns>
+    <ExportAPI("compute.network")>
+    Public Function computeNetwork(g As NetworkGraph) As NetworkGraph
+        Call g.ComputeNodeDegrees
+        Return g
     End Function
 
     <ExportAPI("add.nodes")>
@@ -192,14 +204,18 @@ Public Module NetworkModule
     ''' <param name="tuples">a given node label tuple list</param>
     ''' <returns></returns>
     <ExportAPI("add.edges")>
-    Public Function addEdges(g As NetworkGraph, tuples As Object) As NetworkGraph
+    Public Function addEdges(g As NetworkGraph, tuples As Object, <RRawVectorArgument> Optional weight As Object = Nothing) As NetworkGraph
         Dim nodeLabels As String()
         Dim edge As Edge
         Dim i As i32 = 1
+        Dim weights As Double() = REnv.asVector(Of Double)(weight)
+        Dim w As Double
 
         For Each tuple As NamedValue(Of Object) In list.GetSlots(tuples).IterateNameValues
             nodeLabels = REnv.asVector(Of String)(tuple.Value)
+            w = weights.ElementAtOrDefault(CInt(i) - 1)
             edge = g.CreateEdge(nodeLabels(0), nodeLabels(1))
+            edge.weight = w
 
             ' 20191226
             ' 如果使用数字作为边的编号的话

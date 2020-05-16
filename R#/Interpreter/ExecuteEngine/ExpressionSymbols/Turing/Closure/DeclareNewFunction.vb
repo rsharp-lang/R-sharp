@@ -165,8 +165,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
                     Call ValueAssign.doValueAssign(envir, names, True, value)
                 Else
+                    Dim err As Message = Nothing
+
                     ' 不存在，则插入新的
-                    Call DeclareNewSymbol.PushNames(var.names, value, var.type, False, envir)
+                    Call DeclareNewSymbol.PushNames(var.names, value, var.type, False, envir, err:=err)
+
+                    If Not err Is Nothing Then
+                        Return err
+                    End If
                 End If
             Next
 

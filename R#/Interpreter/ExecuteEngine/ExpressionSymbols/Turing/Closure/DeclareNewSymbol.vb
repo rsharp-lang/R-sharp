@@ -109,9 +109,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 Return value
             Else
                 Try
+                    Dim err As Message = Nothing
                     ' add new symbol into the given environment stack
                     ' and then returns the value result
-                    Call PushNames(names, value, type, is_readonly, envir)
+                    Call PushNames(names, value, type, is_readonly, envir, err:=err)
+
+                    If Not err Is Nothing Then
+                        value = err
+                    End If
                 Catch ex As Exception
                     value = Internal.debug.stop({
                         ex.Message,
@@ -136,34 +141,50 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         ''' <returns>
         ''' 用于初始化环境对象
         ''' </returns>
-        Friend Shared Function PushNames(names$(), value As Object, type As TypeCodes, [readonly] As Boolean, envir As Environment) As Environment
+        Friend Shared Function PushNames(names$(), value As Object, type As TypeCodes, [readonly] As Boolean, envir As Environment, ByRef err As Message) As Environment
             If Not value Is Nothing AndAlso TypeOf value Is invisible Then
                 value = DirectCast(value, invisible).value
             End If
 
             If names.Length = 1 Then
-                Call envir.Push(names(Scan0), value, [readonly], type)
+                value = envir.Push(names(Scan0), value, [readonly], type)
             Else
                 ' tuple
-                Call PushTuple(names, value, type, [readonly], envir)
+                value = PushTuple(names, value, type, [readonly], envir)
+            End If
+
+            If Program.isException(value) Then
+                err = value
+            Else
+                err = Nothing
             End If
 
             Return envir
         End Function
 
-        Private Shared Sub PushTuple(names$(), value As Object, type As TypeCodes, [readonly] As Boolean, envir As Environment)
+        Private Shared Function PushTuple(names$(), value As Object, type As TypeCodes, [readonly] As Boolean, envir As Environment) As Object
+            Dim rtvl As Object
+
             If Not value Is Nothing AndAlso value.GetType.IsArray Then
                 Dim vector As Array = value
 
                 If vector.Length = 1 Then
                     ' all set with one value
                     For Each name As String In names
-                        Call envir.Push(name, value, [readonly])
+                        rtvl = envir.Push(name, value, [readonly])
+
+                        If Program.isException(rtvl) Then
+                            Return rtvl
+                        End If
                     Next
                 ElseIf vector.Length = names.Length Then
                     ' declare one by one
                     For i As Integer = 0 To vector.Length - 1
-                        Call envir.Push(names(i), vector.GetValue(i), [readonly])
+                        rtvl = envir.Push(names(i), vector.GetValue(i), [readonly])
+
+                        If Program.isException(rtvl) Then
+                            Return rtvl
+                        End If
                     Next
                 Else
                     Throw New SyntaxErrorException
@@ -171,10 +192,16 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Else
                 ' all set with one value
                 For Each name As String In names
-                    Call envir.Push(name, value, [readonly])
+                    rtvl = envir.Push(name, value, [readonly])
+
+                    If Program.isException(rtvl) Then
+                        Return rtvl
+                    End If
                 Next
             End If
-        End Sub
+
+            Return Nothing
+        End Function
 
         Public Overrides Function ToString() As String
             If names.Length > 1 Then
