@@ -141,7 +141,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         ''' <returns>
         ''' 用于初始化环境对象
         ''' </returns>
-        Friend Shared Function PushNames(names$(), value As Object, type As TypeCodes, [readonly] As Boolean, envir As Environment, ByRef err As Message) As Environment
+        Friend Shared Function PushNames(names$(),
+                                         value As Object,
+                                         type As TypeCodes,
+                                         [readonly] As Boolean,
+                                         envir As Environment,
+                                         ByRef err As Message) As Environment
+
             If Not value Is Nothing AndAlso TypeOf value Is invisible Then
                 value = DirectCast(value, invisible).value
             End If
@@ -162,7 +168,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Return envir
         End Function
 
-        Private Shared Function PushTuple(names$(), value As Object, type As TypeCodes, [readonly] As Boolean, envir As Environment) As Object
+        Private Shared Function PushTuple(names$(),
+                                          value As Object,
+                                          type As TypeCodes,
+                                          [readonly] As Boolean,
+                                          envir As Environment) As Object
             Dim rtvl As Object
 
             If Not value Is Nothing AndAlso value.GetType.IsArray Then
