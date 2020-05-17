@@ -138,7 +138,14 @@ Namespace Runtime.Internal.Object
             If Not slots.ContainsKey(name) Then
                 Return [default]
             Else
-                Return RCType.CTypeDynamic(slots.TryGetValue(name), GetType(T), env)
+                Dim value As Object = slots(name)
+                Dim type As Type = GetType(T)
+
+                If type.IsArray Then
+                    Return CObj(asVector(value, type.GetElementType, env))
+                Else
+                    Return RCType.CTypeDynamic([single](value), GetType(T), env)
+                End If
             End If
         End Function
 
