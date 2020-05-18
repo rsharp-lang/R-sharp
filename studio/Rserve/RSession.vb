@@ -140,7 +140,7 @@ Public Class RSession : Inherits HttpServer
 
         Select Case post.URL.path
             Case "exec"
-
+                runCode(post.POSTData.Objects("script"), New HttpResponse(p.outputStream, AddressOf p.writeFailure))
         End Select
     End Sub
 
