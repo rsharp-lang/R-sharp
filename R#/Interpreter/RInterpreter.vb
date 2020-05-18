@@ -248,7 +248,14 @@ Namespace Interpreter
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
         Public Function Run(program As Program) As Object
-            Return finalizeResult(program.Execute(globalEnvir))
+            ' Return finalizeResult(program.Execute(globalEnvir))
+            Dim last As Symbol = Me.globalEnvir(lastVariableName)
+            Dim result As Object = program.Execute(globalEnvir)
+
+            ' set last variable in current environment
+            Call last.SetValue(result, globalEnvir)
+
+            Return result
         End Function
 
         ''' <summary>
@@ -294,29 +301,29 @@ Namespace Interpreter
             Return env
         End Function
 
-        Friend Function finalizeResult(result As Object) As Object
-            Dim last As Symbol = Me.globalEnvir(lastVariableName)
+        'Friend Function finalizeResult(result As Object) As Object
+        '    Dim last As Symbol = Me.globalEnvir(lastVariableName)
 
-            ' set last variable in current environment
-            Call last.SetValue(result, globalEnvir)
+        '    ' set last variable in current environment
+        '    Call last.SetValue(result, globalEnvir)
 
-            'If Program.isException(result) Then
-            '    Call VBDebugger.WaitOutput()
-            '    Call Internal.debug.PrintMessageInternal(message:=result)
-            'End If
+        '    'If Program.isException(result) Then
+        '    '    Call VBDebugger.WaitOutput()
+        '    '    Call Internal.debug.PrintMessageInternal(message:=result)
+        '    'End If
 
-            If globalEnvir.messages > 0 Then
-                Call VBDebugger.WaitOutput()
+        '    If globalEnvir.messages > 0 Then
+        '        Call VBDebugger.WaitOutput()
 
-                For Each message As Message In globalEnvir.messages
-                    Call Internal.debug.PrintMessageInternal(message, globalEnvir)
-                Next
+        '        For Each message As Message In globalEnvir.messages
+        '            Call Internal.debug.PrintMessageInternal(message, globalEnvir)
+        '        Next
 
-                Call globalEnvir.messages.Clear()
-            End If
+        '        Call globalEnvir.messages.Clear()
+        '    End If
 
-            Return result
-        End Function
+        '    Return result
+        'End Function
 
         Private Function RunInternal(Rscript As Rscript, arguments As NamedValue(Of Object)()) As Object
             Dim globalEnvir As Environment = InitializeEnvironment(Rscript.fileName, arguments)
@@ -336,7 +343,11 @@ Namespace Interpreter
                 Call globalEnvir.Dispose()
             End If
 
-            Return finalizeResult(result)
+            ' set last variable in current environment
+            Call Me.globalEnvir(lastVariableName).SetValue(result, globalEnvir)
+
+            ' Return finalizeResult(result)
+            Return result
         End Function
 
         ''' <summary>
