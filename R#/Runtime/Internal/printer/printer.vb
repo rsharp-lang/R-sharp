@@ -288,8 +288,17 @@ printSingleElement:
         End Sub
 
         <Extension>
+        Private Function getMaxColumns(env As Environment) As Integer
+            If env.globalEnvironment.stdout.env = OutputEnvironments.Html Then
+                Return 200
+            Else
+                Return If(App.IsConsoleApp, Console.WindowWidth, Integer.MaxValue) - 1
+            End If
+        End Function
+
+        <Extension>
         Friend Sub printContentArray(contents$(), deli$, indentPrefix$, env As Environment)
-            Dim maxColumns As Integer = If(App.IsConsoleApp, Console.WindowWidth, Integer.MaxValue) - 1
+            Dim maxColumns As Integer = env.getMaxColumns
             ' maxsize / average size
             Dim unitWidth As Integer = contents.Max(Function(c) c.Length) + 1
             Dim divSize As Integer = maxColumns \ unitWidth - 3
