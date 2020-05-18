@@ -54,6 +54,7 @@ Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.System.Configuration
 Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
@@ -105,7 +106,7 @@ Public Class RSession : Inherits HttpServer
             Dim result As Object
             Dim content_type As String
 
-            result = R.RedirectOutput(Rstd_out).Evaluate(scriptText)
+            result = R.RedirectOutput(Rstd_out, OutputEnvironments.Html).Evaluate(scriptText)
 
             If RProgram.isException(result) Then
                 invokeRtvl.code = 500

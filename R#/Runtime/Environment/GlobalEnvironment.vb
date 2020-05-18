@@ -86,13 +86,13 @@ Namespace Runtime
             Me.packages = New PackageManager(options)
             Me.global = Me
             Me.Rscript = scriptHost
-            Me.stdout = New RContentOutput(App.StdOut.DefaultValue)
+            Me.stdout = New RContentOutput(App.StdOut.DefaultValue, OutputEnvironments.Console)
 
             MyBase.types.Add("unit", RType.GetRSharpType(GetType(unit)))
         End Sub
 
-        Public Sub RedirectOutput(out As StreamWriter)
-            _stdout = New RContentOutput(out)
+        Public Sub RedirectOutput(out As StreamWriter, env As OutputEnvironments)
+            _stdout = New RContentOutput(out, env)
         End Sub
 
         Public Function LoadLibrary(packageName As String, Optional silent As Boolean = False) As Message

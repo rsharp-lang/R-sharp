@@ -137,8 +137,8 @@ Namespace Interpreter
             [strict] = envirConf.strict
         End Sub
 
-        Public Function RedirectOutput(out As StreamWriter) As RInterpreter
-            Call globalEnvir.RedirectOutput(out)
+        Public Function RedirectOutput(out As StreamWriter, env As OutputEnvironments) As RInterpreter
+            Call globalEnvir.RedirectOutput(out, env)
             Return Me
         End Function
 
