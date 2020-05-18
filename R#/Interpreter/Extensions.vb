@@ -1,44 +1,44 @@
 ﻿#Region "Microsoft.VisualBasic::fcd0947cbbfea661246679aafc2c41d3, R#\Interpreter\Extensions.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module Extensions
-    ' 
-    '         Function: (+2 Overloads) GetExpressions, isTerminator
-    ' 
-    '         Sub: SyntaxErrorHelper
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module Extensions
+' 
+'         Function: (+2 Overloads) GetExpressions, isTerminator
+' 
+'         Sub: SyntaxErrorHelper
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -97,13 +97,29 @@ Namespace Interpreter
         <Extension>
         Public Iterator Function GetExpressions(tokens As Token(),
                                                 Rscript As Rscript,
-                                                errHandler As Action(Of SyntaxResult),
+                                                errHandler As Action(Of SyntaxResult, Token()),
                                                 opts As SyntaxBuilderOptions) As IEnumerable(Of Expression)
 
-            For Each block In tokens.SplitByTopLevelDelimiter(TokenType.terminator)
+            Dim err As Exception = Nothing
+            Dim expr As SyntaxResult
+
+            If errHandler Is Nothing Then
+                errHandler = Sub(syntaxErr, block)
+                                 Call SyntaxErrorHelper(
+                                    opts:=opts,
+                                    syntaxResult:=syntaxErr,
+                                    Rscript:=Rscript,
+                                    tokens:=block
+                                 )
+                             End Sub
+            End If
+
+            For Each block As Token() In tokens.SplitByTopLevelDelimiter(TokenType.terminator, err:=err).SafeQuery
                 If block.Length = 0 OrElse block.isTerminator Then
                     ' skip code comments
                     ' do nothing
+                ElseIf Not err Is Nothing Then
+                    Call errHandler(New SyntaxResult(err, opts.debug), {})
                 Else
                     ' have some bugs about
                     ' handles closure
@@ -111,24 +127,14 @@ Namespace Interpreter
                         .Where(Function(t) Not t.name = TokenType.comment) _
                         .SplitByTopLevelDelimiter(TokenType.close,, "}") _
                         .Split(2)
-                    Dim expr As SyntaxResult
 
                     For Each joinBlock In parts
                         block = joinBlock(Scan0).JoinIterates(joinBlock.ElementAtOrDefault(1)).ToArray
                         expr = Expression.CreateExpression(block, opts)
 
                         If expr.isException Then
-                            If errHandler Is Nothing Then
-                                Call SyntaxErrorHelper(
-                                    opts:=opts,
-                                    syntaxResult:=expr,
-                                    Rscript:=Rscript,
-                                    tokens:=block
-                                )
-                            Else
-                                Call errHandler(expr)
-                                Exit For
-                            End If
+                            Call errHandler(expr, block)
+                            Exit For
                         Else
                             Yield expr.expression
                         End If

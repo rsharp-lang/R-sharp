@@ -363,6 +363,11 @@ Namespace Runtime.Internal.Invokes
             Return con.ReadAllLines
         End Function
 
+        <ExportAPI("readText")>
+        Public Function readText(con As String) As String
+            Return con.ReadAllText
+        End Function
+
         ' writeLines(text, con = stdout(), sep = "\n", useBytes = FALSE)
 
         ''' <summary>

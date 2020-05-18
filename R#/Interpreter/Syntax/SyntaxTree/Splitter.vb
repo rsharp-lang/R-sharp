@@ -52,7 +52,8 @@ Namespace Interpreter.SyntaxParser
         <Extension>
         Friend Function SplitByTopLevelDelimiter(tokens As IEnumerable(Of Token), delimiter As TokenType, ' <Out> ByRef [error] As Exception,
                                                  Optional includeKeyword As Boolean = False,
-                                                 Optional tokenText$ = Nothing) As List(Of Token())
+                                                 Optional tokenText$ = Nothing,
+                                                 Optional ByRef err As Exception = Nothing) As List(Of Token())
             Dim blocks As New List(Of Token())
             Dim buf As New List(Of Token)
             Dim stack As New Stack(Of Token)
@@ -79,7 +80,8 @@ Namespace Interpreter.SyntaxParser
                     stack.Push(t)
                 ElseIf t.name = TokenType.close Then
                     If stack.Count = 0 Then
-                        Throw New SyntaxErrorException(tokenVector.JoinBy(" "))
+                        err = New SyntaxErrorException(tokenVector.JoinBy(" "))
+                        Return Nothing
                     Else
                         stack.Pop()
                     End If
