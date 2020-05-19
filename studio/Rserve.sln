@@ -153,8 +153,8 @@ Global
 		{6FC88360-095E-460C-B659-700719070B84}.GCModeller(Release_X64)|x86.Build.0 = Release|Any CPU
 		{6FC88360-095E-460C-B659-700719070B84}.GCModeller(UNIX-Release_X64)|Any CPU.ActiveCfg = Release|Any CPU
 		{6FC88360-095E-460C-B659-700719070B84}.GCModeller(UNIX-Release_X64)|Any CPU.Build.0 = Release|Any CPU
-		{6FC88360-095E-460C-B659-700719070B84}.GCModeller(UNIX-Release_X64)|x64.ActiveCfg = Release|Any CPU
-		{6FC88360-095E-460C-B659-700719070B84}.GCModeller(UNIX-Release_X64)|x64.Build.0 = Release|Any CPU
+		{6FC88360-095E-460C-B659-700719070B84}.GCModeller(UNIX-Release_X64)|x64.ActiveCfg = GCModeller(UNIX-Release_X64)|x64
+		{6FC88360-095E-460C-B659-700719070B84}.GCModeller(UNIX-Release_X64)|x64.Build.0 = GCModeller(UNIX-Release_X64)|x64
 		{6FC88360-095E-460C-B659-700719070B84}.GCModeller(UNIX-Release_X64)|x86.ActiveCfg = Release|Any CPU
 		{6FC88360-095E-460C-B659-700719070B84}.GCModeller(UNIX-Release_X64)|x86.Build.0 = Release|Any CPU
 		{6FC88360-095E-460C-B659-700719070B84}.GTA5-game-test|Any CPU.ActiveCfg = Release|Any CPU
@@ -441,8 +441,8 @@ Global
 		{0C2EB77C-39F2-460D-A3F8-CE905F867637}.GCModeller(Release_X64)|x86.Build.0 = GCModeller(Release_X64)|Any CPU
 		{0C2EB77C-39F2-460D-A3F8-CE905F867637}.GCModeller(UNIX-Release_X64)|Any CPU.ActiveCfg = GCModeller(Release_X64)|Any CPU
 		{0C2EB77C-39F2-460D-A3F8-CE905F867637}.GCModeller(UNIX-Release_X64)|Any CPU.Build.0 = GCModeller(Release_X64)|Any CPU
-		{0C2EB77C-39F2-460D-A3F8-CE905F867637}.GCModeller(UNIX-Release_X64)|x64.ActiveCfg = GCModeller(Release_X64)|x64
-		{0C2EB77C-39F2-460D-A3F8-CE905F867637}.GCModeller(UNIX-Release_X64)|x64.Build.0 = GCModeller(Release_X64)|x64
+		{0C2EB77C-39F2-460D-A3F8-CE905F867637}.GCModeller(UNIX-Release_X64)|x64.ActiveCfg = GCModeller(UNIX-Release_X64)|x64
+		{0C2EB77C-39F2-460D-A3F8-CE905F867637}.GCModeller(UNIX-Release_X64)|x64.Build.0 = GCModeller(UNIX-Release_X64)|x64
 		{0C2EB77C-39F2-460D-A3F8-CE905F867637}.GCModeller(UNIX-Release_X64)|x86.ActiveCfg = GCModeller(Release_X64)|Any CPU
 		{0C2EB77C-39F2-460D-A3F8-CE905F867637}.GCModeller(UNIX-Release_X64)|x86.Build.0 = GCModeller(Release_X64)|Any CPU
 		{0C2EB77C-39F2-460D-A3F8-CE905F867637}.GTA5-game-test|Any CPU.ActiveCfg = GCModeller(Release_X64)|Any CPU
@@ -585,8 +585,8 @@ Global
 		{05DB9B3D-3456-4005-8E95-7D854CDC6C69}.GCModeller(Release_X64)|x86.Build.0 = Release|Any CPU
 		{05DB9B3D-3456-4005-8E95-7D854CDC6C69}.GCModeller(UNIX-Release_X64)|Any CPU.ActiveCfg = Release|Any CPU
 		{05DB9B3D-3456-4005-8E95-7D854CDC6C69}.GCModeller(UNIX-Release_X64)|Any CPU.Build.0 = Release|Any CPU
-		{05DB9B3D-3456-4005-8E95-7D854CDC6C69}.GCModeller(UNIX-Release_X64)|x64.ActiveCfg = Release|Any CPU
-		{05DB9B3D-3456-4005-8E95-7D854CDC6C69}.GCModeller(UNIX-Release_X64)|x64.Build.0 = Release|Any CPU
+		{05DB9B3D-3456-4005-8E95-7D854CDC6C69}.GCModeller(UNIX-Release_X64)|x64.ActiveCfg = GCModeller(UNIX-Release_X64)|x64
+		{05DB9B3D-3456-4005-8E95-7D854CDC6C69}.GCModeller(UNIX-Release_X64)|x64.Build.0 = GCModeller(UNIX-Release_X64)|x64
 		{05DB9B3D-3456-4005-8E95-7D854CDC6C69}.GCModeller(UNIX-Release_X64)|x86.ActiveCfg = Release|Any CPU
 		{05DB9B3D-3456-4005-8E95-7D854CDC6C69}.GCModeller(UNIX-Release_X64)|x86.Build.0 = Release|Any CPU
 		{05DB9B3D-3456-4005-8E95-7D854CDC6C69}.GTA5-game-test|Any CPU.ActiveCfg = Release|Any CPU
