@@ -129,6 +129,8 @@ Public Class RSession : Inherits HttpServer
         Dim json As String = JSONSerializer.GetJson(invokeRtvl, enumToStr:=True)
         Dim buffer As Byte() = Encodings.UTF8WithoutBOM.CodePage.GetBytes(json)
 
+        response.AccessControlAllowOrigin = "*"
+
         Call response.WriteHeader("application/json", buffer.Length)
         Call response.Write(buffer)
     End Sub
