@@ -129,6 +129,8 @@ Namespace Runtime.Internal.Invokes
                 End With
             ElseIf TypeOf col Is Array Then
                 d.columns.Add($"X{d.columns.Count + 2}", DirectCast(col, Array))
+            ElseIf TypeOf col Is vector Then
+                d.columns.Add($"X{d.columns.Count + 2}", DirectCast(col, vector).data)
             Else
                 d.columns.Add($"X{d.columns.Count + 2}", {col})
             End If
