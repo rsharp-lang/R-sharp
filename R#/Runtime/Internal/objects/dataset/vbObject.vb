@@ -151,7 +151,7 @@ Namespace Runtime.Internal.Object
                                     name = Nothing
                                 End If
 
-                                If Not name Is Nothing Then
+                                If Not name Is Nothing AndAlso name <> p.Name Then
                                     Yield New NamedValue(Of PropertyInfo)(name, p)
                                 End If
                             Next
