@@ -110,6 +110,9 @@ Public Class RSession : Inherits HttpServer
                 invokeRtvl.err = result
             Else
                 invokeRtvl.code = 0
+
+                ' 在终端显示最后的结果值
+                R.Evaluate($"print({RInterpreter.lastVariableName});")
             End If
 
             If R.globalEnvir.stdout.recommendType Is Nothing Then
@@ -120,6 +123,9 @@ Public Class RSession : Inherits HttpServer
 
             Call Rstd_out.Flush()
 
+            ' 后端的输出应该包含有两部分的内容
+            ' 终端输出的文本
+            ' 以及最后的值
             invokeRtvl.info = output.ToArray.ToBase64String
             invokeRtvl.warnings = R.globalEnvir.messages.PopAll
             invokeRtvl.content_type = content_type
