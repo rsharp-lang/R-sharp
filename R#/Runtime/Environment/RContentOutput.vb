@@ -49,11 +49,18 @@ Imports System.IO
 
 Namespace Runtime
 
+    Public Enum OutputEnvironments
+        Console
+        Html
+        None
+    End Enum
+
     ''' <summary>
     ''' R# I/O redirect and interface for Rserve http server
     ''' </summary>
     Public Class RContentOutput
 
+        Public ReadOnly Property env As OutputEnvironments
         Public ReadOnly Property recommendType As String
         Public ReadOnly Property stream As Stream
             Get
@@ -63,7 +70,8 @@ Namespace Runtime
 
         Dim stdout As StreamWriter
 
-        Sub New(stdout As StreamWriter)
+        Sub New(stdout As StreamWriter, env As OutputEnvironments)
+            Me.env = env
             Me.stdout = stdout
         End Sub
 

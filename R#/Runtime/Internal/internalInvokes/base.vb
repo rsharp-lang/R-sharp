@@ -442,6 +442,11 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        <ExportAPI("is.null")>
+        Public Function isNull(x As Object) As Boolean
+            Return x Is Nothing
+        End Function
+
         ''' <summary>
         ''' # Length of an Object
         ''' 
