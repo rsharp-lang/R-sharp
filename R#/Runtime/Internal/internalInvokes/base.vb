@@ -106,7 +106,12 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("rbind")>
-        Public Function rbind(d As dataframe, <RRawVectorArgument> col As Object, env As Environment) As dataframe
+        Public Function rbind(d As dataframe, <RRawVectorArgument> row As Object, env As Environment) As dataframe
+            Throw New NotImplementedException
+        End Function
+
+        <ExportAPI("cbind")>
+        Public Function cbind(d As dataframe, <RRawVectorArgument> col As Object, env As Environment) As dataframe
             If col Is Nothing Then
                 Return d
             End If
