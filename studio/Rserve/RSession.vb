@@ -126,7 +126,7 @@ Public Class RSession : Inherits HttpServer
             ' 后端的输出应该包含有两部分的内容
             ' 终端输出的文本
             ' 以及最后的值
-            If content_type <> "text/html" Then
+            If Not content_type.StartsWith("text/html") Then
                 invokeRtvl.info = New DataURI(base64:=output.ToArray.ToBase64String, mime:=content_type).ToString
             Else
                 invokeRtvl.info = output.ToArray.ToBase64String

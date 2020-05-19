@@ -1029,7 +1029,7 @@ Namespace Runtime.Internal.Invokes
                 Call globalEnv _
                     .packages _
                     .packageDocs _
-                    .PrintHelp(x)
+                    .PrintHelp(x, env.globalEnvironment.stdout)
             ElseIf type Is GetType(DeclareNewFunction) Then
                 Call env.globalEnvironment.stdout.WriteLine(x.ToString)
             ElseIf type.ImplementInterface(GetType(RPrint)) Then
