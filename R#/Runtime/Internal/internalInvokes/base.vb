@@ -1,50 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::be8cad3be5dcfe3947afee0d5a1f2368, R#\Runtime\Internal\internalInvokes\base.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module base
-    ' 
-    '         Function: [stop], allocate, append, autoDispose, cat
-    '                   colnames, createDotNetExceptionMessage, CreateMessageInternal, doPrintInternal, getEnvironmentStack
-    '                   getOption, head, invisible, isEmpty, length
-    '                   names, ncol, neg, nrow, options
-    '                   print, Rdataframe, rep, replace, Rlist
-    '                   rownames, source, str, summary, unitOfT
-    '                   warning
-    ' 
-    '         Sub: q, quit
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module base
+' 
+'         Function: [stop], allocate, append, autoDispose, cat
+'                   colnames, createDotNetExceptionMessage, CreateMessageInternal, doPrintInternal, getEnvironmentStack
+'                   getOption, head, invisible, isEmpty, length
+'                   names, ncol, neg, nrow, options
+'                   print, Rdataframe, rep, replace, Rlist
+'                   rownames, source, str, summary, unitOfT
+'                   warning
+' 
+'         Sub: q, quit
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -103,6 +103,44 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("rep")>
         Public Function rep(x As Object, times As Integer) As Object
             Return Repeats(x, times)
+        End Function
+
+        <ExportAPI("rbind")>
+        Public Function rbind(d As dataframe, <RRawVectorArgument> row As Object, env As Environment) As dataframe
+            Throw New NotImplementedException
+        End Function
+
+        <ExportAPI("cbind")>
+        Public Function cbind(d As dataframe, <RRawVectorArgument> col As Object, env As Environment) As dataframe
+            If col Is Nothing Then
+                Return d
+            End If
+
+            If TypeOf col Is list Then
+                With DirectCast(col, list)
+                    Dim value As Object
+
+                    For Each name As String In .slots.Keys
+                        value = .slots(name)
+
+                        If Not value Is Nothing Then
+                            If TypeOf value Is Array Then
+                                d.columns.Add(name, DirectCast(value, Array))
+                            Else
+                                d.columns.Add(name, {value})
+                            End If
+                        End If
+                    Next
+                End With
+            ElseIf TypeOf col Is Array Then
+                d.columns.Add($"X{d.columns.Count + 2}", DirectCast(col, Array))
+            ElseIf TypeOf col Is vector Then
+                d.columns.Add($"X{d.columns.Count + 2}", DirectCast(col, vector).data)
+            Else
+                d.columns.Add($"X{d.columns.Count + 2}", {col})
+            End If
+
+            Return d
         End Function
 
         ''' <summary>
@@ -1029,7 +1067,7 @@ Namespace Runtime.Internal.Invokes
                 Call globalEnv _
                     .packages _
                     .packageDocs _
-                    .PrintHelp(x)
+                    .PrintHelp(x, env.globalEnvironment.stdout)
             ElseIf type Is GetType(DeclareNewFunction) Then
                 Call env.globalEnvironment.stdout.WriteLine(x.ToString)
             ElseIf type.ImplementInterface(GetType(RPrint)) Then

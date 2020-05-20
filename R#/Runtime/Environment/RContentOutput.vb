@@ -60,7 +60,7 @@ Namespace Runtime
     ''' </summary>
     Public Class RContentOutput
 
-        Public ReadOnly Property env As OutputEnvironments
+        Public ReadOnly Property env As OutputEnvironments = OutputEnvironments.Console
         Public ReadOnly Property recommendType As String
         Public ReadOnly Property stream As Stream
             Get

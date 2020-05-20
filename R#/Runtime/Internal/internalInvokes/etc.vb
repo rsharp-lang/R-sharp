@@ -1,52 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::9383f8b1132709feb1269f5e675ead28, R#\Runtime\Internal\internalInvokes\etc.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module etc
-    ' 
-    '         Function: contributors, license, RVer, sessionInfo, Sys_getlocale
-    '                   Sys_info
-    ' 
-    '         Sub: demo
-    ' 
-    '     Class RSessionInfo
-    ' 
-    '         Properties: basePkgs, BLAS, LAPACK, loadedOnly, locale
-    '                     matprod, platform, RNGkind, running, Rversion
-    ' 
-    '         Function: ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module etc
+' 
+'         Function: contributors, license, RVer, sessionInfo, Sys_getlocale
+'                   Sys_info
+' 
+'         Sub: demo
+' 
+'     Class RSessionInfo
+' 
+'         Properties: basePkgs, BLAS, LAPACK, loadedOnly, locale
+'                     matprod, platform, RNGkind, running, Rversion
+' 
+'         Function: ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -69,8 +69,8 @@ Namespace Runtime.Internal.Invokes
         ''' </summary>
         ''' <returns></returns>
         <ExportAPI("license")>
-        Public Function license() As <RSuppressPrint> Object
-            Call Console.WriteLine(Rsharp.LICENSE.GPL3)
+        Public Function license(Optional env As Environment = Nothing) As <RSuppressPrint> Object
+            Call env.globalEnvironment.stdout.WriteLine(Rsharp.LICENSE.GPL3)
             Return Nothing
         End Function
 
@@ -81,8 +81,8 @@ Namespace Runtime.Internal.Invokes
         ''' </summary>
         ''' <returns></returns>
         <ExportAPI("contributors")>
-        Public Function contributors() As <RSuppressPrint> Object
-            Call Console.WriteLine(My.Resources.contributions)
+        Public Function contributors(Optional env As Environment = Nothing) As <RSuppressPrint> Object
+            Call env.globalEnvironment.stdout.WriteLine(My.Resources.contributions)
             Return Nothing
         End Function
 
