@@ -873,8 +873,8 @@ Global
 		{F78107E5-2D25-4504-BFB4-FADD4DE01DBB}.docs|x86.Build.0 = Debug|Any CPU
 		{F78107E5-2D25-4504-BFB4-FADD4DE01DBB}.GCModeller(Release_X64)|Any CPU.ActiveCfg = Release|Any CPU
 		{F78107E5-2D25-4504-BFB4-FADD4DE01DBB}.GCModeller(Release_X64)|Any CPU.Build.0 = Release|Any CPU
-		{F78107E5-2D25-4504-BFB4-FADD4DE01DBB}.GCModeller(Release_X64)|x64.ActiveCfg = Release|Any CPU
-		{F78107E5-2D25-4504-BFB4-FADD4DE01DBB}.GCModeller(Release_X64)|x64.Build.0 = Release|Any CPU
+		{F78107E5-2D25-4504-BFB4-FADD4DE01DBB}.GCModeller(Release_X64)|x64.ActiveCfg = GCModeller(Release_X64)|x64
+		{F78107E5-2D25-4504-BFB4-FADD4DE01DBB}.GCModeller(Release_X64)|x64.Build.0 = GCModeller(Release_X64)|x64
 		{F78107E5-2D25-4504-BFB4-FADD4DE01DBB}.GCModeller(Release_X64)|x86.ActiveCfg = Release|Any CPU
 		{F78107E5-2D25-4504-BFB4-FADD4DE01DBB}.GCModeller(Release_X64)|x86.Build.0 = Release|Any CPU
 		{F78107E5-2D25-4504-BFB4-FADD4DE01DBB}.GCModeller(UNIX-Release_X64)|Any CPU.ActiveCfg = Release|Any CPU
