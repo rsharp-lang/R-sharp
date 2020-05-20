@@ -155,7 +155,7 @@ Public Class RSessionBackend
     End Function
 
     Private Shared Function requiredDataURI(result As RInvoke) As Boolean
-        Static exclude_types As String() = {"text/html", "text/json", "text/xml", "application/json"}
+        Static exclude_types As String() = {"text/html", "text/json", "text/xml", "text/csv", "application/json"}
 
         SyncLock exclude_types
             Return Not exclude_types _
