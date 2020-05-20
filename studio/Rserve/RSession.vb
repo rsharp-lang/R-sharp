@@ -111,8 +111,10 @@ Public Class RSession : Inherits HttpServer
             Else
                 invokeRtvl.code = 0
 
-                ' 在终端显示最后的结果值
-                R.Evaluate($"print({RInterpreter.lastVariableName});")
+                If Not result Is Nothing Then
+                    ' 在终端显示最后的结果值
+                    R.Evaluate($"print({RInterpreter.lastVariableName});")
+                End If
             End If
 
             If R.globalEnvir.stdout.recommendType Is Nothing Then
@@ -126,7 +128,7 @@ Public Class RSession : Inherits HttpServer
             ' 后端的输出应该包含有两部分的内容
             ' 终端输出的文本
             ' 以及最后的值
-            If Not content_type.StartsWith("text/html") Then
+            If Not content_type.StartsWith("text/html") AndAlso Not content_type.StartsWith("application/json") Then
                 invokeRtvl.info = New DataURI(base64:=output.ToArray.ToBase64String, mime:=content_type).ToString
             Else
                 invokeRtvl.info = output.ToArray.ToBase64String

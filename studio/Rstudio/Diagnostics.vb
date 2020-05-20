@@ -10,7 +10,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Module Diagnostics
 
     <ExportAPI("view")>
-    Public Sub view(symbol As Object, Optional env As Environment = Nothing)
+    Public Sub view(<RRawVectorArgument> symbol As Object, Optional env As Environment = Nothing)
         Call env.globalEnvironment.stdout.Write(JSONSerializer.GetJson(symbol.GetType(), symbol, New JSONSerializerOptions), "application/json")
     End Sub
 
