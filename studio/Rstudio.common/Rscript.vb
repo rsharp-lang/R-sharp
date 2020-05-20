@@ -89,6 +89,8 @@ FINAL:
             For Each warn As Message In globalEnv.messages
                 Call REnv.Internal.debug.PrintMessageInternal(warn, globalEnv)
             Next
+
+            globalEnv.messages.Clear()
         End If
 
         Return code
