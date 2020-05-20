@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::598af3217de827bdfe9d507c0035d124, R#\Interpreter\RInterpreter.vb"
+﻿#Region "Microsoft.VisualBasic::73e86c2864a15ef8d9e5de49749ad3c6, R#\Interpreter\RInterpreter.vb"
 
     ' Author:
     ' 
@@ -38,8 +38,8 @@
     ' 
     '         Constructor: (+1 Overloads) Sub New
     ' 
-    '         Function: (+2 Overloads) Evaluate, finalizeResult, FromEnvironmentConfiguration, InitializeEnvironment, Invoke
-    '                   (+2 Overloads) LoadLibrary, RedirectOutput, Run, RunInternal, Source
+    '         Function: (+2 Overloads) Evaluate, FromEnvironmentConfiguration, InitializeEnvironment, Invoke, (+2 Overloads) LoadLibrary
+    '                   RedirectOutput, Run, RunInternal, Source
     ' 
     '         Sub: (+3 Overloads) Add, (+2 Overloads) Dispose, Print, PrintMemory
     ' 

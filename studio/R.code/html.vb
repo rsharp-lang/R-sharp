@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1013add5ba36fb597359eb08df75c0da, studio\R.code\html.vb"
+﻿#Region "Microsoft.VisualBasic::9509e69ef9cb953c717eb0d6f151f844, studio\R.code\html.vb"
 
     ' Author:
     ' 
@@ -68,4 +68,3 @@ Public Module codeHtml
         Return program.toHtml
     End Function
 End Module
-

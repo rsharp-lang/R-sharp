@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::22d31ab8d91bf59c79cf946a9359e8f6, Library\R.math\dataScience\validation.vb"
+﻿#Region "Microsoft.VisualBasic::fa2c13cfaadd44e760448fde4f27e2a2, Library\R.math\dataScience\validation.vb"
 
     ' Author:
     ' 
@@ -98,4 +98,3 @@ Module validation
         }
     End Function
 End Module
-

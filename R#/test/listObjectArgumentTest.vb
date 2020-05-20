@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e249c89a01435b44e8a6bfd9a43a8d5e, R#\test\listObjectArgumentTest.vb"
+﻿#Region "Microsoft.VisualBasic::5d08d0627b5c9e86610120907bbe464e, R#\test\listObjectArgumentTest.vb"
 
     ' Author:
     ' 
@@ -83,4 +83,3 @@ Module listObjectArgumentTest
         Console.WriteLine(DirectCast(list, list).slots.GetJson)
     End Function
 End Module
-

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1f5aeecb944cf4263db87266c9471105, Library\R.graph\NetworkModule.vb"
+﻿#Region "Microsoft.VisualBasic::14226754c166ead7a9dab320f32b0130, Library\R.graph\NetworkModule.vb"
 
     ' Author:
     ' 
@@ -34,9 +34,9 @@
     ' Module NetworkModule
     ' 
     '     Constructor: (+1 Overloads) Sub New
-    '     Function: addEdge, addEdges, addNode, addNodes, degree
-    '               emptyNetwork, getByGroup, getElementByID, LoadNetwork, printGraph
-    '               SaveNetwork, setAttributes, typeGroupOfNodes
+    '     Function: addEdge, addEdges, addNode, addNodes, computeNetwork
+    '               degree, emptyNetwork, getByGroup, getElementByID, LoadNetwork
+    '               printGraph, SaveNetwork, setAttributes, typeGroupOfNodes
     ' 
     ' /********************************************************************************/
 
