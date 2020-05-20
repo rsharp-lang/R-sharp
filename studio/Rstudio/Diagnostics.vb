@@ -54,7 +54,7 @@ Module Diagnostics
 
     <ExportAPI("view")>
     Public Sub view(<RRawVectorArgument> symbol As Object, Optional env As Environment = Nothing)
-        Call env.globalEnvironment.stdout.Write(JSONSerializer.GetJson(symbol.GetType(), symbol, New JSONSerializerOptions), "application/json")
+        Call env.globalEnvironment.stdout.Write(JSONSerializer.GetJson(symbol.GetType(), symbol, New JSONSerializerOptions), "inspector/json")
     End Sub
 
     <ExportAPI("help")>
