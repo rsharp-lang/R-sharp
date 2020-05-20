@@ -2,8 +2,8 @@
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 
-<Package("debug")>
-Module debugger
+<Package("diagnostics")>
+Module Diagnostics
 
     <ExportAPI("view")>
     Public Sub view(symbol As Object, Optional env As Environment = Nothing)
