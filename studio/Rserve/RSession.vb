@@ -59,6 +59,7 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 Public Class RSession : Inherits HttpServer
 
     ReadOnly R As RInterpreter
+    ReadOnly inspector As New Dictionary(Of String, String)
 
     Public Sub New(port As Integer,
                    Optional workspace$ = "./",
@@ -93,6 +94,22 @@ Public Class RSession : Inherits HttpServer
                 Next
 
                 Call runCode(script.ToString, New HttpResponse(p.outputStream, AddressOf p.writeFailure))
+            Case "inspect"
+                ' 获取指定uid对象的json数据用于前端查看
+                Dim guid As String = request.URL.getArgumentVal("guid")
+
+                SyncLock inspector
+                    If inspector.ContainsKey(guid) Then
+                        Dim buffer = Encoding.UTF8.GetBytes(inspector(guid))
+                        Dim output = p.openResponseStream
+
+                        output.WriteHeader("text/json", buffer.Length)
+                        output.Write(buffer)
+                        output.Flush()
+
+                        inspector.Remove(guid)
+                    End If
+                End SyncLock
         End Select
     End Sub
 
