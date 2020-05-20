@@ -1,41 +1,41 @@
 ﻿#Region "Microsoft.VisualBasic::a8729b71a940118735e5bc52f2b4c521, studio\Rstudio.common\Rscript.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module Rscript
-    ' 
-    '     Function: handleResult, isImports, isInvisible, isValueAssign
-    ' 
-    ' /********************************************************************************/
+' Module Rscript
+' 
+'     Function: handleResult, isImports, isInvisible, isValueAssign
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -47,6 +47,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -59,10 +60,12 @@ Module Rscript
 
     Friend Function handleResult(result As Object, globalEnv As GlobalEnvironment, program As RProgram) As Integer
         Dim requirePrintErr As Boolean = False
+        Dim code As Integer = 0
 
         If RProgram.isException(result, globalEnv, isDotNETException:=requirePrintErr) Then
             Call REnv.Internal.debug.PrintMessageInternal(result, globalEnv)
-            Return 500
+            code = 500
+            GoTo FINAL
         End If
 
         If Not program Is Nothing Then
@@ -81,8 +84,14 @@ Module Rscript
                 End If
             End If
         End If
+FINAL:
+        If globalEnv.messages > 0 Then
+            For Each warn As Message In globalEnv.messages
+                Call REnv.Internal.debug.PrintMessageInternal(warn, globalEnv)
+            Next
+        End If
 
-        Return 0
+        Return code
     End Function
 
     Private Function isInvisible(result As Object) As Boolean
