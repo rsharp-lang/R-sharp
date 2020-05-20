@@ -99,12 +99,12 @@ Namespace Runtime
             End If
         End Sub
 
-        Public Sub Write(message As String)
+        Public Sub Write(message As String, Optional content_type$ = "text/html;charset=UTF-8")
             Call stdout.Write(message)
             Call stdout.Flush()
 
             If _recommendType Is Nothing Then
-                _recommendType = "text/html;charset=UTF-8"
+                _recommendType = content_type
             End If
         End Sub
 
