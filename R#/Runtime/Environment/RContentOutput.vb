@@ -123,7 +123,7 @@ Namespace Runtime
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Sub Write(data As dataframe)
+        Public Sub Write(data As dataframe, Optional content_type$ = "text/csv")
             Call data _
                 .GetTable(globalEnv, False, True) _
                 .Select(Function(row)
@@ -131,7 +131,7 @@ Namespace Runtime
                         End Function) _
                 .JoinBy(vbCrLf) _
                 .DoCall(Sub(text)
-                            Call Write(text, "text/csv")
+                            Call Write(text, content_type)
                         End Sub)
         End Sub
 

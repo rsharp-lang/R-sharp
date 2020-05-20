@@ -200,7 +200,7 @@ Public Class RSessionBackend
         Using output As New MemoryStream(), Rstd_out As New StreamWriter(output, Encodings.UTF8WithoutBOM.CodePage)
             result = handleRScript(scriptText, Rstd_out)
 
-            If result.content_type = "inspector/json" Then
+            If result.content_type = "inspector/json" OrElse result.content_type = "inspector/csv" Then
                 Dim guid As String = App.NextTempName
 
                 inspector.Add(guid, output.ToArray)
