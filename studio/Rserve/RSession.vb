@@ -58,7 +58,7 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
 Public Class RSession : Inherits HttpServer
 
-    ReadOnly R As RInterpreter
+    ReadOnly R As RSessionBackend
 
     Public Sub New(port As Integer,
                    Optional workspace$ = "./",
@@ -66,6 +66,50 @@ Public Class RSession : Inherits HttpServer
 
         Call MyBase.New(port, App.CPUCoreNumbers)
 
+        R = New RSessionBackend(workspace, showError)
+    End Sub
+
+    Public Overrides Sub handleGETRequest(p As HttpProcessor)
+        Dim request As New HttpRequest(p)
+
+        Select Case request.URL.path
+            Case "exec"
+                Dim script As New StringBuilder
+
+                For Each line As String In request.URL.GetValues("script")
+                    script.AppendLine(line & ";")
+                Next
+
+                Call R.RunCode(script.ToString, p.openResponseStream)
+        End Select
+    End Sub
+
+    Public Overrides Sub handlePOSTRequest(p As HttpProcessor, inputData As String)
+        Dim post As New HttpPOSTRequest(p, inputData)
+
+        Select Case post.URL.path
+            Case "exec"
+                Dim script As String = post.POSTData.Objects("script")
+                Dim output As HttpResponse = p.openResponseStream
+
+                Call R.RunCode(script, output)
+        End Select
+    End Sub
+
+    Public Overrides Sub handleOtherMethod(p As HttpProcessor)
+        Call p.writeFailure(404, "method not found")
+    End Sub
+
+    Protected Overrides Function getHttpProcessor(client As TcpClient, bufferSize As Integer) As HttpProcessor
+        Return New HttpProcessor(client, Me, bufferSize)
+    End Function
+End Class
+
+Public Class RSessionBackend
+
+    ReadOnly R As RInterpreter
+
+    Public Sub New(Optional workspace$ = "./", Optional showError As Boolean = True)
         Me.R = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
         Me.R.silent = True
         Me.R.redirectError2stdout = showError
@@ -81,65 +125,65 @@ Public Class RSession : Inherits HttpServer
         End With
     End Sub
 
-    Public Overrides Sub handleGETRequest(p As HttpProcessor)
-        Dim request As New HttpRequest(p)
-
-        Select Case request.URL.path
-            Case "exec"
-                Dim script As New StringBuilder
-
-                For Each line As String In request.URL.GetValues("script")
-                    script.AppendLine(line & ";")
-                Next
-
-                Call runCode(script.ToString, New HttpResponse(p.outputStream, AddressOf p.writeFailure))
-        End Select
-    End Sub
-
-    Private Sub runCode(scriptText As String, response As HttpResponse)
+    Private Function handleRScript(scriptText$, Rstd_out As StreamWriter) As RInvoke
         Dim invokeRtvl As New RInvoke
+        Dim result As Object
+
+        result = R.RedirectOutput(Rstd_out, OutputEnvironments.Html).Evaluate(scriptText)
+
+        If RProgram.isException(result) Then
+            invokeRtvl.code = 500
+            invokeRtvl.err = result
+        Else
+            invokeRtvl.code = 0
+
+            If Not result Is Nothing Then
+                ' 在终端显示最后的结果值
+                R.Evaluate($"print({RInterpreter.lastVariableName});")
+            End If
+        End If
+
+        If R.globalEnvir.stdout.recommendType Is Nothing Then
+            invokeRtvl.content_type = "text/html"
+        Else
+            invokeRtvl.content_type = R.globalEnvir.stdout.recommendType
+        End If
+
+        Call Rstd_out.Flush()
+
+        Return invokeRtvl
+    End Function
+
+    Private Shared Function requiredDataURI(result As RInvoke) As Boolean
+        Static exclude_types As String() = {"text/html", "text/json", "text/xml", "application/json"}
+
+        SyncLock exclude_types
+            Return Not exclude_types _
+                .All(Function(name)
+                         Return result.content_type.StartsWith(name)
+                     End Function)
+        End SyncLock
+    End Function
+
+    Public Sub RunCode(scriptText As String, response As HttpResponse)
+        Dim result As RInvoke
 
         Using output As New MemoryStream(), Rstd_out As New StreamWriter(output, Encodings.UTF8WithoutBOM.CodePage)
-            Dim result As Object
-            Dim content_type As String
-
-            result = R.RedirectOutput(Rstd_out, OutputEnvironments.Html).Evaluate(scriptText)
-
-            If RProgram.isException(result) Then
-                invokeRtvl.code = 500
-                invokeRtvl.err = result
-            Else
-                invokeRtvl.code = 0
-
-                If Not result Is Nothing Then
-                    ' 在终端显示最后的结果值
-                    R.Evaluate($"print({RInterpreter.lastVariableName});")
-                End If
-            End If
-
-            If R.globalEnvir.stdout.recommendType Is Nothing Then
-                content_type = "text/html"
-            Else
-                content_type = R.globalEnvir.stdout.recommendType
-            End If
-
-            Call Rstd_out.Flush()
+            result = handleRScript(scriptText, Rstd_out)
 
             ' 后端的输出应该包含有两部分的内容
             ' 终端输出的文本
             ' 以及最后的值
-            If Not content_type.StartsWith("text/html") AndAlso Not content_type.StartsWith("application/json") Then
-                invokeRtvl.info = New DataURI(base64:=output.ToArray.ToBase64String, mime:=content_type).ToString
+            If requiredDataURI(result) Then
+                result.info = New DataURI(base64:=output.ToArray.ToBase64String, mime:=result.content_type).ToString
             Else
-                invokeRtvl.info = output.ToArray.ToBase64String
+                result.info = output.ToArray.ToBase64String
             End If
 
-            invokeRtvl.warnings = R.globalEnvir.messages.PopAll
-            invokeRtvl.content_type = content_type
+            result.warnings = R.globalEnvir.messages.PopAll
         End Using
 
-        ' Dim json As String = invokeRtvl.GetJson(knownTypes:={GetType(Message), GetType(MSG_TYPES), GetType(StackFrame)})
-        Dim json As String = JSONSerializer.GetJson(invokeRtvl, enumToStr:=True)
+        Dim json As String = JSONSerializer.GetJson(result, enumToStr:=True)
         Dim buffer As Byte() = Encodings.UTF8WithoutBOM.CodePage.GetBytes(json)
 
         response.AccessControlAllowOrigin = "*"
@@ -147,22 +191,4 @@ Public Class RSession : Inherits HttpServer
         Call response.WriteHeader("application/json", buffer.Length)
         Call response.Write(buffer)
     End Sub
-
-    Public Overrides Sub handlePOSTRequest(p As HttpProcessor, inputData As String)
-        Dim post As New HttpPOSTRequest(p, inputData)
-
-        Select Case post.URL.path
-            Case "exec"
-                runCode(post.POSTData.Objects("script"), New HttpResponse(p.outputStream, AddressOf p.writeFailure))
-        End Select
-    End Sub
-
-    Public Overrides Sub handleOtherMethod(p As HttpProcessor)
-        Call p.writeFailure(404, "method not found")
-    End Sub
-
-    Protected Overrides Function getHttpProcessor(client As TcpClient, bufferSize As Integer) As HttpProcessor
-        Return New HttpProcessor(client, Me, bufferSize)
-    End Function
 End Class
-
