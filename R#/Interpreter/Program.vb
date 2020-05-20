@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::671b3d18953a38237d994c1de3f58d04, R#\Interpreter\Program.vb"
+﻿#Region "Microsoft.VisualBasic::17c561d0893680b70a74378948914e0c, R#\Interpreter\Program.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '         Function: BuildProgram, CreateProgram, EndWithFuncCalls, Execute, ExecuteCodeLine
     '                   GetEnumerator, IEnumerable_GetEnumerator, isException, ToString
     ' 
-    '         Sub: configException
+    '         Sub: configException, printExpressionDebug
     ' 
     ' 
     ' /********************************************************************************/
@@ -123,6 +123,14 @@ Namespace Interpreter
             End If
         End Sub
 
+        Private Shared Sub printExpressionDebug(expression As Expression)
+            Dim fore As ConsoleColor = Console.ForegroundColor
+
+            Console.ForegroundColor = ConsoleColor.DarkGray
+            Console.WriteLine(expression.ToString)
+            Console.ForegroundColor = fore
+        End Sub
+
         ''' <summary>
         ''' For execute lambda function
         ''' </summary>
@@ -137,7 +145,7 @@ Namespace Interpreter
             Dim last As Object
 
             If debug Then
-                Call Console.WriteLine(expression.ToString)
+                Call printExpressionDebug(expression)
             End If
 
             last = expression.Evaluate(envir)

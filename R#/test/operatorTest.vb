@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::08a7c7ce4ddc29325a1644995a4cd057, R#\test\operatorTest.vb"
+﻿#Region "Microsoft.VisualBasic::772d58ed26b9256b98aa4ceb92725874, R#\test\operatorTest.vb"
 
     ' Author:
     ' 
@@ -64,4 +64,3 @@ Module operatorTest
         Pause()
     End Sub
 End Module
-

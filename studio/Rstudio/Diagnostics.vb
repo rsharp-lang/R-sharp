@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9509e69ef9cb953c717eb0d6f151f844, studio\R.code\html.vb"
+﻿#Region "Microsoft.VisualBasic::6c46890bf3705346aaa323014fac46f0, studio\Rstudio\Diagnostics.vb"
 
     ' Author:
     ' 
@@ -31,40 +31,44 @@
 
     ' Summaries:
 
-    ' Module codeHtml
+    ' Module Diagnostics
     ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: html
+    '     Function: help
+    ' 
+    '     Sub: view
     ' 
     ' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.Scripting.MetaData
-Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal
+Imports SMRUCC.Rsharp.Runtime.Interop
 
-<Package("devkit.code")>
-Public Module codeHtml
+<Package("diagnostics")>
+Module Diagnostics
 
-    Sub New()
-        htmlPrinter.AttachHtmlFormatter(Of String())(Function(code) html(DirectCast(code, String()).FirstOrDefault))
+    <ExportAPI("view")>
+    Public Sub view(<RRawVectorArgument> symbol As Object, Optional env As Environment = Nothing)
+        Call env.globalEnvironment.stdout.Write(JSONSerializer.GetJson(symbol.GetType(), symbol, New JSONSerializerOptions), "application/json")
     End Sub
 
-    ''' <summary>
-    ''' generate R code highlights
-    ''' </summary>
-    ''' <param name="scriptText"></param>
-    ''' <param name="debug"></param>
-    ''' <returns></returns>
-    <ExportAPI("R.highlights")>
-    Public Function html(scriptText As String, Optional debug As Boolean = False) As String
-        Dim Rscript As Rscript = Rscript.AutoHandleScript(scriptText)
-        Dim [error] As String = Nothing
-        Dim program As Program = Program.CreateProgram(Rscript, debug:=debug, [error]:=[error])
+    <ExportAPI("help")>
+    Public Function help(symbol As Object, Optional env As Environment = Nothing) As Message
+        If TypeOf symbol Is String Then
+            symbol = env.FindSymbol(symbol)?.value
+        End If
 
-        Return program.toHtml
+        If symbol Is Nothing Then
+            Return debug.stop("symbol object can not be nothing!", env)
+        ElseIf Not TypeOf symbol Is RMethodInfo Then
+            Return debug.stop("unsupport symbol object type!", env)
+        End If
+
+
     End Function
 End Module

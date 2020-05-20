@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f82e51b385bd2aaede15c48f378723b8, R#\Runtime\Environment\RContentOutput.vb"
+﻿#Region "Microsoft.VisualBasic::660119f67f7f2dab9620c02a41ffdd85, R#\Runtime\Environment\RContentOutput.vb"
 
     ' Author:
     ' 
@@ -31,12 +31,20 @@
 
     ' Summaries:
 
+    '     Enum OutputEnvironments
+    ' 
+    '         Console, Html, None
+    ' 
+    '  
+    ' 
+    ' 
+    ' 
     '     Class RContentOutput
     ' 
-    '         Properties: recommendType, stream
+    '         Properties: env, recommendType, stream
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Sub: Flush, (+3 Overloads) Write, WriteLine, WriteStream
+    '         Sub: Flush, (+4 Overloads) Write, WriteLine, WriteStream
     ' 
     ' 
     ' /********************************************************************************/
@@ -46,6 +54,9 @@
 Imports System.Drawing
 Imports System.Drawing.Imaging
 Imports System.IO
+Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Runtime
 
@@ -69,12 +80,15 @@ Namespace Runtime
         End Property
 
         Dim stdout As StreamWriter
+        Dim globalEnv As GlobalEnvironment
 
-        Sub New(stdout As StreamWriter, env As OutputEnvironments)
+        Sub New(stdout As StreamWriter, globalEnv As GlobalEnvironment, env As OutputEnvironments)
+            Me.globalEnv = globalEnv
             Me.env = env
             Me.stdout = stdout
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Sub Flush()
             Call stdout.Flush()
         End Sub
@@ -99,13 +113,26 @@ Namespace Runtime
             End If
         End Sub
 
-        Public Sub Write(message As String)
+        Public Sub Write(message As String, Optional content_type$ = "text/html;charset=UTF-8")
             Call stdout.Write(message)
             Call stdout.Flush()
 
             If _recommendType Is Nothing Then
-                _recommendType = "text/html;charset=UTF-8"
+                _recommendType = content_type
             End If
+        End Sub
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Sub Write(data As dataframe)
+            Call data _
+                .GetTable(globalEnv, False, True) _
+                .Select(Function(row)
+                            Return row.Select(Function(cell) $"""{cell}""").JoinBy(",")
+                        End Function) _
+                .JoinBy(vbCrLf) _
+                .DoCall(Sub(text)
+                            Call Write(text, "text/csv")
+                        End Sub)
         End Sub
 
         Public Sub Write(data As IEnumerable(Of Byte))

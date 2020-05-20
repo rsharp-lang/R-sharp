@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a8729b71a940118735e5bc52f2b4c521, studio\Rstudio.common\Rscript.vb"
+﻿#Region "Microsoft.VisualBasic::4ac3191a5d80bafa0607ee3de3571552, studio\Rstudio.common\Rscript.vb"
 
     ' Author:
     ' 
@@ -47,6 +47,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -59,10 +60,12 @@ Module Rscript
 
     Friend Function handleResult(result As Object, globalEnv As GlobalEnvironment, program As RProgram) As Integer
         Dim requirePrintErr As Boolean = False
+        Dim code As Integer = 0
 
         If RProgram.isException(result, globalEnv, isDotNETException:=requirePrintErr) Then
             Call REnv.Internal.debug.PrintMessageInternal(result, globalEnv)
-            Return 500
+            code = 500
+            GoTo FINAL
         End If
 
         If Not program Is Nothing Then
@@ -81,8 +84,16 @@ Module Rscript
                 End If
             End If
         End If
+FINAL:
+        If globalEnv.messages > 0 Then
+            For Each warn As Message In globalEnv.messages
+                Call REnv.Internal.debug.PrintMessageInternal(warn, globalEnv)
+            Next
 
-        Return 0
+            globalEnv.messages.Clear()
+        End If
+
+        Return code
     End Function
 
     Private Function isInvisible(result As Object) As Boolean

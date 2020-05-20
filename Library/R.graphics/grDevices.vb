@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ff666151b3e449205cbf0cb42e516531, Library\R.graphics\grDevices.vb"
+﻿#Region "Microsoft.VisualBasic::bcbf07fea273cd9f7a59c40bea6d7b91, Library\R.graphics\grDevices.vb"
 
     ' Author:
     ' 

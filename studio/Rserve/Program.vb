@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c3961072b11997fab3a1c9396e74e38a, studio\Rserve\Program.vb"
+﻿#Region "Microsoft.VisualBasic::cee99da413d32bad9deb33f202529a16, studio\Rserve\Program.vb"
 
     ' Author:
     ' 
@@ -81,4 +81,3 @@ Module Program
     End Function
 
 End Module
-

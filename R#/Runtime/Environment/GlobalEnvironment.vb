@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c32353c11e5c6d966f7d7fc603001f0d, R#\Runtime\Environment\GlobalEnvironment.vb"
+﻿#Region "Microsoft.VisualBasic::428fd6bf04fb3d0825479a6d49b266bf, R#\Runtime\Environment\GlobalEnvironment.vb"
 
     ' Author:
     ' 
@@ -48,6 +48,7 @@
 #End Region
 
 Imports System.IO
+Imports System.Runtime.CompilerServices
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
@@ -86,13 +87,14 @@ Namespace Runtime
             Me.packages = New PackageManager(options)
             Me.global = Me
             Me.Rscript = scriptHost
-            Me.stdout = New RContentOutput(App.StdOut.DefaultValue, OutputEnvironments.Console)
+            Me.stdout = New RContentOutput(App.StdOut.DefaultValue, globalEnv:=Me, env:=OutputEnvironments.Console)
 
             MyBase.types.Add("unit", RType.GetRSharpType(GetType(unit)))
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Sub RedirectOutput(out As StreamWriter, env As OutputEnvironments)
-            _stdout = New RContentOutput(out, env)
+            _stdout = New RContentOutput(out, globalEnv:=Me, env:=env)
         End Sub
 
         Public Function LoadLibrary(packageName As String, Optional silent As Boolean = False) As Message

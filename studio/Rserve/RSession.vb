@@ -1,45 +1,53 @@
-﻿#Region "Microsoft.VisualBasic::44747715f0b0aeb1ac1dd1a772767cf2, studio\Rserve\RSession.vb"
+﻿#Region "Microsoft.VisualBasic::ef6970ef19e1555d085e5b8d94c3fb54, studio\Rserve\RSession.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-' Class RSession
-' 
-'     Constructor: (+1 Overloads) Sub New
-' 
-'     Function: getHttpProcessor
-' 
-'     Sub: handleGETRequest, handleOtherMethod, handlePOSTRequest
-' 
-' /********************************************************************************/
+    ' Class RSession
+    ' 
+    '     Constructor: (+1 Overloads) Sub New
+    ' 
+    '     Function: getHttpProcessor
+    ' 
+    '     Sub: handleGETRequest, handleOtherMethod, handlePOSTRequest
+    ' 
+    ' Class RSessionBackend
+    ' 
+    '     Constructor: (+1 Overloads) Sub New
+    ' 
+    '     Function: handleRScript, requiredDataURI
+    ' 
+    '     Sub: RunCode
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -58,8 +66,8 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
 Public Class RSession : Inherits HttpServer
 
-    ReadOnly R As RInterpreter
     ReadOnly inspector As New Dictionary(Of String, String)
+    ReadOnly R As RSessionBackend
 
     Public Sub New(port As Integer,
                    Optional workspace$ = "./",
@@ -67,19 +75,7 @@ Public Class RSession : Inherits HttpServer
 
         Call MyBase.New(port, App.CPUCoreNumbers)
 
-        Me.R = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
-        Me.R.silent = True
-        Me.R.redirectError2stdout = showError
-
-        For Each pkgName As String In R.configFile.GetStartupLoadingPackages
-            Call R.LoadLibrary(packageName:=pkgName, silent:=True)
-        Next
-
-        With $"{workspace}/.RData"
-            If .FileExists(True) Then
-
-            End If
-        End With
+        R = New RSessionBackend(workspace, showError)
     End Sub
 
     Public Overrides Sub handleGETRequest(p As HttpProcessor)
@@ -93,7 +89,7 @@ Public Class RSession : Inherits HttpServer
                     script.AppendLine(line & ";")
                 Next
 
-                Call runCode(script.ToString, New HttpResponse(p.outputStream, AddressOf p.writeFailure))
+                   Call R.RunCode(script.ToString, p.openResponseStream)
             Case "inspect"
                 ' 获取指定uid对象的json数据用于前端查看
                 Dim guid As String = request.URL.getArgumentVal("guid")
@@ -110,57 +106,8 @@ Public Class RSession : Inherits HttpServer
                         inspector.Remove(guid)
                     End If
                 End SyncLock
+            
         End Select
-    End Sub
-
-    Private Sub runCode(scriptText As String, response As HttpResponse)
-        Dim invokeRtvl As New RInvoke
-
-        Using output As New MemoryStream(), Rstd_out As New StreamWriter(output, Encodings.UTF8WithoutBOM.CodePage)
-            Dim result As Object
-            Dim content_type As String
-
-            result = R.RedirectOutput(Rstd_out, OutputEnvironments.Html).Evaluate(scriptText)
-
-            If RProgram.isException(result) Then
-                invokeRtvl.code = 500
-                invokeRtvl.err = result
-            Else
-                invokeRtvl.code = 0
-
-                ' 在终端显示最后的结果值
-                R.Evaluate($"print({RInterpreter.lastVariableName});")
-            End If
-
-            If R.globalEnvir.stdout.recommendType Is Nothing Then
-                content_type = "text/html"
-            Else
-                content_type = R.globalEnvir.stdout.recommendType
-            End If
-
-            Call Rstd_out.Flush()
-
-            ' 后端的输出应该包含有两部分的内容
-            ' 终端输出的文本
-            ' 以及最后的值
-            If Not content_type.StartsWith("text/html") Then
-                invokeRtvl.info = New DataURI(base64:=output.ToArray.ToBase64String, mime:=content_type).ToString
-            Else
-                invokeRtvl.info = output.ToArray.ToBase64String
-            End If
-
-            invokeRtvl.warnings = R.globalEnvir.messages.PopAll
-            invokeRtvl.content_type = content_type
-        End Using
-
-        ' Dim json As String = invokeRtvl.GetJson(knownTypes:={GetType(Message), GetType(MSG_TYPES), GetType(StackFrame)})
-        Dim json As String = JSONSerializer.GetJson(invokeRtvl, enumToStr:=True)
-        Dim buffer As Byte() = Encodings.UTF8WithoutBOM.CodePage.GetBytes(json)
-
-        response.AccessControlAllowOrigin = "*"
-
-        Call response.WriteHeader("application/json", buffer.Length)
-        Call response.Write(buffer)
     End Sub
 
     Public Overrides Sub handlePOSTRequest(p As HttpProcessor, inputData As String)
@@ -168,7 +115,10 @@ Public Class RSession : Inherits HttpServer
 
         Select Case post.URL.path
             Case "exec"
-                runCode(post.POSTData.Objects("script"), New HttpResponse(p.outputStream, AddressOf p.writeFailure))
+                Dim script As String = post.POSTData.Objects("script")
+                Dim output As HttpResponse = p.openResponseStream
+
+                Call R.RunCode(script, output)
         End Select
     End Sub
 
@@ -181,3 +131,90 @@ Public Class RSession : Inherits HttpServer
     End Function
 End Class
 
+Public Class RSessionBackend
+
+    ReadOnly R As RInterpreter
+
+    Public Sub New(Optional workspace$ = "./", Optional showError As Boolean = True)
+        Me.R = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
+        Me.R.silent = True
+        Me.R.redirectError2stdout = showError
+
+        For Each pkgName As String In R.configFile.GetStartupLoadingPackages
+            Call R.LoadLibrary(packageName:=pkgName, silent:=True)
+        Next
+
+        With $"{workspace}/.RData"
+            If .FileExists(True) Then
+
+            End If
+        End With
+    End Sub
+
+    Private Function handleRScript(scriptText$, Rstd_out As StreamWriter) As RInvoke
+        Dim invokeRtvl As New RInvoke
+        Dim result As Object
+
+        result = R.RedirectOutput(Rstd_out, OutputEnvironments.Html).Evaluate(scriptText)
+
+        If RProgram.isException(result) Then
+            invokeRtvl.code = 500
+            invokeRtvl.err = result
+        Else
+            invokeRtvl.code = 0
+
+            If Not result Is Nothing Then
+                ' 在终端显示最后的结果值
+                R.Evaluate($"print({RInterpreter.lastVariableName});")
+            End If
+        End If
+
+        If R.globalEnvir.stdout.recommendType Is Nothing Then
+            invokeRtvl.content_type = "text/html"
+        Else
+            invokeRtvl.content_type = R.globalEnvir.stdout.recommendType
+        End If
+
+        Call Rstd_out.Flush()
+
+        Return invokeRtvl
+    End Function
+
+    Private Shared Function requiredDataURI(result As RInvoke) As Boolean
+        Static exclude_types As String() = {"text/html", "text/json", "text/xml", "text/csv", "application/json"}
+
+        SyncLock exclude_types
+            Return Not exclude_types _
+                .All(Function(name)
+                         Return result.content_type.StartsWith(name)
+                     End Function)
+        End SyncLock
+    End Function
+
+    Public Sub RunCode(scriptText As String, response As HttpResponse)
+        Dim result As RInvoke
+
+        Using output As New MemoryStream(), Rstd_out As New StreamWriter(output, Encodings.UTF8WithoutBOM.CodePage)
+            result = handleRScript(scriptText, Rstd_out)
+
+            ' 后端的输出应该包含有两部分的内容
+            ' 终端输出的文本
+            ' 以及最后的值
+            If requiredDataURI(result) Then
+                result.info = New DataURI(base64:=output.ToArray.ToBase64String, mime:=result.content_type).ToString
+            Else
+                result.info = output.ToArray.ToBase64String
+            End If
+
+            result.warnings = R.globalEnvir.messages.PopAll
+        End Using
+
+        Dim json As String = JSONSerializer.GetJson(result, enumToStr:=True)
+        Dim buffer As Byte() = Encodings.UTF8WithoutBOM.CodePage.GetBytes(json)
+
+        response.AccessControlAllowOrigin = "*"
+
+        Call response.WriteHeader("application/json", buffer.Length)
+        Call response.Write(buffer)
+    End Sub
+End Class

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8da9bb46732b96ec1d580badb6ffce8e, studio\R.code\highlights.vb"
+﻿#Region "Microsoft.VisualBasic::8619313912a58051bf2743b43ed2dfcb, studio\R.code\highlights.vb"
 
     ' Author:
     ' 
@@ -49,4 +49,3 @@ Module highlights
 
     End Function
 End Module
-
