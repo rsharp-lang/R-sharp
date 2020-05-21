@@ -126,7 +126,7 @@ Namespace Interpreter
         Private Shared Sub printExpressionDebug(expression As Expression)
             Dim fore As ConsoleColor = Console.ForegroundColor
 
-            Console.ForegroundColor = ConsoleColor.DarkGray
+            Console.ForegroundColor = ConsoleColor.Magenta
             Console.WriteLine(expression.ToString)
             Console.ForegroundColor = fore
         End Sub
