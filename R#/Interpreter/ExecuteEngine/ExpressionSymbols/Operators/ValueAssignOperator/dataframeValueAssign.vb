@@ -54,53 +54,21 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         Public Function ValueAssign(symbolIndex As SymbolIndexer, indexStr As String(), targetObj As dataframe, value As Object, env As Environment) As Message
             If symbolIndex.indexType = SymbolIndexers.dataframeColumns Then
                 If indexStr.Length = 1 Then
-                    If value Is Nothing Then
-                        ' removes column
-                        targetObj.columns.Remove(indexStr(Scan0))
-                    Else
-                        If TypeOf value Is vector Then
-                            value = DirectCast(value, vector).data
-                        ElseIf TypeOf value Is list Then
-                            If targetObj.rownames.IsNullOrEmpty Then
-                                Return Internal.debug.stop(New InvalidProgramException("unable assign list to a dataframe column without row names as key!"), env)
-                            Else
-                                Dim a As Object() = New Object(targetObj.nrows - 1) {}
-                                Dim list As list = DirectCast(value, list)
-                                Dim i As Integer = Scan0
-                                Dim setValue As Boolean = False
-
-                                For Each rowKey As String In targetObj.rownames
-                                    If list.hasName(rowKey) Then
-                                        a(i) = list.slots(rowKey)
-                                        setValue = True
-                                    End If
-
-                                    i += 1
-                                Next
-
-                                value = a
-
-                                If Not setValue Then
-                                    env.AddMessage("no row names contains in the given list!", MSG_TYPES.WRN)
-                                End If
-                            End If
-                        ElseIf Not value.GetType.IsArray Then
-                            Dim a As Array = Array.CreateInstance(value.GetType, 1)
-                            a.SetValue(value, Scan0)
-                            value = a
-                        End If
-
-                        targetObj.columns(indexStr(Scan0)) = value
-                    End If
+                    Return setSingleColumn(targetObj, value, indexStr(Scan0), env)
                 Else
                     Dim seqVal As Array = Runtime.asVector(Of Object)(value)
                     Dim i As i32 = Scan0
+                    Dim err As New Value(Of Message)
 
                     For Each key As String In indexStr
                         If seqVal.Length = 1 Then
-                            targetObj.columns(key) = value
+                            If Not err = setSingleColumn(targetObj, value, key, env) Is Nothing Then
+                                Return err
+                            End If
                         Else
-                            targetObj.columns(key) = seqVal.GetValue(++i)
+                            If Not err = setSingleColumn(targetObj, seqVal.GetValue(++i), key, env) Is Nothing Then
+                                Return err
+                            End If
                         End If
                     Next
                 End If
@@ -111,6 +79,48 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             End If
         End Function
 
+        Private Function setSingleColumn(targetObj As dataframe, value As Object, indexStr$, env As Environment) As Message
+            If value Is Nothing Then
+                ' removes column
+                targetObj.columns.Remove(indexStr)
+                Return Nothing
+            End If
 
+            If TypeOf value Is vector Then
+                value = DirectCast(value, vector).data
+            ElseIf TypeOf value Is list Then
+                If targetObj.rownames.IsNullOrEmpty Then
+                    Return Internal.debug.stop(New InvalidProgramException("unable assign list to a dataframe column without row names as key!"), env)
+                Else
+                    Dim a As Object() = New Object(targetObj.nrows - 1) {}
+                    Dim list As list = DirectCast(value, list)
+                    Dim i As Integer = Scan0
+                    Dim setValue As Boolean = False
+
+                    For Each rowKey As String In targetObj.rownames
+                        If list.hasName(rowKey) Then
+                            a(i) = list.slots(rowKey)
+                            setValue = True
+                        End If
+
+                        i += 1
+                    Next
+
+                    value = a
+
+                    If Not setValue Then
+                        env.AddMessage("no row names contains in the given list!", MSG_TYPES.WRN)
+                    End If
+                End If
+            ElseIf Not value.GetType.IsArray Then
+                Dim a As Array = Array.CreateInstance(value.GetType, 1)
+                a.SetValue(value, Scan0)
+                value = a
+            End If
+
+            targetObj.columns(indexStr) = value
+
+            Return Nothing
+        End Function
     End Module
 End Namespace
