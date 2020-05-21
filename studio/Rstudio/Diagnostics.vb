@@ -62,15 +62,16 @@ Module Diagnostics
         ElseIf TypeOf symbol Is dataframe Then
             buffer.Write(DirectCast(symbol, dataframe), "inspector/csv")
         Else
-            If TypeOf symbol Is list Then
-                symbol = DirectCast(symbol, list).slots
-            ElseIf TypeOf symbol Is vector Then
-                symbol = DirectCast(symbol, vector).data
-            ElseIf TypeOf symbol Is vbObject Then
-                symbol = DirectCast(symbol, vbObject).target
-            End If
+            Dim digest As New Dictionary(Of Type, Func(Of Object, Object))
 
-            Call buffer.Write(JSONSerializer.GetJson(symbol.GetType(), symbol, New JSONSerializerOptions), "inspector/json")
+            digest.Add(GetType(list), Function(obj) DirectCast(obj, list).slots)
+            digest.Add(GetType(vector), Function(obj) DirectCast(obj, vector).data)
+            digest.Add(GetType(vbObject), Function(obj) DirectCast(obj, vbObject).target)
+
+            Dim opts As New JSONSerializerOptions With {.digest = digest}
+            Dim json$ = JSONSerializer.GetJson(symbol.GetType(), symbol, opts)
+
+            Call buffer.Write(json, "inspector/json")
         End If
     End Sub
 
