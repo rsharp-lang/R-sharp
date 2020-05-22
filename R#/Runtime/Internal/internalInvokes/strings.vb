@@ -174,7 +174,7 @@ Namespace Runtime.Internal.Invokes
             Else
                 Dim method As CompareMethod
 
-                If ignoreCase Then
+                If Not ignoreCase Then
                     method = CompareMethod.Binary
                 Else
                     method = CompareMethod.Text

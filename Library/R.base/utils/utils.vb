@@ -190,6 +190,7 @@ Public Module utils
         End If
 
         Dim type As Type = x.GetType
+        Dim encoding As Encodings = TextEncodings.GetEncodings(GetEncoding(fileEncoding))
 
         If type Is GetType(Rdataframe) Then
             Dim matrix As String()() = DirectCast(x, Rdataframe) _
@@ -205,25 +206,23 @@ Public Module utils
                 .ToArray
             Dim dataframe As New File(rows)
 
-            Return dataframe.Save(path:=file, encoding:=Encodings.UTF8WithoutBOM, silent:=True)
+            Return dataframe.Save(path:=file, encoding:=encoding, silent:=True)
         ElseIf type Is GetType(File) Then
-            Return DirectCast(x, File).Save(path:=file, encoding:=Encodings.UTF8WithoutBOM, silent:=True)
-        ElseIf type Is GetType(Microsoft.VisualBasic.Data.csv.IO.DataFrame) Then
-            Return DirectCast(x, Microsoft.VisualBasic.Data.csv.IO.DataFrame).Save(path:=file, encoding:=Encodings.UTF8WithoutBOM, silent:=True)
+            Return DirectCast(x, File).Save(path:=file, encoding:=encoding, silent:=True)
+        ElseIf type Is GetType(IO.DataFrame) Then
+            Return DirectCast(x, IO.DataFrame).Save(path:=file, encoding:=encoding, silent:=True)
         ElseIf REnv.isVector(Of EntityObject)(x) Then
-            Return DirectCast(REnv.asVector(Of EntityObject)(x), EntityObject()).SaveTo(path:=file, encoding:=Encodings.UTF8WithoutBOM.CodePage, silent:=True)
+            Return DirectCast(REnv.asVector(Of EntityObject)(x), EntityObject()).SaveTo(path:=file, encoding:=encoding.CodePage, silent:=True)
         ElseIf REnv.isVector(Of DataSet)(x) Then
-            Return DirectCast(REnv.asVector(Of DataSet)(x), DataSet()).SaveTo(path:=file, encoding:=Encodings.UTF8WithoutBOM.CodePage, silent:=True)
+            Return DirectCast(REnv.asVector(Of DataSet)(x), DataSet()).SaveTo(path:=file, encoding:=encoding.CodePage, silent:=True)
         ElseIf type.IsArray OrElse type Is GetType(vector) Then
-            Return saveGeneric(x, type, file, env)
+            Return saveGeneric(x, type, file, encoding.CodePage, env)
         Else
             Return Message.InCompatibleType(GetType(File), type, env)
         End If
     End Function
 
-    Private Function saveGeneric(x As Object, type As Type, file$, env As Environment) As Boolean
-        Dim encoding As Encoding = Encodings.UTF8WithoutBOM.CodePage
-
+    Private Function saveGeneric(x As Object, type As Type, file$, encoding As Encoding, env As Environment) As Boolean
         If type Is GetType(vector) Then
             x = DirectCast(x, vector).data
             type = x.GetType
