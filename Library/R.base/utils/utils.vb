@@ -91,6 +91,8 @@ Public Module utils
     ''' strings as known to be in Latin-1 or UTF-8 (see Encoding): it is not 
     ''' used to re-encode the input, but allows R to handle encoded strings in 
     ''' their native encoding (if one of those two). 
+    ''' 
+    ''' use <see cref="Encoding.Default"/> by default.
     ''' </param>
     ''' <returns></returns>
     <ExportAPI("read.csv")>
@@ -101,18 +103,19 @@ Public Module utils
                              Optional env As Environment = Nothing) As Object
 
         Dim datafile As Object
+        Dim textEncoding As Encoding = Rsharp.GetEncoding(encoding)
 
         If TypeOf file Is String Then
             datafile = REnv _
                 .TryCatch(Function()
                               If tsv Then
-                                  Return IO.File.LoadTsv(file, encoding:=Rsharp.GetEncoding(encoding))
+                                  Return IO.File.LoadTsv(file, encoding:=textEncoding)
                               Else
-                                  Return IO.File.Load(file, encoding:=Rsharp.GetEncoding(encoding))
+                                  Return IO.File.Load(file, encoding:=textEncoding)
                               End If
                           End Function)
         ElseIf TypeOf file Is fileStream Then
-            Using reader As New textStream(DirectCast(file, fileStream))
+            Using reader As New textStream(DirectCast(file, fileStream), textEncoding)
                 datafile = reader.ReadToEnd _
                     .LineTokens _
                     .DoCall(Function(lines) FileLoader.Load(lines, False, Nothing)) _
