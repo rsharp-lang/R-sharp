@@ -104,7 +104,6 @@ Namespace Runtime.Internal
             Call GetType(strings).DoCall(AddressOf pushEnvir)
             Call GetType(utils).DoCall(AddressOf pushEnvir)
             Call GetType(math).DoCall(AddressOf pushEnvir)
-            Call GetType(help).DoCall(AddressOf pushEnvir)
             Call GetType(etc).DoCall(AddressOf pushEnvir)
             Call GetType([set]).DoCall(AddressOf pushEnvir)
             Call GetType(graphics).DoCall(AddressOf pushEnvir)

@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::dbee26b69ac0f5c8d218d9006b50bfc2, R#\Runtime\Internal\internalInvokes\applys.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module applys
-    ' 
-    '         Function: apply, lapply, sapply
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module applys
+' 
+'         Function: apply, lapply, sapply
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -86,6 +86,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="envir"></param>
         ''' <returns></returns>
         <ExportAPI("sapply")>
+        <RApiReturn(GetType(vector))>
         Public Function sapply(<RRawVectorArgument> X As Object, FUN As Object, envir As Environment) As Object
             If FUN Is Nothing Then
                 Return Internal.debug.stop({"Missing apply function!"}, envir)
@@ -111,22 +112,37 @@ Namespace Runtime.Internal.Invokes
                 Dim list = DirectCast(X, IDictionary)
                 Dim seq As New List(Of Object)
                 Dim names As New List(Of String)
+                Dim value As Object
 
                 For Each key As Object In list.Keys
-                    seq.Add(Runtime.single(apply.Invoke(envir, invokeArgument(list(key)))))
+                    value = apply.Invoke(envir, invokeArgument(list(key)))
+
+                    If Program.isException(value) Then
+                        Return value
+                    End If
+
+                    seq.Add(Runtime.single(value))
                     names.Add(Scripting.ToString(key))
                 Next
 
                 Return New RObj.vector(names, seq.ToArray, envir)
             Else
-                Dim seq = Runtime.asVector(Of Object)(X) _
-                    .AsObjectEnumerator _
-                    .Select(Function(d)
-                                Return Runtime.single(apply.Invoke(envir, invokeArgument(d)))
-                            End Function) _
-                    .ToArray
+                Dim seq As New List(Of Object)
+                Dim value As Object
 
-                Return New RObj.vector With {.Data = seq}
+                For Each d In Runtime.asVector(Of Object)(X) _
+                    .AsObjectEnumerator
+
+                    value = apply.Invoke(envir, invokeArgument(d))
+
+                    If Program.isException(value) Then
+                        Return value
+                    Else
+                        seq.Add(Runtime.single(value))
+                    End If
+                Next
+
+                Return New RObj.vector With {.data = seq.ToArray}
             End If
         End Function
 

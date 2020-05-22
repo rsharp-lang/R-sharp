@@ -47,6 +47,7 @@
 Imports System.IO
 Imports System.IO.Compression
 Imports System.Reflection
+Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -55,6 +56,7 @@ Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Language.UnixBash.FileSystem
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Components
@@ -359,13 +361,13 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="con">a connection object or a character string.</param>
         ''' <returns></returns>
         <ExportAPI("readLines")>
-        Public Function readLines(con As String) As String()
-            Return con.ReadAllLines
+        Public Function readLines(con As String, Optional encoding As Encodings = Encodings.UTF8) As String()
+            Return con.ReadAllLines(encoding.CodePage)
         End Function
 
         <ExportAPI("readText")>
-        Public Function readText(con As String) As String
-            Return con.ReadAllText
+        Public Function readText(con As String, Optional encoding As Encodings = Encodings.UTF8) As String
+            Return con.ReadAllText(encoding.CodePage)
         End Function
 
         ' writeLines(text, con = stdout(), sep = "\n", useBytes = FALSE)
@@ -438,7 +440,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="file$"></param>
         ''' <returns></returns>
         <ExportAPI("save.list")>
-        Public Function saveList(list As Object, file$, Optional envir As Environment = Nothing) As Object
+        Public Function saveList(list As Object, file$, Optional encodings As Encodings = Encodings.UTF8, Optional envir As Environment = Nothing) As Object
             If list Is Nothing Then
                 Return False
             End If
@@ -457,7 +459,7 @@ Namespace Runtime.Internal.Invokes
                 Return Internal.debug.stop(New NotSupportedException(listType.FullName), envir)
             End If
 
-            Return json.SaveTo(file)
+            Return json.SaveTo(file, encodings.CodePage)
         End Function
 
         ReadOnly listKnownTypes As Type() = {
@@ -479,13 +481,14 @@ Namespace Runtime.Internal.Invokes
         Public Function readList(file$,
                                  Optional mode$ = "character",
                                  Optional ofVector As Boolean = False,
+                                 Optional encoding As Encodings = Encodings.UTF8,
                                  Optional envir As Environment = Nothing) As Object
 
             Select Case BASICString.LCase(mode)
-                Case "character" : Return loadListInternal(Of String)(file, ofVector)
-                Case "numeric" : Return loadListInternal(Of Double)(file, ofVector)
-                Case "integer" : Return loadListInternal(Of Long)(file, ofVector)
-                Case "logical" : Return loadListInternal(Of Boolean)(file, ofVector)
+                Case "character" : Return loadListInternal(Of String)(file, ofVector, encoding.CodePage)
+                Case "numeric" : Return loadListInternal(Of Double)(file, ofVector, encoding.CodePage)
+                Case "integer" : Return loadListInternal(Of Long)(file, ofVector, encoding.CodePage)
+                Case "logical" : Return loadListInternal(Of Boolean)(file, ofVector, encoding.CodePage)
                 Case "any"
                     Return file.LoadJsonFile(Of Dictionary(Of String, Object))(knownTypes:=listKnownTypes)
                 Case Else
@@ -493,11 +496,11 @@ Namespace Runtime.Internal.Invokes
             End Select
         End Function
 
-        Private Function loadListInternal(Of T)(file As String, ofVector As Boolean) As Object
+        Private Function loadListInternal(Of T)(file As String, ofVector As Boolean, encoding As Encoding) As Object
             If ofVector Then
-                Return file.LoadJsonFile(Of Dictionary(Of String, T()))
+                Return file.LoadJsonFile(Of Dictionary(Of String, T()))(encoding)
             Else
-                Return file.LoadJsonFile(Of Dictionary(Of String, T))
+                Return file.LoadJsonFile(Of Dictionary(Of String, T))(encoding)
             End If
         End Function
 

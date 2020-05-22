@@ -69,7 +69,7 @@ Public Module Extensions
     End Function
 
     ''' <summary>
-    ''' Get text encoding value
+    ''' Get text encoding value, returns <see cref="Encoding.Default"/> by default.
     ''' </summary>
     ''' <param name="val"></param>
     ''' <returns></returns>

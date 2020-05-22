@@ -56,6 +56,7 @@ Imports System.Net.Sockets
 Imports System.Text
 Imports Flute.Http.Core
 Imports Flute.Http.Core.Message
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Text
@@ -197,10 +198,12 @@ Public Class RSessionBackend
     Public Sub RunCode(scriptText As String, response As HttpResponse)
         Dim result As RInvoke
 
+        Static inspector_types As Index(Of String) = {"inspector/json", "inspector/csv", "inspector/api"}
+
         Using output As New MemoryStream(), Rstd_out As New StreamWriter(output, Encodings.UTF8WithoutBOM.CodePage)
             result = handleRScript(scriptText, Rstd_out)
 
-            If result.content_type = "inspector/json" OrElse result.content_type = "inspector/csv" Then
+            If result.content_type Like inspector_types Then
                 Dim guid As String = App.NextTempName
 
                 inspector.Add(guid, output.ToArray)

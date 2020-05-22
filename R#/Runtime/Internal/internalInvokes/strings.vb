@@ -163,24 +163,35 @@ Namespace Runtime.Internal.Invokes
         ''' </returns>
         <ExportAPI("instr")>
         Public Function InStr(strings As String(),
-                              substr As String,
+                              substr As String(),
                               Optional ignoreCase As Boolean = False,
                               Optional envir As Environment = Nothing) As Object
 
             If strings.IsNullOrEmpty Then
                 Return Nothing
-            ElseIf substr Is Nothing Then
+            ElseIf substr.IsNullOrEmpty Then
                 Return Internal.debug.stop("sub-string component part could not be NULL!", envir)
             Else
                 Dim method As CompareMethod
 
-                If ignoreCase Then
+                If Not ignoreCase Then
                     method = CompareMethod.Binary
                 Else
                     method = CompareMethod.Text
                 End If
 
-                Return strings.Select(Function(str) BASICString.InStr(str, substr, method)).ToArray
+                If substr.Length = 1 Then
+                    substr = Replicate(substr(Scan0), strings.Length).ToArray
+                End If
+                If strings.Length = 1 Then
+                    strings = Replicate(strings(Scan0), substr.Length).ToArray
+                End If
+
+                Return strings _
+                    .Select(Function(str, i)
+                                Return BASICString.InStr(str, substr(i), method)
+                            End Function) _
+                    .ToArray
             End If
         End Function
 

@@ -73,7 +73,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim commandline$ = Runtime.getFirst(cli.Evaluate(envir))
+            Dim commandline$ = CType(Runtime.getFirst(cli.Evaluate(envir)), String).TrimNewLine
             Dim process As New IORedirectFile(commandline, isShellCommand:=True)
             Dim std_out$
             Dim error_code%

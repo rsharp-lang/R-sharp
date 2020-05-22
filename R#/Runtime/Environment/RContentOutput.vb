@@ -80,10 +80,8 @@ Namespace Runtime
         End Property
 
         Dim stdout As StreamWriter
-        Dim globalEnv As GlobalEnvironment
 
-        Sub New(stdout As StreamWriter, globalEnv As GlobalEnvironment, env As OutputEnvironments)
-            Me.globalEnv = globalEnv
+        Sub New(stdout As StreamWriter, env As OutputEnvironments)
             Me.env = env
             Me.stdout = stdout
         End Sub
@@ -123,7 +121,7 @@ Namespace Runtime
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Sub Write(data As dataframe, Optional content_type$ = "text/csv")
+        Public Sub Write(data As dataframe, globalEnv As GlobalEnvironment, Optional content_type$ = "text/csv")
             Call data _
                 .GetTable(globalEnv, False, True) _
                 .Select(Function(row)
