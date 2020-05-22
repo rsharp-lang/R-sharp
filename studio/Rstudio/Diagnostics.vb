@@ -42,15 +42,13 @@
 #End Region
 
 Imports System.Drawing
-Imports System.Drawing.Imaging
-Imports System.IO
 Imports System.IO
 Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.MIME.application.json
-Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.MIME.Markup.MarkDown
+Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -68,7 +66,7 @@ Module Diagnostics
         If symbol Is Nothing Then
             buffer.Write("null", "inspector/json")
         ElseIf TypeOf symbol Is dataframe Then
-            buffer.Write(DirectCast(symbol, dataframe), "inspector/csv")
+            buffer.Write(DirectCast(symbol, dataframe), env.globalEnvironment, "inspector/csv")
         ElseIf TypeOf symbol Is Image OrElse TypeOf symbol Is Bitmap Then
             buffer.Write(New DataURI(CType(symbol, Image)).ToString, "inspector/image")
         ElseIf TypeOf symbol Is GraphicsData Then
