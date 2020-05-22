@@ -70,7 +70,17 @@ Module Diagnostics
             buffer.Write(New DataURI(CType(symbol, Image)).ToString, "inspector/image")
         ElseIf TypeOf symbol Is GraphicsData Then
             Using bytes As New MemoryStream
+                With DirectCast(symbol, GraphicsData)
+                    Call .Save(bytes)
+                    Call bytes.Flush()
 
+                    Dim base64 As New DataURI(
+                        base64:=bytes.ToArray.ToBase64String,
+                        mime:= .content_type
+                    )
+
+                    buffer.Write(base64.ToString, "inspector/image")
+                End With
             End Using
         Else
             Dim digest As New Dictionary(Of Type, Func(Of Object, Object))
