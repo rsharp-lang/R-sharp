@@ -41,8 +41,11 @@
 
 #End Region
 
+Imports System.IO
+Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.MIME.application.json
+Imports Microsoft.VisualBasic.MIME.Markup.MarkDown
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -60,7 +63,11 @@ Module Diagnostics
         If symbol Is Nothing Then
             buffer.Write("null", "inspector/json")
         ElseIf TypeOf symbol Is dataframe Then
-            buffer.Write(DirectCast(symbol, dataframe), "inspector/csv")
+            buffer.Write(
+                data:=DirectCast(symbol, dataframe),
+                globalEnv:=env.globalEnvironment,
+                content_type:="inspector/csv"
+            )
         Else
             Dim digest As New Dictionary(Of Type, Func(Of Object, Object))
 
@@ -87,6 +94,24 @@ Module Diagnostics
             Return debug.stop("unsupport symbol object type!", env)
         End If
 
+        Dim markdownText As String
 
+        Using buffer As New MemoryStream
+            Dim markdown As New RContentOutput(New StreamWriter(buffer), OutputEnvironments.Html)
+
+            Call env.globalEnvironment _
+               .packages _
+               .packageDocs _
+               .PrintHelp(DirectCast(symbol, RMethodInfo), markdown)
+            Call markdown.Flush()
+
+            markdownText = Encoding.UTF8.GetString(buffer.ToArray)
+        End Using
+
+        Dim html As String = New MarkdownHTML().Transform(markdownText)
+
+        Call env.globalEnvironment.stdout.Write(html, "inspector/api")
+
+        Return Nothing
     End Function
 End Module
