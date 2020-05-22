@@ -41,8 +41,13 @@
 
 #End Region
 
+Imports System.Drawing
+Imports System.Drawing.Imaging
+Imports System.IO
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.MIME.application.json
+Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -61,6 +66,12 @@ Module Diagnostics
             buffer.Write("null", "inspector/json")
         ElseIf TypeOf symbol Is dataframe Then
             buffer.Write(DirectCast(symbol, dataframe), "inspector/csv")
+        ElseIf TypeOf symbol Is Image OrElse TypeOf symbol Is Bitmap Then
+            buffer.Write(New DataURI(CType(symbol, Image)).ToString, "inspector/image")
+        ElseIf TypeOf symbol Is GraphicsData Then
+            Using bytes As New MemoryStream
+
+            End Using
         Else
             Dim digest As New Dictionary(Of Type, Func(Of Object, Object))
 
