@@ -1,46 +1,46 @@
-﻿#Region "Microsoft.VisualBasic::5742005a8f4be855c32931a8fbaf232e, Library\R.plot\plots.vb"
+﻿#Region "Microsoft.VisualBasic::47163be0098c3af2b66a3767f0a4b3e9, Library\R.plot\plots.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-' Module plots
-' 
-'     Constructor: (+1 Overloads) Sub New
-' 
-'     Function: CreateSerial, doVolinPlot, linearRegression, plot_binBox, plot_categoryBars
-'               plot_deSolveResult, plotFormula, plotODEResult, plotSerials
-' 
-'     Sub: Main
-' 
-' /********************************************************************************/
+    ' Module plots
+    ' 
+    '     Constructor: (+1 Overloads) Sub New
+    ' 
+    '     Function: CreateSerial, doVolinPlot, linearRegression, plot_binBox, plot_categoryBars
+    '               plot_deSolveResult, plotFormula, plotODEResult, plotSerials
+    ' 
+    '     Sub: Main
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -200,7 +200,7 @@ Module plots
         End If
 
         Dim fx As Func(Of Double, Double) = math.CreateLambda(Of Double, Double)(env)
-        Dim x As Double() = vector.asVector(Of Double)(args!x)
+        Dim x As Double() = asVector(Of Double)(args!x)
         Dim points As PointF() = x.Select(Function(xi) New PointF(xi, fx(xi))).ToArray
 
         Return points.Plot(
@@ -261,8 +261,8 @@ Module plots
                                  Optional alpha As Integer = 255,
                                  Optional ptSize As Integer = 5) As SerialData
 
-        Dim px As Double() = vector.asVector(Of Double)(x)
-        Dim py As Double() = vector.asVector(Of Double)(y)
+        Dim px As Double() = asVector(Of Double)(x)
+        Dim py As Double() = asVector(Of Double)(y)
         Dim points As PointData() = px _
             .Select(Function(xi, i)
                         Return New PointData With {

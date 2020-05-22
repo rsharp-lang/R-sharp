@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a435f1a61d677ddc3dcb150577718f70, Library\R.graph\Layouts.vb"
+﻿#Region "Microsoft.VisualBasic::104f907e3791dd7c87aff95efdd7f365, Library\R.graph\Layouts.vb"
 
     ' Author:
     ' 
@@ -65,10 +65,11 @@ Module Layouts
     <ExportAPI("layout.force_directed")>
     Public Function forceDirect(g As NetworkGraph,
                                 Optional iterations% = 1000,
-                                Optional clearScreen As Boolean = False) As NetworkGraph
+                                Optional clearScreen As Boolean = False,
+                                Optional showProgress As Boolean = True) As NetworkGraph
 
         Return g.doForceLayout(
-            showProgress:=True,
+            showProgress:=showProgress,
             iterations:=iterations,
             clearScreen:=clearScreen
         )

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8cf5a98c3b16cf5b4e49e9ce24f4921c, R.exec\File\JumpPoints.vb"
+﻿#Region "Microsoft.VisualBasic::8cf5a98c3b16cf5b4e49e9ce24f4921c, studio\R.exec\File\JumpPoints.vb"
 
     ' Author:
     ' 

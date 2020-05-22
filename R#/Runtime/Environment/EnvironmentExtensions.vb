@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7cfd10511619b9e7646fdedffe476c36, R#\Runtime\EnvironmentExtensions.vb"
+﻿#Region "Microsoft.VisualBasic::8d0de8b7ace5363582584d8e91d6e5df, R#\Runtime\Environment\EnvironmentExtensions.vb"
 
     ' Author:
     ' 
@@ -45,13 +45,13 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports SMRUCC.Rsharp.Interpreter
-Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Runtime
 
     Module EnvironmentExtensions
 
         Public ReadOnly Property globalStackFrame As StackFrame
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
                 Return New StackFrame With {
                     .File = "<globalEnvironment>",
@@ -65,11 +65,13 @@ Namespace Runtime
             End Get
         End Property
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
         Public Function GetEnvironmentStackTraceString(env As Environment) As String
             Return env.parent?.ToString & " :> " & env.stackFrame.Method.ToString
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function CreateMagicScriptSymbol(filepath As String, R As RInterpreter) As MagicScriptSymbol
             Return New MagicScriptSymbol With {
                 .dir = filepath.ParentPath,

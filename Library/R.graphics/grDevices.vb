@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::51c3a1ef4e3f9b27d8f4f8c5fcbe0204, Library\R.graphics\grDevices.vb"
+﻿#Region "Microsoft.VisualBasic::bcbf07fea273cd9f7a59c40bea6d7b91, Library\R.graphics\grDevices.vb"
 
     ' Author:
     ' 
@@ -73,7 +73,11 @@ Public Module grDevices
     ''' save the graphics plot object as image file
     ''' </summary>
     ''' <param name="graphics">a graphics plot object</param>
-    ''' <param name="file">the file path for save the image file.</param>
+    ''' <param name="file">the file path for save the image file. 
+    ''' (if this file path parameter is nothing, then the resulted 
+    ''' image object will be flush to the standard output stream 
+    ''' of R# environment.)
+    ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("save.graphics")>

@@ -1,4 +1,49 @@
-﻿Imports System.IO
+﻿#Region "Microsoft.VisualBasic::51b6c5dba57d9e06cd78b782b93acb05, studio\Rserve\Rweb.vb"
+
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+
+    ' /********************************************************************************/
+
+    ' Summaries:
+
+    ' Class Rweb
+    ' 
+    '     Constructor: (+1 Overloads) Sub New
+    ' 
+    '     Function: getHttpProcessor
+    ' 
+    '     Sub: handleGETRequest, handleOtherMethod, handlePOSTRequest, runRweb
+    ' 
+    ' /********************************************************************************/
+
+#End Region
+
+Imports System.IO
 Imports System.Net.Sockets
 Imports System.Runtime.CompilerServices
 Imports System.Text
@@ -8,6 +53,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.System.Configuration
 
 ''' <summary>
@@ -59,7 +105,7 @@ Public Class Rweb : Inherits HttpServer
             ' run rscript
             Using R As RInterpreter = RInterpreter _
                 .FromEnvironmentConfiguration(ConfigFile.localConfigs) _
-                .RedirectOutput(Rstd_out)
+                .RedirectOutput(Rstd_out, OutputEnvironments.Html)
 
                 R.silent = True
                 R.redirectError2stdout = showError

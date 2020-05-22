@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::481a0d7b20c4e61101c570750dbd7244, R#\test\tokenlicerTest.vb"
+﻿#Region "Microsoft.VisualBasic::2b31efebc491f5629aa835e586e0da06, R#\test\tokenlicerTest.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,7 @@
     '     Sub: cliInvoke, customOperatorTest, declareFunctionTest, declareTest, elementIndexer
     '          lambdaTest, linqQueryTest, Main, numberUnittest, operatorTest
     '          pipelineTest, regexpLiteral, sequnceTest, sourceScriptTest, specialNameTest
-    '          stringParser, stringValueAssign
+    '          stringParser, stringValueAssign, syntaxBugTest
     ' 
     ' /********************************************************************************/
 
@@ -50,6 +50,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Module tokenlicerTest
 
     Sub Main()
+        Call syntaxBugTest()
         Call lambdaTest()
         Call specialNameTest()
 
@@ -74,6 +75,15 @@ Module tokenlicerTest
         Call declareFunctionTest()
         Call stringParser()
         Call declareTest()
+
+        Pause()
+    End Sub
+
+    Sub syntaxBugTest()
+        Program.BuildProgram("x$a")
+        Program.BuildProgram("x$'12334'")
+
+        Program.BuildProgram("let scores = sapply(a, x -> x$""Score(bits)"");")
 
         Pause()
     End Sub

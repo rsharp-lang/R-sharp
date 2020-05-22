@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9e5525a6ad3cde883d6883062207eb94, R#\System\Package\AnnotationDocs.vb"
+﻿#Region "Microsoft.VisualBasic::56694aed07c8e4a9236562849f52914e, R#\System\Package\AnnotationDocs.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,7 @@
     ' 
     '         Function: (+2 Overloads) GetAnnotations
     ' 
-    '         Sub: printDocs, printFuncBody, PrintHelp
+    '         Sub: printConsole, printDocs, printFuncBody, PrintHelp, printHtml
     ' 
     ' 
     ' /********************************************************************************/
@@ -52,6 +52,8 @@ Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports LibraryAssembly = System.Reflection.Assembly
 Imports EnumPrinter = SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter.enumPrinter
+Imports SMRUCC.Rsharp.Runtime
+Imports System.Text
 
 Namespace System.Package
 
@@ -120,7 +122,59 @@ Namespace System.Package
         ''' Print help information about the given R api method 
         ''' </summary>
         ''' <param name="api"></param>
-        Public Sub PrintHelp(api As RMethodInfo)
+        Public Sub PrintHelp(api As RMethodInfo, out As RContentOutput)
+            If out.env <> OutputEnvironments.Html Then
+                Call api.DoCall(AddressOf printConsole)
+            Else
+                Call printHtml(api, out)
+            End If
+        End Sub
+
+        Private Sub printHtml(api As RMethodInfo, markdown As RContentOutput)
+            Dim docs As ProjectMember = GetAnnotations(api.GetRawDeclares)
+
+            If Not docs Is Nothing Then
+                Call markdown.WriteLine(docs.Summary)
+                Call markdown.WriteLine()
+
+                For Each param As param In docs.Params
+                    Call markdown.WriteLine($"``{param.name}:``  " & param.text.Trim(" "c, ASCII.CR, ASCII.LF))
+                Next
+
+                Call markdown.WriteLine()
+
+                If Not docs.Returns.StringEmpty Then
+                    Call markdown.WriteLine(" [**returns**]: ")
+                    Call markdown.WriteLine(docs.Returns)
+                    Call markdown.WriteLine()
+                End If
+            End If
+
+            Call markdown.WriteLine(api.GetPrintContent)
+
+            Dim enums = api.parameters _
+                .Where(Function(par) par.type.raw.IsEnum) _
+                .Select(Function(par) par.type.raw) _
+                .GroupBy(Function(type) type.FullName) _
+                .ToArray
+
+            If enums.Length > 0 Then
+                Call markdown.WriteLine(" where have enum values:")
+
+                For Each [enum] As REnum In enums.Select(Function(tg) REnum.GetEnumList(tg.First))
+                    Call markdown.WriteLine()
+                    Call markdown.WriteLine($"{New String(" "c, 2)}let {[enum].name} as integer = {{")
+
+                    For Each value As Object In [enum].values
+                        Call markdown.WriteLine($"{New String(" "c, 6)}{value.ToString} = {[enum].IntValue(value)};")
+                    Next
+
+                    Call markdown.WriteLine($"{New String(" "c, 2)}}}")
+                Next
+            End If
+        End Sub
+
+        Private Sub printConsole(api As RMethodInfo)
             Dim docs As ProjectMember = GetAnnotations(api.GetRawDeclares)
 
             If Not docs Is Nothing Then

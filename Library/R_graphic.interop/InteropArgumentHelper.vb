@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b33a7ea37aacc30bd61c77202f57a155, Library\R_graphic.interop\InteropArgumentHelper.vb"
+﻿#Region "Microsoft.VisualBasic::a899710e5214fc0b9737505931bca731, Library\R_graphic.interop\InteropArgumentHelper.vb"
 
     ' Author:
     ' 
@@ -45,6 +45,7 @@ Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
 Imports Microsoft.VisualBasic.MIME.Markup.HTML.CSS
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
@@ -120,6 +121,8 @@ Public Module InteropArgumentHelper
     Public Function getSize(size As Object, Optional default$ = "2700,2000") As String
         If size Is Nothing Then
             Return [default]
+        ElseIf TypeOf size Is vector Then
+            size = DirectCast(size, vector).data
         End If
 
         Select Case size.GetType

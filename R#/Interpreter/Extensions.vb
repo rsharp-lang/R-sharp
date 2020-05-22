@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fcd0947cbbfea661246679aafc2c41d3, R#\Interpreter\Extensions.vb"
+﻿#Region "Microsoft.VisualBasic::f17d85232cf4a30a77453b1b13452037, R#\Interpreter\Extensions.vb"
 
     ' Author:
     ' 
@@ -97,13 +97,29 @@ Namespace Interpreter
         <Extension>
         Public Iterator Function GetExpressions(tokens As Token(),
                                                 Rscript As Rscript,
-                                                errHandler As Action(Of SyntaxResult),
+                                                errHandler As Action(Of SyntaxResult, Token()),
                                                 opts As SyntaxBuilderOptions) As IEnumerable(Of Expression)
 
-            For Each block In tokens.SplitByTopLevelDelimiter(TokenType.terminator)
+            Dim err As Exception = Nothing
+            Dim expr As SyntaxResult
+
+            If errHandler Is Nothing Then
+                errHandler = Sub(syntaxErr, block)
+                                 Call SyntaxErrorHelper(
+                                    opts:=opts,
+                                    syntaxResult:=syntaxErr,
+                                    Rscript:=Rscript,
+                                    tokens:=block
+                                 )
+                             End Sub
+            End If
+
+            For Each block As Token() In tokens.SplitByTopLevelDelimiter(TokenType.terminator, err:=err).SafeQuery
                 If block.Length = 0 OrElse block.isTerminator Then
                     ' skip code comments
                     ' do nothing
+                ElseIf Not err Is Nothing Then
+                    Call errHandler(New SyntaxResult(err, opts.debug), {})
                 Else
                     ' have some bugs about
                     ' handles closure
@@ -111,24 +127,14 @@ Namespace Interpreter
                         .Where(Function(t) Not t.name = TokenType.comment) _
                         .SplitByTopLevelDelimiter(TokenType.close,, "}") _
                         .Split(2)
-                    Dim expr As SyntaxResult
 
                     For Each joinBlock In parts
                         block = joinBlock(Scan0).JoinIterates(joinBlock.ElementAtOrDefault(1)).ToArray
                         expr = Expression.CreateExpression(block, opts)
 
                         If expr.isException Then
-                            If errHandler Is Nothing Then
-                                Call SyntaxErrorHelper(
-                                    opts:=opts,
-                                    syntaxResult:=expr,
-                                    Rscript:=Rscript,
-                                    tokens:=block
-                                )
-                            Else
-                                Call errHandler(expr)
-                                Exit For
-                            End If
+                            Call errHandler(expr, block)
+                            Exit For
                         Else
                             Yield expr.expression
                         End If

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6195fe2bfa55af4c88e89fd534c99096, R#\System\Package\Package.vb"
+﻿#Region "Microsoft.VisualBasic::08290e82f0269401b3320d9e9517fca8, R#\System\Package\Package.vb"
 
     ' Author:
     ' 
@@ -33,8 +33,8 @@
 
     '     Class Package
     ' 
-    '         Properties: [namespace], info, isMissing, LibPath, ls
-    '                     package
+    '         Properties: [namespace], info, is_basePackage, isMissing, libPath
+    '                     ls, package
     ' 
     '         Constructor: (+2 Overloads) Sub New
     '         Function: GetFunction, GetFunctionInternal, GetPackageDescription, GetPackageModuleInfo, ToString

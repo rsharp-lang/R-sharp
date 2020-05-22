@@ -1,50 +1,50 @@
-﻿#Region "Microsoft.VisualBasic::82e5d5b5d94d058529f0da05a622ccc0, R#\Runtime\Internal\internalInvokes\base.vb"
+﻿#Region "Microsoft.VisualBasic::c4a653731b0afed85f25b03e3908ec35, R#\Runtime\Internal\internalInvokes\base.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Module base
-' 
-'         Function: [stop], allocate, append, autoDispose, cat
-'                   colnames, createDotNetExceptionMessage, CreateMessageInternal, doPrintInternal, getEnvironmentStack
-'                   getOption, head, invisible, invokeArgument, isEmpty
-'                   lapply, length, names, ncol, neg
-'                   nrow, options, print, Rdataframe, rep
-'                   replace, Rlist, rownames, sapply, source
-'                   str, summary, unitOfT, warning
-' 
-'         Sub: q, quit
-' 
-' 
-' /********************************************************************************/
+    '     Module base
+    ' 
+    '         Function: [stop], allocate, append, autoDispose, cat
+    '                   cbind, colnames, createDotNetExceptionMessage, CreateMessageInternal, doPrintInternal
+    '                   getEnvironmentStack, getOption, head, invisible, isEmpty
+    '                   isNull, length, names, ncol, neg
+    '                   nrow, options, print, rbind, Rdataframe
+    '                   rep, replace, Rlist, rownames, source
+    '                   str, summary, unitOfT, warning
+    ' 
+    '         Sub: q, quit
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -105,6 +105,44 @@ Namespace Runtime.Internal.Invokes
             Return Repeats(x, times)
         End Function
 
+        <ExportAPI("rbind")>
+        Public Function rbind(d As dataframe, <RRawVectorArgument> row As Object, env As Environment) As dataframe
+            Throw New NotImplementedException
+        End Function
+
+        <ExportAPI("cbind")>
+        Public Function cbind(d As dataframe, <RRawVectorArgument> col As Object, env As Environment) As dataframe
+            If col Is Nothing Then
+                Return d
+            End If
+
+            If TypeOf col Is list Then
+                With DirectCast(col, list)
+                    Dim value As Object
+
+                    For Each name As String In .slots.Keys
+                        value = .slots(name)
+
+                        If Not value Is Nothing Then
+                            If TypeOf value Is Array Then
+                                d.columns.Add(name, DirectCast(value, Array))
+                            Else
+                                d.columns.Add(name, {value})
+                            End If
+                        End If
+                    Next
+                End With
+            ElseIf TypeOf col Is Array Then
+                d.columns.Add($"X{d.columns.Count + 2}", DirectCast(col, Array))
+            ElseIf TypeOf col Is vector Then
+                d.columns.Add($"X{d.columns.Count + 2}", DirectCast(col, vector).data)
+            Else
+                d.columns.Add($"X{d.columns.Count + 2}", {col})
+            End If
+
+            Return d
+        End Function
+
         ''' <summary>
         ''' create an empty vector with specific count of null value filled
         ''' </summary>
@@ -129,23 +167,36 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("unit")>
         Public Function unitOfT(<RRawVectorArgument> x As Object,
                                 <RByRefValueAssign>
-                                Optional unit As unit = Nothing,
+                                Optional unit As Object = Nothing,
                                 Optional env As Environment = Nothing) As Object
 
-            If Not x Is Nothing AndAlso Not TypeOf x Is vector Then
-                With asVector(Of Object)(x)
-                    x = New vector(.DoCall(AddressOf MeasureRealElementType), .ByRef, env)
-                End With
+            If unit Is Nothing Then
+                If TypeOf x Is vector Then
+                    Return DirectCast(x, vector).unit
+                Else
+                    Return Nothing
+                End If
+            Else
+                If TypeOf unit Is vbObject Then
+                    unit = DirectCast(unit, vbObject).target
+                End If
+                If TypeOf unit Is String Then
+                    unit = New unit With {.name = unit}
+                End If
 
-                Call env.AddMessage({
-                    "value x is not a vector",
-                    "it will be convert to vector automatically..."
-                }, MSG_TYPES.WRN)
+                If Not x Is Nothing AndAlso Not TypeOf x Is vector Then
+                    With asVector(Of Object)(x)
+                        x = New vector(.DoCall(AddressOf MeasureRealElementType), .ByRef, env)
+                    End With
+
+                    Call env.AddMessage({
+                        "value x is not a vector",
+                        "it will be convert to vector automatically..."
+                    }, MSG_TYPES.WRN)
+                End If
             End If
 
-            If unit Is Nothing Then
-                Return DirectCast(x, vector)?.unit
-            ElseIf x Is Nothing Then
+            If x Is Nothing Then
                 x = New vector With {.data = {}, .unit = unit}
             Else
                 DirectCast(x, vector).unit = unit
@@ -427,6 +478,11 @@ Namespace Runtime.Internal.Invokes
             Else
                 Return False
             End If
+        End Function
+
+        <ExportAPI("is.null")>
+        Public Function isNull(x As Object) As Boolean
+            Return x Is Nothing
         End Function
 
         ''' <summary>
@@ -1011,7 +1067,7 @@ Namespace Runtime.Internal.Invokes
                 Call globalEnv _
                     .packages _
                     .packageDocs _
-                    .PrintHelp(x)
+                    .PrintHelp(x, env.globalEnvironment.stdout)
             ElseIf type Is GetType(DeclareNewFunction) Then
                 Call env.globalEnvironment.stdout.WriteLine(x.ToString)
             ElseIf type.ImplementInterface(GetType(RPrint)) Then

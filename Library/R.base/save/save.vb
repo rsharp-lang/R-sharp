@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3773f3863534f3717a9b4c135f8ea791, Library\R.base\save.vb"
+﻿#Region "Microsoft.VisualBasic::bb50ae408c04bc5d0a2bc80870f4f6ce, Library\R.base\save\save.vb"
 
     ' Author:
     ' 
@@ -33,16 +33,9 @@
 
     ' Module base
     ' 
-    '     Function: decodeStringVector, load
-    '     Enum RData
+    '     Function: load, readRDS, save, saveRDS
     ' 
-    '         RDA, RDS
-    ' 
-    ' 
-    ' 
-    '  
-    ' 
-    '     Function: readRDS, save, saveRDS
+    '     Sub: saveImage
     ' 
     ' /********************************************************************************/
 

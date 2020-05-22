@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b8037daa3d6e998655aa257d784934b0, R#\Runtime\Internal\objects\dataset\list.vb"
+﻿#Region "Microsoft.VisualBasic::3daf79875ee605a88b11d88d3622ab66, R#\Runtime\Internal\objects\dataset\list.vb"
 
     ' Author:
     ' 
@@ -138,7 +138,14 @@ Namespace Runtime.Internal.Object
             If Not slots.ContainsKey(name) Then
                 Return [default]
             Else
-                Return RCType.CTypeDynamic(slots.TryGetValue(name), GetType(T), env)
+                Dim value As Object = slots(name)
+                Dim type As Type = GetType(T)
+
+                If type.IsArray Then
+                    Return CObj(asVector(value, type.GetElementType, env))
+                Else
+                    Return RCType.CTypeDynamic([single](value), GetType(T), env)
+                End If
             End If
         End Function
 

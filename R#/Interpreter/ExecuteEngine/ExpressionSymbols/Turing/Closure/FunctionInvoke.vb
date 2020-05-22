@@ -1,46 +1,46 @@
-﻿#Region "Microsoft.VisualBasic::567233bd137966a94a64200661c0a173, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\FunctionInvoke.vb"
+﻿#Region "Microsoft.VisualBasic::a5236badd090d9fc14a747a7a0829e23, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\FunctionInvoke.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class FunctionInvoke
-' 
-'         Properties: [namespace], funcName, stackFrame, type
-' 
-'         Constructor: (+2 Overloads) Sub New
-'         Function: allIsValueAssign, doInvokeFuncVar, EnumerateInvokedParameters, Evaluate, getFuncVar
-'                   invokeRInternal, runOptions, ToString
-' 
-' 
-' /********************************************************************************/
+    '     Class FunctionInvoke
+    ' 
+    '         Properties: [namespace], funcName, parameters, stackFrame, type
+    ' 
+    '         Constructor: (+2 Overloads) Sub New
+    '         Function: allIsValueAssign, doInvokeFuncVar, EnumerateInvokedParameters, Evaluate, getFuncVar
+    '                   invokeRInternal, runOptions, ToString
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -87,10 +87,19 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         ''' <returns></returns>
         Public Property [namespace] As String
 
+        Dim m_parameters As Expression()
+
         ''' <summary>
         ''' The parameters expression that passing to the target invoked function.
         ''' </summary>
-        Friend ReadOnly parameters As List(Of Expression)
+        Public Property parameters As Expression()
+            Get
+                Return m_parameters
+            End Get
+            Friend Set(value As Expression())
+                m_parameters = value
+            End Set
+        End Property
 
         ''' <summary>
         ''' Use for create pipeline calls from identifier target
@@ -242,7 +251,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 ' loop, then returns result will be wrapped as return runtime literal value
                 ' so we needs to break such wrapper at here
                 ' or ctype error will happends
-                Dim result As Object = DirectCast(funcVar, RFunction).Invoke(envir, InvokeParameter.Create(parameters))
+                Dim result As Object = DirectCast(funcVar, RFunction).Invoke(envir, InvokeParameter.Create(expressions:=parameters))
 
                 If Not result Is Nothing Then
                     If result.GetType Is GetType(ReturnValue) AndAlso DirectCast(result, ReturnValue).IsRuntimeFunctionReturnWrapper Then
@@ -254,7 +263,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     Return Nothing
                 End If
             Else
-                Dim args = InvokeParameter.Create(parameters)
+                Dim args = InvokeParameter.Create(expressions:=parameters)
                 Dim interop As RMethodInfo = DirectCast(funcVar, RMethodInfo)
 
                 ' invoke .NET package method
@@ -267,7 +276,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 Return runOptions(envir)
             Else
                 ' create argument models
-                Dim argVals As InvokeParameter() = InvokeParameter.Create(parameters)
+                Dim argVals As InvokeParameter() = InvokeParameter.Create(expressions:=parameters)
                 ' and then invoke the specific internal R# api
                 Dim result As Object = Internal.invoke.invokeInternals(envir, funcName, argVals)
 

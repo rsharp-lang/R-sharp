@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::28e95691d9f271275ab6c38975670f1f, R#\Runtime\Extensions.vb"
+﻿#Region "Microsoft.VisualBasic::06ee7b1901b94924373b985203d6a77b, R#\Runtime\Extensions.vb"
 
     ' Author:
     ' 
@@ -77,6 +77,11 @@ Namespace Runtime
             Return GetType(Void)
         End Function
 
+        ''' <summary>
+        ''' 这个会遵循类型缩放的原则返回最大的类型
+        ''' </summary>
+        ''' <param name="array"></param>
+        ''' <returns></returns>
         Public Function MeasureRealElementType(array As Array) As Type
             Dim arrayType As Type = array.GetType
             Dim x As Object
@@ -102,10 +107,34 @@ Namespace Runtime
                     .OrderByDescending(Function(k) k.Count) _
                     .ToArray
 
-                If tg(Scan0).Count < array.Length / 2 Then
-                    Return GetType(Object)
-                Else
+                ' 都是相同类型
+                If tg.Length = 1 Then
                     Return tg(Scan0).First
+                End If
+
+                ' 按照类型缩放原则进行类型的选取
+                Dim allTypes As Type() = tg.Select(Function(g) g.First).ToArray
+
+                ' 排序之后，一般sub type会排在最开始
+                ' base type会排在最后
+                allTypes = allTypes _
+                    .Sort(Function(a, b)
+                              If a.IsInheritsFrom(b) Then
+                                  Return -1
+                              Else
+                                  ' 按照full name排序
+                                  Return a.FullName.CompareTo(b.FullName)
+                              End If
+                          End Function) _
+                    .ToArray
+
+                ' 如果最开始的类型可以继承自最末尾的类型
+                ' 则返回最末尾的类型
+                If allTypes(Scan0).IsInheritsFrom(allTypes.Last) Then
+                    Return allTypes.Last
+                Else
+                    ' 反之说明类型间没有继承关系，即互不兼容，则返回object类型
+                    Return GetType(Object)
                 End If
             End If
         End Function

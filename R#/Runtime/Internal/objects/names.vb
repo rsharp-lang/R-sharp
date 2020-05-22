@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ecced291aae34ec1ed855896dd6eddfe, R#\Runtime\Internal\objects\names.vb"
+﻿#Region "Microsoft.VisualBasic::df25dec6ea0bdf839f05dcf31a31f5f5, R#\Runtime\Internal\objects\names.vb"
 
     ' Author:
     ' 
@@ -157,7 +157,23 @@ Namespace Runtime.Internal.Object
         End Function
 
         Public Function setColNames([object] As Object, namelist As Array, envir As Environment) As Object
-            Throw New NotImplementedException
+            If TypeOf [object] Is dataframe Then
+                With DirectCast([object], dataframe)
+                    Dim [raw] = .columns.ToArray
+                    Dim [new] As New Dictionary(Of String, Array)
+                    Dim names As String() = asVector(Of String)(namelist)
+
+                    For i As Integer = 0 To names.Length - 1
+                        [new].Add(names(i), raw(i).Value)
+                    Next
+
+                    .columns = [new]
+                End With
+            Else
+                Throw New NotImplementedException
+            End If
+
+            Return [object]
         End Function
     End Module
 End Namespace

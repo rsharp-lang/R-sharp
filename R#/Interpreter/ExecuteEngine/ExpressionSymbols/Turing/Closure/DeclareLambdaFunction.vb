@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::dd9975e6bdaab255bf62133a02b2292f, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareLambdaFunction.vb"
+﻿#Region "Microsoft.VisualBasic::813e146ce52ddbc399793531d247da1f, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareLambdaFunction.vb"
 
     ' Author:
     ' 
@@ -123,15 +123,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     '
                     ' Due to the reason of syntax rule of only allows one parameter.
                     '
-                    Dim argVal As Object = arguments(Scan0).Evaluate(envir)
-                    Dim env As Environment = DeclareNewSymbol _
-                        .PushNames(names:=parameter.names,
-                                   value:=argVal,
-                                   type:=TypeCodes.generic,
-                                   envir:=envir,
-                                   [readonly]:=True
-                        )
-                    Dim result As Object = closure.Evaluate(env)
+                    Dim argVal As Object
+
+                    For i As Integer = 0 To parameter.names.Length - 1
+                        argVal = arguments(i).Evaluate(envir)
+                        envir.Push(parameter.names(i), argVal, True, TypeCodes.generic)
+                    Next
+
+                    Dim result As Object = closure.Evaluate(envir)
 
                     Return result
                 End If
@@ -141,13 +140,15 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         Public Function CreateLambda(Of T, Out)(parent As Environment) As Func(Of T, Out)
             Dim envir = New Environment(parent, stackFrame, isInherits:=False)
             Dim v As Symbol
+            Dim err As Message = Nothing
 
             Call DeclareNewSymbol _
                 .PushNames(names:=parameter.names,
                            value:=Nothing,
                            type:=GetType(T).GetRTypeCode,
                            envir:=envir,
-                           [readonly]:=False
+                           [readonly]:=False,
+                           err:=err
             )
 
             v = envir.FindSymbol(parameter.names(Scan0), [inherits]:=False)

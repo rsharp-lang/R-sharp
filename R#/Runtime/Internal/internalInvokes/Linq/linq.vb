@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d93a01dacee112becbb1c9aeb3beb0ee, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
+﻿#Region "Microsoft.VisualBasic::a0c0bb3b11cbb1c9008250366199b00f, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
 
     ' Author:
     ' 
@@ -179,7 +179,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
             If test Is Nothing Then
                 ' test for which index
-                Return Which.IsTrue(Runtime.asLogical(sequence))
+                Return Which.IsTrue(Runtime.asLogical(sequence), offset:=1)
             ElseIf TypeOf sequence Is pipeline Then
                 ' run in pipeline mode
                 Return DirectCast(sequence, pipeline) _
@@ -213,24 +213,24 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         <ExportAPI("which.max")>
         Public Function whichMax(<RRawVectorArgument> sequence As Object, Optional eval As Object = Nothing, Optional env As Environment = Nothing) As Integer
             If eval Is Nothing Then
-                Return Which.Max(DirectCast(asVector(Of Double)(Rset.getObjectSet(sequence)), Double()))
+                Return Which.Max(DirectCast(asVector(Of Double)(Rset.getObjectSet(sequence).ToArray), Double())) + 1
             Else
                 Dim lambda = LinqPipeline.lambda.CreateProjectLambda(Of Double)(eval, env)
                 Dim scores = Rset.getObjectSet(sequence).Select(lambda).ToArray
 
-                Return Which.Max(scores)
+                Return Which.Max(scores) + 1
             End If
         End Function
 
         <ExportAPI("which.min")>
         Public Function whichMin(<RRawVectorArgument> sequence As Object, Optional eval As Object = Nothing, Optional env As Environment = Nothing) As Integer
             If eval Is Nothing Then
-                Return Which.Min(DirectCast(asVector(Of Double)(Rset.getObjectSet(sequence)), Double()))
+                Return Which.Min(DirectCast(asVector(Of Double)(Rset.getObjectSet(sequence)), Double())) + 1
             Else
                 Dim lambda = LinqPipeline.lambda.CreateProjectLambda(Of Double)(eval, env)
                 Dim scores = Rset.getObjectSet(sequence).Select(lambda).ToArray
 
-                Return Which.Min(scores)
+                Return Which.Min(scores) + 1
             End If
         End Function
 

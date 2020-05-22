@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b50699a8f7bd26fce6bdce52cf038694, R#\Runtime\Internal\printer\printer.vb"
+﻿#Region "Microsoft.VisualBasic::a2b1c1e36b7ed5ea0f650e355ec82f56, R#\Runtime\Internal\printer\printer.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,8 @@
     ' 
     '         Constructor: (+1 Overloads) Sub New
     ' 
-    '         Function: DateToString, f64_InternalToString, getStrings, ToString, ValueToString
+    '         Function: DateToString, f64_InternalToString, getMaxColumns, getStrings, ToString
+    '                   ValueToString
     ' 
     '         Sub: AttachConsoleFormatter, AttachInternalConsoleFormatter, printArray, printContentArray, printInternal
     '              printList
@@ -161,7 +162,14 @@ Namespace Runtime.Internal.ConsolePrinter
                     End If
                 End With
             ElseIf valueType Is GetType(vector) Then
-                Call DirectCast(x, vector).data.printArray(maxPrint, env)
+                Dim vec As vector = DirectCast(x, vector)
+
+                Call vec.data.printArray(maxPrint, env)
+
+                If Not vec.unit Is Nothing Then
+                    Call output.WriteLine($"unit: {vec.unit}")
+                End If
+
             ElseIf valueType.ImplementInterface(GetType(IDictionary)) Then
                 Call DirectCast(x, IDictionary).printList(listPrefix, maxPrint, env)
             ElseIf valueType Is GetType(list) Then
@@ -234,8 +242,6 @@ printSingleElement:
                                Return CStr(o)
                            End If
                        End Function
-            ElseIf Not (elementType.Namespace.StartsWith("System.") OrElse elementType.Namespace = "System") Then
-                Return AddressOf classPrinter.printClass
             ElseIf elementType = GetType(Boolean) Then
                 Return Function(b) b.ToString.ToUpper
             ElseIf elementType.IsEnum Then
@@ -249,6 +255,8 @@ printSingleElement:
                                       End Function) _
                               .JoinBy(", ")
                        End Function
+            ElseIf Not (elementType.Namespace.StartsWith("System.") OrElse elementType.Namespace = "System") Then
+                Return AddressOf classPrinter.printClass
             Else
                 Return Function(obj) Scripting.ToString(obj, "NULL", True)
             End If
@@ -281,8 +289,17 @@ printSingleElement:
         End Sub
 
         <Extension>
+        Private Function getMaxColumns(env As Environment) As Integer
+            If env.globalEnvironment.stdout.env = OutputEnvironments.Html Then
+                Return 200
+            Else
+                Return If(App.IsConsoleApp, Console.WindowWidth, Integer.MaxValue) - 1
+            End If
+        End Function
+
+        <Extension>
         Friend Sub printContentArray(contents$(), deli$, indentPrefix$, env As Environment)
-            Dim maxColumns As Integer = If(App.IsConsoleApp, Console.WindowWidth, Integer.MaxValue) - 1
+            Dim maxColumns As Integer = env.getMaxColumns
             ' maxsize / average size
             Dim unitWidth As Integer = contents.Max(Function(c) c.Length) + 1
             Dim divSize As Integer = maxColumns \ unitWidth - 3

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a0689cdf98c09acdf41256c63ee961f6, R#\Runtime\Internal\internalInvokes\string.vb"
+﻿#Region "Microsoft.VisualBasic::d9051bd18aba90d621f4b810d3b1f906, R#\Runtime\Internal\internalInvokes\string.vb"
 
     ' Author:
     ' 
@@ -35,24 +35,34 @@
     ' 
     '         Function: [string], Csprintf, grep, html, json
     '                   match, nchar, paste, regexp, sprintfSingle
-    '                   str_replace, strsplit, xml
+    '                   str_pad, str_replace, strsplit, xml
+    ' 
+    '     Enum str_padSides
+    ' 
+    '         both, left, right
+    ' 
+    '  
+    ' 
+    ' 
     ' 
     ' 
     ' /********************************************************************************/
 
 #End Region
 
+Imports System.Reflection
 Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Scripting
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports VBStr = Microsoft.VisualBasic.Strings
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
-Imports Microsoft.VisualBasic.Scripting
+Imports VBStr = Microsoft.VisualBasic.Strings
 
 Namespace Runtime.Internal.Invokes
 
@@ -95,16 +105,27 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("xml")>
+        <RApiReturn(GetType(String))>
         Public Function xml(<RRawVectorArgument> x As Object, env As Environment) As Object
             If x Is Nothing Then
                 Return "<?xml version=""1.0"" encoding=""utf-16""?>"
-            Else
-                Try
-                    Return XmlExtensions.GetXml(x, x.GetType)
-                Catch ex As Exception
-                    Return Internal.debug.stop(ex, env)
-                End Try
+            ElseIf x.GetType.IsArray Then
+                Dim template As Type = GetType(XmlList(Of ))
+                Dim type As Type = template.MakeGenericType(x.GetType.GetElementType)
+                Dim list As Object = Activator.CreateInstance(type)
+                Dim writer As PropertyInfo = type _
+                    .GetProperties(BindingFlags.Public Or BindingFlags.Instance) _
+                    .Where(Function(p) p.Name = NameOf(XmlList(Of String).items)) _
+                    .FirstOrDefault
+
+                Call writer.SetValue(list, x)
             End If
+
+            Try
+                Return XmlExtensions.GetXml(x, x.GetType)
+            Catch ex As Exception
+                Return Internal.debug.stop(ex, env)
+            End Try
         End Function
 
         ''' <summary>

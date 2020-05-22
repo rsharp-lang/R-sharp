@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::30a7b7743c6850b8e30d15693de5cb22, R#\Runtime\System\Message.vb"
+﻿#Region "Microsoft.VisualBasic::22b336f5777ad7cf4ea85a4921de12c0, R#\Runtime\System\Message.vb"
 
     ' Author:
     ' 
@@ -44,6 +44,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports System.Xml.Serialization
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.Linq
@@ -60,6 +61,9 @@ Namespace Runtime.Components
         Public Property level As MSG_TYPES
         Public Property environmentStack As StackFrame()
         Public Property trace As StackFrame()
+
+        <SoapIgnore>
+        <XmlIgnore>
         Public Property source As Expression
 
         Public Shared Function SymbolNotFound(envir As Environment, symbolName$, type As TypeCodes) As Message

@@ -1,48 +1,49 @@
-﻿#Region "Microsoft.VisualBasic::083237f93a928999119424a4f94d1380, R#\Runtime\Interop\RType.vb"
+﻿#Region "Microsoft.VisualBasic::d13e886b190de342e743a718c3331a23, R#\Runtime\Interop\RType.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class RType
-' 
-'         Properties: fullName, getCount, getItem, haveDynamicsProperty, isArray
-'                     isCollection, isEnvironment, isGenericListObject, mode, raw
-' 
-'         Constructor: (+1 Overloads) Sub New
-'         Function: [GetType], getNames, GetRawElementType, GetRSharpType, populateNames
-'                   ToString
-'         Operators: (+2 Overloads) Like
-' 
-' 
-' /********************************************************************************/
+    '     Class RType
+    ' 
+    '         Properties: any, characters, floats, fullName, getCount
+    '                     getItem, haveDynamicsProperty, integers, isArray, isCollection
+    '                     isEnvironment, isGenericListObject, logicals, mode, raw
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    '         Function: [GetType], [TypeOf], getNames, GetRawElementType, GetRSharpType
+    '                   populateNames, ToString
+    '         Operators: (+4 Overloads) Like
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -51,9 +52,11 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Runtime.Interop
 
@@ -242,6 +245,22 @@ Namespace Runtime.Interop
 
         Public Overloads Shared Function [GetType](code As TypeCodes) As RType
             Return GetRSharpType(Runtime.GetType(code))
+        End Function
+
+        Public Shared Function [TypeOf](x As Object) As RType
+            If x Is Nothing Then
+                Return any
+            ElseIf TypeOf x Is vector Then
+                Dim type = DirectCast(x, vector).elementType
+
+                If type Is Nothing Then
+                    Return MeasureRealElementType(DirectCast(x, vector).data).DoCall(AddressOf RType.GetRSharpType)
+                Else
+                    Return type
+                End If
+            Else
+                Return GetRSharpType(x.GetType)
+            End If
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>

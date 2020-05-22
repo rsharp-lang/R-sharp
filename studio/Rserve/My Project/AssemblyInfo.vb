@@ -8,8 +8,8 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("R# web server")>
-<Assembly: AssemblyDescription("R# web server")>
+<Assembly: AssemblyTitle("R# web session backend progress")>
+<Assembly: AssemblyDescription("R# web session backend progress")>
 <Assembly: AssemblyCompany("SMRUCC")>
 <Assembly: AssemblyProduct("GCModeller")>
 <Assembly: AssemblyCopyright("Copyright © SMRUCC genomics 2020")>

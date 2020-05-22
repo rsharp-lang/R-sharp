@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6e812dc72ed1118800970bf39e28b4ba, R#\Language\TokenIcer\Scanner.vb"
+﻿#Region "Microsoft.VisualBasic::2172abefbc9cdefe4252c7d08a512a39, R#\Language\TokenIcer\Scanner.vb"
 
     ' Author:
     ' 
@@ -316,15 +316,8 @@ Namespace Language.TokenIcer
                 If c = "$"c AndAlso peekNext Like stringLiteralSymbols Then
                     Static [like] As (TokenType, String) = (TokenType.keyword, "like")
 
-                    If lastPopoutToken Is Nothing OrElse
-                       lastPopoutToken.name = TokenType.comma OrElse
-                       lastPopoutToken.name = TokenType.open OrElse
-                       lastPopoutToken.name = TokenType.operator OrElse
-                       lastPopoutToken.name = TokenType.terminator OrElse
-                       lastPopoutToken = [like] Then
-
+                    If Not lastPopoutToken Is Nothing AndAlso lastPopoutToken = [like] Then
                         buffer += "$"c
-
                         Return Nothing
                     End If
                 End If

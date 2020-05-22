@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7e0651ff2c295356c5eb18551313490d, R#\Runtime\Internal\objects\dataset\vbObject.vb"
+﻿#Region "Microsoft.VisualBasic::3f3e3be3123c25690592db24cd92b58d, R#\Runtime\Internal\objects\dataset\vbObject.vb"
 
     ' Author:
     ' 
@@ -36,17 +36,20 @@
     '         Properties: target, type
     ' 
     '         Constructor: (+2 Overloads) Sub New
-    '         Function: existsName, (+2 Overloads) getByName, getNames, (+2 Overloads) setByName, toList
-    '                   ToString
+    '         Function: CreateInstance, existsName, (+2 Overloads) getByName, getNames, getObjMethods
+    '                   getObjProperties, (+2 Overloads) setByName, toList, ToString
     ' 
     ' 
     ' /********************************************************************************/
 
 #End Region
 
+Imports System.Data.Linq.Mapping
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
@@ -75,22 +78,98 @@ Namespace Runtime.Internal.Object
         End Sub
 
         Friend Sub New(obj As Object, vbType As Type)
+            Static propertySchemaCache As New Dictionary(Of RType, Dictionary(Of String, PropertyInfo))
+            Static methodSchemaCache As New Dictionary(Of RType, Dictionary(Of String, RMethodInfo))
+
             target = obj
             type = RType.GetRSharpType(vbType)
-            properties = type.raw.getObjProperties.ToDictionary(Function(p) p.Name)
-            methods = type.raw _
-                .getObjMethods _
-                .GroupBy(Function(m) m.Name) _
-                .Select(Function(g)
-                            Return g _
-                                .OrderByDescending(Function(m) m.GetParameters.Length) _
-                                .First
-                        End Function) _
-                .ToDictionary(Function(m) m.Name,
-                              Function(m)
-                                  Return New RMethodInfo(m.Name, m, target)
-                              End Function)
+            properties = propertySchemaCache.ComputeIfAbsent(
+                key:=type,
+                lazyValue:=Function()
+                               Return getObjProperties(type.raw) _
+                                   .ToDictionary(Function(p) p.Name,
+                                                 Function(p)
+                                                     Return p.Value
+                                                 End Function)
+                           End Function)
+            methods = methodSchemaCache.ComputeIfAbsent(
+                key:=type,
+                lazyValue:=Function()
+                               Return getObjMethods(type.raw) _
+                                   .ToDictionary(Function(m) m.Name,
+                                                 Function(m)
+                                                     Return New RMethodInfo(m.Name, m.Value, target)
+                                                 End Function)
+                           End Function)
         End Sub
+
+        Private Shared Function getObjMethods(raw As Type) As NamedValue(Of MethodInfo)()
+            Dim schema As NamedValue(Of MethodInfo)() = raw _
+               .getObjMethods _
+               .GroupBy(Function(m) m.Name) _
+               .Select(Iterator Function(g)
+                           Dim first As MethodInfo = g _
+                               .OrderByDescending(Function(m) m.GetParameters.Length) _
+                               .First
+                           Dim api As ExportAPIAttribute
+
+                           Yield New NamedValue(Of MethodInfo) With {.Name = g.Key, .Value = first}
+
+                           For Each [overloads] As MethodInfo In g
+                               api = [overloads].GetCustomAttribute(Of ExportAPIAttribute)
+
+                               If Not api Is Nothing Then
+                                   Yield New NamedValue(Of MethodInfo) With {
+                                       .Name = api.Name,
+                                       .Value = [overloads]
+                                   }
+                               End If
+                           Next
+                       End Function) _
+               .IteratesALL _
+               .ToArray
+
+            Return schema
+        End Function
+
+        Private Shared Function getObjProperties(raw As Type) As NamedValue(Of PropertyInfo)()
+            Dim schema As NamedValue(Of PropertyInfo)() = raw _
+                .getObjProperties _
+                .Select(Iterator Function(p) As IEnumerable(Of NamedValue(Of PropertyInfo))
+                            ' Column
+                            Yield New NamedValue(Of PropertyInfo)(p.Name, p)
+
+                            Dim attrs = p.CustomAttributes.ToArray
+                            Dim name As String
+
+                            For Each a As CustomAttributeData In attrs
+                                If a.AttributeType Is GetType(ColumnAttribute) Then
+                                    name = a.NamedArguments.Where(Function(pa) pa.MemberName = "Name").First.TypedValue.Value
+                                ElseIf a.AttributeType.Name = "ColumnAttribute" Then
+                                    name = a.ConstructorArguments.First.Value
+                                Else
+                                    name = Nothing
+                                End If
+
+                                If Not name Is Nothing AndAlso name <> p.Name Then
+                                    Yield New NamedValue(Of PropertyInfo)(name, p)
+                                End If
+                            Next
+                        End Function) _
+                .IteratesALL _
+                .ToArray
+            Dim duplicateds = schema _
+                .GroupBy(Function(a) a.Name) _
+                .Where(Function(a) a.Count > 1) _
+                .Keys _
+                .ToArray
+
+            If duplicateds.Any Then
+                Throw New InvalidProgramException(duplicateds.JoinBy(", "))
+            End If
+
+            Return schema
+        End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function getNames() As String() Implements IReflector.getNames
