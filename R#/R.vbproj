@@ -418,7 +418,6 @@
     <Compile Include="Runtime\Environment\RContentOutput.vb" />
     <Compile Include="Runtime\MagicScriptSymbol.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\env.vb" />
-    <Compile Include="Runtime\Internal\internalInvokes\help.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\etc.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\graphics.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\Linq\lambda.vb" />
