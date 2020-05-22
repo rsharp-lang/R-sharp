@@ -361,13 +361,13 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="con">a connection object or a character string.</param>
         ''' <returns></returns>
         <ExportAPI("readLines")>
-        Public Function readLines(con As String) As String()
-            Return con.ReadAllLines
+        Public Function readLines(con As String, Optional encoding As Encodings = Encodings.UTF8) As String()
+            Return con.ReadAllLines(encoding.CodePage)
         End Function
 
         <ExportAPI("readText")>
-        Public Function readText(con As String) As String
-            Return con.ReadAllText
+        Public Function readText(con As String, Optional encoding As Encodings = Encodings.UTF8) As String
+            Return con.ReadAllText(encoding.CodePage)
         End Function
 
         ' writeLines(text, con = stdout(), sep = "\n", useBytes = FALSE)
