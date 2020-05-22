@@ -49,13 +49,11 @@ Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
+Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports LibraryAssembly = System.Reflection.Assembly
-Imports EnumPrinter = SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter.enumPrinter
-Imports SMRUCC.Rsharp.Runtime
-Imports System.Text
 
-Namespace System.Package
+Namespace System
 
     ''' <summary>
     ''' Parser of the <see cref="Project"/> assembly
