@@ -189,7 +189,7 @@ Public Class RSessionBackend
 
         SyncLock exclude_types
             Return Not exclude_types _
-                .All(Function(name)
+                .Any(Function(name)
                          Return result.content_type.StartsWith(name)
                      End Function)
         End SyncLock
