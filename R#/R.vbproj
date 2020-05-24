@@ -311,6 +311,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interpreter\ExecutableLoop.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExecuteBreaks.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\BreakPoint.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\CreateObject.vb" />
