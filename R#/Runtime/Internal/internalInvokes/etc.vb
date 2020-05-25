@@ -148,6 +148,9 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("sessionInfo")>
         <RApiReturn(GetType(RSessionInfo))>
         Public Function sessionInfo(env As Environment) As vbObject
+            Dim dev As String = env.globalEnvironment.stdout.env _
+                .ToString _
+                .ToLower
             Dim info As New RSessionInfo With {
                 .Rversion = RVer(env),
                 .basePkgs = env.globalEnvironment.packages _
@@ -155,7 +158,8 @@ Namespace Runtime.Internal.Invokes
                     .Select(Function(a) a.namespace) _
                     .ToArray,
                 .locale = Sys_getlocale(),
-                .matprod = "default"
+                .matprod = "default",
+                .output_device = dev
             }
 
             Return New vbObject(info)
@@ -229,6 +233,7 @@ Namespace Runtime.Internal.Invokes
         ''' </summary>
         ''' <returns></returns>
         Public Property platform As String
+        Public Property output_device As String
         ''' <summary>
         ''' a character string, the result of calling Sys.getlocale().
         ''' </summary>
