@@ -111,6 +111,16 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' Get the standard output device name string
+        ''' </summary>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("output_device")>
+        Private Function getOutputDevice(env As Environment) As String
+            Return env.globalEnvironment.stdout.env.ToString.ToLower
+        End Function
+
+        ''' <summary>
         ''' # List Objects
         ''' 
         ''' ``ls`` and ``objects`` return a vector of character strings giving 
