@@ -37,5 +37,5 @@ let g = empty.network()
 :> layout.orthogonal
 :> node.colors(colorLsit)
 :> render.Plot(canvasSize = [1600,1200], nodeSize = node_size, defaultNodeSize = 20, driver = "SVG", labelerIterations= 0)
-:> save.graphics()
+:> save.graphics(file = file_save)
 ;
