@@ -78,14 +78,14 @@ Module Layouts
     <ExportAPI("layout.orthogonal")>
     Public Function orthogonalLayout(g As NetworkGraph,
                                      <RRawVectorArgument>
-                                     Optional gridSize As Object = "10,10",
+                                     Optional gridSize As Object = "100,100",
                                      Optional delta# = 1) As NetworkGraph
 
         Dim size As Size = InteropArgumentHelper _
             .getSize(gridSize) _
             .SizeParser
 
-        Call Orthogonal.DoLayout(g, size, delta)
+        Call Orthogonal.DoLayout(g, size, delta, debug:=True)
 
         Return g
     End Function

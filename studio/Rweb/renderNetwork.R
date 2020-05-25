@@ -34,7 +34,7 @@ let g = empty.network()
 :> add.edges(edge, weight = w)
 :> compute.network()
 # :> layout.force_directed(showProgress = FALSE)
-:> layout.orthogonal
+:> layout.orthogonal(gridSize = [1000,1000])
 :> node.colors(colorLsit)
 :> render.Plot(canvasSize = [1600,1200], nodeSize = node_size, defaultNodeSize = 20, driver = "SVG", labelerIterations= 0)
 :> save.graphics(file = file_save)
