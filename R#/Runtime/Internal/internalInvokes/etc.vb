@@ -283,6 +283,7 @@ Namespace Runtime.Internal.Invokes
             Call info.AppendLine(Rversion.GetString("version.string"))
             Call info.AppendLine($"Platform: {Rversion.GetString("platform")} ({Rversion.GetString("arch")})")
             Call info.AppendLine($"Running under: {Rversion.GetString("system")}")
+            Call info.AppendLine($"Environment device: {output_device}")
             Call info.AppendLine()
             Call info.AppendLine($"Matrix products: {matprod}")
             Call info.AppendLine()
