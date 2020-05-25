@@ -86,6 +86,7 @@ Module Layouts
             .SizeParser
 
         Call Orthogonal.DoLayout(g, size, delta, debug:=True)
+        Call Orthogonal.DoEdgeLayout(g)
 
         Return g
     End Function

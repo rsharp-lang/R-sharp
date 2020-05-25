@@ -130,7 +130,8 @@ Module Visualize
             labelTextStroke:=Nothing,
             driver:=driver,
             minLinkWidth:=minLinkWidth,
-            showLabelerProgress:=showLabelerProgress
+            showLabelerProgress:=showLabelerProgress,
+            drawEdgeBends:=True
         )
     End Function
 
