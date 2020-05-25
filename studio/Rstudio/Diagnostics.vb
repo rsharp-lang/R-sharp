@@ -41,11 +41,14 @@
 
 #End Region
 
+Imports System.Drawing
 Imports System.IO
 Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.MIME.Markup.MarkDown
+Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -63,11 +66,23 @@ Module Diagnostics
         If symbol Is Nothing Then
             buffer.Write("null", "inspector/json")
         ElseIf TypeOf symbol Is dataframe Then
-            buffer.Write(
-                data:=DirectCast(symbol, dataframe),
-                globalEnv:=env.globalEnvironment,
-                content_type:="inspector/csv"
-            )
+            buffer.Write(DirectCast(symbol, dataframe), env.globalEnvironment, "inspector/csv")
+        ElseIf TypeOf symbol Is Image OrElse TypeOf symbol Is Bitmap Then
+            buffer.Write(New DataURI(CType(symbol, Image)).ToString, "inspector/image")
+        ElseIf TypeOf symbol Is GraphicsData Then
+            Using bytes As New MemoryStream
+                With DirectCast(symbol, GraphicsData)
+                    Call .Save(bytes)
+                    Call bytes.Flush()
+
+                    Dim base64 As New DataURI(
+                        base64:=bytes.ToArray.ToBase64String,
+                        mime:= .content_type
+                    )
+
+                    buffer.Write(base64.ToString, "inspector/image")
+                End With
+            End Using
         Else
             Dim digest As New Dictionary(Of Type, Func(Of Object, Object))
 

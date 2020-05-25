@@ -311,6 +311,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interpreter\ExecutableLoop.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExecuteBreaks.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\BreakPoint.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\CreateObject.vb" />
@@ -443,7 +444,6 @@
     <Compile Include="Runtime\Internal\objects\invisible.vb" />
     <Compile Include="Runtime\Internal\objects\names.vb" />
     <Compile Include="Runtime\Internal\objects\unit.vb" />
-    <Compile Include="Runtime\Internal\printer\functionPrinter.vb" />
     <Compile Include="Runtime\Internal\printer\htmlPrinter.vb" />
     <Compile Include="Runtime\Internal\printer\enumPrinter.vb" />
     <Compile Include="Runtime\Interop\RDispose.vb" />
@@ -483,7 +483,9 @@
     <Compile Include="Runtime\Interop\RsharpApi\RMethodArgument.vb" />
     <Compile Include="Runtime\System\InvokeParameter.vb" />
     <Compile Include="Runtime\RVectorExtensions.vb" />
-    <Compile Include="System\Package\AnnotationDocs.vb" />
+    <Compile Include="System\Document\HtmlMarkdownPrinter.vb" />
+    <Compile Include="System\Document\ConsoleMarkdownPrinter.vb" />
+    <Compile Include="System\Document\AnnotationDocs.vb" />
     <Compile Include="System\Package\Database\LocalPackageDatabase.vb" />
     <Compile Include="System\Package\Database\PackageLoaderEntry.vb" />
     <Compile Include="System\Package\PackageManager.vb" />
