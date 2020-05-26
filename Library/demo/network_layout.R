@@ -12,5 +12,5 @@ g
 :> layout.orthogonal
 # Do network render plot and then 
 # saved the generated image file
-:> render.Plot(canvasSize = [600,400]) 
+:> render.Plot(canvasSize = [2000,1400]) 
 :> save.graphics(file = `${!script$dir}/orthogonal.png`);
