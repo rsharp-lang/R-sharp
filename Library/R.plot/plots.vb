@@ -112,7 +112,11 @@ Module plots
     End Sub
 
     Public Function plot_corHeatmap(dist As DistanceMatrix, args As list, env As Environment) As Object
-        Return CorrelationHeatmap.Plot(dist)
+        Dim title$ = args.GetString("title", "Correlations")
+        Dim bg$ = InteropArgumentHelper.getColor(args!bg, "white")
+        Dim size = InteropArgumentHelper.getSize(args!size)
+
+        Return CorrelationHeatmap.Plot(dist, size:=size, bg:=bg, mainTitle:=title)
     End Function
 
     Public Function plot_categoryBars(data As Dictionary(Of String, Double), args As list, env As Environment) As Object
