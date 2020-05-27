@@ -47,18 +47,20 @@
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Math.Distributions
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Prcomp
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
-Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
-Imports Microsoft.VisualBasic.Math.DataFrame
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 <Package("stats")>
 Module stats
@@ -172,6 +174,32 @@ Module stats
         Return PCA
     End Function
 
+    <ExportAPI("as.dist")>
+    Public Function asDist(x As Rdataframe, Optional item1$ = "A", Optional item2$ = "B", Optional correlation$ = "correlation") As DistanceMatrix
+        Dim raw As EntityObject() = x.getRowNames _
+            .Select(Function(id, index)
+                        Return x.dataframeRow(Of String, EntityObject)(id, index)
+                    End Function) _
+            .ToArray
+
+        Return Builder.FromTabular(raw, item1, item2, correlation)
+    End Function
+
+    <Extension>
+    Private Function dataframeRow(Of T, DataSet As {New, INamedValue, DynamicPropertyBase(Of T)})(x As Rdataframe, id As String, index%) As DataSet
+        Dim row As Dictionary(Of String, Object) = x.getRowList(index, drop:=True)
+        Dim props As Dictionary(Of String, T) = row _
+            .ToDictionary(Function(a) a.Key,
+                            Function(a)
+                                Return CType(REnv.single(a.Value), T)
+                            End Function)
+
+        Return New DataSet With {
+            .Key = id,
+            .Properties = props
+        }
+    End Function
+
     <ExportAPI("dist")>
     <RApiReturn(GetType(DistanceMatrix))>
     Public Function dist(<RRawVectorArgument> x As Object,
@@ -188,19 +216,8 @@ Module stats
         ElseIf TypeOf x Is Rdataframe Then
             With DirectCast(x, Rdataframe)
                 raw = .rownames _
-                    .SeqIterator _
-                    .Select(Function(name)
-                                Dim vals As Dictionary(Of String, Object) = .getRowList(name.i, drop:=True)
-                                Dim props As Dictionary(Of String, Double) = vals _
-                                    .ToDictionary(Function(a) a.Key,
-                                                  Function(a)
-                                                      Return CDbl(REnv.single(a.Value))
-                                                  End Function)
-
-                                Return New DataSet With {
-                                    .ID = name.value,
-                                    .Properties = props
-                                }
+                    .Select(Function(name, i)
+                                Return .dataframeRow(Of Double, DataSet)(name, i)
                             End Function) _
                     .ToArray
             End With
