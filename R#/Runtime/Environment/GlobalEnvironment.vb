@@ -70,6 +70,10 @@ Namespace Runtime
         Public ReadOnly Property Rscript As RInterpreter
         Public ReadOnly Property stdout As RContentOutput
 
+        ''' <summary>
+        ''' <see cref="RInterpreter.debug"/>
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property debugMode As Boolean
             Get
                 Return Rscript.debug

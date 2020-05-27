@@ -52,6 +52,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols
 
@@ -73,9 +74,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim commandline$ = CType(Runtime.getFirst(cli.Evaluate(envir)), String).TrimNewLine
-            Dim process As New IORedirectFile(commandline, isShellCommand:=True)
-            Dim std_out$
+            Dim commandline$ = CType(REnv.getFirst(cli.Evaluate(envir)), String).TrimNewLine
+            Dim process As New IORedirectFile(commandline, isShellCommand:=True, debug:=envir.globalEnvironment.debugMode)
+            Dim std_out$()
             Dim error_code%
 
             If commandline.DoCall(AddressOf SyntaxImplements.isInterpolation) Then
@@ -87,7 +88,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
             End If
 
             error_code = process.Run()
-            std_out = process.StandardOutput
+
+            If envir.globalEnvironment.options.stdout_multipline Then
+                std_out = process.redirectDevice _
+                    .LineIterators _
+                    .ToArray
+            Else
+                std_out = {process.StandardOutput}
+            End If
 
             Return New list With {
                 .slots = New Dictionary(Of String, Object) From {
