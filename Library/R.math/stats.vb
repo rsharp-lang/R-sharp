@@ -48,6 +48,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
@@ -64,6 +65,26 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 
 <Package("stats")>
 Module stats
+
+    Sub New()
+        Internal.ConsolePrinter.AttachConsoleFormatter(Of DistanceMatrix)(AddressOf printMatrix)
+    End Sub
+
+    Private Function printMatrix(d As DistanceMatrix) As String
+        Dim sb As New StringBuilder
+
+        Call sb.AppendLine($"Distance matrix of {d.Keys.Length} objects:")
+        Call sb.AppendLine(d.ToString)
+        Call sb.AppendLine()
+
+        For Each row In d.PopulateRowObjects(Of DataSet).Take(6)
+            Call sb.AppendLine($"{row.ID}: {row.Properties.Take(8).Select(Function(t) $"{t.Key}:{t.Value.ToString("F2")}").JoinBy(", ")} ...")
+        Next
+
+        Call sb.AppendLine("...")
+
+        Return sb.ToString
+    End Function
 
     ''' <summary>
     ''' Interpolating Splines
