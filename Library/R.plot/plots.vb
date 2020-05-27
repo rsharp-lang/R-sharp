@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::47163be0098c3af2b66a3767f0a4b3e9, Library\R.plot\plots.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module plots
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: CreateSerial, doVolinPlot, linearRegression, plot_binBox, plot_categoryBars
-    '               plot_deSolveResult, plotFormula, plotODEResult, plotSerials
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Module plots
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: CreateSerial, doVolinPlot, linearRegression, plot_binBox, plot_categoryBars
+'               plot_deSolveResult, plotFormula, plotODEResult, plotSerials
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -57,14 +57,18 @@ Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
 Imports Microsoft.VisualBasic.Data.ChartPlots.Plot3D
 Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics
+Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics.Heatmap
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Imaging
+Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Shapes
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
 Imports Microsoft.VisualBasic.Imaging.Driver
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math.Calculus
 Imports Microsoft.VisualBasic.Math.Calculus.Dynamics.Data
+Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Math.Distributions.BinBox
 Imports Microsoft.VisualBasic.Math.Interpolation
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -106,7 +110,30 @@ Module plots
         Call REnv.Internal.generic.add("plot", GetType(SerialData), AddressOf plotSerials)
         Call REnv.Internal.generic.add("plot", GetType(DataBinBox(Of Double)()), AddressOf plot_binBox)
         Call REnv.Internal.generic.add("plot", GetType(Dictionary(Of String, Double)), AddressOf plot_categoryBars)
+        Call REnv.Internal.generic.add("plot", GetType(DistanceMatrix), AddressOf plot_corHeatmap)
     End Sub
+
+    Public Function plot_corHeatmap(dist As DistanceMatrix, args As list, env As Environment) As Object
+        Dim title$ = args.GetString("title", "Correlations")
+        Dim bg$ = InteropArgumentHelper.getColor(args!bg, "white")
+        Dim size = InteropArgumentHelper.getSize(args!size, "3600,3000")
+        Dim padding$ = InteropArgumentHelper.getPadding(args!padding, "padding: 300px 150px 150px 100px;")
+        Dim driver As Drivers = args.GetString("driver", "default").DoCall(AddressOf g.ParseDriverEnumValue)
+        Dim colorSet = args.GetString("colors", ColorBrewer.DivergingSchemes.RdBu11)
+        Dim fixedSize = args.getValue(Of Boolean)("fixed_size", env, False)
+
+        Return CorrelationHeatmap.Plot(
+            data:=dist,
+            size:=size,
+            bg:=bg,
+            padding:=padding,
+            mainTitle:=title,
+            drawGrid:=True,
+            driver:=driver,
+            mapName:=colorSet,
+            variantSize:=Not fixedSize
+        )
+    End Function
 
     Public Function plot_categoryBars(data As Dictionary(Of String, Double), args As list, env As Environment) As Object
         Dim title$ = args.GetString("title", "Histogram Plot")

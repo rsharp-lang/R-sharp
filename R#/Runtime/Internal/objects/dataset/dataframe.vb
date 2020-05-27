@@ -228,6 +228,17 @@ Namespace Runtime.Internal.Object
             }
         End Function
 
+        Public Function getRowNames() As String()
+            If rownames.IsNullOrEmpty Then
+                Return nrows _
+                    .Sequence(offset:=1) _
+                    .Select(Function(r) $"[{r}, ]") _
+                    .ToArray
+            Else
+                Return rownames
+            End If
+        End Function
+
         ''' <summary>
         ''' Each element in a return result array is a row in table matrix
         ''' </summary>
@@ -238,18 +249,12 @@ Namespace Runtime.Internal.Object
             Dim colNames$() = columns.Keys.ToArray
             Dim col As Array
             Dim row As String() = {""}.Join(colNames)
+            Dim rownames = getRowNames()
 
             If showRowNames Then
                 table(Scan0) = row.ToArray
             Else
                 table(Scan0) = row.Skip(1).ToArray
-            End If
-
-            If rownames.IsNullOrEmpty Then
-                rownames = table _
-                    .Sequence(offSet:=1) _
-                    .Select(Function(r) $"[{r}, ]") _
-                    .ToArray
             End If
 
             Dim elementTypes As Type() = colNames _

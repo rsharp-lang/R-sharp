@@ -1,66 +1,90 @@
 ﻿#Region "Microsoft.VisualBasic::eb9a01017fa05e0c83455309041515b9, Library\R.math\stats.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module stats
-    ' 
-    '     Function: dist, prcomp, spline, tabulateMode
-    ' 
-    ' Enum SplineAlgorithms
-    ' 
-    '     Bezier, BSpline, CatmullRom, CubiSpline
-    ' 
-    '  
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Module stats
+' 
+'     Function: dist, prcomp, spline, tabulateMode
+' 
+' Enum SplineAlgorithms
+' 
+'     Bezier, BSpline, CatmullRom, CubiSpline
+' 
+'  
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.CompilerServices
+Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Math.Distributions
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Prcomp
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
-Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 <Package("stats")>
 Module stats
+
+    Sub New()
+        Internal.ConsolePrinter.AttachConsoleFormatter(Of DistanceMatrix)(AddressOf printMatrix)
+    End Sub
+
+    Private Function printMatrix(d As DistanceMatrix) As String
+        Dim sb As New StringBuilder
+
+        Call sb.AppendLine($"Distance matrix of {d.Keys.Length} objects:")
+        Call sb.AppendLine(d.ToString)
+        Call sb.AppendLine()
+
+        For Each row In d.PopulateRowObjects(Of DataSet).Take(6)
+            Call sb.AppendLine($"{row.ID}: {row.Properties.Take(8).Select(Function(t) $"{t.Key}:{t.Value.ToString("F2")}").JoinBy(", ")} ...")
+        Next
+
+        Call sb.AppendLine("...")
+
+        Return sb.ToString
+    End Function
 
     ''' <summary>
     ''' Interpolating Splines
@@ -171,13 +195,65 @@ Module stats
         Return PCA
     End Function
 
+    <ExportAPI("as.dist")>
+    Public Function asDist(x As Rdataframe, Optional item1$ = "A", Optional item2$ = "B", Optional correlation$ = "correlation") As DistanceMatrix
+        Dim raw As EntityObject() = x.getRowNames _
+            .Select(Function(id, index)
+                        Return x.dataframeRow(Of String, EntityObject)(id, index)
+                    End Function) _
+            .ToArray
+
+        Return Builder.FromTabular(raw, item1, item2, correlation)
+    End Function
+
+    <Extension>
+    Private Function dataframeRow(Of T, DataSet As {New, INamedValue, DynamicPropertyBase(Of T)})(x As Rdataframe, id As String, index%) As DataSet
+        Dim row As Dictionary(Of String, Object) = x.getRowList(index, drop:=True)
+        Dim props As Dictionary(Of String, T) = row _
+            .ToDictionary(Function(a) a.Key,
+                            Function(a)
+                                Return CType(REnv.single(a.Value), T)
+                            End Function)
+
+        Return New DataSet With {
+            .Key = id,
+            .Properties = props
+        }
+    End Function
+
     <ExportAPI("dist")>
+    <RApiReturn(GetType(DistanceMatrix))>
     Public Function dist(<RRawVectorArgument> x As Object,
                          Optional method$ = "euclidean",
                          Optional diag As Boolean = False,
                          Optional upper As Boolean = False,
-                         Optional p% = 2) As DataSet()
+                         Optional p% = 2,
+                         Optional env As Environment = Nothing) As Object
 
+        Dim raw As DataSet()
+
+        If x Is Nothing Then
+            Return Nothing
+        ElseIf TypeOf x Is Rdataframe Then
+            With DirectCast(x, Rdataframe)
+                raw = .rownames _
+                    .Select(Function(name, i)
+                                Return .dataframeRow(Of Double, DataSet)(name, i)
+                            End Function) _
+                    .ToArray
+            End With
+        ElseIf TypeOf x Is DataSet() Then
+            raw = x
+        Else
+            Return Internal.debug.stop(New InvalidCastException(x.GetType.FullName), env)
+        End If
+
+        Select Case Strings.LCase(method)
+            Case "euclidean"
+                Return raw.Euclidean
+            Case Else
+                Return Internal.debug.stop(New NotImplementedException(method), env)
+        End Select
     End Function
 End Module
 
