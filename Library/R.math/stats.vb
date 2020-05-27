@@ -1,49 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::eb9a01017fa05e0c83455309041515b9, Library\R.math\stats.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module stats
-    ' 
-    '     Function: dist, prcomp, spline, tabulateMode
-    ' 
-    ' Enum SplineAlgorithms
-    ' 
-    '     Bezier, BSpline, CatmullRom, CubiSpline
-    ' 
-    '  
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Module stats
+' 
+'     Function: dist, prcomp, spline, tabulateMode
+' 
+' Enum SplineAlgorithms
+' 
+'     Bezier, BSpline, CatmullRom, CubiSpline
+' 
+'  
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -58,6 +58,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
+Imports Microsoft.VisualBasic.Math.DataFrame
 
 <Package("stats")>
 Module stats
@@ -172,12 +173,49 @@ Module stats
     End Function
 
     <ExportAPI("dist")>
+    <RApiReturn(GetType(DistanceMatrix))>
     Public Function dist(<RRawVectorArgument> x As Object,
                          Optional method$ = "euclidean",
                          Optional diag As Boolean = False,
                          Optional upper As Boolean = False,
-                         Optional p% = 2) As DataSet()
+                         Optional p% = 2,
+                         Optional env As Environment = Nothing) As Object
 
+        Dim raw As DataSet()
+
+        If x Is Nothing Then
+            Return Nothing
+        ElseIf TypeOf x Is Rdataframe Then
+            With DirectCast(x, Rdataframe)
+                raw = .rownames _
+                    .SeqIterator _
+                    .Select(Function(name)
+                                Dim vals As Dictionary(Of String, Object) = .getRowList(name.i, drop:=True)
+                                Dim props As Dictionary(Of String, Double) = vals _
+                                    .ToDictionary(Function(a) a.Key,
+                                                  Function(a)
+                                                      Return CDbl(REnv.single(a.Value))
+                                                  End Function)
+
+                                Return New DataSet With {
+                                    .ID = name.value,
+                                    .Properties = props
+                                }
+                            End Function) _
+                    .ToArray
+            End With
+        ElseIf TypeOf x Is DataSet() Then
+            raw = x
+        Else
+            Return Internal.debug.stop(New InvalidCastException(x.GetType.FullName), env)
+        End If
+
+        Select Case Strings.LCase(method)
+            Case "euclidean"
+                Return raw.Euclidean
+            Case Else
+                Return Internal.debug.stop(New NotImplementedException(method), env)
+        End Select
     End Function
 End Module
 
