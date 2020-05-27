@@ -60,10 +60,12 @@ Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics
 Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics.Heatmap
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Imaging
+Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Shapes
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
 Imports Microsoft.VisualBasic.Imaging.Driver
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math.Calculus
 Imports Microsoft.VisualBasic.Math.Calculus.Dynamics.Data
 Imports Microsoft.VisualBasic.Math.DataFrame
@@ -114,9 +116,23 @@ Module plots
     Public Function plot_corHeatmap(dist As DistanceMatrix, args As list, env As Environment) As Object
         Dim title$ = args.GetString("title", "Correlations")
         Dim bg$ = InteropArgumentHelper.getColor(args!bg, "white")
-        Dim size = InteropArgumentHelper.getSize(args!size)
+        Dim size = InteropArgumentHelper.getSize(args!size, "3600,3000")
+        Dim padding$ = InteropArgumentHelper.getPadding(args!padding, "padding: 300px 150px 150px 100px;")
+        Dim driver As Drivers = args.GetString("driver", "default").DoCall(AddressOf g.ParseDriverEnumValue)
+        Dim colorSet = args.GetString("colors", ColorBrewer.DivergingSchemes.RdBu11)
+        Dim fixedSize = args.getValue(Of Boolean)("fixed_size", env, False)
 
-        Return CorrelationHeatmap.Plot(dist, size:=size, bg:=bg, mainTitle:=title)
+        Return CorrelationHeatmap.Plot(
+            data:=dist,
+            size:=size,
+            bg:=bg,
+            padding:=padding,
+            mainTitle:=title,
+            drawGrid:=True,
+            driver:=driver,
+            mapName:=colorSet,
+            variantSize:=Not fixedSize
+        )
     End Function
 
     Public Function plot_categoryBars(data As Dictionary(Of String, Double), args As list, env As Environment) As Object
