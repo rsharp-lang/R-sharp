@@ -11,5 +11,5 @@ let matrix = raw :> as.dist("compoundA", "compoundB", "correlation");
 print(matrix);
 
 matrix 
-:> plot(size="3300,2700", padding = "padding: 150px 250px 200px 200px;", colors ="reverse(jet)", fixed_size = TRUE) 
+:> plot(size="3300,2700", padding = "padding: 150px 250px 200px 100px;", colors ="Spectral:c8", fixed_size = FALSE) 
 :> save.graphics(file = "cor.png");
