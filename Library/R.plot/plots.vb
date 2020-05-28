@@ -61,6 +61,7 @@ Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics.Heatmap
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.DataMining.HierarchicalClustering
 Imports Microsoft.VisualBasic.DataMining.HierarchicalClustering.DendrogramVisualize
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
@@ -122,11 +123,25 @@ Module plots
         Dim padding$ = InteropArgumentHelper.getPadding(args.getByName("padding"))
 
         If args.hasName("class") Then
-            cls = DirectCast(args!class, list).slots _
-                .ToDictionary(Function(a) a.Key,
-                              Function(a)
-                                  Return Scripting.ToString(a.Value)
-                              End Function)
+            Dim list = args!class
+
+            If TypeOf list Is list Then
+                cls = DirectCast(list, list).slots _
+                    .ToDictionary(Function(a) a.Key,
+                                  Function(a)
+                                      Return Scripting.ToString(a.Value)
+                                  End Function)
+            ElseIf TypeOf list Is Dictionary(Of String, String) Then
+                cls = list
+            ElseIf list.GetType.ImplementInterface(GetType(IDictionary)) Then
+                Dim hash = DirectCast(list, IDictionary)
+
+                cls = New Dictionary(Of String, String)
+
+                For Each key As Object In hash.Keys
+                    cls.Add(key.ToString, Scripting.ToString(hash(key)))
+                Next
+            End If
         End If
 
         Dim dp As New DendrogramPanel With {
