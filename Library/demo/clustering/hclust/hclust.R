@@ -3,8 +3,8 @@ imports "charts" from "R.plot";
 
 setwd(!script$dir);
 
-read.csv("correlation.csv")
-:> as.dist("compoundA","compoundB","correlation")
+read.csv("data.csv")
+:> as.dist(type = "dist")
 :> hclust
 :> plot
 :> save.graphics("./hclust.png")

@@ -218,6 +218,9 @@ Module stats
                            <RListObjectArgument>
                            Optional projection As list = Nothing,
                            Optional env As Environment = Nothing) As DistanceMatrix
+
+
+
         If is_matrix Then
             Dim matrix = x.columns.Select(Function(a) a.Value.AsObjectEnumerator(Of String).Select(AddressOf ParseDouble).ToArray).ToArray
             Dim dist As Double()() = New Double(x.nrows - 1)() {}
