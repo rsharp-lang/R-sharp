@@ -58,7 +58,9 @@ Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Math.Distributions
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Prcomp
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -73,7 +75,7 @@ Module stats
     Private Function printMatrix(d As DistanceMatrix) As String
         Dim sb As New StringBuilder
 
-        Call sb.AppendLine($"Distance matrix of {d.Keys.Length} objects:")
+        Call sb.AppendLine($"Distance matrix of {d.keys.Length} objects:")
         Call sb.AppendLine(d.ToString)
         Call sb.AppendLine()
 
@@ -195,15 +197,51 @@ Module stats
         Return PCA
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="is_matrix"></param>
+    ''' <param name="projection">
+    ''' argument for extract data from the given data object, this parameter is depends 
+    ''' on the <paramref name="is_matrix"/> argument, for:
+    ''' 
+    ''' + is_matrix: means the given data is a matrix liked data, then ``type`` should be exists.
+    ''' + not is_matrix: means the given data is a tabular data for represents the data matrix, 
+    '''                  then slots ``f1``, ``f2``, and ``val`` should be exists.
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("as.dist")>
-    Public Function asDist(x As Rdataframe, Optional item1$ = "A", Optional item2$ = "B", Optional correlation$ = "correlation") As DistanceMatrix
-        Dim raw As EntityObject() = x.getRowNames _
-            .Select(Function(id, index)
-                        Return x.dataframeRow(Of String, EntityObject)(id, index)
-                    End Function) _
-            .ToArray
+    Public Function asDist(x As Rdataframe,
+                           Optional is_matrix As Boolean = True,
+                           <RListObjectArgument>
+                           Optional projection As list = Nothing,
+                           Optional env As Environment = Nothing) As DistanceMatrix
+        If is_matrix Then
+            Dim matrix = x.columns.Select(Function(a) a.Value.AsObjectEnumerator(Of String).Select(AddressOf ParseDouble).ToArray).ToArray
+            Dim dist As Double()() = New Double(x.nrows - 1)() {}
+            Dim is_dist As Boolean = projection!type <> "cor"
+            Dim j As Integer
 
-        Return Builder.FromTabular(raw, item1, item2, correlation)
+            For i As Integer = 0 To x.nrows - 1
+                j = i
+                dist(i) = matrix.Select(Function(col) col(j)).ToArray
+            Next
+
+            Return New DistanceMatrix(x.rownames, dist, is_dist)
+        Else
+            Dim raw As EntityObject() = x.getRowNames _
+                .Select(Function(id, index)
+                            Return x.dataframeRow(Of String, EntityObject)(id, index)
+                        End Function) _
+                .ToArray
+            Dim item1$ = projection!f1
+            Dim item2$ = projection!f2
+            Dim val$ = projection!val
+
+            Return Builder.FromTabular(raw, item1, item2, val)
+        End If
     End Function
 
     <Extension>
