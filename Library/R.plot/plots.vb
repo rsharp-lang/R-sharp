@@ -113,6 +113,7 @@ Module plots
         Call REnv.Internal.generic.add("plot", GetType(DataBinBox(Of Double)()), AddressOf plot_binBox)
         Call REnv.Internal.generic.add("plot", GetType(Dictionary(Of String, Double)), AddressOf plot_categoryBars)
         Call REnv.Internal.generic.add("plot", GetType(DistanceMatrix), AddressOf plot_corHeatmap)
+        Call REnv.Internal.generic.add("plot", GetType(Cluster), AddressOf plot_hclust)
     End Sub
 
     Public Function plot_hclust(cluster As Cluster, args As list, env As Environment) As Object
