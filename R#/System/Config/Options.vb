@@ -125,6 +125,16 @@ Namespace System.Configuration
             End Get
         End Property
 
+        ''' <summary>
+        ''' 在R#环境之中调用命令行，输出的stdout字符串是使用多行数据返回还是整个文本返回
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property stdout_multipline As Boolean
+            Get
+                Return getOption("stdout.multipline", [default]:="on").ParseBoolean
+            End Get
+        End Property
+
         Public Property localConfig As String Implements IFileReference.FilePath
 
         Sub New(configs As String)
