@@ -215,7 +215,7 @@ Public Module utils
                 End If
             Case TypeCodes.integer
                 If row_names.length = 1 Then
-                    Dim i As Integer = CInt(row_names.data.GetValue(Scan0))
+                    Dim i As Integer = CInt(row_names.data.GetValue(Scan0)) - 1
                     Dim project = dataframe.columns.Keys(i)
 
                     dataframe.rownames = dataframe.columns(project)
