@@ -247,6 +247,11 @@ Namespace Runtime.Interop
             Return GetRSharpType(Runtime.GetType(code))
         End Function
 
+        ''' <summary>
+        ''' get R# type value of the given VB.NET object value
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
         Public Shared Function [TypeOf](x As Object) As RType
             If x Is Nothing Then
                 Return any

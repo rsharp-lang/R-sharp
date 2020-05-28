@@ -1,48 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::26779411e0258a0f89cedb8d8d80ee4d, Library\R.base\utils\utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module utils
-    ' 
-    '     Function: read_csv, saveGeneric, write_csv
-    ' 
-    ' /********************************************************************************/
+' Module utils
+' 
+'     Function: read_csv, saveGeneric, write_csv
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Text
@@ -157,40 +159,73 @@ Public Module utils
         }
 
         If Not row_names Is Nothing Then
-            With DirectCast(row_names, vector)
-                Select Case .elementType.mode
-                    Case TypeCodes.string, TypeCodes.double
-                        If .length = 1 Then
-                            Dim key = Scripting.ToString(.data.GetValue(Scan0))
+            Dim err As New Value(Of Message)
 
-                            If dataframe.columns.ContainsKey(key) Then
-                                dataframe.rownames = dataframe.columns(key)
-                                dataframe.columns.Remove(key)
-                            Else
-                                Return Internal.debug.stop({"undefined column was selected as row names!", "given: " & key}, env)
-                            End If
-                        Else
-                            dataframe.rownames = .data _
-                                .AsObjectEnumerator(Of Object) _
-                                .Select(AddressOf Scripting.ToString) _
-                                .ToArray
-                        End If
-                    Case TypeCodes.integer
-                        If .length = 1 Then
-                            Dim project = cols(CInt(.data.GetValue(Scan0)))
+            If Not TypeOf row_names Is vector Then
+                If RType.TypeOf(row_names).mode = TypeCodes.string OrElse RType.TypeOf(row_names).mode = TypeCodes.double Then
+                    row_names = REnv _
+                        .asVector(Of Object)(row_names) _
+                        .AsObjectEnumerator(Of Object) _
+                        .Select(AddressOf Scripting.ToString) _
+                        .DoCall(Function(v)
+                                    Return New vector(GetType(String), v, env)
+                                End Function)
+                ElseIf RType.TypeOf(row_names).mode = TypeCodes.integer Then
+                    row_names = REnv _
+                        .asVector(Of Object)(row_names) _
+                        .AsObjectEnumerator(Of Object) _
+                        .Select(Function(i) CInt(i)) _
+                        .DoCall(Function(v)
+                                    Return New vector(GetType(Integer), v, env)
+                                End Function)
+                Else
+                    Return Internal.debug.stop({
+                        "invalid data type for set row names!",
+                        "given: " & RType.TypeOf(row_names).ToString
+                    }, env)
+                End If
+            End If
 
-                            dataframe.columns.Remove(project(Scan0))
-                            dataframe.rownames = project.Skip(1).ToArray
-                        Else
-
-                        End If
-                    Case Else
-                        Return Internal.debug.stop("invalid row names data type! required character or numeric!", env)
-                End Select
-            End With
+            If Not err = dataframe.setRowNames(row_names, env) Is Nothing Then
+                Return err.Value
+            End If
         End If
 
         Return dataframe
+    End Function
+
+    <Extension>
+    Private Function setRowNames(dataframe As Rdataframe, row_names As vector, env As Environment) As Message
+        Select Case row_names.elementType.mode
+            Case TypeCodes.string, TypeCodes.double
+                If row_names.length = 1 Then
+                    Dim key = Scripting.ToString(row_names.data.GetValue(Scan0))
+
+                    If dataframe.columns.ContainsKey(key) Then
+                        dataframe.rownames = dataframe.columns(key)
+                        dataframe.columns.Remove(key)
+                    Else
+                        Return Internal.debug.stop({"undefined column was selected as row names!", "given: " & key}, env)
+                    End If
+                Else
+                    dataframe.rownames = row_names.data _
+                        .AsObjectEnumerator(Of Object) _
+                        .Select(AddressOf Scripting.ToString) _
+                        .ToArray
+                End If
+            Case TypeCodes.integer
+                If row_names.length = 1 Then
+                    Dim i As Integer = CInt(row_names.data.GetValue(Scan0))
+                    Dim project = dataframe.columns.Keys(i)
+
+                    dataframe.rownames = dataframe.columns(project)
+                    dataframe.columns.Remove(project)
+                Else
+
+                End If
+            Case Else
+                Return Internal.debug.stop("invalid row names data type! required character or numeric!", env)
+        End Select
     End Function
 
     ''' <summary>

@@ -3,7 +3,7 @@ imports "charts" from "R.plot";
 
 setwd(!script$dir);
 
-read.csv("data.csv")
+read.csv("data.csv", row_names = 1)
 :> as.dist(type = "dist")
 :> hclust
 :> plot
