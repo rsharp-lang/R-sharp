@@ -94,10 +94,26 @@ Public Module utils
     ''' 
     ''' use <see cref="Encoding.Default"/> by default.
     ''' </param>
+    ''' <param name="row_names">
+    ''' a vector of row names. This can be a vector giving the actual row names, 
+    ''' or a single number giving the column of the table which contains the 
+    ''' row names, or character string giving the name of the table column 
+    ''' containing the row names.
+    '''
+    ''' If there Is a header And the first row contains one fewer field than the 
+    ''' number Of columns, the first column In the input Is used For the row 
+    ''' names. Otherwise If row.names Is missing, the rows are numbered.
+    '''
+    ''' Using row.names = NULL forces row numbering. Missing Or NULL row.names 
+    ''' generate row names that are considered To be 'automatic’ (and not 
+    ''' preserved by as.matrix).
+    ''' </param>
     ''' <returns></returns>
     <ExportAPI("read.csv")>
     <RApiReturn(GetType(Rdataframe))>
     Public Function read_csv(file As Object,
+                             <RRawVectorArgument>
+                             Optional row_names As Object = Nothing,
                              Optional encoding As Object = "unknown",
                              Optional tsv As Boolean = False,
                              Optional env As Environment = Nothing) As Object
@@ -139,6 +155,40 @@ Public Module utils
                                   Return DirectCast(col.Skip(1).ToArray, Array)
                               End Function)
         }
+
+        If Not row_names Is Nothing Then
+            With DirectCast(row_names, vector)
+                Select Case .elementType.mode
+                    Case TypeCodes.string, TypeCodes.double
+                        If .length = 1 Then
+                            Dim key = Scripting.ToString(.data.GetValue(Scan0))
+
+                            If dataframe.columns.ContainsKey(key) Then
+                                dataframe.rownames = dataframe.columns(key)
+                                dataframe.columns.Remove(key)
+                            Else
+                                Return Internal.debug.stop({"undefined column was selected as row names!", "given: " & key}, env)
+                            End If
+                        Else
+                            dataframe.rownames = .data _
+                                .AsObjectEnumerator(Of Object) _
+                                .Select(AddressOf Scripting.ToString) _
+                                .ToArray
+                        End If
+                    Case TypeCodes.integer
+                        If .length = 1 Then
+                            Dim project = cols(CInt(.data.GetValue(Scan0)))
+
+                            dataframe.columns.Remove(project(Scan0))
+                            dataframe.rownames = project.Skip(1).ToArray
+                        Else
+
+                        End If
+                    Case Else
+                        Return Internal.debug.stop("invalid row names data type! required character or numeric!", env)
+                End Select
+            End With
+        End If
 
         Return dataframe
     End Function
