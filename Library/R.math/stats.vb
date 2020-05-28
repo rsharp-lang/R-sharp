@@ -221,6 +221,72 @@ Module stats
         }
     End Function
 
+    ''' <summary>
+    ''' ### Distance Matrix Computation
+    ''' 
+    ''' This function computes and returns the distance matrix computed by using 
+    ''' the specified distance measure to compute the distances between the rows 
+    ''' of a data matrix.
+    ''' </summary>
+    ''' <param name="x">a numeric matrix, data frame or "dist" object.</param>
+    ''' <param name="method">
+    ''' the distance measure to be used. This must be one of "euclidean", "maximum", 
+    ''' "manhattan", "canberra", "binary" or "minkowski". Any unambiguous substring 
+    ''' can be given.
+    ''' </param>
+    ''' <param name="diag"></param>
+    ''' <param name="upper"></param>
+    ''' <param name="p%"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    ''' <remarks>
+    ''' Available distance measures are (written for two vectors x and y):
+    '''
+    ''' + euclidean:
+    ''' Usual distance between the two vectors (2 norm aka L_2), sqrt(sum((x_i - y_i)^2)).
+    '''
+    ''' + maximum:
+    ''' Maximum distance between two components Of x And y (supremum norm)
+    '''
+    ''' + manhattan:
+    ''' Absolute distance between the two vectors (1 norm aka L_1).
+    '''
+    ''' + canberra:
+    ''' ``sum(|x_i - y_i| / (|x_i| + |y_i|))``. Terms with zero numerator And 
+    ''' denominator are omitted from the sum And treated as if the values were 
+    ''' missing.
+    '''
+    ''' This Is intended for non-negative values (e.g., counts), in which case the 
+    ''' denominator can be written in various equivalent ways; Originally, R used 
+    ''' ``x_i + y_i``, then from 1998 to 2017, |x_i + y_i|, And then the correct 
+    ''' ``|x_i| + |y_i|``.
+    '''
+    ''' + binary:
+    ''' (aka asymmetric binary): The vectors are regarded As binary bits, so non-zero 
+    ''' elements are 'on’ and zero elements are ‘off’. The distance is the proportion 
+    ''' of bits in which only one is on amongst those in which at least one is on.
+    '''
+    ''' + minkowski:
+    ''' The p norm, the pth root Of the sum Of the pth powers Of the differences 
+    ''' Of the components.
+    '''
+    ''' Missing values are allowed, And are excluded from all computations involving 
+    ''' the rows within which they occur. Further, When Inf values are involved, 
+    ''' all pairs Of values are excluded When their contribution To the distance gave 
+    ''' NaN Or NA. If some columns are excluded In calculating a Euclidean, Manhattan, 
+    ''' Canberra Or Minkowski distance, the sum Is scaled up proportionally To the 
+    ''' number Of columns used. If all pairs are excluded When calculating a 
+    ''' particular distance, the value Is NA.
+    '''
+    ''' The "dist" method of as.matrix() And as.dist() can be used for conversion 
+    ''' between objects of class "dist" And conventional distance matrices.
+    '''
+    ''' ``as.dist()`` Is a generic function. Its default method handles objects inheriting 
+    ''' from class "dist", Or coercible to matrices using as.matrix(). Support for 
+    ''' classes representing distances (also known as dissimilarities) can be added 
+    ''' by providing an as.matrix() Or, more directly, an as.dist method for such 
+    ''' a class.
+    ''' </remarks>
     <ExportAPI("dist")>
     <RApiReturn(GetType(DistanceMatrix))>
     Public Function dist(<RRawVectorArgument> x As Object,

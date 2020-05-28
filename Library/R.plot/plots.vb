@@ -59,6 +59,8 @@ Imports Microsoft.VisualBasic.Data.ChartPlots.Plot3D
 Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics
 Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics.Heatmap
 Imports Microsoft.VisualBasic.Data.csv.IO
+Imports Microsoft.VisualBasic.DataMining.HierarchicalClustering
+Imports Microsoft.VisualBasic.DataMining.HierarchicalClustering.DendrogramVisualize
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
@@ -111,7 +113,36 @@ Module plots
         Call REnv.Internal.generic.add("plot", GetType(DataBinBox(Of Double)()), AddressOf plot_binBox)
         Call REnv.Internal.generic.add("plot", GetType(Dictionary(Of String, Double)), AddressOf plot_categoryBars)
         Call REnv.Internal.generic.add("plot", GetType(DistanceMatrix), AddressOf plot_corHeatmap)
+        Call REnv.Internal.generic.add("plot", GetType(Cluster), AddressOf plot_hclust)
     End Sub
+
+    Public Function plot_hclust(cluster As Cluster, args As list, env As Environment) As Object
+        Dim cls As Dictionary(Of String, String) = Nothing
+        Dim size$ = InteropArgumentHelper.getSize(args.getByName("size"))
+        Dim padding$ = InteropArgumentHelper.getPadding(args.getByName("padding"))
+
+        If args.hasName("class") Then
+            cls = DirectCast(args!class, list).slots _
+                .ToDictionary(Function(a) a.Key,
+                              Function(a)
+                                  Return Scripting.ToString(a.Value)
+                              End Function)
+        End If
+
+        Dim dp As New DendrogramPanel With {
+           .LineColor = Color.Blue,
+           .ScaleValueDecimals = 0,
+           .ScaleValueInterval = 1,
+           .Model = cluster,
+           .ClassTable = cls
+       }
+        Dim region As New GraphicsRegion(size.SizeParser, padding)
+
+        Using g As Graphics2D = region.Size.CreateGDIDevice(filled:=Color.White)
+            Call dp.Paint(g, region.PlotRegion, layout:=Layouts.Vertical)
+            Return g.ImageResource
+        End Using
+    End Function
 
     Public Function plot_corHeatmap(dist As DistanceMatrix, args As list, env As Environment) As Object
         Dim title$ = args.GetString("title", "Correlations")

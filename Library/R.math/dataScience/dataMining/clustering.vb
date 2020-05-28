@@ -1,55 +1,55 @@
 ﻿#Region "Microsoft.VisualBasic::ccea5dc512510451719920bdc79832dc, Library\R.math\dataScience\dataMining\clustering.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module clustering
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: clusterResultDataFrame, clusterSummary, dbscan, Kmeans
-    '     Enum dbScanMethods
-    ' 
-    '         dist, hybrid, raw
-    ' 
-    ' 
-    ' 
-    '  
-    ' 
-    ' 
-    ' 
-    ' Class dbscanResult
-    ' 
-    '     Properties: cluster, eps, isseed, MinPts
-    ' 
-    ' /********************************************************************************/
+' Module clustering
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: clusterResultDataFrame, clusterSummary, dbscan, Kmeans
+'     Enum dbScanMethods
+' 
+'         dist, hybrid, raw
+' 
+' 
+' 
+'  
+' 
+' 
+' 
+' Class dbscanResult
+' 
+'     Properties: cluster, eps, isseed, MinPts
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -57,9 +57,11 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.DataMining.DBSCAN
+Imports Microsoft.VisualBasic.DataMining.HierarchicalClustering
 Imports Microsoft.VisualBasic.DataMining.KMeans
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -77,7 +79,13 @@ Module clustering
         Call REnv.Internal.generic.add("summary", GetType(EntityClusterModel()), AddressOf clusterSummary)
 
         Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(EntityClusterModel()), AddressOf clusterResultDataFrame)
+
+        Call REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of Cluster)(AddressOf showHclust)
     End Sub
+
+    Private Function showHclust(cluster As Cluster) As String
+        Return cluster.ToConsoleLine
+    End Function
 
     Public Function clusterSummary(result As Object, args As list, env As Environment) As Object
         If TypeOf result Is EntityClusterModel() Then
@@ -154,6 +162,77 @@ Module clustering
         End If
 
         Return model.Kmeans(centers, debug, parallel).ToArray
+    End Function
+
+    ''' <summary>
+    ''' Hierarchical Clustering
+    ''' 
+    ''' Hierarchical cluster analysis on a set of dissimilarities and methods for analyzing it.
+    ''' </summary>
+    ''' <param name="d">a dissimilarity structure as produced by dist.</param>
+    ''' <param name="method">
+    ''' the agglomeration method to be used. This should be (an unambiguous abbreviation of) 
+    ''' one of "ward.D", "ward.D2", "single", "complete", "average" (= UPGMA), "mcquitty" (= WPGMA), 
+    ''' "median" (= WPGMC) or "centroid" (= UPGMC).
+    ''' </param>
+    ''' <returns></returns>
+    ''' <remarks>
+    ''' This function performs a hierarchical cluster analysis using a set of dissimilarities for 
+    ''' the n objects being clustered. Initially, each object is assigned to its own cluster and 
+    ''' then the algorithm proceeds iteratively, at each stage joining the two most similar clusters, 
+    ''' continuing until there is just a single cluster. At each stage distances between clusters 
+    ''' are recomputed by the Lance–Williams dissimilarity update formula according to the particular 
+    ''' clustering method being used.
+    '''
+    ''' A number Of different clustering methods are provided. Ward's minimum variance method aims 
+    ''' at finding compact, spherical clusters. The complete linkage method finds similar clusters. 
+    ''' The single linkage method (which is closely related to the minimal spanning tree) adopts a 
+    ''' ‘friends of friends’ clustering strategy. The other methods can be regarded as aiming for 
+    ''' clusters with characteristics somewhere between the single and complete link methods. 
+    ''' Note however, that methods "median" and "centroid" are not leading to a monotone distance 
+    ''' measure, or equivalently the resulting dendrograms can have so called inversions or reversals 
+    ''' which are hard to interpret, but note the trichotomies in Legendre and Legendre (2012).
+    '''
+    ''' Two different algorithms are found In the literature For Ward clustering. The one used by 
+    ''' Option "ward.D" (equivalent To the only Ward Option "ward" In R versions &lt;= 3.0.3) does 
+    ''' Not implement Ward's (1963) clustering criterion, whereas option "ward.D2" implements that 
+    ''' criterion (Murtagh and Legendre 2014). With the latter, the dissimilarities are squared before 
+    ''' cluster updating. Note that agnes(*, method="ward") corresponds to hclust(*, "ward.D2").
+    '''
+    ''' If members!= NULL, Then d Is taken To be a dissimilarity matrix between clusters instead 
+    ''' Of dissimilarities between singletons And members gives the number Of observations per cluster. 
+    ''' This way the hierarchical cluster algorithm can be 'started in the middle of the dendrogram’, 
+    ''' e.g., in order to reconstruct the part of the tree above a cut (see examples). Dissimilarities 
+    ''' between clusters can be efficiently computed (i.e., without hclust itself) only for a limited 
+    ''' number of distance/linkage combinations, the simplest one being squared Euclidean distance 
+    ''' and centroid linkage. In this case the dissimilarities between the clusters are the squared 
+    ''' Euclidean distances between cluster means.
+    '''
+    ''' In hierarchical cluster displays, a decision Is needed at each merge to specify which subtree 
+    ''' should go on the left And which on the right. Since, for n observations there are n-1 merges, 
+    ''' there are 2^{(n-1)} possible orderings for the leaves in a cluster tree, Or dendrogram. The 
+    ''' algorithm used in hclust Is to order the subtree so that the tighter cluster Is on the left 
+    ''' (the last, i.e., most recent, merge of the left subtree Is at a lower value than the last 
+    ''' merge of the right subtree). Single observations are the tightest clusters possible, And 
+    ''' merges involving two observations place them in order by their observation sequence number.
+    ''' </remarks>
+    <ExportAPI("hclust")>
+    <RApiReturn(GetType(Cluster))>
+    Public Function hclust(d As DistanceMatrix,
+                           Optional method$ = "complete",
+                           Optional env As Environment = Nothing) As Object
+
+        If d Is Nothing Then
+            Return Internal.debug.stop(New NullReferenceException("the given distance matrix object can not be nothing!"), env)
+        End If
+
+        Dim alg As ClusteringAlgorithm = New DefaultClusteringAlgorithm
+        Dim matrix As Double()() = d.PopulateRows _
+            .Select(Function(a) a.ToArray) _
+            .ToArray
+        Dim cluster As Cluster = alg.performClustering(matrix, d.keys, New AverageLinkageStrategy)
+
+        Return cluster
     End Function
 
     ''' <summary>

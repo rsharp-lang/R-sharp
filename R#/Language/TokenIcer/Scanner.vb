@@ -316,7 +316,11 @@ Namespace Language.TokenIcer
                 If c = "$"c AndAlso peekNext Like stringLiteralSymbols Then
                     Static [like] As (TokenType, String) = (TokenType.keyword, "like")
 
-                    If Not lastPopoutToken Is Nothing AndAlso lastPopoutToken = [like] Then
+                    ' 20200528
+                    ' 如果上一个单词是一个对象引用符号或者小括号
+                    ' 则可能是symbol index引用
+                    ' 则$符号不应该被加入到缓存之中
+                    If Not lastPopoutToken Is Nothing AndAlso Not (lastPopoutToken.name = TokenType.identifier OrElse lastPopoutToken.name = TokenType.close) Then
                         buffer += "$"c
                         Return Nothing
                     End If
