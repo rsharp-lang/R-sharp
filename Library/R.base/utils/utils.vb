@@ -226,6 +226,8 @@ Public Module utils
             Case Else
                 Return Internal.debug.stop("invalid row names data type! required character or numeric!", env)
         End Select
+
+        Return Nothing
     End Function
 
     ''' <summary>

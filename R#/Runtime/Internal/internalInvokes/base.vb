@@ -144,6 +144,28 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' matrix transpose
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
+        <ExportAPI("t")>
+        Public Function t(x As dataframe) As Object
+            Dim rownames = x.getRowNames
+            Dim colnames = x.columns.Keys.ToArray
+            Dim mat = colnames.Select(Function(k) x.columns(k).AsObjectEnumerator(Of Object).ToArray).MatrixTranspose.ToArray
+            Dim d As New dataframe With {
+                .rownames = colnames,
+                .columns = New Dictionary(Of String, Array)
+            }
+
+            For i As Integer = 0 To rownames.Length - 1
+                d.columns.Add(rownames(i), mat(i))
+            Next
+
+            Return d
+        End Function
+
+        ''' <summary>
         ''' create an empty vector with specific count of null value filled
         ''' </summary>
         ''' <param name="size"></param>
