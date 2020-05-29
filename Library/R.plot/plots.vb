@@ -149,7 +149,8 @@ Module plots
            .ScaleValueDecimals = 0,
            .ScaleValueInterval = 1,
            .Model = cluster,
-           .ClassTable = cls
+           .ClassTable = cls,
+           .ShowDistanceValues = False
        }
         Dim region As New GraphicsRegion(size.SizeParser, padding)
 
