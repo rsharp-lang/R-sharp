@@ -86,6 +86,8 @@ Namespace Runtime
         ''' <returns></returns>
         Public Property lastException As Message
 
+        Public ReadOnly Property types As New Dictionary(Of String, RType)
+
         Sub New(scriptHost As RInterpreter, options As Options)
             Me.options = options
             Me.packages = New PackageManager(options)
@@ -93,7 +95,7 @@ Namespace Runtime
             Me.Rscript = scriptHost
             Me.stdout = New RContentOutput(App.StdOut.DefaultValue, env:=OutputEnvironments.Console)
 
-            MyBase.types.Add("unit", RType.GetRSharpType(GetType(unit)))
+            Call types.Add("unit", RType.GetRSharpType(GetType(unit)))
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
@@ -142,7 +144,10 @@ Namespace Runtime
                 Call _stdout.WriteLine($"The following object is masked from 'package:{packageName}':")
                 Call _stdout.WriteLine()
 
-                Call printer.printContentArray(masked, ", ", "    ", Me)
+                Dim maxColumns As Integer = Me.getMaxColumns
+                Dim dev As RContentOutput = stdout
+
+                Call printer.printContentArray(masked, ", ", "    ", maxColumns, dev.stdout)
                 Call _stdout.WriteLine()
             End If
 

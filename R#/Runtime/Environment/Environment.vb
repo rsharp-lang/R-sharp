@@ -89,7 +89,7 @@ Namespace Runtime
         End Property
 
         Public ReadOnly Property symbols As Dictionary(Of Symbol)
-        Public ReadOnly Property types As Dictionary(Of String, RType)
+
         ''' <summary>
         ''' 主要是存储警告消息
         ''' </summary>
@@ -165,7 +165,6 @@ Namespace Runtime
 
         Sub New()
             symbols = New Dictionary(Of Symbol)
-            types = New Dictionary(Of String, RType)
             parent = Nothing
             [global] = Nothing
             stackFrame = globalStackFrame
@@ -192,7 +191,6 @@ Namespace Runtime
 
             If isInherits Then
                 symbols = parent.symbols
-                types = parent.types
             End If
 
             Log4VB.redirectError = AddressOf redirectError
@@ -233,9 +231,6 @@ Namespace Runtime
                 ' 20200304 fix bugs for environment inherits mode
                 If Not symbols Is parent.symbols Then
                     Call symbols.Clear()
-                End If
-                If Not types Is parent.types Then
-                    Call types.Clear()
                 End If
             End If
 

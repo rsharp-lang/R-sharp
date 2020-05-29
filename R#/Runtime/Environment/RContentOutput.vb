@@ -79,7 +79,7 @@ Namespace Runtime
             End Get
         End Property
 
-        Dim stdout As StreamWriter
+        Friend stdout As StreamWriter
 
         Sub New(stdout As StreamWriter, env As OutputEnvironments)
             Me.env = env
