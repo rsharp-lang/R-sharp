@@ -1,5 +1,6 @@
 ﻿Imports System.Reflection
 Imports System.Runtime.CompilerServices
+Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal.Utility
@@ -36,7 +37,8 @@ Namespace System
                 .COPYRIGHT = info.AssemblyCopyright,
                 .DESCRIPTION = docs.Summary _
                     .DoCall(AddressOf Strings.Trim) _
-                    .Trim(" "c, "#"c, "-"c),
+                    .Trim(" "c, "#"c, "-"c) _
+                    .stylingMarkdownElements,
                 .index = New Index With {
                     .category = package.Category,
                     .index = package.Namespace,
@@ -44,26 +46,40 @@ Namespace System
                     .keyword = api.name,
                     .title = api.name
                 },
-                .DETAILS = docs.Remarks,
+                .DETAILS = docs.Remarks _
+                    .stylingMarkdownElements,
                 .LICENSE = "",
                 .NAME = api.name,
                 .SEE_ALSO = package.Namespace,
-                .FILES = targetModule.Module.FullyQualifiedName,
-                .SYNOPSIS = $"{api.name}({api.parameters.JoinBy(", ").Replace("``", "")})",
+                .FILES = targetModule.Assembly.Location.FileName,
+                .SYNOPSIS = $"{api.name}({api.parameters.JoinBy(", ").stylingMarkdownElements});",
                 .PROLOG = docs.Summary _
                     .LineTokens _
                     .FirstOrDefault _
                     .DoCall(AddressOf Strings.Trim) _
-                    .Trim(" "c, "#"c, "-"c),
+                    .Trim(" "c, "#"c, "-"c) _
+                    .stylingMarkdownElements,
                 .OPTIONS = docs.Params _
                     .SafeQuery _
                     .Select(Function(a)
-                                Return New NamedValue(Of String)(a.name, a.text)
+                                Return New NamedValue(Of String)(a.name, a.text.stylingMarkdownElements)
                             End Function) _
                     .ToArray
             }
 
             Return man
+        End Function
+
+        <Extension>
+        Private Function stylingMarkdownElements(text As String) As String
+            Dim sb As New StringBuilder(Strings.Trim(text))
+            Dim codes = text.Matches("[`]{2}.+?[`]{2}")
+
+            For Each code As String In codes
+                Call sb.Replace(code, $"\fB{code.Trim("`"c)}\fR")
+            Next
+
+            Return sb.ToString
         End Function
     End Module
 End Namespace

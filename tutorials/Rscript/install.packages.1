@@ -3,7 +3,7 @@
 .SH NAME
 install.packages \- Install Packages from Repositories or Local Files
 .SH SYNOPSIS
-\fIinstall.packages(packages as string, [<Environment>])\fR
+\fIinstall.packages(\fBpackages\fR as string, [\fB<Environment>\fR]);\fR
 .SH DESCRIPTION
 .PP
 Install Packages from Repositories or Local Files
@@ -31,7 +31,7 @@ Install Packages from Repositories or Local Files
 .PP
 \fBpackages\fB \fR\- The dll file name, character vector of the names of 
  packages whose current versions should be downloaded from the repositories.
- 
+
 .PP
 .PP
 \fBenvir\fB \fR\- -
@@ -47,5 +47,9 @@ install.packages tries to detect if you have write permission on the library
 .PP
 .SH SEE ALSO
 utils
+.SH FILES
+.PP
+REnv.dll
+.PP
 .SH COPYRIGHT
 Copyright © xie.guigang@gcmodeller.org 2019
