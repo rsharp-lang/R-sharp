@@ -1,5 +1,5 @@
 .\" man page create by R# package system.
-.TH INSTALL.PACKAGES 0 2020-05-30 "install.packages" "install.packages"
+.TH UTILS 0 2020-05-30 "install.packages" "install.packages"
 .SH NAME
 install.packages \- Install Packages from Repositories or Local Files
 .SH SYNOPSIS
@@ -27,5 +27,25 @@ Install Packages from Repositories or Local Files
  You are advised To run update.packages before install.packages To ensure that 
  any already installed dependencies have their latest versions.
 .PP
+.SH OPTIONS
+.PP
+\fBpackages\fB \fR\- The dll file name, character vector of the names of 
+ packages whose current versions should be downloaded from the repositories.
+ 
+.PP
+.PP
+\fBenvir\fB \fR\- -
+.PP
+.SH DETAILS
+.PP
+install.packages tries to detect if you have write permission on the library 
+ directories specified, but Windows reports unreliably. If there is only one 
+ library directory (the default), R tries to find out by creating a test directory, 
+ but even this need not be the whole story: you may have permission to write 
+ in a library directory but lack permission to write binary files (such as ‘.dll’ 
+ files) there. See the ‘R for Windows FAQ’ for workarounds.
+.PP
+.SH SEE ALSO
+utils
 .SH COPYRIGHT
 Copyright © xie.guigang@gcmodeller.org 2019

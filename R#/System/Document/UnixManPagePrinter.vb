@@ -3,6 +3,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal.Utility
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
@@ -38,11 +39,12 @@ Namespace System
                     .Trim(" "c, "#"c, "-"c),
                 .index = New Index With {
                     .category = package.Category,
-                    .index = api.name,
+                    .index = package.Namespace,
                     .[date] = info.BuiltTime,
                     .keyword = api.name,
                     .title = api.name
                 },
+                .DETAILS = docs.Remarks,
                 .LICENSE = "",
                 .NAME = api.name,
                 .SEE_ALSO = package.Namespace,
@@ -52,7 +54,13 @@ Namespace System
                     .LineTokens _
                     .FirstOrDefault _
                     .DoCall(AddressOf Strings.Trim) _
-                    .Trim(" "c, "#"c, "-"c)
+                    .Trim(" "c, "#"c, "-"c),
+                .OPTIONS = docs.Params _
+                    .SafeQuery _
+                    .Select(Function(a)
+                                Return New NamedValue(Of String)(a.name, a.text)
+                            End Function) _
+                    .ToArray
             }
 
             Return man

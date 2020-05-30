@@ -379,8 +379,29 @@ Namespace Runtime.Internal.Invokes
         ''' </summary>
         ''' <param name="text">A character vector</param>
         ''' <param name="con">A connection Object Or a character String.</param>
-        ''' <param name="sep">character string. A string to be written to the connection after each line of text.</param>
+        ''' <param name="sep">
+        ''' character string. A string to be written to the connection after each line of text.
+        ''' </param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' If the con is a character string, the function calls file to obtain a file connection
+        ''' which is opened for the duration of the function call.
+        '''
+        ''' If the connection Is open it Is written from its current position. If it Is Not open, 
+        ''' it Is opened For the duration Of the Call In "wt" mode And Then closed again.
+        '''
+        ''' Normally writeLines Is used With a text-mode connection, And the Default separator Is 
+        ''' converted To the normal separator For that platform (LF On Unix/Linux, CRLF On Windows). 
+        ''' For more control, open a binary connection And specify the precise value you want 
+        ''' written To the file In sep. For even more control, use writeChar On a binary connection.
+        '''
+        ''' useBytes Is for expert use. Normally (when false) character strings with marked 
+        ''' encodings are converted to the current encoding before being passed to the connection 
+        ''' (which might do further re-encoding). useBytes = TRUE suppresses the re-encoding of 
+        ''' marked strings so they are passed byte-by-byte to the connection: this can be useful 
+        ''' When strings have already been re-encoded by e.g. iconv. (It Is invoked automatically 
+        ''' For strings With marked encoding "bytes".)
+        ''' </remarks>
         <ExportAPI("writeLines")>
         Public Function writeLines(text$(), Optional con$ = Nothing, Optional sep$ = vbCrLf, Optional env As Environment = Nothing) As Object
             If con.StringEmpty Then
@@ -398,7 +419,7 @@ Namespace Runtime.Internal.Invokes
             Else
                 Call text.AsObjectEnumerator _
                     .JoinBy(sep) _
-                    .SaveTo(con)
+                    .SaveTo(con, Encodings.UTF8WithoutBOM.CodePage)
             End If
 
             Return text

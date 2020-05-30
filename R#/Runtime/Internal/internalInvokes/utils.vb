@@ -83,7 +83,14 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <param name="envir"></param>
         ''' <returns></returns>
-        ''' 
+        ''' <remarks>
+        ''' install.packages tries to detect if you have write permission on the library 
+        ''' directories specified, but Windows reports unreliably. If there is only one 
+        ''' library directory (the default), R tries to find out by creating a test directory, 
+        ''' but even this need not be the whole story: you may have permission to write 
+        ''' in a library directory but lack permission to write binary files (such as ‘.dll’ 
+        ''' files) there. See the ‘R for Windows FAQ’ for workarounds.
+        ''' </remarks>
         <ExportAPI("install.packages")>
         Public Function installPackages(packages$(), Optional envir As Environment = Nothing) As Object
             Dim pkgMgr As PackageManager = envir.globalEnvironment.packages
