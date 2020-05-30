@@ -12,7 +12,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace System
 
-    Module UnixManPagePrinter
+    Public Module UnixManPagePrinter
 
         Public Sub printManPage(api As RMethodInfo, docs As ProjectMember, markdown As RContentOutput)
             Dim man As UnixManPage = api.CreateManPage(docs)

@@ -1,51 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::a1564c49d4425c3c516d879551f2510e, studio\R-terminal\CLI\CLI.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module CLI
-    ' 
-    '     Function: Info, InitializeEnvironment, Install, SyntaxText, Version
-    ' 
-    ' /********************************************************************************/
+' Module CLI
+' 
+'     Function: Info, InitializeEnvironment, Install, SyntaxText, Version
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.ComponentModel
+Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Development
+Imports Microsoft.VisualBasic.ApplicationServices.Terminal.Utility
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.InteropService.SharedORM
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.System
 Imports SMRUCC.Rsharp.System.Configuration
 Imports SMRUCC.Rsharp.System.Package
 Imports RlangScript = SMRUCC.Rsharp.Runtime.Components.Rscript
@@ -111,6 +117,30 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
         Return 0
     End Function
 
+    <ExportAPI("--man.1")>
+    <Description("Exports unix man page data for current installed packages.")>
+    <Usage("--man.1 [--out <directory, default=./>]")>
+    Public Function unixman(args As CommandLine) As Integer
+        Dim out$ = args("--out") Or "./"
+        Dim env As New RInterpreter
+        Dim xmldocs = env.globalEnvir.packages.packageDocs
+        Dim utf8 As Encoding = Encodings.UTF8WithoutBOM.CodePage
+
+        For Each pkg As Package In env.globalEnvir.packages.AsEnumerable
+            For Each ref As String In pkg.ls
+                Dim symbol As RMethodInfo = pkg.GetFunction(apiName:=ref)
+                Dim docs = xmldocs.GetAnnotations(symbol.GetRawDeclares)
+                Dim help As UnixManPage = UnixManPagePrinter.CreateManPage(symbol, docs)
+
+                Call UnixManPage _
+                    .ToString(help, "man page create by R# package system.") _
+                    .SaveTo($"{out}/{pkg.namespace}/{ref}.1", utf8)
+            Next
+        Next
+
+        Return 0
+    End Function
+
     <ExportAPI("--info")>
     <Description("Print R# interpreter version information and R# terminal version information.")>
     Public Function Info(args As CommandLine) As Integer
@@ -121,6 +151,7 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
         Call RsharpCore.AppSummary(Nothing, Nothing, App.StdOut)
 
         Call App.StdOut.value.Flush()
+        Call New RInterpreter().Print("sessionInfo();")
 
         Return 0
     End Function

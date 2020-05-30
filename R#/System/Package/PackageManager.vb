@@ -58,6 +58,9 @@ Imports SMRUCC.Rsharp.System.Configuration
 
 Namespace System.Package
 
+    ''' <summary>
+    ''' 这个对象可以枚举出所有已经安装的<see cref="Package"/>对象
+    ''' </summary>
     Public Class PackageManager : Implements IDisposable, Enumeration(Of Package)
 
         ReadOnly pkgDb As LocalPackageDatabase
