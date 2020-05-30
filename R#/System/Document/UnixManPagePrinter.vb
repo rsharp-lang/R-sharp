@@ -55,7 +55,7 @@ Namespace System
                 .NAME = api.name,
                 .SEE_ALSO = package.Namespace,
                 .FILES = targetModule.Assembly.Location.FileName,
-                .SYNOPSIS = $"{api.name}({api.parameters.JoinBy(", ").stylingMarkdownElements});",
+                .SYNOPSIS = $"{api.name}({api.parameters.Select(Function(a) a.ToString.stylingMarkdownElements).JoinBy(", " & vbCrLf)});",
                 .PROLOG = docs.Summary _
                     .LineTokens _
                     .FirstOrDefault _
