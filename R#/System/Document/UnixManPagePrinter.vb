@@ -30,6 +30,9 @@ Namespace System
             If package Is Nothing Then
                 package = New PackageAttribute(targetModule.NamespaceEntry)
             End If
+            If docs Is Nothing Then
+                docs = New ProjectMember
+            End If
 
             Dim man As New UnixManPage With {
                 .AUTHOR = package.Publisher,
@@ -64,7 +67,8 @@ Namespace System
                     .Select(Function(a)
                                 Return New NamedValue(Of String)(a.name, a.text.stylingMarkdownElements)
                             End Function) _
-                    .ToArray
+                    .ToArray,
+                .VALUE = docs.Returns.stylingMarkdownElements
             }
 
             Return man
