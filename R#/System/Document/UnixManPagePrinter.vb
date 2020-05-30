@@ -3,6 +3,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal.Utility
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -32,7 +33,9 @@ Namespace System
                 .AUTHOR = package.Publisher,
                 .BUGS = "",
                 .COPYRIGHT = info.AssemblyCopyright,
-                .DESCRIPTION = docs.Summary,
+                .DESCRIPTION = docs.Summary _
+                    .DoCall(AddressOf Strings.Trim) _
+                    .Trim(" "c, "#"c, "-"c),
                 .index = New Index With {
                     .category = package.Category,
                     .index = api.name,
@@ -44,7 +47,12 @@ Namespace System
                 .NAME = api.name,
                 .SEE_ALSO = package.Namespace,
                 .FILES = targetModule.Module.FullyQualifiedName,
-                .SYNOPSIS = $"{api.name}({api.parameters.JoinBy(", ").Replace("``", "")})"
+                .SYNOPSIS = $"{api.name}({api.parameters.JoinBy(", ").Replace("``", "")})",
+                .PROLOG = docs.Summary _
+                    .LineTokens _
+                    .FirstOrDefault _
+                    .DoCall(AddressOf Strings.Trim) _
+                    .Trim(" "c, "#"c, "-"c)
             }
 
             Return man
