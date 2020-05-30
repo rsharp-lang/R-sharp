@@ -20,8 +20,14 @@ Namespace System
 
         <Extension>
         Public Function CreateManPage(api As RMethodInfo, docs As ProjectMember) As UnixManPage
-            Dim package As PackageAttribute = api.GetRawDeclares.DeclaringType.GetCustomAttribute(Of PackageAttribute)
+            Dim targetModule As Type = api.GetRawDeclares.DeclaringType
+            Dim package As PackageAttribute = targetModule.GetCustomAttribute(Of PackageAttribute)
             Dim info = api.GetRawDeclares.DeclaringType.Assembly.FromAssembly
+
+            If package Is Nothing Then
+                package = New PackageAttribute(targetModule.NamespaceEntry)
+            End If
+
             Dim man As New UnixManPage With {
                 .AUTHOR = package.Publisher,
                 .BUGS = "",
@@ -37,7 +43,8 @@ Namespace System
                 .LICENSE = "",
                 .NAME = api.name,
                 .SEE_ALSO = package.Namespace,
-                .FILES = api.GetRawDeclares.DeclaringType.Module.FullyQualifiedName
+                .FILES = targetModule.Module.FullyQualifiedName,
+                .SYNOPSIS = $"{api.name}({api.parameters.JoinBy(", ").Replace("``", "")})"
             }
 
             Return man

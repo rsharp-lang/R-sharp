@@ -53,11 +53,13 @@
 Imports System.IO
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Development
+Imports Microsoft.VisualBasic.ApplicationServices.Terminal.Utility
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.System
 Imports Win32 = System.Environment
 
 Namespace Runtime.Internal.Invokes
@@ -86,6 +88,25 @@ Namespace Runtime.Internal.Invokes
         Public Function contributors(Optional env As Environment = Nothing) As <RSuppressPrint> Object
             Call env.globalEnvironment.stdout.WriteLine(My.Resources.contributions)
             Return Nothing
+        End Function
+
+        <ExportAPI("man")>
+        Public Function man(symbol As Object, Optional env As Environment = Nothing) As String
+            If symbol Is Nothing Then
+                Return Nothing
+            ElseIf TypeOf symbol Is String Then
+                symbol = env.FindSymbol(symbol)?.value
+            End If
+
+            If Not TypeOf symbol Is RMethodInfo Then
+                Return Nothing
+            End If
+
+            Dim xmldocs = env.globalEnvironment.packages.packageDocs
+            Dim docs = xmldocs.GetAnnotations(DirectCast(symbol, RMethodInfo).GetRawDeclares)
+            Dim help As UnixManPage = UnixManPagePrinter.CreateManPage(symbol, docs)
+
+            Return UnixManPage.ToString(help, "man page create by R# package system.")
         End Function
 
         <ExportAPI("demo")>
