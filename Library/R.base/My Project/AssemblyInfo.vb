@@ -1,6 +1,7 @@
 ﻿Imports System
 Imports System.Reflection
 Imports System.Runtime.InteropServices
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 ' 有关程序集的一般信息由以下
 ' 控制。更改这些特性值可修改
@@ -33,3 +34,5 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyVersion("1.33.*")>
 <Assembly: AssemblyFileVersion("3.1.*")>
+
+<Assembly: RPackageModule>
