@@ -8,12 +8,12 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("R.plot")>
-<Assembly: AssemblyDescription("")>
-<Assembly: AssemblyCompany("")>
-<Assembly: AssemblyProduct("R.plot")>
-<Assembly: AssemblyCopyright("Copyright ©  2019")>
-<Assembly: AssemblyTrademark("")>
+<Assembly: AssemblyTitle("R# data visualization")>
+<Assembly: AssemblyDescription("R# data visualization")>
+<Assembly: AssemblyCompany("SMRUCC/R-sharp")>
+<Assembly: AssemblyProduct("R-sharp")>
+<Assembly: AssemblyCopyright("Copyright © xie.guigang@gcmodeller.org 2019")>
+<Assembly: AssemblyTrademark("GCModeller")>
 
 <Assembly: ComVisible(False)>
 

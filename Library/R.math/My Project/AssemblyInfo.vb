@@ -8,12 +8,12 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("R.math")>
-<Assembly: AssemblyDescription("")>
-<Assembly: AssemblyCompany("")>
-<Assembly: AssemblyProduct("R.math")>
-<Assembly: AssemblyCopyright("Copyright ©  2020")>
-<Assembly: AssemblyTrademark("")>
+<Assembly: AssemblyTitle("R# mathematics and data science library module.")>
+<Assembly: AssemblyDescription("R# mathematics and data science library module.")>
+<Assembly: AssemblyCompany("SMRUCC/Rsharp")>
+<Assembly: AssemblyProduct("R-sharp")>
+<Assembly: AssemblyCopyright("Copyright © xie.guigang@gcmodeller.org 2020")>
+<Assembly: AssemblyTrademark("GCModeller")>
 
 <Assembly: ComVisible(False)>
 
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")>
 
-<Assembly: AssemblyVersion("1.0.0.0")>
-<Assembly: AssemblyFileVersion("1.0.0.0")>
+<Assembly: AssemblyVersion("1.331.*")>
+<Assembly: AssemblyFileVersion("2.981.*")>
