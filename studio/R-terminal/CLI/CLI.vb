@@ -40,12 +40,14 @@
 #End Region
 
 Imports System.ComponentModel
+Imports System.Reflection
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal.Utility
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.InteropService.SharedORM
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Interpreter
@@ -64,7 +66,7 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
     <Usage("--install.packages /module <*.dll> [--verbose]")>
     <Argument("/module", False, CLITypes.File,
               Extensions:="*.dll",
-              Description:=".NET Framework 4.7 assembly module file.")>
+              Description:=".NET Framework 4.8 assembly module file.")>
     Public Function Install(args As CommandLine) As Integer
         Dim module$ = args <= "/module"
         Dim config As New Options(ConfigFile.localConfigs)
@@ -75,12 +77,25 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
         If [module].StringEmpty Then
             Return "Missing '/module' argument!".PrintException
-        Else
-            Dim pkgMgr As New PackageManager(config)
-
-            Call pkgMgr.InstallLocals(dllFile:=[module])
-            Call pkgMgr.Flush()
         End If
+
+        Using pkgMgr As New PackageManager(config)
+            If Not [module].ToLower.StartsWith("scan=") Then
+                Call pkgMgr.InstallLocals(dllFile:=[module])
+            Else
+                For Each file As String In ls - l - "*.dll" <= [module].GetTagValue("=", trim:=True).Value
+                    Try
+                        Dim assm As Assembly = Assembly.LoadFrom(file.GetFullPath)
+
+                        If Not assm.GetCustomAttribute(Of RPackageModuleAttribute) Is Nothing Then
+                            Call pkgMgr.InstallLocals(dllFile:=file)
+                        End If
+                    Catch ex As Exception
+
+                    End Try
+                Next
+            End If
+        End Using
 
         Return 0
     End Function
