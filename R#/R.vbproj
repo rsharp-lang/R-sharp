@@ -417,6 +417,7 @@
     </Compile>
     <Compile Include="Interpreter\ExecuteEngine\Expression.vb" />
     <Compile Include="Runtime\Environment\RContentOutput.vb" />
+    <Compile Include="Runtime\Interop\RInteropAttributes\RPlotStyleCSSAttribute.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RPackageModuleAttribute.vb" />
     <Compile Include="Runtime\MagicScriptSymbol.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\env.vb" />
