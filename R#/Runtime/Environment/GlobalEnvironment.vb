@@ -88,6 +88,24 @@ Namespace Runtime
 
         Public ReadOnly Property types As New Dictionary(Of String, RType)
 
+        ''' <summary>
+        ''' if current executation is comes from the R script executation
+        ''' then this property will returns the directory path in the ``!script``
+        ''' magic symbol object, otherwise will returns nothing
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property scriptDir As String
+            Get
+                Dim script As Symbol = FindSymbol("!script")
+
+                If script Is Nothing OrElse Not TypeOf script.value Is MagicScriptSymbol Then
+                    Return Nothing
+                Else
+                    Return DirectCast(script.value, MagicScriptSymbol).dir
+                End If
+            End Get
+        End Property
+
         Sub New(scriptHost As RInterpreter, options As Options)
             Me.options = options
             Me.packages = New PackageManager(options)

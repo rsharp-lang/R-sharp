@@ -262,6 +262,12 @@ load:       Return LoadLibrary(Scripting.ToString(libDll), env, names)
                     End If
                 Next
 
+                If Not env.globalEnvironment.scriptDir Is Nothing Then
+                    If $"{env.globalEnvironment.scriptDir}/{libDll}".FileExists Then
+                        Return $"{env.globalEnvironment.scriptDir}/{libDll}"
+                    End If
+                End If
+
                 ' if file not found then we test if the dll 
                 ' file extension Is Missing Or Not?
                 If Not libDll.ExtensionSuffix("exe", "dll") Then
