@@ -134,24 +134,42 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
     <ExportAPI("--man.1")>
     <Description("Exports unix man page data for current installed packages.")>
-    <Usage("--man.1 [--out <directory, default=./>]")>
+    <Usage("--man.1 [--module <module.dll> --out <directory, default=./>]")>
     Public Function unixman(args As CommandLine) As Integer
         Dim out$ = args("--out") Or "./"
+        Dim module$ = args("--module")
         Dim env As New RInterpreter
         Dim xmldocs = env.globalEnvir.packages.packageDocs
         Dim utf8 As Encoding = Encodings.UTF8WithoutBOM.CodePage
 
-        For Each pkg As Package In env.globalEnvir.packages.AsEnumerable
-            For Each ref As String In pkg.ls
-                Dim symbol As RMethodInfo = pkg.GetFunction(apiName:=ref)
-                Dim docs = xmldocs.GetAnnotations(symbol.GetRawDeclares)
-                Dim help As UnixManPage = UnixManPagePrinter.CreateManPage(symbol, docs)
+        If [module].FileExists Then
+            For Each pkg As Package In PackageLoader.ParsePackages(dll:=[module])
+                For Each ref As String In pkg.ls
+                    Dim symbol As RMethodInfo = pkg.GetFunction(apiName:=ref)
+                    Dim docs = xmldocs.GetAnnotations(symbol.GetRawDeclares)
+                    Dim help As UnixManPage = UnixManPagePrinter.CreateManPage(symbol, docs)
 
-                Call UnixManPage _
-                    .ToString(help, "man page create by R# package system.") _
-                    .SaveTo($"{out}/{pkg.namespace}/{ref}.1", utf8)
+                    Call UnixManPage _
+                        .ToString(help, "man page create by R# package system.") _
+                        .SaveTo($"{out}/{pkg.namespace}/{ref}.1", utf8)
+                Next
+
+                Call $"load: {pkg.info.Namespace}".__INFO_ECHO
             Next
-        Next
+        Else
+            ' run build for all installed package modules
+            For Each pkg As Package In env.globalEnvir.packages.AsEnumerable
+                For Each ref As String In pkg.ls
+                    Dim symbol As RMethodInfo = pkg.GetFunction(apiName:=ref)
+                    Dim docs = xmldocs.GetAnnotations(symbol.GetRawDeclares)
+                    Dim help As UnixManPage = UnixManPagePrinter.CreateManPage(symbol, docs)
+
+                    Call UnixManPage _
+                        .ToString(help, "man page create by R# package system.") _
+                        .SaveTo($"{out}/{pkg.namespace}/{ref}.1", utf8)
+                Next
+            Next
+        End If
 
         Return 0
     End Function
