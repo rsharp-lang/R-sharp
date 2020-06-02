@@ -98,10 +98,10 @@ Namespace Runtime
             Get
                 Dim script As Symbol = FindSymbol("!script")
 
-                If script Is Nothing OrElse Not TypeOf script.value Is MagicScriptSymbol Then
+                If script Is Nothing AndAlso Not (TypeOf script.value Is vbObject AndAlso TypeOf DirectCast(script.value, vbObject).target Is MagicScriptSymbol) Then
                     Return Nothing
                 Else
-                    Return DirectCast(script.value, MagicScriptSymbol).dir
+                    Return DirectCast(DirectCast(script.value, vbObject).target, MagicScriptSymbol).dir
                 End If
             End Get
         End Property
