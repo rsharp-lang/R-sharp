@@ -190,6 +190,8 @@ Namespace Runtime.Internal.ConsolePrinter
 printSingleElement:
                 Call output.WriteLine("[1] " & printer.ValueToString(x, env))
             End If
+
+            Call output.Flush()
         End Sub
 
         <Extension>
