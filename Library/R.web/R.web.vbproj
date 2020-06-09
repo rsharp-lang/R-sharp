@@ -147,7 +147,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HttpServer.vb" />
-    <Compile Include="HTML.vb" />
     <Compile Include="URL.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
