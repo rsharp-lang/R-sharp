@@ -58,16 +58,6 @@ Imports Microsoft.VisualBasic.Text.Xml.Models
 
 Namespace System.Configuration
 
-    Public Class StartupConfigs
-
-        Public Property loadingPackages As String()
-
-        Public Shared Function DefaultLoadingPackages() As String()
-            Return {"base", "utils", "grDevices", "stats"}
-        End Function
-
-    End Class
-
     Public Class ConfigFile : Inherits XmlDataModel
         Implements IList(Of NamedValue)
 
@@ -98,6 +88,10 @@ Namespace System.Configuration
             localConfigs = $"{GCModellerSettings}/R#.configs.xml".GetFullPath
         End Sub
 
+        ''' <summary>
+        ''' default is ``["base", "utils", "grDevices", "stats"]``
+        ''' </summary>
+        ''' <returns></returns>
         Public Function GetStartupLoadingPackages() As String()
             If startups Is Nothing Then
                 Return StartupConfigs.DefaultLoadingPackages

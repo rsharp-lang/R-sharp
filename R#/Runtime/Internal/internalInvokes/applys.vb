@@ -41,6 +41,8 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -49,6 +51,7 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RObj = SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Runtime.Internal.Invokes
@@ -195,19 +198,11 @@ Namespace Runtime.Internal.Invokes
                     End If
                 Next
             Else
-                Dim getName As Func(Of SeqValue(Of Object), String)
+                Dim getName As Func(Of SeqValue(Of Object), String) = keyNameAuto(names, envir)
                 Dim keyName$
                 Dim value As Object
 
-                If names Is Nothing Then
-                    getName = Function(i) $"[[{i.i + 1}]]"
-                Else
-                    getName = Function(i)
-                                  Return getFirst(RConversion.asCharacters(names.Invoke(envir, invokeArgument(i.value))))
-                              End Function
-                End If
-
-                For Each d In Runtime.asVector(Of Object)(X) _
+                For Each d As SeqValue(Of Object) In REnv.asVector(Of Object)(X) _
                     .AsObjectEnumerator _
                     .SeqIterator
 
@@ -223,6 +218,49 @@ Namespace Runtime.Internal.Invokes
             End If
 
             Return New list With {.slots = list}
+        End Function
+
+        Private Function keyNameAuto(type As Type) As Func(Of Object, String)
+            Static cache As New Dictionary(Of Type, Func(Of Object, String))
+
+            Return cache.ComputeIfAbsent(
+                key:=type,
+                lazyValue:=Function(key As Type)
+                               If key.ImplementInterface(GetType(INamedValue)) Then
+                                   Return Function(a) DirectCast(a, INamedValue).Key
+                               ElseIf key.ImplementInterface(GetType(IReadOnlyId)) Then
+                                   Return Function(a) DirectCast(a, IReadOnlyId).Identity
+                               ElseIf key.ImplementInterface(GetType(IKeyedEntity(Of String))) Then
+                                   Return Function(a) DirectCast(a, IKeyedEntity(Of String)).Key
+                               Else
+                                   Return Function() Nothing
+                               End If
+                           End Function)
+        End Function
+
+        Public Function keyNameAuto(names As RFunction, env As Environment) As Func(Of SeqValue(Of Object), String)
+            If names Is Nothing Then
+                Return Function(i)
+                           Dim name As String = Nothing
+
+                           If Not i.value Is Nothing Then
+                               name = keyNameAuto(i.value.GetType)(i.value)
+                           End If
+
+                           If name Is Nothing Then
+                               name = $"[[{i.i + 1}]]"
+                           End If
+
+                           Return name
+                       End Function
+            Else
+                Return Function(i)
+                           Dim nameVals = names.Invoke(env, invokeArgument(i.value))
+                           Dim namesVec = RConversion.asCharacters(nameVals)
+
+                           Return getFirst(namesVec)
+                       End Function
+            End If
         End Function
     End Module
 End Namespace
