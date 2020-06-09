@@ -135,6 +135,19 @@ Namespace System.Configuration
             End Get
         End Property
 
+        ''' <summary>
+        ''' logical. Should R report extra information on progress? Set to TRUE by the command-line option --verbose
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' debug模式下会默认将啰嗦模式打开
+        ''' </remarks>
+        Public ReadOnly Property verbose As Boolean
+            Get
+                Return getOption("verbose", [default]:="off").ParseBoolean
+            End Get
+        End Property
+
         Public Property localConfig As String Implements IFileReference.FilePath
 
         Sub New(configs As String)

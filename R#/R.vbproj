@@ -465,6 +465,7 @@
     <Compile Include="Runtime\System\Rscript.vb" />
     <Compile Include="Runtime\System\Interface\RNames.vb" />
     <Compile Include="Runtime\Environment\GlobalEnvironment.vb" />
+    <Compile Include="System\Config\StartupConfigs.vb" />
     <Compile Include="System\Config\Options.vb" />
     <Compile Include="System\Config\ConfigFile.vb" />
     <Compile Include="Runtime\System\Interface\RPrint.vb" />
