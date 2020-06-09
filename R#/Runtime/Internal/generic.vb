@@ -49,6 +49,7 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Runtime.Internal
@@ -108,14 +109,34 @@ Namespace Runtime.Internal
             Return Nothing
         End Function
 
+        Public Function invokeGeneric(generic As NamedValue(Of Type), args As list, x As Object, env As Environment) As Object
+            If Not exists(generic.Name) Then
+                Return missingGenericSymbol(generic.Name, env)
+            Else
+                Return invokeGeneric(args, x, env, generic.Name, generic)
+            End If
+        End Function
+
+        Private Function missingGenericSymbol(funcName As String, env As Environment) As Message
+            Return debug.stop({$"missing loader entry for generic function '{funcName}'!", "consider load required package at first!"}, env)
+        End Function
+
         <Extension>
         Friend Function invokeGeneric(args As list, x As Object, env As Environment, <CallerMemberName> Optional funcName$ = Nothing) As Object
             Dim type As Type = x.GetType
-            Dim apiCalls As GenericFunction
 
             If Not generics.ContainsKey(funcName) Then
-                Return debug.stop({$"missing loader entry for generic function '{funcName}'!", "consider load required package at first!"}, env)
-            ElseIf Not generics(funcName).ContainsKey(type) Then
+                Return missingGenericSymbol(funcName, env)
+            Else
+                Return invokeGeneric(args, x, env, funcName, type)
+            End If
+        End Function
+
+        <Extension>
+        Friend Function invokeGeneric(args As list, x As Object, env As Environment, funcName$, type As Type) As Object
+            Dim apiCalls As GenericFunction
+
+            If Not generics(funcName).ContainsKey(type) Then
                 If TypeOf x Is Object() Then
                     x = MeasureRealElementType(DirectCast(x, Array)) _
                         .DoCall(Function(constrain)
