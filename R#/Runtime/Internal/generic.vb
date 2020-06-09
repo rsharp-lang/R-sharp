@@ -96,10 +96,12 @@ Namespace Runtime.Internal
                     Dim genericName As String = funcName.Replace("." & type, "")
                     Dim target As Type = env.globalEnvironment.types(type)
 
-                    Return New NamedValue(Of Type) With {
-                        .Name = genericName,
-                        .Value = target
-                    }
+                    If exists(genericName) Then
+                        Return New NamedValue(Of Type) With {
+                            .Name = genericName,
+                            .Value = target
+                        }
+                    End If
                 End If
             Next
 
