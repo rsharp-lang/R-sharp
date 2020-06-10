@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7b48830a9a4865d13a96b26bc1ad32cf, R#\ApiArgumentHelpers.vb"
+﻿#Region "Microsoft.VisualBasic::c92a2d50db4711228186760754cfc114, R#\ApiArgumentHelpers.vb"
 
     ' Author:
     ' 
@@ -109,4 +109,3 @@ Public Module ApiArgumentHelpers
         End Select
     End Function
 End Module
-

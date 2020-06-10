@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0694289ce2e8d0dec2289a7b7b5d366e, R#\test\debuggerTest.vb"
+﻿#Region "Microsoft.VisualBasic::7c23c129b76bb716d5f17c9f157d1334, R#\test\debuggerTest.vb"
 
     ' Author:
     ' 
@@ -52,4 +52,3 @@ Module debuggerTest
         Pause()
     End Sub
 End Module
-
