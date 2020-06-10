@@ -2,7 +2,8 @@ require(igraph);
 require(igraph.layouts);
 require(igraph.render);
 
-let test.network as string = `${!script$dir}/demo_network`;
+# let test.network as string = `${!script$dir}/demo_network`;
+let test.network = "D:\biodeep\biodeepdb_v3\Rscript\metacluster\old_network\Flavonoids\tree_network";
 let g = read.network(test.network);
 
 # create a new empty network graph model
@@ -18,7 +19,7 @@ let g = read.network(test.network);
 print(g);
 
 g
-:> layout.orthogonal
+:> layout.orthogonal(layoutIteration = 10)
 # Do network render plot and then 
 # saved the generated image file
 :> render.Plot(canvasSize = [2000,1400]) 

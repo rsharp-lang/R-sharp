@@ -79,13 +79,14 @@ Module Layouts
     Public Function orthogonalLayout(g As NetworkGraph,
                                      <RRawVectorArgument>
                                      Optional gridSize As Object = "1000,1000",
-                                     Optional delta# = 13) As NetworkGraph
+                                     Optional delta# = 13,
+                                     Optional layoutIteration% = -1) As NetworkGraph
 
         Dim size As Size = InteropArgumentHelper _
             .getSize(gridSize) _
             .SizeParser
 
-        Call Orthogonal.DoLayout(g, size, delta, debug:=True)
+        Call Orthogonal.DoLayout(g, size, delta, debug:=True, iterationCount:=layoutIteration)
         Call Orthogonal.DoEdgeLayout(g)
 
         Return g
