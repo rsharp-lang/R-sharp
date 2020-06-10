@@ -5,6 +5,15 @@ require(igraph.render);
 let test.network as string = `${!script$dir}/demo_network`;
 let g = read.network(test.network);
 
+# create a new empty network graph model
+# let g = empty.network()
+# :> add.nodes(labels = ["A","B","C","D"]);
+
+# g :> add.edge("A", "B");
+# g :> add.edge("A", "C");
+# g :> add.edge("C", "D");
+# g :> add.edge("D", "B");
+
 # view summary info of the network
 print(g);
 
