@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c4a653731b0afed85f25b03e3908ec35, R#\Runtime\Internal\internalInvokes\base.vb"
+﻿#Region "Microsoft.VisualBasic::0f52f6aeda2b974bde2ec7b16804d3f2, R#\Runtime\Internal\internalInvokes\base.vb"
 
     ' Author:
     ' 
@@ -39,7 +39,7 @@
     '                   isNull, length, names, ncol, neg
     '                   nrow, options, print, rbind, Rdataframe
     '                   rep, replace, Rlist, rownames, source
-    '                   str, summary, unitOfT, warning
+    '                   str, summary, t, unitOfT, warning
     ' 
     '         Sub: q, quit
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::61d9eb50ecb5c9fa5810671ea8753042, R#\System\Config\ConfigFile.vb"
+﻿#Region "Microsoft.VisualBasic::dc5d5bc5db3040494edc90d032a1a3b4, R#\System\Config\ConfigFile.vb"
 
     ' Author:
     ' 
@@ -31,12 +31,6 @@
 
     ' Summaries:
 
-    '     Class StartupConfigs
-    ' 
-    '         Properties: loadingPackages
-    ' 
-    '         Function: DefaultLoadingPackages
-    ' 
     '     Class ConfigFile
     ' 
     '         Properties: config, GCModellerSettings, localConfigs, size, startups

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::18f5aaf436cd64212a1156c27f52dc48, R#\Runtime\Environment\Environment.vb"
+﻿#Region "Microsoft.VisualBasic::c2b744768d89f968245202568bb9e22d, R#\Runtime\Environment\Environment.vb"
 
     ' Author:
     ' 
@@ -34,7 +34,7 @@
     '     Class Environment
     ' 
     '         Properties: globalEnvironment, isGlobal, last, messages, parent
-    '                     stackFrame, stackTrace, symbols, types
+    '                     stackFrame, stackTrace, symbols
     ' 
     '         Constructor: (+3 Overloads) Sub New
     ' 

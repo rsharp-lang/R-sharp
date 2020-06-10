@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::428fd6bf04fb3d0825479a6d49b266bf, R#\Runtime\Environment\GlobalEnvironment.vb"
+﻿#Region "Microsoft.VisualBasic::b03d596b66b0209c02ee5fccf752ed4b, R#\Runtime\Environment\GlobalEnvironment.vb"
 
     ' Author:
     ' 
@@ -34,7 +34,7 @@
     '     Class GlobalEnvironment
     ' 
     '         Properties: debugMode, lastException, options, packages, Rscript
-    '                     stdout
+    '                     scriptDir, stdout, types
     ' 
     '         Constructor: (+1 Overloads) Sub New
     ' 

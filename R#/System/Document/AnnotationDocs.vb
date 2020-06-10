@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::56694aed07c8e4a9236562849f52914e, R#\System\Package\AnnotationDocs.vb"
+﻿#Region "Microsoft.VisualBasic::11ca90300f1051be22d5cd700fbde001, R#\System\Document\AnnotationDocs.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,7 @@
     ' 
     '         Function: (+2 Overloads) GetAnnotations
     ' 
-    '         Sub: printConsole, printDocs, printFuncBody, PrintHelp, printHtml
+    '         Sub: PrintHelp
     ' 
     ' 
     ' /********************************************************************************/
