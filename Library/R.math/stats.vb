@@ -73,7 +73,17 @@ Module stats
 
     Sub New()
         Internal.ConsolePrinter.AttachConsoleFormatter(Of DistanceMatrix)(AddressOf printMatrix)
+        Internal.ConsolePrinter.AttachConsoleFormatter(Of TtestResult)(AddressOf printTtest)
+        Internal.ConsolePrinter.AttachConsoleFormatter(Of TwoSampleResult)(AddressOf printTwoSampleTTest)
     End Sub
+
+    Private Function printTtest(t As TtestResult) As String
+        Return t.ToString
+    End Function
+
+    Private Function printTwoSampleTTest(t As TwoSampleResult) As String
+        Return t.ToString
+    End Function
 
     Private Function printMatrix(d As DistanceMatrix) As String
         Dim sb As New StringBuilder
@@ -394,7 +404,7 @@ Module stats
     ''' <returns></returns>
     <ExportAPI("t.test")>
     <RApiReturn(GetType(TwoSampleResult), GetType(TtestResult))>
-    Public Function ttest(x As Object, Optional y As Object = Nothing,
+    Public Function ttest(<RRawVectorArgument> x As Object, <RRawVectorArgument> Optional y As Object = Nothing,
                           Optional alternative As Hypothesis = Hypothesis.TwoSided,
                           Optional mu# = 0,
                           Optional paired As Boolean = False,
