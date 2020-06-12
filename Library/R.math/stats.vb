@@ -1,51 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::1dc3ce077acdd1063662b3e7d452367f, Library\R.math\stats.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module stats
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: asDist, dataframeRow, dist, prcomp, printMatrix
-    '               spline, tabulateMode
-    ' 
-    ' Enum SplineAlgorithms
-    ' 
-    '     Bezier, BSpline, CatmullRom, CubiSpline
-    ' 
-    '  
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Module stats
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: asDist, dataframeRow, dist, prcomp, printMatrix
+'               spline, tabulateMode
+' 
+' Enum SplineAlgorithms
+' 
+'     Bezier, BSpline, CatmullRom, CubiSpline
+' 
+'  
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -59,6 +59,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Math.Distributions
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Prcomp
+Imports Microsoft.VisualBasic.Math.Statistics.Hypothesis
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -360,6 +361,50 @@ Module stats
             Case Else
                 Return Internal.debug.stop(New NotImplementedException(method), env)
         End Select
+    End Function
+
+    ''' <summary>
+    ''' Student's t-Test
+    ''' 
+    ''' Performs one and two sample t-tests on vectors of data.
+    ''' </summary>
+    ''' <param name="x">a (non-empty) numeric vector of data values.</param>
+    ''' <param name="y">an optional (non-empty) numeric vector of data values.
+    ''' </param>
+    ''' <param name="alternative">
+    ''' a character string specifying the alternative hypothesis, must be one of 
+    ''' "two.sided" (default), "greater" or "less". You can specify just the initial 
+    ''' letter.
+    ''' </param>
+    ''' <param name="mu">
+    ''' a number indicating the true value of the mean (or difference in means if you 
+    ''' are performing a two sample test).
+    ''' </param>
+    ''' <param name="paired">	
+    ''' a logical indicating whether you want a paired t-test.</param>
+    ''' <param name="var_equal">
+    ''' a logical variable indicating whether to treat the two variances as being equal. 
+    ''' If TRUE then the pooled variance is used to estimate the variance otherwise the 
+    ''' Welch (or Satterthwaite) approximation to the degrees of freedom is used.
+    ''' </param>
+    ''' <param name="conf_level">
+    ''' confidence level of the interval.
+    ''' </param>
+    ''' <returns></returns>
+    <ExportAPI("t.test")>
+    <RApiReturn(GetType(TwoSampleResult), GetType(TtestResult))>
+    Public Function ttest(x As Object, Optional y As Object = Nothing,
+                          Optional alternative As Hypothesis = Hypothesis.TwoSided,
+                          Optional mu# = 0,
+                          Optional paired As Boolean = False,
+                          Optional var_equal As Boolean = False,
+                          Optional conf_level# = 0.95) As Object
+
+        If y Is Nothing Then
+            Return t.Test(REnv.asVector(Of Double)(x), alternative, mu, alpha:=1 - conf_level)
+        Else
+            Return t.Test(REnv.asVector(Of Double)(x), REnv.asVector(Of Double)(y), alternative, mu, alpha:=1 - conf_level, varEqual:=var_equal)
+        End If
     End Function
 End Module
 
