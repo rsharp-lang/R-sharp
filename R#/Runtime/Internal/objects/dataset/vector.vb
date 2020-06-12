@@ -268,10 +268,11 @@ Namespace Runtime.Internal.Object
             Return $"[{length}] vec<{m_type.ToString}>"
         End Function
 
-        Public Shared Function asVector(Of T)(x As IEnumerable(Of T)) As vector
+        Public Shared Function asVector(Of T)(x As IEnumerable(Of T), Optional unit As unit = Nothing) As vector
             Return New vector With {
                 .data = x.ToArray,
-                .elementType = RType.GetRSharpType(GetType(T))
+                .elementType = RType.GetRSharpType(GetType(T)),
+                .unit = unit
             }
         End Function
 

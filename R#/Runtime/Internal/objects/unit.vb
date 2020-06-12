@@ -48,6 +48,13 @@ Namespace Runtime.Internal.Object
 
         Public Property name As String
 
+        Sub New()
+        End Sub
+
+        Sub New(unit As String)
+            Me.name = unit
+        End Sub
+
         Public Overrides Function ToString() As String
             Return name
         End Function
