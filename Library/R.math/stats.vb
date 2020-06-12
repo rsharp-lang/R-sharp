@@ -60,6 +60,7 @@ Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Math.Distributions
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Prcomp
 Imports Microsoft.VisualBasic.Math.Statistics.Hypothesis
+Imports Microsoft.VisualBasic.Math.Statistics.Hypothesis.FishersExact
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -405,6 +406,22 @@ Module stats
         Else
             Return t.Test(REnv.asVector(Of Double)(x), REnv.asVector(Of Double)(y), alternative, mu, alpha:=1 - conf_level, varEqual:=var_equal)
         End If
+    End Function
+
+    ''' <summary>
+    ''' Fisher's Exact Test for Count Data
+    ''' 
+    ''' Performs Fisher's exact test for testing the null of independence 
+    ''' of rows and columns in a contingency table with fixed marginals.
+    ''' </summary>
+    ''' <param name="a%"></param>
+    ''' <param name="b%"></param>
+    ''' <param name="c%"></param>
+    ''' <param name="d%"></param>
+    ''' <returns></returns>
+    <ExportAPI("fisher.test")>
+    Public Function fisher_test(a%, b%, c%, d%) As FishersExactPvalues
+        Return FishersExactTest.FishersExact(a, b, c, d)
     End Function
 End Module
 
