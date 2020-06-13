@@ -62,7 +62,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports node = Microsoft.VisualBasic.Data.visualize.Network.Graph.Node
 Imports REnv = SMRUCC.Rsharp.Runtime
 
-<Package("igraph")>
+<Package("igraph", Category:=APICategories.ResearchTools, Publisher:="xie.guigang@gcmodeller.org")>
 <RTypeExport("graph", GetType(NetworkGraph))>
 Public Module NetworkModule
 
@@ -330,4 +330,14 @@ Public Module NetworkModule
         End If
     End Function
 
+    ''' <summary>
+    ''' Decompose a graph into components, Creates a separate graph for each component of a graph.
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <param name="minVertices"></param>
+    ''' <returns></returns>
+    <ExportAPI("decompose")>
+    Public Function DecomposeGraph(g As NetworkGraph, Optional weakMode As Boolean = True, Optional minVertices As Integer = 5) As NetworkGraph()
+        Return g.DecomposeGraph(weakMode, minVertices).ToArray
+    End Function
 End Module
