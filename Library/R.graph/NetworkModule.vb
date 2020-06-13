@@ -333,11 +333,17 @@ Public Module NetworkModule
     ''' <summary>
     ''' Decompose a graph into components, Creates a separate graph for each component of a graph.
     ''' </summary>
-    ''' <param name="g"></param>
-    ''' <param name="minVertices"></param>
-    ''' <returns></returns>
+    ''' <param name="graph">The original graph.</param>
+    ''' <param name="weakMode">
+    ''' Character constant giving the type of the components, wither weak for weakly connected 
+    ''' components or strong for strongly connected components.
+    ''' </param>
+    ''' <param name="minVertices">The minimum number of vertices a component should contain in 
+    ''' order to place it in the result list. Eg. supply 2 here to ignore isolate vertices.
+    ''' </param>
+    ''' <returns>A list of graph objects.</returns>
     <ExportAPI("decompose")>
-    Public Function DecomposeGraph(g As NetworkGraph, Optional weakMode As Boolean = True, Optional minVertices As Integer = 5) As NetworkGraph()
-        Return g.DecomposeGraph(weakMode, minVertices).ToArray
+    Public Function DecomposeGraph(graph As NetworkGraph, Optional weakMode As Boolean = True, Optional minVertices As Integer = 5) As NetworkGraph()
+        Return graph.DecomposeGraph(weakMode, minVertices).ToArray
     End Function
 End Module
