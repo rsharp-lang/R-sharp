@@ -43,6 +43,7 @@
 Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.GraphTheory
+Imports Microsoft.VisualBasic.Data.GraphTheory.Analysis
 Imports Microsoft.VisualBasic.Data.GraphTheory.Analysis.Dijkstra
 Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -97,5 +98,18 @@ Module Dijkstra
         End If
 
         Return router.CalculateMinCost(from, [to])
+    End Function
+
+    <ExportAPI("betweenness_centrality")>
+    Public Function BetweennessCentrality(g As Object, Optional undirect As Boolean = False, Optional env As Environment = Nothing) As Object
+        If g Is Nothing Then
+            Return REnv.debug.stop("the given graph model is nothing!", env)
+        ElseIf TypeOf g Is NetworkGraph Then
+            g = DijkstraRouter.FromNetwork(DirectCast(g, NetworkGraph), undirect)
+        ElseIf Not TypeOf g Is DijkstraRouter Then
+            Return REnv.debug.stop("invalid object type!", env)
+        End If
+
+        Return DirectCast(g, DijkstraRouter).BetweennessCentrality
     End Function
 End Module
