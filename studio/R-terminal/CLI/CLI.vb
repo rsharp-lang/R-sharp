@@ -129,6 +129,12 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
                 .ToArray
         End If
 
+        If adds.StringEmpty AndAlso remove.StringEmpty Then
+            For Each name As String In config.startups.loadingPackages
+                Call Console.WriteLine(name)
+            Next
+        End If
+
         Return config _
             .GetXml _
             .SaveTo(ConfigFile.localConfigs) _
