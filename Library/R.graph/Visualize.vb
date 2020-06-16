@@ -40,6 +40,7 @@
 #End Region
 
 Imports System.Drawing
+Imports System.Drawing.Drawing2D
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.visualize.Network
 Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream.Generic
@@ -82,6 +83,9 @@ Module Visualize
                                Optional labelerIterations% = 100,
                                Optional texture As Object = Nothing,
                                Optional showLabelerProgress As Boolean = False,
+                               Optional showUntexture As Boolean = True,
+                               Optional defaultEdgeColor$ = "gray",
+                               Optional defaultLabelColor$ = "black",
                                Optional driver As Drivers = Drivers.GDI,
                                Optional env As Environment = Nothing) As Object
 
@@ -152,14 +156,23 @@ Module Visualize
                                 Dim value = getTexture(id)
 
                                 If value Is Nothing Then
-                                    Call gr.DrawCircle(center, r, color)
+                                    If showUntexture Then
+                                        Call gr.DrawCircle(center, r, color)
+                                    End If
                                 Else
                                     Dim textureBrush As Brush = value.GetBrush
 
                                     If TypeOf textureBrush Is SolidBrush Then
                                         Call gr.DrawCircle(center, r, textureBrush)
                                     Else
-                                        Call gr.DrawImage(value.LoadImage, center.X - r, center.Y - r, 200, 200)
+                                        Dim res = value.LoadImage
+                                        Dim size = res.Size
+                                        Dim maxR = r * 2.5
+                                        Dim scale = stdNum.Max(size.Width, size.Height) / maxR
+                                        Dim w! = size.Width / scale
+                                        Dim h! = size.Height / scale
+
+                                        Call gr.DrawImage(value.LoadImage, center.X - w / 2, center.Y - h / 2, w, h)
                                     End If
                                 End If
                             End Function
@@ -177,7 +190,10 @@ Module Visualize
             showLabelerProgress:=showLabelerProgress,
             drawEdgeBends:=True,
             throwEx:=env.globalEnvironment.Rscript.debug,
-            drawNodeShape:=drawNodeShape
+            drawNodeShape:=drawNodeShape，
+            edgeDashTypes:=DashStyle.Dash,
+            defaultEdgeColor:=defaultEdgeColor,
+            defaultLabelColor:=defaultLabelColor
         )
     End Function
 
