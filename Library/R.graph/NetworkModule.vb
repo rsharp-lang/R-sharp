@@ -97,7 +97,7 @@ Public Module NetworkModule
 
     <ExportAPI("read.network")>
     Public Function LoadNetwork(directory$, Optional defaultNodeSize As Object = "20,20") As NetworkGraph
-        Return NetworkFileIO.Load(directory).CreateGraph(defaultNodeSize:=InteropArgumentHelper.getSize(defaultNodeSize))
+        Return NetworkFileIO.Load(directory.GetDirectoryFullPath).CreateGraph(defaultNodeSize:=InteropArgumentHelper.getSize(defaultNodeSize))
     End Function
 
     ''' <summary>
