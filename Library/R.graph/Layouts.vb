@@ -66,6 +66,9 @@ Module Layouts
     ''' <returns></returns>
     <ExportAPI("layout.force_directed")>
     Public Function forceDirect(g As NetworkGraph,
+                                Optional stiffness# = 80,
+                                Optional repulsion# = 4000,
+                                Optional damping# = 0.83,
                                 Optional iterations% = 1000,
                                 Optional clearScreen As Boolean = False,
                                 Optional showProgress As Boolean = True,
@@ -79,7 +82,10 @@ Module Layouts
         Return g.doForceLayout(
             showProgress:=showProgress,
             iterations:=iterations,
-            clearScreen:=clearScreen
+            clearScreen:=clearScreen,
+            Stiffness:=stiffness,
+            Repulsion:=repulsion,
+            Damping:=damping
         )
     End Function
 
