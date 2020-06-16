@@ -46,6 +46,7 @@ Imports Microsoft.VisualBasic.Data.visualize.Network
 Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream.Generic
 Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.Imaging
+Imports Microsoft.VisualBasic.Imaging.BitmapImage
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Imaging.Math2D
@@ -80,6 +81,7 @@ Module Visualize
                                Optional minNodeSize! = 10,
                                Optional minLinkWidth! = 2,
                                Optional nodeSize As Object = Nothing,
+                               Optional nodeLabel As Object = Nothing,
                                Optional labelerIterations% = 100,
                                Optional texture As Object = Nothing,
                                Optional showLabelerProgress As Boolean = False,
@@ -152,12 +154,12 @@ Module Visualize
         Dim drawNodeShape As DrawNodeShape = Nothing
 
         If Not getTexture Is Nothing Then
-            drawNodeShape = Function(id, gr, color, r, center)
+            drawNodeShape = Function(id, gr, colorBrush, r, center)
                                 Dim value = getTexture(id)
 
                                 If value Is Nothing Then
                                     If showUntexture Then
-                                        Call gr.DrawCircle(center, r, color)
+                                        Call gr.DrawCircle(center, r, colorBrush)
                                     End If
                                 Else
                                     Dim textureBrush As Brush = value.GetBrush
@@ -165,7 +167,7 @@ Module Visualize
                                     If TypeOf textureBrush Is SolidBrush Then
                                         Call gr.DrawCircle(center, r, textureBrush)
                                     Else
-                                        Dim res = value.LoadImage
+                                        Dim res = value.LoadImage.ColorReplace(Color.White, Color.Transparent)
                                         Dim size = res.Size
                                         Dim maxR = r * 2.5
                                         Dim scale = stdNum.Max(size.Width, size.Height) / maxR
@@ -176,6 +178,19 @@ Module Visualize
                                     End If
                                 End If
                             End Function
+        End If
+
+        Dim getNodeLabel As Func(Of Node, String) = Nothing
+
+        If Not nodeLabel Is Nothing Then
+            Select Case nodeLabel.GetType
+                Case GetType(DeclareLambdaFunction)
+                    Dim compute = DirectCast(nodeLabel, DeclareLambdaFunction).CreateLambda(Of String, String)(env)
+
+                    getNodeLabel = Function(node) compute(node.label)
+                Case Else
+                    Return Internal.debug.stop(New NotImplementedException(nodeSize.GetType.FullName), env)
+            End Select
         End If
 
         Return g.DrawImage(
@@ -193,7 +208,8 @@ Module Visualize
             drawNodeShape:=drawNodeShape，
             edgeDashTypes:=DashStyle.Dash,
             defaultEdgeColor:=defaultEdgeColor,
-            defaultLabelColor:=defaultLabelColor
+            defaultLabelColor:=defaultLabelColor,
+            getNodeLabel:=getNodeLabel
         )
     End Function
 
