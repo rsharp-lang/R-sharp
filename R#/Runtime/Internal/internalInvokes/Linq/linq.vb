@@ -119,7 +119,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             If Not getKey Is Nothing Then
                 Return Rset.getObjectSet(items) _
                    .GroupBy(Function(o)
-                                Dim arg = InvokeParameter.Create(o)
+                                Dim arg = InvokeParameter.CreateLiterals(o)
                                 Return getKey.Invoke(envir, arg)
                             End Function) _
                    .Select(Function(g)
@@ -146,7 +146,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 Return Nothing
             End If
 
-            Dim doProject As Func(Of Object, Object) = Function(o) project.Invoke(envir, InvokeParameter.Create(o))
+            Dim doProject As Func(Of Object, Object) = Function(o) project.Invoke(envir, InvokeParameter.CreateLiterals(o))
 
             If TypeOf sequence Is pipeline Then
                 ' run in pipeline mode
@@ -201,7 +201,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Dim arg As InvokeParameter()
 
             For Each item As Object In sequence
-                arg = InvokeParameter.Create(item)
+                arg = InvokeParameter.CreateLiterals(item)
                 pass = Runtime.asLogical(test.Invoke(env, arg))(Scan0)
 
                 If pass Then
@@ -248,7 +248,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             End If
 
             For Each item As Object In Rset.getObjectSet(sequence)
-                arg = InvokeParameter.Create(item)
+                arg = InvokeParameter.CreateLiterals(item)
                 pass = Runtime.asLogical(test.Invoke(envir, arg))(Scan0)
 
                 If pass Then
@@ -268,7 +268,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Dim source As IEnumerable(Of Object) = Rset.getObjectSet(sequence)
             Dim result As Group() = source _
                 .GroupBy(Function(o)
-                             Dim arg = InvokeParameter.Create(o)
+                             Dim arg = InvokeParameter.CreateLiterals(o)
                              Dim keyVal As Object = Runtime.single(getKey.Invoke(envir, arg))
 
                              Return keyVal
@@ -307,7 +307,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 getKeyFunc = Function(o) o
             Else
                 getKeyFunc = Function(o)
-                                 Dim arg = InvokeParameter.Create(o)
+                                 Dim arg = InvokeParameter.CreateLiterals(o)
                                  Dim index As Object = getKey.Invoke(envir, arg)
 
                                  Return index

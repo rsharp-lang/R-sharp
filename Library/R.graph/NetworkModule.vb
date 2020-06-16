@@ -320,7 +320,7 @@ Public Module NetworkModule
 
             Return g.vertex _
                 .Where(Function(n)
-                           Dim test As Object = selector.Invoke(env, InvokeParameter.Create(n))
+                           Dim test As Object = selector.Invoke(env, InvokeParameter.CreateLiterals(n))
                            ' get test result
                            Return REnv _
                                .asLogical(test) _

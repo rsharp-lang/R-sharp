@@ -1,41 +1,41 @@
 ﻿#Region "Microsoft.VisualBasic::d22c0f3ce37234a753055522771d96e9, Library\R.graph\Visualize.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module Visualize
-    ' 
-    '     Function: colorByTypeGroup, renderPlot, setNodeColors
-    ' 
-    ' /********************************************************************************/
+' Module Visualize
+' 
+'     Function: colorByTypeGroup, renderPlot, setNodeColors
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -47,10 +47,12 @@ Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Driver
+Imports Microsoft.VisualBasic.Imaging.Math2D
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports stdNum = System.Math
@@ -78,6 +80,7 @@ Module Visualize
                                Optional minLinkWidth! = 2,
                                Optional nodeSize As Object = Nothing,
                                Optional labelerIterations% = 100,
+                               Optional texture As Object = Nothing,
                                Optional showLabelerProgress As Boolean = False,
                                Optional driver As Drivers = Drivers.GDI,
                                Optional env As Environment = Nothing) As Object
@@ -128,6 +131,40 @@ Module Visualize
             End Select
         End If
 
+        Dim getTexture As Func(Of String, String) = Nothing
+
+        If Not texture Is Nothing Then
+            Select Case texture.GetType
+                Case GetType(DeclareNewFunction)
+                    Dim func As DeclareNewFunction = texture
+
+                    getTexture = Function(label)
+                                     Return getFirst(func.Invoke(env, InvokeParameter.CreateLiterals(label)))
+                                 End Function
+                Case Else
+            End Select
+        End If
+
+        Dim drawNodeShape As DrawNodeShape = Nothing
+
+        If Not getTexture Is Nothing Then
+            drawNodeShape = Function(id, gr, color, r, center)
+                                Dim value = getTexture(id)
+
+                                If value Is Nothing Then
+                                    Call gr.DrawCircle(center, r, color)
+                                Else
+                                    Dim textureBrush As Brush = value.GetBrush
+
+                                    If TypeOf textureBrush Is SolidBrush Then
+                                        Call gr.DrawCircle(center, r, textureBrush)
+                                    Else
+                                        Call gr.DrawImage(value.LoadImage, center.X - r, center.Y - r, 200, 200)
+                                    End If
+                                End If
+                            End Function
+        End If
+
         Return g.DrawImage(
             canvasSize:=InteropArgumentHelper.getSize(canvasSize),
             padding:=InteropArgumentHelper.getPadding(padding),
@@ -139,7 +176,8 @@ Module Visualize
             minLinkWidth:=minLinkWidth,
             showLabelerProgress:=showLabelerProgress,
             drawEdgeBends:=True,
-            throwEx:=env.globalEnvironment.Rscript.debug
+            throwEx:=env.globalEnvironment.Rscript.debug,
+            drawNodeShape:=drawNodeShape
         )
     End Function
 

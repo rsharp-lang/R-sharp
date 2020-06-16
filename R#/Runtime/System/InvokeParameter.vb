@@ -192,7 +192,12 @@ Namespace Runtime.Components
                               End Function)
         End Function
 
-        Public Shared Function Create(ParamArray args As Object()) As InvokeParameter()
+        ''' <summary>
+        ''' create argument by runtime literal values.
+        ''' </summary>
+        ''' <param name="args"></param>
+        ''' <returns></returns>
+        Public Shared Function CreateLiterals(ParamArray args As Object()) As InvokeParameter()
             Return args _
                 .Select(Function(a, i)
                             Return New InvokeParameter() With {

@@ -57,7 +57,7 @@ Namespace Runtime.Internal
         ''' 
         <DebuggerStepThrough>
         Friend Function invokeArgument(value As Object) As InvokeParameter()
-            Return InvokeParameter.Create(value)
+            Return InvokeParameter.CreateLiterals(value)
         End Function
 
         Friend Function getRFunc(FUN As Object, env As Environment) As [Variant](Of RFunction, Message)
