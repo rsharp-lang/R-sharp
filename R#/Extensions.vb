@@ -98,4 +98,29 @@ Public Module Extensions
             Return Scripting.ToString(Runtime.getFirst(list(key)))
         End If
     End Function
+
+    <Extension>
+    Public Function SafeCreateColumns(Of T)(data As IEnumerable(Of T), getKey As Func(Of T, String), getArray As Func(Of T, String())) As Dictionary(Of String, Array)
+        Dim cols As New Dictionary(Of String, Array)
+        Dim key As String
+
+        For Each col As T In data
+            key = getKey(col)
+
+            If cols.ContainsKey(key) Then
+                For i As Integer = 0 To 10000
+                    Dim newKey = key & "." & i
+
+                    If Not cols.ContainsKey(newKey) Then
+                        key = newKey
+                        Exit For
+                    End If
+                Next
+            End If
+
+            cols.Add(key, getArray(col))
+        Next
+
+        Return cols
+    End Function
 End Module
