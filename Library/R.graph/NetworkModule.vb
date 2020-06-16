@@ -134,6 +134,8 @@ Public Module NetworkModule
     <ExportAPI("compute.network")>
     Public Function computeNetwork(g As NetworkGraph) As NetworkGraph
         Call g.ComputeNodeDegrees
+        Call g.ComputeBetweennessCentrality
+
         Return g
     End Function
 
