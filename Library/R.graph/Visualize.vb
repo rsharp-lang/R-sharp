@@ -138,7 +138,8 @@ Module Visualize
             driver:=driver,
             minLinkWidth:=minLinkWidth,
             showLabelerProgress:=showLabelerProgress,
-            drawEdgeBends:=True
+            drawEdgeBends:=True,
+            throwEx:=env.globalEnvironment.Rscript.debug
         )
     End Function
 
