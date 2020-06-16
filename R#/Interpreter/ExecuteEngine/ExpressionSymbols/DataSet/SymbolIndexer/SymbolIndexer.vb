@@ -258,66 +258,74 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     End If
                 End If
             Else
-                Dim sequence As Array = Runtime.asVector(Of Object)(obj)
-                Dim Rarray As RIndex
-
-                If sequence.Length = 0 Then
-                    Return Nothing
-                ElseIf sequence.Length = 1 Then
-                    Dim tmp = sequence.GetValue(Scan0)
-                    Dim type As RType = RType.GetRSharpType(tmp.GetType)
-
-                    If type.raw.ImplementInterface(GetType(RIndex)) Then
-                        Rarray = tmp
-
-                        '' by element index
-                        'If Not sequence.GetType.ImplementInterface(GetType(RIndex)) Then
-                        '    Return Internal.debug.stop("Target object can not be indexed!", envir)
-                        'End If
-                    Else
-                        Dim count As Integer
-                        Dim item As Func(Of Integer, Object)
-
-                        If Not (type.getCount Is Nothing OrElse type.getItem Is Nothing) Then
-                            count = type.getCount.GetValue(tmp)
-                            item = Function(i)
-                                       If i > count Then
-                                           Return Nothing
-                                       ElseIf i < 0 Then
-                                           i = count + i
-                                       End If
-
-                                       Return type.getItem.GetValue(tmp, {i - 1})
-                                   End Function
-
-                            Return DirectCast(asVector(Of Integer)(indexer), Integer()) _
-                                .Select(item) _
-                                .ToArray
-                        Else
-                            Rarray = New vector With {.data = sequence}
-                        End If
-                    End If
-                Else
-                    Rarray = New vector With {.data = sequence}
-                End If
-
-                ' 20200429 但indexer的长度为1个元素，并且类型为boolean逻辑值的时候
-                ' 假设If indexer.Length = 1 Then分支在前面，则indexer逻辑值会被强制转换为integer
-                ' 可能会产生错误：
-                '
-                ' System.IndexOutOfRangeException: Index has to be between upper and lower bound of the array.
-                '
-                ' at System.Array.GetValue(System.Int32 index) [0x0002a] in <d50a1f2f14b642d2b936cb144b307343>:0
-                ' at SMRUCC.Rsharp.Runtime.Internal.Object.vector.getByIndex(System.Int32 i) [0x0003e] in <e6d99a935c2a4c6a89f70a13664e6034>:0
-                '
-                If Runtime.isVector(Of Boolean)(indexer) Then
-                    Return Rarray.getByIndex(Which.IsTrue(Runtime.asLogical(indexer), offset:=1))
-                ElseIf indexer.Length = 1 Then
-                    Return Rarray.getByIndex(CInt(indexer.GetValue(Scan0)))
-                Else
-                    Return Rarray.getByIndex(Runtime.asVector(Of Integer)(indexer))
-                End If
+                Return vectorSubset(obj, indexer, envir)
             End If
+        End Function
+
+        Private Function vectorSubset(obj As Object, indexer As Array, env As Environment) As Object
+            Dim sequence As Array = Runtime.asVector(Of Object)(obj)
+            Dim Rarray As RIndex
+
+            If sequence.Length = 0 Then
+                Return Nothing
+            ElseIf sequence.Length = 1 Then
+                Dim tmp = sequence.GetValue(Scan0)
+                Dim type As RType = RType.GetRSharpType(tmp.GetType)
+
+                If type.raw.ImplementInterface(GetType(RIndex)) Then
+                    Rarray = tmp
+
+                    '' by element index
+                    'If Not sequence.GetType.ImplementInterface(GetType(RIndex)) Then
+                    '    Return Internal.debug.stop("Target object can not be indexed!", envir)
+                    'End If
+                Else
+                    Dim count As Integer
+                    Dim item As Func(Of Integer, Object)
+
+                    If Not (type.getCount Is Nothing OrElse type.getItem Is Nothing) Then
+                        count = type.getCount.GetValue(tmp)
+                        item = Function(i)
+                                   If i > count Then
+                                       Return Nothing
+                                   ElseIf i < 0 Then
+                                       i = count + i
+                                   End If
+
+                                   Return type.getItem.GetValue(tmp, {i - 1})
+                               End Function
+
+                        Return DirectCast(asVector(Of Integer)(indexer), Integer()) _
+                            .Select(item) _
+                            .ToArray
+                    Else
+                        Rarray = New vector With {.data = sequence}
+                    End If
+                End If
+            Else
+                Rarray = New vector With {.data = sequence}
+            End If
+
+            ' 20200429 但indexer的长度为1个元素，并且类型为boolean逻辑值的时候
+            ' 假设If indexer.Length = 1 Then分支在前面，则indexer逻辑值会被强制转换为integer
+            ' 可能会产生错误：
+            '
+            ' System.IndexOutOfRangeException: Index has to be between upper and lower bound of the array.
+            '
+            ' at System.Array.GetValue(System.Int32 index) [0x0002a] in <d50a1f2f14b642d2b936cb144b307343>:0
+            ' at SMRUCC.Rsharp.Runtime.Internal.Object.vector.getByIndex(System.Int32 i) [0x0003e] in <e6d99a935c2a4c6a89f70a13664e6034>:0
+            '
+            Dim vec As Array
+
+            If Runtime.isVector(Of Boolean)(indexer) Then
+                vec = Rarray.getByIndex(Which.IsTrue(Runtime.asLogical(indexer), offset:=1))
+            ElseIf indexer.Length = 1 Then
+                Return Rarray.getByIndex(CInt(indexer.GetValue(Scan0)))
+            Else
+                vec = Rarray.getByIndex(Runtime.asVector(Of Integer)(indexer))
+            End If
+
+            Return New vector(MeasureRealElementType(vec), vec, env)
         End Function
 
         Public Overrides Function ToString() As String
