@@ -684,7 +684,7 @@ Namespace Runtime.Internal.Invokes
         ''' return value from the left-hand side.)
         ''' </returns>
         <ExportAPI("names")>
-        Public Function names([object] As Object,
+        Public Function names(<RRawVectorArgument> [object] As Object,
                               <RByRefValueAssign>
                               Optional namelist As Array = Nothing,
                               Optional envir As Environment = Nothing) As Object
