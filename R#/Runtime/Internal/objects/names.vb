@@ -116,6 +116,8 @@ Namespace Runtime.Internal.Object
             Select Case [object].GetType
                 Case GetType(list), GetType(dataframe)
                     Return DirectCast([object], RNames).setNames(namelist, env)
+                Case GetType(vector)
+                    Return DirectCast([object], vector).setNames(namelist, env)
                 Case Else
                     Return Internal.debug.stop({
                         "set names for the given type of object is unsupported! please consider convert it as vector at first...",
