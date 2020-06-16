@@ -96,8 +96,12 @@ Public Module NetworkModule
     End Function
 
     <ExportAPI("read.network")>
-    Public Function LoadNetwork(directory$, Optional defaultNodeSize As Object = "20,20") As NetworkGraph
-        Return NetworkFileIO.Load(directory).CreateGraph(defaultNodeSize:=InteropArgumentHelper.getSize(defaultNodeSize))
+    Public Function LoadNetwork(directory$, Optional defaultNodeSize As Object = "20,20", Optional defaultBrush$ = "black") As NetworkGraph
+        Return NetworkFileIO.Load(directory.GetDirectoryFullPath) _
+            .CreateGraph(
+                defaultNodeSize:=InteropArgumentHelper.getSize(defaultNodeSize),
+                defaultBrush:=defaultBrush
+            )
     End Function
 
     ''' <summary>
@@ -112,6 +116,26 @@ Public Module NetworkModule
         Else
             g.Clear()
         End If
+
+        Return g
+    End Function
+
+    ''' <summary>
+    ''' removes all of the isolated nodes.
+    ''' </summary>
+    ''' <param name="graph"></param>
+    ''' <returns></returns>
+    <ExportAPI("connected_graph")>
+    Public Function connectedNetwork(graph As NetworkGraph) As NetworkGraph
+        Dim g As New NetworkGraph
+
+        For Each node As node In graph.connectedNodes
+            Call g.CreateNode(node.label, node.data)
+        Next
+
+        For Each edge As Edge In graph.graphEdges
+            Call g.CreateEdge(g.GetElementByID(edge.U.label), g.GetElementByID(edge.V.label), edge.weight, edge.data)
+        Next
 
         Return g
     End Function
@@ -134,6 +158,8 @@ Public Module NetworkModule
     <ExportAPI("compute.network")>
     Public Function computeNetwork(g As NetworkGraph) As NetworkGraph
         Call g.ComputeNodeDegrees
+        Call g.ComputeBetweennessCentrality
+
         Return g
     End Function
 
@@ -318,7 +344,7 @@ Public Module NetworkModule
 
             Return g.vertex _
                 .Where(Function(n)
-                           Dim test As Object = selector.Invoke(env, InvokeParameter.Create(n))
+                           Dim test As Object = selector.Invoke(env, InvokeParameter.CreateLiterals(n))
                            ' get test result
                            Return REnv _
                                .asLogical(test) _

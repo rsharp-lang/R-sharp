@@ -107,17 +107,23 @@ Namespace Runtime.Internal.Object
         ''' </summary>
         ''' <param name="[object]"></param>
         ''' <param name="namelist">This method will ensure that the value is a string vector</param>
-        ''' <param name="envir"></param>
+        ''' <param name="env"></param>
         ''' <returns></returns>
-        Public Function setNames([object] As Object, namelist As Array, envir As Environment) As Object
+        Public Function setNames([object] As Object, namelist As Array, env As Environment) As Object
             namelist = Runtime.asVector(Of String)(namelist)
 
             ' set names
             Select Case [object].GetType
                 Case GetType(list), GetType(dataframe)
-                    Return DirectCast([object], RNames).setNames(namelist, envir)
+                    Return DirectCast([object], RNames).setNames(namelist, env)
+                Case GetType(vector)
+                    Return DirectCast([object], vector).setNames(namelist, env)
                 Case Else
-                    Return Internal.debug.stop({"unsupported!", "func: names"}, envir)
+                    Return Internal.debug.stop({
+                        "set names for the given type of object is unsupported! please consider convert it as vector at first...",
+                        "func: names",
+                        "objtype: " & [object].GetType.FullName
+                    }, env)
             End Select
         End Function
 

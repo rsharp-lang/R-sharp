@@ -249,6 +249,9 @@ Namespace Runtime
             If DirectCast(value, Array) _
                 .AsObjectEnumerator _
                 .All(Function(i)
+                         If i Is Nothing Then
+                             Return False
+                         End If
                          If Not i.GetType.IsInheritsFrom(GetType(Array)) Then
                              Return True
                          Else
