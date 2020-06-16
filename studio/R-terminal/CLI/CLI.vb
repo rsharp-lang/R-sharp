@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::c3760b2fb8a24e499eefeeb2fc98eaaa, studio\R-terminal\CLI\CLI.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module CLI
-    ' 
-    '     Function: Info, InitializeEnvironment, Install, SyntaxText, unixman
-    '               Version
-    ' 
-    ' /********************************************************************************/
+' Module CLI
+' 
+'     Function: Info, InitializeEnvironment, Install, SyntaxText, unixman
+'               Version
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -48,6 +48,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Terminal.Utility
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.InteropService.SharedORM
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
@@ -99,6 +100,39 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
         End Using
 
         Return 0
+    End Function
+
+    <ExportAPI("--startups")>
+    <Usage("--startups [--add <namespaceList> --remove <namespaceList>]")>
+    Public Function ConfigStartups(args As CommandLine) As Integer
+        Dim adds As String = args("--add")
+        Dim remove As String = args("--remove")
+        Dim config As ConfigFile = ConfigFile.Load(ConfigFile.localConfigs)
+
+        If config.startups Is Nothing Then
+            config.startups = New StartupConfigs
+        End If
+
+        If Not adds.StringEmpty Then
+            config.startups.loadingPackages = config.startups _
+                .loadingPackages _
+                .JoinIterates(adds.StringSplit("([;,]|\s)+")) _
+                .ToArray
+        End If
+        If Not remove.StringEmpty Then
+            Dim removePending As Index(Of String) = remove.StringSplit("([;,]|\s)+")
+
+            config.startups.loadingPackages = config.startups _
+                .loadingPackages _
+                .SafeQuery _
+                .Where(Function(name) Not name Like removePending) _
+                .ToArray
+        End If
+
+        Return config _
+            .GetXml _
+            .SaveTo(ConfigFile.localConfigs) _
+            .CLICode
     End Function
 
     <ExportAPI("--version")>
