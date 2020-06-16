@@ -153,6 +153,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
             v = envir.FindSymbol(parameter.names(Scan0), [inherits]:=False)
 
+            Dim isNumbericOut = GetType(Out).GetRTypeCode = TypeCodes.double OrElse GetType(Out).GetRTypeCode = TypeCodes.integer
+            Dim isStringOut = GetType(Out) Is GetType(String)
+
             Return Function(x As T) As Out
                        Dim result As Object
 
@@ -164,8 +167,15 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                        If Not result Is Nothing Then
                            Dim type As Type = result.GetType
 
-                           If type.IsArray AndAlso type.GetElementType Is GetType(Out) Then
-                               result = DirectCast(result, Array).GetValue(Scan0)
+                           If type.IsArray Then
+                               If type.GetElementType Is GetType(Out) Then
+                                   result = DirectCast(result, Array).GetValue(Scan0)
+                               ElseIf isStringOut Then
+                                   result = Scripting.ToString(DirectCast(result, Array).GetValue(Scan0))
+                               ElseIf isNumbericOut Then
+                                   type = type.GetElementType
+                                   result = Conversion.CTypeDynamic(DirectCast(result, Array).GetValue(Scan0), GetType(Out))
+                               End If
                            End If
                        End If
 

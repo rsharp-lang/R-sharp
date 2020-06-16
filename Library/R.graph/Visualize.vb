@@ -116,6 +116,13 @@ Module Visualize
                             End Function
                         )
                     End With
+                Case GetType(String)
+                    Dim propName As String = nodeSize
+
+                    nodeRadius = New Func(Of Node, Single)(
+                        Function(n As Node)
+                            Return stdNum.Max(Val(n.data(propName)), minNodeSize)
+                        End Function)
                 Case Else
                     Return Internal.debug.stop(New NotImplementedException(nodeSize.GetType.FullName), env)
             End Select
