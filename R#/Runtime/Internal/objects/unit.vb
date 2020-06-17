@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::91abaaf4fe9e49c7da7a286f8c65aee1, R#\Runtime\Internal\objects\unit.vb"
+﻿#Region "Microsoft.VisualBasic::ab25c42a9a5042dbfc8ae58032519cd9, R#\Runtime\Internal\objects\unit.vb"
 
     ' Author:
     ' 
@@ -35,6 +35,7 @@
     ' 
     '         Properties: name
     ' 
+    '         Constructor: (+2 Overloads) Sub New
     '         Function: ToString
     ' 
     ' 
