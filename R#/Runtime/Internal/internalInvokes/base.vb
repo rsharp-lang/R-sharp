@@ -351,6 +351,14 @@ Namespace Runtime.Internal.Invokes
             Return values.RDataframe(envir)
         End Function
 
+        ''' <summary>
+        ''' The Number of Rows/Columns of an Array
+        ''' 
+        ''' nrow and ncol return the number of rows or columns present in x.
+        ''' </summary>
+        ''' <param name="x">a vector, array, data frame, or NULL.</param>
+        ''' <param name="env"></param>
+        ''' <returns>an integer of length 1 or NULL, the latter only for ncol and nrow.</returns>
         <ExportAPI("nrow")>
         <RApiReturn(GetType(Integer))>
         Public Function nrow(x As Object, Optional env As Environment = Nothing) As Object
@@ -359,10 +367,18 @@ Namespace Runtime.Internal.Invokes
             ElseIf x.GetType Is GetType(dataframe) Then
                 Return DirectCast(x, dataframe).nrows
             Else
-                Return Internal.debug.stop(RType.GetRSharpType(x).ToString & " is not a dataframe!", env)
+                Return Internal.debug.stop(RType.GetRSharpType(x.GetType).ToString & " is not a dataframe!", env)
             End If
         End Function
 
+        ''' <summary>
+        ''' The Number of Rows/Columns of an Array
+        ''' 
+        ''' nrow and ncol return the number of rows or columns present in x.
+        ''' </summary>
+        ''' <param name="x">a vector, array, data frame, or NULL.</param>
+        ''' <param name="env"></param>
+        ''' <returns>an integer of length 1 or NULL, the latter only for ncol and nrow.</returns>
         <ExportAPI("ncol")>
         <RApiReturn(GetType(Integer))>
         Public Function ncol(x As Object, Optional env As Environment = Nothing) As Object
@@ -371,7 +387,7 @@ Namespace Runtime.Internal.Invokes
             ElseIf x.GetType Is GetType(dataframe) Then
                 Return DirectCast(x, dataframe).ncols
             Else
-                Return Internal.debug.stop(RType.GetRSharpType(x).ToString & " is not a dataframe!", env)
+                Return Internal.debug.stop(RType.GetRSharpType(x.GetType).ToString & " is not a dataframe!", env)
             End If
         End Function
 
