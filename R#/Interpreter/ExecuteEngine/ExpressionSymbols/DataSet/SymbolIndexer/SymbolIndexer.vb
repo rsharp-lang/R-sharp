@@ -325,7 +325,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 vec = Rarray.getByIndex(Runtime.asVector(Of Integer)(indexer))
             End If
 
-            Return New vector(MeasureRealElementType(vec), vec, env)
+            If vec.Length = 0 Then
+                Return New vector With {.data = {}}
+            Else
+                ' 20200617 但vec是空集合的时候
+                ' 得到的type是void类型
+                ' 会报错：无法创建一个void类型的数组
+                Return New vector(MeasureRealElementType(vec), vec, env)
+            End If
         End Function
 
         Public Overrides Function ToString() As String

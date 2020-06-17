@@ -1,50 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::0f52f6aeda2b974bde2ec7b16804d3f2, R#\Runtime\Internal\internalInvokes\base.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module base
-    ' 
-    '         Function: [stop], allocate, append, autoDispose, cat
-    '                   cbind, colnames, createDotNetExceptionMessage, CreateMessageInternal, doPrintInternal
-    '                   getEnvironmentStack, getOption, head, invisible, isEmpty
-    '                   isNull, length, names, ncol, neg
-    '                   nrow, options, print, rbind, Rdataframe
-    '                   rep, replace, Rlist, rownames, source
-    '                   str, summary, t, unitOfT, warning
-    ' 
-    '         Sub: q, quit
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module base
+' 
+'         Function: [stop], allocate, append, autoDispose, cat
+'                   cbind, colnames, createDotNetExceptionMessage, CreateMessageInternal, doPrintInternal
+'                   getEnvironmentStack, getOption, head, invisible, isEmpty
+'                   isNull, length, names, ncol, neg
+'                   nrow, options, print, rbind, Rdataframe
+'                   rep, replace, Rlist, rownames, source
+'                   str, summary, t, unitOfT, warning
+' 
+'         Sub: q, quit
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -351,6 +351,14 @@ Namespace Runtime.Internal.Invokes
             Return values.RDataframe(envir)
         End Function
 
+        ''' <summary>
+        ''' The Number of Rows/Columns of an Array
+        ''' 
+        ''' nrow and ncol return the number of rows or columns present in x.
+        ''' </summary>
+        ''' <param name="x">a vector, array, data frame, or NULL.</param>
+        ''' <param name="env"></param>
+        ''' <returns>an integer of length 1 or NULL, the latter only for ncol and nrow.</returns>
         <ExportAPI("nrow")>
         <RApiReturn(GetType(Integer))>
         Public Function nrow(x As Object, Optional env As Environment = Nothing) As Object
@@ -359,10 +367,18 @@ Namespace Runtime.Internal.Invokes
             ElseIf x.GetType Is GetType(dataframe) Then
                 Return DirectCast(x, dataframe).nrows
             Else
-                Return Internal.debug.stop(RType.GetRSharpType(x).ToString & " is not a dataframe!", env)
+                Return Internal.debug.stop(RType.GetRSharpType(x.GetType).ToString & " is not a dataframe!", env)
             End If
         End Function
 
+        ''' <summary>
+        ''' The Number of Rows/Columns of an Array
+        ''' 
+        ''' nrow and ncol return the number of rows or columns present in x.
+        ''' </summary>
+        ''' <param name="x">a vector, array, data frame, or NULL.</param>
+        ''' <param name="env"></param>
+        ''' <returns>an integer of length 1 or NULL, the latter only for ncol and nrow.</returns>
         <ExportAPI("ncol")>
         <RApiReturn(GetType(Integer))>
         Public Function ncol(x As Object, Optional env As Environment = Nothing) As Object
@@ -371,7 +387,7 @@ Namespace Runtime.Internal.Invokes
             ElseIf x.GetType Is GetType(dataframe) Then
                 Return DirectCast(x, dataframe).ncols
             Else
-                Return Internal.debug.stop(RType.GetRSharpType(x).ToString & " is not a dataframe!", env)
+                Return Internal.debug.stop(RType.GetRSharpType(x.GetType).ToString & " is not a dataframe!", env)
             End If
         End Function
 
@@ -874,6 +890,12 @@ Namespace Runtime.Internal.Invokes
                     Throw DirectCast(message, Exception)
                 Else
                     Return DirectCast(message, Exception).createDotNetExceptionMessage(envir)
+                End If
+            ElseIf message.GetType Is GetType(Message) Then
+                If debugMode Then
+                    Throw New Exception(DirectCast(message, Message).message.JoinBy("; "))
+                Else
+                    Return message
                 End If
             Else
                 If debugMode Then

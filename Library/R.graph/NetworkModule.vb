@@ -1,47 +1,48 @@
 ﻿#Region "Microsoft.VisualBasic::14226754c166ead7a9dab320f32b0130, Library\R.graph\NetworkModule.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module NetworkModule
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: addEdge, addEdges, addNode, addNodes, computeNetwork
-    '               degree, emptyNetwork, getByGroup, getElementByID, LoadNetwork
-    '               printGraph, SaveNetwork, setAttributes, typeGroupOfNodes
-    ' 
-    ' /********************************************************************************/
+' Module NetworkModule
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: addEdge, addEdges, addNode, addNodes, computeNetwork
+'               degree, emptyNetwork, getByGroup, getElementByID, LoadNetwork
+'               printGraph, SaveNetwork, setAttributes, typeGroupOfNodes
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
@@ -230,7 +231,13 @@ Public Module NetworkModule
     ''' <param name="tuples">a given node label tuple list</param>
     ''' <returns></returns>
     <ExportAPI("add.edges")>
-    Public Function addEdges(g As NetworkGraph, tuples As Object, <RRawVectorArgument> Optional weight As Object = Nothing) As NetworkGraph
+    <RApiReturn(GetType(NetworkGraph))>
+    Public Function addEdges(g As NetworkGraph, tuples As Object,
+                             <RRawVectorArgument>
+                             Optional weight As Object = Nothing,
+                             Optional ignoreElementNotFound As Boolean = True,
+                             Optional env As Environment = Nothing) As Object
+
         Dim nodeLabels As String()
         Dim edge As Edge
         Dim i As i32 = 1
@@ -240,6 +247,24 @@ Public Module NetworkModule
         For Each tuple As NamedValue(Of Object) In list.GetSlots(tuples).IterateNameValues
             nodeLabels = REnv.asVector(Of String)(tuple.Value)
             w = weights.ElementAtOrDefault(CInt(i) - 1)
+
+            If g.GetElementByID(nodeLabels(Scan0)) Is Nothing Then
+                If ignoreElementNotFound Then
+                    Call g.CreateNode(nodeLabels(Scan0))
+                    Call env.AddMessage({"missing target node for create a new edge...", "missing node: " & nodeLabels(Scan0)}, MSG_TYPES.WRN)
+                Else
+                    Return Internal.debug.stop({"missing target node for create a new edge...", "missing node: " & nodeLabels(Scan0)}, env)
+                End If
+            End If
+            If g.GetElementByID(nodeLabels(1)) Is Nothing Then
+                If ignoreElementNotFound Then
+                    Call g.CreateNode(nodeLabels(1))
+                    Call env.AddMessage({"missing target node for create a new edge...", "missing node: " & nodeLabels(1)}, MSG_TYPES.WRN)
+                Else
+                    Return Internal.debug.stop({"missing target node for create a new edge...", "missing node: " & nodeLabels(1)}, env)
+                End If
+            End If
+
             edge = g.CreateEdge(nodeLabels(0), nodeLabels(1))
             edge.weight = w
 

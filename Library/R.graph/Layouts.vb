@@ -65,6 +65,7 @@ Module Layouts
     ''' </param>
     ''' <returns></returns>
     <ExportAPI("layout.force_directed")>
+    <RApiReturn(GetType(NetworkGraph))>
     Public Function forceDirect(g As NetworkGraph,
                                 Optional stiffness# = 80,
                                 Optional repulsion# = 4000,
@@ -72,14 +73,18 @@ Module Layouts
                                 Optional iterations% = 1000,
                                 Optional clearScreen As Boolean = False,
                                 Optional showProgress As Boolean = True,
-                                Optional env As Environment = Nothing) As NetworkGraph
+                                Optional env As Environment = Nothing) As Object
 
         If g.CheckZero Then
             env.AddMessage("all of the vertex node in your network graph is in ZERO location, do random layout at first...", MSG_TYPES.WRN)
             g = g.doRandomLayout
         End If
 
-        Return g.doForceLayout(
+        If Not showProgress Then
+            Call "Do force directed layout...".__INFO_ECHO
+        End If
+
+        Call g.doForceLayout(
             showProgress:=showProgress,
             iterations:=iterations,
             clearScreen:=clearScreen,
@@ -87,6 +92,27 @@ Module Layouts
             Repulsion:=repulsion,
             Damping:=damping
         )
+
+        Dim allNan = g.vertex.All(Function(a) a.data.initialPostion.isNaN)
+
+        If allNan Then
+            Dim tooLarge As Boolean = g.graphEdges.Count / g.connectedNodes.Length > 10
+
+            If tooLarge Then
+                Return Internal.debug.stop({
+                    "do network graph layout failure...",
+                    "your network size is too large, please consider reduce the edge connection size...",
+                    "size: [" & g.vertex.Count & ", " & g.graphEdges.Count & "]"
+                }, env)
+            Else
+                Return Internal.debug.stop({
+                    "do network graph layout failure...",
+                    "please consider adjust one of the physics parameters: stiffness, repulsion or damping..."
+                }, env)
+            End If
+        Else
+            Return g
+        End If
     End Function
 
     <ExportAPI("layout.orthogonal")>
