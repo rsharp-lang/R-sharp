@@ -80,6 +80,10 @@ Module Layouts
             g = g.doRandomLayout
         End If
 
+        If Not showProgress Then
+            Call "Do force directed layout...".__INFO_ECHO
+        End If
+
         Call g.doForceLayout(
             showProgress:=showProgress,
             iterations:=iterations,
