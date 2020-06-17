@@ -548,29 +548,29 @@ Namespace Runtime.Internal.Invokes
         ''' is a character string, a file connection with that name 
         ''' will be established for the duration of the diversion.
         '''
-        '''Normal R output (To connection stdout) Is diverted by the 
-        '''Default type = "output". Only prompts And (most) messages 
-        '''Continue To appear On the console. Messages sent To 
-        '''stderr() (including those from message, warning And Stop) 
-        '''can be diverted by sink(type = "message") (see below).
+        ''' Normal R output (To connection stdout) Is diverted by the 
+        ''' Default type = "output". Only prompts And (most) messages 
+        ''' Continue To appear On the console. Messages sent To 
+        ''' stderr() (including those from message, warning And Stop) 
+        ''' can be diverted by sink(type = "message") (see below).
         '''
-        '''sink() Or sink(file = NULL) ends the last diversion (of 
-        '''the specified type). There Is a stack of diversions for 
-        '''normal output, so output reverts to the previous diversion 
-        '''(if there was one). The stack Is of up to 21 connections 
-        '''(20 diversions).
+        ''' sink() Or sink(file = NULL) ends the last diversion (of 
+        ''' the specified type). There Is a stack of diversions for 
+        ''' normal output, so output reverts to the previous diversion 
+        ''' (if there was one). The stack Is of up to 21 connections 
+        ''' (20 diversions).
         '''
-        '''If file Is a connection it will be opened If necessary 
-        '''(In "wt" mode) And closed once it Is removed from the 
-        '''stack Of diversions.
+        ''' If file Is a connection it will be opened If necessary 
+        ''' (In "wt" mode) And closed once it Is removed from the 
+        ''' stack Of diversions.
         '''
-        '''split = TRUE only splits R output (via Rvprintf) And the 
-        '''default output from writeLines: it does Not split all 
-        '''output that might be sent To stdout().
+        ''' split = TRUE only splits R output (via Rvprintf) And the 
+        ''' default output from writeLines: it does Not split all 
+        ''' output that might be sent To stdout().
         '''
-        '''Sink-ing the messages stream should be done only with 
-        '''great care. For that stream file must be an already open 
-        '''connection, And there Is no stack of connections.
+        ''' Sink-ing the messages stream should be done only with 
+        ''' great care. For that stream file must be an already open 
+        ''' connection, And there Is no stack of connections.
         '''
         ''' If file Is a character String, the file will be opened 
         ''' Using the current encoding. If you want a different 
@@ -580,12 +580,12 @@ Namespace Runtime.Internal.Invokes
         ''' such strings To the current encoding.
         ''' </remarks>
         <ExportAPI("sink")>
-        Public Sub sink(Optional file$ = Nothing,
-                        Optional append As Boolean = False,
-                        Optional split As Boolean = False,
-                        Optional env As Environment = Nothing)
+        Public Function sink(Optional file$ = Nothing,
+                             Optional append As Boolean = False,
+                             Optional split As Boolean = False,
+                             Optional env As Environment = Nothing) As Object
 
-        End Sub
+        End Function
 
         ''' <summary>
         ''' # Length of an Object
