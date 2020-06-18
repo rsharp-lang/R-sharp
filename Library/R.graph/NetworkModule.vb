@@ -63,6 +63,9 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports node = Microsoft.VisualBasic.Data.visualize.Network.Graph.Node
 Imports REnv = SMRUCC.Rsharp.Runtime
 
+''' <summary>
+''' package or create network graph and do network analysis.
+''' </summary>
 <Package("igraph", Category:=APICategories.ResearchTools, Publisher:="xie.guigang@gcmodeller.org")>
 <RTypeExport("graph", GetType(NetworkGraph))>
 Public Module NetworkModule
@@ -77,6 +80,13 @@ Public Module NetworkModule
         Return $"Network graph with {g.vertex.Count} vertex nodes and {g.graphEdges.Count} edges."
     End Function
 
+    ''' <summary>
+    ''' save the network graph
+    ''' </summary>
+    ''' <param name="g">the network graph object or [nodes, edges] table data.</param>
+    ''' <param name="file">a folder file path for save the network data.</param>
+    ''' <param name="properties">a list of property name for save in node table and edge table.</param>
+    ''' <returns></returns>
     <ExportAPI("save.network")>
     Public Function SaveNetwork(g As Object, file$, Optional properties As String() = Nothing) As Boolean
         If g Is Nothing Then
@@ -96,6 +106,13 @@ Public Module NetworkModule
         Return tables.Save(file)
     End Function
 
+    ''' <summary>
+    ''' load network graph object from a given file location
+    ''' </summary>
+    ''' <param name="directory">a directory which contains two data table: nodes and network edges</param>
+    ''' <param name="defaultNodeSize">default node size in width and height</param>
+    ''' <param name="defaultBrush">default brush texture descriptor string</param>
+    ''' <returns></returns>
     <ExportAPI("read.network")>
     Public Function LoadNetwork(directory$, Optional defaultNodeSize As Object = "20,20", Optional defaultBrush$ = "black") As NetworkGraph
         Return NetworkFileIO.Load(directory.GetDirectoryFullPath) _
@@ -164,6 +181,12 @@ Public Module NetworkModule
         Return g
     End Function
 
+    ''' <summary>
+    ''' a nodes by given label list.
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <param name="labels">a character vector of the node labels</param>
+    ''' <returns></returns>
     <ExportAPI("add.nodes")>
     Public Function addNodes(g As NetworkGraph, labels$()) As NetworkGraph
         For Each label As String In labels
@@ -283,7 +306,15 @@ Public Module NetworkModule
         Return g
     End Function
 
+    ''' <summary>
+    ''' get node elements by given id
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <param name="id"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("getElementByID")>
+    <RApiReturn(GetType(node))>
     Public Function getElementByID(g As NetworkGraph, id As Object, Optional env As Environment = Nothing) As Object
         Dim array As Array
 
@@ -339,9 +370,10 @@ Public Module NetworkModule
     ''' Node select by group or other condition
     ''' </summary>
     ''' <param name="g"></param>
-    ''' <param name="typeSelector$"></param>
+    ''' <param name="typeSelector"></param>
     ''' <returns></returns>
     <ExportAPI("select")>
+    <RApiReturn(GetType(node))>
     Public Function getByGroup(g As NetworkGraph, typeSelector As Object, Optional env As Environment = Nothing) As Object
         If typeSelector Is Nothing Then
             Return {}
