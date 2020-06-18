@@ -1275,6 +1275,16 @@ Namespace Runtime.Internal.Invokes
         End Sub
 
         ''' <summary>
+        ''' force quit of current R# session without confirm
+        ''' </summary>
+        ''' <param name="status"></param>
+        ''' 
+        <ExportAPI("exit")>
+        Public Sub [exit](status As Integer)
+            Call App.Exit(status)
+        End Sub
+
+        ''' <summary>
         ''' 
         ''' </summary>
         ''' <param name="x"><see cref="ISaveHandle"/> object or any other object.</param>
