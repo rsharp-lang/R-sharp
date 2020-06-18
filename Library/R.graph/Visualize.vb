@@ -207,7 +207,7 @@ Module Visualize
             drawEdgeBends:=True,
             throwEx:=env.globalEnvironment.Rscript.debug,
             drawNodeShape:=drawNodeShape，
-            edgeDashTypes:=DashStyle.Dash,
+            edgeDashTypes:=DashStyle.Solid,
             defaultEdgeColor:=defaultEdgeColor,
             defaultLabelColor:=defaultLabelColor,
             getNodeLabel:=getNodeLabel,
