@@ -88,6 +88,7 @@ Module Visualize
                                Optional showUntexture As Boolean = True,
                                Optional defaultEdgeColor$ = "gray",
                                Optional defaultLabelColor$ = "black",
+                               Optional drawEdgeDirection As Boolean = False,
                                Optional driver As Drivers = Drivers.GDI,
                                Optional env As Environment = Nothing) As Object
 
@@ -209,7 +210,8 @@ Module Visualize
             edgeDashTypes:=DashStyle.Dash,
             defaultEdgeColor:=defaultEdgeColor,
             defaultLabelColor:=defaultLabelColor,
-            getNodeLabel:=getNodeLabel
+            getNodeLabel:=getNodeLabel,
+            drawEdgeDirection:=drawEdgeDirection
         )
     End Function
 
