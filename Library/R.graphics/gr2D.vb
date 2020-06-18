@@ -10,7 +10,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 <Package("graphics2D")>
 Module graphics2D
 
-    <ExportAPI("rectangle")>
+    <ExportAPI("rect")>
     <RApiReturn(GetType(Rectangle), GetType(RectangleF))>
     Public Function rectangle(x As Double, y As Double, w As Double, h As Double, Optional float As Boolean = True) As Object
         If float Then
@@ -18,6 +18,11 @@ Module graphics2D
         Else
             Return New Rectangle(x, y, w, h)
         End If
+    End Function
+
+    <ExportAPI("rectangle")>
+    Public Function rectangle(location As PointF, size As SizeF) As RectangleF
+        Return New RectangleF(location, size)
     End Function
 
     <ExportAPI("point")>
