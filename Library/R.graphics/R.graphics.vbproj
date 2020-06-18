@@ -278,9 +278,11 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="gr2D.vb" />
     <Compile Include="grDevices.vb" />
     <Compile Include="gr3D.vb" />
     <Compile Include="grSVG.vb" />
+    <Compile Include="gr2DLabeler.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>

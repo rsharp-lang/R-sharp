@@ -115,6 +115,16 @@ Module Layouts
         End If
     End Function
 
+    ''' <summary>
+    ''' do orthogonal layout for the network graph input
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <param name="gridSize"></param>
+    ''' <param name="delta">the node movement delta</param>
+    ''' <param name="layoutIteration">
+    ''' the iteration number for run the layout process, ``-1`` means auto calculation.
+    ''' </param>
+    ''' <returns></returns>
     <ExportAPI("layout.orthogonal")>
     Public Function orthogonalLayout(g As NetworkGraph,
                                      <RRawVectorArgument>

@@ -65,6 +65,49 @@ Imports stdNum = System.Math
 <Package("igraph.render")>
 Module Visualize
 
+    Private Function getNodeSizeHandler(nodeSize As Object, minNodeSize!, env As Environment, ByRef err As Message) As Func(Of Node, Single)
+        Select Case nodeSize.GetType
+            Case GetType(list)
+                Dim list As list = nodeSize
+
+                Return New Func(Of Node, Single)(
+                    Function(node As Node) As Single
+                        If list.slots.ContainsKey(node.label) Then
+                            Return stdNum.Max(CSng(Val(list.slots(node.label))), minNodeSize)
+                        Else
+                            Return minNodeSize
+                        End If
+                    End Function
+                )
+            Case GetType(Func(Of Node, Single))
+                Return DirectCast(nodeSize, Func(Of Node, Single))
+            Case GetType(Func(Of Node, Double))
+                With DirectCast(nodeSize, Func(Of Node, Double))
+                    Return New Func(Of Node, Single)(Function(n) .Invoke(n))
+                End With
+            Case GetType(DeclareLambdaFunction)
+                With DirectCast(nodeSize, DeclareLambdaFunction)
+                    Dim compute = .CreateLambda(Of String, Single)(env)
+
+                    Return New Func(Of Node, Single)(
+                        Function(n)
+                            Return compute(n.label)
+                        End Function
+                    )
+                End With
+            Case GetType(String)
+                Dim propName As String = nodeSize
+
+                Return Function(n As Node)
+                           Return stdNum.Max(Val(n.data(propName)), minNodeSize)
+                       End Function
+            Case Else
+                err = Internal.debug.stop(New NotImplementedException(nodeSize.GetType.FullName), env)
+        End Select
+
+        Return Nothing
+    End Function
+
     ''' <summary>
     ''' Rendering png or svg image from a given network graph model.
     ''' </summary>
@@ -84,56 +127,37 @@ Module Visualize
                                Optional nodeLabel As Object = Nothing,
                                Optional labelerIterations% = 100,
                                Optional texture As Object = Nothing,
+                               Optional widget As Object = Nothing,
                                Optional showLabelerProgress As Boolean = False,
                                Optional showUntexture As Boolean = True,
                                Optional defaultEdgeColor$ = "gray",
                                Optional defaultLabelColor$ = "black",
+                               Optional drawEdgeDirection As Boolean = False,
                                Optional driver As Drivers = Drivers.GDI,
                                Optional env As Environment = Nothing) As Object
 
+        Dim nodeWidget As Action(Of IGraphics, PointF, Double, Node) = Nothing
         Dim nodeRadius As [Variant](Of Func(Of Node, Single), Single) = Nothing
+        Dim err As Message = Nothing
 
         If nodeSize Is Nothing Then
             nodeRadius = minNodeSize
         Else
-            Select Case nodeSize.GetType
-                Case GetType(list)
-                    Dim list As list = nodeSize
+            nodeRadius = getNodeSizeHandler(nodeSize, minNodeSize, env, err)
 
-                    nodeRadius = New Func(Of Node, Single)(
-                        Function(node As Node) As Single
-                            If list.slots.ContainsKey(node.label) Then
-                                Return stdNum.Max(CSng(Val(list.slots(node.label))), minNodeSize)
-                            Else
-                                Return minNodeSize
-                            End If
-                        End Function
-                    )
-                Case GetType(Func(Of Node, Single))
-                    nodeRadius = DirectCast(nodeSize, Func(Of Node, Single))
-                Case GetType(Func(Of Node, Double))
-                    With DirectCast(nodeSize, Func(Of Node, Double))
-                        nodeRadius = New Func(Of Node, Single)(Function(n) .Invoke(n))
-                    End With
-                Case GetType(DeclareLambdaFunction)
-                    With DirectCast(nodeSize, DeclareLambdaFunction)
-                        Dim compute = .CreateLambda(Of String, Single)(env)
+            If Not err Is Nothing Then
+                Return err
+            End If
+        End If
 
-                        nodeRadius = New Func(Of Node, Single)(
-                            Function(n)
-                                Return compute(n.label)
-                            End Function
-                        )
-                    End With
-                Case GetType(String)
-                    Dim propName As String = nodeSize
+        If Not widget Is Nothing Then
+            Select Case widget.GetType
+                Case GetType(DeclareNewFunction)
+                    Dim func As DeclareNewFunction = widget
 
-                    nodeRadius = New Func(Of Node, Single)(
-                        Function(n As Node)
-                            Return stdNum.Max(Val(n.data(propName)), minNodeSize)
-                        End Function)
-                Case Else
-                    Return Internal.debug.stop(New NotImplementedException(nodeSize.GetType.FullName), env)
+                    nodeWidget = Sub(canvas, center, radius, node)
+                                     Call func.Invoke(env, InvokeParameter.CreateLiterals(canvas, center, radius, node.label))
+                                 End Sub
             End Select
         End If
 
@@ -206,10 +230,12 @@ Module Visualize
             drawEdgeBends:=True,
             throwEx:=env.globalEnvironment.Rscript.debug,
             drawNodeShape:=drawNodeShape，
-            edgeDashTypes:=DashStyle.Dash,
+            edgeDashTypes:=DashStyle.Solid,
             defaultEdgeColor:=defaultEdgeColor,
             defaultLabelColor:=defaultLabelColor,
-            getNodeLabel:=getNodeLabel
+            getNodeLabel:=getNodeLabel,
+            drawEdgeDirection:=drawEdgeDirection,
+            nodeWidget:=nodeWidget
         )
     End Function
 
