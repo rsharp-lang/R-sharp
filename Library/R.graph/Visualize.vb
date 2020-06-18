@@ -156,7 +156,7 @@ Module Visualize
                     Dim func As DeclareNewFunction = widget
 
                     nodeWidget = Sub(canvas, center, radius, node)
-
+                                     Call func.Invoke(env, InvokeParameter.CreateLiterals(canvas, center, radius, node.label))
                                  End Sub
             End Select
         End If

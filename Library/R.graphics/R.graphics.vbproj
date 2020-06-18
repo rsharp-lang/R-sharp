@@ -278,6 +278,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="gr2D.vb" />
     <Compile Include="grDevices.vb" />
     <Compile Include="gr3D.vb" />
     <Compile Include="grSVG.vb" />

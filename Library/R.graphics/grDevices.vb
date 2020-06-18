@@ -47,12 +47,9 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
-Imports Microsoft.VisualBasic.Imaging.Drawing2D.Shapes
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.MIME.Markup
-Imports Microsoft.VisualBasic.MIME.Markup.HTML.CSS
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
@@ -330,14 +327,5 @@ break:
         Else
             Return list
         End If
-    End Function
-
-    <ExportAPI("line2D")>
-    Public Function line2D(<RRawVectorArgument> a As Object, <RRawVectorArgument> b As Object, Optional stroke As Object = Stroke.AxisStroke) As Line
-        Dim p1 As PointF = InteropArgumentHelper.getVector2D(a)
-        Dim p2 As PointF = InteropArgumentHelper.getVector2D(b)
-        Dim penCSS As String = InteropArgumentHelper.getStrokePenCSS(stroke)
-
-        Return New Line(p1, p2, HTML.CSS.Stroke.TryParse(penCSS))
     End Function
 End Module
