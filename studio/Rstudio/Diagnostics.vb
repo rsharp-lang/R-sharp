@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::eea840dfc8431098725b646f92e99c48, studio\Rstudio\Diagnostics.vb"
+﻿#Region "Microsoft.VisualBasic::ee2a6e858b1236a05c2311a8bb07a5e3, studio\Rstudio\Diagnostics.vb"
 
     ' Author:
     ' 
@@ -59,6 +59,35 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 <Package("diagnostics")>
 Module Diagnostics
 
+    ''' <summary>
+    ''' A helper api for invoke a Data Viewer
+    ''' 
+    ''' Invoke a spreadsheet-style data viewer on a matrix-like R object.
+    ''' </summary>
+    ''' <param name="symbol">
+    ''' an R object which can be coerced to a data frame with non-zero 
+    ''' numbers of rows and columns.
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <remarks>
+    ''' Object x is coerced (if possible) to a data frame, then columns 
+    ''' are converted to character using format.data.frame. The object 
+    ''' is then viewed in a spreadsheet-like data viewer, a read-only 
+    ''' version of data.entry.
+    '''
+    ''' If there are row names On the data frame that are Not 1:nrow, 
+    ''' they are displayed in a separate first column called 
+    ''' ``row.names``.
+    '''
+    ''' Objects with zero columns Or zero rows are Not accepted.
+    '''
+    ''' The array Of cells can be navigated via the scrollbars And by 
+    ''' the cursor keys, Home, End, Page Up And Page Down.
+    '''
+    ''' The initial size Of the data viewer window Is taken from the 
+    ''' Default dimensions Of a pager (see Rconsole), but adjusted 
+    ''' downwards To show a whole number Of rows And columns.
+    ''' </remarks>
     <ExportAPI("view")>
     Public Sub view(<RRawVectorArgument> symbol As Object, Optional env As Environment = Nothing)
         Dim buffer = env.globalEnvironment.stdout

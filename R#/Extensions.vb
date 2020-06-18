@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a9ae0b93b96a1d088f8990b05260a42c, R#\Extensions.vb"
+﻿#Region "Microsoft.VisualBasic::91d2d5002aa6a1f264c2d81e1f0ae7b6, R#\Extensions.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     ' Module Extensions
     ' 
-    '     Function: AsRReturn, GetEncoding, GetObject, GetString
+    '     Function: AsRReturn, GetEncoding, GetObject, GetString, SafeCreateColumns
     ' 
     ' /********************************************************************************/
 

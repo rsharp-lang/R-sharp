@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::856a4af385c8e62345a89bc1a301fce7, R#\Runtime\System\InvokeParameter.vb"
+﻿#Region "Microsoft.VisualBasic::b7d289b5d6a6e6762eab0aafaa9b5ba2, R#\Runtime\System\InvokeParameter.vb"
 
     ' Author:
     ' 
@@ -37,7 +37,7 @@
     '                     value
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: (+2 Overloads) Create, CreateArguments, Evaluate, ToString
+    '         Function: Create, CreateArguments, CreateLiterals, Evaluate, ToString
     ' 
     ' 
     ' /********************************************************************************/

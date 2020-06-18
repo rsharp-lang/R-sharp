@@ -1,50 +1,51 @@
-﻿#Region "Microsoft.VisualBasic::0f52f6aeda2b974bde2ec7b16804d3f2, R#\Runtime\Internal\internalInvokes\base.vb"
+﻿#Region "Microsoft.VisualBasic::767cb5bb368244719a127d0c25cccc65, R#\Runtime\Internal\internalInvokes\base.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Module base
-' 
-'         Function: [stop], allocate, append, autoDispose, cat
-'                   cbind, colnames, createDotNetExceptionMessage, CreateMessageInternal, doPrintInternal
-'                   getEnvironmentStack, getOption, head, invisible, isEmpty
-'                   isNull, length, names, ncol, neg
-'                   nrow, options, print, rbind, Rdataframe
-'                   rep, replace, Rlist, rownames, source
-'                   str, summary, t, unitOfT, warning
-' 
-'         Sub: q, quit
-' 
-' 
-' /********************************************************************************/
+    '     Module base
+    ' 
+    '         Function: [stop], allocate, append, autoDispose, cat
+    '                   cbind, colnames, createDotNetExceptionMessage, CreateMessageInternal, doPrintInternal
+    '                   getEnvironmentStack, getOption, head, invisible, isEmpty
+    '                   isNull, length, names, ncol, neg
+    '                   nrow, options, print, rbind, Rdataframe
+    '                   rep, replace, Rlist, rownames, sink
+    '                   source, str, summary, t, unitOfT
+    '                   warning
+    ' 
+    '         Sub: q, quit
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -521,6 +522,70 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("is.null")>
         Public Function isNull(x As Object) As Boolean
             Return x Is Nothing
+        End Function
+
+        ''' <summary>
+        ''' Send R Output to a File
+        ''' 
+        ''' ``sink`` diverts R output to a connection (and stops such diversions).
+        ''' </summary>
+        ''' <param name="file">
+        ''' a writable connection Or a character String naming 
+        ''' the file To write To, Or NULL To Stop sink-ing.
+        ''' </param>
+        ''' <param name="append">
+        ''' logical. If TRUE, output will be appended to file; 
+        ''' otherwise, it will overwrite the contents of file.
+        ''' </param>
+        ''' <param name="split">
+        ''' logical: if TRUE, output will be sent to the new sink 
+        ''' and to the current output stream, like the Unix 
+        ''' program ``tee``.
+        ''' </param>
+        ''' <returns>sink returns NULL.</returns>
+        ''' <remarks>
+        ''' sink diverts R output to a connection (and must be used 
+        ''' again to finish such a diversion, see below!). If file 
+        ''' is a character string, a file connection with that name 
+        ''' will be established for the duration of the diversion.
+        '''
+        ''' Normal R output (To connection stdout) Is diverted by the 
+        ''' Default type = "output". Only prompts And (most) messages 
+        ''' Continue To appear On the console. Messages sent To 
+        ''' stderr() (including those from message, warning And Stop) 
+        ''' can be diverted by sink(type = "message") (see below).
+        '''
+        ''' sink() Or sink(file = NULL) ends the last diversion (of 
+        ''' the specified type). There Is a stack of diversions for 
+        ''' normal output, so output reverts to the previous diversion 
+        ''' (if there was one). The stack Is of up to 21 connections 
+        ''' (20 diversions).
+        '''
+        ''' If file Is a connection it will be opened If necessary 
+        ''' (In "wt" mode) And closed once it Is removed from the 
+        ''' stack Of diversions.
+        '''
+        ''' split = TRUE only splits R output (via Rvprintf) And the 
+        ''' default output from writeLines: it does Not split all 
+        ''' output that might be sent To stdout().
+        '''
+        ''' Sink-ing the messages stream should be done only with 
+        ''' great care. For that stream file must be an already open 
+        ''' connection, And there Is no stack of connections.
+        '''
+        ''' If file Is a character String, the file will be opened 
+        ''' Using the current encoding. If you want a different 
+        ''' encoding (e.g., To represent strings which have been 
+        ''' stored In UTF-8), use a file connection — but some 
+        ''' ways To produce R output will already have converted 
+        ''' such strings To the current encoding.
+        ''' </remarks>
+        <ExportAPI("sink")>
+        Public Function sink(Optional file$ = Nothing,
+                             Optional append As Boolean = False,
+                             Optional split As Boolean = False,
+                             Optional env As Environment = Nothing) As Object
+
         End Function
 
         ''' <summary>
