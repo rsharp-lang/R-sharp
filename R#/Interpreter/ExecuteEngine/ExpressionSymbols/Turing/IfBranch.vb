@@ -60,6 +60,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
@@ -131,7 +132,16 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
                 Return test
             End If
 
-            If True = Runtime.asLogical(test)(Scan0) Then
+            Dim flags As Boolean() = REnv.asLogical(test)
+
+            If flags.Length = 0 Then
+                Return Internal.debug.stop({
+                    "argument is of length zero",
+                    "test: " & ifTest.ToString
+                }, envir)
+            End If
+
+            If True = flags(Scan0) Then
                 Dim env As New Environment(envir, stackFrame, isInherits:=False)
                 Dim resultVal As Object = trueClosure.Invoke(env, {})
 
