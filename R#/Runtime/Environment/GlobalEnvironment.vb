@@ -132,7 +132,9 @@ Namespace Runtime
                     Call _stdout.WriteLine($"Loading required package: {packageName}")
                 End If
 
-                Call packages.addAttached(package)
+                If Not package Is Nothing Then
+                    Call packages.addAttached(package)
+                End If
             Else
                 Return Nothing
             End If

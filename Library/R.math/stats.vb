@@ -69,6 +69,9 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 
+''' <summary>
+''' 
+''' </summary>
 <Package("stats")>
 Module stats
 
@@ -76,6 +79,7 @@ Module stats
         Internal.ConsolePrinter.AttachConsoleFormatter(Of DistanceMatrix)(AddressOf printMatrix)
         Internal.ConsolePrinter.AttachConsoleFormatter(Of TtestResult)(AddressOf printTtest)
         Internal.ConsolePrinter.AttachConsoleFormatter(Of TwoSampleResult)(AddressOf printTwoSampleTTest)
+        Internal.ConsolePrinter.AttachConsoleFormatter(Of FishersExactPvalues)(Function(o) o.ToString)
     End Sub
 
     Private Function printTtest(t As TtestResult) As String
