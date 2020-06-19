@@ -1,63 +1,61 @@
 ﻿#Region "Microsoft.VisualBasic::252e20483f23b1609c0779727130d4ea, R#\Runtime\Internal\internalInvokes\etc.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module etc
-    ' 
-    '         Function: contributors, getActivators, license, man, RVer
-    '                   sessionInfo, Sys_getlocale, Sys_info
-    ' 
-    '         Sub: demo
-    ' 
-    '     Class RSessionInfo
-    ' 
-    '         Properties: activators, basePkgs, BLAS, LAPACK, loadedOnly
-    '                     locale, matprod, output_device, platform, RNGkind
-    '                     running, Rversion
-    ' 
-    '         Function: ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module etc
+' 
+'         Function: contributors, getActivators, license, man, RVer
+'                   sessionInfo, Sys_getlocale, Sys_info
+' 
+'         Sub: demo
+' 
+'     Class RSessionInfo
+' 
+'         Properties: activators, basePkgs, BLAS, LAPACK, loadedOnly
+'                     locale, matprod, output_device, platform, RNGkind
+'                     running, Rversion
+' 
+'         Function: ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
-Imports System.IO
-Imports System.Text
+Imports System.Globalization
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal.Utility
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System
@@ -149,16 +147,18 @@ Namespace Runtime.Internal.Invokes
 
         <ExportAPI("Sys.getlocale")>
         Public Function Sys_getlocale() As list
+            Dim invariantCulture = CultureInfo.CurrentCulture
+
             Return New list With {
                 .slots = New Dictionary(Of String, Object) From {
-                    {"name", InvariantCulture.Name},
-                    {"ISO_name", InvariantCulture.TwoLetterISOLanguageName},
-                    {"en_name", InvariantCulture.EnglishName},
-                    {"fullName", InvariantCulture.DisplayName},
-                    {"LC_ID", InvariantCulture.LCID},
-                    {"CompareInfo", InvariantCulture.CompareInfo.ToString},
-                    {"TextInfo", InvariantCulture.TextInfo.ToString},
-                    {"NumberInfo", InvariantCulture.NumberFormat.ToString}
+                    {"name", invariantCulture.Name},
+                    {"ISO_name", invariantCulture.TwoLetterISOLanguageName},
+                    {"en_name", invariantCulture.EnglishName},
+                    {"fullName", invariantCulture.DisplayName},
+                    {"LC_ID", invariantCulture.LCID},
+                    {"CompareInfo", invariantCulture.CompareInfo.ToString},
+                    {"TextInfo", invariantCulture.TextInfo.ToString},
+                    {"NumberInfo", invariantCulture.NumberFormat.ToString}
                 }
             }
         End Function
@@ -181,14 +181,23 @@ Namespace Runtime.Internal.Invokes
                 .ToLower
             Dim info As New RSessionInfo With {
                 .Rversion = RVer(env),
-                .basePkgs = env.globalEnvironment.packages _
+                .loadedOnly = env.globalEnvironment.packages _
                     .EnumerateAttachedPackages _
                     .Select(Function(a) a.namespace) _
                     .ToArray,
                 .locale = Sys_getlocale(),
                 .matprod = "default",
                 .output_device = dev,
-                .activators = getActivators(env)
+                .activators = getActivators(env),
+                .environment_variables = New list With {
+                    .slots = App _
+                        .GetAppVariables _
+                        .ToDictionary(Function(a) a.Name,
+                                      Function(a)
+                                          Return CObj(a.Value)
+                                      End Function)
+                },
+                .basePkgs = invoke.ls.slots.Keys.ToArray
             }
 
             Return New vbObject(info)
@@ -259,104 +268,4 @@ Namespace Runtime.Internal.Invokes
             }
         End Function
     End Module
-
-    Public Class RSessionInfo
-
-        ''' <summary>
-        ''' a list, the result of calling R.Version().
-        ''' </summary>
-        ''' <returns></returns>
-        <RNameAlias("R.version")>
-        Public Property Rversion As list
-        ''' <summary>
-        ''' a character string describing the platform R was 
-        ''' built under. Where sub-architectures are in use 
-        ''' this is of the form platform/sub-arch (nn-bit).
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property platform As String
-        Public Property output_device As String
-        ''' <summary>
-        ''' a character string, the result of calling Sys.getlocale().
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property locale As list
-        ''' <summary>
-        ''' a character string (or possibly NULL), the same as osVersion, see below.
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property running As String
-        ''' <summary>
-        ''' a character vector, the result of calling RNGkind().
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property RNGkind As String
-        ''' <summary>
-        ''' a character vector of base packages which are attached.
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property basePkgs As String()
-        Public Property activators As list
-        ''' <summary>
-        ''' (not always present): a named list of the results of calling 
-        ''' packageDescription on packages whose namespaces are loaded 
-        ''' but are not attached.
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property loadedOnly As String
-        ''' <summary>
-        ''' a character string, the result of calling getOption("matprod").
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property matprod As String
-        ''' <summary>
-        ''' a character string, the result of calling extSoftVersion()["BLAS"].
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property BLAS As String
-        ''' <summary>
-        ''' a character string, the result of calling La_library().
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property LAPACK As String
-
-        Public Overrides Function ToString() As String
-            Dim info As New StringBuilder
-            Dim maxColumns As Integer = 120
-
-            Call info.AppendLine(Rversion.GetString("version.string"))
-            Call info.AppendLine($"Platform: {Rversion.GetString("platform")} ({Rversion.GetString("arch")})")
-            Call info.AppendLine($"Running under: {Rversion.GetString("system")}")
-            Call info.AppendLine($"Environment device: {output_device}")
-            Call info.AppendLine()
-            Call info.AppendLine($"Matrix products: {matprod}")
-            Call info.AppendLine()
-            Call info.AppendLine("locale:")
-
-            For Each attr In locale.slots.SeqIterator(offset:=1)
-                Call info.AppendLine($"[{attr.i}] {attr.value.Key}={attr.value.Value}")
-            Next
-
-            Call info.AppendLine()
-            Call info.AppendLine("attached R# packages:")
-
-            Using output As New StringWriter(info)
-                Call basePkgs.printContentArray(Nothing, Nothing, maxColumns, output)
-                Call output.Flush()
-            End Using
-
-            Call info.AppendLine()
-            Call info.AppendLine("activators:")
-
-            If activators.length > 0 Then
-                For Each attr In activators.slots.SeqIterator(offset:=1)
-                    Call info.AppendLine($"[{attr.i}] {attr.value.Key}={attr.value.Value}")
-                Next
-            Else
-                Call info.AppendLine("nothing")
-            End If
-
-            Return info.ToString
-        End Function
-    End Class
 End Namespace

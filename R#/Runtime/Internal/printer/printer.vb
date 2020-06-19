@@ -1,52 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::06d91b7647ab962b7a8d02242245e31c, R#\Runtime\Internal\printer\printer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Delegate Function
-    ' 
-    ' 
-    '     Module printer
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: DateToString, f64_InternalToString, getMaxColumns, getStrings, ToString
-    '                   ValueToString
-    ' 
-    '         Sub: AttachConsoleFormatter, AttachInternalConsoleFormatter, printArray, printContentArray, printInternal
-    '              printList
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Delegate Function
+' 
+' 
+'     Module printer
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: DateToString, f64_InternalToString, getMaxColumns, getStrings, ToString
+'                   ValueToString
+' 
+'         Sub: AttachConsoleFormatter, AttachInternalConsoleFormatter, printArray, printContentArray, printInternal
+'              printList
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -61,9 +61,11 @@ Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Configuration
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.ConsolePrinter
 
@@ -87,6 +89,7 @@ Namespace Runtime.Internal.ConsolePrinter
             RtoString(GetType(GlobalEnvironment)) = Function(o) DirectCast(o, GlobalEnvironment).ToString
             RtoString(GetType(LogEntry)) = Function(o) DirectCast(o, LogEntry).ToString
             RtoString(GetType(unit)) = Function(o) DirectCast(o, unit).ToString
+            RtoString(GetType(RSessionInfo)) = Function(o) o.ToString
 
             RInternalToString(GetType(Double)) = AddressOf printer.f64_InternalToString
         End Sub
@@ -266,7 +269,7 @@ printSingleElement:
         End Function
 
         Friend Function getStrings(xVec As Array, env As GlobalEnvironment) As IEnumerable(Of String)
-            Dim elementType As Type = Runtime.MeasureArrayElementType(xVec)
+            Dim elementType As Type = REnv.MeasureArrayElementType(xVec)
             Dim toString As IStringBuilder = printer.ToString(elementType, env, True)
 
             Return From element As Object
