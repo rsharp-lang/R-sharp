@@ -61,6 +61,8 @@ Namespace Runtime.Internal.Object
                     Return DirectCast([object], RNames).getNames
                 Case GetType(vbObject)
                     Return DirectCast([object], vbObject).getNames
+                Case GetType(vector)
+                    Return DirectCast([object], vector).getNames
                 Case Else
                     If type.IsArray Then
                         Dim objVec As Array = Runtime.asVector(Of Object)([object])
@@ -98,7 +100,7 @@ Namespace Runtime.Internal.Object
                         Return keys
                     End If
 
-                    Return Internal.debug.stop({"unsupported!", "func: names"}, envir)
+                    Return Internal.debug.stop({"unsupported!", "func: names", "type: " & type.FullName}, envir)
             End Select
         End Function
 
