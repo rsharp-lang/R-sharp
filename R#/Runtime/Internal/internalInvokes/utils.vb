@@ -1,54 +1,56 @@
 ﻿#Region "Microsoft.VisualBasic::f554a311807b38d1fc617a659322d37e, R#\Runtime\Internal\internalInvokes\utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module utils
-    ' 
-    '         Function: GetInstalledPackages, installPackages, keyGroups, wget
-    ' 
-    '         Sub: cls, sleep
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module utils
+' 
+'         Function: GetInstalledPackages, installPackages, keyGroups, wget
+' 
+'         Sub: cls, sleep
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
 Imports System.Threading
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Net
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Package
 Imports RPkg = SMRUCC.Rsharp.System.Package.Package
 
@@ -236,5 +238,110 @@ Namespace Runtime.Internal.Invokes
         Public Sub sleep(sec As Integer)
             Call Thread.Sleep(sec * 1000)
         End Sub
+
+        ''' <summary>
+        ''' Return the First or Last Part of an Object
+        ''' 
+        ''' Returns the first or last parts of a vector, matrix, table, data frame or function. 
+        ''' Since head() and tail() are generic functions, they may also have been extended 
+        ''' to other classes.
+        ''' </summary>
+        ''' <param name="x">an object</param>
+        ''' <param name="n">
+        ''' a single integer. If positive or zero, size for the resulting object: number of 
+        ''' elements for a vector (including lists), rows for a matrix or data frame or lines 
+        ''' for a function. If negative, all but the n last/first number of elements of x.
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <remarks>
+        ''' For matrices, 2-dim tables and data frames, head() (tail()) returns the first (last) 
+        ''' n rows when n >= 0 or all but the last (first) n rows when n &lt; 0. head.matrix() 
+        ''' and tail.matrix() are exported. For functions, the lines of the deparsed function 
+        ''' are returned as character strings.
+        '''
+        ''' If a matrix has no row names, Then tail() will add row names Of the form "[n,]" 
+        ''' To the result, so that it looks similar To the last lines Of x When printed. 
+        ''' Setting addrownums = False suppresses this behaviour.
+        ''' </remarks>
+        ''' <returns>An object (usually) like x but generally smaller. For ftable objects x, 
+        ''' a transformed format(x).</returns>
+        <ExportAPI("head")>
+        Public Function head(<RRawVectorArgument> x As Object, Optional n% = 6, Optional env As Environment = Nothing) As Object
+            If x Is Nothing Then
+                Return x
+            ElseIf x.GetType.IsArray Then
+                x = New vector With {.data = x}
+            ElseIf x.GetType.ImplementInterface(GetType(IDictionary(Of String, Object))) Then
+                x = New list With {.slots = x}
+            End If
+
+            Dim type As Type = x.GetType
+
+            If type Is GetType(vector) Then
+                Dim v As vector = DirectCast(x, vector)
+
+                If v.length <= n Then
+                    Return x
+                Else
+                    Dim data As Array = Array.CreateInstance(v.elementType.raw, n)
+
+                    For i As Integer = 0 To data.Length - 1
+                        data.SetValue(v.data.GetValue(i), i)
+                    Next
+
+                    Return New vector With {.data = data}
+                End If
+            ElseIf type Is GetType(list) Then
+                Dim l As list = DirectCast(x, list)
+
+                If l.length <= n Then
+                    Return l
+                Else
+                    Return New list With {
+                        .slots = l.slots.Keys _
+                            .Take(n) _
+                            .ToDictionary(Function(key) key,
+                                          Function(key)
+                                              Return l.slots(key)
+                                          End Function)
+                    }
+                End If
+            ElseIf type Is GetType(dataframe) Then
+                Dim df As dataframe = DirectCast(x, dataframe)
+
+                If df.nrows <= n Then
+                    Return df
+                Else
+                    Dim data As New Dictionary(Of String, Array)
+                    Dim colVal As Array
+                    Dim colSubset As Array
+
+                    For Each col In df.columns
+                        If col.Value.Length = 1 Then
+                            data.Add(col.Key, col.Value)
+                        Else
+                            colVal = col.Value
+                            colSubset = Array.CreateInstance(colVal.GetType.GetElementType, n)
+
+                            For i As Integer = 0 To n - 1
+                                colSubset.SetValue(colVal.GetValue(i), i)
+                            Next
+
+                            data.Add(col.Key, colSubset)
+                        End If
+                    Next
+
+                    Return New dataframe With {
+                        .columns = data,
+                        .rownames = df.rownames _
+                            .SafeQuery _
+                            .Take(n) _
+                            .ToArray
+                    }
+                End If
+            Else
+                Return x
+            End If
+        End Function
     End Module
 End Namespace
