@@ -96,7 +96,13 @@ Namespace Runtime
             End If
 
             Dim vector As Array = Runtime.asVector(Of Object)(x)
-            Dim type As Type = vector.GetValue(Scan0).GetType
+            Dim type As Type
+
+            If vector.Length = 0 Then
+                Return {}
+            Else
+                type = vector.GetValue(Scan0).GetType
+            End If
 
             If type Is GetType(Boolean) Then
                 Return vector.AsObjectEnumerator _
