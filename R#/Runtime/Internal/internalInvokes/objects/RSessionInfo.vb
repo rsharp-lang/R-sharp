@@ -88,15 +88,6 @@ Namespace Runtime.Internal.Invokes
             Next
 
             Call info.AppendLine()
-            Call info.AppendLine("Environment variables:")
-
-            i = 1
-
-            For Each config In environment_variables.slots
-                Call info.AppendLine($"[{++i}] {config.Key}={config.Value}")
-            Next
-
-            Call info.AppendLine()
             Call info.AppendLine("attached R# packages:")
 
             Using output As New StringWriter(info)
@@ -130,6 +121,15 @@ Namespace Runtime.Internal.Invokes
             Else
                 Call info.AppendLine("nothing")
             End If
+
+            Call info.AppendLine()
+            Call info.AppendLine("Environment variables:")
+
+            i = 1
+
+            For Each config In environment_variables.slots
+                Call info.AppendLine($"[{++i}] {config.Key}={config.Value}")
+            Next
 
             Return info.ToString
         End Function
