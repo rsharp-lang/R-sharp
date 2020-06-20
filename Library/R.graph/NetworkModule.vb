@@ -391,13 +391,13 @@ Public Module NetworkModule
             End If
         ElseIf TypeOf elements Is node() Then
             If values Is Nothing Then
-                Return DirectCast(elements, node()).Select(Function(a) a.data(name)).ToArray
+                Return DirectCast(elements, node()).Select(Function(a) If(a.data(name), "")).ToArray
             Else
                 Return Internal.debug.stop(New NotImplementedException, env)
             End If
         ElseIf TypeOf elements Is Edge() Then
             If values Is Nothing Then
-                Return DirectCast(elements, Edge()).Select(Function(a) a.data(name)).ToArray
+                Return DirectCast(elements, Edge()).Select(Function(a) If(a.data(name), "")).ToArray
             Else
                 Return Internal.debug.stop(New NotImplementedException, env)
             End If
