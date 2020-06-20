@@ -367,6 +367,45 @@ Public Module NetworkModule
         Return g
     End Function
 
+    <ExportAPI("vertex")>
+    Public Function getNodes(g As NetworkGraph) As node()
+        Return g.vertex.ToArray
+    End Function
+
+    <ExportAPI("edges")>
+    Public Function getEdges(g As NetworkGraph) As Edge()
+        Return g.graphEdges.ToArray
+    End Function
+
+    <ExportAPI("attributes")>
+    Public Function attributes(<RRawVectorArgument> elements As Object, name$,
+                               <RByRefValueAssign, RRawVectorArgument>
+                               Optional values As Object = Nothing,
+                               Optional env As Environment = Nothing) As Object
+
+        If elements Is Nothing Then
+            If Not values Is Nothing Then
+                Return Internal.debug.stop("target elements for set attribute values can not be nothing!", env)
+            Else
+                Return Nothing
+            End If
+        ElseIf TypeOf elements Is node() Then
+            If values Is Nothing Then
+                Return DirectCast(elements, node()).Select(Function(a) a.data(name)).ToArray
+            Else
+                Return Internal.debug.stop(New NotImplementedException, env)
+            End If
+        ElseIf TypeOf elements Is Edge() Then
+            If values Is Nothing Then
+                Return DirectCast(elements, Edge()).Select(Function(a) a.data(name)).ToArray
+            Else
+                Return Internal.debug.stop(New NotImplementedException, env)
+            End If
+        Else
+            Return Internal.debug.stop(Message.InCompatibleType(GetType(node), elements.GetType, env,, NameOf(elements)), env)
+        End If
+    End Function
+
     ''' <summary>
     ''' Node select by group or other condition
     ''' </summary>

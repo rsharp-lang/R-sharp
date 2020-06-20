@@ -60,6 +60,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports stdNum = System.Math
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports Microsoft.VisualBasic.Linq
 
 ''' <summary>
 ''' Rendering png or svg image from a given network graph model.
@@ -134,7 +135,7 @@ Module Visualize
                                Optional widget As Object = Nothing,
                                Optional showLabelerProgress As Boolean = False,
                                Optional showUntexture As Boolean = True,
-                               Optional defaultEdgeColor$ = "gray",
+                               Optional defaultEdgeColor$ = "lightgray",
                                Optional defaultLabelColor$ = "black",
                                Optional drawEdgeDirection As Boolean = False,
                                Optional driver As Drivers = Drivers.GDI,
@@ -266,9 +267,53 @@ Module Visualize
         Return g
     End Function
 
+    <ExportAPI("edge.color")>
+    Public Function setEdgeColors(g As NetworkGraph,
+                                  <RRawVectorArgument, RByRefValueAssign>
+                                  Optional colors As Object = Nothing,
+                                  Optional env As Environment = Nothing) As Object
+        If colors Is Nothing Then
+            Return g.graphEdges _
+                .Select(Function(a)
+                            If a.data.color Is Nothing Then
+                                Return Color.Black
+                            Else
+                                Return a.data.color.Color
+                            End If
+                        End Function) _
+                .ToArray
+        Else
+            Dim values = REnv.asVector(Of Object)(colors)
+
+            If values.Length = 1 Then
+                Dim unify As SolidBrush
+                Dim first = values.GetValue(Scan0)
+
+                Select Case first.GetType
+                    Case GetType(String)
+                        unify = DirectCast(first, String).TranslateColor.DoCall(Function(c) New SolidBrush(c))
+                    Case GetType(Color)
+                        unify = New SolidBrush(DirectCast(first, Color))
+                    Case GetType(SolidBrush)
+                        unify = first
+                    Case Else
+                        Return Internal.debug.stop(Message.InCompatibleType(GetType(Color), first.GetType, env,, NameOf(colors)), env)
+                End Select
+
+                For Each edge As Edge In g.graphEdges
+                    edge.data.color = unify
+                Next
+            ElseIf values.Length <> g.graphEdges.Count Then
+                Return Internal.debug.stop("the color length is not equals to the edge size!", env)
+            Else
+
+            End If
+        End If
+    End Function
+
     <ExportAPI("node.colors")>
     <RApiReturn(GetType(NetworkGraph), GetType(list))>
-    Public Function setNodeColors(g As NetworkGraph, Optional colors As list = Nothing) As Object
+    Public Function setNodeColors(g As NetworkGraph, <RByRefValueAssign> Optional colors As list = Nothing) As Object
         If colors Is Nothing Then
             Return New list With {
                 .slots = g.vertex _
