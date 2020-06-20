@@ -9,7 +9,7 @@
     <Import_RootNamespace>R_graphic.interop</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)InteropArgumentHelper.vb" />
     <Compile Include="$(MSBuildThisFileDirectory)gdi.vb" />
+    <Compile Include="$(MSBuildThisFileDirectory)InteropArgumentHelper.vb" />
   </ItemGroup>
 </Project>

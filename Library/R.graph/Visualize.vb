@@ -284,9 +284,9 @@ Module Visualize
                 .ToArray
         Else
             Dim values = REnv.asVector(Of Object)(colors)
+            Dim unify As SolidBrush
 
             If values.Length = 1 Then
-                Dim unify As SolidBrush
                 Dim first = values.GetValue(Scan0)
 
                 Select Case first.GetType
@@ -306,8 +306,25 @@ Module Visualize
             ElseIf values.Length <> g.graphEdges.Count Then
                 Return Internal.debug.stop("the color length is not equals to the edge size!", env)
             Else
+                For Each edge As SeqValue(Of Edge) In g.graphEdges.SeqIterator
+                    Dim first = values.GetValue(CInt(edge))
 
+                    Select Case first.GetType
+                        Case GetType(String)
+                            unify = DirectCast(first, String).TranslateColor.DoCall(Function(c) New SolidBrush(c))
+                        Case GetType(Color)
+                            unify = New SolidBrush(DirectCast(first, Color))
+                        Case GetType(SolidBrush)
+                            unify = first
+                        Case Else
+                            Return Internal.debug.stop(Message.InCompatibleType(GetType(Color), first.GetType, env,, NameOf(colors)), env)
+                    End Select
+
+                    edge.value.data.color = unify
+                Next
             End If
+
+            Return g
         End If
     End Function
 
