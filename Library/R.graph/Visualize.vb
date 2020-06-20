@@ -59,6 +59,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports stdNum = System.Math
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
 ''' Rendering png or svg image from a given network graph model.
@@ -139,7 +140,7 @@ Module Visualize
                                Optional driver As Drivers = Drivers.GDI,
                                Optional env As Environment = Nothing) As Object
 
-        Dim nodeWidget As Action(Of IGraphics, PointF, Double, Node) = Nothing
+        Dim nodeWidget As Func(Of IGraphics, PointF, Double, Node, RectangleF) = Nothing
         Dim nodeRadius As [Variant](Of Func(Of Node, Single), Single) = Nothing
         Dim err As Message = Nothing
 
@@ -158,9 +159,15 @@ Module Visualize
                 Case GetType(DeclareNewFunction)
                     Dim func As DeclareNewFunction = widget
 
-                    nodeWidget = Sub(canvas, center, radius, node)
-                                     Call func.Invoke(env, InvokeParameter.CreateLiterals(canvas, center, radius, node.label))
-                                 End Sub
+                    nodeWidget = Function(canvas, center, radius, node)
+                                     Dim layout = func.Invoke(env, InvokeParameter.CreateLiterals(canvas, center, radius, node.label))
+
+                                     If Not layout Is Nothing Then
+                                         layout = REnv.asVector(Of Object)(layout).GetValue(Scan0)
+                                     End If
+
+                                     Return layout
+                                 End Function
             End Select
         End If
 
