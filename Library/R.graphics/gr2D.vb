@@ -2,12 +2,18 @@
 Imports System.Drawing
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Imaging
+Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Shapes
+Imports Microsoft.VisualBasic.Imaging.Math2D
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.Markup
 Imports Microsoft.VisualBasic.MIME.Markup.HTML.CSS
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 <Package("graphics2D")>
 Module graphics2D
@@ -47,13 +53,52 @@ Module graphics2D
         End If
     End Function
 
+    <ExportAPI("offset2D")>
+    Public Function offset2D(layout As Object, <RRawVectorArgument> offset As Object, Optional env As Environment = Nothing) As Object
+        Dim offsetPt As PointF
+
+        If offset Is Nothing Then
+            Return layout
+        ElseIf TypeOf offset Is Point Then
+            offsetPt = DirectCast(offset, Point).PointF
+        ElseIf TypeOf offset Is PointF Then
+            offsetPt = DirectCast(offset, PointF)
+        ElseIf TypeOf offset Is Long() OrElse TypeOf offset Is Integer() OrElse TypeOf offset Is Single() OrElse TypeOf offset Is Double() Then
+            With REnv.asVector(Of Double)(offset)
+                offsetPt = New PointF(.GetValue(Scan0), .GetValue(1))
+            End With
+        ElseIf TypeOf offset Is list Then
+            With DirectCast(offset, list)
+                offsetPt = New PointF(.getValue(Of Double)("x", env), .getValue(Of Double)("y", env))
+            End With
+        ElseIf TypeOf offset Is vector Then
+            With DirectCast(offset, vector).data
+                offsetPt = New PointF(CDbl(.GetValue(Scan0)), CDbl(.GetValue(1)))
+            End With
+        Else
+            Return Internal.debug.stop(Message.InCompatibleType(GetType(PointF), offset.GetType, env,, NameOf(offset)), env)
+        End If
+
+        If TypeOf layout Is Point Then
+            Return DirectCast(layout, Point).OffSet2D(offsetPt)
+        ElseIf TypeOf layout Is PointF Then
+            Return DirectCast(layout, PointF).OffSet2D(offsetPt)
+        ElseIf TypeOf layout Is Rectangle Then
+            Return DirectCast(layout, Rectangle).OffSet2D(offsetPt)
+        ElseIf TypeOf layout Is RectangleF Then
+            Return DirectCast(layout, RectangleF).OffSet2D(offsetPt)
+        Else
+            Return Internal.debug.stop(Message.InCompatibleType(GetType(PointF), layout.GetType, env,, NameOf(layout)), env)
+        End If
+    End Function
+
     <ExportAPI("line")>
-    Public Function line2D(<RRawVectorArgument> a As Object, <RRawVectorArgument> b As Object, Optional stroke As Object = Stroke.AxisStroke) As Line
+    Public Function line2D(<RRawVectorArgument> a As Object, <RRawVectorArgument> b As Object, Optional stroke As Object = Stroke.AxisStroke) As Shapes.Line
         Dim p1 As PointF = InteropArgumentHelper.getVector2D(a)
         Dim p2 As PointF = InteropArgumentHelper.getVector2D(b)
         Dim penCSS As String = InteropArgumentHelper.getStrokePenCSS(stroke)
 
-        Return New Line(p1, p2, HTML.CSS.Stroke.TryParse(penCSS))
+        Return New Shapes.Line(p1, p2, HTML.CSS.Stroke.TryParse(penCSS))
     End Function
 
     <ExportAPI("draw.triangle")>

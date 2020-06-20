@@ -95,12 +95,18 @@ Namespace Runtime.Components
                      End Function)
         End Function
 
-        Public Shared Function InCompatibleType(require As Type, given As Type, envir As Environment, Optional message$ = "The given type is incompatible with the required type!") As Message
+        Public Shared Function InCompatibleType(require As Type, given As Type, envir As Environment,
+                                                Optional message$ = "The given type is incompatible with the required type!",
+                                                Optional paramName$ = Nothing) As Message
             Return {
                 message,
                 "required: " & require.FullName,
                 "given: " & given.FullName
             }.DoCall(Function(msg)
+                         If Not paramName.StringEmpty Then
+                             msg = msg.JoinIterates({$"parameter: {paramName}"})
+                         End If
+
                          Return Internal.debug.stop(msg, envir)
                      End Function)
         End Function
