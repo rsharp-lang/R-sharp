@@ -298,7 +298,8 @@ Module Visualize
             nodeWidget:=nodeWidget,
             fontSize:=CSng(labelFontSize),
             nodeStroke:=InteropArgumentHelper.getStrokePenCSS(nodeStroke, Nothing),
-            hullPolygonGroups:=hullPolygonGroups
+            hullPolygonGroups:=hullPolygonGroups,
+            convexHullCurveDegree:=1
         )
     End Function
 
