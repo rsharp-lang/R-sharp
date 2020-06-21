@@ -62,14 +62,16 @@ Public Module ApiArgumentHelpers
             Case GetType(NamedValue(Of T))
                 Return DirectCast(value, NamedValue(Of T))
             Case GetType(list)
-                Dim name As String = DirectCast(value, list).slots.Keys.First
+                Dim list As list = DirectCast(value, list)
+                Dim name As String = list.slots.Keys.First
 
                 value = DirectCast(value, list).slots(name)
                 value = RCType.CTypeDynamic(value, GetType(T), env)
 
                 Return New NamedValue(Of T) With {
                     .Name = name,
-                    .Value = value
+                    .Value = value,
+                    .Description = list.getValue(Of String)("description", env)
                 }
 
             Case Else
