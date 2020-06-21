@@ -102,8 +102,17 @@ Module graphics2D
     End Function
 
     <ExportAPI("draw.triangle")>
-    Public Function DrawTriangle(g As IGraphics, topleft As PointF, size As SizeF, Optional color As Object = "black", Optional border As Object = Stroke.AxisStroke) As IGraphics
+    Public Function DrawTriangle(g As IGraphics, topleft As PointF, size As SizeF,
+                                 <RRawVectorArgument>
+                                 Optional color As Object = "black",
+                                 Optional border As Object = Stroke.AxisStroke) As IGraphics
         Call Triangle.Draw(g, topleft.ToPoint, size.ToSize, gdi.getBrush(color), InteropArgumentHelper.getStrokePenCSS(border).DoCall(AddressOf Stroke.TryParse))
+        Return g
+    End Function
+
+    <ExportAPI("draw.circle")>
+    Public Function DrawCircle(g As IGraphics, center As PointF, r As Single, <RRawVectorArgument> Optional color As Object = "black", Optional border As Object = Stroke.AxisGridStroke) As IGraphics
+        Call Circle.Draw(g, center, r, gdi.getBrush(color), Stroke.TryParse(InteropArgumentHelper.getStrokePenCSS(border, Nothing)))
         Return g
     End Function
 End Module

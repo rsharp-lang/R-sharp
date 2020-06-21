@@ -55,12 +55,14 @@ Imports Microsoft.VisualBasic.MIME.Markup.HTML.CSS
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports stdNum = System.Math
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 
 ''' <summary>
 ''' Rendering png or svg image from a given network graph model.
@@ -115,7 +117,10 @@ Module Visualize
     ''' Rendering png or svg image from a given network graph model.
     ''' </summary>
     ''' <param name="g"></param>
-    ''' <param name="canvasSize$"></param>
+    ''' <param name="canvasSize"></param>
+    ''' <param name="texture">
+    ''' get texture brush or color brush descriptor string.
+    ''' </param>
     ''' <returns></returns>
     <ExportAPI("render.Plot")>
     <RApiReturn(GetType(GraphicsData))>
@@ -129,8 +134,11 @@ Module Visualize
                                Optional nodeSize As Object = Nothing,
                                Optional nodeLabel As Object = Nothing,
                                Optional nodeStroke As Object = Stroke.ScatterLineStroke,
+                               Optional nodeVisual As Object = Nothing,
+                               Optional hullPolygonGroups As Object = Nothing,
                                Optional labelFontSize As Object = 20,
                                Optional labelerIterations% = 100,
+                               Optional labelColor As Object = Nothing,
                                Optional texture As Object = Nothing,
                                Optional widget As Object = Nothing,
                                Optional showLabelerProgress As Boolean = False,
@@ -213,6 +221,16 @@ Module Visualize
                                     End If
                                 End If
                             End Function
+        ElseIf Not nodeVisual Is Nothing Then
+            If TypeOf nodeVisual Is DeclareNewFunction Then
+                Dim drawNode As DeclareNewFunction = DirectCast(nodeVisual, DeclareNewFunction)
+
+                drawNodeShape = Function(id, gr, color, r, center)
+                                    Return drawNode.Invoke(env, InvokeParameter.CreateLiterals(gr, id, color, center, r))
+                                End Function
+            Else
+                Return Internal.debug.stop(Message.InCompatibleType(GetType(DeclareNewFunction), nodeVisual.GetType, env,, NameOf(nodeVisual)), env)
+            End If
         End If
 
         Dim getNodeLabel As Func(Of Node, String) = Nothing
@@ -228,6 +246,34 @@ Module Visualize
             End Select
         End If
 
+        Dim getLabelColor As Func(Of Node, Color) = Nothing
+
+        If Not labelColor Is Nothing Then
+            If TypeOf labelColor Is DeclareNewFunction Then
+                getLabelColor = Function(node)
+                                    Dim vals = DirectCast(labelColor, DeclareNewFunction).Invoke(env, InvokeParameter.CreateLiterals(node.label))
+                                    vals = REnv.getFirst(vals)
+                                    Return InteropArgumentHelper.getColor(vals).TranslateColor
+                                End Function
+            Else
+                Return Internal.debug.stop(Message.InCompatibleType(GetType(DeclareNewFunction), labelColor.GetType, env,, NameOf(labelColor)), env)
+            End If
+        End If
+
+        If Not hullPolygonGroups Is Nothing Then
+            hullPolygonGroups = GetNamedValueTuple(Of String)(hullPolygonGroups, env)
+
+            If Not hullPolygonGroups Is Nothing Then
+                With DirectCast(hullPolygonGroups, [Variant](Of NamedValue(Of String), Message))
+                    If .GetUnderlyingType Is GetType(Message) Then
+                        Return .VB
+                    Else
+                        hullPolygonGroups = .TryCast(Of NamedValue(Of String))
+                    End If
+                End With
+            End If
+        End If
+
         Return g.DrawImage(
             canvasSize:=InteropArgumentHelper.getSize(canvasSize),
             padding:=InteropArgumentHelper.getPadding(padding),
@@ -235,6 +281,9 @@ Module Visualize
             defaultColor:=InteropArgumentHelper.getColor(defaultColor),
             nodeRadius:=nodeRadius,
             labelTextStroke:=Nothing,
+            labelWordWrapWidth:=10,
+            labelColorAsNodeColor:=False,
+            getLabelColor:=getLabelColor,
             driver:=driver,
             minLinkWidth:=minLinkWidth,
             showLabelerProgress:=showLabelerProgress,
@@ -248,7 +297,8 @@ Module Visualize
             drawEdgeDirection:=drawEdgeDirection,
             nodeWidget:=nodeWidget,
             fontSize:=CSng(labelFontSize),
-            nodeStroke:=InteropArgumentHelper.getStrokePenCSS(nodeStroke, Nothing)
+            nodeStroke:=InteropArgumentHelper.getStrokePenCSS(nodeStroke, Nothing),
+            hullPolygonGroups:=hullPolygonGroups
         )
     End Function
 
