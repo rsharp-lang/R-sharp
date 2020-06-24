@@ -82,7 +82,7 @@ Namespace Runtime
 
         Dim stdout As StreamWriter
         Dim logfile As StreamWriter
-        Dim split As Boolean
+        Dim split As Boolean = True
 
         Sub New(stdout As StreamWriter, env As OutputEnvironments)
             Me.env = env
@@ -149,6 +149,10 @@ Namespace Runtime
             If _recommendType Is Nothing Then
                 _recommendType = "text/html;charset=UTF-8"
             End If
+        End Sub
+
+        Public Overrides Sub Write(value As String)
+            Call Write(value, "text/html;charset=UTF-8")
         End Sub
 
         ''' <summary>

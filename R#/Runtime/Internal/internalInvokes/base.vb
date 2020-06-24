@@ -583,7 +583,7 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("sink")>
         Public Sub sink(Optional file$ = Nothing,
                         Optional append As Boolean = False,
-                        Optional split As Boolean = False,
+                        Optional split As Boolean = True,
                         Optional env As Environment = Nothing)
 
             Dim stdout As RContentOutput = env.globalEnvironment.stdout
