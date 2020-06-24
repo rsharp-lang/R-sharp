@@ -60,12 +60,6 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Runtime
 
-    Public Enum OutputEnvironments
-        Console
-        Html
-        None
-    End Enum
-
     ''' <summary>
     ''' R# I/O redirect and interface for Rserve http server
     ''' </summary>

@@ -416,6 +416,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Interpreter\ExecuteEngine\Expression.vb" />
+    <Compile Include="Runtime\Environment\Class1.vb" />
     <Compile Include="Runtime\Environment\RContentOutput.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\objects\RSessionInfo.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RPlotStyleCSSAttribute.vb" />

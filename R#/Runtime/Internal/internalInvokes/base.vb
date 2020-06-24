@@ -586,6 +586,12 @@ Namespace Runtime.Internal.Invokes
                              Optional split As Boolean = False,
                              Optional env As Environment = Nothing) As Object
 
+            If file.StringEmpty Then
+                ' 打开一个新的会话用于保存输出日志
+            Else
+                ' 结束当前的日志会话
+
+            End If
         End Function
 
         ''' <summary>
