@@ -581,18 +581,21 @@ Namespace Runtime.Internal.Invokes
         ''' such strings To the current encoding.
         ''' </remarks>
         <ExportAPI("sink")>
-        Public Function sink(Optional file$ = Nothing,
-                             Optional append As Boolean = False,
-                             Optional split As Boolean = False,
-                             Optional env As Environment = Nothing) As Object
+        Public Sub sink(Optional file$ = Nothing,
+                        Optional append As Boolean = False,
+                        Optional split As Boolean = False,
+                        Optional env As Environment = Nothing)
+
+            Dim stdout As RContentOutput = env.globalEnvironment.stdout
 
             If file.StringEmpty Then
                 ' 打开一个新的会话用于保存输出日志
+                Call stdout.openSink(file, split, append)
             Else
                 ' 结束当前的日志会话
-
+                Call stdout.closeSink()
             End If
-        End Function
+        End Sub
 
         ''' <summary>
         ''' # Length of an Object

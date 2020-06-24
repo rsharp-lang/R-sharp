@@ -82,21 +82,23 @@ Namespace Runtime
 
         Dim stdout As StreamWriter
         Dim logfile As StreamWriter
+        Dim split As Boolean
 
         Sub New(stdout As StreamWriter, env As OutputEnvironments)
             Me.env = env
             Me.stdout = stdout
         End Sub
 
-        Public Sub sink(file As String)
-            If file.StringEmpty Then
-                Call logfile.Flush()
-                Call logfile.Close()
+        Public Sub openSink(logfile As String, Optional split As Boolean = True, Optional append As Boolean = False)
+            Me.split = split
+            Me.logfile = logfile.OpenWriter(append:=append)
+        End Sub
 
-                logfile = Nothing
-            Else
-                logfile = file.OpenWriter
-            End If
+        Public Sub closeSink()
+            Call logfile.Flush()
+            Call logfile.Close()
+
+            logfile = Nothing
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
@@ -109,8 +111,10 @@ Namespace Runtime
         End Sub
 
         Public Overrides Sub WriteLine()
-            Call stdout.WriteLine()
-            Call stdout.Flush()
+            If split Then
+                Call stdout.WriteLine()
+                Call stdout.Flush()
+            End If
 
             If Not logfile Is Nothing Then
                 Call logfile.WriteLine()
@@ -128,10 +132,12 @@ Namespace Runtime
         ''' The string to write. If value is null, only the line terminator is written.
         ''' </param>
         Public Overrides Sub WriteLine(message As String)
-            If message Is Nothing Then
-                Call stdout.WriteLine()
-            Else
-                Call stdout.WriteLine(message)
+            If split Then
+                If message Is Nothing Then
+                    Call stdout.WriteLine()
+                Else
+                    Call stdout.WriteLine(message)
+                End If
             End If
 
             If Not logfile Is Nothing Then
@@ -151,8 +157,10 @@ Namespace Runtime
         ''' <param name="message"></param>
         ''' <param name="content_type$"></param>
         Public Overloads Sub Write(message As String, content_type$)
-            Call stdout.Write(message)
-            Call stdout.Flush()
+            If split Then
+                Call stdout.Write(message)
+                Call stdout.Flush()
+            End If
 
             If Not logfile Is Nothing Then
                 Call logfile.Write(message)
@@ -173,10 +181,6 @@ Namespace Runtime
                 .JoinBy(vbCrLf) _
                 .DoCall(Sub(text)
                             Call Write(text, content_type)
-
-                            If Not logfile Is Nothing Then
-                                Call logfile.WriteLine(text)
-                            End If
                         End Sub)
         End Sub
 
@@ -184,9 +188,11 @@ Namespace Runtime
             Dim buffer As Byte() = data.ToArray
             Dim base = stdout.BaseStream
 
-            For Each bit As Byte In buffer
-                Call base.WriteByte(bit)
-            Next
+            If split Then
+                For Each bit As Byte In buffer
+                    Call base.WriteByte(bit)
+                Next
+            End If
 
             If Not logfile Is Nothing Then
                 base = logfile.BaseStream
