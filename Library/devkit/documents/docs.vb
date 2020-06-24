@@ -260,6 +260,6 @@ Module docs
     End Function
 
     Public Function PackageIndex()
-
+        Throw New NotImplementedException
     End Function
 End Module

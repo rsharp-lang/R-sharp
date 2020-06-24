@@ -289,7 +289,7 @@ printSingleElement:
             Dim maxColumns As Integer = env.getMaxColumns
             Dim output As RContentOutput = env.globalEnvironment.stdout
 
-            Call contents.printContentArray(Nothing, Nothing, maxColumns, output.stdout)
+            Call contents.printContentArray(Nothing, Nothing, maxColumns, output)
 
             If xvec.Length > maxPrint Then
                 Call env.stdout.WriteLine($"[ reached getOption(""max.print"") -- omitted {xvec.Length - contents.Length} entries ]")

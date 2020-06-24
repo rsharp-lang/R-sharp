@@ -169,7 +169,7 @@ Namespace Runtime
                 Dim maxColumns As Integer = Me.getMaxColumns
                 Dim dev As RContentOutput = stdout
 
-                Call printer.printContentArray(masked, ", ", "    ", maxColumns, dev.stdout)
+                Call printer.printContentArray(masked, ", ", "    ", maxColumns, dev)
                 Call _stdout.WriteLine()
             End If
 

@@ -69,6 +69,6 @@ Module devkit
 
     <ExportAPI("git.log")>
     Public Function gitLog(file As String) As log()
-
+        Return log.ParseGitLogText(file.SolveStream).ToArray
     End Function
 End Module
