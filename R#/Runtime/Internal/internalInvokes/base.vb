@@ -588,7 +588,7 @@ Namespace Runtime.Internal.Invokes
 
             Dim stdout As RContentOutput = env.globalEnvironment.stdout
 
-            If file.StringEmpty Then
+            If Not file.StringEmpty Then
                 ' 打开一个新的会话用于保存输出日志
                 Call stdout.openSink(file, split, append)
             Else
