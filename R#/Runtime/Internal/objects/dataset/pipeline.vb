@@ -56,6 +56,8 @@ Namespace Runtime.Internal.Object
 
         ReadOnly pipeline As IEnumerable
 
+        Public Property [pipeFinalize] As Action
+
         Public ReadOnly Property isError As Boolean
             Get
                 Return TypeOf pipeline Is Message AndAlso DirectCast(pipeline, Message).level = MSG_TYPES.ERR
@@ -96,13 +98,17 @@ Namespace Runtime.Internal.Object
         ''' the program will be crashed.
         ''' </remarks>
         Public Function createVector(env As Environment) As vector
-            Return New vector(elementType, pipeline, env)
+            Return New vector(elementType, populates(Of Object), env)
         End Function
 
         Public Iterator Function populates(Of T)() As IEnumerable(Of T)
             For Each obj As Object In pipeline
                 Yield DirectCast(obj, T)
             Next
+
+            If Not _pipeFinalize Is Nothing Then
+                Call _pipeFinalize()
+            End If
         End Function
 
         Public Overrides Function ToString() As String
@@ -114,8 +120,10 @@ Namespace Runtime.Internal.Object
         End Function
 
         <DebuggerStepThrough>
-        Public Shared Function CreateFromPopulator(Of T)(upstream As IEnumerable(Of T)) As pipeline
-            Return New pipeline(upstream, GetType(T))
+        Public Shared Function CreateFromPopulator(Of T)(upstream As IEnumerable(Of T), Optional finalize As Action = Nothing) As pipeline
+            Return New pipeline(upstream, GetType(T)) With {
+                .pipeFinalize = finalize
+            }
         End Function
 
         Public Shared Widening Operator CType([error] As Message) As pipeline

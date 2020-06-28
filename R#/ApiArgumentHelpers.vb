@@ -142,7 +142,19 @@ Public Module ApiArgumentHelpers
         End Select
     End Function
 
-    Public Function GetFileStream(file As Object, env As Environment) As [Variant](Of Stream, Message)
-
+    Public Function GetFileStream(file As Object, mode As FileAccess, env As Environment) As [Variant](Of Stream, Message)
+        If file Is Nothing Then
+            Return Internal.debug.stop({"file output can not be nothing!"}, env)
+        ElseIf TypeOf file Is String Then
+            If mode = FileAccess.Read Then
+                Return DirectCast(file, String).Open(FileMode.Open, doClear:=False, [readOnly]:=True)
+            Else
+                Return DirectCast(file, String).Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False)
+            End If
+        ElseIf TypeOf file Is Stream Then
+            Return DirectCast(file, Stream)
+        Else
+            Return Internal.debug.stop(Message.InCompatibleType(GetType(Stream), file.GetType, env,, NameOf(file)), env)
+        End If
     End Function
 End Module
