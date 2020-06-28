@@ -238,7 +238,14 @@ Module stats
                            Optional env As Environment = Nothing) As DistanceMatrix
 
         If is_matrix Then
-            Dim matrix = x.columns.Select(Function(a) a.Value.AsObjectEnumerator(Of String).Select(AddressOf ParseDouble).ToArray).ToArray
+            Dim matrix As Double()() = x.columns _
+                .Select(Function(a)
+                            Return a.Value _
+                                .AsObjectEnumerator(Of String) _
+                                .Select(AddressOf ParseDouble) _
+                                .ToArray
+                        End Function) _
+                .ToArray
             Dim dist As Double()() = New Double(x.nrows - 1)() {}
             Dim is_dist As Boolean = projection!type <> "cor"
             Dim j As Integer
