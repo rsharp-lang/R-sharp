@@ -39,6 +39,7 @@
 
 #End Region
 
+Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
@@ -139,5 +140,9 @@ Public Module ApiArgumentHelpers
                     "given: " & value.GetType.FullName
                 }, env)
         End Select
+    End Function
+
+    Public Function GetFileStream(file As Object, env As Environment) As [Variant](Of Stream, Message)
+
     End Function
 End Module
