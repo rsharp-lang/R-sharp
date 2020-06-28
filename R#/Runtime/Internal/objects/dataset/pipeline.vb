@@ -138,6 +138,8 @@ Namespace Runtime.Internal.Object
                 End If
             ElseIf TypeOf upstream Is T() Then
                 Return CreateFromPopulator(Of T)(DirectCast(upstream, T()))
+            ElseIf TypeOf upstream Is T Then
+                Return CreateFromPopulator(Of T)({DirectCast(upstream, T)})
             ElseIf TypeOf upstream Is IEnumerable(Of T) Then
                 Return CreateFromPopulator(Of T)(DirectCast(upstream, IEnumerable(Of T)))
             ElseIf TypeOf upstream Is vector Then
