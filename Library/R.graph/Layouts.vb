@@ -56,6 +56,22 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Module Layouts
 
     ''' <summary>
+    ''' do random layout of the given network graph object and then returns the given graph object.
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("layout.random")>
+    <RApiReturn(GetType(NetworkGraph))>
+    Public Function randomLayout(g As NetworkGraph, Optional env As Environment = Nothing) As Object
+        If g Is Nothing Then
+            Return Internal.debug.stop("the given network graph object can not be nothing!", env)
+        Else
+            Return g.doRandomLayout
+        End If
+    End Function
+
+    ''' <summary>
     ''' Do force directed layout
     ''' </summary>
     ''' <param name="g">A network graph object.</param>
