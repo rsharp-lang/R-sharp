@@ -169,36 +169,100 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' <summary>
         ''' The which test filter
         ''' </summary>
-        ''' <param name="envir"></param>
+        ''' <param name="env"></param>
         ''' <returns></returns>
         ''' 
         <ExportAPI("which")>
         Private Function where(<RRawVectorArgument>
                                sequence As Object,
                                Optional test As Object = Nothing,
-                               Optional envir As Environment = Nothing) As Object
+                               Optional pipelineFilter As Boolean = True,
+                               Optional env As Environment = Nothing) As Object
 
             If test Is Nothing Then
                 ' test for which index
-                Return Which.IsTrue(Runtime.asLogical(sequence), offset:=1)
+                Return Which.IsTrue(REnv.asLogical(sequence), offset:=1)
             ElseIf TypeOf sequence Is pipeline Then
                 ' run in pipeline mode
                 Return DirectCast(sequence, pipeline) _
                     .populates(Of Object) _
-                    .runWhichFilter(test, envir) _
+                    .runWhichFilter(test, env) _
                     .DoCall(Function(seq)
-                                Return New pipeline(seq, DirectCast(sequence, pipeline).elementType)
+                                If pipelineFilter Then
+                                    Return Iterator Function() As IEnumerable(Of Object)
+                                               For Each obj In seq
+                                                   If TypeOf obj Is Message Then
+                                                       Yield obj
+                                                       Return
+                                                   Else
+                                                       With DirectCast(obj, (Boolean, Object))
+                                                           If .Item1 Then
+                                                               Yield .Item2
+                                                           End If
+                                                       End With
+                                                   End If
+                                               Next
+                                           End Function() _
+                                       .DoCall(Function(pip)
+                                                   Return New pipeline(pip, DirectCast(sequence, pipeline).elementType)
+                                               End Function)
+                                Else
+                                    Dim booleans As New List(Of Boolean)
+
+                                    For Each obj In seq
+                                        If TypeOf obj Is Message Then
+                                            Return obj
+                                        Else
+                                            With DirectCast(obj, (Boolean, Object))
+                                                booleans.Add(.Item1)
+                                            End With
+                                        End If
+                                    Next
+
+                                    Return booleans.ToArray
+                                End If
                             End Function)
             Else
-                Return Rset.getObjectSet(sequence) _
-                    .runWhichFilter(test, envir) _
+                Dim testResult = Rset.getObjectSet(sequence) _
+                    .runWhichFilter(test, env) _
                     .ToArray
+
+                If pipelineFilter Then
+                    Dim objs As New List(Of Boolean)
+
+                    For Each obj In testResult
+                        If TypeOf obj Is Message Then
+                            Return obj
+                        Else
+                            With DirectCast(obj, (Boolean, Object))
+                                If .Item1 Then
+                                    Call objs.Add(.Item2)
+                                End If
+                            End With
+                        End If
+                    Next
+
+                    Return objs.ToArray
+                Else
+                    Dim booleans As New List(Of Boolean)
+
+                    For Each obj In testResult
+                        If TypeOf obj Is Message Then
+                            Return obj
+                        Else
+                            With DirectCast(obj, (Boolean, Object))
+                                booleans.Add(.Item1)
+                            End With
+                        End If
+                    Next
+
+                    Return booleans.ToArray
+                End If
             End If
         End Function
 
         <Extension>
         Private Iterator Function runWhichFilter(sequence As IEnumerable(Of Object), test As Object, env As Environment) As IEnumerable(Of Object)
-            Dim pass As Boolean
             Dim predicate As Predicate(Of Object)
 
             If TypeOf test Is RFunction Then
@@ -218,11 +282,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             End If
 
             For Each item As Object In sequence
-                pass = predicate(item)
-
-                If pass Then
-                    Yield item
-                End If
+                Yield (predicate(item), item)
             Next
         End Function
 
