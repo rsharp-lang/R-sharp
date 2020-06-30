@@ -1,44 +1,44 @@
 ﻿#Region "Microsoft.VisualBasic::ff23d14df67d27ee10cc50e830d0b0c4, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module linq
-    ' 
-    '         Function: all, any, doWhile, first, groupBy
-    '                   orderBy, projectAs, reverse, runWhichFilter, skip
-    '                   take, unique, where, whichMax, whichMin
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module linq
+' 
+'         Function: all, any, doWhile, first, groupBy
+'                   orderBy, projectAs, reverse, runWhichFilter, skip
+'                   take, unique, where, whichMax, whichMin
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -50,6 +50,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 
 Namespace Runtime.Internal.Invokes.LinqPipeline
@@ -174,7 +175,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         <ExportAPI("which")>
         Private Function where(<RRawVectorArgument>
                                sequence As Object,
-                               Optional test As RFunction = Nothing,
+                               Optional test As Object = Nothing,
                                Optional envir As Environment = Nothing) As Object
 
             If test Is Nothing Then
@@ -196,13 +197,28 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         End Function
 
         <Extension>
-        Private Iterator Function runWhichFilter(sequence As IEnumerable(Of Object), test As RFunction, env As Environment) As IEnumerable(Of Object)
+        Private Iterator Function runWhichFilter(sequence As IEnumerable(Of Object), test As Object, env As Environment) As IEnumerable(Of Object)
             Dim pass As Boolean
-            Dim arg As InvokeParameter()
+            Dim predicate As Predicate(Of Object)
+
+            If TypeOf test Is RFunction Then
+                predicate = Function(item)
+                                Dim arg = InvokeParameter.CreateLiterals(item)
+                                Dim result = DirectCast(test, RFunction).Invoke(env, arg)
+
+                                Return REnv.asLogical(result)(Scan0)
+                            End Function
+            ElseIf TypeOf test Is Predicate(Of Object) Then
+                predicate = DirectCast(test, Predicate(Of Object))
+            ElseIf TypeOf test Is Func(Of Object, Boolean) Then
+                predicate = New Predicate(Of Object)(AddressOf DirectCast(test, Func(Of Object, Boolean)).Invoke)
+            Else
+                Yield Internal.debug.stop(Message.InCompatibleType(GetType(Predicate(Of Object)), test.GetType, env), env)
+                Return
+            End If
 
             For Each item As Object In sequence
-                arg = InvokeParameter.CreateLiterals(item)
-                pass = Runtime.asLogical(test.Invoke(env, arg))(Scan0)
+                pass = predicate(item)
 
                 If pass Then
                     Yield item
