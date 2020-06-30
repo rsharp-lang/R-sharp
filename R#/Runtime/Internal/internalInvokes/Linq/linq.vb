@@ -1,44 +1,44 @@
 ﻿#Region "Microsoft.VisualBasic::ff23d14df67d27ee10cc50e830d0b0c4, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module linq
-    ' 
-    '         Function: all, any, doWhile, first, groupBy
-    '                   orderBy, projectAs, reverse, runWhichFilter, skip
-    '                   take, unique, where, whichMax, whichMin
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module linq
+' 
+'         Function: all, any, doWhile, first, groupBy
+'                   orderBy, projectAs, reverse, runWhichFilter, skip
+'                   take, unique, where, whichMax, whichMin
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -50,6 +50,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 
 Namespace Runtime.Internal.Invokes.LinqPipeline
@@ -168,45 +169,124 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' <summary>
         ''' The which test filter
         ''' </summary>
-        ''' <param name="envir"></param>
+        ''' <param name="env"></param>
         ''' <returns></returns>
         ''' 
         <ExportAPI("which")>
         Private Function where(<RRawVectorArgument>
                                sequence As Object,
-                               Optional test As RFunction = Nothing,
-                               Optional envir As Environment = Nothing) As Object
+                               Optional test As Object = Nothing,
+                               Optional pipelineFilter As Boolean = True,
+                               Optional env As Environment = Nothing) As Object
 
             If test Is Nothing Then
                 ' test for which index
-                Return Which.IsTrue(Runtime.asLogical(sequence), offset:=1)
+                Return Which.IsTrue(REnv.asLogical(sequence), offset:=1)
             ElseIf TypeOf sequence Is pipeline Then
                 ' run in pipeline mode
-                Return DirectCast(sequence, pipeline) _
-                    .populates(Of Object) _
-                    .runWhichFilter(test, envir) _
-                    .DoCall(Function(seq)
-                                Return New pipeline(seq, DirectCast(sequence, pipeline).elementType)
-                            End Function)
+                Return runFilterPipeline(sequence, test, pipelineFilter, env)
             Else
-                Return Rset.getObjectSet(sequence) _
-                    .runWhichFilter(test, envir) _
+                Dim testResult = Rset.getObjectSet(sequence) _
+                    .runWhichFilter(test, env) _
                     .ToArray
+
+                If pipelineFilter Then
+                    Dim objs As New List(Of Boolean)
+
+                    For Each obj In testResult
+                        If TypeOf obj Is Message Then
+                            Return obj
+                        Else
+                            With DirectCast(obj, (Boolean, Object))
+                                If .Item1 Then
+                                    Call objs.Add(.Item2)
+                                End If
+                            End With
+                        End If
+                    Next
+
+                    Return objs.ToArray
+                Else
+                    Dim booleans As New List(Of Boolean)
+
+                    For Each obj In testResult
+                        If TypeOf obj Is Message Then
+                            Return obj
+                        Else
+                            With DirectCast(obj, (Boolean, Object))
+                                booleans.Add(.Item1)
+                            End With
+                        End If
+                    Next
+
+                    Return booleans.ToArray
+                End If
             End If
         End Function
 
+        Private Function runFilterPipeline(sequence As Object, test As Object, pipelineFilter As Boolean, env As Environment) As Object
+            Return DirectCast(sequence, pipeline) _
+                    .populates(Of Object) _
+                    .runWhichFilter(test, env) _
+                    .DoCall(Function(seq)
+                                If pipelineFilter Then
+                                    Return Iterator Function() As IEnumerable(Of Object)
+                                               For Each obj In seq
+                                                   If TypeOf obj Is Message Then
+                                                       Yield obj
+                                                       Return
+                                                   Else
+                                                       With DirectCast(obj, (Boolean, Object))
+                                                           If .Item1 Then
+                                                               Yield .Item2
+                                                           End If
+                                                       End With
+                                                   End If
+                                               Next
+                                           End Function() _
+                                       .DoCall(Function(pip)
+                                                   Return New pipeline(pip, DirectCast(sequence(), pipeline).elementType)
+                                               End Function)
+                                Else
+                                    Dim booleans As New List(Of Boolean)
+
+                                    For Each obj In seq
+                                        If TypeOf obj Is Message Then
+                                            Return obj
+                                        Else
+                                            With DirectCast(obj, (Boolean, Object))
+                                                booleans.Add(.Item1)
+                                            End With
+                                        End If
+                                    Next
+
+                                    Return booleans.ToArray
+                                End If
+                            End Function)
+        End Function
+
         <Extension>
-        Private Iterator Function runWhichFilter(sequence As IEnumerable(Of Object), test As RFunction, env As Environment) As IEnumerable(Of Object)
-            Dim pass As Boolean
-            Dim arg As InvokeParameter()
+        Private Iterator Function runWhichFilter(sequence As IEnumerable(Of Object), test As Object, env As Environment) As IEnumerable(Of Object)
+            Dim predicate As Predicate(Of Object)
+
+            If TypeOf test Is RFunction Then
+                predicate = Function(item)
+                                Dim arg = InvokeParameter.CreateLiterals(item)
+                                Dim result = DirectCast(test, RFunction).Invoke(env, arg)
+
+                                Return REnv.asLogical(result)(Scan0)
+                            End Function
+            ElseIf TypeOf test Is Predicate(Of Object) Then
+                predicate = DirectCast(test, Predicate(Of Object))
+            ElseIf TypeOf test Is Func(Of Object, Boolean) Then
+                predicate = New Predicate(Of Object)(AddressOf DirectCast(test, Func(Of Object, Boolean)).Invoke)
+            Else
+                Yield Internal.debug.stop(Message.InCompatibleType(GetType(Predicate(Of Object)), test.GetType, env), env)
+                Return
+            End If
 
             For Each item As Object In sequence
-                arg = InvokeParameter.CreateLiterals(item)
-                pass = Runtime.asLogical(test.Invoke(env, arg))(Scan0)
-
-                If pass Then
-                    Yield item
-                End If
+                Yield (predicate(item), item)
             Next
         End Function
 

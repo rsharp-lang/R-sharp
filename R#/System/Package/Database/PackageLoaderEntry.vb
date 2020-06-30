@@ -113,7 +113,7 @@ Namespace System.Package
         ''' <returns></returns>
         Public Function GetLoader(ByRef exception As Exception) As Package
             Dim loader As Type = [module].GetType(
-                knownFirst:=False,
+                knownFirst:=True,
                 throwEx:=False,
                 getException:=exception,
                 searchPath:={$"{App.HOME}/Library"}
