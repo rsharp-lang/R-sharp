@@ -184,44 +184,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 Return Which.IsTrue(REnv.asLogical(sequence), offset:=1)
             ElseIf TypeOf sequence Is pipeline Then
                 ' run in pipeline mode
-                Return DirectCast(sequence, pipeline) _
-                    .populates(Of Object) _
-                    .runWhichFilter(test, env) _
-                    .DoCall(Function(seq)
-                                If pipelineFilter Then
-                                    Return Iterator Function() As IEnumerable(Of Object)
-                                               For Each obj In seq
-                                                   If TypeOf obj Is Message Then
-                                                       Yield obj
-                                                       Return
-                                                   Else
-                                                       With DirectCast(obj, (Boolean, Object))
-                                                           If .Item1 Then
-                                                               Yield .Item2
-                                                           End If
-                                                       End With
-                                                   End If
-                                               Next
-                                           End Function() _
-                                       .DoCall(Function(pip)
-                                                   Return New pipeline(pip, DirectCast(sequence, pipeline).elementType)
-                                               End Function)
-                                Else
-                                    Dim booleans As New List(Of Boolean)
-
-                                    For Each obj In seq
-                                        If TypeOf obj Is Message Then
-                                            Return obj
-                                        Else
-                                            With DirectCast(obj, (Boolean, Object))
-                                                booleans.Add(.Item1)
-                                            End With
-                                        End If
-                                    Next
-
-                                    Return booleans.ToArray
-                                End If
-                            End Function)
+                Return runFilterPipeline(sequence, test, pipelineFilter, env)
             Else
                 Dim testResult = Rset.getObjectSet(sequence) _
                     .runWhichFilter(test, env) _
@@ -259,6 +222,47 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                     Return booleans.ToArray
                 End If
             End If
+        End Function
+
+        Private Function runFilterPipeline(sequence As Object, test As Object, pipelineFilter As Boolean, env As Environment) As Object
+            Return DirectCast(sequence, pipeline) _
+                    .populates(Of Object) _
+                    .runWhichFilter(test, env) _
+                    .DoCall(Function(seq)
+                                If pipelineFilter Then
+                                    Return Iterator Function() As IEnumerable(Of Object)
+                                               For Each obj In seq
+                                                   If TypeOf obj Is Message Then
+                                                       Yield obj
+                                                       Return
+                                                   Else
+                                                       With DirectCast(obj, (Boolean, Object))
+                                                           If .Item1 Then
+                                                               Yield .Item2
+                                                           End If
+                                                       End With
+                                                   End If
+                                               Next
+                                           End Function() _
+                                       .DoCall(Function(pip)
+                                                   Return New pipeline(pip, DirectCast(sequence(), pipeline).elementType)
+                                               End Function)
+                                Else
+                                    Dim booleans As New List(Of Boolean)
+
+                                    For Each obj In seq
+                                        If TypeOf obj Is Message Then
+                                            Return obj
+                                        Else
+                                            With DirectCast(obj, (Boolean, Object))
+                                                booleans.Add(.Item1)
+                                            End With
+                                        End If
+                                    Next
+
+                                    Return booleans.ToArray
+                                End If
+                            End Function)
         End Function
 
         <Extension>
