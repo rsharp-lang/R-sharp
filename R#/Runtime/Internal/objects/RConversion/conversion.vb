@@ -222,7 +222,13 @@ Namespace Runtime.Internal.Object.Converts
             If makeDataframe.is_ableConverts(type) Then
                 Return makeDataframe.createDataframe(type, x, args, env)
             Else
-                Return Internal.debug.stop(New InvalidProgramException, env)
+                type = makeDataframe.tryTypeLineage(type)
+
+                If type Is Nothing Then
+                    Return Internal.debug.stop(New InvalidProgramException("missing api for handle of data: " & type.FullName), env)
+                Else
+                    Return makeDataframe.createDataframe(type, x, args, env)
+                End If
             End If
         End Function
 

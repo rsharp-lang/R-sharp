@@ -81,6 +81,16 @@ Namespace Runtime.Internal.Object.Converts
             Return makesDataframe.ContainsKey(type)
         End Function
 
+        Public Function tryTypeLineage(type As Type) As Type
+            For Each base As Type In makesDataframe.Keys
+                If type.IsInheritsFrom(base) Then
+                    Return base
+                End If
+            Next
+
+            Return Nothing
+        End Function
+
         Public Function createDataframe(type As Type, x As Object, args As list, env As Environment) As dataframe
             Return makesDataframe(type)(x, args, env)
         End Function
