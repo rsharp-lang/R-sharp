@@ -297,6 +297,11 @@ Namespace Runtime.Internal.Object.Converts
         ''' Cast the raw dictionary object to R# list object
         ''' </summary>
         ''' <param name="obj"></param>
+        ''' <param name="args">
+        ''' for dataframe type:
+        ''' 
+        ''' ``byRow``: logical, default is FALSE, means cast dataframe to list directly by column hash table values
+        ''' </param>
         ''' <returns></returns>
         <ExportAPI("as.list")>
         Public Function asList(obj As Object, <RListObjectArgument> args As Object, Optional env As Environment = Nothing) As list

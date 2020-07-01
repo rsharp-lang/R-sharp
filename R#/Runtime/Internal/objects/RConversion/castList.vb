@@ -42,6 +42,7 @@
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Emit.Delegates
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Object.Converts
 
@@ -79,7 +80,7 @@ Namespace Runtime.Internal.Object.Converts
                     ' object property as list data
                     Return DirectCast(obj, vbObject).toList
                 Case GetType(dataframe)
-                    Dim byRow As Boolean = Runtime.asLogical(args!byrow)(Scan0)
+                    Dim byRow As Boolean = REnv.asLogical(args!byrow)(Scan0)
 
                     If byRow Then
                         Return DirectCast(obj, dataframe).listByRows
