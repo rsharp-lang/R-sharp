@@ -148,6 +148,15 @@ Namespace Runtime.Internal.Object
                 Else
                     Return Internal.debug.stop(Message.InCompatibleType(GetType(T), DirectCast(upstream, vector).elementType.raw, env), env)
                 End If
+            ElseIf TypeOf upstream Is Object() Then
+                Dim objs = DirectCast(upstream, Object())
+                Dim type As Type = MeasureRealElementType(objs)
+
+                If type Is GetType(T) Then
+                    Return New pipeline(objs, RType.GetRSharpType(type))
+                Else
+                    Return Internal.debug.stop(Message.InCompatibleType(GetType(T), type, env), env)
+                End If
             Else
                 Return Internal.debug.stop(Message.InCompatibleType(GetType(T), upstream.GetType, env), env)
             End If
