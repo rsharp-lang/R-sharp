@@ -324,5 +324,9 @@ Namespace Runtime.Interop
         Public Overrides Function ToString() As String
             Return $"Dim {name} As {api.ToString}"
         End Function
+
+        Public Function getReturns(env As Environment) As RType Implements RFunction.getReturns
+            Return returns
+        End Function
     End Class
 End Namespace

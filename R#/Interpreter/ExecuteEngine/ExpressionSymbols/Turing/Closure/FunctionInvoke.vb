@@ -72,12 +72,6 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
     Public Class FunctionInvoke : Inherits Expression
         Implements IRuntimeTrace
 
-        Public Overrides ReadOnly Property type As TypeCodes
-            Get
-                Return TypeCodes.generic
-            End Get
-        End Property
-
         Public ReadOnly Property funcName As Expression
         Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
 
@@ -86,6 +80,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         ''' </summary>
         ''' <returns></returns>
         Public Property [namespace] As String
+
+        Public Overrides ReadOnly Property type As TypeCodes
+            Get
+                Return TypeCodes.generic
+            End Get
+        End Property
 
         Dim m_parameters As Expression()
 

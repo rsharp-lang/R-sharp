@@ -68,10 +68,10 @@ Namespace Runtime.Components.Interface
         ReadOnly Property name As String
 
         ''' <summary>
-        ''' 这个函数所返回的类型，如果没有额外的信息，这个属性一般是any类型
+        ''' 获取这个函数可能所返回的类型，如果没有额外的信息，这个属性一般是any类型
         ''' </summary>
         ''' <returns></returns>
-        ReadOnly Property returns As RType
+        Function getReturns(env As Environment) As RType
 
         ''' <summary>
         ''' 执行当前的这个函数对象然后获取得到结果值

@@ -49,6 +49,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
@@ -203,6 +204,10 @@ RE0:
 
         Public Function GetPrintContent() As String Implements RPrint.GetPrintContent
             Return $"``{name}``"
+        End Function
+
+        Public Function getReturns(env As Environment) As RType Implements RFunction.getReturns
+            Return RType.GetRSharpType(GetType(Object))
         End Function
     End Class
 End Namespace
