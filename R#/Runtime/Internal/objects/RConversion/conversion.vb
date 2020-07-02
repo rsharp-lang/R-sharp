@@ -425,5 +425,18 @@ Namespace Runtime.Internal.Object.Converts
         Public Function asRaw(<RRawVectorArgument> obj As Object, Optional env As Environment = Nothing) As Byte()
 
         End Function
+
+        ''' <summary>
+        ''' running pipeline function in linq pipeline mode
+        ''' </summary>
+        ''' <param name="seq">any kind of object sequence in R# environment</param>
+        ''' <returns></returns>
+        <ExportAPI("as.pipeline")>
+        Public Function asPipeline(<RRawVectorArgument> seq As Object) As pipeline
+            Dim type As RType = Nothing
+            Dim sequence = Rset.getObjectSet(seq, elementType:=type)
+
+            Return New pipeline(sequence, type)
+        End Function
     End Module
 End Namespace
