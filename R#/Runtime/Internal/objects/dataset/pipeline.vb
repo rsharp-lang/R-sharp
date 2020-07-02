@@ -139,6 +139,8 @@ Namespace Runtime.Internal.Object
 
                         Exit For
                     End Try
+
+                    Yield cast
                 End If
             Next
 
