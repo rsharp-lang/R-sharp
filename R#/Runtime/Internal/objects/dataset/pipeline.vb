@@ -64,6 +64,11 @@ Namespace Runtime.Internal.Object
 
         Public Property [pipeFinalize] As Action
 
+        ''' <summary>
+        ''' contains an error message in the pipeline populator or 
+        ''' the pipeline data is an error message
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property isError As Boolean
             Get
                 If Not populatorFirstErr Is Nothing Then
@@ -124,7 +129,14 @@ Namespace Runtime.Internal.Object
                         cast = Nothing
                         cast = DirectCast(obj, T)
                     Catch ex As Exception
+                        Dim warnings As String() = {
+                            "the given pipeline is early stop due to an unexpected error message was generated from upstream."
+                        }.JoinIterates(populatorFirstErr.message.Select(Function(msg) $"Err: " & msg)) _
+                         .ToArray
+
                         populatorFirstErr = Internal.debug.stop(ex, env)
+                        env.AddMessage(warnings, MSG_TYPES.WRN)
+
                         Exit For
                     End Try
                 End If
