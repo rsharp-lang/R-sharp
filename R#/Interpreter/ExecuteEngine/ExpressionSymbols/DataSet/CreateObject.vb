@@ -76,14 +76,22 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Me.constructor = constructor
         End Sub
 
+        Public Shared Function TryGetType(activator As String, env As Environment) As [Variant](Of RType, Message)
+            If env.globalEnvironment.types.ContainsKey(activator) Then
+                Return env.globalEnvironment.types(activator)
+            Else
+                Return Internal.debug.stop({"missing required type information...", "type: " & activator}, env)
+            End If
+        End Function
+
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim type As RType = envir.globalEnvironment.types.TryGetValue(name)
+            Dim type = TryGetType(name, envir)
             Dim obj As vbObject
 
-            If type Is Nothing Then
-                Return Internal.debug.stop({"missing required type information...", "type: " & name}, envir)
+            If type Like GetType(Message) Then
+                Return type.TryCast(Of Message)
             Else
-                obj = vbObject.CreateInstance(type.raw)
+                obj = vbObject.CreateInstance(type.TryCast(Of RType).raw)
             End If
 
             Dim err As New Value(Of Object)

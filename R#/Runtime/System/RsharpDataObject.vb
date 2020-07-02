@@ -54,7 +54,7 @@ Namespace Runtime.Components
             Get
                 Return m_type
             End Get
-            Protected Set(value As RType)
+            Protected Friend Set(value As RType)
                 m_type = value
             End Set
         End Property
