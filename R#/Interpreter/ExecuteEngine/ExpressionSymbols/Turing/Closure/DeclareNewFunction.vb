@@ -52,6 +52,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
@@ -190,6 +191,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
     # function_internal
     {body}
 }}"
+        End Function
+
+        Public Function getReturns(env As Environment) As RType Implements RFunction.getReturns
+            Return RType.GetRSharpType(GetType(Object))
         End Function
     End Class
 End Namespace

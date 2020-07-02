@@ -61,7 +61,7 @@ Module netCDFutils
         ElseIf TypeOf file Is Stream Then
             Return New netCDFReader(New BinaryDataReader(DirectCast(file, Stream)))
         ElseIf TypeOf file Is pipeline AndAlso DirectCast(file, pipeline).elementType Like GetType(Byte) Then
-            Return New netCDFReader(New BinaryDataReader(New MemoryStream(DirectCast(file, pipeline).populates(Of Byte).ToArray)))
+            Return New netCDFReader(New BinaryDataReader(New MemoryStream(DirectCast(file, pipeline).populates(Of Byte)(env).ToArray)))
         Else
             Return Internal.debug.stop(New InvalidProgramException, env)
         End If

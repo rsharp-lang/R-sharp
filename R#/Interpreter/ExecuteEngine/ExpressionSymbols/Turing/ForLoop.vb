@@ -164,7 +164,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
         Private Function getSequence(env As Environment) As IEnumerable(Of Object)
             Dim rawSeq As Object = sequence.Evaluate(env)
-            Dim data As IEnumerable(Of Object) = [Rset].getObjectSet(rawSeq)
+            Dim data As IEnumerable(Of Object) = [Rset].getObjectSet(rawSeq, env)
 
             Return data
         End Function

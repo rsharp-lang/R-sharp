@@ -57,10 +57,24 @@ Namespace Runtime.Internal.Object
 
         ReadOnly pipeline As IEnumerable
 
+        ''' <summary>
+        ''' 在抛出数据的时候所遇到的第一个错误消息
+        ''' </summary>
+        Dim populatorFirstErr As Message
+
         Public Property [pipeFinalize] As Action
 
+        ''' <summary>
+        ''' contains an error message in the pipeline populator or 
+        ''' the pipeline data is an error message
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property isError As Boolean
             Get
+                If Not populatorFirstErr Is Nothing Then
+                    Return True
+                End If
+
                 Return TypeOf pipeline Is Message AndAlso DirectCast(pipeline, Message).level = MSG_TYPES.ERR
             End Get
         End Property
@@ -82,7 +96,9 @@ Namespace Runtime.Internal.Object
         End Sub
 
         Public Function getError() As Message
-            If isError Then
+            If Not populatorFirstErr Is Nothing Then
+                Return populatorFirstErr
+            ElseIf isError Then
                 Return DirectCast(CObj(pipeline), Message)
             Else
                 Return Nothing
@@ -99,12 +115,33 @@ Namespace Runtime.Internal.Object
         ''' the program will be crashed.
         ''' </remarks>
         Public Function createVector(env As Environment) As vector
-            Return New vector(elementType, populates(Of Object), env)
+            Return New vector(elementType, populates(Of Object)(env), env)
         End Function
 
-        Public Iterator Function populates(Of T)() As IEnumerable(Of T)
+        Public Iterator Function populates(Of T)(env As Environment) As IEnumerable(Of T)
+            Dim cast As T
+
             For Each obj As Object In pipeline
-                Yield DirectCast(obj, T)
+                If TypeOf obj Is Message Then
+                    populatorFirstErr = DirectCast(obj, Message)
+                Else
+                    Try
+                        cast = Nothing
+                        cast = DirectCast(obj, T)
+                    Catch ex As Exception
+                        Dim warnings As String() = {
+                            "the given pipeline is early stop due to an unexpected error message was generated from upstream."
+                        }.JoinIterates(populatorFirstErr.message.Select(Function(msg) $"Err: " & msg)) _
+                         .ToArray
+
+                        populatorFirstErr = Internal.debug.stop(ex, env)
+                        env.AddMessage(warnings, MSG_TYPES.WRN)
+
+                        Exit For
+                    End Try
+
+                    Yield cast
+                End If
             Next
 
             If Not _pipeFinalize Is Nothing Then

@@ -61,7 +61,7 @@ Namespace Runtime.Internal.Invokes
         ''' </summary>
         ''' <param name="x"></param>
         ''' <returns></returns>
-        Public Function getObjectSet(x As Object) As IEnumerable(Of Object)
+        Public Function getObjectSet(x As Object, env As Environment, Optional ByRef elementType As RType = Nothing) As IEnumerable(Of Object)
             If x Is Nothing Then
                 Return {}
             End If
@@ -69,17 +69,35 @@ Namespace Runtime.Internal.Invokes
             Dim type As Type = x.GetType
 
             If type Is GetType(vector) Then
-                Return DirectCast(x, vector).data.AsObjectEnumerator
+                With DirectCast(x, vector)
+                    elementType = .elementType
+                    Return .data.AsObjectEnumerator
+                End With
             ElseIf type Is GetType(list) Then
-                ' list value as sequence data
-                Return DirectCast(x, list).slots.Values.AsEnumerable
+                With DirectCast(x, list)
+                    ' list value as sequence data
+                    Dim raw As Object() = .slots.Values.ToArray
+                    elementType = MeasureRealElementType(raw).DoCall(AddressOf RType.GetRSharpType)
+                    Return raw.AsEnumerable
+                End With
             ElseIf type.ImplementInterface(GetType(IDictionary(Of String, Object))) Then
-                Return DirectCast(x, IDictionary(Of String, Object)).Values.AsEnumerable
+                With DirectCast(x, IDictionary(Of String, Object))
+                    Dim raw As Object() = .Values.AsEnumerable.ToArray
+                    elementType = MeasureRealElementType(raw).DoCall(AddressOf RType.GetRSharpType)
+                    Return raw.AsEnumerable
+                End With
             ElseIf type.IsArray Then
-                Return DirectCast(x, Array).AsObjectEnumerator
+                With DirectCast(x, Array)
+                    elementType = .GetType.GetElementType.DoCall(AddressOf RType.GetRSharpType)
+                    Return .AsObjectEnumerator
+                End With
             ElseIf type Is GetType(pipeline) Then
-                Return DirectCast(x, pipeline).populates(Of Object)
+                With DirectCast(x, pipeline)
+                    elementType = .elementType
+                    Return .populates(Of Object)(env)
+                End With
             Else
+                elementType = RType.GetRSharpType(x.GetType)
                 Return {x}
             End If
         End Function
@@ -91,10 +109,10 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="y">vectors (of the same mode) containing a sequence of items (conceptually) with no duplicated values.</param>
         ''' <returns></returns>
         <ExportAPI("intersect")>
-        Public Function intersect(<RRawVectorArgument> x As Object, <RRawVectorArgument> y As Object) As Object
-            Dim index_a As New Index(Of Object)(getObjectSet(x))
+        Public Function intersect(<RRawVectorArgument> x As Object, <RRawVectorArgument> y As Object, Optional env As Environment = Nothing) As Object
+            Dim index_a As New Index(Of Object)(getObjectSet(x, env))
             Dim inter As Object() = index_a _
-                .Intersect(collection:=getObjectSet(y)) _
+                .Intersect(collection:=getObjectSet(y, env)) _
                 .Distinct _
                 .ToArray
 
@@ -108,9 +126,9 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="y">vectors (of the same mode) containing a sequence of items (conceptually) with no duplicated values.</param>
         ''' <returns></returns>
         <ExportAPI("union")>
-        Public Function union(<RRawVectorArgument> x As Object, <RRawVectorArgument> y As Object) As Object
-            Dim join As Object() = getObjectSet(x) _
-                .JoinIterates(getObjectSet(y)) _
+        Public Function union(<RRawVectorArgument> x As Object, <RRawVectorArgument> y As Object, Optional env As Environment = Nothing) As Object
+            Dim join As Object() = getObjectSet(x, env) _
+                .JoinIterates(getObjectSet(y, env)) _
                 .Distinct _
                 .ToArray
             Return join
