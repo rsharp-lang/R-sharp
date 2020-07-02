@@ -156,13 +156,13 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                     .populates(Of Object) _
                     .Select(doProject)
 
-                Return New pipeline(projection, GetType(Object))
+                Return New pipeline(projection, project.returns)
             Else
                 Dim result As Object() = Rset.getObjectSet(sequence) _
                     .Select(doProject) _
                     .ToArray
 
-                Return result
+                Return New vector(result, project.returns)
             End If
         End Function
 

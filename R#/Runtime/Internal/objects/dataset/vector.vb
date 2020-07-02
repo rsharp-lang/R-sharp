@@ -76,6 +76,11 @@ Namespace Runtime.Internal.Object
         Sub New()
         End Sub
 
+        Sub New(input As Array, type As RType)
+            data = input
+            elementType = type
+        End Sub
+
         ''' <summary>
         ''' Create a vector from a pipeline model and given array element <paramref name="model"/> type
         ''' </summary>
