@@ -63,18 +63,18 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
     Module linq
 
         <ExportAPI("take")>
-        Public Function take(<RRawVectorArgument> sequence As Object, n%) As Object
+        Public Function take(<RRawVectorArgument> sequence As Object, n%, Optional env As Environment = Nothing) As Object
             If sequence Is Nothing Then
                 Return Nothing
             ElseIf TypeOf sequence Is pipeline Then
                 Return DirectCast(sequence, pipeline) _
-                    .populates(Of Object) _
+                    .populates(Of Object)(env) _
                     .Take(n) _
                     .DoCall(Function(seq)
                                 Return New pipeline(seq, DirectCast(sequence(), pipeline).elementType)
                             End Function)
             Else
-                Return Rset.getObjectSet(sequence).Take(n).ToArray
+                Return Rset.getObjectSet(sequence, env).Take(n).ToArray
             End If
         End Function
 
@@ -87,18 +87,18 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' <returns>An System.Collections.Generic.IEnumerable`1 that contains the elements that occur
         ''' after the specified index in the input sequence.</returns>
         <ExportAPI("skip")>
-        Public Function skip(<RRawVectorArgument> sequence As Object, n%) As Object
+        Public Function skip(<RRawVectorArgument> sequence As Object, n%, Optional env As Environment = Nothing) As Object
             If sequence Is Nothing Then
                 Return Nothing
             ElseIf TypeOf sequence Is pipeline Then
                 Return DirectCast(sequence, pipeline) _
-                    .populates(Of Object) _
+                    .populates(Of Object)(env) _
                     .Skip(n) _
                     .DoCall(Function(seq)
                                 Return New pipeline(seq, DirectCast(sequence, pipeline).elementType)
                             End Function)
             Else
-                Return Rset.getObjectSet(sequence).Skip(n).ToArray
+                Return Rset.getObjectSet(sequence, env).Skip(n).ToArray
             End If
         End Function
 
@@ -118,7 +118,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                                 Optional envir As Environment = Nothing) As Object
 
             If Not getKey Is Nothing Then
-                Return Rset.getObjectSet(items) _
+                Return Rset.getObjectSet(items, envir) _
                    .GroupBy(Function(o)
                                 Dim arg = InvokeParameter.CreateLiterals(o)
                                 Return getKey.Invoke(envir, arg)
@@ -128,7 +128,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                            End Function) _
                    .ToArray
             Else
-                Return Rset.getObjectSet(items) _
+                Return Rset.getObjectSet(items, envir) _
                    .GroupBy(Function(o)
                                 Return o
                             End Function) _
@@ -153,12 +153,12 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 ' run in pipeline mode
                 Dim seq As pipeline = DirectCast(sequence, pipeline)
                 Dim projection As IEnumerable(Of Object) = seq _
-                    .populates(Of Object) _
+                    .populates(Of Object)(envir) _
                     .Select(doProject)
 
                 Return New pipeline(projection, project.getReturns(envir))
             Else
-                Dim result As Object() = Rset.getObjectSet(sequence) _
+                Dim result As Object() = Rset.getObjectSet(sequence, envir) _
                     .Select(doProject) _
                     .ToArray
 
@@ -186,7 +186,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 ' run in pipeline mode
                 Return runFilterPipeline(sequence, test, pipelineFilter, env)
             Else
-                Dim testResult = Rset.getObjectSet(sequence) _
+                Dim testResult = Rset.getObjectSet(sequence, env) _
                     .runWhichFilter(test, env) _
                     .ToArray
 
@@ -226,7 +226,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
         Private Function runFilterPipeline(sequence As Object, test As Object, pipelineFilter As Boolean, env As Environment) As Object
             Return DirectCast(sequence, pipeline) _
-                    .populates(Of Object) _
+                    .populates(Of Object)(env) _
                     .runWhichFilter(test, env) _
                     .DoCall(Function(seq)
                                 If pipelineFilter Then
@@ -293,10 +293,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         <ExportAPI("which.max")>
         Public Function whichMax(<RRawVectorArgument> sequence As Object, Optional eval As Object = Nothing, Optional env As Environment = Nothing) As Integer
             If eval Is Nothing Then
-                Return Which.Max(DirectCast(asVector(Of Double)(Rset.getObjectSet(sequence).ToArray), Double())) + 1
+                Return Which.Max(DirectCast(asVector(Of Double)(Rset.getObjectSet(sequence, env).ToArray), Double())) + 1
             Else
                 Dim lambda = LinqPipeline.lambda.CreateProjectLambda(Of Double)(eval, env)
-                Dim scores = Rset.getObjectSet(sequence).Select(lambda).ToArray
+                Dim scores = Rset.getObjectSet(sequence, env).Select(lambda).ToArray
 
                 Return Which.Max(scores) + 1
             End If
@@ -305,10 +305,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         <ExportAPI("which.min")>
         Public Function whichMin(<RRawVectorArgument> sequence As Object, Optional eval As Object = Nothing, Optional env As Environment = Nothing) As Integer
             If eval Is Nothing Then
-                Return Which.Min(DirectCast(asVector(Of Double)(Rset.getObjectSet(sequence)), Double())) + 1
+                Return Which.Min(DirectCast(asVector(Of Double)(Rset.getObjectSet(sequence, env)), Double())) + 1
             Else
                 Dim lambda = LinqPipeline.lambda.CreateProjectLambda(Of Double)(eval, env)
-                Dim scores = Rset.getObjectSet(sequence).Select(lambda).ToArray
+                Dim scores = Rset.getObjectSet(sequence, env).Select(lambda).ToArray
 
                 Return Which.Min(scores) + 1
             End If
@@ -324,12 +324,12 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Dim arg As InvokeParameter()
 
             If test Is Nothing Then
-                Return Rset.getObjectSet(sequence).FirstOrDefault
+                Return Rset.getObjectSet(sequence, envir).FirstOrDefault
             End If
 
-            For Each item As Object In Rset.getObjectSet(sequence)
+            For Each item As Object In Rset.getObjectSet(sequence, envir)
                 arg = InvokeParameter.CreateLiterals(item)
-                pass = Runtime.asLogical(test.Invoke(envir, arg))(Scan0)
+                pass = REnv.asLogical(test.Invoke(envir, arg))(Scan0)
 
                 If pass Then
                     Return item
@@ -345,7 +345,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                                  getKey As RFunction,
                                  Optional envir As Environment = Nothing) As Object
 
-            Dim source As IEnumerable(Of Object) = Rset.getObjectSet(sequence)
+            Dim source As IEnumerable(Of Object) = Rset.getObjectSet(sequence, envir)
             Dim result As Group() = source _
                 .GroupBy(Function(o)
                              Dim arg = InvokeParameter.CreateLiterals(o)
@@ -379,7 +379,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                                 Optional desc As Boolean = False,
                                 Optional envir As Environment = Nothing) As Object
 
-            Dim source As Object() = Rset.getObjectSet(sequence).ToArray
+            Dim source As Object() = Rset.getObjectSet(sequence, envir).ToArray
             Dim getKeyFunc As Func(Of Object, Object)
             Dim result As Array
 
@@ -439,7 +439,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <ExportAPI("any")>
         Public Function any(<RRawVectorArgument> test As Object, Optional narm As Boolean = False) As Boolean
-            Return Runtime.asLogical(test).Any(Function(b) b = True)
+            Return REnv.asLogical(test).Any(Function(b) b = True)
         End Function
 
         ''' <summary>
@@ -468,7 +468,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <ExportAPI("all")>
         Public Function all(<RRawVectorArgument> test As Object, Optional narm As Boolean = False) As Boolean
-            Return Runtime.asLogical(test).All(Function(b) b = True)
+            Return REnv.asLogical(test).All(Function(b) b = True)
         End Function
 
         <ExportAPI("while")>

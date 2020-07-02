@@ -51,9 +51,7 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -64,9 +62,9 @@ Namespace Runtime.Internal.Object.Converts
     Module RConversion
 
         <ExportAPI("as.Date")>
-        Public Function asDate(<RRawVectorArgument> obj As Object) As Date()
+        Public Function asDate(<RRawVectorArgument> obj As Object, Optional env As Environment = Nothing) As Date()
             Return Rset _
-                .getObjectSet(obj) _
+                .getObjectSet(obj, env) _
                 .Select(Function(o)
                             If TypeOf o Is Date Then
                                 Return CDate(o)
@@ -434,9 +432,9 @@ Namespace Runtime.Internal.Object.Converts
         ''' <param name="seq">any kind of object sequence in R# environment</param>
         ''' <returns></returns>
         <ExportAPI("as.pipeline")>
-        Public Function asPipeline(<RRawVectorArgument> seq As Object) As pipeline
+        Public Function asPipeline(<RRawVectorArgument> seq As Object, Optional env As Environment = Nothing) As pipeline
             Dim type As RType = Nothing
-            Dim sequence = Rset.getObjectSet(seq, elementType:=type)
+            Dim sequence = Rset.getObjectSet(seq, env, elementType:=type)
 
             Return New pipeline(sequence, type)
         End Function

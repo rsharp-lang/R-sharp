@@ -61,7 +61,7 @@ Namespace Runtime.Internal.Invokes
         ''' </summary>
         ''' <param name="x"></param>
         ''' <returns></returns>
-        Public Function getObjectSet(x As Object, Optional ByRef elementType As RType = Nothing) As IEnumerable(Of Object)
+        Public Function getObjectSet(x As Object, env As Environment, Optional ByRef elementType As RType = Nothing) As IEnumerable(Of Object)
             If x Is Nothing Then
                 Return {}
             End If
@@ -94,7 +94,7 @@ Namespace Runtime.Internal.Invokes
             ElseIf type Is GetType(pipeline) Then
                 With DirectCast(x, pipeline)
                     elementType = .elementType
-                    Return .populates(Of Object)
+                    Return .populates(Of Object)(env)
                 End With
             Else
                 elementType = RType.GetRSharpType(x.GetType)
@@ -109,10 +109,10 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="y">vectors (of the same mode) containing a sequence of items (conceptually) with no duplicated values.</param>
         ''' <returns></returns>
         <ExportAPI("intersect")>
-        Public Function intersect(<RRawVectorArgument> x As Object, <RRawVectorArgument> y As Object) As Object
-            Dim index_a As New Index(Of Object)(getObjectSet(x))
+        Public Function intersect(<RRawVectorArgument> x As Object, <RRawVectorArgument> y As Object, Optional env As Environment = Nothing) As Object
+            Dim index_a As New Index(Of Object)(getObjectSet(x, env))
             Dim inter As Object() = index_a _
-                .Intersect(collection:=getObjectSet(y)) _
+                .Intersect(collection:=getObjectSet(y, env)) _
                 .Distinct _
                 .ToArray
 
@@ -126,9 +126,9 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="y">vectors (of the same mode) containing a sequence of items (conceptually) with no duplicated values.</param>
         ''' <returns></returns>
         <ExportAPI("union")>
-        Public Function union(<RRawVectorArgument> x As Object, <RRawVectorArgument> y As Object) As Object
-            Dim join As Object() = getObjectSet(x) _
-                .JoinIterates(getObjectSet(y)) _
+        Public Function union(<RRawVectorArgument> x As Object, <RRawVectorArgument> y As Object, Optional env As Environment = Nothing) As Object
+            Dim join As Object() = getObjectSet(x, env) _
+                .JoinIterates(getObjectSet(y, env)) _
                 .Distinct _
                 .ToArray
             Return join

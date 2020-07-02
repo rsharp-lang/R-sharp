@@ -155,7 +155,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("grep")>
-        Public Function grep(<RRawVectorArgument> text As Object, greps As String()) As Object
+        Public Function grep(<RRawVectorArgument> text As Object, greps As String(), Optional env As Environment = Nothing) As Object
             If text Is Nothing Then
                 Return Nothing
             End If
@@ -166,13 +166,13 @@ Namespace Runtime.Internal.Invokes
 
             If TypeOf text Is pipeline Then
                 Return DirectCast(text, pipeline) _
-                    .populates(Of String) _
+                    .populates(Of String)(env) _
                     .Select(Function(str)
                                 Return textgrep(str)
                             End Function) _
                     .DoCall(AddressOf pipeline.CreateFromPopulator)
             Else
-                Return Rset.getObjectSet(text) _
+                Return Rset.getObjectSet(text, env) _
                     .Select(Function(o)
                                 Return textgrep(Scripting.ToString(o))
                             End Function) _
