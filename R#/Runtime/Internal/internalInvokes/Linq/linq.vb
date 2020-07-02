@@ -245,7 +245,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                                                Next
                                            End Function() _
                                        .DoCall(Function(pip)
-                                                   Return New pipeline(pip, DirectCast(sequence(), pipeline).elementType)
+                                                   Return New pipeline(pip, DirectCast(sequence, pipeline).elementType)
                                                End Function)
                                 Else
                                     Dim booleans As New List(Of Boolean)
