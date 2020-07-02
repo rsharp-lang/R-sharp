@@ -441,6 +441,13 @@ Namespace Runtime.Internal.Object.Converts
             Return New pipeline(sequence, type)
         End Function
 
+        ''' <summary>
+        ''' try to cast type class of the given data sequence 
+        ''' </summary>
+        ''' <param name="any"></param>
+        ''' <param name="type"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("ctype")>
         Public Function castType(<RRawVectorArgument> any As Object, type As String, Optional env As Environment = Nothing) As Object
             Dim [class] As [Variant](Of RType, Message) = DataSets.CreateObject.TryGetType(type, env)
