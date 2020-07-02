@@ -97,7 +97,7 @@ Namespace Runtime.Internal.Invokes
                     Return .populates(Of Object)
                 End With
             Else
-                elementType = x.GetType
+                elementType = RType.GetRSharpType(x.GetType)
                 Return {x}
             End If
         End Function
