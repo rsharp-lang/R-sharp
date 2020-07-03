@@ -125,4 +125,16 @@ Module netCDFutils
 
         Return table
     End Function
+
+    <ExportAPI("var")>
+    Public Function getDataVariable(file As Object, <RRawVectorArgument> name As Object, Optional env As Environment = Nothing) As Object
+        If TypeOf file Is String Then
+            file = netCDFReader.Open(DirectCast(file, String))
+        End If
+        If Not TypeOf file Is netCDFReader Then
+            Return Internal.debug.stop(New NotImplementedException, env)
+        End If
+
+        ' Dim var = DirectCast(file, netCDFReader).getDataVariableEntry()
+    End Function
 End Module
