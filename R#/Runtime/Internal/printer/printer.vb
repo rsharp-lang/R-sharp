@@ -82,6 +82,7 @@ Namespace Runtime.Internal.ConsolePrinter
         Sub New()
             RtoString(GetType(Color)) = Function(c) DirectCast(c, Color).ToHtmlColor.ToLower
             RtoString(GetType(vbObject)) = Function(o) DirectCast(o, vbObject).ToString
+            RtoString(GetType(pipeline)) = Function(o) DirectCast(o, pipeline).ToString
             RtoString(GetType(RType)) = Function(o) DirectCast(o, RType).ToString
             RtoString(GetType(DateTime)) = AddressOf DateToString
             RtoString(GetType(ExceptionData)) = AddressOf debug.PrintRExceptionStackTrace
