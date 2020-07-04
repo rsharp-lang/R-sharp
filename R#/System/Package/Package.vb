@@ -60,6 +60,11 @@ Namespace System.Package
     Public Class Package
 
         Public ReadOnly Property info As PackageAttribute
+
+        ''' <summary>
+        ''' the package assembly module.
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property package As Type
 
         Public ReadOnly Property is_basePackage As Boolean
@@ -80,6 +85,11 @@ Namespace System.Package
             End Get
         End Property
 
+        ''' <summary>
+        ''' the <see cref="package"/> assembly module is nothing means 
+        ''' the current package object is missing on your filesystem.
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property isMissing As Boolean
             Get
                 Return package Is Nothing

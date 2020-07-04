@@ -200,6 +200,11 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
         Else
             ' run build for all installed package modules
             For Each pkg As Package In env.globalEnvir.packages.AsEnumerable
+                If pkg.isMissing Then
+                    Call $"missing package: {pkg.namespace}...".PrintException
+                    Continue For
+                End If
+
                 For Each ref As String In pkg.ls
                     Dim symbol As RMethodInfo = pkg.GetFunction(apiName:=ref)
                     Dim docs = xmldocs.GetAnnotations(symbol.GetRawDeclares)
