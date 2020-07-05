@@ -161,6 +161,13 @@ Module plots
         End Using
     End Function
 
+    ''' <summary>
+    ''' 绘制关联热图
+    ''' </summary>
+    ''' <param name="dist"></param>
+    ''' <param name="args"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     Public Function plot_corHeatmap(dist As DistanceMatrix, args As list, env As Environment) As Object
         Dim title$ = args.GetString("title", "Correlations")
         Dim bg$ = InteropArgumentHelper.getColor(args!bg, "white")
