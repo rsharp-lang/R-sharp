@@ -178,7 +178,7 @@ Module plots
         Dim colorSet = args.GetString("colors", ColorBrewer.DivergingSchemes.RdBu11)
         Dim fixedSize = args.getValue(Of Boolean)("fixed_size", env, False)
         Dim titleFont$ = InteropArgumentHelper.getFontCSS(args!mainCSS, CSSFont.Win7VeryLarge)
-        Dim labelFont$ = InteropArgumentHelper.getFontCSS(args!labelCSS, CSSFont.Win7LittleLarge)
+        Dim labelFont$ = InteropArgumentHelper.getFontCSS(args!labelCSS, CSSFont.Win7Normal)
         Dim legendTitleFont$ = InteropArgumentHelper.getFontCSS(args!legendTitleCSS, CSSFont.Win7LargeBold)
 
         Return CorrelationHeatmap.Plot(
