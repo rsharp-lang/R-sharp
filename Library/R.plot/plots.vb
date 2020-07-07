@@ -1,47 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::9f643179228d6ffe84116762eb265e38, Library\R.plot\plots.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module plots
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: CreateSerial, doVolinPlot, linearRegression, plot_binBox, plot_categoryBars
-    '               plot_corHeatmap, plot_deSolveResult, plot_hclust, plotFormula, plotODEResult
-    '               plotSerials
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Module plots
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: CreateSerial, doVolinPlot, linearRegression, plot_binBox, plot_categoryBars
+'               plot_corHeatmap, plot_deSolveResult, plot_hclust, plotFormula, plotODEResult
+'               plotSerials
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -75,6 +75,7 @@ Imports Microsoft.VisualBasic.Math.Calculus.Dynamics.Data
 Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Math.Distributions.BinBox
 Imports Microsoft.VisualBasic.Math.Interpolation
+Imports Microsoft.VisualBasic.MIME.Markup.HTML.CSS
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp
@@ -161,6 +162,13 @@ Module plots
         End Using
     End Function
 
+    ''' <summary>
+    ''' 绘制关联热图
+    ''' </summary>
+    ''' <param name="dist"></param>
+    ''' <param name="args"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     Public Function plot_corHeatmap(dist As DistanceMatrix, args As list, env As Environment) As Object
         Dim title$ = args.GetString("title", "Correlations")
         Dim bg$ = InteropArgumentHelper.getColor(args!bg, "white")
@@ -169,6 +177,9 @@ Module plots
         Dim driver As Drivers = args.GetString("driver", "default").DoCall(AddressOf g.ParseDriverEnumValue)
         Dim colorSet = args.GetString("colors", ColorBrewer.DivergingSchemes.RdBu11)
         Dim fixedSize = args.getValue(Of Boolean)("fixed_size", env, False)
+        Dim titleFont$ = InteropArgumentHelper.getFontCSS(args!mainCSS, CSSFont.Win7VeryLarge)
+        Dim labelFont$ = InteropArgumentHelper.getFontCSS(args!labelCSS, CSSFont.Win7Normal)
+        Dim legendTitleFont$ = InteropArgumentHelper.getFontCSS(args!legendTitleCSS, CSSFont.Win7LargeBold)
 
         Return CorrelationHeatmap.Plot(
             data:=dist,
@@ -179,7 +190,10 @@ Module plots
             drawGrid:=True,
             driver:=driver,
             mapName:=colorSet,
-            variantSize:=Not fixedSize
+            variantSize:=Not fixedSize,
+            titleFont:=titleFont,
+            rowLabelFontStyle:=labelFont,
+            legendFont:=legendTitleFont
         )
     End Function
 
