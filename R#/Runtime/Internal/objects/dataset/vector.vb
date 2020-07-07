@@ -63,6 +63,7 @@ Namespace Runtime.Internal.Object
         ''' </summary>
         ''' <returns></returns>
         Public Property unit As unit
+        Public Property factor As factor
 
         Public ReadOnly Property length As Integer Implements RIndex.length
             Get
@@ -76,6 +77,11 @@ Namespace Runtime.Internal.Object
         Sub New()
         End Sub
 
+        ''' <summary>
+        ''' 这个构造函数主要是应用于内部编程的快速创建
+        ''' </summary>
+        ''' <param name="input"></param>
+        ''' <param name="type"></param>
         Sub New(input As Array, type As RType)
             data = input
             elementType = type

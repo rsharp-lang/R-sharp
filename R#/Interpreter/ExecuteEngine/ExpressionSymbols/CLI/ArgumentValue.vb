@@ -45,6 +45,7 @@
 
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols
 
@@ -78,7 +79,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         End Function
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim arg As String = Runtime.getFirst(name.Evaluate(envir))
+            Dim arg As String = REnv.getFirst(name.Evaluate(envir))
             Dim value As Object
             Dim arguments = App.CommandLine
 
