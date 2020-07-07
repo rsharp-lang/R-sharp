@@ -63,6 +63,7 @@ Namespace Runtime.Internal.Object
         ''' </summary>
         ''' <returns></returns>
         Public Property unit As unit
+        Public Property factor As factor
 
         Public ReadOnly Property length As Integer Implements RIndex.length
             Get
