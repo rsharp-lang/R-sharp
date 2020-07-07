@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::926ddf2dbe8c976aa97e1dada54fa736, studio\R-terminal\CLI\CLI.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module CLI
-    ' 
-    '     Function: ConfigStartups, Info, InitializeEnvironment, Install, SyntaxText
-    '               unixman, Version
-    ' 
-    ' /********************************************************************************/
+' Module CLI
+' 
+'     Function: ConfigStartups, Info, InitializeEnvironment, Install, SyntaxText
+'               unixman, Version
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -61,7 +61,11 @@ Imports SMRUCC.Rsharp.System.Package
 Imports RlangScript = SMRUCC.Rsharp.Runtime.Components.Rscript
 Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
-<CLI> Module CLI
+<GroupingDefine(CLI.SystemConfig, Description:="R# language system and environment configuration util tools.")>
+<CLI()>
+Module CLI
+
+    Friend Const SystemConfig As String = "R# System Utils"
 
     <ExportAPI("--install.packages")>
     <Description("Install new packages.")>
@@ -69,6 +73,7 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
     <Argument("/module", False, CLITypes.File,
               Extensions:="*.dll",
               Description:=".NET Framework 4.8 assembly module file.")>
+    <Group(SystemConfig)>
     Public Function Install(args As CommandLine) As Integer
         Dim module$ = args <= "/module"
         Dim config As New Options(ConfigFile.localConfigs)
@@ -104,6 +109,7 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
     <ExportAPI("--startups")>
     <Usage("--startups [--add <namespaceList> --remove <namespaceList>]")>
+    <Group(SystemConfig)>
     Public Function ConfigStartups(args As CommandLine) As Integer
         Dim adds As String = args("--add")
         Dim remove As String = args("--remove")
@@ -150,6 +156,7 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
     <ExportAPI("--setup")>
     <Description("Initialize the R# runtime environment.")>
+    <Group(SystemConfig)>
     Public Function InitializeEnvironment(args As CommandLine) As Integer
         Dim config As New Options(ConfigFile.localConfigs)
 
