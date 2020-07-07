@@ -73,5 +73,9 @@ Namespace Runtime.Internal.Object
                 .factor = factor
             }
         End Function
+
+        Public Shared Function asCharacter(levels As Integer(), factor As factor) As String()
+
+        End Function
     End Class
 End Namespace
