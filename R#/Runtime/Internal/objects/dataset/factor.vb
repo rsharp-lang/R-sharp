@@ -13,6 +13,16 @@ Namespace Runtime.Internal.Object
 
         ReadOnly levels As New Dictionary(Of String, Integer)
 
+        ''' <summary>
+        ''' level的数量
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property nlevel As Integer
+            Get
+                Return levels.Count
+            End Get
+        End Property
+
         Sub New()
             m_type = RType.GetRSharpType(GetType(Integer))
         End Sub
@@ -43,7 +53,11 @@ Namespace Runtime.Internal.Object
                 Call factor.levels.Add(level, 2 ^ factor.levels.Count)
             Next
 
-            factor.vector = raw _
+            Return factor
+        End Function
+
+        Public Shared Function asFactor(raw As String(), factor As factor) As vector
+            Dim vector As Integer() = raw _
                 .Select(Function(str)
                             If str Is Nothing Then
                                 Return 0
@@ -55,11 +69,9 @@ Namespace Runtime.Internal.Object
                         End Function) _
                 .ToArray
 
-            Return factor
-        End Function
-
-        Public Shared Function asFactor() As vector
-
+            Return New vector(vector, factor.elementType) With {
+                .factor = factor
+            }
         End Function
     End Class
 End Namespace
