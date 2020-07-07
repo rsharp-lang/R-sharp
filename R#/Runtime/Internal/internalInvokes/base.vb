@@ -903,18 +903,22 @@ Namespace Runtime.Internal.Invokes
                 End If
             ElseIf message.GetType Is GetType(Message) Then
                 If debugMode Then
-                    Throw New Exception(DirectCast(message, Message).message.JoinBy("; "))
+                    Dim err As New Exception(DirectCast(message, Message).message.JoinBy("; "))
+                    Call App.LogException(err)
+                    Throw err
                 Else
                     Return message
                 End If
             Else
                 If debugMode Then
-                    Throw New Exception(Runtime.asVector(Of Object)(message) _
+                    Dim err As New Exception(Runtime.asVector(Of Object)(message) _
                        .AsObjectEnumerator _
                        .SafeQuery _
                        .Select(Function(o) Scripting.ToString(o, "NULL")) _
                        .JoinBy("; ")
                     )
+                    Call App.LogException(err)
+                    Throw err
                 Else
                     Return base.CreateMessageInternal(message, envir, level:=MSG_TYPES.ERR)
                 End If
