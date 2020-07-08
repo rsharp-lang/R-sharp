@@ -53,6 +53,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
@@ -91,7 +92,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim obj As Object = symbol.Evaluate(envir)
-            Dim indexer = Runtime.asVector(Of Object)(index.Evaluate(envir))
+            Dim indexer = REnv.asVector(Of Object)(index.Evaluate(envir))
 
             If indexer.Length = 0 Then
                 Return emptyIndexError(Me, envir)
@@ -167,7 +168,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
             If Not objType.ImplementInterface(GetType(RNameIndex)) Then
                 If objType.ImplementInterface(Of IDictionary) AndAlso objType.GenericTypeArguments(Scan0) Is GetType(String) Then
-                    Dim keys As String() = asVector(Of String)(indexer)
+                    Dim keys As String() = REnv.asVector(Of String)(indexer)
                     Dim table As IDictionary = DirectCast(obj, IDictionary)
 
                     If indexer.Length = 1 Then
@@ -254,7 +255,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                         Return list.getByIndex(i.ToArray)
                     Else
                         ' get by index
-                        Return list.getByIndex(Runtime.asVector(Of Integer)(indexer))
+                        Return list.getByIndex(REnv.asVector(Of Integer)(indexer))
                     End If
                 End If
             Else
@@ -263,7 +264,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         End Function
 
         Private Function vectorSubset(obj As Object, indexer As Array, env As Environment) As Object
-            Dim sequence As Array = Runtime.asVector(Of Object)(obj)
+            Dim sequence As Array = REnv.asVector(Of Object)(obj)
             Dim Rarray As RIndex
 
             If sequence.Length = 0 Then
@@ -317,12 +318,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             '
             Dim vec As Array
 
-            If Runtime.isVector(Of Boolean)(indexer) Then
-                vec = Rarray.getByIndex(Which.IsTrue(Runtime.asLogical(indexer), offset:=1))
+            If REnv.isVector(Of Boolean)(indexer) Then
+                vec = Rarray.getByIndex(Which.IsTrue(REnv.asLogical(indexer), offset:=1))
             ElseIf indexer.Length = 1 Then
                 Return Rarray.getByIndex(CInt(indexer.GetValue(Scan0)))
             Else
-                vec = Rarray.getByIndex(Runtime.asVector(Of Integer)(indexer))
+                vec = Rarray.getByIndex(REnv.asVector(Of Integer)(indexer))
             End If
 
             If vec.Length = 0 Then
@@ -331,7 +332,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 ' 20200617 但vec是空集合的时候
                 ' 得到的type是void类型
                 ' 会报错：无法创建一个void类型的数组
-                Return New vector(MeasureRealElementType(vec), vec, env)
+                Return New vector(REnv.MeasureRealElementType(vec), vec, env)
             End If
         End Function
 
