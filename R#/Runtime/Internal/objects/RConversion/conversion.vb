@@ -106,15 +106,64 @@ Namespace Runtime.Internal.Object.Converts
         End Function
 
         ''' <summary>
+        ''' ### Flatten Lists
         ''' 
+        ''' Given a list structure x, unlist simplifies it to produce a vector 
+        ''' which contains all the atomic components which occur in <paramref name="x"/>.
         ''' </summary>
-        ''' <param name="list"></param>
+        ''' <param name="x">an R Object, typically a list Or vector.</param>
         ''' <param name="[typeof]">element type of the array</param>
         ''' <param name="env"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' NULL or an expression or a vector of an appropriate mode to hold 
+        ''' the list components.
+        '''
+        ''' The output type Is determined from the highest type Of the components 
+        ''' In the hierarchy ``NULL`` &lt; ``raw`` &lt; ``logical`` &lt; ``Integer`` 
+        ''' &lt; ``Double`` &lt; ``complex`` &lt; ``character`` &lt; ``list`` &lt; 
+        ''' ``expression``, after coercion Of pairlists To lists.
+        ''' </returns>
+        ''' <remarks>
+        ''' unlist is generic: you can write methods to handle specific classes of 
+        ''' objects, see InternalMethods, and note, e.g., relist with the unlist
+        ''' method for relistable objects.
+        '''
+        ''' If recursive = False, the Function will Not recurse beyond the first level 
+        ''' items In x.
+        '''
+        ''' Factors are treated specially. If all non-list elements Of x are factors 
+        ''' (Or ordered factors) Then the result will be a factor With levels the union 
+        ''' Of the level sets Of the elements, In the order the levels occur In the 
+        ''' level sets Of the elements (which means that If all the elements have the 
+        ''' same level Set, that Is the level Set Of the result).
+        '''
+        ''' x can be an atomic vector, but Then unlist does Nothing useful, Not even 
+        ''' drop names.
+        '''
+        ''' By Default, unlist tries to retain the naming information present in x. If 
+        ''' ``use.names = FALSE`` all naming information Is dropped.
+        '''
+        ''' Where possible the list elements are coerced To a common mode during the 
+        ''' unlisting, And so the result often ends up As a character vector. Vectors 
+        ''' will be coerced To the highest type Of the components In the hierarchy 
+        ''' ``NULL`` &lt; ``raw`` &lt; ``logical`` &lt; ``Integer`` &lt; ``Double`` &lt;
+        ''' ``complex`` &lt; ``character`` &lt; ``list`` &lt; ``expression``: pairlists 
+        ''' are treated As lists.
+        '''
+        ''' A list Is a (generic) vector, And the simplified vector might still be a list 
+        ''' (And might be unchanged). Non-vector elements Of the list (For example language 
+        ''' elements such As names, formulas And calls) are Not coerced, And so a list 
+        ''' containing one Or more Of these remains a list. (The effect Of unlisting an lm 
+        ''' fit Is a list which has individual residuals As components.) Note that 
+        ''' ``unlist(x)`` now returns x unchanged also For non-vector x, instead Of signalling 
+        ''' an Error In that Case.
+        ''' </remarks>
         <ExportAPI("unlist")>
-        Public Function unlist(list As Object, Optional [typeof] As Object = Nothing, Optional env As Environment = Nothing) As Object
-            If list Is Nothing Then
+        Public Function unlist(<RRawVectorArgument> x As Object,
+                               Optional [typeof] As Object = Nothing,
+                               Optional env As Environment = Nothing) As Object
+
+            If x Is Nothing Then
                 Return Nothing
             End If
 
@@ -138,20 +187,20 @@ Namespace Runtime.Internal.Object.Converts
                 End Select
             End If
 
-            Dim listType As Type = list.GetType
+            Dim listType As Type = x.GetType
 
             If listType.IsArray Then
-                Return list
+                Return x
             ElseIf DataFramework.IsPrimitive(listType) Then
-                Return list
+                Return x
             ElseIf listType Is GetType(list) Then
-                Return DirectCast(list, list).unlistOfRList([typeof], env)
+                Return DirectCast(x, list).unlistOfRList([typeof], env)
             ElseIf listType.ImplementInterface(GetType(IDictionary)) Then
-                Return New list(list).unlistOfRList([typeof], env)
+                Return New list(x).unlistOfRList([typeof], env)
             Else
                 ' Return Internal.debug.stop(New InvalidCastException(list.GetType.FullName), env)
                 ' is a single uer defined .NET object 
-                Return list
+                Return x
             End If
         End Function
 
