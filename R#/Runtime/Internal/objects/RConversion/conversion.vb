@@ -194,10 +194,25 @@ Namespace Runtime.Internal.Object.Converts
                 Dim names As New List(Of String)
                 Dim values As New List(Of Object)
 
+                For Each obj In result
+                    If obj Is Nothing Then
+                        names.Add("")
+                        values.Add(Nothing)
+                    ElseIf TypeOf obj Is NamedValue(Of Object) Then
+                        With DirectCast(obj, NamedValue(Of Object))
+                            names.Add(.Name)
+                            values.Add(.Value)
+                        End With
+                    Else
+                        names.Add("")
+                        values.Add(obj)
+                    End If
+                Next
+
                 If [typeof] Is Nothing Then
-                    Return New vector(names.ToArray, result.ToArray(Of Object), env)
+                    Return New vector(names.ToArray, values.ToArray(Of Object), env)
                 Else
-                    Return New vector(names.ToArray, result.ToArray(Of Object), RType.GetRSharpType([typeof]), env)
+                    Return New vector(names.ToArray, values.ToArray(Of Object), RType.GetRSharpType([typeof]), env)
                 End If
             Else
                 If [typeof] Is Nothing Then
@@ -219,7 +234,7 @@ Namespace Runtime.Internal.Object.Converts
                 ElseIf listType Is GetType(vector) Then
                     Return tryUnlistArray(DirectCast(x, vector).data, containsListNames)
                 ElseIf DataFramework.IsPrimitive(listType) Then
-                    Return x
+                    Return {x}
                 ElseIf listType Is GetType(list) Then
                     Return DirectCast(x, list).unlistOfRList(containsListNames)
                 ElseIf listType.ImplementInterface(GetType(IDictionary)) Then
@@ -227,7 +242,7 @@ Namespace Runtime.Internal.Object.Converts
                 Else
                     ' Return Internal.debug.stop(New InvalidCastException(list.GetType.FullName), env)
                     ' is a single uer defined .NET object 
-                    Return x
+                    Return {x}
                 End If
             End If
         End Function
