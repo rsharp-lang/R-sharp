@@ -187,60 +187,88 @@ Namespace Runtime.Internal.Object.Converts
                 End Select
             End If
 
-            Dim listType As Type = x.GetType
+            Dim containsListNames As Boolean = False
+            Dim result As IEnumerable = unlistRecursive(x, containsListNames)
 
-            If listType.IsArray Then
-                Return x
-            ElseIf DataFramework.IsPrimitive(listType) Then
-                Return x
-            ElseIf listType Is GetType(list) Then
-                Return DirectCast(x, list).unlistOfRList([typeof], env)
-            ElseIf listType.ImplementInterface(GetType(IDictionary)) Then
-                Return New list(x).unlistOfRList([typeof], env)
+            If containsListNames Then
+                Dim names As New List(Of String)
+                Dim values As New List(Of Object)
+
+                If [typeof] Is Nothing Then
+                    Return New vector(names.ToArray, result.ToArray(Of Object), env)
+                Else
+                    Return New vector(names.ToArray, result.ToArray(Of Object), RType.GetRSharpType([typeof]), env)
+                End If
             Else
-                ' Return Internal.debug.stop(New InvalidCastException(list.GetType.FullName), env)
-                ' is a single uer defined .NET object 
-                Return x
+                If [typeof] Is Nothing Then
+                    Return New vector(result.ToArray(Of Object), RType.any)
+                Else
+                    Return New vector(result.ToArray(Of Object), RType.GetRSharpType([typeof]))
+                End If
             End If
+        End Function
+
+        Private Function unlistRecursive(x As Object, ByRef containsListNames As Boolean) As IEnumerable
+            If x Is Nothing Then
+                Return Nothing
+            Else
+                Dim listType As Type = x.GetType
+
+                If listType.IsArray Then
+                    Return tryUnlistArray(DirectCast(x, Array), containsListNames)
+                ElseIf listType Is GetType(vector) Then
+                    Return tryUnlistArray(DirectCast(x, vector).data, containsListNames)
+                ElseIf DataFramework.IsPrimitive(listType) Then
+                    Return x
+                ElseIf listType Is GetType(list) Then
+                    Return DirectCast(x, list).unlistOfRList(containsListNames)
+                ElseIf listType.ImplementInterface(GetType(IDictionary)) Then
+                    Return New list(x).unlistOfRList(containsListNames)
+                Else
+                    ' Return Internal.debug.stop(New InvalidCastException(list.GetType.FullName), env)
+                    ' is a single uer defined .NET object 
+                    Return x
+                End If
+            End If
+        End Function
+
+        <Extension>
+        Private Function tryUnlistArray(data As Array, ByRef containsListNames As Boolean) As IEnumerable
+            Dim values As New List(Of Object)
+
+            For Each obj In data.AsObjectEnumerator
+                values.AddRange(unlistRecursive(obj, containsListNames))
+            Next
+
+            Return values
         End Function
 
         ''' <summary>
         ''' 
         ''' </summary>
         ''' <param name="rlist"></param>
-        ''' <param name="[typeof]">element type of the array</param>
-        ''' <param name="env"></param>
         ''' <returns></returns>
         <Extension>
-        Private Function unlistOfRList(rlist As list, [typeof] As Type, env As Environment) As Object
-            Dim data As New List(Of Object)
-            Dim names As New List(Of String)
-            Dim vec As vector
+        Private Function unlistOfRList(rlist As list, ByRef containsListNames As Boolean) As IEnumerable
+            Dim data As New List(Of NamedValue(Of Object))
 
             For Each name As String In rlist.getNames
-                Dim a As Array = Runtime.asVector(Of Object)(rlist.slots(name))
+                Dim a As Array = Runtime.asVector(Of Object)(rlist.slots(name)).tryUnlistArray(containsListNames).ToArray(Of Object)
 
                 If a.Length = 1 Then
-                    data.Add(a.GetValue(Scan0))
-                    names.Add(name)
+                    data.Add(New NamedValue(Of Object)(name, a.GetValue(Scan0)))
                 Else
                     Dim i As i32 = 1
 
                     For Each item As Object In a
-                        data.Add(item)
-                        names.Add($"{name}{++i}")
+                        data.Add(New NamedValue(Of Object)($"{name}{++i}", item))
                     Next
                 End If
             Next
 
-            If [typeof] Is Nothing Then
-                vec = New vector(names, data.ToArray, env)
-            Else
-                vec = New vector([typeof], data.AsEnumerable, env)
-                vec.setNames(names.ToArray, env)
-            End If
+            containsListNames = True
 
-            Return vec
+            Return data
         End Function
 
         ''' <summary>
