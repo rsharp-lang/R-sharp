@@ -58,6 +58,53 @@ Namespace Runtime.Internal.Invokes
 
     Module applys
 
+        ''' <summary>
+        ''' ### Apply Functions Over Array Margins
+        ''' 
+        ''' Returns a vector or array or list of values obtained by applying 
+        ''' a function to margins of an array or matrix.
+        ''' </summary>
+        ''' <param name="x">an array, including a matrix.</param>
+        ''' <param name="margin">a vector giving the subscripts which the 
+        ''' function will be applied over. E.g., for a matrix 1 indicates rows, 
+        ''' 2 indicates columns, c(1, 2) indicates rows and columns. Where X has 
+        ''' named dimnames, it can be a character vector selecting dimension 
+        ''' names.</param>
+        ''' <param name="FUN">
+        ''' the function to be applied: see ‘Details’. In the case of functions 
+        ''' like +, %*%, etc., the function name must be backquoted or quoted.
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns>If each call to FUN returns a vector of length n, then apply 
+        ''' returns an array of dimension c(n, dim(X)[MARGIN]) if ``n &gt; 1``. 
+        ''' If n equals 1, apply returns a vector if MARGIN has length 1 and an array 
+        ''' of dimension dim(X)[MARGIN] otherwise. If n is 0, the result has length 
+        ''' 0 but not necessarily the ‘correct’ dimension.
+        '''
+        ''' If the calls To FUN Return vectors Of different lengths, apply returns 
+        ''' a list Of length prod(Dim(X)[MARGIN]) With Dim Set To MARGIN If this has 
+        ''' length greater than one.
+        '''
+        ''' In all cases the result Is coerced by as.vector to one of the basic 
+        ''' vector types before the dimensions are set, so that (for example) factor 
+        ''' results will be coerced to a character array.</returns>
+        ''' <remarks>
+        ''' If X is not an array but an object of a class with a non-null dim value 
+        ''' (such as a data frame), apply attempts to coerce it to an array via 
+        ''' ``as.matrix`` if it is two-dimensional (e.g., a data frame) or via 
+        ''' ``as.array``.
+        '''
+        ''' FUN Is found by a call to match.fun And typically Is either a function 
+        ''' Or a symbol (e.g., a backquoted name) Or a character string specifying 
+        ''' a function to be searched for from the environment of the call to apply.
+        '''
+        ''' Arguments in ``...`` cannot have the same name as any of the other 
+        ''' arguments, And care may be needed to avoid partial matching to MARGIN Or 
+        ''' FUN. In general-purpose code it Is good practice to name the first three 
+        ''' arguments if ... Is passed through: this both avoids Partial matching To 
+        ''' MARGIN Or FUN And ensures that a sensible Error message Is given If 
+        ''' arguments named X, MARGIN Or FUN are passed through ``...``.
+        ''' </remarks>
         <ExportAPI("apply")>
         Public Function apply(x As Object, margin As margins, FUN As Object, Optional env As Environment = Nothing) As Object
             If x Is Nothing Then

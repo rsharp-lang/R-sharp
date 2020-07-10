@@ -287,5 +287,29 @@ Namespace Runtime.Internal.Invokes
 
             Return gauss.ToArray
         End Function
+
+        ''' <summary>
+        ''' grouping data input by given numeric tolerance
+        ''' </summary>
+        ''' <param name="sequence"></param>
+        ''' <param name="eval"></param>
+        ''' <param name="offset"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("cluster_1D")>
+        Public Function cluster1D(<RRawVectorArgument> sequence As Object, eval As Object, Optional offset As Double = 0, Optional env As Environment = Nothing) As Object
+            Dim data As pipeline = pipeline.TryCreatePipeline(Of Object)(sequence, env)
+            Dim evalFUNC As Evaluate(Of Object)
+
+            If data.isError Then
+                Return data.getError
+            End If
+
+            If eval Is Nothing Then
+                Return Internal.debug.stop("the evaluation delegate function can not be nothing, i'm unsure about how to evaluate the data object as numeric value...", env)
+            ElseIf TypeOf eval Is Func(Of Object, Double) Then
+                evalFUNC = New Evaluate(Of Object)(AddressOf DirectCast(eval, Func(Of Object, Double)).Invoke)
+            End If
+        End Function
     End Module
 End Namespace
