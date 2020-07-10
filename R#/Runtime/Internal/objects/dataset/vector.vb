@@ -87,6 +87,11 @@ Namespace Runtime.Internal.Object
             elementType = type
         End Sub
 
+        Sub New(names As String(), input As Array, type As RType, env As Environment)
+            Call Me.New(input, type)
+            Call Me.setNames(names, env)
+        End Sub
+
         ''' <summary>
         ''' Create a vector from a pipeline model and given array element <paramref name="model"/> type
         ''' </summary>

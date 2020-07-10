@@ -6,7 +6,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
-Namespace Runtime.Internal.Invokes
+Namespace System.Components
 
     Public Class RSessionInfo
 
