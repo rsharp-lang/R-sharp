@@ -239,6 +239,8 @@ Namespace Runtime.Internal.Object.Converts
                     Return DirectCast(x, list).unlistOfRList(containsListNames)
                 ElseIf listType.ImplementInterface(GetType(IDictionary)) Then
                     Return New list(x).unlistOfRList(containsListNames)
+                ElseIf listType Is GetType(pipeline) Then
+                    Return tryUnlistArray(DirectCast(x, pipeline).pipeline.ToArray(Of Object), containsListNames)
                 Else
                     ' Return Internal.debug.stop(New InvalidCastException(list.GetType.FullName), env)
                     ' is a single uer defined .NET object 
