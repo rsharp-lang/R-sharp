@@ -581,6 +581,7 @@ Namespace Runtime.Internal.Invokes
 
                 Using decompressionStream As New GZipStream(originalFileStream, CompressionMode.Decompress)
                     decompressionStream.CopyTo(deflate)
+                    deflate.Position = Scan0
                 End Using
 
                 Return deflate
