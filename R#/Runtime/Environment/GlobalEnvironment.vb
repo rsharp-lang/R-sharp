@@ -50,6 +50,7 @@
 Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
@@ -118,6 +119,16 @@ Namespace Runtime
 
             Call types.Add("unit", RType.GetRSharpType(GetType(unit)))
         End Sub
+
+        Public Overloads Function [GetType]([typeof] As String) As RType
+            Dim type As RType = _types.TryGetValue([typeof])
+
+            If type Is Nothing Then
+                Return [typeof].GetRTypeCode.DoCall(AddressOf RType.GetType)
+            Else
+                Return type
+            End If
+        End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Sub RedirectOutput(out As StreamWriter, env As OutputEnvironments)

@@ -561,7 +561,10 @@ Namespace Runtime.Internal.Invokes
 
         <ExportAPI("open.gzip")>
         <RApiReturn(GetType(Stream))>
-        Public Function openGzip(file As Object, Optional env As Environment = Nothing) As Object
+        Public Function openGzip(file As Object,
+                                 Optional tmpfileWorker$ = Nothing,
+                                 Optional env As Environment = Nothing) As Object
+
             If file Is Nothing Then
                 Return Nothing
             End If
@@ -577,7 +580,13 @@ Namespace Runtime.Internal.Invokes
             End If
 
             Using originalFileStream
-                Dim deflate As New MemoryStream
+                Dim deflate As Stream
+
+                If Not tmpfileWorker.StringEmpty Then
+                    deflate = tmpfileWorker.Open(FileMode.OpenOrCreate, doClear:=True)
+                Else
+                    deflate = New MemoryStream
+                End If
 
                 Using decompressionStream As New GZipStream(originalFileStream, CompressionMode.Decompress)
                     decompressionStream.CopyTo(deflate)

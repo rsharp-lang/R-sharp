@@ -173,9 +173,7 @@ Namespace Runtime.Internal.Object.Converts
                     Case GetType(RType)
                         [typeof] = DirectCast([typeof], RType).raw
                     Case GetType(String)
-                        Dim RType As RType = DirectCast([typeof], String) _
-                            .GetRTypeCode _
-                            .DoCall(AddressOf RType.GetType)
+                        Dim RType As RType = env.globalEnvironment.GetType([typeof])
 
                         If RType.isArray Then
                             [typeof] = RType.raw.GetElementType
