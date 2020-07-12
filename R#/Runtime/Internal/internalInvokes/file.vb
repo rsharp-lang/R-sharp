@@ -549,6 +549,14 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' open a zip file
+        ''' </summary>
+        ''' <param name="file"></param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' a folder liked list object
+        ''' </returns>
         <ExportAPI("open.zip")>
         <RApiReturn(GetType(ZipFolder))>
         Public Function openZip(file As String, Optional env As Environment = Nothing) As Object
@@ -559,6 +567,18 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' decompression of a gzip file and get the deflate file data stream.
+        ''' </summary>
+        ''' <param name="file">
+        ''' the file path or file stream data.
+        ''' </param>
+        ''' <param name="tmpfileWorker">
+        ''' using tempfile for process the large data file which its file length 
+        ''' is greater then the memorystream its upbound capacity.
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("open.gzip")>
         <RApiReturn(GetType(Stream))>
         Public Function openGzip(file As Object,
