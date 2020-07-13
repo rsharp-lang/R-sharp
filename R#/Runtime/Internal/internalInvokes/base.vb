@@ -789,6 +789,84 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' ### Make Syntactically Valid Names
+        ''' 
+        ''' Make syntactically valid names out of character vectors.
+        ''' 
+        ''' 
+        ''' </summary>
+        ''' <param name="names">
+        ''' character vector To be coerced To syntactically valid names. 
+        ''' This Is coerced To character If necessary.
+        ''' </param>
+        ''' <param name="unique">
+        ''' logical; if TRUE, the resulting elements are unique. This may 
+        ''' be desired for, e.g., column names.
+        ''' </param>
+        ''' <param name="allow_">
+        ''' logical. For compatibility with R prior to 1.9.0.
+        ''' </param>
+        ''' <remarks>
+        ''' A syntactically valid name consists of letters, numbers and 
+        ''' the dot or underline characters and starts with a letter or 
+        ''' the dot not followed by a number. Names such as ".2way" are 
+        ''' not valid, and neither are the reserved words.
+        '''
+        ''' The definition Of a letter depends On the current locale, but 
+        ''' only ASCII digits are considered To be digits.
+        '''
+        ''' The character "X" Is prepended If necessary. All invalid 
+        ''' characters are translated To ".". A missing value Is translated 
+        ''' To "NA". Names which match R keywords have a dot appended To 
+        ''' them. Duplicated values are altered by make.unique.
+        ''' </remarks>
+        ''' <returns>A character vector of same length as names with each 
+        ''' changed to a syntactically valid name, in the current locale's 
+        ''' encoding.</returns>
+        <ExportAPI("make.names")>
+        Public Function makeNames(<RRawVectorArgument> names As Object, Optional unique As Boolean = False, Optional allow_ As Boolean = True) As Object
+            Dim nameList As String() = asVector(Of String)(names)
+            Dim nameUniques As New Dictionary(Of String, Counter)
+            Dim nameAll As New List(Of String)
+
+            For Each name As String In nameList
+                name = name _
+                    .Select(Function(c)
+                                If c = "_"c AndAlso allow_ Then
+                                    Return c
+                                Else
+                                    If c >= "a"c AndAlso c <= "z"c Then
+                                        Return c
+                                    ElseIf c >= "A"c AndAlso c <= "Z"c Then
+                                        Return c
+                                    ElseIf c >= "0"c AndAlso c <= "9"c Then
+                                        Return c
+                                    Else
+                                        Return "."c
+                                    End If
+                                End If
+                            End Function) _
+                    .CharString
+RE0:
+                If unique AndAlso nameUniques.ContainsKey(name) Then
+                    nameUniques(name).Hit()
+                    name = name & nameUniques(name).Value
+                    GoTo RE0
+                ElseIf unique Then
+                    nameUniques.Add(name, Scan0)
+                Else
+                    nameAll.Add(name)
+                End If
+            Next
+
+            If unique Then
+                Return nameUniques.Keys.ToArray
+            Else
+                Return nameAll.ToArray
+            End If
+        End Function
+
+        ''' <summary>
         ''' # Row and Column Names
         ''' 
         ''' Retrieve or set the row or column names of a matrix-like object.

@@ -123,7 +123,7 @@ Namespace Interpreter
             benchmark = App.NanoTime - benchmark
 
             If debug Then
-                Call printDebug($"[elapse_time] {TimeSpan.FromTicks(benchmark).FormatTime}.", ConsoleColor.Green)
+                Call printDebug($"[elapse_time] {TimeSpan.FromTicks(benchmark).FormatTime}", ConsoleColor.Green)
             End If
 
             ' next keyword will break current closure 
