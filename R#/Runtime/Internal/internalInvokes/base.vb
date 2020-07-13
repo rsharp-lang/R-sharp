@@ -826,7 +826,6 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("make.names")>
         Public Function makeNames(<RRawVectorArgument> names As Object, Optional unique As Boolean = False, Optional allow_ As Boolean = True) As Object
             Dim nameList As String() = asVector(Of String)(names)
-            Dim nameUniques As New Dictionary(Of String, Counter)
             Dim nameAll As New List(Of String)
 
             For Each name As String In nameList
@@ -847,20 +846,12 @@ Namespace Runtime.Internal.Invokes
                                 End If
                             End Function) _
                     .CharString
-RE0:
-                If unique AndAlso nameUniques.ContainsKey(name) Then
-                    nameUniques(name).Hit()
-                    name = name & nameUniques(name).Value
-                    GoTo RE0
-                ElseIf unique Then
-                    nameUniques.Add(name, Scan0)
-                Else
-                    nameAll.Add(name)
-                End If
+
+                Call nameAll.Add(name)
             Next
 
             If unique Then
-                Return nameUniques.Keys.ToArray
+                Return nameAll.uniqueNames
             Else
                 Return nameAll.ToArray
             End If
