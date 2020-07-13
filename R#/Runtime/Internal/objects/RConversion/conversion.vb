@@ -463,7 +463,21 @@ Namespace Runtime.Internal.Object.Converts
             If obj.GetType.ImplementInterface(GetType(IDictionary)) Then
                 Return Runtime.CTypeOfList(Of Double)(obj, env)
             Else
-                Return Runtime.asVector(Of Double)(obj)
+                Dim data As Object() = pipeline _
+                    .TryCreatePipeline(Of Object)(obj, env) _
+                    .populates(Of Object)(env) _
+                    .ToArray
+                Dim populates = Iterator Function() As IEnumerable(Of Double)
+                                    For Each item In data
+                                        If TypeOf item Is String Then
+                                            Yield Val(DirectCast(item, String))
+                                        Else
+                                            Yield DirectCast(RCType.CTypeDynamic(obj, GetType(Double), env), Double)
+                                        End If
+                                    Next
+                                End Function
+
+                Return populates().ToArray
             End If
         End Function
 
