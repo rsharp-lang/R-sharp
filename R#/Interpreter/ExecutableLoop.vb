@@ -94,11 +94,11 @@ Namespace Interpreter
             End If
         End Sub
 
-        Private Shared Sub printExpressionDebug(expression As Expression)
+        Private Shared Sub printDebug(expression As String, Optional color As ConsoleColor = ConsoleColor.Magenta)
             Dim fore As ConsoleColor = Console.ForegroundColor
 
-            Console.ForegroundColor = ConsoleColor.Magenta
-            Console.WriteLine(expression.ToString)
+            Console.ForegroundColor = color
+            Console.WriteLine(expression)
             Console.ForegroundColor = fore
         End Sub
 
@@ -113,12 +113,18 @@ Namespace Interpreter
                                                Optional ByRef breakLoop As Boolean = False,
                                                Optional debug As Boolean = False) As Object
             Dim last As Object
+            Dim benchmark As Long = App.NanoTime
 
             If debug Then
-                Call printExpressionDebug(expression)
+                Call printDebug(expression.ToString)
             End If
 
             last = expression.Evaluate(envir)
+            benchmark = App.NanoTime - benchmark
+
+            If debug Then
+                Call printDebug($"[elapse_time] {TimeSpan.FromTicks(benchmark).FormatTime}.", ConsoleColor.Green)
+            End If
 
             ' next keyword will break current closure 
             ' and then goto execute next iteration loop
