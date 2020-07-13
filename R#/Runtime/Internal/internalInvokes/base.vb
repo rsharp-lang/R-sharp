@@ -111,11 +111,27 @@ Namespace Runtime.Internal.Invokes
             Throw New NotImplementedException
         End Function
 
+        ''' <summary>
+        ''' ### Combine R Objects by Rows or Columns
+        ''' 
+        ''' Take a sequence of vector, matrix or data-frame arguments 
+        ''' and combine by columns or rows, respectively. These are 
+        ''' generic functions with methods for other R classes.
+        ''' </summary>
+        ''' <param name="d"></param>
+        ''' <param name="col"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("cbind")>
         Public Function cbind(d As dataframe, <RRawVectorArgument> col As Object, env As Environment) As dataframe
             If col Is Nothing Then
                 Return d
             End If
+
+            d = New dataframe With {
+                .columns = New Dictionary(Of String, Array)(d.columns),
+                .rownames = d.rownames
+            }
 
             If TypeOf col Is list Then
                 With DirectCast(col, list)
@@ -137,6 +153,15 @@ Namespace Runtime.Internal.Invokes
                 d.columns.Add($"X{d.columns.Count + 2}", DirectCast(col, Array))
             ElseIf TypeOf col Is vector Then
                 d.columns.Add($"X{d.columns.Count + 2}", DirectCast(col, vector).data)
+            ElseIf TypeOf col Is dataframe Then
+                Dim colnames = d.columns.Keys.ToArray
+                Dim append As dataframe = DirectCast(col, dataframe)
+                Dim oldColNames = append.columns.Keys.ToArray
+                Dim newNames = colnames.JoinIterates(oldColNames).uniqueNames
+
+                For i As Integer = 0 To append.columns.Count - 1
+                    d.columns.Add(newNames(i + colnames.Length), append.columns(oldColNames(i)))
+                Next
             Else
                 d.columns.Add($"X{d.columns.Count + 2}", {col})
             End If
