@@ -55,7 +55,7 @@ Namespace Runtime.Internal.Object
     ''' </summary>
     Public Class pipeline : Inherits RsharpDataObject
 
-        ReadOnly pipeline As IEnumerable
+        Friend ReadOnly pipeline As IEnumerable
 
         ''' <summary>
         ''' 在抛出数据的时候所遇到的第一个错误消息

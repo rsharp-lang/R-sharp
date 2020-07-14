@@ -108,7 +108,11 @@ Namespace Runtime.Internal.Object.Converts
                 Return array
             End If
 
-            Return Conversion.CTypeDynamic(obj, type)
+            Try
+                Return Conversion.CTypeDynamic(obj, type)
+            Catch ex As Exception
+                Return Internal.debug.stop(ex, env)
+            End Try
         End Function
 
         Public Shared Function CastToEnum(obj As Object, type As Type, env As Environment) As Object

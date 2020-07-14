@@ -173,9 +173,7 @@ Namespace Runtime.Internal.Object.Converts
                     Case GetType(RType)
                         [typeof] = DirectCast([typeof], RType).raw
                     Case GetType(String)
-                        Dim RType As RType = DirectCast([typeof], String) _
-                            .GetRTypeCode _
-                            .DoCall(AddressOf RType.GetType)
+                        Dim RType As RType = env.globalEnvironment.GetType([typeof])
 
                         If RType.isArray Then
                             [typeof] = RType.raw.GetElementType
@@ -239,6 +237,8 @@ Namespace Runtime.Internal.Object.Converts
                     Return DirectCast(x, list).unlistOfRList(containsListNames)
                 ElseIf listType.ImplementInterface(GetType(IDictionary)) Then
                     Return New list(x).unlistOfRList(containsListNames)
+                ElseIf listType Is GetType(pipeline) Then
+                    Return tryUnlistArray(DirectCast(x, pipeline).pipeline.ToArray(Of Object), containsListNames)
                 Else
                     ' Return Internal.debug.stop(New InvalidCastException(list.GetType.FullName), env)
                     ' is a single uer defined .NET object 
@@ -463,7 +463,21 @@ Namespace Runtime.Internal.Object.Converts
             If obj.GetType.ImplementInterface(GetType(IDictionary)) Then
                 Return Runtime.CTypeOfList(Of Double)(obj, env)
             Else
-                Return Runtime.asVector(Of Double)(obj)
+                Dim data As Object() = pipeline _
+                    .TryCreatePipeline(Of Object)(obj, env) _
+                    .populates(Of Object)(env) _
+                    .ToArray
+                Dim populates = Iterator Function() As IEnumerable(Of Double)
+                                    For Each item In data
+                                        If TypeOf item Is String Then
+                                            Yield Val(DirectCast(item, String))
+                                        Else
+                                            Yield DirectCast(RCType.CTypeDynamic(obj, GetType(Double), env), Double)
+                                        End If
+                                    Next
+                                End Function
+
+                Return populates().ToArray
             End If
         End Function
 

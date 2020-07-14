@@ -1,46 +1,48 @@
 ﻿#Region "Microsoft.VisualBasic::5b0456258086e448f93b02676ead1b0d, R#\Runtime\Internal\objects\names.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module names
-    ' 
-    '         Function: getColNames, getNames, getRowNames, setColNames, setNames
-    '                   setRowNames
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module names
+' 
+'         Function: getColNames, getNames, getRowNames, setColNames, setNames
+'                   setRowNames
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
@@ -50,7 +52,25 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 
 Namespace Runtime.Internal.Object
 
-    Module names
+    Public Module names
+
+        <Extension>
+        Public Function uniqueNames(names As IEnumerable(Of String)) As String()
+            Dim nameUniques As New Dictionary(Of String, Counter)
+
+            For Each name As String In names
+RE0:
+                If nameUniques.ContainsKey(name) Then
+                    nameUniques(name).Hit()
+                    name = name & nameUniques(name).Value
+                    GoTo RE0
+                Else
+                    nameUniques.Add(name, Scan0)
+                End If
+            Next
+
+            Return nameUniques.Keys.ToArray
+        End Function
 
         Public Function getNames([object] As Object, envir As Environment) As Object
             Dim type As Type = [object].GetType

@@ -111,11 +111,27 @@ Namespace Runtime.Internal.Invokes
             Throw New NotImplementedException
         End Function
 
+        ''' <summary>
+        ''' ### Combine R Objects by Rows or Columns
+        ''' 
+        ''' Take a sequence of vector, matrix or data-frame arguments 
+        ''' and combine by columns or rows, respectively. These are 
+        ''' generic functions with methods for other R classes.
+        ''' </summary>
+        ''' <param name="d"></param>
+        ''' <param name="col"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("cbind")>
         Public Function cbind(d As dataframe, <RRawVectorArgument> col As Object, env As Environment) As dataframe
             If col Is Nothing Then
                 Return d
             End If
+
+            d = New dataframe With {
+                .columns = New Dictionary(Of String, Array)(d.columns),
+                .rownames = d.rownames
+            }
 
             If TypeOf col Is list Then
                 With DirectCast(col, list)
@@ -137,6 +153,15 @@ Namespace Runtime.Internal.Invokes
                 d.columns.Add($"X{d.columns.Count + 2}", DirectCast(col, Array))
             ElseIf TypeOf col Is vector Then
                 d.columns.Add($"X{d.columns.Count + 2}", DirectCast(col, vector).data)
+            ElseIf TypeOf col Is dataframe Then
+                Dim colnames = d.columns.Keys.ToArray
+                Dim append As dataframe = DirectCast(col, dataframe)
+                Dim oldColNames = append.columns.Keys.ToArray
+                Dim newNames = colnames.JoinIterates(oldColNames).uniqueNames
+
+                For i As Integer = 0 To append.columns.Count - 1
+                    d.columns.Add(newNames(i + colnames.Length), append.columns(oldColNames(i)))
+                Next
             Else
                 d.columns.Add($"X{d.columns.Count + 2}", {col})
             End If
@@ -785,6 +810,75 @@ Namespace Runtime.Internal.Invokes
                 Return RObj.names.getNames([object], envir)
             Else
                 Return RObj.names.setNames([object], namelist, envir)
+            End If
+        End Function
+
+        ''' <summary>
+        ''' ### Make Syntactically Valid Names
+        ''' 
+        ''' Make syntactically valid names out of character vectors.
+        ''' 
+        ''' 
+        ''' </summary>
+        ''' <param name="names">
+        ''' character vector To be coerced To syntactically valid names. 
+        ''' This Is coerced To character If necessary.
+        ''' </param>
+        ''' <param name="unique">
+        ''' logical; if TRUE, the resulting elements are unique. This may 
+        ''' be desired for, e.g., column names.
+        ''' </param>
+        ''' <param name="allow_">
+        ''' logical. For compatibility with R prior to 1.9.0.
+        ''' </param>
+        ''' <remarks>
+        ''' A syntactically valid name consists of letters, numbers and 
+        ''' the dot or underline characters and starts with a letter or 
+        ''' the dot not followed by a number. Names such as ".2way" are 
+        ''' not valid, and neither are the reserved words.
+        '''
+        ''' The definition Of a letter depends On the current locale, but 
+        ''' only ASCII digits are considered To be digits.
+        '''
+        ''' The character "X" Is prepended If necessary. All invalid 
+        ''' characters are translated To ".". A missing value Is translated 
+        ''' To "NA". Names which match R keywords have a dot appended To 
+        ''' them. Duplicated values are altered by make.unique.
+        ''' </remarks>
+        ''' <returns>A character vector of same length as names with each 
+        ''' changed to a syntactically valid name, in the current locale's 
+        ''' encoding.</returns>
+        <ExportAPI("make.names")>
+        Public Function makeNames(<RRawVectorArgument> names As Object, Optional unique As Boolean = False, Optional allow_ As Boolean = True) As Object
+            Dim nameList As String() = asVector(Of String)(names)
+            Dim nameAll As New List(Of String)
+
+            For Each name As String In nameList
+                name = name _
+                    .Select(Function(c)
+                                If c = "_"c AndAlso allow_ Then
+                                    Return c
+                                Else
+                                    If c >= "a"c AndAlso c <= "z"c Then
+                                        Return c
+                                    ElseIf c >= "A"c AndAlso c <= "Z"c Then
+                                        Return c
+                                    ElseIf c >= "0"c AndAlso c <= "9"c Then
+                                        Return c
+                                    Else
+                                        Return "."c
+                                    End If
+                                End If
+                            End Function) _
+                    .CharString
+
+                Call nameAll.Add(name)
+            Next
+
+            If unique Then
+                Return nameAll.uniqueNames
+            Else
+                Return nameAll.ToArray
             End If
         End Function
 

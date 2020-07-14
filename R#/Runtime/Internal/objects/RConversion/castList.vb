@@ -1,46 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::aa8ce8ce9d14b3c862b13ae4f5ded3d3, R#\Runtime\Internal\objects\RConversion\castList.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module castList
-    ' 
-    '         Function: CTypeList, listInternal
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module castList
+' 
+'         Function: CTypeList, listInternal
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -78,7 +79,7 @@ Namespace Runtime.Internal.Object.Converts
                     Return obj
                 Case GetType(vbObject)
                     ' object property as list data
-                    Return DirectCast(obj, vbObject).toList
+                    Return DirectCast(obj, vbObject).objCastList(args)
                 Case GetType(dataframe)
                     Dim byRow As Boolean = REnv.asLogical(args!byrow)(Scan0)
 
@@ -99,9 +100,41 @@ Namespace Runtime.Internal.Object.Converts
 
                         Return New list With {.slots = objList}
                     Else
-                        Throw New NotImplementedException
+                        Return New vbObject(obj).objCastList(args)
                     End If
             End Select
+        End Function
+
+        <Extension>
+        Private Function objCastList(vbobj As vbObject, args As list) As list
+            Dim list As Dictionary(Of String, Object) = vbobj.properties _
+                .ToDictionary(Function(p) p.Key,
+                              Function(p)
+                                  Dim value As Object = p.Value.GetValue(vbobj.target)
+
+                                  If value Is Nothing Then
+                                      Return Nothing
+                                  ElseIf TypeOf value Is Array OrElse TypeOf value Is vector Then
+                                      Return value
+                                  Else
+                                      Return listInternal(value, args)
+                                  End If
+                              End Function)
+
+            If vbobj.type.haveDynamicsProperty Then
+                Dim dynamic As IDynamicsObject = vbobj.target
+
+                For Each name As String In dynamic _
+                    .GetNames _
+                    .Where(Function(nameKey)
+                               Return Not list.ContainsKey(nameKey)
+                           End Function)
+
+                    Call list.Add(name, dynamic.GetItemValue(name))
+                Next
+            End If
+
+            Return New list With {.slots = list}
         End Function
     End Module
 End Namespace

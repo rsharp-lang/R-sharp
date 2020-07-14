@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::31130665cadea5342e1a37bdb35e5ffd, R#\Runtime\Internal\internalInvokes\file.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module file
-    ' 
-    '         Function: basename, dir_exists, dirCreate, dirname, exists
-    '                   file, filecopy, fileinfo, getwd, listDirs
-    '                   listFiles, loadListInternal, normalizeFileName, normalizePath, openGzip
-    '                   openZip, readLines, readList, readText, Rhome
-    '                   saveList, setwd, writeLines
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module file
+' 
+'         Function: basename, dir_exists, dirCreate, dirname, exists
+'                   file, filecopy, fileinfo, getwd, listDirs
+'                   listFiles, loadListInternal, normalizeFileName, normalizePath, openGzip
+'                   openZip, readLines, readList, readText, Rhome
+'                   saveList, setwd, writeLines
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -57,6 +57,7 @@ Imports Microsoft.VisualBasic.Language.UnixBash.FileSystem
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Components
@@ -548,6 +549,14 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' open a zip file
+        ''' </summary>
+        ''' <param name="file"></param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' a folder liked list object
+        ''' </returns>
         <ExportAPI("open.zip")>
         <RApiReturn(GetType(ZipFolder))>
         Public Function openZip(file As String, Optional env As Environment = Nothing) As Object
@@ -558,13 +567,50 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' decompression of a gzip file and get the deflate file data stream.
+        ''' </summary>
+        ''' <param name="file">
+        ''' the file path or file stream data.
+        ''' </param>
+        ''' <param name="tmpfileWorker">
+        ''' using tempfile for process the large data file which its file length 
+        ''' is greater then the memorystream its upbound capacity.
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("open.gzip")>
-        Public Function openGzip(file As String) As Stream
-            Using originalFileStream As FileStream = file.Open(FileMode.Open, doClear:=False)
-                Dim deflate As New MemoryStream
+        <RApiReturn(GetType(Stream))>
+        Public Function openGzip(file As Object,
+                                 Optional tmpfileWorker$ = Nothing,
+                                 Optional env As Environment = Nothing) As Object
+
+            If file Is Nothing Then
+                Return Nothing
+            End If
+
+            Dim originalFileStream As Stream
+
+            If TypeOf file Is String Then
+                originalFileStream = DirectCast(file, String).Open(FileMode.Open, doClear:=False)
+            ElseIf TypeOf file Is Stream Then
+                originalFileStream = DirectCast(file, Stream)
+            Else
+                Return Internal.debug.stop(Message.InCompatibleType(GetType(Stream), file.GetType, env), env)
+            End If
+
+            Using originalFileStream
+                Dim deflate As Stream
+
+                If Not tmpfileWorker.StringEmpty Then
+                    deflate = tmpfileWorker.Open(FileMode.OpenOrCreate, doClear:=True)
+                Else
+                    deflate = New MemoryStream
+                End If
 
                 Using decompressionStream As New GZipStream(originalFileStream, CompressionMode.Decompress)
                     decompressionStream.CopyTo(deflate)
+                    deflate.Position = Scan0
                 End Using
 
                 Return deflate
