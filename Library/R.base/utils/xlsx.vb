@@ -52,14 +52,17 @@ Imports msXlsx = Microsoft.VisualBasic.MIME.Office.Excel.File
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 
 ''' <summary>
-''' 
+''' Xlsx file toolkit
 ''' </summary>
 <Package("xlsx", Category:=APICategories.UtilityTools)>
 Module xlsx
 
     ''' <summary>
-    ''' 
+    ''' read a sheet table in xlsx file as a ``dataframe`` object.
     ''' </summary>
+    ''' <param name="sheetIndex">
+    ''' the data sheet index or name for read data
+    ''' </param>
     ''' <returns></returns>
     ''' 
     <ExportAPI("read.xlsx")>
@@ -107,6 +110,12 @@ Module xlsx
 
     End Function
 
+    ''' <summary>
+    ''' create a new worksheet for a given xlsx file 
+    ''' </summary>
+    ''' <param name="wb"></param>
+    ''' <param name="sheetName$"></param>
+    ''' <returns></returns>
     <ExportAPI("createSheet")>
     Public Function createSheet(wb As msXlsx, Optional sheetName$ = "Sheet1") As worksheet
         Return wb.AddSheetTable(sheetName)
