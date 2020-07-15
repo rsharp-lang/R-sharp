@@ -165,6 +165,10 @@ Namespace Runtime.Internal.Object
         End Function
 
         Public Shared Function TryCreatePipeline(Of T)(upstream As Object, env As Environment) As pipeline
+            If TypeOf upstream Is Dictionary(Of String, Object).ValueCollection Then
+                upstream = DirectCast(upstream, Dictionary(Of String, Object).ValueCollection).ToArray
+            End If
+
             If upstream Is Nothing Then
                 Return Internal.debug.stop("the upstream data can not be nothing!", env)
             ElseIf TypeOf upstream Is pipeline Then

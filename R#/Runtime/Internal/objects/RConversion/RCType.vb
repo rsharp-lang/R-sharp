@@ -91,6 +91,17 @@ Namespace Runtime.Internal.Object.Converts
             ElseIf objType Is GetType(list) AndAlso type.ImplementInterface(GetType(IDictionary)) Then
                 ' cast R# list object to any dictionary table object???
                 Return DirectCast(obj, list).CTypeList(type, env)
+            ElseIf objType.ImplementInterface(GetType(IDictionary)) AndAlso type Is GetType(list) Then
+                Dim list As New list With {
+                    .slots = New Dictionary(Of String, Object)
+                }
+                Dim raw As IDictionary = DirectCast(obj, IDictionary)
+
+                For Each itemKey As Object In raw.Keys
+                    list.slots.Add(itemKey.ToString, raw.Item(itemKey))
+                Next
+
+                Return list
             ElseIf type.IsEnum Then
                 Return CastToEnum(obj, type, env)
             ElseIf objType Is GetType(Environment) AndAlso type Is GetType(GlobalEnvironment) Then
