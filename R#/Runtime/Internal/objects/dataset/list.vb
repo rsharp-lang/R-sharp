@@ -102,6 +102,10 @@ Namespace Runtime.Internal.Object
             Next
         End Function
 
+        'Public Sub Add(name As String, value As Object)
+        '    _slots(name) = value
+        'End Sub
+
         Public Function setNames(names() As String, envir As Environment) As Object Implements RNames.setNames
             Dim oldNames = slots.Keys.ToArray
             Dim newSlots As Dictionary(Of String, Object)
