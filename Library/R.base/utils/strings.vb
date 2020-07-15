@@ -53,7 +53,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports RHtml = SMRUCC.Rsharp.Runtime.Internal.htmlPrinter
 
-<Package("strings", Category:=APICategories.UtilityTools)>
+<Package("stringr", Category:=APICategories.UtilityTools)>
 Module strings
 
     Sub New()

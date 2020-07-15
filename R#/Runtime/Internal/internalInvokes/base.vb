@@ -1152,7 +1152,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
-        ''' # Compactly Display the Structure of an Arbitrary ``R#`` Object
+        ''' ### Compactly Display the Structure of an Arbitrary ``R#`` Object
         ''' 
         ''' Compactly display the internal structure of an R object, a diagnostic function 
         ''' and an alternative to summary (and to some extent, dput). Ideally, only one 
@@ -1164,11 +1164,14 @@ Namespace Runtime.Internal.Invokes
         ''' ``strOptions()`` Is a convenience function for setting ``options(str = .)``, 
         ''' see the examples.
         ''' </summary>
-        ''' <param name="[object]">any R object about which you want to have some information.</param>
+        ''' <param name="object">any R object about which you want to have some information.</param>
+        ''' <param name="list_len">
+        ''' numeric; maximum number of list elements to display within a level.
+        ''' </param>
         ''' <returns></returns>
         <ExportAPI("str")>
-        Public Function str(<RRawVectorArgument> [object] As Object, Optional env As Environment = Nothing) As Object
-            Dim structure$ = reflector.GetStructure([object], env.globalEnvironment, " ")
+        Public Function str(<RRawVectorArgument> [object] As Object, Optional list_len% = 99, Optional env As Environment = Nothing) As Object
+            Dim structure$ = reflector.GetStructure([object], env.globalEnvironment, " ", list_len)
             Call env.globalEnvironment.stdout.WriteLine([structure])
             Return Nothing
         End Function

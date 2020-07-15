@@ -172,8 +172,12 @@ Module CLI
                     file = "Library/" & file
                 End If
 
-                Call pkgMgr.InstallLocals(dllFile:=file)
-                Call pkgMgr.Flush()
+                If file.FileExists Then
+                    Call pkgMgr.InstallLocals(dllFile:=file)
+                    Call pkgMgr.Flush()
+                Else
+                    Call $"missing module dll: {file}".PrintException
+                End If
             Next
         End Using
 
