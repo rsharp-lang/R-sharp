@@ -218,6 +218,8 @@
     <Compile Include="dataScience\validation.vb" />
     <Compile Include="math.vb" />
     <Compile Include="dataScience\dataMining\clustering.vb" />
+    <Compile Include="dataScience\signalProcessing.vb" />
+    <Compile Include="symbolic.vb" />
     <Compile Include="stats.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -294,6 +296,10 @@
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Mathematica\Math\ODE\ODEsSolver.vbproj">
       <Project>{14e0b048-3a0d-4fd6-aa79-9b815d6f1b30}</Project>
       <Name>ODEsSolver</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Mathematica\SignalProcessing\SignalProcessing\SignalProcessing.vbproj">
+      <Project>{83975074-cbe1-4abc-ba91-91d63da156c8}</Project>
+      <Name>SignalProcessing</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\47-dotnet_Microsoft.VisualBasic.vbproj">
       <Project>{fecce1fd-e1d4-49e3-a668-60bb5e7aed99}</Project>
