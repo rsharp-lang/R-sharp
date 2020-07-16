@@ -324,65 +324,143 @@ Namespace Runtime.Internal.Object.Converts
             End If
         End Function
 
+        ''' <summary>
+        ''' ### Vectors
+        ''' 
+        ''' vector produces a vector of the given length and mode.
+        ''' 
+        ''' as.vector, a generic, attempts to coerce its argument into a 
+        ''' vector of mode mode (the default is to coerce to whichever 
+        ''' vector mode is most convenient): if the result is atomic all 
+        ''' attributes are removed.
+        ''' </summary>
+        ''' <param name="x">an R object.</param>
+        ''' <param name="mode">
+        ''' character string naming an atomic mode or "list" or "expression" 
+        ''' or (except for vector) "any". Currently, is.vector() allows any 
+        ''' type (see typeof) for mode, and when mode is not "any", 
+        ''' ``is.vector(x, mode)`` is almost the same as ``typeof(x) == mode``.
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <remarks>
+        ''' The atomic modes are "logical", "integer", "numeric" (synonym 
+        ''' "double"), "complex", "character" and "raw".
+        '''
+        ''' If mode = "any", Is.vector may Return True For the atomic modes, 
+        ''' list And expression. For any mode, it will Return False If x has 
+        ''' any attributes except names. (This Is incompatible With S.) On 
+        ''' the other hand, As.vector removes all attributes including names 
+        ''' For results Of atomic mode (but Not those Of mode "list" nor 
+        ''' "expression").
+        '''
+        ''' Note that factors are Not vectors; Is.vector returns False And 
+        ''' ``as.vector`` converts a factor To a character vector For 
+        ''' ``mode = "any"``.
+        ''' 
+        ''' as.vector and is.vector are quite distinct from the meaning of the 
+        ''' formal class "vector" in the methods package, and hence as(x, "vector") 
+        ''' and is(x, "vector").
+        '''
+        ''' Note that ``as.vector(x)`` Is Not necessarily a null operation if 
+        ''' ``is.vector(x)`` Is true: any names will be removed from an atomic 
+        ''' vector.
+        '''
+        ''' Non-vector modes "symbol" (synonym "name") And "pairlist" are accepted 
+        ''' but have long been undocumented: they are used To implement As.name And 
+        ''' As.pairlist, And those functions should preferably be used directly. 
+        ''' None Of the description here applies To those modes: see the help For 
+        ''' the preferred forms.
+        ''' </remarks>
+        ''' <returns>
+        ''' For vector, a vector of the given length and mode. Logical vector 
+        ''' elements are initialized to FALSE, numeric vector elements to 0, 
+        ''' character vector elements to "", raw vector elements to nul bytes and 
+        ''' list/expression elements to NULL.
+        '''
+        ''' For as.vector, a vector (atomic Or of type list Or expression). All 
+        ''' attributes are removed from the result if it Is of an atomic mode, but 
+        ''' Not in general for a list result. The default method handles 24 input 
+        ''' types And 12 values of type: the details Of most coercions are 
+        ''' undocumented And subject To change.
+        '''
+        ''' For Is.vector, TRUE Or FALSE. Is.vector(x, mode = "numeric") can be 
+        ''' true for vectors of types "integer" Or "double" whereas 
+        ''' ``is.vector(x, mode = "double")`` can only be true for those of type 
+        ''' "double".
+        ''' </returns>
         <ExportAPI("as.vector")>
-        Public Function asVector(<RRawVectorArgument> obj As Object, Optional env As Environment = Nothing) As Object
-            If obj Is Nothing Then
-                Return obj
+        Public Function asVector(<RRawVectorArgument> x As Object,
+                                 Optional mode As Object = "any",
+                                 Optional env As Environment = Nothing) As Object
+
+            If x Is Nothing Then
+                Return x
             End If
 
-            If TypeOf obj Is vector Then
-                Return obj
-            ElseIf obj.GetType.IsArray Then
-                Return New vector With {.data = obj}
+            If TypeOf x Is vector Then
+                Return x
+            ElseIf x.GetType.IsArray Then
+                Return New vector With {.data = x}
+            ElseIf TypeOf x Is pipeline Then
+                Return DirectCast(x, pipeline).createVector(env)
             Else
-                Dim interfaces = obj.GetType.GetInterfaces
+                Dim interfaces = x.GetType.GetInterfaces
 
                 ' array of <T>
                 For Each type In interfaces
                     If type.GenericTypeArguments.Length > 0 AndAlso type.ImplementInterface(Of IEnumerable) Then
-                        Dim generic As Type = type.GenericTypeArguments(Scan0)
-                        Dim buffer As Object = Activator.CreateInstance(GetType(List(Of )).MakeGenericType(generic))
-                        Dim add As MethodInfo = buffer.GetType.GetMethod("Add", BindingFlags.Public Or BindingFlags.Instance)
-                        Dim source As IEnumerator = DirectCast(obj, IEnumerable).GetEnumerator
-
-                        source.MoveNext()
-                        source = source.Current
-
-                        ' get element count by list
-                        Do While source.MoveNext
-                            Call add.Invoke(buffer, {source.Current})
-                        Loop
-
-                        ' write buffered data to vector
-                        Dim vec As Array = Array.CreateInstance(generic, DirectCast(buffer, IList).Count)
-                        Dim i As i32 = Scan0
-
-                        For Each x As Object In DirectCast(buffer, IEnumerable)
-                            vec.SetValue(x, ++i)
-                        Next
-
-                        Return New vector With {.data = vec}
+                        Return type.castArrayOfGeneric(x)
                     End If
                 Next
 
                 ' array of object
                 For Each type In interfaces
                     If type Is GetType(IEnumerable) Then
-                        Dim buffer As New List(Of Object)
-
-                        For Each x As Object In DirectCast(obj, IEnumerable)
-                            buffer.Add(x)
-                        Next
-
-                        Return New vector With {.data = buffer.ToArray}
+                        Return castArrayOfObject(x)
                     End If
                 Next
 
                 ' obj is not a vector type
-                env.AddMessage($"target object of '{obj.GetType.FullName}' can not be convert to a vector.", MSG_TYPES.WRN)
+                env.AddMessage($"target object of '{x.GetType.FullName}' can not be convert to a vector.", MSG_TYPES.WRN)
 
-                Return obj
+                Return x
             End If
+        End Function
+
+        Private Function castArrayOfObject(obj As Object) As vector
+            Dim buffer As New List(Of Object)
+
+            For Each x As Object In DirectCast(obj, IEnumerable)
+                buffer.Add(x)
+            Next
+
+            Return New vector With {.data = buffer.ToArray}
+        End Function
+
+        <Extension>
+        Private Function castArrayOfGeneric(type As Type, obj As Object) As vector
+            Dim generic As Type = type.GenericTypeArguments(Scan0)
+            Dim buffer As Object = Activator.CreateInstance(GetType(List(Of )).MakeGenericType(generic))
+            Dim add As MethodInfo = buffer.GetType.GetMethod("Add", BindingFlags.Public Or BindingFlags.Instance)
+            Dim source As IEnumerator = DirectCast(obj, IEnumerable).GetEnumerator
+
+            source.MoveNext()
+            source = source.Current
+
+            ' get element count by list
+            Do While source.MoveNext
+                Call add.Invoke(buffer, {source.Current})
+            Loop
+
+            ' write buffered data to vector
+            Dim vec As Array = Array.CreateInstance(generic, DirectCast(buffer, IList).Count)
+            Dim i As i32 = Scan0
+
+            For Each x As Object In DirectCast(buffer, IEnumerable)
+                vec.SetValue(x, ++i)
+            Next
+
+            Return New vector With {.data = vec}
         End Function
 
         ''' <summary>
