@@ -267,6 +267,14 @@
       <Project>{6ca54af6-cadc-457e-94b9-384f2990f07e}</Project>
       <Name>hierarchical-clustering</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\MachineLearning\MachineLearning\MachineLearning.vbproj">
+      <Project>{a43ec013-2b55-4d25-b9f1-96bd5fb1e577}</Project>
+      <Name>MachineLearning</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\MachineLearning\MLDebugger\MLDebugger.vbproj">
+      <Project>{ccbf36ab-506d-48a2-9150-a3762d4120ec}</Project>
+      <Name>MLDebugger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Mathematica\Math\DataFittings\DataFittings.vbproj">
       <Project>{fc125b0d-1942-496f-b502-9c0eb80e35b6}</Project>
       <Name>DataFittings</Name>
