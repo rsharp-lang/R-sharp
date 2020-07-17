@@ -93,6 +93,11 @@ Module machineLearning
         Return dataframe
     End Function
 
+    <ExportAPI("softmax")>
+    Public Function Softmax(<RRawVectorArgument> V As Object) As Object
+        Return SoftmaxLayer.Softmax(REnv.asVector(Of Double)(V)).DoCall(AddressOf vector.asVector)
+    End Function
+
     <ExportAPI("raw_samples")>
     Public Function getRawSamples(x As StoreProcedure.DataSet) As Sample()
         Return x.DataSamples.items
