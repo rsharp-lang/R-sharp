@@ -289,6 +289,99 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' ### Random Samples and Permutations
+        ''' 
+        ''' ``sample`` takes a sample of the specified size from the elements 
+        ''' of x using either with or without replacement.
+        ''' </summary>
+        ''' <param name="x">
+        ''' either a vector Of one Or more elements from which To choose, Or a positive Integer. See 'Details.’
+        ''' </param>
+        ''' <param name="size">a non-negative integer giving the number of items to choose.</param>
+        ''' <param name="replace">should sampling be with replacement?</param>
+        ''' <param name="prob">
+        ''' a vector Of probability weights For obtaining the elements Of the vector being sampled.
+        ''' </param>
+        ''' <remarks>
+        ''' If x has length 1, is numeric (in the sense of is.numeric) and ``x >= 1``, sampling 
+        ''' via sample takes place from ``1:x``. Note that this convenience feature may lead to 
+        ''' undesired behaviour when x is of varying length in calls such as sample(x). 
+        ''' See the examples.
+        '''
+        ''' Otherwise x can be any R Object For which length And subsetting by integers make sense: 
+        ''' S3 Or S4 methods for these operations will be dispatched as appropriate.
+        '''
+        ''' For sample the default for size Is the number of items inferred from the first argument, 
+        ''' so that sample(x) generates a random permutation of the elements of x (Or 1:x).
+        '''
+        ''' It Is allowed to ask for size = 0 samples with n = 0 Or a length-zero x, but otherwise 
+        ''' ``n > 0`` Or positive length(x) Is required.
+        '''
+        ''' Non-integer positive numerical values of n Or x will be truncated to the next smallest 
+        ''' integer, which has to be no larger than ``.Machine$integer.max``.
+        '''
+        ''' The optional prob argument can be used to give a vector of weights for obtaining the elements 
+        ''' of the vector being sampled. They need Not sum to one, but they should be non-negative And 
+        ''' Not all zero. If replace Is true, Walker's alias method (Ripley, 1987) is used when there 
+        ''' are more than 200 reasonably probable values: this gives results incompatible with those 
+        ''' from ``R &lt; 2.2.0``.
+        '''
+        ''' If replace Is False, these probabilities are applied sequentially, that Is the probability 
+        ''' Of choosing the Next item Is proportional To the weights amongst the remaining items. The 
+        ''' number Of nonzero weights must be at least size In this Case.
+        ''' </remarks>
+        ''' <returns>
+        ''' For sample a vector of length size with elements drawn from either ``x`` or from the 
+        ''' integers ``1:x``.
+        ''' </returns>
+        <ExportAPI("sample")>
+        Public Function sample(<RRawVectorArgument>
+                               x As Object,
+                               size As Integer,
+                               Optional replace As Boolean = False,
+                               Optional prob As Object = Nothing) As Object
+
+            Dim data As Object() = asVector(Of Object)(x)
+            Dim index As Integer() = sample_int(size, size, replace, prob)
+            Dim takeSamples As New List(Of Object)
+
+            For Each i As Integer In index
+                Call takeSamples.Add(data(i))
+            Next
+
+            Return takeSamples.ToArray
+        End Function
+
+        <ExportAPI("sample.int")>
+        <RApiReturn(GetType(Integer))>
+        Public Function sample_int(n As Integer, Optional size As Object = "n", Optional replace As Boolean = False, Optional prob As Object = Nothing) As Object
+            Dim i As New List(Of Integer)(n.Sequence(offset:=1))
+            Dim list As New List(Of Integer)
+            Dim seeds As Random = randf.seeds
+
+            If size.ToString <> "n" Then
+                n = size
+            End If
+
+            If replace Then
+                ' 有重复的采样
+                For j As Integer = 0 To n - 1
+                    list.Add(i(seeds.Next(0, i.Count)))
+                Next
+            Else
+                Dim index As Integer
+
+                For j As Integer = 0 To n - 1
+                    index = seeds.Next(0, i.Count)
+                    list.Add(i(index))
+                    i.RemoveAt(index)
+                Next
+            End If
+
+            Return list.ToArray
+        End Function
+
+        ''' <summary>
         ''' grouping data input by given numeric tolerance
         ''' </summary>
         ''' <param name="sequence"></param>
