@@ -133,8 +133,20 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     .DoCall(Function(code)
                                 Return ClosureExpressionSyntax.ClosureExpression(code, opts)
                             End Function)
+            ElseIf tokens(Scan0) = (TokenType.operator, "%") AndAlso
+               tokens(1) = (TokenType.identifier, "do") AndAlso
+               tokens(2) = (TokenType.operator, "%") Then
+
+                ' for(...) %do% {...}
+                isParallel = False
+
+                Return tokens _
+                    .Skip(4) _
+                    .DoCall(Function(code)
+                                Return ClosureExpressionSyntax.ClosureExpression(code, opts)
+                            End Function)
             Else
-                Throw New SyntaxErrorException
+                Return New SyntaxResult(New SyntaxErrorException, opts.debug)
             End If
         End Function
     End Module
