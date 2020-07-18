@@ -1,47 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::1b08bc3bceb940e2bd6ff79fb226ec61, Library\R.math\dataScience\machineLearning.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module machineLearning
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: addTrainingSample, ANNpredict, checkModelDataset, createANN, CreateANNTrainer
-    '               createEmptyMLDataset, getRawSamples, normalizeData, openDebugger, readANNModel
-    '               readModelDataset, runANNTraining, (+2 Overloads) Tabular, writeANNNetwork
-    ' 
-    '     Sub: doFileSave
-    ' 
-    ' /********************************************************************************/
+' Module machineLearning
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: addTrainingSample, ANNpredict, checkModelDataset, createANN, CreateANNTrainer
+'               createEmptyMLDataset, getRawSamples, normalizeData, openDebugger, readANNModel
+'               readModelDataset, runANNTraining, (+2 Overloads) Tabular, writeANNNetwork
+' 
+'     Sub: doFileSave
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -71,10 +71,10 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 Module machineLearning
 
     Sub New()
-        REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(StoreProcedure.DataSet), AddressOf Tabular)
+        REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(StoreProcedure.DataSet), AddressOf tabular)
     End Sub
 
-    Public Function Tabular(x As StoreProcedure.DataSet, args As list, env As Environment) As Rdataframe
+    Public Function tabular(x As StoreProcedure.DataSet, args As list, env As Environment) As Rdataframe
         Dim markOuput As Boolean = args.getValue(Of Boolean)("mark.output", env)
         Dim table As DataTable() = x.ToTable(markOuput).ToArray
         Dim a As Array
@@ -297,7 +297,6 @@ Module machineLearning
     ''' <param name="weight0"></param>
     ''' <param name="learnRateDecay"></param>
     ''' <param name="truncate"></param>
-    ''' <param name="selectiveMode"></param>
     ''' <returns></returns>
     <ExportAPI("ANN.training_model")>
     Public Function CreateANNTrainer(inputSize%, outputSize%,
@@ -308,8 +307,7 @@ Module machineLearning
                                      Optional active As activation = Nothing,
                                      Optional weight0 As Object = "random",
                                      Optional learnRateDecay As Double = 0.0000000001,
-                                     Optional truncate As Double = -1,
-                                     Optional selectiveMode As Boolean = False) As TrainingUtils
+                                     Optional truncate As Double = -1) As TrainingUtils
         Dim w0 As Func(Of Double)
         Dim sizeVec As Integer() = REnv.asVector(Of Integer)(hiddenSize)
 
@@ -326,12 +324,29 @@ Module machineLearning
             momentum,
             active.CreateActivations,
             weightInit:=w0
-        ) With {.Selective = selectiveMode}
+        )
 
         trainingHelper.NeuronNetwork.LearnRateDecay = learnRateDecay
         trainingHelper.Truncate = truncate
 
         Return trainingHelper
+    End Function
+
+    ''' <summary>
+    ''' Apply configuration on the ANN training model.
+    ''' </summary>
+    ''' <param name="ann"></param>
+    ''' <returns></returns>
+    <ExportAPI("configuration")>
+    Public Function configuration(ann As TrainingUtils,
+                                  Optional softmax As Boolean = True,
+                                  Optional selectiveMode As Boolean = False,
+                                  Optional dropout As Double = 0) As TrainingUtils
+
+        Return ann _
+            .SetLayerNormalize(opt:=softmax) _
+            .SetDropOut(percentage:=dropout) _
+            .SetSelective(opt:=selectiveMode)
     End Function
 
     ''' <summary>
@@ -369,7 +384,9 @@ Module machineLearning
                                    Optional normalMethod As Methods = Methods.RelativeScaler,
                                    Optional learnRateDecay As Double = 0.0000000001,
                                    Optional truncate As Double = -1,
+                                   Optional softmax As Boolean = True,
                                    Optional selectiveMode As Boolean = False,
+                                   Optional dropout As Double = 0,
                                    Optional maxIterations As Integer = 10000,
                                    Optional minErr As Double = 0.01,
                                    Optional parallel As Boolean = True,
@@ -384,9 +401,10 @@ Module machineLearning
             weight0:=weight0,
             learnRateDecay:=learnRateDecay,
             truncate:=truncate,
-            selectiveMode:=selectiveMode,
             active:=active
-        )
+        ).SetLayerNormalize(opt:=softmax) _
+         .SetDropOut(percentage:=dropout) _
+         .SetSelective(opt:=selectiveMode)
 
         For Each sample As Sample In trainSet.PopulateNormalizedSamples(method:=normalMethod)
             Call trainingHelper.Add(sample.vector, sample.target)
