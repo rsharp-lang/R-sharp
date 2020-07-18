@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5e2c8d6308496b01760b46850444b95e, R#\Interpreter\ExecutableLoop.vb"
+﻿#Region "Microsoft.VisualBasic::3f2e98348037ad3bad1f64e4e9527a51, R#\Interpreter\ExecutableLoop.vb"
 
     ' Author:
     ' 
@@ -37,7 +37,7 @@
     ' 
     '         Function: Execute, ExecuteCodeLine
     ' 
-    '         Sub: configException, printExpressionDebug
+    '         Sub: configException, printDebug
     ' 
     ' 
     ' /********************************************************************************/

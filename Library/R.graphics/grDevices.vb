@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bcbf07fea273cd9f7a59c40bea6d7b91, Library\R.graphics\grDevices.vb"
+﻿#Region "Microsoft.VisualBasic::02279f538e5a677fdd1dfa98592c4a24, Library\R.graphics\grDevices.vb"
 
     ' Author:
     ' 
@@ -34,7 +34,7 @@
     ' Module grDevices
     ' 
     '     Function: colorPopulator, colors, devCur, devOff, imageAttrs
-    '               line2D, rgb, saveImage
+    '               rgb, saveImage
     ' 
     ' /********************************************************************************/
 

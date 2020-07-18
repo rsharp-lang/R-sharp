@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::956dd3214c484e3cca2cbbb61ad3585c, R#\Runtime\Internal\internalInvokes\math.vb"
+﻿#Region "Microsoft.VisualBasic::6ea4e13c3bbfb87f2f8aa55a7437464e, R#\Runtime\Internal\internalInvokes\math.vb"
 
     ' Author:
     ' 
@@ -33,9 +33,10 @@
 
     '     Module math
     ' 
-    '         Function: abs, exp, log, max, mean
-    '                   min, pearson, pow, rnorm, round
-    '                   rsd, runif, sd, sqrt, sum
+    '         Function: abs, cluster1D, exp, log, max
+    '                   mean, min, pearson, pow, rnorm
+    '                   round, rsd, runif, sample, sample_int
+    '                   sd, sqrt, sum
     ' 
     '         Sub: set_seed
     ' 

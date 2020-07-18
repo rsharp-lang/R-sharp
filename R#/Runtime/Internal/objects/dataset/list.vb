@@ -1,47 +1,47 @@
-﻿#Region "Microsoft.VisualBasic::3daf79875ee605a88b11d88d3622ab66, R#\Runtime\Internal\objects\dataset\list.vb"
+﻿#Region "Microsoft.VisualBasic::4626ded24f0a21476652ad273ef5648b, R#\Runtime\Internal\objects\dataset\list.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class list
-' 
-'         Properties: length, slots
-' 
-'         Constructor: (+2 Overloads) Sub New
-'         Function: (+2 Overloads) getByIndex, (+2 Overloads) getByName, getNames, GetSlots, getValue
-'                   hasName, namedValues, setByindex, setByIndex, (+2 Overloads) setByName
-'                   setNames, ToString
-' 
-' 
-' /********************************************************************************/
+    '     Class list
+    ' 
+    '         Properties: length, slots
+    ' 
+    '         Constructor: (+2 Overloads) Sub New
+    '         Function: AsGeneric, (+2 Overloads) getByIndex, (+2 Overloads) getByName, getNames, GetSlots
+    '                   getValue, hasName, namedValues, setByindex, setByIndex
+    '                   (+2 Overloads) setByName, setNames, ToString
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b633137b0ca442216ef2e3c8660ad029, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\CreateObject.vb"
+﻿#Region "Microsoft.VisualBasic::7302c732b5436d58b1d41691fabbcc0d, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\CreateObject.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,7 @@
     '         Properties: constructor, name, stackFrame, type
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, ToString
+    '         Function: Evaluate, ToString, TryGetType
     ' 
     ' 
     ' /********************************************************************************/

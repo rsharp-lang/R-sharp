@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3f3e3be3123c25690592db24cd92b58d, R#\Runtime\Internal\objects\dataset\vbObject.vb"
+﻿#Region "Microsoft.VisualBasic::aa4c3b55019734d81dcf97dcf86f2d6c, R#\Runtime\Internal\objects\dataset\vbObject.vb"
 
     ' Author:
     ' 
@@ -37,7 +37,7 @@
     ' 
     '         Constructor: (+2 Overloads) Sub New
     '         Function: CreateInstance, existsName, (+2 Overloads) getByName, getNames, getObjMethods
-    '                   getObjProperties, (+2 Overloads) setByName, toList, ToString
+    '                   getObjProperties, (+2 Overloads) setByName, ToString
     ' 
     ' 
     ' /********************************************************************************/

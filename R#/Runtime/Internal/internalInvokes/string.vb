@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d9051bd18aba90d621f4b810d3b1f906, R#\Runtime\Internal\internalInvokes\string.vb"
+﻿#Region "Microsoft.VisualBasic::3c8bd1895b6f9438de8f93bc37c331cf, R#\Runtime\Internal\internalInvokes\string.vb"
 
     ' Author:
     ' 

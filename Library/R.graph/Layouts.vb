@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::36d24b53ac51c65267edd42288145dee, Library\R.graph\Layouts.vb"
+﻿#Region "Microsoft.VisualBasic::9637ac74287de7d12687186d8b934d93, Library\R.graph\Layouts.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     ' Module Layouts
     ' 
-    '     Function: forceDirect, orthogonalLayout
+    '     Function: forceDirect, orthogonalLayout, randomLayout
     ' 
     ' /********************************************************************************/
 

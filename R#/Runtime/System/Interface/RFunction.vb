@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::78ca5b9ab54a1ec469fb52a9d49af521, R#\Runtime\System\Interface\RFunction.vb"
+﻿#Region "Microsoft.VisualBasic::b74c22b06cce40e0ef17aec373d364c2, R#\Runtime\System\Interface\RFunction.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,7 @@
     ' 
     '         Properties: name
     ' 
-    '         Function: Invoke
+    '         Function: getReturns, Invoke
     ' 
     '     Interface IRuntimeTrace
     ' 
