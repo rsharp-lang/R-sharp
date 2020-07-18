@@ -225,7 +225,7 @@ Module machineLearning
     ''' save a trained ANN network model into a given xml files.
     ''' </summary>
     ''' <param name="model"></param>
-    ''' <param name="file$"></param>
+    ''' <param name="file">the xml file path</param>
     ''' <param name="scattered"></param>
     ''' <param name="env"></param>
     ''' <returns></returns>
@@ -235,6 +235,8 @@ Module machineLearning
             Return False
         ElseIf TypeOf model Is Network Then
             model = StoreProcedure.NeuralNetwork.Snapshot(DirectCast(model, Network))
+        ElseIf TypeOf model Is TrainingUtils Then
+            model = DirectCast(model, TrainingUtils).TakeSnapshot
         ElseIf Not TypeOf model Is NeuralNetwork Then
             Return Internal.debug.stop({
                 $"invalid data type for save: {model.GetType.FullName}",
@@ -304,6 +306,7 @@ Module machineLearning
                                      Optional hiddenSize As Object = "25,100,30",
                                      Optional learnRate As Double = 0.1,
                                      Optional momentum As Double = 0.9,
+                                     <RDefaultValue("hidden: Sigmoid(alpha:=2.0); output: Sigmoid(alpha:=2.0)")>
                                      Optional active As activation = Nothing,
                                      Optional weight0 As Object = "random",
                                      Optional learnRateDecay As Double = 0.0000000001,
@@ -347,6 +350,45 @@ Module machineLearning
             .SetLayerNormalize(opt:=softmax) _
             .SetDropOut(percentage:=dropout) _
             .SetSelective(opt:=selectiveMode)
+    End Function
+
+    <ExportAPI("input.size")>
+    Public Function inputSize(trainSet As StoreProcedure.DataSet) As Integer
+        Return trainSet.Size.Width
+    End Function
+
+    <ExportAPI("output.size")>
+    Public Function outputSize(trainSet As StoreProcedure.DataSet) As Integer
+        Return trainSet.OutputSize
+    End Function
+
+    <ExportAPI("set.trainingSet")>
+    Public Function setTrainingSet(ann As TrainingUtils,
+                                   trainingSet As StoreProcedure.DataSet,
+                                   Optional normalMethod As Methods = Methods.RelativeScaler) As TrainingUtils
+
+        For Each sample As Sample In trainingSet.PopulateNormalizedSamples(method:=normalMethod)
+            Call ann.Add(sample.vector, sample.target)
+        Next
+
+        Return ann
+    End Function
+
+    <ExportAPI("training")>
+    Public Function runANNTraining(training As TrainingUtils,
+                                   Optional maxIterations As Integer = 10000,
+                                   Optional minErr As Double = 0.01,
+                                   Optional parallel As Boolean = True) As TrainingUtils
+
+        Helpers.MaxEpochs = maxIterations
+        Helpers.MinimumError = minErr
+
+        Call training _
+            .AttachReporter(Sub(i, err, ANN)
+                            End Sub) _
+            .Train(parallel)
+
+        Return training
     End Function
 
     ''' <summary>

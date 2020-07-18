@@ -14,15 +14,18 @@ print(check.ML_model(dataset));
 print("ANN training result model will be saved at location:");
 print(output);
 
-dataset
-:> training.ANN(
+ANN.training_model(
+	inputSize      = input.size(dataset),
+	outputSize     = output.size(dataset),
 	hiddenSize     = [100, 300, 50, 20], 
 	learnRate      = 0.125, 
 	momentum       = 0.9, 
 	minErr         = 0.05, 
 	parallel       = TRUE,
-	outputSnapshot = TRUE,
-	maxIterations  = 10000
+	outputSnapshot = TRUE	
 )
+:> configuration(softmax = TRUE, selectiveMode = TRUE)
+:> set.trainingSet(dataset)
+:> training(maxIterations  = 100)
 :> write.ANN_network(output)
 ;
