@@ -3,8 +3,10 @@ Imports System.Net
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 <Package("ftp", Category:=APICategories.UtilityTools)>
+<RTypeExport("ftp", GetType(FtpContext))>
 Module FTP
 
     <ExportAPI("list.ftp_dirs")>
@@ -30,7 +32,7 @@ End Module
 
 Public Class FtpContext
 
-    Public Property userName As String
+    Public Property username As String
     Public Property password As String
     Public Property server As String
 
@@ -38,8 +40,8 @@ Public Class FtpContext
         Dim ftpContext As String = $"{server}/{dir}"
         Dim request As FtpWebRequest = DirectCast(WebRequest.Create(ftpContext), FtpWebRequest)
 
-        If Not (userName.StringEmpty OrElse password.StringEmpty) Then
-            request.Credentials = New NetworkCredential(userName, password)
+        If Not (username.StringEmpty OrElse password.StringEmpty) Then
+            request.Credentials = New NetworkCredential(username, password)
         End If
 
         Return request
