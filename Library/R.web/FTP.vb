@@ -37,7 +37,7 @@ Public Class FtpContext
     Public Property server As String
 
     Public Function CreateRequest(dir As String) As FtpWebRequest
-        Dim ftpContext As String = $"{server}/{dir}"
+        Dim ftpContext As String = $"ftp://{server}/{dir}"
         Dim request As FtpWebRequest = DirectCast(WebRequest.Create(ftpContext), FtpWebRequest)
 
         If Not (username.StringEmpty OrElse password.StringEmpty) Then
