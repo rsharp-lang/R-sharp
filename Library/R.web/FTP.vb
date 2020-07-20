@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports System.Net
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -11,26 +12,38 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Module FTP
 
     <ExportAPI("list.ftp_dirs")>
-    Public Function list_ftpdirs(ftp As FtpContext, dir As String, Optional env As Environment = Nothing) As Object
+    Public Function list_ftpdirs(ftp As FtpContext, dir As String,
+                                 Optional throwEx As Boolean = False,
+                                 Optional env As Environment = Nothing) As Object
+
         Dim request As FtpWebRequest = ftp.CreateRequest(dir)
         Dim list As New List(Of String)
 
         request.Method = WebRequestMethods.Ftp.ListDirectory
 
-        Using response As FtpWebResponse = DirectCast(request.GetResponse(), FtpWebResponse)
-            Dim responseStream As Stream = response.GetResponseStream
-            Dim dirname As String = dir.Trim("/"c).Split("/"c).Last
+        Try
+            Using response As FtpWebResponse = DirectCast(request.GetResponse(), FtpWebResponse)
+                Dim responseStream As Stream = response.GetResponseStream
+                Dim dirname As String = dir.Trim("/"c).Split("/"c).Last
 
-            Using reader As New StreamReader(responseStream)
-                Do While reader.Peek <> -1
-                    list.Add(reader.ReadLine)
-                Loop
+                Using reader As New StreamReader(responseStream)
+                    Do While reader.Peek <> -1
+                        list.Add(reader.ReadLine)
+                    Loop
+                End Using
+
+                Return list _
+                    .Select(Function(a) a.Replace($"{dirname}/", "")) _
+                    .ToArray
             End Using
-
-            Return list _
-                .Select(Function(a) a.Replace($"{dirname}/", "")) _
-                .ToArray
-        End Using
+        Catch ex As Exception
+            If throwEx Then
+                Return Internal.debug.stop(New Exception(dir, ex), env)
+            Else
+                env.AddMessage({ex.Message, "dir: " & dir}, MSG_TYPES.WRN)
+                Return {}
+            End If
+        End Try
     End Function
 
     <ExportAPI("ftp.get")>
