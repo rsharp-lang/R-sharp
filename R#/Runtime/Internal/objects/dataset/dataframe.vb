@@ -188,6 +188,22 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        Public Function getRowIndex(any As Object) As Integer
+            If TypeOf any Is Array Then
+                any = DirectCast(any, Array).GetValue(Scan0)
+            End If
+
+            If any.GetType Like RType.characters Then
+                Dim rowname As String = Scripting.ToString(any)
+                Return getRowNames.IndexOf(rowname)
+            ElseIf any.GetType Like RType.integers Then
+                ' R# index integer is from base 1
+                Return CInt(any) - 1
+            Else
+                Return -1
+            End If
+        End Function
+
         Public Function GetByRowIndex(index As Integer()) As dataframe
             Dim subsetRowNumbers As String() = index _
                 .Select(Function(i, j)

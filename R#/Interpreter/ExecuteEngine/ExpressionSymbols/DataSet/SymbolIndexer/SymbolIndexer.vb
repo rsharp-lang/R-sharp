@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::dc9be4e6bab427cb46d9b2620c596d30, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class SymbolIndexer
-    ' 
-    '         Properties: type
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: emptyIndexError, Evaluate, getByIndex, getByName, getColumn
-    '                   ToString, vectorSubset
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class SymbolIndexer
+' 
+'         Properties: type
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: emptyIndexError, Evaluate, getByIndex, getByName, getColumn
+'                   ToString, vectorSubset
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -48,6 +48,7 @@ Imports System.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.DataFramework
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
@@ -92,31 +93,73 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim obj As Object = symbol.Evaluate(envir)
-            Dim indexer = REnv.asVector(Of Object)(index.Evaluate(envir))
 
-            If indexer.Length = 0 Then
-                Return emptyIndexError(Me, envir)
-            ElseIf Program.isException(obj) Then
+            If Program.isException(obj) Then
                 Return obj
             ElseIf obj Is Nothing Then
                 Return Nothing
             End If
 
-            ' now obj is always have values:
-            If indexType = SymbolIndexers.nameIndex Then
-                ' a[[name]]
-                ' a$name
-                Return getByName(obj, indexer, envir)
-            ElseIf indexType = SymbolIndexers.vectorIndex Then
-                ' a[name]
-                ' a[index]
-                Return getByIndex(obj, indexer, envir)
-            ElseIf indexType = SymbolIndexers.dataframeColumns Then
-                Return getColumn(obj, indexer, envir)
-            ElseIf indexType = SymbolIndexers.dataframeRows Then
-                Return DirectCast(obj, dataframe).sliceByRow(indexer)
+            If indexType = SymbolIndexers.dataframeRanges Then
+                If Not TypeOf obj Is dataframe Then
+                    Return Internal.debug.stop(Message.InCompatibleType(GetType(dataframe), obj.GetType, envir), envir)
+                Else
+                    Return getDataframeRowRange(data:=DirectCast(obj, dataframe), envir)
+                End If
             Else
-                Return Internal.debug.stop(New NotImplementedException(indexType.ToString), envir)
+                Dim indexer = REnv.asVector(Of Object)(index.Evaluate(envir))
+
+                If indexer.Length = 0 Then
+                    Return emptyIndexError(Me, envir)
+                End If
+
+                ' now obj is always have values:
+                If indexType = SymbolIndexers.nameIndex Then
+                    ' a[[name]]
+                    ' a$name
+                    Return getByName(obj, indexer, envir)
+                ElseIf indexType = SymbolIndexers.vectorIndex Then
+                    ' a[name]
+                    ' a[index]
+                    Return getByIndex(obj, indexer, envir)
+                ElseIf indexType = SymbolIndexers.dataframeColumns Then
+                    Return getColumn(obj, indexer, envir)
+                ElseIf indexType = SymbolIndexers.dataframeRows Then
+                    Return DirectCast(obj, dataframe).sliceByRow(indexer)
+                Else
+                    Return Internal.debug.stop(New NotImplementedException(indexType.ToString), envir)
+                End If
+            End If
+        End Function
+
+        Private Function getDataframeRowRange(data As dataframe, env As Environment) As Object
+            Dim indexVec As VectorLiteral = index
+
+            If indexVec.length = 2 Then
+                ' [row, column]
+                ' [row, , drop = TRUE]
+                If TypeOf indexVec.values(1) Is ValueAssign Then
+                    Dim opt As ValueAssign = indexVec(1)
+
+                    If TypeOf opt.targetSymbols(Scan0) Is Literal AndAlso DirectCast(opt.targetSymbols(Scan0), Literal) = "drop" Then
+                        Dim drop As Boolean = asLogical(opt.value.Evaluate(env))(Scan0)
+                        Dim rowIndex = data.getRowIndex(indexVec.values(Scan0).Evaluate(env))
+                        Dim result = data.getRowList(rowIndex, drop:=drop)
+
+                        Return result
+                    Else
+                        Return Internal.debug.stop("invalid options for slice dataframe", env)
+                    End If
+                Else
+                    Return data _
+                        .sliceByRow(indexVec.values(Scan0).Evaluate(env)) _
+                        .projectByColumn(asVector(Of Object)(indexVec.values(1).Evaluate(env)))
+                End If
+            ElseIf indexVec.length = 3 Then
+                ' [row, column, drop = TRUE]
+                Return Internal.debug.stop(New NotImplementedException, env)
+            Else
+                Return Internal.debug.stop("invalid expression for subset a dataframe!", env)
             End If
         End Function
 
