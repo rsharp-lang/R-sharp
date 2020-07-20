@@ -269,9 +269,11 @@ printSingleElement:
             End If
         End Function
 
-        Friend Function getStrings(xVec As Array, env As GlobalEnvironment) As IEnumerable(Of String)
-            Dim elementType As Type = REnv.MeasureArrayElementType(xVec)
-            Dim toString As IStringBuilder = printer.ToString(elementType, env, True)
+        Friend Function getStrings(xVec As Array, ByRef elementType As Type, env As GlobalEnvironment) As IEnumerable(Of String)
+            Dim toString As IStringBuilder
+
+            elementType = REnv.MeasureArrayElementType(xVec)
+            toString = printer.ToString(elementType, env, True)
 
             Return From element As Object
                    In xVec.AsQueryable
@@ -285,15 +287,20 @@ printSingleElement:
         ''' <param name="xvec"></param>
         <Extension>
         Friend Sub printArray(xvec As Array, maxPrint%, env As GlobalEnvironment)
-            Dim stringVec As IEnumerable(Of String) = getStrings(xvec, env)
+            Dim elementType As Type = Nothing
+            Dim stringVec As IEnumerable(Of String) = getStrings(xvec, elementType, env)
             Dim contents As String() = stringVec.Take(maxPrint).ToArray
             Dim maxColumns As Integer = env.getMaxColumns
             Dim output As RContentOutput = env.globalEnvironment.stdout
 
-            Call contents.printContentArray(Nothing, Nothing, maxColumns, output)
+            If contents.Length = 0 Then
+                Call output.WriteLine($"{RType.GetRSharpType(elementType)}(0)")
+            Else
+                Call contents.printContentArray(Nothing, Nothing, maxColumns, output)
 
-            If xvec.Length > maxPrint Then
-                Call env.stdout.WriteLine($"[ reached getOption(""max.print"") -- omitted {xvec.Length - contents.Length} entries ]")
+                If xvec.Length > maxPrint Then
+                    Call env.stdout.WriteLine($"[ reached getOption(""max.print"") -- omitted {xvec.Length - contents.Length} entries ]")
+                End If
             End If
         End Sub
 

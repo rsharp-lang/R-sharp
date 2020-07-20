@@ -92,7 +92,7 @@ Namespace Runtime.Internal.Invokes
             If x Is Nothing Then
                 Return ""
             ElseIf x.GetType.IsArray Then
-                Return printer.getStrings(x, env.globalEnvironment).ToArray
+                Return printer.getStrings(x, Nothing, env.globalEnvironment).ToArray
             Else
                 Return printer.ToString(x.GetType, env.globalEnvironment, True)(x)
             End If

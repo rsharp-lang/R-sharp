@@ -185,9 +185,9 @@ Namespace Runtime.Internal.Object
             If a.Length = 1 Then
                 Return $"{typeCode} {printer.ValueToString(a.GetValue(Scan0), env)}"
             ElseIf a.Length <= 6 Then
-                Return $"{typeCode} [1:{a.Length}] {printer.getStrings(a, env).JoinBy(" ")}"
+                Return $"{typeCode} [1:{a.Length}] {printer.getStrings(a, Nothing, env).JoinBy(" ")}"
             Else
-                Return $"{typeCode} [1:{a.Length}] {printer.getStrings(a, env).Take(6).JoinBy(" ")} ..."
+                Return $"{typeCode} [1:{a.Length}] {printer.getStrings(a, Nothing, env).Take(6).JoinBy(" ")} ..."
             End If
         End Function
     End Module
