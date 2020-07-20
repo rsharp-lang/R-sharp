@@ -191,6 +191,8 @@ Namespace Runtime.Internal.Object
         Public Function getRowIndex(any As Object) As Integer
             If TypeOf any Is Array Then
                 any = DirectCast(any, Array).GetValue(Scan0)
+            ElseIf TypeOf any Is vector Then
+                any = DirectCast(any, vector).data.GetValue(Scan0)
             End If
 
             If any.GetType Like RType.characters Then

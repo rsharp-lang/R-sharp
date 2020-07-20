@@ -146,6 +146,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                         Dim rowIndex = data.getRowIndex(indexVec.values(Scan0).Evaluate(env))
                         Dim result = data.getRowList(rowIndex, drop:=drop)
 
+                        If TypeOf result Is Dictionary(Of String, Object) Then
+                            result = New list With {.slots = result}
+                        End If
+
                         Return result
                     Else
                         Return Internal.debug.stop("invalid options for slice dataframe", env)
