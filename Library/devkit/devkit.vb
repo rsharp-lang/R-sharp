@@ -50,7 +50,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 ''' <summary>
 ''' VisualBasic.NET application development kit
 ''' </summary>
-<Package("VisualStudio.devkit")>
+<Package("VisualStudio")>
 Module devkit
 
     ''' <summary>
