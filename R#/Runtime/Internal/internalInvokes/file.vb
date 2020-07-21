@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::bcb0db2059e7ce6f09ca79d6ea865f22, R#\Runtime\Internal\internalInvokes\file.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module file
-    ' 
-    '         Function: basename, dir_exists, dirCreate, dirname, exists
-    '                   file, filecopy, fileinfo, getwd, listDirs
-    '                   listFiles, loadListInternal, normalizeFileName, normalizePath, openGzip
-    '                   openZip, readLines, readList, readText, Rhome
-    '                   saveList, setwd, writeLines
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module file
+' 
+'         Function: basename, dir_exists, dirCreate, dirname, exists
+'                   file, filecopy, fileinfo, getwd, listDirs
+'                   listFiles, loadListInternal, normalizeFileName, normalizePath, openGzip
+'                   openZip, readLines, readList, readText, Rhome
+'                   saveList, setwd, writeLines
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -546,6 +546,41 @@ Namespace Runtime.Internal.Invokes
                 Return description.Open(open, doClear:=truncate)
             Else
                 Return description.Open(open, doClear:=False)
+            End If
+        End Function
+
+        ''' <summary>
+        ''' close connections, i.e., “generalized files”, such as possibly compressed files, URLs, pipes, etc.
+        ''' </summary>
+        ''' <param name="con">a connection.</param>
+        ''' <returns></returns>
+        ''' 
+        <ExportAPI("close")>
+        <RApiReturn(GetType(Boolean))>
+        Public Function close(con As Object, Optional env As Environment = Nothing) As Object
+            If con Is Nothing Then
+                Return Internal.debug.stop("the required connection can not be nothing!", env)
+            ElseIf TypeOf con Is Stream Then
+                With DirectCast(con, Stream)
+                    Call .Flush()
+                    Call .Close()
+                    Call .Dispose()
+                End With
+
+                Return True
+            ElseIf TypeOf con Is StreamWriter Then
+                With DirectCast(con, StreamWriter)
+                    Call .Flush()
+                    Call .Close()
+                    Call .Dispose()
+                End With
+
+                Return True
+            ElseIf con.GetType.ImplementInterface(GetType(IDisposable)) Then
+                Call DirectCast(con, IDisposable).Dispose()
+                Return True
+            Else
+                Return Internal.debug.stop(Message.InCompatibleType(GetType(Stream), con.GetType, env), env)
             End If
         End Function
 

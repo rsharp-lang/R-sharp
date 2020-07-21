@@ -119,6 +119,10 @@ Namespace System.Configuration
             End Get
         End Property
 
+        ''' <summary>
+        ''' turn strict mode on?
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property [strict] As Boolean
             Get
                 Return getOption("strict", [default]:="on").ParseBoolean
