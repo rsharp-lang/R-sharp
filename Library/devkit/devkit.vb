@@ -51,7 +51,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 ''' <summary>
 ''' VisualBasic.NET application development kit
 ''' </summary>
-<Package("VisualStudio")>
+<Package("VisualStudio", Category:=APICategories.UtilityTools, Publisher:="xie.guigang@live.com")>
 Module devkit
 
     ''' <summary>
@@ -74,6 +74,11 @@ Module devkit
         Return log.ParseGitLogText(file.SolveStream).ToArray
     End Function
 
+    ''' <summary>
+    ''' show IL assembly code of the given R# api
+    ''' </summary>
+    ''' <param name="api"></param>
+    ''' <returns></returns>
     <ExportAPI("il")>
     Public Function showIL(api As RMethodInfo) As String()
         Dim il As New IL.MethodBodyReader(api.GetRawDeclares)
