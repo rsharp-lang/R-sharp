@@ -42,6 +42,7 @@
 Imports System.Reflection
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio
+Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.IL
 Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.VersionControl
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -76,8 +77,8 @@ Module devkit
     <ExportAPI("il")>
     Public Function showIL(api As RMethodInfo) As String()
         Dim il As New IL.MethodBodyReader(api.GetRawDeclares)
-        Dim msil = il.instructions.ToArray
+        Dim msil As ILInstruction() = il.ToArray
 
-        Return msil.Select(Function(a) a.ToString)
+        Return msil.Select(Function(a) a.GetCode).ToArray
     End Function
 End Module
