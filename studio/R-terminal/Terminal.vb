@@ -139,7 +139,7 @@ Type 'q()' to quit R.
         If Not [error].StringEmpty Then
             result = REnv.Internal.debug.stop([error], R.globalEnvir)
         Else
-            result = REnv.TryCatch(Function() R.Run(program))
+            result = REnv.TryCatch(Function() R.Run(program), debug:=R.debug)
         End If
 
         Call Rscript.handleResult(result, R.globalEnvir, program)
