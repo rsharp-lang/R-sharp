@@ -173,43 +173,47 @@ Namespace Runtime.Internal.Object.Converts
                 [typeof] = env.globalEnvironment.GetType([typeof])
             End If
 
-            Dim containsListNames As Boolean = False
+            Dim containsListNames As Value(Of Boolean) = False
             Dim result As IEnumerable = unlistRecursive(x, containsListNames)
 
-            If containsListNames Then
-                Dim names As New List(Of String)
-                Dim values As New List(Of Object)
-
-                For Each obj In result
-                    If obj Is Nothing Then
-                        names.Add("")
-                        values.Add(Nothing)
-                    ElseIf TypeOf obj Is NamedValue(Of Object) Then
-                        With DirectCast(obj, NamedValue(Of Object))
-                            names.Add(.Name)
-                            values.Add(.Value)
-                        End With
-                    Else
-                        names.Add("")
-                        values.Add(obj)
-                    End If
-                Next
-
-                If [typeof] Is Nothing Then
-                    Return New vector(names.ToArray, values.ToArray(Of Object), env)
-                Else
-                    Return New vector(names.ToArray, values.ToArray(Of Object), RType.GetRSharpType([typeof]), env)
-                End If
+            If pipeline Then
+                Return New pipeline(result, TryCast([typeof], RType))
             Else
-                If [typeof] Is Nothing Then
-                    Return New vector(result.ToArray(Of Object), RType.any)
+                If containsListNames.Value Then
+                    Dim names As New List(Of String)
+                    Dim values As New List(Of Object)
+
+                    For Each obj In result
+                        If obj Is Nothing Then
+                            names.Add("")
+                            values.Add(Nothing)
+                        ElseIf TypeOf obj Is NamedValue(Of Object) Then
+                            With DirectCast(obj, NamedValue(Of Object))
+                                names.Add(.Name)
+                                values.Add(.Value)
+                            End With
+                        Else
+                            names.Add("")
+                            values.Add(obj)
+                        End If
+                    Next
+
+                    If [typeof] Is Nothing Then
+                        Return New vector(names.ToArray, values.ToArray(Of Object), env)
+                    Else
+                        Return New vector(names.ToArray, values.ToArray(Of Object), RType.GetRSharpType([typeof]), env)
+                    End If
                 Else
-                    Return New vector(result.ToArray(Of Object), RType.GetRSharpType([typeof]))
+                    If [typeof] Is Nothing Then
+                        Return New vector(result.ToArray(Of Object), RType.any)
+                    Else
+                        Return New vector(result.ToArray(Of Object), RType.GetRSharpType([typeof]))
+                    End If
                 End If
             End If
         End Function
 
-        Private Function unlistRecursive(x As Object, ByRef containsListNames As Boolean) As IEnumerable
+        Private Function unlistRecursive(x As Object, containsListNames As Value(Of Boolean)) As IEnumerable
             If x Is Nothing Then
                 Return Nothing
             Else
@@ -226,7 +230,7 @@ Namespace Runtime.Internal.Object.Converts
                 ElseIf listType.ImplementInterface(GetType(IDictionary)) Then
                     Return New list(x).unlistOfRList(containsListNames)
                 ElseIf listType Is GetType(pipeline) Then
-                    Return tryUnlistArray(DirectCast(x, pipeline).pipeline.ToArray(Of Object), containsListNames)
+                    Return tryUnlistArray(DirectCast(x, pipeline).pipeline, containsListNames)
                 Else
                     ' Return Internal.debug.stop(New InvalidCastException(list.GetType.FullName), env)
                     ' is a single uer defined .NET object 
@@ -236,14 +240,12 @@ Namespace Runtime.Internal.Object.Converts
         End Function
 
         <Extension>
-        Private Function tryUnlistArray(data As Array, ByRef containsListNames As Boolean) As IEnumerable
-            Dim values As New List(Of Object)
-
-            For Each obj In data.AsObjectEnumerator
-                values.AddRange(unlistRecursive(obj, containsListNames))
+        Private Iterator Function tryUnlistArray(data As IEnumerable, containsListNames As Value(Of Boolean)) As IEnumerable
+            For Each obj As Object In data
+                For Each item As Object In unlistRecursive(obj, containsListNames)
+                    Yield item
+                Next
             Next
-
-            Return values
         End Function
 
         ''' <summary>
@@ -252,7 +254,7 @@ Namespace Runtime.Internal.Object.Converts
         ''' <param name="rlist"></param>
         ''' <returns></returns>
         <Extension>
-        Private Function unlistOfRList(rlist As list, ByRef containsListNames As Boolean) As IEnumerable
+        Private Function unlistOfRList(rlist As list, containsListNames As Value(Of Boolean)) As IEnumerable
             Dim data As New List(Of NamedValue(Of Object))
 
             For Each name As String In rlist.getNames
@@ -269,7 +271,7 @@ Namespace Runtime.Internal.Object.Converts
                 End If
             Next
 
-            containsListNames = True
+            containsListNames.Value = True
 
             Return data
         End Function
