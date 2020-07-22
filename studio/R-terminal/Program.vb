@@ -39,7 +39,7 @@
 
 #End Region
 
-#Const DEBUG = True
+#Const DEBUG = 0
 
 Imports Microsoft.VisualBasic.CommandLine
 Imports SMRUCC.Rsharp.Interpreter
@@ -70,7 +70,7 @@ Module Program
             result = REnv.Internal.debug.stop([error], R.globalEnvir)
         Else
 #If DEBUG Then
-            result = REnv.TryCatch(Function() R.Run(program), debug:=True)
+            result = R.Run(program)
 #Else
             result = REnv.TryCatch(Function() R.Run(program), debug:=R.debug)
 #End If

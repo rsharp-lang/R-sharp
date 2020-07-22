@@ -246,7 +246,6 @@ Namespace Interpreter
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        <DebuggerStepThrough>
         Public Function Run(program As Program) As Object
             ' Return finalizeResult(program.Execute(globalEnvir))
             Dim last As Symbol = Me.globalEnvir(lastVariableName)
