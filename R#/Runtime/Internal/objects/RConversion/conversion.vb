@@ -162,6 +162,7 @@ Namespace Runtime.Internal.Object.Converts
         <ExportAPI("unlist")>
         Public Function unlist(<RRawVectorArgument> x As Object,
                                Optional [typeof] As Object = Nothing,
+                               Optional pipeline As Boolean = False,
                                Optional env As Environment = Nothing) As Object
 
             If x Is Nothing Then
@@ -169,21 +170,7 @@ Namespace Runtime.Internal.Object.Converts
             End If
 
             If Not [typeof] Is Nothing Then
-                Select Case [typeof].GetType
-                    Case GetType(Type) ' do nothing
-                    Case GetType(RType)
-                        [typeof] = DirectCast([typeof], RType).raw
-                    Case GetType(String)
-                        Dim RType As RType = env.globalEnvironment.GetType([typeof])
-
-                        If RType.isArray Then
-                            [typeof] = RType.raw.GetElementType
-                        Else
-                            [typeof] = RType.raw
-                        End If
-                    Case Else
-                        Return Internal.debug.stop(New NotImplementedException, env)
-                End Select
+                [typeof] = env.globalEnvironment.GetType([typeof])
             End If
 
             Dim containsListNames As Boolean = False
