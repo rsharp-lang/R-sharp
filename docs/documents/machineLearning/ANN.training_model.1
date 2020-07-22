@@ -1,5 +1,5 @@
 .\" man page create by R# package system.
-.TH MACHINELEARNING 2 2000-01-01 "ANN.training_model" "ANN.training_model"
+.TH MACHINELEARNING 2 2020-07-20 "ANN.training_model" "ANN.training_model"
 .SH NAME
 ANN.training_model \- create a new ANN training model
 .SH SYNOPSIS
@@ -8,11 +8,10 @@ ANN.training_model \- create a new ANN training model
 \fBhiddenSize\fR as <generic> Object = [25,100,30], 
 \fBlearnRate\fR as double = 0.1, 
 \fBmomentum\fR as double = 0.9, 
-\fBactive\fR as <generic> activation = \fB<NULL>\fR, 
+\fBactive\fR as <generic> activation = 'hidden: Sigmoid(alpha:=2.0); output: Sigmoid(alpha:=2.0)', 
 \fBweight0\fR as <generic> Object = "random", 
 \fBlearnRateDecay\fR as double = 1E-10, 
-\fBtruncate\fR as double = -1, 
-\fBselectiveMode\fR as boolean = FALSE);\fR
+\fBtruncate\fR as double = -1);\fR
 .SH DESCRIPTION
 .PP
 create a new ANN training model
@@ -45,9 +44,6 @@ create a new ANN training model
 .PP
 \fBtruncate\fB \fR\- -
 .PP
-.PP
-\fBselectiveMode\fB \fR\- -
-.PP
 .SH SEE ALSO
 machineLearning
 .SH FILES
@@ -55,6 +51,6 @@ machineLearning
 R.math.dll
 .PP
 .SH AUTHOR
-Written by xie.guigang@gcmodeller.org
+Written by \fBxie.guigang@gcmodeller.org\fR
 .SH COPYRIGHT
-Copyright ©  2020
+Copyright © xie.guigang@gcmodeller.org 2020
