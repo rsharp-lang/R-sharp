@@ -7,10 +7,21 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
 
+''' <summary>
+''' ftp modules
+''' </summary>
 <Package("ftp", Category:=APICategories.UtilityTools)>
 <RTypeExport("ftp", GetType(FtpContext))>
 Module FTP
 
+    ''' <summary>
+    ''' list file names in the given ftp directory.
+    ''' </summary>
+    ''' <param name="ftp"></param>
+    ''' <param name="dir"></param>
+    ''' <param name="throwEx"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("list.ftp_dirs")>
     Public Function list_ftpdirs(ftp As FtpContext, dir As String,
                                  Optional throwEx As Boolean = False,
@@ -46,6 +57,16 @@ Module FTP
         End Try
     End Function
 
+    ''' <summary>
+    ''' download file via ftp
+    ''' </summary>
+    ''' <param name="ftp"></param>
+    ''' <param name="file"></param>
+    ''' <param name="save">
+    ''' a directory path or actual file path for save the given file that download from the remote ftp server.
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("ftp.get")>
     Public Function ftpget(ftp As FtpContext, file As String, Optional save As String = "./", Optional env As Environment = Nothing) As Object
         Dim request As FtpWebRequest = ftp.CreateRequest(file)
@@ -96,6 +117,10 @@ Public Class FtpContext
         End If
 
         Return request
+    End Function
+
+    Public Overrides Function ToString() As String
+        Return $"{username Or "anonymous".AsDefault}@ftp://{server}"
     End Function
 
 End Class
