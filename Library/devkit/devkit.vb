@@ -77,13 +77,16 @@ Module devkit
     ''' <summary>
     ''' show IL assembly code of the given R# api
     ''' </summary>
-    ''' <param name="api"></param>
+    ''' <param name="api">
+    ''' a R# api function symbol object
+    ''' </param>
     ''' <returns></returns>
     <ExportAPI("il")>
-    Public Function showIL(api As RMethodInfo) As String()
+    <RApiReturn(GetType(ILInstruction))>
+    Public Function showIL(api As RMethodInfo) As Object
         Dim il As New IL.MethodBodyReader(api.GetRawDeclares)
         Dim msil As ILInstruction() = il.ToArray
 
-        Return msil.Select(Function(a) a.GetCode).ToArray
+        Return msil
     End Function
 End Module

@@ -120,11 +120,18 @@ Namespace Runtime
             Call types.Add("unit", RType.GetRSharpType(GetType(unit)))
         End Sub
 
-        Public Overloads Function [GetType]([typeof] As String) As RType
-            Dim type As RType = _types.TryGetValue([typeof])
+        Public Overloads Function [GetType]([typeof] As Object) As RType
+            If TypeOf [typeof] Is Type Then
+                Return RType.GetRSharpType(DirectCast([typeof], Type))
+            ElseIf TypeOf [typeof] Is RType Then
+                Return DirectCast([typeof], RType)
+            End If
+
+            Dim className As String = Scripting.ToString([typeof], "any")
+            Dim type As RType = _types.TryGetValue(className)
 
             If type Is Nothing Then
-                Return [typeof].GetRTypeCode.DoCall(AddressOf RType.GetType)
+                Return className.GetRTypeCode.DoCall(AddressOf RType.GetType)
             Else
                 Return type
             End If

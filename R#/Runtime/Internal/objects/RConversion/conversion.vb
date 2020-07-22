@@ -398,7 +398,10 @@ Namespace Runtime.Internal.Object.Converts
                 Return x
             End If
 
+            Dim classType As RType = env.globalEnvironment.GetType(mode)
+
             If TypeOf x Is vector Then
+                DirectCast(x, vector).elementType = classType
                 Return x
             ElseIf x.GetType.IsArray Then
                 Return New vector With {.data = x}
