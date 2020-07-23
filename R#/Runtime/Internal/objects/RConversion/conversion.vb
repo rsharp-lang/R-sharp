@@ -1,45 +1,45 @@
 ﻿#Region "Microsoft.VisualBasic::6fd47588b9d9f6b412567f20bb747582, R#\Runtime\Internal\objects\RConversion\conversion.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module RConversion
-    ' 
-    '         Function: asCharacters, asDataframe, asDate, asInteger, asList
-    '                   asLogicals, asNumeric, asObject, asPipeline, asRaw
-    '                   asVector, castArrayOfGeneric, castArrayOfObject, castType, isCharacter
-    '                   tryUnlistArray, unlist, unlistOfRList, unlistRecursive
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module RConversion
+' 
+'         Function: asCharacters, asDataframe, asDate, asInteger, asList
+'                   asLogicals, asNumeric, asObject, asPipeline, asRaw
+'                   asVector, castArrayOfGeneric, castArrayOfObject, castType, isCharacter
+'                   tryUnlistArray, unlist, unlistOfRList, unlistRecursive
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -172,6 +172,9 @@ Namespace Runtime.Internal.Object.Converts
             If Not [typeof] Is Nothing Then
                 [typeof] = env.globalEnvironment.GetType([typeof])
             End If
+            If TypeOf [typeof] Is Type Then
+                [typeof] = RType.GetRSharpType(DirectCast([typeof], Type))
+            End If
 
             Dim containsListNames As Value(Of Boolean) = False
             Dim result As IEnumerable = unlistRecursive(x, containsListNames)
@@ -201,13 +204,13 @@ Namespace Runtime.Internal.Object.Converts
                     If [typeof] Is Nothing Then
                         Return New vector(names.ToArray, values.ToArray(Of Object), env)
                     Else
-                        Return New vector(names.ToArray, values.ToArray(Of Object), RType.GetRSharpType([typeof]), env)
+                        Return New vector(names.ToArray, values.ToArray(Of Object), [typeof], env)
                     End If
                 Else
                     If [typeof] Is Nothing Then
                         Return New vector(result.ToArray(Of Object), RType.any)
                     Else
-                        Return New vector(result.ToArray(Of Object), RType.GetRSharpType([typeof]))
+                        Return New vector(result.ToArray(Of Object), [typeof])
                     End If
                 End If
             End If
