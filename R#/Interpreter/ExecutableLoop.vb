@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::3f2e98348037ad3bad1f64e4e9527a51, R#\Interpreter\ExecutableLoop.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class ExecutableLoop
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: Execute, ExecuteCodeLine
-    ' 
-    '         Sub: configException, printDebug
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class ExecutableLoop
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: Execute, ExecuteCodeLine
+' 
+'         Sub: configException, printDebug
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -56,6 +56,16 @@ Namespace Interpreter
 
     Public NotInheritable Class ExecutableLoop
 
+        Shared ReadOnly Rsharp As Process = Process.GetCurrentProcess()
+
+        Shared memSize As Double
+        Shared memSize2 As Double
+        Shared memoryDelta As Double
+
+        Shared Sub New()
+            memSize = Rsharp.WorkingSet64 / 1024 / 1024
+        End Sub
+
         Private Sub New()
         End Sub
 
@@ -68,24 +78,22 @@ Namespace Interpreter
             Dim last As Object = Nothing
             Dim breakLoop As Boolean = False
             Dim debug As Boolean = env.globalEnvironment.debugMode
-            Dim Rsharp As Process = Process.GetCurrentProcess()
-            Dim memSize As Double = Rsharp.WorkingSet64 / 1024 / 1024
-            Dim memSize2 As Double
-            Dim memoryDelta As Double
 
             ' The program code loop
             For Each expression As Expression In execQueue
                 last = ExecuteCodeLine(expression, env, breakLoop, debug)
 
                 If debug Then
-                    memSize2 = Rsharp.WorkingSet64 / 1024 / 1024
-                    memoryDelta = memSize2 - memSize
-                    memSize = memSize2
+                    SyncLock Rsharp
+                        memSize2 = Rsharp.WorkingSet64 / 1024 / 1024
+                        memoryDelta = memSize2 - memSize
+                        memSize = memSize2
+                    End SyncLock
 
                     If memoryDelta > 0 Then
-                        Call printDebug($"[app_memory] {memSize2} MB, delta {memoryDelta} MB", ConsoleColor.Red)
+                        Call printDebug($"[app_memory] {memSize2.ToString("F2")} MB, delta {memoryDelta.ToString("F2")} MB", ConsoleColor.Red)
                     Else
-                        Call printDebug($"[app_memory] {memSize2} MB, delta {memoryDelta} MB", ConsoleColor.Blue)
+                        Call printDebug($"[app_memory] {memSize2.ToString("F2")} MB, delta {memoryDelta.ToString("F2")} MB", ConsoleColor.Blue)
                     End If
                 End If
 
