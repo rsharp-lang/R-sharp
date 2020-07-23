@@ -71,6 +71,8 @@ Namespace Runtime
                 Return TypeCodes.generic
             ElseIf parseTypecode.ContainsKey(type) Then
                 Return parseTypecode(type)
+            ElseIf type = "any" Then
+                Return TypeCodes.generic
             Else
                 ' .NET type
                 Return TypeCodes.ref
