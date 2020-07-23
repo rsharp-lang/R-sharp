@@ -343,5 +343,28 @@ Namespace Runtime.Internal.Invokes
                 Return x
             End If
         End Function
+
+        ''' <summary>
+        ''' ### Report on Memory Allocation
+        ''' 
+        ''' ``memory.size`` reports the current or maximum memory allocation 
+        ''' of the malloc function used in this version of R.
+        ''' </summary>
+        ''' <param name="max">	
+        ''' logical. If TRUE the maximum amount of memory obtained from the OS 
+        ''' Is reported, if FALSE the amount currently in use, if NA the memory 
+        ''' limit.
+        ''' </param>
+        ''' <returns>
+        ''' Size in Mb (1048576 bytes), rounded to 0.01 Mb for memory.size
+        ''' </returns>
+        <ExportAPI("memory.size")>
+        <RApiReturn(GetType(Double))>
+        Public Function memorySize(Optional max As Boolean = False) As Object
+            Dim Rsharp As Process = Process.GetCurrentProcess()
+            Dim memSize As Double = Rsharp.WorkingSet64 / 1024 / 1024
+
+            Return vector.asVector({memSize}, New unit With {.name = "MB"})
+        End Function
     End Module
 End Namespace
