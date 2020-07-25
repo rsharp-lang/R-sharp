@@ -1,6 +1,7 @@
 ﻿
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 
 Namespace System.Package
 
@@ -23,6 +24,16 @@ Namespace System.Package
         ''' </param>
         <Extension>
         Public Sub TryRunZzzOnLoad(package As Assembly)
+            Static assemblyLoaded As New Index(Of String)
+
+            If Not package.ToString Like assemblyLoaded Then
+                Call package.RunZzz
+                Call assemblyLoaded.Add(package.ToString)
+            End If
+        End Sub
+
+        <Extension>
+        Private Sub RunZzz(package As Assembly)
             Dim zzz As Type = package _
                 .GetTypes _
                 .Where(Function(a) a.Name = "zzz") _
