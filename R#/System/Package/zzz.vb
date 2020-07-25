@@ -23,7 +23,24 @@ Namespace System.Package
         ''' </param>
         <Extension>
         Public Sub TryRunZzzOnLoad(package As Assembly)
+            Dim zzz As Type = package _
+                .GetTypes _
+                .Where(Function(a) a.Name = "zzz") _
+                .FirstOrDefault
 
+            If zzz Is Nothing Then
+                Return
+            End If
+
+            Dim onLoad As MethodInfo = zzz _
+                .GetMethods(BindingFlags.Public Or BindingFlags.Static) _
+                .Where(Function(m) m.Name = "onLoad") _
+                .Where(Function(m) m.GetParameters.IsNullOrEmpty) _
+                .FirstOrDefault
+
+            If Not onLoad Is Nothing Then
+                Call onLoad.Invoke(Nothing, {})
+            End If
         End Sub
     End Module
 End Namespace
