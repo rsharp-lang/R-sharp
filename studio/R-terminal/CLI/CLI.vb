@@ -186,7 +186,7 @@ Module CLI
 
     <ExportAPI("--man.1")>
     <Description("Exports unix man page data for current installed packages.")>
-    <Usage("--man.1 [--module <module.dll> --out <directory, default=./>]")>
+    <Usage("--man.1 [--module <module.dll> --debug --out <directory, default=./>]")>
     Public Function unixman(args As CommandLine) As Integer
         Dim out$ = args("--out") Or "./"
         Dim module$ = args("--module")
