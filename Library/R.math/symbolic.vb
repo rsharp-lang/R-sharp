@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f34e61bf05dac6bdc429810c7d50e8c2, Library\R.math\symbolic.vb"
+﻿#Region "Microsoft.VisualBasic::9976087f7fa39ca5e3a87bfefdb3ab4e, Library\R.math\symbolic.vb"
 
     ' Author:
     ' 
@@ -66,4 +66,3 @@ Module symbolic
             .DoCall(AddressOf vector.asVector)
     End Function
 End Module
-

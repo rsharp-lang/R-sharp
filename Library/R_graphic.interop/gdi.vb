@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::044e18df4f44b387c5b635a180b13fe3, Library\R_graphic.interop\gdi.vb"
+﻿#Region "Microsoft.VisualBasic::c97e09697eab4267bfa182285d7b994f, Library\R_graphic.interop\gdi.vb"
 
     ' Author:
     ' 
@@ -82,4 +82,3 @@ Module gdi
         End Select
     End Function
 End Module
-
