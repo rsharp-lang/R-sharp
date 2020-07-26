@@ -130,6 +130,11 @@ Namespace Runtime.Internal.Invokes
             End Try
         End Function
 
+        <ExportAPI("bdecode")>
+        Public Function fromBstring(bstr As String) As Object
+            Dim decode = BencodeDecoder.Decode(bstr)
+        End Function
+
         <ExportAPI("bencode")>
         <RApiReturn(GetType(String))>
         Public Function bencode(list As list, Optional env As Environment = Nothing) As Object
