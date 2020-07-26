@@ -63,6 +63,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 Imports VBStr = Microsoft.VisualBasic.Strings
+Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 
 Namespace Runtime.Internal.Invokes
 
@@ -204,7 +205,7 @@ Namespace Runtime.Internal.Invokes
                 Return Runtime.asVector(Of String)(strs) _
                     .AsObjectEnumerator(Of String) _
                     .Select(AddressOf VBStr.Len) _
-                    .ToArray
+                    .DoCall(AddressOf vector.asVector)
             End If
         End Function
 
@@ -417,29 +418,37 @@ Namespace Runtime.Internal.Invokes
             Return [string] _
                 .SafeQuery _
                 .Select(Function(s)
-                            If s.StringEmpty Then
-                                Return New String(pad, width)
-                            End If
-
-                            If side = str_padSides.left Then
-                                Return s.PadLeft(width, pad)
-                            ElseIf side = str_padSides.right Then
-                                Return s.PadRight(width, pad)
-                            Else
-                                Dim l As Integer = s.Length
-                                Dim left As Integer = (width - l) / 2
-                                Dim right As Integer = width - l - left
-
-                                If left <= 0 Then
-                                    Return s
-                                Else
-                                    Return New String(pad, left) & s & New String(pad, right)
-                                End If
-                            End If
+                            Return strPad_internal(s, width, side, pad)
                         End Function) _
                 .ToArray
         End Function
 
+        Private Function strPad_internal(s As String, width As Integer, side As str_padSides, pad As Char) As String
+            If s.StringEmpty Then
+                Return New String(pad, width)
+            End If
+
+            If side = str_padSides.left Then
+                Return s.PadLeft(width, pad)
+            ElseIf side = str_padSides.right Then
+                Return s.PadRight(width, pad)
+            Else
+                Dim l As Integer = s.Length
+                Dim left As Integer = (width - l) / 2
+                Dim right As Integer = width - l - left
+
+                If left <= 0 Then
+                    Return s
+                Else
+                    Return New String(pad, left) & s & New String(pad, right)
+                End If
+            End If
+        End Function
+
+        <ExportAPI("str_empty")>
+        Public Function str_empty([string] As String()) As Boolean()
+            Return [string].Select(AddressOf StringEmpty).ToArray
+        End Function
     End Module
 
     Public Enum str_padSides
