@@ -131,22 +131,35 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <ExportAPI("bencode")>
-        Public Function bencode(list As list) As String
-            Return bencoder(list).ToBencodedString
+        <RApiReturn(GetType(String))>
+        Public Function bencode(list As list, Optional env As Environment = Nothing) As Object
+            Dim err As Exception = Nothing
+            Dim encode As BDictionary = bencoder(list, err)
+
+            If Not encode Is Nothing Then
+                Return encode.ToBencodedString
+            Else
+                Return Internal.debug.stop(err, env)
+            End If
         End Function
 
-        Private Function bencoder(list As list) As BDictionary
+        Private Function bencoder(list As list, ByRef err As Exception) As BDictionary
             Dim encoder As New BDictionary()
 
             For Each item In list.slots
-                If TypeOf item.Value Is String Then
+                If item.Value Is Nothing Then
+                    encoder.Add(item.Key, New BString(""))
+                ElseIf TypeOf item.Value Is String Then
                     encoder.Add(item.Key, New BString(DirectCast(item.Value, String)))
                 ElseIf TypeOf item.Value Is Boolean OrElse TypeOf item.Value Is DateTime Then
                     encoder.Add(item.Key, New BString(Scripting.ToString(item.Value)))
                 ElseIf TypeOf item.Value Is Integer OrElse TypeOf item.Value Is Long OrElse TypeOf item.Value Is Short Then
                     encoder.Add(item.Key, New BInteger(CInt(item.Value)))
-                ElseIf item.Value Is list Then
-                    encoder.Add(item.Key, bencoder(item.Value))
+                ElseIf TypeOf item.Value Is list Then
+                    encoder.Add(item.Key, bencoder(item.Value, err))
+                Else
+                    err = New NotImplementedException(item.Value.GetType.FullName)
+                    Return Nothing
                 End If
             Next
 
