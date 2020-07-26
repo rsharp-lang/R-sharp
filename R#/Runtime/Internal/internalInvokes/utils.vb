@@ -367,5 +367,98 @@ Namespace Runtime.Internal.Invokes
 
             Return vector.asVector({memSize}, New unit With {.name = "MB"})
         End Function
+
+        ''' <summary>
+        ''' ### Invoke a System Command
+        ''' 
+        ''' ``system`` invokes the OS command specified by ``command``.
+        ''' </summary>
+        ''' <param name="command">the system command to be invoked, as a character string.</param>
+        ''' <param name="intern">a logical (not NA) which indicates whether to capture the 
+        ''' output of the command as an R character vector.</param>
+        ''' <param name="ignore_stdout"></param>
+        ''' <param name="ignore_stderr"></param>
+        ''' <param name="wait"></param>
+        ''' <param name="input"></param>
+        ''' <param name="show_output_on_console">
+        ''' logical (Not NA), indicates whether to capture the output of the command And show 
+        ''' it on the R console (Not used by Rterm, which shows the output in the terminal 
+        ''' unless wait Is false).
+        ''' </param>
+        ''' <param name="minimized">
+        ''' logical (Not NA), indicates whether a command window should be displayed initially 
+        ''' as a minimized window.
+        ''' </param>
+        ''' <param name="invisible"></param>
+        ''' <param name="timeout"></param>
+        ''' <remarks>
+        ''' This interface has become rather complicated over the years: see system2 for a more 
+        ''' portable and flexible interface which is recommended for new code.
+        '''
+        ''' command Is parsed as a command plus arguments separated by spaces. So if the path to 
+        ''' the command (Or a single argument such as a file path) contains spaces, it must be 
+        ''' quoted e.g. by shQuote. Only double quotes are allowed on Windows: see the examples. 
+        ''' (Note: a Windows path name cannot contain a Double quote, so we Do Not need To worry 
+        ''' about escaping embedded quotes.)
+        '''
+        ''' command must be an executable (extensions '.exe’, ‘.com’) or a batch file (extensions 
+        ''' ‘.cmd’ and ‘.bat’): these extensions are tried in turn if none is supplied. This 
+        ''' means that redirection, pipes, DOS internal commands, ... cannot be used: see shell 
+        ''' if you want to pass a shell command-line.
+        '''
+        ''' The search path For command may be system-dependent: it will include the R 'bin’ 
+        ''' directory, the working directory and the Windows system directories before PATH.
+        '''
+        ''' When timeout Is non-zero, the command Is terminated after the given number of seconds. 
+        ''' The termination works for typical commands, but Is Not guaranteed it Is possible to 
+        ''' write a program that would keep running after the time Is out. Timeouts can only be 
+        ''' set with wait = TRUE.
+        '''
+        ''' The ordering Of arguments after the first two has changed from time To time: it Is 
+        ''' recommended to name all arguments after the first.
+        '''
+        ''' There are many pitfalls In Using system To ascertain If a command can be run — 
+        ''' Sys.which Is more suitable.
+        ''' </remarks>
+        ''' <returns>
+        ''' If intern = TRUE, a character vector giving the output of the command, one line per 
+        ''' character string. (Output lines of more than 8095 bytes will be split.) If the command 
+        ''' could not be run an R error is generated. Under the Rgui console intern = TRUE also 
+        ''' captures stderr unless ignore.stderr = TRUE. If command runs but gives a non-zero exit 
+        ''' status this will be reported with a warning and in the attribute "status" of the result: 
+        ''' an attribute "errmsg" may also be available.
+        '''
+        ''' If intern = False, the Return value Is an Error code (0 For success), given the invisible 
+        ''' attribute (so needs To be printed explicitly). If the command could Not be run For any 
+        ''' reason, the value Is 127 And a warning Is issued (As from R 3.5.0). Otherwise If 
+        ''' wait = True the value Is the Exit status returned by the command, And If wait = False it 
+        ''' Is 0 (the conventional success value).
+        '''
+        ''' If the command times out, a warning Is reported And the Exit status Is 124. Some Windows 
+        ''' commands Return out-Of-range status values (e.g., -1) And so only the bottom 16 bits Of 
+        ''' the value are used.
+        '''
+        ''' If intern = False, wait = True, show.output.On.console = True the 'stdout’ and ‘stderr’ 
+        ''' (unless ignore.stdout = TRUE or ignore.stderr = TRUE) output from a command that is a 
+        ''' ‘console application’ should appear in the R console (Rgui) or the window running R 
+        ''' (Rterm).
+        '''
+        ''' Not all Windows executables properly respect redirection of output, Or may only do so 
+        ''' from a console application such as Rterm And Not from Rgui For example, 'fc.exe’ was 
+        ''' among these in the past, but we have had more success recently.
+        ''' </returns>
+        <ExportAPI("system")>
+        Public Function system(command$,
+                               Optional intern As Boolean = False,
+                               Optional ignore_stdout As Boolean = False,
+                               Optional ignore_stderr As Boolean = False,
+                               Optional wait As Boolean = True,
+                               Optional input As Object = Nothing,
+                               Optional show_output_on_console As Boolean = True,
+                               Optional minimized As Boolean = False,
+                               Optional invisible As Boolean = True,
+                               Optional timeout As Double = 0)
+
+        End Function
     End Module
 End Namespace
