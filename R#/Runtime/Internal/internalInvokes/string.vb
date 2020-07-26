@@ -1,52 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::57d04c426b345937650c837e22a84714, R#\Runtime\Internal\internalInvokes\string.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module stringr
-    ' 
-    '         Function: [string], Csprintf, grep, html, json
-    '                   match, nchar, paste, regexp, sprintfSingle
-    '                   str_pad, str_replace, strsplit, xml
-    ' 
-    '     Enum str_padSides
-    ' 
-    '         both, left, right
-    ' 
-    '  
-    ' 
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module stringr
+' 
+'         Function: [string], Csprintf, grep, html, json
+'                   match, nchar, paste, regexp, sprintfSingle
+'                   str_pad, str_replace, strsplit, xml
+' 
+'     Enum str_padSides
+' 
+'         both, left, right
+' 
+'  
+' 
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -56,6 +56,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting
+Imports Microsoft.VisualBasic.Serialization.Bencoding
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
@@ -127,6 +128,29 @@ Namespace Runtime.Internal.Invokes
             Catch ex As Exception
                 Return Internal.debug.stop(ex, env)
             End Try
+        End Function
+
+        <ExportAPI("bencode")>
+        Public Function bencode(list As list) As String
+            Return bencoder(list).ToBencodedString
+        End Function
+
+        Private Function bencoder(list As list) As BDictionary
+            Dim encoder As New BDictionary()
+
+            For Each item In list.slots
+                If TypeOf item.Value Is String Then
+                    encoder.Add(item.Key, New BString(DirectCast(item.Value, String)))
+                ElseIf TypeOf item.Value Is Boolean OrElse TypeOf item.Value Is DateTime Then
+                    encoder.Add(item.Key, New BString(Scripting.ToString(item.Value)))
+                ElseIf TypeOf item.Value Is Integer OrElse TypeOf item.Value Is Long OrElse TypeOf item.Value Is Short Then
+                    encoder.Add(item.Key, New BInteger(CInt(item.Value)))
+                ElseIf item.Value Is list Then
+                    encoder.Add(item.Key, bencoder(item.Value))
+                End If
+            Next
+
+            Return encoder
         End Function
 
         ''' <summary>
