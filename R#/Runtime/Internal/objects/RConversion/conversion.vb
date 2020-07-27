@@ -319,7 +319,13 @@ RE0:
 
                             With DirectCast(x, Array)
                                 For i As Integer = 0 To .Length - 1
-                                    Call list.SetValue(.GetValue(i), i)
+                                    x = .GetValue(i)
+
+                                    If TypeOf x Is vbObject Then
+                                        x = DirectCast(x, vbObject).target
+                                    End If
+
+                                    list.SetValue(x, i)
                                 Next
                             End With
 
