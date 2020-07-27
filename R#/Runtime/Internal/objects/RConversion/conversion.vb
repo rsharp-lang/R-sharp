@@ -301,7 +301,7 @@ Namespace Runtime.Internal.Object.Converts
                     Return args
                 End If
             End If
-
+RE0:
             Dim type As Type = x.GetType
 
             If makeDataframe.is_ableConverts(type) Then
@@ -310,6 +310,25 @@ Namespace Runtime.Internal.Object.Converts
                 type = makeDataframe.tryTypeLineage(type)
 
                 If type Is Nothing Then
+                    If TypeOf x Is vector Then
+                        x = DirectCast(x, vector).data
+                        type = MeasureRealElementType(x)
+
+                        If x.GetType.GetElementType Is Nothing OrElse x.GetType.GetElementType Is GetType(Object) Then
+                            Dim list = Array.CreateInstance(type, DirectCast(x, Array).Length)
+
+                            With DirectCast(x, Array)
+                                For i As Integer = 0 To .Length - 1
+                                    Call list.SetValue(.GetValue(i), i)
+                                Next
+                            End With
+
+                            x = list
+                        End If
+
+                        GoTo RE0
+                    End If
+
                     Return Internal.debug.stop(New InvalidProgramException("missing api for handle of data: " & type.FullName), env)
                 Else
                     Return makeDataframe.createDataframe(type, x, args, env)
