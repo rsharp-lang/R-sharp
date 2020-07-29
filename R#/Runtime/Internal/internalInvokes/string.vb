@@ -182,6 +182,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("json")>
+        <RApiReturn(GetType(String))>
         Public Function json(<RRawVectorArgument>
                              x As Object,
                              Optional compress As Boolean = True,
