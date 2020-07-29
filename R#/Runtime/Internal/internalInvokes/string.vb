@@ -55,6 +55,7 @@ Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Net.Http
@@ -204,7 +205,13 @@ Namespace Runtime.Internal.Invokes
             Dim type As Type = x.GetType
 
             Try
-                Return JsonContract.GetObjectJson(type, x, indent:=Not compress)
+                Return JsonContract.GetObjectJson(type, x, indent:=Not compress,
+                     knownTypes:={
+                         GetType(Integer),
+                         GetType(Boolean),
+                         GetType(String),
+                         GetType(Dictionary(Of String, Object))
+                     })
             Catch ex As Exception
                 Return debug.stop(ex, env)
             End Try
