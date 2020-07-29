@@ -22,8 +22,16 @@ let validateSet = trainingSet
 })
 ;
 
+let ROC = NULL;
+let aucValue as double;
+
 for(attr in 0:2) {
 	print(`ROC for predicts attribute ${attr}:`);
-	print(as.data.frame(ANN :> ANN.ROC(validateSet, [0, 1], attr)));
+	
+	ROC = ANN :> ANN.ROC(validateSet, [0, 1], attr);
+	aucValue = AUC(ROC);
+	
+	print(as.data.frame(ROC));
+	print(`the AUC value of the ROC result is: ${aucValue}`);
 }
 

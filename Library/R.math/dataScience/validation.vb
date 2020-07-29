@@ -49,6 +49,7 @@ Imports Microsoft.VisualBasic.MachineLearning.StoreProcedure
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -86,7 +87,7 @@ Module validation
     End Function
 
     <ExportAPI("AUC")>
-    Public Function AUC(ROC As Object, Optional env As Environment = Nothing) As Object
+    Public Function AUC(<RRawVectorArgument> ROC As Object, Optional env As Environment = Nothing) As Object
         Dim validates As pipeline = pipeline.TryCreatePipeline(Of Evaluation.Validation)(ROC, env)
 
         If validates.isError Then
