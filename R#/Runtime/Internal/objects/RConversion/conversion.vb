@@ -633,7 +633,7 @@ RE0:
         ''' <summary>
         ''' cast any R# object to raw buffer
         ''' </summary>
-        ''' <param name="obj"></param>
+        ''' <param name="obj">numeric values or character vector</param>
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("as.raw")>
