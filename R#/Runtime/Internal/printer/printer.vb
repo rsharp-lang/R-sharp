@@ -92,9 +92,17 @@ Namespace Runtime.Internal.ConsolePrinter
             RtoString(GetType(LogEntry)) = Function(o) DirectCast(o, LogEntry).ToString
             RtoString(GetType(unit)) = Function(o) DirectCast(o, unit).ToString
             RtoString(GetType(RSessionInfo)) = Function(o) o.ToString
+            RtoString(GetType(MemoryStream)) = AddressOf printStream
 
             RInternalToString(GetType(Double)) = AddressOf printer.f64_InternalToString
         End Sub
+
+        Private Function printStream(buffer As MemoryStream) As String
+            Dim bytes As Byte() = buffer.ToArray
+            Dim hex As String() = bytes.Take(10).Select(Function(i) CInt(i).ToHexString).ToArray
+
+            Return $"[size={buffer.Length}] {hex.JoinBy(" ")}..."
+        End Function
 
         Private Function DateToString(x As Date) As String
             Dim yy = x.Year.ToString.FormatZero("0000")
