@@ -653,7 +653,7 @@ RE0:
 
                 Select Case item.GetType
                     Case GetType(String)
-                        chunk = (encoder.GetBytes(item).AsList + CByte(0)).ToArray
+                        chunk = (encoder.GetBytes(DirectCast(item, String)).AsList + CByte(0)).ToArray
                         isNumeric = False
                     Case GetType(Integer)
                         chunk = BitConverter.GetBytes(DirectCast(item, Integer))
@@ -673,7 +673,7 @@ RE0:
                     Case GetType(Date)
                         chunk = BitConverter.GetBytes(DirectCast(item, Date).UnixTimeStamp)
                     Case GetType(Char)
-                        chunk = encoder.GetBytes(DirectCast(item, Char))
+                        chunk = encoder.GetBytes({DirectCast(item, Char)})
                         isNumeric = False
                     Case Else
                         Return Internal.debug.stop(Message.InCompatibleType(GetType(String), item.GetType, env), env)

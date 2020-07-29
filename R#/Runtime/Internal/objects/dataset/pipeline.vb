@@ -201,6 +201,8 @@ Namespace Runtime.Internal.Object
                 Else
                     Return Internal.debug.stop(Message.InCompatibleType(GetType(T), type, env), env)
                 End If
+            ElseIf GetType(T) Is GetType(Object) Then
+                Return CreateFromPopulator(Of T)({upstream})
             Else
                 Return Internal.debug.stop(Message.InCompatibleType(GetType(T), upstream.GetType, env), env)
             End If
