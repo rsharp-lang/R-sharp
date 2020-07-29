@@ -3,7 +3,7 @@
   <activation name="Sigmoid">
     <Arguments name="alpha">2</Arguments>
   </activation>
-  <layers size="100" id="1">
+  <layers size="200" id="1">
     <neuron>6F</neuron>
     <neuron>70</neuron>
     <neuron>71</neuron>
@@ -104,8 +104,6 @@
     <neuron>D0</neuron>
     <neuron>D1</neuron>
     <neuron>D2</neuron>
-  </layers>
-  <layers size="300" id="2">
     <neuron>D3</neuron>
     <neuron>D4</neuron>
     <neuron>D5</neuron>
@@ -206,6 +204,8 @@
     <neuron>134</neuron>
     <neuron>135</neuron>
     <neuron>136</neuron>
+  </layers>
+  <layers size="300" id="2">
     <neuron>137</neuron>
     <neuron>138</neuron>
     <neuron>139</neuron>
@@ -406,8 +406,6 @@
     <neuron>1FC</neuron>
     <neuron>1FD</neuron>
     <neuron>1FE</neuron>
-  </layers>
-  <layers size="50" id="3">
     <neuron>1FF</neuron>
     <neuron>200</neuron>
     <neuron>201</neuron>
@@ -458,8 +456,6 @@
     <neuron>22E</neuron>
     <neuron>22F</neuron>
     <neuron>230</neuron>
-  </layers>
-  <layers size="20" id="4">
     <neuron>231</neuron>
     <neuron>232</neuron>
     <neuron>233</neuron>
@@ -480,5 +476,99 @@
     <neuron>242</neuron>
     <neuron>243</neuron>
     <neuron>244</neuron>
+    <neuron>245</neuron>
+    <neuron>246</neuron>
+    <neuron>247</neuron>
+    <neuron>248</neuron>
+    <neuron>249</neuron>
+    <neuron>24A</neuron>
+    <neuron>24B</neuron>
+    <neuron>24C</neuron>
+    <neuron>24D</neuron>
+    <neuron>24E</neuron>
+    <neuron>24F</neuron>
+    <neuron>250</neuron>
+    <neuron>251</neuron>
+    <neuron>252</neuron>
+    <neuron>253</neuron>
+    <neuron>254</neuron>
+    <neuron>255</neuron>
+    <neuron>256</neuron>
+    <neuron>257</neuron>
+    <neuron>258</neuron>
+    <neuron>259</neuron>
+    <neuron>25A</neuron>
+    <neuron>25B</neuron>
+    <neuron>25C</neuron>
+    <neuron>25D</neuron>
+    <neuron>25E</neuron>
+    <neuron>25F</neuron>
+    <neuron>260</neuron>
+    <neuron>261</neuron>
+    <neuron>262</neuron>
+  </layers>
+  <layers size="50" id="3">
+    <neuron>263</neuron>
+    <neuron>264</neuron>
+    <neuron>265</neuron>
+    <neuron>266</neuron>
+    <neuron>267</neuron>
+    <neuron>268</neuron>
+    <neuron>269</neuron>
+    <neuron>26A</neuron>
+    <neuron>26B</neuron>
+    <neuron>26C</neuron>
+    <neuron>26D</neuron>
+    <neuron>26E</neuron>
+    <neuron>26F</neuron>
+    <neuron>270</neuron>
+    <neuron>271</neuron>
+    <neuron>272</neuron>
+    <neuron>273</neuron>
+    <neuron>274</neuron>
+    <neuron>275</neuron>
+    <neuron>276</neuron>
+    <neuron>277</neuron>
+    <neuron>278</neuron>
+    <neuron>279</neuron>
+    <neuron>27A</neuron>
+    <neuron>27B</neuron>
+    <neuron>27C</neuron>
+    <neuron>27D</neuron>
+    <neuron>27E</neuron>
+    <neuron>27F</neuron>
+    <neuron>280</neuron>
+    <neuron>281</neuron>
+    <neuron>282</neuron>
+    <neuron>283</neuron>
+    <neuron>284</neuron>
+    <neuron>285</neuron>
+    <neuron>286</neuron>
+    <neuron>287</neuron>
+    <neuron>288</neuron>
+    <neuron>289</neuron>
+    <neuron>28A</neuron>
+    <neuron>28B</neuron>
+    <neuron>28C</neuron>
+    <neuron>28D</neuron>
+    <neuron>28E</neuron>
+    <neuron>28F</neuron>
+    <neuron>290</neuron>
+    <neuron>291</neuron>
+    <neuron>292</neuron>
+    <neuron>293</neuron>
+    <neuron>294</neuron>
+  </layers>
+  <layers size="10" id="4">
+    <neuron>295</neuron>
+    <neuron>296</neuron>
+    <neuron>297</neuron>
+    <neuron>298</neuron>
+    <neuron>299</neuron>
+    <neuron>29A</neuron>
+    <neuron>29B</neuron>
+    <neuron>29C</neuron>
+    <neuron>29D</neuron>
+    <neuron>29E</neuron>
   </layers>
 </HiddenLayer>

@@ -418,6 +418,7 @@
     <Compile Include="Interpreter\ExecuteEngine\Expression.vb" />
     <Compile Include="Runtime\Environment\OutputEnvironments.vb" />
     <Compile Include="Runtime\Environment\RContentOutput.vb" />
+    <Compile Include="System\Components\Encoder.vb" />
     <Compile Include="System\Components\RSessionInfo.vb" />
     <Compile Include="Runtime\Internal\objects\dataset\factor.vb" />
     <Compile Include="Runtime\Interop\RInteropAttributes\RPlotStyleCSSAttribute.vb" />

@@ -3,7 +3,7 @@
   <activation name="Sigmoid">
     <Arguments name="alpha">2</Arguments>
   </activation>
-  <neuron>245</neuron>
-  <neuron>246</neuron>
-  <neuron>247</neuron>
+  <neuron>29F</neuron>
+  <neuron>2A0</neuron>
+  <neuron>2A1</neuron>
 </layer>

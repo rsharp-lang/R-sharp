@@ -46,6 +46,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.IL
 Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.VersionControl
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 ''' <summary>
@@ -53,6 +54,10 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 ''' </summary>
 <Package("VisualStudio", Category:=APICategories.UtilityTools, Publisher:="xie.guigang@live.com")>
 Module devkit
+
+    Sub New()
+        Internal.ConsolePrinter.AttachConsoleFormatter(Of ILInstruction)(Function(a) DirectCast(a, ILInstruction).GetCode)
+    End Sub
 
     ''' <summary>
     ''' Get .NET library module assembly information data.

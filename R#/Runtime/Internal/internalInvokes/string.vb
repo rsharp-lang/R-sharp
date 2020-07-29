@@ -50,11 +50,13 @@
 
 #End Region
 
+Imports System.IO
 Imports System.Reflection
 Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Scripting
 Imports Microsoft.VisualBasic.Serialization.Bencoding
 Imports Microsoft.VisualBasic.Serialization.JSON
@@ -62,6 +64,7 @@ Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.System.Components
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 Imports VBStr = Microsoft.VisualBasic.Strings
 Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
@@ -167,6 +170,7 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("json")>
+        <RApiReturn(GetType(String))>
         Public Function json(<RRawVectorArgument>
                              x As Object,
                              Optional compress As Boolean = True,
@@ -175,13 +179,35 @@ Namespace Runtime.Internal.Invokes
             If x Is Nothing Then
                 Return "null"
             Else
-                Dim type As Type = x.GetType
+                x = Encoder.GetObject(x)
+            End If
 
-                Try
-                    Return JsonContract.GetObjectJson(type, x, indent:=Not compress)
-                Catch ex As Exception
-                    Return debug.stop(ex, env)
-                End Try
+            Dim type As Type = x.GetType
+
+            Try
+                Return JsonContract.GetObjectJson(type, x, indent:=Not compress)
+            Catch ex As Exception
+                Return debug.stop(ex, env)
+            End Try
+        End Function
+
+        <ExportAPI("base64")>
+        <RApiReturn(GetType(Byte))>
+        Public Function base64(<RRawVectorArgument> raw As Object, Optional env As Environment = Nothing) As Object
+            Dim bytes As pipeline = pipeline.TryCreatePipeline(Of Byte)(raw, env)
+
+            If raw Is Nothing Then
+                Return Nothing
+            End If
+
+            If bytes.isError Then
+                If TypeOf raw Is Stream Then
+                    Return DirectCast(raw, Stream).PopulateBlocks.IteratesALL.ToBase64String
+                Else
+                    Return bytes.getError
+                End If
+            Else
+                Return bytes.populates(Of Byte)(env).ToBase64String
             End If
         End Function
 

@@ -1,53 +1,55 @@
 ﻿#Region "Microsoft.VisualBasic::fa2c13cfaadd44e760448fde4f27e2a2, Library\R.math\dataScience\validation.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module validation
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: ANN_ROC, createSampleValidation, Tabular
-    ' 
-    ' /********************************************************************************/
+' Module validation
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: ANN_ROC, createSampleValidation, Tabular
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.DataMining.ComponentModel
+Imports Microsoft.VisualBasic.DataMining.ComponentModel.Evaluation
 Imports Microsoft.VisualBasic.MachineLearning.Debugger
 Imports Microsoft.VisualBasic.MachineLearning.NeuralNetwork
 Imports Microsoft.VisualBasic.MachineLearning.StoreProcedure
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -63,7 +65,7 @@ Module validation
         Dim dataframe As New Rdataframe With {
             .rownames = input.Select(Function(r) CStr(r.Threshold)).ToArray,
             .columns = New Dictionary(Of String, Array) From {
-                {"threshold", .rownames},
+                {"threshold", .rownames.Select(AddressOf Val).ToArray},
                 {"specificity", input.Select(Function(r) r.Specificity).ToArray},
                 {"sensibility", input.Select(Function(r) r.Sensibility).ToArray},
                 {"accuracy", input.Select(Function(r) r.Accuracy).ToArray},
@@ -84,9 +86,20 @@ Module validation
         Return dataframe
     End Function
 
+    <ExportAPI("AUC")>
+    Public Function AUC(<RRawVectorArgument> ROC As Object, Optional env As Environment = Nothing) As Object
+        Dim validates As pipeline = pipeline.TryCreatePipeline(Of Evaluation.Validation)(ROC, env)
+
+        If validates.isError Then
+            Return validates.getError
+        End If
+
+        Return validates.populates(Of Evaluation.Validation)(env).AUC
+    End Function
+
     <ExportAPI("ANN.ROC")>
     Public Function ANN_ROC(ANN As Network, validateSet As TrainingSample(), range As Double(), attribute%, Optional n% = 20) As Evaluation.Validation()
-        ' Return ANN.CreateValidateResult(validateSet).ROC(range, attribute, n)
+        Return ANN.CreateValidateResult(validateSet).ROC(range, attribute, n)
     End Function
 
     <ExportAPI("as.validation")>
