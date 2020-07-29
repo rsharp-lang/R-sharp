@@ -686,6 +686,8 @@ RE0:
                 buffer.Write(chunk, Scan0, chunk.Length)
             Next
 
+            Call buffer.Flush()
+
             Return buffer
         End Function
 

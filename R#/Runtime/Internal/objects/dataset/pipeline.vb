@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::9e20f0990f547779a7ba4ca0e4e9110f, R#\Runtime\Internal\objects\dataset\pipeline.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class pipeline
-    ' 
-    '         Properties: [pipeFinalize], isError, isMessage
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: CreateFromPopulator, createVector, getError, populates, ToString
-    '                   TryCreatePipeline
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class pipeline
+' 
+'         Properties: [pipeFinalize], isError, isMessage
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: CreateFromPopulator, createVector, getError, populates, ToString
+'                   TryCreatePipeline
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -180,13 +180,15 @@ Namespace Runtime.Internal.Object
                 End If
             ElseIf TypeOf upstream Is T() Then
                 Return CreateFromPopulator(Of T)(DirectCast(upstream, T()))
-            ElseIf TypeOf upstream Is T Then
+            ElseIf (Not GetType(T) Is GetType(Object)) AndAlso TypeOf upstream Is T Then
                 Return CreateFromPopulator(Of T)({DirectCast(upstream, T)})
             ElseIf TypeOf upstream Is IEnumerable(Of T) Then
                 Return CreateFromPopulator(Of T)(DirectCast(upstream, IEnumerable(Of T)))
             ElseIf TypeOf upstream Is vector Then
                 If DirectCast(upstream, vector).elementType Like GetType(T) Then
                     Return CreateFromPopulator(Of T)(DirectCast(upstream, vector).data.AsObjectEnumerator(Of T))
+                ElseIf GetType(T) Is GetType(Object) Then
+                    Return CreateFromPopulator(Of Object)(DirectCast(upstream, vector).data.AsObjectEnumerator)
                 Else
                     Return Internal.debug.stop(Message.InCompatibleType(GetType(T), DirectCast(upstream, vector).elementType.raw, env), env)
                 End If
