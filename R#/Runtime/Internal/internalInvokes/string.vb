@@ -143,23 +143,8 @@ Namespace Runtime.Internal.Invokes
         Public Function bencode(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
             Return x.GetType.ToBEncode(
                 obj:=x,
-                digest:=Function(any)
-                            If any Is Nothing Then
-                                Return Nothing
-                            ElseIf TypeOf any Is vector Then
-                                Return DirectCast(any, vector).data
-                            ElseIf TypeOf any Is list Then
-                                Return DirectCast(any, list).slots
-                            ElseIf TypeOf any Is vbObject Then
-                                Return DirectCast(any, vbObject).target
-                            ElseIf TypeOf any Is pipeline Then
-                                Return DirectCast(any, pipeline).populates(Of Object)(env).ToArray
-                            ElseIf TypeOf any Is dataframe Then
-                                Return DirectCast(any, dataframe).columns
-                            Else
-                                Return any
-                            End If
-                        End Function)
+                digest:=Function(any) Encoder.DigestRSharpObject(any, env)
+            )
         End Function
 
         ''' <summary>
