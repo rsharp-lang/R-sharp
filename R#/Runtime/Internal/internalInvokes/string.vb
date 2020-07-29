@@ -52,6 +52,7 @@
 
 Imports System.IO
 Imports System.Reflection
+Imports System.Runtime.CompilerServices
 Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language.C
@@ -135,7 +136,40 @@ Namespace Runtime.Internal.Invokes
 
         <ExportAPI("bdecode")>
         Public Function fromBstring(bstr As String) As Object
-            Dim decode = BencodeDecoder.Decode(bstr)
+            Dim result = BencodeDecoder.Decode(bstr).Select(Function(node) node.decodeObject()).ToArray
+
+            If result.Length = 1 Then
+                Return result(Scan0)
+            Else
+                Return result
+            End If
+        End Function
+
+        <Extension>
+        Private Function decodeObject(element As BElement) As Object
+            Select Case element.GetType
+                Case GetType(BString)
+                    Return DirectCast(element, BString).Value
+                Case GetType(BInteger)
+                    Return DirectCast(element, BInteger).Value
+                Case GetType(BList)
+                    Dim array As New List(Of Object)
+
+                    For Each item As BElement In DirectCast(element, BList)
+                        array.Add(item.decodeObject)
+                    Next
+
+                    Return array.ToArray
+                Case Else
+                    Dim table As BDictionary = DirectCast(element, BDictionary)
+                    Dim list As New list With {.slots = New Dictionary(Of String, Object)}
+
+                    For Each item In table
+                        list.slots.Add(item.Key.Value, item.Value.decodeObject)
+                    Next
+
+                    Return list
+            End Select
         End Function
 
         <ExportAPI("bencode")>
