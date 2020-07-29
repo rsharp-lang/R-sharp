@@ -17,15 +17,15 @@ print(output);
 ANN.training_model(
 	inputSize      = input.size(dataset),
 	outputSize     = output.size(dataset),
-	hiddenSize     = [100, 300, 50, 20], 
+	hiddenSize     = [200, 300, 50, 10], 
 	learnRate      = 0.125, 
 	momentum       = 0.9, 
 	minErr         = 0.05, 
 	parallel       = TRUE,
 	outputSnapshot = TRUE	
 )
-:> configuration(softmax = TRUE, selectiveMode = TRUE)
+:> configuration(softmax = FALSE, selectiveMode = TRUE)
 :> set.trainingSet(dataset)
-:> training(maxIterations  = 100)
+:> training(maxIterations  = 1000)
 :> write.ANN_network(output)
 ;

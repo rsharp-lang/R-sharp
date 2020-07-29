@@ -2,13 +2,13 @@
 <NeuralNetwork xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://machinelearning.scibasic.net/ANN/">
   <!--
      model:     Microsoft.VisualBasic.MachineLearning.NeuralNetwork.StoreProcedure.NeuralNetwork
-     assembly:  Microsoft.VisualBasic.MachineLearning, Version=1.10.7421.25016, Culture=neutral, PublicKeyToken=null
-     version:   1.10.7421.25016
-     built:     4/26/2020 1:53:52 PM
-     md5:       d4169264c03af618fd3e74b8a200f9db
-     timestamp: 4/26/2020 1:53:54 PM
+     assembly:  Microsoft.VisualBasic.MachineLearning, Version=1.10.7515.23662, Culture=neutral, PublicKeyToken=null
+     version:   1.10.7515.23662
+     built:     2020/7/29 星期三 下午 1:08:44
+     md5:       a36aa2a801c5e328bdc337e5b29c4cad
+     timestamp: 2020/7/29 星期三 下午 1:08:44
   -->
-  <learnRate>0.12499962575052218</learnRate>
+  <learnRate>0.12499838548528271</learnRate>
   <momentum>0.9</momentum>
-  <errors>0.011450806826860097</errors>
+  <errors>0.0077459700566779232</errors>
 </NeuralNetwork>
