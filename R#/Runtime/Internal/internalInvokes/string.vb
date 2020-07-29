@@ -64,6 +64,7 @@ Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.System.Components
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 Imports VBStr = Microsoft.VisualBasic.Strings
 Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
@@ -189,14 +190,16 @@ Namespace Runtime.Internal.Invokes
             If x Is Nothing Then
                 Return "null"
             Else
-                Dim type As Type = x.GetType
-
-                Try
-                    Return JsonContract.GetObjectJson(type, x, indent:=Not compress)
-                Catch ex As Exception
-                    Return debug.stop(ex, env)
-                End Try
+                x = Encoder.GetObject(x)
             End If
+
+            Dim type As Type = x.GetType
+
+            Try
+                Return JsonContract.GetObjectJson(type, x, indent:=Not compress)
+            Catch ex As Exception
+                Return debug.stop(ex, env)
+            End Try
         End Function
 
         <ExportAPI("base64")>
