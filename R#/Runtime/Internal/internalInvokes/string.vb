@@ -137,38 +137,26 @@ Namespace Runtime.Internal.Invokes
 
         <ExportAPI("bencode")>
         <RApiReturn(GetType(String))>
-        Public Function bencode(list As list, Optional env As Environment = Nothing) As Object
-            Dim err As Exception = Nothing
-            Dim encode As BDictionary = bencoder(list, err)
-
-            If Not encode Is Nothing Then
-                Return encode.ToBencodedString
-            Else
-                Return Internal.debug.stop(err, env)
-            End If
-        End Function
-
-        Private Function bencoder(list As list, ByRef err As Exception) As BDictionary
-            Dim encoder As New BDictionary()
-
-            For Each item In list.slots
-                If item.Value Is Nothing Then
-                    encoder.Add(item.Key, New BString(""))
-                ElseIf TypeOf item.Value Is String Then
-                    encoder.Add(item.Key, New BString(DirectCast(item.Value, String)))
-                ElseIf TypeOf item.Value Is Boolean OrElse TypeOf item.Value Is DateTime Then
-                    encoder.Add(item.Key, New BString(Scripting.ToString(item.Value)))
-                ElseIf TypeOf item.Value Is Integer OrElse TypeOf item.Value Is Long OrElse TypeOf item.Value Is Short Then
-                    encoder.Add(item.Key, New BInteger(CInt(item.Value)))
-                ElseIf TypeOf item.Value Is list Then
-                    encoder.Add(item.Key, bencoder(item.Value, err))
-                Else
-                    err = New NotImplementedException(item.Value.GetType.FullName)
-                    Return Nothing
-                End If
-            Next
-
-            Return encoder
+        Public Function bencode(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+            Return x.GetType.ToBEncode(
+                obj:=x,
+                digest:=Function(any)
+                            If any Is Nothing Then
+                                Return Nothing
+                            ElseIf TypeOf any Is vector Then
+                                Return DirectCast(any, vector).data
+                            ElseIf TypeOf any Is list Then
+                                Return DirectCast(any, list).slots
+                            ElseIf TypeOf any Is vbObject Then
+                                Return DirectCast(any, vbObject).target
+                            ElseIf TypeOf any Is pipeline Then
+                                Return DirectCast(any, pipeline).populates(Of Object)(env).ToArray
+                            ElseIf TypeOf any Is dataframe Then
+                                Return DirectCast(any, dataframe).columns
+                            Else
+                                Return any
+                            End If
+                        End Function)
         End Function
 
         ''' <summary>
