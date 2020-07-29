@@ -2,11 +2,11 @@
 <DataSet xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <!--
      model:     Microsoft.VisualBasic.MachineLearning.StoreProcedure.DataSet
-     assembly:  Microsoft.VisualBasic.MachineLearning, Version=1.10.7421.25016, Culture=neutral, PublicKeyToken=null
-     version:   1.10.7421.25016
-     built:     4/26/2020 1:53:52 PM
-     md5:       d4169264c03af618fd3e74b8a200f9db
-     timestamp: 4/26/2020 1:53:54 PM
+     assembly:  Microsoft.VisualBasic.MachineLearning, Version=1.10.7515.23662, Culture=neutral, PublicKeyToken=null
+     version:   1.10.7515.23662
+     built:     2020/7/29 星期三 下午 1:08:44
+     md5:       a36aa2a801c5e328bdc337e5b29c4cad
+     timestamp: 2020/7/29 星期三 下午 1:08:44
   -->
   <sample size="60">
     <sample id="tmp0000a" target="1 1 1">
@@ -100,124 +100,124 @@
       <status>H4sIAAAAAAAEAGNgQAYf7CmlAYxVWyFQAAAA</status>
     </sample>
     <sample id="tmp0000E" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//X0ogii8l0D9vrbOUt9bpP63GN2dW48s/BZMwcIJJuD9GmW/9osznP7zHsf/d49g/o63hntHW4D+amjv1TM3NP+xMNwh2pps/aGij1TO04T8AZ93VUAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//917gIuKV1j/yCL5VrDfiPzoONWgdh9o/kvTFSXwttj8ogzn0k8G8P/3nh1nLwNA/f4GadYwNyj/N8MndmSu4P/P6ilZGSsI/6fsDVI6X2z+ZimtPUAAAAA==</status>
     </sample>
     <sample id="tmp0000F" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//zHE59OW4vD9DHqtWIY/VP2sXOFa1C7w/t6+zjNvX6T+9Ibuy3pDtP+6LPQL3xb4/PIg55R3E3D/rHepb9Q7lPyYd/uKSDu8/WQxqpCwG5T8HsL3fUAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//RyRUA4p4oD+mJKVOU5LSP6IGfzKEtuI/kEECrWG6mj/CEVl7R+/SPw7JjMpTMaM/n5DGP4N71j81cpLC5wWmPyu0M8AV2sk/5ivA8CVJ0z/tARysUAAAAA==</status>
     </sample>
     <sample id="tmp0000G" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//uIG23NtA6z8DjLSHAUbqP6XNKk/SZtU/OXfjT5y74T+8xO8qXuLnPzOiN2IZ0cs/ut4hOF3vkD98KqsbPpXlP12hZrCuUOM/ugK7x1yB7T+otx78UAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//oQTVxLbo4D8hdn8hqlTZP5D2aliu4cs/m+L4SucKxj9HlgRBveSrP7tmls4qANg/37JLOzym4j856ZvmacFqP9r3JBi6SN8/RM+/UdUa0z+wIKlsUAAAAA==</status>
     </sample>
     <sample id="tmp0000H" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//JVQxahKquD/Iez0l5L3OPyW3+3KS2+0/CZrhvwTN4D8epjnjDtPsP2nzJ6C0+aM/kR4omkgPxD/bajF8bbXIP4FPIUvAp8A/Gshu4gxk5z9tmFCeUAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//UwjK3lw32D9VjMEQXvnTP2wQJeo1iOI/L8vOIcuYyj+h5MPJgyWFPy9cycJK4cc/ForLVj742D+B2D0CdB/SPzoRNv2cCNs/c6/6MFPxpj+Eze9NUAAAAA==</status>
     </sample>
     <sample id="tmp0000I" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//bCss/rUV1j9aT3/frKfvP9Ffu0jor90/+yR3RH2S6z83yvdnG+XrP8uJJkTlRKM/R3U/V6O63z9BwDloIOC8PyNtulaRNu0/2AG2AewA2z+u48tUUAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//9xKUIuJv4D8lehVi34nXP4O/8ARb+eE/dvCQ8QdF1T/rsXumKAzhP0KGG/Dtj9o/6NW+zvNq3z/QgNSXm3O9P2e2K2Az29U/HGlKfsFn2D+EHvyqUAAAAA==</status>
     </sample>
     <sample id="tmp0000J" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//ry8jYNeXcT8523CwnG3oP3DNK8y35rU/lso590rl7D8XjLpSC0btP1kyt3osmds/Oo082pxG3j9zeupJOT3lP0mbLEakTdY/ubDhpFzY4D9aU/CZUAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//X6FoKxa32j/0QTkY+qCsPyL2uxwR+90/Oy7aKYR90z9lRikiMqPEP56n4zPP0+E/nJZGf4F+1j/aOXGFUwPPP91Sh1I7dqA/dWDelKCW1T+axo12UAAAAA==</status>
     </sample>
     <sample id="tmp0000K" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//0KkvLOjU1z8ngzaDk0HrP0lF6IykIuQ/b701RLfeuj/Ge7oQ4z3dP0fPN7Wj5+s/+a+zcPzX2T/kaOXqcbTiP5kJeqnMBO0/h6K4aENR7D8FM6zqUAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//puhWSbna0T/aEQDOhqLJP37VZ4slUco/nBTsP7Rw3D+wnM+piwGrP5peD5YZfNQ/NWrB4E3o0z+spxbUoiDYPz9PIMifJ5A/qo7RZ4j6uz8UQkYoUAAAAA==</status>
     </sample>
     <sample id="tmp0000L" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//2am9uezU7j/O0iAnZ2nQPwvKIUkF5eA/MFQ9Ahiqzj9H7adKo/bTP14yN/0umes/Nritxhrc1j+wgzzG10HePwKt6+eA1uU/IFyt1g+u5j9BhyUhUAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//5OrYEaWozz964CL2PHCxP+dGBcMMPcw/Tgj188AdxD9cbP4RyM/YPzkeKU8cj8Q/gV0EflrI2z848QqhNRLfP7zn1n0Rp84/2eXWPCCmzj98NgJkUAAAAA==</status>
     </sample>
     <sample id="tmp0000M" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//6S3urPQW5z/u1rncduvsP1q98MSsXug/xYEuvuJAxz9avPoYLV7tP5aeqjlLT9U/EJUnP4jKwz/fkT1478ieP/MNJ235huM/4xm8S/EM3j/cYxniUAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//O/c9Zp373j+JRaKQke/dP9LnB9q1wNA/+DpqZ+KDuz9KlL2MJcrePxXgwps9o9Q/mfxrWrNk3D+c8m+q55LRPy8Tlv5j1qc/dbJp56A/qz8Rh1hYUAAAAA==</status>
     </sample>
     <sample id="tmp0000N" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//mjjk3Ewc4j9jGj+5MY3fPxIN9juJBus/J6PmbZNR4z9j5q2YMfPWPx4lv/eOkt8/IRQupRAK1z918K13OvjWPy/OM3gX59k/7/q/snf97z8jo71+UAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//4X2ESIrY2z9S2iUoKe3CPybu7JesENA/FsNeofHHtT+v0y6D12nXPwEdKN6ADtQ/zB7DOJnCxD+nqdUnBwi+P+D8VnzW5NE/eArQbW84yz+CtKXlUAAAAA==</status>
     </sample>
     <sample id="tmp0000O" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//oJDoG1BI5D/AUbrA3yjtP7u5NI7dXMo/fFM5wL2pnD8lrjqOElfdP/jcLxt87uc/u0Q8nV0izj+iJPb4UBLrP/PT5VH56eI/i5s1WMXNqj9tPbIkUAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//M3BoPYCeuj/uuKDqQym9PwFtzKWzabk/eKVujCK5zT9V57vq3SbBP0Hp3+0GW9Y/MevqR//b2z/7ccGiMOzTPyIUIT8RiuA/pisoANMVRD8Y7gV1UAAAAA==</status>
     </sample>
     <sample id="tmp0000P" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//jugl0Eb0sj+gKCYAUBQzP3HN/mG4Zu8/hfFoTMJ45D/QgvP3Z8HpP/X7u3L6/d0/bC4u8jUXtz+vSbm616TcP07tLz6n9sc/v3Q/XF+6vz95FpcDUAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//7MYLpw99vz/KC6JEstLdP2mHlOaBEGc/1d1Lsh0i2T+gzwaVaQHdP4IJGx+OUdo/wUOv+Xk74T8EcGWvaB65P1tzyox6BuI/6HndP1oj1T8uNaynUAAAAA==</status>
     </sample>
     <sample id="tmp0000Q" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//A+ptpQH15j/b1i95bevXP/Favn14Le8/UPk3B6j82z/a06gX7WnUP085PLqnHN4/qbg0r1Rc2j/kJjvbcZPtP9phODTtMOw/FGR0KQoy6j9GHO97UAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//ZcgJosx93j/KvIuyMauiP0blQ1TWJdU/hpr9InYA4j8vTNY3fozRPyIhZtP3drk/XjACDMmx2j9b5VXyE1nBP98WMl1vC9k/bT1ZzxwFsz+LLD93UAAAAA==</status>
     </sample>
     <sample id="tmp0000R" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//TSigqiYU4D/g438n8PHvPwLWIjgBa7E/ErIrNQnZ5T/8WybW/S2zPyrcM+wU7uk/f6gseT9U5j++8u7WXnnnP19JbmivJOc/iH0r98O+xT8rgeKrUAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//DrPM+FMm4z8Y8w60WEbUP6/oZ0m+Wso/Ieo2gBB1mz/ArSIe4FbBP//IlWtMsdc/SSovpySV1z9fUQk9SUKeP7yAcQX4WeI/FFa7PT3ewD9DUheeUAAAAA==</status>
     </sample>
     <sample id="tmp0000S" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//4/AxrHH4uD9EgactosDTPzkxuFOcGNw/OrSjFx3a4T+/n7KX30/ZP9Uz5FLqGeI/wb+geuBf4D83bjS+GzfKP1cg83UrkOk/N/X4kpt67D/hpvWeUAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//SVs+uqQt3z8+FVVvBfHAP70wlJIr5dY/gHKVsgyGpz99VchMi/fgPz5sJDUfNuI/NIiLIOeQwj+3dgdM9VTdPxiPbnPyrc0/SRg95Ve/4T8PAMU5UAAAAA==</status>
     </sample>
     <sample id="tmp0000T" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//g5kze8HM2T85ZTp1nDLtP5vzK7HN+cU///AjoX/40T/YIaQa7BDSP2VKob4ypdA/z/b7Qmf77T/HMfFf45joP69gLWJXsOY/azr/aTWd7z92EGobUAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//5/svUfP91z+TzSDCyWawPzPUjS3mtsM/r/RvUfGT4T88o0R70YTVP8+RImTnSLE/W6/KDOGK2D82mbwTzn/BP3m2Y7o82+E/EFsjBIitoT87UOjvUAAAAA==</status>
     </sample>
     <sample id="tmp0000U" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//RwErh6OA1T+W1CcYS+rTP8jCvcRj4e4/3m9xKO+36D9rMeOqtZjhP4vJJpTFZLM/Bar7YgLV7T+9NqZZXhvTPwUmpJECE+I/pqa/C1PT7z8rMsC2UAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//pA8iJNIH4T+E+L9OdS/TP8Hg+tWTo+A/6thrSttS3D/EL4omr+RhPwplGpxR/9k/cxfuH1Ol0D9pEBgxm27iP/SGOqOtdtA/gxrEpXRAtT9djdFWUAAAAA==</status>
     </sample>
     <sample id="tmp0000V" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//fFUxwL2q6D8gpq3OD9PWP3lb7nS8Lec/NH4jOBq/kT9uDzbAtgebP8JSNB1hKdo/0dK7kmjp7T9uTTXMtqbaP4fMKnxDZqU/GDbwOAwb6D9r5BJ6UAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//y/lev0vjpT81+cavZ0ngP7gDcx1C6L8/rTu3etad2z8FhQXsG1zcP8c9X+pJBdY/Qq0jCqHW0T/2NvG9FDXSP45QVGOtjqA/GdrzM6aG0z99z4cqUAAAAA==</status>
     </sample>
     <sample id="tmp0000W" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//51x9YnOu7j8bAzWgjYHKPzMaIJUZDcA/o2w/oVG27z+mLrXXUpfaPxTDZTWK4eI/+eY0u3xz6j9BYnJWIDHpP01Cs08modk/TSZ0WyYT6j/kPb/4UAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//ShV9Zdi94T8HkDATneHhP8QI7ZL7HeA/skwe+SXz2z/buQxJuinTP1yZiMB6GeE//RGQOsvVxD9fcTro4mvQP8wxJfPlmNI/sski2NhksT9YDXKrUAAAAA==</status>
     </sample>
     <sample id="tmp0000X" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//W+U3qa3y6z+4djsZXLvtP91BMpjuIJk/9A5v/nmH5z++XjU6X6/qP9FTcqnoKek/tfsrpNr91T++qGoBX1TlP7azIDDbWYA/XO2oMq521D/TXkt1UAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//BcCY4mjG4j9cu6E6e6rNPyU6vhVGULI/DEsvhR8/4T9Q5P95wYvJP4rF/NZe/Mc/BV825IIvyz8dX0dXW3zgP4PPLMDBZ6Y/wRfZ9RO/vz9TN6e0UAAAAA==</status>
     </sample>
     <sample id="tmp0000Y" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//0Ino7+dE5D+KkTY3xUjLP4n16F3EeuQ/sXkzati86T/d/TyW7n6+PxubL2SNzac/ACcwAYATyD/Vgydq6sHDPwiQIDUESNA/i+e3fsXz6z8uHugAUAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//CsFaSuvG0z9bE/goR6PFP4XfmVGPvMk/1oGMILgNwz+tKEcpI2HgP+FvCFiK0d0/b+zIJwRD4T/TFHYCA6TUP2mRadsaL7s/7uWl+/by4j89ENREUAAAAA==</status>
     </sample>
     <sample id="tmp0000Z" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//w6QpmWHS1D8YUOHcC6jgP/6ELih/Quc/lio9KUuV7j+CsDvwQNidP3P/IG65f8A/+Y4vm3zHxz8kVn4jEivvPxexLXmL2NY/V259dSu37j86UIWDUAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//l11LNf/h2D+W4WU7MVe5PyUKz3VFuLo/2ZLTQNMv0D/PnMJvmoG0P9CyJERoWeI/Y01Mj+RZ2T9B013LBlC1Px0+vgJCUsI/OCCJDulcsT+17zGWUAAAAA==</status>
     </sample>
     <sample id="tmp00010" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//4Mg/3W/kzz8QHyUyiI/CPzh6+QQcvew/uP8vNtz/5z9WCj4UKwW/P8Pe9aZh7+o/AoIq5QBB1T+FTH92QqbvP830Ll5mesc/qHI9MlS5zj84HHz1UAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//Frik/dcozz/RCdPZG7hsPwfvCm9QRNI/Ealj2u46yD/1s5cqx6a4P/FnAUGSTdo/4mMe2r3+2z95IsnGb8THPwmTbnvrr80/PyKHgOxd0D+M1HIqUAAAAA==</status>
     </sample>
     <sample id="tmp00011" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//NFwh5BmusD8mVKIiEyrRP9BHtPLnI9o/GjZuHg0b5z9FYj1IIrG+P4S4rxRC3Oc/PkskCp8l4j+4GSn224zUP+jMd85z5us/QjsvK6Gd1z+nGGY5UAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//iByI8BDbwD9uVfvBUETXPww61ws50M4/Q1WtijtE4D+7v/+nEBPjP+cgfjYNqtg/SzCUffLk1j+c0JMVG7XWP98wewajy+A/X7BqV5a+2z+8kNVnUAAAAA==</status>
     </sample>
     <sample id="tmp00012" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//qXIzalS52T8EBqsgAoPlPzwa4jseDeE/m7khqc3c4D/Wp74d61PfP4cqrZhDldY/6MYzxHPjyT/FOyNc4p2xP3Ax7fa3mOY/4h6t3nCP5j9XH+hOUAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//IODyy6kJ4z+RWjgBSS3cPwoawGI4QMM/Vsw/Yl4Z0z87uyNnnd3RP6QHWHYFN98/Sja6f1hOwD8VYgKrpMraP+TubW7YXd0/2uU5Nu3yzD8hOFIyUAAAAA==</status>
     </sample>
     <sample id="tmp00013" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//E3Cmggk44z9tTy9dtqfXP2Wgp4ky0NM/f0cxdL+jqD+yIyQQ2RGyPxiEvsYLQt8/VVSokSoq1D/Q9bgn6HrsP2a4qwcz3OU/8YGjV/jA0T/aiWIqUAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//yXuYQrEK2T9ldYd+f4fAPyufL62Vz9c/JNxkLRJu4j9MUAplv8HeP/YapxJ7jdM/DIHXi7nz3j9CZ2NzBxqIP3GfAi1S6ao/oaUzRtDSuT/Gy5K4UAAAAA==</status>
     </sample>
     <sample id="tmp00014" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//sbitY1jc5j/s9DIndnrJP8Ij/gLhEe8/h9Y6gENrjT8FvDNCAt7pP+eEOrRzQq0/fmE5HL+wvD8KcifgBLlzP05+NeAmv+o/AEqk5f8k0j/JK73MUAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//9r+g3scsnT+hRy1s0KPWPzct+xI1MLc/gai5nEDU3D+XvQd/ZXjdP5uCADXn2pk/xUFULxZU3T/P/P5cARjJP8p5OlcYcNA/s+zYy7/c0j/xfO2nUAAAAA==</status>
     </sample>
     <sample id="tmp00015" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//n/RjUU/64T/iVrcrcavrP+VJNKjyJLo/6jr/JnWd7z8DtWNAgdrhPzTspNYZduI/iC2n0MOW4z85ga+3nMDXP5tXoU7Nq9A/BywxlgOW6D+4iHFLUAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//q2pqFbybyz8x5sPNSyalP+7yjhhERsQ/FdVaEPHQ0z/PuItINKmyP99nAGSJzdk/dP+5bLr/3D+MxJg5rMjiP9o/OjYgU+A/fZdodSWyyj8qNXZKUAAAAA==</status>
     </sample>
     <sample id="tmp00016" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//Ce3otYR25D8RsyFOiNnQPyo2JP8UG9I/ozy9cVGe3j+X7OiJS3bkP9CD7A3oQeY/4Vl9TPCs7j/gHi4EcA/XP6SxafzR2OQ/PWqoZR415D+Y5b4dUAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//zEwkAWYm0j+/HMDxkkGTP78IXdvF6tQ/+KWVpsifdz/cDFWkobndP7nIKYBc5GQ/VA6ZvZDt4j8jS4iRXvLQP8OjBQV7a5w/gGRYPaaY0j90CdpwUAAAAA==</status>
     </sample>
     <sample id="tmp00017" target="1 0 0">
-      <status>H4sIAAAAAAAEAAFQAK//sxy3l1mO2z9uVWvitqrlP3bUaPM6auQ/7wumovcF4z/w5OkxePLkP2XwM60y+Mk/QuKsHSFx5j/iLuEtcZfgP5f97WbL/uY/OVc3p5yr2z/COse/UAAAAA==</status>
+      <status>H4sIAAAAAAAEAAFQAK//IIOGCF0O4D8RFflBIiTWP65888/wV9M/V3hp+5Ei2z9hpIDZyevZPz/xcFcG384/RI95vDth1j/qygz7QTLTPyV1nklfB9w/EbPT8+4/0D9gSPdOUAAAAA==</status>
     </sample>
   </sample>
   <normalization>
     <!--
      model:     Microsoft.VisualBasic.MachineLearning.StoreProcedure.NormalizeMatrix
-     assembly:  Microsoft.VisualBasic.MachineLearning, Version=1.10.7421.25016, Culture=neutral, PublicKeyToken=null
-     version:   1.10.7421.25016
-     built:     4/26/2020 1:53:52 PM
-     md5:       d4169264c03af618fd3e74b8a200f9db
-     timestamp: 4/26/2020 1:53:54 PM
+     assembly:  Microsoft.VisualBasic.MachineLearning, Version=1.10.7515.23662, Culture=neutral, PublicKeyToken=null
+     version:   1.10.7515.23662
+     built:     2020/7/29 星期三 下午 1:08:44
+     md5:       a36aa2a801c5e328bdc337e5b29c4cad
+     timestamp: 2020/7/29 星期三 下午 1:08:44
   -->
     <matrix size="10">
       <!--
      model:     Microsoft.VisualBasic.Math.Distributions.SampleDistribution
-     assembly:  Microsoft.VisualBasic.Math.Core, Version=10.1.7421.25015, Culture=neutral, PublicKeyToken=null
-     version:   10.1.7421.25015
-     built:     4/26/2020 1:53:50 PM
-     md5:       779db37631a2569c640c06fa04cc8d7f
-     timestamp: 4/26/2020 1:53:51 PM
+     assembly:  Microsoft.VisualBasic.Math.Core, Version=10.1.7515.24666, Culture=neutral, PublicKeyToken=null
+     version:   10.1.7515.24666
+     built:     2020/7/29 星期三 下午 1:42:12
+     md5:       1b969b7364e608c793c03c378240ea4d
+     timestamp: 2020/7/29 星期三 下午 1:42:14
   -->
-      <item min="0" max="1" average="0.57124053129828856" stdErr="0.39812858701071913" size="60" quantile="0 0.09754095510465137 0.63341137749767462 1 1" />
-      <item min="0.000291127711670067" max="1" average="0.76607506050079854" stdErr="0.31714354105245857" size="60" quantile="0.000291127711670067 0.37374436220794188 0.99828345980415278 1 1" />
-      <item min="0.024539688147855777" max="1" average="0.75161484654602362" stdErr="0.3347062376597873" size="60" quantile="0.024539688147855777 0.4638615331909906 0.98128909244262108 1 1" />
-      <item min="0.014364745474590336" max="1" average="0.76501761460599993" stdErr="0.32177743108180229" size="60" quantile="0.014364745474590336 0.55787520043452976 0.99100572103215645 1 1" />
-      <item min="0.026396613580359433" max="1" average="0.74861457667559439" stdErr="0.32880562226523963" size="60" quantile="0.026396613580359433 0.45843948258945694 0.92393431576152063 1 1" />
-      <item min="0.037635006493718835" max="1" average="0.71859256599653776" stdErr="0.340807145956998" size="60" quantile="0.037635006493718835 0.43122398361155018 0.872026304189128 1 1" />
-      <item min="0.016538101721805566" max="1" average="0.72481745418230248" stdErr="0.3351579555725151" size="60" quantile="0.016538101721805566 0.40380774503751088 0.95861067714104931 1 1" />
-      <item min="0.0048151197865675763" max="1" average="0.74544765886173014" stdErr="0.32764002855849034" size="60" quantile="0.0048151197865675763 0.4475611995195789 0.98904536384579045 1 1" />
-      <item min="0.0079838871061726872" max="1" average="0.7670769583979048" stdErr="0.30991364315856995" size="60" quantile="0.0079838871061726872 0.60359892323780751 0.97052902540682306 1 1" />
-      <item min="0" max="1" average="0.63900125336631575" stdErr="0.38943674025163727" size="60" quantile="0 0.2774029594275183 0.76831225714102025 1 1" />
+      <item min="0" max="1" average="0.510618063092209" stdErr="0.38816373734570864" size="60" quantile="0 0.12300203159591278 0.47642818283123339 1 1" />
+      <item min="0.003505758663409277" max="1" average="0.62613721817551971" stdErr="0.392842679419197" size="60" quantile="0.003505758663409277 0.23176517832640797 0.56929604288623481 1 1" />
+      <item min="0.0028154885409471986" max="1" average="0.639456861493856" stdErr="0.37772969648414734" size="60" quantile="0.0028154885409471986 0.24072945669327372 0.58477983343637541 1 1" />
+      <item min="0.0057676160734927359" max="1" average="0.64577636270587169" stdErr="0.37584725823011966" size="60" quantile="0.0057676160734927359 0.29842338175439431 0.57593640199673191 1 1" />
+      <item min="0.0021842404278853162" max="1" average="0.64514717780758934" stdErr="0.37714700189736483" size="60" quantile="0.0021842404278853162 0.29585444493957536 0.59607727825458967 1 1" />
+      <item min="0.0025502974179341911" max="1" average="0.65982417791608" stdErr="0.35876600529972991" size="60" quantile="0.0025502974179341911 0.34407279861349277 0.5734139758038399 1 1" />
+      <item min="0.12739092098893173" max="1" average="0.68528810948379737" stdErr="0.32739865831205789" size="60" quantile="0.12739092098893173 0.38347650765603242 0.5914996817668432 1 1" />
+      <item min="0.0032660549521753815" max="1" average="0.62602938617860393" stdErr="0.3916492867554785" size="60" quantile="0.0032660549521753815 0.25658486059707813 0.5869961857735162 1 1" />
+      <item min="0.015776154126867722" max="1" average="0.64033510983937192" stdErr="0.38320394011651832" size="60" quantile="0.015776154126867722 0.25684174078369593 0.57348252356680218 1 1" />
+      <item min="0" max="1" average="0.44732066758007466" stdErr="0.41328890302839338" size="60" quantile="0 0.067823949860326915 0.29472346217125817 1 1" />
     </matrix>
     <names>
       <string>X_1</string>
