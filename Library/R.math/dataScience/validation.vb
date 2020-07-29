@@ -42,6 +42,7 @@
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.DataMining.ComponentModel
+Imports Microsoft.VisualBasic.DataMining.ComponentModel.Evaluation
 Imports Microsoft.VisualBasic.MachineLearning.Debugger
 Imports Microsoft.VisualBasic.MachineLearning.NeuralNetwork
 Imports Microsoft.VisualBasic.MachineLearning.StoreProcedure
@@ -63,7 +64,7 @@ Module validation
         Dim dataframe As New Rdataframe With {
             .rownames = input.Select(Function(r) CStr(r.Threshold)).ToArray,
             .columns = New Dictionary(Of String, Array) From {
-                {"threshold", .rownames},
+                {"threshold", .rownames.Select(AddressOf Val).ToArray},
                 {"specificity", input.Select(Function(r) r.Specificity).ToArray},
                 {"sensibility", input.Select(Function(r) r.Sensibility).ToArray},
                 {"accuracy", input.Select(Function(r) r.Accuracy).ToArray},
@@ -82,6 +83,17 @@ Module validation
         }
 
         Return dataframe
+    End Function
+
+    <ExportAPI("AUC")>
+    Public Function AUC(ROC As Object, Optional env As Environment = Nothing) As Object
+        Dim validates As pipeline = pipeline.TryCreatePipeline(Of Evaluation.Validation)(ROC, env)
+
+        If validates.isError Then
+            Return validates.getError
+        End If
+
+        Return validates.populates(Of Evaluation.Validation)(env).AUC
     End Function
 
     <ExportAPI("ANN.ROC")>
