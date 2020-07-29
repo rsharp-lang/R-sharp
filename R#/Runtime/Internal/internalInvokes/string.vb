@@ -175,7 +175,7 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("bencode")>
         <RApiReturn(GetType(String))>
         Public Function bencode(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
-            Return x.GetType.ToBEncode(
+            Return ToBEncode(
                 obj:=x,
                 digest:=Function(any) Encoder.DigestRSharpObject(any, env)
             ).ToBencodedString
