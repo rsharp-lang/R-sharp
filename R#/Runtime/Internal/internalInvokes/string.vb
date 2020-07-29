@@ -50,11 +50,13 @@
 
 #End Region
 
+Imports System.IO
 Imports System.Reflection
 Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Scripting
 Imports Microsoft.VisualBasic.Serialization.Bencoding
 Imports Microsoft.VisualBasic.Serialization.JSON
@@ -194,6 +196,26 @@ Namespace Runtime.Internal.Invokes
                 Catch ex As Exception
                     Return debug.stop(ex, env)
                 End Try
+            End If
+        End Function
+
+        <ExportAPI("base64")>
+        <RApiReturn(GetType(Byte))>
+        Public Function base64(<RRawVectorArgument> raw As Object, Optional env As Environment = Nothing) As Object
+            Dim bytes As pipeline = pipeline.TryCreatePipeline(Of Byte)(raw, env)
+
+            If raw Is Nothing Then
+                Return Nothing
+            End If
+
+            If bytes.isError Then
+                If TypeOf raw Is Stream Then
+                    Return DirectCast(raw, Stream).PopulateBlocks.IteratesALL.ToBase64String
+                Else
+                    Return bytes.getError
+                End If
+            Else
+                Return bytes.populates(Of Byte)(env).ToBase64String
             End If
         End Function
 
