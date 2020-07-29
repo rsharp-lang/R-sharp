@@ -178,7 +178,7 @@ Namespace Runtime.Internal.Invokes
             Return x.GetType.ToBEncode(
                 obj:=x,
                 digest:=Function(any) Encoder.DigestRSharpObject(any, env)
-            )
+            ).ToBencodedString
         End Function
 
         ''' <summary>
