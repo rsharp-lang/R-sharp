@@ -625,23 +625,43 @@ Namespace Runtime.Internal.Object.Converts
             Dim buffer As New MemoryStream
             Dim encoder As Encoding = encoding.CodePage
             Dim chunk As Byte()
+            Dim needReverse As Boolean = BitConverter.IsLittleEndian AndAlso networkByteOrder
+            Dim isNumeric As Boolean
 
             For Each item As Object In pipeline.TryCreatePipeline(Of Object)(obj, env).populates(Of Object)(env)
+                isNumeric = True
+
                 Select Case item.GetType
-                    Case GetType(String) : chunk = (encoder.GetBytes(item).AsList + CByte(0)).ToArray
-                    Case GetType(Integer) : chunk = BitConverter.GetBytes(DirectCast(item, Integer))
-                    Case GetType(Long) : chunk = BitConverter.GetBytes(DirectCast(item, Integer))
-                    Case GetType(Short) : chunk = BitConverter.GetBytes(DirectCast(item, Integer))
-                    Case GetType(Single) : chunk = BitConverter.GetBytes(DirectCast(item, Integer))
-                    Case GetType(Double) : chunk = BitConverter.GetBytes(DirectCast(item, Integer))
-                    Case GetType(Byte) : chunk = BitConverter.GetBytes(DirectCast(item, Integer))
-                    Case GetType(Boolean) : chunk = BitConverter.GetBytes(DirectCast(item, Integer))
+                    Case GetType(String)
+                        chunk = (encoder.GetBytes(item).AsList + CByte(0)).ToArray
+                        isNumeric = False
+                    Case GetType(Integer)
+                        chunk = BitConverter.GetBytes(DirectCast(item, Integer))
+                    Case GetType(Long)
+                        chunk = BitConverter.GetBytes(DirectCast(item, Long))
+                    Case GetType(Short)
+                        chunk = BitConverter.GetBytes(DirectCast(item, Short))
+                    Case GetType(Single)
+                        chunk = BitConverter.GetBytes(DirectCast(item, Single))
+                    Case GetType(Double)
+                        chunk = BitConverter.GetBytes(DirectCast(item, Double))
+                    Case GetType(Byte)
+                        chunk = BitConverter.GetBytes(DirectCast(item, Byte))
+                    Case GetType(Boolean)
+                        chunk = {CByte(If(DirectCast(item, Boolean), 1, 0))}
+                        isNumeric = False
                     Case GetType(Date)
                         chunk = BitConverter.GetBytes(DirectCast(item, Date).UnixTimeStamp)
-                    Case GetType(Char) : chunk = encoder.GetBytes(DirectCast(item, Char))
+                    Case GetType(Char)
+                        chunk = encoder.GetBytes(DirectCast(item, Char))
+                        isNumeric = False
                     Case Else
-
+                        Return Internal.debug.stop(Message.InCompatibleType(GetType(String), item.GetType, env), env)
                 End Select
+
+                If isNumeric AndAlso needReverse Then
+                    Call Array.Reverse(chunk)
+                End If
 
                 buffer.Write(chunk, Scan0, chunk.Length)
             Next
