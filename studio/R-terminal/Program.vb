@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1145fdb55cce7636b7b48b9fc6b4eeba, studio\R-terminal\Program.vb"
+﻿#Region "Microsoft.VisualBasic::e045887d43d90e0eb7054c98fbe95b3d, studio\R-terminal\Program.vb"
 
     ' Author:
     ' 
@@ -39,6 +39,8 @@
 
 #End Region
 
+#Const DEBUG = 0
+
 Imports Microsoft.VisualBasic.CommandLine
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -67,7 +69,11 @@ Module Program
         If Not [error] Is Nothing Then
             result = REnv.Internal.debug.stop([error], R.globalEnvir)
         Else
-            result = REnv.TryCatch(Function() R.Run(program))
+#If DEBUG Then
+            result = R.Run(program)
+#Else
+            result = REnv.TryCatch(Function() R.Run(program), debug:=R.debug)
+#End If
         End If
 
         Return Rscript.handleResult(result, R.globalEnvir, program)

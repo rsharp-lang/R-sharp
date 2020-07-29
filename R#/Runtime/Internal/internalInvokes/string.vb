@@ -1,52 +1,52 @@
-﻿#Region "Microsoft.VisualBasic::3c8bd1895b6f9438de8f93bc37c331cf, R#\Runtime\Internal\internalInvokes\string.vb"
+﻿#Region "Microsoft.VisualBasic::57d04c426b345937650c837e22a84714, R#\Runtime\Internal\internalInvokes\string.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module stringr
-    ' 
-    '         Function: [string], Csprintf, grep, html, json
-    '                   match, nchar, paste, regexp, sprintfSingle
-    '                   str_pad, str_replace, strsplit, xml
-    ' 
-    '     Enum str_padSides
-    ' 
-    '         both, left, right
-    ' 
-    '  
-    ' 
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module stringr
+' 
+'         Function: [string], Csprintf, grep, html, json
+'                   match, nchar, paste, regexp, sprintfSingle
+'                   str_pad, str_replace, strsplit, xml
+' 
+'     Enum str_padSides
+' 
+'         both, left, right
+' 
+'  
+' 
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -56,6 +56,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting
+Imports Microsoft.VisualBasic.Serialization.Bencoding
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
@@ -63,6 +64,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 Imports VBStr = Microsoft.VisualBasic.Strings
+Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 
 Namespace Runtime.Internal.Invokes
 
@@ -126,6 +128,47 @@ Namespace Runtime.Internal.Invokes
             Catch ex As Exception
                 Return Internal.debug.stop(ex, env)
             End Try
+        End Function
+
+        <ExportAPI("bdecode")>
+        Public Function fromBstring(bstr As String) As Object
+            Dim decode = BencodeDecoder.Decode(bstr)
+        End Function
+
+        <ExportAPI("bencode")>
+        <RApiReturn(GetType(String))>
+        Public Function bencode(list As list, Optional env As Environment = Nothing) As Object
+            Dim err As Exception = Nothing
+            Dim encode As BDictionary = bencoder(list, err)
+
+            If Not encode Is Nothing Then
+                Return encode.ToBencodedString
+            Else
+                Return Internal.debug.stop(err, env)
+            End If
+        End Function
+
+        Private Function bencoder(list As list, ByRef err As Exception) As BDictionary
+            Dim encoder As New BDictionary()
+
+            For Each item In list.slots
+                If item.Value Is Nothing Then
+                    encoder.Add(item.Key, New BString(""))
+                ElseIf TypeOf item.Value Is String Then
+                    encoder.Add(item.Key, New BString(DirectCast(item.Value, String)))
+                ElseIf TypeOf item.Value Is Boolean OrElse TypeOf item.Value Is DateTime Then
+                    encoder.Add(item.Key, New BString(Scripting.ToString(item.Value)))
+                ElseIf TypeOf item.Value Is Integer OrElse TypeOf item.Value Is Long OrElse TypeOf item.Value Is Short Then
+                    encoder.Add(item.Key, New BInteger(CInt(item.Value)))
+                ElseIf TypeOf item.Value Is list Then
+                    encoder.Add(item.Key, bencoder(item.Value, err))
+                Else
+                    err = New NotImplementedException(item.Value.GetType.FullName)
+                    Return Nothing
+                End If
+            Next
+
+            Return encoder
         End Function
 
         ''' <summary>
@@ -204,7 +247,7 @@ Namespace Runtime.Internal.Invokes
                 Return Runtime.asVector(Of String)(strs) _
                     .AsObjectEnumerator(Of String) _
                     .Select(AddressOf VBStr.Len) _
-                    .ToArray
+                    .DoCall(AddressOf vector.asVector)
             End If
         End Function
 
@@ -417,29 +460,37 @@ Namespace Runtime.Internal.Invokes
             Return [string] _
                 .SafeQuery _
                 .Select(Function(s)
-                            If s.StringEmpty Then
-                                Return New String(pad, width)
-                            End If
-
-                            If side = str_padSides.left Then
-                                Return s.PadLeft(width, pad)
-                            ElseIf side = str_padSides.right Then
-                                Return s.PadRight(width, pad)
-                            Else
-                                Dim l As Integer = s.Length
-                                Dim left As Integer = (width - l) / 2
-                                Dim right As Integer = width - l - left
-
-                                If left <= 0 Then
-                                    Return s
-                                Else
-                                    Return New String(pad, left) & s & New String(pad, right)
-                                End If
-                            End If
+                            Return strPad_internal(s, width, side, pad)
                         End Function) _
                 .ToArray
         End Function
 
+        Private Function strPad_internal(s As String, width As Integer, side As str_padSides, pad As Char) As String
+            If s.StringEmpty Then
+                Return New String(pad, width)
+            End If
+
+            If side = str_padSides.left Then
+                Return s.PadLeft(width, pad)
+            ElseIf side = str_padSides.right Then
+                Return s.PadRight(width, pad)
+            Else
+                Dim l As Integer = s.Length
+                Dim left As Integer = (width - l) / 2
+                Dim right As Integer = width - l - left
+
+                If left <= 0 Then
+                    Return s
+                Else
+                    Return New String(pad, left) & s & New String(pad, right)
+                End If
+            End If
+        End Function
+
+        <ExportAPI("str_empty")>
+        Public Function str_empty([string] As String()) As Boolean()
+            Return [string].Select(AddressOf StringEmpty).ToArray
+        End Function
     End Module
 
     Public Enum str_padSides

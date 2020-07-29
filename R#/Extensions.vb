@@ -1,41 +1,41 @@
 ﻿#Region "Microsoft.VisualBasic::91d2d5002aa6a1f264c2d81e1f0ae7b6, R#\Extensions.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module Extensions
-    ' 
-    '     Function: AsRReturn, GetEncoding, GetObject, GetString, SafeCreateColumns
-    ' 
-    ' /********************************************************************************/
+' Module Extensions
+' 
+'     Function: AsRReturn, GetEncoding, GetObject, GetString, SafeCreateColumns
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -43,7 +43,8 @@ Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
+Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
@@ -122,5 +123,42 @@ Public Module Extensions
         Next
 
         Return cols
+    End Function
+
+    <Extension>
+    Public Function EvaluateFramework(Of T, TOut)(env As Environment, x As Object, eval As Func(Of T, TOut)) As Object
+        If x Is Nothing Then
+            Return Nothing
+        ElseIf TypeOf x Is list Then
+            Return DirectCast(x, list) _
+                .AsGeneric(Of T)(env) _
+                .ToDictionary(Function(a) a.Key,
+                              Function(a)
+                                  Return CObj(eval(a.Value))
+                              End Function) _
+                .DoCall(Function(list)
+                            Return New list With {
+                                .slots = list
+                            }
+                        End Function)
+        ElseIf TypeOf x Is vector Then
+            With DirectCast(x, vector)
+                Return New vector(
+                    names:= .getNames,
+                    input:= .data.AsObjectEnumerator(Of T).Select(eval).ToArray,
+                    type:=RType.GetRSharpType(GetType(TOut)),
+                    env:=env
+                )
+            End With
+        ElseIf x.GetType.IsArray Then
+            Return New vector(
+                input:=DirectCast(x, Array).AsObjectEnumerator(Of T).Select(eval).ToArray,
+                type:=RType.GetRSharpType(GetType(TOut))
+            )
+        ElseIf TypeOf x Is T Then
+            Return eval(DirectCast(x, T))
+        Else
+            Return Internal.debug.stop(Message.InCompatibleType(GetType(T), x.GetType, env), env)
+        End If
     End Function
 End Module

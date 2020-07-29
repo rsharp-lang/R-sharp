@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8787a6178d68fc8d983ada9472953630, studio\R-terminal\CLI\CLI.vb"
+﻿#Region "Microsoft.VisualBasic::b5341d6fba43cab77cb8ec2c03a8711f, studio\R-terminal\CLI\CLI.vb"
 
     ' Author:
     ' 
@@ -186,7 +186,7 @@ Module CLI
 
     <ExportAPI("--man.1")>
     <Description("Exports unix man page data for current installed packages.")>
-    <Usage("--man.1 [--module <module.dll> --out <directory, default=./>]")>
+    <Usage("--man.1 [--module <module.dll> --debug --out <directory, default=./>]")>
     Public Function unixman(args As CommandLine) As Integer
         Dim out$ = args("--out") Or "./"
         Dim module$ = args("--module")

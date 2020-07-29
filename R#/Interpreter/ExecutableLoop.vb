@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3f2e98348037ad3bad1f64e4e9527a51, R#\Interpreter\ExecutableLoop.vb"
+﻿#Region "Microsoft.VisualBasic::a4494a12bc525654070977fb44be7a6c, R#\Interpreter\ExecutableLoop.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Class ExecutableLoop
     ' 
-    '         Constructor: (+1 Overloads) Sub New
+    '         Constructor: (+2 Overloads) Sub New
     ' 
     '         Function: Execute, ExecuteCodeLine
     ' 
@@ -56,25 +56,49 @@ Namespace Interpreter
 
     Public NotInheritable Class ExecutableLoop
 
+        Shared ReadOnly Rsharp As Process = Process.GetCurrentProcess()
+
+        Shared memSize As Double
+        Shared memSize2 As Double
+        Shared memoryDelta As Double
+
+        Shared Sub New()
+            memSize = Rsharp.WorkingSet64 / 1024 / 1024
+        End Sub
+
         Private Sub New()
         End Sub
 
         ''' <summary>
         ''' function/forloop/if/else/elseif/repeat/while, etc...
         ''' </summary>
-        ''' <param name="envir"></param>
+        ''' <param name="env"></param>
         ''' <returns></returns>
-        Public Shared Function Execute(execQueue As IEnumerable(Of Expression), envir As Environment) As Object
+        Public Shared Function Execute(execQueue As IEnumerable(Of Expression), env As Environment) As Object
             Dim last As Object = Nothing
             Dim breakLoop As Boolean = False
-            Dim debug As Boolean = envir.globalEnvironment.debugMode
+            Dim debug As Boolean = env.globalEnvironment.debugMode
 
             ' The program code loop
             For Each expression As Expression In execQueue
-                last = ExecuteCodeLine(expression, envir, breakLoop, debug)
+                last = ExecuteCodeLine(expression, env, breakLoop, debug)
+
+                If debug Then
+                    SyncLock Rsharp
+                        memSize2 = Rsharp.WorkingSet64 / 1024 / 1024
+                        memoryDelta = memSize2 - memSize
+                        memSize = memSize2
+                    End SyncLock
+
+                    If memoryDelta > 0 Then
+                        Call printDebug($"[app_memory] {memSize2.ToString("F2")} MB, delta {memoryDelta.ToString("F2")} MB", ConsoleColor.Red)
+                    Else
+                        Call printDebug($"[app_memory] {memSize2.ToString("F2")} MB, delta {memoryDelta.ToString("F2")} MB", ConsoleColor.Blue)
+                    End If
+                End If
 
                 If breakLoop Then
-                    Call configException(envir, last, expression)
+                    Call configException(env, last, expression)
                     Exit For
                 End If
             Next

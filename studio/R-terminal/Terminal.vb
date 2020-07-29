@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cab66169f27a3942f2025f7666e35c08, studio\R-terminal\Terminal.vb"
+﻿#Region "Microsoft.VisualBasic::cfc1cf37fe993826eb674379ea94b80d, studio\R-terminal\Terminal.vb"
 
     ' Author:
     ' 
@@ -139,7 +139,7 @@ Type 'q()' to quit R.
         If Not [error].StringEmpty Then
             result = REnv.Internal.debug.stop([error], R.globalEnvir)
         Else
-            result = REnv.TryCatch(Function() R.Run(program))
+            result = REnv.TryCatch(Function() R.Run(program), debug:=R.debug)
         End If
 
         Call Rscript.handleResult(result, R.globalEnvir, program)

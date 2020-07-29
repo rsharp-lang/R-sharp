@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e415a5398bbfaefef9ae19be89fcb45f, Library\R.graphics\gr2D.vb"
+﻿#Region "Microsoft.VisualBasic::300aa8fc81d2a1f70249f612ad9837c8, Library\R.graphics\gr2D.vb"
 
     ' Author:
     ' 
@@ -39,7 +39,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports System.Drawing
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -158,4 +157,3 @@ Module graphics2D
         Return g
     End Function
 End Module
-

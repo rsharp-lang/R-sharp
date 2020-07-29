@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2b82c98593b06e33063dede1ecc86edd, R#\System\Package\ImportsPackage.vb"
+﻿#Region "Microsoft.VisualBasic::a2dcdf01d425fa0276c2b9178f172f8b, R#\System\Package\ImportsPackage.vb"
 
     ' Author:
     ' 
@@ -104,14 +104,17 @@ Namespace System.Package
         ''' <summary>
         ''' This function returns a list of object which is masked by the new imports <paramref name="package"/>
         ''' </summary>
-        ''' <param name="envir"></param>
+        ''' <param name="env"></param>
         ''' <param name="package"></param>
         ''' <param name="strict"></param>
         ''' <returns></returns>
         <Extension>
-        Public Function ImportsStatic(envir As Environment, package As Type, Optional strict As Boolean = True) As IEnumerable(Of String)
+        Public Function ImportsStatic(env As Environment, package As Type, Optional strict As Boolean = True) As IEnumerable(Of String)
             Try
-                Return ImportsStaticInternalImpl(envir, package, strict:=strict)
+                Call package.Assembly.TryRunZzzOnLoad
+
+                ' imports package and export api
+                Return env.ImportsStaticInternalImpl(package, strict:=strict)
             Catch ex As Exception
                 If TypeOf ex Is MissingMethodException Then
                     With DirectCast(ex, MissingMethodException)

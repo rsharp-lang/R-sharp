@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::140e8400f1035c12ba08b30d0c77c21a, R#\Runtime\RTypeExtensions.vb"
+﻿#Region "Microsoft.VisualBasic::bba53ebda02fd2d8af4f5e055d92f0ae, R#\Runtime\RTypeExtensions.vb"
 
     ' Author:
     ' 
@@ -71,6 +71,8 @@ Namespace Runtime
                 Return TypeCodes.generic
             ElseIf parseTypecode.ContainsKey(type) Then
                 Return parseTypecode(type)
+            ElseIf type = "any" Then
+                Return TypeCodes.generic
             Else
                 ' .NET type
                 Return TypeCodes.ref

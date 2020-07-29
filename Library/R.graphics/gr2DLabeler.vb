@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::68f8deb55ed7222772e5ce1e25514cc7, Library\R.graphics\gr2DLabeler.vb"
+﻿#Region "Microsoft.VisualBasic::9b6174be71a1ceb73c391eff6ac57d85, Library\R.graphics\gr2DLabeler.vb"
 
     ' Author:
     ' 
@@ -39,7 +39,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Imaging
@@ -139,4 +138,3 @@ Module gr2DLabeler
         )
     End Function
 End Module
-

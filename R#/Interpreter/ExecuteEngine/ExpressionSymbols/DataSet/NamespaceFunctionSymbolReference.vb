@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::decf248fd217859aa681786c6ef0e549, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\NamespaceFunctionSymbolReference.vb"
+﻿#Region "Microsoft.VisualBasic::cc317aaa2cb615de92a5b2284df16a47, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\NamespaceFunctionSymbolReference.vb"
 
     ' Author:
     ' 
@@ -87,8 +87,15 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
         Friend Shared Function getPackageApiImpl(env As Environment, namespace$, funcNameSymbol As Expression) As Object
             ' find package and then load method
-            Dim pkg As RPkg = env.globalEnvironment.packages.FindPackage([namespace], Nothing)
-            Dim funcName As Object = getFuncNameSymbolText(funcNameSymbol, env)
+            Dim [error] As Exception = Nothing
+            Dim pkg As RPkg = env.globalEnvironment.packages.FindPackage([namespace], [error])
+            Dim funcName As Object
+
+            If Not [error] Is Nothing Then
+                Return Internal.debug.stop([error], env)
+            Else
+                funcName = getFuncNameSymbolText(funcNameSymbol, env)
+            End If
 
             If pkg Is Nothing Then
                 Return Message.SymbolNotFound(env, [namespace], TypeCodes.ref)

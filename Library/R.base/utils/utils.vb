@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cddfaf751bc2359f5c87640d7421e5bc, Library\R.base\utils\utils.vb"
+﻿#Region "Microsoft.VisualBasic::80cdfd3718a23fe2e8d94100f33d0a45, Library\R.base\utils\utils.vb"
 
     ' Author:
     ' 
@@ -127,13 +127,15 @@ Public Module utils
 
         If TypeOf file Is String Then
             datafile = REnv _
-                .TryCatch(Function()
-                              If tsv Then
-                                  Return IO.File.LoadTsv(file, encoding:=textEncoding)
-                              Else
-                                  Return IO.File.Load(file, encoding:=textEncoding)
-                              End If
-                          End Function)
+                .TryCatch(runScript:=Function()
+                                         If tsv Then
+                                             Return IO.File.LoadTsv(file, encoding:=textEncoding)
+                                         Else
+                                             Return IO.File.Load(file, encoding:=textEncoding)
+                                         End If
+                                     End Function,
+                          debug:=env.globalEnvironment.debugMode
+                )
         ElseIf TypeOf file Is fileStream Then
             Using reader As New textStream(DirectCast(file, fileStream), textEncoding)
                 datafile = reader.ReadToEnd _
@@ -289,7 +291,7 @@ Public Module utils
             Return Internal.debug.stop("Empty dataframe object!", env)
         ElseIf Not file.StringEmpty Then
             ' test if the target table file is not locked by excel
-            Dim err As Object = REnv.TryCatch(Function() "".SaveTo(file))
+            Dim err As Object = REnv.TryCatch(Function() "".SaveTo(file), debug:=env.globalEnvironment.debugMode)
 
             If Not TypeOf err Is Boolean Then
                 Return Internal.debug.stop(err, env)

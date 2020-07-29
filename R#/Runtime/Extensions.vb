@@ -1,44 +1,46 @@
-﻿#Region "Microsoft.VisualBasic::06ee7b1901b94924373b985203d6a77b, R#\Runtime\Extensions.vb"
+﻿#Region "Microsoft.VisualBasic::6bed320fe52a7c9f152c2349796a995a, R#\Runtime\Extensions.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module Extensions
-    ' 
-    '         Function: MeasureArrayElementType, MeasureRealElementType, TryCatch
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module Extensions
+' 
+'         Function: MeasureArrayElementType, MeasureRealElementType, TryCatch
+' 
+' 
+' /********************************************************************************/
 
 #End Region
+
+Imports vbObject = SMRUCC.Rsharp.Runtime.Internal.Object.vbObject
 
 Namespace Runtime
 
@@ -50,12 +52,16 @@ Namespace Runtime
         ''' </summary>
         ''' <param name="runScript"></param>
         ''' <returns></returns>
-        Public Function TryCatch(runScript As Func(Of Object)) As Object
-            Try
+        Public Function TryCatch(runScript As Func(Of Object), debug As Boolean) As Object
+            If debug Then
                 Return runScript()
-            Catch ex As Exception
-                Return ex
-            End Try
+            Else
+                Try
+                    Return runScript()
+                Catch ex As Exception
+                    Return ex
+                End Try
+            End If
         End Function
 
         ''' <summary>
@@ -95,7 +101,13 @@ Namespace Runtime
                 x = array.GetValue(i)
 
                 If Not x Is Nothing Then
-                    types.Add(x.GetType)
+                    arrayType = x.GetType
+
+                    If arrayType Is GetType(vbObject) Then
+                        arrayType = DirectCast(x, vbObject).target.GetType
+                    End If
+
+                    types.Add(arrayType)
                 End If
             Next
 

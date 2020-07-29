@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9b4e94c387f506e48080d7713e6be586, Library\R.math\dataScience\signalProcessing.vb"
+﻿#Region "Microsoft.VisualBasic::ce283f11a3566e102e84c04ad8d53725, Library\R.math\dataScience\signalProcessing.vb"
 
     ' Author:
     ' 
@@ -39,7 +39,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -118,4 +117,3 @@ Module signalProcessing
         Return matrix.ToArray
     End Function
 End Module
-
