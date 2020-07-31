@@ -1,4 +1,5 @@
-﻿Imports SMRUCC.Rsharp.Runtime.Internal.Object
+﻿Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace System.Components
 
@@ -25,6 +26,24 @@ Namespace System.Components
                 Return Encoder.GetObject(DirectCast(Robj, vbObject).target)
             Else
                 Return Robj
+            End If
+        End Function
+
+        Public Function DigestRSharpObject(any As Object, env As Environment) As Object
+            If any Is Nothing Then
+                Return Nothing
+            ElseIf TypeOf any Is vector Then
+                Return DirectCast(any, vector).data
+            ElseIf TypeOf any Is list Then
+                Return DirectCast(any, list).slots
+            ElseIf TypeOf any Is vbObject Then
+                Return DirectCast(any, vbObject).target
+            ElseIf TypeOf any Is pipeline Then
+                Return DirectCast(any, pipeline).populates(Of Object)(env).ToArray
+            ElseIf TypeOf any Is dataframe Then
+                Return DirectCast(any, dataframe).columns
+            Else
+                Return any
             End If
         End Function
     End Module

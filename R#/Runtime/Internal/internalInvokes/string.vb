@@ -52,8 +52,10 @@
 
 Imports System.IO
 Imports System.Reflection
+Imports System.Runtime.CompilerServices
 Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Net.Http
@@ -135,43 +137,49 @@ Namespace Runtime.Internal.Invokes
 
         <ExportAPI("bdecode")>
         Public Function fromBstring(bstr As String) As Object
-            Dim decode = BencodeDecoder.Decode(bstr)
+            Dim result = BencodeDecoder.Decode(bstr).Select(Function(node) node.decodeObject()).ToArray
+
+            If result.Length = 1 Then
+                Return result(Scan0)
+            Else
+                Return result
+            End If
+        End Function
+
+        <Extension>
+        Private Function decodeObject(element As BElement) As Object
+            Select Case element.GetType
+                Case GetType(BString)
+                    Return DirectCast(element, BString).Value
+                Case GetType(BInteger)
+                    Return DirectCast(element, BInteger).Value
+                Case GetType(BList)
+                    Dim array As New List(Of Object)
+
+                    For Each item As BElement In DirectCast(element, BList)
+                        array.Add(item.decodeObject)
+                    Next
+
+                    Return array.ToArray
+                Case Else
+                    Dim table As BDictionary = DirectCast(element, BDictionary)
+                    Dim list As New list With {.slots = New Dictionary(Of String, Object)}
+
+                    For Each item In table
+                        list.slots.Add(item.Key.Value, item.Value.decodeObject)
+                    Next
+
+                    Return list
+            End Select
         End Function
 
         <ExportAPI("bencode")>
         <RApiReturn(GetType(String))>
-        Public Function bencode(list As list, Optional env As Environment = Nothing) As Object
-            Dim err As Exception = Nothing
-            Dim encode As BDictionary = bencoder(list, err)
-
-            If Not encode Is Nothing Then
-                Return encode.ToBencodedString
-            Else
-                Return Internal.debug.stop(err, env)
-            End If
-        End Function
-
-        Private Function bencoder(list As list, ByRef err As Exception) As BDictionary
-            Dim encoder As New BDictionary()
-
-            For Each item In list.slots
-                If item.Value Is Nothing Then
-                    encoder.Add(item.Key, New BString(""))
-                ElseIf TypeOf item.Value Is String Then
-                    encoder.Add(item.Key, New BString(DirectCast(item.Value, String)))
-                ElseIf TypeOf item.Value Is Boolean OrElse TypeOf item.Value Is DateTime Then
-                    encoder.Add(item.Key, New BString(Scripting.ToString(item.Value)))
-                ElseIf TypeOf item.Value Is Integer OrElse TypeOf item.Value Is Long OrElse TypeOf item.Value Is Short Then
-                    encoder.Add(item.Key, New BInteger(CInt(item.Value)))
-                ElseIf TypeOf item.Value Is list Then
-                    encoder.Add(item.Key, bencoder(item.Value, err))
-                Else
-                    err = New NotImplementedException(item.Value.GetType.FullName)
-                    Return Nothing
-                End If
-            Next
-
-            Return encoder
+        Public Function bencode(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+            Return ToBEncode(
+                obj:=x,
+                digest:=Function(any) Encoder.DigestRSharpObject(any, env)
+            ).ToBencodedString
         End Function
 
         ''' <summary>
@@ -197,7 +205,13 @@ Namespace Runtime.Internal.Invokes
             Dim type As Type = x.GetType
 
             Try
-                Return JsonContract.GetObjectJson(type, x, indent:=Not compress)
+                Return JsonContract.GetObjectJson(type, x, indent:=Not compress,
+                     knownTypes:={
+                         GetType(Integer),
+                         GetType(Boolean),
+                         GetType(String),
+                         GetType(Dictionary(Of String, Object))
+                     })
             Catch ex As Exception
                 Return debug.stop(ex, env)
             End Try
