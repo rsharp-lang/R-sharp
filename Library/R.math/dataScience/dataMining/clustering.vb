@@ -138,7 +138,13 @@ Module clustering
 
     <ExportAPI("cmeans")>
     <RApiReturn(GetType(FuzzyCMeansEntity))>
-    Public Function fuzzyCMeans(<RRawVectorArgument> dataset As Object, Optional centers% = 3, Optional fuzzification# = 2, Optional env As Environment = Nothing) As Object
+    Public Function fuzzyCMeans(<RRawVectorArgument>
+                                dataset As Object,
+                                Optional centers% = 3,
+                                Optional fuzzification# = 2,
+                                Optional threshold# = 0.001,
+                                Optional env As Environment = Nothing) As Object
+
         Dim data As pipeline = pipeline.TryCreatePipeline(Of DataSet)(dataset, env)
 
         If data.isError Then
@@ -157,7 +163,11 @@ Module clustering
                     End Function) _
             .ToArray
 
-        Call entities.FuzzyCMeans(centers, fuzzificationParameter:=fuzzification)
+        Call entities.FuzzyCMeans(
+            numberOfClusters:=centers,
+            fuzzificationParameter:=fuzzification,
+            threshold:=threshold
+        )
 
         Return entities
     End Function
