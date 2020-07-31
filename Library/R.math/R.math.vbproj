@@ -297,6 +297,10 @@
       <Project>{14e0b048-3a0d-4fd6-aa79-9b815d6f1b30}</Project>
       <Name>ODEsSolver</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Mathematica\SignalProcessing\Signal.IO\Signal.IO.vbproj">
+      <Project>{b08c17b2-7c36-404d-9e51-b3348b286ee6}</Project>
+      <Name>Signal.IO</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Mathematica\SignalProcessing\SignalProcessing\SignalProcessing.vbproj">
       <Project>{83975074-cbe1-4abc-ba91-91d63da156c8}</Project>
       <Name>SignalProcessing</Name>

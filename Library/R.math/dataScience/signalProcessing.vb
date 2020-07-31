@@ -43,6 +43,7 @@
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.csv.IO
+Imports Microsoft.VisualBasic.Data.Signal
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math.SignalProcessing
@@ -74,6 +75,18 @@ Module signalProcessing
             .reference = App.NextTempName,
             .Strength = REnv.asVector(Of Double)(signals)
         }
+    End Function
+
+    <ExportAPI("writeCDF")>
+    <RApiReturn(GetType(Boolean))>
+    Public Function writeCDF(<RRawVectorArgument> signals As Object, file As String, Optional description As String = "no description", Optional env As Environment = Nothing) As Object
+        Dim signalData As pipeline = pipeline.TryCreatePipeline(Of GeneralSignal)(signals, env)
+
+        If signalData.isError Then
+            Return signalData.getError
+        End If
+
+        Return signalData.populates(Of GeneralSignal)(env).WriteCDF(file, description)
     End Function
 
     ''' <summary>
