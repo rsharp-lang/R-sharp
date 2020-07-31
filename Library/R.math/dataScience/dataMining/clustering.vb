@@ -74,7 +74,7 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 ''' <summary>
 ''' R# data clustering tools
 ''' </summary>
-<Package("stats.clustering")>
+<Package("clustering")>
 Module clustering
 
     Sub New()
@@ -110,11 +110,11 @@ Module clustering
 
     Public Function cmeansSummary(cmeans As FuzzyCMeansEntity(), args As list, env As Environment) As Rdataframe
         Dim summary As New Rdataframe With {
-            .rownames = cmeans.Keys
+            .rownames = cmeans.Keys,
+            .columns = New Dictionary(Of String, Array) From {
+                {"cluster", cmeans.Select(Function(e) e.ProbablyMembership).ToArray}
+            }
         }
-        Dim clusters As Integer() = cmeans.Select(Function(e) e.ProbablyMembership).ToArray
-
-        summary.columns.Add("cluster", clusters)
 
         For Each i As Integer In cmeans(Scan0).Memberships.Keys
             summary.columns.Add("cluster" & i, cmeans.Select(Function(e) e.Memberships(i)).ToArray)
