@@ -112,12 +112,12 @@ Module clustering
         Dim summary As New Rdataframe With {
             .rownames = cmeans.Keys,
             .columns = New Dictionary(Of String, Array) From {
-                {"cluster", cmeans.Select(Function(e) e.ProbablyMembership).ToArray}
+                {"cluster", cmeans.Select(Function(e) e.probablyMembership).ToArray}
             }
         }
 
-        For Each i As Integer In cmeans(Scan0).Memberships.Keys
-            summary.columns.Add("cluster" & i, cmeans.Select(Function(e) e.Memberships(i)).ToArray)
+        For Each i As Integer In cmeans(Scan0).memberships.Keys
+            summary.columns.Add("cluster" & i, cmeans.Select(Function(e) e.memberships(i)).ToArray)
         Next
 
         Return summary
@@ -158,7 +158,7 @@ Module clustering
                         Return New FuzzyCMeansEntity With {
                             .entityVector = d(propertyNames),
                             .uid = d.ID,
-                            .Memberships = New Dictionary(Of Integer, Double)
+                            .memberships = New Dictionary(Of Integer, Double)
                         }
                     End Function) _
             .ToArray
