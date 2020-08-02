@@ -10,3 +10,4 @@ file
 ;
 
 print(file :> read.xlsx(sheetIndex = "SMILES"));
+print(file :> read.xlsx(sheetIndex = "Library"));
