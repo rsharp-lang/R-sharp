@@ -82,6 +82,7 @@ Module Program
     Private Function RunScript(filepath$, args As CommandLine) As Integer
         Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
         Dim silent As Boolean = args("--silent")
+        Dim ignoreMissingStartupPackages As Boolean = args("--ignore-missing-startup-packages")
 
         If args("--debug") Then
             R.debug = True
@@ -97,7 +98,11 @@ Module Program
         ' Call R.LoadLibrary("grDevices")
         ' Call R.LoadLibrary("stats")
         For Each pkgName As String In R.configFile.GetStartupLoadingPackages
-            Call R.LoadLibrary(packageName:=pkgName, silent:=silent)
+            Call R.LoadLibrary(
+                packageName:=pkgName,
+                silent:=silent,
+                ignoreMissingStartupPackages:=ignoreMissingStartupPackages
+            )
         Next
 
         If Not silent Then
