@@ -185,12 +185,12 @@ Namespace Interpreter
         ''' <param name="packageName">
         ''' package namespace or dll module file path
         ''' </param>
-        Public Function LoadLibrary(packageName$, Optional silent As Boolean = False) As RInterpreter
+        Public Function LoadLibrary(packageName$, Optional silent As Boolean = False, Optional ignoreMissingStartupPackages As Boolean = False) As RInterpreter
             If packageName.FileExists Then
                 ' is a dll file
                 Call [Imports].LoadLibrary(packageName, globalEnvir, {"*"})
             Else
-                Dim result As Message = globalEnvir.LoadLibrary(packageName, silent)
+                Dim result As Message = globalEnvir.LoadLibrary(packageName, silent, ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
 
                 If Not result Is Nothing Then
                     Call Internal.debug.PrintMessageInternal(result, globalEnvir)

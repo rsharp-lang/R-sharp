@@ -142,7 +142,7 @@ Namespace Runtime
             _stdout = New RContentOutput(out, env:=env)
         End Sub
 
-        Public Function LoadLibrary(packageName As String, Optional silent As Boolean = False) As Message
+        Public Function LoadLibrary(packageName As String, Optional silent As Boolean = False, Optional ignoreMissingStartupPackages As Boolean = False) As Message
             Dim exception As Exception = Nothing
             Dim package As RPkg = packages.FindPackage(packageName, exception)
 
@@ -159,7 +159,9 @@ Namespace Runtime
             End If
 
             If package Is Nothing Then
-                Return MissingPackage(packageName, exception)
+                If Not ignoreMissingStartupPackages Then
+                    Return MissingPackage(packageName, exception)
+                End If
             Else
                 Return LoadLibrary(package.package, packageName, silent)
             End If

@@ -1,56 +1,56 @@
 ﻿#Region "Microsoft.VisualBasic::8ad8d7aa0819509a25ba9c6e82922fec, Library\R.math\dataScience\dataMining\clustering.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module clustering
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: clusterResultDataFrame, clusterSummary, dbscan, hclust, Kmeans
-    '               showHclust
-    '     Enum dbScanMethods
-    ' 
-    '         dist, hybrid, raw
-    ' 
-    ' 
-    ' 
-    '  
-    ' 
-    ' 
-    ' 
-    ' Class dbscanResult
-    ' 
-    '     Properties: cluster, eps, isseed, MinPts
-    ' 
-    ' /********************************************************************************/
+' Module clustering
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: clusterResultDataFrame, clusterSummary, dbscan, hclust, Kmeans
+'               showHclust
+'     Enum dbScanMethods
+' 
+'         dist, hybrid, raw
+' 
+' 
+' 
+'  
+' 
+' 
+' 
+' Class dbscanResult
+' 
+'     Properties: cluster, eps, isseed, MinPts
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -58,6 +58,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.DataMining.DBSCAN
+Imports Microsoft.VisualBasic.DataMining.FuzzyCMeans
 Imports Microsoft.VisualBasic.DataMining.HierarchicalClustering
 Imports Microsoft.VisualBasic.DataMining.KMeans
 Imports Microsoft.VisualBasic.Language
@@ -73,13 +74,14 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 ''' <summary>
 ''' R# data clustering tools
 ''' </summary>
-<Package("stats.clustering")>
+<Package("clustering")>
 Module clustering
 
     Sub New()
         Call REnv.Internal.generic.add("summary", GetType(EntityClusterModel()), AddressOf clusterSummary)
 
         Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(EntityClusterModel()), AddressOf clusterResultDataFrame)
+        Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(FuzzyCMeansEntity()), AddressOf cmeansSummary)
 
         Call REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of Cluster)(AddressOf showHclust)
     End Sub
@@ -106,6 +108,21 @@ Module clustering
         End If
     End Function
 
+    Public Function cmeansSummary(cmeans As FuzzyCMeansEntity(), args As list, env As Environment) As Rdataframe
+        Dim summary As New Rdataframe With {
+            .rownames = cmeans.Keys,
+            .columns = New Dictionary(Of String, Array) From {
+                {"cluster", cmeans.Select(Function(e) e.probablyMembership).ToArray}
+            }
+        }
+
+        For Each i As Integer In cmeans(Scan0).memberships.Keys
+            summary.columns.Add("cluster" & i, cmeans.Select(Function(e) e.memberships(i)).ToArray)
+        Next
+
+        Return summary
+    End Function
+
     Public Function clusterResultDataFrame(data As EntityClusterModel(), args As list, env As Environment) As Rdataframe
         Dim table As File = data.ToCsvDoc
         Dim matrix As New Rdataframe With {
@@ -117,6 +134,42 @@ Module clustering
         Next
 
         Return matrix
+    End Function
+
+    <ExportAPI("cmeans")>
+    <RApiReturn(GetType(FuzzyCMeansEntity))>
+    Public Function fuzzyCMeans(<RRawVectorArgument>
+                                dataset As Object,
+                                Optional centers% = 3,
+                                Optional fuzzification# = 2,
+                                Optional threshold# = 0.001,
+                                Optional env As Environment = Nothing) As Object
+
+        Dim data As pipeline = pipeline.TryCreatePipeline(Of DataSet)(dataset, env)
+
+        If data.isError Then
+            Return data.getError
+        End If
+
+        Dim raw = data.populates(Of DataSet)(env).ToArray
+        Dim propertyNames As String() = raw.PropertyNames
+        Dim entities As FuzzyCMeansEntity() = raw _
+            .Select(Function(d)
+                        Return New FuzzyCMeansEntity With {
+                            .entityVector = d(propertyNames),
+                            .uid = d.ID,
+                            .memberships = New Dictionary(Of Integer, Double)
+                        }
+                    End Function) _
+            .ToArray
+
+        Call entities.FuzzyCMeans(
+            numberOfClusters:=centers,
+            fuzzificationParameter:=fuzzification,
+            threshold:=threshold
+        )
+
+        Return entities
     End Function
 
     ''' <summary>
