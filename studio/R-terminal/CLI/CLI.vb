@@ -52,6 +52,8 @@ Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.InteropService.SharedORM
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
@@ -219,11 +221,21 @@ Module CLI
     <Extension>
     Private Sub unixMan(pkg As Package, xmldocs As AnnotationDocs, out$)
         Dim annoDocs As ProjectType = xmldocs.GetAnnotations(pkg.package)
+        Dim links As New List(Of NamedValue(Of String))
 
         For Each ref As String In pkg.ls
             Dim symbol As RMethodInfo = pkg.GetFunction(apiName:=ref)
-            Dim docs = xmldocs.GetAnnotations(symbol.GetRawDeclares)
+            Dim docs As ProjectMember = xmldocs.GetAnnotations(symbol.GetRawDeclares)
             Dim help As UnixManPage = UnixManPagePrinter.CreateManPage(symbol, docs)
+
+            links += New NamedValue(Of String) With {
+                .Name = ref,
+                .Value = $"{pkg.namespace}/{ref}.1",
+                .Description = docs _
+                    .Summary _
+                    .LineTokens _
+                    .FirstOrDefault
+            }
 
             Call UnixManPage _
                 .ToString(help, "man page create by R# package system.") _
@@ -240,6 +252,12 @@ Module CLI
                     Call markdown.WriteLine("> " & line)
                 Next
             End If
+
+            Call markdown.WriteLine()
+
+            For Each link As NamedValue(Of String) In links
+                Call markdown.WriteLine($"+ [{link.Name}]({link.Value}) {link.Description}")
+            Next
         End Using
     End Sub
 
