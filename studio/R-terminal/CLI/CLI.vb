@@ -232,9 +232,9 @@ Module CLI
                 .Name = ref,
                 .Value = $"{pkg.namespace}/{ref}.1",
                 .Description = docs _
-                    .Summary _
-                    .LineTokens _
-                    .FirstOrDefault
+                    ?.Summary _
+                    ?.LineTokens _
+                     .FirstOrDefault
             }
 
             Call UnixManPage _
