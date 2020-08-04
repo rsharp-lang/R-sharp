@@ -134,6 +134,25 @@ Namespace Interpreter.SyntaxParser
                 }
 
                 pip = New FunctionInvoke(name, stacktrace, a)
+            ElseIf TypeOf b Is SymbolIndexer Then
+                Dim ref As SymbolIndexer = DirectCast(b, SymbolIndexer)
+
+                If ref.indexType <> SymbolIndexers.nameIndex Then
+                    pip = Nothing
+                Else
+                    ' member of the symbol could be a function
+                    Dim stacktrace As New StackFrame With {
+                        .File = opts.source.fileName,
+                        .Line = "n/a",
+                        .Method = New Method With {
+                            .Method = ref.ToString,
+                            .[Module] = "call_function",
+                            .[Namespace] = "SMRUCC/R#"
+                        }
+                    }
+
+                    pip = New FunctionInvoke(ref, stacktrace, a)
+                End If
             Else
                 pip = Nothing
             End If
