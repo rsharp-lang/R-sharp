@@ -203,6 +203,7 @@ app=""$DIR/{script}""
 cli=""$@""
 
 R# ""$app"" $cli".Replace("{script}", script.FileName)
+        script = script.LineTokens.JoinBy(vbLf)
 
         Return script.SaveTo(bash, utf8).CLICode
     End Function
