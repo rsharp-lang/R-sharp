@@ -58,6 +58,7 @@ Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Interpreter
+Imports Microsoft.VisualBasic.My
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System
@@ -187,6 +188,23 @@ Module CLI
         End Using
 
         Return 0
+    End Function
+
+    <ExportAPI("/bash")>
+    <Usage("/bash --script <run.R>")>
+    Public Function BashRun(args As CommandLine) As Integer
+        Dim script$ = args <= "--script"
+        Dim bash$ = script.ParentPath & "/" & script.BaseName
+        Dim utf8 As Encoding = Encodings.UTF8WithoutBOM.CodePage
+        Dim dirHelper As String = UNIX.GetLocationHelper
+
+        script = dirHelper & vbLf & "
+app=""$DIR/{script}""
+cli=""$@""
+
+R# ""$app"" $cli".Replace("{script}", script.FileName)
+
+        Return script.SaveTo(bash, utf8).CLICode
     End Function
 
     <ExportAPI("--man.1")>

@@ -63,7 +63,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 Return DoStringBinary(Of Boolean)(a, b, Function(x, y) x = y)
             End If
 
-            Return text.Select(Function(s) r.Match(s).Value = s).ToArray
+            Return text _
+                .Select(Function(s) s.IsPattern(r)) _
+                .ToArray
         End Function
 
         Public Function StringBinaryOperator(env As Environment, a As Object, b As Object, [operator] As String) As Object
