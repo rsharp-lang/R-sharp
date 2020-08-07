@@ -85,6 +85,47 @@ Namespace Runtime.Internal.Invokes
     Public Module base
 
         ''' <summary>
+        ''' ### Dimensions of an Object
+        ''' 
+        ''' Retrieve or set the dimension of an object.
+        ''' </summary>
+        ''' <param name="x">an R Object, For example a matrix, array Or data frame.</param>
+        ''' <returns>
+        ''' For the default method, either NULL or a numeric vector, which is 
+        ''' coerced to integer (by truncation).
+        ''' 
+        ''' For an array (and hence in particular, for a matrix) dim retrieves 
+        ''' the dim attribute of the object. It is NULL or a vector of mode 
+        ''' integer.
+        ''' 
+        ''' The replacement method changes the "dim" attribute (provided the New 
+        ''' value Is compatible) And removes any "dimnames" And "names" 
+        ''' attributes.
+        ''' </returns>
+        ''' <remarks>
+        ''' The functions dim and ``dim&lt;-`` are internal generic primitive functions.
+        ''' Dim has a method For ``data.frames``, which returns the lengths Of the 
+        ''' ``row.names`` attribute Of x And Of x (As the numbers Of rows And columns 
+        ''' respectively).
+        ''' </remarks>
+        <ExportAPI("dim")>
+        Public Function [dim](<RRawVectorArgument> x As Object) As Object
+            If x Is Nothing Then
+                Return Nothing
+            ElseIf TypeOf x Is dataframe Then
+                With DirectCast(x, dataframe)
+                    Return { .nrows, .ncols}
+                End With
+            ElseIf TypeOf x Is vector Then
+                Return DirectCast(x, vector).length
+            ElseIf TypeOf x Is Array Then
+                Return DirectCast(x, Array).Length
+            Else
+                Return 1
+            End If
+        End Function
+
+        ''' <summary>
         ''' ### Replicate Elements of Vectors and Lists
         ''' 
         ''' rep replicates the values in x. It is a generic function, 
