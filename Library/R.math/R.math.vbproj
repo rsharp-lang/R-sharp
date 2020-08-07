@@ -213,12 +213,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="dataScience\activation.vb" />
-    <Compile Include="dataScience\machineLearning.vb" />
-    <Compile Include="dataScience\validation.vb" />
     <Compile Include="math.vb" />
-    <Compile Include="dataScience\dataMining\clustering.vb" />
-    <Compile Include="dataScience\signalProcessing.vb" />
+    <Compile Include="signalProcessing.vb" />
     <Compile Include="symbolic.vb" />
     <Compile Include="stats.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
