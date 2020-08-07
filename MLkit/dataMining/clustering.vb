@@ -356,7 +356,7 @@ Module clustering
 
         Select Case method
             Case dbScanMethods.dist
-                x = stats.dist(x)
+                x = x.Euclidean.PopulateRowObjects(Of DataSet).ToArray
                 dist = Function(a, b) a(b.ID)
             Case dbScanMethods.raw
                 Dim all As String() = x.PropertyNames
