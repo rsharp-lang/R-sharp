@@ -261,6 +261,10 @@ R# ""$app"" $cli".Replace("{script}", script.FileName)
                 .SaveTo($"{out}/{pkg.namespace}/{ref}.1", UTF8)
         Next
 
+        If annoDocs Is Nothing Then
+            annoDocs = New ProjectType(New ProjectNamespace(New Project("n/a")))
+        End If
+
         Using markdown As StreamWriter = $"{out}/{pkg.namespace}.md".OpenWriter
             Call markdown.WriteLine("# " & pkg.namespace)
             Call markdown.WriteLine()

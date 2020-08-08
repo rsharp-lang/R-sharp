@@ -13,6 +13,9 @@ R# install.packages('R.plot.dll');
 R# install.packages('R.web.dll');
 R# install.packages('R.math.dll');
 
+R# install.packages('Rstudio.dll');
+R# install.packages('MLkit.dll');
+
 REM finally, view of the summary information about the installed
 REM libraries.
 R# installed.packages();
