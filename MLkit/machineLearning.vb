@@ -363,13 +363,28 @@ Module machineLearning
         Return trainSet.OutputSize
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="ann"></param>
+    ''' <param name="trainingSet"></param>
+    ''' <param name="normalMethod"></param>
+    ''' <param name="attribute">
+    ''' run training for a single output or all of the result output.
+    ''' </param>
+    ''' <returns></returns>
     <ExportAPI("set.trainingSet")>
     Public Function setTrainingSet(ann As TrainingUtils,
                                    trainingSet As StoreProcedure.DataSet,
-                                   Optional normalMethod As Methods = Methods.RelativeScaler) As TrainingUtils
+                                   Optional normalMethod As Methods = Methods.RelativeScaler,
+                                   Optional attribute% = -1) As TrainingUtils
 
         For Each sample As Sample In trainingSet.PopulateNormalizedSamples(method:=normalMethod)
-            Call ann.Add(sample.vector, sample.target)
+            If attribute < 0 Then
+                Call ann.Add(sample.vector, sample.target)
+            Else
+                Call ann.Add(sample.vector, sample.target(attribute))
+            End If
         Next
 
         Return ann
@@ -413,6 +428,9 @@ Module machineLearning
     ''' by default, and you can change the output type to file model by set this parameter value to 
     ''' ``TRUE``. 
     ''' </param>
+    ''' <param name="attribute">
+    ''' run training for a single output or all of the result output.
+    ''' </param>
     ''' <returns></returns>
     <ExportAPI("training.ANN")>
     <RApiReturn(GetType(StoreProcedure.NeuralNetwork), GetType(Network))>
@@ -433,7 +451,8 @@ Module machineLearning
                                    Optional maxIterations As Integer = 10000,
                                    Optional minErr As Double = 0.01,
                                    Optional parallel As Boolean = True,
-                                   Optional outputSnapshot As Boolean = False) As Object
+                                   Optional outputSnapshot As Boolean = False,
+                                   Optional attribute% = -1) As Object
 
         Dim trainingHelper As TrainingUtils = CreateANNTrainer(
             inputSize:=trainSet.Size.Width,

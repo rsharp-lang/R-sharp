@@ -53,7 +53,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 
-<Package("machineLearning.validation", Category:=APICategories.ResearchTools, Publisher:="xie.guigang@gcmodeller.org")>
+<Package("validation", Category:=APICategories.ResearchTools, Publisher:="xie.guigang@gcmodeller.org")>
 Module validation
 
     Sub New()
