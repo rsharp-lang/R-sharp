@@ -18,7 +18,7 @@ print(output);
 
 ANN.training_model(
 	inputSize      = input.size(dataset),
-	outputSize     = output.size(dataset),
+	outputSize     = 1, # output.size(dataset),
 	hiddenSize     = as.integer(strsplit(hiddens, ',')), 
 	learnRate      = 0.125, 
 	momentum       = 0.9, 
