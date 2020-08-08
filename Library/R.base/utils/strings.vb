@@ -49,10 +49,12 @@ Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.MIME.application.json.Javascript
 Imports Microsoft.VisualBasic.MIME.application.xml
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports RHtml = SMRUCC.Rsharp.Runtime.Internal.htmlPrinter
+Imports Rlang = Microsoft.VisualBasic.My.RlangInterop
 
 <Package("stringr", Category:=APICategories.UtilityTools)>
 Module strings
@@ -115,5 +117,15 @@ Module strings
     <Extension>
     Private Function createRObj(json As XmlElement, env As Environment) As Object
 
+    End Function
+
+    <ExportAPI("decode.R_unicode")>
+    Public Function unescapeRUnicode(input As Object, Optional env As Environment = Nothing) As Object
+        Return env.EvaluateFramework(Of String, String)(input, AddressOf Rlang.ProcessingRUniCode)
+    End Function
+
+    <ExportAPI("decode.R_rawstring")>
+    Public Function unescapeRRawstring(input As Object, Optional encoding As Encodings = Encodings.Unicode, Optional env As Environment = Nothing) As Object
+        Return env.EvaluateFramework(Of String, String)(input, Function(str) Rlang.ProcessingRRawUniCode(str, encoding))
     End Function
 End Module
