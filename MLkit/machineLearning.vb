@@ -469,7 +469,11 @@ Module machineLearning
          .SetSelective(opt:=selectiveMode)
 
         For Each sample As Sample In trainSet.PopulateNormalizedSamples(method:=normalMethod)
-            Call trainingHelper.Add(sample.vector, sample.target)
+            If attribute < 0 Then
+                Call trainingHelper.Add(sample.vector, sample.target)
+            Else
+                Call trainingHelper.Add(sample.vector, sample.target(attribute))
+            End If
         Next
 
         Helpers.MaxEpochs = maxIterations
