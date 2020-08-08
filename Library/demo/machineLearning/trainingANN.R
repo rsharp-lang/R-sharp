@@ -1,8 +1,8 @@
-imports "machineLearning" from "R.math";
+imports "machineLearning" from "MLkit";
 
 options(progress_bar = "disabled");
 
-let inputFile as string = ?"--data"   || "D:\biodeep\biodeepdb_v3\Rscript\metacluster\training.XML";
+let inputFile as string = ?"--data"   || stop("no training data set was provided!");
 let output as string    = ?"--save"   || `${dirname(inputFile)}/${basename(inputFile)}.trainingResult/`;
 let maxLoops as integer = ?"--loops"  || 10000;
 let hiddens as string   = ?"--hidden" || "120,300,200,20";
