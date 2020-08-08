@@ -27,7 +27,7 @@ ANN.training_model(
 	outputSnapshot = TRUE	
 )
 :> configuration(softmax = FALSE, selectiveMode = TRUE)
-:> set.trainingSet(dataset)
+:> set.trainingSet(dataset, attribute = 0)
 :> training(maxIterations  = maxLoops)
 :> write.ANN_network(output)
 ;
