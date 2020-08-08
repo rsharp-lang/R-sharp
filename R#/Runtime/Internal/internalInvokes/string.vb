@@ -53,9 +53,9 @@
 Imports System.IO
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
+Imports System.Text
 Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Net.Http
@@ -66,7 +66,7 @@ Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports SMRUCC.Rsharp.System.Components
+Imports encoder = SMRUCC.Rsharp.System.Components.Encoder
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 Imports VBStr = Microsoft.VisualBasic.Strings
 Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
@@ -178,7 +178,7 @@ Namespace Runtime.Internal.Invokes
         Public Function bencode(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
             Return ToBEncode(
                 obj:=x,
-                digest:=Function(any) Encoder.DigestRSharpObject(any, env)
+                digest:=Function(any) encoder.DigestRSharpObject(any, env)
             ).ToBencodedString
         End Function
 
@@ -199,7 +199,7 @@ Namespace Runtime.Internal.Invokes
             If x Is Nothing Then
                 Return "null"
             Else
-                x = Encoder.GetObject(x)
+                x = encoder.GetObject(x)
             End If
 
             Dim type As Type = x.GetType
@@ -217,6 +217,12 @@ Namespace Runtime.Internal.Invokes
             End Try
         End Function
 
+        ''' <summary>
+        ''' encode byte stream into base64 string
+        ''' </summary>
+        ''' <param name="raw"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("base64")>
         <RApiReturn(GetType(Byte))>
         Public Function base64(<RRawVectorArgument> raw As Object, Optional env As Environment = Nothing) As Object
@@ -234,6 +240,27 @@ Namespace Runtime.Internal.Invokes
                 End If
             Else
                 Return bytes.populates(Of Byte)(env).ToBase64String
+            End If
+        End Function
+
+        ''' <summary>
+        ''' decode base64 string as text or the raw bytes buffer object.
+        ''' </summary>
+        ''' <param name="base64">a string in base64 encode pattern</param>
+        ''' <param name="asText_encoding">if this parameter is not nothing, then the output will be convert as text</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("base64_decode")>
+        <RApiReturn(GetType(String), GetType(Byte))>
+        Public Function base64Decode(base64 As String, Optional asText_encoding As Object = Nothing, Optional env As Environment = Nothing) As Object
+            If Not asText_encoding Is Nothing Then
+                ' decode as string
+                Dim encoding As Encoding = GetEncoding(asText_encoding)
+                Dim raw As Byte() = base64.Base64RawBytes
+
+                Return encoding.GetString(raw)
+            Else
+                Return New MemoryStream(base64.Base64RawBytes)
             End If
         End Function
 
