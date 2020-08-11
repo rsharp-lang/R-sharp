@@ -114,9 +114,25 @@ Module dataframe
         Return $"${id} {length} slots {{{keys.Take(3).JoinBy(", ")}..."
     End Function
 
+    ''' <summary>
+    ''' raw dataframe to rows
+    ''' </summary>
+    ''' <param name="file"></param>
+    ''' <returns></returns>
     <ExportAPI("rows")>
     Public Function rows(file As File) As RowObject()
         Return file.ToArray
+    End Function
+
+    ''' <summary>
+    ''' raw dataframe get column data by index
+    ''' </summary>
+    ''' <param name="file"></param>
+    ''' <param name="index"></param>
+    ''' <returns></returns>
+    <ExportAPI("column")>
+    Public Function column(file As File, index As Integer) As String()
+        Return file.Column(index).ToArray
     End Function
 
     <ExportAPI("cells")>
