@@ -337,7 +337,12 @@ Namespace Runtime.Internal.Invokes
 
         <ExportAPI("dir.create")>
         Public Function dirCreate(path$, Optional showWarnings As Boolean = True, Optional recursive As Boolean = False, Optional mode$ = "0777") As Boolean
+            If showWarnings AndAlso path.DirectoryExists Then
+
+            End If
+
             Call path.MkDIR
+
             Return True
         End Function
 

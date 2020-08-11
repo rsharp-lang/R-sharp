@@ -115,6 +115,10 @@ Namespace Runtime.Internal.Object
                     End If
                 End If
 
+                If Not model Is GetType(vbObject) AndAlso TypeOf obj Is vbObject Then
+                    obj = DirectCast(obj, vbObject).target
+                End If
+
                 Call buffer.SetValue(obj, CInt(i))
 
                 If ++i = buffer.Length Then

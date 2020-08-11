@@ -93,9 +93,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 tright = RType.GetRSharpType(b.GetType)
             End If
 
-            If tleft.raw Like RType.characters OrElse tright.raw Like RType.characters Then
+            ' tleft/tright will be nothing if the element type is void type
+            If tleft?.raw Like RType.characters OrElse tright?.raw Like RType.characters Then
                 Return StringBinaryOperator(envir, a, b, [operator])
-            ElseIf tleft.raw Like RType.logicals AndAlso tright.raw Like RType.logicals Then
+            ElseIf tleft?.raw Like RType.logicals AndAlso tright?.raw Like RType.logicals Then
                 Select Case [operator]
                     Case "=="
                         Return Runtime.Core.BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
