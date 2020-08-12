@@ -104,6 +104,23 @@ Module machineLearning
         Return x.DataSamples.items
     End Function
 
+    <ExportAPI("add_samples")>
+    <RApiReturn(GetType(StoreProcedure.DataSet))>
+    Public Function addSamples(x As StoreProcedure.DataSet,
+                               <RRawVectorArgument>
+                               samples As Object,
+                               Optional estimateQuantile As Boolean = True,
+                               Optional env As Environment = Nothing) As Object
+
+        Dim sampleList = pipeline.TryCreatePipeline(Of Sample)(samples, env)
+
+        If sampleList.isError Then
+            Return sampleList.getError
+        End If
+
+        Return StoreProcedure.DataSet.JoinSamples(x, sampleList.populates(Of Sample)(env), estimateQuantile)
+    End Function
+
     ''' <summary>
     ''' convert machine learning dataset to dataframe table.
     ''' </summary>
