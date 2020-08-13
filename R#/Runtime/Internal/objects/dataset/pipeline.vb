@@ -193,18 +193,29 @@ Namespace Runtime.Internal.Object
                     Return Internal.debug.stop(Message.InCompatibleType(GetType(T), DirectCast(upstream, vector).elementType.raw, env), env)
                 End If
             ElseIf TypeOf upstream Is Object() Then
-                Dim objs = DirectCast(upstream, Object())
-                Dim type As Type = MeasureRealElementType(objs)
-
-                If type Is GetType(T) Then
-                    Return New pipeline(objs, RType.GetRSharpType(type))
-                Else
-                    Return Internal.debug.stop(Message.InCompatibleType(GetType(T), type, env), env)
-                End If
+                Return TryCastObjectVector(Of T)(DirectCast(upstream, Object()), env)
             ElseIf GetType(T) Is GetType(Object) Then
                 Return CreateFromPopulator(Of T)({upstream})
+            ElseIf TypeOf upstream Is list Then
+                ' unlist
+                Return DirectCast(upstream, list).slots _
+                    .Values _
+                    .ToArray _
+                    .DoCall(Function(ls)
+                                Return TryCastObjectVector(Of T)(ls, env)
+                            End Function)
             Else
                 Return Internal.debug.stop(Message.InCompatibleType(GetType(T), upstream.GetType, env), env)
+            End If
+        End Function
+
+        Private Shared Function TryCastObjectVector(Of T)(objs As Object(), env As Environment) As pipeline
+            Dim type As Type = MeasureRealElementType(objs)
+
+            If type Is GetType(T) Then
+                Return New pipeline(objs, RType.GetRSharpType(type))
+            Else
+                Return Internal.debug.stop(Message.InCompatibleType(GetType(T), type, env), env)
             End If
         End Function
 
