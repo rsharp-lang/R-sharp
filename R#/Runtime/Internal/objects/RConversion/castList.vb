@@ -110,7 +110,7 @@ Namespace Runtime.Internal.Object.Converts
                 Dim list As list = DirectCast(obj, dataframe).listByRows
 
                 If Not names.StringEmpty Then
-                    If list.hasName(names) Then
+                    If DirectCast(obj, dataframe).hasName(names) Then
                         obj = list.setNames(DirectCast(obj, dataframe).columns(names), env)
 
                         If TypeOf obj Is Message Then

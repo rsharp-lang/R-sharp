@@ -85,7 +85,7 @@ Namespace Runtime.Internal.Object
             Next
         End Sub
 
-        Public Function hasName(name As String) As Boolean
+        Public Function hasName(name As String) As Boolean Implements RNames.hasName
             Return slots.ContainsKey(name)
         End Function
 
