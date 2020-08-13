@@ -495,7 +495,7 @@ RE0:
         ''' <param name="args">
         ''' for dataframe type:
         ''' 
-        ''' ``byRow``: logical, default is FALSE, means cast dataframe to list directly by column hash table values
+        ''' ``byrow``: logical, default is FALSE, means cast dataframe to list directly by column hash table values
         ''' </param>
         ''' <returns></returns>
         <ExportAPI("as.list")>
