@@ -87,6 +87,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Me.value = value
         End Sub
 
+        ''' <summary>
+        ''' create a string literal
+        ''' </summary>
+        ''' <param name="value"></param>
         Sub New(value As String)
             Me.m_type = TypeCodes.string
             Me.value = value

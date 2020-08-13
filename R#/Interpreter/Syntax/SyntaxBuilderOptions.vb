@@ -54,11 +54,29 @@ Namespace Interpreter.SyntaxParser
         Public source As Rscript
         Public [error] As String
 
+        Public isBuildVector As Boolean
+
         Public ReadOnly Property haveSyntaxErr As Boolean
             Get
                 Return Not [error].StringEmpty
             End Get
         End Property
+
+        Public Function Clone() As SyntaxBuilderOptions
+            Return New SyntaxBuilderOptions With {
+                .debug = debug,
+                .[error] = [error],
+                .isBuildVector = isBuildVector,
+                .source = source
+            }
+        End Function
+
+        Public Function UsingVectorBuilder(produce As Func(Of SyntaxBuilderOptions, SyntaxResult)) As SyntaxResult
+            Dim newClone As SyntaxBuilderOptions = Clone()
+            newClone.isBuildVector = True
+            Dim result As SyntaxResult = produce(newClone)
+            Return result
+        End Function
 
         Public Function GetStackTrace(token As Token, Optional name$ = Nothing) As StackFrame
             Return New StackFrame With {
