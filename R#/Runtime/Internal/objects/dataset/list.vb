@@ -106,6 +106,12 @@ Namespace Runtime.Internal.Object
         '    _slots(name) = value
         'End Sub
 
+        ''' <summary>
+        ''' 出错会返回错误消息
+        ''' </summary>
+        ''' <param name="names"></param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         Public Function setNames(names() As String, envir As Environment) As Object Implements RNames.setNames
             Dim oldNames = slots.Keys.ToArray
             Dim newSlots As Dictionary(Of String, Object)
