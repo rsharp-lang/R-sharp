@@ -380,11 +380,11 @@ Module machineLearning
     ''' </param>
     ''' <returns></returns>
     <ExportAPI("configuration")>
-    Public Function configuration(util As TrainingUtils,
+    Public Function configuration(util As ANNTrainer,
                                   Optional softmax As Boolean? = Nothing,
                                   Optional selectiveMode As Boolean? = Nothing,
                                   Optional dropout As Double? = Nothing,
-                                  Optional snapshotLocation As String = "NA") As TrainingUtils
+                                  Optional snapshotLocation As String = "NA") As ANNTrainer
 
         If Not softmax Is Nothing Then
             util = util.SetLayerNormalize(opt:=softmax)
@@ -423,10 +423,10 @@ Module machineLearning
     ''' </param>
     ''' <returns></returns>
     <ExportAPI("set.trainingSet")>
-    Public Function setTrainingSet(ann As TrainingUtils,
+    Public Function setTrainingSet(ann As ANNTrainer,
                                    trainingSet As StoreProcedure.DataSet,
                                    Optional normalMethod As Methods = Methods.RelativeScaler,
-                                   Optional attribute% = -1) As TrainingUtils
+                                   Optional attribute% = -1) As ANNTrainer
 
         For Each sample As Sample In trainingSet.PopulateNormalizedSamples(method:=normalMethod)
             If attribute < 0 Then
@@ -440,10 +440,10 @@ Module machineLearning
     End Function
 
     <ExportAPI("training")>
-    Public Function runANNTraining(training As TrainingUtils,
+    Public Function runANNTraining(training As ANNTrainer,
                                    Optional maxIterations As Integer = 10000,
                                    Optional minErr As Double = 0.01,
-                                   Optional parallel As Boolean = True) As TrainingUtils
+                                   Optional parallel As Boolean = True) As ANNTrainer
 
         Helpers.MaxEpochs = maxIterations
         Helpers.MinimumError = minErr
