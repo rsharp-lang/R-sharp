@@ -362,12 +362,18 @@ Module machineLearning
     Public Function configuration(ann As TrainingUtils,
                                   Optional softmax As Boolean = True,
                                   Optional selectiveMode As Boolean = False,
-                                  Optional dropout As Double = 0) As TrainingUtils
-
-        Return ann _
+                                  Optional dropout As Double = 0,
+                                  Optional snapshotLocation As String = "NA") As TrainingUtils
+        Dim util = ann _
             .SetLayerNormalize(opt:=softmax) _
             .SetDropOut(percentage:=dropout) _
             .SetSelective(opt:=selectiveMode)
+
+        If Not snapshotLocation = "NA" Then
+            util.SetSnapshotLocation(snapshotLocation)
+        End If
+
+        Return util
     End Function
 
     <ExportAPI("input.size")>
