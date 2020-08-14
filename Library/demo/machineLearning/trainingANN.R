@@ -32,10 +32,11 @@ ANN.training_model(
 	momentum       = 0.9, 
 	minErr         = 0.05, 
 	parallel       = TRUE,
-	outputSnapshot = TRUE	
+	outputSnapshot = TRUE,
+	truncate       = 1	
 )
 :> configuration(softmax = FALSE, selectiveMode = TRUE)
 :> set.trainingSet(dataset, attribute = attr)
-:> training(maxIterations  = maxLoops)
+:> training(maxIterations = maxLoops)
 :> write.ANN_network(output)
 ;
