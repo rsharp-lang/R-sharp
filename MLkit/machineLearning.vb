@@ -121,30 +121,14 @@ Module machineLearning
         Return StoreProcedure.DataSet.JoinSamples(x, sampleList.populates(Of Sample)(env), estimateQuantile)
     End Function
 
-    ''' <summary>
-    ''' convert machine learning dataset to dataframe table.
-    ''' </summary>
-    ''' <param name="x"></param>
-    ''' <param name="markOuput"></param>
-    ''' <returns></returns>
-    <ExportAPI("as.tabular")>
-    Public Function Tabular(x As StoreProcedure.DataSet, Optional markOuput As Boolean = True) As DataTable()
-        Return x.ToTable(markOuput).ToArray
-    End Function
-
-    ''' <summary>
-    ''' read the dataset for training the machine learning model
-    ''' </summary>
-    ''' <param name="file"></param>
-    ''' <returns></returns>
-    <ExportAPI("read.ML_model")>
-    Public Function readModelDataset(file As String) As StoreProcedure.DataSet
-        Return file.LoadXml(Of StoreProcedure.DataSet)
-    End Function
-
     <ExportAPI("read.ANN_network")>
     Public Function readANNModel(file As String) As NeuralNetwork
         Return NeuralNetwork.LoadModel(file)
+    End Function
+
+    <ExportAPI("load.parallel_ANN")>
+    Public Function loadParallelANN(dir As String)
+
     End Function
 
     <ExportAPI("as.ANN")>

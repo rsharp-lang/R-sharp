@@ -189,6 +189,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="activation.vb" />
+    <Compile Include="datasetKit.vb" />
     <Compile Include="zzz.vb" />
     <Compile Include="dataMining\clustering.vb" />
     <Compile Include="machineLearning.vb" />
