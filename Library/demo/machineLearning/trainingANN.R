@@ -1,12 +1,15 @@
 imports "machineLearning" from "MLkit";
 
+# demo script for running ANN model training
+
 options(progress_bar = "disabled");
 
-let inputFile as string = ?"--data"   || stop("no training data set was provided!");
-let output as string    = ?"--save"   || `${dirname(inputFile)}/${basename(inputFile)}_ANN/`;
-let maxLoops as integer = ?"--loops"  || 10000;
-let hiddens as string   = ?"--hidden" || "120,300,200,20";
-let attr as string      = ?"--attr";
+let inputFile as string    = ?"--data"   || stop("no training data set was provided!");
+let output as string       = ?"--save"   || `${dirname(inputFile)}/${basename(inputFile)}_ANN/`;
+let maxLoops as integer    = ?"--loops"  || 10000;
+let hiddens as string      = ?"--hidden" || "120,300,200,20";
+let attr as string         = ?"--attr";
+let dropout.rate as double = 0;
 let dataset = inputFile
 :> read.ML_model
 ;
@@ -30,13 +33,18 @@ ANN.training_model(
 	hiddenSize     = as.integer(strsplit(hiddens, ',')), 
 	learnRate      = 0.125, 
 	momentum       = 0.9, 
-	minErr         = 0.05, 
-	parallel       = TRUE,
-	outputSnapshot = TRUE	
+	minErr         = 0.05, 	
+	outputSnapshot = TRUE,
+	truncate       = -1	
 )
-:> configuration(softmax = FALSE, selectiveMode = TRUE)
+:> configuration(softmax = FALSE)
+:> configuration(selectiveMode = TRUE)
+:> configuration(dropout = dropout.rate)
 :> configuration(snapshotLocation = output)
 :> set.trainingSet(dataset, attribute = attr)
-:> training(maxIterations  = maxLoops)
+:> training(
+	maxIterations = maxLoops, 
+	parallel      = TRUE
+)
 :> write.ANN_network(output)
 ;
