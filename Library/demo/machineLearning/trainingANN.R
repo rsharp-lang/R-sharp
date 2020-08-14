@@ -3,7 +3,7 @@ imports "machineLearning" from "MLkit";
 options(progress_bar = "disabled");
 
 let inputFile as string = ?"--data"   || stop("no training data set was provided!");
-let output as string    = ?"--save"   || `${dirname(inputFile)}/${basename(inputFile)}.trainingResult/`;
+let output as string    = ?"--save"   || `${dirname(inputFile)}/${basename(inputFile)}_ANN/`;
 let maxLoops as integer = ?"--loops"  || 10000;
 let hiddens as string   = ?"--hidden" || "120,300,200,20";
 let attr as string      = ?"--attr";
@@ -35,6 +35,7 @@ ANN.training_model(
 	outputSnapshot = TRUE	
 )
 :> configuration(softmax = FALSE, selectiveMode = TRUE)
+:> configuration(snapshotLocation = output)
 :> set.trainingSet(dataset, attribute = attr)
 :> training(maxIterations  = maxLoops)
 :> write.ANN_network(output)
