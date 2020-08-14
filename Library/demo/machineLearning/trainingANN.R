@@ -1,4 +1,4 @@
-imports "machineLearning" from "MLkit";
+imports ["dataset", "machineLearning"] from "MLkit";
 
 # demo script for running ANN model training
 
