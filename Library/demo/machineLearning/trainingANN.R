@@ -35,7 +35,9 @@ ANN.training_model(
 	outputSnapshot = TRUE,
 	truncate       = 1	
 )
-:> configuration(softmax = FALSE, selectiveMode = TRUE)
+:> configuration(softmax = FALSE)
+:> configuration(selectiveMode = TRUE)
+:> configuration(dropout = 0.2)
 :> configuration(snapshotLocation = output)
 :> set.trainingSet(dataset, attribute = attr)
 :> training(maxIterations = maxLoops)

@@ -357,6 +357,9 @@ Module machineLearning
     ''' Apply configuration on the ANN training model.
     ''' </summary>
     ''' <param name="util"></param>
+    ''' <param name="dropout">
+    ''' a percentage value range in [0,1].
+    ''' </param>
     ''' <returns></returns>
     <ExportAPI("configuration")>
     Public Function configuration(util As TrainingUtils,
