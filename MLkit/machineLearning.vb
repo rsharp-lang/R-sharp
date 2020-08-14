@@ -243,11 +243,12 @@ Module machineLearning
     ''' save a trained ANN network model into a given xml files.
     ''' </summary>
     ''' <param name="model"></param>
-    ''' <param name="file">the xml file path</param>
+    ''' <param name="file">the xml file path or directory path.</param>
     ''' <param name="scattered"></param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("write.ANN_network")>
+    <RApiReturn(GetType(Boolean))>
     Public Function writeANNNetwork(model As Object, file$, Optional scattered As Boolean = True, Optional env As Environment = Nothing) As Object
         If model Is Nothing Then
             Return False
@@ -255,6 +256,9 @@ Module machineLearning
             model = StoreProcedure.NeuralNetwork.Snapshot(DirectCast(model, Network))
         ElseIf TypeOf model Is TrainingUtils Then
             model = DirectCast(model, TrainingUtils).TakeSnapshot
+        ElseIf TypeOf model Is IndividualParallelTraining Then
+            Call DirectCast(model, IndividualParallelTraining).Snapshot(file)
+            Return True
         ElseIf Not TypeOf model Is NeuralNetwork Then
             Return Internal.debug.stop({
                 $"invalid data type for save: {model.GetType.FullName}",
@@ -328,7 +332,8 @@ Module machineLearning
                                      Optional active As activation = Nothing,
                                      Optional weight0 As Object = "random",
                                      Optional learnRateDecay As Double = 0.0000000001,
-                                     Optional truncate As Double = -1) As TrainingUtils
+                                     Optional truncate As Double = -1,
+                                     Optional split As Boolean = False) As ANNTrainer
         Dim w0 As Func(Of Double)
         Dim sizeVec As Integer() = REnv.asVector(Of Integer)(hiddenSize)
 
@@ -338,14 +343,27 @@ Module machineLearning
             w0 = Helpers.UnifyWeightInitializer(REnv.asVector(Of Double)(weight0).GetValue(Scan0))
         End If
 
-        Dim trainingHelper As New TrainingUtils(
-            inputSize, sizeVec,
-            outputSize,
-            learnRate,
-            momentum,
-            active.CreateActivations,
-            weightInit:=w0
-        )
+        Dim trainingHelper As ANNTrainer
+
+        If split Then
+            trainingHelper = New IndividualParallelTraining(
+                inputSize, sizeVec,
+                outputSize,
+                learnRate,
+                momentum,
+                active.CreateActivations,
+                weightInit:=w0
+            )
+        Else
+            trainingHelper = New TrainingUtils(
+                inputSize, sizeVec,
+                outputSize,
+                learnRate,
+                momentum,
+                active.CreateActivations,
+                weightInit:=w0
+            )
+        End If
 
         trainingHelper.NeuronNetwork.LearnRateDecay = learnRateDecay
         trainingHelper.Truncate = truncate
