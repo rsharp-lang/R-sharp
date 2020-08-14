@@ -155,6 +155,10 @@ Namespace Runtime.Internal.Object
                 .DoCall(AddressOf RType.GetRSharpType)
         End Sub
 
+        Public Function hasName(name As String) As Boolean Implements RNames.hasName
+            Return name Like nameIndex
+        End Function
+
         Public Function getNames() As String() Implements RNames.getNames
             Return names
         End Function

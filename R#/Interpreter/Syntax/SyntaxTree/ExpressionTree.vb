@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::51368805804ddce2980101a8a5387199, R#\Interpreter\Syntax\SyntaxTree\ExpressionTree.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module ExpressionTree
-    ' 
-    '         Function: CreateTree, ObjectInvoke, ParseExpressionTree, simpleSequence
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module ExpressionTree
+' 
+'         Function: CreateTree, ObjectInvoke, ParseExpressionTree, simpleSequence
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -48,6 +48,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.SyntaxParser.SyntaxImplements
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
+Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Interpreter.SyntaxParser
 
@@ -66,6 +67,21 @@ Namespace Interpreter.SyntaxParser
                     ' 是一个复杂的表达式
                     Return blocks(Scan0).ParseExpressionTree(opts)
                 End If
+            ElseIf opts.isBuildVector Then
+                Dim expressions As New List(Of Expression)
+                Dim temp As SyntaxResult
+
+                For i As Integer = 0 To blocks.Count - 1 Step 2
+                    temp = blocks(i).ParseExpressionTree(opts)
+
+                    If temp.isException Then
+                        Return temp
+                    Else
+                        expressions.Add(temp.expression)
+                    End If
+                Next
+
+                Return New VectorLiteral(expressions.ToArray, TypeCodes.generic)
             Else
                 Return New SyntaxResult(New NotImplementedException, opts.debug)
             End If
@@ -97,6 +113,12 @@ Namespace Interpreter.SyntaxParser
                     Return New SymbolReference("$")
                 ElseIf tokens(Scan0).name = TokenType.regexp Then
                     Return New Regexp(tokens(Scan0).text)
+                ElseIf tokens(Scan0).name = TokenType.stringLiteral Then
+                    Return New Literal(tokens(Scan0).text)
+                ElseIf tokens(Scan0).name = TokenType.numberLiteral Then
+                    Return New Literal(Val(tokens(Scan0).text))
+                ElseIf tokens(Scan0).name = TokenType.integerLiteral Then
+                    Return New Literal(CLng(tokens(Scan0).text))
                 Else
                     blocks = New List(Of Token()) From {tokens}
                 End If

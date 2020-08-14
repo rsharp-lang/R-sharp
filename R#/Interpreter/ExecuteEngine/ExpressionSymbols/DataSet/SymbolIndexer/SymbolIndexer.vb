@@ -285,9 +285,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             If obj.GetType Is GetType(list) Then
                 Dim list As list = DirectCast(obj, list)
 
-                If Runtime.isVector(Of String)(indexer) Then
+                If REnv.isVector(Of String)(indexer) Then
                     ' get by names
-                    Return list.getByName(Runtime.asVector(Of String)(indexer))
+                    Return list.getByName(REnv.asVector(Of String)(indexer))
                 Else
                     If TypeOf indexer Is Boolean() OrElse MeasureArrayElementType(indexer) Is GetType(Boolean) Then
                         Dim i As New List(Of Integer)

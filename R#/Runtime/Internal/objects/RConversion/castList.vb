@@ -1,48 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::0e229dd0a6eb035c7f39061886cc5517, R#\Runtime\Internal\objects\RConversion\castList.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module castList
-    ' 
-    '         Function: CTypeList, listInternal, objCastList
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module castList
+' 
+'         Function: CTypeList, listInternal, objCastList
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Object.Converts
@@ -69,7 +71,7 @@ Namespace Runtime.Internal.Object.Converts
             Return table
         End Function
 
-        Friend Function listInternal(obj As Object, args As list) As list
+        Friend Function listInternal(obj As Object, args As list, env As Environment) As Object
             Dim type As Type = obj.GetType
 
             Select Case type
@@ -79,15 +81,9 @@ Namespace Runtime.Internal.Object.Converts
                     Return obj
                 Case GetType(vbObject)
                     ' object property as list data
-                    Return DirectCast(obj, vbObject).objCastList(args)
+                    Return DirectCast(obj, vbObject).objCastList(args, env)
                 Case GetType(dataframe)
-                    Dim byRow As Boolean = REnv.asLogical(args!byrow)(Scan0)
-
-                    If byRow Then
-                        Return DirectCast(obj, dataframe).listByRows
-                    Else
-                        Return DirectCast(obj, dataframe).listByColumns
-                    End If
+                    Return dataframe_castList(obj, args, env)
                 Case Else
                     If type.ImplementInterface(GetType(IDictionary)) Then
                         Dim objList As New Dictionary(Of String, Object)
@@ -100,26 +96,61 @@ Namespace Runtime.Internal.Object.Converts
 
                         Return New list With {.slots = objList}
                     Else
-                        Return New vbObject(obj).objCastList(args)
+                        Return New vbObject(obj).objCastList(args, env)
                     End If
             End Select
         End Function
 
         <Extension>
-        Private Function objCastList(vbobj As vbObject, args As list) As list
-            Dim list As Dictionary(Of String, Object) = vbobj.properties _
-                .ToDictionary(Function(p) p.Key,
-                              Function(p)
-                                  Dim value As Object = p.Value.GetValue(vbobj.target)
+        Private Function dataframe_castList(obj As Object, args As list, env As Environment) As Object
+            Dim byRow As Boolean = REnv.asLogical(args!byrow)(Scan0)
+            Dim names As String = Scripting.ToString(REnv.getFirst(args!names), null:=Nothing)
 
-                                  If value Is Nothing Then
-                                      Return Nothing
-                                  ElseIf TypeOf value Is Array OrElse TypeOf value Is vector Then
-                                      Return value
-                                  Else
-                                      Return listInternal(value, args)
-                                  End If
-                              End Function)
+            If byRow Then
+                Dim list As list = DirectCast(obj, dataframe).listByRows
+
+                If Not names.StringEmpty Then
+                    If DirectCast(obj, dataframe).hasName(names) Then
+                        obj = list.setNames(DirectCast(obj, dataframe).columns(names), env)
+
+                        If TypeOf obj Is Message Then
+                            Return obj
+                        End If
+                    Else
+                        Return Internal.debug.stop({
+                            $"undefined column '{names}' that selected for used as list names!",
+                            $"column: {names}"
+                        }, env)
+                    End If
+                End If
+
+                Return list
+            Else
+                Return DirectCast(obj, dataframe).listByColumns
+            End If
+        End Function
+
+        <Extension>
+        Private Function objCastList(vbobj As vbObject, args As list, env As Environment) As Object
+            Dim list As New Dictionary(Of String, Object)
+
+            For Each p As KeyValuePair(Of String, PropertyInfo) In vbobj.properties
+                Dim value As Object = p.Value.GetValue(vbobj.target)
+
+                If value Is Nothing Then
+                    list.Add(p.Key, Nothing)
+                ElseIf TypeOf value Is Array OrElse TypeOf value Is vector Then
+                    list.Add(p.Key, value)
+                Else
+                    value = listInternal(value, args, env)
+
+                    If TypeOf value Is Message Then
+                        Return value
+                    Else
+                        list.Add(p.Key, value)
+                    End If
+                End If
+            Next
 
             If vbobj.type.haveDynamicsProperty Then
                 Dim dynamic As IDynamicsObject = vbobj.target

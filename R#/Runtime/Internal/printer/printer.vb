@@ -316,9 +316,9 @@ printSingleElement:
         <Extension>
         Friend Function getMaxColumns(env As Environment) As Integer
             If env.globalEnvironment.stdout.env = OutputEnvironments.Html Then
-                Return 200
+                Return 128
             Else
-                Return If(App.IsConsoleApp, Console.WindowWidth, Integer.MaxValue) - 1
+                Return If(App.IsConsoleApp, Console.WindowWidth, Integer.MaxValue) * 0.75
             End If
         End Function
 

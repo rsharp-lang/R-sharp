@@ -67,6 +67,7 @@ Namespace Runtime.Components.Interface
     Public Interface RNames : Inherits IReflector
 
         Function setNames(names As String(), envir As Environment) As Object
+        Function hasName(name As String) As Boolean
     End Interface
 
     Public Interface RIndex

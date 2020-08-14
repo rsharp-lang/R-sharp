@@ -104,6 +104,23 @@ Module machineLearning
         Return x.DataSamples.items
     End Function
 
+    <ExportAPI("add_samples")>
+    <RApiReturn(GetType(StoreProcedure.DataSet))>
+    Public Function addSamples(x As StoreProcedure.DataSet,
+                               <RRawVectorArgument>
+                               samples As Object,
+                               Optional estimateQuantile As Boolean = True,
+                               Optional env As Environment = Nothing) As Object
+
+        Dim sampleList = pipeline.TryCreatePipeline(Of Sample)(samples, env)
+
+        If sampleList.isError Then
+            Return sampleList.getError
+        End If
+
+        Return StoreProcedure.DataSet.JoinSamples(x, sampleList.populates(Of Sample)(env), estimateQuantile)
+    End Function
+
     ''' <summary>
     ''' convert machine learning dataset to dataframe table.
     ''' </summary>
@@ -345,12 +362,18 @@ Module machineLearning
     Public Function configuration(ann As TrainingUtils,
                                   Optional softmax As Boolean = True,
                                   Optional selectiveMode As Boolean = False,
-                                  Optional dropout As Double = 0) As TrainingUtils
-
-        Return ann _
+                                  Optional dropout As Double = 0,
+                                  Optional snapshotLocation As String = "NA") As TrainingUtils
+        Dim util = ann _
             .SetLayerNormalize(opt:=softmax) _
             .SetDropOut(percentage:=dropout) _
             .SetSelective(opt:=selectiveMode)
+
+        If Not snapshotLocation = "NA" Then
+            util.SetSnapshotLocation(snapshotLocation)
+        End If
+
+        Return util
     End Function
 
     <ExportAPI("input.size")>

@@ -495,15 +495,17 @@ RE0:
         ''' <param name="args">
         ''' for dataframe type:
         ''' 
-        ''' ``byRow``: logical, default is FALSE, means cast dataframe to list directly by column hash table values
+        ''' + ``byrow``: logical, default is FALSE, means cast dataframe to list directly by column hash table values
+        ''' + ``names``: character, the column names that will be used as the list names
         ''' </param>
         ''' <returns></returns>
         <ExportAPI("as.list")>
-        Public Function asList(obj As Object, <RListObjectArgument> args As Object, Optional env As Environment = Nothing) As list
+        <RApiReturn(GetType(list))>
+        Public Function asList(obj As Object, <RListObjectArgument> args As Object, Optional env As Environment = Nothing) As Object
             If obj Is Nothing Then
                 Return Nothing
             Else
-                Return listInternal(obj, base.Rlist(args, env))
+                Return listInternal(obj, base.Rlist(args, env), env)
             End If
         End Function
 
