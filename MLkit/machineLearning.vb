@@ -59,6 +59,7 @@ Imports Microsoft.VisualBasic.MachineLearning.NeuralNetwork.StoreProcedure
 Imports Microsoft.VisualBasic.MachineLearning.StoreProcedure
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports DataTable = Microsoft.VisualBasic.Data.csv.IO.DataSet
@@ -127,8 +128,8 @@ Module machineLearning
     End Function
 
     <ExportAPI("load.parallel_ANN")>
-    Public Function loadParallelANN(dir As String)
-
+    Public Function loadParallelANN(dir As String, normalize As NormalizeMatrix, Optional method As Methods = Methods.NormalScaler) As ParallelNetwork
+        Return ParallelNetwork.LoadSnapshot(dir, normalize, method)
     End Function
 
     <ExportAPI("as.ANN")>
@@ -204,8 +205,16 @@ Module machineLearning
     End Function
 
     <ExportAPI("ANN.predict")>
-    Public Function ANNpredict(model As Network, input As Double()) As Object
-        Return model.Compute(input)
+    Public Function ANNpredict(model As Object, input As Double(), Optional env As Environment = Nothing) As Object
+        If model Is Nothing Then
+            Return Internal.debug.stop("the required neuron network can not be nothing!", env)
+        ElseIf TypeOf model Is Network Then
+            Return DirectCast(model, Network).Compute(input)
+        ElseIf TypeOf model Is ParallelNetwork Then
+            Return DirectCast(model, ParallelNetwork).Predicts(input).ToArray
+        Else
+            Return Internal.debug.stop(Message.InCompatibleType(GetType(Network), model.GetType, env), env)
+        End If
     End Function
 
     <ExportAPI("normalize")>
