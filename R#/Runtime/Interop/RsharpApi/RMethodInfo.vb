@@ -184,7 +184,7 @@ Namespace Runtime.Interop
         End Function
 
         Public Function Invoke(envir As Environment, params As InvokeParameter()) As Object Implements RFunction.Invoke
-            Dim parameters As Object()
+            Dim parameters As New List(Of Object)
             Dim apiStackFrame As New StackFrame With {
                 .File = GetRawDeclares.DeclaringType.Assembly.Location.FileName,
                 .Line = "<unknown>",
@@ -197,17 +197,29 @@ Namespace Runtime.Interop
 
             Using env As New Environment(envir, apiStackFrame, isInherits:=True)
                 If listObjectMargin <> ListObjectArgumentMargin.none Then
-                    parameters = RArgumentList.CreateObjectListArguments(Me, env, params).ToArray
+                    For Each value As Object In RArgumentList.CreateObjectListArguments(Me, env, params)
+                        If Program.isException(value) Then
+                            Return value
+                        Else
+                            parameters.Add(value)
+                        End If
+                    Next
                 Else
-                    parameters = InvokeParameter _
+                    For Each value As Object In InvokeParameter _
                         .CreateArguments(env, params, hasObjectList:=False) _
                         .DoCall(Function(args)
                                     Return createNormalArguments(env, args)
-                                End Function) _
-                        .ToArray
+                                End Function)
+
+                        If Program.isException(value) Then
+                            Return value
+                        Else
+                            parameters.Add(value)
+                        End If
+                    Next
                 End If
 
-                Return Invoke(parameters, env)
+                Return Invoke(parameters.ToArray, env)
             End Using
         End Function
 

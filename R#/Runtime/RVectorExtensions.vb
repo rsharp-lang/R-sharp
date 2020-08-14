@@ -1,49 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::178675b58e152d9ee532e8abcb0543b1, R#\Runtime\RVectorExtensions.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module RVectorExtensions
-    ' 
-    '         Function: [single], (+2 Overloads) asVector, createArray, CTypeOfList, fromArray
-    '                   getFirst, isVector
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module RVectorExtensions
+' 
+'         Function: [single], (+2 Overloads) asVector, createArray, CTypeOfList, fromArray
+'                   getFirst, isVector
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
@@ -147,7 +148,7 @@ Namespace Runtime
         ''' <param name="value"></param>
         ''' <param name="type"></param>
         ''' <returns></returns>
-        Public Function asVector(value As Object, type As Type, env As Environment) As Array
+        Public Function asVector(value As Object, type As Type, env As Environment) As Object
             Dim arrayType As Type = type.MakeArrayType
             Dim valueType As Type
 
@@ -184,9 +185,16 @@ Namespace Runtime
         Private Function createArray(type As Type, value As Object, env As Environment) As Object
             Dim src As Array = value
             Dim array As Array = Array.CreateInstance(type, src.Length)
+            Dim castValue As Object
 
             For i As Integer = 0 To array.Length - 1
-                array.SetValue(RCType.CTypeDynamic(src.GetValue(i), type, env), i)
+                castValue = RCType.CTypeDynamic(src.GetValue(i), type, env)
+
+                If Program.isException(castValue) Then
+                    Return castValue
+                Else
+                    Call array.SetValue(castValue, i)
+                End If
             Next
 
             Return array
