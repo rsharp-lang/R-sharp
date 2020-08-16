@@ -380,5 +380,15 @@ Namespace Runtime.Internal.Invokes
 
             Return Nothing
         End Function
+
+        ''' <summary>
+        ''' get a .NET type model from a given VB.NET type full name
+        ''' </summary>
+        ''' <param name="fullName"></param>
+        ''' <returns></returns>
+        <ExportAPI("export")>
+        Public Function [typeof](fullName As String) As RType
+            Return RType.GetRSharpType(Type.GetType(fullName))
+        End Function
     End Module
 End Namespace
