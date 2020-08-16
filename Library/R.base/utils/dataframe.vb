@@ -60,6 +60,8 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports csv = Microsoft.VisualBasic.Data.csv.IO.File
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports RPrinter = SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
+Imports Idataframe = Microsoft.VisualBasic.Data.csv.IO.DataFrame
+Imports Microsoft.VisualBasic.Data.csv.StorageProvider.Reflection
 
 ''' <summary>
 ''' The sciBASIC.NET dataframe api
@@ -117,6 +119,34 @@ Module dataframe
         End If
 
         Return $"${id} {length} slots {{{keys.Take(3).JoinBy(", ")}..."
+    End Function
+
+    ''' <summary>
+    ''' Load .NET objects from a given dataframe data object.
+    ''' </summary>
+    ''' <param name="data"></param>
+    ''' <param name="type"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("as.objects")>
+    <RApiReturn(GetType(vector))>
+    Public Function deserialize(data As csv, type As Object,
+                                Optional strict As Boolean = False,
+                                Optional metaBlank$ = "",
+                                Optional silent As Boolean = True,
+                                Optional env As Environment = Nothing) As Object
+
+        Dim dataframe As Idataframe = Idataframe.CreateObject(data)
+        Dim schema As RType = env.globalEnvironment.GetType(type)
+        Dim result As IEnumerable(Of Object) = dataframe.LoadDataToObject(
+            type:=schema.raw,
+            strict:=strict,
+            metaBlank:=metaBlank,
+            silent:=silent
+        )
+        Dim vector As New vector(schema, result, env)
+
+        Return vector
     End Function
 
     ''' <summary>

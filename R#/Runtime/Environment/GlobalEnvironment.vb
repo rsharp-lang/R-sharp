@@ -120,6 +120,11 @@ Namespace Runtime
             Call types.Add("unit", RType.GetRSharpType(GetType(unit)))
         End Sub
 
+        ''' <summary>
+        ''' get type definition from a given type object or type name
+        ''' </summary>
+        ''' <param name="typeof"></param>
+        ''' <returns></returns>
         Public Overloads Function [GetType]([typeof] As Object) As RType
             If TypeOf [typeof] Is Type Then
                 Return RType.GetRSharpType(DirectCast([typeof], Type))
