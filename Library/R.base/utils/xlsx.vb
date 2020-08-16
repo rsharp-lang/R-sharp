@@ -40,11 +40,9 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.Office.Excel.XML.xl.worksheets
 Imports Microsoft.VisualBasic.Scripting.MetaData
-Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -68,11 +66,13 @@ Module xlsx
     ''' <returns></returns>
     ''' 
     <ExportAPI("read.xlsx")>
-    <RApiReturn(GetType(Rdataframe))>
+    <RApiReturn(GetType(Rdataframe), GetType(csv))>
     Public Function readXlsx(file As Object,
                              Optional sheetIndex$ = "Sheet1",
                              <RRawVectorArgument>
                              Optional row_names As Object = Nothing,
+                             Optional raw As Boolean = False,
+                             Optional check_names As Boolean = True,
                              Optional env As Environment = Nothing) As Object
 
         Dim xlsx As msXlsx
@@ -86,29 +86,12 @@ Module xlsx
         End If
 
         Dim table As csv = xlsx.GetTable(sheetName:=sheetIndex)
-        Dim columns As String()() = table.Columns.ToArray
-        Dim dataframe As New Rdataframe With {
-            .columns = columns _
-                .SafeCreateColumns(Function(col) col(Scan0),
-                                   Function(col)
-                                       Return DirectCast(col.Skip(1).ToArray, Array)
-                                   End Function)
-        }
 
-        If Not row_names Is Nothing Then
-            Dim err As New Value(Of Message)
-
-            row_names = ensureRowNames(row_names, env)
-
-            If Program.isException(row_names) Then
-                Return row_names
-            End If
-            If Not err = dataframe.setRowNames(row_names, env) Is Nothing Then
-                Return err.Value
-            End If
+        If raw Then
+            Return table
+        Else
+            Return table.rawToDataFrame(row_names, check_names, env)
         End If
-
-        Return dataframe
     End Function
 
     <ExportAPI("open.xlsx")>

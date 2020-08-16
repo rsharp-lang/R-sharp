@@ -44,15 +44,14 @@ Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
-Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Text
-Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports csv = Microsoft.VisualBasic.Data.csv.IO.File
 Imports fileStream = System.IO.Stream
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -151,40 +150,9 @@ Public Module utils
 
         If Not TypeOf datafile Is File Then
             Return Internal.debug.stop(datafile, env)
-        End If
-
-        Dim cols() = DirectCast(datafile, File).Columns.ToArray
-        Dim colNames As String() = cols.Select(Function(col) col(Scan0)).ToArray
-
-        If check_names Then
-            colNames = Internal.Invokes.base.makeNames(colNames, unique:=True)
         Else
-            colNames = colNames.uniqueNames
+            Return DirectCast(datafile, csv).rawToDataFrame(row_names, check_names, env)
         End If
-
-        Dim dataframe As New Rdataframe() With {
-            .columns = cols _
-                .SeqIterator _
-                .ToDictionary(Function(col) colNames(col.i),
-                              Function(col)
-                                  Return DirectCast(col.value.Skip(1).ToArray, Array)
-                              End Function)
-        }
-
-        If Not row_names Is Nothing Then
-            Dim err As New Value(Of Message)
-
-            row_names = ensureRowNames(row_names, env)
-
-            If Program.isException(row_names) Then
-                Return row_names
-            End If
-            If Not err = dataframe.setRowNames(row_names, env) Is Nothing Then
-                Return err.Value
-            End If
-        End If
-
-        Return dataframe
     End Function
 
     Public Function ensureRowNames(row_names As Object, env As Environment) As Object

@@ -1,56 +1,61 @@
 ﻿#Region "Microsoft.VisualBasic::8c4cc217cc189c60f45aaf3953dfee56, Library\R.base\utils\dataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module dataframe
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: appendCells, appendRow, cells, colnames, CreateRowObject
-    '               openCsv, printTable, project, readCsvRaw, readDataSet
-    '               rows, RowToString, vector
-    ' 
-    ' /********************************************************************************/
+' Module dataframe
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: appendCells, appendRow, cells, colnames, CreateRowObject
+'               openCsv, printTable, project, readCsvRaw, readDataSet
+'               rows, RowToString, vector
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports csv = Microsoft.VisualBasic.Data.csv.IO.File
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
@@ -112,6 +117,54 @@ Module dataframe
         End If
 
         Return $"${id} {length} slots {{{keys.Take(3).JoinBy(", ")}..."
+    End Function
+
+    ''' <summary>
+    ''' convert the raw csv table object to R dataframe object.
+    ''' </summary>
+    ''' <param name="raw"></param>
+    ''' <returns></returns>
+    <ExportAPI("rawToDataFrame")>
+    <Extension>
+    <RApiReturn(GetType(Rdataframe))>
+    Public Function rawToDataFrame(raw As csv,
+                                   <RRawVectorArgument>
+                                   Optional row_names As Object = Nothing,
+                                   Optional check_names As Boolean = True,
+                                   Optional env As Environment = Nothing) As Object
+
+        Dim cols() = raw.Columns.ToArray
+        Dim colNames As String() = cols.Select(Function(col) col(Scan0)).ToArray
+
+        If check_names Then
+            colNames = Internal.Invokes.base.makeNames(colNames, unique:=True)
+        Else
+            colNames = colNames.uniqueNames
+        End If
+
+        Dim dataframe As New Rdataframe() With {
+            .columns = cols _
+                .SeqIterator _
+                .ToDictionary(Function(col) colNames(col.i),
+                              Function(col)
+                                  Return DirectCast(col.value.Skip(1).ToArray, Array)
+                              End Function)
+        }
+
+        If Not row_names Is Nothing Then
+            Dim err As New Value(Of Message)
+
+            row_names = ensureRowNames(row_names, env)
+
+            If Program.isException(row_names) Then
+                Return row_names
+            End If
+            If Not err = dataframe.setRowNames(row_names, env) Is Nothing Then
+                Return err.Value
+            End If
+        End If
+
+        Return dataframe
     End Function
 
     ''' <summary>
