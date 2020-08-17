@@ -290,6 +290,23 @@ Module clustering
     End Function
 
     ''' <summary>
+    ''' do btree clustering
+    ''' </summary>
+    ''' <param name="d"></param>
+    ''' <param name="equals"></param>
+    ''' <param name="gt"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("btree")>
+    Public Function btree(d As DistanceMatrix, Optional equals As Double = 0.9, Optional gt As Double = 0.7, Optional env As Environment = Nothing) As Object
+        If d Is Nothing Then
+            Return Internal.debug.stop(New NullReferenceException("the given distance matrix object can not be nothing!"), env)
+        End If
+
+
+    End Function
+
+    ''' <summary>
     ''' ### DBSCAN density reachability and connectivity clustering
     ''' 
     ''' Generates a density based clustering of arbitrary shape as 
