@@ -55,6 +55,7 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Algorithm.BinaryTree
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.DataMining.DBSCAN
@@ -74,7 +75,7 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 ''' <summary>
 ''' R# data clustering tools
 ''' </summary>
-<Package("clustering")>
+<Package("clustering", Category:=APICategories.ResearchTools, Publisher:="xie.guigang@live.com")>
 Module clustering
 
     Sub New()
@@ -298,12 +299,35 @@ Module clustering
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("btree")>
-    Public Function btree(d As DistanceMatrix, Optional equals As Double = 0.9, Optional gt As Double = 0.7, Optional env As Environment = Nothing) As Object
+    <RApiReturn(GetType(btreeCluster))>
+    Public Function btreeClusterFUN(d As DistanceMatrix, Optional equals As Double = 0.9, Optional gt As Double = 0.7, Optional env As Environment = Nothing) As Object
         If d Is Nothing Then
             Return Internal.debug.stop(New NullReferenceException("the given distance matrix object can not be nothing!"), env)
         End If
 
+        Dim compares As Comparison(Of String) =
+            Function(x, y) As Integer
+                Dim similarity As Double = d(x, y)
 
+                If similarity >= equals Then
+                    Return 0
+                ElseIf similarity >= gt Then
+                    Return 1
+                Else
+                    Return -1
+                End If
+            End Function
+        Dim btree As New AVLTree(Of String, String)(compares, Function(str) str)
+
+        For Each id As String In d.keys
+            For Each id2 As String In d.keys.Where(Function(a) a <> id)
+                Call btree.Add(id, id2, valueReplace:=False)
+            Next
+        Next
+
+        Dim cluster As btreeCluster = btreeCluster.GetClusters(btree)
+
+        Return cluster
     End Function
 
     ''' <summary>

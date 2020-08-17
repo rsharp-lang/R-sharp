@@ -189,6 +189,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="activation.vb" />
+    <Compile Include="dataMining\btreeCluster.vb" />
     <Compile Include="dataMining\dbscanResult.vb" />
     <Compile Include="datasetKit.vb" />
     <Compile Include="zzz.vb" />
