@@ -151,7 +151,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                             Dim syntaxParts = t.SplitByTopLevelDelimiter(TokenType.operator, False, "=")
 
                             If syntaxParts = 1 Then
-                                Return SyntaxImplements.DeclareNewSymbol(t)
+                                Return SyntaxImplements.DeclareNewSymbol(t, opts)
                             ElseIf syntaxParts = 3 Then
                                 Return SyntaxImplements.DeclareNewSymbol(syntaxParts(0), syntaxParts(2), opts, True)
                             Else
