@@ -52,6 +52,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -65,6 +66,25 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
     ''' </summary>
     <Package("linq", Category:=APICategories.SoftwareTools, Publisher:="xie.guigang@live.com")>
     Module linq
+
+        Sub New()
+            Call generic.add(NameOf(base.summary), GetType(Group), AddressOf groupSummary)
+            Call generic.add(NameOf(base.summary), GetType(Group()), AddressOf groupsSummary)
+        End Sub
+
+        Private Function groupSummary(x As Group, args As list, env As Environment) As Object
+            Return $" '{x.length}' elements with key: " & printer.ValueToString(x.key, env.globalEnvironment)
+        End Function
+
+        Private Function groupsSummary(groups As Group(), args As list, env As Environment) As Object
+            Dim summary As New list With {.slots = New Dictionary(Of String, Object)}
+
+            For Each item As Group In groups
+                summary.slots.Add(Scripting.ToString(item.key), item.length)
+            Next
+
+            Return summary
+        End Function
 
         <ExportAPI("take")>
         Public Function take(<RRawVectorArgument> sequence As Object, n%, Optional env As Environment = Nothing) As Object

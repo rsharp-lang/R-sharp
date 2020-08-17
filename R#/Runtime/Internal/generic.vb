@@ -73,6 +73,12 @@ Namespace Runtime.Internal
 
         ReadOnly generics As New Dictionary(Of String, Dictionary(Of Type, GenericFunction))
 
+        ''' <summary>
+        ''' overloads <paramref name="name"/> = (x As <see cref="Object"/>, args As <see cref="list"/>, env As <see cref="Environment"/>) As <see cref="Object"/>
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <param name="x"></param>
+        ''' <param name="[overloads]"></param>
         Public Sub add(name$, x As Type, [overloads] As GenericFunction)
             If Not generics.ContainsKey(name) Then
                 generics(name) = New Dictionary(Of Type, GenericFunction)
