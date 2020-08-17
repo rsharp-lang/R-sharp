@@ -204,14 +204,18 @@ Namespace Runtime.Internal.Invokes
 
             Dim type As Type = x.GetType
 
+            Static genericTypes As Type() = {
+                GetType(Integer),
+                GetType(Boolean),
+                GetType(String),
+                GetType(Dictionary(Of String, Object)),
+                GetType(Integer()),
+                GetType(Boolean()),
+                GetType(String())
+            }
+
             Try
-                Return JsonContract.GetObjectJson(type, x, indent:=Not compress,
-                     knownTypes:={
-                         GetType(Integer),
-                         GetType(Boolean),
-                         GetType(String),
-                         GetType(Dictionary(Of String, Object))
-                     })
+                Return JsonContract.GetObjectJson(type, x, indent:=Not compress, knownTypes:=genericTypes)
             Catch ex As Exception
                 Return debug.stop(ex, env)
             End Try

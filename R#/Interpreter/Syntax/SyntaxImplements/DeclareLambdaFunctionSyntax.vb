@@ -94,7 +94,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                            .DoCall(Function(exp)
                                        Return "[lambda: " & exp & "]"
                                    End Function)
-                Dim parameter As SyntaxResult = SyntaxImplements.DeclareNewSymbol(tokens(Scan0))
+                Dim parameter As SyntaxResult = SyntaxImplements.DeclareNewSymbol(tokens(Scan0), opts)
                 Dim closure As SyntaxResult = .Skip(2) _
                                               .IteratesALL _
                                               .DoCall(Function(code)

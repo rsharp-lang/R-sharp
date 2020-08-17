@@ -5,6 +5,11 @@ Namespace System.Components
 
     Module Encoder
 
+        ''' <summary>
+        ''' digest R# object as underlying .NET object
+        ''' </summary>
+        ''' <param name="Robj"></param>
+        ''' <returns></returns>
         Public Function GetObject(Robj As Object) As Object
             If TypeOf Robj Is vector Then
                 Dim array As New List(Of Object)
@@ -24,6 +29,8 @@ Namespace System.Components
                 Return list
             ElseIf TypeOf Robj Is vbObject Then
                 Return Encoder.GetObject(DirectCast(Robj, vbObject).target)
+            ElseIf TypeOf Robj Is dataframe Then
+                Return DirectCast(Robj, dataframe).columns
             Else
                 Return Robj
             End If

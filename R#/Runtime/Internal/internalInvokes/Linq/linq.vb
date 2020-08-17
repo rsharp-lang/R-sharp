@@ -1,54 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::8472f16c02253db1dd683d53499f0546, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module linq
-    ' 
-    '         Function: all, any, doWhile, first, groupBy
-    '                   orderBy, projectAs, reverse, runFilterPipeline, runWhichFilter
-    '                   skip, take, unique, where, whichMax
-    '                   whichMin
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module linq
+' 
+'         Function: all, any, doWhile, first, groupBy
+'                   orderBy, projectAs, reverse, runFilterPipeline, runWhichFilter
+'                   skip, take, unique, where, whichMax
+'                   whichMin
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -62,6 +66,25 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
     ''' </summary>
     <Package("linq", Category:=APICategories.SoftwareTools, Publisher:="xie.guigang@live.com")>
     Module linq
+
+        Sub New()
+            Call generic.add(NameOf(base.summary), GetType(Group), AddressOf groupSummary)
+            Call generic.add(NameOf(base.summary), GetType(Group()), AddressOf groupsSummary)
+        End Sub
+
+        Private Function groupSummary(x As Group, args As list, env As Environment) As Object
+            Return $" '{x.length}' elements with key: " & printer.ValueToString(x.key, env.globalEnvironment)
+        End Function
+
+        Private Function groupsSummary(groups As Group(), args As list, env As Environment) As Object
+            Dim summary As New list With {.slots = New Dictionary(Of String, Object)}
+
+            For Each item As Group In groups
+                summary.slots.Add(Scripting.ToString(item.key), item.length)
+            Next
+
+            Return summary
+        End Function
 
         <ExportAPI("take")>
         Public Function take(<RRawVectorArgument> sequence As Object, n%, Optional env As Environment = Nothing) As Object
@@ -340,29 +363,93 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Return Nothing
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="sequence"></param>
+        ''' <param name="getKey"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("groupBy")>
         Private Function groupBy(<RRawVectorArgument>
                                  sequence As Object,
-                                 getKey As RFunction,
-                                 Optional envir As Environment = Nothing) As Object
+                                 Optional getKey As Object = Nothing,
+                                 Optional env As Environment = Nothing) As Object
 
-            Dim source As IEnumerable(Of Object) = Rset.getObjectSet(sequence, envir)
-            Dim result As Group() = source _
-                .GroupBy(Function(o)
-                             Dim arg = InvokeParameter.CreateLiterals(o)
-                             Dim keyVal As Object = Runtime.single(getKey.Invoke(envir, arg))
+            Dim measure = tryKeyBy(getKey, env)
 
-                             Return keyVal
-                         End Function) _
+            If measure Like GetType(Message) Then
+                Return measure.TryCast(Of Message)
+            End If
+
+            Dim err As Message = Nothing
+            Dim projectList = measure.TryCast(Of Func(Of Object, Object)).produceKeyedSequence(sequence, env, err)
+
+            If Not err Is Nothing Then
+                Return err
+            End If
+
+            Dim result As Group() = projectList _
+                .GroupBy(Function(a) a.key) _
                 .Select(Function(group)
                             Return New Group With {
                                 .key = group.Key,
-                                .group = group.ToArray
+                                .group = group.Select(Function(a) a.obj).ToArray
                             }
                         End Function) _
                 .ToArray
 
             Return result
+        End Function
+
+        <Extension>
+        Private Function produceKeyedSequence(keyBy As Func(Of Object, Object), sequence As Object, env As Environment, ByRef err As Message) As IEnumerable(Of (key As Object, obj As Object))
+            Dim projectList As New List(Of (key As Object, obj As Object))
+            Dim key As Object
+
+            For Each item As Object In Rset.getObjectSet(sequence, env)
+                key = keyBy(item)
+
+                If Program.isException(key) Then
+                    err = key
+                    Exit For
+                Else
+                    projectList.Add((key, item))
+                End If
+            Next
+
+            Return projectList
+        End Function
+
+        Private Function tryKeyBy(getKey As Object, env As Environment) As [Variant](Of Message, Func(Of Object, Object))
+            If getKey Is Nothing Then
+                Return New Func(Of Object, Object)(Function(obj) obj)
+            ElseIf TypeOf getKey Is RFunction Then
+                Dim keyFun As RFunction = DirectCast(getKey, RFunction)
+
+                Return New Func(Of Object, Object)(
+                    Function(o)
+                        Dim arg = InvokeParameter.CreateLiterals(o)
+                        Dim keyVal As Object = REnv.single(getKey.Invoke(env, arg))
+
+                        Return keyVal
+                    End Function)
+            ElseIf TypeOf getKey Is String Then
+                Dim listKey As String = DirectCast(getKey, String)
+
+                Return New Func(Of Object, Object)(
+                    Function(o)
+                        If o Is Nothing Then
+                            Return Nothing
+                        ElseIf o.GetType.ImplementInterface(GetType(RNameIndex)) Then
+                            Return REnv.single(DirectCast(o, RNameIndex).getByName(listKey))
+                        Else
+                            Return debug.stop(Message.InCompatibleType(GetType(RNameIndex), o.GetType, env), env)
+                        End If
+                    End Function)
+            Else
+                Return debug.stop(Message.InCompatibleType(GetType(RFunction), getKey.GetType, env), env)
+            End If
         End Function
 
         ''' <summary>
@@ -380,28 +467,29 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                                 Optional desc As Boolean = False,
                                 Optional envir As Environment = Nothing) As Object
 
-            Dim source As Object() = Rset.getObjectSet(sequence, envir).ToArray
-            Dim getKeyFunc As Func(Of Object, Object)
             Dim result As Array
+            Dim measure = tryKeyBy(getKey, envir)
 
-            If getKey Is Nothing Then
-                getKeyFunc = Function(o) o
-            Else
-                getKeyFunc = Function(o)
-                                 Dim arg = InvokeParameter.CreateLiterals(o)
-                                 Dim index As Object = getKey.Invoke(envir, arg)
+            If measure Like GetType(Message) Then
+                Return measure.TryCast(Of Message)
+            End If
 
-                                 Return index
-                             End Function
+            Dim err As Message = Nothing
+            Dim projectList = measure.TryCast(Of Func(Of Object, Object)).produceKeyedSequence(sequence, envir, err)
+
+            If Not err Is Nothing Then
+                Return err
             End If
 
             If desc Then
-                result = source _
-                    .OrderByDescending(Function(o) Runtime.single(getKeyFunc(o))) _
+                result = projectList _
+                    .OrderByDescending(Function(o) o.key) _
+                    .Select(Function(a) a.obj) _
                     .ToArray
             Else
-                result = source _
-                    .OrderBy(Function(o) Runtime.single(getKeyFunc(o))) _
+                result = projectList _
+                    .OrderBy(Function(o) o.key) _
+                    .Select(Function(a) a.obj) _
                     .ToArray
             End If
 

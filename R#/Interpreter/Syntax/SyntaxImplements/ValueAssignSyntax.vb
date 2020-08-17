@@ -51,8 +51,14 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
     Module ValueAssignSyntax
 
         Public Function ValueAssign(tokens As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim targetSymbols = DeclareNewSymbolSyntax _
-                .getNames(tokens(Scan0)) _
+            Dim symbolNames = DeclareNewSymbolSyntax.getNames(tokens(Scan0))
+
+            If symbolNames Like GetType(SyntaxErrorException) Then
+                Return New SyntaxResult(symbolNames.TryCast(Of SyntaxErrorException), opts.debug)
+            End If
+
+            Dim targetSymbols = symbolNames _
+                .TryCast(Of String()) _
                 .Select(Function(name) New Literal(name)) _
                 .ToArray
             Dim isByRef = tokens(Scan0)(Scan0).text = "="
