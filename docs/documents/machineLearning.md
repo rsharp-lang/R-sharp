@@ -4,9 +4,9 @@ R# machine learning library
 
 + [softmax](machineLearning/softmax.1) 
 + [raw_samples](machineLearning/raw_samples.1) 
-+ [as.tabular](machineLearning/as.tabular.1) convert machine learning dataset to dataframe table.
-+ [read.ML_model](machineLearning/read.ML_model.1) read the dataset for training the machine learning model
++ [add_samples](machineLearning/add_samples.1) 
 + [read.ANN_network](machineLearning/read.ANN_network.1) 
++ [load.parallel_ANN](machineLearning/load.parallel_ANN.1) 
 + [as.ANN](machineLearning/as.ANN.1) 
 + [new.ML_model](machineLearning/new.ML_model.1) create a new model dataset
 + [add](machineLearning/add.1) add new training sample into the model dataset

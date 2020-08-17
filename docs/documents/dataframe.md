@@ -2,7 +2,10 @@
 
 The sciBASIC.NET dataframe api
 
-+ [rows](dataframe/rows.1) 
++ [as.objects](dataframe/as.objects.1) Load .NET objects from a given dataframe data object.
++ [rawToDataFrame](dataframe/rawToDataFrame.1) convert the raw csv table object to R dataframe object.
++ [rows](dataframe/rows.1) raw dataframe to rows
++ [column](dataframe/column.1) raw dataframe get column data by index
 + [cells](dataframe/cells.1) 
 + [read.csv.raw](dataframe/read.csv.raw.1) 
 + [open.csv](dataframe/open.csv.1) 

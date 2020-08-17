@@ -3,17 +3,23 @@
 .SH NAME
 configuration \- Apply configuration on the ANN training model.
 .SH SYNOPSIS
-\fIconfiguration(\fBann\fR as <generic> TrainingUtils, 
-\fBsoftmax\fR as boolean = TRUE, 
-\fBselectiveMode\fR as boolean = FALSE, 
-\fBdropout\fR as double = 0);\fR
+\fIconfiguration(\fButil\fR as <generic> ANNTrainer, 
+\fBsoftmax\fR as boolean = \fB<NULL>\fR, 
+\fBselectiveMode\fR as boolean = \fB<NULL>\fR, 
+\fBdropout\fR as double = \fB<NULL>\fR, 
+\fBsnapshotLocation\fR as string = "NA");\fR
 .SH DESCRIPTION
 .PP
 Apply configuration on the ANN training model.
 .PP
 .SH OPTIONS
 .PP
-\fBann\fB \fR\- -
+\fButil\fB \fR\- -
+.PP
+.PP
+\fBdropout\fB \fR\- 
+ a percentage value range in [0,1].
+
 .PP
 .SH SEE ALSO
 machineLearning
