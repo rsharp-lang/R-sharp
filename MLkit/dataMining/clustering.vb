@@ -390,17 +390,6 @@ Module clustering
             .isseed = isseed.Select(Function(i) x(i).ID).ToArray
         }
     End Function
-
-    Public Enum dbScanMethods
-        hybrid
-        raw
-        dist
-    End Enum
 End Module
 
-Public Class dbscanResult
-    Public Property cluster As EntityClusterModel()
-    Public Property isseed As String()
-    Public Property eps As Double
-    Public Property MinPts As Integer
-End Class
+
