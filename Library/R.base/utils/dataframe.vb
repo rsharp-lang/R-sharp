@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8c4cc217cc189c60f45aaf3953dfee56, Library\R.base\utils\dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::b3ab9b03c111241c4c29ee5048bd2b14, Library\R.base\utils\dataframe.vb"
 
     ' Author:
     ' 
@@ -34,27 +34,35 @@
     ' Module dataframe
     ' 
     '     Constructor: (+1 Overloads) Sub New
-    '     Function: appendCells, appendRow, cells, colnames, CreateRowObject
-    '               openCsv, printTable, project, readCsvRaw, readDataSet
-    '               rows, RowToString, vector
+    '     Function: appendCells, appendRow, cells, colnames, column
+    '               CreateRowObject, deserialize, openCsv, printTable, project
+    '               rawToDataFrame, readCsvRaw, readDataSet, rows, RowToString
+    '               vector
     ' 
     ' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports csv = Microsoft.VisualBasic.Data.csv.IO.File
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports RPrinter = SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
+Imports Idataframe = Microsoft.VisualBasic.Data.csv.IO.DataFrame
+Imports Microsoft.VisualBasic.Data.csv.StorageProvider.Reflection
 
 ''' <summary>
 ''' The sciBASIC.NET dataframe api
@@ -114,9 +122,101 @@ Module dataframe
         Return $"${id} {length} slots {{{keys.Take(3).JoinBy(", ")}..."
     End Function
 
+    ''' <summary>
+    ''' Load .NET objects from a given dataframe data object.
+    ''' </summary>
+    ''' <param name="data"></param>
+    ''' <param name="type"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("as.objects")>
+    <RApiReturn(GetType(vector))>
+    Public Function deserialize(data As csv, type As Object,
+                                Optional strict As Boolean = False,
+                                Optional metaBlank$ = "",
+                                Optional silent As Boolean = True,
+                                Optional env As Environment = Nothing) As Object
+
+        Dim dataframe As Idataframe = Idataframe.CreateObject(data)
+        Dim schema As RType = env.globalEnvironment.GetType(type)
+        Dim result As IEnumerable(Of Object) = dataframe.LoadDataToObject(
+            type:=schema.raw,
+            strict:=strict,
+            metaBlank:=metaBlank,
+            silent:=silent
+        )
+        Dim vector As New vector(schema, result, env)
+
+        Return vector
+    End Function
+
+    ''' <summary>
+    ''' convert the raw csv table object to R dataframe object.
+    ''' </summary>
+    ''' <param name="raw"></param>
+    ''' <returns></returns>
+    <ExportAPI("rawToDataFrame")>
+    <Extension>
+    <RApiReturn(GetType(Rdataframe))>
+    Public Function rawToDataFrame(raw As csv,
+                                   <RRawVectorArgument>
+                                   Optional row_names As Object = Nothing,
+                                   Optional check_names As Boolean = True,
+                                   Optional env As Environment = Nothing) As Object
+
+        Dim cols() = raw.Columns.ToArray
+        Dim colNames As String() = cols.Select(Function(col) col(Scan0)).ToArray
+
+        If check_names Then
+            colNames = Internal.Invokes.base.makeNames(colNames, unique:=True)
+        Else
+            colNames = colNames.uniqueNames
+        End If
+
+        Dim dataframe As New Rdataframe() With {
+            .columns = cols _
+                .SeqIterator _
+                .ToDictionary(Function(col) colNames(col.i),
+                              Function(col)
+                                  Return DirectCast(col.value.Skip(1).ToArray, Array)
+                              End Function)
+        }
+
+        If Not row_names Is Nothing Then
+            Dim err As New Value(Of Message)
+
+            row_names = ensureRowNames(row_names, env)
+
+            If Program.isException(row_names) Then
+                Return row_names
+            End If
+            If Not err = dataframe.setRowNames(row_names, env) Is Nothing Then
+                Return err.Value
+            End If
+        End If
+
+        Return dataframe
+    End Function
+
+    ''' <summary>
+    ''' raw dataframe to rows
+    ''' </summary>
+    ''' <param name="file"></param>
+    ''' <returns></returns>
     <ExportAPI("rows")>
     Public Function rows(file As File) As RowObject()
         Return file.ToArray
+    End Function
+
+    ''' <summary>
+    ''' raw dataframe get column data by index
+    ''' </summary>
+    ''' <param name="file"></param>
+    ''' <param name="index"></param>
+    ''' <returns></returns>
+    <ExportAPI("column")>
+    Public Function column(file As File, index As Integer) As String()
+        Return file.Column(index).ToArray
     End Function
 
     <ExportAPI("cells")>

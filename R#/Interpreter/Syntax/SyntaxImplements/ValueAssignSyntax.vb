@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::50a93feee09df0f68a53966d9f603c66, R#\Interpreter\Syntax\SyntaxImplements\ValueAssignSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::f8a156e46fed71546faefc5696e9e981, R#\Interpreter\Syntax\SyntaxImplements\ValueAssignSyntax.vb"
 
     ' Author:
     ' 
@@ -51,8 +51,14 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
     Module ValueAssignSyntax
 
         Public Function ValueAssign(tokens As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim targetSymbols = DeclareNewSymbolSyntax _
-                .getNames(tokens(Scan0)) _
+            Dim symbolNames = DeclareNewSymbolSyntax.getNames(tokens(Scan0))
+
+            If symbolNames Like GetType(SyntaxErrorException) Then
+                Return New SyntaxResult(symbolNames.TryCast(Of SyntaxErrorException), opts.debug)
+            End If
+
+            Dim targetSymbols = symbolNames _
+                .TryCast(Of String()) _
                 .Select(Function(name) New Literal(name)) _
                 .ToArray
             Dim isByRef = tokens(Scan0)(Scan0).text = "="

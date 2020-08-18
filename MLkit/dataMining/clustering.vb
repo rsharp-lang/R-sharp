@@ -1,60 +1,48 @@
-﻿#Region "Microsoft.VisualBasic::8ad8d7aa0819509a25ba9c6e82922fec, Library\R.math\dataScience\dataMining\clustering.vb"
+﻿#Region "Microsoft.VisualBasic::d798215b43ce424b392dff7294514147, MLkit\dataMining\clustering.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-' Module clustering
-' 
-'     Constructor: (+1 Overloads) Sub New
-'     Function: clusterResultDataFrame, clusterSummary, dbscan, hclust, Kmeans
-'               showHclust
-'     Enum dbScanMethods
-' 
-'         dist, hybrid, raw
-' 
-' 
-' 
-'  
-' 
-' 
-' 
-' Class dbscanResult
-' 
-'     Properties: cluster, eps, isseed, MinPts
-' 
-' /********************************************************************************/
+    ' Module clustering
+    ' 
+    '     Constructor: (+1 Overloads) Sub New
+    '     Function: btreeClusterFUN, clusterResultDataFrame, clusterSummary, cmeansSummary, dbscan
+    '               fuzzyCMeans, hclust, Kmeans, showHclust
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Algorithm.BinaryTree
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.DataMining.DBSCAN
@@ -74,7 +62,7 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 ''' <summary>
 ''' R# data clustering tools
 ''' </summary>
-<Package("clustering")>
+<Package("clustering", Category:=APICategories.ResearchTools, Publisher:="xie.guigang@live.com")>
 Module clustering
 
     Sub New()
@@ -290,6 +278,46 @@ Module clustering
     End Function
 
     ''' <summary>
+    ''' do btree clustering
+    ''' </summary>
+    ''' <param name="d"></param>
+    ''' <param name="equals"></param>
+    ''' <param name="gt"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("btree")>
+    <RApiReturn(GetType(btreeCluster))>
+    Public Function btreeClusterFUN(d As DistanceMatrix, Optional equals As Double = 0.9, Optional gt As Double = 0.7, Optional env As Environment = Nothing) As Object
+        If d Is Nothing Then
+            Return Internal.debug.stop(New NullReferenceException("the given distance matrix object can not be nothing!"), env)
+        End If
+
+        Dim compares As Comparison(Of String) =
+            Function(x, y) As Integer
+                Dim similarity As Double = d(x, y)
+
+                If similarity >= equals Then
+                    Return 0
+                ElseIf similarity >= gt Then
+                    Return 1
+                Else
+                    Return -1
+                End If
+            End Function
+        Dim btree As New AVLTree(Of String, String)(compares, Function(str) str)
+
+        For Each id As String In d.keys
+            For Each id2 As String In d.keys.Where(Function(a) a <> id)
+                Call btree.Add(id, id2, valueReplace:=False)
+            Next
+        Next
+
+        Dim cluster As btreeCluster = btreeCluster.GetClusters(btree)
+
+        Return cluster
+    End Function
+
+    ''' <summary>
     ''' ### DBSCAN density reachability and connectivity clustering
     ''' 
     ''' Generates a density based clustering of arbitrary shape as 
@@ -390,17 +418,4 @@ Module clustering
             .isseed = isseed.Select(Function(i) x(i).ID).ToArray
         }
     End Function
-
-    Public Enum dbScanMethods
-        hybrid
-        raw
-        dist
-    End Enum
 End Module
-
-Public Class dbscanResult
-    Public Property cluster As EntityClusterModel()
-    Public Property isseed As String()
-    Public Property eps As Double
-    Public Property MinPts As Integer
-End Class

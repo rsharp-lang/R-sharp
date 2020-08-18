@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::040c09506cade6b352d5a3c22ff9004e, R#\Runtime\Internal\generic.vb"
+﻿#Region "Microsoft.VisualBasic::a939dfd6b809adde1882211c8a9352e5, R#\Runtime\Internal\generic.vb"
 
     ' Author:
     ' 
@@ -73,6 +73,12 @@ Namespace Runtime.Internal
 
         ReadOnly generics As New Dictionary(Of String, Dictionary(Of Type, GenericFunction))
 
+        ''' <summary>
+        ''' overloads <paramref name="name"/> = (x As <see cref="Object"/>, args As <see cref="list"/>, env As <see cref="Environment"/>) As <see cref="Object"/>
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <param name="x"></param>
+        ''' <param name="[overloads]"></param>
         Public Sub add(name$, x As Type, [overloads] As GenericFunction)
             If Not generics.ContainsKey(name) Then
                 generics(name) = New Dictionary(Of Type, GenericFunction)

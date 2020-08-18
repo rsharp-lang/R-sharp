@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a13a962c9170c0f159598cbc50cd2871, R#\Runtime\Environment\GlobalEnvironment.vb"
+﻿#Region "Microsoft.VisualBasic::e34aa1c344cba627a6e4cc29360f249a, R#\Runtime\Environment\GlobalEnvironment.vb"
 
     ' Author:
     ' 
@@ -120,6 +120,11 @@ Namespace Runtime
             Call types.Add("unit", RType.GetRSharpType(GetType(unit)))
         End Sub
 
+        ''' <summary>
+        ''' get type definition from a given type object or type name
+        ''' </summary>
+        ''' <param name="typeof"></param>
+        ''' <returns></returns>
         Public Overloads Function [GetType]([typeof] As Object) As RType
             If TypeOf [typeof] Is Type Then
                 Return RType.GetRSharpType(DirectCast([typeof], Type))

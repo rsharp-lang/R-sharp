@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::51368805804ddce2980101a8a5387199, R#\Interpreter\Syntax\SyntaxTree\ExpressionTree.vb"
+﻿#Region "Microsoft.VisualBasic::a208163cab79489a9635bbe0d7236c18, R#\Interpreter\Syntax\SyntaxTree\ExpressionTree.vb"
 
     ' Author:
     ' 
@@ -48,6 +48,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.SyntaxParser.SyntaxImplements
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
+Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Interpreter.SyntaxParser
 
@@ -66,6 +67,21 @@ Namespace Interpreter.SyntaxParser
                     ' 是一个复杂的表达式
                     Return blocks(Scan0).ParseExpressionTree(opts)
                 End If
+            ElseIf opts.isBuildVector Then
+                Dim expressions As New List(Of Expression)
+                Dim temp As SyntaxResult
+
+                For i As Integer = 0 To blocks.Count - 1 Step 2
+                    temp = blocks(i).ParseExpressionTree(opts)
+
+                    If temp.isException Then
+                        Return temp
+                    Else
+                        expressions.Add(temp.expression)
+                    End If
+                Next
+
+                Return New VectorLiteral(expressions.ToArray, TypeCodes.generic)
             Else
                 Return New SyntaxResult(New NotImplementedException, opts.debug)
             End If
@@ -97,6 +113,12 @@ Namespace Interpreter.SyntaxParser
                     Return New SymbolReference("$")
                 ElseIf tokens(Scan0).name = TokenType.regexp Then
                     Return New Regexp(tokens(Scan0).text)
+                ElseIf tokens(Scan0).name = TokenType.stringLiteral Then
+                    Return New Literal(tokens(Scan0).text)
+                ElseIf tokens(Scan0).name = TokenType.numberLiteral Then
+                    Return New Literal(Val(tokens(Scan0).text))
+                ElseIf tokens(Scan0).name = TokenType.integerLiteral Then
+                    Return New Literal(CLng(tokens(Scan0).text))
                 Else
                     blocks = New List(Of Token()) From {tokens}
                 End If

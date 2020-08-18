@@ -1,46 +1,46 @@
-﻿#Region "Microsoft.VisualBasic::9e20f0990f547779a7ba4ca0e4e9110f, R#\Runtime\Internal\objects\dataset\pipeline.vb"
+﻿#Region "Microsoft.VisualBasic::134d28b56322a729d1afa59325a5b55d, R#\Runtime\Internal\objects\dataset\pipeline.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class pipeline
-' 
-'         Properties: [pipeFinalize], isError, isMessage
-' 
-'         Constructor: (+2 Overloads) Sub New
-'         Function: CreateFromPopulator, createVector, getError, populates, ToString
-'                   TryCreatePipeline
-' 
-' 
-' /********************************************************************************/
+    '     Class pipeline
+    ' 
+    '         Properties: [pipeFinalize], isError, isMessage
+    ' 
+    '         Constructor: (+2 Overloads) Sub New
+    '         Function: CreateFromPopulator, createVector, getError, populates, ToString
+    '                   TryCastObjectVector, TryCreatePipeline
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -193,18 +193,29 @@ Namespace Runtime.Internal.Object
                     Return Internal.debug.stop(Message.InCompatibleType(GetType(T), DirectCast(upstream, vector).elementType.raw, env), env)
                 End If
             ElseIf TypeOf upstream Is Object() Then
-                Dim objs = DirectCast(upstream, Object())
-                Dim type As Type = MeasureRealElementType(objs)
-
-                If type Is GetType(T) Then
-                    Return New pipeline(objs, RType.GetRSharpType(type))
-                Else
-                    Return Internal.debug.stop(Message.InCompatibleType(GetType(T), type, env), env)
-                End If
+                Return TryCastObjectVector(Of T)(DirectCast(upstream, Object()), env)
             ElseIf GetType(T) Is GetType(Object) Then
                 Return CreateFromPopulator(Of T)({upstream})
+            ElseIf TypeOf upstream Is list Then
+                ' unlist
+                Return DirectCast(upstream, list).slots _
+                    .Values _
+                    .ToArray _
+                    .DoCall(Function(ls)
+                                Return TryCastObjectVector(Of T)(ls, env)
+                            End Function)
             Else
                 Return Internal.debug.stop(Message.InCompatibleType(GetType(T), upstream.GetType, env), env)
+            End If
+        End Function
+
+        Private Shared Function TryCastObjectVector(Of T)(objs As Object(), env As Environment) As pipeline
+            Dim type As Type = MeasureRealElementType(objs)
+
+            If type Is GetType(T) Then
+                Return New pipeline(objs, RType.GetRSharpType(type))
+            Else
+                Return Internal.debug.stop(Message.InCompatibleType(GetType(T), type, env), env)
             End If
         End Function
 

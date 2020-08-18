@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1398a4aa265314ac10ec0f7626de1f14, R#\Runtime\Internal\objects\dataset\vector.vb"
+﻿#Region "Microsoft.VisualBasic::d7363632012942e26be9602474821207, R#\Runtime\Internal\objects\dataset\vector.vb"
 
     ' Author:
     ' 
@@ -36,8 +36,8 @@
     '         Properties: data, factor, length, unit
     ' 
     '         Constructor: (+5 Overloads) Sub New
-    '         Function: asVector, (+2 Overloads) getByIndex, getNames, isVectorOf, setByindex
-    '                   setByIndex, setNames, ToString
+    '         Function: asVector, (+2 Overloads) getByIndex, getNames, hasName, isVectorOf
+    '                   setByindex, setByIndex, setNames, ToString
     ' 
     ' 
     ' /********************************************************************************/
@@ -115,6 +115,10 @@ Namespace Runtime.Internal.Object
                     End If
                 End If
 
+                If Not model Is GetType(vbObject) AndAlso TypeOf obj Is vbObject Then
+                    obj = DirectCast(obj, vbObject).target
+                End If
+
                 Call buffer.SetValue(obj, CInt(i))
 
                 If ++i = buffer.Length Then
@@ -150,6 +154,10 @@ Namespace Runtime.Internal.Object
                 .MeasureArrayElementType(data) _
                 .DoCall(AddressOf RType.GetRSharpType)
         End Sub
+
+        Public Function hasName(name As String) As Boolean Implements RNames.hasName
+            Return name Like nameIndex
+        End Function
 
         Public Function getNames() As String() Implements RNames.getNames
             Return names

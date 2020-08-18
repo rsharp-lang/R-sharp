@@ -1,52 +1,54 @@
-﻿#Region "Microsoft.VisualBasic::57d04c426b345937650c837e22a84714, R#\Runtime\Internal\internalInvokes\string.vb"
+﻿#Region "Microsoft.VisualBasic::702eb4d2432890879375d061adec7432, R#\Runtime\Internal\internalInvokes\string.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Module stringr
-' 
-'         Function: [string], Csprintf, grep, html, json
-'                   match, nchar, paste, regexp, sprintfSingle
-'                   str_pad, str_replace, strsplit, xml
-' 
-'     Enum str_padSides
-' 
-'         both, left, right
-' 
-'  
-' 
-' 
-' 
-' 
-' /********************************************************************************/
+    '     Module stringr
+    ' 
+    '         Function: [string], base64, base64Decode, bencode, Csprintf
+    '                   decodeObject, fromBstring, grep, html, json
+    '                   match, nchar, paste, regexp, sprintfSingle
+    '                   str_empty, str_pad, str_replace, strPad_internal, strsplit
+    '                   xml
+    ' 
+    '     Enum str_padSides
+    ' 
+    '         both, left, right
+    ' 
+    '  
+    ' 
+    ' 
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -101,7 +103,7 @@ Namespace Runtime.Internal.Invokes
             ElseIf x.GetType.IsArray Then
                 Return printer.getStrings(x, Nothing, env.globalEnvironment).ToArray
             Else
-                Return printer.ToString(x.GetType, env.globalEnvironment, True)(x)
+                Return printer.ToString(x.GetType, env.globalEnvironment, True, False)(x)
             End If
         End Function
 
@@ -204,14 +206,18 @@ Namespace Runtime.Internal.Invokes
 
             Dim type As Type = x.GetType
 
+            Static genericTypes As Type() = {
+                GetType(Integer),
+                GetType(Boolean),
+                GetType(String),
+                GetType(Dictionary(Of String, Object)),
+                GetType(Integer()),
+                GetType(Boolean()),
+                GetType(String())
+            }
+
             Try
-                Return JsonContract.GetObjectJson(type, x, indent:=Not compress,
-                     knownTypes:={
-                         GetType(Integer),
-                         GetType(Boolean),
-                         GetType(String),
-                         GetType(Dictionary(Of String, Object))
-                     })
+                Return JsonContract.GetObjectJson(type, x, indent:=Not compress, knownTypes:=genericTypes)
             Catch ex As Exception
                 Return debug.stop(ex, env)
             End Try

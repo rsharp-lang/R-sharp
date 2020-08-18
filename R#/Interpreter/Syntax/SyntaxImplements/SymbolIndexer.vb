@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::451c016dc54fd337b3ef0a909f844b7e, R#\Interpreter\Syntax\SyntaxImplements\SymbolIndexer.vb"
+﻿#Region "Microsoft.VisualBasic::583f63867eaac86c4510072ff5e76ef0, R#\Interpreter\Syntax\SyntaxImplements\SymbolIndexer.vb"
 
     ' Author:
     ' 
@@ -75,12 +75,23 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 .ToArray
 
             If tokens.isStackOf("[", "]") Then
+                ' 脱掉最外侧的[]
+                ' 可能为 x[["X"]] 取值
+                ' 也可能为 x[ [a,b,c] ] 取子集
                 tokens = tokens _
                     .Skip(1) _
                     .Take(tokens.Length - 2) _
                     .ToArray
-                indexType = SymbolIndexers.nameIndex
-                index = Expression.CreateExpression(tokens, opts)
+
+                index = opts.UsingVectorBuilder(Function(opt) Expression.CreateExpression(tokens, opt))
+
+                If index.isException Then
+                    Return index
+                ElseIf TypeOf index.expression Is VectorLiteral Then
+                    indexType = SymbolIndexers.vectorIndex
+                Else
+                    indexType = SymbolIndexers.nameIndex
+                End If
             Else
                 Call tokens.parseIndex(index, indexType, opts)
             End If

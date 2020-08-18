@@ -1,50 +1,49 @@
-﻿#Region "Microsoft.VisualBasic::8f13c94a08c54c0ec7b5c423e1d4f6eb, Library\R.base\utils\xlsx.vb"
+﻿#Region "Microsoft.VisualBasic::f25635311cbb0d1d9d27aaa913783e1c, Library\R.base\utils\xlsx.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-' Module xlsx
-' 
-'     Function: createSheet, createWorkbook, readXlsx, writeXlsx
-' 
-' /********************************************************************************/
+    ' Module xlsx
+    ' 
+    '     Function: createSheet, createWorkbook, getSheetNames, openXlsx, readXlsx
+    '               writeXlsx
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.Office.Excel.XML.xl.worksheets
 Imports Microsoft.VisualBasic.Scripting.MetaData
-Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -68,11 +67,13 @@ Module xlsx
     ''' <returns></returns>
     ''' 
     <ExportAPI("read.xlsx")>
-    <RApiReturn(GetType(Rdataframe))>
+    <RApiReturn(GetType(Rdataframe), GetType(csv))>
     Public Function readXlsx(file As Object,
                              Optional sheetIndex$ = "Sheet1",
                              <RRawVectorArgument>
                              Optional row_names As Object = Nothing,
+                             Optional raw As Boolean = False,
+                             Optional check_names As Boolean = True,
                              Optional env As Environment = Nothing) As Object
 
         Dim xlsx As msXlsx
@@ -86,29 +87,12 @@ Module xlsx
         End If
 
         Dim table As csv = xlsx.GetTable(sheetName:=sheetIndex)
-        Dim columns As String()() = table.Columns.ToArray
-        Dim dataframe As New Rdataframe With {
-            .columns = columns _
-                .SafeCreateColumns(Function(col) col(Scan0),
-                                   Function(col)
-                                       Return DirectCast(col.Skip(1).ToArray, Array)
-                                   End Function)
-        }
 
-        If Not row_names Is Nothing Then
-            Dim err As New Value(Of Message)
-
-            row_names = ensureRowNames(row_names, env)
-
-            If Program.isException(row_names) Then
-                Return row_names
-            End If
-            If Not err = dataframe.setRowNames(row_names, env) Is Nothing Then
-                Return err.Value
-            End If
+        If raw Then
+            Return table
+        Else
+            Return table.rawToDataFrame(row_names, check_names, env)
         End If
-
-        Return dataframe
     End Function
 
     <ExportAPI("open.xlsx")>

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b0a67240f28623785891de30c17e1cea, R#\Interpreter\Syntax\SyntaxImplements\DeclareNewFunctionSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::96afbb26a57b7f89dc09f3e6d02bc668, R#\Interpreter\Syntax\SyntaxImplements\DeclareNewFunctionSyntax.vb"
 
     ' Author:
     ' 
@@ -151,7 +151,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                             Dim syntaxParts = t.SplitByTopLevelDelimiter(TokenType.operator, False, "=")
 
                             If syntaxParts = 1 Then
-                                Return SyntaxImplements.DeclareNewSymbol(t)
+                                Return SyntaxImplements.DeclareNewSymbol(t, opts)
                             ElseIf syntaxParts = 3 Then
                                 Return SyntaxImplements.DeclareNewSymbol(syntaxParts(0), syntaxParts(2), opts, True)
                             Else

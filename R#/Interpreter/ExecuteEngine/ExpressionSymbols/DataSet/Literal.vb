@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b049c2e1cc571064fa49bec228f9023b, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal.vb"
+﻿#Region "Microsoft.VisualBasic::5d7dffe8ce034582f7062d059b70c385, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal.vb"
 
     ' Author:
     ' 
@@ -87,6 +87,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Me.value = value
         End Sub
 
+        ''' <summary>
+        ''' create a string literal
+        ''' </summary>
+        ''' <param name="value"></param>
         Sub New(value As String)
             Me.m_type = TypeCodes.string
             Me.value = value

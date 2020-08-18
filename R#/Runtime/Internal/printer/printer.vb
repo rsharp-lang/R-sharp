@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f447af411c8718ec5e8dcfebdc2e1413, R#\Runtime\Internal\printer\printer.vb"
+﻿#Region "Microsoft.VisualBasic::c0795ab39f00a7adbcb0e3d45d4226dc, R#\Runtime\Internal\printer\printer.vb"
 
     ' Author:
     ' 
@@ -38,8 +38,8 @@
     ' 
     '         Constructor: (+1 Overloads) Sub New
     ' 
-    '         Function: DateToString, f64_InternalToString, getMaxColumns, getStrings, ToString
-    '                   ValueToString
+    '         Function: DateToString, f64_InternalToString, getMaxColumns, getStrings, printStream
+    '                   ToString, ValueToString
     ' 
     '         Sub: AttachConsoleFormatter, AttachInternalConsoleFormatter, printArray, printContentArray, printInternal
     '              printList
@@ -243,7 +243,7 @@ printSingleElement:
         ''' <param name="elementType"></param>
         ''' <returns></returns>
         <Extension>
-        Friend Function ToString(elementType As Type, env As GlobalEnvironment, printContent As Boolean) As IStringBuilder
+        Friend Function ToString(elementType As Type, env As GlobalEnvironment, printContent As Boolean, Optional allowClassPrinter As Boolean = True) As IStringBuilder
             If RtoString.ContainsKey(elementType) Then
                 Return RtoString(elementType)
             ElseIf RInternalToString.ContainsKey(elementType) Then
@@ -271,10 +271,16 @@ printSingleElement:
                                       End Function) _
                               .JoinBy(", ")
                        End Function
-            ElseIf Not (elementType.Namespace.StartsWith("System.") OrElse elementType.Namespace = "System") Then
-                Return AddressOf classPrinter.printClass
             Else
-                Return Function(obj) Scripting.ToString(obj, "NULL", True)
+                If allowClassPrinter Then
+                    If Not (elementType.Namespace.StartsWith("System.") OrElse elementType.Namespace = "System") Then
+                        Return AddressOf classPrinter.printClass
+                    Else
+                        Return Function(obj) Scripting.ToString(obj, "NULL", True)
+                    End If
+                Else
+                    Return Function(obj) Scripting.ToString(obj, "NULL", True)
+                End If
             End If
         End Function
 
@@ -316,9 +322,9 @@ printSingleElement:
         <Extension>
         Friend Function getMaxColumns(env As Environment) As Integer
             If env.globalEnvironment.stdout.env = OutputEnvironments.Html Then
-                Return 200
+                Return 128
             Else
-                Return If(App.IsConsoleApp, Console.WindowWidth, Integer.MaxValue) - 1
+                Return If(App.IsConsoleApp, Console.WindowWidth, Integer.MaxValue) * 0.75
             End If
         End Function
 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a73c75cd42b4f84f004289ea238f2598, R#\Interpreter\Syntax\SyntaxBuilderOptions.vb"
+﻿#Region "Microsoft.VisualBasic::5a75a116f8483bc1a08cca64286103be, R#\Interpreter\Syntax\SyntaxBuilderOptions.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,7 @@
     ' 
     '         Properties: haveSyntaxErr
     ' 
-    '         Function: GetStackTrace
+    '         Function: Clone, GetStackTrace, UsingVectorBuilder
     ' 
     ' 
     ' /********************************************************************************/
@@ -54,11 +54,29 @@ Namespace Interpreter.SyntaxParser
         Public source As Rscript
         Public [error] As String
 
+        Public isBuildVector As Boolean
+
         Public ReadOnly Property haveSyntaxErr As Boolean
             Get
                 Return Not [error].StringEmpty
             End Get
         End Property
+
+        Public Function Clone() As SyntaxBuilderOptions
+            Return New SyntaxBuilderOptions With {
+                .debug = debug,
+                .[error] = [error],
+                .isBuildVector = isBuildVector,
+                .source = source
+            }
+        End Function
+
+        Public Function UsingVectorBuilder(produce As Func(Of SyntaxBuilderOptions, SyntaxResult)) As SyntaxResult
+            Dim newClone As SyntaxBuilderOptions = Clone()
+            newClone.isBuildVector = True
+            Dim result As SyntaxResult = produce(newClone)
+            Return result
+        End Function
 
         Public Function GetStackTrace(token As Token, Optional name$ = Nothing) As StackFrame
             Return New StackFrame With {

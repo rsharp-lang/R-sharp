@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::178675b58e152d9ee532e8abcb0543b1, R#\Runtime\RVectorExtensions.vb"
+﻿#Region "Microsoft.VisualBasic::826e7c270209d11dc88dc09023fd23b9, R#\Runtime\RVectorExtensions.vb"
 
     ' Author:
     ' 
@@ -44,6 +44,7 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
@@ -147,7 +148,7 @@ Namespace Runtime
         ''' <param name="value"></param>
         ''' <param name="type"></param>
         ''' <returns></returns>
-        Public Function asVector(value As Object, type As Type, env As Environment) As Array
+        Public Function asVector(value As Object, type As Type, env As Environment) As Object
             Dim arrayType As Type = type.MakeArrayType
             Dim valueType As Type
 
@@ -184,9 +185,16 @@ Namespace Runtime
         Private Function createArray(type As Type, value As Object, env As Environment) As Object
             Dim src As Array = value
             Dim array As Array = Array.CreateInstance(type, src.Length)
+            Dim castValue As Object
 
             For i As Integer = 0 To array.Length - 1
-                array.SetValue(RCType.CTypeDynamic(src.GetValue(i), type, env), i)
+                castValue = RCType.CTypeDynamic(src.GetValue(i), type, env)
+
+                If Program.isException(castValue) Then
+                    Return castValue
+                Else
+                    Call array.SetValue(castValue, i)
+                End If
             Next
 
             Return array

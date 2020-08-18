@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::432935abded6e0458f447eabd702b4e4, R#\Interpreter\Syntax\SyntaxImplements\DeclareNewSymbolSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::9863b1022322b252d366eb2187df2bf4, R#\Interpreter\Syntax\SyntaxImplements\DeclareNewSymbolSyntax.vb"
 
     ' Author:
     ' 
@@ -113,20 +113,52 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 .DeclareNewSymbol(False, opts)
         End Function
 
-        Public Function DeclareNewSymbol(singleToken As Token()) As SyntaxResult
+        ''' <summary>
+        ''' declare a parameter symbol
+        ''' </summary>
+        ''' <param name="singleToken"></param>
+        ''' <returns></returns>
+        Public Function DeclareNewSymbol(singleToken As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
+            Dim symbolNames = getNames(singleToken)
+            Dim type As TypeCodes
+
+            If symbolNames Like GetType(SyntaxErrorException) Then
+                Return New SyntaxResult(symbolNames.TryCast(Of SyntaxErrorException), opts.debug)
+            End If
+
+            If singleToken.Length > 1 AndAlso symbolNames.TryCast(Of String()).Length = 1 Then
+                type = singleToken(2).text.GetRTypeCode
+            Else
+                type = TypeCodes.generic
+            End If
+
             Return New DeclareNewSymbol(
-                names:=getNames(singleToken),
+                names:=symbolNames,
                 value:=Nothing,
-                type:=TypeCodes.generic,
+                type:=type,
                 [readonly]:=False
             )
         End Function
 
+        ''' <summary>
+        ''' declare a new parameter with optional default value
+        ''' </summary>
+        ''' <param name="symbol"></param>
+        ''' <param name="value"></param>
+        ''' <param name="opts"></param>
+        ''' <param name="funcParameter"></param>
+        ''' <returns></returns>
         Public Function DeclareNewSymbol(symbol As Token(), value As Token(), opts As SyntaxBuilderOptions, funcParameter As Boolean) As SyntaxResult
             Dim valSyntaxTemp As SyntaxResult = Expression.CreateExpression(value, opts)
 
             If valSyntaxTemp.isException Then
                 Return valSyntaxTemp
+            End If
+
+            Dim symbolNames = getNames(symbol)
+
+            If symbolNames Like GetType(SyntaxErrorException) Then
+                Return New SyntaxResult(symbolNames.TryCast(Of SyntaxErrorException), opts.debug)
             End If
 
             Dim type As TypeCodes
@@ -138,27 +170,47 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             End If
 
             Return New DeclareNewSymbol(
-                names:=getNames(symbol),
+                names:=symbolNames,
                 value:=valSyntaxTemp.expression,
                 type:=type,
                 [readonly]:=False
             )
         End Function
 
-        Friend Function getNames(code As Token()) As String()
+        ''' <summary>
+        ''' get tuple names or a single symbol name
+        ''' </summary>
+        ''' <param name="code"></param>
+        ''' <returns></returns>
+        Friend Function getNames(code As Token()) As [Variant](Of String(), SyntaxErrorException)
             If code.Length > 1 Then
-                Return code.Skip(1) _
-                    .Take(code.Length - 2) _
-                    .Where(Function(token) Not token.name = TokenType.comma) _
-                    .Select(Function(symbol)
-                                If symbol.name <> TokenType.identifier Then
-                                    Throw New SyntaxErrorException
-                                Else
-                                    Return symbol.text
-                                End If
-                            End Function) _
-                    .ToArray
+                If code(Scan0) = (TokenType.open, "[") AndAlso code.Last = (TokenType.close, "]") Then
+                    ' [a,b,c]
+                    ' tuple symbol names
+                    Dim symbols = code.Skip(1) _
+                        .Take(code.Length - 2) _
+                        .Where(Function(token) Not token.name = TokenType.comma) _
+                        .ToArray
+                    Dim names As New List(Of String)
+
+                    For Each symbol In symbols
+                        ' allowes using keyword as symbol 
+                        If symbol.name <> TokenType.identifier AndAlso symbol.name <> TokenType.keyword Then
+                            Return New SyntaxErrorException(code.Select(Function(a) a.text).JoinBy(" "))
+                        Else
+                            names.Add(symbol.text)
+                        End If
+                    Next
+
+                    Return names.ToArray
+                ElseIf code(1) = (TokenType.keyword, "as") Then
+                    ' a as type
+                    Return {code(Scan0).text}
+                Else
+                    Return New SyntaxErrorException(code.Select(Function(a) a.text).JoinBy(" "))
+                End If
             Else
+                ' single symbol
                 Return {code(Scan0).text}
             End If
         End Function

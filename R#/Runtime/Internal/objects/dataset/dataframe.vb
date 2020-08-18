@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::adf85163bc74286638fa7f0e612bca24, R#\Runtime\Internal\objects\dataset\dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::bc5e852b551b8d025ddf186f5a68161c, R#\Runtime\Internal\objects\dataset\dataframe.vb"
 
     ' Author:
     ' 
@@ -35,9 +35,9 @@
     ' 
     '         Properties: columns, ncols, nrows, rownames
     ' 
-    '         Function: CreateDataFrame, GetByRowIndex, (+2 Overloads) getColumnVector, getKeyByIndex, getRowIndex
-    '                   getRowList, getRowNames, GetTable, projectByColumn, sliceByRow
-    '                   ToString
+    '         Function: CreateDataFrame, GetByRowIndex, (+2 Overloads) getColumnVector, getKeyByIndex, getNames
+    '                   getRowIndex, getRowList, getRowNames, GetTable, hasName
+    '                   projectByColumn, setNames, sliceByRow, ToString
     ' 
     ' 
     ' /********************************************************************************/
@@ -50,12 +50,13 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Object
 
-    Public Class dataframe
+    Public Class dataframe : Implements RNames
 
         ''' <summary>
         ''' 长度为1或者长度为n
@@ -320,6 +321,39 @@ Namespace Runtime.Internal.Object
             Next
 
             Return dataframe
+        End Function
+
+        Public Function setNames(names() As String, envir As Environment) As Object Implements RNames.setNames
+            If names.Length <> columns.Count Then
+                Return Internal.debug.stop({
+                    $"the given size of the column names character is not match the column numbers in this dataframe object!",
+                    $"given: {names.Length}",
+                    $"required: {columns.Count}"
+                }, envir)
+            Else
+                Dim setNamesTemp As New Dictionary(Of String, Array)
+                Dim oldNames As String() = getNames()
+
+                For i As Integer = 0 To names.Length - 1
+                    setNamesTemp.Add(names(i), columns(oldNames(i)))
+                Next
+
+                columns = setNamesTemp
+
+                Return Me
+            End If
+        End Function
+
+        Public Function hasName(name As String) As Boolean Implements RNames.hasName
+            Return columns.ContainsKey(name)
+        End Function
+
+        ''' <summary>
+        ''' get column names
+        ''' </summary>
+        ''' <returns></returns>
+        Public Function getNames() As String() Implements IReflector.getNames
+            Return columns.Keys.ToArray
         End Function
     End Class
 End Namespace

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::92b10d32f9947aa0c4a484cad8ff2083, R#\Interpreter\Syntax\SyntaxImplements\DeclareLambdaFunctionSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::8e038b021a2e2294c60e8f0a7f7af905, R#\Interpreter\Syntax\SyntaxImplements\DeclareLambdaFunctionSyntax.vb"
 
     ' Author:
     ' 
@@ -94,7 +94,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                            .DoCall(Function(exp)
                                        Return "[lambda: " & exp & "]"
                                    End Function)
-                Dim parameter As SyntaxResult = SyntaxImplements.DeclareNewSymbol(tokens(Scan0))
+                Dim parameter As SyntaxResult = SyntaxImplements.DeclareNewSymbol(tokens(Scan0), opts)
                 Dim closure As SyntaxResult = .Skip(2) _
                                               .IteratesALL _
                                               .DoCall(Function(code)

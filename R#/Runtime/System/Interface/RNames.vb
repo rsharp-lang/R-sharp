@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c70b4b6de529c8c0ff4bb4660a92be17, R#\Runtime\System\Interface\RNames.vb"
+﻿#Region "Microsoft.VisualBasic::a38eac76292e1a46cadd2730ff85b1f7, R#\Runtime\System\Interface\RNames.vb"
 
     ' Author:
     ' 
@@ -37,7 +37,7 @@
     ' 
     '     Interface RNames
     ' 
-    '         Function: setNames
+    '         Function: hasName, setNames
     ' 
     '     Interface RIndex
     ' 
@@ -67,6 +67,7 @@ Namespace Runtime.Components.Interface
     Public Interface RNames : Inherits IReflector
 
         Function setNames(names As String(), envir As Environment) As Object
+        Function hasName(name As String) As Boolean
     End Interface
 
     Public Interface RIndex
