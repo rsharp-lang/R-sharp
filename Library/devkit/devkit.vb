@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::00ffcdcd1245d19fc295d9eba242d7e7, Library\devkit\devkit.vb"
+﻿#Region "Microsoft.VisualBasic::4315278d68986244476948b7011e77cf, Library\devkit\devkit.vb"
 
     ' Author:
     ' 
@@ -33,6 +33,7 @@
 
     ' Module devkit
     ' 
+    '     Constructor: (+1 Overloads) Sub New
     '     Function: AssemblyInfo, gitLog, showIL, svnLog
     ' 
     ' /********************************************************************************/
