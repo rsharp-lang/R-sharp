@@ -192,6 +192,7 @@
     <Compile Include="dataMining\btreeCluster.vb" />
     <Compile Include="dataMining\dbscanResult.vb" />
     <Compile Include="datasetKit.vb" />
+    <Compile Include="GeneticAlgorithmToolkit.vb" />
     <Compile Include="zzz.vb" />
     <Compile Include="dataMining\clustering.vb" />
     <Compile Include="machineLearning.vb" />
