@@ -303,7 +303,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 Dim i As New List(Of Object)
 
                 If TypeOf indexer Is Boolean() OrElse MeasureArrayElementType(indexer) Is GetType(Boolean) Then
-                    For Each flag As SeqValue(Of Boolean) In DirectCast(asVector(Of Boolean)(indexer), Boolean()).SeqIterator(offset:=1)
+                    For Each flag As SeqValue(Of Boolean) In DirectCast(asVector(Of Boolean)(indexer), Boolean()).SeqIterator
                         If flag.value Then
                             ' get by index
                             Call i.Add(allKeys(flag.i))
@@ -312,7 +312,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 Else
                     ' get by index
                     For Each flag As Integer In DirectCast(REnv.asVector(Of Integer)(indexer), Integer())
-                        Call i.Add(allKeys(flag))
+                        Call i.Add(allKeys(flag - 1))
                     Next
                 End If
 
