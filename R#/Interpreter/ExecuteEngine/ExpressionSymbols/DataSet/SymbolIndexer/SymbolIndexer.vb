@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::cf618fb69c1385c784f97409789077eb, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class SymbolIndexer
-    ' 
-    '         Properties: type
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: emptyIndexError, Evaluate, getByIndex, getByName, getColumn
-    '                   getDataframeRowRange, ToString, vectorSubset
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class SymbolIndexer
+' 
+'         Properties: type
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: emptyIndexError, Evaluate, getByIndex, getByName, getColumn
+'                   getDataframeRowRange, ToString, vectorSubset
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -283,31 +283,57 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         ''' <returns></returns>
         Private Function getByIndex(obj As Object, indexer As Array, envir As Environment) As Object
             If obj.GetType Is GetType(list) Then
-                Dim list As list = DirectCast(obj, list)
+                obj = DirectCast(obj, list).slots
+            End If
 
-                If REnv.isVector(Of String)(indexer) Then
-                    ' get by names
-                    Return list.getByName(REnv.asVector(Of String)(indexer))
-                Else
-                    If TypeOf indexer Is Boolean() OrElse MeasureArrayElementType(indexer) Is GetType(Boolean) Then
-                        Dim i As New List(Of Integer)
-
-                        For Each flag As SeqValue(Of Boolean) In DirectCast(asVector(Of Boolean)(indexer), Boolean()).SeqIterator(offset:=1)
-                            If flag.value Then
-                                i.Add(flag.i)
-                            End If
-                        Next
-
-                        ' get by index
-                        Return list.getByIndex(i.ToArray)
-                    Else
-                        ' get by index
-                        Return list.getByIndex(REnv.asVector(Of Integer)(indexer))
-                    End If
-                End If
+            If obj.GetType.ImplementInterface(GetType(IDictionary)) Then
+                Return listSubset(DirectCast(obj, IDictionary), indexer)
             Else
                 Return vectorSubset(obj, indexer, envir)
             End If
+        End Function
+
+        Private Function listSubset(list As IDictionary, indexer As Array) As Object
+            Dim allKeys = (From x In list.Keys).ToArray
+
+            If REnv.isVector(Of String)(indexer) Then
+                ' get by names
+                Return doListSubset(list, names:=REnv.asVector(Of String)(indexer))
+            Else
+                Dim i As New List(Of Object)
+
+                If TypeOf indexer Is Boolean() OrElse MeasureArrayElementType(indexer) Is GetType(Boolean) Then
+                    For Each flag As SeqValue(Of Boolean) In DirectCast(asVector(Of Boolean)(indexer), Boolean()).SeqIterator(offset:=1)
+                        If flag.value Then
+                            ' get by index
+                            Call i.Add(allKeys(flag.i))
+                        End If
+                    Next
+                Else
+                    ' get by index
+                    For Each flag As Integer In DirectCast(REnv.asVector(Of Integer)(indexer), Integer())
+                        Call i.Add(allKeys(flag))
+                    Next
+                End If
+
+                Return doListSubset(list, i.ToArray)
+            End If
+        End Function
+
+        Private Function doListSubset(list As IDictionary, names As Array) As Object
+            Dim subset As New list() With {
+                .slots = New Dictionary(Of String, Object)
+            }
+
+            For Each id As Object In names.AsObjectEnumerator
+                If list.Contains(key:=id) Then
+                    subset.slots(id) = list(id)
+                Else
+                    subset.slots(id) = Nothing
+                End If
+            Next
+
+            Return subset
         End Function
 
         Private Function vectorSubset(obj As Object, indexer As Array, env As Environment) As Object
