@@ -11,6 +11,14 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 <Package("wav", Category:=APICategories.UtilityTools)>
 Public Module wavToolkit
 
+    Sub New()
+        Call Internal.ConsolePrinter.AttachConsoleFormatter(Of WaveFile)(AddressOf wavToString)
+    End Sub
+
+    Private Function wavToString(wav As WaveFile) As String
+
+    End Function
+
     <ExportAPI("read.wav")>
     <RApiReturn(GetType(WaveFile))>
     Public Function readWav(<RRawVectorArgument> file As Object, Optional env As Environment = Nothing) As Object
@@ -22,6 +30,8 @@ Public Module wavToolkit
 
         If TypeOf file Is String Then
             dataFile = DirectCast(file, String).Open(FileMode.Open, doClear:=False, [readOnly]:=True)
+        ElseIf TypeOf file Is String() Then
+            dataFile = DirectCast(file, String())(Scan0).Open(FileMode.Open, doClear:=False, [readOnly]:=True)
         ElseIf TypeOf file Is Stream Then
             dataFile = DirectCast(file, Stream)
         ElseIf TypeOf file Is Byte() Then
