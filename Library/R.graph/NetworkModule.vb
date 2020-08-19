@@ -254,9 +254,17 @@ Public Module NetworkModule
         Return nodes
     End Function
 
+    ''' <summary>
+    ''' add edge link into the given network graph
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <param name="u"></param>
+    ''' <param name="v"></param>
+    ''' <param name="weight"></param>
+    ''' <returns></returns>
     <ExportAPI("add.edge")>
-    Public Function addEdge(g As NetworkGraph, u$, v$) As Edge
-        Return g.CreateEdge(u, v)
+    Public Function addEdge(g As NetworkGraph, u$, v$, Optional weight# = 0) As Edge
+        Return g.CreateEdge(u, v, weight)
     End Function
 
     ''' <summary>
