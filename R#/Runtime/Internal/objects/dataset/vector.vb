@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1398a4aa265314ac10ec0f7626de1f14, R#\Runtime\Internal\objects\dataset\vector.vb"
+﻿#Region "Microsoft.VisualBasic::d7363632012942e26be9602474821207, R#\Runtime\Internal\objects\dataset\vector.vb"
 
     ' Author:
     ' 
@@ -36,8 +36,8 @@
     '         Properties: data, factor, length, unit
     ' 
     '         Constructor: (+5 Overloads) Sub New
-    '         Function: asVector, (+2 Overloads) getByIndex, getNames, isVectorOf, setByindex
-    '                   setByIndex, setNames, ToString
+    '         Function: asVector, (+2 Overloads) getByIndex, getNames, hasName, isVectorOf
+    '                   setByindex, setByIndex, setNames, ToString
     ' 
     ' 
     ' /********************************************************************************/
