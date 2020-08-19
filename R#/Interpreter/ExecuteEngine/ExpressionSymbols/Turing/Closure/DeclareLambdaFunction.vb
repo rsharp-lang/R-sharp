@@ -175,6 +175,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                        v.SetValue(x, envir)
                        result = closure.Evaluate(envir)
 
+                       If Program.isException(result) Then
+                           Return result
+                       End If
+
                        ' 20200210 对于lambda函数而言，其是运行时创建的函数
                        ' 返回的值很可能是一个向量
                        If Not result Is Nothing Then

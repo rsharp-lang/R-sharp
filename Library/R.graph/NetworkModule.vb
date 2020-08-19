@@ -196,8 +196,15 @@ Public Module NetworkModule
     ''' <param name="g"></param>
     ''' <returns></returns>
     <ExportAPI("degree")>
-    Public Function degree(g As NetworkGraph) As Dictionary(Of String, Integer)
-        Return g.ComputeNodeDegrees
+    Public Function degree(g As NetworkGraph) As list
+        Return New list With {
+            .slots = g _
+                .ComputeNodeDegrees _
+                .ToDictionary(Function(a) a.Key,
+                              Function(a)
+                                  Return CObj(a.Value)
+                              End Function)
+        }
     End Function
 
     ''' <summary>
