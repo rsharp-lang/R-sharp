@@ -80,6 +80,7 @@ Namespace Runtime.Components.Interface
         ''' <param name="arguments"></param>
         ''' <returns></returns>
         Function Invoke(envir As Environment, arguments As InvokeParameter()) As Object
+        Function DirectInvoke(arguments As Object(), env As Environment) As Object
 
     End Interface
 
