@@ -43,6 +43,7 @@
 
 #End Region
 
+Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
@@ -73,12 +74,31 @@ Public Module NetworkModule
 
     Sub New()
         REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of NetworkGraph)(AddressOf printGraph)
+        REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of node)(AddressOf printNode)
     End Sub
 
     Private Function printGraph(obj As Object) As String
         Dim g As NetworkGraph = DirectCast(obj, NetworkGraph)
 
         Return $"Network graph with {g.vertex.Count} vertex nodes and {g.graphEdges.Count} edges."
+    End Function
+
+    Private Function printNode(node As node) As String
+        Dim str As New StringBuilder
+
+        Call str.AppendLine($"#{node.ID}  {node.label}")
+        Call str.AppendLine($"degree: {node.degree.In} in, {node.degree.Out} out.")
+        Call str.AppendLine(node.adjacencies?.ToString)
+
+        If Not node.data Is Nothing Then
+            If Not node.data.color Is Nothing Then
+                Call str.AppendLine("color: " & node.data.color.ToString)
+            End If
+
+            Call str.AppendLine("class: " & (node.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) Or "n/a".AsDefault))
+        End If
+
+        Return str.ToString
     End Function
 
     ''' <summary>
