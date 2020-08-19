@@ -368,7 +368,7 @@ Public Module NetworkModule
     ''' <param name="type"></param>
     ''' <param name="nodes"></param>
     ''' <returns></returns>
-    <ExportAPI("groups")>
+    <ExportAPI("set_group")>
     Public Function typeGroupOfNodes(g As NetworkGraph, type$, nodes As String()) As NetworkGraph
         Call nodes _
             .Select(AddressOf g.GetElementByID) _
