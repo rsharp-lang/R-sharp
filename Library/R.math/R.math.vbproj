@@ -214,7 +214,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="math.vb" />
-    <Compile Include="signalProcessing.vb" />
     <Compile Include="symbolic.vb" />
     <Compile Include="stats.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -277,17 +276,13 @@
       <Project>{14e0b048-3a0d-4fd6-aa79-9b815d6f1b30}</Project>
       <Name>ODEsSolver</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Mathematica\SignalProcessing\Signal.IO\Signal.IO.vbproj">
-      <Project>{b08c17b2-7c36-404d-9e51-b3348b286ee6}</Project>
-      <Name>Signal.IO</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Mathematica\SignalProcessing\SignalProcessing\SignalProcessing.vbproj">
-      <Project>{83975074-cbe1-4abc-ba91-91d63da156c8}</Project>
-      <Name>SignalProcessing</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\47-dotnet_Microsoft.VisualBasic.vbproj">
       <Project>{fecce1fd-e1d4-49e3-a668-60bb5e7aed99}</Project>
       <Name>47-dotnet_Microsoft.VisualBasic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\mime\application%25xml\application_xml.vbproj">
+      <Project>{25af39f4-76af-411f-ac19-0dd1e128d801}</Project>
+      <Name>application_xml</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\R#\R.vbproj">
       <Project>{0c2eb77c-39f2-460d-a3f8-ce905f867637}</Project>
