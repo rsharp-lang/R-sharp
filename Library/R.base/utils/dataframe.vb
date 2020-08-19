@@ -382,7 +382,7 @@ Module dataframe
     ''' Subset of the given dataframe by columns
     ''' </summary>
     ''' <param name="dataset"></param>
-    ''' <param name="cols"></param>
+    ''' <param name="cols">a character vector of the dataframe column names.</param>
     ''' <returns></returns>
     <ExportAPI("dataset.project")>
     Public Function project(dataset As Array, cols$(), Optional envir As Environment = Nothing) As Object
@@ -433,16 +433,19 @@ Module dataframe
     ''' <summary>
     ''' Read dataframe
     ''' </summary>
-    ''' <param name="file$"></param>
-    ''' <param name="mode$"></param>
+    ''' <param name="file">the csv file</param>
+    ''' <param name="mode"></param>
     ''' <returns></returns>
     <ExportAPI("read.dataframe")>
-    Public Function readDataSet(file$, Optional mode$ = "numeric|character|any", Optional toRObj As Boolean = False, Optional silent As Boolean = True) As Object
-        Dim readMode As String = mode.Split("|"c).First
+    Public Function readDataSet(file$,
+                                Optional mode As DataModes = DataModes.numeric,
+                                Optional toRObj As Boolean = False,
+                                Optional silent As Boolean = True) As Object
+
         Dim dataframe As New Rdataframe
 
-        Select Case readMode.ToLower
-            Case "numeric"
+        Select Case mode
+            Case DataModes.numeric
                 Dim data = DataSet.LoadDataSet(file, silent:=silent).ToArray
 
                 If toRObj Then
@@ -457,7 +460,7 @@ Module dataframe
                 Else
                     Return data
                 End If
-            Case "character"
+            Case DataModes.character
                 Dim data = EntityObject.LoadDataSet(file, silent:=silent).ToArray
 
                 If toRObj Then
