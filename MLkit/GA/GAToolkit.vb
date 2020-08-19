@@ -23,11 +23,11 @@ Module GAToolkit
     <ExportAPI("template")>
     Public Function template(seed As Object, crossover As RFunction, mutate As RFunction, uniqueId As RFunction, Optional env As Environment = Nothing) As GeneralChromosome
         Return New GeneralChromosome With {
-            .crossoverGeneric = Function(a, b) crossover.DirectInvoke({a, b}, env),
-            .mutateGeneric = Function(obj, rate) mutate.DirectInvoke({obj, rate}, env),
+            .crossoverGeneric = Function(a, b) crossover.Invoke({a, b}, env),
+            .mutateGeneric = Function(obj, rate) mutate.Invoke({obj, rate}, env),
             .MutationRate = 0.1,
             .target = seed,
-            .uniqueId = Function(obj) uniqueId.DirectInvoke({obj}, env)
+            .uniqueId = Function(obj) uniqueId.Invoke({obj}, env)
         }
     End Function
 

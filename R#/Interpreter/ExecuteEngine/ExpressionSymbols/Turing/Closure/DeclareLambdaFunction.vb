@@ -109,35 +109,39 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     ' no value for the required parameter
                     Return DeclareNewFunction.MissingParameters(parameter, name, envir)
                 Else
-                    ' lambda function only allows one parameter in 
-                    ' its declaration
-                    '
-                    ' example as:
-                    ' 
-                    ' x -> x + 1;
-                    ' [x, y] -> x + y;       # tuple element is still one parameter, so this is legal
-                    ' [x, y, z] -> x * y *z; # tuple element is still one parameter, so this is legal
-                    '
-                    ' function invoke of the lambda function should be in syntax of
-                    '
-                    ' lambda(x)
-                    ' lambda([x,y])
-                    ' lambda([x,y,z])
-                    '
-                    ' Due to the reason of syntax rule of only allows one parameter.
-                    '
-                    Dim argVal As Object
-
-                    For i As Integer = 0 To parameter.names.Length - 1
-                        argVal = arguments(i).Evaluate(envir)
-                        envir.Push(parameter.names(i), argVal, True, TypeCodes.generic)
-                    Next
-
-                    Dim result As Object = closure.Evaluate(envir)
-
-                    Return result
+                    Return Invoke(arguments.Select(Function(a) a.Evaluate(parent)).ToArray, parent)
                 End If
             End Using
+        End Function
+
+        Public Function Invoke(arguments() As Object, env As Environment) As Object Implements RFunction.Invoke
+            ' lambda function only allows one parameter in 
+            ' its declaration
+            '
+            ' example as:
+            ' 
+            ' x -> x + 1;
+            ' [x, y] -> x + y;       # tuple element is still one parameter, so this is legal
+            ' [x, y, z] -> x * y *z; # tuple element is still one parameter, so this is legal
+            '
+            ' function invoke of the lambda function should be in syntax of
+            '
+            ' lambda(x)
+            ' lambda([x,y])
+            ' lambda([x,y,z])
+            '
+            ' Due to the reason of syntax rule of only allows one parameter.
+            '
+            Dim argVal As Object
+
+            For i As Integer = 0 To parameter.names.Length - 1
+                argVal = arguments(i)
+                env.Push(parameter.names(i), argVal, True, TypeCodes.generic)
+            Next
+
+            Dim result As Object = closure.Evaluate(env)
+
+            Return result
         End Function
 
         Public Function CreateLambda(Of T, Out)(parent As Environment) As Func(Of T, Out)

@@ -80,7 +80,13 @@ Namespace Runtime.Components.Interface
         ''' <param name="arguments"></param>
         ''' <returns></returns>
         Function Invoke(envir As Environment, arguments As InvokeParameter()) As Object
-        Function DirectInvoke(arguments As Object(), env As Environment) As Object
+        ''' <summary>
+        ''' 直接传入参数进行函数的调用，这个接口一般是直接用于生成lambda函数所使用的
+        ''' </summary>
+        ''' <param name="arguments"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        Function Invoke(arguments As Object(), env As Environment) As Object
 
     End Interface
 

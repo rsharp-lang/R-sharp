@@ -151,7 +151,7 @@ Namespace Runtime.Interop
                 .ToArray
         End Function
 
-        Public Function Invoke(parameters As Object(), env As Environment) As Object
+        Public Function Invoke(parameters As Object(), env As Environment) As Object Implements RFunction.Invoke
             Dim result As Object
 
             For Each arg In parameters
