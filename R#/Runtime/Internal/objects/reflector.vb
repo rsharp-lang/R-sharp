@@ -64,6 +64,8 @@ Namespace Runtime.Internal.Object
                 Return "<NULL>"
             ElseIf x.GetType Is GetType(list) Then
                 x = DirectCast(x, list).slots
+            ElseIf TypeOf x Is MagicScriptSymbol Then
+                x = DirectCast(x, MagicScriptSymbol).toList.slots
             End If
 
             Dim type As Type = x.GetType
