@@ -122,8 +122,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
             ' function parameter should be evaluate 
             ' from the parent environment.
-            arguments = InvokeParameter.CreateArguments(parent, params, hasObjectList:=True)
-            argumentKeys = arguments.Keys.ToArray
+            With InvokeParameter.CreateArguments(parent, params, hasObjectList:=True)
+                If .GetUnderlyingType Is GetType(Message) Then
+                    Return .TryCast(Of Message)
+                Else
+                    arguments = .TryCast(Of Dictionary(Of String, Object))
+                    argumentKeys = arguments.Keys.ToArray
+                End If
+            End With
 
             ' initialize environment
             For i As Integer = 0 To Me.params.Length - 1
@@ -135,6 +141,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     ' missing, use default value
                     If var.hasInitializeExpression Then
                         value = var.value.Evaluate(envir)
+
+                        If Program.isException(value) Then
+                            Return value
+                        End If
                     Else
                         Return MissingParameters(var, funcName, envir)
                     End If
@@ -150,10 +160,6 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                         ' try to fix such bug
                         value = arguments(argumentKeys(i))
                     End If
-                End If
-
-                If Program.isException(value) Then
-                    Return value
                 End If
 
                 ' 20191120 对于函数对象而言，由于拥有自己的环境，在构建闭包之后

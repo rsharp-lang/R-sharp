@@ -205,12 +205,13 @@ Namespace Runtime.Interop
                         End If
                     Next
                 Else
-                    For Each value As Object In InvokeParameter _
-                        .CreateArguments(env, params, hasObjectList:=False) _
-                        .DoCall(Function(args)
-                                    Return createNormalArguments(env, args)
-                                End Function)
+                    Dim callParams = InvokeParameter.CreateArguments(env, params, hasObjectList:=False)
 
+                    If callParams Like GetType(Message) Then
+                        Return callParams.TryCast(Of Message)
+                    End If
+
+                    For Each value As Object In createNormalArguments(env, callParams)
                         If Program.isException(value) Then
                             Return value
                         Else
