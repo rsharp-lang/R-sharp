@@ -328,7 +328,7 @@ Namespace Runtime.Internal.Invokes
                 ' 如果错误消息不存在
                 ' 则返回当前的调用栈信息
                 Return New ExceptionData With {
-                    .StackTrace = env.getEnvironmentStack,
+                    .StackTrace = debug.getEnvironmentStack(env),
                     .Message = {"n/a"},
                     .TypeFullName = "n/a"
                 }

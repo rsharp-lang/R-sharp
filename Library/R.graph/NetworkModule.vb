@@ -1,48 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::61fc734c0fe6105f14bcebb387af1f26, Library\R.graph\NetworkModule.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module NetworkModule
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: addEdge, addEdges, addNode, addNodes, attributes
-    '               computeNetwork, connectedNetwork, DecomposeGraph, degree, emptyNetwork
-    '               getByGroup, getEdges, getElementByID, getNodes, LoadNetwork
-    '               printGraph, SaveNetwork, setAttributes, typeGroupOfNodes
-    ' 
-    ' /********************************************************************************/
+' Module NetworkModule
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: addEdge, addEdges, addNode, addNodes, attributes
+'               computeNetwork, connectedNetwork, DecomposeGraph, degree, emptyNetwork
+'               getByGroup, getEdges, getElementByID, getNodes, LoadNetwork
+'               printGraph, SaveNetwork, setAttributes, typeGroupOfNodes
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
@@ -73,12 +74,31 @@ Public Module NetworkModule
 
     Sub New()
         REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of NetworkGraph)(AddressOf printGraph)
+        REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of node)(AddressOf printNode)
     End Sub
 
     Private Function printGraph(obj As Object) As String
         Dim g As NetworkGraph = DirectCast(obj, NetworkGraph)
 
         Return $"Network graph with {g.vertex.Count} vertex nodes and {g.graphEdges.Count} edges."
+    End Function
+
+    Private Function printNode(node As node) As String
+        Dim str As New StringBuilder
+
+        Call str.AppendLine($"#{node.ID}  {node.label}")
+        Call str.AppendLine($"degree: {node.degree.In} in, {node.degree.Out} out.")
+        Call str.AppendLine(node.adjacencies?.ToString)
+
+        If Not node.data Is Nothing Then
+            If Not node.data.color Is Nothing Then
+                Call str.AppendLine("color: " & node.data.color.ToString)
+            End If
+
+            Call str.AppendLine("class: " & (node.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) Or "n/a".AsDefault))
+        End If
+
+        Return str.ToString
     End Function
 
     ''' <summary>
@@ -140,6 +160,17 @@ Public Module NetworkModule
     End Function
 
     ''' <summary>
+    ''' removes duplicated edges in the network
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <param name="directedGraph"></param>
+    ''' <returns></returns>
+    <ExportAPI("trim.edges")>
+    Public Function trimEdges(g As NetworkGraph, Optional directedGraph As Boolean = False) As NetworkGraph
+        Return g.RemoveDuplicated(directedGraph)
+    End Function
+
+    ''' <summary>
     ''' removes all of the isolated nodes.
     ''' </summary>
     ''' <param name="graph"></param>
@@ -165,8 +196,15 @@ Public Module NetworkModule
     ''' <param name="g"></param>
     ''' <returns></returns>
     <ExportAPI("degree")>
-    Public Function degree(g As NetworkGraph) As Dictionary(Of String, Integer)
-        Return g.ComputeNodeDegrees
+    Public Function degree(g As NetworkGraph) As list
+        Return New list With {
+            .slots = g _
+                .ComputeNodeDegrees _
+                .ToDictionary(Function(a) a.Key,
+                              Function(a)
+                                  Return CObj(a.Value)
+                              End Function)
+        }
     End Function
 
     ''' <summary>
@@ -243,9 +281,17 @@ Public Module NetworkModule
         Return nodes
     End Function
 
+    ''' <summary>
+    ''' add edge link into the given network graph
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <param name="u"></param>
+    ''' <param name="v"></param>
+    ''' <param name="weight"></param>
+    ''' <returns></returns>
     <ExportAPI("add.edge")>
-    Public Function addEdge(g As NetworkGraph, u$, v$) As Edge
-        Return g.CreateEdge(u, v)
+    Public Function addEdge(g As NetworkGraph, u$, v$, Optional weight# = 0) As Edge
+        Return g.CreateEdge(u, v, weight)
     End Function
 
     ''' <summary>
@@ -357,7 +403,7 @@ Public Module NetworkModule
     ''' <param name="type"></param>
     ''' <param name="nodes"></param>
     ''' <returns></returns>
-    <ExportAPI("groups")>
+    <ExportAPI("set_group")>
     Public Function typeGroupOfNodes(g As NetworkGraph, type$, nodes As String()) As NetworkGraph
         Call nodes _
             .Select(AddressOf g.GetElementByID) _

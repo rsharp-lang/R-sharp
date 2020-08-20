@@ -97,7 +97,8 @@ Namespace Runtime.Components
 
         Public Shared Function InCompatibleType(require As Type, given As Type, envir As Environment,
                                                 Optional message$ = "The given type is incompatible with the required type!",
-                                                Optional paramName$ = Nothing) As Message
+                                                Optional paramName$ = Nothing,
+                                                Optional suppress As Boolean = False) As Message
             Return {
                 message,
                 "required: " & require.FullName,
@@ -107,7 +108,7 @@ Namespace Runtime.Components
                              msg = msg.JoinIterates({$"parameter: {paramName}"})
                          End If
 
-                         Return Internal.debug.stop(msg, envir)
+                         Return Internal.debug.stop(msg, envir, suppress)
                      End Function)
         End Function
 

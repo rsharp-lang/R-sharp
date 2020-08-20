@@ -126,7 +126,8 @@ Module Visualize
     Public Function renderPlot(g As NetworkGraph,
                                <RRawVectorArgument>
                                Optional canvasSize As Object = "1024,768",
-                               Optional padding$ = g.DefaultPadding,
+                               <RRawVectorArgument>
+                               Optional padding As Object = g.DefaultPadding,
                                Optional defaultColor$ = "skyblue",
                                Optional minNodeSize! = 10,
                                Optional minLinkWidth! = 2,

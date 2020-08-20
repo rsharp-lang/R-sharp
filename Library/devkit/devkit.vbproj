@@ -216,9 +216,9 @@
       <Project>{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}</Project>
       <Name>47-dotnet_Microsoft.VisualBasic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\runtime\sciBASIC#\mime\text%25html\MIME-htmls.vbproj">
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\mime\text%25html\mime-htmls.vbproj">
       <Project>{2dd4be80-ddc3-4767-94a7-10f1c3395716}</Project>
-      <Name>MIME-htmls</Name>
+      <Name>mime-htmls</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\vs_solutions\dev\VisualStudio\VisualStudio.vbproj">
       <Project>{3a65d811-fc5c-4ad9-8456-8f720ff14c16}</Project>

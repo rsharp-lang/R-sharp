@@ -1,45 +1,45 @@
 ﻿#Region "Microsoft.VisualBasic::891633b421f3cb58965a2ec94e68e4cc, R#\Interpreter\ExecuteEngine\ExpressionSymbols\CLI\CommandLine.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class CommandLine
-    ' 
-    '         Properties: type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, possibleInterpolationFailure
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class CommandLine
+' 
+'         Properties: type
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate, possibleInterpolationFailure
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -49,7 +49,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.SyntaxParser
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -112,7 +112,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
                     $"commandline: " & commandline
                 },
                 .level = MSG_TYPES.WRN,
-                .environmentStack = envir.getEnvironmentStack,
+                .environmentStack = debug.getEnvironmentStack(envir),
                 .trace = devtools.ExceptionData.GetCurrentStackTrace
             }
         End Function

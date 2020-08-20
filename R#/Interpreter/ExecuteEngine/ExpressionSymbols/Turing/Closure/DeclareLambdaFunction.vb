@@ -1,50 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::91cb4202a7024cc35e3967bdffd56bd4, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareLambdaFunction.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class DeclareLambdaFunction
-    ' 
-    '         Properties: closure, name, parameterNames, stackFrame, type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: CreateLambda, Evaluate, GetPrintContent, getReturns, getSingle
-    '                   Invoke, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class DeclareLambdaFunction
+' 
+'         Properties: closure, name, parameterNames, stackFrame, type
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: CreateLambda, Evaluate, GetPrintContent, getReturns, getSingle
+'                   Invoke, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
@@ -109,35 +110,44 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     ' no value for the required parameter
                     Return DeclareNewFunction.MissingParameters(parameter, name, envir)
                 Else
-                    ' lambda function only allows one parameter in 
-                    ' its declaration
-                    '
-                    ' example as:
-                    ' 
-                    ' x -> x + 1;
-                    ' [x, y] -> x + y;       # tuple element is still one parameter, so this is legal
-                    ' [x, y, z] -> x * y *z; # tuple element is still one parameter, so this is legal
-                    '
-                    ' function invoke of the lambda function should be in syntax of
-                    '
-                    ' lambda(x)
-                    ' lambda([x,y])
-                    ' lambda([x,y,z])
-                    '
-                    ' Due to the reason of syntax rule of only allows one parameter.
-                    '
-                    Dim argVal As Object
-
-                    For i As Integer = 0 To parameter.names.Length - 1
-                        argVal = arguments(i).Evaluate(envir)
-                        envir.Push(parameter.names(i), argVal, True, TypeCodes.generic)
-                    Next
-
-                    Dim result As Object = closure.Evaluate(envir)
-
-                    Return result
+                    Return arguments _
+                        .Select(Function(a) a.Evaluate(envir)) _
+                        .ToArray _
+                        .DoCall(Function(vals)
+                                    Return Invoke(vals, envir)
+                                End Function)
                 End If
             End Using
+        End Function
+
+        Public Function Invoke(arguments() As Object, env As Environment) As Object Implements RFunction.Invoke
+            ' lambda function only allows one parameter in 
+            ' its declaration
+            '
+            ' example as:
+            ' 
+            ' x -> x + 1;
+            ' [x, y] -> x + y;       # tuple element is still one parameter, so this is legal
+            ' [x, y, z] -> x * y *z; # tuple element is still one parameter, so this is legal
+            '
+            ' function invoke of the lambda function should be in syntax of
+            '
+            ' lambda(x)
+            ' lambda([x,y])
+            ' lambda([x,y,z])
+            '
+            ' Due to the reason of syntax rule of only allows one parameter.
+            '
+            Dim argVal As Object
+
+            For i As Integer = 0 To parameter.names.Length - 1
+                argVal = arguments(i)
+                env.Push(parameter.names(i), argVal, True, TypeCodes.generic)
+            Next
+
+            Dim result As Object = closure.Evaluate(env)
+
+            Return result
         End Function
 
         Public Function CreateLambda(Of T, Out)(parent As Environment) As Func(Of T, Out)
@@ -164,6 +174,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
                        v.SetValue(x, envir)
                        result = closure.Evaluate(envir)
+
+                       If Program.isException(result) Then
+                           Return result
+                       End If
 
                        ' 20200210 对于lambda函数而言，其是运行时创建的函数
                        ' 返回的值很可能是一个向量

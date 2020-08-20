@@ -1,51 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::b7d289b5d6a6e6762eab0aafaa9b5ba2, R#\Runtime\System\InvokeParameter.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class InvokeParameter
-    ' 
-    '         Properties: haveSymbolName, index, isProbablyVectorNameTuple, isSymbolAssign, name
-    '                     value
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Create, CreateArguments, CreateLiterals, Evaluate, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class InvokeParameter
+' 
+'         Properties: haveSymbolName, index, isProbablyVectorNameTuple, isSymbolAssign, name
+'                     value
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Create, CreateArguments, CreateLiterals, Evaluate, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
@@ -177,19 +179,29 @@ Namespace Runtime.Components
         ''' </param>
         ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Shared Function CreateArguments(envir As Environment, arguments As IEnumerable(Of InvokeParameter), hasObjectList As Boolean) As Dictionary(Of String, Object)
-            Return arguments _
-                .SeqIterator _
-                .ToDictionary(Function(a)
-                                  If a.value.haveSymbolName(hasObjectList) Then
-                                      Return a.value.name
-                                  Else
-                                      Return "$" & a.i
-                                  End If
-                              End Function,
-                              Function(a)
-                                  Return a.value.Evaluate(envir)
-                              End Function)
+        Public Shared Function CreateArguments(envir As Environment, arguments As IEnumerable(Of InvokeParameter), hasObjectList As Boolean) As [Variant](Of Message, Dictionary(Of String, Object))
+            Dim argVals As New Dictionary(Of String, Object)
+
+            For Each arg As SeqValue(Of InvokeParameter) In arguments.SeqIterator
+                Dim keyName As String
+                Dim argVal As Object
+
+                If arg.value.haveSymbolName(hasObjectList) Then
+                    keyName = arg.value.name
+                Else
+                    keyName = "$" & arg.i
+                End If
+
+                argVal = arg.value.Evaluate(envir)
+
+                If Program.isException(argVal) Then
+                    Return DirectCast(argVal, Message)
+                Else
+                    argVals.Add(keyName, argVal)
+                End If
+            Next
+
+            Return argVals
         End Function
 
         ''' <summary>

@@ -1,49 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::34c21616678555ecfaeeb047ae24fedf, R#\Runtime\Internal\debug.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class debug
-    ' 
-    '         Properties: verbose
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: [stop], getMessageColor, getMessagePrefix, PrintMessageInternal, PrintRExceptionStackTrace
-    '                   PrintRStackTrace
-    ' 
-    '         Sub: write
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class debug
+' 
+'         Properties: verbose
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: [stop], getMessageColor, getMessagePrefix, PrintMessageInternal, PrintRExceptionStackTrace
+'                   PrintRStackTrace
+' 
+'         Sub: write
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -58,6 +58,7 @@ Imports Microsoft.VisualBasic.My
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 
 Namespace Runtime.Internal
 
@@ -84,9 +85,105 @@ Namespace Runtime.Internal
             End If
         End Sub
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="message"></param>
+        ''' <param name="envir"></param>
+        ''' <param name="suppress">
+        ''' this parameter indicated that the R environment should not 
+        ''' throw the exception when running in debug mode. 
+        ''' </param>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Shared Function [stop](message As Object, envir As Environment) As Message
-            Return base.stop(message, envir)
+        Public Shared Function [stop](message As Object, envir As Environment, Optional suppress As Boolean = False) As Message
+            Dim debugMode As Boolean = envir.globalEnvironment.debugMode AndAlso Not suppress
+
+            If Not message Is Nothing AndAlso message.GetType.IsInheritsFrom(GetType(Exception), strict:=False) Then
+                Call App.LogException(DirectCast(message, Exception), trace:=getEnvironmentStack(envir).JoinBy(vbCrLf))
+
+                If debugMode Then
+                    Throw DirectCast(message, Exception)
+                Else
+                    Return createDotNetExceptionMessage(DirectCast(message, Exception), envir)
+                End If
+            ElseIf message.GetType Is GetType(Message) Then
+                If debugMode Then
+                    Dim err As New Exception(DirectCast(message, Message).message.JoinBy("; "))
+                    Call App.LogException(err)
+                    Throw err
+                Else
+                    Return message
+                End If
+            Else
+                If debugMode Then
+                    Dim err As New Exception(Runtime.asVector(Of Object)(message) _
+                       .AsObjectEnumerator _
+                       .SafeQuery _
+                       .Select(Function(o) Scripting.ToString(o, "NULL")) _
+                       .JoinBy("; ")
+                    )
+                    Call App.LogException(err)
+                    Throw err
+                Else
+                    Return debug.CreateMessageInternal(message, envir, level:=MSG_TYPES.ERR)
+                End If
+            End If
+        End Function
+
+        Friend Shared Function getEnvironmentStack(parent As Environment) As StackFrame()
+            Dim frames As New List(Of StackFrame)
+
+            Do While Not parent Is Nothing
+                frames += parent.stackFrame
+                parent = parent.parent
+            Loop
+
+            Return frames
+        End Function
+
+        ''' <summary>
+        ''' Create R# internal message
+        ''' </summary>
+        ''' <param name="messages"></param>
+        ''' <param name="envir"></param>
+        ''' <param name="level">The message level</param>
+        ''' <returns></returns>
+        Friend Shared Function CreateMessageInternal(messages As Object, envir As Environment, level As MSG_TYPES) As Message
+            Return New Message With {
+                .message = Runtime.asVector(Of Object)(messages) _
+                    .AsObjectEnumerator _
+                    .SafeQuery _
+                    .Select(Function(o) Scripting.ToString(o, "NULL")) _
+                    .ToArray,
+                .level = level,
+                .environmentStack = envir.DoCall(AddressOf getEnvironmentStack),
+                .trace = devtools.ExceptionData.GetCurrentStackTrace
+            }
+        End Function
+
+        Private Shared Function createDotNetExceptionMessage(ex As Exception, envir As Environment) As Message
+            Dim messages As New List(Of String)
+            Dim exception As Exception = ex
+
+            Do While Not ex Is Nothing
+                messages += ex.GetType.Name & ": " & ex.Message
+                ex = ex.InnerException
+            Loop
+
+            ' add stack info for display
+            If exception.StackTrace.StringEmpty Then
+                messages += "stackFrames: none"
+            Else
+                messages += "stackFrames: " & vbCrLf & exception.StackTrace
+            End If
+
+            Return New Message With {
+                .message = messages,
+                .environmentStack = envir.DoCall(AddressOf getEnvironmentStack),
+                .level = MSG_TYPES.ERR,
+                .trace = devtools.ExceptionData.GetCurrentStackTrace
+            }
         End Function
 
         Public Shared Function PrintRExceptionStackTrace(err As ExceptionData) As String

@@ -142,6 +142,11 @@ Namespace Runtime.Internal
         Friend Function invokeGeneric(args As list, x As Object, env As Environment, funcName$, type As Type) As Object
             Dim apiCalls As GenericFunction
 
+            If type Is GetType(vbObject) AndAlso Not generics(funcName).ContainsKey(type) Then
+                x = DirectCast(x, vbObject).target
+                type = x.GetType
+            End If
+
             If Not generics(funcName).ContainsKey(type) Then
                 If TypeOf x Is Object() Then
                     x = MeasureRealElementType(DirectCast(x, Array)) _
