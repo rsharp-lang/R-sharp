@@ -321,7 +321,7 @@ Namespace Runtime.Interop
                 Return Runtime.asVector(value, arg.rawVectorFlag.vector, envir)
             End If
 
-            If arg.type Like GetType(Object) Then
+            If arg.type Like GetType(Object) OrElse Program.isException(value) Then
                 Return value
             End If
 
