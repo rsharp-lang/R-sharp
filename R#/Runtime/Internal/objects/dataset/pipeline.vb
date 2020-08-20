@@ -165,7 +165,7 @@ Namespace Runtime.Internal.Object
             }
         End Function
 
-        Public Shared Function TryCreatePipeline(Of T)(upstream As Object, env As Environment) As pipeline
+        Public Shared Function TryCreatePipeline(Of T)(upstream As Object, env As Environment, Optional suppress As Boolean = False) As pipeline
             If TypeOf upstream Is Dictionary(Of String, Object).ValueCollection Then
                 upstream = DirectCast(upstream, Dictionary(Of String, Object).ValueCollection).ToArray
             End If
@@ -176,7 +176,7 @@ Namespace Runtime.Internal.Object
                 If DirectCast(upstream, pipeline).elementType Like GetType(T) Then
                     Return upstream
                 Else
-                    Return Internal.debug.stop(Message.InCompatibleType(GetType(T), DirectCast(upstream, pipeline).elementType.raw, env), env)
+                    Return Internal.debug.stop(Message.InCompatibleType(GetType(T), DirectCast(upstream, pipeline).elementType.raw, env), env, suppress)
                 End If
             ElseIf TypeOf upstream Is T() Then
                 Return CreateFromPopulator(Of T)(DirectCast(upstream, T()))
@@ -190,7 +190,7 @@ Namespace Runtime.Internal.Object
                 ElseIf GetType(T) Is GetType(Object) Then
                     Return CreateFromPopulator(Of Object)(DirectCast(upstream, vector).data.AsObjectEnumerator)
                 Else
-                    Return Internal.debug.stop(Message.InCompatibleType(GetType(T), DirectCast(upstream, vector).elementType.raw, env), env)
+                    Return Internal.debug.stop(Message.InCompatibleType(GetType(T), DirectCast(upstream, vector).elementType.raw, env), env, suppress)
                 End If
             ElseIf TypeOf upstream Is Object() Then
                 Return TryCastObjectVector(Of T)(DirectCast(upstream, Object()), env)
@@ -205,7 +205,7 @@ Namespace Runtime.Internal.Object
                                 Return TryCastObjectVector(Of T)(ls, env)
                             End Function)
             Else
-                Return Internal.debug.stop(Message.InCompatibleType(GetType(T), upstream.GetType, env), env)
+                Return Internal.debug.stop(Message.InCompatibleType(GetType(T), upstream.GetType, env), env, suppress)
             End If
         End Function
 
