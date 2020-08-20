@@ -85,6 +85,16 @@ Namespace Runtime.Internal
             End If
         End Sub
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="message"></param>
+        ''' <param name="envir"></param>
+        ''' <param name="suppress">
+        ''' this parameter indicated that the R environment should not 
+        ''' throw the exception when running in debug mode. 
+        ''' </param>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function [stop](message As Object, envir As Environment, Optional suppress As Boolean = False) As Message
             Dim debugMode As Boolean = envir.globalEnvironment.debugMode AndAlso Not suppress
