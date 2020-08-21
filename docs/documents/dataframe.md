@@ -15,4 +15,5 @@ The sciBASIC.NET dataframe api
 + [dataset.colnames](dataframe/dataset.colnames.1) Get/Set column names of the given **`dataset`**
 + [dataset.vector](dataframe/dataset.vector.1) Get/set value of a given data column
 + [dataset.project](dataframe/dataset.project.1) Subset of the given dataframe by columns
++ [dataset.transpose](dataframe/dataset.transpose.1) 
 + [read.dataframe](dataframe/read.dataframe.1) Read dataframe

@@ -1,24 +1,20 @@
 .\" man page create by R# package system.
-.TH IGRAPH 2 2020-08-17 "groups" "groups"
+.TH IGRAPH 2 2020-08-21 "trim.edges" "trim.edges"
 .SH NAME
-groups \- Make node groups by given type name
+trim.edges \- removes duplicated edges in the network
 .SH SYNOPSIS
-\fIgroups(\fBg\fR as <generic> NetworkGraph, 
-\fBtype\fR as string, 
-\fBnodes\fR as string);\fR
+\fItrim.edges(\fBg\fR as <generic> NetworkGraph, 
+\fBdirectedGraph\fR as boolean = FALSE);\fR
 .SH DESCRIPTION
 .PP
-Make node groups by given type name
+removes duplicated edges in the network
 .PP
 .SH OPTIONS
 .PP
 \fBg\fB \fR\- -
 .PP
 .PP
-\fBtype\fB \fR\- -
-.PP
-.PP
-\fBnodes\fB \fR\- -
+\fBdirectedGraph\fB \fR\- -
 .PP
 .SH SEE ALSO
 igraph
