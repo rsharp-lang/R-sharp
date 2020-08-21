@@ -42,7 +42,6 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Data.IO.netCDF.Components
 Imports SMRUCC.Rsharp.Interpreter
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports RExpression = SMRUCC.Rsharp.Interpreter.ExecuteEngine.Expression
 
