@@ -65,8 +65,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Compiler\Compiler.vb" />
+    <Compile Include="Compiler\File\Expression.vb" />
+    <Compile Include="Compiler\File\JumpPoints.vb" />
     <Compile Include="html.vb" />
     <Compile Include="highlights.vb" />
+    <Compile Include="Compiler\Loader.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
