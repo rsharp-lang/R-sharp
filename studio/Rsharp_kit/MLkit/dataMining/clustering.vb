@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d798215b43ce424b392dff7294514147, MLkit\dataMining\clustering.vb"
+﻿#Region "Microsoft.VisualBasic::d798215b43ce424b392dff7294514147, studio\Rsharp_kit\MLkit\dataMining\clustering.vb"
 
     ' Author:
     ' 

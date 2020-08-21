@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ef0d94de7b9677f42392b71f8dd9d100, studio\R.exec\Compiler.vb"
+﻿#Region "Microsoft.VisualBasic::f919c9c5bfefd3f41f8813a748655a87, studio\R.code\Compiler\Compiler.vb"
 
     ' Author:
     ' 

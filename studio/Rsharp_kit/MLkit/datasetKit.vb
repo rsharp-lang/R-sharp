@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::964d5a99cf384ebb4126de17670201ce, MLkit\datasetKit.vb"
+﻿#Region "Microsoft.VisualBasic::aa55ccc4a056999359798acc31caefcc, studio\Rsharp_kit\MLkit\datasetKit.vb"
 
     ' Author:
     ' 
@@ -39,7 +39,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Linq
@@ -89,4 +88,3 @@ Module datasetKit
         Return file.LoadXml(Of DataSet)
     End Function
 End Module
-

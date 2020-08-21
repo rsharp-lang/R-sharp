@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e09a56bf73186f69a931a9c528a8bb13, MLkit\zzz.vb"
+﻿#Region "Microsoft.VisualBasic::745d769bfe3dce831c0075950b53efee, studio\Rsharp_kit\MLkit\zzz.vb"
 
     ' Author:
     ' 
@@ -50,4 +50,3 @@ Public Class zzz
             .AppSummary("Welcome to the SMRUCC Machine Learning toolkit!", "", App.StdOut)
     End Sub
 End Class
-

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b3ab9b03c111241c4c29ee5048bd2b14, Library\R.base\utils\dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::26b068d5ec2e6181077135f7db99f2b6, Library\R.base\utils\dataframe.vb"
 
     ' Author:
     ' 
@@ -37,7 +37,7 @@
     '     Function: appendCells, appendRow, cells, colnames, column
     '               CreateRowObject, deserialize, openCsv, printTable, project
     '               rawToDataFrame, readCsvRaw, readDataSet, rows, RowToString
-    '               vector
+    '               transpose, vector
     ' 
     ' /********************************************************************************/
 

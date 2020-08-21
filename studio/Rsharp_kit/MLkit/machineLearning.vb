@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::30cd936d8196d8c049573151b18c0f73, MLkit\machineLearning.vb"
+﻿#Region "Microsoft.VisualBasic::30cd936d8196d8c049573151b18c0f73, studio\Rsharp_kit\MLkit\machineLearning.vb"
 
     ' Author:
     ' 

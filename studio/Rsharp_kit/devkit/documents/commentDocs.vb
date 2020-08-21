@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e2e1d67ca21f700423c65d821055d726, Library\devkit\documents\commentDocs.vb"
+﻿#Region "Microsoft.VisualBasic::e2e1d67ca21f700423c65d821055d726, studio\Rsharp_kit\devkit\documents\commentDocs.vb"
 
     ' Author:
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3bebf597e7279ebe077f2ff4e67a5d9a, MLkit\activation.vb"
+﻿#Region "Microsoft.VisualBasic::3bebf597e7279ebe077f2ff4e67a5d9a, studio\Rsharp_kit\MLkit\activation.vb"
 
     ' Author:
     ' 

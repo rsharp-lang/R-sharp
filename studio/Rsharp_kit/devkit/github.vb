@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a77eca48134caf61fd0f18e0fe48c84b, Library\devkit\github.vb"
+﻿#Region "Microsoft.VisualBasic::a77eca48134caf61fd0f18e0fe48c84b, studio\Rsharp_kit\devkit\github.vb"
 
     ' Author:
     ' 

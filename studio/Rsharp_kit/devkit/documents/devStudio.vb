@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f1993e686cc1581c04bd9a29ded3eca7, Library\devkit\documents\devStudio.vb"
+﻿#Region "Microsoft.VisualBasic::f1993e686cc1581c04bd9a29ded3eca7, studio\Rsharp_kit\devkit\documents\devStudio.vb"
 
     ' Author:
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::da23cbf6529b8e28487f3f6edb8651f7, MLkit\dataMining\dbscanResult.vb"
+﻿#Region "Microsoft.VisualBasic::da23cbf6529b8e28487f3f6edb8651f7, studio\Rsharp_kit\MLkit\dataMining\dbscanResult.vb"
 
     ' Author:
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cc9b7b03af875b199155c5bd1d73b2e4, MLkit\dataMining\btreeCluster.vb"
+﻿#Region "Microsoft.VisualBasic::6a828b776af2ae265de01b1af67b5846, studio\Rsharp_kit\MLkit\dataMining\btreeCluster.vb"
 
     ' Author:
     ' 
@@ -68,4 +68,3 @@ Public Class btreeCluster
         End If
     End Function
 End Class
-
