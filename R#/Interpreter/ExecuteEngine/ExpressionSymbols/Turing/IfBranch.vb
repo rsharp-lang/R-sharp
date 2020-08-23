@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::400e38586e2832879d31ee06b3d6da71, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\IfBranch.vb"
+﻿#Region "Microsoft.VisualBasic::b4f7c757fd506cffa8052a86d27383c0, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\IfBranch.vb"
 
     ' Author:
     ' 
@@ -58,7 +58,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
-Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Internal
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -125,7 +125,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
                         $"missing value where TRUE/FALSE needed"
                     },
                     .level = MSG_TYPES.ERR,
-                    .environmentStack = envir.getEnvironmentStack,
+                    .environmentStack = debug.getEnvironmentStack(envir),
                     .trace = devtools.ExceptionData.GetCurrentStackTrace
                 }
             ElseIf Program.isException(test) Then

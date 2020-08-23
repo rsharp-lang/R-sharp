@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::891633b421f3cb58965a2ec94e68e4cc, R#\Interpreter\ExecuteEngine\ExpressionSymbols\CLI\CommandLine.vb"
+﻿#Region "Microsoft.VisualBasic::6d59d5d10c6acfc11008caf937ee4d30, R#\Interpreter\ExecuteEngine\ExpressionSymbols\CLI\CommandLine.vb"
 
     ' Author:
     ' 
@@ -49,7 +49,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.SyntaxParser
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -112,7 +112,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
                     $"commandline: " & commandline
                 },
                 .level = MSG_TYPES.WRN,
-                .environmentStack = envir.getEnvironmentStack,
+                .environmentStack = debug.getEnvironmentStack(envir),
                 .trace = devtools.ExceptionData.GetCurrentStackTrace
             }
         End Function

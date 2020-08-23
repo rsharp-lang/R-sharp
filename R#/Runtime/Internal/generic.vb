@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a939dfd6b809adde1882211c8a9352e5, R#\Runtime\Internal\generic.vb"
+﻿#Region "Microsoft.VisualBasic::2990cab58f93ddd7260e8eaaacbe889f, R#\Runtime\Internal\generic.vb"
 
     ' Author:
     ' 
@@ -141,6 +141,11 @@ Namespace Runtime.Internal
         <Extension>
         Friend Function invokeGeneric(args As list, x As Object, env As Environment, funcName$, type As Type) As Object
             Dim apiCalls As GenericFunction
+
+            If type Is GetType(vbObject) AndAlso Not generics(funcName).ContainsKey(type) Then
+                x = DirectCast(x, vbObject).target
+                type = x.GetType
+            End If
 
             If Not generics(funcName).ContainsKey(type) Then
                 If TypeOf x Is Object() Then

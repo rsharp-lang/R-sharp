@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::826e7c270209d11dc88dc09023fd23b9, R#\Runtime\RVectorExtensions.vb"
+﻿#Region "Microsoft.VisualBasic::e93b9214690cd14b3cb4dd7d4a178bdf, R#\Runtime\RVectorExtensions.vb"
 
     ' Author:
     ' 
@@ -173,7 +173,14 @@ Namespace Runtime
                     Return type.createArray(DirectCast(value, Group).group, env)
                 Else
                     Dim array As Array = Array.CreateInstance(type, 1)
-                    array.SetValue(RCType.CTypeDynamic(value, type, env), Scan0)
+                    Dim [single] As Object = RCType.CTypeDynamic(value, type, env)
+
+                    If Program.isException([single]) Then
+                        Return [single]
+                    Else
+                        Call array.SetValue([single], Scan0)
+                    End If
+
                     Return array
                 End If
             Else

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::dc0e81e8dfc3911f896fff93805c1186, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewFunction.vb"
+﻿#Region "Microsoft.VisualBasic::500e9f70ab9e7fe53212aa0b11f5a8ca, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewFunction.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,7 @@
     '         Properties: body, funcName, params, stackFrame, type
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, getReturns, Invoke, MissingParameters, ToString
+    '         Function: Evaluate, getReturns, (+2 Overloads) Invoke, MissingParameters, ToString
     ' 
     ' 
     ' /********************************************************************************/
@@ -108,10 +108,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Dim value As Object
             Dim arguments As Dictionary(Of String, Object)
             Dim envir As Environment = Me.envir
+            Dim runDispose As Boolean = False
 
             If envir Is Nothing Then
                 envir = parent
             Else
+                runDispose = True
                 envir = New Environment(parent, stackFrame, isInherits:=False)
             End If
 
@@ -120,8 +122,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
             ' function parameter should be evaluate 
             ' from the parent environment.
-            arguments = InvokeParameter.CreateArguments(parent, params, hasObjectList:=True)
-            argumentKeys = arguments.Keys.ToArray
+            With InvokeParameter.CreateArguments(parent, params, hasObjectList:=True)
+                If .GetUnderlyingType Is GetType(Message) Then
+                    Return .TryCast(Of Message)
+                Else
+                    arguments = .TryCast(Of Dictionary(Of String, Object))
+                    argumentKeys = arguments.Keys.ToArray
+                End If
+            End With
 
             ' initialize environment
             For i As Integer = 0 To Me.params.Length - 1
@@ -133,6 +141,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     ' missing, use default value
                     If var.hasInitializeExpression Then
                         value = var.value.Evaluate(envir)
+
+                        If Program.isException(value) Then
+                            Return value
+                        End If
                     Else
                         Return MissingParameters(var, funcName, envir)
                     End If
@@ -148,10 +160,6 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                         ' try to fix such bug
                         value = arguments(argumentKeys(i))
                     End If
-                End If
-
-                If Program.isException(value) Then
-                    Return value
                 End If
 
                 ' 20191120 对于函数对象而言，由于拥有自己的环境，在构建闭包之后
@@ -177,7 +185,56 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 End If
             Next
 
-            Return body.Evaluate(envir)
+            If runDispose Then
+                Using envir
+                    Return body.Evaluate(envir)
+                End Using
+            Else
+                Return body.Evaluate(envir)
+            End If
+        End Function
+
+        Public Function Invoke(arguments() As Object, parent As Environment) As Object Implements RFunction.Invoke
+            Dim envir As Environment = Me.envir
+            Dim argVal As Object
+            Dim runDispose As Boolean = False
+
+            If envir Is Nothing Then
+                envir = parent
+            Else
+                runDispose = True
+                envir = New Environment(parent, stackFrame, isInherits:=False)
+            End If
+
+            For i As Integer = 0 To params.Length - 1
+                Dim names As Literal() = params(i).names _
+                    .Select(Function(name) New Literal(name)) _
+                    .ToArray
+
+                If i >= arguments.Length Then
+                    If params(i).hasInitializeExpression Then
+                        argVal = params(i).value.Evaluate(envir)
+
+                        If Program.isException(argVal) Then
+                            Return argVal
+                        End If
+
+                        Call ValueAssign.doValueAssign(envir, names, True, argVal)
+                    Else
+                        Return MissingParameters(params(i), funcName, envir)
+                    End If
+                Else
+                    Call ValueAssign.doValueAssign(envir, names, True, arguments(i))
+                End If
+            Next
+
+            If runDispose Then
+                Using envir
+                    Return body.Evaluate(envir)
+                End Using
+            Else
+                Return body.Evaluate(envir)
+            End If
         End Function
 
         Public Overrides Function Evaluate(envir As Environment) As Object

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7531d12051e05f60d4b6d9331b816d92, R#\Runtime\Internal\internalInvokes\base.vb"
+﻿#Region "Microsoft.VisualBasic::cb50e93a4586fe667d703d35c5d7b558, R#\Runtime\Internal\internalInvokes\base.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,12 @@
     '     Module base
     ' 
     '         Function: [dim], [stop], allocate, append, autoDispose
-    '                   cat, cbind, colnames, createDotNetExceptionMessage, CreateMessageInternal
-    '                   doPrintInternal, getEnvironmentStack, getOption, invisible, isEmpty
-    '                   isNull, length, makeNames, names, ncol
-    '                   neg, nrow, options, print, rbind
-    '                   Rdataframe, rep, replace, Rlist, rownames
-    '                   sink, source, str, summary, t
-    '                   unitOfT, warning
+    '                   cat, cbind, colnames, doPrintInternal, getOption
+    '                   invisible, isEmpty, isNull, length, makeNames
+    '                   names, ncol, neg, nrow, options
+    '                   print, rbind, Rdataframe, rep, replace
+    '                   Rlist, rownames, sink, source, str
+    '                   summary, t, unitOfT, warning
     ' 
     '         Sub: [exit], q, quit
     ' 
@@ -49,8 +48,6 @@
 
 #End Region
 
-Imports System.Runtime.CompilerServices
-Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -66,14 +63,12 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
-Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Components
 Imports SMRUCC.Rsharp.System.Configuration
-Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports RObj = SMRUCC.Rsharp.Runtime.Internal.Object
 Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 
@@ -1028,95 +1023,7 @@ Namespace Runtime.Internal.Invokes
         ''' 
         <ExportAPI("stop")>
         Public Function [stop](<RRawVectorArgument> message As Object, Optional envir As Environment = Nothing) As Message
-            Dim debugMode As Boolean = envir.globalEnvironment.debugMode
-
-            If Not message Is Nothing AndAlso message.GetType.IsInheritsFrom(GetType(Exception), strict:=False) Then
-                Call App.LogException(DirectCast(message, Exception), trace:=envir.getEnvironmentStack.JoinBy(vbCrLf))
-
-                If debugMode Then
-                    Throw DirectCast(message, Exception)
-                Else
-                    Return DirectCast(message, Exception).createDotNetExceptionMessage(envir)
-                End If
-            ElseIf message.GetType Is GetType(Message) Then
-                If debugMode Then
-                    Dim err As New Exception(DirectCast(message, Message).message.JoinBy("; "))
-                    Call App.LogException(err)
-                    Throw err
-                Else
-                    Return message
-                End If
-            Else
-                If debugMode Then
-                    Dim err As New Exception(Runtime.asVector(Of Object)(message) _
-                       .AsObjectEnumerator _
-                       .SafeQuery _
-                       .Select(Function(o) Scripting.ToString(o, "NULL")) _
-                       .JoinBy("; ")
-                    )
-                    Call App.LogException(err)
-                    Throw err
-                Else
-                    Return base.CreateMessageInternal(message, envir, level:=MSG_TYPES.ERR)
-                End If
-            End If
-        End Function
-
-        <Extension>
-        Private Function createDotNetExceptionMessage(ex As Exception, envir As Environment) As Message
-            Dim messages As New List(Of String)
-            Dim exception As Exception = ex
-
-            Do While Not ex Is Nothing
-                messages += ex.GetType.Name & ": " & ex.Message
-                ex = ex.InnerException
-            Loop
-
-            ' add stack info for display
-            If exception.StackTrace.StringEmpty Then
-                messages += "stackFrames: none"
-            Else
-                messages += "stackFrames: " & vbCrLf & exception.StackTrace
-            End If
-
-            Return New Message With {
-                .message = messages,
-                .environmentStack = envir.getEnvironmentStack,
-                .level = MSG_TYPES.ERR,
-                .trace = devtools.ExceptionData.GetCurrentStackTrace
-            }
-        End Function
-
-        <Extension>
-        Friend Function getEnvironmentStack(parent As Environment) As StackFrame()
-            Dim frames As New List(Of StackFrame)
-
-            Do While Not parent Is Nothing
-                frames += parent.stackFrame
-                parent = parent.parent
-            Loop
-
-            Return frames
-        End Function
-
-        ''' <summary>
-        ''' Create R# internal message
-        ''' </summary>
-        ''' <param name="messages"></param>
-        ''' <param name="envir"></param>
-        ''' <param name="level">The message level</param>
-        ''' <returns></returns>
-        Friend Function CreateMessageInternal(messages As Object, envir As Environment, level As MSG_TYPES) As Message
-            Return New Message With {
-                .message = Runtime.asVector(Of Object)(messages) _
-                    .AsObjectEnumerator _
-                    .SafeQuery _
-                    .Select(Function(o) Scripting.ToString(o, "NULL")) _
-                    .ToArray,
-                .level = level,
-                .environmentStack = envir.getEnvironmentStack,
-                .trace = devtools.ExceptionData.GetCurrentStackTrace
-            }
+            Return debug.stop(message, envir)
         End Function
 
         ''' <summary>
@@ -1138,7 +1045,7 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("warning")>
         <DebuggerStepThrough>
         Public Function warning(<RRawVectorArgument> message As Object, Optional envir As Environment = Nothing) As Message
-            Dim msg As Message = CreateMessageInternal(message, envir, level:=MSG_TYPES.WRN)
+            Dim msg As Message = debug.CreateMessageInternal(message, envir, level:=MSG_TYPES.WRN)
             envir.messages.Add(msg)
             Return msg
         End Function

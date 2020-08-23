@@ -69,20 +69,11 @@ try {
 The ``switch...case`` is very similar to the ``if...else if...else``:
 
 ```R
-switch(value_expression) {
-
-    case condition1 {
-    
-    }
-    
-    case condition2 {
-    
-    }
-    
-    case else {
-    
-    }
-}
+switch(value_expression) 
+|> condition1: value_expression1; 
+|> condition2: value_expression2;
+|> ...;
+|> else: value_expression3; 
 ```
 
 ####  2.1.2. <a name='Loopcontrol'></a>Loop control

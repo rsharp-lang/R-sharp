@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::24e1e1563ad5342db3d7ed6c9332dd0f, R#\Runtime\Internal\objects\reflector.vb"
+﻿#Region "Microsoft.VisualBasic::49229ba49cbeb46e56efcebcbcdbe9c6, R#\Runtime\Internal\objects\reflector.vb"
 
     ' Author:
     ' 
@@ -64,6 +64,13 @@ Namespace Runtime.Internal.Object
                 Return "<NULL>"
             ElseIf x.GetType Is GetType(list) Then
                 x = DirectCast(x, list).slots
+            End If
+
+            If TypeOf x Is vbObject Then
+                x = DirectCast(x, vbObject).target
+            End If
+            If TypeOf x Is MagicScriptSymbol Then
+                x = DirectCast(x, MagicScriptSymbol).toList.slots
             End If
 
             Dim type As Type = x.GetType

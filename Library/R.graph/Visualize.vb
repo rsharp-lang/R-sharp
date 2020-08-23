@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5c5a1fcc5b517d0a8f436ffa55828e9c, Library\R.graph\Visualize.vb"
+﻿#Region "Microsoft.VisualBasic::f926887df8821e24631f43507442caae, Library\R.graph\Visualize.vb"
 
     ' Author:
     ' 
@@ -126,7 +126,8 @@ Module Visualize
     Public Function renderPlot(g As NetworkGraph,
                                <RRawVectorArgument>
                                Optional canvasSize As Object = "1024,768",
-                               Optional padding$ = g.DefaultPadding,
+                               <RRawVectorArgument>
+                               Optional padding As Object = g.DefaultPadding,
                                Optional defaultColor$ = "skyblue",
                                Optional minNodeSize! = 10,
                                Optional minLinkWidth! = 2,

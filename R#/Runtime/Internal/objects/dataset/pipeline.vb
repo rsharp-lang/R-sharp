@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::134d28b56322a729d1afa59325a5b55d, R#\Runtime\Internal\objects\dataset\pipeline.vb"
+﻿#Region "Microsoft.VisualBasic::51bf3012bdb849cb7a6d6a10dd2cceb2, R#\Runtime\Internal\objects\dataset\pipeline.vb"
 
     ' Author:
     ' 
@@ -165,7 +165,7 @@ Namespace Runtime.Internal.Object
             }
         End Function
 
-        Public Shared Function TryCreatePipeline(Of T)(upstream As Object, env As Environment) As pipeline
+        Public Shared Function TryCreatePipeline(Of T)(upstream As Object, env As Environment, Optional suppress As Boolean = False) As pipeline
             If TypeOf upstream Is Dictionary(Of String, Object).ValueCollection Then
                 upstream = DirectCast(upstream, Dictionary(Of String, Object).ValueCollection).ToArray
             End If
@@ -176,7 +176,7 @@ Namespace Runtime.Internal.Object
                 If DirectCast(upstream, pipeline).elementType Like GetType(T) Then
                     Return upstream
                 Else
-                    Return Internal.debug.stop(Message.InCompatibleType(GetType(T), DirectCast(upstream, pipeline).elementType.raw, env), env)
+                    Return Message.InCompatibleType(GetType(T), DirectCast(upstream, pipeline).elementType.raw, env, suppress:=suppress)
                 End If
             ElseIf TypeOf upstream Is T() Then
                 Return CreateFromPopulator(Of T)(DirectCast(upstream, T()))
@@ -190,10 +190,10 @@ Namespace Runtime.Internal.Object
                 ElseIf GetType(T) Is GetType(Object) Then
                     Return CreateFromPopulator(Of Object)(DirectCast(upstream, vector).data.AsObjectEnumerator)
                 Else
-                    Return Internal.debug.stop(Message.InCompatibleType(GetType(T), DirectCast(upstream, vector).elementType.raw, env), env)
+                    Return Message.InCompatibleType(GetType(T), DirectCast(upstream, vector).elementType.raw, env, suppress:=suppress)
                 End If
             ElseIf TypeOf upstream Is Object() Then
-                Return TryCastObjectVector(Of T)(DirectCast(upstream, Object()), env)
+                Return TryCastObjectVector(Of T)(DirectCast(upstream, Object()), env, suppress)
             ElseIf GetType(T) Is GetType(Object) Then
                 Return CreateFromPopulator(Of T)({upstream})
             ElseIf TypeOf upstream Is list Then
@@ -202,20 +202,20 @@ Namespace Runtime.Internal.Object
                     .Values _
                     .ToArray _
                     .DoCall(Function(ls)
-                                Return TryCastObjectVector(Of T)(ls, env)
+                                Return TryCastObjectVector(Of T)(ls, env, suppress)
                             End Function)
             Else
-                Return Internal.debug.stop(Message.InCompatibleType(GetType(T), upstream.GetType, env), env)
+                Return Message.InCompatibleType(GetType(T), upstream.GetType, env, suppress:=suppress)
             End If
         End Function
 
-        Private Shared Function TryCastObjectVector(Of T)(objs As Object(), env As Environment) As pipeline
+        Private Shared Function TryCastObjectVector(Of T)(objs As Object(), env As Environment, suppress As Boolean) As pipeline
             Dim type As Type = MeasureRealElementType(objs)
 
             If type Is GetType(T) Then
                 Return New pipeline(objs, RType.GetRSharpType(type))
             Else
-                Return Internal.debug.stop(Message.InCompatibleType(GetType(T), type, env), env)
+                Return Message.InCompatibleType(GetType(T), type, env, suppress:=suppress)
             End If
         End Function
 

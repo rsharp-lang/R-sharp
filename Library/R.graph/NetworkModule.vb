@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::61fc734c0fe6105f14bcebb387af1f26, Library\R.graph\NetworkModule.vb"
+﻿#Region "Microsoft.VisualBasic::d8c6043c251c006ce7f83ad18152d417, Library\R.graph\NetworkModule.vb"
 
     ' Author:
     ' 
@@ -37,12 +37,14 @@
     '     Function: addEdge, addEdges, addNode, addNodes, attributes
     '               computeNetwork, connectedNetwork, DecomposeGraph, degree, emptyNetwork
     '               getByGroup, getEdges, getElementByID, getNodes, LoadNetwork
-    '               printGraph, SaveNetwork, setAttributes, typeGroupOfNodes
+    '               printGraph, printNode, SaveNetwork, setAttributes, trimEdges
+    '               typeGroupOfNodes
     ' 
     ' /********************************************************************************/
 
 #End Region
 
+Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
@@ -73,12 +75,31 @@ Public Module NetworkModule
 
     Sub New()
         REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of NetworkGraph)(AddressOf printGraph)
+        REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of node)(AddressOf printNode)
     End Sub
 
     Private Function printGraph(obj As Object) As String
         Dim g As NetworkGraph = DirectCast(obj, NetworkGraph)
 
         Return $"Network graph with {g.vertex.Count} vertex nodes and {g.graphEdges.Count} edges."
+    End Function
+
+    Private Function printNode(node As node) As String
+        Dim str As New StringBuilder
+
+        Call str.AppendLine($"#{node.ID}  {node.label}")
+        Call str.AppendLine($"degree: {node.degree.In} in, {node.degree.Out} out.")
+        Call str.AppendLine(node.adjacencies?.ToString)
+
+        If Not node.data Is Nothing Then
+            If Not node.data.color Is Nothing Then
+                Call str.AppendLine("color: " & node.data.color.ToString)
+            End If
+
+            Call str.AppendLine("class: " & (node.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) Or "n/a".AsDefault))
+        End If
+
+        Return str.ToString
     End Function
 
     ''' <summary>
@@ -140,6 +161,17 @@ Public Module NetworkModule
     End Function
 
     ''' <summary>
+    ''' removes duplicated edges in the network
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <param name="directedGraph"></param>
+    ''' <returns></returns>
+    <ExportAPI("trim.edges")>
+    Public Function trimEdges(g As NetworkGraph, Optional directedGraph As Boolean = False) As NetworkGraph
+        Return g.RemoveDuplicated(directedGraph)
+    End Function
+
+    ''' <summary>
     ''' removes all of the isolated nodes.
     ''' </summary>
     ''' <param name="graph"></param>
@@ -165,8 +197,15 @@ Public Module NetworkModule
     ''' <param name="g"></param>
     ''' <returns></returns>
     <ExportAPI("degree")>
-    Public Function degree(g As NetworkGraph) As Dictionary(Of String, Integer)
-        Return g.ComputeNodeDegrees
+    Public Function degree(g As NetworkGraph) As list
+        Return New list With {
+            .slots = g _
+                .ComputeNodeDegrees _
+                .ToDictionary(Function(a) a.Key,
+                              Function(a)
+                                  Return CObj(a.Value)
+                              End Function)
+        }
     End Function
 
     ''' <summary>
@@ -243,9 +282,17 @@ Public Module NetworkModule
         Return nodes
     End Function
 
+    ''' <summary>
+    ''' add edge link into the given network graph
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <param name="u"></param>
+    ''' <param name="v"></param>
+    ''' <param name="weight"></param>
+    ''' <returns></returns>
     <ExportAPI("add.edge")>
-    Public Function addEdge(g As NetworkGraph, u$, v$) As Edge
-        Return g.CreateEdge(u, v)
+    Public Function addEdge(g As NetworkGraph, u$, v$, Optional weight# = 0) As Edge
+        Return g.CreateEdge(u, v, weight)
     End Function
 
     ''' <summary>
@@ -357,7 +404,7 @@ Public Module NetworkModule
     ''' <param name="type"></param>
     ''' <param name="nodes"></param>
     ''' <returns></returns>
-    <ExportAPI("groups")>
+    <ExportAPI("set_group")>
     Public Function typeGroupOfNodes(g As NetworkGraph, type$, nodes As String()) As NetworkGraph
         Call nodes _
             .Select(AddressOf g.GetElementByID) _

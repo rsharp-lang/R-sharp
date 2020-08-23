@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a899710e5214fc0b9737505931bca731, Library\R_graphic.interop\InteropArgumentHelper.vb"
+﻿#Region "Microsoft.VisualBasic::465ab27f0660fbdd1e174b2cf7d397d4, Library\R_graphic.interop\InteropArgumentHelper.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,14 @@
     ' Module InteropArgumentHelper
     ' 
     '     Function: getColor, getFontCSS, getPadding, getSize, getStrokePenCSS
-    '               getVector2D, getVector3D
+    '               getVector2D, getVector3D, paddingFromNumbers
     ' 
     ' /********************************************************************************/
 
 #End Region
 
 Imports System.Drawing
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
@@ -102,20 +103,25 @@ Public Module InteropArgumentHelper
             Case GetType(String)
                 Return padding
             Case GetType(Long()), GetType(Integer())
-                Dim data As Array = padding
-
-                If data.Length = 1 Then
-                    Dim x As String = data.GetValue(Scan0).ToString
-
-                    Return $"padding: {x}px {x}px {x}px {x}px;"
-                ElseIf data.Length = 4 Then
-                    Return $"padding: {data.GetValue(0)}px {data.GetValue(1)}px {data.GetValue(2)}px {data.GetValue(3)}px;"
-                Else
-                    Return [default]
-                End If
+                Return DirectCast(padding, Array).paddingFromNumbers(default$)
+            Case GetType(vector)
+                Return DirectCast(padding, vector).data.paddingFromNumbers(default$)
             Case Else
                 Return [default]
         End Select
+    End Function
+
+    <Extension>
+    Private Function paddingFromNumbers(data As Array, default$) As String
+        If data.Length = 1 Then
+            Dim x As String = data.GetValue(Scan0).ToString
+
+            Return $"padding: {x}px {x}px {x}px {x}px;"
+        ElseIf data.Length = 4 Then
+            Return $"padding: {data.GetValue(0)}px {data.GetValue(1)}px {data.GetValue(2)}px {data.GetValue(3)}px;"
+        Else
+            Return [default]
+        End If
     End Function
 
     Public Function getSize(size As Object, Optional default$ = "2700,2000") As String

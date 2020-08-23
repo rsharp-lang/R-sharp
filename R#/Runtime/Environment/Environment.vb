@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c2b744768d89f968245202568bb9e22d, R#\Runtime\Environment\Environment.vb"
+﻿#Region "Microsoft.VisualBasic::da566d08628e3671dacf9dfb7cec68c2, R#\Runtime\Environment\Environment.vb"
 
     ' Author:
     ' 
@@ -60,7 +60,7 @@ Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
@@ -84,7 +84,7 @@ Namespace Runtime
         Public ReadOnly Property stackFrame As StackFrame
         Public ReadOnly Property stackTrace As StackFrame()
             Get
-                Return Me.getEnvironmentStack
+                Return debug.getEnvironmentStack(Me)
             End Get
         End Property
 
@@ -217,7 +217,7 @@ Namespace Runtime
         End Sub
 
         Public Sub AddMessage(message As Object, Optional level As MSG_TYPES = MSG_TYPES.WRN)
-            Internal.Invokes _
+            Internal.debug _
                 .CreateMessageInternal(message, Me, level) _
                 .DoCall(AddressOf messages.Add)
         End Sub

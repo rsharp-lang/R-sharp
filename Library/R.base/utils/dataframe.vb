@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b3ab9b03c111241c4c29ee5048bd2b14, Library\R.base\utils\dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::26b068d5ec2e6181077135f7db99f2b6, Library\R.base\utils\dataframe.vb"
 
     ' Author:
     ' 
@@ -37,7 +37,7 @@
     '     Function: appendCells, appendRow, cells, colnames, column
     '               CreateRowObject, deserialize, openCsv, printTable, project
     '               rawToDataFrame, readCsvRaw, readDataSet, rows, RowToString
-    '               vector
+    '               transpose, vector
     ' 
     ' /********************************************************************************/
 
@@ -50,6 +50,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
+Imports Microsoft.VisualBasic.Data.csv.StorageProvider.Reflection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -59,10 +60,9 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports csv = Microsoft.VisualBasic.Data.csv.IO.File
+Imports Idataframe = Microsoft.VisualBasic.Data.csv.IO.DataFrame
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports RPrinter = SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
-Imports Idataframe = Microsoft.VisualBasic.Data.csv.IO.DataFrame
-Imports Microsoft.VisualBasic.Data.csv.StorageProvider.Reflection
 
 ''' <summary>
 ''' The sciBASIC.NET dataframe api
@@ -382,10 +382,10 @@ Module dataframe
     ''' Subset of the given dataframe by columns
     ''' </summary>
     ''' <param name="dataset"></param>
-    ''' <param name="cols"></param>
+    ''' <param name="cols">a character vector of the dataframe column names.</param>
     ''' <returns></returns>
     <ExportAPI("dataset.project")>
-    Public Function project(dataset As Array, cols$(), envir As Environment) As Object
+    Public Function project(dataset As Array, cols$(), Optional envir As Environment = Nothing) As Object
         Dim baseElement As Type = Runtime.MeasureArrayElementType(dataset)
 
         If baseElement Is GetType(EntityObject) Then
@@ -417,19 +417,35 @@ Module dataframe
         End If
     End Function
 
+    <ExportAPI("dataset.transpose")>
+    Public Function transpose(dataset As Array, Optional env As Environment = Nothing) As Object
+        Dim baseElement As Type = Runtime.MeasureArrayElementType(dataset)
+
+        If baseElement Is GetType(EntityObject) Then
+            Return dataset.AsObjectEnumerator(Of EntityObject).Transpose
+        ElseIf baseElement Is GetType(DataSet) Then
+            Return dataset.AsObjectEnumerator(Of DataSet).Transpose
+        Else
+            Return Internal.debug.stop(New InvalidProgramException, env)
+        End If
+    End Function
+
     ''' <summary>
     ''' Read dataframe
     ''' </summary>
-    ''' <param name="file$"></param>
-    ''' <param name="mode$"></param>
+    ''' <param name="file">the csv file</param>
+    ''' <param name="mode"></param>
     ''' <returns></returns>
     <ExportAPI("read.dataframe")>
-    Public Function readDataSet(file$, Optional mode$ = "numeric|character|any", Optional toRObj As Boolean = False, Optional silent As Boolean = True) As Object
-        Dim readMode As String = mode.Split("|"c).First
+    Public Function readDataSet(file$,
+                                Optional mode As DataModes = DataModes.numeric,
+                                Optional toRObj As Boolean = False,
+                                Optional silent As Boolean = True) As Object
+
         Dim dataframe As New Rdataframe
 
-        Select Case readMode.ToLower
-            Case "numeric"
+        Select Case mode
+            Case DataModes.numeric
                 Dim data = DataSet.LoadDataSet(file, silent:=silent).ToArray
 
                 If toRObj Then
@@ -444,7 +460,7 @@ Module dataframe
                 Else
                     Return data
                 End If
-            Case "character"
+            Case DataModes.character
                 Dim data = EntityObject.LoadDataSet(file, silent:=silent).ToArray
 
                 If toRObj Then

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b7d289b5d6a6e6762eab0aafaa9b5ba2, R#\Runtime\System\InvokeParameter.vb"
+﻿#Region "Microsoft.VisualBasic::3e0767791c0a6a6a9e50e658288dea87, R#\Runtime\System\InvokeParameter.vb"
 
     ' Author:
     ' 
@@ -45,7 +45,9 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
@@ -177,19 +179,29 @@ Namespace Runtime.Components
         ''' </param>
         ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Shared Function CreateArguments(envir As Environment, arguments As IEnumerable(Of InvokeParameter), hasObjectList As Boolean) As Dictionary(Of String, Object)
-            Return arguments _
-                .SeqIterator _
-                .ToDictionary(Function(a)
-                                  If a.value.haveSymbolName(hasObjectList) Then
-                                      Return a.value.name
-                                  Else
-                                      Return "$" & a.i
-                                  End If
-                              End Function,
-                              Function(a)
-                                  Return a.value.Evaluate(envir)
-                              End Function)
+        Public Shared Function CreateArguments(envir As Environment, arguments As IEnumerable(Of InvokeParameter), hasObjectList As Boolean) As [Variant](Of Message, Dictionary(Of String, Object))
+            Dim argVals As New Dictionary(Of String, Object)
+
+            For Each arg As SeqValue(Of InvokeParameter) In arguments.SeqIterator
+                Dim keyName As String
+                Dim argVal As Object
+
+                If arg.value.haveSymbolName(hasObjectList) Then
+                    keyName = arg.value.name
+                Else
+                    keyName = "$" & arg.i
+                End If
+
+                argVal = arg.value.Evaluate(envir)
+
+                If Program.isException(argVal) Then
+                    Return DirectCast(argVal, Message)
+                Else
+                    argVals.Add(keyName, argVal)
+                End If
+            Next
+
+            Return argVals
         End Function
 
         ''' <summary>

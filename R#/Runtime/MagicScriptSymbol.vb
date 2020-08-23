@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8008047fa9a855b71ddd4b97a76412da, R#\Runtime\MagicScriptSymbol.vb"
+﻿#Region "Microsoft.VisualBasic::0d10f6a78ce7e066805f5a3b2e56e36d, R#\Runtime\MagicScriptSymbol.vb"
 
     ' Author:
     ' 
@@ -36,11 +36,14 @@
     '         Properties: debug, dir, file, fullName, silent
     '                     startup_time
     ' 
+    '         Function: toList
+    ' 
     ' 
     ' /********************************************************************************/
 
 #End Region
 
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime
@@ -56,5 +59,17 @@ Namespace Runtime
         Public Property debug As Boolean
         Public Property silent As Boolean
 
+        Public Function toList() As list
+            Return New list With {
+                .slots = New Dictionary(Of String, Object) From {
+                    {NameOf(dir), dir},
+                    {NameOf(file), file},
+                    {NameOf(fullName), fullName},
+                    {"startup.time", startup_time},
+                    {NameOf(debug), debug},
+                    {NameOf(silent), silent}
+                }
+            }
+        End Function
     End Class
 End Namespace

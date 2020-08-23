@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b74c22b06cce40e0ef17aec373d364c2, R#\Runtime\System\Interface\RFunction.vb"
+﻿#Region "Microsoft.VisualBasic::4eeb12ca34785d867aab2ac013361187, R#\Runtime\System\Interface\RFunction.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,7 @@
     ' 
     '         Properties: name
     ' 
-    '         Function: getReturns, Invoke
+    '         Function: getReturns, (+2 Overloads) Invoke
     ' 
     '     Interface IRuntimeTrace
     ' 
@@ -80,6 +80,13 @@ Namespace Runtime.Components.Interface
         ''' <param name="arguments"></param>
         ''' <returns></returns>
         Function Invoke(envir As Environment, arguments As InvokeParameter()) As Object
+        ''' <summary>
+        ''' 直接传入参数进行函数的调用，这个接口一般是直接用于生成lambda函数所使用的
+        ''' </summary>
+        ''' <param name="arguments"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        Function Invoke(arguments As Object(), env As Environment) As Object
 
     End Interface
 

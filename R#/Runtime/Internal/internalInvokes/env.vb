@@ -1,44 +1,44 @@
-﻿#Region "Microsoft.VisualBasic::aadf46316deb7df5c02cda2fc8ce48ee, R#\Runtime\Internal\internalInvokes\env.vb"
+﻿#Region "Microsoft.VisualBasic::dd39004eb5a5265d9ff3a60f7f301c78, R#\Runtime\Internal\internalInvokes\env.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module env
-    ' 
-    '         Function: [get], [typeof], CallInternal, doCall, environment
-    '                   getOutputDevice, globalenv, lockBinding, ls, objects
-    '                   objectSize, traceback, unlockBinding
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module env
+' 
+'         Function: [get], [typeof], CallInternal, doCall, environment
+'                   getOutputDevice, globalenv, lockBinding, ls, objects
+'                   objectSize, traceback, unlockBinding
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -47,10 +47,12 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Package
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Invokes
 
@@ -70,21 +72,15 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("get")>
         Public Function [get](x As Object, envir As Environment, Optional [inherits] As Boolean = True) As Object
-            Dim name As String = Runtime.asVector(Of Object)(x) _
+            Dim name As String = REnv.asVector(Of Object)(x) _
                 .DoCall(Function(o)
-                            Return Scripting.ToString(Runtime.getFirst(o), null:=Nothing)
+                            Return Scripting.ToString(REnv.getFirst(o), null:=Nothing)
                         End Function)
 
             If name.StringEmpty Then
                 Return Internal.debug.stop("NULL value provided for object name!", envir)
-            End If
-
-            Dim symbol As Symbol = envir.FindSymbol(name, [inherits])
-
-            If symbol Is Nothing Then
-                Return Message.SymbolNotFound(envir, name, TypeCodes.generic)
             Else
-                Return symbol.value
+                Return SymbolReference.GetReferenceObject(name, envir, [inherits])
             End If
         End Function
 
@@ -328,7 +324,7 @@ Namespace Runtime.Internal.Invokes
                 ' 如果错误消息不存在
                 ' 则返回当前的调用栈信息
                 Return New ExceptionData With {
-                    .StackTrace = env.getEnvironmentStack,
+                    .StackTrace = debug.getEnvironmentStack(env),
                     .Message = {"n/a"},
                     .TypeFullName = "n/a"
                 }
