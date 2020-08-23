@@ -166,6 +166,8 @@ Namespace Runtime
             If package Is Nothing Then
                 If Not ignoreMissingStartupPackages Then
                     Return MissingPackage(packageName, exception)
+                Else
+                    Return Nothing
                 End If
             Else
                 Return LoadLibrary(package.package, packageName, silent)
