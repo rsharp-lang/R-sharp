@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-16"?>
+<NeuralNetwork xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://machinelearning.scibasic.net/ANN/">
+  <!--
+     model:     Microsoft.VisualBasic.MachineLearning.NeuralNetwork.StoreProcedure.NeuralNetwork
+     assembly:  Microsoft.VisualBasic.MachineLearning, Version=1.10.7540.29984, Culture=neutral, PublicKeyToken=null
+     version:   1.10.7540.29984
+     built:     8/23/2020 4:39:28 PM
+     md5:       4bee31f692841626008acec3b6d0a6b9
+     timestamp: 8/23/2020 4:41:23 PM
+  -->
+  <learnRate>0.1247147771512863</learnRate>
+  <momentum>0.9</momentum>
+  <errors />
+</NeuralNetwork>

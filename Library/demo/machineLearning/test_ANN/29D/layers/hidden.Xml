@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-16"?>
+<HiddenLayer xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" size="3">
+  <activation name="Sigmoid">
+    <Arguments name="alpha">2</Arguments>
+  </activation>
+  <layers size="20" id="1">
+    <neuron>6F</neuron>
+    <neuron>70</neuron>
+    <neuron>71</neuron>
+    <neuron>72</neuron>
+    <neuron>73</neuron>
+    <neuron>74</neuron>
+    <neuron>75</neuron>
+    <neuron>76</neuron>
+    <neuron>77</neuron>
+    <neuron>78</neuron>
+    <neuron>79</neuron>
+    <neuron>7A</neuron>
+    <neuron>7B</neuron>
+    <neuron>7C</neuron>
+    <neuron>7D</neuron>
+    <neuron>7E</neuron>
+    <neuron>7F</neuron>
+    <neuron>80</neuron>
+    <neuron>81</neuron>
+    <neuron>82</neuron>
+  </layers>
+  <layers size="30" id="2">
+    <neuron>83</neuron>
+    <neuron>84</neuron>
+    <neuron>85</neuron>
+    <neuron>86</neuron>
+    <neuron>87</neuron>
+    <neuron>88</neuron>
+    <neuron>89</neuron>
+    <neuron>8A</neuron>
+    <neuron>8B</neuron>
+    <neuron>8C</neuron>
+    <neuron>8D</neuron>
+    <neuron>8E</neuron>
+    <neuron>8F</neuron>
+    <neuron>90</neuron>
+    <neuron>91</neuron>
+    <neuron>92</neuron>
+    <neuron>93</neuron>
+    <neuron>94</neuron>
+    <neuron>95</neuron>
+    <neuron>96</neuron>
+    <neuron>97</neuron>
+    <neuron>98</neuron>
+    <neuron>99</neuron>
+    <neuron>9A</neuron>
+    <neuron>9B</neuron>
+    <neuron>9C</neuron>
+    <neuron>9D</neuron>
+    <neuron>9E</neuron>
+    <neuron>9F</neuron>
+    <neuron>A0</neuron>
+  </layers>
+  <layers size="10" id="3">
+    <neuron>A1</neuron>
+    <neuron>A2</neuron>
+    <neuron>A3</neuron>
+    <neuron>A4</neuron>
+    <neuron>A5</neuron>
+    <neuron>A6</neuron>
+    <neuron>A7</neuron>
+    <neuron>A8</neuron>
+    <neuron>A9</neuron>
+    <neuron>AA</neuron>
+  </layers>
+</HiddenLayer>
