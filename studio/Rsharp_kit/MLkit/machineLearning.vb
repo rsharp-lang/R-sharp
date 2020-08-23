@@ -105,6 +105,14 @@ Module machineLearning
         Return x.DataSamples.items
     End Function
 
+    ''' <summary>
+    ''' add new training sample collection into the model dataset
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="samples"></param>
+    ''' <param name="estimateQuantile"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("add_samples")>
     <RApiReturn(GetType(StoreProcedure.DataSet))>
     Public Function addSamples(x As StoreProcedure.DataSet,
@@ -199,7 +207,10 @@ Module machineLearning
             }, env)
         End If
 
-        dataset.DataSamples.items.Add(New Sample(input) With {.ID = App.NextTempName, .target = output})
+        Call New Sample(input) With {
+            .ID = App.NextTempName,
+            .target = output
+        }.DoCall(AddressOf dataset.DataSamples.items.Add)
 
         Return model
     End Function
@@ -213,13 +224,49 @@ Module machineLearning
         ElseIf TypeOf model Is ParallelNetwork Then
             Return DirectCast(model, ParallelNetwork).Predicts(input).ToArray
         Else
-            Return Internal.debug.stop(Message.InCompatibleType(GetType(Network), model.GetType, env), env)
+            Return Message.InCompatibleType(GetType(Network), model.GetType, env)
         End If
     End Function
 
     <ExportAPI("normalize")>
     Public Function normalizeData(trainingSet As NormalizeMatrix, input As Double(), Optional method As Normalizer.Methods = Normalizer.Methods.NormalScaler) As Double()
         Return trainingSet.NormalizeInput(input, method)
+    End Function
+
+    ''' <summary>
+    ''' Create normalization matrix data object for the given ANN training data model
+    ''' </summary>
+    ''' <param name="dataset"></param>
+    ''' <param name="names">the names of the input dimensions</param>
+    ''' <returns></returns>
+    ''' 
+    <ExportAPI("create.normalize")>
+    <RApiReturn(GetType(StoreProcedure.DataSet))>
+    Public Function createNormalizationMatrix(dataset As StoreProcedure.DataSet,
+                                              Optional names As String() = Nothing,
+                                              Optional estimateQuantile As Boolean = True,
+                                              Optional env As Environment = Nothing) As Object
+
+        If dataset.DataSamples Is Nothing OrElse dataset.DataSamples.AsEnumerable.Count = 0 Then
+            Return Internal.debug.stop("the required training sample data can not be empty!", env)
+        End If
+
+        If names.IsNullOrEmpty Then
+            names = dataset.DataSamples _
+                .AsEnumerable _
+                .First _
+                .vector _
+                .Select(Function(x, i) $"X_{i + 1}") _
+                .ToArray
+        End If
+
+        dataset.NormalizeMatrix = NormalizeMatrix.CreateFromSamples(
+            samples:=dataset.DataSamples.AsEnumerable,
+            names:=names,
+            estimateQuantile:=estimateQuantile
+        )
+
+        Return dataset
     End Function
 
     ''' <summary>
