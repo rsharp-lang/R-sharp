@@ -78,7 +78,9 @@ Namespace Runtime
                 .file = filepath.FileName,
                 .fullName = filepath.GetFullPath,
                 .startup_time = Now.ToString,
-                .debug = R.debug
+                .debug = R.debug,
+                .log4vb_redirect = R.globalEnvir.log4vb_redirect,
+                .silent = R.silent
             }
         End Function
     End Module

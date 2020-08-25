@@ -193,8 +193,10 @@ Namespace Runtime
                 symbols = parent.symbols
             End If
 
-            Log4VB.redirectError = AddressOf redirectError
-            Log4VB.redirectWarning = AddressOf redirectWarning
+            If parent.global.log4vb_redirect Then
+                Log4VB.redirectError = AddressOf redirectError
+                Log4VB.redirectWarning = AddressOf redirectWarning
+            End If
         End Sub
 
         Sub New(globalEnv As GlobalEnvironment)
@@ -204,8 +206,10 @@ Namespace Runtime
             Me.global = globalEnv
             Me.stackFrame = globalStackFrame
 
-            Log4VB.redirectError = AddressOf redirectError
-            Log4VB.redirectWarning = AddressOf redirectWarning
+            If globalEnv.log4vb_redirect Then
+                Log4VB.redirectError = AddressOf redirectError
+                Log4VB.redirectWarning = AddressOf redirectWarning
+            End If
         End Sub
 
         Protected Sub redirectError(obj$, msg$, level As MSG_TYPES)

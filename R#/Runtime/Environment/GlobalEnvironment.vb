@@ -71,6 +71,7 @@ Namespace Runtime
         Public ReadOnly Property packages As PackageManager
         Public ReadOnly Property Rscript As RInterpreter
         Public ReadOnly Property stdout As RContentOutput
+        Public ReadOnly Property log4vb_redirect As Boolean = True
 
         ''' <summary>
         ''' <see cref="RInterpreter.debug"/>
@@ -116,6 +117,7 @@ Namespace Runtime
             Me.global = Me
             Me.Rscript = scriptHost
             Me.stdout = New RContentOutput(App.StdOut.DefaultValue, env:=OutputEnvironments.Console)
+            Me.log4vb_redirect = options.log4vb_redirect
 
             Call types.Add("unit", RType.GetRSharpType(GetType(unit)))
         End Sub

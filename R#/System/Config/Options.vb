@@ -152,6 +152,12 @@ Namespace System.Configuration
             End Get
         End Property
 
+        Public ReadOnly Property log4vb_redirect As Boolean
+            Get
+                Return getOption("log4vb.redirect", [default]:="off").ParseBoolean
+            End Get
+        End Property
+
         Public Property localConfig As String Implements IFileReference.FilePath
 
         Sub New(configs As String)
