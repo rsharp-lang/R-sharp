@@ -36,7 +36,7 @@ ANN.training_model(
 	minErr         = 0.05, 	
 	outputSnapshot = TRUE,
 	truncate       = -1,
-	split          = TRUE
+	split          = FALSE
 )
 :> configuration(softmax = FALSE)
 :> configuration(selectiveMode = TRUE)
