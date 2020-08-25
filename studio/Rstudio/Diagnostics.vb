@@ -120,7 +120,9 @@ Module Diagnostics
             digest.Add(GetType(vbObject), Function(obj) DirectCast(obj, vbObject).target)
 
             Dim opts As New JSONSerializerOptions With {.digest = digest}
-            Dim json$ = JSONSerializer.GetJson(symbol.GetType(), symbol, opts)
+            Dim json As String = ObjectSerializer _
+                .GetJsonElement(symbol.GetType(), symbol, opts) _
+                .BuildJsonString(opts)
 
             Call buffer.Write(json, "inspector/json")
         End If
