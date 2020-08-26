@@ -1,4 +1,4 @@
-imports ["dataset", "machineLearning"] from "MLkit";
+imports ["dataset", "machineLearning", "GA_toolkit"] from "MLkit";
 
 # demo script for running ANN model training
 
@@ -9,6 +9,7 @@ let output as string       = ?"--save"   || `${dirname(inputFile)}/${basename(in
 let maxLoops as integer    = ?"--loops"  || 10000;
 let hiddens as string      = ?"--hidden" || "120,300,200,20";
 let attr as string         = ?"--attr";
+let GA_run as boolean      = ?"--ga";
 let dropout.rate as double = 0;
 let dataset = inputFile
 :> read.ML_model
@@ -27,7 +28,7 @@ print(check.ML_model(dataset));
 print("ANN training result model will be saved at location:");
 print(output);
 
-ANN.training_model(
+let ANN = ANN.training_model(
 	inputSize      = input.size(dataset),
 	outputSize     = (attr < 0) ? output.size(dataset) : 1,
 	hiddenSize     = as.integer(strsplit(hiddens, ',')), 
@@ -43,9 +44,17 @@ ANN.training_model(
 :> configuration(dropout = dropout.rate)
 :> configuration(snapshotLocation = output)
 :> set.trainingSet(dataset, attribute = attr)
-:> training(
-	maxIterations = maxLoops, 
-	parallel      = TRUE
-)
+;
+
+if (GA_run) {
+	ANN :> ANN.training(
+		trainingSet = dataset
+	);
+} else {
+	ANN :> training(
+		maxIterations = maxLoops, 
+		parallel      = TRUE
+	);
+}
 :> write.ANN_network(output)
 ;
