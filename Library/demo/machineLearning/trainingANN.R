@@ -46,15 +46,19 @@ let ANN = ANN.training_model(
 :> set.trainingSet(dataset, attribute = attr)
 ;
 
+let ANN_result = NULL;
+
 if (GA_run) {
-	ANN :> ANN.training(
+	ANN_result = ANN :> ANN.training(
 		trainingSet = dataset
 	);
 } else {
-	ANN :> training(
+	ANN_result = ANN :> training(
 		maxIterations = maxLoops, 
 		parallel      = TRUE
 	);
 }
+
+ANN_result
 :> write.ANN_network(output)
 ;
