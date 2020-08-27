@@ -466,7 +466,8 @@ Module machineLearning
     Public Function setTrainingSet(ann As ANNTrainer,
                                    trainingSet As StoreProcedure.DataSet,
                                    Optional normalMethod As Methods = Methods.RelativeScaler,
-                                   Optional attribute% = -1) As ANNTrainer
+                                   Optional attribute% = -1,
+                                   Optional setOutputNames As Boolean = True) As ANNTrainer
 
         For Each sample As Sample In trainingSet.PopulateNormalizedSamples(method:=normalMethod)
             If attribute < 0 Then
@@ -475,6 +476,10 @@ Module machineLearning
                 Call ann.Add(sample.vector, sample.target(attribute))
             End If
         Next
+
+        If setOutputNames Then
+            Call ann.SetOutputNames(trainingSet.output)
+        End If
 
         Return ann
     End Function
