@@ -9,6 +9,7 @@ let output as string       = ?"--save"   || `${dirname(inputFile)}/${basename(in
 let maxLoops as integer    = ?"--loops"  || 10000;
 let hiddens as string      = ?"--hidden" || "120,300,200,20";
 let attr as string         = ?"--attr";
+let split_out as boolean   = ?"--split";
 let GA_run as boolean      = ?"--ga";
 let GA_popSize as integer  = ?"--ga.pop_size" || 250;
 let dropout.rate as double = 0;
@@ -29,6 +30,10 @@ print(check.ML_model(dataset));
 print("ANN training result model will be saved at location:");
 print(output);
 
+if (split_out) {
+	print("ANN model output will be split into multiple partitions...");
+}
+
 let ANN = ANN.training_model(
 	inputSize      = input.size(dataset),
 	outputSize     = (attr < 0) ? output.size(dataset) : 1,
@@ -38,7 +43,7 @@ let ANN = ANN.training_model(
 	minErr         = 0.05, 	
 	outputSnapshot = TRUE,
 	truncate       = -1,
-	split          = FALSE
+	split          = split_out
 )
 :> configuration(softmax = FALSE)
 :> configuration(selectiveMode = TRUE)
