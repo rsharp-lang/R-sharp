@@ -49,8 +49,11 @@ let ANN = ANN.training_model(
 let ANN_result = NULL;
 
 if (GA_run) {
+	print("ANN model will be training in GA framework!");
+
 	ANN_result = ANN :> ANN.training(
-		trainingSet = dataset
+		trainingSet = dataset,
+		populationSize = 50
 	);
 } else {
 	ANN_result = ANN :> training(
