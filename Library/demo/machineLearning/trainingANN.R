@@ -10,6 +10,7 @@ let maxLoops as integer    = ?"--loops"  || 10000;
 let hiddens as string      = ?"--hidden" || "120,300,200,20";
 let attr as string         = ?"--attr";
 let GA_run as boolean      = ?"--ga";
+let GA_popSize as integer  = ?"--ga.pop_size" || 250;
 let dropout.rate as double = 0;
 let dataset = inputFile
 :> read.ML_model
@@ -52,8 +53,9 @@ if (GA_run) {
 	print("ANN model will be training in GA framework!");
 
 	ANN_result = ANN :> ANN.training(
-		trainingSet = dataset,
-		populationSize = 50
+		trainingSet    = dataset,
+		populationSize = GA_popSize,
+		iterations     = maxLoops 
 	);
 } else {
 	ANN_result = ANN :> training(
