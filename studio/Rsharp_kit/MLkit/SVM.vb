@@ -58,6 +58,14 @@ Module SVM
         }
     End Function
 
+    ''' <summary>
+    ''' append problem data into current problem dataset
+    ''' </summary>
+    ''' <param name="problem"></param>
+    ''' <param name="tag"></param>
+    ''' <param name="data"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("append.trainingSet")>
     <RApiReturn(GetType(Problem))>
     Public Function expandProblem(problem As Problem, tag As String(), data As Object, Optional env As Environment = Nothing) As Object
@@ -84,7 +92,23 @@ Module SVM
         Return problem
     End Function
 
-    Private Function getDataLambda(dimNames As String(), tag As String(), data As Object, env As Environment, ByRef err As Message, ByRef n As Integer) As Func(Of Integer, (label As String, data As Node()))
+    ''' <summary>
+    ''' merge two problem table by row append. 
+    ''' (this api is usually apply for join 
+    ''' positive set and negative set.) 
+    ''' </summary>
+    ''' <param name="x">positive set or negative set</param>
+    ''' <param name="y">positive set or negative set</param>
+    ''' <returns></returns>
+    <ExportAPI("join.problems")>
+    Public Function joinTable(x As ProblemTable, y As ProblemTable) As ProblemTable
+        Return ProblemTable.Append(x, y)
+    End Function
+
+    Private Function getDataLambda(dimNames As String(), tag As String(), data As Object, env As Environment,
+                                   ByRef err As Message,
+                                   ByRef n As Integer) As Func(Of Integer, (label As String, data As Node()))
+
         Dim vectors As New Dictionary(Of String, Double())
 
         If data Is Nothing Then
