@@ -1,5 +1,6 @@
 ﻿
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.DataMining.ComponentModel.Encoder
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.SVM
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -48,16 +49,18 @@ Module SVM
 
         Return New Problem With {
             .DimensionNames = dimNames,
-            .MaxIndex = dimNames.Length
+            .MaxIndex = dimNames.Length,
+            .X = {},
+            .Y = {}
         }
     End Function
 
     <ExportAPI("append.trainingSet")>
     <RApiReturn(GetType(Problem))>
-    Public Function expandProblem(problem As Problem, tag As Integer(), data As Object, Optional env As Environment = Nothing) As Object
+    Public Function expandProblem(problem As Problem, tag As String(), data As Object, Optional env As Environment = Nothing) As Object
         Dim part As New List(Of Node())()
-        Dim labels As New List(Of Double)()
-        Dim row As (label As Double, data As Node())
+        Dim labels As New List(Of String)()
+        Dim row As (label As String, data As Node())
         Dim n As Integer
         Dim err As Message = Nothing
         Dim getData = getDataLambda(problem.DimensionNames, tag, data, env, err, n)
@@ -73,12 +76,12 @@ Module SVM
         Next
 
         problem.X = problem.X.AsList + part.AsEnumerable
-        problem.Y = problem.Y.AsList + labels.AsEnumerable
+        problem.Y = ClassEncoder.Union(problem.Y, labels)
 
         Return problem
     End Function
 
-    Private Function getDataLambda(dimNames As String(), tag As Integer(), data As Object, env As Environment, ByRef err As Message, ByRef n As Integer) As Func(Of Integer, (label As Double, data As Node()))
+    Private Function getDataLambda(dimNames As String(), tag As String(), data As Object, env As Environment, ByRef err As Message, ByRef n As Integer) As Func(Of Integer, (label As String, data As Node()))
         Dim vectors As New Dictionary(Of String, Double())
 
         If data Is Nothing Then
@@ -93,7 +96,7 @@ Module SVM
             Return Nothing
         End If
 
-        Dim getTag As Func(Of Integer, Integer)
+        Dim getTag As Func(Of Integer, String)
 
         n = vectors.Values.First.Length
 
@@ -182,7 +185,7 @@ Module SVM
         Dim row As (label As Double, data As Node())
         Dim n As Integer
         Dim err As Message = Nothing
-        Dim getData = getDataLambda(svm.DimensionNames, {0}, data, env, err, n)
+        Dim getData = getDataLambda(svm.DimensionNames, {"n/a"}, data, env, err, n)
         Dim datum As Node()
 
         If Not err Is Nothing Then
