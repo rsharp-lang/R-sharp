@@ -177,7 +177,11 @@ Module SVM
         Dim transform As RangeTransform = RangeTransform.Compute(problem)
         Dim model As Model = Training.Train(transform.Scale(problem), param)
 
-        Return New SvmModel With {.transform = transform, .model = model}
+        Return New SvmModel With {
+            .transform = transform,
+            .model = model,
+            .factors = New ClassEncoder(problem.Y)
+        }
     End Function
 
     <ExportAPI("svm_classify")>
@@ -202,10 +206,15 @@ Module SVM
             names = DirectCast(data, list).getNames
         End If
 
+        Dim label As Double
+        Dim factor As ColorClass
+
         For i As Integer = 0 To n - 1
             row = getData(i)
             datum = transform.Transform(row.data)
-            labels.Add(names(i), svm.model.Predict(datum))
+            label = svm.model.Predict(datum)
+            factor = svm.factors.GetColor(label)
+            labels.Add(names(i), factor)
         Next
 
         Return New list With {.slots = labels}
@@ -216,6 +225,7 @@ Public Class SvmModel
 
     Public Property model As Model
     Public Property transform As IRangeTransform
+    Public Property factors As ClassEncoder
 
     Public ReadOnly Property DimensionNames As String()
         Get
