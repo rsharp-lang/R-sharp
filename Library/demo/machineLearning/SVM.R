@@ -3,7 +3,7 @@ imports "SVM" from "MLkit";
 let svm = svm.problem(["X", "Y", "Z"])
 :> append.trainingSet(
 	tag = 1,
-	data = data.frame(X = [1,1,1], Y = [1,1,1], Z = [1,1,1])
+	data = data.frame(X = [-100,-100,-100], Y = [1,1,1], Z = [1,1,1])
 )
 :> append.trainingSet(
 	tag = 2,
@@ -11,12 +11,12 @@ let svm = svm.problem(["X", "Y", "Z"])
 )
 :> append.trainingSet(
 	tag = 3,
-	data = data.frame(X = [3,3,3], Y = [3,3,3], Z = [3,3,3])
+	data = data.frame(X = [300,300,300], Y = [300,300,300], Z = [300,300,300])
 )
 :> trainSVMModel
 ;
 
-let validates = data.frame(X = [1,2,3,4], Y = [1,2,3,4], Z = [1,2,3,4]);
+let validates = data.frame(X = [1,-200,3,400], Y = [1,2,3,400], Z = [1,2,3,400]);
 
 rownames(validates) = ["a","b","c","d"];
 

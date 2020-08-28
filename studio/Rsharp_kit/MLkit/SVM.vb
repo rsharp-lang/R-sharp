@@ -140,7 +140,9 @@ Module SVM
                                   Optional EPS As Double = 0.001,
                                   Optional P As Double = 0.1,
                                   Optional shrinking As Boolean = True,
-                                  Optional probability As Boolean = False) As SvmModel
+                                  Optional probability As Boolean = False,
+                                  Optional weights As list = Nothing,
+                                  Optional env As Environment = Nothing) As SvmModel
 
         Dim param As New Parameter With {
             .SvmType = svmType,
@@ -156,6 +158,19 @@ Module SVM
             .Probability = probability,
             .Shrinking = shrinking
         }
+
+        If Not weights Is Nothing Then
+            With weights.AsGeneric(Of Double)(env)
+                For Each label In .AsEnumerable
+                    Call param.Weights.Add(CInt(label.Key), label.Value)
+                Next
+            End With
+        Else
+            For Each label In problem.Y.Select(Function(a) CInt(a)).Distinct
+                param.Weights.Add(label, 1)
+            Next
+        End If
+
         Dim transform As RangeTransform = RangeTransform.Compute(problem)
         Dim model As Model = Training.Train(transform.Scale(problem), param)
 
