@@ -182,7 +182,7 @@ Module SVM
 
     <ExportAPI("svm_classify")>
     Public Function svmClassify(svm As SvmModel, data As Object, Optional env As Environment = Nothing) As Object
-        Dim row As (label As Double, data As Node())
+        Dim row As (label As String, data As Node())
         Dim n As Integer
         Dim err As Message = Nothing
         Dim getData = getDataLambda(svm.DimensionNames, {"n/a"}, data, env, err, n)
