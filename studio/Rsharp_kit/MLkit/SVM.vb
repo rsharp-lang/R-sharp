@@ -3,6 +3,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.SVM
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -53,20 +54,45 @@ Module SVM
     Public Function expandProblem(problem As Problem, tag As Integer(), data As Object, Optional env As Environment = Nothing) As Object
         Dim part As New List(Of Node())()
         Dim labels As New List(Of Double)()
+        Dim row As (label As Double, data As Node())
+        Dim n As Integer
+        Dim err As Message = Nothing
+        Dim getData = getDataLambda(problem.DimensionNames, tag, data, env, err, n)
+
+        If Not err Is Nothing Then
+            Return err
+        End If
+
+        For i As Integer = 0 To n - 1
+            row = getData(i)
+            labels.Add(row.label)
+            part.Add(row.data)
+        Next
+
+        problem.X = problem.X.AsList + part.AsEnumerable
+        problem.Y = problem.Y.AsList + labels.AsEnumerable
+
+        Return problem
+    End Function
+
+    Private Function getDataLambda(dimNames As String(), tag As Integer(), data As Object, env As Environment, ByRef err As Message, ByRef n As Integer) As Func(Of Integer, (label As Double, data As Node()))
         Dim vectors As New Dictionary(Of String, Double())
 
         If data Is Nothing Then
-            Return Internal.debug.stop("no problem data was provided!", env)
+            err = Internal.debug.stop("no problem data was provided!", env)
+            Return Nothing
         ElseIf TypeOf data Is list Then
             vectors = DirectCast(data, list).AsGeneric(Of Double())(env)
         ElseIf TypeOf data Is dataframe Then
             vectors = DirectCast(data, dataframe).columns.ToDictionary(Function(a) a.Key, Function(a) DirectCast(REnv.asVector(Of Double)(a.Value), Double()))
         Else
-            Return Message.InCompatibleType(GetType(dataframe), data.GetType, env)
+            err = Message.InCompatibleType(GetType(dataframe), data.GetType, env)
+            Return Nothing
         End If
 
-        Dim n As Integer = vectors.Values.First.Length
         Dim getTag As Func(Of Integer, Integer)
+
+        n = vectors.Values.First.Length
 
         If tag.Length = 1 Then
             getTag = Function() tag(Scan0)
@@ -74,24 +100,9 @@ Module SVM
             getTag = Function(i) tag(i)
         End If
 
-        Dim index As Integer
-        Dim row As Node()
-
-        For i As Integer = 0 To n - 1
-            labels.Add(getTag(i))
-            index = i
-            row = problem.DimensionNames _
-                .Select(Function([dim], j)
-                            Return New Node(j + 1, vectors([dim])(index))
-                        End Function) _
-                .ToArray
-            part.Add(row)
-        Next
-
-        problem.X = problem.X.AsList + part.AsEnumerable
-        problem.Y = problem.Y.AsList + labels.AsEnumerable
-
-        Return problem
+        Return Function(i)
+                   Return (getTag(i), dimNames.Select(Function([dim], j) New Node(j + 1, vectors([dim])(i))).ToArray)
+               End Function
     End Function
 
     ''' <summary>
@@ -126,7 +137,7 @@ Module SVM
                                   Optional EPS As Double = 0.001,
                                   Optional P As Double = 0.1,
                                   Optional shrinking As Boolean = True,
-                                  Optional probability As Boolean = False) As Model
+                                  Optional probability As Boolean = False) As SvmModel
 
         Dim param As New Parameter With {
             .SvmType = svmType,
@@ -145,6 +156,54 @@ Module SVM
         Dim transform As RangeTransform = RangeTransform.Compute(problem)
         Dim model As Model = Training.Train(transform.Scale(problem), param)
 
-        Return model
+        Return New SvmModel With {.transform = transform, .model = model}
+    End Function
+
+    <ExportAPI("svm_classify")>
+    Public Function svmClassify(svm As SvmModel, data As Object, Optional env As Environment = Nothing) As Object
+        Dim row As (label As Double, data As Node())
+        Dim n As Integer
+        Dim err As Message = Nothing
+        Dim getData = getDataLambda(svm.DimensionNames, {0}, data, env, err, n)
+        Dim datum As Node()
+
+        If Not err Is Nothing Then
+            Return err
+        End If
+
+        Dim transform As IRangeTransform = svm.transform
+        Dim labels As New Dictionary(Of String, Object)
+        Dim names As String()
+
+        If TypeOf data Is dataframe Then
+            names = DirectCast(data, dataframe).getRowNames
+        Else
+            names = DirectCast(data, list).getNames
+        End If
+
+        For i As Integer = 0 To n - 1
+            row = getData(i)
+            datum = transform.Transform(row.data)
+            labels.Add(names(i), svm.model.Predict(datum))
+        Next
+
+        Return New list With {.slots = labels}
     End Function
 End Module
+
+Public Class SvmModel
+
+    Public Property model As Model
+    Public Property transform As IRangeTransform
+
+    Public ReadOnly Property DimensionNames As String()
+        Get
+            Return model.DimensionNames
+        End Get
+    End Property
+
+    Public Overrides Function ToString() As String
+        Return DimensionNames.GetJson
+    End Function
+
+End Class
