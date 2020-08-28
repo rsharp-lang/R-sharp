@@ -46,7 +46,10 @@ Module SVM
             End If
         End If
 
-        Return New Problem With {.DimensionNames = dimNames}
+        Return New Problem With {
+            .DimensionNames = dimNames,
+            .MaxIndex = dimNames.Length
+        }
     End Function
 
     <ExportAPI("append.trainingSet")>
