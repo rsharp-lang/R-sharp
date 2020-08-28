@@ -7,6 +7,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports Parameter = Microsoft.VisualBasic.MachineLearning.SVM.Parameter
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 <Package("SVM")>
@@ -91,5 +92,59 @@ Module SVM
         problem.Y = problem.Y.AsList + labels.AsEnumerable
 
         Return problem
+    End Function
+
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="problem"></param>
+    ''' <param name="svmType">Type of SVM (default C-SVC)</param>
+    ''' <param name="kernelType">Type of kernel function (default Polynomial)</param>
+    ''' <param name="degree">Degree in kernel function (default 3).</param>
+    ''' <param name="gamma">Gamma in kernel function (default 1/k)</param>
+    ''' <param name="coefficient0">Zeroeth coefficient in kernel function (default 0)</param>
+    ''' <param name="nu">The parameter nu of nu-SVC, one-class SVM, and nu-SVR (default 0.5)</param>
+    ''' <param name="cacheSize">Cache memory size in MB (default 100)</param>
+    ''' <param name="C">The parameter C of C-SVC, epsilon-SVR, and nu-SVR (default 1)</param>
+    ''' <param name="EPS">Tolerance of termination criterion (default 0.001)</param>
+    ''' <param name="P">The epsilon in loss function of epsilon-SVR (default 0.1)</param>
+    ''' <param name="shrinking">Whether to use the shrinking heuristics, (default True)</param>
+    ''' <param name="probability">
+    ''' Whether to train an SVC or SVR model for probability estimates, (default False)
+    ''' </param>
+    ''' <returns></returns>
+    <ExportAPI("trainSVMModel")>
+    Public Function trainSVMModel(problem As Problem,
+                                  Optional svmType As SvmType = SvmType.C_SVC,
+                                  Optional kernelType As KernelType = KernelType.RBF,
+                                  Optional degree As Integer = 3,
+                                  Optional gamma As Double = 0,
+                                  Optional coefficient0 As Double = 0,
+                                  Optional nu As Double = 0.5,
+                                  Optional cacheSize As Integer = 40,
+                                  Optional C As Double = 1,
+                                  Optional EPS As Double = 0.001,
+                                  Optional P As Double = 0.1,
+                                  Optional shrinking As Boolean = True,
+                                  Optional probability As Boolean = False) As Model
+
+        Dim param As New Parameter With {
+            .SvmType = svmType,
+            .KernelType = kernelType,
+            .C = C,
+            .CacheSize = cacheSize,
+            .Coefficient0 = coefficient0,
+            .Degree = degree,
+            .EPS = EPS,
+            .Gamma = gamma,
+            .Nu = nu,
+            .P = P,
+            .Probability = probability,
+            .Shrinking = shrinking
+        }
+        Dim transform As RangeTransform = RangeTransform.Compute(problem)
+        Dim model As Model = Training.Train(transform.Scale(problem), param)
+
+        Return model
     End Function
 End Module
