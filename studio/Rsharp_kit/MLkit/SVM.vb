@@ -15,6 +15,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports dataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports Parameter = Microsoft.VisualBasic.MachineLearning.SVM.Parameter
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports stdNum = System.Math
 
 <Package("SVM")>
 <RTypeExport("problem", GetType(Problem))>
@@ -61,6 +62,79 @@ Module SVM
         data.rownames = problems.vectors.Keys.ToArray
 
         Return data
+    End Function
+
+    ''' <summary>
+    ''' removes all columns that will all value equals to each other
+    ''' </summary>
+    ''' <param name="model"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("problem.trim")>
+    <RApiReturn(GetType(Problem), GetType(ProblemTable))>
+    Public Function svmModelTrimNULL(model As Object, Optional env As Environment = Nothing) As Object
+        If model Is Nothing Then
+            Return Nothing
+        ElseIf TypeOf model Is Problem Then
+            Dim problem As Problem = DirectCast(model, Problem)
+            Dim trim As New List(Of Node())
+            Dim dimNames As New List(Of String)
+
+            For i As Integer = 0 To problem.MaxIndex - 1
+                ' 如果这一列全部等于第一个值
+                ' 则删除
+                Dim val As Double = problem.X(Scan0)(i).Value
+                Dim j = i
+
+                If problem.X.Any(Function(row) stdNum.Abs(row(j).Value - val) > 0.0000001) Then
+                    trim.Add(problem.X.Select(Function(row) row(j)).ToArray)
+                    dimNames.Add(problem.DimensionNames(j))
+                End If
+            Next
+
+            Dim matrix = trim.PopAll.MatrixTranspose.ToArray
+
+            For Each row In matrix
+                trim.Add(row.Select(Function(node, i) New Node(i, node.Value)).ToArray)
+            Next
+
+            Return New Problem With {
+                .DimensionNames = dimNames,
+                .MaxIndex = dimNames.Count,
+                .X = trim.ToArray,
+                .Y = problem.Y _
+                    .Select(Function(a)
+                                Return New ColorClass With {
+                                    .color = a.color,
+                                    .enumInt = a.enumInt,
+                                    .name = a.name
+                                }
+                            End Function) _
+                    .ToArray
+            }
+        ElseIf TypeOf model Is ProblemTable Then
+            Dim problem As ProblemTable = DirectCast(model, ProblemTable).Clone
+
+            For Each name As String In problem.DimensionNames
+                Dim val As Double = problem.vectors(Scan0)(name)
+
+                If problem.vectors.All(Function(vec) stdNum.Abs(vec(name) - val) <= 0.000000001) Then
+                    For Each vec In problem.vectors
+                        vec.Properties.Remove(name)
+                    Next
+                End If
+            Next
+
+            problem.DimensionNames = problem.vectors _
+                .Select(Function(vec) vec.Properties.Keys) _
+                .IteratesALL _
+                .Distinct _
+                .ToArray
+
+            Return problem
+        Else
+            Return Message.InCompatibleType(GetType(Problem), model.GetType, env)
+        End If
     End Function
 
     <ExportAPI("svm.problem")>
