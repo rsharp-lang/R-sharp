@@ -1,9 +1,11 @@
 ﻿
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.DataMining.ComponentModel.Encoder
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.SVM
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -105,6 +107,11 @@ Module SVM
         Return ProblemTable.Append(x, y)
     End Function
 
+    <ExportAPI("parse.SVM_problems")>
+    Public Function ParseProblemTableJSON(text As String) As ProblemTable
+        Return text.LoadJSON(Of ProblemTable)
+    End Function
+
     Private Function getDataLambda(dimNames As String(), tag As String(), data As Object, env As Environment,
                                    ByRef err As Message,
                                    ByRef n As Integer) As Func(Of Integer, (label As String, data As Node()))
@@ -139,7 +146,7 @@ Module SVM
     End Function
 
     ''' <summary>
-    ''' 
+    ''' train SVM model
     ''' </summary>
     ''' <param name="problem"></param>
     ''' <param name="svmType">Type of SVM (default C-SVC)</param>
@@ -158,7 +165,7 @@ Module SVM
     ''' </param>
     ''' <returns></returns>
     <ExportAPI("trainSVMModel")>
-    Public Function trainSVMModel(problem As Problem,
+    Public Function trainSVMModel(problem As Object,
                                   Optional svmType As SvmType = SvmType.C_SVC,
                                   Optional kernelType As KernelType = KernelType.RBF,
                                   Optional degree As Integer = 3,
@@ -172,7 +179,7 @@ Module SVM
                                   Optional shrinking As Boolean = True,
                                   Optional probability As Boolean = False,
                                   Optional weights As list = Nothing,
-                                  Optional env As Environment = Nothing) As SVMModel
+                                  Optional env As Environment = Nothing) As Object
 
         Dim param As New Parameter With {
             .SvmType = svmType,
@@ -189,6 +196,14 @@ Module SVM
             .Shrinking = shrinking
         }
 
+        If problem Is Nothing Then
+            Return Internal.debug.stop("the required SVM training dataset can not be nothing!", env)
+        End If
+
+        If Not (TypeOf problem Is Problem OrElse TypeOf problem Is ProblemTable) Then
+            Return Message.InCompatibleType(GetType(Problem), problem.GetType, env)
+        End If
+
         If Not weights Is Nothing Then
             With weights.AsGeneric(Of Double)(env)
                 For Each label In .AsEnumerable
@@ -196,13 +211,41 @@ Module SVM
                 Next
             End With
         Else
-            For Each label In problem.Y.Select(Function(a) CInt(a)).Distinct
-                param.Weights.Add(label, 1)
-            Next
+            If TypeOf problem Is Problem Then
+                For Each label In DirectCast(problem, Problem).Y.Select(Function(a) a.name).Distinct
+                    Call param.Weights.Add(label, 1)
+                Next
+            Else
+                For Each label In DirectCast(problem, ProblemTable).Topics _
+                    .Select(Function(topic)
+                                Return DirectCast(problem, ProblemTable).GetTopicLabels(topic)
+                            End Function) _
+                    .IteratesALL _
+                    .Distinct
+
+                    Call param.Weights.Add(label, 1)
+                Next
+            End If
         End If
 
+        If TypeOf problem Is Problem Then
+            Return getSvmModel(DirectCast(problem, Problem), param)
+        Else
+            Return New list With {
+                .slots = DirectCast(problem, ProblemTable) _
+                    .Topics _
+                    .ToDictionary(Function(a) a,
+                                  Function(a)
+                                      Return CObj(DirectCast(problem, ProblemTable).GetProblem(a).getSvmModel(param))
+                                  End Function)
+            }
+        End If
+    End Function
+
+    <Extension>
+    Private Function getSvmModel(problem As Problem, par As Parameter) As SVMModel
         Dim transform As RangeTransform = RangeTransform.Compute(problem)
-        Dim model As Model = Training.Train(transform.Scale(problem), param)
+        Dim model As Model = Training.Train(transform.Scale(problem), par)
 
         Return New SVMModel With {
             .transform = transform,
