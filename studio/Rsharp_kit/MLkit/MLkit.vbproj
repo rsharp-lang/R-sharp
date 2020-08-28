@@ -196,6 +196,7 @@
     <Compile Include="datasetKit.vb" />
     <Compile Include="GA\GAToolkit.vb" />
     <Compile Include="GA\GeneralChromosome.vb" />
+    <Compile Include="SVM.vb" />
     <Compile Include="zzz.vb" />
     <Compile Include="dataMining\clustering.vb" />
     <Compile Include="machineLearning.vb" />
