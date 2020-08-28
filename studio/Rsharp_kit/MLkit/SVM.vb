@@ -164,9 +164,27 @@ Module SVM
             err = Internal.debug.stop("no problem data was provided!", env)
             Return Nothing
         ElseIf TypeOf data Is list Then
-            vectors = DirectCast(data, list).AsGeneric(Of Double())(env)
+            With DirectCast(data, list)
+                For Each name As String In dimNames
+                    If Not .hasName(name) Then
+                        err = Internal.debug.stop($"missing dimension {name}!", env)
+                        Return Nothing
+                    End If
+
+                    vectors(name) = .getValue(Of Double())(name, env)
+                Next
+            End With
         ElseIf TypeOf data Is dataframe Then
-            vectors = DirectCast(data, dataframe).columns.ToDictionary(Function(a) a.Key, Function(a) DirectCast(REnv.asVector(Of Double)(a.Value), Double()))
+            With DirectCast(data, dataframe)
+                For Each name As String In dimNames
+                    If Not .hasName(name) Then
+                        err = Internal.debug.stop($"missing dimension {name}!", env)
+                        Return Nothing
+                    End If
+
+                    vectors(name) = REnv.asVector(Of Double)(.columns(name))
+                Next
+            End With
         Else
             err = Message.InCompatibleType(GetType(Object), data.GetType, env)
             Return Nothing
