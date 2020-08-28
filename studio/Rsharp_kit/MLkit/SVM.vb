@@ -15,6 +15,10 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 <RTypeExport("problem", GetType(Problem))>
 Module SVM
 
+    Sub New()
+        Call Internal.ConsolePrinter.AttachConsoleFormatter(Of ColorClass)(Function(o) o.ToString)
+    End Sub
+
     <ExportAPI("svm.problem")>
     <RApiReturn(GetType(Problem))>
     Public Function NewProblem(<RRawVectorArgument> dimensions As Object, Optional env As Environment = Nothing) As Object
