@@ -274,12 +274,14 @@ Module SVM
             For Each topic As String In table.GetTopics
                 problem = table.GetProblem(topic)
 
-                For Each label As ColorClass In problem _
+                For Each label As ColorClass In DirectCast(problem, Problem) _
                     .Y _
                     .GroupBy(Function(a) a.name) _
                     .Select(Function(a) a.First)
 
-                    Call param.Weights.Add(label.enumInt, 1)
+                    ' 因为会被反复使用，所以可能会出现重名的问题
+                    ' 在这里直接设置
+                    param.Weights.Item(label.enumInt) = 1
                 Next
 
                 result(topic) = DirectCast(problem, Problem).getSvmModel(param)
