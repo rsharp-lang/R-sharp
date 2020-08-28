@@ -1,22 +1,23 @@
 imports "SVM" from "MLkit";
 
-let svm = svm.problem(["X", "Y", "Z"])
+let svm = svm.problem(["X", "Y"])
 :> append.trainingSet(
-	tag = 1,
-	data = data.frame(X = [-100,-100,-100], Y = [1,1,1], Z = [1,1,1])
+	tag = -1,
+	data = data.frame(X = runif(100, -120, -100), Y = runif(100,1,2))
 )
 :> append.trainingSet(
 	tag = 2,
-	data = data.frame(X = [2,2,2], Y = [2,2,2], Z = [2,2,2])
+	data = data.frame(X = runif(100, 1, 10), Y = runif(100, 0, 20))
 )
 :> append.trainingSet(
 	tag = 3,
-	data = data.frame(X = [300,300,300], Y = [300,300,300], Z = [300,300,300])
+	data = data.frame(X = runif(100, 300, 500), Y = runif(100, 300, 310))
 )
 :> trainSVMModel
 ;
 
-let validates = data.frame(X = [1,-200,3,400], Y = [1,2,3,400], Z = [1,2,3,400]);
+# 2 1 2 3
+let validates = data.frame(X = [2,-103,3,311], Y = [1,2,1.3,302]);
 
 rownames(validates) = ["a","b","c","d"];
 
