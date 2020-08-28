@@ -48,7 +48,7 @@ Module SVM
         Dim index As Integer
         Dim attrKey As String
 
-        For Each topic As String In problems.Topics
+        For Each topic As String In problems.GetTopics
             data.columns($"[{topic}]") = problems.GetTopicLabels(topic)
         Next
 
@@ -271,7 +271,7 @@ Module SVM
             Dim table As ProblemTable = DirectCast(problem, ProblemTable)
             Dim result As New Dictionary(Of String, SVMModel)
 
-            For Each topic As String In table.Topics
+            For Each topic As String In table.GetTopics
                 problem = table.GetProblem(topic)
 
                 For Each label As ColorClass In problem _
