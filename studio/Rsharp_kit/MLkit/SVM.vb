@@ -207,7 +207,7 @@ Module SVM
         If Not weights Is Nothing Then
             With weights.AsGeneric(Of Double)(env)
                 For Each label In .AsEnumerable
-                    Call param.Weights.Add(CInt(label.Key), label.Value)
+                    Call param.Weights.Add(label.Key, label.Value)
                 Next
             End With
         Else
