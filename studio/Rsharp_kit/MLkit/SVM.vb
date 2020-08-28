@@ -1,7 +1,9 @@
 ﻿
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.DataMining.ComponentModel.Encoder
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.SVM
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -10,6 +12,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports dataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports Parameter = Microsoft.VisualBasic.MachineLearning.SVM.Parameter
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -19,7 +22,46 @@ Module SVM
 
     Sub New()
         Call Internal.ConsolePrinter.AttachConsoleFormatter(Of ColorClass)(Function(o) o.ToString)
+
+        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(Problem), AddressOf problemDataframe)
+        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(ProblemTable), AddressOf problemsDataframe)
     End Sub
+
+    Private Function problemDataframe(problem As Problem, args As list, env As Environment) As dataframe
+        Dim data As New dataframe With {.columns = New Dictionary(Of String, Array)}
+        Dim index As Integer
+
+        data.columns("[output]") = problem.Y.Select(Function(a) a.name).ToArray
+
+        For i As Integer = 0 To problem.DimensionNames.Length - 1
+            index = i
+            data.columns(problem.DimensionNames(i)) = problem.X _
+                .Select(Function(row) row(index).Value) _
+                .ToArray
+        Next
+
+        Return data
+    End Function
+
+    Private Function problemsDataframe(problems As ProblemTable, args As list, env As Environment) As dataframe
+        Dim data As New dataframe With {.columns = New Dictionary(Of String, Array)}
+        Dim index As Integer
+        Dim attrKey As String
+
+        For Each topic As String In problems.Topics
+            data.columns($"[{topic}]") = problems.GetTopicLabels(topic)
+        Next
+
+        For i As Integer = 0 To problems.DimensionNames.Length - 1
+            index = i
+            attrKey = problems.DimensionNames(i)
+            data.columns(attrKey) = problems.vectors.Select(Function(a) a(attrKey)).ToArray
+        Next
+
+        data.rownames = problems.vectors.Keys.ToArray
+
+        Return data
+    End Function
 
     <ExportAPI("svm.problem")>
     <RApiReturn(GetType(Problem))>
@@ -126,7 +168,7 @@ Module SVM
         ElseIf TypeOf data Is dataframe Then
             vectors = DirectCast(data, dataframe).columns.ToDictionary(Function(a) a.Key, Function(a) DirectCast(REnv.asVector(Of Double)(a.Value), Double()))
         Else
-            err = Message.InCompatibleType(GetType(dataframe), data.GetType, env)
+            err = Message.InCompatibleType(GetType(Object), data.GetType, env)
             Return Nothing
         End If
 
@@ -165,6 +207,7 @@ Module SVM
     ''' </param>
     ''' <returns></returns>
     <ExportAPI("trainSVMModel")>
+    <RApiReturn(GetType(SVMModel), GetType(SVMMultipleSet))>
     Public Function trainSVMModel(problem As Object,
                                   Optional svmType As SvmType = SvmType.C_SVC,
                                   Optional kernelType As KernelType = KernelType.RBF,
@@ -226,7 +269,7 @@ Module SVM
             Return getSvmModel(DirectCast(problem, Problem), param)
         Else
             Dim table As ProblemTable = DirectCast(problem, ProblemTable)
-            Dim result As New Dictionary(Of String, Object)
+            Dim result As New Dictionary(Of String, SVMModel)
 
             For Each topic As String In table.Topics
                 problem = table.GetProblem(topic)
@@ -242,7 +285,10 @@ Module SVM
                 result(topic) = DirectCast(problem, Problem).getSvmModel(param)
             Next
 
-            Return New list With {.slots = result}
+            Return New SVMMultipleSet With {
+                .dimensionNames = table.DimensionNames,
+                .topics = result
+            }
         End If
     End Function
 
@@ -259,7 +305,69 @@ Module SVM
     End Function
 
     <ExportAPI("svm_classify")>
-    Public Function svmClassify(svm As SVMModel, data As Object, Optional env As Environment = Nothing) As Object
+    Public Function svmClassify(svm As Object, data As Object, Optional env As Environment = Nothing) As Object
+        If svm Is Nothing Then
+            Return Internal.debug.stop("the required svm model can not be nothing!", env)
+        ElseIf TypeOf svm Is SVMModel Then
+            Return DirectCast(svm, SVMModel).svmClassify1(data, env)
+        ElseIf TypeOf svm Is SVMMultipleSet Then
+            Return DirectCast(svm, SVMMultipleSet).svmClassify2(data, env)
+        Else
+            Return Message.InCompatibleType(GetType(SVMModel), svm.GetType, env)
+        End If
+    End Function
+
+    <Extension>
+    Private Function svmClassify2(models As SVMMultipleSet, data As Object, env As Environment) As Object
+        Dim row As (label As String, data As Node())
+        Dim n As Integer
+        Dim err As Message = Nothing
+        Dim getData = getDataLambda(models.dimensionNames, {"n/a"}, data, env, err, n)
+        Dim datum As Node()
+
+        If Not err Is Nothing Then
+            Return err
+        End If
+
+        Dim names As String()
+
+        If TypeOf data Is dataframe Then
+            names = DirectCast(data, dataframe).getRowNames
+        Else
+            names = DirectCast(data, list).getNames
+        End If
+
+        Dim label As Double
+        Dim factor As ColorClass
+        Dim uid As String
+        Dim outputVectors = models.topics _
+            .Select(Function(a)
+                        Return (topic:=a.Key, a.Value.transform, a.Value.model, a.Value.factors)
+                    End Function) _
+            .ToArray
+        Dim info As New Dictionary(Of String, String)
+        Dim result As New List(Of EntityObject)
+
+        For i As Integer = 0 To n - 1
+            row = getData(i)
+            uid = names(i)
+            info = New Dictionary(Of String, String)
+
+            For Each SVM In outputVectors
+                datum = SVM.transform.Transform(row.data)
+                label = SVM.model.Predict(datum)
+                factor = SVM.factors.GetColor(label)
+                info.Add(SVM.topic, factor.name)
+            Next
+
+            result += New EntityObject With {.ID = uid, .Properties = info}
+        Next
+
+        Return result.ToArray
+    End Function
+
+    <Extension>
+    Private Function svmClassify1(svm As SVMModel, data As Object, env As Environment) As Object
         Dim row As (label As String, data As Node())
         Dim n As Integer
         Dim err As Message = Nothing
