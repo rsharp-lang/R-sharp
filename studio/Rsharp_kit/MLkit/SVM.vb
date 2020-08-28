@@ -222,6 +222,7 @@ Module SVM
                                   Optional shrinking As Boolean = True,
                                   Optional probability As Boolean = False,
                                   Optional weights As list = Nothing,
+                                  Optional verbose As Boolean = False,
                                   Optional env As Environment = Nothing) As Object
 
         Dim param As New Parameter With {
@@ -264,6 +265,8 @@ Module SVM
                 Next
             End If
         End If
+
+        Training.IsVerbose = verbose
 
         If TypeOf problem Is Problem Then
             Return getSvmModel(DirectCast(problem, Problem), param)
