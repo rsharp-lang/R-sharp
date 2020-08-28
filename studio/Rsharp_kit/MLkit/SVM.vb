@@ -207,23 +207,17 @@ Module SVM
         If Not weights Is Nothing Then
             With weights.AsGeneric(Of Double)(env)
                 For Each label In .AsEnumerable
-                    Call param.Weights.Add(label.Key, label.Value)
+                    Call param.Weights.Add(CInt(label.Key), label.Value)
                 Next
             End With
         Else
             If TypeOf problem Is Problem Then
-                For Each label In DirectCast(problem, Problem).Y.Select(Function(a) a.name).Distinct
-                    Call param.Weights.Add(label, 1)
-                Next
-            Else
-                For Each label In DirectCast(problem, ProblemTable).Topics _
-                    .Select(Function(topic)
-                                Return DirectCast(problem, ProblemTable).GetTopicLabels(topic)
-                            End Function) _
-                    .IteratesALL _
-                    .Distinct
+                For Each label As ColorClass In DirectCast(problem, Problem) _
+                    .Y _
+                    .GroupBy(Function(a) a.name) _
+                    .Select(Function(a) a.First)
 
-                    Call param.Weights.Add(label, 1)
+                    Call param.Weights.Add(label.enumInt, 1)
                 Next
             End If
         End If
@@ -231,14 +225,24 @@ Module SVM
         If TypeOf problem Is Problem Then
             Return getSvmModel(DirectCast(problem, Problem), param)
         Else
-            Return New list With {
-                .slots = DirectCast(problem, ProblemTable) _
-                    .Topics _
-                    .ToDictionary(Function(a) a,
-                                  Function(a)
-                                      Return CObj(DirectCast(problem, ProblemTable).GetProblem(a).getSvmModel(param))
-                                  End Function)
-            }
+            Dim table As ProblemTable = DirectCast(problem, ProblemTable)
+            Dim result As New Dictionary(Of String, Object)
+
+            For Each topic As String In table.Topics
+                problem = table.GetProblem(topic)
+
+                For Each label As ColorClass In problem _
+                    .Y _
+                    .GroupBy(Function(a) a.name) _
+                    .Select(Function(a) a.First)
+
+                    Call param.Weights.Add(label.enumInt, 1)
+                Next
+
+                result(topic) = DirectCast(problem, Problem).getSvmModel(param)
+            Next
+
+            Return New list With {.slots = result}
         End If
     End Function
 
