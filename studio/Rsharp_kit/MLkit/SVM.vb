@@ -132,7 +132,7 @@ Module SVM
                                   Optional svmType As SvmType = SvmType.C_SVC,
                                   Optional kernelType As KernelType = KernelType.RBF,
                                   Optional degree As Integer = 3,
-                                  Optional gamma As Double = 0,
+                                  Optional gamma As Double = 0.5,
                                   Optional coefficient0 As Double = 0,
                                   Optional nu As Double = 0.5,
                                   Optional cacheSize As Integer = 40,

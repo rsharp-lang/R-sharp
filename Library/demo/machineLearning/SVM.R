@@ -16,7 +16,7 @@ let svm = svm.problem(["X", "Y"])
 :> trainSVMModel
 ;
 
-# 2 1 2 3
+# 2 -1 2 3
 let validates = data.frame(X = [2,-103,3,311], Y = [1,2,1.3,302]);
 
 rownames(validates) = ["a","b","c","d"];
