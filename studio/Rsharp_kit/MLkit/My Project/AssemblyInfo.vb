@@ -8,11 +8,11 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("MLkit")>
-<Assembly: AssemblyDescription("")>
+<Assembly: AssemblyTitle("MLkit: R# machine learning toolkit library")>
+<Assembly: AssemblyDescription("MLkit: R# machine learning toolkit library")>
 <Assembly: AssemblyCompany("")>
 <Assembly: AssemblyProduct("MLkit")>
-<Assembly: AssemblyCopyright("Copyright ©  2020")>
+<Assembly: AssemblyCopyright("Copyright © xie.guigang@gcmodeller.org 2020")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")>
 
-<Assembly: AssemblyVersion("1.0.0.0")>
-<Assembly: AssemblyFileVersion("1.0.0.0")>
+<Assembly: AssemblyVersion("1.3210.*")>
+<Assembly: AssemblyFileVersion("2.3321.*")>
