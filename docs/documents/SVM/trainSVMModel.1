@@ -1,5 +1,5 @@
 .\" man page create by R# package system.
-.TH SVM 1 2000-01-01 "trainSVMModel" "trainSVMModel"
+.TH SVM 1 2020-08-28 "trainSVMModel" "trainSVMModel"
 .SH NAME
 trainSVMModel \- 
 .SH SYNOPSIS
@@ -7,7 +7,7 @@ trainSVMModel \-
 \fBsvmType\fR as <integer> SvmType = [C_SVC], 
 \fBkernelType\fR as <integer> KernelType = [RBF], 
 \fBdegree\fR as integer = 3, 
-\fBgamma\fR as double = 0, 
+\fBgamma\fR as double = 0.5, 
 \fBcoefficient0\fR as double = 0, 
 \fBnu\fR as double = 0.5, 
 \fBcacheSize\fR as integer = 40, 
@@ -15,7 +15,9 @@ trainSVMModel \-
 \fBEPS\fR as double = 0.001, 
 \fBP\fR as double = 0.1, 
 \fBshrinking\fR as boolean = TRUE, 
-\fBprobability\fR as boolean = FALSE);\fR
+\fBprobability\fR as boolean = FALSE, 
+\fBweights\fR as list = \fB<NULL>\fR, 
+[\fB<Environment>\fR]);\fR
 .SH OPTIONS
 .PP
 \fBproblem\fB \fR\- -
@@ -65,4 +67,4 @@ SVM
 MLkit.dll
 .PP
 .SH COPYRIGHT
-Copyright ©  2020
+Copyright © xie.guigang@gcmodeller.org 2020
