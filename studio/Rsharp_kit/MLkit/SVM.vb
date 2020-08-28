@@ -4,7 +4,6 @@ Imports Microsoft.VisualBasic.DataMining.ComponentModel.Encoder
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.SVM
 Imports Microsoft.VisualBasic.Scripting.MetaData
-Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -145,7 +144,7 @@ Module SVM
                                   Optional shrinking As Boolean = True,
                                   Optional probability As Boolean = False,
                                   Optional weights As list = Nothing,
-                                  Optional env As Environment = Nothing) As SvmModel
+                                  Optional env As Environment = Nothing) As SVMModel
 
         Dim param As New Parameter With {
             .SvmType = svmType,
@@ -177,7 +176,7 @@ Module SVM
         Dim transform As RangeTransform = RangeTransform.Compute(problem)
         Dim model As Model = Training.Train(transform.Scale(problem), param)
 
-        Return New SvmModel With {
+        Return New SVMModel With {
             .transform = transform,
             .model = model,
             .factors = New ClassEncoder(problem.Y)
@@ -185,7 +184,7 @@ Module SVM
     End Function
 
     <ExportAPI("svm_classify")>
-    Public Function svmClassify(svm As SvmModel, data As Object, Optional env As Environment = Nothing) As Object
+    Public Function svmClassify(svm As SVMModel, data As Object, Optional env As Environment = Nothing) As Object
         Dim row As (label As String, data As Node())
         Dim n As Integer
         Dim err As Message = Nothing
@@ -220,21 +219,3 @@ Module SVM
         Return New list With {.slots = labels}
     End Function
 End Module
-
-Public Class SvmModel
-
-    Public Property model As Model
-    Public Property transform As IRangeTransform
-    Public Property factors As ClassEncoder
-
-    Public ReadOnly Property DimensionNames As String()
-        Get
-            Return model.DimensionNames
-        End Get
-    End Property
-
-    Public Overrides Function ToString() As String
-        Return DimensionNames.GetJson
-    End Function
-
-End Class
