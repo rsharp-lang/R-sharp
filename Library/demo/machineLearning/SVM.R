@@ -26,3 +26,21 @@ let validates = data.frame(X = [2,-103,3,311,500, 50], Y = [1,2,1.3,302,1800, 50
 rownames(validates) = ["a","b","c","d","e", "f"];
 
 str(svm :> svm_classify(validates));
+
+const json_saved = `${!script$dir}/SVM.json`;
+
+print(`the svm model in json format will be saved at location: ${json_saved}`);
+
+svm 
+:> svm_json
+:> writeLines(con = json_saved)
+;
+
+print("validate result from the json model loaded result:");
+
+json_saved
+:> readText
+:> parse.SVM_json
+:> svm_classify(validates)
+:> str
+;
