@@ -5,6 +5,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.ChartPlots
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
+Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.DataMining.ComponentModel.Encoder
 Imports Microsoft.VisualBasic.DataMining.ComponentModel.Evaluation
@@ -54,6 +55,8 @@ Module SVM
                         End Function) _
                 .ToArray
         }
+
+        Return ROCPlot.Plot(roc:=curve)
     End Function
 
     Private Function problemDataframe(problem As Problem, args As list, env As Environment) As dataframe
@@ -254,6 +257,19 @@ Module SVM
     <ExportAPI("parse.SVM_problems")>
     Public Function ParseProblemTableJSON(text As String) As ProblemTable
         Return text.LoadJSON(Of ProblemTable)
+    End Function
+
+    <ExportAPI("problem.validateLabels")>
+    Public Function problemValidateLabels(problem As ProblemTable) As dataframe
+        Dim labels As New dataframe With {.columns = New Dictionary(Of String, Array)}
+
+        For Each dimension As String In problem.GetTopics
+            labels.columns.Add(dimension, problem.GetTopicLabels(dimension))
+        Next
+
+        labels.rownames = problem.vectors.Select(Function(a) a.id).ToArray
+
+        Return labels
     End Function
 
     Private Function getDataLambda(dimNames As String(), tag As String(), data As Object, env As Environment,
@@ -513,7 +529,7 @@ Module SVM
 
             Dim classifyResult As EntityObject() = DirectCast(result, EntityObject())
             Dim validates As dataframe = DirectCast(labels, dataframe)
-            Dim resultList As New Dictionary(Of String, PerformanceEvaluator)
+            Dim resultList As New Dictionary(Of String, Object)
 
             For Each dimension As String In validates.columns.Keys
                 Dim validateVector As String() = REnv.asVector(Of String)(validates.columns(dimension))
@@ -533,7 +549,7 @@ Module SVM
                 resultList.Add(dimension, New PerformanceEvaluator(points))
             Next
 
-            Return resultList
+            Return New list With {.slots = resultList}
         Else
             Return Message.InCompatibleType(GetType(SVMModel), svm.GetType, env)
         End If
