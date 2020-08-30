@@ -1,14 +1,20 @@
 ﻿
+Imports System.Drawing
+Imports System.Drawing.Drawing2D
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Data.ChartPlots
+Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.DataMining.ComponentModel.Encoder
+Imports Microsoft.VisualBasic.DataMining.ComponentModel.Evaluation
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.SVM
 Imports Microsoft.VisualBasic.MachineLearning.SVM.StorageProcedure
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -27,7 +33,28 @@ Module SVM
 
         Call Internal.Object.Converts.makeDataframe.addHandler(GetType(Problem), AddressOf problemDataframe)
         Call Internal.Object.Converts.makeDataframe.addHandler(GetType(ProblemTable), AddressOf problemsDataframe)
+
+        Call Internal.generic.add("plot", GetType(PerformanceEvaluator), AddressOf plotROC)
     End Sub
+
+    Private Function plotROC(validates As PerformanceEvaluator, args As list, env As Environment) As Object
+        Dim ROC = validates.ROCCurve
+        Dim curve As New SerialData With {
+            .color = Color.Black,
+            .lineType = DashStyle.Solid,
+            .pointSize = 5,
+            .shape = LegendStyles.Circle,
+            .title = validates.AuC,
+            .width = 5,
+            .pts = ROC _
+                .Select(Function(a)
+                            Return New PointData() With {
+                                .pt = a
+                            }
+                        End Function) _
+                .ToArray
+        }
+    End Function
 
     Private Function problemDataframe(problem As Problem, args As list, env As Environment) As dataframe
         Dim data As New dataframe With {.columns = New Dictionary(Of String, Array)}
@@ -444,6 +471,69 @@ Module SVM
             Return DirectCast(svm, SVMModel).svmClassify1(data, env)
         ElseIf TypeOf svm Is SVMMultipleSet Then
             Return DirectCast(svm, SVMMultipleSet).svmClassify2(data, env)
+        Else
+            Return Message.InCompatibleType(GetType(SVMModel), svm.GetType, env)
+        End If
+    End Function
+
+    <ExportAPI("svm_validates")>
+    Public Function svmValidates(svm As Object, validateSet As Object, <RRawVectorArgument> labels As Object, Optional env As Environment = Nothing) As Object
+        If svm Is Nothing Then
+            Return Internal.debug.stop("the required svm model can not be nothing!", env)
+        ElseIf TypeOf svm Is SVMModel Then
+            Dim result As Object = DirectCast(svm, SVMModel).svmClassify1(validateSet, env)
+            Dim labelsList As String() = REnv.asVector(Of String)(labels)
+
+            If Program.isException(result) Then
+                Return result
+            End If
+
+            Dim classifyResult As list = DirectCast(result, list)
+            Dim keys As String() = classifyResult.slots.Keys.ToArray
+            Dim points As New List(Of RankPair)
+
+            For i As Integer = 0 To keys.Length - 1
+                Dim p As ColorClass = classifyResult.slots(keys(i))
+                Dim validate = labelsList(i)
+
+                If p.name <> validate Then
+                    points.Add(New RankPair(0, 0))
+                Else
+                    points.Add(New RankPair(1, 1))
+                End If
+            Next
+
+            Return New PerformanceEvaluator(points)
+        ElseIf TypeOf svm Is SVMMultipleSet Then
+            Dim result As Object = DirectCast(svm, SVMMultipleSet).svmClassify2(validateSet, env)
+
+            If Program.isException(result) Then
+                Return result
+            End If
+
+            Dim classifyResult As EntityObject() = DirectCast(result, EntityObject())
+            Dim validates As dataframe = DirectCast(labels, dataframe)
+            Dim resultList As New Dictionary(Of String, PerformanceEvaluator)
+
+            For Each dimension As String In validates.columns.Keys
+                Dim validateVector As String() = REnv.asVector(Of String)(validates.columns(dimension))
+                Dim points As New List(Of RankPair)
+
+                For i As Integer = 0 To classifyResult.Length - 1
+                    Dim p As String = classifyResult(i)(dimension)
+                    Dim validate As String = validateVector(i)
+
+                    If p <> validate Then
+                        points.Add(New RankPair(0, 0))
+                    Else
+                        points.Add(New RankPair(1, 1))
+                    End If
+                Next
+
+                resultList.Add(dimension, New PerformanceEvaluator(points))
+            Next
+
+            Return resultList
         Else
             Return Message.InCompatibleType(GetType(SVMModel), svm.GetType, env)
         End If
