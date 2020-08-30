@@ -38,7 +38,7 @@ Module SVM
         For i As Integer = 0 To problem.DimensionNames.Length - 1
             index = i
             data.columns(problem.DimensionNames(i)) = problem.X _
-                .Select(Function(row) row(index).Value) _
+                .Select(Function(row) row(index).value) _
                 .ToArray
         Next
 
@@ -84,10 +84,10 @@ Module SVM
             For i As Integer = 0 To problem.MaxIndex - 1
                 ' 如果这一列全部等于第一个值
                 ' 则删除
-                Dim val As Double = problem.X(Scan0)(i).Value
+                Dim val As Double = problem.X(Scan0)(i).value
                 Dim j = i
 
-                If problem.X.Any(Function(row) stdNum.Abs(row(j).Value - val) > 0.0000001) Then
+                If problem.X.Any(Function(row) stdNum.Abs(row(j).value - val) > 0.0000001) Then
                     trim.Add(problem.X.Select(Function(row) row(j)).ToArray)
                     dimNames.Add(problem.DimensionNames(j))
                 End If
@@ -96,7 +96,7 @@ Module SVM
             Dim matrix = trim.PopAll.MatrixTranspose.ToArray
 
             For Each row In matrix
-                trim.Add(row.Select(Function(node, i) New Node(i, node.Value)).ToArray)
+                trim.Add(row.Select(Function(node, i) New Node(i, node.value)).ToArray)
             Next
 
             Return New Problem With {
