@@ -6,6 +6,7 @@ Imports Microsoft.VisualBasic.DataMining.ComponentModel.Encoder
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.SVM
+Imports Microsoft.VisualBasic.MachineLearning.SVM.StorageProcedure
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime
@@ -399,6 +400,36 @@ Module SVM
             .model = model,
             .factors = New ClassEncoder(problem.Y)
         }
+    End Function
+
+    <ExportAPI("parse.SVM_json")>
+    <RApiReturn(GetType(SVMModel), GetType(SVMMultipleSet))>
+    Public Function parseSVMJSON(json As String, Optional multipleSet As Boolean = False) As Object
+        If multipleSet Then
+            Return json.LoadJSON(Of SVMMultipleSetJSON).CreateSVMModel
+        Else
+            Return json.LoadJSON(Of SvmModelJSON).CreateSVMModel
+        End If
+    End Function
+
+    ''' <summary>
+    ''' serialize the SVM model as json string for save to a file
+    ''' </summary>
+    ''' <param name="svm"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("svm_json")>
+    <RApiReturn(GetType(String))>
+    Public Function SVMJSON(svm As Object, Optional env As Environment = Nothing) As Object
+        If svm Is Nothing Then
+            Return "null"
+        ElseIf TypeOf svm Is SVMModel Then
+            Return DirectCast(svm, SVMModel).GetJson
+        ElseIf TypeOf svm Is SVMMultipleSet Then
+            Return DirectCast(svm, SVMMultipleSet).GetJson
+        Else
+            Return Message.InCompatibleType(GetType(SVMModel), svm.GetType, env)
+        End If
     End Function
 
     <ExportAPI("svm_classify")>
