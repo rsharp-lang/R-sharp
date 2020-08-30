@@ -424,9 +424,13 @@ Module SVM
         If svm Is Nothing Then
             Return "null"
         ElseIf TypeOf svm Is SVMModel Then
-            Return DirectCast(svm, SVMModel).GetJson
+            Return DirectCast(svm, SVMModel) _
+                .DoCall(AddressOf SvmModelJSON.CreateJSONModel) _
+                .GetJson
         ElseIf TypeOf svm Is SVMMultipleSet Then
-            Return DirectCast(svm, SVMMultipleSet).GetJson
+            Return DirectCast(svm, SVMMultipleSet) _
+                .DoCall(AddressOf SVMMultipleSetJSON.CreateJSONModel) _
+                .GetJson
         Else
             Return Message.InCompatibleType(GetType(SVMModel), svm.GetType, env)
         End If
