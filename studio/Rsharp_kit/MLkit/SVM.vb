@@ -540,7 +540,7 @@ Module SVM
                     Dim validate As String = validateVector(i)
 
                     If p <> validate Then
-                        points.Add(New RankPair(0, 0))
+                        points.Add(New RankPair(1, 0))
                     Else
                         points.Add(New RankPair(1, 1))
                     End If
