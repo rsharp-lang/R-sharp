@@ -200,6 +200,11 @@ Namespace Interpreter
             Return Me
         End Function
 
+        ''' <summary>
+        ''' Imports static api function from given package module
+        ''' </summary>
+        ''' <param name="package"></param>
+        ''' <returns></returns>
         Public Function LoadLibrary(package As Type) As RInterpreter
             Call globalEnvir.LoadLibrary(package)
             Return Me
