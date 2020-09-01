@@ -45,6 +45,7 @@
 #End Region
 
 Imports Microsoft.VisualBasic.ComponentModel
+Imports Microsoft.VisualBasic.Net.Protocols.ContentTypes
 
 Namespace System.Components
 
@@ -52,6 +53,12 @@ Namespace System.Components
 
         Public Property data As ISaveHandle
         Public Property filePath As String Implements IFileReference.FilePath
+
+        Public ReadOnly Property MimeType As ContentType() Implements IFileReference.MimeType
+            Get
+                Return {MIME.UnknownType}
+            End Get
+        End Property
 
         Public Overrides Function ToString() As String
             Return filePath

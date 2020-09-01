@@ -1,13 +1,21 @@
 ﻿
+Imports System.Drawing
+Imports System.Drawing.Drawing2D
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Data.ChartPlots
+Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
+Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.DataMining.ComponentModel.Encoder
+Imports Microsoft.VisualBasic.DataMining.ComponentModel.Evaluation
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.SVM
+Imports Microsoft.VisualBasic.MachineLearning.SVM.StorageProcedure
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -15,6 +23,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports dataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports Parameter = Microsoft.VisualBasic.MachineLearning.SVM.Parameter
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports stdNum = System.Math
 
 <Package("SVM")>
 <RTypeExport("problem", GetType(Problem))>
@@ -25,7 +34,30 @@ Module SVM
 
         Call Internal.Object.Converts.makeDataframe.addHandler(GetType(Problem), AddressOf problemDataframe)
         Call Internal.Object.Converts.makeDataframe.addHandler(GetType(ProblemTable), AddressOf problemsDataframe)
+
+        Call Internal.generic.add("plot", GetType(PerformanceEvaluator), AddressOf plotROC)
     End Sub
+
+    Private Function plotROC(validates As PerformanceEvaluator, args As list, env As Environment) As Object
+        Dim ROC = validates.ROCCurve
+        Dim curve As New SerialData With {
+            .color = Color.Black,
+            .lineType = DashStyle.Solid,
+            .pointSize = 5,
+            .shape = LegendStyles.Circle,
+            .title = validates.AuC,
+            .width = 5,
+            .pts = ROC _
+                .Select(Function(a)
+                            Return New PointData() With {
+                                .pt = a
+                            }
+                        End Function) _
+                .ToArray
+        }
+
+        Return ROCPlot.Plot(roc:=curve)
+    End Function
 
     Private Function problemDataframe(problem As Problem, args As list, env As Environment) As dataframe
         Dim data As New dataframe With {.columns = New Dictionary(Of String, Array)}
@@ -36,7 +68,7 @@ Module SVM
         For i As Integer = 0 To problem.DimensionNames.Length - 1
             index = i
             data.columns(problem.DimensionNames(i)) = problem.X _
-                .Select(Function(row) row(index).Value) _
+                .Select(Function(row) row(index).value) _
                 .ToArray
         Next
 
@@ -61,6 +93,79 @@ Module SVM
         data.rownames = problems.vectors.Keys.ToArray
 
         Return data
+    End Function
+
+    ''' <summary>
+    ''' removes all columns that will all value equals to each other
+    ''' </summary>
+    ''' <param name="model"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("problem.trim")>
+    <RApiReturn(GetType(Problem), GetType(ProblemTable))>
+    Public Function svmModelTrimNULL(model As Object, Optional env As Environment = Nothing) As Object
+        If model Is Nothing Then
+            Return Nothing
+        ElseIf TypeOf model Is Problem Then
+            Dim problem As Problem = DirectCast(model, Problem)
+            Dim trim As New List(Of Node())
+            Dim dimNames As New List(Of String)
+
+            For i As Integer = 0 To problem.MaxIndex - 1
+                ' 如果这一列全部等于第一个值
+                ' 则删除
+                Dim val As Double = problem.X(Scan0)(i).value
+                Dim j = i
+
+                If problem.X.Any(Function(row) stdNum.Abs(row(j).value - val) > 0.0000001) Then
+                    trim.Add(problem.X.Select(Function(row) row(j)).ToArray)
+                    dimNames.Add(problem.DimensionNames(j))
+                End If
+            Next
+
+            Dim matrix = trim.PopAll.MatrixTranspose.ToArray
+
+            For Each row In matrix
+                trim.Add(row.Select(Function(node, i) New Node(i, node.value)).ToArray)
+            Next
+
+            Return New Problem With {
+                .DimensionNames = dimNames,
+                .MaxIndex = dimNames.Count,
+                .X = trim.ToArray,
+                .Y = problem.Y _
+                    .Select(Function(a)
+                                Return New ColorClass With {
+                                    .color = a.color,
+                                    .enumInt = a.enumInt,
+                                    .name = a.name
+                                }
+                            End Function) _
+                    .ToArray
+            }
+        ElseIf TypeOf model Is ProblemTable Then
+            Dim problem As ProblemTable = DirectCast(model, ProblemTable).Clone
+
+            For Each name As String In problem.DimensionNames
+                Dim val As Double = problem.vectors(Scan0)(name)
+
+                If problem.vectors.All(Function(vec) stdNum.Abs(vec(name) - val) <= 0.000000001) Then
+                    For Each vec In problem.vectors
+                        vec.Properties.Remove(name)
+                    Next
+                End If
+            Next
+
+            problem.DimensionNames = problem.vectors _
+                .Select(Function(vec) vec.Properties.Keys) _
+                .IteratesALL _
+                .Distinct _
+                .ToArray
+
+            Return problem
+        Else
+            Return Message.InCompatibleType(GetType(Problem), model.GetType, env)
+        End If
     End Function
 
     <ExportAPI("svm.problem")>
@@ -154,6 +259,19 @@ Module SVM
         Return text.LoadJSON(Of ProblemTable)
     End Function
 
+    <ExportAPI("problem.validateLabels")>
+    Public Function problemValidateLabels(problem As ProblemTable) As dataframe
+        Dim labels As New dataframe With {.columns = New Dictionary(Of String, Array)}
+
+        For Each dimension As String In problem.GetTopics
+            labels.columns.Add(dimension, problem.GetTopicLabels(dimension))
+        Next
+
+        labels.rownames = problem.vectors.Select(Function(a) a.id).ToArray
+
+        Return labels
+    End Function
+
     Private Function getDataLambda(dimNames As String(), tag As String(), data As Object, env As Environment,
                                    ByRef err As Message,
                                    ByRef n As Integer) As Func(Of Integer, (label As String, data As Node()))
@@ -164,9 +282,27 @@ Module SVM
             err = Internal.debug.stop("no problem data was provided!", env)
             Return Nothing
         ElseIf TypeOf data Is list Then
-            vectors = DirectCast(data, list).AsGeneric(Of Double())(env)
+            With DirectCast(data, list)
+                For Each name As String In dimNames
+                    If Not .hasName(name) Then
+                        err = Internal.debug.stop($"missing dimension {name}!", env)
+                        Return Nothing
+                    End If
+
+                    vectors(name) = .getValue(Of Double())(name, env)
+                Next
+            End With
         ElseIf TypeOf data Is dataframe Then
-            vectors = DirectCast(data, dataframe).columns.ToDictionary(Function(a) a.Key, Function(a) DirectCast(REnv.asVector(Of Double)(a.Value), Double()))
+            With DirectCast(data, dataframe)
+                For Each name As String In dimNames
+                    If Not .hasName(name) Then
+                        err = Internal.debug.stop($"missing dimension {name}!", env)
+                        Return Nothing
+                    End If
+
+                    vectors(name) = REnv.asVector(Of Double)(.columns(name))
+                Next
+            End With
         Else
             err = Message.InCompatibleType(GetType(Object), data.GetType, env)
             Return Nothing
@@ -222,6 +358,7 @@ Module SVM
                                   Optional shrinking As Boolean = True,
                                   Optional probability As Boolean = False,
                                   Optional weights As list = Nothing,
+                                  Optional verbose As Boolean = False,
                                   Optional env As Environment = Nothing) As Object
 
         Dim param As New Parameter With {
@@ -265,6 +402,8 @@ Module SVM
             End If
         End If
 
+        Training.IsVerbose = verbose
+
         If TypeOf problem Is Problem Then
             Return getSvmModel(DirectCast(problem, Problem), param)
         Else
@@ -306,6 +445,40 @@ Module SVM
         }
     End Function
 
+    <ExportAPI("parse.SVM_json")>
+    <RApiReturn(GetType(SVMModel), GetType(SVMMultipleSet))>
+    Public Function parseSVMJSON(json As String, Optional multipleSet As Boolean = False) As Object
+        If multipleSet Then
+            Return json.LoadJSON(Of SVMMultipleSetJSON).CreateSVMModel
+        Else
+            Return json.LoadJSON(Of SvmModelJSON).CreateSVMModel
+        End If
+    End Function
+
+    ''' <summary>
+    ''' serialize the SVM model as json string for save to a file
+    ''' </summary>
+    ''' <param name="svm"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("svm_json")>
+    <RApiReturn(GetType(String))>
+    Public Function SVMJSON(svm As Object, Optional env As Environment = Nothing) As Object
+        If svm Is Nothing Then
+            Return "null"
+        ElseIf TypeOf svm Is SVMModel Then
+            Return DirectCast(svm, SVMModel) _
+                .DoCall(AddressOf SvmModelJSON.CreateJSONModel) _
+                .GetJson
+        ElseIf TypeOf svm Is SVMMultipleSet Then
+            Return DirectCast(svm, SVMMultipleSet) _
+                .DoCall(AddressOf SVMMultipleSetJSON.CreateJSONModel) _
+                .GetJson
+        Else
+            Return Message.InCompatibleType(GetType(SVMModel), svm.GetType, env)
+        End If
+    End Function
+
     <ExportAPI("svm_classify")>
     Public Function svmClassify(svm As Object, data As Object, Optional env As Environment = Nothing) As Object
         If svm Is Nothing Then
@@ -314,6 +487,69 @@ Module SVM
             Return DirectCast(svm, SVMModel).svmClassify1(data, env)
         ElseIf TypeOf svm Is SVMMultipleSet Then
             Return DirectCast(svm, SVMMultipleSet).svmClassify2(data, env)
+        Else
+            Return Message.InCompatibleType(GetType(SVMModel), svm.GetType, env)
+        End If
+    End Function
+
+    <ExportAPI("svm_validates")>
+    Public Function svmValidates(svm As Object, validateSet As Object, <RRawVectorArgument> labels As Object, Optional env As Environment = Nothing) As Object
+        If svm Is Nothing Then
+            Return Internal.debug.stop("the required svm model can not be nothing!", env)
+        ElseIf TypeOf svm Is SVMModel Then
+            Dim result As Object = DirectCast(svm, SVMModel).svmClassify1(validateSet, env)
+            Dim labelsList As String() = REnv.asVector(Of String)(labels)
+
+            If Program.isException(result) Then
+                Return result
+            End If
+
+            Dim classifyResult As list = DirectCast(result, list)
+            Dim keys As String() = classifyResult.slots.Keys.ToArray
+            Dim points As New List(Of RankPair)
+
+            For i As Integer = 0 To keys.Length - 1
+                Dim p As ColorClass = classifyResult.slots(keys(i))
+                Dim validate = labelsList(i)
+
+                If p.name <> validate Then
+                    points.Add(New RankPair(0, 0))
+                Else
+                    points.Add(New RankPair(1, 1))
+                End If
+            Next
+
+            Return New PerformanceEvaluator(points)
+        ElseIf TypeOf svm Is SVMMultipleSet Then
+            Dim result As Object = DirectCast(svm, SVMMultipleSet).svmClassify2(validateSet, env)
+
+            If Program.isException(result) Then
+                Return result
+            End If
+
+            Dim classifyResult As EntityObject() = DirectCast(result, EntityObject())
+            Dim validates As dataframe = DirectCast(labels, dataframe)
+            Dim resultList As New Dictionary(Of String, Object)
+
+            For Each dimension As String In validates.columns.Keys
+                Dim validateVector As String() = REnv.asVector(Of String)(validates.columns(dimension))
+                Dim points As New List(Of RankPair)
+
+                For i As Integer = 0 To classifyResult.Length - 1
+                    Dim p As String = classifyResult(i)(dimension)
+                    Dim validate As String = validateVector(i)
+
+                    If p <> validate Then
+                        points.Add(New RankPair(1, 0))
+                    Else
+                        points.Add(New RankPair(1, 1))
+                    End If
+                Next
+
+                resultList.Add(dimension, New PerformanceEvaluator(points))
+            Next
+
+            Return New list With {.slots = resultList}
         Else
             Return Message.InCompatibleType(GetType(SVMModel), svm.GetType, env)
         End If
