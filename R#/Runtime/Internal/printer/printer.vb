@@ -121,7 +121,7 @@ Namespace Runtime.Internal.ConsolePrinter
 
             Return Function(d)
                        Dim val As Double = DirectCast(d, Double)
-                       Dim str As String = val.ToString(format)
+                       Dim str As String = val.ToString(format).TrimEnd("0"c, "."c)
 
                        If val > 0 Then
                            str = " " & str
