@@ -60,8 +60,9 @@ Public Module wavToolkit
         Call Internal.ConsolePrinter.AttachConsoleFormatter(Of WaveFile)(AddressOf wavToString)
     End Sub
 
-    Private Function wavToString(wav As WaveFile) As String
+    Private Function wavToString(wavObj As Object) As String
         Dim summary As New StringBuilder
+        Dim wav As WaveFile = DirectCast(wavObj, WaveFile)
 
         Call summary.AppendLine($"[{wav.magic}] {wav.fileSize} bytes")
         Call summary.AppendLine($"format: {wav.format}")

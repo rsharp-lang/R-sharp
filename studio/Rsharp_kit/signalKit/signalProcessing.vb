@@ -69,11 +69,11 @@ Module signalProcessing
 
         Return New GeneralSignal With {
             .description = title,
-            .Measures = REnv.asVector(Of Double)(measure),
+            .Measures = DirectCast(REnv.asVector(Of Double)(measure), Double()),
             .measureUnit = measure.unit?.ToString Or "n/a".AsDefault,
             .meta = meta.AsGeneric(Of String)(env),
             .reference = App.NextTempName,
-            .Strength = REnv.asVector(Of Double)(signals)
+            .Strength = DirectCast(REnv.asVector(Of Double)(signals), Double())
         }
     End Function
 
@@ -127,7 +127,7 @@ Module signalProcessing
         Dim matrix As New List(Of DataSet)
 
         For Each signal As GeneralSignal In allSignals
-            Dim raw = signal.Measures _
+            Dim raw As Dictionary(Of String, Double) = signal.Measures _
                 .SeqIterator _
                 .ToDictionary(Function(a) a.value.ToString,
                               Function(i)
