@@ -88,6 +88,8 @@ Namespace Interpreter
                         memSize2 = Rsharp.WorkingSet64 / 1024 / 1024
                         memoryDelta = memSize2 - memSize
                         memSize = memSize2
+
+                        Call Rsharp.Refresh()
                     End SyncLock
 
                     If memoryDelta > 0 Then
