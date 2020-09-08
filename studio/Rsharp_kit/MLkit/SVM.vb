@@ -575,7 +575,7 @@ Module SVM
             names = DirectCast(data, list).getNames
         End If
 
-        Dim label As Double
+        Dim label As SVMPrediction
         Dim factor As ColorClass
         Dim uid As String
         Dim outputVectors = models.topics _
@@ -594,7 +594,7 @@ Module SVM
             For Each SVM In outputVectors
                 datum = SVM.transform.Transform(row.data)
                 label = SVM.model.Predict(datum)
-                factor = SVM.factors.GetColor(label)
+                factor = SVM.factors.GetColor(label.class)
                 info.Add(SVM.topic, factor.name)
             Next
 
@@ -626,14 +626,14 @@ Module SVM
             names = DirectCast(data, list).getNames
         End If
 
-        Dim label As Double
+        Dim label As SVMPrediction
         Dim factor As ColorClass
 
         For i As Integer = 0 To n - 1
             row = getData(i)
             datum = transform.Transform(row.data)
             label = svm.model.Predict(datum)
-            factor = svm.factors.GetColor(label)
+            factor = svm.factors.GetColor(label.class)
             labels.Add(names(i), factor)
         Next
 
