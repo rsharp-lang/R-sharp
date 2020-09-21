@@ -414,11 +414,25 @@ Public Module NetworkModule
         Return g
     End Function
 
+    ''' <summary>
+    ''' get all nodes in the given graph model
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <returns></returns>
     <ExportAPI("vertex")>
-    Public Function getNodes(g As NetworkGraph) As node()
-        Return g.vertex.ToArray
+    Public Function getNodes(g As NetworkGraph, Optional allConnected As Boolean = False) As node()
+        If allConnected Then
+            Return g.connectedNodes
+        Else
+            Return g.vertex.ToArray
+        End If
     End Function
 
+    ''' <summary>
+    ''' get all edges in the given graph model
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <returns></returns>
     <ExportAPI("edges")>
     Public Function getEdges(g As NetworkGraph) As Edge()
         Return g.graphEdges.ToArray
