@@ -124,8 +124,29 @@ Module clustering
         Return matrix
     End Function
 
+    ''' <summary>
+    ''' ### the cmeans algorithm module
+    ''' 
+    ''' **Fuzzy clustering** (also referred to as **soft clustering**) is a form of clustering in which 
+    ''' each data point can belong to more than one cluster.
+    '''
+    ''' Clustering Or cluster analysis involves assigning data points to clusters (also called buckets, 
+    ''' bins, Or classes), Or homogeneous classes, such that items in the same class Or cluster are as 
+    ''' similar as possible, while items belonging to different classes are as dissimilar as possible. 
+    ''' Clusters are identified via similarity measures. These similarity measures include distance, 
+    ''' connectivity, And intensity. Different similarity measures may be chosen based on the data Or 
+    ''' the application.
+    ''' 
+    ''' > https://en.wikipedia.org/wiki/Fuzzy_clustering
+    ''' </summary>
+    ''' <param name="dataset"></param>
+    ''' <param name="centers"></param>
+    ''' <param name="fuzzification"></param>
+    ''' <param name="threshold"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("cmeans")>
-    <RApiReturn(GetType(FuzzyCMeansEntity))>
+    <RApiReturn(GetType(Classify))>
     Public Function fuzzyCMeans(<RRawVectorArgument>
                                 dataset As Object,
                                 Optional centers% = 3,
@@ -141,23 +162,21 @@ Module clustering
 
         Dim raw = data.populates(Of DataSet)(env).ToArray
         Dim propertyNames As String() = raw.PropertyNames
-        Dim entities As FuzzyCMeansEntity() = raw _
+        Dim entities As ClusterEntity() = raw _
             .Select(Function(d)
-                        Return New FuzzyCMeansEntity With {
+                        Return New ClusterEntity With {
                             .entityVector = d(propertyNames),
-                            .uid = d.ID,
-                            .memberships = New Dictionary(Of Integer, Double)
+                            .uid = d.ID
                         }
                     End Function) _
             .ToArray
-
-        Call entities.FuzzyCMeans(
-            numberOfClusters:=centers,
-            fuzzificationParameter:=fuzzification,
+        Dim classes As Classify() = entities.CMeans(
+            classCount:=centers,
+            fuzzification:=fuzzification,
             threshold:=threshold
         )
 
-        Return entities
+        Return classes
     End Function
 
     ''' <summary>
