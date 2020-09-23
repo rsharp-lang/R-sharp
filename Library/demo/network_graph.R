@@ -32,10 +32,10 @@ g :> add.edge("X", "A1");
 
 # do network styling
 g 
-:> groups(type = "A+",      nodes = ["A","B","C"])
-:> groups(type = "B_class", nodes = ["D"])
-:> groups(type = "tails",   nodes = ["F", "G"])
-:> groups(type = "mirror",  nodes = ["A1","B1","C1","D1","E1", "F1", "G1", "H1"]);
+:> set_group(type = "A+",      nodes = ["A","B","C"])
+:> set_group(type = "B_class", nodes = ["D"])
+:> set_group(type = "tails",   nodes = ["F", "G"])
+:> set_group(type = "mirror",  nodes = ["A1","B1","C1","D1","E1", "F1", "G1", "H1"]);
 
 g 
 :> color.group(type = "A+",      color = "red")

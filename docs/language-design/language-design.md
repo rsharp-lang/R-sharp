@@ -363,19 +363,20 @@ if (not me is him) {
 
 Allows user operator
 
-|Operator |Description          |
-|---------|---------------------|
-|``+``    | add                 |
-|``-``    | substract           |
-|``*``    | multiply            |
-|``/``    | devide              |
-|``\``    | integer devide      |
-|``%``    | mod                 |
-|``^``    | power               |
-|``is``   | object equals       |
-|``like`` | object similarity   |
-|``in``   | collection set      |
-|``which``| index list for true |
+|Operator   |Description          |
+|-----------|---------------------|
+|``+``      | add                 |
+|``-``      | substract           |
+|``*``      | multiply            |
+|``/``      | devide              |
+|``\``      | integer devide      |
+|``%``      | mod                 |
+|``^``      | power               |
+|``is``     | object equals       |
+|``like``   | object similarity   |
+|``in``     | in collection set   |
+|``which``  | index list for true |
+|``between``| in a given range    |
 
 ####  7.2.1. <a name='Useroperator'></a>User operator
 
@@ -511,7 +512,7 @@ The ``in`` operator means does the element in the target collection? returns a b
 local booleans <- name in names(obj);
 # in range
 # means x >= min and x <= max
-local booleans <- x in [min, max];
+local booleans <- x between [min, max];
 ```
 
 ####  7.4.1. <a name='combinewithWhichoperator'></a>combine with ``Which`` operator 
@@ -519,8 +520,29 @@ local booleans <- x in [min, max];
 The ``which`` operator gets the index of the value ``TRUE`` in a boolean vector:
 
 ```R
-local x <- |1, 2, 3, 4, 5|;
-local indices.true <- which x in [min, max];
+let x <- [1, 2, 3, 4, 5];
+let indices.true <- which x between [min, max];
+```
+
+#### Difference of ``in`` and ``between``
+
+the ``in`` operator is apply for collection set element exact match and the ``between`` operator is apply for the numeric range test,
+example as:
+
+```R
+# in test each element in x collection
+# for exact match in collection b
+#
+# each x in b? 
+[1, 2, 2.5, 3, 4, 5] in [2, 3]
+# result:
+# [1] FALSE TRUE FALSE TRUE FALSE FALSE
+
+# between test each element in x collection
+# is in a given value range?
+[1, 2, 2.5, 3, 4, 5] between [2, 3]
+# result:
+# [1] FALSE TRUE TRUE TRUE FALSE FALSE
 ```
 
 ##  8. <a name='bracketinRlanguage'></a>``[]`` bracket in R language
