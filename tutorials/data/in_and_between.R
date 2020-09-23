@@ -1,5 +1,5 @@
 # in test each element in x collection
-# for exact match in collection b
+# is exact match in collection b?
 #
 # each x in b? 
 print([1, 2, 2.5, 3, 4, 5] in [2, 3]);
