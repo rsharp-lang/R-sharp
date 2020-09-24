@@ -519,6 +519,8 @@ Module SVM
             Return DirectCast(svm, SVMMultipleSet) _
                 .DoCall(AddressOf SVMMultipleSetJSON.CreateJSONModel) _
                 .GetJson
+        ElseIf TypeOf svm Is ProblemTable Then
+            Return DirectCast(svm, ProblemTable).GetJson
         Else
             Return Message.InCompatibleType(GetType(SVMModel), svm.GetType, env)
         End If
