@@ -483,7 +483,8 @@ Module SVM
     <Extension>
     Private Function getSvmModel(problem As Problem, par As Parameter) As SVMModel
         Dim transform As RangeTransform = RangeTransform.Compute(problem)
-        Dim model As Model = Training.Train(transform.Scale(problem), par)
+        Dim scale = transform.Scale(problem)
+        Dim model As Model = Training.Train(scale, par)
 
         Return New SVMModel With {
             .transform = transform,

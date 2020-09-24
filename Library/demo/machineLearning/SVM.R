@@ -1,27 +1,27 @@
 imports "SVM" from "MLkit";
 
-let svm = svm.problem(["X", "Y"])
+let svm = svm.problem(["X", "Y", "Z"])
 :> append.trainingSet(
 	tag = 10,
-	data = data.frame(X = runif(100, -120, -100), Y = runif(100,1,2))
+	data = data.frame(X = runif(100, -120, -100), Y = runif(100,1,2), Z = runif(100, 10, 12))
 )
 :> append.trainingSet(
 	tag = 2,
-	data = data.frame(X = runif(100, 1, 10), Y = runif(100, 0, 20))
+	data = data.frame(X = runif(100, 1, 10), Y = runif(100, 0, 20), Z = runif(100, 10, 12))
 )
 :> append.trainingSet(
 	tag = 3,
-	data = data.frame(X = runif(100, 300, 500), Y = runif(100, 300, 310))
+	data = data.frame(X = runif(100, 300, 500), Y = runif(100, 300, 310), Z = runif(100, 10, 120))
 )
 :> append.trainingSet(
 	tag = "332A",
-	data = data.frame(X = runif(100, 300, 500), Y = runif(100, 1300, 1310))
+	data = data.frame(X = runif(100, 300, 500), Y = runif(100, 1300, 1310), Z = runif(100, 10, 512))
 )
 :> trainSVMModel
 ;
 
 # 2 10 2 3 332A 2
-let validates = data.frame(X = [2,-103,3,311,500, 50], Y = [1,2,1.3,302,1800, 50]);
+let validates = data.frame(X = [2,-103,3,311,500, 50], Y = [1,2,1.3,302,1800, 50], Z = [2,-103,3,311,500, 50]);
 
 rownames(validates) = ["a","b","c","d","e", "f"];
 
