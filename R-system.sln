@@ -462,8 +462,8 @@ Global
 		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.Release|x86.Build.0 = Release|x86
 		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.Rsharp_app_release|Any CPU.ActiveCfg = Release|Any CPU
 		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.Rsharp_app_release|Any CPU.Build.0 = Release|Any CPU
-		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.Rsharp_app_release|x64.ActiveCfg = Rsharp_app_release|x64
-		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.Rsharp_app_release|x64.Build.0 = Rsharp_app_release|x64
+		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.Rsharp_app_release|x64.ActiveCfg = GCModeller(Release_X64)|x64
+		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.Rsharp_app_release|x64.Build.0 = GCModeller(Release_X64)|x64
 		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.Rsharp_app_release|x86.ActiveCfg = Release|x86
 		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.Rsharp_app_release|x86.Build.0 = Release|x86
 		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}.sciBASIC.NET-test-release|Any CPU.ActiveCfg = sciBASIC.NET-test-release|Any CPU
