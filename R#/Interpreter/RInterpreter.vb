@@ -303,11 +303,11 @@ Namespace Interpreter
                 Call arguments.Keys.GetJson.__INFO_ECHO
 
                 If arguments.Any(Function(a) a.Name = "!script") Then
-                    Dim magic As MagicScriptSymbol = arguments _
+                    Dim magic As vbObject = arguments _
                         .Where(Function(a) a.Name = "!script") _
                         .First _
                         .Value
-                    Dim magicList As list = magic.toList
+                    Dim magicList As list = DirectCast(magic.target, MagicScriptSymbol).toList
 
                     Call Invokes.base.str(magicList, env:=env)
                 End If
