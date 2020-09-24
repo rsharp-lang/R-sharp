@@ -84,19 +84,7 @@ Namespace Interpreter
                 last = ExecuteCodeLine(expression, env, breakLoop, debug)
 
                 If debug Then
-                    SyncLock Rsharp
-                        memSize2 = Rsharp.WorkingSet64 / 1024 / 1024
-                        memoryDelta = memSize2 - memSize
-                        memSize = memSize2
-
-                        Call Rsharp.Refresh()
-                    End SyncLock
-
-                    If memoryDelta > 0 Then
-                        Call printDebug($"[app_memory] {memSize2.ToString("F2")} MB, delta {memoryDelta.ToString("F2")} MB", ConsoleColor.Red)
-                    Else
-                        Call printDebug($"[app_memory] {memSize2.ToString("F2")} MB, delta {memoryDelta.ToString("F2")} MB", ConsoleColor.Blue)
-                    End If
+                    Call printMemoryProfile()
                 End If
 
                 If breakLoop Then
@@ -107,6 +95,22 @@ Namespace Interpreter
 
             Return last
         End Function
+
+        Private Shared Sub printMemoryProfile()
+            SyncLock Rsharp
+                memSize2 = Rsharp.WorkingSet64 / 1024 / 1024
+                memoryDelta = memSize2 - memSize
+                memSize = memSize2
+
+                Call Rsharp.Refresh()
+            End SyncLock
+
+            If memoryDelta > 0 Then
+                Call printDebug($"[app_memory] {memSize2.ToString("F2")} MB, delta {memoryDelta.ToString("F2")} MB", ConsoleColor.Red)
+            Else
+                Call printDebug($"[app_memory] {memSize2.ToString("F2")} MB, delta {memoryDelta.ToString("F2")} MB", ConsoleColor.Blue)
+            End If
+        End Sub
 
         Private Shared Sub configException(env As Environment, last As Object, expression As Expression)
             If Not last Is Nothing AndAlso Program.isException(last) Then
@@ -120,7 +124,7 @@ Namespace Interpreter
             End If
         End Sub
 
-        Private Shared Sub printDebug(expression As String, Optional color As ConsoleColor = ConsoleColor.Magenta)
+        Friend Shared Sub printDebug(expression As String, Optional color As ConsoleColor = ConsoleColor.Magenta)
             Dim fore As ConsoleColor = Console.ForegroundColor
 
             Console.ForegroundColor = color

@@ -1,50 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::b7ee746234f1312a5ef0b40eb2b962a5, R#\Interpreter\RInterpreter.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class RInterpreter
-    ' 
-    '         Properties: configFile, debug, globalEnvir, redirectError2stdout, Rsharp
-    '                     silent, strict, warnings
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: (+2 Overloads) Evaluate, FromEnvironmentConfiguration, InitializeEnvironment, Invoke, (+2 Overloads) LoadLibrary
-    '                   RedirectOutput, Run, RunInternal, Source
-    ' 
-    '         Sub: (+3 Overloads) Add, (+2 Overloads) Dispose, Print, PrintMemory
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class RInterpreter
+' 
+'         Properties: configFile, debug, globalEnvir, redirectError2stdout, Rsharp
+'                     silent, strict, warnings
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: (+2 Overloads) Evaluate, FromEnvironmentConfiguration, InitializeEnvironment, Invoke, (+2 Overloads) LoadLibrary
+'                   RedirectOutput, Run, RunInternal, Source
+' 
+'         Sub: (+3 Overloads) Add, (+2 Overloads) Dispose, Print, PrintMemory
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -62,6 +62,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Configuration
@@ -300,6 +301,16 @@ Namespace Interpreter
             If debug AndAlso arguments.Length > 0 Then
                 Call "Initialize of the environment with pre-define symbols:".__DEBUG_ECHO
                 Call arguments.Keys.GetJson.__INFO_ECHO
+
+                If arguments.Any(Function(a) a.Name = "!script") Then
+                    Dim magic As vbObject = arguments _
+                        .Where(Function(a) a.Name = "!script") _
+                        .First _
+                        .Value
+                    Dim magicList As list = DirectCast(magic.target, MagicScriptSymbol).toList
+
+                    Call Invokes.base.str(magicList, env:=env)
+                End If
             End If
 
             Return env

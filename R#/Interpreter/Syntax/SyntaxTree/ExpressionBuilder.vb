@@ -124,7 +124,9 @@ Namespace Interpreter.SyntaxParser
 
         <Extension>
         Friend Function ParseExpression(code As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
-            If code(Scan0).isKeyword Then
+            If code = 0 Then
+                Return New SyntaxResult(New SyntaxErrorException("expressin tokens can not be empty!"), opts.debug)
+            ElseIf code(Scan0).isKeyword Then
                 Dim expression As SyntaxResult = code.keywordExpressionHandler(opts)
 
                 ' if expression is nothing
