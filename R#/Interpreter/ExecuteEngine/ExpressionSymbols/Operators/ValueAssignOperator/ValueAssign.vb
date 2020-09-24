@@ -319,7 +319,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             End Select
 
             If target Is Nothing Then
-                Return Message.SymbolNotFound(envir, symbolName.ToString, TypeCodes.generic)
+                If TypeOf symbolName Is Literal AndAlso Not envir.globalEnvironment.Rscript.strict Then
+                    envir.Push(DirectCast(symbolName, Literal).value.ToString, value, [readonly]:=False)
+                    Return Nothing
+                Else
+                    Return Message.SymbolNotFound(envir, symbolName.ToString, TypeCodes.generic)
+                End If
             End If
 
             If isByRef Then

@@ -75,6 +75,8 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+        Call strictTest()
+
         Call whileTest()
         Call functiondeclaretest2()
 
@@ -182,6 +184,13 @@ Module interpreterTest
         Call stringInterpolateTest()
 
 
+        Pause()
+    End Sub
+
+    Sub strictTest()
+        R.strict = False
+        Call R.Evaluate("a =1:3")
+        Call R.Print("a")
         Pause()
     End Sub
 
