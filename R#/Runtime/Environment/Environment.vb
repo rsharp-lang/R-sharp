@@ -213,11 +213,11 @@ Namespace Runtime
         End Sub
 
         Protected Sub redirectError(obj$, msg$, level As MSG_TYPES)
-            Call AddMessage({msg, "error_level: exception warning", "location: " & obj})
+            Call AddMessage({msg, "location: " & obj}, level:=MSG_TYPES.ERR)
         End Sub
 
         Protected Sub redirectWarning(obj$, msg$, level As MSG_TYPES)
-            Call AddMessage({msg, "error_level: warning", "location: " & obj})
+            Call AddMessage({msg, "location: " & obj})
         End Sub
 
         Public Sub AddMessage(message As Object, Optional level As MSG_TYPES = MSG_TYPES.WRN)
