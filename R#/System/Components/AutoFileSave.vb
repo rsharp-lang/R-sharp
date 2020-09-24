@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5bca2e25042fb7cc46be125ef4d3e5f6, R#\System\Components\AutoFileSave.vb"
+﻿#Region "Microsoft.VisualBasic::38b20bd21df2a1a891b629a2f8056bb5, R#\System\Components\AutoFileSave.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Class AutoFileSave
     ' 
-    '         Properties: data, filePath
+    '         Properties: data, filePath, MimeType
     ' 
     '         Function: ToString
     ' 

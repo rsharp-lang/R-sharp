@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ee2a6e858b1236a05c2311a8bb07a5e3, studio\Rstudio\Diagnostics.vb"
+﻿#Region "Microsoft.VisualBasic::125f22e6e43b80cf292a554aa2c9cfb7, studio\Rstudio\Diagnostics.vb"
 
     ' Author:
     ' 
