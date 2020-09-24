@@ -486,6 +486,8 @@ Module SVM
         Dim scale = transform.Scale(problem)
         Dim model As Model = Training.Train(scale, par)
 
+        Call Training.flushLog()
+
         Return New SVMModel With {
             .transform = transform,
             .model = model,

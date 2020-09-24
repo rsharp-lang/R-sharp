@@ -6,7 +6,7 @@ let save_json = ?"--save" || `${dirname(trainingSet)}/${basename(trainingSet)}.s
 let svm_model = trainingSet 
 :> readText 
 :> parse.SVM_problems
-:> trainSVMModel
+:> trainSVMModel(verbose = TRUE)
 ;
 
 svm_model
