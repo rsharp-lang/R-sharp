@@ -110,9 +110,9 @@ Module SVM
 
         data.columns("[output]") = problem.Y.Select(Function(a) a.name).ToArray
 
-        For i As Integer = 0 To problem.DimensionNames.Length - 1
+        For i As Integer = 0 To problem.dimensionNames.Length - 1
             index = i
-            data.columns(problem.DimensionNames(i)) = problem.X _
+            data.columns(problem.dimensionNames(i)) = problem.X _
                 .Select(Function(row) row(index).value) _
                 .ToArray
         Next
@@ -129,9 +129,9 @@ Module SVM
             data.columns($"[{topic}]") = problems.GetTopicLabels(topic)
         Next
 
-        For i As Integer = 0 To problems.DimensionNames.Length - 1
+        For i As Integer = 0 To problems.dimensionNames.Length - 1
             index = i
-            attrKey = problems.DimensionNames(i)
+            attrKey = problems.dimensionNames(i)
             data.columns(attrKey) = problems.vectors.Select(Function(a) a(attrKey)).ToArray
         Next
 
@@ -156,7 +156,7 @@ Module SVM
             Dim trim As New List(Of Node())
             Dim dimNames As New List(Of String)
 
-            For i As Integer = 0 To problem.MaxIndex - 1
+            For i As Integer = 0 To problem.maxIndex - 1
                 ' 如果这一列全部等于第一个值
                 ' 则删除
                 Dim val As Double = problem.X(Scan0)(i).value
@@ -164,7 +164,7 @@ Module SVM
 
                 If problem.X.Any(Function(row) stdNum.Abs(row(j).value - val) > 0.0000001) Then
                     trim.Add(problem.X.Select(Function(row) row(j)).ToArray)
-                    dimNames.Add(problem.DimensionNames(j))
+                    dimNames.Add(problem.dimensionNames(j))
                 End If
             Next
 
@@ -175,8 +175,8 @@ Module SVM
             Next
 
             Return New Problem With {
-                .DimensionNames = dimNames,
-                .MaxIndex = dimNames.Count,
+                .dimensionNames = dimNames,
+                .maxIndex = dimNames.Count,
                 .X = trim.ToArray,
                 .Y = problem.Y _
                     .Select(Function(a)
@@ -191,7 +191,7 @@ Module SVM
         ElseIf TypeOf model Is ProblemTable Then
             Dim problem As ProblemTable = DirectCast(model, ProblemTable).Clone
 
-            For Each name As String In problem.DimensionNames
+            For Each name As String In problem.dimensionNames
                 Dim val As Double = problem.vectors(Scan0)(name)
 
                 If problem.vectors.All(Function(vec) stdNum.Abs(vec(name) - val) <= 0.000000001) Then
@@ -201,7 +201,7 @@ Module SVM
                 End If
             Next
 
-            problem.DimensionNames = problem.vectors _
+            problem.dimensionNames = problem.vectors _
                 .Select(Function(vec) vec.Properties.Keys) _
                 .IteratesALL _
                 .Distinct _
@@ -245,8 +245,8 @@ Module SVM
         End If
 
         Return New Problem With {
-            .DimensionNames = dimNames,
-            .MaxIndex = dimNames.Length,
+            .dimensionNames = dimNames,
+            .maxIndex = dimNames.Length,
             .X = {},
             .Y = {}
         }
@@ -268,7 +268,7 @@ Module SVM
         Dim row As (label As String, data As Node())
         Dim n As Integer
         Dim err As Message = Nothing
-        Dim getData = getDataLambda(problem.DimensionNames, tag, data, env, err, n)
+        Dim getData = getDataLambda(problem.dimensionNames, tag, data, env, err, n)
 
         If Not err Is Nothing Then
             Return err
@@ -407,17 +407,17 @@ Module SVM
                                   Optional env As Environment = Nothing) As Object
 
         Dim param As New Parameter With {
-            .SvmType = svmType,
-            .KernelType = kernelType,
-            .C = C,
-            .CacheSize = cacheSize,
-            .Coefficient0 = coefficient0,
-            .Degree = degree,
+            .svmType = svmType,
+            .kernelType = kernelType,
+            .c = C,
+            .cacheSize = cacheSize,
+            .coefficient0 = coefficient0,
+            .degree = degree,
             .EPS = EPS,
-            .Gamma = gamma,
-            .Nu = nu,
+            .gamma = gamma,
+            .nu = nu,
             .P = P,
-            .Probability = probability,
+            .probability = probability,
             .shrinking = shrinking
         }
 
@@ -432,7 +432,7 @@ Module SVM
         If Not weights Is Nothing Then
             With weights.AsGeneric(Of Double)(env)
                 For Each label In .AsEnumerable
-                    Call param.Weights.Add(CInt(label.Key), label.Value)
+                    Call param.weights.Add(CInt(label.Key), label.Value)
                 Next
             End With
         Else
@@ -442,7 +442,7 @@ Module SVM
                     .GroupBy(Function(a) a.name) _
                     .Select(Function(a) a.First)
 
-                    Call param.Weights.Add(label.enumInt, 1)
+                    Call param.weights.Add(label.enumInt, 1)
                 Next
             End If
         End If
@@ -467,14 +467,14 @@ Module SVM
 
                     ' 因为会被反复使用，所以可能会出现重名的问题
                     ' 在这里直接设置
-                    param.Weights.Item(label.enumInt) = 1
+                    param.weights.Item(label.enumInt) = 1
                 Next
 
                 result(topic) = DirectCast(problem, Problem).getSvmModel(param)
             Next
 
             Return New SVMMultipleSet With {
-                .dimensionNames = table.DimensionNames,
+                .dimensionNames = table.dimensionNames,
                 .topics = result
             }
         End If
