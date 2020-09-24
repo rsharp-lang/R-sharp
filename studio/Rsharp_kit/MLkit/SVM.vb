@@ -1,4 +1,49 @@
-﻿
+﻿#Region "Microsoft.VisualBasic::1aeab18ae49db5e9a4ffd9a0b2a588c9, studio\Rsharp_kit\MLkit\SVM.vb"
+
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+
+' /********************************************************************************/
+
+' Summaries:
+
+' Module SVM
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: expandProblem, getDataLambda, getSvmModel, joinTable, NewProblem
+'               ParseProblemTableJSON, parseSVMJSON, plotROC, problemDataframe, problemsDataframe
+'               problemValidateLabels, svmClassify, svmClassify1, svmClassify2, SVMJSON
+'               svmModelTrimNULL, svmValidates, trainSVMModel
+' 
+' /********************************************************************************/
+
+#End Region
+
+
 Imports System.Drawing
 Imports System.Drawing.Drawing2D
 Imports System.Runtime.CompilerServices
@@ -65,9 +110,9 @@ Module SVM
 
         data.columns("[output]") = problem.Y.Select(Function(a) a.name).ToArray
 
-        For i As Integer = 0 To problem.DimensionNames.Length - 1
+        For i As Integer = 0 To problem.dimensionNames.Length - 1
             index = i
-            data.columns(problem.DimensionNames(i)) = problem.X _
+            data.columns(problem.dimensionNames(i)) = problem.X _
                 .Select(Function(row) row(index).value) _
                 .ToArray
         Next
@@ -84,9 +129,9 @@ Module SVM
             data.columns($"[{topic}]") = problems.GetTopicLabels(topic)
         Next
 
-        For i As Integer = 0 To problems.DimensionNames.Length - 1
+        For i As Integer = 0 To problems.dimensionNames.Length - 1
             index = i
-            attrKey = problems.DimensionNames(i)
+            attrKey = problems.dimensionNames(i)
             data.columns(attrKey) = problems.vectors.Select(Function(a) a(attrKey)).ToArray
         Next
 
@@ -111,7 +156,7 @@ Module SVM
             Dim trim As New List(Of Node())
             Dim dimNames As New List(Of String)
 
-            For i As Integer = 0 To problem.MaxIndex - 1
+            For i As Integer = 0 To problem.maxIndex - 1
                 ' 如果这一列全部等于第一个值
                 ' 则删除
                 Dim val As Double = problem.X(Scan0)(i).value
@@ -119,7 +164,7 @@ Module SVM
 
                 If problem.X.Any(Function(row) stdNum.Abs(row(j).value - val) > 0.0000001) Then
                     trim.Add(problem.X.Select(Function(row) row(j)).ToArray)
-                    dimNames.Add(problem.DimensionNames(j))
+                    dimNames.Add(problem.dimensionNames(j))
                 End If
             Next
 
@@ -130,8 +175,8 @@ Module SVM
             Next
 
             Return New Problem With {
-                .DimensionNames = dimNames,
-                .MaxIndex = dimNames.Count,
+                .dimensionNames = dimNames,
+                .maxIndex = dimNames.Count,
                 .X = trim.ToArray,
                 .Y = problem.Y _
                     .Select(Function(a)
@@ -146,7 +191,7 @@ Module SVM
         ElseIf TypeOf model Is ProblemTable Then
             Dim problem As ProblemTable = DirectCast(model, ProblemTable).Clone
 
-            For Each name As String In problem.DimensionNames
+            For Each name As String In problem.dimensionNames
                 Dim val As Double = problem.vectors(Scan0)(name)
 
                 If problem.vectors.All(Function(vec) stdNum.Abs(vec(name) - val) <= 0.000000001) Then
@@ -156,7 +201,7 @@ Module SVM
                 End If
             Next
 
-            problem.DimensionNames = problem.vectors _
+            problem.dimensionNames = problem.vectors _
                 .Select(Function(vec) vec.Properties.Keys) _
                 .IteratesALL _
                 .Distinct _
@@ -200,8 +245,8 @@ Module SVM
         End If
 
         Return New Problem With {
-            .DimensionNames = dimNames,
-            .MaxIndex = dimNames.Length,
+            .dimensionNames = dimNames,
+            .maxIndex = dimNames.Length,
             .X = {},
             .Y = {}
         }
@@ -223,7 +268,7 @@ Module SVM
         Dim row As (label As String, data As Node())
         Dim n As Integer
         Dim err As Message = Nothing
-        Dim getData = getDataLambda(problem.DimensionNames, tag, data, env, err, n)
+        Dim getData = getDataLambda(problem.dimensionNames, tag, data, env, err, n)
 
         If Not err Is Nothing Then
             Return err
@@ -362,18 +407,18 @@ Module SVM
                                   Optional env As Environment = Nothing) As Object
 
         Dim param As New Parameter With {
-            .SvmType = svmType,
-            .KernelType = kernelType,
-            .C = C,
-            .CacheSize = cacheSize,
-            .Coefficient0 = coefficient0,
-            .Degree = degree,
+            .svmType = svmType,
+            .kernelType = kernelType,
+            .c = C,
+            .cacheSize = cacheSize,
+            .coefficient0 = coefficient0,
+            .degree = degree,
             .EPS = EPS,
-            .Gamma = gamma,
-            .Nu = nu,
+            .gamma = gamma,
+            .nu = nu,
             .P = P,
-            .Probability = probability,
-            .Shrinking = shrinking
+            .probability = probability,
+            .shrinking = shrinking
         }
 
         If problem Is Nothing Then
@@ -387,7 +432,7 @@ Module SVM
         If Not weights Is Nothing Then
             With weights.AsGeneric(Of Double)(env)
                 For Each label In .AsEnumerable
-                    Call param.Weights.Add(CInt(label.Key), label.Value)
+                    Call param.weights.Add(CInt(label.Key), label.Value)
                 Next
             End With
         Else
@@ -397,7 +442,7 @@ Module SVM
                     .GroupBy(Function(a) a.name) _
                     .Select(Function(a) a.First)
 
-                    Call param.Weights.Add(label.enumInt, 1)
+                    Call param.weights.Add(label.enumInt, 1)
                 Next
             End If
         End If
@@ -411,6 +456,8 @@ Module SVM
             Dim result As New Dictionary(Of String, SVMModel)
 
             For Each topic As String In table.GetTopics
+                Call $"trainSVMModel::{topic}".__INFO_ECHO
+
                 problem = table.GetProblem(topic)
 
                 For Each label As ColorClass In DirectCast(problem, Problem) _
@@ -420,14 +467,14 @@ Module SVM
 
                     ' 因为会被反复使用，所以可能会出现重名的问题
                     ' 在这里直接设置
-                    param.Weights.Item(label.enumInt) = 1
+                    param.weights.Item(label.enumInt) = 1
                 Next
 
                 result(topic) = DirectCast(problem, Problem).getSvmModel(param)
             Next
 
             Return New SVMMultipleSet With {
-                .dimensionNames = table.DimensionNames,
+                .dimensionNames = table.dimensionNames,
                 .topics = result
             }
         End If
@@ -474,6 +521,8 @@ Module SVM
             Return DirectCast(svm, SVMMultipleSet) _
                 .DoCall(AddressOf SVMMultipleSetJSON.CreateJSONModel) _
                 .GetJson
+        ElseIf TypeOf svm Is ProblemTable Then
+            Return DirectCast(svm, ProblemTable).GetJson
         Else
             Return Message.InCompatibleType(GetType(SVMModel), svm.GetType, env)
         End If

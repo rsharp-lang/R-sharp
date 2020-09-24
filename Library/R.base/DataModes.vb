@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::347b2cfaa98c176b591b7be34ae9379e, Library\R.base\DataModes.vb"
+﻿#Region "Microsoft.VisualBasic::5dab9086114a92beb4d71adb9079e499, Library\R.base\DataModes.vb"
 
     ' Author:
     ' 
@@ -42,7 +42,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Public Enum DataModes
     any

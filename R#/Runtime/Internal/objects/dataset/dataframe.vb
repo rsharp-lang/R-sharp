@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bc5e852b551b8d025ddf186f5a68161c, R#\Runtime\Internal\objects\dataset\dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::4b32d40a13cc8dc398c5213fdbd61dda, R#\Runtime\Internal\objects\dataset\dataframe.vb"
 
     ' Author:
     ' 
@@ -35,9 +35,9 @@
     ' 
     '         Properties: columns, ncols, nrows, rownames
     ' 
-    '         Function: CreateDataFrame, GetByRowIndex, (+2 Overloads) getColumnVector, getKeyByIndex, getNames
-    '                   getRowIndex, getRowList, getRowNames, GetTable, hasName
-    '                   projectByColumn, setNames, sliceByRow, ToString
+    '         Function: CreateDataFrame, forEachRow, GetByRowIndex, (+2 Overloads) getColumnVector, getKeyByIndex
+    '                   getNames, getRowIndex, getRowList, getRowNames, GetTable
+    '                   hasName, projectByColumn, setNames, sliceByRow, ToString
     ' 
     ' 
     ' /********************************************************************************/
@@ -65,6 +65,10 @@ Namespace Runtime.Internal.Object
         Public Property columns As Dictionary(Of String, Array)
         Public Property rownames As String()
 
+        ''' <summary>
+        ''' column <see cref="Array.Length"/>
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property nrows As Integer
             Get
                 Return Aggregate col As Array
@@ -188,6 +192,37 @@ Namespace Runtime.Internal.Object
                     .Select(Function(key) slots(key)) _
                     .ToArray
             End If
+        End Function
+
+        Public Iterator Function forEachRow(Optional colKeys As String() = Nothing) As IEnumerable(Of NamedCollection(Of Object))
+            Dim rowIds As String() = getRowNames()
+            Dim nrows As Integer = Me.nrows
+            Dim array As Array
+
+            If colKeys.IsNullOrEmpty Then
+                colKeys = columns.Keys.ToArray
+            End If
+
+            For index As Integer = 0 To nrows - 1
+                Dim objVec As Object() = New Object(colKeys.Length - 1) {}
+                Dim key As String
+
+                For i As Integer = 0 To colKeys.Length - 1
+                    key = colKeys(i)
+                    array = _columns(key)
+
+                    If array.Length = 1 Then
+                        objVec(i) = array.GetValue(Scan0)
+                    Else
+                        objVec(i) = array.GetValue(index)
+                    End If
+                Next
+
+                Yield New NamedCollection(Of Object) With {
+                    .name = rowIds(index),
+                    .value = objVec
+                }
+            Next
         End Function
 
         Public Function getRowIndex(any As Object) As Integer

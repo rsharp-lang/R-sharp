@@ -339,7 +339,11 @@ RE0:
                         GoTo RE0
                     End If
 
-                    Return Internal.debug.stop(New InvalidProgramException("missing api for handle of data: " & type.FullName), env)
+                    If type Is Nothing Then
+                        Return Internal.debug.stop(New InvalidProgramException("unknown type handler..."), env)
+                    Else
+                        Return Internal.debug.stop(New InvalidProgramException("missing api for handle of data: " & type.FullName), env)
+                    End If
                 Else
                     Return makeDataframe.createDataframe(type, x, args, env)
                 End If

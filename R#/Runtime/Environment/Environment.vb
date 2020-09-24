@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::da566d08628e3671dacf9dfb7cec68c2, R#\Runtime\Environment\Environment.vb"
+﻿#Region "Microsoft.VisualBasic::e6052b95eb9696837ce4a8426870c35f, R#\Runtime\Environment\Environment.vb"
 
     ' Author:
     ' 
@@ -213,11 +213,11 @@ Namespace Runtime
         End Sub
 
         Protected Sub redirectError(obj$, msg$, level As MSG_TYPES)
-            Call AddMessage({msg, "error_level: exception warning", "location: " & obj})
+            Call AddMessage({msg, "location: " & obj}, level:=MSG_TYPES.ERR)
         End Sub
 
         Protected Sub redirectWarning(obj$, msg$, level As MSG_TYPES)
-            Call AddMessage({msg, "error_level: warning", "location: " & obj})
+            Call AddMessage({msg, "location: " & obj})
         End Sub
 
         Public Sub AddMessage(message As Object, Optional level As MSG_TYPES = MSG_TYPES.WRN)

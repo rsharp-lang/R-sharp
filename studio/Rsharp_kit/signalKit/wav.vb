@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a127a64f1a0fe4fe84890daf2f9f1271, studio\Rsharp_kit\signalKit\wav.vb"
+﻿#Region "Microsoft.VisualBasic::622ad5e616259dc21a0e4de869211036, studio\Rsharp_kit\signalKit\wav.vb"
 
     ' Author:
     ' 
@@ -39,7 +39,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports System.IO
 Imports System.Text
@@ -113,4 +112,3 @@ Public Module wavToolkit
         End Using
     End Function
 End Module
-

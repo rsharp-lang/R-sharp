@@ -86,11 +86,8 @@ Module Rscript
         End If
 FINAL:
         If globalEnv.messages > 0 Then
-            For Each warn As Message In globalEnv.messages
-                Call REnv.Internal.debug.PrintMessageInternal(warn, globalEnv)
-            Next
-
-            globalEnv.messages.Clear()
+            Call REnv.Internal.debug.PrintWarningMessages(globalEnv.messages, globalEnv)
+            Call globalEnv.messages.Clear()
         End If
 
         Return code

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::30cd936d8196d8c049573151b18c0f73, studio\Rsharp_kit\MLkit\machineLearning.vb"
+﻿#Region "Microsoft.VisualBasic::3d2d026c04776960319791a785202c62, studio\Rsharp_kit\MLkit\machineLearning.vb"
 
     ' Author:
     ' 
@@ -36,9 +36,10 @@
     '     Constructor: (+1 Overloads) Sub New
     ' 
     '     Function: addSamples, addTrainingSample, ANNpredict, checkModelDataset, configuration
-    '               createANN, CreateANNTrainer, createEmptyMLDataset, getRawSamples, inputSize
-    '               loadParallelANN, normalizeData, openDebugger, outputSize, readANNModel
-    '               (+2 Overloads) runANNTraining, setTrainingSet, Softmax, tabular, writeANNNetwork
+    '               createANN, CreateANNTrainer, createEmptyMLDataset, createNormalizationMatrix, getRawSamples
+    '               inputSize, loadParallelANN, normalizeData, openDebugger, outputSize
+    '               readANNModel, (+2 Overloads) runANNTraining, setTrainingSet, Softmax, tabular
+    '               writeANNNetwork
     ' 
     '     Sub: doFileSave
     ' 

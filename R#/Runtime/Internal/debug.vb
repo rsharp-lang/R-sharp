@@ -200,6 +200,32 @@ Namespace Runtime.Internal
             Return info.ToString
         End Function
 
+        Public Shared Function PrintWarningMessages(warnings As IEnumerable(Of Message), globalEnv As GlobalEnvironment) As Object
+            Dim i As i32 = 1
+            Dim backup As ConsoleColor
+            Dim dev As StreamWriter = New StreamWriter(globalEnv.stdout.stream)
+
+            If App.IsConsoleApp Then
+                backup = Console.ForegroundColor
+                Console.ForegroundColor = ConsoleColor.Yellow
+            End If
+
+            Call globalEnv.stdout.Flush()
+            Call dev.WriteLine("Warning messages:")
+
+            For Each msg As Message In warnings
+                dev.WriteLine($"  {++i}. {msg.message.JoinBy("; ")}")
+            Next
+
+            Call dev.Flush()
+
+            If App.IsConsoleApp Then
+                Console.ForegroundColor = backup
+            End If
+
+            Return Nothing
+        End Function
+
         Public Shared Function PrintMessageInternal(message As Message, globalEnv As GlobalEnvironment) As Object
             Dim execRoutine$ = message.environmentStack _
                 .Reverse _
