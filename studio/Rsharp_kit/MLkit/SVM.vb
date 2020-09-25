@@ -58,7 +58,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.SVM
 Imports Microsoft.VisualBasic.MachineLearning.SVM.StorageProcedure
-Imports Microsoft.VisualBasic.MIME.application.json
+Imports Microsoft.VisualBasic.MIME.application
 Imports Microsoft.VisualBasic.MIME.application.json.Javascript
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Serialization.JSON
@@ -511,19 +511,19 @@ Module SVM
 
     <ExportAPI("parse.SVM_json")>
     <RApiReturn(GetType(SVMModel), GetType(SVMMultipleSet))>
-    Public Function parseSVMJSON(json As Object, Optional env As Environment = Nothing) As Object
-        If json Is Nothing Then
+    Public Function parseSVMJSON(x As Object, Optional env As Environment = Nothing) As Object
+        If x Is Nothing Then
             Return Internal.debug.stop("the required json value can not be nothing!", env)
         End If
 
         Dim jsonObj As JsonObject
 
-        If TypeOf json Is String Then
-            jsonObj = New JsonParser().OpenJSON(json)
-        ElseIf TypeOf json Is JsonObject Then
-            jsonObj = json
+        If TypeOf x Is String Then
+            jsonObj = New json.JsonParser().OpenJSON(x)
+        ElseIf TypeOf x Is JsonObject Then
+            jsonObj = x
         Else
-            Return Message.InCompatibleType(GetType(JsonObject), json.GetType, env)
+            Return Message.InCompatibleType(GetType(JsonObject), x.GetType, env)
         End If
 
         If jsonObj.Score(GetType(SVMMultipleSetJSON)) > jsonObj.Score(GetType(SvmModelJSON)) Then
