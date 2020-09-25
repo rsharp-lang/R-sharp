@@ -72,6 +72,8 @@ Imports stdNum = System.Math
 
 <Package("SVM")>
 <RTypeExport("problem", GetType(Problem))>
+<RTypeExport("svm", GetType(SVMModel))>
+<RTypeExport("svmSet", GetType(SVMMultipleSet))>
 Module SVM
 
     Sub New()
@@ -671,7 +673,7 @@ Module SVM
         Dim row As (label As String, data As Node())
         Dim n As Integer
         Dim err As Message = Nothing
-        Dim getData = getDataLambda(svm.DimensionNames, {"n/a"}, data, env, err, n)
+        Dim getData = getDataLambda(svm.dimensionNames, {"n/a"}, data, env, err, n)
         Dim datum As Node()
 
         If Not err Is Nothing Then

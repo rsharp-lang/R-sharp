@@ -37,7 +37,9 @@ svm
 :> writeLines(con = json_saved)
 ;
 
-svm :> write.bson(file = `${!script$dir}/SVM.bson`);
+let bson_file as string = `${!script$dir}/SVM.bson`;
+
+svm :> write.bson(file = bson_file);
 
 print("validate result from the json model loaded result:");
 
@@ -50,3 +52,11 @@ json_saved
 
 print("validate result from the bson model loaded result:");
 
+using model as file(bson_file) {
+	model 
+	:> parseBSON 
+	:> object("svm") 
+	:> svm_classify(validates)
+	:> str
+	;
+}
