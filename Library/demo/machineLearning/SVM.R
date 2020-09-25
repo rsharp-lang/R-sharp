@@ -54,7 +54,7 @@ print("validate result from the bson model loaded result:");
 
 using model as file(bson_file) {
 	model 
-	:> parseBSON 
+	:> parseBSON(raw = TRUE) 
 	:> object("svm") 
 	:> svm_classify(validates)
 	:> str
