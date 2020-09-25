@@ -47,3 +47,6 @@ json_saved
 :> svm_classify(validates)
 :> str
 ;
+
+print("validate result from the bson model loaded result:");
+

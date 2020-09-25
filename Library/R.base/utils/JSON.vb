@@ -9,6 +9,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 <Package("JSON", Category:=APICategories.UtilityTools, Publisher:="i@xieguigang.me")>
 Module JSON
@@ -22,6 +23,38 @@ Module JSON
         Else
             Return rawElement.createRObj(env)
         End If
+    End Function
+
+    <ExportAPI("parseBSON")>
+    Public Function parseBSON(<RRawVectorArgument> buffer As Object, Optional raw As Boolean = False, Optional env As Environment = Nothing) As Object
+        Dim bytes As pipeline = pipeline.TryCreatePipeline(Of Byte)(buffer, env, suppress:=True)
+        Dim bufStream As Stream
+
+        If bytes.isError Then
+            If TypeOf buffer Is Stream Then
+                bufStream = DirectCast(buffer, Stream)
+            Else
+                Return bytes.getError
+            End If
+        Else
+            bufStream = New MemoryStream(bytes.populates(Of Byte)(env).ToArray)
+        End If
+
+        Dim json As JsonObject = New BSON.Decoder(bufStream).decodeDocument
+
+        If raw Then
+            Return json
+        Else
+            Return json.createRObj(env)
+        End If
+    End Function
+
+    <ExportAPI("object")>
+    Public Function buildObject(json As JsonElement, schema As Object, Optional env As Environment = Nothing) As Object
+        Dim type As RType = env.globalEnvironment.GetType([typeof]:=schema)
+        Dim obj As Object = json.CreateObject(type)
+
+        Return obj
     End Function
 
     <ExportAPI("write.bson")>
