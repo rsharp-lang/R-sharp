@@ -25,7 +25,7 @@ Module JSON
     End Function
 
     <ExportAPI("write.bson")>
-    Public Function writeBSON(json As JsonObject, Optional file As Object = Nothing, Optional env As Environment = Nothing) As Object
+    Public Function writeBSON(obj As Object, Optional file As Object = Nothing, Optional env As Environment = Nothing) As Object
         Dim stream As Stream
 
         If file Is Nothing Then
@@ -40,7 +40,19 @@ Module JSON
             End If
         End If
 
-        Call BSON.WriteBuffer(json, stream)
+        If TypeOf obj Is vbObject Then
+            obj = DirectCast(obj, vbObject).target
+        End If
+
+        If Not TypeOf obj Is JsonObject Then
+            obj = ObjectSerializer.GetJsonElement(
+                schema:=obj.GetType,
+                obj:=obj,
+                opt:=New JSONSerializerOptions
+            )
+        End If
+
+        Call BSON.WriteBuffer(DirectCast(obj, JsonObject), stream)
 
         If file Is Nothing Then
             Return DirectCast(stream, MemoryStream).ToArray
