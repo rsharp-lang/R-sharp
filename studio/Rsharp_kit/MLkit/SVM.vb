@@ -56,8 +56,11 @@ Imports Microsoft.VisualBasic.DataMining.ComponentModel.Encoder
 Imports Microsoft.VisualBasic.DataMining.ComponentModel.Evaluation
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.MachineLearning
 Imports Microsoft.VisualBasic.MachineLearning.SVM
 Imports Microsoft.VisualBasic.MachineLearning.SVM.StorageProcedure
+Imports Microsoft.VisualBasic.MIME.application
+Imports Microsoft.VisualBasic.MIME.application.json.Javascript
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Interpreter
@@ -74,7 +77,7 @@ Imports stdNum = System.Math
 <RTypeExport("problem", GetType(Problem))>
 <RTypeExport("svm", GetType(SVMModel))>
 <RTypeExport("svmSet", GetType(SVMMultipleSet))>
-Module SVM
+Module SVMkit
 
     Sub New()
         Call Internal.ConsolePrinter.AttachConsoleFormatter(Of ColorClass)(Function(o) o.ToString)
@@ -496,7 +499,7 @@ Module SVM
     Private Function getSvmModel(problem As Problem, par As Parameter) As SVMModel
         Dim transform As RangeTransform = RangeTransform.Compute(problem)
         Dim scale = transform.Scale(problem)
-        Dim model As Model = Training.Train(scale, par)
+        Dim model As SVM.Model = Training.Train(scale, par)
 
         Call Training.flushLog()
 
@@ -509,11 +512,25 @@ Module SVM
 
     <ExportAPI("parse.SVM_json")>
     <RApiReturn(GetType(SVMModel), GetType(SVMMultipleSet))>
-    Public Function parseSVMJSON(json As String, Optional multipleSet As Boolean = False) As Object
-        If multipleSet Then
-            Return json.LoadJSON(Of SVMMultipleSetJSON).CreateSVMModel
+    Public Function parseSVMJSON(x As Object, Optional env As Environment = Nothing) As Object
+        If x Is Nothing Then
+            Return Internal.debug.stop("the required json value can not be nothing!", env)
+        End If
+
+        Dim jsonObj As JsonObject
+
+        If TypeOf x Is String Then
+            jsonObj = New json.JsonParser().OpenJSON(x)
+        ElseIf TypeOf x Is JsonObject Then
+            jsonObj = x
         Else
-            Return json.LoadJSON(Of SvmModelJSON).CreateSVMModel
+            Return Message.InCompatibleType(GetType(JsonObject), x.GetType, env)
+        End If
+
+        If jsonObj.Score(GetType(SVMMultipleSetJSON)) > jsonObj.Score(GetType(SvmModelJSON)) Then
+            Return jsonObj.CreateObject(Of SVMMultipleSetJSON).CreateSVMModel
+        Else
+            Return jsonObj.CreateObject(Of SvmModelJSON).CreateSVMModel
         End If
     End Function
 
@@ -525,17 +542,28 @@ Module SVM
     ''' <returns></returns>
     <ExportAPI("svm_json")>
     <RApiReturn(GetType(String))>
-    Public Function SVMJSON(svm As Object, Optional env As Environment = Nothing) As Object
+    Public Function SVMJSON(svm As Object,
+                            Optional fileModel As Boolean = False,
+                            Optional env As Environment = Nothing) As Object
+
         If svm Is Nothing Then
             Return "null"
         ElseIf TypeOf svm Is SVMModel Then
-            Return DirectCast(svm, SVMModel) _
-                .DoCall(AddressOf SvmModelJSON.CreateJSONModel) _
-                .GetJson
+            Dim file = SvmModelJSON.CreateJSONModel(DirectCast(svm, SVMModel))
+
+            If fileModel Then
+                Return file
+            Else
+                Return file.GetJson
+            End If
         ElseIf TypeOf svm Is SVMMultipleSet Then
-            Return DirectCast(svm, SVMMultipleSet) _
-                .DoCall(AddressOf SVMMultipleSetJSON.CreateJSONModel) _
-                .GetJson
+            Dim file = SVMMultipleSetJSON.CreateJSONModel(DirectCast(svm, SVMMultipleSet))
+
+            If fileModel Then
+                Return file
+            Else
+                Return file.GetJson
+            End If
         ElseIf TypeOf svm Is ProblemTable Then
             Return DirectCast(svm, ProblemTable).GetJson
         Else
@@ -655,7 +683,7 @@ Module SVM
             uid = names(i)
             info = New Dictionary(Of String, String)
 
-            For Each SVM In outputVectors
+            For Each SVM As (topic$, transform As IRangeTransform, model As SVM.Model, factors As ClassEncoder) In outputVectors
                 datum = SVM.transform.Transform(row.data)
                 label = SVM.model.Predict(datum)
                 factor = SVM.factors.GetColor(label.class)
@@ -673,7 +701,7 @@ Module SVM
         Dim row As (label As String, data As Node())
         Dim n As Integer
         Dim err As Message = Nothing
-        Dim getData = getDataLambda(svm.dimensionNames, {"n/a"}, data, env, err, n)
+        Dim getData = SVMkit.getDataLambda(svm.dimensionNames, {"n/a"}, data, env, err, n)
         Dim datum As Node()
 
         If Not err Is Nothing Then
