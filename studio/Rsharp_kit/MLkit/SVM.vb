@@ -454,23 +454,33 @@ Module SVM
         Else
             Dim table As ProblemTable = DirectCast(problem, ProblemTable)
             Dim result As New Dictionary(Of String, SVMModel)
+            Dim allocated = table _
+                .GetTopics _
+                .Select(Function(topic)
+                            Dim topicProblem = table.GetProblem(topic)
+                            Dim args As Parameter = param.Clone
 
-            For Each topic As String In table.GetTopics
-                Call $"trainSVMModel::{topic}".__INFO_ECHO
+                            For Each label As ColorClass In DirectCast(topicProblem, Problem) _
+                                .Y _
+                                .GroupBy(Function(a) a.name) _
+                                .Select(Function(a) a.First)
 
-                problem = table.GetProblem(topic)
+                                ' 因为会被反复使用，所以可能会出现重名的问题
+                                ' 在这里直接设置
+                                args.weights.Item(label.enumInt) = 1
+                            Next
 
-                For Each label As ColorClass In DirectCast(problem, Problem) _
-                    .Y _
-                    .GroupBy(Function(a) a.name) _
-                    .Select(Function(a) a.First)
+                            Return (args, topicProblem, topic)
+                        End Function) _
+                .AsParallel _
+                .Select(Function(subTopic)
+                            Dim model = subTopic.topicProblem.getSvmModel(subTopic.args)
+                            Return (model, subTopic.topic)
+                        End Function)
 
-                    ' 因为会被反复使用，所以可能会出现重名的问题
-                    ' 在这里直接设置
-                    param.weights.Item(label.enumInt) = 1
-                Next
-
-                result(topic) = DirectCast(problem, Problem).getSvmModel(param)
+            For Each topic As (Model As SVMModel, topic$) In allocated
+                Call $"trainSVMModel::{topic.topic}".__INFO_ECHO
+                result(topic.topic) = topic.Model
             Next
 
             Return New SVMMultipleSet With {
@@ -483,7 +493,10 @@ Module SVM
     <Extension>
     Private Function getSvmModel(problem As Problem, par As Parameter) As SVMModel
         Dim transform As RangeTransform = RangeTransform.Compute(problem)
-        Dim model As Model = Training.Train(transform.Scale(problem), par)
+        Dim scale = transform.Scale(problem)
+        Dim model As Model = Training.Train(scale, par)
+
+        Call Training.flushLog()
 
         Return New SVMModel With {
             .transform = transform,

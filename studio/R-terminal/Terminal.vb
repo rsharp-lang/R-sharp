@@ -78,8 +78,16 @@ Type 'q()' to quit R.
 ")
     End Sub
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks>
+    ''' 在R终端模式下，是关闭严格模式的，即变量不需要首先使用let进行声明就可以直接赋值
+    ''' </remarks>
     Public Function RunTerminal() As Integer
         R = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
+        R.strict = False
 
         ' Call R.LoadLibrary("base")
         ' Call R.LoadLibrary("utils")
