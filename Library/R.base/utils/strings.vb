@@ -44,16 +44,10 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Algorithm.DynamicProgramming.Levenshtein
-Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
-Imports Microsoft.VisualBasic.Language
-Imports Microsoft.VisualBasic.MIME.application.json
-Imports Microsoft.VisualBasic.MIME.application.json.Javascript
 Imports Microsoft.VisualBasic.MIME.application.xml
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime
-Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports RHtml = SMRUCC.Rsharp.Runtime.Internal.htmlPrinter
 Imports Rlang = Microsoft.VisualBasic.My.RlangInterop
 
@@ -67,47 +61,6 @@ Module strings
     <ExportAPI("levenshtein")>
     Public Function Levenshtein(x$, y$) As DistResult
         Return LevenshteinDistance.ComputeDistance(x, y)
-    End Function
-
-    <ExportAPI("fromJSON")>
-    Public Function fromJSON(str As String, Optional env As Environment = Nothing) As Object
-        Return New JsonParser().OpenJSON(str).createRObj(env)
-    End Function
-
-    <Extension>
-    Private Function createRObj(json As JsonElement, env As Environment) As Object
-        If TypeOf json Is JsonValue Then
-            Return DirectCast(json, JsonValue).GetStripString
-        ElseIf TypeOf json Is JsonArray Then
-            Dim array As JsonArray = DirectCast(json, JsonArray)
-
-            If array.All(Function(a) TypeOf a Is JsonValue) Then
-                Return array _
-                    .Select(Function(a) a.createRObj(env)) _
-                    .ToArray
-            Else
-                Dim list As New list With {.slots = New Dictionary(Of String, Object)}
-                Dim i As i32 = 1
-
-                For Each item As JsonElement In array
-                    list.slots.Add($"[[{++i}]]", item.createRObj(env))
-                Next
-
-                Return list
-            End If
-        ElseIf TypeOf json Is JsonObject Then
-            Dim list As New list With {
-                .slots = New Dictionary(Of String, Object)
-            }
-
-            For Each item As NamedValue(Of JsonElement) In DirectCast(json, JsonObject)
-                Call list.slots.Add(item.Name, item.Value.createRObj(env))
-            Next
-
-            Return list
-        Else
-            Return Internal.debug.stop(Message.InCompatibleType(GetType(JsonElement), json.GetType, env), env)
-        End If
     End Function
 
     <ExportAPI("fromXML")>

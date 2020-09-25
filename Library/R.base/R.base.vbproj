@@ -348,6 +348,7 @@
     <Compile Include="DataModes.vb" />
     <Compile Include="utils\dataframe.vb" />
     <Compile Include="utils\console.vb" />
+    <Compile Include="utils\JSON.vb" />
     <Compile Include="utils\xlsx.vb" />
     <Compile Include="utils\strings.vb" />
     <Compile Include="utils\utils.vb" />
