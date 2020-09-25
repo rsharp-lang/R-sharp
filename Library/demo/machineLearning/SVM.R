@@ -1,4 +1,5 @@
 imports "SVM" from "MLkit";
+imports "JSON" from "R.base";
 
 let svm = svm.problem(["X", "Y", "Z"])
 :> append.trainingSet(
@@ -35,6 +36,8 @@ svm
 :> svm_json
 :> writeLines(con = json_saved)
 ;
+
+svm :> write.bson(file = `${!script$dir}/SVM.bson`);
 
 print("validate result from the json model loaded result:");
 
