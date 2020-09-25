@@ -39,7 +39,7 @@ svm
 
 let bson_file as string = `${!script$dir}/SVM.bson`;
 
-svm :> write.bson(file = bson_file);
+svm :> svm_json(fileModel = TRUE) :> write.bson(file = bson_file);
 
 print("validate result from the json model loaded result:");
 

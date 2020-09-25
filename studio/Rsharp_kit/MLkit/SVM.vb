@@ -58,6 +58,8 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.SVM
 Imports Microsoft.VisualBasic.MachineLearning.SVM.StorageProcedure
+Imports Microsoft.VisualBasic.MIME.application.json
+Imports Microsoft.VisualBasic.MIME.application.json.Javascript
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Interpreter
@@ -509,11 +511,25 @@ Module SVM
 
     <ExportAPI("parse.SVM_json")>
     <RApiReturn(GetType(SVMModel), GetType(SVMMultipleSet))>
-    Public Function parseSVMJSON(json As String, Optional multipleSet As Boolean = False) As Object
-        If multipleSet Then
-            Return json.LoadJSON(Of SVMMultipleSetJSON).CreateSVMModel
+    Public Function parseSVMJSON(json As Object, Optional env As Environment = Nothing) As Object
+        If json Is Nothing Then
+            Return Internal.debug.stop("the required json value can not be nothing!", env)
+        End If
+
+        Dim jsonObj As JsonObject
+
+        If TypeOf json Is String Then
+            jsonObj = New JsonParser().OpenJSON(json)
+        ElseIf TypeOf json Is JsonObject Then
+            jsonObj = json
         Else
-            Return json.LoadJSON(Of SvmModelJSON).CreateSVMModel
+            Return Message.InCompatibleType(GetType(JsonObject), json.GetType, env)
+        End If
+
+        If jsonObj.Score(GetType(SVMMultipleSetJSON)) > jsonObj.Score(GetType(SvmModelJSON)) Then
+            Return jsonObj.CreateObject(Of SVMMultipleSetJSON).CreateSVMModel
+        Else
+            Return jsonObj.CreateObject(Of SvmModelJSON).CreateSVMModel
         End If
     End Function
 
@@ -525,17 +541,28 @@ Module SVM
     ''' <returns></returns>
     <ExportAPI("svm_json")>
     <RApiReturn(GetType(String))>
-    Public Function SVMJSON(svm As Object, Optional env As Environment = Nothing) As Object
+    Public Function SVMJSON(svm As Object,
+                            Optional fileModel As Boolean = False,
+                            Optional env As Environment = Nothing) As Object
+
         If svm Is Nothing Then
             Return "null"
         ElseIf TypeOf svm Is SVMModel Then
-            Return DirectCast(svm, SVMModel) _
-                .DoCall(AddressOf SvmModelJSON.CreateJSONModel) _
-                .GetJson
+            Dim file = SvmModelJSON.CreateJSONModel(DirectCast(svm, SVMModel))
+
+            If fileModel Then
+                Return file
+            Else
+                Return file.GetJson
+            End If
         ElseIf TypeOf svm Is SVMMultipleSet Then
-            Return DirectCast(svm, SVMMultipleSet) _
-                .DoCall(AddressOf SVMMultipleSetJSON.CreateJSONModel) _
-                .GetJson
+            Dim file = SVMMultipleSetJSON.CreateJSONModel(DirectCast(svm, SVMMultipleSet))
+
+            If fileModel Then
+                Return file
+            Else
+                Return file.GetJson
+            End If
         ElseIf TypeOf svm Is ProblemTable Then
             Return DirectCast(svm, ProblemTable).GetJson
         Else
