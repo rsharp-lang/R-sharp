@@ -1,21 +1,22 @@
 imports "SVM" from "MLkit";
+imports "JSON" from "R.base";
 
 let svm = svm.problem(["X", "Y", "Z"])
 :> append.trainingSet(
 	tag = 10,
-	data = data.frame(X = runif(100, -120, -100), Y = runif(100,1,2), Z = runif(100, 10, 12))
+	data = data.frame(X = runif(20, -120, -100), Y = runif(20, 1, 2), Z = runif(20, 10, 12))
 )
 :> append.trainingSet(
 	tag = 2,
-	data = data.frame(X = runif(100, 1, 10), Y = runif(100, 0, 20), Z = runif(100, 10, 12))
+	data = data.frame(X = runif(20, 1, 10), Y = runif(20, 0, 20), Z = runif(20, 10, 12))
 )
 :> append.trainingSet(
 	tag = 3,
-	data = data.frame(X = runif(100, 300, 500), Y = runif(100, 300, 310), Z = runif(100, 10, 120))
+	data = data.frame(X = runif(20, 300, 500), Y = runif(20, 300, 310), Z = runif(20, 10, 120))
 )
 :> append.trainingSet(
 	tag = "332A",
-	data = data.frame(X = runif(100, 300, 500), Y = runif(100, 1300, 1310), Z = runif(100, 10, 512))
+	data = data.frame(X = runif(20, 300, 500), Y = runif(20, 1300, 1310), Z = runif(20, 10, 512))
 )
 :> trainSVMModel
 ;
@@ -36,6 +37,12 @@ svm
 :> writeLines(con = json_saved)
 ;
 
+print(svm :> svm_json);
+
+let bson_file as string = `${!script$dir}/SVM.bson`;
+
+svm :> svm_json(fileModel = TRUE) :> write.bson(file = bson_file);
+
 print("validate result from the json model loaded result:");
 
 json_saved
@@ -44,3 +51,19 @@ json_saved
 :> svm_classify(validates)
 :> str
 ;
+
+print("validate result from the bson model loaded result:");
+
+using model as file(bson_file) {
+	svm = model 
+	:> parseBSON(raw = TRUE) 
+	:> parse.SVM_json 
+	;
+	
+	print(svm :> svm_json);
+	
+	svm
+	:> svm_classify(validates)
+	:> str
+	;
+}
