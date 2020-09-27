@@ -599,6 +599,74 @@ Module SVMkit
     End Function
 
     ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="svm"></param>
+    ''' <param name="validateSet"></param>
+    ''' <param name="labels"></param>
+    ''' <param name="env"></param>
+    ''' <returns>
+    ''' <see cref="PerformanceEvaluator"/>
+    ''' </returns>
+    Private Function validateSingleSvmModel(svm As SVMModel, validateSet As Object, labels As Object, env As Environment) As Object
+        Dim result As Object = DirectCast(svm, SVMModel).svmClassify1(validateSet, env)
+        Dim labelsList As String() = REnv.asVector(Of String)(labels)
+
+        If Program.isException(result) Then
+            Return result
+        End If
+
+        Dim classifyResult As list = DirectCast(result, list)
+        Dim keys As String() = classifyResult.slots.Keys.ToArray
+        Dim points As New List(Of RankPair)
+
+        For i As Integer = 0 To keys.Length - 1
+            Dim p As ColorClass = classifyResult.slots(keys(i))
+            Dim validate = labelsList(i)
+
+            If p.name <> validate Then
+                points.Add(New RankPair(0, 0))
+            Else
+                points.Add(New RankPair(1, 1))
+            End If
+        Next
+
+        Return New PerformanceEvaluator(points)
+    End Function
+
+    Private Function validateMultipleSvmModel(svm As SVMMultipleSet, validateSet As Object, labels As Object, env As Environment) As Object
+        Dim result As Object = DirectCast(svm, SVMMultipleSet).svmClassify2(validateSet, env)
+
+        If Program.isException(result) Then
+            Return result
+        End If
+
+        Dim classifyResult As EntityObject() = DirectCast(result, EntityObject())
+        Dim validates As dataframe = DirectCast(labels, dataframe)
+        Dim resultList As New Dictionary(Of String, Object)
+
+        For Each dimension As String In validates.columns.Keys
+            Dim validateVector As String() = REnv.asVector(Of String)(validates.columns(dimension))
+            Dim points As New List(Of RankPair)
+
+            For i As Integer = 0 To classifyResult.Length - 1
+                Dim p As String = classifyResult(i)(dimension)
+                Dim validate As String = validateVector(i)
+
+                If p <> validate Then
+                    points.Add(New RankPair(1, 0))
+                Else
+                    points.Add(New RankPair(1, 1))
+                End If
+            Next
+
+            resultList.Add(dimension, New PerformanceEvaluator(points))
+        Next
+
+        Return New list With {.slots = resultList}
+    End Function
+
+    ''' <summary>
     ''' SVM model validation
     ''' </summary>
     ''' <param name="svm">a trained SVM model</param>
@@ -611,65 +679,17 @@ Module SVMkit
     ''' the classify label result corresponding to the input 
     ''' ``validateSet`` rows.</param>
     ''' <param name="env"></param>
-    ''' <returns></returns>
+    ''' <returns>
+    ''' ``PerformanceEvaluator`` dataset for draw a ROC curve.
+    ''' </returns>
     <ExportAPI("svm_validates")>
     Public Function svmValidates(svm As Object, validateSet As Object, <RRawVectorArgument> labels As Object, Optional env As Environment = Nothing) As Object
         If svm Is Nothing Then
             Return Internal.debug.stop("the required svm model can not be nothing!", env)
         ElseIf TypeOf svm Is SVMModel Then
-            Dim result As Object = DirectCast(svm, SVMModel).svmClassify1(validateSet, env)
-            Dim labelsList As String() = REnv.asVector(Of String)(labels)
-
-            If Program.isException(result) Then
-                Return result
-            End If
-
-            Dim classifyResult As list = DirectCast(result, list)
-            Dim keys As String() = classifyResult.slots.Keys.ToArray
-            Dim points As New List(Of RankPair)
-
-            For i As Integer = 0 To keys.Length - 1
-                Dim p As ColorClass = classifyResult.slots(keys(i))
-                Dim validate = labelsList(i)
-
-                If p.name <> validate Then
-                    points.Add(New RankPair(0, 0))
-                Else
-                    points.Add(New RankPair(1, 1))
-                End If
-            Next
-
-            Return New PerformanceEvaluator(points)
+            Return validateSingleSvmModel(DirectCast(svm, SVMModel), validateSet, labels, env)
         ElseIf TypeOf svm Is SVMMultipleSet Then
-            Dim result As Object = DirectCast(svm, SVMMultipleSet).svmClassify2(validateSet, env)
-
-            If Program.isException(result) Then
-                Return result
-            End If
-
-            Dim classifyResult As EntityObject() = DirectCast(result, EntityObject())
-            Dim validates As dataframe = DirectCast(labels, dataframe)
-            Dim resultList As New Dictionary(Of String, Object)
-
-            For Each dimension As String In validates.columns.Keys
-                Dim validateVector As String() = REnv.asVector(Of String)(validates.columns(dimension))
-                Dim points As New List(Of RankPair)
-
-                For i As Integer = 0 To classifyResult.Length - 1
-                    Dim p As String = classifyResult(i)(dimension)
-                    Dim validate As String = validateVector(i)
-
-                    If p <> validate Then
-                        points.Add(New RankPair(1, 0))
-                    Else
-                        points.Add(New RankPair(1, 1))
-                    End If
-                Next
-
-                resultList.Add(dimension, New PerformanceEvaluator(points))
-            Next
-
-            Return New list With {.slots = resultList}
+            Return validateMultipleSvmModel(DirectCast(svm, SVMMultipleSet), validateSet, labels, env)
         Else
             Return Message.InCompatibleType(GetType(SVMModel), svm.GetType, env)
         End If
