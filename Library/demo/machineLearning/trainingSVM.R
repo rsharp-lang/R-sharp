@@ -8,5 +8,6 @@ trainingSet
 :> readText 
 :> parse.SVM_problems
 :> trainSVMModel(verbose = TRUE)
+:> svm_json(fileModel = TRUE)
 :> write.bson(file = save_bson)
 ;
