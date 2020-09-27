@@ -158,42 +158,7 @@ Module SVMkit
         If model Is Nothing Then
             Return Nothing
         ElseIf TypeOf model Is Problem Then
-            Dim problem As Problem = DirectCast(model, Problem)
-            Dim trim As New List(Of Node())
-            Dim dimNames As New List(Of String)
-
-            For i As Integer = 0 To problem.maxIndex - 1
-                ' 如果这一列全部等于第一个值
-                ' 则删除
-                Dim val As Double = problem.X(Scan0)(i).value
-                Dim j = i
-
-                If problem.X.Any(Function(row) stdNum.Abs(row(j).value - val) > 0.0000001) Then
-                    trim.Add(problem.X.Select(Function(row) row(j)).ToArray)
-                    dimNames.Add(problem.dimensionNames(j))
-                End If
-            Next
-
-            Dim matrix = trim.PopAll.MatrixTranspose.ToArray
-
-            For Each row In matrix
-                trim.Add(row.Select(Function(node, i) New Node(i, node.value)).ToArray)
-            Next
-
-            Return New Problem With {
-                .dimensionNames = dimNames,
-                .maxIndex = dimNames.Count,
-                .X = trim.ToArray,
-                .Y = problem.Y _
-                    .Select(Function(a)
-                                Return New ColorClass With {
-                                    .color = a.color,
-                                    .enumInt = a.enumInt,
-                                    .name = a.name
-                                }
-                            End Function) _
-                    .ToArray
-            }
+            Return trimSingleProblem(DirectCast(model, Problem))
         ElseIf TypeOf model Is ProblemTable Then
             Dim problem As ProblemTable = DirectCast(model, ProblemTable).Clone
 
@@ -201,7 +166,7 @@ Module SVMkit
                 Dim val As Double = problem.vectors(Scan0)(name)
 
                 If problem.vectors.All(Function(vec) stdNum.Abs(vec(name) - val) <= 0.000000001) Then
-                    For Each vec In problem.vectors
+                    For Each vec As SupportVector In problem.vectors
                         vec.Properties.Remove(name)
                     Next
                 End If
@@ -217,6 +182,42 @@ Module SVMkit
         Else
             Return Message.InCompatibleType(GetType(Problem), model.GetType, env)
         End If
+    End Function
+
+    Private Function trimSingleProblem(problem As Problem) As Problem
+        Dim trim As New List(Of Node())
+        Dim dimNames As New List(Of String)
+
+        For i As Integer = 0 To problem.maxIndex - 1
+            ' 如果这一列全部等于第一个值
+            ' 则删除
+            Dim val As Double = problem.X(Scan0)(i).value
+            Dim j = i
+
+            If problem.X.Any(Function(row) stdNum.Abs(row(j).value - val) > 0.0000001) Then
+                trim.Add(problem.X.Select(Function(row) row(j)).ToArray)
+                dimNames.Add(problem.dimensionNames(j))
+            End If
+        Next
+
+        For Each row As Node() In trim.PopAll.MatrixTranspose.ToArray
+            trim.Add(row.Select(Function(node, i) New Node(i, node.value)).ToArray)
+        Next
+
+        Return New Problem With {
+            .dimensionNames = dimNames,
+            .maxIndex = dimNames.Count,
+            .X = trim.ToArray,
+            .Y = problem.Y _
+                .Select(Function(a)
+                            Return New ColorClass With {
+                                .color = a.color,
+                                .enumInt = a.enumInt,
+                                .name = a.name
+                            }
+                        End Function) _
+                .ToArray
+        }
     End Function
 
     <ExportAPI("svm.problem")>
@@ -310,6 +311,12 @@ Module SVMkit
         Return text.LoadJSON(Of ProblemTable)
     End Function
 
+    ''' <summary>
+    ''' extract the classify labels part from the 
+    ''' validation set object.
+    ''' </summary>
+    ''' <param name="problem"></param>
+    ''' <returns></returns>
     <ExportAPI("problem.validateLabels")>
     Public Function problemValidateLabels(problem As ProblemTable) As dataframe
         Dim labels As New dataframe With {.columns = New Dictionary(Of String, Array)}
@@ -458,42 +465,48 @@ Module SVMkit
         If TypeOf problem Is Problem Then
             Return getSvmModel(DirectCast(problem, Problem), param)
         Else
-            Dim table As ProblemTable = DirectCast(problem, ProblemTable)
-            Dim result As New Dictionary(Of String, SVMModel)
-            Dim allocated = table _
-                .GetTopics _
-                .Select(Function(topic)
-                            Dim topicProblem = table.GetProblem(topic)
-                            Dim args As Parameter = param.Clone
-
-                            For Each label As ColorClass In DirectCast(topicProblem, Problem) _
-                                .Y _
-                                .GroupBy(Function(a) a.name) _
-                                .Select(Function(a) a.First)
-
-                                ' 因为会被反复使用，所以可能会出现重名的问题
-                                ' 在这里直接设置
-                                args.weights.Item(label.enumInt) = 1
-                            Next
-
-                            Return (args, topicProblem, topic)
-                        End Function) _
-                .AsParallel _
-                .Select(Function(subTopic)
-                            Dim model = subTopic.topicProblem.getSvmModel(subTopic.args)
-                            Return (model, subTopic.topic)
-                        End Function)
-
-            For Each topic As (Model As SVMModel, topic$) In allocated
-                Call $"trainSVMModel::{topic.topic}".__INFO_ECHO
-                result(topic.topic) = topic.Model
-            Next
-
-            Return New SVMMultipleSet With {
-                .dimensionNames = table.dimensionNames,
-                .topics = result
-            }
+            Return getSvmModel(DirectCast(problem, ProblemTable), param)
         End If
+    End Function
+
+    Private Function getSvmModel(table As ProblemTable, param As Parameter) As SVMMultipleSet
+        Dim result As New Dictionary(Of String, SVMModel)
+        Dim allocated = table _
+            .GetTopics _
+            .Select(Function(topic) table.packCache(topic, param)) _
+            .AsParallel _
+            .Select(Function(subTopic)
+                        Dim model As SVMModel = subTopic.topicProblem.getSvmModel(subTopic.args)
+                        Return (model, subTopic.topic)
+                    End Function)
+
+        For Each topic As (Model As SVMModel, topic$) In allocated
+            Call $"trainSVMModel::{topic.topic}".__INFO_ECHO
+            result(topic.topic) = topic.Model
+        Next
+
+        Return New SVMMultipleSet With {
+            .dimensionNames = table.dimensionNames,
+            .topics = result
+        }
+    End Function
+
+    <Extension>
+    Private Function packCache(table As ProblemTable, topic As String, param As Parameter) As (args As Parameter, topicProblem As Problem, topic As String)
+        Dim topicProblem As Problem = table.GetProblem(topic)
+        Dim args As Parameter = param.Clone
+
+        For Each label As ColorClass In DirectCast(topicProblem, Problem) _
+            .Y _
+            .GroupBy(Function(a) a.name) _
+            .Select(Function(a) a.First)
+
+            ' 因为会被反复使用，所以可能会出现重名的问题
+            ' 在这里直接设置
+            args.weights(key:=label.enumInt) = 1
+        Next
+
+        Return (args, topicProblem, topic)
     End Function
 
     <Extension>
