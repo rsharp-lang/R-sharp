@@ -48,6 +48,7 @@ Imports System.Drawing
 Imports System.Drawing.Drawing2D
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Data.ChartPlots
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
 Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics
@@ -452,7 +453,7 @@ Module SVMkit
             End If
         End If
 
-        Training.IsVerbose = verbose
+        Logging.IsVerbose = verbose
 
         If TypeOf problem Is Problem Then
             Return getSvmModel(DirectCast(problem, Problem), param)
@@ -501,7 +502,7 @@ Module SVMkit
         Dim scale = transform.Scale(problem)
         Dim model As SVM.Model = Training.Train(scale, par)
 
-        Call Training.flushLog()
+        Call Logging.flush()
 
         Return New SVMModel With {
             .transform = transform,
