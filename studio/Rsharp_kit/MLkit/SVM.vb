@@ -585,6 +585,20 @@ Module SVMkit
         End If
     End Function
 
+    ''' <summary>
+    ''' SVM model validation
+    ''' </summary>
+    ''' <param name="svm">a trained SVM model</param>
+    ''' <param name="validateSet">
+    ''' a dataframe object which contains the validate set data, 
+    ''' each column should be exists in the dimensin name of 
+    ''' the trainingSet.
+    ''' </param>
+    ''' <param name="labels">a dataframe object which contains 
+    ''' the classify label result corresponding to the input 
+    ''' ``validateSet`` rows.</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("svm_validates")>
     Public Function svmValidates(svm As Object, validateSet As Object, <RRawVectorArgument> labels As Object, Optional env As Environment = Nothing) As Object
         If svm Is Nothing Then
