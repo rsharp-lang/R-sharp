@@ -76,7 +76,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 Dim cmin = compareOf(a, min)
                 Dim cmax = compareOf(a, max)
 
-                If cmin Like GetType(Boolean) AndAlso cmax Like GetType(Boolean) Then
+                If cmin Like GetType(Integer) AndAlso cmax Like GetType(Integer) Then
                     If cmin.VA >= 0 AndAlso cmax.VA <= 0 Then
                         flags.Add(True)
                     Else

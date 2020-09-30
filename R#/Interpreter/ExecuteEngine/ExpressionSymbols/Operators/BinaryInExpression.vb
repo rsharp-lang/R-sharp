@@ -75,13 +75,27 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim index As Index(Of Object) = getIndex(b, envir).Indexing
-            Dim isComparable As Boolean = index.Objects.All(Function(a) a.GetType.ImplementInterface(GetType(IComparable)))
+            Dim rawIndexObjects As Object() = index.Objects
+            Dim isComparable As Boolean = rawIndexObjects.All(Function(a) a.GetType.ImplementInterface(GetType(IComparable)))
             Dim findTest As Boolean() = getIndex(a, envir) _
                 .Select(Function(x)
                             If x Like index Then
                                 Return True
                             ElseIf isComparable AndAlso x.GetType.ImplementInterface(GetType(IComparable)) Then
+                                For Each y As Object In rawIndexObjects
+                                    Dim test = BinaryBetweenExpression.compareOf(x, y)
 
+                                    If test Like GetType(Exception) Then
+                                        ' can not compare between different type!
+                                        ' ignore
+                                    ElseIf test.TryCast(Of Integer) = 0 Then
+                                        Return True
+                                    End If
+                                Next
+
+                                Return False
+                            Else
+                                Return False
                             End If
                         End Function) _
                 .ToArray
