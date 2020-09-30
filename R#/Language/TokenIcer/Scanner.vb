@@ -193,7 +193,7 @@ Namespace Language.TokenIcer
             "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string",
             "const", "imports", "require", "library",
             "if", "else", "for", "loop", "while", "repeat", "step", "break", "next",
-            "in", "like", "from", "where", "order", "by", "distinct", "select",
+            "between", "in", "like", "from", "where", "order", "by", "distinct", "select",
             "ascending", "descending",
             "suppress",
             "typeof", "modeof", "valueof",

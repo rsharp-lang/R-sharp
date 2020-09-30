@@ -242,6 +242,8 @@ Namespace Interpreter.SyntaxParser
 
                             If opToken = "in" Then
                                 be = New BinaryInExpression(a.expression, b.expression)
+                            ElseIf opToken = "between" Then
+                                be = New BinaryBetweenExpression(a.expression, b.expression)
                             ElseIf opToken = "||" Then
                                 be = New BinaryOrExpression(a.expression, b.expression)
                             Else

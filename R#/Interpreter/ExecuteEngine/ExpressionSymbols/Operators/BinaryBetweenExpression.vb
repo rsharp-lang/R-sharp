@@ -58,6 +58,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             End Get
         End Property
 
+        Sub New(collectionSet As Expression, range As Expression)
+            Me.collectionSet = collectionSet
+            Me.range = range
+        End Sub
+
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim rangeVal As Object() = asVector(Of Object)(range.Evaluate(envir))
             Dim min As IComparable = rangeVal(Scan0)
