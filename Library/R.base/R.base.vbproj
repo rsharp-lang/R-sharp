@@ -350,7 +350,7 @@
     <Compile Include="utils\console.vb" />
     <Compile Include="utils\JSON.vb" />
     <Compile Include="utils\xlsx.vb" />
-    <Compile Include="utils\strings.vb" />
+    <Compile Include="utils\stringr.vb" />
     <Compile Include="utils\utils.vb" />
     <Compile Include="save\save.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />

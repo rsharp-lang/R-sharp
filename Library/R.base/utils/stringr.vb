@@ -52,7 +52,7 @@ Imports RHtml = SMRUCC.Rsharp.Runtime.Internal.htmlPrinter
 Imports Rlang = Microsoft.VisualBasic.My.RlangInterop
 
 <Package("stringr", Category:=APICategories.UtilityTools)>
-Module strings
+Module stringr
 
     Sub New()
         RHtml.AttachHtmlFormatter(Of DistResult)(AddressOf ResultVisualize.HTMLVisualize)
