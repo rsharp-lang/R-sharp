@@ -42,8 +42,10 @@
 
 #End Region
 
+Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
@@ -64,27 +66,37 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim rangeVal As Object() = asVector(Of Object)(range.Evaluate(envir))
+            Dim rangeVal As Object() = REnv.asVector(Of Object)(range.Evaluate(envir))
             Dim min As IComparable = rangeVal(Scan0)
             Dim max As IComparable = rangeVal(1)
-            Dim values As Object() = asVector(Of Object)(collectionSet.Evaluate(envir))
-            Dim flags As Boolean() = values _
-                .Select(Function(a)
-                            Dim cmin As Boolean = compareOf(a, min) >= 0
-                            Dim cmax As Boolean = compareOf(a, max) <= 0
+            Dim values As Object() = REnv.asVector(Of Object)(collectionSet.Evaluate(envir))
+            Dim flags As New List(Of Boolean)
 
-                            Return cmin AndAlso cmax
-                        End Function) _
-                .ToArray
+            For Each a As Object In values
+                Dim cmin = compareOf(a, min)
+                Dim cmax = compareOf(a, max)
 
-            Return flags
+                If cmin Like GetType(Boolean) AndAlso cmax Like GetType(Boolean) Then
+                    If cmin.VA >= 0 AndAlso cmax.VA <= 0 Then
+                        flags.Add(True)
+                    Else
+                        flags.Add(False)
+                    End If
+                ElseIf cmin Like GetType(Exception) Then
+                    Return Internal.debug.stop(cmin.TryCast(Of Exception)(), envir)
+                Else
+                    Return Internal.debug.stop(cmax.TryCast(Of Exception)(), envir)
+                End If
+            Next
+
+            Return flags.ToArray
         End Function
 
         Public Overrides Function ToString() As String
             Return $"{collectionSet.ToString} BETWEEN {range}"
         End Function
 
-        Friend Shared Function compareOf(a As IComparable, b As IComparable) As Integer
+        Friend Shared Function compareOf(a As IComparable, b As IComparable) As [Variant](Of Integer, Exception)
             If a Is Nothing AndAlso b Is Nothing Then
                 Return 0
             ElseIf a Is Nothing Then
