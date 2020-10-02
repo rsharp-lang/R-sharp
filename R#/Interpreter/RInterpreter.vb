@@ -173,12 +173,20 @@ Namespace Interpreter
         ''' A shortcut of ``print(expr)``
         ''' </summary>
         ''' <param name="expr"></param>
-        Public Sub Print(expr As String)
+        ''' <param name="auto">
+        ''' 在自动条件下，会忽略掉<paramref name="expr"/>为<see cref="invisible"/>
+        ''' 的结果打印
+        ''' </param>
+        Public Sub Print(expr As String, Optional auto As Boolean = True)
             Dim result As Object = Evaluate(expr)
 
-            ' do expression evaluation and then 
-            ' print($expr)
-            Call REnv.print(result, globalEnvir)
+            If auto AndAlso Not result Is Nothing AndAlso TypeOf result Is invisible Then
+                Return
+            Else
+                ' do expression evaluation and then 
+                ' print($expr)
+                Call REnv.print(result, globalEnvir)
+            End If
         End Sub
 
         ''' <summary>

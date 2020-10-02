@@ -328,7 +328,7 @@ Namespace Runtime.Internal.Invokes
         ''' they are not assigned.
         ''' </returns>
         <ExportAPI("invisible")>
-        Public Function invisible(x As Object) As <RSuppressPrint> Object
+        Public Function invisible(x As Object) As Object
             Return New invisible With {.value = x}
         End Function
 
@@ -1138,9 +1138,10 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("print")>
         Public Function print(<RRawVectorArgument> x As Object, env As Environment) As Object
+            ' 这个函数是由用户指定调用的，会忽略掉invisible属性值
+            '
             If x Is Nothing Then
                 Call env.globalEnvironment.stdout.WriteLine("NULL")
-
                 ' just returns nothing literal
                 Return Nothing
             Else

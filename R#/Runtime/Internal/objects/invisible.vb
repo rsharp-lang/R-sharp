@@ -42,9 +42,18 @@
 
 Namespace Runtime.Internal.Object
 
+    ''' <summary>
+    ''' do not print the result object on the console
+    ''' unless an explicit call of the ``print`` or ``cat``
+    ''' function have been invoke
+    ''' </summary>
     Public Class invisible
 
         Public Property value As Object
+
+        Public Overrides Function ToString() As String
+            Return value
+        End Function
 
     End Class
 End Namespace
