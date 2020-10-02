@@ -74,6 +74,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             Dim a As Object = left.Evaluate(envir)
             Dim b As Object = right.Evaluate(envir)
 
+            If TypeOf a Is invisible Then
+                a = DirectCast(a, invisible).value
+            End If
+            If TypeOf b Is invisible Then
+                b = DirectCast(b, invisible).value
+            End If
+
             If Program.isException(a) Then
                 Return a
             ElseIf Program.isException(b) Then
