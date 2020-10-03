@@ -1,49 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::d09d596201b0a17197ed16dae85daac5, R#\Runtime\Core.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module Core
-    ' 
-    '         Function: [Module], Add, asLogical, BinaryCoreInternal, Divide
-    '                   Minus, Multiply, op_In, Power, UnaryCoreInternal
-    '                   VectorAlignment
-    '         Class typedefine
-    ' 
-    '             Constructor: (+2 Overloads) Sub New
-    ' 
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module Core
+' 
+'         Function: [Module], Add, asLogical, BinaryCoreInternal, Divide
+'                   Minus, Multiply, op_In, Power, UnaryCoreInternal
+'                   VectorAlignment
+'         Class typedefine
+' 
+'             Constructor: (+2 Overloads) Sub New
+' 
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -110,7 +110,7 @@ Namespace Runtime
                     .ToArray
             ElseIf type Like numericTypes Then
                 Return vector.AsObjectEnumerator _
-                    .Select(Function(num) CBool(num <> 0)) _
+                    .Select(Function(num) CDbl(num) <> 0) _
                     .ToArray
             ElseIf type Is GetType(String) Then
                 Return vector.AsObjectEnumerator _
@@ -152,7 +152,7 @@ Namespace Runtime
                     ' This can be optimised by using hash table if the x and collection are both a large collection. 
                     Dim xVector = DirectCast(x, IEnumerable(Of T)).ToArray
 
-                    If x.Vector.Length > 500 AndAlso .Count > 1000 Then
+                    If xVector.Length > 500 AndAlso .Count > 1000 Then
 
                         ' Using hash table optimised for large n*m situation          
                         With .AsHashSet()
@@ -288,32 +288,32 @@ Namespace Runtime
         ''' <returns></returns>
         ''' 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Function Add(Of TX As IComparable(Of TX), TY As IComparable(Of TY), TOut)(x, y) As IEnumerable(Of TOut)
+        Public Function Add(Of TX As IComparable(Of TX), TY As IComparable(Of TY), TOut)(x As Object, y As Object) As IEnumerable(Of TOut)
             Return BinaryCoreInternal(Of TX, TY, TOut)(x, y, Function(a, b) a + b)
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Function Minus(Of TX As IComparable(Of TX), TY As IComparable(Of TY), TOut)(x, y) As IEnumerable(Of TOut)
+        Public Function Minus(Of TX As IComparable(Of TX), TY As IComparable(Of TY), TOut)(x As Object, y As Object) As IEnumerable(Of TOut)
             Return BinaryCoreInternal(Of TX, TY, TOut)(x, y, Function(a, b) a - b)
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Function Multiply(Of TX As IComparable(Of TX), TY As IComparable(Of TY), TOut)(x, y) As IEnumerable(Of TOut)
+        Public Function Multiply(Of TX As IComparable(Of TX), TY As IComparable(Of TY), TOut)(x As Object, y As Object) As IEnumerable(Of TOut)
             Return BinaryCoreInternal(Of TX, TY, TOut)(x, y, Function(a, b) a * b)
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Function Divide(Of TX As IComparable(Of TX), TY As IComparable(Of TY), TOut)(x, y) As IEnumerable(Of TOut)
+        Public Function Divide(Of TX As IComparable(Of TX), TY As IComparable(Of TY), TOut)(x As Object, y As Object) As IEnumerable(Of TOut)
             Return BinaryCoreInternal(Of TX, TY, TOut)(x, y, Function(a, b) a / b)
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Function Power(Of TX As IComparable(Of TX), TY As IComparable(Of TY), TOut)(x, y) As IEnumerable(Of TOut)
+        Public Function Power(Of TX As IComparable(Of TX), TY As IComparable(Of TY), TOut)(x As Object, y As Object) As IEnumerable(Of TOut)
             Return BinaryCoreInternal(Of TX, TY, TOut)(x, y, Function(a, b) a ^ b)
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Function [Module](Of TX As IComparable(Of TX), TY As IComparable(Of TY), TOut)(x, y) As IEnumerable(Of TOut)
+        Public Function [Module](Of TX As IComparable(Of TX), TY As IComparable(Of TY), TOut)(x As Object, y As Object) As IEnumerable(Of TOut)
             Return BinaryCoreInternal(Of TX, TY, TOut)(x, y, Function(a, b) a Mod b)
         End Function
 

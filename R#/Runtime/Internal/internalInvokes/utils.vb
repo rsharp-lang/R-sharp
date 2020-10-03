@@ -271,9 +271,9 @@ Namespace Runtime.Internal.Invokes
             If x Is Nothing Then
                 Return x
             ElseIf x.GetType.IsArray Then
-                x = New vector With {.data = x}
+                x = New vector With {.data = DirectCast(x, Array)}
             ElseIf x.GetType.ImplementInterface(GetType(IDictionary(Of String, Object))) Then
-                x = New list With {.slots = x}
+                x = New list With {.slots = DirectCast(x, Dictionary(Of String, Object))}
             End If
 
             Dim type As Type = x.GetType
@@ -457,8 +457,8 @@ Namespace Runtime.Internal.Invokes
                                Optional show_output_on_console As Boolean = True,
                                Optional minimized As Boolean = False,
                                Optional invisible As Boolean = True,
-                               Optional timeout As Double = 0)
-
+                               Optional timeout As Double = 0) As Integer
+            Throw New NotImplementedException
         End Function
     End Module
 End Namespace

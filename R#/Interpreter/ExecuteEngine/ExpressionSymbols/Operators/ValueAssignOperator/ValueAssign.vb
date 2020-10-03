@@ -145,28 +145,28 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             End If
         End Function
 
-        Private Shared Function setFromVector(envir As Environment, targetSymbols As Expression(), isByRef As Boolean, value As Object) As Object
+        Private Shared Function setFromVector(envir As Environment, targetSymbols As Expression(), isByRef As Boolean, value As Object) As Message
             Dim message As New Value(Of Message)
             Dim array As Array
 
             If value.GetType Is GetType(vector) Then
                 array = DirectCast(value, vector).data
             Else
-                array = value
+                array = DirectCast(value, Array)
             End If
 
             If array.Length = 1 Then
                 ' all assign the same value result
                 For Each name As Expression In targetSymbols
                     If Not (message = assignSymbol(envir, name, isByRef, value)) Is Nothing Then
-                        Return message
+                        Return message.Value
                     End If
                 Next
             ElseIf array.Length = targetSymbols.Length Then
                 ' one by one
                 For i As Integer = 0 To array.Length - 1
                     If Not (message = assignSymbol(envir, targetSymbols(i), isByRef, array.GetValue(i))) Is Nothing Then
-                        Return message
+                        Return message.Value
                     End If
                 Next
             Else
@@ -177,8 +177,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             Return Nothing
         End Function
 
-        Private Shared Function setFromObjectList(envir As Environment, targetSymbols As Expression(), isByRef As Boolean, value As Object)
-            Dim list As list = value
+        Private Shared Function setFromObjectList(envir As Environment, targetSymbols As Expression(), isByRef As Boolean, value As Object) As Message
+            Dim list As list = DirectCast(value, list)
             Dim message As New Value(Of Message)
 
             If list.length = 1 Then
@@ -200,7 +200,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                     End If
 
                     If Not (message = assignSymbol(envir, targetSymbols(i), isByRef, value)) Is Nothing Then
-                        Return message
+                        Return message.Value
                     End If
                 Next
             Else
@@ -220,7 +220,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 ' literal NULL
                 For Each name As Expression In targetSymbols
                     If Not (message = assignSymbol(envir, name, isByRef, value)) Is Nothing Then
-                        Return message
+                        Return message.Value
                     End If
                 Next
 
@@ -245,7 +245,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         Friend Shared Function GetSymbol(symbolName As Expression) As String
             Select Case symbolName.GetType
                 Case GetType(Literal)
-                    Return DirectCast(symbolName, Literal).value
+                    Return CStr(DirectCast(symbolName, Literal).value)
                 Case GetType(SymbolReference)
                     Return DirectCast(symbolName, SymbolReference).symbol
                 Case Else
@@ -254,7 +254,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         End Function
 
         Private Shared Function setByNameIndex(symbolName As Expression, envir As Environment, value As Object) As Message
-            Dim symbolIndex As SymbolIndexer = symbolName
+            Dim symbolIndex As SymbolIndexer = DirectCast(symbolName, SymbolIndexer)
             Dim targetObj As Object = symbolIndex.symbol.Evaluate(envir)
             Dim index As Object = symbolIndex.index.Evaluate(envir)
 
@@ -267,15 +267,15 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             End If
 
             If symbolIndex.indexType = SymbolIndexers.vectorIndex AndAlso index.GetType Like RType.integers Then
-                Return setVectorElements(targetObj, Runtime.asVector(Of Integer)(index), value, envir)
+                Return setVectorElements(targetObj, DirectCast(Runtime.asVector(Of Integer)(index), Integer()), value, envir)
             End If
 
-            Dim indexStr As String() = Runtime.asVector(Of String)(index)
+            Dim indexStr As String() = DirectCast(Runtime.asVector(Of String)(index), String())
             Dim result As Object
 
             If Not targetObj.GetType.ImplementInterface(GetType(RNameIndex)) Then
                 If targetObj.GetType Is GetType(dataframe) Then
-                    Return dataframeValueAssign.ValueAssign(symbolIndex, indexStr, targetObj, value, envir)
+                    Return dataframeValueAssign.ValueAssign(symbolIndex, indexStr, DirectCast(targetObj, dataframe), value, envir)
                 Else
                     Return Internal.debug.stop({"Target symbol can not be indexed by name!", $"SymbolName: {symbolIndex.symbol}"}, envir)
                 End If
@@ -294,11 +294,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                     envir.AddMessage($"'{symbolIndex.index}' contains multiple index, only use first index key value...")
                 End If
             Else
-                result = DirectCast(targetObj, RNameIndex).setByName(indexStr, value, envir)
+                result = DirectCast(targetObj, RNameIndex).setByName(indexStr, DirectCast(value, Array), envir)
             End If
 
             If Not result Is Nothing AndAlso result.GetType Is GetType(Message) Then
-                Return result
+                Return DirectCast(result, Message)
             Else
                 Return Nothing
             End If
@@ -309,7 +309,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
             Select Case symbolName.GetType
                 Case GetType(Literal)
-                    target = envir.FindSymbol(DirectCast(symbolName, Literal).value)
+                    target = envir.FindSymbol(DirectCast(DirectCast(symbolName, Literal).value, String))
                 Case GetType(SymbolReference)
                     target = envir.FindSymbol(DirectCast(symbolName, SymbolReference).symbol)
                 Case GetType(SymbolIndexer)
@@ -343,7 +343,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 target = DirectCast(target, vector).data
             End If
 
-            Dim targetVector As Array = target
+            Dim targetVector As Array = DirectCast(target, Array)
             Dim getValue As Func(Of Object)
 
             If value Is Nothing Then
