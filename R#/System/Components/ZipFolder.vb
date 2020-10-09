@@ -1,48 +1,48 @@
 ﻿#Region "Microsoft.VisualBasic::eb307a2ea3638782e10839ce8a90992c, R#\System\Components\ZipFolder.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class ZipFolder
-    ' 
-    '         Properties: ls
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: ToString
-    ' 
-    '         Sub: (+2 Overloads) Dispose
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class ZipFolder
+' 
+'         Properties: ls
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: ToString
+' 
+'         Sub: (+2 Overloads) Dispose
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -59,6 +59,8 @@ Namespace System.Components
 
         Default Public ReadOnly Property Item(fileName As String) As Stream
             Get
+                fileName = fileName.TrimStart("/"c, "\"c).Replace("\"c, "/"c)
+
                 If allFiles.ContainsKey(fileName) Then
                     Return ZipStreamReader.Decompress(allFiles(fileName))
                 Else
@@ -86,10 +88,17 @@ Namespace System.Components
         ''' <param name="zipFile"></param>
         Sub New(zipFile As String)
             zip = New ZipArchive(zipFile.Open(doClear:=False, [readOnly]:=True), ZipArchiveMode.Read)
-            allFiles = zip.Entries _
-                .ToDictionary(Function(file)
-                                  Return file.Name.TrimStart("/"c, "\"c)
-                              End Function)
+            allFiles = New Dictionary(Of String, ZipArchiveEntry)
+
+            For Each item As ZipArchiveEntry In zip.Entries
+                Dim key As String = item.FullName.TrimStart("/"c, "\"c).Replace("\"c, "/"c)
+
+                If allFiles.ContainsKey(key) Then
+                    Throw New DuplicateNameException(key)
+                Else
+                    allFiles.Add(key, item)
+                End If
+            Next
         End Sub
 
         Public Overrides Function ToString() As String
