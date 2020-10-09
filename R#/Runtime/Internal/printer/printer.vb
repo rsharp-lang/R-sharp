@@ -121,7 +121,24 @@ Namespace Runtime.Internal.ConsolePrinter
 
             Return Function(d)
                        Dim val As Double = DirectCast(d, Double)
-                       Dim str As String = val.ToString(format).TrimEnd("0"c, "."c)
+
+                       If val = 0.0 Then
+                           ' 20201009
+                           ' 因为下面的代码有一个将0字符进行TrimEnd的操作
+                           ' 所以val等于零的时候，会变为空字符串
+                           ' 在这里直接返回零来避免这个格式化问题
+                           Return "0"
+                       End If
+
+                       Dim str As String = val.ToString(format)
+
+                       If str.IndexOf("."c) > -1 Then
+                           str = str.TrimEnd("0"c)
+
+                           If str.Last = "."c Then
+                               str = str.TrimEnd("."c)
+                           End If
+                       End If
 
                        If val > 0 Then
                            str = " " & str
