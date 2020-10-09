@@ -16,4 +16,6 @@ str(d["b",, drop = TRUE]);
 
 let echo = x -> print(x);
 
-d :> echo
+d :> echo;
+
+write.csv(d, file = `${!script$dir}/dataframe.csv`, row.names = FALSE);
