@@ -346,6 +346,8 @@ Namespace Language.TokenIcer
             Return Nothing
         End Function
 
+        Public Const RSymbol$ = "([_\.])?[a-z][a-z0-9_\.]*"
+
         ''' <summary>
         ''' 这个函数的调用会将<see cref="buffer"/>清空
         ''' </summary>
@@ -440,7 +442,7 @@ Namespace Language.TokenIcer
                         Return New Token With {.name = TokenType.integerLiteral, .text = text}
                     ElseIf Double.TryParse(text, Nothing) Then
                         Return New Token With {.name = TokenType.numberLiteral, .text = text}
-                    ElseIf text.IsPattern("([_\.])?[a-z][a-z0-9_\.]*") Then
+                    ElseIf text.IsPattern(RSymbol) Then
                         Return New Token With {.name = TokenType.identifier, .text = text}
                     End If
 #If DEBUG Then

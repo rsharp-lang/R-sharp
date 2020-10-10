@@ -280,7 +280,7 @@ Binary:
                         Return New ByRefFunctionCall(calls.expression, vals.expression)
                     End If
                 End If
-            Else
+            ElseIf target.Length >= 3 Then
                 ' the exception is always the last one
                 With target.Skip(1) _
                            .Take(code(Scan0).Length - 2) _
@@ -294,6 +294,14 @@ Binary:
                     Else
                         symbol = .Select(Function(e) e.expression) _
                                  .ToArray
+                    End If
+                End With
+            Else
+                With Expression.CreateExpression(target, opts)
+                    If .isException Then
+                        Return .ByRef
+                    Else
+                        symbol = { .expression}
                     End If
                 End With
             End If
