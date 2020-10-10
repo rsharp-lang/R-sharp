@@ -61,6 +61,8 @@ Imports textStream = System.IO.StreamReader
 ''' The R Utils Package 
 ''' </summary>
 <Package("utils", Category:=APICategories.UtilityTools)>
+<RTypeExport("entity", GetType(EntityObject))>
+<RTypeExport("dataset", GetType(DataSet))>
 Public Module utils
 
     ''' <summary>
@@ -301,11 +303,17 @@ Public Module utils
 
     Private Function saveGeneric(x As Object, type As Type, file$, encoding As Encoding, env As Environment) As Boolean
         If type Is GetType(vector) Then
-            x = DirectCast(x, vector).data
-            type = x.GetType
-        End If
+            With DirectCast(x, vector)
+                x = DirectCast(x, vector).data
+                type = .elementType?.raw
+            End With
 
-        type = type.GetElementType
+            If type Is Nothing Then
+                type = x.GetType.GetElementType
+            End If
+        Else
+            type = type.GetElementType
+        End If
 
         Return DirectCast(x, Array).SaveTable(file, encoding, type, silent:=True)
     End Function

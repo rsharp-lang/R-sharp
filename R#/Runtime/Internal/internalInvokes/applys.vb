@@ -118,6 +118,82 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' parallel sapply
+        ''' </summary>
+        ''' <returns></returns>
+        <ExportAPI("parSapply")>
+        Public Function parSapply(<RRawVectorArgument> X As Object, FUN As Object, envir As Environment) As Object
+            Dim check = checkInternal(X, FUN, envir)
+
+            If Not TypeOf check Is Boolean Then
+                Return check
+            End If
+
+            Dim seq As New List(Of Object)
+            Dim names As New List(Of String)
+            Dim apply As RFunction = FUN
+
+            If X.GetType Is GetType(list) Then
+                X = DirectCast(X, list).slots
+            End If
+
+            If X.GetType.ImplementInterface(GetType(IDictionary)) Then
+                Dim list = DirectCast(X, IDictionary)
+                Dim values = DirectCast(list.Keys, IEnumerable) _
+                    .Cast(Of Object) _
+                    .Select(Function(a) (key:=a, value:=list(a))) _
+                    .AsParallel _
+                    .Select(Function(a)
+                                Return (key:=Scripting.ToString(a.key), value:=apply.Invoke(envir, invokeArgument(a.value)))
+                            End Function)
+
+                For Each tuple As (key As String, value As Object) In values
+                    If Program.isException(tuple.value) Then
+                        Return tuple.value
+                    End If
+
+                    seq.Add(REnv.single(tuple.value))
+                    names.Add(tuple.key)
+                Next
+            Else
+                Dim values As IEnumerable(Of Object) = REnv.asVector(Of Object)(X) _
+                    .AsObjectEnumerator _
+                    .AsParallel _
+                    .Select(Function(d)
+                                Return apply.Invoke(envir, invokeArgument(d))
+                            End Function)
+
+                For Each value As Object In values
+                    If Program.isException(value) Then
+                        Return value
+                    Else
+                        seq.Add(REnv.single(value))
+                    End If
+                Next
+            End If
+
+            Return New RObj.vector(names, seq.ToArray, envir)
+        End Function
+
+        Private Function checkInternal(X As Object, FUN As Object, env As Environment) As Object
+            If FUN Is Nothing Then
+                Return Internal.debug.stop({"Missing apply function!"}, env)
+            ElseIf Not FUN.GetType.ImplementInterface(GetType(RFunction)) Then
+                Return Internal.debug.stop({"Target is not a function!"}, env)
+            End If
+
+            If Program.isException(X) Then
+                Return X
+            ElseIf Program.isException(FUN) Then
+                Return FUN
+            ElseIf X Is Nothing Then
+                Return Nothing
+            Else
+                Return True
+            End If
+        End Function
+
+        ''' <summary>
         ''' # Apply a Function over a List or Vector
         ''' 
         ''' sapply is a user-friendly version and wrapper of lapply by default 
@@ -139,18 +215,10 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("sapply")>
         <RApiReturn(GetType(vector))>
         Public Function sapply(<RRawVectorArgument> X As Object, FUN As Object, envir As Environment) As Object
-            If FUN Is Nothing Then
-                Return Internal.debug.stop({"Missing apply function!"}, envir)
-            ElseIf Not FUN.GetType.ImplementInterface(GetType(RFunction)) Then
-                Return Internal.debug.stop({"Target is not a function!"}, envir)
-            End If
+            Dim check = checkInternal(X, FUN, envir)
 
-            If Program.isException(X) Then
-                Return X
-            ElseIf Program.isException(FUN) Then
-                Return FUN
-            ElseIf X Is Nothing Then
-                Return Nothing
+            If Not TypeOf check Is Boolean Then
+                Return check
             End If
 
             Dim apply As RFunction = FUN
@@ -220,16 +288,10 @@ Namespace Runtime.Internal.Invokes
                                Optional names As RFunction = Nothing,
                                Optional envir As Environment = Nothing) As Object
 
-            If FUN Is Nothing Then
-                Return Internal.debug.stop({"Missing apply function!"}, envir)
-            ElseIf Not FUN.GetType.ImplementInterface(GetType(RFunction)) Then
-                Return Internal.debug.stop({"Target is not a function!"}, envir)
-            End If
+            Dim check = checkInternal(X, FUN, envir)
 
-            If Program.isException(X) Then
-                Return X
-            ElseIf Program.isException(FUN) Then
-                Return FUN
+            If Not TypeOf check Is Boolean Then
+                Return check
             ElseIf X.GetType Is GetType(list) Then
                 X = DirectCast(X, list).slots
             End If
