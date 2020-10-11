@@ -270,6 +270,19 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' Decodes URL-encoded string
+        ''' 
+        ''' Decodes any ``%##`` encoding in the given string. 
+        ''' Plus symbols ('+') are decoded to a space character.
+        ''' </summary>
+        ''' <param name="str">The string to be decoded.</param>
+        ''' <returns>Returns the decoded string.</returns>
+        <ExportAPI("urldecode")>
+        Public Function urldecode(str As String()) As Object
+            Return str.SafeQuery.Select(Function(s) s.UrlDecode).ToArray
+        End Function
+
         <ExportAPI("grep")>
         Public Function grep(<RRawVectorArgument> text As Object, greps As String(), Optional env As Environment = Nothing) As Object
             If text Is Nothing Then
