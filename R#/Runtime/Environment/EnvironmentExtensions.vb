@@ -48,6 +48,7 @@ Imports SMRUCC.Rsharp.Interpreter
 
 Namespace Runtime
 
+    <HideModuleName>
     Module EnvironmentExtensions
 
         Public ReadOnly Property globalStackFrame As StackFrame
@@ -87,7 +88,8 @@ Namespace Runtime
                 .debug = R.debug,
                 .log4vb_redirect = R.globalEnvir.log4vb_redirect,
                 .silent = R.silent,
-                .commandLine = commandLine
+                .commandLine = commandLine,
+                .commandArguments = App.CommandLine.Tokens
             }
         End Function
     End Module

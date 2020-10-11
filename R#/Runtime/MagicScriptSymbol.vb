@@ -61,8 +61,17 @@ Namespace Runtime
         Public Property silent As Boolean
         Public Property log4vb_redirect As Boolean
         Public Property commandLine As Dictionary(Of String, String())
+        Public Property commandArguments As String()
 
         Public Function toList() As list
+            Dim commandLine As New list With {
+                .slots = Me.commandLine _
+                    .ToDictionary(Function(a) a.Key,
+                                    Function(a)
+                                        Return CObj(a.Value)
+                                    End Function)
+            }
+
             Return New list With {
                 .slots = New Dictionary(Of String, Object) From {
                     {NameOf(dir), dir},
@@ -73,11 +82,10 @@ Namespace Runtime
                     {NameOf(silent), silent},
                     {"log4vb.redirect", log4vb_redirect},
                     {NameOf(commandLine), New list With {
-                            .slots = commandLine _
-                                .ToDictionary(Function(a) a.Key,
-                                              Function(a)
-                                                  Return CObj(a.Value)
-                                              End Function)
+                        .slots = New Dictionary(Of String, Object) From {
+                                {"commandLine", commandLine},
+                                {"arguments", commandArguments}
+                            }
                         }
                     }
                 }
