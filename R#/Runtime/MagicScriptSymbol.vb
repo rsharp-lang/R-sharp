@@ -60,6 +60,7 @@ Namespace Runtime
         Public Property debug As Boolean
         Public Property silent As Boolean
         Public Property log4vb_redirect As Boolean
+        Public Property commandLine As Dictionary(Of String, String())
 
         Public Function toList() As list
             Return New list With {
@@ -70,7 +71,15 @@ Namespace Runtime
                     {"startup.time", startup_time},
                     {NameOf(debug), debug},
                     {NameOf(silent), silent},
-                    {"log4vb.redirect", log4vb_redirect}
+                    {"log4vb.redirect", log4vb_redirect},
+                    {NameOf(commandLine), New list With {
+                            .slots = commandLine _
+                                .ToDictionary(Function(a) a.Key,
+                                              Function(a)
+                                                  Return CObj(a.Value)
+                                              End Function)
+                        }
+                    }
                 }
             }
         End Function

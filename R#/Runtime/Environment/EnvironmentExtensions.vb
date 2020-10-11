@@ -73,6 +73,12 @@ Namespace Runtime
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function CreateMagicScriptSymbol(filepath As String, R As RInterpreter) As MagicScriptSymbol
+            Dim commandLine As New Dictionary(Of String, String())
+
+            For Each arguments In App.CommandLine.ParameterList.GroupBy(Function(a) a.Name.ToLower)
+                commandLine.Add(arguments.Key, arguments.Select(Function(a) a.Value).ToArray)
+            Next
+
             Return New MagicScriptSymbol With {
                 .dir = filepath.ParentPath,
                 .file = filepath.FileName,
@@ -80,7 +86,8 @@ Namespace Runtime
                 .startup_time = Now.ToString,
                 .debug = R.debug,
                 .log4vb_redirect = R.globalEnvir.log4vb_redirect,
-                .silent = R.silent
+                .silent = R.silent,
+                .commandLine = commandLine
             }
         End Function
     End Module
