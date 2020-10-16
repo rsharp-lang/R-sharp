@@ -52,6 +52,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -126,6 +127,15 @@ Namespace Runtime.Interop
             Me.invisible = RSuppressPrintAttribute.IsPrintInvisible(closure)
             Me.listObjectMargin = RArgumentList.objectListArgumentMargin(Me)
         End Sub
+
+        Public Iterator Function getArguments() As IEnumerable(Of NamedValue(Of Expression)) Implements RFunction.getArguments
+            For Each arg As RMethodArgument In parameters
+                Yield New NamedValue(Of Expression) With {
+                    .Name = arg.name,
+                    .Value = If(arg.isOptional, New RuntimeValueLiteral(arg.default), Nothing)
+                }
+            Next
+        End Function
 
         ''' <summary>
         ''' Gets the <see cref="MethodInfo"/> represented by the delegate.

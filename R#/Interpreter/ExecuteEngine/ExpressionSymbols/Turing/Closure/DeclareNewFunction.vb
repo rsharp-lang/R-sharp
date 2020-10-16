@@ -44,6 +44,7 @@
 #End Region
 
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
@@ -91,6 +92,17 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Me.body = body
             Me.stackFrame = stackframe
         End Sub
+
+        Public Iterator Function getArguments() As IEnumerable(Of NamedValue(Of Expression)) Implements RFunction.getArguments
+            For Each arg As DeclareNewSymbol In params
+                For Each name As String In arg.names
+                    Yield New NamedValue(Of Expression) With {
+                        .Name = name,
+                        .Value = arg.value
+                    }
+                Next
+            Next
+        End Function
 
         Friend Shared Function MissingParameters(var As DeclareNewSymbol, funcName$, envir As Environment) As Object
             Dim message As String() = {

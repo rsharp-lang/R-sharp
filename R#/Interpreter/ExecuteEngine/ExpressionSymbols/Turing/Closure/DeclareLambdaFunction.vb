@@ -45,6 +45,7 @@
 #End Region
 
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -91,6 +92,18 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Me.closure = closure
             Me.stackFrame = stackframe
         End Sub
+
+        ''' <summary>
+        ''' lambda函数是不存在可选默认参数值的
+        ''' </summary>
+        ''' <returns></returns>
+        Public Iterator Function getArguments() As IEnumerable(Of NamedValue(Of Expression)) Implements RFunction.getArguments
+            For Each name As String In parameter.names
+                Yield New NamedValue(Of Expression) With {
+                    .Name = name
+                }
+            Next
+        End Function
 
         ''' <summary>
         ''' 返回的是一个<see cref="RFunction"/>
