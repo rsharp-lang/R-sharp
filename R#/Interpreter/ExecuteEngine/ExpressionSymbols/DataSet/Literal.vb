@@ -121,6 +121,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         Public Overrides Function ToString() As String
             If value Is Nothing Then
                 Return "NULL"
+            ElseIf TypeOf value Is String Then
+                Return $"""{value}"""
+            ElseIf TypeOf value Is Date Then
+                Return $"#{value}#"
             Else
                 Return value.ToString
             End If

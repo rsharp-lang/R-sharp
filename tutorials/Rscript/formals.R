@@ -1,1 +1,3 @@
-formals(function(a = 1, b = ['hello']) {})
+print(formals(function(a = 1, b = [`a + ${a}`, 'hello']) {
+	# ...
+}));
