@@ -70,6 +70,11 @@ Namespace Runtime.Internal.Object.Converts
 
             Dim objType As Type = obj.GetType
 
+            If objType.IsArray AndAlso Not type.IsArray Then
+                obj = [single](obj)
+                objType = obj.GetType
+            End If
+
             If objType Is GetType(vbObject) AndAlso Not type Is GetType(Object) Then
                 obj = DirectCast(obj, vbObject).target
 
