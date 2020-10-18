@@ -106,7 +106,7 @@ Namespace Runtime.Internal.Invokes
 
             If is_file Then
                 Call stream.Close()
-                Call stream.Flush()
+                Call stream.Dispose()
             End If
 
             Return True
