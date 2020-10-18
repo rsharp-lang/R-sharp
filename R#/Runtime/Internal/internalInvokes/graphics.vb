@@ -88,11 +88,13 @@ Namespace Runtime.Internal.Invokes
             End If
 
             Dim stream As Stream
+            Dim is_file As Boolean = False
 
             If file Is Nothing Then
                 stream = Console.OpenStandardOutput
             ElseIf TypeOf file Is String Then
                 stream = DirectCast(file, String).Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False)
+                is_file = True
             ElseIf TypeOf file Is Stream Then
                 stream = file
             Else
@@ -101,6 +103,11 @@ Namespace Runtime.Internal.Invokes
 
             Call DirectCast(image, Image).Save(stream, format.GetFormat)
             Call stream.Flush()
+
+            If is_file Then
+                Call stream.Close()
+                Call stream.Flush()
+            End If
 
             Return True
         End Function
