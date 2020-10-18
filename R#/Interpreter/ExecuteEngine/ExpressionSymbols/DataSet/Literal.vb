@@ -79,6 +79,16 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End Get
         End Property
 
+        Public ReadOnly Property ValueStr As String
+            Get
+                If value Is Nothing Then
+                    Return ""
+                Else
+                    Return Scripting.ToString(value)
+                End If
+            End Get
+        End Property
+
         Friend Sub New()
         End Sub
 

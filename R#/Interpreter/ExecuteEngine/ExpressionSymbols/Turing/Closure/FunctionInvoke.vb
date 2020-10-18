@@ -224,7 +224,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             End If
 
             If TypeOf funcName Is Literal Then
-                Dim symbol As Object = envir.FindSymbol(DirectCast(funcName, Literal).ToString)?.value
+                Dim symbol As Object = envir.FindSymbol(DirectCast(funcName, Literal).ValueStr)?.value
 
                 If symbol Is Nothing Then
                     funcVar = Nothing
@@ -240,7 +240,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
         Private Function doInvokeFuncVar(funcVar As RFunction, envir As Environment) As Object
             If funcVar Is Nothing AndAlso TypeOf funcName Is Literal Then
-                Dim funcStr = DirectCast(funcName, Literal).ToString
+                Dim funcStr = DirectCast(funcName, Literal).ValueStr
                 ' 可能是一个系统的内置函数
                 Return invokeRInternal(funcStr, envir)
             ElseIf funcVar.GetType Like runtimeFuncs Then
