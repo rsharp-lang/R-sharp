@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::622ad5e616259dc21a0e4de869211036, studio\Rsharp_kit\signalKit\wav.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module wavToolkit
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: readWav, wavToString
-    ' 
-    ' /********************************************************************************/
+' Module wavToolkit
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: readWav, wavToString
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -50,6 +50,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 <Package("wav", Category:=APICategories.UtilityTools)>
@@ -75,22 +76,34 @@ Public Module wavToolkit
         Call summary.AppendLine($"  bits_per_sample: {wav.fmt.BitsPerSample}")
         Call summary.AppendLine($"           is_PCM: {wav.fmt.isPCM.ToString.ToUpper}")
         Call summary.AppendLine()
-        Call summary.AppendLine($"wav_data:")
 
-        Dim i As i32 = 1
+        If TypeOf wav.data Is DataSubChunk Then
+            Dim i As i32 = 1
 
-        For Each sample In wav.data.AsEnumerable
-            Call summary.AppendLine($"  sample #{++i}: {sample.channels.Take(6).JoinBy(", ")}...")
-        Next
+            Call summary.AppendLine($"wav_data:")
+
+            For Each sample As Sample In DirectCast(wav.data, DataSubChunk).AsEnumerable
+                Call summary.AppendLine($"  sample #{++i}: {sample.channels.Take(6).JoinBy(", ")}...")
+            Next
+        End If
 
         Return summary.ToString
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="file"></param>
+    ''' <param name="lazy"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("read.wav")>
     <RApiReturn(GetType(WaveFile))>
-    Public Function readWav(<RRawVectorArgument> file As Object, Optional env As Environment = Nothing) As Object
+    Public Function readWav(<RRawVectorArgument> file As Object, Optional lazy As Boolean = False, Optional env As Environment = Nothing) As Object
         If file Is Nothing Then
             Return Internal.debug.stop("the given file object can not be nothing!", env)
+        ElseIf TypeOf file Is vector Then
+            file = DirectCast(file, vector).data
         End If
 
         Dim dataFile As Stream
@@ -108,7 +121,7 @@ Public Module wavToolkit
         End If
 
         Using reader As New BinaryDataReader(dataFile)
-            Return WaveFile.Open(reader)
+            Return WaveFile.Open(reader, lazy:=lazy)
         End Using
     End Function
 End Module
