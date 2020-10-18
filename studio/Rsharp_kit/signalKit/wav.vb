@@ -120,8 +120,6 @@ Public Module wavToolkit
             Return Internal.debug.stop(Message.InCompatibleType(GetType(Stream), file.GetType, env), env)
         End If
 
-        Using reader As New BinaryDataReader(dataFile)
-            Return WaveFile.Open(reader, lazy:=lazy)
-        End Using
+        Return WaveFile.Open(New BinaryDataReader(dataFile), lazy:=lazy)
     End Function
 End Module
