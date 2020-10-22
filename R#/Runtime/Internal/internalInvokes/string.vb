@@ -1,54 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::702eb4d2432890879375d061adec7432, R#\Runtime\Internal\internalInvokes\string.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module stringr
-    ' 
-    '         Function: [string], base64, base64Decode, bencode, Csprintf
-    '                   decodeObject, fromBstring, grep, html, json
-    '                   match, nchar, paste, regexp, sprintfSingle
-    '                   str_empty, str_pad, str_replace, strPad_internal, strsplit
-    '                   xml
-    ' 
-    '     Enum str_padSides
-    ' 
-    '         both, left, right
-    ' 
-    '  
-    ' 
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module stringr
+' 
+'         Function: [string], base64, base64Decode, bencode, Csprintf
+'                   decodeObject, fromBstring, grep, html, json
+'                   match, nchar, paste, regexp, sprintfSingle
+'                   str_empty, str_pad, str_replace, strPad_internal, strsplit
+'                   xml
+' 
+'     Enum str_padSides
+' 
+'         both, left, right
+' 
+'  
+' 
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -58,6 +58,8 @@ Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Net.Http
@@ -576,6 +578,27 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("str_empty")>
         Public Function str_empty([string] As String()) As Boolean()
             Return [string].Select(AddressOf StringEmpty).ToArray
+        End Function
+
+        ''' <summary>
+        ''' parse the string text in format like ``tag{delimiter}value``
+        ''' </summary>
+        ''' <param name="string"></param>
+        ''' <param name="delimiter"></param>
+        ''' <param name="trim_value"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("tagvalue")>
+        Public Function tagvalue([string] As String(), Optional delimiter$ = " ", Optional trim_value As Boolean = True, Optional env As Environment = Nothing) As Object
+            Dim values As NamedValue(Of String)() = [string] _
+                .SafeQuery _
+                .Select(Function(str)
+                            Return str.GetTagValue(delimiter, trim:=trim_value)
+                        End Function) _
+                .ToArray
+            Dim vec As vector = vector.asVector(values.Values)
+            Call vec.setNames(values.Keys, env)
+            Return vec
         End Function
     End Module
 
