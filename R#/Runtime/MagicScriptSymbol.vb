@@ -1,55 +1,56 @@
 ﻿#Region "Microsoft.VisualBasic::69a52a3975a317c27f9778a1519a82c9, R#\Runtime\MagicScriptSymbol.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class MagicScriptSymbol
-    ' 
-    '         Properties: debug, dir, file, fullName, log4vb_redirect
-    '                     silent, startup_time
-    ' 
-    '         Function: toList, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class MagicScriptSymbol
+' 
+'         Properties: debug, dir, file, fullName, log4vb_redirect
+'                     silent, startup_time
+' 
+'         Function: toList, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Interop.CType
 
 Namespace Runtime
 
-    Public Class MagicScriptSymbol
+    Public Class MagicScriptSymbol : Implements ICTypeList
 
         Public Property dir As String
         Public Property file As String
@@ -63,7 +64,7 @@ Namespace Runtime
         Public Property commandLine As Dictionary(Of String, String())
         Public Property commandArguments As String()
 
-        Public Function toList() As list
+        Public Function toList() As list Implements ICTypeList.toList
             Dim commandLine As New list With {
                 .slots = Me.commandLine _
                     .ToDictionary(Function(a) a.Key,
