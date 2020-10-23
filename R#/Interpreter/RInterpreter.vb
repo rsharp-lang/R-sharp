@@ -144,6 +144,29 @@ Namespace Interpreter
             Return Me
         End Function
 
+        Public Function options(Optional names As String() = Nothing, Optional verbose As Boolean? = Nothing) As Object
+            Dim setOption As Boolean = False
+
+            If Not verbose Is Nothing Then
+                globalEnvir.options.setOption(NameOf(verbose), verbose.Value)
+                setOption = True
+            End If
+
+            If setOption AndAlso Not names.IsNullOrEmpty Then
+                Return Internal.debug.stop({"can not set options with get options!"}, globalEnvir)
+            ElseIf setOption Then
+                Return globalEnvir
+            Else
+                Return New list With {
+                    .slots = names _
+                        .ToDictionary(Function(name) name,
+                                      Function(opt)
+                                          Return CObj(globalEnvir.options.getOption(opt))
+                                      End Function)
+                }
+            End If
+        End Function
+
         Public Sub PrintMemory(Optional dev As TextWriter = Nothing)
             Dim table$()() = globalEnvir _
                 .Select(Function(v)

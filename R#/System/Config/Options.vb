@@ -142,7 +142,7 @@ Namespace System.Configuration
         End Property
 
         ''' <summary>
-        ''' logical. Should R report extra information on progress? Set to TRUE by the command-line option --verbose
+        ''' logical. Should R report extra information on progress? Set to TRUE by the command-line option ``--verbose``
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks>
