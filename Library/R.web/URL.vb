@@ -59,7 +59,7 @@ Public Module URL
                           Optional headers As list = Nothing,
                           Optional env As Environment = Nothing) As WebResponseResult
 
-        Dim httpHeaders As Dictionary(Of String, String) = headers.AsGeneric(Of String)(env)
+        Dim httpHeaders As Dictionary(Of String, String) = headers?.AsGeneric(Of String)(env)
         Dim verbose As Boolean = env.globalEnvironment.options.verbose
 
         Return HttpGet _
