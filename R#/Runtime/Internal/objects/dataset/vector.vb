@@ -155,6 +155,14 @@ Namespace Runtime.Internal.Object
                 .DoCall(AddressOf RType.GetRSharpType)
         End Sub
 
+        Public Function getByName(name As String) As Object
+            If Not name Like nameIndex Then
+                Return Nothing
+            Else
+                Return getByIndex(nameIndex.IndexOf(name))
+            End If
+        End Function
+
         Public Function hasName(name As String) As Boolean Implements RNames.hasName
             Return name Like nameIndex
         End Function

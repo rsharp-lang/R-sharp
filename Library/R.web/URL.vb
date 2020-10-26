@@ -47,6 +47,8 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports Microsoft.VisualBasic.Net.Http
+Imports SMRUCC.Rsharp.Runtime.Components
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
 ''' the R# http utils
@@ -94,6 +96,58 @@ Public Module URL
                          Optional headers As list = Nothing,
                          Optional env As Environment = Nothing) As String
 
+
+
+    End Function
+
+    ''' <summary>
+    ''' upload files through http post
+    ''' </summary>
+    ''' <param name="url">the target network location.</param>
+    ''' <param name="files">a list of file path for upload to the specific network location.</param>
+    ''' <param name="headers">set cookies or other http headers at here.</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("upload")>
+    Public Function upload(url As String,
+                           <RRawVectorArgument> files As Object,
+                           Optional headers As list = Nothing,
+                           Optional env As Environment = Nothing) As Object
+
+        Using http As New MultipartForm()
+            If files Is Nothing Then
+                Return Internal.debug.stop("the required file list can not be nothing!", env)
+            End If
+
+            If TypeOf files Is vector Then
+                With DirectCast(files, vector)
+                    If .getNames.IsNullOrEmpty Then
+                        files = REnv.asVector(Of String)(.data)
+                        GoTo uploadbyfiles
+                    Else
+                        Dim filepath As String
+
+                        For Each name As String In .getNames
+                            filepath = Scripting.ToString(REnv.single(.getByName(name)))
+                            http.Add(name, filepath.ReadBinary, filepath.FileName)
+                        Next
+                    End If
+                End With
+            ElseIf TypeOf files Is String() Then
+uploadbyfiles:
+                For Each file As String In DirectCast(files, String())
+                    Call http.Add(file.FileName, file.ReadBinary, file.FileName)
+                Next
+            ElseIf TypeOf files Is list Then
+                For Each file In DirectCast(files, list).AsGeneric(Of String)(env)
+                    Call http.Add(file.Key, file.Value.ReadBinary, file.Value.FileName)
+                Next
+            Else
+                Return Message.InCompatibleType(GetType(String), files.GetType, env)
+            End If
+
+            Return http.POST(url, headers?.AsGeneric(Of String)(env))
+        End Using
     End Function
 
     ''' <summary>
