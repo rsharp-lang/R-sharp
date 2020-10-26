@@ -57,8 +57,14 @@ Public Module URL
     Public Function [get](url As String,
                           Optional params As list = Nothing,
                           Optional headers As list = Nothing,
-                          Optional env As Environment = Nothing) As String
-        Return url.GET
+                          Optional env As Environment = Nothing) As WebResponseResult
+
+        Dim httpHeaders As Dictionary(Of String, String) = headers.AsGeneric(Of String)(env)
+        Dim verbose As Boolean = env.globalEnvironment.options.verbose
+
+        Return HttpGet _
+            .BuildWebRequest(url, httpHeaders, Nothing, Nothing) _
+            .urlGet(echo:=verbose)
     End Function
 
     <ExportAPI("requests.post")>
