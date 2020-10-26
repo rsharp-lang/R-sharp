@@ -58,7 +58,6 @@ Public Module URL
 
     <ExportAPI("requests.get")>
     Public Function [get](url As String,
-                          Optional params As list = Nothing,
                           Optional headers As list = Nothing,
                           Optional env As Environment = Nothing) As WebResponseResult
 
@@ -94,10 +93,12 @@ Public Module URL
     Public Function post(url As String,
                          Optional params As list = Nothing,
                          Optional headers As list = Nothing,
-                         Optional env As Environment = Nothing) As String
+                         Optional env As Environment = Nothing) As WebResponseResult
 
+        Dim httpHeaders As Dictionary(Of String, String) = headers?.AsGeneric(Of String)(env)
+        Dim verbose As Boolean = env.globalEnvironment.options.verbose
 
-
+        Return WebServiceUtils.PostRequest(url, params?.AsGeneric(Of String)(env))
     End Function
 
     ''' <summary>
