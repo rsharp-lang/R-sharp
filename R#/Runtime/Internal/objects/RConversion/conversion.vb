@@ -657,13 +657,19 @@ RE0:
             Dim chunk As Byte()
             Dim needReverse As Boolean = BitConverter.IsLittleEndian AndAlso networkByteOrder
             Dim isNumeric As Boolean
+            Dim all As Object() = pipeline.TryCreatePipeline(Of Object)(obj, env).populates(Of Object)(env).ToArray
 
-            For Each item As Object In pipeline.TryCreatePipeline(Of Object)(obj, env).populates(Of Object)(env)
+            For Each item As Object In all
                 isNumeric = True
 
                 Select Case item.GetType
                     Case GetType(String)
-                        chunk = (encoder.GetBytes(DirectCast(item, String)).AsList + CByte(0)).ToArray
+                        If all.Length > 1 Then
+                            chunk = (encoder.GetBytes(DirectCast(item, String)).AsList + CByte(0)).ToArray
+                        Else
+                            chunk = (encoder.GetBytes(DirectCast(item, String)))
+                        End If
+
                         isNumeric = False
                     Case GetType(Integer)
                         chunk = BitConverter.GetBytes(DirectCast(item, Integer))

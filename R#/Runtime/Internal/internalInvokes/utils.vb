@@ -1,45 +1,45 @@
 ﻿#Region "Microsoft.VisualBasic::c28f89b3c7006edfa30d3bc0ffa41a74, R#\Runtime\Internal\internalInvokes\utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module utils
-    ' 
-    '         Function: GetInstalledPackages, head, installPackages, keyGroups, memorySize
-    '                   system, wget
-    ' 
-    '         Sub: cls, sleep
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module utils
+' 
+'         Function: GetInstalledPackages, head, installPackages, keyGroups, memorySize
+'                   system, wget
+' 
+'         Sub: cls, sleep
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -54,6 +54,11 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Package
 Imports RPkg = SMRUCC.Rsharp.System.Package.Package
+Imports REnv = SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
+Imports SMRUCC.Rsharp.Runtime.Components
+Imports System.IO
+Imports Microsoft.VisualBasic.SecurityString
 
 Namespace Runtime.Internal.Invokes
 
@@ -459,6 +464,34 @@ Namespace Runtime.Internal.Invokes
                                Optional invisible As Boolean = True,
                                Optional timeout As Double = 0) As Integer
             Throw New NotImplementedException
+        End Function
+
+        <ExportAPI("md5")>
+        Public Function md5(<RRawVectorArgument> data As Object, Optional env As Environment = Nothing) As Object
+            If data Is Nothing Then
+                Return Nothing
+            End If
+
+            If TypeOf data Is String() Then
+                Return DirectCast(data, String()) _
+                    .Select(Function(str) str.MD5) _
+                    .ToArray
+            ElseIf TypeOf data Is vector Then
+                Return REnv.asVector(Of String)(DirectCast(data, vector).data) _
+                    .AsObjectEnumerator(Of String) _
+                    .Select(Function(str) str.MD5) _
+                    .ToArray
+            Else
+                data = RConversion.asRaw(data, ,, env)
+
+                If Not TypeOf data Is Message Then
+                    Return data
+                Else
+                    Using buffer As MemoryStream = DirectCast(data, MemoryStream), md5hash As New Md5HashProvider
+                        Return md5hash.GetMd5Hash(buffer.ToArray)
+                    End Using
+                End If
+            End If
         End Function
     End Module
 End Namespace
