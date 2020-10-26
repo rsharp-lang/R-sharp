@@ -472,7 +472,9 @@ Namespace Runtime.Internal.Invokes
                 Return Nothing
             End If
 
-            If TypeOf data Is String() Then
+            If TypeOf data Is String Then
+                Return DirectCast(data, String).MD5
+            ElseIf TypeOf data Is String() Then
                 Return DirectCast(data, String()) _
                     .Select(Function(str) str.MD5) _
                     .ToArray
