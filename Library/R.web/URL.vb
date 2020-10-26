@@ -101,6 +101,11 @@ Public Module URL
         Return WebServiceUtils.PostRequest(url, params?.AsGeneric(Of String)(env))
     End Function
 
+    <ExportAPI("content")>
+    Public Function content(data As WebResponseResult) As String
+        Return data?.html
+    End Function
+
     ''' <summary>
     ''' upload files through http post
     ''' </summary>

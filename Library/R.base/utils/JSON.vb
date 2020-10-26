@@ -14,6 +14,17 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 <Package("JSON", Category:=APICategories.UtilityTools, Publisher:="i@xieguigang.me")>
 Module JSON
 
+    ''' <summary>
+    ''' a short cut method of ``parseJSON`` 
+    ''' </summary>
+    ''' <param name="str"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("json_decode")>
+    Public Function json_decode(str As String, Optional env As Environment = Nothing) As Object
+        Return fromJSON(str, raw:=False, env:=env)
+    End Function
+
     <ExportAPI("parseJSON")>
     Public Function fromJSON(str As String, Optional raw As Boolean = False, Optional env As Environment = Nothing) As Object
         Dim rawElement As JsonElement = New JsonParser().OpenJSON(str)
