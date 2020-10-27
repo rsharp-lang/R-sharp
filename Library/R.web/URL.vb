@@ -40,16 +40,16 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.Scripting.MetaData
-Imports Microsoft.VisualBasic.Net
-Imports SMRUCC.Rsharp.Runtime.Interop
-Imports SMRUCC.Rsharp.Runtime
-Imports SMRUCC.Rsharp.Runtime.Internal.Object
-Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
-Imports Microsoft.VisualBasic.Net.Http
-Imports SMRUCC.Rsharp.Runtime.Components
-Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Net
+Imports Microsoft.VisualBasic.Net.Http
+Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Interop
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
 ''' the R# http utils
@@ -57,6 +57,33 @@ Imports Microsoft.VisualBasic.Linq
 <Package("http", Category:=APICategories.UtilityTools)>
 Public Module URL
 
+    ''' <summary>
+    ''' ### URL-encodes string
+    ''' 
+    ''' This function is convenient when encoding a string to be 
+    ''' used in a query part of a URL, as a convenient way to 
+    ''' pass variables to the next page.
+    ''' </summary>
+    ''' <param name="data">The string to be encoded.</param>
+    ''' <param name="env"></param>
+    ''' <returns>
+    ''' Returns a string in which all non-alphanumeric characters except ``-_.`` 
+    ''' have been replaced with a percent (%) sign followed by two hex digits and 
+    ''' spaces encoded as plus (+) signs. It is encoded the same way that the 
+    ''' posted data from a WWW form is encoded, that is the same way as in 
+    ''' ``application/x-www-form-urlencoded`` media type. This differs from the 
+    ''' RFC 3986 encoding (see rawurlencode()) in that for historical reasons, 
+    ''' spaces are encoded as plus (+) signs.
+    ''' </returns>
+    ''' <remarks>
+    ''' Be careful about variables that may match HTML entities. Things like 
+    ''' ``&amp;amp``, ``&amp;copy`` and ``&amp;pound`` are parsed by the browser and 
+    ''' the actual entity is used instead of the desired variable name. 
+    ''' 
+    ''' This is an obvious hassle that the W3C has been telling people about for 
+    ''' years. The reference is here: 
+    ''' http://www.w3.org/TR/html4/appendix/notes.html#h-B.2.2.
+    ''' </remarks>
     <ExportAPI("urlencode")>
     <RApiReturn(GetType(String))>
     Public Function urlencode(<RRawVectorArgument> data As Object, Optional env As Environment = Nothing) As Object
@@ -75,6 +102,13 @@ Public Module URL
         End If
     End Function
 
+    ''' <summary>
+    ''' http get request
+    ''' </summary>
+    ''' <param name="url"></param>
+    ''' <param name="headers"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("requests.get")>
     Public Function [get](url As String,
                           Optional headers As list = Nothing,
@@ -88,6 +122,11 @@ Public Module URL
             .UrlGet(echo:=verbose)
     End Function
 
+    ''' <summary>
+    ''' parse cookies data from the http web request result
+    ''' </summary>
+    ''' <param name="data"></param>
+    ''' <returns></returns>
     <ExportAPI("cookies")>
     Public Function HttpCookies(data As WebResponseResult) As list
         Dim cookieStr As String = data.headers.TryGetValue(HttpHeaderName.SetCookie)
@@ -120,6 +159,11 @@ Public Module URL
         Return WebServiceUtils.PostRequest(url, params?.AsGeneric(Of String)(env))
     End Function
 
+    ''' <summary>
+    ''' get content string from the http request result
+    ''' </summary>
+    ''' <param name="data"></param>
+    ''' <returns></returns>
     <ExportAPI("content")>
     Public Function content(data As WebResponseResult) As String
         Return data?.html
