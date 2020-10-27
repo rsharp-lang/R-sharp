@@ -49,12 +49,31 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports Microsoft.VisualBasic.Net.Http
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports Microsoft.VisualBasic.Linq
 
 ''' <summary>
 ''' the R# http utils
 ''' </summary>
 <Package("http", Category:=APICategories.UtilityTools)>
 Public Module URL
+
+    <ExportAPI("urlencode")>
+    <RApiReturn(GetType(String))>
+    Public Function urlencode(<RRawVectorArgument> data As Object, Optional env As Environment = Nothing) As Object
+        If data Is Nothing Then
+            Return Nothing
+        ElseIf TypeOf data Is String Then
+            Return DirectCast(data, String).UrlEncode
+        ElseIf TypeOf data Is String() Then
+            Return DirectCast(data, String()).Select(Function(str) str.UrlEncode).ToArray
+        ElseIf TypeOf data Is vector Then
+            Return DirectCast(data, vector).data.AsObjectEnumerator(Of String).Select(Function(str) str.UrlEncode).ToArray
+        ElseIf TypeOf data Is list Then
+            Return DirectCast(data, list).AsGeneric(Of String)(env).BuildUrlData(escaping:=True, stripNull:=False)
+        Else
+            Return Message.InCompatibleType(GetType(String), data.GetType, env)
+        End If
+    End Function
 
     <ExportAPI("requests.get")>
     Public Function [get](url As String,
