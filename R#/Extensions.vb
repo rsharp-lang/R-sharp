@@ -42,7 +42,6 @@
 
 Imports System.Runtime.CompilerServices
 Imports System.Text
-Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime
@@ -133,6 +132,15 @@ Public Module Extensions
         Return cols
     End Function
 
+    ''' <summary>
+    ''' 一个R对象通用的求值框架函数
+    ''' </summary>
+    ''' <typeparam name="T">输入的元素类型</typeparam>
+    ''' <typeparam name="TOut">输出的元素类型</typeparam>
+    ''' <param name="env"></param>
+    ''' <param name="x">输入的数据源</param>
+    ''' <param name="eval">求值函数</param>
+    ''' <returns></returns>
     <Extension>
     Public Function EvaluateFramework(Of T, TOut)(env As Environment, x As Object, eval As Func(Of T, TOut)) As Object
         If x Is Nothing Then

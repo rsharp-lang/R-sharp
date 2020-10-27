@@ -600,6 +600,46 @@ Namespace Runtime.Internal.Invokes
             Call vec.setNames(values.Keys, env)
             Return vec
         End Function
+
+        ''' <summary>
+        ''' ### Character Translation and Casefolding
+        ''' 
+        ''' Translate characters in character vectors, in particular 
+        ''' from upper to lower case or vice versa.
+        ''' </summary>
+        ''' <param name="x">
+        ''' a character vector, or an object that can be coerced to character by 
+        ''' ``as.character``.
+        ''' </param>
+        ''' <returns>
+        ''' A character vector of the same length and with the same attributes as 
+        ''' ``x`` (after possible coercion).
+        ''' 
+        ''' Elements of the result will be have the encoding declared as that of 
+        ''' the current locale (see Encoding) if the corresponding input had a 
+        ''' declared encoding And the current locale Is either Latin-1 Or UTF-8. 
+        ''' The result will be in the current locale's encoding unless the 
+        ''' corresponding input was in UTF-8, when it will be in UTF-8 when the 
+        ''' system has Unicode wide characters.
+        ''' </returns>
+        ''' <remarks>
+        ''' chartr translates each character in x that is specified in old 
+        ''' to the corresponding character specified in new. Ranges are 
+        ''' supported in the specifications, but character classes and 
+        ''' repeated characters are not. If old contains more characters than 
+        ''' new, an error is signaled; if it contains fewer characters, the 
+        ''' extra characters at the end of new are ignored.
+        ''' 
+        ''' ``tolower`` And ``toupper`` convert upper-case characters in a 
+        ''' character vector to lower-case, Or vice versa. Non-alphabetic 
+        ''' characters are left unchanged.
+        ''' </remarks>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <ExportAPI("tolower")>
+        Public Function tolower(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+            Return env.EvaluateFramework(Of String, String)(x, AddressOf VBStr.LCase)
+        End Function
     End Module
 
     Public Enum str_padSides
