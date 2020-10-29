@@ -1,4 +1,4 @@
-# igraph
+﻿# igraph
 
 package or create network graph and do network analysis.
 
@@ -16,8 +16,8 @@ package or create network graph and do network analysis.
 + [add.edges](igraph/add.edges.1) Add edges by a given node label tuple list
 + [getElementByID](igraph/getElementByID.1) get node elements by given id
 + [set_group](igraph/set_group.1) Make node groups by given type name
-+ [vertex](igraph/vertex.1) 
-+ [edges](igraph/edges.1) 
++ [vertex](igraph/vertex.1) get all nodes in the given graph model
++ [edges](igraph/edges.1) get all edges in the given graph model
 + [attributes](igraph/attributes.1) 
 + [select](igraph/select.1) Node select by group or other condition
 + [decompose](igraph/decompose.1) Decompose a graph into components, Creates a separate graph for each component of a graph.
