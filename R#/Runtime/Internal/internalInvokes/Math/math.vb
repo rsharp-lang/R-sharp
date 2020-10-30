@@ -405,5 +405,9 @@ Namespace Runtime.Internal.Invokes
                 evalFUNC = New Evaluate(Of Object)(AddressOf DirectCast(eval, Func(Of Object, Double)).Invoke)
             End If
         End Function
+
+        Public Function var(x As Object, Optional y As Object = Nothing, Optional na_rm As Boolean = False, Optional use As  ) As Object
+
+        End Function
     End Module
 End Namespace
