@@ -51,8 +51,9 @@ Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.Correlations
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports stdNum = System.Math
 Imports randf = Microsoft.VisualBasic.Math.RandomExtensions
+Imports REnv = SMRUCC.Rsharp.Runtime
+Imports stdNum = System.Math
 
 Namespace Runtime.Internal.Invokes
 
@@ -406,7 +407,47 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
-        Public Function var(x As Object, Optional y As Object = Nothing, Optional na_rm As Boolean = False, Optional use As  ) As Object
+        ''' <summary>
+        ''' ### Correlation, Variance and Covariance (Matrices)
+        ''' 
+        ''' var, cov and cor compute the variance of x and the covariance or 
+        ''' correlation of x and y if these are vectors. If x and y are 
+        ''' matrices then the covariances (or correlations) between the columns 
+        ''' of x and the columns of y are computed.
+        ''' </summary>
+        ''' <param name="x">a numeric vector, matrix or data frame.</param>
+        ''' <param name="y">
+        ''' NULL (default) or a vector, matrix or data frame with compatible dimensions to x. 
+        ''' The default is equivalent to y = x (but more efficient).
+        ''' </param>
+        ''' <param name="na_rm">logical. Should missing values be removed?</param>
+        ''' <param name="use">
+        ''' an optional character string giving a method for computing covariances 
+        ''' in the presence of missing values. This must be (an abbreviation of) 
+        ''' one of the strings "everything", "all.obs", "complete.obs", "na.or.complete", 
+        ''' or "pairwise.complete.obs".</param>
+        ''' <returns></returns>
+        <ExportAPI("var")>
+        Public Function var(<RRawVectorArgument> x As Object,
+                            <RRawVectorArgument>
+                            Optional y As Object = Nothing,
+                            Optional na_rm As Boolean = False,
+                            Optional use As varUseMethods = varUseMethods.everything) As Object
+
+            Dim vx As Double() = REnv.asVector(Of Double)(x)
+            Dim vy As Double()
+
+            If y Is Nothing Then
+                vy = vx
+            Else
+                vy = REnv.asVector(Of Double)(y)
+            End If
+
+            If na_rm Then
+                vx = vx.Where(Function(xi) Not xi.IsNaNImaginary).ToArray
+                vy = vy.Where(Function(yi) Not yi.IsNaNImaginary).ToArray
+            End If
+
 
         End Function
     End Module

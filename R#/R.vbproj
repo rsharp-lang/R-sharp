@@ -659,6 +659,7 @@
     <Compile Include="Interpreter\ExecuteEngine\Expression.vb" />
     <Compile Include="Runtime\Environment\OutputEnvironments.vb" />
     <Compile Include="Runtime\Environment\RContentOutput.vb" />
+    <Compile Include="Runtime\Internal\internalInvokes\Math\varUseMethods.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\reflections.vb" />
     <Compile Include="Runtime\Interop\CType\ICType.vb" />
     <Compile Include="System\Components\Encoder.vb" />
