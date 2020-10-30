@@ -306,6 +306,8 @@ Namespace Language.TokenIcer
                 Return New Token With {.name = TokenType.comma, .text = ","}
             ElseIf c = ";"c Then
                 Return New Token With {.name = TokenType.terminator, .text = ";"}
+            ElseIf c = "~"c Then
+                Return New Token With {.name = TokenType.formula, .text = "~"}
             ElseIf c = "?"c Then
                 Return New Token With {.name = TokenType.iif, .text = "?"}
             ElseIf c = ":"c Then

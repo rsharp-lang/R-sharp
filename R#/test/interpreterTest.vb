@@ -75,6 +75,9 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+        Call formulaTest()
+
+
         Call strictTest()
 
         Call whileTest()
@@ -183,6 +186,12 @@ Module interpreterTest
 
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub formulaTest()
+        Call R.Print("y ~ x + b")
 
         Pause()
     End Sub
