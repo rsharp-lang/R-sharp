@@ -94,6 +94,7 @@ Namespace Runtime.Internal.ConsolePrinter
             RtoString(GetType(unit)) = Function(o) DirectCast(o, unit).ToString
             RtoString(GetType(RSessionInfo)) = Function(o) o.ToString
             RtoString(GetType(MemoryStream)) = AddressOf printStream
+            RtoString(GetType(FormulaExpression)) = Function(f) f.ToString
 
             ' Rscript expression to string
             RtoString(GetType(Literal)) = Function(o) DirectCast(o, Literal).ToString

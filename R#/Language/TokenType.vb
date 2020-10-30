@@ -68,11 +68,6 @@ Namespace Language
         ''' </summary>
         annotation
 
-        ''' <summary>
-        ''' ~
-        ''' </summary>
-        formula
-
         identifier
         ''' <summary>
         ''' 必须要使用``;``作为表达式的结束分隔符

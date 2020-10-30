@@ -21,8 +21,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         ''' </summary>
         Public ReadOnly Property formula As Expression
 
-        Sub New()
-
+        Sub New(y As String, formula As Expression)
+            Me.var = y
+            Me.formula = formula
         End Sub
 
         ''' <summary>
