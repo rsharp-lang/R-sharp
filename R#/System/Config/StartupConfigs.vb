@@ -49,7 +49,7 @@ Namespace System.Configuration
         Public Property loadingPackages As String()
 
         Public Shared Function DefaultLoadingPackages() As String()
-            Return {"base", "utils", "grDevices", "stats"}
+            Return {"base", "utils", "grDevices", "stats", "math"}
         End Function
 
     End Class

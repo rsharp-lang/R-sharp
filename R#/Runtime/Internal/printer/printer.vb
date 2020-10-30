@@ -63,6 +63,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Internal.Object.Utils
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Components
 Imports SMRUCC.Rsharp.System.Configuration
@@ -94,6 +95,7 @@ Namespace Runtime.Internal.ConsolePrinter
             RtoString(GetType(unit)) = Function(o) DirectCast(o, unit).ToString
             RtoString(GetType(RSessionInfo)) = Function(o) o.ToString
             RtoString(GetType(MemoryStream)) = AddressOf printStream
+            RtoString(GetType(FormulaExpression)) = Function(f) f.ToString
 
             ' Rscript expression to string
             RtoString(GetType(Literal)) = Function(o) DirectCast(o, Literal).ToString
@@ -215,8 +217,8 @@ Namespace Runtime.Internal.ConsolePrinter
                                 DirectCast(list, IDictionary).printList(listPrefix, maxPrint, env)
                             End Sub)
             ElseIf valueType Is GetType(dataframe) Then
-                Call DirectCast(x, dataframe) _
-                    .GetTable(env) _
+                Call TableFormatter _
+                    .GetTable(DirectCast(x, dataframe), env) _
                     .Print(addBorder:=False) _
                     .DoCall(AddressOf output.WriteLine)
             ElseIf valueType Is GetType(vbObject) Then

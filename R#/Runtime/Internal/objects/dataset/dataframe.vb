@@ -1,58 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::4b32d40a13cc8dc398c5213fdbd61dda, R#\Runtime\Internal\objects\dataset\dataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class dataframe
-    ' 
-    '         Properties: columns, ncols, nrows, rownames
-    ' 
-    '         Function: CreateDataFrame, forEachRow, GetByRowIndex, (+2 Overloads) getColumnVector, getKeyByIndex
-    '                   getNames, getRowIndex, getRowList, getRowNames, GetTable
-    '                   hasName, projectByColumn, setNames, sliceByRow, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class dataframe
+' 
+'         Properties: columns, ncols, nrows, rownames
+' 
+'         Function: CreateDataFrame, forEachRow, GetByRowIndex, (+2 Overloads) getColumnVector, getKeyByIndex
+'                   getNames, getRowIndex, getRowList, getRowNames, GetTable
+'                   hasName, projectByColumn, setNames, sliceByRow, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Reflection
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.Serialization
-Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
-Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Object
 
@@ -70,6 +69,7 @@ Namespace Runtime.Internal.Object
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property nrows As Integer
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
                 Return Aggregate col As Array
                        In columns.Values
@@ -79,6 +79,7 @@ Namespace Runtime.Internal.Object
         End Property
 
         Public ReadOnly Property ncols As Integer
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
                 Return columns.Count
             End Get
@@ -99,16 +100,24 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function getKeyByIndex(index As Integer) As String
             Return columns.Keys.ElementAtOrDefault(index - 1)
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function getColumnVector(index As Integer) As Array
             Return getColumnVector(getKeyByIndex(index))
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function getVector(Of T)(name As String) As T()
+            Return REnv.asVector(Of T)(columns(name))
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function ToString() As String
-            Return $"[{nrows}, {ncols}] {columns.Keys.GetJson}"
+            Return $"[{nrows}x{ncols}] ['{columns.Keys.JoinBy("', '")}']"
         End Function
 
         ''' <summary>
@@ -283,59 +292,6 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
-        ''' <summary>
-        ''' Each element in a return result array is a row in table matrix
-        ''' </summary>
-        ''' <returns></returns>
-        Public Function GetTable(env As GlobalEnvironment, Optional printContent As Boolean = True, Optional showRowNames As Boolean = True) As String()()
-            Dim table As String()() = New String(nrows)() {}
-            Dim rIndex As Integer
-            Dim colNames$() = columns.Keys.ToArray
-            Dim col As Array
-            Dim row As String() = {""}.Join(colNames)
-            Dim rownames = getRowNames()
-
-            If showRowNames Then
-                table(Scan0) = row.ToArray
-            Else
-                table(Scan0) = row.Skip(1).ToArray
-            End If
-
-            Dim elementTypes As Type() = colNames _
-                .Select(Function(key)
-                            Return columns(key).GetType.GetElementType
-                        End Function) _
-                .ToArray
-            Dim formatters As IStringBuilder() = elementTypes _
-                .Select(Function(type)
-                            Return printer.ToString(type, env, printContent)
-                        End Function) _
-                .ToArray
-
-            For i As Integer = 1 To table.Length - 1
-                rIndex = i - 1
-                row(Scan0) = rownames(rIndex)
-
-                For j As Integer = 0 To columns.Count - 1
-                    col = columns(colNames(j))
-
-                    If col.Length = 1 Then
-                        row(j + 1) = formatters(j)(col.GetValue(Scan0))
-                    Else
-                        row(j + 1) = formatters(j)(col.GetValue(rIndex))
-                    End If
-                Next
-
-                If showRowNames Then
-                    table(i) = row.ToArray
-                Else
-                    table(i) = row.Skip(1).ToArray
-                End If
-            Next
-
-            Return table
-        End Function
-
         Public Shared Function CreateDataFrame(Of T)(data As IEnumerable(Of T)) As dataframe
             Dim vec As T() = data.ToArray
             Dim type As Type = GetType(T)
@@ -379,6 +335,7 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function hasName(name As String) As Boolean Implements RNames.hasName
             Return columns.ContainsKey(name)
         End Function
@@ -387,6 +344,8 @@ Namespace Runtime.Internal.Object
         ''' get column names
         ''' </summary>
         ''' <returns></returns>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function getNames() As String() Implements IReflector.getNames
             Return columns.Keys.ToArray
         End Function

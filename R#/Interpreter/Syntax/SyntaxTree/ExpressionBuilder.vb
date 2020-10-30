@@ -170,6 +170,8 @@ Namespace Interpreter.SyntaxParser
 
                     If opText = "=" OrElse opText = "<-" Then
                         Return SyntaxImplements.ValueAssign(code, opts)
+                    ElseIf opText = "~" Then
+                        Return SyntaxImplements.FormulaExpressionSyntax.RunParse(code, opts)
                     End If
                 ElseIf code = 2 Then
                     Dim result = parseInvoke(code, opts)

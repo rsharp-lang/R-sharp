@@ -54,6 +54,7 @@ Imports Microsoft.VisualBasic.Math.Distributions.BinBox
 Imports Microsoft.VisualBasic.Math.LinearAlgebra
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
@@ -72,11 +73,17 @@ Module math
     Sub New()
         REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(ODEsOut), AddressOf create_deSolve_DataFrame)
 
+        REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of FitResult)(AddressOf printLinearFit)
+        REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of WeightedFit)(AddressOf printLinearFit)
         REnv.Internal.generic.add("summary", GetType(FitResult), AddressOf summaryFit)
     End Sub
 
     Private Function summaryFit(x As Object, args As list, env As Environment) As Object
 
+    End Function
+
+    Private Function printLinearFit(fit As Object) As String
+        Return fit.ToString
     End Function
 
     Private Function create_deSolve_DataFrame(x As ODEsOut, args As list, env As Environment) As dataframe
@@ -208,21 +215,75 @@ Module math
     End Function
 
     ''' <summary>
-    ''' do linear modelling
+    ''' ### Fitting Linear Models
+    ''' 
+    ''' do linear modelling, lm is used to fit linear models. It can be used to carry out regression, 
+    ''' single stratum analysis of variance and analysis of covariance (although aov may provide a 
+    ''' more convenient interface for these).
     ''' </summary>
-    ''' <param name="formula"></param>
+    ''' <param name="formula">a formula expression of the target expression</param>
     ''' <param name="data">A dataframe for provides the data source for doing the linear modelling.</param>
-    ''' <param name="weights">A numeric vector for provides weight value for the points in the linear modelling processing.</param>
+    ''' <param name="weights">
+    ''' A numeric vector for provides weight value for the points in the linear modelling processing.
+    ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("lm")>
-    Public Function lm(formula As Object, data As Object,
+    Public Function lm(formula As FormulaExpression, data As Object,
                        <RRawVectorArgument>
                        Optional weights As Object = Nothing,
                        Optional env As Environment = Nothing) As Object
 
-        If Not base.isEmpty(weights) Then
+        Dim df As dataframe
 
+        If data Is Nothing Then
+            Return Internal.debug.stop({"the required data can not be nothing!"}, env)
+        ElseIf TypeOf data Is dataframe Then
+            df = DirectCast(data, dataframe)
+
+            If Not df.columns.ContainsKey(formula.var) Then
+                Return Internal.debug.stop({
+                    $"missing the required symbol '{formula.var}' in your input data!",
+                    $"symbol: {formula.var}",
+                    $"formula: {formula}"
+                }, env)
+            End If
+        Else
+            Return Message.InCompatibleType(GetType(dataframe), data.GetType, env)
+        End If
+
+        Dim w As Double()
+
+        If Not base.isEmpty(weights) Then
+            w = REnv.asVector(Of Double)(weights)
+        Else
+            w = Nothing
+        End If
+
+        If TypeOf formula.formula Is SymbolReference Then
+            ' y ~ x
+            Dim x As Double() = df.getVector(Of Double)(DirectCast(formula.formula, SymbolReference).symbol)
+            Dim y As Double() = df.getVector(Of Double)(formula.var)
+
+            If w.IsNullOrEmpty Then
+                Return LeastSquares.LinearFit(x, y)
+            Else
+                Return WeightedLinearRegression.Regress(x, y, w)
+            End If
+        Else
+            Dim symbol As Object = formula.GetSymbols(env)
+
+            If TypeOf symbol Is Message Then
+                Return symbol
+            End If
+
+            Dim columns As New List(Of Double())
+
+            For Each colName As String In DirectCast(symbol, String())
+                Call columns.Add(df.getVector(Of Double)(colName))
+            Next
+
+            Throw New NotImplementedException
         End If
 
         Throw New NotImplementedException
