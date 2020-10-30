@@ -74,9 +74,10 @@ Module math
         REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(ODEsOut), AddressOf create_deSolve_DataFrame)
 
         REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of FitResult)(AddressOf printLinearFit)
+        REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of WeightedFit)(AddressOf printLinearFit)
     End Sub
 
-    Private Function printLinearFit(fit As FitResult) As String
+    Private Function printLinearFit(fit As Object) As String
         Return fit.ToString
     End Function
 
