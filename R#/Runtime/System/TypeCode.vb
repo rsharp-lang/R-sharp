@@ -69,6 +69,7 @@ Namespace Runtime.Components
         ''' Object reference
         ''' </summary>
         [ref]
+        [formula]
 
 #Region "PrimitiveTypes"
 

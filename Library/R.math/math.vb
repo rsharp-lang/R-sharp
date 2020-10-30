@@ -203,7 +203,7 @@ Module math
     ''' <summary>
     ''' do linear modelling
     ''' </summary>
-    ''' <param name="formula"></param>
+    ''' <param name="formula">a formula expression of the target expression</param>
     ''' <param name="data">A dataframe for provides the data source for doing the linear modelling.</param>
     ''' <param name="weights">A numeric vector for provides weight value for the points in the linear modelling processing.</param>
     ''' <param name="env"></param>
