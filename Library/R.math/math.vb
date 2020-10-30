@@ -202,11 +202,17 @@ Module math
     End Function
 
     ''' <summary>
-    ''' do linear modelling
+    ''' ### Fitting Linear Models
+    ''' 
+    ''' do linear modelling, lm is used to fit linear models. It can be used to carry out regression, 
+    ''' single stratum analysis of variance and analysis of covariance (although aov may provide a 
+    ''' more convenient interface for these).
     ''' </summary>
     ''' <param name="formula">a formula expression of the target expression</param>
     ''' <param name="data">A dataframe for provides the data source for doing the linear modelling.</param>
-    ''' <param name="weights">A numeric vector for provides weight value for the points in the linear modelling processing.</param>
+    ''' <param name="weights">
+    ''' A numeric vector for provides weight value for the points in the linear modelling processing.
+    ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("lm")>
@@ -214,6 +220,20 @@ Module math
                        <RRawVectorArgument>
                        Optional weights As Object = Nothing,
                        Optional env As Environment = Nothing) As Object
+
+        If data Is Nothing Then
+            Return Internal.debug.stop({"the required data can not be nothing!"}, env)
+        ElseIf TypeOf data Is dataframe Then
+            Dim df As dataframe = DirectCast(data, dataframe)
+
+            If Not df.columns.ContainsKey(formula.var) Then
+                Return Internal.debug.stop({
+                    $"missing the required symbol '{formula.var}' in your input data!",
+                    $"symbol: {formula.var}",
+                    $"formula: {formula}"
+                }, env)
+            End If
+        End If
 
         If Not base.isEmpty(weights) Then
 

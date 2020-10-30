@@ -108,7 +108,7 @@ Namespace Runtime.Internal.Object
         End Function
 
         Public Overrides Function ToString() As String
-            Return $"[{nrows}, {ncols}] {columns.Keys.GetJson}"
+            Return $"[{nrows}x{ncols}] ['{columns.Keys.JoinBy("', '")}']"
         End Function
 
         ''' <summary>
