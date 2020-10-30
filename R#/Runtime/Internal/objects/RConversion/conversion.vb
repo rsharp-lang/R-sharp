@@ -594,34 +594,78 @@ RE0:
             End If
         End Function
 
+        ''' <summary>
+        ''' ### Character Vectors
+        ''' 
+        ''' Create or test for objects of type "character".
+        ''' </summary>
+        ''' <param name="x">object to be coerced or tested.</param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' as.character attempts to coerce its argument to character type; 
+        ''' like as.vector it strips attributes including names. For lists 
+        ''' and pairlists (including language objects such as calls) it deparses 
+        ''' the elements individually, except that it extracts the first element 
+        ''' of length-one character vectors.
+        ''' </returns>
+        ''' <remarks>
+        ''' as.character and is.character are generic: you can write methods 
+        ''' to handle specific classes of objects, see InternalMethods. 
+        ''' Further, for as.character the default method calls as.vector, 
+        ''' so dispatch is first on methods for as.character and then for methods 
+        ''' for as.vector.
+        '''
+        ''' as.character represents real And complex numbers to 15 significant 
+        ''' digits (technically the compiler's setting of the ISO C constant 
+        ''' DBL_DIG, which will be 15 on machines supporting IEC60559 arithmetic 
+        ''' according to the C99 standard). This ensures that all the digits in 
+        ''' the result will be reliable (and not the result of representation 
+        ''' error), but does mean that conversion to character and back to numeric 
+        ''' may change the number. If you want to convert numbers to character 
+        ''' with the maximum possible precision, use format.
+        ''' </remarks>
         <ExportAPI("as.character")>
         <RApiReturn(GetType(String))>
-        Public Function asCharacters(<RRawVectorArgument> obj As Object, Optional env As Environment = Nothing) As Object
-            If obj Is Nothing Then
+        Public Function asCharacters(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+            If x Is Nothing Then
                 Return Nothing
-            ElseIf obj.GetType.ImplementInterface(GetType(IDictionary)) Then
-                Return Runtime.CTypeOfList(Of String)(obj, env)
+            ElseIf x.GetType.ImplementInterface(GetType(IDictionary)) Then
+                Return Runtime.CTypeOfList(Of String)(x, env)
             Else
-                Return Runtime.asVector(Of String)(obj)
+                Return Runtime.asVector(Of String)(x)
             End If
         End Function
 
+        ''' <summary>
+        ''' ### Character Vectors
+        ''' 
+        ''' Create or test for objects of type "character".
+        ''' </summary>
+        ''' <param name="x">object to be coerced or tested.</param>
+        ''' <returns>is.character returns TRUE or FALSE depending on 
+        ''' whether its argument is of character type or not.
+        ''' </returns>
         <ExportAPI("is.character")>
-        Public Function isCharacter(<RRawVectorArgument> obj As Object) As Boolean
-            If obj Is Nothing Then
+        Public Function isCharacter(<RRawVectorArgument> x As Object) As Boolean
+            If x Is Nothing Then
                 Return False
-            ElseIf obj.GetType Is GetType(vector) Then
-                obj = DirectCast(obj, vector).data
-            ElseIf obj.GetType Is GetType(list) Then
+            ElseIf x.GetType Is GetType(vector) Then
+                x = DirectCast(x, vector).data
+            ElseIf x.GetType Is GetType(list) Then
                 ' 只判断list的value
-                obj = DirectCast(obj, list).slots.Values.ToArray
-            ElseIf obj.GetType.ImplementInterface(GetType(IDictionary)) Then
-                obj = DirectCast(obj, IDictionary).Values.AsSet.ToArray
+                x = DirectCast(x, list).slots.Values.ToArray
+            ElseIf x.GetType.ImplementInterface(GetType(IDictionary)) Then
+                x = DirectCast(x, IDictionary).Values.AsSet.ToArray
             End If
 
-            If obj.GetType Like RType.characters Then
+            If x.GetType Like RType.characters Then
                 Return True
-            ElseIf obj.GetType.IsArray AndAlso DirectCast(obj, Array).AsObjectEnumerator.All(Function(x) x.GetType Like RType.characters) Then
+            ElseIf x.GetType.IsArray AndAlso DirectCast(x, Array) _
+                .AsObjectEnumerator _
+                .All(Function(xi)
+                         Return xi.GetType Like RType.characters
+                     End Function) Then
+
                 Return True
             Else
                 Return False
