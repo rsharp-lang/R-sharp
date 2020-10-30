@@ -42,6 +42,7 @@
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Data.Bootstrapping
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math.Calculus
@@ -239,14 +240,38 @@ Module math
             Return Message.InCompatibleType(GetType(dataframe), data.GetType, env)
         End If
 
-        If TypeOf formula.formula Is SymbolReference Then
-            ' y ~ x
-            Dim x As Double() = REnv.asVector(Of Double)(df.columns(DirectCast(formula.formula, SymbolReference).symbol))
-            Dim y As Double() = REnv.asVector(Of Double)
-        End If
+        Dim w As Double()
 
         If Not base.isEmpty(weights) Then
+            w = REnv.asVector(Of Double)(weights)
+        Else
+            w = Nothing
+        End If
 
+        If TypeOf formula.formula Is SymbolReference Then
+            ' y ~ x
+            Dim x As Double() = df.getVector(Of Double)(DirectCast(formula.formula, SymbolReference).symbol)
+            Dim y As Double() = df.getVector(Of Double)(formula.var)
+
+            If w.IsNullOrEmpty Then
+                Return LeastSquares.LinearFit(x, y)
+            Else
+                Return WeightedLinearRegression.Regress(x, y, w)
+            End If
+        Else
+            Dim symbol As Object = formula.GetSymbols(env)
+
+            If TypeOf symbol Is Message Then
+                Return symbol
+            End If
+
+            Dim columns As New List(Of Double())
+
+            For Each colName As String In DirectCast(symbol, String())
+                Call columns.Add(df.getVector(Of Double)(colName))
+            Next
+
+            Throw New NotImplementedException
         End If
 
         Throw New NotImplementedException
