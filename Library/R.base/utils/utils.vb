@@ -50,6 +50,7 @@ Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Internal.Object.Utils
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports csv = Microsoft.VisualBasic.Data.csv.IO.File
 Imports fileStream = System.IO.Stream
@@ -272,8 +273,9 @@ Public Module utils
         Dim encoding As Encodings = TextEncodings.GetEncodings(GetEncoding(fileEncoding))
 
         If type Is GetType(Rdataframe) Then
-            Dim matrix As String()() = DirectCast(x, Rdataframe) _
+            Dim matrix As String()() = TableFormatter _
                 .GetTable(
+                    df:=DirectCast(x, Rdataframe),
                     env:=env.globalEnvironment,
                     printContent:=False,
                     showRowNames:=row_names

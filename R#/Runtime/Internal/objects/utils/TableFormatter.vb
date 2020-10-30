@@ -3,7 +3,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 
 Namespace Runtime.Internal.Object.Utils
 
-    Friend Class TableFormatter
+    Public Class TableFormatter
 
         ''' <summary>
         ''' Each element in a return result array is a row in table matrix
