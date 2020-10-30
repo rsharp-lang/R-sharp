@@ -221,10 +221,12 @@ Module math
                        Optional weights As Object = Nothing,
                        Optional env As Environment = Nothing) As Object
 
+        Dim df As dataframe
+
         If data Is Nothing Then
             Return Internal.debug.stop({"the required data can not be nothing!"}, env)
         ElseIf TypeOf data Is dataframe Then
-            Dim df As dataframe = DirectCast(data, dataframe)
+            df = DirectCast(data, dataframe)
 
             If Not df.columns.ContainsKey(formula.var) Then
                 Return Internal.debug.stop({
@@ -233,6 +235,14 @@ Module math
                     $"formula: {formula}"
                 }, env)
             End If
+        Else
+            Return Message.InCompatibleType(GetType(dataframe), data.GetType, env)
+        End If
+
+        If TypeOf formula.formula Is SymbolReference Then
+            ' y ~ x
+            Dim x As Double() = REnv.asVector(Of Double)(df.columns(DirectCast(formula.formula, SymbolReference).symbol))
+            Dim y As Double() = REnv.asVector(Of Double)
         End If
 
         If Not base.isEmpty(weights) Then

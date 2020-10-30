@@ -663,6 +663,7 @@
     <Compile Include="Runtime\Environment\RContentOutput.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\Math\varUseMethods.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\reflections.vb" />
+    <Compile Include="Runtime\Internal\objects\utils\TableFormatter.vb" />
     <Compile Include="Runtime\Interop\CType\ICType.vb" />
     <Compile Include="System\Components\Encoder.vb" />
     <Compile Include="System\Components\RSessionInfo.vb" />
@@ -794,5 +795,6 @@
       <Name>47-dotnet_Microsoft.VisualBasic</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
