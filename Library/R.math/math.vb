@@ -72,7 +72,13 @@ Module math
 
     Sub New()
         REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(ODEsOut), AddressOf create_deSolve_DataFrame)
+
+        REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of FitResult)(AddressOf printLinearFit)
     End Sub
+
+    Private Function printLinearFit(fit As FitResult) As String
+        Return fit.ToString
+    End Function
 
     Private Function create_deSolve_DataFrame(x As ODEsOut, args As list, env As Environment) As dataframe
         Dim data As New dataframe With {
