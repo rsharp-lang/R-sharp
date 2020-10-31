@@ -43,6 +43,7 @@
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.Bootstrapping
+Imports Microsoft.VisualBasic.Data.Bootstrapping.Multivariate
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math.Calculus
@@ -293,8 +294,7 @@ Module math
             Next
 
             Dim matrix As New GeneralMatrix(columns.ToArray, t:=True)
-            Dim errors As MLRFit.Error() = Nothing
-            Dim fit As MLRFit = MLRFit.LinearFitting(matrix, f:=y, errors:=errors)
+            Dim fit As MLRFit = MLRFit.LinearFitting(matrix, f:=y)
 
             Return fit
         End If
