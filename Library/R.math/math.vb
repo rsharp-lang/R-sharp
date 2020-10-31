@@ -267,15 +267,16 @@ Module math
 
         If TypeOf formula.formula Is SymbolReference Then
             ' y ~ x
-            Dim x As Double() = df.getVector(Of Double)(DirectCast(formula.formula, SymbolReference).symbol)
+            Dim x_symbol As String = DirectCast(formula.formula, SymbolReference).symbol
+            Dim x As Double() = df.getVector(Of Double)(x_symbol)
 
             If w.IsNullOrEmpty Then
-                Return New lmCall With {
+                Return New lmCall(formula.var, {x_symbol}) With {
                     .formula = formula,
                     .lm = LeastSquares.LinearFit(x, y)
                 }
             Else
-                Return New lmCall With {
+                Return New lmCall(formula.var, {x_symbol}) With {
                     .formula = formula,
                     .lm = WeightedLinearRegression.Regress(x, y, w)
                 }
@@ -296,7 +297,10 @@ Module math
             Dim matrix As New GeneralMatrix(columns.ToArray, t:=True)
             Dim fit As MLRFit = MLRFit.LinearFitting(matrix, f:=y)
 
-            Return fit
+            Return New lmCall(formula.var, DirectCast(symbol, String())) With {
+                .formula = formula,
+                .lm = fit
+            }
         End If
     End Function
 
@@ -308,31 +312,62 @@ Module math
     ''' <returns></returns>
     <ExportAPI("as.formula")>
     <RApiReturn(GetType(DeclareLambdaFunction))>
-    Public Function asFormula(lm As Object, Optional env As Environment = Nothing) As Object
+    Public Function asFormula(lm As lmCall, Optional env As Environment = Nothing) As Object
         If lm Is Nothing Then
             Return Internal.debug.stop("the required linear model can not be nothing!", env)
         End If
 
-        Dim closure As Expression
-        Dim name As String
-        Dim parameter As DeclareNewSymbol
-
         ' 主要是生成lambda函数的closure表达式
-        If TypeOf lm Is FitResult Then
-            parameter = New DeclareNewSymbol({"x"}, Nothing, TypeCodes.double, [readonly]:=False)
-            name = DirectCast(lm, IFitted).Polynomial.ToString("G3")
-
-        ElseIf TypeOf lm Is WeightedFit Then
-            parameter = New DeclareNewSymbol({"x"}, Nothing, TypeCodes.double, [readonly]:=False)
-            name = DirectCast(lm, IFitted).Polynomial.ToString("G3")
-        ElseIf TypeOf lm Is MLRFit Then
-
-            name = DirectCast(lm, IFitted).Polynomial.ToString("G3")
-        Else
-            Return Message.InCompatibleType(GetType(FitResult), lm.GetType, env)
-        End If
+        Dim name As String = lm.lm.Polynomial.ToString("G3")
+        Dim parameter As New DeclareNewSymbol(lm.variables, Nothing, TypeCodes.double, [readonly]:=False)
+        Dim closure As Expression = lm.CreateFormulaCall
 
         Return New DeclareLambdaFunction(name, parameter, closure, env.stackFrame)
+    End Function
+
+    ''' <summary>
+    ''' ### Model Predictions
+    ''' 
+    ''' predict is a generic function for predictions from the results of 
+    ''' various model fitting functions. The function invokes particular 
+    ''' methods which depend on the class of the first argument.
+    ''' </summary>
+    ''' <param name="lm">a model Object For which prediction Is desired.</param>
+    ''' <param name="x"></param>
+    ''' <param name="env"></param>
+    ''' <returns>
+    ''' The form of the value returned by predict depends on the class of its argument. 
+    ''' See the documentation of the particular methods for details of what is 
+    ''' produced by that method.
+    ''' </returns>
+    ''' <remarks>
+    ''' Most prediction methods which are similar to those for linear models 
+    ''' have an argument newdata specifying the first place to look for 
+    ''' explanatory variables to be used for prediction. Some considerable 
+    ''' attempts are made to match up the columns in newdata to those used 
+    ''' for fitting, for example that they are of comparable types and that 
+    ''' any factors have the same level set in the same order (or can be 
+    ''' transformed to be so).
+    ''' 
+    ''' Time series prediction methods In package stats have an argument 
+    ''' n.ahead specifying how many time steps ahead To predict.
+    ''' 
+    ''' Many methods have a logical argument se.fit saying If standard errors 
+    ''' are To returned.
+    ''' </remarks>
+    <ExportAPI("predict")>
+    Public Function predict(lm As lmCall,
+                            <RRawVectorArgument>
+                            x As Object,
+                            Optional env As Environment = Nothing) As Object
+
+        If lm Is Nothing Then
+            Return Internal.debug.stop("the required model object can not be nothing!", env)
+        ElseIf TypeOf lm.lm Is MLRFit Then
+
+        Else
+
+        End If
     End Function
 
     ''' <summary>
