@@ -300,11 +300,13 @@ Module math
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("as.formula")>
+    <RApiReturn(GetType(DeclareLambdaFunction))>
     Public Function asFormula(lm As Object, Optional env As Environment = Nothing) As Object
         If lm Is Nothing Then
             Return Internal.debug.stop("the required linear model can not be nothing!", env)
         End If
 
+        ' 主要是生成lambda函数的closure表达式
         If TypeOf lm Is FitResult Then
             Throw New NotImplementedException
         ElseIf TypeOf lm Is WeightedFit Then
