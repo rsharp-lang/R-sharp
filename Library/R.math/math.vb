@@ -52,6 +52,7 @@ Imports Microsoft.VisualBasic.Math.Calculus.ODESolver
 Imports Microsoft.VisualBasic.Math.Distributions
 Imports Microsoft.VisualBasic.Math.Distributions.BinBox
 Imports Microsoft.VisualBasic.Math.LinearAlgebra
+Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
@@ -260,10 +261,11 @@ Module math
             w = Nothing
         End If
 
+        Dim y As Double() = df.getVector(Of Double)(formula.var)
+
         If TypeOf formula.formula Is SymbolReference Then
             ' y ~ x
             Dim x As Double() = df.getVector(Of Double)(DirectCast(formula.formula, SymbolReference).symbol)
-            Dim y As Double() = df.getVector(Of Double)(formula.var)
 
             If w.IsNullOrEmpty Then
                 Return LeastSquares.LinearFit(x, y)
@@ -283,10 +285,12 @@ Module math
                 Call columns.Add(df.getVector(Of Double)(colName))
             Next
 
-            Throw New NotImplementedException
-        End If
+            Dim matrix As New GeneralMatrix(columns.ToArray, t:=True)
+            Dim errors As MLRFit.Error() = Nothing
+            Dim fit As MLRFit = MLRFit.LinearFitting(matrix, f:=y, errors:=errors)
 
-        Throw New NotImplementedException
+            Return fit
+        End If
     End Function
 
     ''' <summary>
