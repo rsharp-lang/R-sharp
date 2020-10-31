@@ -294,6 +294,29 @@ Module math
     End Function
 
     ''' <summary>
+    ''' create a lambda function based on the ``lm`` result.
+    ''' </summary>
+    ''' <param name="lm"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("as.formula")>
+    Public Function asFormula(lm As Object, Optional env As Environment = Nothing) As Object
+        If lm Is Nothing Then
+            Return Internal.debug.stop("the required linear model can not be nothing!", env)
+        End If
+
+        If TypeOf lm Is FitResult Then
+            Throw New NotImplementedException
+        ElseIf TypeOf lm Is WeightedFit Then
+            Throw New NotImplementedException
+        ElseIf TypeOf lm Is MLRFit Then
+            Throw New NotImplementedException
+        Else
+            Return Message.InCompatibleType(GetType(FitResult), lm.GetType, env)
+        End If
+    End Function
+
+    ''' <summary>
     ''' Evaluate cos similarity of two vector
     ''' 
     ''' the given vector x and y should be contains the elements in the same length.
