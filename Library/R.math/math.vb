@@ -54,6 +54,7 @@ Imports Microsoft.VisualBasic.Math.Distributions.BinBox
 Imports Microsoft.VisualBasic.Math.LinearAlgebra
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
@@ -306,16 +307,22 @@ Module math
             Return Internal.debug.stop("the required linear model can not be nothing!", env)
         End If
 
+        Dim closure As Expression
+        Dim name As String
+        Dim parameter As DeclareNewSymbol
+
         ' 主要是生成lambda函数的closure表达式
         If TypeOf lm Is FitResult Then
-            Throw New NotImplementedException
+            parameter = New DeclareNewSymbol({"x"}, Nothing, TypeCodes.double, [readonly]:=False)
         ElseIf TypeOf lm Is WeightedFit Then
-            Throw New NotImplementedException
+            parameter = New DeclareNewSymbol({"x"}, Nothing, TypeCodes.double, [readonly]:=False)
         ElseIf TypeOf lm Is MLRFit Then
             Throw New NotImplementedException
         Else
             Return Message.InCompatibleType(GetType(FitResult), lm.GetType, env)
         End If
+
+        Return New DeclareLambdaFunction(name, parameter, closure, env.stackFrame)
     End Function
 
     ''' <summary>
