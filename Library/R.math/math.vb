@@ -314,10 +314,14 @@ Module math
         ' 主要是生成lambda函数的closure表达式
         If TypeOf lm Is FitResult Then
             parameter = New DeclareNewSymbol({"x"}, Nothing, TypeCodes.double, [readonly]:=False)
+            name = DirectCast(lm, IFitted).Polynomial.ToString("G3")
+
         ElseIf TypeOf lm Is WeightedFit Then
             parameter = New DeclareNewSymbol({"x"}, Nothing, TypeCodes.double, [readonly]:=False)
+            name = DirectCast(lm, IFitted).Polynomial.ToString("G3")
         ElseIf TypeOf lm Is MLRFit Then
-            Throw New NotImplementedException
+
+            name = DirectCast(lm, IFitted).Polynomial.ToString("G3")
         Else
             Return Message.InCompatibleType(GetType(FitResult), lm.GetType, env)
         End If
