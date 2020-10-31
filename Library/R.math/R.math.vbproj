@@ -294,6 +294,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="lmCall.vb" />
     <Compile Include="math.vb" />
     <Compile Include="symbolic.vb" />
     <Compile Include="stats.vb" />

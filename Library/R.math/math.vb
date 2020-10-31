@@ -269,9 +269,15 @@ Module math
             Dim x As Double() = df.getVector(Of Double)(DirectCast(formula.formula, SymbolReference).symbol)
 
             If w.IsNullOrEmpty Then
-                Return LeastSquares.LinearFit(x, y)
+                Return New lmCall With {
+                    .formula = formula,
+                    .lm = LeastSquares.LinearFit(x, y)
+                }
             Else
-                Return WeightedLinearRegression.Regress(x, y, w)
+                Return New lmCall With {
+                    .formula = formula,
+                    .lm = WeightedLinearRegression.Regress(x, y, w)
+                }
             End If
         Else
             Dim symbol As Object = formula.GetSymbols(env)
