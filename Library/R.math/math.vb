@@ -76,17 +76,12 @@ Module math
     Sub New()
         REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(ODEsOut), AddressOf create_deSolve_DataFrame)
 
-        REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of FitResult)(AddressOf printLinearFit)
-        REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of WeightedFit)(AddressOf printLinearFit)
-        REnv.Internal.generic.add("summary", GetType(FitResult), AddressOf summaryFit)
+        REnv.Internal.generic.add("summary", GetType(lmCall), AddressOf summaryFit)
+        REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of lmCall)(Function(o) o.ToString)
     End Sub
 
-    Private Function summaryFit(x As Object, args As list, env As Environment) As Object
+    Private Function summaryFit(x As lmCall, args As list, env As Environment) As Object
 
-    End Function
-
-    Private Function printLinearFit(fit As Object) As String
-        Return fit.ToString
     End Function
 
     Private Function create_deSolve_DataFrame(x As ODEsOut, args As list, env As Environment) As dataframe
@@ -273,12 +268,21 @@ Module math
             If w.IsNullOrEmpty Then
                 Return New lmCall(formula.var, {x_symbol}) With {
                     .formula = formula,
-                    .lm = LeastSquares.LinearFit(x, y)
+                    .lm = LeastSquares.LinearFit(x, y),
+                    .data = df.ToString
                 }
             Else
+                Dim wStr As String = w.Select(Function(d) d.ToString("G3")).JoinBy(", ")
+
+                If wStr.Length > 32 Then
+                    wStr = Mid(wStr, 1, 32) & "..."
+                End If
+
                 Return New lmCall(formula.var, {x_symbol}) With {
                     .formula = formula,
-                    .lm = WeightedLinearRegression.Regress(x, y, w)
+                    .lm = WeightedLinearRegression.Regress(x, y, w),
+                    .data = df.ToString,
+                    .weights = $"[{wStr}]"
                 }
             End If
         Else
@@ -299,7 +303,8 @@ Module math
 
             Return New lmCall(formula.var, DirectCast(symbol, String())) With {
                 .formula = formula,
-                .lm = fit
+                .lm = fit,
+                .data = df.ToString
             }
         End If
     End Function

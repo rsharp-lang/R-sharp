@@ -53,6 +53,8 @@ Public Class lmCall
     Public Property formula As FormulaExpression
     Public Property name As String
     Public Property variables As String()
+    Public Property data As String
+    Public Property weights As String
 
     Sub New(name As String, variables As String())
         Me.name = name
@@ -60,7 +62,33 @@ Public Class lmCall
     End Sub
 
     Public Overrides Function ToString() As String
-        Return CreateFormulaCall.ToString
+        If TypeOf lm Is WeightedFit Then
+            Dim formula = DirectCast(DirectCast(lm, WeightedFit).Polynomial, Polynomial)
+
+            Return $"
+Call:
+lm(formula = {formula}, data = <{data}>, weights = {weights})
+
+Coefficients:
+(Intercept)            {variables(Scan0)}  
+  {formula.Factors(Scan0).ToString("G4")}    {formula.Factors(1).ToString("G4")}
+
+"
+        ElseIf TypeOf lm Is FitResult Then
+            Dim formula = DirectCast(DirectCast(lm, FitResult).Polynomial, Polynomial)
+
+            Return $"
+Call:
+lm(formula = {formula}, data = <{data}>)
+
+Coefficients:
+(Intercept)            {variables(Scan0)}    
+  {formula.Factors(Scan0).ToString("G4")}    {formula.Factors(1).ToString("G4")}  
+
+"
+        Else
+            Throw New NotImplementedException
+        End If
     End Function
 
     Public Function CreateFormulaCall() As Expression
