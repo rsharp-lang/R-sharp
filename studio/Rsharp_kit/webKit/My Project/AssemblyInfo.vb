@@ -9,11 +9,11 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 '查看程序集特性的值
 
-<Assembly: AssemblyTitle("R.web")>
-<Assembly: AssemblyDescription("")>
-<Assembly: AssemblyCompany("Microsoft")>
-<Assembly: AssemblyProduct("R.web")>
-<Assembly: AssemblyCopyright("Copyright © Microsoft 2019")>
+<Assembly: AssemblyTitle("Http and web toolkit for R# scripting")>
+<Assembly: AssemblyDescription("Http and web toolkit for R# scripting")>
+<Assembly: AssemblyCompany("SMRUCC")>
+<Assembly: AssemblyProduct("R#")>
+<Assembly: AssemblyCopyright("Copyright © xie.guigang@gcmodeller.org 2020")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>
