@@ -78,7 +78,7 @@ Module CLI
     <ExportAPI("--install.packages")>
     <Description("Install new packages.")>
     <Usage("--install.packages /module <*.dll> [--verbose]")>
-    <Argument("/module", False, CLITypes.File,
+    <ArgumentAttribute("/module", False, CLITypes.File,
               Extensions:="*.dll",
               Description:=".NET Framework 4.8 assembly module file.")>
     <Group(SystemConfig)>
