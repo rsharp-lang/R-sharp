@@ -1,4 +1,4 @@
-﻿# VisualStudio
+# VisualStudio
 
 VisualBasic.NET application development kit
 
