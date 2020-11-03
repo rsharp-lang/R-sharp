@@ -190,19 +190,19 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\runtime\httpd\WebCloud\SMRUCC.HTTPInternal\SMRUCC.WebCloud.HTTPInternal.vbproj">
+    <ProjectReference Include="..\..\..\..\runtime\httpd\WebCloud\SMRUCC.HTTPInternal\SMRUCC.WebCloud.HTTPInternal.vbproj">
       <Project>{fbfc1455-b232-4f16-afc7-4054a8b864ab}</Project>
       <Name>SMRUCC.WebCloud.HTTPInternal</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\47-dotnet_Microsoft.VisualBasic.vbproj">
+    <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\47-dotnet_Microsoft.VisualBasic.vbproj">
       <Project>{fecce1fd-e1d4-49e3-a668-60bb5e7aed99}</Project>
       <Name>47-dotnet_Microsoft.VisualBasic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\runtime\sciBASIC#\mime\text%25html\MIME-htmls.vbproj">
+    <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\mime\text%25html\mime-htmls.vbproj">
       <Project>{2dd4be80-ddc3-4767-94a7-10f1c3395716}</Project>
       <Name>MIME-htmls</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\R#\R.vbproj">
+    <ProjectReference Include="..\..\..\R#\R.vbproj">
       <Project>{0C2EB77C-39F2-460D-A3F8-CE905F867637}</Project>
       <Name>R</Name>
     </ProjectReference>
