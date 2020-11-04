@@ -555,6 +555,7 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\BreakPoint.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\FormulaExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\CreateObject.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\ExpressionLiteral.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\NamespaceFunctionSymbolReference.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\ObjectWith.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Regexp.vb" />
@@ -622,12 +623,12 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\IfBranch.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CodeComment.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\FunctionInvoke.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SequenceLiteral.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\SequenceLiteral.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\IIfExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssignOperator\ValueAssign.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolReference.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\VectorLiteral.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\VectorLiteral.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\Literal.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewSymbol.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxTree\ExpressionTree.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxTree\ExpressionSignature.vb" />
