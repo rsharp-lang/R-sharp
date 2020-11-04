@@ -19,8 +19,9 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         End Function
 
         Public Function GetExpressionLiteral(code As Token()(), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim stackFrame As StackFrame = opts.GetStackTrace(code(Scan0)(Scan0), "__expression__literal")
-            Dim literal As SyntaxResult = SyntaxResult.CreateExpression(code.Skip(1).IteratesALL, opts)
+            Dim literalTokens As Token() = code.Skip(1).IteratesALL.ToArray
+            Dim stackFrame As StackFrame = opts.GetStackTrace(code(Scan0)(Scan0), $"[expression_literal] {literalTokens.Select(Function(a) a.text).JoinBy("")}")
+            Dim literal As SyntaxResult = SyntaxResult.CreateExpression(literalTokens, opts)
 
             If literal.isException Then
                 Return literal

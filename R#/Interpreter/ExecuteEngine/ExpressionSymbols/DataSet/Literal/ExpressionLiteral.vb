@@ -28,7 +28,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         End Function
 
         Public Overrides Function ToString() As String
-            Return $"~<{expression}>"
+            Return $"~""{expression}"""
         End Function
     End Class
 End Namespace
