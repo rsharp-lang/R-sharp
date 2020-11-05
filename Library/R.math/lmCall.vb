@@ -73,7 +73,7 @@ Public Class lmCall
 
             Return $"
 Call:
-lm(formula = {formula}, data = <{data}>, weights = {weights})
+lm(formula = {formula.ToString(variables, "G3")}, data = <{data}>, weights = {weights})
 
 Coefficients:
 (Intercept)            {variables(Scan0)}  
@@ -85,7 +85,7 @@ Coefficients:
 
             Return $"
 Call:
-lm(formula = {formula}, data = <{data}>)
+lm(formula = {formula.ToString(variables, "G3")}, data = <{data}>)
 
 Coefficients:
 (Intercept)            {variables(Scan0)}    
@@ -97,7 +97,7 @@ Coefficients:
 
             Return $"
 Call:
-lm(formula = {formula}, data = <{data}>)
+lm(formula = {formula.ToString(variables, "G3")}, data = <{data}>)
 
 Coefficients:
 (Intercept)            {variables(Scan0)}    
