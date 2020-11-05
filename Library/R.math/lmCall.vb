@@ -93,7 +93,17 @@ Coefficients:
 
 "
         Else
-            Throw New NotImplementedException
+            Dim formula = DirectCast(DirectCast(lm, MLRFit).Polynomial, MultivariatePolynomial)
+
+            Return $"
+Call:
+lm(formula = {formula}, data = <{data}>)
+
+Coefficients:
+(Intercept)            {variables(Scan0)}    
+  {formula.Factors(Scan0).ToString("G4")}    {formula.Factors(1).ToString("G4")}  
+
+"
         End If
     End Function
 
