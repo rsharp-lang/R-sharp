@@ -40,6 +40,7 @@
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Data.Bootstrapping
 Imports Microsoft.VisualBasic.Data.Bootstrapping.Multivariate
 Imports Microsoft.VisualBasic.Math.LinearAlgebra
@@ -60,6 +61,11 @@ Public Class lmCall
         Me.name = name
         Me.variables = variables
     End Sub
+
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    Public Function Predicts(x As Double()) As Double
+        Return lm.GetY(x)
+    End Function
 
     Public Overrides Function ToString() As String
         If TypeOf lm Is WeightedFit Then
