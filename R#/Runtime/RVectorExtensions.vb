@@ -218,6 +218,12 @@ Namespace Runtime
             Return ofList
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <Extension>
+        Public Function TryCastGenericArray(vec As Array, env As Environment) As Object
+            Return asVector(vec, MeasureRealElementType(vec), env)
+        End Function
+
         ''' <summary>
         ''' 这个函数会确保返回的输出值都是一个数组
         ''' </summary>
