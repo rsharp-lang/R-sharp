@@ -1,7 +1,11 @@
 let a <- [1,2,3,4,5];
-let b <- [4,6,8,10,12];
-let c <- [1,1,1,1,1];
-let d <- [2,2,2,2,2];
-let mydata <- data.frame(a, b,c);
+let b <- [5,7,9,11,13];
+let c <- [15,31.5,1.8,1.5,71.5];
+let d <- [3,3,3,3,3.3];
+let mydata <- data.frame(a, b,c, d);
 
-print(lm(b ~ a + c, mydata));
+let mlr = lm(b ~ a + c + d, mydata);
+
+print(mlr);
+
+print(mlr :> predict(mydata));
