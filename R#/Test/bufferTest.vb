@@ -17,8 +17,12 @@ Module bufferTest
         Dim serial As vectorBuffer = vectorBuffer.CreateBuffer(vec, R.globalEnvir)
         Dim bytes = serial.Serialize
 
-        Call bytes.FlushStream("./test_vector.dat")
+        Dim temp = "./test_vector.dat"
 
+        Call bytes.FlushStream(temp)
 
+        Dim vec2 = vectorBuffer.CreateBuffer(temp.Open)
+
+        Pause()
     End Sub
 End Module
