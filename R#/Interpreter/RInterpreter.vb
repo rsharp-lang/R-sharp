@@ -260,7 +260,17 @@ Namespace Interpreter
         End Sub
 
         Public Function Invoke(funcName$, ParamArray args As Object()) As Object
-            Dim symbol = globalEnvir.FindSymbol(funcName)
+            Dim find As Object = getFunctionSymbol(funcName)
+
+            If TypeOf find Is Message Then
+                Return find
+            Else
+                Return DirectCast(DirectCast(find, Symbol).value, RFunction).Invoke(args, globalEnvir)
+            End If
+        End Function
+
+        Private Function getFunctionSymbol(funcName As String) As Object
+            Dim symbol As Symbol = globalEnvir.FindSymbol(funcName)
 
             If symbol Is Nothing Then
                 Return Internal.invoke.stop(New EntryPointNotFoundException($"No object named '{funcName}' could be found in global environment!"), globalEnvir)
@@ -268,7 +278,22 @@ Namespace Interpreter
                 Return Internal.invoke.stop(New InvalidProgramException($"Object '{funcName}' is not a function!"), globalEnvir)
             End If
 
-            Return DirectCast(symbol.value, RFunction).Invoke(globalEnvir, args)
+            Return symbol
+        End Function
+
+        Public Function Invoke(funcName$, args As NamedValue(Of Object)()) As Object
+            Dim find As Object = getFunctionSymbol(funcName)
+            Dim parameters As InvokeParameter() = args _
+                .Select(Function(a, i)
+                            Return New InvokeParameter(a.Name, a.Value, i + 1)
+                        End Function) _
+                .ToArray
+
+            If TypeOf find Is Message Then
+                Return find
+            Else
+                Return DirectCast(DirectCast(find, Symbol).value, RFunction).Invoke(globalEnvir, parameters)
+            End If
         End Function
 
         ''' <summary>

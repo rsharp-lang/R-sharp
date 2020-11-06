@@ -137,6 +137,11 @@ Namespace Runtime.Components
         Private Sub New()
         End Sub
 
+        Sub New(name As String, runtimeValue As Object, index As Integer)
+            Me.index = index
+            Me.value = New ValueAssign({name}, New RuntimeValueLiteral(runtimeValue))
+        End Sub
+
         ''' <summary>
         ''' get value part
         ''' </summary>
