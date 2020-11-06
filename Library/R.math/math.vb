@@ -66,6 +66,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports baseMath = Microsoft.VisualBasic.Math
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports stdVec = Microsoft.VisualBasic.Math.LinearAlgebra.Vector
+Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 
 ''' <summary>
 ''' the R# math module
@@ -368,11 +369,73 @@ Module math
 
         If lm Is Nothing Then
             Return Internal.debug.stop("the required model object can not be nothing!", env)
-        ElseIf TypeOf lm.lm Is MLRFit Then
-
-        Else
-
         End If
+
+        Dim input As New Dictionary(Of String, Double())
+        Dim names As String() = Nothing
+
+        If x Is Nothing Then
+            Return Internal.debug.stop("the required input data x can not be nothing!", env)
+        ElseIf TypeOf x Is Integer OrElse TypeOf x Is Long OrElse TypeOf x Is Single OrElse TypeOf x Is Double Then
+            Return lm.lm.GetY(CDbl(x))
+        ElseIf TypeOf x Is Double() OrElse TypeOf x Is vector Then
+            input = New Dictionary(Of String, Double()) From {
+                {lm.variables(Scan0), REnv.asVector(Of Double)(x)}
+            }
+
+            If TypeOf x Is Double() Then
+                names = Nothing
+            ElseIf TypeOf x Is vector Then
+                names = DirectCast(x, vector).getNames
+            Else
+                Throw New Exception("this exception will never happends!")
+            End If
+        ElseIf TypeOf x Is list Then
+            For Each name As String In lm.variables
+                input(name) = REnv.asVector(Of Double)(DirectCast(x, list).getByName(name))
+            Next
+
+            names = Nothing
+        ElseIf TypeOf x Is dataframe Then
+            For Each name As String In lm.variables
+                input(name) = REnv.asVector(Of Double)(DirectCast(x, dataframe).getColumnVector(name))
+            Next
+
+            names = DirectCast(x, dataframe).rownames
+        Else
+            Return Message.InCompatibleType(GetType(dataframe), x.GetType, env)
+        End If
+
+        Dim result As New List(Of Double)
+
+        With input.First.Value
+            If Not input.All(Function(a) a.Value.Length = .Length) Then
+                Return Internal.debug.stop("all of the data variable vector for predicts should be equals to each other in size!", env)
+            End If
+
+            For i As Integer = 0 To .Length - 1
+#Disable Warning
+                Dim xvec As Double() = lm.variables _
+                    .Select(Function(name) input(name)(i)) _
+                    .ToArray
+#Enable Warning
+                Call result.Add(lm.Predicts(xvec))
+            Next
+        End With
+
+        Dim out As New vector(result.ToArray, RType.GetRSharpType(GetType(Double)))
+
+        If names.IsNullOrEmpty Then
+            Return out
+        Else
+            x = out.setNames(names, env)
+
+            If TypeOf x Is Message Then
+                Return x
+            End If
+        End If
+
+        Return out
     End Function
 
     ''' <summary>

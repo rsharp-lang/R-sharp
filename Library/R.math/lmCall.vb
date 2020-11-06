@@ -40,6 +40,7 @@
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Data.Bootstrapping
 Imports Microsoft.VisualBasic.Data.Bootstrapping.Multivariate
 Imports Microsoft.VisualBasic.Math.LinearAlgebra
@@ -61,13 +62,18 @@ Public Class lmCall
         Me.variables = variables
     End Sub
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    Public Function Predicts(x As Double()) As Double
+        Return lm.GetY(x)
+    End Function
+
     Public Overrides Function ToString() As String
         If TypeOf lm Is WeightedFit Then
             Dim formula = DirectCast(DirectCast(lm, WeightedFit).Polynomial, Polynomial)
 
             Return $"
 Call:
-lm(formula = {formula}, data = <{data}>, weights = {weights})
+lm(formula = {formula.ToString(variables, "G3")}, data = <{data}>, weights = {weights})
 
 Coefficients:
 (Intercept)            {variables(Scan0)}  
@@ -79,7 +85,7 @@ Coefficients:
 
             Return $"
 Call:
-lm(formula = {formula}, data = <{data}>)
+lm(formula = {formula.ToString(variables, "G3")}, data = <{data}>)
 
 Coefficients:
 (Intercept)            {variables(Scan0)}    
@@ -87,7 +93,17 @@ Coefficients:
 
 "
         Else
-            Throw New NotImplementedException
+            Dim formula = DirectCast(DirectCast(lm, MLRFit).Polynomial, MultivariatePolynomial)
+
+            Return $"
+Call:
+lm(formula = {formula.ToString(variables, "G3")}, data = <{data}>)
+
+Coefficients:
+(Intercept)            {variables(Scan0)}    
+  {formula.Factors(Scan0).ToString("G4")}    {formula.Factors(1).ToString("G4")}  
+
+"
         End If
     End Function
 

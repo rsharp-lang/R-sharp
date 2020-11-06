@@ -137,6 +137,11 @@ Namespace Runtime.Components
         Private Sub New()
         End Sub
 
+        Sub New(name As String, runtimeValue As Object, index As Integer)
+            Me.index = index
+            Me.value = New ValueAssign({name}, New RuntimeValueLiteral(runtimeValue))
+        End Sub
+
         ''' <summary>
         ''' get value part
         ''' </summary>
@@ -172,14 +177,17 @@ Namespace Runtime.Components
         ''' <summary>
         ''' 
         ''' </summary>
-        ''' <param name="envir"></param>
+        ''' <param name="env"></param>
         ''' <param name="arguments"></param>
         ''' <param name="hasObjectList">
         ''' If has object list argument, then use the symbol name as slot name
         ''' </param>
         ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Shared Function CreateArguments(envir As Environment, arguments As IEnumerable(Of InvokeParameter), hasObjectList As Boolean) As [Variant](Of Message, Dictionary(Of String, Object))
+        Public Shared Function CreateArguments(env As Environment,
+                                               arguments As IEnumerable(Of InvokeParameter),
+                                               hasObjectList As Boolean) As [Variant](Of Message, Dictionary(Of String, Object))
+
             Dim argVals As New Dictionary(Of String, Object)
 
             For Each arg As SeqValue(Of InvokeParameter) In arguments.SeqIterator
@@ -192,7 +200,7 @@ Namespace Runtime.Components
                     keyName = "$" & arg.i
                 End If
 
-                argVal = arg.value.Evaluate(envir)
+                argVal = arg.value.Evaluate(env)
 
                 If Program.isException(argVal) Then
                     Return DirectCast(argVal, Message)

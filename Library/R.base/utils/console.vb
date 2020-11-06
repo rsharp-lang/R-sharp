@@ -1,44 +1,44 @@
 ﻿#Region "Microsoft.VisualBasic::ca65801a21e896ae035ebcbf35073b6b, Library\R.base\utils\console.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module console
-    ' 
-    '     Function: ConsoleBackColor, ConsoleForeColor, CreateProgressBar, log, passwordInput
-    '               PinProgressBarTop
-    ' 
-    '     Sub: ClearProgressBarPinned
-    ' 
-    ' /********************************************************************************/
+' Module console
+' 
+'     Function: ConsoleBackColor, ConsoleForeColor, CreateProgressBar, log, passwordInput
+'               PinProgressBarTop
+' 
+'     Sub: ClearProgressBarPinned
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -49,7 +49,9 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports CMD = System.Console
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
 ''' R# console utilities
@@ -71,7 +73,11 @@ Module console
     ''' <param name="back_color">sets the background color of the console.</param>
     ''' <returns>The message text value</returns>
     <ExportAPI("log")>
-    Public Function log(message As String, Optional fore_color As ConsoleColor? = Nothing, Optional back_color As ConsoleColor? = Nothing) As String
+    Public Function log(<RRawVectorArgument> message As Object,
+                        Optional fore_color As ConsoleColor? = Nothing,
+                        Optional back_color As ConsoleColor? = Nothing,
+                        Optional env As Environment = Nothing) As Object
+
         Dim foreBackup = CMD.ForegroundColor
         Dim backBackup = CMD.BackgroundColor
 
@@ -82,7 +88,17 @@ Module console
             CMD.BackgroundColor = back_color
         End If
 
-        Call CMD.Write(sprintf(message))
+        Dim strings As String() = REnv.asVector(Of String)(message)
+
+        If strings.Length = 0 Then
+            Call CMD.Write("")
+        ElseIf strings.Length = 1 Then
+            Call CMD.Write(sprintf(strings(Scan0)))
+        Else
+            For i As Integer = 0 To strings.Length - 1
+                Call CMD.Write($"[{i + 1}] " & sprintf(strings(i)))
+            Next
+        End If
 
         CMD.ForegroundColor = foreBackup
         CMD.BackgroundColor = backBackup

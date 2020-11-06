@@ -59,6 +59,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports System.IO
 Imports Microsoft.VisualBasic.SecurityString
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 
 Namespace Runtime.Internal.Invokes
 
@@ -494,6 +495,21 @@ Namespace Runtime.Internal.Invokes
                     End Using
                 End If
             End If
+        End Function
+
+        ''' <summary>
+        ''' ### Debug an Expression
+        ''' 
+        ''' apply for debug in Visual Studio, like a script breakpoint
+        ''' </summary>
+        ''' <param name="expr">any interpreted R expression.</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("debug")>
+        Public Function debugTool(expr As Expression, env As Environment) As Object
+            Dim caller As Environment = env.parent.parent
+            Dim result As Object = expr.Evaluate(caller)
+            Return result
         End Function
     End Module
 End Namespace

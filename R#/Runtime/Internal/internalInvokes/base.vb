@@ -70,6 +70,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object.Utils
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Components
 Imports SMRUCC.Rsharp.System.Configuration
+Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RObj = SMRUCC.Rsharp.Runtime.Internal.Object
 Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 
@@ -207,22 +208,55 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
-        ''' matrix transpose
+        ''' ### matrix transpose
+        ''' 
+        ''' Given a matrix or data.frame x, t returns the transpose of x.
         ''' </summary>
-        ''' <param name="x"></param>
-        ''' <returns></returns>
+        ''' <param name="x">a matrix Or data frame, typically.</param>
+        ''' <returns>
+        ''' A matrix, with dim and dimnames constructed appropriately from 
+        ''' those of x, and other attributes except names copied across.
+        ''' </returns>
+        ''' <remarks>
+        ''' This is a generic function for which methods can be written. 
+        ''' The description here applies to the default and "data.frame" 
+        ''' methods.
+        ''' 
+        ''' A data frame Is first coerced To a matrix: see as.matrix. 
+        ''' When x Is a vector, it Is treated as a column, i.e., the 
+        ''' result Is a 1-row matrix.
+        ''' </remarks>
         <ExportAPI("t")>
-        Public Function t(x As dataframe) As Object
-            Dim rownames = x.getRowNames
-            Dim colnames = x.columns.Keys.ToArray
-            Dim mat = colnames.Select(Function(k) x.columns(k).AsObjectEnumerator(Of Object).ToArray).MatrixTranspose.ToArray
+        Public Function t(x As dataframe, Optional generic As Boolean = True, Optional env As Environment = Nothing) As Object
+            Dim rownames As String() = x.getRowNames
+            Dim colnames As String() = x.columns.Keys.ToArray
+            Dim mat As Object()() = colnames _
+                .Select(Function(k)
+                            Return x.columns(k).AsObjectEnumerator(Of Object).ToArray
+                        End Function) _
+                .MatrixTranspose _
+                .ToArray
             Dim d As New dataframe With {
                 .rownames = colnames,
                 .columns = New Dictionary(Of String, Array)
             }
+            Dim colVector As Array
+            Dim genericVal As Object
 
             For i As Integer = 0 To rownames.Length - 1
-                d.columns.Add(rownames(i), mat(i))
+                colVector = mat(i)
+
+                If generic Then
+                    genericVal = REnv.TryCastGenericArray(colVector, env)
+
+                    If TypeOf genericVal Is Message Then
+                        Return genericVal
+                    Else
+                        colVector = genericVal
+                    End If
+                End If
+
+                d.columns(rownames(i)) = colVector
             Next
 
             Return d

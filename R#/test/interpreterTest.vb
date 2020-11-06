@@ -75,6 +75,9 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+
+        Call debugTest()
+
         Call formulaTest()
 
 
@@ -186,6 +189,12 @@ Module interpreterTest
 
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub debugTest()
+        Call R.Print("debug(~1+1);")
 
         Pause()
     End Sub
