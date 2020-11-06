@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.Runtime.InteropServices
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -35,13 +36,48 @@ Namespace Runtime.Internal.Object.serialize
             Return buffer
         End Function
 
+        Public Shared Function CreateBuffer(bytes As Stream) As vectorBuffer
+            Dim raw As Byte() = New Byte(2 * Marshal.SizeOf(GetType(Integer)) - 1) {}
+
+            bytes.Read(raw, Scan0, raw.Length)
+
+            Dim name_size As Integer = BitConverter.ToInt32(raw, Scan0)
+            Dim vector_size As Integer = BitConverter.ToInt32(raw, Marshal.SizeOf(GetType(Integer)))
+
+            Using reader As New StreamReader(bytes)
+                Dim type As Type = Type.GetType(reader.ReadLine)
+                Dim unit As String = reader.ReadLine
+
+                Dim names As String() = New String(name_size - 1) {}
+
+                For i As Integer = 0 To names.Length - 1
+                    names(i) = reader.ReadLine
+                Next
+
+                name_size = Marshal.SizeOf(GetType(Type))
+                raw = New Byte(vector_size * name_size - 1) {}
+
+                bytes.Read(raw, Scan0, raw.Length)
+
+
+
+                Return New vectorBuffer With {
+                    .type = type.FullName,
+                    .names = names,
+                    .unit = unit
+                }
+            End Using
+        End Function
+
         Public Overrides Function Serialize() As Byte()
             Dim type As Type = Type.GetType(Me.type)
 
             Using buffer As New MemoryStream, output As New StreamWriter(buffer)
+                output.Write(names.Length)
+                output.Write(vector.Length)
+
                 output.WriteLine(type.FullName)
                 output.WriteLine(unit)
-                output.Write(names.Length)
 
                 For i As Integer = 0 To names.Length - 1
                     output.WriteLine(names(i))
