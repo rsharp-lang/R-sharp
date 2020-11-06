@@ -5,6 +5,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.System.Configuration
 
 Partial Module CLI
@@ -41,12 +42,26 @@ Partial Module CLI
             Call R.LoadLibrary(packageName:=pkgName)
         Next
 
-        Dim result As Object
+        Dim result As Object = R.Source(script, parameters)
 
-        If Not entry.StringEmpty Then
+        If TypeOf result Is Message Then
+            Return postResult(result, master, port)
+        ElseIf Not entry.StringEmpty Then
             result = R.Invoke(entry, parameters)
+        End If
+
+        ' post result data back to the master node
+        Return postResult(result, master, port)
+    End Function
+
+    Private Function postResult(result As Object, master As String, port As Integer) As Integer
+        If result Is Nothing Then
+        ElseIf TypeOf result Is dataframe Then
+        ElseIf TypeOf result Is vector Then
+        ElseIf TypeOf result Is list Then
+        ElseIf TypeOf result Is Message Then
         Else
-            result = R.Source(script, parameters)
+
         End If
 
         If Not result Is Nothing AndAlso result.GetType Is GetType(Message) Then
