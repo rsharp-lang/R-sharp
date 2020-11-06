@@ -664,6 +664,7 @@
     <Compile Include="Runtime\Environment\RContentOutput.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\Math\varUseMethods.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\reflections.vb" />
+    <Compile Include="Runtime\Internal\objects\serialize\Class1.vb" />
     <Compile Include="Runtime\Internal\objects\serialize\vectorBuffer.vb" />
     <Compile Include="Runtime\Internal\objects\serialize\listBuffer.vb" />
     <Compile Include="Runtime\Internal\objects\utils\TableFormatter.vb" />
