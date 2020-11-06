@@ -87,6 +87,14 @@ Namespace Runtime.Internal.Object
             elementType = type
         End Sub
 
+        Friend Sub New(names As String(), input As Array, type As RType, unit As unit)
+            Call Me.New(input, type)
+
+            Me.unit = unit
+            Me.names = names
+            Me.nameIndex = names.Indexing
+        End Sub
+
         Sub New(names As String(), input As Array, type As RType, env As Environment)
             Call Me.New(input, type)
             Call Me.setNames(names, env)

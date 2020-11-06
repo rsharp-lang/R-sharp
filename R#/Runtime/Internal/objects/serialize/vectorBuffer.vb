@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports System.Runtime.InteropServices
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports Microsoft.VisualBasic.Serialization
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -18,6 +19,20 @@ Namespace Runtime.Internal.Object.serialize
         Public Property vector As Array
         Public Property names As String()
         Public Property unit As String
+
+        Public ReadOnly Property underlyingType As Type
+            Get
+                Return Global.System.Type.GetType(type)
+            End Get
+        End Property
+
+        Public Function GetVector() As vector
+            Dim rtype As RType = RType.GetRSharpType(underlyingType)
+            Dim unit As New unit With {.name = Me.unit}
+            Dim vec As New vector(names, vector, rtype, unit)
+
+            Return vec
+        End Function
 
         Public Shared Function CreateBuffer(vector As vector, env As Environment) As Object
             Dim buffer As New vectorBuffer With {
@@ -47,25 +62,28 @@ Namespace Runtime.Internal.Object.serialize
             Using reader As New StreamReader(bytes)
                 Dim type As Type = Type.GetType(reader.ReadLine)
                 Dim unit As String = reader.ReadLine
-
                 Dim names As String() = New String(name_size - 1) {}
 
                 For i As Integer = 0 To names.Length - 1
                     names(i) = reader.ReadLine
                 Next
 
-                name_size = Marshal.SizeOf(GetType(Type))
-                raw = New Byte(vector_size * name_size - 1) {}
-
+                raw = New Byte(3) {}
+                bytes.Read(raw, Scan0, raw.Length)
+                name_size = BitConverter.ToInt32(raw, Scan0)
+                raw = New Byte(name_size - 1) {}
                 bytes.Read(raw, Scan0, raw.Length)
 
+                Using ms As New MemoryStream(raw)
+                    Dim vector As Array = RawStream.GetData(ms, type.PrimitiveTypeCode)
 
-
-                Return New vectorBuffer With {
-                    .type = type.FullName,
-                    .names = names,
-                    .unit = unit
-                }
+                    Return New vectorBuffer With {
+                        .type = type.FullName,
+                        .names = names,
+                        .unit = unit,
+                        .vector = vector
+                    }
+                End Using
             End Using
         End Function
 
@@ -85,39 +103,9 @@ Namespace Runtime.Internal.Object.serialize
 
                 output.Flush()
 
-                Dim raw As Byte()
+                Dim raw As Byte() = RawStream.GetBytes(vector)
 
-                Select Case type
-                    Case GetType(Integer)
-                        raw = DirectCast(vector, Integer()) _
-                            .Select(Function(s) BitConverter.GetBytes(s)) _
-                            .IteratesALL _
-                            .ToArray
-                    Case GetType(Long)
-                        raw = DirectCast(vector, Long()) _
-                            .Select(Function(s) BitConverter.GetBytes(s)) _
-                            .IteratesALL _
-                            .ToArray
-                    Case GetType(Double)
-                        raw = DirectCast(vector, Double()) _
-                            .Select(Function(s) BitConverter.GetBytes(s)) _
-                            .IteratesALL _
-                            .ToArray
-                    Case GetType(Single)
-                        raw = DirectCast(vector, Single()) _
-                            .Select(Function(s) BitConverter.GetBytes(s)) _
-                            .IteratesALL _
-                            .ToArray
-                    Case GetType(Boolean)
-                        raw = DirectCast(vector, Boolean()) _
-                            .Select(Function(b) If(b, CByte(1), CByte(0))) _
-                            .ToArray
-                    Case GetType(Byte)
-                        raw = DirectCast(vector, Byte())
-                    Case Else
-                        Throw New NotImplementedException(type.FullName)
-                End Select
-
+                output.Write(raw.Length)
                 buffer.Write(raw, Scan0, raw.Length)
                 output.Flush()
                 buffer.Flush()
