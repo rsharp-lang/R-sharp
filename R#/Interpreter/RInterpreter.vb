@@ -107,6 +107,7 @@ Namespace Interpreter
         ''' <param name="name"></param>
         ''' <returns></returns>
         Default Public ReadOnly Property GetValue(name As String) As Object
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
                 Return globalEnvir(name).value
             End Get
@@ -115,6 +116,7 @@ Namespace Interpreter
         Public Const lastVariableName$ = "$"
 
         Public ReadOnly Property configFile As ConfigFile
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
                 Return globalEnvir.options.file
             End Get
@@ -454,6 +456,7 @@ Namespace Interpreter
             End SyncLock
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
         Public Shared Function FromEnvironmentConfiguration(configs As String) As RInterpreter
             Return New RInterpreter(New Options(configs))
