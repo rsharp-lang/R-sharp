@@ -1,7 +1,9 @@
 ﻿Imports System.IO
 Imports System.Runtime.InteropServices
+Imports System.Text
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports Microsoft.VisualBasic.Serialization
+Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -88,25 +90,35 @@ Namespace Runtime.Internal.Object.serialize
 
         Public Overrides Function Serialize() As Byte()
             Dim type As Type = Type.GetType(Me.type)
+            Dim bytes As Byte()
+            Dim text As Encoding = Encodings.UTF8.CodePage
+            Dim raw As Byte()
+            Dim sizeof As Byte()
 
-            Using buffer As New MemoryStream, output As New StreamWriter(buffer)
-                output.Write(names.Length)
-                output.Write(vector.Length)
+            Using buffer As New MemoryStream
+                buffer.Write(BitConverter.GetBytes(names.Length), Scan0, 4)
+                buffer.Write(BitConverter.GetBytes(vector.Length), Scan0, 4)
 
-                output.WriteLine(type.FullName)
-                output.WriteLine(unit)
+                bytes = text.GetBytes(type.FullName)
+                buffer.Write(BitConverter.GetBytes(bytes.Length), Scan0, 4)
+                buffer.Write(bytes, Scan0, bytes.Length)
 
-                For i As Integer = 0 To names.Length - 1
-                    output.WriteLine(names(i))
-                Next
+                bytes = text.GetBytes(unit)
+                buffer.Write(BitConverter.GetBytes(bytes.Length), Scan0, 4)
+                buffer.Write(bytes, Scan0, bytes.Length)
 
-                output.Flush()
+                raw = RawStream.GetBytes(names)
+                sizeof = BitConverter.GetBytes(raw.Length)
 
-                Dim raw As Byte() = RawStream.GetBytes(vector)
-
-                output.Write(raw.Length)
+                buffer.Write(sizeof, Scan0, 4)
                 buffer.Write(raw, Scan0, raw.Length)
-                output.Flush()
+
+                raw = RawStream.GetBytes(vector)
+                sizeof = BitConverter.GetBytes(raw.Length)
+
+                buffer.Write(sizeof, Scan0, 4)
+                buffer.Write(raw, Scan0, raw.Length)
+
                 buffer.Flush()
 
                 Return buffer.ToArray
