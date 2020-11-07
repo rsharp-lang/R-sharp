@@ -40,6 +40,7 @@
 #End Region
 
 Imports System.ComponentModel
+Imports System.Net
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -62,9 +63,18 @@ Partial Module CLI
     <Argument("/args", False, CLITypes.Base64, PipelineTypes.std_in,
               AcceptTypes:={GetType(Dictionary(Of String, String))},
               Extensions:="*.json",
-              Description:="The base64 text of the input arguments for running current R# script file, this is a json encoded text of the arguments.")>
+              Description:="The base64 text of the input arguments for running current R# script file, this is a json encoded text of the arguments. the json object should be a collection of [key => value] pairs.")>
     <Argument("/entry", True, CLITypes.String, AcceptTypes:={GetType(String)},
               Description:="the entry function name, by default is running the script from the begining to ends.")>
+    <Argument("/request-id", False, CLITypes.String,
+              AcceptTypes:={GetType(String)},
+              Description:="the unique id for identify current slave progress in the master node when invoke post data callback.")>
+    <Argument("/MASTER", True, CLITypes.String,
+              AcceptTypes:={GetType(IPAddress)},
+              Description:="the ip address of the master node, by default this parameter value is ``localhost``.")>
+    <Argument("/PORT", False, CLITypes.Integer,
+              AcceptTypes:={GetType(Integer)},
+              Description:="the port number for master node listen to this callback post data.")>
     Public Function slaveMode(args As CommandLine) As Integer
         Dim script As String = args <= "/exec"
         Dim arguments As Dictionary(Of String, String) = args("/args") _
