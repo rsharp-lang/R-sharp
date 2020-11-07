@@ -54,37 +54,54 @@ Namespace Runtime.Internal.Object.serialize
 
         Public Shared Function CreateBuffer(bytes As Stream) As vectorBuffer
             Dim raw As Byte() = New Byte(2 * Marshal.SizeOf(GetType(Integer)) - 1) {}
+            Dim text As Encoding = Encodings.UTF8.CodePage
 
             bytes.Read(raw, Scan0, raw.Length)
 
             Dim name_size As Integer = BitConverter.ToInt32(raw, Scan0)
             Dim vector_size As Integer = BitConverter.ToInt32(raw, Marshal.SizeOf(GetType(Integer)))
+            Dim int_size As Byte() = New Byte(3) {}
+            Dim sizeof As Integer
 
-            Using reader As New StreamReader(bytes)
-                Dim type As Type = Type.GetType(reader.ReadLine)
-                Dim unit As String = reader.ReadLine
-                Dim names As String() = New String(name_size - 1) {}
+            bytes.Read(int_size, Scan0, int_size.Length)
+            sizeof = BitConverter.ToInt32(int_size, Scan0)
+            raw = New Byte(sizeof - 1) {}
+            bytes.Read(raw, Scan0, raw.Length)
 
-                For i As Integer = 0 To names.Length - 1
-                    names(i) = reader.ReadLine
-                Next
+            Dim type As Type = Type.GetType(text.GetString(raw))
 
-                raw = New Byte(3) {}
-                bytes.Read(raw, Scan0, raw.Length)
-                name_size = BitConverter.ToInt32(raw, Scan0)
-                raw = New Byte(name_size - 1) {}
-                bytes.Read(raw, Scan0, raw.Length)
+            bytes.Read(int_size, Scan0, int_size.Length)
+            sizeof = BitConverter.ToInt32(int_size, Scan0)
+            raw = New Byte(sizeof - 1) {}
+            bytes.Read(raw, Scan0, raw.Length)
 
-                Using ms As New MemoryStream(raw)
-                    Dim vector As Array = RawStream.GetData(ms, type.PrimitiveTypeCode)
+            bytes.Read(int_size, Scan0, int_size.Length)
+            sizeof = BitConverter.ToInt32(int_size, Scan0)
+            raw = New Byte(sizeof - 1) {}
+            bytes.Read(raw, Scan0, raw.Length)
 
-                    Return New vectorBuffer With {
-                        .type = type.FullName,
-                        .names = names,
-                        .unit = unit,
-                        .vector = vector
-                    }
-                End Using
+            Dim unit As String = text.GetString(raw)
+            Dim names As String()
+
+            Using ms As New MemoryStream(raw)
+                names = RawStream.GetData(ms, TypeCode.String)
+            End Using
+
+            raw = New Byte(3) {}
+            bytes.Read(raw, Scan0, raw.Length)
+            sizeof = BitConverter.ToInt32(raw, Scan0)
+            raw = New Byte(sizeof - 1) {}
+            bytes.Read(raw, Scan0, raw.Length)
+
+            Using ms As New MemoryStream(raw)
+                Dim vector As Array = RawStream.GetData(ms, type.PrimitiveTypeCode)
+
+                Return New vectorBuffer With {
+                    .type = type.FullName,
+                    .names = names,
+                    .unit = unit,
+                    .vector = vector
+                }
             End Using
         End Function
 
