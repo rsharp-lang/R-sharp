@@ -1,14 +1,8 @@
-﻿Namespace Runtime.Serialize
+﻿Imports Microsoft.VisualBasic.Serialization
 
-    ''' <summary>
-    ''' 
-    ''' </summary>
-    Public Enum BufferObject
-        raw
-        text
-        bitmap
-        vector
-        list
-        dataframe
-    End Enum
+Namespace Runtime.Serialize
+
+    Public MustInherit Class BufferObject : Inherits RawStream
+
+    End Class
 End Namespace

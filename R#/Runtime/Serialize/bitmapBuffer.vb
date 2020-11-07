@@ -45,11 +45,10 @@
 
 Imports System.Drawing
 Imports System.IO
-Imports Microsoft.VisualBasic.Serialization
 
 Namespace Runtime.Serialize
 
-    Public Class bitmapBuffer : Inherits RawStream
+    Public Class bitmapBuffer : Inherits BufferObject
 
         Public Property bitmap As Image
 

@@ -664,12 +664,12 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="type"></param>
         ''' <returns></returns>
         <ExportAPI("buffer")>
-        Public Function buffer(Optional type As BufferObject = BufferObject.raw, Optional env As Environment = Nothing) As Object
+        Public Function buffer(Optional type As BufferObjects = BufferObjects.raw, Optional env As Environment = Nothing) As Object
             Select Case type
-                Case BufferObject.raw : Return New rawBuffer
-                Case BufferObject.text : Return New textBuffer
-                Case BufferObject.bitmap : Return New bitmapBuffer
-                Case BufferObject.vector : Return New vectorBuffer
+                Case BufferObjects.raw : Return New rawBuffer
+                Case BufferObjects.text : Return New textBuffer
+                Case BufferObjects.bitmap : Return New bitmapBuffer
+                Case BufferObjects.vector : Return New vectorBuffer
                 Case Else
                     Return Internal.debug.stop(New NotImplementedException(type.Description), env)
             End Select

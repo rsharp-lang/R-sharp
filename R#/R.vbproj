@@ -666,6 +666,7 @@
     <Compile Include="Runtime\Internal\internalInvokes\reflections.vb" />
     <Compile Include="Runtime\Internal\objects\RConversion\castRaw.vb" />
     <Compile Include="Runtime\Serialize\bitmapBuffer.vb" />
+    <Compile Include="Runtime\Serialize\BufferObjects.vb" />
     <Compile Include="Runtime\Serialize\BufferObject.vb" />
     <Compile Include="Runtime\Serialize\rawBuffer.vb" />
     <Compile Include="Runtime\Serialize\textBuffer.vb" />

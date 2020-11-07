@@ -1,9 +1,8 @@
 ﻿Imports System.IO
-Imports Microsoft.VisualBasic.Serialization
 
 Namespace Runtime.Serialize
 
-    Public Class rawBuffer : Inherits RawStream
+    Public Class rawBuffer : Inherits BufferObject
 
         Public Property buffer As MemoryStream
 

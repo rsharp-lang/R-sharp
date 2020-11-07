@@ -53,7 +53,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Runtime.Serialize
 
-    Public Class messageBuffer : Inherits RawStream
+    Public Class messageBuffer : Inherits BufferObject
 
         Public Property message As String()
         Public Property level As MSG_TYPES
