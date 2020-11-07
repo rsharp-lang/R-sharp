@@ -24,6 +24,51 @@ Namespace Runtime.Serialize
             Me.trace = message.trace
         End Sub
 
+        Sub New()
+        End Sub
+
+        Public Shared Function CreateBuffer(buffer As Stream) As messageBuffer
+            Dim level As MSG_TYPES
+            Dim int_buf As Byte() = New Byte(3) {}
+            Dim text As Encoding = Encodings.UTF8.CodePage
+            Dim bytes As Byte()
+
+            buffer.Read(int_buf, Scan0, int_buf.Length)
+            level = CType(BitConverter.ToInt32(int_buf, Scan0), MSG_TYPES)
+
+            buffer.Read(int_buf, Scan0, int_buf.Length)
+            bytes = New Byte(BitConverter.ToInt32(int_buf, Scan0) - 1) {}
+            buffer.Read(bytes, Scan0, bytes.Length)
+
+            Dim source As String = text.GetString(bytes)
+
+            buffer.Read(int_buf, Scan0, int_buf.Length)
+            bytes = New Byte(BitConverter.ToInt32(int_buf, Scan0) - 1) {}
+            buffer.Read(bytes, Scan0, bytes.Length)
+
+            Dim message As String() = RawStream.GetData(bytes, TypeCode.String)
+
+            buffer.Read(int_buf, Scan0, int_buf.Length)
+            bytes = New Byte(BitConverter.ToInt32(int_buf, Scan0) - 1) {}
+            buffer.Read(bytes, Scan0, bytes.Length)
+
+            Dim env As StackFrame() = New TraceBuffer(bytes).StackTrace
+
+            buffer.Read(int_buf, Scan0, int_buf.Length)
+            bytes = New Byte(BitConverter.ToInt32(int_buf, Scan0) - 1) {}
+            buffer.Read(bytes, Scan0, bytes.Length)
+
+            Dim trace As StackFrame() = New TraceBuffer(bytes).StackTrace
+
+            Return New messageBuffer With {
+                .environmentStack = env,
+                .level = level,
+                .message = message,
+                .source = source,
+                .trace = trace
+            }
+        End Function
+
         Public Overrides Function Serialize() As Byte()
             Dim text As Encoding = Encodings.UTF8.CodePage
             Dim bytes As Byte()
@@ -39,7 +84,17 @@ Namespace Runtime.Serialize
                 buffer.Write(BitConverter.GetBytes(bytes.Length), Scan0, 4)
                 buffer.Write(bytes, Scan0, bytes.Length)
 
+                Dim trace As New TraceBuffer With {.StackTrace = environmentStack}
 
+                bytes = trace.Serialize
+                buffer.Write(BitConverter.GetBytes(bytes.Length), Scan0, 4)
+                buffer.Write(bytes, Scan0, bytes.Length)
+
+                trace = New TraceBuffer With {.StackTrace = Me.trace}
+
+                bytes = trace.Serialize
+                buffer.Write(BitConverter.GetBytes(bytes.Length), Scan0, 4)
+                buffer.Write(bytes, Scan0, bytes.Length)
 
                 buffer.Flush()
 
