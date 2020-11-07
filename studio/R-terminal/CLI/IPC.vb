@@ -81,7 +81,7 @@ Partial Module CLI
             .Base64Decode _
             .LoadJSON(Of Dictionary(Of String, String()))
         Dim port As Integer = args <= "/PORT"
-        Dim master As String = args <= "/MASTER" Or "localhost"
+        Dim master As String = args("/MASTER") Or "localhost"
         Dim entry As String = args <= "/entry"
         Dim request_id As String = args <= "/request-id"
         Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
