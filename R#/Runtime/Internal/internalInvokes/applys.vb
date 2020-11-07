@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::952f6e89a656119d8b17704a8161bbef, R#\Runtime\Internal\internalInvokes\applys.vb"
+﻿#Region "Microsoft.VisualBasic::309076b0b5f08cb0dc6ad696062789e3, R#\Runtime\Internal\internalInvokes\applys.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,8 @@
 
     '     Module applys
     ' 
-    '         Function: apply, (+2 Overloads) keyNameAuto, lapply, sapply
+    '         Function: apply, checkInternal, (+2 Overloads) keyNameAuto, lapply, parSapply
+    '                   sapply
     ' 
     ' 
     ' /********************************************************************************/

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8c7b6a2531a91d66ea4865244be47072, R#\test\interpreterTest.vb"
+﻿#Region "Microsoft.VisualBasic::37903183ca64babdbf6f09832b96bd19, R#\Test\interpreterTest.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
     ' Module interpreterTest
     ' 
     '     Sub: anonymous, appendTest, booleanCLIArgumentTest, closureEnvironmentTest, closureTest
-    '          functiondeclaretest2, headTest, isEmptyTest, lastSymbolTest, Main
-    '          markdownTest, missingSymbolInStringInterpolate, moduleTest, negativeValTest, numberLiteralsTest
-    '          objClasstest, orDefaultTest, printClassTest, regexpTest, sequenceGeneratorTest
-    '          suppressTest, syntaxErrorTest, unaryNegTest, usingTest, whileTest
-    '          withTest
+    '          debugTest, formulaTest, functiondeclaretest2, headTest, isEmptyTest
+    '          lastSymbolTest, Main, markdownTest, missingSymbolInStringInterpolate, moduleTest
+    '          negativeValTest, numberLiteralsTest, objClasstest, orDefaultTest, printClassTest
+    '          regexpTest, sequenceGeneratorTest, strictTest, suppressTest, syntaxErrorTest
+    '          unaryNegTest, usingTest, whileTest, withTest
     ' module test1
     ' 
     '     Sub: boolLiteralTest, branchTest, cliTest, commandLineArgumentTest, constantTest

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3e0767791c0a6a6a9e50e658288dea87, R#\Runtime\System\InvokeParameter.vb"
+﻿#Region "Microsoft.VisualBasic::1db532c27f60cc32db5b4b6e08ca89a4, R#\Runtime\System\InvokeParameter.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,7 @@
     '         Properties: haveSymbolName, index, isProbablyVectorNameTuple, isSymbolAssign, name
     '                     value
     ' 
-    '         Constructor: (+1 Overloads) Sub New
+    '         Constructor: (+2 Overloads) Sub New
     '         Function: Create, CreateArguments, CreateLiterals, Evaluate, ToString
     ' 
     ' 

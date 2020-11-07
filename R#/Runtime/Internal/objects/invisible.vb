@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f35b05d24713e58e612fbe6fa9b22c35, R#\Runtime\Internal\objects\invisible.vb"
+﻿#Region "Microsoft.VisualBasic::f02f55aaa713be9a1e73ffc6ddcdb8b5, R#\Runtime\Internal\objects\invisible.vb"
 
     ' Author:
     ' 
@@ -34,6 +34,8 @@
     '     Class invisible
     ' 
     '         Properties: value
+    ' 
+    '         Function: ToString
     ' 
     ' 
     ' /********************************************************************************/

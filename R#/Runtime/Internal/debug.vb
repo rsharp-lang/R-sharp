@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6e4eaa1c11a374aaae521935608adad2, R#\Runtime\Internal\debug.vb"
+﻿#Region "Microsoft.VisualBasic::066c5d7b7a51057f37cdbded74a9f1d5, R#\Runtime\Internal\debug.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '         Constructor: (+1 Overloads) Sub New
     ' 
     '         Function: [stop], createDotNetExceptionMessage, CreateMessageInternal, getEnvironmentStack, getMessageColor
-    '                   getMessagePrefix, PrintMessageInternal, PrintRExceptionStackTrace, PrintRStackTrace
+    '                   getMessagePrefix, PrintMessageInternal, PrintRExceptionStackTrace, PrintRStackTrace, PrintWarningMessages
     ' 
     '         Sub: write
     ' 

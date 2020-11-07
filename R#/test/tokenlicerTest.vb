@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2b31efebc491f5629aa835e586e0da06, R#\test\tokenlicerTest.vb"
+﻿#Region "Microsoft.VisualBasic::2b31efebc491f5629aa835e586e0da06, R#\Test\tokenlicerTest.vb"
 
     ' Author:
     ' 

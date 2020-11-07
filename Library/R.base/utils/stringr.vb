@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1ec1316e7a2311a069c94d2f38ca0d2d, Library\R.base\utils\strings.vb"
+﻿#Region "Microsoft.VisualBasic::00e523fb751c466c5270cddd948b165e, Library\R.base\utils\stringr.vb"
 
     ' Author:
     ' 
@@ -31,11 +31,10 @@
 
     ' Summaries:
 
-    ' Module strings
+    ' Module stringr
     ' 
     '     Constructor: (+1 Overloads) Sub New
-    '     Function: (+2 Overloads) createRObj, fromJSON, fromXML, Levenshtein, unescapeRRawstring
-    '               unescapeRUnicode
+    '     Function: createRObj, fromXML, Levenshtein, unescapeRRawstring, unescapeRUnicode
     ' 
     ' /********************************************************************************/
 

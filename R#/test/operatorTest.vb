@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::772d58ed26b9256b98aa4ceb92725874, R#\test\operatorTest.vb"
+﻿#Region "Microsoft.VisualBasic::772d58ed26b9256b98aa4ceb92725874, R#\Test\operatorTest.vb"
 
     ' Author:
     ' 

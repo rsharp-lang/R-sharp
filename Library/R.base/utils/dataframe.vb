@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::26b068d5ec2e6181077135f7db99f2b6, Library\R.base\utils\dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::3fa3b0f72dde14755214f1515dcd315d, Library\R.base\utils\dataframe.vb"
 
     ' Author:
     ' 
