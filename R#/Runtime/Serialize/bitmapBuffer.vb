@@ -53,6 +53,9 @@ Namespace Runtime.Serialize
 
         Public Property bitmap As Image
 
+        Sub New()
+        End Sub
+
         Sub New(bytes As Byte())
             Using ms As New MemoryStream(bytes)
                 bitmap = Image.FromStream(ms)
