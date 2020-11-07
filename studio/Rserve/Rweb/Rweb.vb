@@ -108,7 +108,7 @@ Public Class Rweb : Inherits HttpServer
         Dim Rslave As String = $"{App.HOME}/R#.exe"
 
         If App.IsMicrosoftPlatform Then
-            Call App.Shell(Rslave, arguments, CLR:=True).Run()
+            Call App.Shell(Rslave, arguments, CLR:=True, debug:=True).Run()
         Else
             Call UNIX.Shell("mono", $"{Rslave.CLIPath} {arguments}", verbose:=True)
         End If

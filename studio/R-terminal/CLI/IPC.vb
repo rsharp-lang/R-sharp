@@ -131,6 +131,9 @@ Partial Module CLI
             Throw New NotImplementedException(result.GetType.FullName)
         End If
 
+        Call $">> {buffer.code.Description}".__DEBUG_ECHO
+        Call $"post result back to the master node: {url}".__DEBUG_ECHO
+
         Using form As New MultipartForm
             Call form.Add("data", buffer.Serialize, "data.bin")
             Call form.POST(url)
