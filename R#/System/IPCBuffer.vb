@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::09e27f0c9c07c4718e4f2825e3d2670b, R#\System\IPCBuffer.vb"
+﻿#Region "Microsoft.VisualBasic::8aef60be73603eb2954a12e88866a68a, R#\System\IPCBuffer.vb"
 
     ' Author:
     ' 
@@ -111,5 +111,3 @@ Namespace System
         End Function
     End Class
 End Namespace
-
-
