@@ -1,6 +1,11 @@
-﻿Namespace Runtime.Serialize
+﻿Imports Microsoft.VisualBasic.Serialization
 
-    Public Class listBuffer
+Namespace Runtime.Serialize
 
+    Public Class listBuffer : Inherits RawStream
+
+        Public Overrides Function Serialize() As Byte()
+            Throw New NotImplementedException()
+        End Function
     End Class
 End Namespace
