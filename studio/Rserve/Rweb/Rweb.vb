@@ -50,16 +50,12 @@ Imports System.Text
 Imports Flute.Http.Core
 Imports Flute.Http.Core.HttpStream
 Imports Flute.Http.Core.Message
-Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
-Imports Microsoft.VisualBasic.Serialization.JSON
-Imports Microsoft.VisualBasic.Net.Http
-Imports Microsoft.VisualBasic.Text
-Imports SMRUCC.Rsharp.Interpreter
-Imports SMRUCC.Rsharp.Runtime
-Imports SMRUCC.Rsharp.Runtime.Serialize
-Imports SMRUCC.Rsharp.System.Configuration
 Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.My
+Imports Microsoft.VisualBasic.Net.Http
+Imports Microsoft.VisualBasic.Serialization.JSON
+Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Serialize
 
 ''' <summary>
 ''' Rweb is not design for general web programming, it is 
@@ -124,12 +120,20 @@ Public Class Rweb : Inherits HttpServer
         End SyncLock
 
         If TypeOf result Is messageBuffer Then
-            Dim err As String = DirectCast(result, messageBuffer).GetErrorMessage.ToString
+            Dim err As String
+            Dim message = DirectCast(result, messageBuffer).GetErrorMessage
+
+            Using buffer As New MemoryStream, output As New StreamWriter(buffer)
+                Call Internal.debug.writeErrMessage(message, stdout:=output, redirectError2stdout:=False)
+                Call buffer.Flush()
+
+                err = Encoding.UTF8.GetString(buffer.ToArray)
+            End Using
 
             If showError Then
                 Call response.WriteHTML(err)
             Else
-                Call response.WriteError(code, err)
+                Call response.WriteError(500, err)
             End If
         ElseIf TypeOf result Is bitmapBuffer Then
             Dim bytes As Byte() = result.Serialize
