@@ -53,6 +53,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Serialize
 Imports SMRUCC.Rsharp.System.Configuration
+Imports IPEndPoint = Microsoft.VisualBasic.Net.IPEndPoint
 
 Partial Module CLI
 
@@ -113,6 +114,7 @@ Partial Module CLI
     <Extension>
     Private Function postResult(env As Environment, result As Object, master As String, port As Integer, request_id As String) As Integer
         Dim buffer As New Buffer
+        Dim ip As New IPEndPoint(master)
         Dim url As String = $"http://{master}:{port}/callback?request={request_id}"
 
         If result Is Nothing Then
