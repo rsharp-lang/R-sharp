@@ -665,6 +665,7 @@
     <Compile Include="Runtime\Internal\internalInvokes\Math\varUseMethods.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\reflections.vb" />
     <Compile Include="Runtime\Serialize\bitmapBuffer.vb" />
+    <Compile Include="Runtime\Serialize\textBuffer.vb" />
     <Compile Include="Runtime\Serialize\messageBuffer.vb" />
     <Compile Include="Runtime\Serialize\vectorBuffer.vb" />
     <Compile Include="Runtime\Serialize\listBuffer.vb" />
