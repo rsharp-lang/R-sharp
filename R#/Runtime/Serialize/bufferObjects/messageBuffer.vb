@@ -69,10 +69,10 @@ Namespace Runtime.Serialize
         Public Property trace As StackFrame()
         Public Property source As String
 
-        Sub New(message As Message)
+        Sub New(message As Message, Optional source As String = "unknown")
             Me.message = message.message
             Me.level = message.level
-            Me.source = message.source.ToString
+            Me.source = If(message.source?.ToString, source)
             Me.environmentStack = message.environmentStack
             Me.trace = message.trace
         End Sub
