@@ -83,6 +83,8 @@ Namespace Runtime.Serialize
                     bufferObject = New bitmapBuffer With {.bitmap = Image.FromStream(data)}
                 Case BufferObjects.vector
                     bufferObject = vectorBuffer.CreateBuffer(data)
+                Case BufferObjects.message
+                    bufferObject = messageBuffer.CreateBuffer(data)
                 Case Else
                     Throw New NotImplementedException(code.Description)
             End Select
