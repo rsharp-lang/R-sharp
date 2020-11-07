@@ -21,7 +21,7 @@ Module bufferTest
 
         Call bytes.FlushStream(temp)
 
-        Dim vec2 = vectorBuffer.CreateBuffer(temp.Open)
+        Dim vec2 = vectorBuffer.CreateBuffer(temp.Open).GetVector
 
         Pause()
     End Sub

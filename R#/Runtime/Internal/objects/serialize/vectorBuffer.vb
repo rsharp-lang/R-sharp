@@ -75,12 +75,13 @@ Namespace Runtime.Internal.Object.serialize
             raw = New Byte(sizeof - 1) {}
             bytes.Read(raw, Scan0, raw.Length)
 
+            Dim unit As String = text.GetString(raw)
+
             bytes.Read(int_size, Scan0, int_size.Length)
             sizeof = BitConverter.ToInt32(int_size, Scan0)
             raw = New Byte(sizeof - 1) {}
             bytes.Read(raw, Scan0, raw.Length)
 
-            Dim unit As String = text.GetString(raw)
             Dim names As String()
 
             Using ms As New MemoryStream(raw)
