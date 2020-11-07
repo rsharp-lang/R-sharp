@@ -53,6 +53,8 @@ Imports Flute.Http.Core.Message
 Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.My
 Imports Microsoft.VisualBasic.Net.Http
+Imports Microsoft.VisualBasic.Net.Tcp
+Imports Microsoft.VisualBasic.Parallel
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Serialize
@@ -66,12 +68,16 @@ Public Class Rweb : Inherits HttpServer
     Dim Rweb As String
     Dim showError As Boolean
     Dim requestPostback As New Dictionary(Of String, BufferObject)
+    Dim socket As TcpServicesSocket
 
-    Public Sub New(Rweb$, port As Integer, show_error As Boolean, Optional threads As Integer = -1)
+    Public Sub New(Rweb$, port As Integer, tcp As Integer, show_error As Boolean, Optional threads As Integer = -1)
         MyBase.New(port, threads)
 
         Me.Rweb = Rweb
         Me.showError = show_error
+        Me.socket = New TcpServicesSocket(tcp) With {
+            .ResponseHandler = AddressOf callback
+        }
     End Sub
 
     Public Overrides Sub handleGETRequest(p As HttpProcessor)
@@ -97,7 +103,7 @@ Public Class Rweb : Inherits HttpServer
     Private Sub runRweb(Rscript As String, args As Dictionary(Of String, String()), response As HttpResponse)
         Dim argsText As String = args.GetJson.Base64String
         Dim request_id As String = App.GetNextUniqueName("web_request__")
-        Dim port As Integer = Me.localPort
+        Dim port As Integer = socket.LocalPort
         Dim master As String = "localhost"
         Dim entry As String = "run"
 
@@ -150,6 +156,10 @@ Public Class Rweb : Inherits HttpServer
             Call response.Write(New Byte() {})
         End If
     End Sub
+
+    Private Function callback(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
+
+    End Function
 
     Public Overrides Sub handlePOSTRequest(p As HttpProcessor, inputData As String)
         Dim request As New HttpPOSTRequest(p, inputData)

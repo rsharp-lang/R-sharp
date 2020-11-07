@@ -56,14 +56,15 @@ Module Program
     ''' <returns></returns>
     <ExportAPI("--start")>
     <Description("Start R# web services, host R# script with http get request.")>
-    <Usage("--start [--port <port number, default=7452> --Rweb <directory, default=./Rweb> --show_error --n_threads <max_threads, default=8>]")>
+    <Usage("--start [--port <port number, default=7452> --tcp <port_number, default=3838> --Rweb <directory, default=./Rweb> --show_error --n_threads <max_threads, default=8>]")>
     Public Function start(args As CommandLine) As Integer
         Dim port As Integer = args("--port") Or 7452
         Dim Rweb As String = args("--Rweb") Or App.CurrentDirectory & "/Rweb"
         Dim n_threads As Integer = args("--n_threads") Or 8
         Dim show_error As Boolean = args("--show_error")
+        Dim tcp As Integer = args("--tcp") Or 3838
 
-        Using http As New Rweb(Rweb, port, show_error, threads:=n_threads)
+        Using http As New Rweb(Rweb, port, tcp, show_error, threads:=n_threads)
             Return http.Run()
         End Using
     End Function
