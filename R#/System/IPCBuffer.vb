@@ -23,7 +23,7 @@ Namespace System
             Return requestId
         End Function
 
-        Public Shared Function Parse(buffer As Stream) As IPCBuffer
+        Public Shared Function ParseBuffer(buffer As Stream) As IPCBuffer
             Dim int_size As Byte() = New Byte(3) {}
             Dim sizeof As Integer
             Dim bytes As Byte()

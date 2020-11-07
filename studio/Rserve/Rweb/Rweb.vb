@@ -58,6 +58,7 @@ Imports Microsoft.VisualBasic.Parallel
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Serialize
+Imports SMRUCC.Rsharp.System
 
 ''' <summary>
 ''' Rweb is not design for general web programming, it is 
@@ -135,7 +136,7 @@ Public Class Rweb : Inherits HttpServer
             Dim message = DirectCast(result, messageBuffer).GetErrorMessage
 
             Using buffer As New MemoryStream, output As New StreamWriter(buffer)
-                Call Internal.debug.writeErrMessage(message, stdout:=output, redirectError2stdout:=False)
+                Call Internal.debug.writeErrMessage(message, stdout:=output, redirectError2stdout:=True)
                 Call buffer.Flush()
 
                 err = Encoding.UTF8.GetString(buffer.ToArray)
@@ -163,7 +164,15 @@ Public Class Rweb : Inherits HttpServer
     End Sub
 
     Private Function callback(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
+        Using bytes As New MemoryStream(request.ChunkBuffer)
+            Dim data As IPCBuffer = IPCBuffer.ParseBuffer(bytes)
 
+            SyncLock requestPostback
+                requestPostback(data.requestId) = data.buffer.data
+            End SyncLock
+
+            Return New DataPipe(NetResponse.RFC_OK)
+        End Using
     End Function
 
     Public Overrides Sub handlePOSTRequest(p As HttpProcessor, inputData As String)
