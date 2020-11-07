@@ -1,45 +1,45 @@
 ﻿#Region "Microsoft.VisualBasic::51b6c5dba57d9e06cd78b782b93acb05, studio\Rserve\Rweb\Rweb.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Class Rweb
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: getHttpProcessor
-    ' 
-    '     Sub: handleGETRequest, handleOtherMethod, handlePOSTRequest, runRweb
-    ' 
-    ' /********************************************************************************/
+' Class Rweb
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: getHttpProcessor
+' 
+'     Sub: handleGETRequest, handleOtherMethod, handlePOSTRequest, runRweb
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -48,13 +48,18 @@ Imports System.Net.Sockets
 Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Flute.Http.Core
+Imports Flute.Http.Core.HttpStream
 Imports Flute.Http.Core.Message
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Serialize
 Imports SMRUCC.Rsharp.System.Configuration
+Imports Microsoft.VisualBasic.ApplicationServices
+Imports Microsoft.VisualBasic.My
 
 ''' <summary>
 ''' Rweb is not design for general web programming, it is 
@@ -64,6 +69,7 @@ Public Class Rweb : Inherits HttpServer
 
     Dim Rweb As String
     Dim showError As Boolean
+    Dim requestPostback As New Dictionary(Of String, BufferObject)
 
     Public Sub New(Rweb$, port As Integer, show_error As Boolean, Optional threads As Integer = -1)
         MyBase.New(port, threads)
@@ -86,63 +92,83 @@ Public Class Rweb : Inherits HttpServer
         End Using
     End Sub
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="Rscript">the file path of the target R# script file</param>
+    ''' <param name="args">script arguments</param>
+    ''' <param name="response"></param>
     Private Sub runRweb(Rscript As String, args As Dictionary(Of String, String()), response As HttpResponse)
-        Using output As New MemoryStream(), Rstd_out As New StreamWriter(output, Encodings.UTF8WithoutBOM.CodePage)
-            Dim result As Object
-            Dim code As Integer
-            Dim content_type As String
-            Dim http As NamedValue(Of Object)() = args _
-                .Select(Function(t)
-                            Return New NamedValue(Of Object) With {
-                                .Name = t.Key,
-                                .Value = t.Value
-                            }
-                        End Function) _
-                .ToArray
+        Dim argsText As String = args.GetJson.Base64String
+        Dim request_id As String = App.GetNextUniqueName("web_request__")
+        Dim port As Integer = Me.localPort
+        Dim master As String = "localhost"
+        Dim entry As String = "run"
 
-            Call args.GetJson.__DEBUG_ECHO
+        Call args.GetJson.__DEBUG_ECHO
 
-            ' run rscript
-            Using R As RInterpreter = RInterpreter _
-                .FromEnvironmentConfiguration(ConfigFile.localConfigs) _
-                .RedirectOutput(Rstd_out, OutputEnvironments.Html)
+        ' --slave /exec <script.R> /args <json_base64> /request-id <request_id> /PORT=<port_number> [/MASTER=<ip, default=localhost> /entry=<function_name, default=NULL>]
+        Dim arguments As String = $"--slave /exec {Rscript.CLIPath} /args ""{argsText}"" /request-id {request_id} /PORT={port} /MASTER={master} /entry={entry}"
+        Dim Rslave As String = $"{App.HOME}/R#.exe"
 
-                R.silent = True
-                R.redirectError2stdout = showError
+        If App.IsMicrosoftPlatform Then
+            Call App.Shell(Rslave, arguments, CLR:=True).Run()
+        Else
+            Call UNIX.Shell("mono", $"{Rslave.CLIPath} {arguments}", verbose:=True)
+        End If
 
-                For Each pkgName As String In R.configFile.GetStartupLoadingPackages
-                    Call R.LoadLibrary(packageName:=pkgName, silent:=True)
-                Next
+        Dim result As BufferObject = requestPostback.TryGetValue(request_id)
 
-                result = R.Source(Rscript, http)
-                code = Rserve.Rscript.handleResult(result, R.globalEnvir, Nothing)
+        SyncLock requestPostback
+            Call requestPostback.Remove(request_id)
+        End SyncLock
 
-                If R.globalEnvir.stdout.recommendType Is Nothing Then
-                    content_type = "text/html"
-                Else
-                    content_type = R.globalEnvir.stdout.recommendType
-                End If
-            End Using
+        If TypeOf result Is messageBuffer Then
+            Dim err As String = DirectCast(result, messageBuffer).GetErrorMessage.ToString
 
-            Call Rstd_out.Flush()
-
-            If code <> 0 Then
-                Dim err As String = Encoding.UTF8.GetString(output.ToArray)
-
-                If showError Then
-                    Call response.WriteHTML(err)
-                Else
-                    Call response.WriteError(code, err)
-                End If
+            If showError Then
+                Call response.WriteHTML(err)
             Else
-                Call response.WriteHeader(content_type, output.Length)
-                Call response.Write(output.ToArray)
+                Call response.WriteError(code, err)
             End If
-        End Using
+        ElseIf TypeOf result Is bitmapBuffer Then
+            Dim bytes As Byte() = result.Serialize
+
+            Call response.WriteHeader("image/png", bytes.Length)
+            Call response.Write(bytes)
+        ElseIf TypeOf result Is textBuffer Then
+            Dim bytes As Byte() = result.Serialize
+
+            Call response.WriteHeader("html/text", bytes.Length)
+            Call response.Write(bytes)
+        Else
+            Call response.WriteHeader("html/text", 0)
+            Call response.Write(New Byte() {})
+        End If
     End Sub
 
     Public Overrides Sub handlePOSTRequest(p As HttpProcessor, inputData As String)
-        Call p.writeFailure(404, "not allowed!")
+        Dim request As New HttpPOSTRequest(p, inputData)
+
+        Select Case request.URL.path
+            Case "callback"
+                Dim requestId As String = request.URL("request")
+                Dim data As HttpPostedFile = request.POSTData.files _
+                    .TryGetValue("data") _
+                   ?.FirstOrDefault
+
+                Using file As FileStream = data.TempPath.Open
+                    Dim buffer As Buffer = Buffer.ParseBuffer(raw:=file)
+
+                    SyncLock requestPostback
+                        requestPostback(requestId) = buffer.data
+                    End SyncLock
+                End Using
+
+                Call p.writeSuccess(0)
+            Case Else
+                Call p.writeFailure(404, "not allowed!")
+        End Select
     End Sub
 
     Public Overrides Sub handleOtherMethod(p As HttpProcessor)

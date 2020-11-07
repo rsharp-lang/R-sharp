@@ -63,7 +63,7 @@ Partial Module CLI
     <Argument("/args", False, CLITypes.Base64, PipelineTypes.std_in,
               AcceptTypes:={GetType(Dictionary(Of String, String))},
               Extensions:="*.json",
-              Description:="The base64 text of the input arguments for running current R# script file, this is a json encoded text of the arguments. the json object should be a collection of [key => value] pairs.")>
+              Description:="The base64 text of the input arguments for running current R# script file, this is a json encoded text of the arguments. the json object should be a collection of [key => value[]] pairs.")>
     <Argument("/entry", True, CLITypes.String, AcceptTypes:={GetType(String)},
               Description:="the entry function name, by default is running the script from the begining to ends.")>
     <Argument("/request-id", False, CLITypes.String,
@@ -77,9 +77,9 @@ Partial Module CLI
               Description:="the port number for master node listen to this callback post data.")>
     Public Function slaveMode(args As CommandLine) As Integer
         Dim script As String = args <= "/exec"
-        Dim arguments As Dictionary(Of String, String) = args("/args") _
+        Dim arguments As Dictionary(Of String, String()) = args("/args") _
             .Base64Decode _
-            .LoadJSON(Of Dictionary(Of String, String))
+            .LoadJSON(Of Dictionary(Of String, String()))
         Dim port As Integer = args <= "/PORT"
         Dim master As String = args <= "/MASTER" Or "localhost"
         Dim entry As String = args <= "/entry"
@@ -113,7 +113,7 @@ Partial Module CLI
     <Extension>
     Private Function postResult(env As Environment, result As Object, master As String, port As Integer, request_id As String) As Integer
         Dim buffer As New Buffer
-        Dim url As String = $"http://{master}:{port}/callback?request=${request_id}"
+        Dim url As String = $"http://{master}:{port}/callback?request={request_id}"
 
         If result Is Nothing Then
             buffer.data = rawBuffer.getEmptyBuffer

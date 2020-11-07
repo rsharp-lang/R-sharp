@@ -227,6 +227,15 @@ Namespace Runtime.Internal
         End Function
 
         Public Shared Function PrintMessageInternal(message As Message, globalEnv As GlobalEnvironment) As Object
+            Dim stdout As New StreamWriter(globalEnv.stdout.stream)
+
+            Call globalEnv.stdout.Flush()
+            Call writeErrMessage(message, stdout, globalEnv.Rscript.redirectError2stdout)
+
+            Return Nothing
+        End Function
+
+        Public Shared Sub writeErrMessage(message As Message, Optional stdout As StreamWriter = Nothing, Optional redirectError2stdout As Boolean = False)
             Dim execRoutine$ = message.environmentStack _
                 .Reverse _
                 .Select(Function(frame) frame.Method.Method) _
@@ -239,12 +248,10 @@ Namespace Runtime.Internal
                 backup = Console.ForegroundColor
             End If
 
-            Call globalEnv.stdout.Flush()
-
-            If message.level = MSG_TYPES.ERR AndAlso Not globalEnv.Rscript.redirectError2stdout Then
+            If message.level = MSG_TYPES.ERR AndAlso Not redirectError2stdout Then
                 dev = App.StdErr
             Else
-                dev = New StreamWriter(globalEnv.stdout.stream)
+                dev = stdout
             End If
 
             If App.IsConsoleApp Then
@@ -272,9 +279,7 @@ Namespace Runtime.Internal
             If App.IsConsoleApp Then
                 Console.ForegroundColor = backup
             End If
-
-            Return Nothing
-        End Function
+        End Sub
 
         Private Shared Function getMessagePrefix(message As Message) As String
             Select Case message.level
