@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f2aa6162ae6bb3c976405f74ae481e4f, Library\R.base\utils\JSON.vb"
+﻿#Region "Microsoft.VisualBasic::50816f6235274fdcdff5dff2555e8267, Library\R.base\utils\JSON.vb"
 
     ' Author:
     ' 
@@ -187,4 +187,3 @@ Module JSON
         End If
     End Function
 End Module
-

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::37782b8966490f8c6c8fbd6af13c8b84, R#\Runtime\Serialize\bitmapBuffer.vb"
+﻿#Region "Microsoft.VisualBasic::c07c15ad1f169441c952200f7cc7229c, R#\Runtime\Serialize\bufferObjects\bitmapBuffer.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,7 @@
     ' 
     '         Properties: bitmap
     ' 
-    '         Constructor: (+1 Overloads) Sub New
+    '         Constructor: (+2 Overloads) Sub New
     '         Function: Serialize
     ' 
     ' 

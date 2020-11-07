@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cd00d22db1292a45cd80d79ecf4f22a4, R#\Test\bufferTest.vb"
+﻿#Region "Microsoft.VisualBasic::73c2b3ea19f63b5900d5561a46bdede1, R#\Test\bufferTest.vb"
 
     ' Author:
     ' 
@@ -79,4 +79,3 @@ Module bufferTest
         Pause()
     End Sub
 End Module
-
