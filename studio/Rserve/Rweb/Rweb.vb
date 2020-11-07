@@ -80,6 +80,11 @@ Public Class Rweb : Inherits HttpServer
         }
     End Sub
 
+    Public Overrides Function Run() As Integer
+        Call RunTask(AddressOf socket.Run)
+        Return MyBase.Run()
+    End Function
+
     Public Overrides Sub handleGETRequest(p As HttpProcessor)
         Using response As New HttpResponse(p.outputStream, AddressOf p.writeFailure)
             ' /<scriptFileName>?...args
