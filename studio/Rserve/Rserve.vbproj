@@ -162,9 +162,10 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RInvoke.vb" />
-    <Compile Include="RSession.vb" />
-    <Compile Include="Rweb.vb" />
+    <Compile Include="Rweb\RSessionBackend.vb" />
+    <Compile Include="Rweb\RInvoke.vb" />
+    <Compile Include="Rweb\RSession.vb" />
+    <Compile Include="Rweb\Rweb.vb" />
     <Compile Include="Program.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">

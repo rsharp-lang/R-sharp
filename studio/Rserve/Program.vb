@@ -55,7 +55,7 @@ Module Program
     ''' <param name="args"></param>
     ''' <returns></returns>
     <ExportAPI("--start")>
-    <Description("Run R# script with http get request.")>
+    <Description("Start R# web services, host R# script with http get request.")>
     <Usage("--start [--port <port number, default=7452> --Rweb <directory, default=./Rweb> --show_error --n_threads <max_threads, default=8>]")>
     Public Function start(args As CommandLine) As Integer
         Dim port As Integer = args("--port") Or 7452
