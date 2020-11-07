@@ -676,6 +676,7 @@
     <Compile Include="Runtime\Internal\objects\utils\TableFormatter.vb" />
     <Compile Include="Runtime\Interop\CType\ICType.vb" />
     <Compile Include="Runtime\Serialize\Buffer.vb" />
+    <Compile Include="System\IPCBuffer.vb" />
     <Compile Include="System\Components\Encoder.vb" />
     <Compile Include="System\Components\RSessionInfo.vb" />
     <Compile Include="Runtime\Internal\objects\dataset\factor.vb" />

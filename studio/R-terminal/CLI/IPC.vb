@@ -1,41 +1,41 @@
 ﻿#Region "Microsoft.VisualBasic::a3b0452e35060363d7f24022768a840a, studio\R-terminal\CLI\IPC.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module CLI
-    ' 
-    '     Function: postResult, slaveMode
-    ' 
-    ' /********************************************************************************/
+' Module CLI
+' 
+'     Function: postResult, slaveMode
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -45,13 +45,13 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
-Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Serialize
+Imports SMRUCC.Rsharp.System
 Imports SMRUCC.Rsharp.System.Configuration
 Imports IPEndPoint = Microsoft.VisualBasic.Net.IPEndPoint
 
@@ -114,8 +114,7 @@ Partial Module CLI
     <Extension>
     Private Function postResult(env As Environment, result As Object, master As String, port As Integer, request_id As String) As Integer
         Dim buffer As New Buffer
-        Dim ip As New IPEndPoint(master)
-        Dim url As String = $"http://{master}:{port}/callback?request={request_id}"
+        Dim masterNode As New IPEndPoint(master, port)
 
         If result Is Nothing Then
             buffer.data = rawBuffer.getEmptyBuffer
@@ -133,13 +132,7 @@ Partial Module CLI
             Throw New NotImplementedException(result.GetType.FullName)
         End If
 
-        Call $">> {buffer.code.Description}".__DEBUG_ECHO
-        Call $"post result back to the master node: {url}".__DEBUG_ECHO
-
-        Using form As New MultipartForm
-            Call form.Add("data", buffer.Serialize, "data.bin")
-            Call form.POST(url)
-        End Using
+        Call New Tcp.TcpRequest(masterNode).SendMessage(New IPCBuffer(request_id, buffer).Serialize)
 
         If Not result Is Nothing AndAlso result.GetType Is GetType(Message) Then
             Return DirectCast(result, Message).level
