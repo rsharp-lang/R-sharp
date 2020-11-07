@@ -380,7 +380,7 @@ Namespace Runtime.Internal.Invokes
         ' writeLines(text, con = stdout(), sep = "\n", useBytes = FALSE)
 
         ''' <summary>
-        ''' Write Lines to a Connection
+        ''' ### Write Lines to a Connection
         ''' 
         ''' Write text lines to a connection.
         ''' </summary>
@@ -410,8 +410,8 @@ Namespace Runtime.Internal.Invokes
         ''' For strings With marked encoding "bytes".)
         ''' </remarks>
         <ExportAPI("writeLines")>
-        Public Function writeLines(text$(), Optional con$ = Nothing, Optional sep$ = vbCrLf, Optional env As Environment = Nothing) As Object
-            If con.StringEmpty Then
+        Public Function writeLines(text$(), Optional con As Object = Nothing, Optional sep$ = vbCrLf, Optional env As Environment = Nothing) As Object
+            If con Is Nothing OrElse (TypeOf con Is String AndAlso DirectCast(con, String).StringEmpty) Then
                 Dim stdOut As Action(Of String)
 
                 If env.globalEnvironment.stdout Is Nothing Then
@@ -423,13 +423,16 @@ Namespace Runtime.Internal.Invokes
                 Call text.AsObjectEnumerator _
                     .JoinBy(sep) _
                     .DoCall(stdOut)
-            Else
+            ElseIf TypeOf con Is String Then
                 Call text.AsObjectEnumerator _
                     .JoinBy(sep) _
                     .SaveTo(con, Encodings.UTF8WithoutBOM.CodePage)
+            ElseIf TypeOf con Is textBuffer Then
+                DirectCast(con, textBuffer).text = text.AsObjectEnumerator.JoinBy(sep)
+                Return con
             End If
 
-            Return text
+            Return Nothing
         End Function
 
         ''' <summary>
