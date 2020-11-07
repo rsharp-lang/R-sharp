@@ -1,46 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::02279f538e5a677fdd1dfa98592c4a24, Library\R.graphics\grDevices.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module grDevices
-    ' 
-    '     Function: colorPopulator, colors, devCur, devOff, imageAttrs
-    '               rgb, saveImage
-    ' 
-    ' /********************************************************************************/
+' Module grDevices
+' 
+'     Function: colorPopulator, colors, devCur, devOff, imageAttrs
+'               rgb, saveImage
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Drawing
+Imports System.IO
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -53,8 +54,10 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Serialize
 Imports REnv = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
@@ -78,31 +81,56 @@ Public Module grDevices
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("save.graphics")>
-    Public Function saveImage(graphics As Object, Optional file$ = Nothing, Optional env As Environment = Nothing) As Object
+    Public Function saveImage(graphics As Object, Optional file As Object = Nothing, Optional env As Environment = Nothing) As Object
         If graphics Is Nothing Then
             Return Internal.debug.stop("Graphics data is NULL!", env)
         ElseIf graphics.GetType Is GetType(Image) Then
-            If file.StringEmpty Then
-                env.globalEnvironment.stdout.Write(DirectCast(graphics, Image))
-            Else
-                Return DirectCast(graphics, Image).SaveAs(file)
-            End If
+            Return saveBitmap(Of Image)(graphics, file, env)
         ElseIf graphics.GetType Is GetType(Bitmap) Then
-            If file.StringEmpty Then
-                env.globalEnvironment.stdout.Write(DirectCast(graphics, Bitmap))
-            Else
-                Return DirectCast(graphics, Bitmap).SaveAs(file)
-            End If
+            Return saveBitmap(Of Bitmap)(graphics, file, env)
         ElseIf graphics.GetType.IsInheritsFrom(GetType(GraphicsData)) Then
             With DirectCast(graphics, GraphicsData)
-                If file.StringEmpty Then
+                If file Is Nothing OrElse TypeOf file Is String AndAlso DirectCast(file, String).StringEmpty Then
                     env.globalEnvironment.stdout.WriteStream(AddressOf .Save, .content_type)
+                ElseIf TypeOf file Is String Then
+                    Return .Save(DirectCast(file, String))
+                ElseIf TypeOf file Is Stream Then
+                    Dim fs As Stream = DirectCast(file, Stream)
+                    Call .Save(fs)
+                    Call fs.Flush()
+                    Return fs
+                ElseIf TypeOf graphics Is ImageData AndAlso TypeOf file Is bitmapBuffer Then
+                    DirectCast(file, bitmapBuffer).bitmap = DirectCast(graphics, ImageData).Image
+                    Return file
+                ElseIf TypeOf graphics Is SVGData AndAlso TypeOf file Is textBuffer Then
+                    DirectCast(file, textBuffer).text = DirectCast(graphics, SVGData).GetSVGXml
+                    Return file
                 Else
-                    Return .Save(file)
+                    Return Message.InCompatibleType(GetType(String), file.GetType, env)
                 End If
             End With
         Else
             Return Internal.debug.stop(New InvalidProgramException($"'{graphics.GetType.Name}' is not a graphics data object!"), env)
+        End If
+
+        Return Nothing
+    End Function
+
+    Private Function saveBitmap(Of T As Image)(graphics As T, file As Object, env As Environment) As Object
+        If file Is Nothing OrElse TypeOf file Is String AndAlso DirectCast(file, String).StringEmpty Then
+            env.globalEnvironment.stdout.Write(DirectCast(graphics, Image))
+        ElseIf TypeOf file Is String Then
+            Return DirectCast(graphics, Image).SaveAs(file)
+        ElseIf TypeOf file Is Stream Then
+            Dim fs As Stream = DirectCast(file, Stream)
+            Call DirectCast(graphics, Image).Save(fs, Imaging.ImageFormat.Png)
+            Call fs.Flush()
+            Return fs
+        ElseIf TypeOf file Is bitmapBuffer Then
+            DirectCast(file, bitmapBuffer).bitmap = graphics
+            Return file
+        Else
+            Return Message.InCompatibleType(GetType(String), file.GetType, env, "invalid file for save bitmap!")
         End If
 
         Return Nothing
@@ -135,7 +163,7 @@ Public Module grDevices
     ''' <returns></returns>
     <ExportAPI("dev.off")>
     Public Function devOff(Optional which% = -1) As Integer
-
+        Throw New NotImplementedException
     End Function
 
     ''' <summary>
