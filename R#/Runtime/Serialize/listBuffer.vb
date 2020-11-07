@@ -1,4 +1,4 @@
-﻿Namespace Runtime.Internal.Object.serialize
+﻿Namespace Runtime.Serialize
 
     Public Class listBuffer
 
