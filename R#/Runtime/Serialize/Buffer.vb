@@ -9,8 +9,21 @@ Namespace Runtime.Serialize
 
     Public Class Buffer : Inherits RawStream
 
-        Public Property code As BufferObjects
         Public Property data As BufferObject
+
+        Public ReadOnly Property code As BufferObjects
+            Get
+                Select Case data.GetType
+                    Case GetType(rawBuffer) : Return BufferObjects.raw
+                    Case GetType(textBuffer) : Return BufferObjects.text
+                    Case GetType(bitmapBuffer) : Return BufferObjects.bitmap
+                    Case GetType(messageBuffer) : Return BufferObjects.message
+                    Case GetType(vectorBuffer) : Return BufferObjects.vector
+                    Case Else
+                        Throw New NotImplementedException(data.GetType.FullName)
+                End Select
+            End Get
+        End Property
 
         Public Shared Function ParseBuffer(raw As Stream) As Buffer
             Dim code As BufferObjects = MeasureBufferMagic(raw)
@@ -31,7 +44,6 @@ Namespace Runtime.Serialize
             End Select
 
             Return New Buffer With {
-                .code = code,
                 .data = bufferObject
             }
         End Function

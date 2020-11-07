@@ -5,10 +5,14 @@
     ''' </summary>
     Public Enum BufferObjects
         raw
-        text
+
+        text = 100
         bitmap
-        vector
+
+        vector = 200
         list
         dataframe
+
+        message = 500
     End Enum
 End Namespace
