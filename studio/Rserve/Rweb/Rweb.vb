@@ -116,7 +116,7 @@ Public Class Rweb : Inherits HttpServer
         Call args.GetJson.__DEBUG_ECHO
 
         ' --slave /exec <script.R> /args <json_base64> /request-id <request_id> /PORT=<port_number> [/MASTER=<ip, default=localhost> /entry=<function_name, default=NULL>]
-        Dim arguments As String = $"--slave /exec {Rscript.CLIPath} /args ""{argsText}"" /request-id {request_id} /PORT={port} /MASTER={master} /entry={entry}"
+        Dim arguments As String = $"--slave /exec {Rscript.CLIPath} /request-id {request_id} /PORT={port} /MASTER={master} /entry={entry} /args ""{argsText}"""
         Dim Rslave As String = $"{App.HOME}/R#.exe"
 
         If App.IsMicrosoftPlatform Then
