@@ -1,45 +1,45 @@
-﻿#Region "Microsoft.VisualBasic::2303c6a78b351137c18363482141bfff, studio\Rserve\Rweb\RSessionBackend.vb"
+﻿#Region "Microsoft.VisualBasic::edf791827bdcfc8996308e2f0adc91ee, studio\Rserve\Rweb\RSessionBackend.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-' Class RSessionBackend
-' 
-'     Constructor: (+1 Overloads) Sub New
-' 
-'     Function: handleRScript, requiredDataURI
-' 
-'     Sub: InspectObject, RunCode
-' 
-' /********************************************************************************/
+    ' Class RSessionBackend
+    ' 
+    '     Constructor: (+1 Overloads) Sub New
+    ' 
+    '     Function: handleRScript, requiredDataURI
+    ' 
+    '     Sub: InspectObject, RunCode
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -167,4 +167,3 @@ Public Class RSessionBackend
         Call response.Write(buffer)
     End Sub
 End Class
-
