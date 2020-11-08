@@ -55,6 +55,7 @@ Namespace System
 
         Public Property requestId As String
         Public Property buffer As DataBuffer
+        Public Property chunksize As Integer
 
         Sub New(request_id As String, buffer As DataBuffer)
             Me.requestId = request_id
@@ -65,7 +66,7 @@ Namespace System
         End Sub
 
         Public Overrides Function ToString() As String
-            Return requestId
+            Return $"[{requestId}] {buffer.code.Description} in {chunksize} bytes"
         End Function
 
         Public Shared Function ParseBuffer(buffer As Stream) As IPCBuffer
@@ -80,17 +81,20 @@ Namespace System
 
             Dim id As String = Encoding.UTF8.GetString(bytes)
             Dim data As DataBuffer
+            Dim size As Integer
 
             buffer.Read(int_size, Scan0, int_size.Length)
             sizeof = BitConverter.ToInt32(int_size, Scan0)
 
             Using ms As MemoryStream = BufferObject.SubStream(buffer, 4 + bytes.Length + 4, sizeof)
                 data = DataBuffer.ParseBuffer(ms)
+                size = ms.Length
             End Using
 
             Return New IPCBuffer With {
                 .buffer = data,
-                .requestId = id
+                .requestId = id,
+                .chunksize = size
             }
         End Function
 

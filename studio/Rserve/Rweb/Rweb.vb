@@ -173,6 +173,8 @@ Public Class Rweb : Inherits HttpServer
                 requestPostback(data.requestId) = data.buffer.data
             End SyncLock
 
+            Call $"accept callback data: {data.ToString}".__DEBUG_ECHO
+
             Return New DataPipe(NetResponse.RFC_OK)
         End Using
     End Function
