@@ -152,6 +152,10 @@ Public Class Rweb : Inherits HttpServer
         ElseIf TypeOf result Is bitmapBuffer Then
             Dim bytes As Byte() = result.Serialize
 
+            Using buffer As New MemoryStream(bytes)
+                bytes = buffer.UnGzipStream.ToArray
+            End Using
+
             Call response.WriteHeader("image/png", bytes.Length)
             Call response.Write(bytes)
         ElseIf TypeOf result Is textBuffer Then
