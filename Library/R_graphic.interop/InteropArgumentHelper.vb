@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::465ab27f0660fbdd1e174b2cf7d397d4, Library\R_graphic.interop\InteropArgumentHelper.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module InteropArgumentHelper
-    ' 
-    '     Function: getColor, getFontCSS, getPadding, getSize, getStrokePenCSS
-    '               getVector2D, getVector3D, paddingFromNumbers
-    ' 
-    ' /********************************************************************************/
+' Module InteropArgumentHelper
+' 
+'     Function: getColor, getFontCSS, getPadding, getSize, getStrokePenCSS
+'               getVector2D, getVector3D, paddingFromNumbers
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -99,9 +99,23 @@ Public Module InteropArgumentHelper
             Return [default]
         End If
 
+        If TypeOf padding Is vector Then
+            padding = DirectCast(padding, vector).data
+        End If
+
         Select Case padding.GetType
             Case GetType(String)
                 Return padding
+            Case GetType(String())
+                Dim strs As String() = DirectCast(padding, String())
+
+                If strs.Length = 1 Then
+                    Return strs(Scan0)
+                ElseIf strs.Length = 4 AndAlso strs.Take(4).All(Function(val) val.IsNumeric) Then
+                    Return strs.Take(4).Select(AddressOf Val).ToArray.paddingFromNumbers(default$)
+                Else
+                    Return [default]
+                End If
             Case GetType(Long()), GetType(Integer())
                 Return DirectCast(padding, Array).paddingFromNumbers(default$)
             Case GetType(vector)
@@ -135,7 +149,15 @@ Public Module InteropArgumentHelper
             Case GetType(String)
                 Return size
             Case GetType(String())
-                Return DirectCast(size, String()).ElementAtOrDefault(Scan0)
+                Dim strs As String() = DirectCast(size, String())
+
+                If strs.Length = 1 Then
+                    Return strs(Scan0)
+                ElseIf strs(Scan0).IsNumeric AndAlso strs(1).IsNumeric Then
+                    Return $"{strs(Scan0)},{strs(1)}"
+                Else
+                    Return [default]
+                End If
             Case GetType(Size)
                 With DirectCast(size, Size)
                     Return $"{ .Width},{ .Height}"

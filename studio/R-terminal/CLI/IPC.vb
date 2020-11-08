@@ -95,6 +95,8 @@ Partial Module CLI
                     End Function) _
             .ToArray
 
+        R.debug = args("--debug")
+
         For Each pkgName As String In R.configFile.GetStartupLoadingPackages
             Call R.LoadLibrary(packageName:=pkgName)
         Next
