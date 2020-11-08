@@ -84,7 +84,7 @@ Namespace Runtime.Serialize
                 Case BufferObjects.text
                     bufferObject = New textBuffer With {.text = Encoding.UTF8.GetString(data.ToArray)}
                 Case BufferObjects.bitmap
-                    bufferObject = New bitmapBuffer With {.bitmap = Image.FromStream(data)}
+                    bufferObject = New bitmapBuffer(data)
                 Case BufferObjects.vector
                     bufferObject = vectorBuffer.CreateBuffer(data)
                 Case BufferObjects.message

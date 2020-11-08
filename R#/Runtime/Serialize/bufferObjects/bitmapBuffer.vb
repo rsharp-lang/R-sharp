@@ -62,14 +62,22 @@ Namespace Runtime.Serialize
         Sub New()
         End Sub
 
+        Sub New(buffer As Stream)
+            Call loadAuto(buffer)
+        End Sub
+
         Sub New(bytes As Byte())
             Using ms As New MemoryStream(bytes)
-                If ms.CheckGZipMagic Then
-                    bitmap = Image.FromStream(ms.GZipStream)
-                Else
-                    bitmap = Image.FromStream(ms)
-                End If
+                Call loadAuto(ms)
             End Using
+        End Sub
+
+        Private Sub loadAuto(buffer As Stream)
+            If buffer.CheckGZipMagic Then
+                bitmap = Image.FromStream(buffer.UnGzipStream)
+            Else
+                bitmap = Image.FromStream(buffer)
+            End If
         End Sub
 
         Public Overrides Function Serialize() As Byte()
