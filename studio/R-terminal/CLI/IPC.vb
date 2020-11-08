@@ -134,7 +134,10 @@ Partial Module CLI
             Throw New NotImplementedException(result.GetType.FullName)
         End If
 
-        Call New Tcp.TcpRequest(masterNode).SendMessage(New IPCBuffer(request_id, buffer).Serialize)
+        Dim packageData As Byte() = New IPCBuffer(request_id, buffer).Serialize
+
+        Call $"push callback data '{buffer.code.Description}' to [{masterNode}] [{packageData.Length} bytes]".__INFO_ECHO
+        Call New Tcp.TcpRequest(masterNode).SendMessage(packageData)
 
         If Not result Is Nothing AndAlso result.GetType Is GetType(Message) Then
             Return DirectCast(result, Message).level

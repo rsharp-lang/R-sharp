@@ -69,6 +69,10 @@ Namespace Runtime.Serialize
             End Get
         End Property
 
+        Public Overrides Function ToString() As String
+            Return code.Description
+        End Function
+
         Public Shared Function ParseBuffer(raw As Stream) As Buffer
             Dim code As BufferObjects = MeasureBufferMagic(raw)
             Dim bufferObject As BufferObject
