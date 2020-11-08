@@ -69,6 +69,12 @@ Namespace Runtime.Serialize
         Public Property trace As StackFrame()
         Public Property source As String
 
+        Public Overrides ReadOnly Property code As BufferObjects
+            Get
+                Return BufferObjects.message
+            End Get
+        End Property
+
         Sub New(message As Message, Optional source As String = "unknown")
             Me.message = message.message
             Me.level = message.level

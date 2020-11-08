@@ -44,6 +44,12 @@ Namespace Runtime.Serialize
 
     Public Class listBuffer : Inherits BufferObject
 
+        Public Overrides ReadOnly Property code As BufferObjects
+            Get
+                Return BufferObjects.list
+            End Get
+        End Property
+
         Public Overrides Function Serialize() As Byte()
             Throw New NotImplementedException()
         End Function

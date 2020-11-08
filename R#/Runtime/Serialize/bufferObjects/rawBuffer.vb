@@ -50,6 +50,12 @@ Namespace Runtime.Serialize
 
         Public Property buffer As MemoryStream
 
+        Public Overrides ReadOnly Property code As BufferObjects
+            Get
+                Return BufferObjects.raw
+            End Get
+        End Property
+
         Public Shared Function getEmptyBuffer() As rawBuffer
             Return New rawBuffer With {.buffer = New MemoryStream()}
         End Function

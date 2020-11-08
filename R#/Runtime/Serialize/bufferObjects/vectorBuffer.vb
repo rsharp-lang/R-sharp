@@ -72,6 +72,12 @@ Namespace Runtime.Serialize
             End Get
         End Property
 
+        Public Overrides ReadOnly Property code As BufferObjects
+            Get
+                Return BufferObjects.vector
+            End Get
+        End Property
+
         Public Function GetVector() As vector
             Dim rtype As RType = RType.GetRSharpType(underlyingType)
             Dim unit As New unit With {.name = Me.unit}

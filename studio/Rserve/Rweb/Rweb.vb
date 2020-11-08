@@ -127,6 +127,8 @@ Public Class Rweb : Inherits HttpServer
 
         Dim result As BufferObject = requestPostback.TryGetValue(request_id)
 
+        Call $"get callback from slave process [{request_id}] -> {result.code.Description}".__INFO_ECHO
+
         SyncLock requestPostback
             Call requestPostback.Remove(request_id)
         End SyncLock

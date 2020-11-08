@@ -47,6 +47,7 @@ Namespace Runtime.Serialize
 
     Public MustInherit Class BufferObject : Inherits RawStream
 
+        Public MustOverride ReadOnly Property code As BufferObjects
 
         Public Shared Function SubStream(stream As Stream, from As Long, length As Integer) As MemoryStream
             Dim buffer As Byte() = New Byte(length - 1) {}

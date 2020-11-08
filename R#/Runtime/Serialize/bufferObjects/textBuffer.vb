@@ -51,6 +51,12 @@ Namespace Runtime.Serialize
 
         Public Property text As String
 
+        Public Overrides ReadOnly Property code As BufferObjects
+            Get
+                Return BufferObjects.text
+            End Get
+        End Property
+
         Sub New()
         End Sub
 

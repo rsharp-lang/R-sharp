@@ -52,6 +52,12 @@ Namespace Runtime.Serialize
 
         Public Property bitmap As Image
 
+        Public Overrides ReadOnly Property code As BufferObjects
+            Get
+                Return BufferObjects.bitmap
+            End Get
+        End Property
+
         Sub New()
         End Sub
 
