@@ -92,7 +92,7 @@ Namespace Runtime.Interop
     Public Class RDefaultExpressionAttribute : Inherits RInteropAttribute
 
         Public Shared Function ParseDefaultExpression(strExp As String) As Expression
-            Return Program.CreateProgram(Rscript.FromText(strExp), debug:=False, [error]:=Nothing).execQueue.First
+            Return Program.CreateProgram(Rscript.FromText(strExp.Trim("~"c)), debug:=False, [error]:=Nothing).execQueue.First
         End Function
 
     End Class
