@@ -274,6 +274,8 @@ Namespace Runtime.Interop
                         Yield envir
                     ElseIf Not arg.isOptional Then
                         Yield missingParameter(arg, envir, name)
+                    ElseIf TypeOf arg.default Is Expression Then
+                        Yield DirectCast(arg.default, Expression).Evaluate(envir)
                     Else
                         Yield arg.default
                     End If
@@ -284,7 +286,11 @@ Namespace Runtime.Interop
                         Yield getValue(arg, arguments(nameKey), apiTrace, envir, False)
                     Else
                         If arg.isOptional Then
-                            Yield arg.default
+                            If TypeOf arg.default Is Expression Then
+                                Yield DirectCast(arg.default, Expression).Evaluate(envir)
+                            Else
+                                Yield arg.default
+                            End If
                         Else
                             Yield missingParameter(arg, envir, name)
                         End If

@@ -95,13 +95,20 @@ Namespace Runtime.Interop
             Dim [default] = p.GetCustomAttribute(Of RDefaultValueAttribute)
             Dim isObj As Boolean = Not p.GetCustomAttribute(Of RListObjectArgumentAttribute) Is Nothing
             Dim isByref As Boolean = Not p.GetCustomAttribute(Of RByRefValueAssignAttribute) Is Nothing
+            Dim hasExpression As Boolean = Not p.GetCustomAttribute(Of RDefaultExpressionAttribute) Is Nothing
 
             Return New RMethodArgument With {
                 .name = p.Name,
                 .type = RType.GetRSharpType(p.ParameterType),
                 .rawVectorFlag = rawVectorFlag,
                 .defaultScriptValue = [default],
-                .[default] = getDefaultValue(.rawVectorFlag, .defaultScriptValue, p.ParameterType, p.DefaultValue),
+                .[default] = getDefaultValue(
+                    rawVector:= .rawVectorFlag,
+                    defaultScript:= .defaultScriptValue,
+                    paramType:=p.ParameterType,
+                    hasExpression:=hasExpression,
+                    [default]:=p.DefaultValue
+                ),
                 .isOptional = p.HasDefaultValue,
                 .isObjectList = isObj,
                 .isRequireRawVector = Not .rawVectorFlag Is Nothing,
@@ -109,8 +116,14 @@ Namespace Runtime.Interop
             }
         End Function
 
-        Private Shared Function getDefaultValue(rawVector As RRawVectorArgumentAttribute, defaultScript As RDefaultValueAttribute, paramType As Type, [default] As Object) As Object
-            If rawVector Is Nothing Then
+        Private Shared Function getDefaultValue(rawVector As RRawVectorArgumentAttribute,
+                                                defaultScript As RDefaultValueAttribute,
+                                                paramType As Type,
+                                                hasExpression As Boolean,
+                                                [default] As Object) As Object
+            If hasExpression AndAlso TypeOf [default] Is String AndAlso DirectCast([default], String).FirstOrDefault = "~"c Then
+                Return RDefaultExpressionAttribute.ParseDefaultExpression(CStr([default]))
+            ElseIf rawVector Is Nothing Then
                 If Not defaultScript Is Nothing Then
                     Return defaultScript.ParseDefaultValue(paramType)
                 Else
