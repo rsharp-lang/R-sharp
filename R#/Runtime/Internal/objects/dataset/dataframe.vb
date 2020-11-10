@@ -203,6 +203,11 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        ''' <summary>
+        ''' ``[rowname => columns]``
+        ''' </summary>
+        ''' <param name="colKeys"></param>
+        ''' <returns></returns>
         Public Iterator Function forEachRow(Optional colKeys As String() = Nothing) As IEnumerable(Of NamedCollection(Of Object))
             Dim rowIds As String() = getRowNames()
             Dim nrows As Integer = Me.nrows
