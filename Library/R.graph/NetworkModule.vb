@@ -136,11 +136,12 @@ Public Module NetworkModule
     ''' <param name="defaultBrush">default brush texture descriptor string</param>
     ''' <returns></returns>
     <ExportAPI("read.network")>
-    Public Function LoadNetwork(directory$, Optional defaultNodeSize As Object = "20,20", Optional defaultBrush$ = "black") As NetworkGraph
+    Public Function LoadNetwork(directory$, Optional defaultNodeSize As Object = "20,20", Optional defaultBrush$ = "black", Optional ignoresBrokenLinks As Boolean = False) As NetworkGraph
         Return NetworkFileIO.Load(directory.GetDirectoryFullPath) _
             .CreateGraph(
                 defaultNodeSize:=InteropArgumentHelper.getSize(defaultNodeSize),
-                defaultBrush:=defaultBrush
+                defaultBrush:=defaultBrush,
+                ignoresBrokenLinks:=ignoresBrokenLinks
             )
     End Function
 
