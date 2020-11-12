@@ -182,6 +182,30 @@ Public Module NetworkModule
         Return graph.GetConnectedGraph
     End Function
 
+    <ExportAPI("node.names")>
+    Public Function nodeNames(graph As NetworkGraph,
+                              <RByRefValueAssignAttribute>
+                              Optional setNames As list = Nothing,
+                              Optional env As Environment = Nothing) As Object
+
+        If setNames Is Nothing Then
+            Return graph.vertex.Select(Function(a) a.data.label).ToArray
+        Else
+            Dim names As New List(Of String)
+            Dim sets As Dictionary(Of String, String) = setNames.AsGeneric(Of String)(env)
+
+            For Each node As node In graph.vertex
+                If sets.ContainsKey(node.label) AndAlso Not sets(node.label).StringEmpty Then
+                    node.data.label = sets(node.label)
+                End If
+
+                Call names.Add(node.data.label)
+            Next
+
+            Return names.ToArray
+        End If
+    End Function
+
     ''' <summary>
     ''' Calculate node degree in given graph
     ''' </summary>
