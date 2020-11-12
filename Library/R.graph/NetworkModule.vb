@@ -186,7 +186,12 @@ Public Module NetworkModule
         Next
 
         For Each edge As Edge In graph.graphEdges
-            Call g.CreateEdge(g.GetElementByID(edge.U.label), g.GetElementByID(edge.V.label), edge.weight, edge.data)
+            Call g.CreateEdge(
+                u:=g.GetElementByID(edge.U.label),
+                v:=g.GetElementByID(edge.V.label),
+                weight:=edge.weight,
+                data:=edge.data
+            )
         Next
 
         Return g
