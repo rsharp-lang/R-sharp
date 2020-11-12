@@ -179,22 +179,7 @@ Public Module NetworkModule
     ''' <returns></returns>
     <ExportAPI("connected_graph")>
     Public Function connectedNetwork(graph As NetworkGraph) As NetworkGraph
-        Dim g As New NetworkGraph
-
-        For Each node As node In graph.connectedNodes
-            Call g.CreateNode(node.label, node.data)
-        Next
-
-        For Each edge As Edge In graph.graphEdges
-            Call g.CreateEdge(
-                u:=g.GetElementByID(edge.U.label),
-                v:=g.GetElementByID(edge.V.label),
-                weight:=edge.weight,
-                data:=edge.data
-            )
-        Next
-
-        Return g
+        Return graph.GetConnectedGraph
     End Function
 
     ''' <summary>
