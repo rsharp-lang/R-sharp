@@ -1,45 +1,45 @@
 ﻿#Region "Microsoft.VisualBasic::6e2700760c0621cb30f41dd6a9959bfe, R#\Runtime\Internal\internalInvokes\utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module utils
-    ' 
-    '         Function: debugTool, GetInstalledPackages, head, installPackages, keyGroups
-    '                   md5, memorySize, system, wget
-    ' 
-    '         Sub: cls, sleep
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module utils
+' 
+'         Function: debugTool, GetInstalledPackages, head, installPackages, keyGroups
+'                   md5, memorySize, system, wget
+' 
+'         Sub: cls, sleep
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -60,6 +60,9 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports System.IO
 Imports Microsoft.VisualBasic.SecurityString
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports Microsoft.VisualBasic.My
+Imports Microsoft.VisualBasic.Text
+Imports Microsoft.VisualBasic.ApplicationServices
 
 Namespace Runtime.Internal.Invokes
 
@@ -463,8 +466,22 @@ Namespace Runtime.Internal.Invokes
                                Optional show_output_on_console As Boolean = True,
                                Optional minimized As Boolean = False,
                                Optional invisible As Boolean = True,
-                               Optional timeout As Double = 0) As Integer
-            Throw New NotImplementedException
+                               Optional timeout As Double = 0,
+                               Optional clr As Boolean = False) As Integer
+
+            Dim tokens As String() = CommandLine.TryParse(command, ASCII.Quot, "`")
+            Dim executative As String = tokens(Scan0)
+            Dim arguments As String = tokens.Skip(1).Select(Function(str) str.CLIToken).JoinBy(" ")
+
+            If App.IsMicrosoftPlatform Then
+                Call App.Shell(executative, arguments, CLR:=clr, debug:=True).Run()
+            ElseIf clr Then
+                Call UNIX.Shell("mono", $"{executative.CLIPath} {arguments}", verbose:=show_output_on_console)
+            Else
+                Call UNIX.Shell(executative, arguments, verbose:=show_output_on_console)
+            End If
+
+            Return 0
         End Function
 
         <ExportAPI("md5")>
