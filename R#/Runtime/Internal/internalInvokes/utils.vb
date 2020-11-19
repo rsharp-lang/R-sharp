@@ -63,6 +63,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports Microsoft.VisualBasic.My
 Imports Microsoft.VisualBasic.Text
 Imports Microsoft.VisualBasic.ApplicationServices
+Imports Microsoft.VisualBasic.CommandLine.Parsers
 
 Namespace Runtime.Internal.Invokes
 
@@ -469,7 +470,7 @@ Namespace Runtime.Internal.Invokes
                                Optional timeout As Double = 0,
                                Optional clr As Boolean = False) As Integer
 
-            Dim tokens As String() = CommandLine.TryParse(command, ASCII.Quot, "`")
+            Dim tokens As String() = CLIParser.GetTokens(command)
             Dim executative As String = tokens(Scan0)
             Dim arguments As String = tokens.Skip(1).Select(Function(str) str.CLIToken).JoinBy(" ")
 
