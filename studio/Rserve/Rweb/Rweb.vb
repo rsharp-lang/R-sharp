@@ -203,7 +203,23 @@ Public Class Rweb : Inherits HttpServer
 
                 Call p.writeSuccess(0)
             Case Else
-                Call p.writeFailure(404, "not allowed!")
+                Using response As New HttpResponse(p.outputStream, AddressOf p.writeFailure)
+                    ' /<scriptFileName>?...args
+                    Dim Rscript As String = Rweb & "/" & request.URL.path & ".R"
+                    Dim args As New Dictionary(Of String, String())(request.URL.query)
+
+                    If Not Rscript.FileExists Then
+                        Call p.writeFailure(404, "not allowed!")
+                    Else
+                        Dim form = request.POSTData.Form
+
+                        For Each formKey In form.AllKeys
+                            args(formKey) = form.GetValues(formKey)
+                        Next
+
+                        Call runRweb(Rscript, args, response)
+                    End If
+                End Using
         End Select
     End Sub
 
