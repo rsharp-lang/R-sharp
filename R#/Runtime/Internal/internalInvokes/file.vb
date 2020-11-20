@@ -790,10 +790,20 @@ Namespace Runtime.Internal.Invokes
         Public Sub fileRename(from$, to$, Optional env As Environment = Nothing)
             If Not from.FileExists Then
                 Call env.AddMessage({$"the given file is not exists...", $"source file: {from}"}, MSG_TYPES.WRN)
+            Else
+                Call [to].ParentPath.MkDIR
+                Call from.FileMove(to$)
             End If
+        End Sub
 
-            Call [to].ParentPath.MkDIR
-            Call from.FileMove(to$)
+        ''' <summary>
+        ''' Delete files or directories
+        ''' </summary>
+        <ExportAPI("file.remove")>
+        Public Sub fileRemove(x As String())
+            For Each file As String In x.SafeQuery
+                Call file.DeleteFile
+            Next
         End Sub
     End Module
 End Namespace

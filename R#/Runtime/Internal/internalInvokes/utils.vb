@@ -475,7 +475,13 @@ Namespace Runtime.Internal.Invokes
             Dim arguments As String = tokens.Skip(1).Select(Function(str) str.CLIToken).JoinBy(" ")
 
             If App.IsMicrosoftPlatform Then
-                Call App.Shell(executative, arguments, CLR:=clr, debug:=True).Run()
+                Dim ps = App.Shell(executative, arguments, CLR:=clr, debug:=True)
+
+                Call ps.Run()
+
+                If show_output_on_console Then
+                    Call Console.WriteLine(ps.StandardOutput)
+                End If
             ElseIf clr Then
                 Call UNIX.Shell("mono", $"{executative.CLIPath} {arguments}", verbose:=show_output_on_console)
             Else
