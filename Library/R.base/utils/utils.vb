@@ -273,21 +273,7 @@ Public Module utils
         Dim encoding As Encodings = TextEncodings.GetEncodings(GetEncoding(fileEncoding))
 
         If type Is GetType(Rdataframe) Then
-            Dim matrix As String()() = TableFormatter _
-                .GetTable(
-                    df:=DirectCast(x, Rdataframe),
-                    env:=env.globalEnvironment,
-                    printContent:=False,
-                    showRowNames:=row_names
-                )
-            Dim rows As IEnumerable(Of RowObject) = matrix _
-                .Select(Function(r)
-                            Return New RowObject(r)
-                        End Function) _
-                .ToArray
-            Dim dataframe As New File(rows)
-
-            Return dataframe.Save(path:=file, encoding:=encoding, silent:=True)
+            Return DirectCast(x, Rdataframe).DataFrameRows(row_names, env).Save(path:=file, encoding:=encoding, silent:=True)
         ElseIf type Is GetType(File) Then
             Return DirectCast(x, File).Save(path:=file, encoding:=encoding, silent:=True)
         ElseIf type Is GetType(IO.DataFrame) Then
@@ -303,7 +289,26 @@ Public Module utils
         End If
     End Function
 
-    Private Function saveGeneric(x As Object, type As Type, file$, encoding As Encoding, env As Environment) As Boolean
+    <Extension>
+    Friend Function DataFrameRows(x As Rdataframe, row_names As Boolean, env As Environment) As File
+        Dim matrix As String()() = TableFormatter _
+            .GetTable(
+                df:=x,
+                env:=env.globalEnvironment,
+                printContent:=False,
+                showRowNames:=row_names
+            )
+        Dim rows As IEnumerable(Of RowObject) = matrix _
+            .Select(Function(r)
+                        Return New RowObject(r)
+                    End Function) _
+            .ToArray
+        Dim dataframe As New File(rows)
+
+        Return dataframe
+    End Function
+
+    Friend Function MeasureGenericType(x As Object, ByRef type As Type) As Array
         If type Is GetType(vector) Then
             With DirectCast(x, vector)
                 x = DirectCast(x, vector).data
@@ -317,6 +322,11 @@ Public Module utils
             type = type.GetElementType
         End If
 
-        Return DirectCast(x, Array).SaveTable(file, encoding, type, silent:=True)
+        Return DirectCast(x, Array)
+    End Function
+
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    Private Function saveGeneric(x As Object, type As Type, file$, encoding As Encoding, env As Environment) As Boolean
+        Return MeasureGenericType(x, type).SaveTable(file, encoding, type, silent:=True)
     End Function
 End Module
