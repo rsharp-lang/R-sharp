@@ -731,11 +731,11 @@ Namespace Runtime.Internal.Invokes
 
             If patterns.Length = 1 Then
                 For Each ext As String In exts
-                    files += $"{tmpdir}/{patterns(Scan0)}{randf.NextInteger(10000).ToString.MD5.Substring(3, 9)}{ext}".GetFullPath
+                    files += $"{tmpdir}/{patterns(Scan0)}{NextTempToken()}{ext}".GetFullPath
                 Next
             ElseIf exts.Length = 1 Then
                 For Each patternStr As String In patterns
-                    files += $"{tmpdir}/{patternStr}{randf.NextInteger(10000).ToString.MD5.Substring(3, 9)}{exts(Scan0)}".GetFullPath
+                    files += $"{tmpdir}/{patternStr}{NextTempToken()}{exts(Scan0)}".GetFullPath
                 Next
             ElseIf patterns.Length <> exts.Length Then
                 Return Internal.debug.stop({
@@ -745,11 +745,15 @@ Namespace Runtime.Internal.Invokes
                 }, env)
             Else
                 For i As Integer = 0 To exts.Length - 1
-                    files += $"{tmpdir}/{patterns(i)}{randf.NextInteger(10000).ToString.MD5.Substring(3, 9)}{exts(i)}".GetFullPath
+                    files += $"{tmpdir}/{patterns(i)}{NextTempToken()}{exts(i)}".GetFullPath
                 Next
             End If
 
             Return files.ToArray
+        End Function
+
+        Private Function NextTempToken() As String
+            Return (randf.NextInteger(10000).ToString & Now.ToString).MD5.Substring(3, 9)
         End Function
 
         ''' <summary>
