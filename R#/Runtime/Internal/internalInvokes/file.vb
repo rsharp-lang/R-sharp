@@ -48,6 +48,7 @@ Imports System.IO
 Imports System.IO.Compression
 Imports System.Reflection
 Imports System.Text
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -779,5 +780,20 @@ Namespace Runtime.Internal.Invokes
             Return dir
         End Function
 
+        ''' <summary>
+        ''' File renames
+        ''' </summary>
+        ''' <param name="from">character vectors, containing file names Or paths.</param>
+        ''' <param name="to">character vectors, containing file names Or paths.</param>
+        ''' <param name="env"></param>
+        <ExportAPI("file.rename")>
+        Public Sub fileRename(from$, to$, Optional env As Environment = Nothing)
+            If Not from.FileExists Then
+                Call env.AddMessage({$"the given file is not exists...", $"source file: {from}"}, MSG_TYPES.WRN)
+            End If
+
+            Call [to].ParentPath.MkDIR
+            Call from.FileMove(to$)
+        End Sub
     End Module
 End Namespace
