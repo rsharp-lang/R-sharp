@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::5682a55ffc10fa520e6ac554cbf737cd, R#\Runtime\Internal\internalInvokes\file.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module file
-    ' 
-    '         Function: basename, buffer, close, dir_exists, dirCreate
-    '                   dirname, exists, file, filecopy, fileinfo
-    '                   getwd, listDirs, listFiles, loadListInternal, normalizeFileName
-    '                   normalizePath, openGzip, openZip, readLines, readList
-    '                   readText, Rhome, saveList, setwd, writeLines
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module file
+' 
+'         Function: basename, buffer, close, dir_exists, dirCreate
+'                   dirname, exists, file, filecopy, fileinfo
+'                   getwd, listDirs, listFiles, loadListInternal, normalizeFileName
+'                   normalizePath, openGzip, openZip, readLines, readList
+'                   readText, Rhome, saveList, setwd, writeLines
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -48,10 +48,12 @@ Imports System.IO
 Imports System.IO.Compression
 Imports System.Reflection
 Imports System.Text
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.My.UNIX
@@ -64,6 +66,8 @@ Imports SMRUCC.Rsharp.Runtime.Serialize
 Imports SMRUCC.Rsharp.System.Components
 Imports BASICString = Microsoft.VisualBasic.Strings
 Imports fsOptions = Microsoft.VisualBasic.FileIO.SearchOption
+Imports randf = Microsoft.VisualBasic.Math.RandomExtensions
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Invokes
 
@@ -677,5 +681,129 @@ Namespace Runtime.Internal.Invokes
                     Return Internal.debug.stop(New NotImplementedException(type.Description), env)
             End Select
         End Function
+
+        ''' <summary>
+        ''' ### Create Names for Temporary Files
+        ''' 
+        ''' ``tempfile`` returns a vector of character strings 
+        ''' which can be used as names for temporary files.
+        ''' </summary>
+        ''' <param name="pattern">a non-empty character vector giving the initial part of the name.</param>
+        ''' <param name="tmpdir">a non-empty character vector giving the directory name</param>
+        ''' <param name="fileext">a non-empty character vector giving the file extension</param>
+        ''' <returns>
+        ''' a character vector giving the names of possible (temporary) files. 
+        ''' Note that no files are generated by tempfile.
+        ''' </returns>
+        ''' <remarks>
+        ''' The length of the result is the maximum of the lengths of the three arguments; 
+        ''' values of shorter arguments are recycled.
+        '''
+        ''' The names are very likely To be unique among calls To tempfile In an R session 
+        ''' And across simultaneous R sessions (unless tmpdir Is specified). The filenames 
+        ''' are guaranteed Not To be currently In use.
+        '''
+        ''' The file name Is made by concatenating the path given by tmpdir, the pattern 
+        ''' String, a random String In hex And a suffix Of fileext.
+        '''
+        ''' By Default, tmpdir will be the directory given by tempdir(). This will be a 
+        ''' subdirectory of the per-session temporary directory found by the following 
+        ''' rule when the R session Is started. The environment variables TMPDIR, TMP And TEMP 
+        ''' are checked in turn And the first found which points to a writable directory Is 
+        ''' used: If none succeeds the value Of R_USER (see Rconsole) Is used. If the path 
+        ''' To the directory contains a space In any Of the components, the path returned will 
+        ''' use the shortnames version Of the path. Note that setting any Of these environment 
+        ''' variables In the R session has no effect On tempdir(): the per-session temporary 
+        ''' directory Is created before the interpreter Is started.
+        ''' </remarks>
+        <ExportAPI("tempfile")>
+        <RApiReturn(GetType(String))>
+        Public Function tempfile(<RRawVectorArgument>
+                                 Optional pattern As Object = "file",
+                                 <RDefaultExpression>
+                                 Optional tmpdir$ = "~tempdir()",
+                                 <RRawVectorArgument>
+                                 Optional fileext As Object = ".tmp",
+                                 Optional env As Environment = Nothing) As Object
+
+            Dim patterns As String() = REnv.asVector(Of String)(pattern)
+            Dim exts As String() = REnv.asVector(Of String)(fileext)
+            Dim files As New List(Of String)
+
+            If patterns.Length = 1 Then
+                For Each ext As String In exts
+                    files += $"{tmpdir}/{patterns(Scan0)}{NextTempToken()}{ext}".GetFullPath
+                Next
+            ElseIf exts.Length = 1 Then
+                For Each patternStr As String In patterns
+                    files += $"{tmpdir}/{patternStr}{NextTempToken()}{exts(Scan0)}".GetFullPath
+                Next
+            ElseIf patterns.Length <> exts.Length Then
+                Return Internal.debug.stop({
+                    $"the size of filename patterns should be equals to the file extension names!",
+                    $"sizeof pattern: {patterns.Length}",
+                    $"sizeof fileext: {exts.Length}"
+                }, env)
+            Else
+                For i As Integer = 0 To exts.Length - 1
+                    files += $"{tmpdir}/{patterns(i)}{NextTempToken()}{exts(i)}".GetFullPath
+                Next
+            End If
+
+            Return files.ToArray
+        End Function
+
+        Private Function NextTempToken() As String
+            Return (randf.NextInteger(10000).ToString & Now.ToString).MD5.Substring(3, 9)
+        End Function
+
+        ''' <summary>
+        ''' ### Create Names For Temporary Files
+        ''' </summary>
+        ''' <param name="check">
+        ''' logical indicating if tmpdir() should be checked and recreated if no longer valid.
+        ''' </param>
+        ''' <returns>the path of the per-session temporary directory.</returns>
+        ''' <remarks>
+        ''' + On Windows, both will use a backslash as the path separator.
+        ''' + On a Unix-alike, the value will be an absolute path (unless tmpdir Is set to a relative path), 
+        '''   but it need Not be canonical (see normalizePath) And on macOS it often Is Not.
+        ''' </remarks>
+        <ExportAPI("tempdir")>
+        Public Function tempdir(Optional check As Boolean = False) As String
+            Static dir As String = (App.AppSystemTemp & $"/Rtmp{App.PID.ToString.MD5.Substring(3, 6).ToUpper}").GetDirectoryFullPath
+
+            If check Then
+                Call dir.MkDIR
+            End If
+
+            Return dir
+        End Function
+
+        ''' <summary>
+        ''' File renames
+        ''' </summary>
+        ''' <param name="from">character vectors, containing file names Or paths.</param>
+        ''' <param name="to">character vectors, containing file names Or paths.</param>
+        ''' <param name="env"></param>
+        <ExportAPI("file.rename")>
+        Public Sub fileRename(from$, to$, Optional env As Environment = Nothing)
+            If Not from.FileExists Then
+                Call env.AddMessage({$"the given file is not exists...", $"source file: {from}"}, MSG_TYPES.WRN)
+            Else
+                Call [to].ParentPath.MkDIR
+                Call from.FileMove(to$)
+            End If
+        End Sub
+
+        ''' <summary>
+        ''' Delete files or directories
+        ''' </summary>
+        <ExportAPI("file.remove")>
+        Public Sub fileRemove(x As String())
+            For Each file As String In x.SafeQuery
+                Call file.DeleteFile
+            Next
+        End Sub
     End Module
 End Namespace
