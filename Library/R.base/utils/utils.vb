@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b7d039e6d90d9dc4cb22626a39a8dc02, Library\R.base\utils\utils.vb"
+﻿#Region "Microsoft.VisualBasic::b976150630c37e73e1d96f3224625e11, Library\R.base\utils\utils.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,8 @@
 
     ' Module utils
     ' 
-    '     Function: ensureRowNames, read_csv, saveGeneric, setRowNames, write_csv
+    '     Function: DataFrameRows, ensureRowNames, MeasureGenericType, read_csv, saveGeneric
+    '               setRowNames, write_csv
     ' 
     ' /********************************************************************************/
 

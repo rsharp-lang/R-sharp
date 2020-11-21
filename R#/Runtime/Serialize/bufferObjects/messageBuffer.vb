@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::301d2ed5f10378f3ebc2456d8e596f2c, R#\Runtime\Serialize\bufferObjects\messageBuffer.vb"
+﻿#Region "Microsoft.VisualBasic::b4350e904b495bdb8965b8ba21fa685e, R#\Runtime\Serialize\bufferObjects\messageBuffer.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,8 @@
 
     '     Class messageBuffer
     ' 
-    '         Properties: environmentStack, level, message, source, trace
+    '         Properties: code, environmentStack, level, message, source
+    '                     trace
     ' 
     '         Constructor: (+2 Overloads) Sub New
     '         Function: CreateBuffer, GetErrorMessage, Serialize

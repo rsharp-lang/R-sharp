@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1d56cb497a82be7311ad1f3bace80c1c, R#\Runtime\Serialize\bufferObjects\listBuffer.vb"
+﻿#Region "Microsoft.VisualBasic::0c4d104a3e6d57d55b34794047d40661, R#\Runtime\Serialize\bufferObjects\listBuffer.vb"
 
     ' Author:
     ' 
@@ -32,6 +32,8 @@
     ' Summaries:
 
     '     Class listBuffer
+    ' 
+    '         Properties: code
     ' 
     '         Function: Serialize
     ' 

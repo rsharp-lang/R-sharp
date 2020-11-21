@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1a94718667426e6bed87d68c9f116814, Library\R.graph\NetworkModule.vb"
+﻿#Region "Microsoft.VisualBasic::b64283089d40f609eee4ec11491fb557, Library\R.graph\NetworkModule.vb"
 
     ' Author:
     ' 
@@ -37,8 +37,8 @@
     '     Function: addEdge, addEdges, addNode, addNodes, attributes
     '               computeNetwork, connectedNetwork, DecomposeGraph, degree, emptyNetwork
     '               getByGroup, getEdges, getElementByID, getNodes, LoadNetwork
-    '               printGraph, printNode, SaveNetwork, setAttributes, trimEdges
-    '               typeGroupOfNodes
+    '               nodeNames, printGraph, printNode, SaveNetwork, setAttributes
+    '               trimEdges, typeGroupOfNodes
     ' 
     ' /********************************************************************************/
 

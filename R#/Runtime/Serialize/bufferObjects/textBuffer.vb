@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8108aea9af4452f5e6622a777f0a115c, R#\Runtime\Serialize\bufferObjects\textBuffer.vb"
+﻿#Region "Microsoft.VisualBasic::2861b8995920fcec7c5bcc71bb932c5d, R#\Runtime\Serialize\bufferObjects\textBuffer.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Class textBuffer
     ' 
-    '         Properties: text
+    '         Properties: code, text
     ' 
     '         Constructor: (+2 Overloads) Sub New
     '         Function: Serialize
