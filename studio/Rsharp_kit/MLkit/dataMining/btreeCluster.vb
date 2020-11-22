@@ -75,28 +75,28 @@ Public Class btreeCluster
         End If
     End Function
 
-    Public Function ToHClust() As Cluster
-        If left Is Nothing AndAlso right Is Nothing Then
-            ' 是一个叶子节点
-            If members.IsNullOrEmpty Then
-                Return New Cluster(key) With {
+    Private Function hleaf() As Cluster
+        ' 是一个叶子节点
+        If members.IsNullOrEmpty Then
+            Return New Cluster(key) With {
+                .Distance = New Distance(0, 1)
+            }
+        Else
+            Dim leafTree As New Cluster($"leaf-{key}") With {
+                .Distance = New Distance(0, members.Length)
+            }
+
+            For Each key As String In members
+                Call New Cluster(key) With {
                     .Distance = New Distance(0, 1)
-                }
-            Else
-                Dim leafTree As New Cluster($"leaf-{key}") With {
-                    .Distance = New Distance(0, members.Length)
-                }
+                }.DoCall(AddressOf leafTree.AddChild)
+            Next
 
-                For Each key As String In members
-                    Call New Cluster(key) With {
-                        .Distance = New Distance(0, 1)
-                    }.DoCall(AddressOf leafTree.AddChild)
-                Next
-
-                Return leafTree
-            End If
+            Return leafTree
         End If
+    End Function
 
+    Private Function hnode() As Cluster
         Dim node As New Cluster($"node-{key}")
         Dim distance As Double
         Dim cl As Cluster
@@ -104,12 +104,12 @@ Public Class btreeCluster
         If Not left Is Nothing Then
             cl = left.ToHClust
             node.AddChild(cl)
-            distance += cl.DistanceValue
+            distance += cl.DistanceValue + 1
         End If
         If Not right Is Nothing Then
             cl = right.ToHClust
             node.AddChild(cl)
-            distance += cl.DistanceValue
+            distance += cl.DistanceValue + 1
         End If
 
         For Each key As String In members
@@ -121,5 +121,17 @@ Public Class btreeCluster
         node.Distance = New Distance(distance)
 
         Return node
+    End Function
+
+    ''' <summary>
+    ''' leaf distance value is ZERO always
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function ToHClust() As Cluster
+        If left Is Nothing AndAlso right Is Nothing Then
+            Return hleaf()
+        Else
+            Return hnode()
+        End If
     End Function
 End Class
