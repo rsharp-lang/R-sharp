@@ -282,13 +282,14 @@ Module clustering
     <RApiReturn(GetType(Cluster))>
     Public Function hclust(d As DistanceMatrix,
                            Optional method$ = "complete",
+                           Optional debug As Boolean = False,
                            Optional env As Environment = Nothing) As Object
 
         If d Is Nothing Then
             Return Internal.debug.stop(New NullReferenceException("the given distance matrix object can not be nothing!"), env)
         End If
 
-        Dim alg As ClusteringAlgorithm = New DefaultClusteringAlgorithm
+        Dim alg As ClusteringAlgorithm = New DefaultClusteringAlgorithm With {.debug = debug}
         Dim matrix As Double()() = d.PopulateRows _
             .Select(Function(a) a.ToArray) _
             .ToArray
@@ -306,8 +307,12 @@ Module clustering
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("btree")>
-    <RApiReturn(GetType(btreeCluster))>
-    Public Function btreeClusterFUN(d As DistanceMatrix, Optional equals As Double = 0.9, Optional gt As Double = 0.7, Optional env As Environment = Nothing) As Object
+    <RApiReturn(GetType(btreeCluster), GetType(Cluster))>
+    Public Function btreeClusterFUN(d As DistanceMatrix,
+                                    Optional equals As Double = 0.9,
+                                    Optional gt As Double = 0.7,
+                                    Optional hclust As Boolean = False,
+                                    Optional env As Environment = Nothing) As Object
         If d Is Nothing Then
             Return Internal.debug.stop(New NullReferenceException("the given distance matrix object can not be nothing!"), env)
         End If
@@ -334,7 +339,11 @@ Module clustering
 
         Dim cluster As btreeCluster = btreeCluster.GetClusters(btree)
 
-        Return cluster
+        If hclust Then
+            Return cluster.ToHClust
+        Else
+            Return cluster
+        End If
     End Function
 
     ''' <summary>
