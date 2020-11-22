@@ -153,6 +153,7 @@ Module plots
                 Next
             End If
 
+            classinfo = classinfo.ToDictionary(Function(a) a.Key, Function(a) a.Value.TranslateColor.ToHtmlColor)
             classes = classinfo.Values _
                 .Distinct _
                 .Select(Function(colorName, i)

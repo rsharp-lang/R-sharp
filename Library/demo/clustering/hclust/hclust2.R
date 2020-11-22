@@ -11,7 +11,7 @@ class = lapply(1:length(labels), i -> class[i], names = i -> labels[i]);
 
 str(class);
 
-let d = read.csv("../../metabolome.txt", row_names = 1, tsv = TRUE)
+let d = read.csv("../../metabolome.txt", row_names = 1, tsv = TRUE, check_names = FALSE)
 :> t
 :> dist
 ;
