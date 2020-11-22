@@ -61,8 +61,8 @@ Imports Microsoft.VisualBasic.Data.ChartPlots.Plot3D
 Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics
 Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics.Heatmap
 Imports Microsoft.VisualBasic.Data.csv.IO
+Imports Microsoft.VisualBasic.DataMining.ComponentModel.Encoder
 Imports Microsoft.VisualBasic.DataMining.HierarchicalClustering
-Imports Microsoft.VisualBasic.DataMining.HierarchicalClustering.DendrogramVisualize
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
@@ -121,33 +121,61 @@ Module plots
     End Sub
 
     Public Function plot_hclust(cluster As Cluster, args As list, env As Environment) As Object
-        Dim cls As Dictionary(Of String, String) = Nothing
         Dim size$ = InteropArgumentHelper.getSize(args.getByName("size"))
         Dim padding$ = InteropArgumentHelper.getPadding(args.getByName("padding"))
+        Dim labelStyle$ = InteropArgumentHelper.getFontCSS(args.getByName("label"), CSSFont.PlotLabelNormal)
+        Dim linkStroke$ = InteropArgumentHelper.getStrokePenCSS(args.getByName("links"), Stroke.AxisGridStroke)
+        Dim tickStyle$ = InteropArgumentHelper.getFontCSS(args.getByName("ticks"), CSSFont.PlotLabelNormal)
+        Dim axisStroke$ = InteropArgumentHelper.getStrokePenCSS(args.getByName("axis"), Stroke.AxisStroke)
+        Dim ptSize As Double = args.getValue(Of Double)("pt.size", env, 10)
+        Dim bg$ = InteropArgumentHelper.getColor(args.getByName("background"), "white")
+        Dim classes As ColorClass() = Nothing
+        Dim classinfo As Dictionary(Of String, String) = Nothing
 
         If args.hasName("class") Then
-            Dim list = args!class
+            Dim list As Object = args!class
 
             If TypeOf list Is list Then
-                cls = DirectCast(list, list).slots _
+                classinfo = DirectCast(list, list).slots _
                     .ToDictionary(Function(a) a.Key,
                                   Function(a)
                                       Return Scripting.ToString(a.Value)
                                   End Function)
             ElseIf TypeOf list Is Dictionary(Of String, String) Then
-                cls = list
+                classinfo = list
             ElseIf list.GetType.ImplementInterface(GetType(IDictionary)) Then
                 Dim hash = DirectCast(list, IDictionary)
 
-                cls = New Dictionary(Of String, String)
+                classinfo = New Dictionary(Of String, String)
 
                 For Each key As Object In hash.Keys
-                    cls.Add(key.ToString, Scripting.ToString(hash(key)))
+                    classinfo(key.ToString) = Scripting.ToString(hash(key))
                 Next
             End If
+
+            classes = classinfo.Values _
+                .Distinct _
+                .Select(Function(colorName, i)
+                            Return New ColorClass With {
+                                .color = colorName,
+                                .enumInt = i,
+                                .name = colorName
+                            }
+                        End Function) _
+                .ToArray
         End If
 
-        Return New DendrogramPanelV2(cluster, New Theme With {.padding = padding}).Plot(size)
+        Dim theme As New Theme With {
+            .padding = padding,
+            .tagCSS = labelStyle,
+            .gridStroke = linkStroke,
+            .axisTickCSS = tickStyle,
+            .axisStroke = axisStroke,
+            .PointSize = ptSize,
+            .background = bg
+        }
+
+        Return New DendrogramPanelV2(cluster, theme, classes, classinfo).Plot(size)
     End Function
 
     ''' <summary>
