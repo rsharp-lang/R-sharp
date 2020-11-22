@@ -332,9 +332,7 @@ Module clustering
         Dim btree As New AVLTree(Of String, String)(compares, Function(str) str)
 
         For Each id As String In d.keys
-            For Each id2 As String In d.keys.Where(Function(a) a <> id)
-                Call btree.Add(id, id2, valueReplace:=False)
-            Next
+            Call btree.Add(id, id, valueReplace:=False)
         Next
 
         Dim cluster As btreeCluster = btreeCluster.GetClusters(btree)
