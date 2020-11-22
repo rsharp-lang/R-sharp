@@ -359,6 +359,23 @@ Module clustering
         End If
     End Function
 
+    <ExportAPI("cluster.groups")>
+    Public Function clusterGroups(<RRawVectorArgument> data As Object, Optional env As Environment = Nothing) As Object
+        Dim rawInputs As pipeline = pipeline.TryCreatePipeline(Of EntityClusterModel)(data, env)
+
+        If rawInputs.isError Then
+            Return rawInputs.getError
+        End If
+
+        Dim groups As New list With {.slots = New Dictionary(Of String, Object)}
+
+        For Each group In rawInputs.populates(Of EntityClusterModel)(env).GroupBy(Function(a) a.Cluster)
+            groups.slots(group.Key) = group.Keys.ToArray
+        Next
+
+        Return groups
+    End Function
+
     ''' <summary>
     ''' ### DBSCAN density reachability and connectivity clustering
     ''' 
