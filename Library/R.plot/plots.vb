@@ -127,8 +127,10 @@ Module plots
         Dim linkStroke$ = InteropArgumentHelper.getStrokePenCSS(args.getByName("links"), Stroke.AxisGridStroke)
         Dim tickStyle$ = InteropArgumentHelper.getFontCSS(args.getByName("ticks"), CSSFont.PlotLabelNormal)
         Dim axisStroke$ = InteropArgumentHelper.getStrokePenCSS(args.getByName("axis"), Stroke.AxisStroke)
+        Dim axisFormat$ = args.getValue("axis.format", env, "F1")
         Dim ptSize As Double = args.getValue(Of Double)("pt.size", env, 10)
         Dim bg$ = InteropArgumentHelper.getColor(args.getByName("background"), "white")
+        Dim pointColor$ = InteropArgumentHelper.getColor(args.getByName("pt.color"), "black")
         Dim classes As ColorClass() = Nothing
         Dim classinfo As Dictionary(Of String, String) = Nothing
 
@@ -173,10 +175,17 @@ Module plots
             .axisTickCSS = tickStyle,
             .axisStroke = axisStroke,
             .PointSize = ptSize,
-            .background = bg
+            .background = bg,
+            .axisTickFormat = axisFormat
         }
 
-        Return New DendrogramPanelV2(cluster, theme, classes, classinfo).Plot(size)
+        Return New DendrogramPanelV2(
+            hist:=cluster,
+            theme:=theme,
+            classes:=classes,
+            classinfo:=classinfo,
+            pointColor:=pointColor
+        ).Plot(size)
     End Function
 
     ''' <summary>
