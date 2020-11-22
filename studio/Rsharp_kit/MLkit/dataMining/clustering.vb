@@ -321,7 +321,7 @@ Module clustering
         If d.is_dist Then
             Dim distRows As Double()() = d.PopulateRows.Select(Function(a) a.ToArray).ToArray
             Dim names As String() = d.keys
-            Dim q As Double() = distRows.IteratesALL.QuantileLevels
+            Dim q As Double() = distRows.IteratesALL.QuantileLevels(fast:=distRows.Length >= 200)
 
             distRows = q _
                 .Split(names.Length) _
