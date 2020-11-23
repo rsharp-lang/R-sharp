@@ -8,3 +8,4 @@ read.csv("data.csv", row_names = 1)
 :> hclust
 :> plot(class = read.list("sampleInfo.json"), padding = "padding: 200px 200px 200px 200px;")
 :> save.graphics("./hclust.png")
+;

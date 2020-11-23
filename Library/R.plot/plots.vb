@@ -1,47 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::c637d3bd1e8e99a7b6f4229d74572b40, Library\R.plot\plots.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module plots
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: CreateSerial, doVolinPlot, linearRegression, plot_binBox, plot_categoryBars
-    '               plot_corHeatmap, plot_deSolveResult, plot_hclust, plotFormula, plotODEResult
-    '               plotSerials
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Module plots
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: CreateSerial, doVolinPlot, linearRegression, plot_binBox, plot_categoryBars
+'               plot_corHeatmap, plot_deSolveResult, plot_hclust, plotFormula, plotODEResult
+'               plotSerials
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -55,13 +55,14 @@ Imports Microsoft.VisualBasic.Data.ChartPlots.BarPlot
 Imports Microsoft.VisualBasic.Data.ChartPlots.BarPlot.Data
 Imports Microsoft.VisualBasic.Data.ChartPlots.BarPlot.Histogram
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic
+Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Canvas
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
 Imports Microsoft.VisualBasic.Data.ChartPlots.Plot3D
 Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics
 Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics.Heatmap
 Imports Microsoft.VisualBasic.Data.csv.IO
+Imports Microsoft.VisualBasic.DataMining.ComponentModel.Encoder
 Imports Microsoft.VisualBasic.DataMining.HierarchicalClustering
-Imports Microsoft.VisualBasic.DataMining.HierarchicalClustering.DendrogramVisualize
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
@@ -120,46 +121,71 @@ Module plots
     End Sub
 
     Public Function plot_hclust(cluster As Cluster, args As list, env As Environment) As Object
-        Dim cls As Dictionary(Of String, String) = Nothing
         Dim size$ = InteropArgumentHelper.getSize(args.getByName("size"))
         Dim padding$ = InteropArgumentHelper.getPadding(args.getByName("padding"))
+        Dim labelStyle$ = InteropArgumentHelper.getFontCSS(args.getByName("label"), CSSFont.PlotLabelNormal)
+        Dim linkStroke$ = InteropArgumentHelper.getStrokePenCSS(args.getByName("links"), Stroke.AxisGridStroke)
+        Dim tickStyle$ = InteropArgumentHelper.getFontCSS(args.getByName("ticks"), CSSFont.PlotLabelNormal)
+        Dim axisStroke$ = InteropArgumentHelper.getStrokePenCSS(args.getByName("axis"), Stroke.AxisStroke)
+        Dim axisFormat$ = args.getValue("axis.format", env, "F1")
+        Dim ptSize As Double = args.getValue(Of Double)("pt.size", env, 10)
+        Dim bg$ = InteropArgumentHelper.getColor(args.getByName("background"), "white")
+        Dim pointColor$ = InteropArgumentHelper.getColor(args.getByName("pt.color"), "black")
+        Dim classes As ColorClass() = Nothing
+        Dim classinfo As Dictionary(Of String, String) = Nothing
 
         If args.hasName("class") Then
-            Dim list = args!class
+            Dim list As Object = args!class
 
             If TypeOf list Is list Then
-                cls = DirectCast(list, list).slots _
+                classinfo = DirectCast(list, list).slots _
                     .ToDictionary(Function(a) a.Key,
                                   Function(a)
                                       Return Scripting.ToString(a.Value)
                                   End Function)
             ElseIf TypeOf list Is Dictionary(Of String, String) Then
-                cls = list
+                classinfo = list
             ElseIf list.GetType.ImplementInterface(GetType(IDictionary)) Then
                 Dim hash = DirectCast(list, IDictionary)
 
-                cls = New Dictionary(Of String, String)
+                classinfo = New Dictionary(Of String, String)
 
                 For Each key As Object In hash.Keys
-                    cls.Add(key.ToString, Scripting.ToString(hash(key)))
+                    classinfo(key.ToString) = Scripting.ToString(hash(key))
                 Next
             End If
+
+            classinfo = classinfo.ToDictionary(Function(a) a.Key, Function(a) a.Value.TranslateColor.ToHtmlColor)
+            classes = classinfo.Values _
+                .Distinct _
+                .Select(Function(colorName, i)
+                            Return New ColorClass With {
+                                .color = colorName,
+                                .enumInt = i,
+                                .name = colorName
+                            }
+                        End Function) _
+                .ToArray
         End If
 
-        Dim dp As New DendrogramPanel With {
-           .LineColor = Color.Blue,
-           .ScaleValueDecimals = 0,
-           .ScaleValueInterval = 1,
-           .Model = cluster,
-           .ClassTable = cls,
-           .ShowDistanceValues = False
-       }
-        Dim region As New GraphicsRegion(size.SizeParser, padding)
+        Dim theme As New Theme With {
+            .padding = padding,
+            .tagCSS = labelStyle,
+            .gridStroke = linkStroke,
+            .axisTickCSS = tickStyle,
+            .axisStroke = axisStroke,
+            .PointSize = ptSize,
+            .background = bg,
+            .axisTickFormat = axisFormat
+        }
 
-        Using g As Graphics2D = region.Size.CreateGDIDevice(filled:=Color.White)
-            Call dp.Paint(g, region.PlotRegion, layout:=Layouts.Vertical)
-            Return g.ImageResource
-        End Using
+        Return New DendrogramPanelV2(
+            hist:=cluster,
+            theme:=theme,
+            classes:=classes,
+            classinfo:=classinfo,
+            pointColor:=pointColor
+        ).Plot(size)
     End Function
 
     ''' <summary>

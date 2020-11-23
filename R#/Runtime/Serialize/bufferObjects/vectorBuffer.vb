@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8161a7f68ec2afd19fdac9267d430049, R#\Runtime\Serialize\bufferObjects\vectorBuffer.vb"
+﻿#Region "Microsoft.VisualBasic::245dbd82fb66fbd66a9ba24242f21c6b, R#\Runtime\Serialize\bufferObjects\vectorBuffer.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,8 @@
 
     '     Class vectorBuffer
     ' 
-    '         Properties: names, type, underlyingType, unit, vector
+    '         Properties: code, names, type, underlyingType, unit
+    '                     vector
     ' 
     '         Function: (+2 Overloads) CreateBuffer, GetVector, Serialize
     ' 
