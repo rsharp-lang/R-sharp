@@ -640,6 +640,18 @@ Namespace Runtime.Internal.Invokes
         Public Function tolower(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
             Return env.EvaluateFramework(Of String, String)(x, AddressOf VBStr.LCase)
         End Function
+
+        ''' <summary>
+        ''' ``chr`` returns the characters corresponding to the specified ASCII codes.
+        ''' </summary>
+        ''' <param name="ascii">
+        ''' vector or list of vectors containing integer ASCII codes
+        ''' </param>
+        ''' <returns></returns>
+        <ExportAPI("chr")>
+        Public Function chr(ascii As Integer()) As Char()
+            Return ascii.SafeQuery.Select(Function(i) ChrW(i)).ToArray
+        End Function
     End Module
 
     Public Enum str_padSides
