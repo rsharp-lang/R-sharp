@@ -1,43 +1,43 @@
 ﻿#Region "Microsoft.VisualBasic::da7ab9d9fc2ff4a12a70cdf9fd081e1a, studio\Rsharp_kit\MLkit\dataMining\clustering.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module clustering
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: btreeClusterFUN, clusterResultDataFrame, clusterSummary, cmeansSummary, dbscan
-    '               fuzzyCMeans, hclust, Kmeans, showHclust
-    ' 
-    ' /********************************************************************************/
+' Module clustering
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: btreeClusterFUN, clusterResultDataFrame, clusterSummary, cmeansSummary, dbscan
+'               fuzzyCMeans, hclust, Kmeans, showHclust
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -53,6 +53,7 @@ Imports Microsoft.VisualBasic.DataMining.KMeans
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math.DataFrame
+Imports Microsoft.VisualBasic.Math.Quantile
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -282,13 +283,14 @@ Module clustering
     <RApiReturn(GetType(Cluster))>
     Public Function hclust(d As DistanceMatrix,
                            Optional method$ = "complete",
+                           Optional debug As Boolean = False,
                            Optional env As Environment = Nothing) As Object
 
         If d Is Nothing Then
             Return Internal.debug.stop(New NullReferenceException("the given distance matrix object can not be nothing!"), env)
         End If
 
-        Dim alg As ClusteringAlgorithm = New DefaultClusteringAlgorithm
+        Dim alg As ClusteringAlgorithm = New DefaultClusteringAlgorithm With {.debug = debug}
         Dim matrix As Double()() = d.PopulateRows _
             .Select(Function(a) a.ToArray) _
             .ToArray
@@ -306,10 +308,28 @@ Module clustering
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("btree")>
-    <RApiReturn(GetType(btreeCluster))>
-    Public Function btreeClusterFUN(d As DistanceMatrix, Optional equals As Double = 0.9, Optional gt As Double = 0.7, Optional env As Environment = Nothing) As Object
+    <RApiReturn(GetType(btreeCluster), GetType(Cluster))>
+    Public Function btreeClusterFUN(d As DistanceMatrix,
+                                    Optional equals As Double = 0.9,
+                                    Optional gt As Double = 0.7,
+                                    Optional hclust As Boolean = False,
+                                    Optional env As Environment = Nothing) As Object
         If d Is Nothing Then
             Return Internal.debug.stop(New NullReferenceException("the given distance matrix object can not be nothing!"), env)
+        End If
+
+        If d.is_dist Then
+            Dim distRows As Double()() = d.PopulateRows.Select(Function(a) a.ToArray).ToArray
+            Dim names As String() = d.keys
+            Dim q As Double() = distRows.IteratesALL.QuantileLevels(fast:=distRows.Length >= 200)
+
+            distRows = q _
+                .Split(names.Length) _
+                .Select(Function(v)
+                            Return v.Select(Function(a) 1 - a).ToArray
+                        End Function) _
+                .ToArray
+            d = New DistanceMatrix(names.Indexing, distRows, False)
         End If
 
         Dim compares As Comparison(Of String) =
@@ -327,14 +347,33 @@ Module clustering
         Dim btree As New AVLTree(Of String, String)(compares, Function(str) str)
 
         For Each id As String In d.keys
-            For Each id2 As String In d.keys.Where(Function(a) a <> id)
-                Call btree.Add(id, id2, valueReplace:=False)
-            Next
+            Call btree.Add(id, id, valueReplace:=False)
         Next
 
         Dim cluster As btreeCluster = btreeCluster.GetClusters(btree)
 
-        Return cluster
+        If hclust Then
+            Return cluster.ToHClust
+        Else
+            Return cluster
+        End If
+    End Function
+
+    <ExportAPI("cluster.groups")>
+    Public Function clusterGroups(<RRawVectorArgument> data As Object, Optional env As Environment = Nothing) As Object
+        Dim rawInputs As pipeline = pipeline.TryCreatePipeline(Of EntityClusterModel)(data, env)
+
+        If rawInputs.isError Then
+            Return rawInputs.getError
+        End If
+
+        Dim groups As New list With {.slots = New Dictionary(Of String, Object)}
+
+        For Each group In rawInputs.populates(Of EntityClusterModel)(env).GroupBy(Function(a) a.Cluster)
+            groups.slots(group.Key) = group.Keys.ToArray
+        Next
+
+        Return groups
     End Function
 
     ''' <summary>

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d438d77d2751e498261b0175c8b74d69, R#\Runtime\Serialize\BufferObject.vb"
+﻿#Region "Microsoft.VisualBasic::9f5c555612e73b856cec924d18488009, R#\Runtime\Serialize\BufferObject.vb"
 
     ' Author:
     ' 
