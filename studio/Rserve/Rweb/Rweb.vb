@@ -1,45 +1,45 @@
 ﻿#Region "Microsoft.VisualBasic::81296557efcbda6b327d3aa0c2329436, studio\Rserve\Rweb\Rweb.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Class Rweb
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: callback, getHttpProcessor, Run
-    ' 
-    '     Sub: handleGETRequest, handleOtherMethod, handlePOSTRequest, runRweb
-    ' 
-    ' /********************************************************************************/
+' Class Rweb
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: callback, getHttpProcessor, Run
+' 
+'     Sub: handleGETRequest, handleOtherMethod, handlePOSTRequest, runRweb
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -92,18 +92,28 @@ Public Class Rweb : Inherits HttpServer
             Dim request As New HttpRequest(p)
             Dim Rscript As String = Rweb & "/" & request.URL.path & ".R"
             Dim is_background As Boolean = request.GetBoolean("rweb_background")
+            Dim request_id As String = NextRequestId
 
             If Not Rscript.FileExists Then
                 Call p.writeFailure(404, "file not found!")
             ElseIf is_background Then
-
+                Call RunTask(Sub() Call runRweb(Rscript, request_id, request.URL.query, response, is_background))
+                Call response.WriteHTML(request_id)
             Else
-                Call runRweb(Rscript, request.URL.query, response, is_background)
+                Call runRweb(Rscript, request_id, request.URL.query, response, is_background)
             End If
         End Using
     End Sub
 
-    Private Sub pushBackResult(result As BufferObject, response As HttpResponse)
+    Private Sub pushBackResult(request_id$, response As HttpResponse)
+        Dim result As BufferObject = requestPostback.TryGetValue(request_id)
+
+        Call $"get callback from slave process [{request_id}] -> {result.code.Description}".__INFO_ECHO
+
+        SyncLock requestPostback
+            Call requestPostback.Remove(request_id)
+        End SyncLock
+
         If TypeOf result Is messageBuffer Then
             Dim err As String
             Dim message = DirectCast(result, messageBuffer).GetErrorMessage
@@ -140,15 +150,20 @@ Public Class Rweb : Inherits HttpServer
         End If
     End Sub
 
+    Public ReadOnly Property NextRequestId As String
+        Get
+            Return App.GetNextUniqueName("web_request__")
+        End Get
+    End Property
+
     ''' <summary>
     ''' 
     ''' </summary>
     ''' <param name="Rscript">the file path of the target R# script file</param>
     ''' <param name="args">script arguments</param>
     ''' <param name="response"></param>
-    Private Sub runRweb(Rscript As String, args As Dictionary(Of String, String()), response As HttpResponse, is_background As Boolean)
+    Private Sub runRweb(Rscript As String, request_id$, args As Dictionary(Of String, String()), response As HttpResponse, is_background As Boolean)
         Dim argsText As String = args.GetJson.Base64String
-        Dim request_id As String = App.GetNextUniqueName("web_request__")
         Dim port As Integer = socket.LocalPort
         Dim master As String = "localhost"
         Dim entry As String = "run"
@@ -165,15 +180,9 @@ Public Class Rweb : Inherits HttpServer
             Call UNIX.Shell("mono", $"{Rslave.CLIPath} {arguments}", verbose:=True)
         End If
 
-        Dim result As BufferObject = requestPostback.TryGetValue(request_id)
-
-        Call $"get callback from slave process [{request_id}] -> {result.code.Description}".__INFO_ECHO
-
-        SyncLock requestPostback
-            Call requestPostback.Remove(request_id)
-        End SyncLock
-
-        Call pushBackResult(result, response)
+        If Not is_background Then
+            Call pushBackResult(request_id, response)
+        End If
     End Sub
 
     Private Function callback(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
@@ -220,12 +229,18 @@ Public Class Rweb : Inherits HttpServer
                         Call p.writeFailure(404, "not allowed!")
                     Else
                         Dim form = request.POSTData.Form
+                        Dim request_id As String = NextRequestId
 
                         For Each formKey In form.AllKeys
                             args(formKey) = form.GetValues(formKey)
                         Next
 
-                        Call runRweb(Rscript, args, response, is_background)
+                        If is_background Then
+                            Call RunTask(Sub() Call runRweb(Rscript, request_id, request.URL.query, response, is_background))
+                            Call response.WriteHTML(request_id)
+                        Else
+                            Call runRweb(Rscript, request_id, request.URL.query, response, is_background)
+                        End If
                     End If
                 End Using
         End Select
