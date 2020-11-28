@@ -91,48 +91,19 @@ Public Class Rweb : Inherits HttpServer
             ' /<scriptFileName>?...args
             Dim request As New HttpRequest(p)
             Dim Rscript As String = Rweb & "/" & request.URL.path & ".R"
+            Dim is_background As Boolean = request.GetBoolean("rweb_background")
 
             If Not Rscript.FileExists Then
                 Call p.writeFailure(404, "file not found!")
+            ElseIf is_background Then
+
             Else
-                Call runRweb(Rscript, request.URL.query, response)
+                Call runRweb(Rscript, request.URL.query, response, is_background)
             End If
         End Using
     End Sub
 
-    ''' <summary>
-    ''' 
-    ''' </summary>
-    ''' <param name="Rscript">the file path of the target R# script file</param>
-    ''' <param name="args">script arguments</param>
-    ''' <param name="response"></param>
-    Private Sub runRweb(Rscript As String, args As Dictionary(Of String, String()), response As HttpResponse)
-        Dim argsText As String = args.GetJson.Base64String
-        Dim request_id As String = App.GetNextUniqueName("web_request__")
-        Dim port As Integer = socket.LocalPort
-        Dim master As String = "localhost"
-        Dim entry As String = "run"
-
-        Call args.GetJson.__DEBUG_ECHO
-
-        ' --slave /exec <script.R> /args <json_base64> /request-id <request_id> /PORT=<port_number> [/MASTER=<ip, default=localhost> /entry=<function_name, default=NULL>]
-        Dim arguments As String = $"--slave /exec {Rscript.CLIPath} /request-id {request_id} /PORT={port} /MASTER={master} /entry={entry} /args ""{argsText}"""
-        Dim Rslave As String = $"{App.HOME}/R#.exe"
-
-        If App.IsMicrosoftPlatform Then
-            Call App.Shell(Rslave, arguments, CLR:=True, debug:=True).Run()
-        Else
-            Call UNIX.Shell("mono", $"{Rslave.CLIPath} {arguments}", verbose:=True)
-        End If
-
-        Dim result As BufferObject = requestPostback.TryGetValue(request_id)
-
-        Call $"get callback from slave process [{request_id}] -> {result.code.Description}".__INFO_ECHO
-
-        SyncLock requestPostback
-            Call requestPostback.Remove(request_id)
-        End SyncLock
-
+    Private Sub pushBackResult(result As BufferObject, response As HttpResponse)
         If TypeOf result Is messageBuffer Then
             Dim err As String
             Dim message = DirectCast(result, messageBuffer).GetErrorMessage
@@ -167,6 +138,42 @@ Public Class Rweb : Inherits HttpServer
             Call response.WriteHeader("html/text", 0)
             Call response.Write(New Byte() {})
         End If
+    End Sub
+
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="Rscript">the file path of the target R# script file</param>
+    ''' <param name="args">script arguments</param>
+    ''' <param name="response"></param>
+    Private Sub runRweb(Rscript As String, args As Dictionary(Of String, String()), response As HttpResponse, is_background As Boolean)
+        Dim argsText As String = args.GetJson.Base64String
+        Dim request_id As String = App.GetNextUniqueName("web_request__")
+        Dim port As Integer = socket.LocalPort
+        Dim master As String = "localhost"
+        Dim entry As String = "run"
+
+        Call args.GetJson.__DEBUG_ECHO
+
+        ' --slave /exec <script.R> /args <json_base64> /request-id <request_id> /PORT=<port_number> [/MASTER=<ip, default=localhost> /entry=<function_name, default=NULL>]
+        Dim arguments As String = $"--slave /exec {Rscript.CLIPath} /request-id {request_id} /PORT={port} /MASTER={master} /entry={entry} /args ""{argsText}"""
+        Dim Rslave As String = $"{App.HOME}/R#.exe"
+
+        If App.IsMicrosoftPlatform Then
+            Call App.Shell(Rslave, arguments, CLR:=True, debug:=True).Run()
+        Else
+            Call UNIX.Shell("mono", $"{Rslave.CLIPath} {arguments}", verbose:=True)
+        End If
+
+        Dim result As BufferObject = requestPostback.TryGetValue(request_id)
+
+        Call $"get callback from slave process [{request_id}] -> {result.code.Description}".__INFO_ECHO
+
+        SyncLock requestPostback
+            Call requestPostback.Remove(request_id)
+        End SyncLock
+
+        Call pushBackResult(result, response)
     End Sub
 
     Private Function callback(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
@@ -207,6 +214,7 @@ Public Class Rweb : Inherits HttpServer
                     ' /<scriptFileName>?...args
                     Dim Rscript As String = Rweb & "/" & request.URL.path & ".R"
                     Dim args As New Dictionary(Of String, String())(request.URL.query)
+                    Dim is_background As Boolean = request.GetBoolean("rweb_background")
 
                     If Not Rscript.FileExists Then
                         Call p.writeFailure(404, "not allowed!")
@@ -217,7 +225,7 @@ Public Class Rweb : Inherits HttpServer
                             args(formKey) = form.GetValues(formKey)
                         Next
 
-                        Call runRweb(Rscript, args, response)
+                        Call runRweb(Rscript, args, response, is_background)
                     End If
                 End Using
         End Select
