@@ -94,7 +94,15 @@ Public Class Rweb : Inherits HttpServer
             Dim is_background As Boolean = request.GetBoolean("rweb_background")
             Dim request_id As String = NextRequestId
 
-            If Not Rscript.FileExists Then
+            If request.URL.path = "check_invoke" Then
+                request_id = request.URL("request_id")
+
+                SyncLock requestPostback
+                    Call p.WriteLine(requestPostback.ContainsKey(request_id))
+                End SyncLock
+            ElseIf request.URL.path = "get_invoke" Then
+                Call pushBackResult(request.URL("request_id"), response)
+            ElseIf Not Rscript.FileExists Then
                 Call p.writeFailure(404, "file not found!")
             ElseIf is_background Then
                 Call RunTask(Sub() Call runRweb(Rscript, request_id, request.URL.query, response, is_background))
