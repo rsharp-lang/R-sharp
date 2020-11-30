@@ -755,6 +755,7 @@
     <Compile Include="System\Document\UnixManPagePrinter.vb" />
     <Compile Include="System\Package\Database\LocalPackageDatabase.vb" />
     <Compile Include="System\Package\Database\PackageLoaderEntry.vb" />
+    <Compile Include="System\Package\PackageFile\DESCRIPTION.vb" />
     <Compile Include="System\Package\zzz.vb" />
     <Compile Include="System\Package\PackageManager.vb" />
     <Compile Include="System\Package\Package.vb" />
