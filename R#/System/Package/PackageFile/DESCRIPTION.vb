@@ -13,5 +13,9 @@
         Public Property License As String
         Public Property MetaData As Dictionary(Of String, String)
 
+        Public Shared Function Parse(file As String) As DESCRIPTION
+
+        End Function
+
     End Class
 End Namespace
