@@ -2,18 +2,16 @@
 
     Public Class DESCRIPTION
 
-' Package: biodeepMSMS
-' Type: Package
-' Title: biodeep MS/MS alignment and Build internal reference database
-' Version: 4.133.718.669
-' Date: 2019-09-20
-' Author: xieguigang
-' Maintainer: xieguigang <gg.xie@bionovogene.com>
-' Description: biodeep MS/MS alignment and Build internal reference database,
-    ' contains internal database: metlin, monoall LC_MS databases.
-' License: bionovogene
-' RoxygenNote: 7.1.1
-
+        Public Property Package As String
+        Public Property Type As String
+        Public Property Title As String
+        Public Property Version As String
+        Public Property [Date] As String
+        Public Property Author As String
+        Public Property Maintainer As String
+        Public Property Description As String
+        Public Property License As String
+        Public Property MetaData As Dictionary(Of String, String)
 
     End Class
 End Namespace
