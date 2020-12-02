@@ -207,7 +207,7 @@ Module plots
         Dim labelFont$ = InteropArgumentHelper.getFontCSS(args!labelCSS, CSSFont.Win7Normal)
         Dim legendTitleFont$ = InteropArgumentHelper.getFontCSS(args!legendTitleCSS, CSSFont.Win7LargeBold)
 
-        Return CorrelationHeatmap.Plot(
+        Return CorrelationTriangle.Plot(
             data:=dist,
             size:=size,
             bg:=bg,
