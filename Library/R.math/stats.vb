@@ -1,52 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::988db7c55d08cb913c34a84f8dce1447, Library\R.math\stats.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module stats
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: asDist, dataframeRow, dist, fisher_test, prcomp
-    '               printMatrix, printTtest, printTwoSampleTTest, spline, tabulateMode
-    '               ttest
-    ' 
-    ' Enum SplineAlgorithms
-    ' 
-    '     Bezier, BSpline, CatmullRom, CubiSpline
-    ' 
-    '  
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Module stats
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: asDist, dataframeRow, dist, fisher_test, prcomp
+'               printMatrix, printTtest, printTwoSampleTTest, spline, tabulateMode
+'               ttest
+' 
+' Enum SplineAlgorithms
+' 
+'     Bezier, BSpline, CatmullRom, CubiSpline
+' 
+'  
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -270,6 +270,15 @@ Module stats
         End If
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <typeparam name="DataSet"></typeparam>
+    ''' <param name="x"></param>
+    ''' <param name="id"></param>
+    ''' <param name="index">the row index</param>
+    ''' <returns></returns>
     <Extension>
     Private Function dataframeRow(Of T, DataSet As {New, INamedValue, DynamicPropertyBase(Of T)})(x As Rdataframe, id As String, index%) As DataSet
         Dim row As Dictionary(Of String, Object) = x.getRowList(index, drop:=True)
@@ -285,8 +294,21 @@ Module stats
         }
     End Function
 
-    Public Function corr() As Object
+    ''' <summary>
+    ''' matrix correlation
+    ''' </summary>
+    ''' <param name="x">evaluate correlation for each row elements</param>
+    ''' <returns></returns>
+    <ExportAPI("corr")>
+    Public Function corr(x As Rdataframe, Optional spearman As Boolean = False) As DistanceMatrix
+        Dim rows As DataSet() = x.getRowNames _
+            .Select(Function(id, index)
+                        Return x.dataframeRow(Of Double, DataSet)(id, index)
+                    End Function) _
+            .ToArray
+        Dim cor As DistanceMatrix = rows.Correlation(spearman)
 
+        Return cor
     End Function
 
     ''' <summary>
