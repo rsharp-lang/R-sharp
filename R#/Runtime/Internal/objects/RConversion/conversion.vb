@@ -427,7 +427,15 @@ RE0:
             Dim classType As RType = env.globalEnvironment.GetType(mode)
 
             If TypeOf x Is vector Then
-                DirectCast(x, vector).elementType = classType
+                If classType.raw Is GetType(Object) Then
+                    DirectCast(x, vector).elementType = classType
+                Else
+                    x = New vector With {
+                        .data = REnv.asVector(DirectCast(x, vector).data, classType.raw, env),
+                        .elementType = classType
+                    }
+                End If
+
                 Return x
             ElseIf x.GetType.IsArray Then
                 Return New vector With {.data = REnv.asVector(x, classType.raw, env), .elementType = classType}
@@ -583,8 +591,10 @@ RE0:
                                     For Each item In data
                                         If TypeOf item Is String Then
                                             Yield Val(DirectCast(item, String))
+                                        ElseIf TypeOf item Is Double Then
+                                            Yield DirectCast(item, Double)
                                         Else
-                                            Yield DirectCast(RCType.CTypeDynamic(obj, GetType(Double), env), Double)
+                                            Yield DirectCast(RCType.CTypeDynamic(item, GetType(Double), env), Double)
                                         End If
                                     Next
                                 End Function
