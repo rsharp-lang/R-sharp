@@ -285,6 +285,10 @@ Module stats
         }
     End Function
 
+    Public Function corr() As Object
+
+    End Function
+
     ''' <summary>
     ''' ### Distance Matrix Computation
     ''' 
