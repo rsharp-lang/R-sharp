@@ -283,7 +283,7 @@ Namespace Runtime.Internal.Object
                 ' single value
                 Call a.SetValue(c.GetValue(Scan0), Scan0)
             Else
-                For Each i In index.SeqIterator
+                For Each i As SeqValue(Of Integer) In index.SeqIterator
                     Call a.SetValue(c.GetValue(i.value), i)
                 Next
             End If
