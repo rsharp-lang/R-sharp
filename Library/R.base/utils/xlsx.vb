@@ -80,6 +80,7 @@ Module xlsx
                              Optional row_names As Object = Nothing,
                              Optional raw As Boolean = False,
                              Optional check_names As Boolean = True,
+                             Optional check_modes As Boolean = True,
                              Optional env As Environment = Nothing) As Object
 
         Dim xlsx As msXlsx
@@ -97,7 +98,7 @@ Module xlsx
         If raw Then
             Return table
         Else
-            Return table.rawToDataFrame(row_names, check_names, env)
+            Return table.rawToDataFrame(row_names, check_names, check_modes, env)
         End If
     End Function
 
