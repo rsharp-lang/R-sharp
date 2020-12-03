@@ -84,6 +84,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Scatter2D = Microsoft.VisualBasic.Data.ChartPlots.Scatter
 
@@ -266,6 +267,59 @@ Module plots
             xLabel:=xlab,
             yLabel:=ylab,
             padding:=padding
+        )
+    End Function
+
+    <ExportAPI("barplot")>
+    Public Function barplot(data As Rdataframe,
+                            Optional category$ = "item",
+                            Optional value$ = "value",
+                            Optional color$ = "color",
+                            Optional title$ = "Histogram Plot",
+                            Optional xlab$ = "X",
+                            Optional ylab$ = "Y",
+                            Optional bg As Object = "white",
+                            <RRawVectorArgument> Optional size As Object = "1920,1080",
+                            <RRawVectorArgument> Optional padding As Object = g.DefaultPadding,
+                            Optional show_grid As Boolean = True) As Object
+
+        Dim items As String() = data.columns(category)
+        Dim values As Double() = REnv.asVector(Of Double)(data.columns(value))
+        Dim colors As String() = data.columns(color).AsObjectEnumerator.Select(AddressOf InteropArgumentHelper.getColor).ToArray
+        Dim s As HistProfile() = items _
+            .SeqIterator _
+            .Select(Function(i)
+                        Dim histLegend As New Legend With {
+                            .color = colors(i),
+                            .fontstyle = CSSFont.Win7LargerBold,
+                            .style = LegendStyles.Rectangle,
+                            .title = i.value
+                        }
+                        Dim x As Double = values(i)
+                        Dim bar As New HistogramData With {
+                            .pointY = x,
+                            .y = x,
+                            .x1 = i.i,
+                            .x2 = i.i + 1
+                        }
+
+                        Return New HistProfile(histLegend, {bar})
+                    End Function) _
+            .ToArray
+        Dim group As New HistogramGroup With {
+            .Samples = s,
+            .Serials = s.Select(Function(a) a.SerialData).ToArray
+        }
+        Dim bgColor As String = InteropArgumentHelper.getColor(bg, "white")
+
+        Return group.Plot(
+            bg:=bgColor,
+            size:=InteropArgumentHelper.getSize(size),
+            padding:=InteropArgumentHelper.getPadding(padding),
+            showGrid:=show_grid,
+            xlabel:=xlab,
+            Ylabel:=ylab,
+            title:=title
         )
     End Function
 
