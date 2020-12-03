@@ -52,7 +52,7 @@ Imports Flute.Http.Core.HttpStream
 Imports Flute.Http.Core.Message
 Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.My
-Imports Microsoft.VisualBasic.Net.Http
+Imports Microsoft.VisualBasic.Net.HTTP
 Imports Microsoft.VisualBasic.Net.Tcp
 Imports Microsoft.VisualBasic.Parallel
 Imports Microsoft.VisualBasic.Serialization.JSON
@@ -105,7 +105,8 @@ Public Class Rweb : Inherits HttpServer
             ElseIf Not Rscript.FileExists Then
                 Call p.writeFailure(404, "file not found!")
             ElseIf is_background Then
-                Call RunTask(Sub() Call runRweb(Rscript, request_id, request.URL.query, response, is_background))
+                Call $"task '{request_id}' will be running in background.".__DEBUG_ECHO
+                Call New Action(Sub() Call runRweb(Rscript, request_id, request.URL.query, response, is_background)).BeginInvoke(Nothing, Nothing)
                 Call response.WriteHTML(request_id)
             Else
                 Call runRweb(Rscript, request_id, request.URL.query, response, is_background)

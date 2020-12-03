@@ -1,49 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::1165d050fe2aeed2dbaf69a5ba28cc8d, R#\Runtime\Internal\internalInvokes\file.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module file
-    ' 
-    '         Function: basename, buffer, close, dir_exists, dirCreate
-    '                   dirname, exists, file, filecopy, fileinfo
-    '                   getwd, listDirs, listFiles, loadListInternal, NextTempToken
-    '                   normalizeFileName, normalizePath, openGzip, openZip, readLines
-    '                   readList, readText, Rhome, saveList, setwd
-    '                   tempdir, tempfile, writeLines
-    ' 
-    '         Sub: fileRemove, fileRename
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module file
+' 
+'         Function: basename, buffer, close, dir_exists, dirCreate
+'                   dirname, exists, file, filecopy, fileinfo
+'                   getwd, listDirs, listFiles, loadListInternal, NextTempToken
+'                   normalizeFileName, normalizePath, openGzip, openZip, readLines
+'                   readList, readText, Rhome, saveList, setwd
+'                   tempdir, tempfile, writeLines
+' 
+'         Sub: fileRemove, fileRename
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -86,32 +86,60 @@ Namespace Runtime.Internal.Invokes
         ''' 
         ''' Utility function to extract information about files on the user's file systems.
         ''' </summary>
-        ''' <param name="files"></param>
+        ''' <param name="files">
+        ''' The fully qualified name of the new file, or the relative file name. Do not end
+        ''' the path with the directory separator character.
+        ''' </param>
         ''' <param name="env"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' a object list with slots:
+        ''' 
+        ''' + DirectoryName: Gets a string representing the directory's full path.
+        ''' + Length: Gets the size, in bytes, of the current file.
+        ''' + Name: Gets the name of the file.
+        ''' + IsReadOnly: Gets or sets a value that determines if the current file is read only.
+        ''' + Exists: Gets a value indicating whether a file exists.
+        ''' 
+        ''' </returns>
         <ExportAPI("file.info")>
-        Public Function fileinfo(files As String(), Optional env As Environment = Nothing) As Object
-            If files.IsNullOrEmpty Then
+        Public Function fileinfo(<RRawVectorArgument> files As Object, Optional env As Environment = Nothing) As Object
+            Dim fileList As String() = REnv.asVector(Of String)(files)
+
+            If fileList.IsNullOrEmpty Then
                 Return Nothing
-            ElseIf files.Length = 1 Then
-                Dim file As String = files(Scan0)
-                Dim fileInfoObj As New FileInfo(file)
-                Dim data As New Dictionary(Of String, Object)
-
-                For Each [property] As PropertyInfo In fileInfoObj _
-                    .GetType _
-                    .GetProperties(PublicProperty) _
-                    .Where(Function(p)
-                               Return p.GetIndexParameters.IsNullOrEmpty
-                           End Function)
-
-                    Call data.Add([property].Name, [property].GetValue(fileInfoObj))
-                Next
-
-                Return New list With {.slots = data}
+            ElseIf fileList.Length = 1 Then
+                Return fileInfoByFile(fileList(Scan0))
             Else
-                Return Internal.debug.stop(New NotImplementedException, env)
+                Return fileList _
+                    .Select(Function(path) path.GetFullPath) _
+                    .Distinct _
+                    .ToDictionary(Function(filepath) filepath,
+                                  Function(filepath)
+                                      Return fileInfoByFile(filepath)
+                                  End Function) _
+                    .DoCall(Function(slots)
+                                Return New list With {
+                                    .slots = slots
+                                }
+                            End Function)
             End If
+        End Function
+
+        Private Function fileInfoByFile(filepath As String) As Object
+            Dim fileInfoObj As New FileInfo(filepath)
+            Dim data As New Dictionary(Of String, Object)
+
+            For Each [property] As PropertyInfo In fileInfoObj _
+                .GetType _
+                .GetProperties(PublicProperty) _
+                .Where(Function(p)
+                           Return p.GetIndexParameters.IsNullOrEmpty
+                       End Function)
+
+                Call data.Add([property].Name, [property].GetValue(fileInfoObj))
+            Next
+
+            Return New list With {.slots = data}
         End Function
 
         ''' <summary>

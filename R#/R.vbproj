@@ -200,7 +200,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Biodeep|x64'">
     <DebugSymbols>true</DebugSymbols>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>..\..\..\..\MassSpectrum-toolkits\App\</OutputPath>
+    <OutputPath>..\..\..\..\mzkit\App\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <DocumentationFile>REnv.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
@@ -525,6 +525,33 @@
     <PlatformTarget>x64</PlatformTarget>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Docker|AnyCPU'">
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Docker\</OutputPath>
+    <DocumentationFile>REnv.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Docker|x86'">
+    <OutputPath>bin\x86\Docker\</OutputPath>
+    <DocumentationFile>REnv.xml</DocumentationFile>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Docker|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x64\Docker\</OutputPath>
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
+    <DocumentationFile>REnv.xml</DocumentationFile>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -755,6 +782,9 @@
     <Compile Include="System\Document\UnixManPagePrinter.vb" />
     <Compile Include="System\Package\Database\LocalPackageDatabase.vb" />
     <Compile Include="System\Package\Database\PackageLoaderEntry.vb" />
+    <Compile Include="System\Package\PackageFile\PackageModel.vb" />
+    <Compile Include="System\Package\PackageFile\DESCRIPTION.vb" />
+    <Compile Include="System\Package\PackageFile\CreatePackage.vb" />
     <Compile Include="System\Package\zzz.vb" />
     <Compile Include="System\Package\PackageManager.vb" />
     <Compile Include="System\Package\Package.vb" />
