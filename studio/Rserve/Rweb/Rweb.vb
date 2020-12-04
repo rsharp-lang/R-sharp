@@ -245,10 +245,10 @@ Public Class Rweb : Inherits HttpServer
                         Next
 
                         If is_background Then
-                            Call RunTask(Sub() Call runRweb(Rscript, request_id, request.URL.query, response, is_background))
+                            Call RunTask(Sub() Call runRweb(Rscript, request_id, args, response, is_background))
                             Call response.WriteHTML(request_id)
                         Else
-                            Call runRweb(Rscript, request_id, request.URL.query, response, is_background)
+                            Call runRweb(Rscript, request_id, args, response, is_background)
                         End If
                     End If
                 End Using
