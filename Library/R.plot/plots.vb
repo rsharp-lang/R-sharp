@@ -275,17 +275,22 @@ Module plots
                             Optional category$ = "item",
                             Optional value$ = "value",
                             Optional color$ = "color",
+                            Optional min$ = "min",
+                            Optional max$ = "max",
                             Optional title$ = "Histogram Plot",
                             Optional xlab$ = "X",
                             Optional ylab$ = "Y",
                             Optional bg As Object = "white",
                             <RRawVectorArgument> Optional size As Object = "1920,1080",
                             <RRawVectorArgument> Optional padding As Object = g.DefaultPadding,
-                            Optional show_grid As Boolean = True) As Object
+                            Optional show_grid As Boolean = True,
+                            Optional show_legend As Boolean = True) As Object
 
         Dim items As String() = data.columns(category)
         Dim values As Double() = REnv.asVector(Of Double)(data.columns(value))
         Dim colors As String() = data.columns(color).AsObjectEnumerator.Select(AddressOf InteropArgumentHelper.getColor).ToArray
+        Dim minX As Double() = REnv.asVector(Of Double)(data.columns(min))
+        Dim maxX As Double() = REnv.asVector(Of Double)(data.columns(max))
         Dim s As HistProfile() = items _
             .SeqIterator _
             .Select(Function(i)
@@ -299,8 +304,8 @@ Module plots
                         Dim bar As New HistogramData With {
                             .pointY = x,
                             .y = x,
-                            .x1 = i.i,
-                            .x2 = i.i + 1
+                            .x1 = minX(i.i),
+                            .x2 = maxX(i.i)
                         }
 
                         Return New HistProfile(histLegend, {bar})
@@ -319,7 +324,8 @@ Module plots
             showGrid:=show_grid,
             xlabel:=xlab,
             Ylabel:=ylab,
-            title:=title
+            title:=title,
+            showLegend:=show_legend
         )
     End Function
 

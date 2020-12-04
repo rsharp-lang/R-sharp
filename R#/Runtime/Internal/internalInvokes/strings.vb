@@ -234,5 +234,45 @@ Namespace Runtime.Internal.Invokes
                 Return Internal.debug.stop(New InvalidProgramException(type.FullName), envir)
             End If
         End Function
+
+        ''' <summary>
+        ''' ### Does String Start or End With Another String?
+        ''' 
+        ''' Determines if entries of x start or end with string (entries of) 
+        ''' prefix or suffix respectively, where strings are recycled to 
+        ''' common lengths.
+        ''' </summary>
+        ''' <param name="x">vector of character string whose ``starts`` are considered.</param>
+        ''' <param name="prefix">character vector(often of length one).</param>
+        ''' <returns>
+        ''' A logical vector, of “common length” of x and prefix (or suffix), i.e., 
+        ''' of the longer of the two lengths unless one of them is zero when the result 
+        ''' is also of zero length. A shorter input is recycled to the output length.
+        ''' </returns>
+        <ExportAPI("startsWith")>
+        <RApiReturn(GetType(Boolean))>
+        Public Function startsWith(x As String(), prefix As String) As Object
+            Return x.SafeQuery.Select(Function(str) str.StartsWith(prefix)).ToArray
+        End Function
+
+        ''' <summary>
+        ''' ### Does String Start or End With Another String?
+        ''' 
+        ''' Determines if entries of x start or end with string (entries of) 
+        ''' prefix or suffix respectively, where strings are recycled to 
+        ''' common lengths.
+        ''' </summary>
+        ''' <param name="x">vector of character string whose ``starts`` are considered.</param>
+        ''' <param name="suffix">character vector(often of length one).</param>
+        ''' <returns>
+        ''' A logical vector, of “common length” of x and prefix (or suffix), i.e., 
+        ''' of the longer of the two lengths unless one of them is zero when the result 
+        ''' is also of zero length. A shorter input is recycled to the output length.
+        ''' </returns>
+        <ExportAPI("endsWith")>
+        <RApiReturn(GetType(Boolean))>
+        Public Function endsWith(x As String(), suffix As String) As Object
+            Return x.SafeQuery.Select(Function(str) str.EndsWith(suffix)).ToArray
+        End Function
     End Module
 End Namespace
