@@ -60,6 +60,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.My.UNIX
+Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -836,5 +837,15 @@ Namespace Runtime.Internal.Invokes
                 Call file.DeleteFile
             Next
         End Sub
+
+        ''' <summary>
+        ''' read file as data URI string
+        ''' </summary>
+        ''' <param name="file">the file path</param>
+        ''' <returns></returns>
+        <ExportAPI("dataUri")>
+        Public Function dataUri(file As String) As String
+            Return New DataURI(file).ToString
+        End Function
     End Module
 End Namespace
