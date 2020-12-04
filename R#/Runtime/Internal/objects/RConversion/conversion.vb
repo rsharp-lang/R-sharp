@@ -1,45 +1,45 @@
 ﻿#Region "Microsoft.VisualBasic::5f40c086df1e949a5ab62298ea66181f, R#\Runtime\Internal\objects\RConversion\conversion.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module RConversion
-    ' 
-    '         Function: asCharacters, asDataframe, asDate, asInteger, asList
-    '                   asLogicals, asNumeric, asObject, asPipeline, asRaw
-    '                   asVector, castArrayOfGeneric, castArrayOfObject, castType, isCharacter
-    '                   tryUnlistArray, unlist, unlistOfRList, unlistRecursive
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module RConversion
+' 
+'         Function: asCharacters, asDataframe, asDate, asInteger, asList
+'                   asLogicals, asNumeric, asObject, asPipeline, asRaw
+'                   asVector, castArrayOfGeneric, castArrayOfObject, castType, isCharacter
+'                   tryUnlistArray, unlist, unlistOfRList, unlistRecursive
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -299,6 +299,19 @@ Namespace Runtime.Internal.Object.Converts
                                     Optional env As Environment = Nothing) As Object
             If x Is Nothing Then
                 Return x
+            ElseIf TypeOf X Is dataframe Then
+                ' clone
+                Dim raw As dataframe = x
+                Dim clone As New dataframe With {
+                    .columns = raw.columns _
+                        .ToDictionary(Function(k) k.Key,
+                                      Function(k)
+                                          Return k.Value
+                                      End Function),
+                    .rownames = raw.rownames.ToArray
+                }
+
+                Return clone
             Else
                 args = base.Rlist(args, env)
 
@@ -315,39 +328,49 @@ RE0:
                 type = makeDataframe.tryTypeLineage(type)
 
                 If type Is Nothing Then
-                    If TypeOf x Is vector Then
-                        x = DirectCast(x, vector).data
-                        type = MeasureRealElementType(x)
+                    Dim err As Message = handleUnsure(x, type, env)
 
-                        If x.GetType.GetElementType Is Nothing OrElse x.GetType.GetElementType Is GetType(Object) Then
-                            Dim list = Array.CreateInstance(type, DirectCast(x, Array).Length)
-
-                            With DirectCast(x, Array)
-                                For i As Integer = 0 To .Length - 1
-                                    x = .GetValue(i)
-
-                                    If TypeOf x Is vbObject Then
-                                        x = DirectCast(x, vbObject).target
-                                    End If
-
-                                    list.SetValue(x, i)
-                                Next
-                            End With
-
-                            x = list
-                        End If
-
-                        GoTo RE0
-                    End If
-
-                    If type Is Nothing Then
-                        Return Internal.debug.stop(New InvalidProgramException("unknown type handler..."), env)
+                    If Not err Is Nothing Then
+                        Return err
                     Else
-                        Return Internal.debug.stop(New InvalidProgramException("missing api for handle of data: " & type.FullName), env)
+                        GoTo RE0
                     End If
                 Else
                     Return makeDataframe.createDataframe(type, x, args, env)
                 End If
+            End If
+        End Function
+
+        Private Function handleUnsure(ByRef x As Object, ByRef type As Type, env As Environment) As Message
+            If TypeOf x Is vector Then
+                x = DirectCast(x, vector).data
+                type = MeasureRealElementType(x)
+
+                If x.GetType.GetElementType Is Nothing OrElse x.GetType.GetElementType Is GetType(Object) Then
+                    Dim list = Array.CreateInstance(type, DirectCast(x, Array).Length)
+
+                    With DirectCast(x, Array)
+                        For i As Integer = 0 To .Length - 1
+                            x = .GetValue(i)
+
+                            If TypeOf x Is vbObject Then
+                                x = DirectCast(x, vbObject).target
+                            End If
+
+                            list.SetValue(x, i)
+                        Next
+                    End With
+
+                    x = list
+                End If
+
+                Return Nothing
+            End If
+
+            If type Is Nothing Then
+                Return Internal.debug.stop(New InvalidProgramException("unknown type handler..."), env)
+            Else
+                Return Internal.debug.stop(New InvalidProgramException("missing api for handle of data: " & type.FullName), env)
             End If
         End Function
 
