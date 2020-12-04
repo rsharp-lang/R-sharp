@@ -163,6 +163,7 @@ Module dataframe
                                    <RRawVectorArgument>
                                    Optional row_names As Object = Nothing,
                                    Optional check_names As Boolean = True,
+                                   Optional check_modes As Boolean = True,
                                    Optional env As Environment = Nothing) As Object
 
         Dim cols() = raw.Columns.ToArray
@@ -179,7 +180,14 @@ Module dataframe
                 .SeqIterator _
                 .ToDictionary(Function(col) colNames(col.i),
                               Function(col)
-                                  Return DirectCast(col.value.Skip(1).ToArray, Array)
+                                  If check_modes Then
+                                      Return col.value _
+                                          .Skip(1) _
+                                          .ToArray _
+                                          .DoCall(AddressOf IO.DataImports.ParseVector)
+                                  Else
+                                      Return DirectCast(col.value.Skip(1).ToArray, Array)
+                                  End If
                               End Function)
         }
 

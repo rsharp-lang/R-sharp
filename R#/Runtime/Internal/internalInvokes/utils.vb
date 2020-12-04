@@ -294,7 +294,13 @@ Namespace Runtime.Internal.Invokes
                 If v.length <= n Then
                     Return x
                 Else
-                    Dim data As Array = Array.CreateInstance(v.elementType.raw, n)
+                    Dim data As Array
+
+                    If v.elementType Is Nothing Then
+                        data = New Object(n - 1) {}
+                    Else
+                        data = Array.CreateInstance(v.elementType.raw, n)
+                    End If
 
                     For i As Integer = 0 To data.Length - 1
                         data.SetValue(v.data.GetValue(i), i)

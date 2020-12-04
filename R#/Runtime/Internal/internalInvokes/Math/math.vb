@@ -224,8 +224,8 @@ Namespace Runtime.Internal.Invokes
 
         <ExportAPI("pearson")>
         Public Function pearson(x As Array, y As Array, Optional MAXIT As Integer = 5000) As list
-            Dim data1 As Double() = Runtime.asVector(Of Double)(x)
-            Dim data2 As Double() = Runtime.asVector(Of Double)(y)
+            Dim data1 As Double() = REnv.asVector(Of Double)(x)
+            Dim data2 As Double() = REnv.asVector(Of Double)(y)
             Dim p1#
             Dim p2#
             Dim z#

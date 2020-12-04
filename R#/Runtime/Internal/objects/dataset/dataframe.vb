@@ -266,24 +266,29 @@ Namespace Runtime.Internal.Object
             Dim subsetData As Dictionary(Of String, Array) = columns _
                 .ToDictionary(Function(c) c.Key,
                               Function(c)
-                                  Dim a = Array.CreateInstance(MeasureRealElementType(c.Value), index.Length)
-
-                                  If c.Value.Length = 1 Then
-                                      ' single value
-                                      a.SetValue(c.Value.GetValue(Scan0), Scan0)
-                                  Else
-                                      For Each i In index.SeqIterator
-                                          a.SetValue(c.Value.GetValue(i.value), i)
-                                      Next
-                                  End If
-
-                                  Return a
+                                  Return subsetColData(c.Value, index)
                               End Function)
 
             Return New dataframe With {
                 .rownames = subsetRowNumbers,
                 .columns = subsetData
             }
+        End Function
+
+        Private Function subsetColData(c As Array, index As Integer()) As Array
+            Dim type As Type = MeasureRealElementType(c)
+            Dim a As Array = Array.CreateInstance(type, index.Length)
+
+            If c.Length = 1 Then
+                ' single value
+                Call a.SetValue(c.GetValue(Scan0), Scan0)
+            Else
+                For Each i As SeqValue(Of Integer) In index.SeqIterator
+                    Call a.SetValue(c.GetValue(i.value), i)
+                Next
+            End If
+
+            Return a
         End Function
 
         Public Function getRowNames() As String()

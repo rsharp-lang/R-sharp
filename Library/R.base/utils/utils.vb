@@ -121,6 +121,7 @@ Public Module utils
                              <RRawVectorArgument>
                              Optional row_names As Object = Nothing,
                              Optional check_names As Boolean = True,
+                             Optional check_modes As Boolean = True,
                              Optional encoding As Object = "unknown",
                              Optional tsv As Boolean = False,
                              Optional env As Environment = Nothing) As Object
@@ -155,7 +156,7 @@ Public Module utils
         If Not TypeOf datafile Is File Then
             Return Internal.debug.stop(datafile, env)
         Else
-            Return DirectCast(datafile, csv).rawToDataFrame(row_names, check_names, env)
+            Return DirectCast(datafile, csv).rawToDataFrame(row_names, check_names, check_modes, env)
         End If
     End Function
 
