@@ -18,8 +18,14 @@ print("cluster colors:");
 print(clusters);
 
 let manifold = MNIST_LabelledVectorArray 
-:> read.mnist.labelledvector(takes = 20000)
-:> umap(dimension = 2)
+:> read.mnist.labelledvector(takes = 25000)
+:> umap(
+	dimension         = 2, 
+	numberOfNeighbors = 10,
+    localConnectivity = 1,
+    KnnIter           = 64,
+    bandwidth         = 1
+)
 ;
 
 # data visualization
