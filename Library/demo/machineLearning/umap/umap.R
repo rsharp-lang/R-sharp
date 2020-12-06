@@ -6,7 +6,7 @@ const MNIST_LabelledVectorArray as string = "E:\GCModeller\src\runtime\sciBASIC#
 const graph_visual as string = `${!script$dir}/MNIST-LabelledVectorArray-20000x100.umap_graph.png`;
 
 let manifold = MNIST_LabelledVectorArray 
-:> read.mnist.labelledvector(takes = 20000)
+:> read.mnist.labelledvector(takes = 200)
 :> umap(dimension = 2)
 ;
 
