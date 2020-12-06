@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b71d8673413b6f903cb266f768a7eace, R#\Runtime\Internal\internalInvokes\strings.vb"
+﻿#Region "Microsoft.VisualBasic::8981f45acf3cf115ddc2831cf67f6ddf, R#\Runtime\Internal\internalInvokes\strings.vb"
 
     ' Author:
     ' 
@@ -33,8 +33,8 @@
 
     '     Module strings
     ' 
-    '         Function: AscW, InStr, LCase, Mid, Trim
-    '                   UCase
+    '         Function: AscW, endsWith, InStr, LCase, Mid
+    '                   startsWith, Trim, UCase
     ' 
     ' 
     ' /********************************************************************************/

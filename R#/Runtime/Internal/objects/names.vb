@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::713427640b68b8cf5cecfd392ce2b17c, R#\Runtime\Internal\objects\names.vb"
+﻿#Region "Microsoft.VisualBasic::2b389cedcb720fcda0a82290f6b8064a, R#\Runtime\Internal\objects\names.vb"
 
     ' Author:
     ' 
@@ -33,8 +33,8 @@
 
     '     Module names
     ' 
-    '         Function: getColNames, getNames, getRowNames, setColNames, setNames
-    '                   setRowNames, uniqueNames
+    '         Function: getColNames, getNames, getRowNames, makeNames, setColNames
+    '                   setNames, setRowNames, uniqueNames
     ' 
     ' 
     ' /********************************************************************************/
