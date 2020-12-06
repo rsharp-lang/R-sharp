@@ -175,6 +175,35 @@ Public Module InteropArgumentHelper
         End Select
     End Function
 
+    ''' <summary>
+    ''' 因为html颜色不支持透明度，所以这个函数是为了解决透明度丢失的问题而编写的
+    ''' </summary>
+    ''' <param name="color"></param>
+    ''' <param name="default$"></param>
+    ''' <returns></returns>
+    Public Function GetRawColor(color As Object, Optional default$ = "black") As Color
+        If color Is Nothing Then
+            Return [default].TranslateColor
+        End If
+
+        Select Case color.GetType
+            Case GetType(String)
+                Return DirectCast(color, String).TranslateColor
+            Case GetType(String())
+                Return DirectCast(DirectCast(color, String()).GetValue(Scan0), String).TranslateColor
+            Case GetType(Color)
+                Return DirectCast(color, Color)
+            Case GetType(Integer), GetType(Long), GetType(Short)
+                Return color.ToString.TranslateColor
+            Case GetType(Integer()), GetType(Long()), GetType(Short())
+                Return DirectCast(color, Array).GetValue(Scan0).ToString.TranslateColor
+            Case GetType(SolidBrush)
+                Return DirectCast(color, SolidBrush).Color
+            Case Else
+                Return [default].TranslateColor
+        End Select
+    End Function
+
     Public Function getColor(color As Object, Optional default$ = "black") As String
         If color Is Nothing Then
             Return [default]
@@ -191,6 +220,8 @@ Public Module InteropArgumentHelper
                 Return color.ToString
             Case GetType(Integer()), GetType(Long()), GetType(Short())
                 Return DirectCast(color, Array).GetValue(Scan0).ToString
+            Case GetType(SolidBrush)
+                Return DirectCast(color, SolidBrush).Color.ToHtmlColor
             Case Else
                 Return [default]
         End Select

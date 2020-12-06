@@ -28,7 +28,13 @@ Module Manifold
     ''' <returns></returns>
     <ExportAPI("umap")>
     <RApiReturn(GetType(list))>
-    Public Function umapProjection(<RRawVectorArgument> data As Object, Optional dimension% = 2, Optional env As Environment = Nothing) As Object
+    Public Function umapProjection(<RRawVectorArgument> data As Object,
+                                   Optional dimension% = 2,
+                                   Optional numberOfNeighbors As Integer = 15,
+                                   Optional localConnectivity As Double = 1,
+                                   Optional KnnIter As Integer = 64,
+                                   Optional bandwidth As Double = 1,
+                                   Optional env As Environment = Nothing) As Object
         Dim labels As String()
         Dim matrix As Double()()
 
@@ -56,7 +62,11 @@ Module Manifold
 
         Dim umap As New Umap(
             distance:=AddressOf DistanceFunctions.CosineForNormalizedVectors,
-            dimensions:=dimension
+            dimensions:=dimension,
+            numberOfNeighbors:=numberOfNeighbors,
+            localConnectivity:=localConnectivity,
+            KnnIter:=KnnIter,
+            bandwidth:=bandwidth
         )
         Dim nEpochs As Integer
 

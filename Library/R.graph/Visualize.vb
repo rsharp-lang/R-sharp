@@ -315,8 +315,8 @@ Module Visualize
     ''' <param name="color$"></param>
     ''' <returns></returns>
     <ExportAPI("setColors")>
-    Public Function colorByTypeGroup(g As NetworkGraph, type$, color$) As NetworkGraph
-        Dim colorBrush As Brush = color.GetBrush
+    Public Function colorByTypeGroup(g As NetworkGraph, type$, color As Object) As NetworkGraph
+        Dim colorBrush As New SolidBrush(InteropArgumentHelper.GetRawColor(color))
 
         g.vertex _
             .Where(Function(n)

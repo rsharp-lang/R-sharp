@@ -284,6 +284,23 @@ break:
     End Function
 
     ''' <summary>
+    ''' adjust color alpha value
+    ''' </summary>
+    ''' <param name="color"></param>
+    ''' <param name="alpha">the color alpha value should be in range ``[0,1]``.</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("alpha")>
+    Public Function adjustAlpha(<RRawVectorArgument> color As Object, alpha As Double, Optional env As Environment = Nothing) As Object
+        Return pipeline.TryCreatePipeline(Of Object)(color, env) _
+            .populates(Of Object)(env) _
+            .Select(Function(obj)
+                        Return InteropArgumentHelper.getColor(obj).TranslateColor.Alpha(alpha * 255)
+                    End Function) _
+            .ToArray
+    End Function
+
+    ''' <summary>
     ''' get color set
     ''' </summary>
     ''' <param name="term">the color set name</param>
