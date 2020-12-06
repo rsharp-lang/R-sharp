@@ -204,7 +204,7 @@ Namespace Runtime.Internal.Object
         End Function
 
         ''' <summary>
-        ''' ``[rowname => columns]``
+        ''' 获取得到数据框之中每一行的数据(``[rowname => columns]``)
         ''' </summary>
         ''' <param name="colKeys"></param>
         ''' <returns></returns>
@@ -291,6 +291,10 @@ Namespace Runtime.Internal.Object
             Return a
         End Function
 
+        ''' <summary>
+        ''' 这个函数会自动处理空值的情况
+        ''' </summary>
+        ''' <returns></returns>
         Public Function getRowNames() As String()
             If rownames.IsNullOrEmpty Then
                 Return nrows _
