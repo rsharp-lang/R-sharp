@@ -388,6 +388,7 @@
     <Compile Include="Layouts.vb" />
     <Compile Include="Dijkstra.vb" />
     <Compile Include="Comparison.vb" />
+    <Compile Include="builder.vb" />
     <Compile Include="Visualize.vb" />
     <Compile Include="NetworkModule.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -433,6 +434,14 @@
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Graph\GraphTheory.vbproj">
       <Project>{203BC68F-A0CD-443A-AB62-4AF4110F752F}</Project>
       <Name>GraphTheory</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Mathematica\Math\DataFrame\DataFrame.vbproj">
+      <Project>{6140aed7-e317-46dd-9c15-7fe400795992}</Project>
+      <Name>DataFrame</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Visualization\Visualization\DataVisualization.vbproj">
+      <Project>{3a114030-d9fd-4913-8e85-a78c032e9000}</Project>
+      <Name>DataVisualization</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\gr\Microsoft.VisualBasic.Imaging\Microsoft.VisualBasic.Imaging.vbproj">
       <Project>{85E71B4B-9276-4EC8-AADC-C849205F1EA8}</Project>
