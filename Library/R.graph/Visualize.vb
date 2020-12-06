@@ -146,6 +146,7 @@ Module Visualize
                                Optional showUntexture As Boolean = True,
                                Optional showLabel As Boolean = True,
                                Optional defaultEdgeColor$ = "lightgray",
+                               Optional defaultEdgeDash As DashStyle = DashStyle.Solid,
                                Optional defaultLabelColor$ = "black",
                                Optional drawEdgeDirection As Boolean = False,
                                Optional driver As Drivers = Drivers.GDI,
@@ -292,7 +293,7 @@ Module Visualize
             drawEdgeBends:=True,
             throwEx:=env.globalEnvironment.Rscript.debug,
             drawNodeShape:=drawNodeShape，
-            edgeDashTypes:=DashStyle.Solid,
+            edgeDashTypes:=defaultEdgeDash,
             defaultEdgeColor:=defaultEdgeColor,
             defaultLabelColor:=defaultLabelColor,
             getNodeLabel:=getNodeLabel,

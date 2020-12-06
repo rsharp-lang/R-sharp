@@ -95,7 +95,7 @@ Namespace Runtime.Internal.Object
 RE0:
                 If nameUniques.ContainsKey(name) Then
                     nameUniques(name).Hit()
-                    name = name & nameUniques(name).Value
+                    name = name & "_" & nameUniques(name).Value
                     GoTo RE0
                 Else
                     nameUniques.Add(name, Scan0)

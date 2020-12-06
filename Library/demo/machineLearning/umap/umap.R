@@ -5,10 +5,13 @@ require(igraph.render);
 
 const MNIST_LabelledVectorArray as string = "E:\GCModeller\src\runtime\sciBASIC#\Data_science\DataMining\data\umap\MNIST-LabelledVectorArray-60000x100.msgpack";
 const graph_visual as string = `${!script$dir}/MNIST-LabelledVectorArray-20000x100.umap_graph.png`;
-const clusters as string = ["#006400","#00008b","#b03060","#ff4500","#ffd700","#7fff00","#00ffff","#ff00ff","#6495ed","#ffdab9"];
+const clusters as string = [
+	"#006400","#00008b","#b03060","#ff4500","#ffd700",
+	"#7fff00","#00ffff","#ff00ff","#6495ed","#ffdab9"
+];
 
 let manifold = MNIST_LabelledVectorArray 
-:> read.mnist.labelledvector(takes = 1000)
+:> read.mnist.labelledvector(takes = 10000)
 :> umap(dimension = 2)
 ;
 
@@ -34,9 +37,12 @@ manifold$umap
 	canvasSize        = [3840, 2160],
 	padding           = "padding:100px 100px 100px 100px;",
 	labelerIterations = -1,
-	minNodeSize       = 20,
+	minNodeSize       = 30,
+	minLinkWidth      = 0.5,
 	nodeStroke        = "stroke: lightgray; stroke-width: 2px; stroke-dash: dash;",
-	showLabel         = FALSE
+	showLabel         = FALSE,
+	defaultEdgeColor  = "#F6F6F6",
+    defaultEdgeDash   = "Dash"
 )
 :> save.graphics(file = graph_visual)
 ;
