@@ -11,9 +11,19 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 
+''' <summary>
+''' UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction
+''' </summary>
 <Package("umap")>
 Module Manifold
 
+    ''' <summary>
+    ''' UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction
+    ''' </summary>
+    ''' <param name="data"></param>
+    ''' <param name="dimension%"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("umap")>
     <RApiReturn(GetType(list))>
     Public Function umapProjection(<RRawVectorArgument> data As Object, Optional dimension% = 2, Optional env As Environment = Nothing) As Object
