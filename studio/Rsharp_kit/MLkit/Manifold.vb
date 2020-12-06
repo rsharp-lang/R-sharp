@@ -2,10 +2,12 @@
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.visualize
+Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream.Generic
 Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.DataMining.UMAP
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
@@ -84,9 +86,25 @@ Module Manifold
 
     <ExportAPI("as.graph")>
     <RApiReturn(GetType(NetworkGraph))>
-    Public Function asGraph(umap As Umap, <RRawVectorArgument> labels As Object, Optional env As Environment = Nothing) As Object
-        Dim labelList As String() = DirectCast(REnv.asVector(Of String)(labels), String()).makeNames(unique:=True)
-        Dim g As NetworkGraph = umap.CreateGraph(labelList)
+    Public Function asGraph(umap As Umap, <RRawVectorArgument> labels As Object,
+                            <RRawVectorArgument>
+                            Optional groups As Object = Nothing,
+                            Optional env As Environment = Nothing) As Object
+
+        Dim labelList As String() = REnv.asVector(Of String)(labels)
+        Dim uniqueLabels As String() = labelList.makeNames(unique:=True)
+        Dim g As NetworkGraph = umap.CreateGraph(uniqueLabels, labelList)
+
+        If Not groups Is Nothing Then
+            labelList = REnv.asVector(Of String)(groups)
+
+            Call base.print("cluster groups that you defined for the nodes:", env)
+            Call base.print(labelList.Distinct.OrderBy(Function(str) str).ToArray, env)
+
+            For i As Integer = 0 To uniqueLabels.Length - 1
+                g.GetElementByID(uniqueLabels(i)).data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) = labelList(i)
+            Next
+        End If
 
         Return g
     End Function

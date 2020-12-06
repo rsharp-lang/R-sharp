@@ -144,6 +144,7 @@ Module Visualize
                                Optional widget As Object = Nothing,
                                Optional showLabelerProgress As Boolean = False,
                                Optional showUntexture As Boolean = True,
+                               Optional showLabel As Boolean = True,
                                Optional defaultEdgeColor$ = "lightgray",
                                Optional defaultLabelColor$ = "black",
                                Optional drawEdgeDirection As Boolean = False,
@@ -300,11 +301,19 @@ Module Visualize
             fontSize:=CSng(labelFontSize),
             nodeStroke:=InteropArgumentHelper.getStrokePenCSS(nodeStroke, Nothing),
             hullPolygonGroups:=hullPolygonGroups,
-            convexHullCurveDegree:=1
+            convexHullCurveDegree:=1,
+            displayId:=showLabel
         )
     End Function
 
-    <ExportAPI("color.group")>
+    ''' <summary>
+    ''' set color by node group
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <param name="type$"></param>
+    ''' <param name="color$"></param>
+    ''' <returns></returns>
+    <ExportAPI("setColors")>
     Public Function colorByTypeGroup(g As NetworkGraph, type$, color$) As NetworkGraph
         Dim colorBrush As Brush = color.GetBrush
 

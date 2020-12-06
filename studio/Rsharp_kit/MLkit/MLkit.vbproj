@@ -287,6 +287,10 @@
       <Project>{c57630a3-33b1-4cad-9dc8-3a9e66ce93ff}</Project>
       <Name>UMAP</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\Graph\GraphTheory.vbproj">
+      <Project>{203BC68F-A0CD-443A-AB62-4AF4110F752F}</Project>
+      <Name>GraphTheory</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\MachineLearning\MachineLearning\MachineLearning.vbproj">
       <Project>{a43ec013-2b55-4d25-b9f1-96bd5fb1e577}</Project>
       <Name>MachineLearning</Name>
