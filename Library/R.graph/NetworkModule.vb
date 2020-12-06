@@ -73,7 +73,7 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 <RTypeExport("graph", GetType(NetworkGraph))>
 Public Module NetworkModule
 
-    Sub New()
+    Friend Sub Main()
         REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of NetworkGraph)(AddressOf printGraph)
         REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of node)(AddressOf printNode)
     End Sub

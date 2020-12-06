@@ -385,6 +385,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="zzz.vb" />
     <Compile Include="Layouts.vb" />
     <Compile Include="Dijkstra.vb" />
     <Compile Include="Comparison.vb" />
