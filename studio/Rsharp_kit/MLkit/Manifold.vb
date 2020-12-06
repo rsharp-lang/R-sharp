@@ -85,7 +85,7 @@ Module Manifold
     <ExportAPI("as.graph")>
     <RApiReturn(GetType(NetworkGraph))>
     Public Function asGraph(umap As Umap, <RRawVectorArgument> labels As Object, Optional env As Environment = Nothing) As Object
-        Dim labelList As String() = REnv.asVector(Of String)(labels)
+        Dim labelList As String() = DirectCast(REnv.asVector(Of String)(labels), String()).makeNames(unique:=True)
         Dim g As NetworkGraph = umap.CreateGraph(labelList)
 
         Return g

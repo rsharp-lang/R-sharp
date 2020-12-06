@@ -15,7 +15,8 @@ manifold$umap
 :> as.graph(labels = manifold$labels)
 :> render.Plot(
 	canvasSize = [4096, 3112],
-	padding = "padding:100px 100px 100px 100px;"	
+	padding = "padding:100px 100px 100px 100px;",
+	labelerIterations = -1	
 )
 :> save.graphics(file = graph_visual)
 ;

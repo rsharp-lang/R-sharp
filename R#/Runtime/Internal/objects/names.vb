@@ -55,6 +55,39 @@ Namespace Runtime.Internal.Object
     Public Module names
 
         <Extension>
+        Public Function makeNames(nameList As IEnumerable(Of String), Optional unique As Boolean = False, Optional allow_ As Boolean = True) As String()
+            Dim nameAll As New List(Of String)
+
+            For Each name As String In nameList
+                name = name _
+                    .Select(Function(c)
+                                If c = "_"c AndAlso allow_ Then
+                                    Return c
+                                Else
+                                    If c >= "a"c AndAlso c <= "z"c Then
+                                        Return c
+                                    ElseIf c >= "A"c AndAlso c <= "Z"c Then
+                                        Return c
+                                    ElseIf c >= "0"c AndAlso c <= "9"c Then
+                                        Return c
+                                    Else
+                                        Return "."c
+                                    End If
+                                End If
+                            End Function) _
+                    .CharString
+
+                Call nameAll.Add(name)
+            Next
+
+            If unique Then
+                Return nameAll.uniqueNames
+            Else
+                Return nameAll.ToArray
+            End If
+        End Function
+
+        <Extension>
         Public Function uniqueNames(names As IEnumerable(Of String)) As String()
             Dim nameUniques As New Dictionary(Of String, Counter)
 
