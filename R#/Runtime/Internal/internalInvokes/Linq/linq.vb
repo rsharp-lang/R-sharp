@@ -352,13 +352,23 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 If x Is Nothing Then
                     Return New Integer() {}
                 Else
-                    Return Which.Max(DirectCast(asVector(Of Double)(Rset.getObjectSet(x, env).ToArray), Double())) + 1
+                    Dim dbl As Double() = DirectCast(asVector(Of Double)(Rset.getObjectSet(x, env).ToArray), Double())
+
+                    If dbl.Length = 0 Then
+                        Return New Integer() {}
+                    Else
+                        Return Which.Max(dbl) + 1
+                    End If
                 End If
             Else
                 Dim lambda = LinqPipeline.lambda.CreateProjectLambda(Of Double)(eval, env)
                 Dim scores = Rset.getObjectSet(x, env).Select(lambda).ToArray
 
-                Return Which.Max(scores) + 1
+                If scores.Length = 0 Then
+                    Return New Integer() {}
+                Else
+                    Return Which.Max(scores) + 1
+                End If
             End If
         End Function
 
@@ -399,13 +409,23 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 If x Is Nothing Then
                     Return New Integer() {}
                 Else
-                    Return Which.Min(DirectCast(asVector(Of Double)(Rset.getObjectSet(x, env)), Double())) + 1
+                    Dim dbl As Double() = DirectCast(asVector(Of Double)(Rset.getObjectSet(x, env)), Double())
+
+                    If dbl.Length = 0 Then
+                        Return New Integer() {}
+                    Else
+                        Return Which.Min(dbl) + 1
+                    End If
                 End If
             Else
                 Dim lambda = LinqPipeline.lambda.CreateProjectLambda(Of Double)(eval, env)
                 Dim scores = Rset.getObjectSet(x, env).Select(lambda).ToArray
 
-                Return Which.Min(scores) + 1
+                If scores.Length = 0 Then
+                    Return New Integer() {}
+                Else
+                    Return Which.Min(scores) + 1
+                End If
             End If
         End Function
 
