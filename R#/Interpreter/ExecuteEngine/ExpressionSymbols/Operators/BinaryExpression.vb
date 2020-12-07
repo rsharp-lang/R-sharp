@@ -74,6 +74,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             Dim a As Object = left.Evaluate(envir)
             Dim b As Object = right.Evaluate(envir)
 
+            ' > NULL / NULL
+            ' numeric(0)
+            If a Is Nothing OrElse b Is Nothing Then
+                Return New Object() {}
+            End If
+
             If TypeOf a Is invisible Then
                 a = DirectCast(a, invisible).value
             End If
