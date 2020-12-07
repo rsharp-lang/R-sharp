@@ -60,6 +60,18 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 <Package("umap")>
 Module Manifold
 
+    Sub New()
+        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(Umap), AddressOf exportUmapTable)
+    End Sub
+
+    Private Function exportUmapTable(umap As Umap, args As list, env As Environment) As Rdataframe
+        Dim labels = args.getByName("labels")
+        Dim colNames = args.getByName("dimension")
+        Dim table As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
+
+        Return table
+    End Function
+
     ''' <summary>
     ''' UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction
     ''' </summary>
