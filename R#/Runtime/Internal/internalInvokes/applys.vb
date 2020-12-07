@@ -249,7 +249,7 @@ Namespace Runtime.Internal.Invokes
                         Return value
                     End If
 
-                    seq.Add(Runtime.single(value))
+                    seq.Add(REnv.single(value))
                     names.Add(Scripting.ToString(key))
                 Next
 
@@ -266,7 +266,7 @@ Namespace Runtime.Internal.Invokes
                     If Program.isException(value) Then
                         Return value
                     Else
-                        seq.Add(Runtime.single(value))
+                        seq.Add(REnv.single(value))
                     End If
                 Next
 
