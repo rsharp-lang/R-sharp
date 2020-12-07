@@ -265,6 +265,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
             If targetObj Is Nothing Then
                 Return Internal.debug.stop({"Target symbol is nothing!", $"SymbolName: {symbolIndex.symbol}"}, envir)
+            ElseIf TypeOf targetObj Is Message Then
+                Return targetObj
             End If
 
             If symbolIndex.indexType = SymbolIndexers.vectorIndex AndAlso index.GetType Like RType.integers Then
