@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::b64283089d40f609eee4ec11491fb557, Library\R.graph\NetworkModule.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module NetworkModule
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: addEdge, addEdges, addNode, addNodes, attributes
-    '               computeNetwork, connectedNetwork, DecomposeGraph, degree, emptyNetwork
-    '               getByGroup, getEdges, getElementByID, getNodes, LoadNetwork
-    '               nodeNames, printGraph, printNode, SaveNetwork, setAttributes
-    '               trimEdges, typeGroupOfNodes
-    ' 
-    ' /********************************************************************************/
+' Module NetworkModule
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: addEdge, addEdges, addNode, addNodes, attributes
+'               computeNetwork, connectedNetwork, DecomposeGraph, degree, emptyNetwork
+'               getByGroup, getEdges, getElementByID, getNodes, LoadNetwork
+'               nodeNames, printGraph, printNode, SaveNetwork, setAttributes
+'               trimEdges, typeGroupOfNodes
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -51,6 +51,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.visualize.Network
 Imports Microsoft.VisualBasic.Data.visualize.Network.Analysis
+Imports Microsoft.VisualBasic.Data.visualize.Network.Analysis.Model
 Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream
 Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream.Generic
 Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
@@ -73,7 +74,7 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 <RTypeExport("graph", GetType(NetworkGraph))>
 Public Module NetworkModule
 
-    Sub New()
+    Friend Sub Main()
         REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of NetworkGraph)(AddressOf printGraph)
         REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of node)(AddressOf printNode)
     End Sub
@@ -110,19 +111,20 @@ Public Module NetworkModule
     ''' <param name="properties">a list of property name for save in node table and edge table.</param>
     ''' <returns></returns>
     <ExportAPI("save.network")>
-    Public Function SaveNetwork(g As Object, file$, Optional properties As String() = Nothing) As Boolean
-        If g Is Nothing Then
-            Throw New ArgumentNullException("g")
-        End If
-
+    <RApiReturn(GetType(Boolean))>
+    Public Function SaveNetwork(g As Object, file$, Optional properties As String() = Nothing, Optional env As Environment = Nothing) As Object
         Dim tables As NetworkTables
+
+        If g Is Nothing Then
+            Return Internal.debug.stop("the required network graph object can not be nothing!", env)
+        End If
 
         If g.GetType Is GetType(NetworkGraph) Then
             tables = DirectCast(g, NetworkGraph).Tabular(properties)
         ElseIf g.GetType Is GetType(NetworkTables) Then
             tables = g
         Else
-            Throw New InvalidProgramException(g.GetType.FullName)
+            Return Internal.debug.stop(New InvalidProgramException(g.GetType.FullName), env)
         End If
 
         Return tables.Save(file)
@@ -168,8 +170,25 @@ Public Module NetworkModule
     ''' <param name="directedGraph"></param>
     ''' <returns></returns>
     <ExportAPI("trim.edges")>
-    Public Function trimEdges(g As NetworkGraph, Optional directedGraph As Boolean = False) As NetworkGraph
-        Return g.RemoveDuplicated(directedGraph)
+    Public Function trimEdges(g As NetworkGraph,
+                              Optional directedGraph As Boolean = False,
+                              Optional removesTuples As Boolean = False) As NetworkGraph
+
+        g = g.RemoveDuplicated(directedGraph)
+
+        If removesTuples Then
+            Dim index = New GraphIndex(Of node, Edge)().nodes(g.vertex).edges(g.graphEdges)
+            Dim tuples = g.graphEdges _
+                .Where(Function(e) e.isTupleEdge(index)) _
+                .ToArray
+
+            For Each edge As Edge In tuples
+                Call g.DetachNode(edge.U)
+                Call g.DetachNode(edge.V)
+            Next
+        End If
+
+        Return g
     End Function
 
     ''' <summary>

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::72f8eef9dc691babf1667c5a01cc435a, Library\R.graphics\grDevices.vb"
+﻿#Region "Microsoft.VisualBasic::93292b155aea5a2725c257e9707816b9, Library\R.graphics\grDevices.vb"
 
     ' Author:
     ' 
@@ -33,8 +33,8 @@
 
     ' Module grDevices
     ' 
-    '     Function: colorPopulator, colors, devCur, devOff, imageAttrs
-    '               rgb, saveBitmap, saveImage
+    '     Function: adjustAlpha, colorPopulator, colors, devCur, devOff
+    '               imageAttrs, rgb, saveBitmap, saveImage
     ' 
     ' /********************************************************************************/
 
@@ -281,6 +281,23 @@ Public Module grDevices
         Next
 break:
         ' exit iterator loops
+    End Function
+
+    ''' <summary>
+    ''' adjust color alpha value
+    ''' </summary>
+    ''' <param name="color"></param>
+    ''' <param name="alpha">the color alpha value should be in range ``[0,1]``.</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("alpha")>
+    Public Function adjustAlpha(<RRawVectorArgument> color As Object, alpha As Double, Optional env As Environment = Nothing) As Object
+        Return pipeline.TryCreatePipeline(Of Object)(color, env) _
+            .populates(Of Object)(env) _
+            .Select(Function(obj)
+                        Return InteropArgumentHelper.getColor(obj).TranslateColor.Alpha(alpha * 255)
+                    End Function) _
+            .ToArray
     End Function
 
     ''' <summary>

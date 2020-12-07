@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f926887df8821e24631f43507442caae, Library\R.graph\Visualize.vb"
+﻿#Region "Microsoft.VisualBasic::c6233bb861375d670bcc15eaae503090, Library\R.graph\Visualize.vb"
 
     ' Author:
     ' 
@@ -144,7 +144,9 @@ Module Visualize
                                Optional widget As Object = Nothing,
                                Optional showLabelerProgress As Boolean = False,
                                Optional showUntexture As Boolean = True,
+                               Optional showLabel As Boolean = True,
                                Optional defaultEdgeColor$ = "lightgray",
+                               Optional defaultEdgeDash As DashStyle = DashStyle.Solid,
                                Optional defaultLabelColor$ = "black",
                                Optional drawEdgeDirection As Boolean = False,
                                Optional driver As Drivers = Drivers.GDI,
@@ -291,7 +293,7 @@ Module Visualize
             drawEdgeBends:=True,
             throwEx:=env.globalEnvironment.Rscript.debug,
             drawNodeShape:=drawNodeShape，
-            edgeDashTypes:=DashStyle.Solid,
+            edgeDashTypes:=defaultEdgeDash,
             defaultEdgeColor:=defaultEdgeColor,
             defaultLabelColor:=defaultLabelColor,
             getNodeLabel:=getNodeLabel,
@@ -300,13 +302,21 @@ Module Visualize
             fontSize:=CSng(labelFontSize),
             nodeStroke:=InteropArgumentHelper.getStrokePenCSS(nodeStroke, Nothing),
             hullPolygonGroups:=hullPolygonGroups,
-            convexHullCurveDegree:=1
+            convexHullCurveDegree:=1,
+            displayId:=showLabel
         )
     End Function
 
-    <ExportAPI("color.group")>
-    Public Function colorByTypeGroup(g As NetworkGraph, type$, color$) As NetworkGraph
-        Dim colorBrush As Brush = color.GetBrush
+    ''' <summary>
+    ''' set color by node group
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <param name="type$"></param>
+    ''' <param name="color$"></param>
+    ''' <returns></returns>
+    <ExportAPI("setColors")>
+    Public Function colorByTypeGroup(g As NetworkGraph, type$, color As Object) As NetworkGraph
+        Dim colorBrush As New SolidBrush(InteropArgumentHelper.GetRawColor(color))
 
         g.vertex _
             .Where(Function(n)

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4d1badc99c94cc047cae536f932427b3, R#\Runtime\Internal\internalInvokes\string.vb"
+﻿#Region "Microsoft.VisualBasic::8fec7243e2aba824dfaf581468292b1f, R#\Runtime\Internal\internalInvokes\string.vb"
 
     ' Author:
     ' 
@@ -33,11 +33,11 @@
 
     '     Module stringr
     ' 
-    '         Function: [string], base64, base64Decode, bencode, Csprintf
-    '                   decodeObject, fromBstring, grep, html, json
-    '                   match, nchar, paste, regexp, sprintfSingle
-    '                   str_empty, str_pad, str_replace, strPad_internal, strsplit
-    '                   tagvalue, tolower, urldecode, xml
+    '         Function: [string], base64, base64Decode, bencode, chr
+    '                   Csprintf, decodeObject, fromBstring, grep, html
+    '                   json, match, nchar, paste, regexp
+    '                   sprintfSingle, str_empty, str_pad, str_replace, strPad_internal
+    '                   strsplit, tagvalue, tolower, urldecode, xml
     ' 
     '     Enum str_padSides
     ' 

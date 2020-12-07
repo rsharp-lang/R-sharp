@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::aa55ccc4a056999359798acc31caefcc, studio\Rsharp_kit\MLkit\datasetKit.vb"
+﻿#Region "Microsoft.VisualBasic::2ba536a1ee5d77cb8ba3a74cb16f1ce7, studio\Rsharp_kit\MLkit\dataset\datasetKit.vb"
 
     ' Author:
     ' 
@@ -34,17 +34,20 @@
     ' Module datasetKit
     ' 
     '     Constructor: (+1 Overloads) Sub New
-    '     Function: getNormalizeMatrix, readModelDataset, Tabular
+    '     Function: getNormalizeMatrix, readMNISTLabelledVector, readModelDataset, Tabular
     ' 
     ' /********************************************************************************/
 
 #End Region
 
+Imports System.IO
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Data.IO.MessagePack
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.Debugger
 Imports Microsoft.VisualBasic.MachineLearning.StoreProcedure
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports DataTable = Microsoft.VisualBasic.Data.csv.IO.DataSet
 
 ''' <summary>
@@ -86,5 +89,12 @@ Module datasetKit
     <ExportAPI("read.ML_model")>
     Public Function readModelDataset(file As String) As DataSet
         Return file.LoadXml(Of DataSet)
+    End Function
+
+    <ExportAPI("read.mnist.labelledvector")>
+    Public Function readMNISTLabelledVector(messagepack As String, Optional takes As Integer = -1) As dataframe
+        Using file As Stream = messagepack.Open(IO.FileMode.Open, doClear:=False, [readOnly]:=True)
+            Return LabelledVector.CreateDataFrame(MsgPackSerializer.Deserialize(Of LabelledVector())(file), takes)
+        End Using
     End Function
 End Module

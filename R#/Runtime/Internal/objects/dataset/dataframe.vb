@@ -1,46 +1,47 @@
-﻿#Region "Microsoft.VisualBasic::91e57fcad20bf39e6cfff401a3ff6ed1, R#\Runtime\Internal\objects\dataset\dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::bd3ccf93884d3d5ea8582a6100610793, R#\Runtime\Internal\objects\dataset\dataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class dataframe
-    ' 
-    '         Properties: columns, ncols, nrows, rownames
-    ' 
-    '         Function: CreateDataFrame, forEachRow, GetByRowIndex, (+2 Overloads) getColumnVector, getKeyByIndex
-    '                   getNames, getRowIndex, getRowList, getRowNames, getVector
-    '                   hasName, projectByColumn, setNames, sliceByRow, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class dataframe
+' 
+'         Properties: columns, ncols, nrows, rownames
+' 
+'         Function: CreateDataFrame, forEachRow, GetByRowIndex, (+2 Overloads) getColumnVector, getKeyByIndex
+'                   getNames, getRowIndex, getRowList, getRowNames, getVector
+'                   hasName, projectByColumn, setNames, sliceByRow, subsetColData
+'                   ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -48,7 +49,9 @@ Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -151,7 +154,7 @@ Namespace Runtime.Internal.Object
         ''' </summary>
         ''' <param name="selector"></param>
         ''' <returns></returns>
-        Public Function sliceByRow(selector As Array) As dataframe
+        Public Function sliceByRow(selector As Array, env As Environment) As [Variant](Of dataframe, Message)
             Dim indexType As Type = MeasureRealElementType(selector)
 
             If indexType Like RType.logicals Then
@@ -161,9 +164,16 @@ Namespace Runtime.Internal.Object
             ElseIf indexType Like RType.characters Then
                 Dim indexNames As String() = asVector(Of String)(selector)
                 Dim rowNames As Index(Of String) = Me.getRowNames
-                Dim index As Integer() = indexNames _
-                    .Select(Function(name) rowNames.IndexOf(name)) _
-                    .ToArray
+                Dim index As New List(Of Integer)
+                Dim i As i32 = 0
+
+                For Each name As String In indexNames
+                    If (i = rowNames.IndexOf(name)) = -1 Then
+                        Return Internal.debug.stop({$"missing row '{name}' in the given dataframe...", $"rowname: {name}"}, env)
+                    Else
+                        index.Add(i)
+                    End If
+                Next
 
                 Return GetByRowIndex(index)
             Else
@@ -204,7 +214,7 @@ Namespace Runtime.Internal.Object
         End Function
 
         ''' <summary>
-        ''' ``[rowname => columns]``
+        ''' 获取得到数据框之中每一行的数据(``[rowname => columns]``)
         ''' </summary>
         ''' <param name="colKeys"></param>
         ''' <returns></returns>
@@ -291,6 +301,10 @@ Namespace Runtime.Internal.Object
             Return a
         End Function
 
+        ''' <summary>
+        ''' 这个函数会自动处理空值的情况
+        ''' </summary>
+        ''' <returns></returns>
         Public Function getRowNames() As String()
             If rownames.IsNullOrEmpty Then
                 Return nrows _

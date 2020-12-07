@@ -125,7 +125,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 ElseIf indexType = SymbolIndexers.dataframeColumns Then
                     Return getColumn(obj, indexer, envir)
                 ElseIf indexType = SymbolIndexers.dataframeRows Then
-                    Return DirectCast(obj, dataframe).sliceByRow(indexer)
+                    Return DirectCast(obj, dataframe).sliceByRow(indexer, envir).Value
                 Else
                     Return Internal.debug.stop(New NotImplementedException(indexType.ToString), envir)
                 End If
@@ -155,9 +155,15 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                         Return Internal.debug.stop("invalid options for slice dataframe", env)
                     End If
                 Else
-                    Return data _
-                        .sliceByRow(indexVec.values(Scan0).Evaluate(env)) _
-                        .projectByColumn(asVector(Of Object)(indexVec.values(1).Evaluate(env)))
+                    Dim x = indexVec.values(Scan0).Evaluate(env)
+                    Dim y = asVector(Of Object)(indexVec.values(1).Evaluate(env))
+                    Dim result = data.sliceByRow(x, env)
+
+                    If result Like GetType(Message) Then
+                        Return result.TryCast(Of Message)
+                    Else
+                        Return result.TryCast(Of dataframe).projectByColumn(y)
+                    End If
                 End If
             ElseIf indexVec.length = 3 Then
                 ' [row, column, drop = TRUE]
