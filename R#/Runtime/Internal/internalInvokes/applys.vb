@@ -110,7 +110,7 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("apply")>
         Public Function apply(x As Object, margin As margins, FUN As Object, Optional env As Environment = Nothing) As Object
             If x Is Nothing Then
-                Return x
+                Return New Object() {}
             ElseIf TypeOf x Is dataframe Then
                 Return doApply.apply(DirectCast(x, dataframe), margin, FUN, env)
             Else
@@ -124,6 +124,10 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("parSapply")>
         Public Function parSapply(<RRawVectorArgument> X As Object, FUN As Object, envir As Environment) As Object
+            If X Is Nothing Then
+                Return New Object() {}
+            End If
+
             Dim check = checkInternal(X, FUN, envir)
 
             If Not TypeOf check Is Boolean Then
@@ -216,6 +220,10 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("sapply")>
         <RApiReturn(GetType(vector))>
         Public Function sapply(<RRawVectorArgument> X As Object, FUN As Object, envir As Environment) As Object
+            If X Is Nothing Then
+                Return New Object() {}
+            End If
+
             Dim check = checkInternal(X, FUN, envir)
 
             If Not TypeOf check Is Boolean Then
@@ -241,7 +249,7 @@ Namespace Runtime.Internal.Invokes
                         Return value
                     End If
 
-                    seq.Add(Runtime.single(value))
+                    seq.Add(REnv.single(value))
                     names.Add(Scripting.ToString(key))
                 Next
 
@@ -258,7 +266,7 @@ Namespace Runtime.Internal.Invokes
                     If Program.isException(value) Then
                         Return value
                     Else
-                        seq.Add(Runtime.single(value))
+                        seq.Add(REnv.single(value))
                     End If
                 Next
 
@@ -288,6 +296,10 @@ Namespace Runtime.Internal.Invokes
         Public Function lapply(<RRawVectorArgument> X As Object, FUN As Object,
                                Optional names As RFunction = Nothing,
                                Optional envir As Environment = Nothing) As Object
+
+            If X Is Nothing Then
+                Return New list With {.slots = New Dictionary(Of String, Object)}
+            End If
 
             Dim check = checkInternal(X, FUN, envir)
 

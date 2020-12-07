@@ -315,27 +315,117 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Next
         End Function
 
+        ''' <summary>
+        ''' Where is the Min() or Max() or first TRUE or FALSE ?
+        ''' 
+        ''' Determines the location, i.e., index of the (first) minimum or maximum of a 
+        ''' numeric (or logical) vector.
+        ''' </summary>
+        ''' <param name="x">
+        ''' numeric (logical, integer or double) vector or an R object for which the internal 
+        ''' coercion to double works whose min or max is searched for.
+        ''' </param>
+        ''' <param name="eval"></param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' Missing and NaN values are discarded.
+        ''' 
+        ''' an integer Or on 64-bit platforms, if length(x) = n>= 2^31 an integer valued 
+        ''' double of length 1 Or 0 (iff x has no non-NAs), giving the index of the first 
+        ''' minimum Or maximum respectively of x.
+        ''' 
+        ''' If this extremum Is unique (Or empty), the results are the same As (but more 
+        ''' efficient than) which(x == min(x, na.rm = True)) Or which(x == max(x, na.rm = True)) 
+        ''' respectively.
+        ''' 
+        ''' Logical x – First True Or False
+        ''' 
+        ''' For a logical vector x with both FALSE And TRUE values, which.min(x) And 
+        ''' which.max(x) return the index of the first FALSE Or TRUE, respectively, as 
+        ''' FALSE &lt; TRUE. However, match(FALSE, x) Or match(TRUE, x) are typically 
+        ''' preferred, as they do indicate mismatches.
+        ''' </returns>
         <ExportAPI("which.max")>
-        Public Function whichMax(<RRawVectorArgument> sequence As Object, Optional eval As Object = Nothing, Optional env As Environment = Nothing) As Integer
+        <RApiReturn(GetType(Integer))>
+        Public Function whichMax(<RRawVectorArgument> x As Object, Optional eval As Object = Nothing, Optional env As Environment = Nothing) As Object
             If eval Is Nothing Then
-                Return Which.Max(DirectCast(asVector(Of Double)(Rset.getObjectSet(sequence, env).ToArray), Double())) + 1
+                If x Is Nothing Then
+                    Return New Integer() {}
+                Else
+                    Dim dbl As Double() = DirectCast(asVector(Of Double)(Rset.getObjectSet(x, env).ToArray), Double())
+
+                    If dbl.Length = 0 Then
+                        Return New Integer() {}
+                    Else
+                        Return Which.Max(dbl) + 1
+                    End If
+                End If
             Else
                 Dim lambda = LinqPipeline.lambda.CreateProjectLambda(Of Double)(eval, env)
-                Dim scores = Rset.getObjectSet(sequence, env).Select(lambda).ToArray
+                Dim scores = Rset.getObjectSet(x, env).Select(lambda).ToArray
 
-                Return Which.Max(scores) + 1
+                If scores.Length = 0 Then
+                    Return New Integer() {}
+                Else
+                    Return Which.Max(scores) + 1
+                End If
             End If
         End Function
 
+        ''' <summary>
+        ''' Where is the Min() or Max() or first TRUE or FALSE ?
+        ''' 
+        ''' Determines the location, i.e., index of the (first) minimum or maximum of a 
+        ''' numeric (or logical) vector.
+        ''' </summary>
+        ''' <param name="x">
+        ''' numeric (logical, integer or double) vector or an R object for which the internal 
+        ''' coercion to double works whose min or max is searched for.
+        ''' </param>
+        ''' <param name="eval"></param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' Missing and NaN values are discarded.
+        ''' 
+        ''' an integer Or on 64-bit platforms, if length(x) = n>= 2^31 an integer valued 
+        ''' double of length 1 Or 0 (iff x has no non-NAs), giving the index of the first 
+        ''' minimum Or maximum respectively of x.
+        ''' 
+        ''' If this extremum Is unique (Or empty), the results are the same As (but more 
+        ''' efficient than) which(x == min(x, na.rm = True)) Or which(x == max(x, na.rm = True)) 
+        ''' respectively.
+        ''' 
+        ''' Logical x – First True Or False
+        ''' 
+        ''' For a logical vector x with both FALSE And TRUE values, which.min(x) And 
+        ''' which.max(x) return the index of the first FALSE Or TRUE, respectively, as 
+        ''' FALSE &lt; TRUE. However, match(FALSE, x) Or match(TRUE, x) are typically 
+        ''' preferred, as they do indicate mismatches.
+        ''' </returns>
         <ExportAPI("which.min")>
-        Public Function whichMin(<RRawVectorArgument> sequence As Object, Optional eval As Object = Nothing, Optional env As Environment = Nothing) As Integer
+        <RApiReturn(GetType(Integer))>
+        Public Function whichMin(<RRawVectorArgument> x As Object, Optional eval As Object = Nothing, Optional env As Environment = Nothing) As Object
             If eval Is Nothing Then
-                Return Which.Min(DirectCast(asVector(Of Double)(Rset.getObjectSet(sequence, env)), Double())) + 1
+                If x Is Nothing Then
+                    Return New Integer() {}
+                Else
+                    Dim dbl As Double() = DirectCast(asVector(Of Double)(Rset.getObjectSet(x, env)), Double())
+
+                    If dbl.Length = 0 Then
+                        Return New Integer() {}
+                    Else
+                        Return Which.Min(dbl) + 1
+                    End If
+                End If
             Else
                 Dim lambda = LinqPipeline.lambda.CreateProjectLambda(Of Double)(eval, env)
-                Dim scores = Rset.getObjectSet(sequence, env).Select(lambda).ToArray
+                Dim scores = Rset.getObjectSet(x, env).Select(lambda).ToArray
 
-                Return Which.Min(scores) + 1
+                If scores.Length = 0 Then
+                    Return New Integer() {}
+                Else
+                    Return Which.Min(scores) + 1
+                End If
             End If
         End Function
 
@@ -497,9 +587,16 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Return result
         End Function
 
+        ''' <summary>
+        ''' reverse a given sequence
+        ''' </summary>
+        ''' <param name="sequence"></param>
+        ''' <returns></returns>
         <ExportAPI("reverse")>
         Public Function reverse(<RRawVectorArgument> sequence As Object) As Object
-
+            Dim array As Array = REnv.asVector(Of Object)(sequence)
+            Call Array.Reverse(array)
+            Return array
         End Function
 
         ''' <summary>

@@ -1,43 +1,43 @@
 ﻿#Region "Microsoft.VisualBasic::a10174dba2fd975800fbef32c98b4a72, R#\Runtime\RVectorExtensions.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module RVectorExtensions
-    ' 
-    '         Function: [single], (+2 Overloads) asVector, createArray, CTypeOfList, fromArray
-    '                   getFirst, isVector, TryCastGenericArray
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module RVectorExtensions
+' 
+'         Function: [single], (+2 Overloads) asVector, createArray, CTypeOfList, fromArray
+'                   getFirst, isVector, TryCastGenericArray
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -128,14 +128,25 @@ Namespace Runtime
         ''' </param>
         ''' <returns></returns>
         Public Function [single](x As Object) As Object
-            If Not x Is Nothing Then
-                If x.GetType.IsArray AndAlso DirectCast(x, Array).Length = 1 Then
+            If x Is Nothing Then
+                Return Nothing
+            End If
+
+            If x.GetType.IsArray Then
+                If DirectCast(x, Array).Length = 1 Then
                     Return DirectCast(x, Array).GetValue(Scan0)
-                ElseIf x.GetType Is GetType(vector) AndAlso DirectCast(x, vector).length = 1 Then
+                ElseIf DirectCast(x, Array).Length = 0 Then
+                    Return Nothing
+                End If
+            ElseIf x.GetType Is GetType(vector) Then
+                If DirectCast(x, vector).length = 1 Then
                     Return DirectCast(x, vector).data.GetValue(Scan0)
+                ElseIf DirectCast(x, vector).length = 0 Then
+                    Return Nothing
                 End If
             End If
 
+            ' x is not single orelse x is not a collection, return x directly
             Return x
         End Function
 

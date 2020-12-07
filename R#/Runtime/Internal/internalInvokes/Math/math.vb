@@ -1,50 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::2fe91ef984673aa0cec8e361a60dd35e, R#\Runtime\Internal\internalInvokes\Math\math.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module math
-    ' 
-    '         Function: abs, cluster1D, exp, log, max
-    '                   mean, min, pearson, pow, rnorm
-    '                   round, rsd, runif, sample, sample_int
-    '                   sd, sqrt, sum, var
-    ' 
-    '         Sub: set_seed
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module math
+' 
+'         Function: abs, cluster1D, exp, log, max
+'                   mean, min, pearson, pow, rnorm
+'                   round, rsd, runif, sample, sample_int
+'                   sd, sqrt, sum, var
+' 
+'         Sub: set_seed
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math
@@ -78,7 +79,7 @@ Namespace Runtime.Internal.Invokes
                 Return Nothing
             Else
                 Dim rounds = From element As Double
-                             In Runtime.asVector(Of Double)(x)
+                             In REnv.asVector(Of Double)(x)
                              Select stdNum.Round(element, decimals)
 
                 Return rounds.ToArray
@@ -98,7 +99,7 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("log")>
         Public Function log(x As Array, Optional newBase As Double = stdNum.E) As Double()
-            Return Runtime.asVector(Of Double)(x) _
+            Return REnv.asVector(Of Double)(x) _
                 .AsObjectEnumerator(Of Double) _
                 .Select(Function(d) stdNum.Log(d, newBase)) _
                 .ToArray
@@ -117,7 +118,7 @@ Namespace Runtime.Internal.Invokes
                 Return 0
             End If
 
-            Dim array = Runtime.asVector(Of Object)(x)
+            Dim array = REnv.asVector(Of Object)(x)
             Dim elementType As Type = Runtime.MeasureArrayElementType(array)
 
             Select Case elementType
@@ -168,8 +169,15 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="na_rm">a logical indicating whether missing values should be removed.</param>
         ''' <returns></returns>
         <ExportAPI("max")>
-        Public Function max(x As Array, Optional na_rm As Boolean = False) As Double
-            Return Runtime.asVector(Of Double)(x).AsObjectEnumerator(Of Double).Max
+        Public Function max(x As Array, Optional na_rm As Boolean = False, Optional env As Environment = Nothing) As Double
+            Dim dbl = REnv.asVector(Of Double)(x).AsObjectEnumerator(Of Double).ToArray
+
+            If dbl.Length = 0 Then
+                Call env.AddMessage({"no non-missing arguments to max; returning -Inf"}, MSG_TYPES.WRN)
+                Return Double.NegativeInfinity
+            Else
+                Return dbl.Max
+            End If
         End Function
 
         ''' <summary>
@@ -179,8 +187,15 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="na_rm">a logical indicating whether missing values should be removed.</param>
         ''' <returns></returns>
         <ExportAPI("min")>
-        Public Function min(x As Array, Optional na_rm As Boolean = False) As Double
-            Return Runtime.asVector(Of Double)(x).AsObjectEnumerator(Of Double).Min
+        Public Function min(x As Array, Optional na_rm As Boolean = False, Optional env As Environment = Nothing) As Double
+            Dim dbl = REnv.asVector(Of Double)(x).AsObjectEnumerator(Of Double).ToArray
+
+            If dbl.Length = 0 Then
+                Call env.AddMessage({"no non-missing arguments to min; returning Inf"}, MSG_TYPES.WRN)
+                Return Double.PositiveInfinity
+            Else
+                Return dbl.Min
+            End If
         End Function
 
         ''' <summary>
@@ -195,7 +210,7 @@ Namespace Runtime.Internal.Invokes
             If x Is Nothing OrElse x.Length = 0 Then
                 Return 0
             Else
-                Return Runtime.asVector(Of Double)(x).AsObjectEnumerator(Of Double).Average
+                Return REnv.asVector(Of Double)(x).AsObjectEnumerator(Of Double).Average
             End If
         End Function
 
@@ -217,9 +232,24 @@ Namespace Runtime.Internal.Invokes
             Return Runtime.asVector(Of Double)(x).AsObjectEnumerator(Of Double).RSD
         End Function
 
+        ''' <summary>
+        ''' ### Standard Deviation
+        ''' 
+        ''' This function computes the standard deviation of the values in x. 
+        ''' If na.rm is TRUE then missing values are removed before computation 
+        ''' proceeds.
+        ''' </summary>
+        ''' <param name="x">
+        ''' a numeric vector or an R object but not a factor coercible to numeric by as.double(x)
+        ''' </param>
+        ''' <returns></returns>
         <ExportAPI("sd")>
         Public Function sd(x As Array) As Double
-            Return DirectCast(asVector(Of Double)(x), Double()).StdError
+            If x Is Nothing OrElse x.Length = 0 Then
+                Return 0
+            Else
+                Return DirectCast(asVector(Of Double)(x), Double()).StdError
+            End If
         End Function
 
         <ExportAPI("pearson")>

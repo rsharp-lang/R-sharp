@@ -223,7 +223,7 @@ Namespace Runtime.Internal.Object.Converts
 
         Private Function unlistRecursive(x As Object, containsListNames As Value(Of Boolean)) As IEnumerable
             If x Is Nothing Then
-                Return Nothing
+                Return New Object() {}
             Else
                 Dim listType As Type = x.GetType
 
