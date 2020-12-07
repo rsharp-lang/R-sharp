@@ -567,9 +567,16 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Return result
         End Function
 
+        ''' <summary>
+        ''' reverse a given sequence
+        ''' </summary>
+        ''' <param name="sequence"></param>
+        ''' <returns></returns>
         <ExportAPI("reverse")>
         Public Function reverse(<RRawVectorArgument> sequence As Object) As Object
-
+            Dim array As Array = REnv.asVector(Of Object)(sequence)
+            Call Array.Reverse(array)
+            Return array
         End Function
 
         ''' <summary>

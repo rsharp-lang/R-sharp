@@ -79,7 +79,7 @@ Namespace Runtime.Internal.Invokes
                 Return Nothing
             Else
                 Dim rounds = From element As Double
-                             In Runtime.asVector(Of Double)(x)
+                             In REnv.asVector(Of Double)(x)
                              Select stdNum.Round(element, decimals)
 
                 Return rounds.ToArray
@@ -99,7 +99,7 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("log")>
         Public Function log(x As Array, Optional newBase As Double = stdNum.E) As Double()
-            Return Runtime.asVector(Of Double)(x) _
+            Return REnv.asVector(Of Double)(x) _
                 .AsObjectEnumerator(Of Double) _
                 .Select(Function(d) stdNum.Log(d, newBase)) _
                 .ToArray
@@ -118,7 +118,7 @@ Namespace Runtime.Internal.Invokes
                 Return 0
             End If
 
-            Dim array = Runtime.asVector(Of Object)(x)
+            Dim array = REnv.asVector(Of Object)(x)
             Dim elementType As Type = Runtime.MeasureArrayElementType(array)
 
             Select Case elementType
@@ -232,9 +232,24 @@ Namespace Runtime.Internal.Invokes
             Return Runtime.asVector(Of Double)(x).AsObjectEnumerator(Of Double).RSD
         End Function
 
+        ''' <summary>
+        ''' ### Standard Deviation
+        ''' 
+        ''' This function computes the standard deviation of the values in x. 
+        ''' If na.rm is TRUE then missing values are removed before computation 
+        ''' proceeds.
+        ''' </summary>
+        ''' <param name="x">
+        ''' a numeric vector or an R object but not a factor coercible to numeric by as.double(x)
+        ''' </param>
+        ''' <returns></returns>
         <ExportAPI("sd")>
         Public Function sd(x As Array) As Double
-            Return DirectCast(asVector(Of Double)(x), Double()).StdError
+            If x Is Nothing OrElse x.Length = 0 Then
+                Return 0
+            Else
+                Return DirectCast(asVector(Of Double)(x), Double()).StdError
+            End If
         End Function
 
         <ExportAPI("pearson")>
