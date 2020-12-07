@@ -65,9 +65,33 @@ Module Manifold
     End Sub
 
     Private Function exportUmapTable(umap As Umap, args As list, env As Environment) As Rdataframe
-        Dim labels = args.getByName("labels")
-        Dim colNames = args.getByName("dimension")
-        Dim table As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
+        Dim labels As String() = REnv.asVector(Of String)(args.getByName("labels"))
+        Dim colNames As String() = REnv.asVector(Of String)(args.getByName("dimension"))
+        Dim table As New Rdataframe With {
+            .columns = New Dictionary(Of String, Array)
+        }
+        Dim projection As Double()() = umap.GetEmbedding
+
+        If labels.IsNullOrEmpty Then
+            labels = projection _
+                .Select(Function(r, i) $"item_{i + 1}") _
+                .ToArray
+        End If
+        If colNames.IsNullOrEmpty Then
+            colNames = projection(Scan0) _
+                .Select(Function(r, i) $"dimension_{i + 1}") _
+                .ToArray
+        End If
+
+        For i As Integer = 0 To colNames.Length - 1
+#Disable Warning
+            table.columns(colNames(i)) = projection _
+                .Select(Function(r) r(i)) _
+                .ToArray
+#Enable Warning
+        Next
+
+        table.rownames = labels
 
         Return table
     End Function
