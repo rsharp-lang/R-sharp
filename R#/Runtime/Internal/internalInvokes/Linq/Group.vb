@@ -70,7 +70,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Call printer.AttachInternalConsoleFormatter(Of Group)(AddressOf InternalToString)
         End Sub
 
-        Private Shared Function InternalToString(env As GlobalEnvironment) As IStringBuilder
+        Private Shared Function InternalToString(printContent As Boolean, env As GlobalEnvironment) As IStringBuilder
             Return Function(x) DirectCast(x, Group).ToString(env)
         End Function
 
