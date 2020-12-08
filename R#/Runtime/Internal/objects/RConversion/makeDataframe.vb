@@ -1,51 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::6ba5bf7d615ffb5c5bdf8be86c2c2d53, R#\Runtime\Internal\objects\RConversion\makeDataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Delegate Function
-    ' 
-    ' 
-    '     Module makeDataframe
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: createColumnVector, createDataframe, is_ableConverts, RDataframe, TracebackDataFrmae
-    '                   tryTypeLineage
-    ' 
-    '         Sub: [addHandler]
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Delegate Function
+' 
+' 
+'     Module makeDataframe
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: createColumnVector, createDataframe, is_ableConverts, RDataframe, TracebackDataFrmae
+'                   tryTypeLineage
+' 
+'         Sub: [addHandler]
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -57,6 +57,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Object.Converts
 
@@ -71,14 +72,21 @@ Namespace Runtime.Internal.Object.Converts
         End Sub
 
         ''' <summary>
-        ''' Public <see cref="Global.System.Delegate"/> Function IMakeDataFrame(x As <see cref="Object"/>, args As <see cref="list"/>, env As <see cref="Environment"/>) As <see cref="dataframe"/>
+        ''' Public <see cref="Global.System.Delegate"/> Function IMakeDataFrame(
+        '''     x As <see cref="Object"/>, 
+        '''     args As <see cref="list"/>, 
+        '''     env As <see cref="Environment"/>
+        ''' ) As <see cref="dataframe"/>
         ''' </summary>
         ''' <param name="type"></param>
         ''' <param name="handler"></param>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Sub [addHandler](type As Type, handler As IMakeDataFrame)
             makesDataframe(type) = handler
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function is_ableConverts(type As Type) As Boolean
             Return makesDataframe.ContainsKey(type)
         End Function
@@ -93,6 +101,7 @@ Namespace Runtime.Internal.Object.Converts
             Return Nothing
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function createDataframe(type As Type, x As Object, args As list, env As Environment) As dataframe
             Return makesDataframe(type)(x, args, env)
         End Function
@@ -157,56 +166,7 @@ Namespace Runtime.Internal.Object.Converts
                 If first.IsEmpty Then
                     Return Nothing
                 ElseIf TypeOf first.Value Is list Then
-                    ' passing parameter by a list
-                    Dim matrix As New dataframe With {
-                        .columns = New Dictionary(Of String, Array)
-                    }
-                    Dim colName$
-                    Dim colVal As Object
-                    Dim listColumns As New List(Of NamedValue(Of list))
-
-                    ' set null to a column is delete a column data in R
-                    ' so we skip all of the null field value at here
-                    For Each col In DirectCast(first.Value, list).slots.Where(Function(a) Not a.Value Is Nothing)
-                        colName = col.Key
-                        colVal = col.Value
-
-                        If TypeOf colVal Is list Then
-                            listColumns += New NamedValue(Of list) With {
-                                .Name = colName,
-                                .Value = DirectCast(colVal, list)
-                            }
-                        Else
-                            matrix.columns.Add(colName, env.createColumnVector(colVal))
-                        End If
-                    Next
-
-                    If listColumns = DirectCast(first.Value, list).slots.Count Then
-                        Dim rownames As String() = listColumns _
-                            .Values _
-                            .Select(Function(c) c.slots.Keys) _
-                            .IteratesALL _
-                            .Distinct _
-                            .ToArray
-                        Dim vector As New List(Of Object)
-                        Dim listData As Dictionary(Of String, Object)
-
-                        For Each col In listColumns
-                            listData = col.Value.slots
-
-                            For Each rId As String In rownames
-                                vector.Add(listData.TryGetValue(rId))
-                            Next
-
-                            Call matrix.columns.Add(col.Name, env.createColumnVector(vector.PopAll))
-                        Next
-
-                        matrix.rownames = rownames
-                    ElseIf listColumns > 0 AndAlso matrix.columns.Count > 0 Then
-                        Return Internal.debug.stop(New InvalidCastException, env)
-                    End If
-
-                    Return matrix
+                    Return DirectCast(first.Value, list).fromList(env)
                 Else
                     Return New dataframe With {
                         .columns = New Dictionary(Of String, Array) From {
@@ -223,11 +183,74 @@ Namespace Runtime.Internal.Object.Converts
         End Function
 
         <Extension>
+        Private Function fromList(firstList As list, env As Environment) As Object
+            ' passing parameter by a list
+            Dim matrix As New dataframe With {
+                .columns = New Dictionary(Of String, Array)
+            }
+            Dim colName$
+            Dim colVal As Object
+            Dim listColumns As New List(Of NamedValue(Of list))
+            Dim vectorArray As Array
+
+            ' set null to a column is delete a column data in R
+            ' so we skip all of the null field value at here
+            For Each col In firstList.slots.Where(Function(a) Not a.Value Is Nothing)
+                colName = col.Key
+                colVal = col.Value
+
+                If TypeOf colVal Is list Then
+                    listColumns += New NamedValue(Of list) With {
+                        .Name = colName,
+                        .Value = DirectCast(colVal, list)
+                    }
+                Else
+                    vectorArray = env.createColumnVector(colVal)
+                    matrix.columns(colName) = vectorArray
+                End If
+            Next
+
+            If listColumns = firstList.slots.Count Then
+                Dim rownames As String() = listColumns _
+                    .Values _
+                    .Select(Function(c) c.slots.Keys) _
+                    .IteratesALL _
+                    .Distinct _
+                    .ToArray
+                Dim vector As New List(Of Object)
+                Dim listData As Dictionary(Of String, Object)
+
+                For Each col In listColumns
+                    listData = col.Value.slots
+
+                    For Each rId As String In rownames
+                        vector.Add(listData.TryGetValue(rId))
+                    Next
+
+                    vectorArray = env.createColumnVector(vector.PopAll)
+                    matrix.columns(col.Name) = vectorArray
+                Next
+
+                matrix.rownames = rownames
+            ElseIf listColumns > 0 AndAlso matrix.columns.Count > 0 Then
+                Return Internal.debug.stop(New InvalidCastException, env)
+            End If
+
+            Return matrix
+        End Function
+
+        <Extension>
         Private Function createColumnVector(env As Environment, a As Object) As Array
             ' 假设dataframe之中每一列数据的类型都是相同的
             ' 则我们直接使用第一个元素的类型作为列的数据类型
-            Dim first As Object = Runtime.getFirst(a, nonNULL:=True)
-            Dim colVec As Array = Runtime.asVector(a, first.GetType, env)
+            Dim first As Object = REnv.getFirst(a, nonNULL:=True)
+            Dim colVec As Array
+
+            If first Is Nothing Then
+                Return New Object() {}
+            Else
+                colVec = REnv.asVector(a, first.GetType, env)
+            End If
 
             Return colVec
         End Function

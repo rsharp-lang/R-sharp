@@ -876,7 +876,11 @@ Namespace Runtime.Internal.Invokes
                               <RByRefValueAssign>
                               Optional namelist As Array = Nothing,
                               Optional envir As Environment = Nothing) As Object
-
+            ' > names(NULL)
+            ' NULL
+            If [object] Is Nothing Then
+                Return Nothing
+            End If
             If namelist Is Nothing OrElse namelist.Length = 0 Then
                 Return RObj.names.getNames([object], envir)
             Else
