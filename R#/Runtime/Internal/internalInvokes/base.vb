@@ -621,6 +621,51 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' ### ‘Not Available’ / Missing Values
+        ''' 
+        ''' NA is a logical constant of length 1 which contains a missing value indicator. 
+        ''' NA can be coerced to any other vector type except raw. There are also constants 
+        ''' NA_integer_, NA_real_, NA_complex_ and NA_character_ of the other atomic vector 
+        ''' types which support missing values: all of these are reserved words in the R 
+        ''' language.
+        ''' 
+        ''' The generic Function Is.na indicates which elements are missing.
+        ''' The generic Function Is.na&lt;- sets elements To NA.
+        ''' </summary>
+        ''' <param name="x">an R object to be tested: the default method for is.na and anyNA handle atomic vectors, lists, pairlists, and NULL.</param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' The default method for is.na applied to an atomic vector returns a logical vector 
+        ''' of the same length as its argument x, containing TRUE for those elements marked NA 
+        ''' or, for numeric or complex vectors, NaN, and FALSE otherwise. (A complex value is 
+        ''' regarded as NA if either its real or imaginary part is NA or NaN.) dim, dimnames 
+        ''' and names attributes are copied to the result.
+        '''
+        ''' The Default methods also work For lists And pairlists
+        ''' 
+        ''' For Is.na, elementwise the result Is false unless that element Is a length-one atomic 
+        ''' vector And the single element of that vector Is regarded as NA Or NaN (note that any 
+        ''' Is.na method for the class of the element Is ignored).
+        ''' 
+        ''' anyNA(recursive = FALSE) works the same way as Is.na; anyNA(recursive = TRUE) applies 
+        ''' anyNA (with method dispatch) to each element.
+        '''
+        ''' The data frame method For Is.na returns a logical matrix With the same dimensions As 
+        ''' the data frame, And With dimnames taken from the row And column names Of the data 
+        ''' frame.
+        '''
+        ''' anyNA(NULL) Is false; Is.na(NULL) Is logical(0) (no longer warning since R version 3.5.0).
+        ''' </returns>
+        <ExportAPI("is.na")>
+        Public Function isNA(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+            Return pipeline _
+                .TryCreatePipeline(Of Double)(x, env) _
+                .populates(Of Double)(env) _
+                .Select(Function(a) a.IsNaNImaginary) _
+                .ToArray
+        End Function
+
+        ''' <summary>
         ''' Send R Output to a File
         ''' 
         ''' ``sink`` diverts R output to a connection (and stops such diversions).

@@ -259,7 +259,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             Dim targetObj As Object = symbolIndex.symbol.Evaluate(envir)
             Dim index As Object = symbolIndex.index.Evaluate(envir)
 
-            If True = CBool(base.isEmpty(index)) Then
+            If Program.isException(index) Then
+                Return index
+            ElseIf True = CBool(base.isEmpty(index)) Then
                 Return SymbolIndexer.emptyIndexError(symbolIndex, envir)
             End If
 

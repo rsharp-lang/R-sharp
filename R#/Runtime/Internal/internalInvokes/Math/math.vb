@@ -206,11 +206,17 @@ Namespace Runtime.Internal.Invokes
         ''' allowed for trim = 0, only.</param>
         ''' <returns></returns>
         <ExportAPI("mean")>
-        Public Function mean(x As Array) As Double
+        Public Function mean(x As Array, Optional na_rm As Boolean = False) As Double
             If x Is Nothing OrElse x.Length = 0 Then
                 Return 0
             Else
-                Return REnv.asVector(Of Double)(x).AsObjectEnumerator(Of Double).Average
+                Dim array As Double() = REnv.asVector(Of Double)(x).AsObjectEnumerator(Of Double).ToArray
+
+                If na_rm Then
+                    Return array.Where(Function(a) Not a.IsNaNImaginary).Average
+                Else
+                    Return array.Average
+                End If
             End If
         End Function
 
