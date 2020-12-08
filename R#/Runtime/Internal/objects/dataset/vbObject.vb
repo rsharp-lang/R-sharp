@@ -1,52 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::d7acf1d4957dfba2cdc7dc0e8653454d, R#\Runtime\Internal\objects\dataset\vbObject.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class vbObject
-    ' 
-    '         Properties: target, type
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: CreateInstance, existsName, (+2 Overloads) getByName, getNames, getObjMethods
-    '                   getObjProperties, (+2 Overloads) setByName, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class vbObject
+' 
+'         Properties: target, type
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: CreateInstance, existsName, (+2 Overloads) getByName, getNames, getObjMethods
+'                   getObjProperties, (+2 Overloads) setByName, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Data.Linq.Mapping
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
+Imports System.Web.Script.Serialization
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
@@ -69,6 +70,7 @@ Namespace Runtime.Internal.Object
         ''' R# type wrapper of the type data for <see cref="target"/>
         ''' </summary>
         ''' <returns></returns>
+        <ScriptIgnore>
         Public ReadOnly Property type As RType
 
         Friend ReadOnly properties As Dictionary(Of String, PropertyInfo)

@@ -322,7 +322,9 @@ Namespace Runtime.Internal.Object.Converts
 RE0:
             Dim type As Type = x.GetType
 
-            If makeDataframe.is_ableConverts(type) Then
+            If type Is GetType(list) Then
+                Return makeDataframe.fromList(DirectCast(x, list), env)
+            ElseIf makeDataframe.is_ableConverts(type) Then
                 Return makeDataframe.createDataframe(type, x, args, env)
             Else
                 type = makeDataframe.tryTypeLineage(type)

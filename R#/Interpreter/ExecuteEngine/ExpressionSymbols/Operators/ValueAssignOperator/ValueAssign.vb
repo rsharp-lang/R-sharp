@@ -259,7 +259,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             Dim targetObj As Object = symbolIndex.symbol.Evaluate(envir)
             Dim index As Object = symbolIndex.index.Evaluate(envir)
 
-            If True = CBool(base.isEmpty(index)) Then
+            If Program.isException(index) Then
+                Return index
+            ElseIf True = CBool(base.isEmpty(index)) Then
                 Return SymbolIndexer.emptyIndexError(symbolIndex, envir)
             End If
 
@@ -271,6 +273,15 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
             If symbolIndex.indexType = SymbolIndexers.vectorIndex AndAlso index.GetType Like RType.integers Then
                 Return setVectorElements(targetObj, DirectCast(Runtime.asVector(Of Integer)(index), Integer()), value, envir)
+            ElseIf symbolIndex.indexType = SymbolIndexers.vectorIndex AndAlso index.GetType Like RType.logicals Then
+                Dim flags As Boolean() = DirectCast(Runtime.asVector(Of Boolean)(index), Boolean())
+                Dim indexVals As Integer() = flags _
+                    .Select(Function(b, i) (b, i + 1)) _
+                    .Where(Function(flag) flag.b) _
+                    .Select(Function(flag) flag.Item2) _
+                    .ToArray
+
+                Return setVectorElements(targetObj, indexVals, value, envir)
             End If
 
             Dim indexStr As String() = DirectCast(Runtime.asVector(Of String)(index), String())
@@ -353,6 +364,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         End Function
 
         Private Shared Function setVectorElements(ByRef target As Object, index As Integer(), value As Object, env As Environment) As Message
+            If index.IsNullOrEmpty Then
+                ' vector content no changed
+                Return Nothing
+            End If
+
             If target.GetType Is GetType(vector) Then
                 target = DirectCast(target, vector).data
             End If

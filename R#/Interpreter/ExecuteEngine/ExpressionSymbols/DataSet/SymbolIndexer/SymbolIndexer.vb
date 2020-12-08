@@ -107,7 +107,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     Return getDataframeRowRange(data:=DirectCast(obj, dataframe), envir)
                 End If
             Else
-                Dim indexer = REnv.asVector(Of Object)(index.Evaluate(envir))
+                Dim indexerRaw As Object = index.Evaluate(envir)
+                Dim indexer As Array
+
+                If Program.isException(indexerRaw) Then
+                    Return indexerRaw
+                Else
+                    indexer = REnv.asVector(Of Object)(indexerRaw)
+                End If
 
                 If indexer.Length = 0 Then
                     Return emptyIndexError(Me, envir)
