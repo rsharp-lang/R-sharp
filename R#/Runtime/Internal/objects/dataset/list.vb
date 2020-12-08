@@ -223,8 +223,20 @@ Namespace Runtime.Internal.Object
             Return New list With {.slots = subset}
         End Function
 
+        ''' <summary>
+        ''' null <paramref name="value"/> will remove the target slot by <paramref name="name"/>
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <param name="value"></param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
         Public Function setByName(name As String, value As Object, envir As Environment) As Object Implements RNameIndex.setByName
-            slots(name) = value
+            If value Is Nothing Then
+                slots.Remove(name)
+            Else
+                slots(name) = value
+            End If
+
             Return value
         End Function
 
