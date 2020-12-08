@@ -71,7 +71,7 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.ConsolePrinter
 
-    Public Delegate Function InternalToString(env As GlobalEnvironment) As IStringBuilder
+    Public Delegate Function InternalToString(printContent As Boolean, env As GlobalEnvironment) As IStringBuilder
 
     ''' <summary>
     ''' R# console nice print supports.
@@ -122,7 +122,7 @@ Namespace Runtime.Internal.ConsolePrinter
             Return $"#{yy}-{mm}-{dd} {h}:{m}:{s}#"
         End Function
 
-        Private Function f64_InternalToString(env As GlobalEnvironment) As IStringBuilder
+        Private Function f64_InternalToString(printContent As Boolean, env As GlobalEnvironment) As IStringBuilder
             Dim opts As Options = env.globalEnvironment.options
             Dim format As String = $"{opts.f64Format}{opts.digits}"
 
@@ -147,7 +147,7 @@ Namespace Runtime.Internal.ConsolePrinter
                            End If
                        End If
 
-                       If val > 0 Then
+                       If printContent AndAlso val > 0 Then
                            str = " " & str
                        End If
 
@@ -271,7 +271,7 @@ printSingleElement:
             If RtoString.ContainsKey(elementType) Then
                 Return RtoString(elementType)
             ElseIf RInternalToString.ContainsKey(elementType) Then
-                Return RInternalToString(elementType)(env)
+                Return RInternalToString(elementType)(printContent, env)
             ElseIf elementType Is GetType(String) Then
                 Return Function(o) As String
                            If o Is Nothing Then
