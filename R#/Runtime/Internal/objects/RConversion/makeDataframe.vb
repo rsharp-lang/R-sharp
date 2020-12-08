@@ -183,7 +183,7 @@ Namespace Runtime.Internal.Object.Converts
         End Function
 
         <Extension>
-        Private Function fromList(firstList As list, env As Environment) As Object
+        Friend Function fromList(firstList As list, env As Environment) As Object
             ' passing parameter by a list
             Dim matrix As New dataframe With {
                 .columns = New Dictionary(Of String, Array)
