@@ -687,9 +687,11 @@ Namespace Runtime.Internal.Invokes
             If Not file.StringEmpty Then
                 ' 打开一个新的会话用于保存输出日志
                 Call stdout.openSink(file, split, append)
-            Else
+            ElseIf stdout.isLogOpen Then
                 ' 结束当前的日志会话
                 Call stdout.closeSink()
+            Else
+                Return Internal.debug.stop("log file is missing!", env)
             End If
 
             Return Nothing

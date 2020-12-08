@@ -78,6 +78,12 @@ Namespace Runtime
         Dim logfile As StreamWriter
         Dim split As Boolean = True
 
+        Public ReadOnly Property isLogOpen As Boolean
+            Get
+                Return Not logfile Is Nothing
+            End Get
+        End Property
+
         Sub New(stdout As StreamWriter, env As OutputEnvironments)
             Me.env = env
             Me.stdout = stdout
