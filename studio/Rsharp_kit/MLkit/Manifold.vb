@@ -100,7 +100,10 @@ Module Manifold
     ''' UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction
     ''' </summary>
     ''' <param name="data"></param>
-    ''' <param name="dimension%"></param>
+    ''' <param name="dimension"></param>
+    ''' <param name="customMapCutoff">
+    ''' cutoff value in range ``[0,1]``
+    ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("umap")>
@@ -112,6 +115,7 @@ Module Manifold
                                    Optional KnnIter As Integer = 64,
                                    Optional bandwidth As Double = 1,
                                    Optional customNumberOfEpochs As Integer? = Nothing,
+                                   Optional customMapCutoff As Double? = Nothing,
                                    Optional env As Environment = Nothing) As Object
         Dim labels As String()
         Dim matrix As Double()()
@@ -145,7 +149,8 @@ Module Manifold
             localConnectivity:=localConnectivity,
             KnnIter:=KnnIter,
             bandwidth:=bandwidth,
-            customNumberOfEpochs:=customNumberOfEpochs
+            customNumberOfEpochs:=customNumberOfEpochs,
+            customMapCutoff:=customMapCutoff
         )
         Dim nEpochs As Integer
 
