@@ -594,27 +594,41 @@ RE0:
             End If
         End Function
 
+        ''' <summary>
+        ''' # Numeric Vectors
+        ''' 
+        ''' Creates or coerces objects of type "numeric". is.numeric is a more 
+        ''' general test of an object being interpretable as numbers.
+        ''' </summary>
+        ''' <param name="x">object to be coerced or tested.</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' ``NULL`` will be treated as ZERO based on the rule of VisualBasic runtime conversion.
+        ''' </remarks>
         <ExportAPI("as.numeric")>
         <RApiReturn(GetType(Double))>
-        Public Function asNumeric(<RRawVectorArgument> obj As Object, Optional env As Environment = Nothing) As Object
-            If obj Is Nothing Then
+        Public Function asNumeric(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+            If x Is Nothing Then
                 Return 0
             End If
 
-            If TypeOf obj Is list Then
-                obj = DirectCast(obj, list).slots
+            If TypeOf x Is list Then
+                x = DirectCast(x, list).slots
             End If
 
-            If obj.GetType.ImplementInterface(GetType(IDictionary)) Then
-                Return Runtime.CTypeOfList(Of Double)(obj, env)
+            If x.GetType.ImplementInterface(GetType(IDictionary)) Then
+                Return Runtime.CTypeOfList(Of Double)(x, env)
             Else
                 Dim data As Object() = pipeline _
-                    .TryCreatePipeline(Of Object)(obj, env) _
+                    .TryCreatePipeline(Of Object)(x, env) _
                     .populates(Of Object)(env) _
                     .ToArray
                 Dim populates = Iterator Function() As IEnumerable(Of Double)
                                     For Each item In data
-                                        If TypeOf item Is String Then
+                                        If item Is Nothing Then
+                                            Yield 0
+                                        ElseIf TypeOf item Is String Then
                                             Yield Val(DirectCast(item, String))
                                         ElseIf TypeOf item Is Double Then
                                             Yield DirectCast(item, Double)

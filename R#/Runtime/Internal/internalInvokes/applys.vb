@@ -267,11 +267,13 @@ Namespace Runtime.Internal.Invokes
             Else
                 Dim seq As New List(Of Object)
                 Dim value As Object
+                Dim argsPreviews As InvokeParameter()
 
                 For Each d In Runtime.asVector(Of Object)(X) _
                     .AsObjectEnumerator
 
-                    value = apply.Invoke(envir, invokeArgument(d))
+                    argsPreviews = invokeArgument(d)
+                    value = apply.Invoke(envir, argsPreviews)
 
                     If Program.isException(value) Then
                         Return value

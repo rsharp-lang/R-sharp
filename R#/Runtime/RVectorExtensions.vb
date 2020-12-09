@@ -179,9 +179,25 @@ Namespace Runtime
 
             If Not valueType Is arrayType Then
                 If valueType.IsArray Then
-                    Return type.createArray(value, env)
+                    If type Is GetType(Void) Then
+                        Return value
+                    Else
+                        Return type.createArray(value, env)
+                    End If
                 ElseIf valueType Is GetType(Group) Then
-                    Return type.createArray(DirectCast(value, Group).group, env)
+                    If type Is GetType(Void) Then
+                        Return DirectCast(value, Group).group
+                    Else
+                        Return type.createArray(DirectCast(value, Group).group, env)
+                    End If
+                ElseIf type Is GetType(void) Then
+                    Dim one As Object = [single](value)
+
+                    If one Is Nothing Then
+                        Return one
+                    Else
+                        Return {one}
+                    End If
                 Else
                     Dim array As Array = Array.CreateInstance(type, 1)
                     Dim [single] As Object = RCType.CTypeDynamic(value, type, env)
