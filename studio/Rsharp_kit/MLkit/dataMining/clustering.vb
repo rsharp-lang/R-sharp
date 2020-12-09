@@ -220,6 +220,25 @@ Module clustering
                 Case Else
                     Return REnv.Internal.debug.stop(New InvalidProgramException(dataset.GetType.FullName), env)
             End Select
+        ElseIf TypeOf dataset Is Rdataframe Then
+            Dim colNames As String() = DirectCast(dataset, Rdataframe).columns _
+                .Keys _
+                .ToArray
+
+            model = DirectCast(dataset, Rdataframe) _
+                .forEachRow _
+                .Select(Function(r)
+                            Return New EntityClusterModel With {
+                                .ID = r.name,
+                                .Properties = colNames _
+                                    .SeqIterator _
+                                    .ToDictionary(Function(c) c.value,
+                                                  Function(i)
+                                                      Return CType(r(i), Double)
+                                                  End Function)
+                            }
+                        End Function) _
+                .ToArray
         Else
             Return REnv.Internal.debug.stop(New InvalidProgramException(dataset.GetType.FullName), env)
         End If

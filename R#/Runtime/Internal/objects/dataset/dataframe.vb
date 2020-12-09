@@ -214,7 +214,7 @@ Namespace Runtime.Internal.Object
         End Function
 
         ''' <summary>
-        ''' 获取得到数据框之中每一行的数据(``[rowname => columns]``)
+        ''' 获取得到数据框之中每一行的数据(``[rowname => columns[]]``)
         ''' </summary>
         ''' <param name="colKeys"></param>
         ''' <returns></returns>

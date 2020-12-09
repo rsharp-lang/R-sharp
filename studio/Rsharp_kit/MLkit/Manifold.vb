@@ -178,11 +178,12 @@ Module Manifold
     Public Function asGraph(umap As Umap, <RRawVectorArgument> labels As Object,
                             <RRawVectorArgument>
                             Optional groups As Object = Nothing,
+                            Optional threshold As Double = 0,
                             Optional env As Environment = Nothing) As Object
 
         Dim labelList As String() = REnv.asVector(Of String)(labels)
         Dim uniqueLabels As String() = labelList.makeNames(unique:=True)
-        Dim g As NetworkGraph = umap.CreateGraph(uniqueLabels, labelList)
+        Dim g As NetworkGraph = umap.CreateGraph(uniqueLabels, labelList, threshold:=threshold)
 
         If Not groups Is Nothing Then
             labelList = REnv.asVector(Of String)(groups)
