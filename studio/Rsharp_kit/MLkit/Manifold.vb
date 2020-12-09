@@ -111,6 +111,7 @@ Module Manifold
                                    Optional localConnectivity As Double = 1,
                                    Optional KnnIter As Integer = 64,
                                    Optional bandwidth As Double = 1,
+                                   Optional customNumberOfEpochs As Integer? = Nothing,
                                    Optional env As Environment = Nothing) As Object
         Dim labels As String()
         Dim matrix As Double()()
@@ -143,7 +144,8 @@ Module Manifold
             numberOfNeighbors:=numberOfNeighbors,
             localConnectivity:=localConnectivity,
             KnnIter:=KnnIter,
-            bandwidth:=bandwidth
+            bandwidth:=bandwidth,
+            customNumberOfEpochs:=customNumberOfEpochs
         )
         Dim nEpochs As Integer
 
