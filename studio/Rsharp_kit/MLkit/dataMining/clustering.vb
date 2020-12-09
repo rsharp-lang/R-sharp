@@ -379,20 +379,49 @@ Module clustering
     End Function
 
     <ExportAPI("cluster.groups")>
-    Public Function clusterGroups(<RRawVectorArgument> data As Object, Optional env As Environment = Nothing) As Object
+    <RApiReturn(GetType(String), GetType(list))>
+    Public Function clusterGroups(<RRawVectorArgument> data As Object,
+                                  <RRawVectorArgument>
+                                  Optional labels As Object = Nothing,
+                                  Optional env As Environment = Nothing) As Object
+
         Dim rawInputs As pipeline = pipeline.TryCreatePipeline(Of EntityClusterModel)(data, env)
 
         If rawInputs.isError Then
             Return rawInputs.getError
         End If
 
-        Dim groups As New list With {.slots = New Dictionary(Of String, Object)}
+        Dim labelList As String() = REnv.asVector(Of String)(labels)
 
-        For Each group In rawInputs.populates(Of EntityClusterModel)(env).GroupBy(Function(a) a.Cluster)
-            groups.slots(group.Key) = group.Keys.ToArray
-        Next
+        If labelList.IsNullOrEmpty Then
+            Dim groups As New list With {
+                .slots = New Dictionary(Of String, Object)
+            }
 
-        Return groups
+            For Each group In rawInputs _
+                .populates(Of EntityClusterModel)(env) _
+                .GroupBy(Function(a)
+                             Return a.Cluster
+                         End Function)
+
+                groups.slots(group.Key) = group.Keys.ToArray
+            Next
+
+            Return groups
+        Else
+            Dim index As Dictionary(Of String, String) = rawInputs _
+                .populates(Of EntityClusterModel)(env) _
+                .ToDictionary(Function(a) a.ID,
+                              Function(a)
+                                  Return a.Cluster
+                              End Function)
+
+            Return labelList _
+                .Select(Function(label)
+                            Return index.TryGetValue(label, [default]:="n/a")
+                        End Function) _
+                .ToArray
+        End If
     End Function
 
     ''' <summary>
