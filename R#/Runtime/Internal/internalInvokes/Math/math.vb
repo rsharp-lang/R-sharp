@@ -248,13 +248,16 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="x">
         ''' a numeric vector or an R object but not a factor coercible to numeric by as.double(x)
         ''' </param>
+        ''' <param name="sample">
+        ''' sample or population
+        ''' </param>
         ''' <returns></returns>
         <ExportAPI("sd")>
-        Public Function sd(x As Array) As Double
+        Public Function sd(x As Array, Optional sample As Boolean = False) As Double
             If x Is Nothing OrElse x.Length = 0 Then
                 Return 0
             Else
-                Return DirectCast(asVector(Of Double)(x), Double()).StdError
+                Return DirectCast(asVector(Of Double)(x), Double()).SD(isSample:=sample)
             End If
         End Function
 
