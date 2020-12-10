@@ -119,7 +119,11 @@ Public Class Rweb : Inherits HttpServer
     Private Sub pushBackResult(request_id$, response As HttpResponse)
         Dim result As BufferObject = requestPostback.TryGetValue(request_id)
 
-        Call $"get callback from slave process [{request_id}] -> {result.code.Description}".__INFO_ECHO
+        If result Is Nothing Then
+            Call $"unsure for empty result:: [{request_id}]...".Warning
+        Else
+            Call $"get callback from slave process [{request_id}] -> {result.code.Description}".__INFO_ECHO
+        End If
 
         SyncLock requestPostback
             Call requestPostback.Remove(request_id)
