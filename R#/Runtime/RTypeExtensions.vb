@@ -54,11 +54,18 @@ Namespace Runtime
         ''' <summary>
         ''' Converts the input string text to value <see cref="TypeCodes"/>
         ''' </summary>
-        ReadOnly parseTypecode As Dictionary(Of String, TypeCodes) = Enums(Of TypeCodes) _
-            .ToDictionary(Function(e) e.Description.ToLower,
-                          Function(code)
-                              Return code
-                          End Function)
+        ReadOnly parseTypecode As Dictionary(Of String, TypeCodes)
+
+        Sub New()
+            parseTypecode = Enums(Of TypeCodes) _
+                .ToDictionary(Function(e) e.Description.ToLower,
+                              Function(code)
+                                  Return code
+                              End Function)
+
+            ' add string type alias
+            parseTypecode("character") = TypeCodes.string
+        End Sub
 
         ''' <summary>
         ''' Get R type code from the type constraint expression value.

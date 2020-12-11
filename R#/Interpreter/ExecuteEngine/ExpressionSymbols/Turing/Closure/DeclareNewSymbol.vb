@@ -119,7 +119,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     value = Internal.debug.stop({
                         ex.Message,
                         "symbols: " & names.JoinBy(","),
-                        "value: " & If(value, GetType(Void), value.GetType).FullName,
+                        "value: " & If(value Is Nothing, GetType(Void), value.GetType).FullName,
                         "required: " & type.Description,
                         "is_readonly: " & is_readonly
                     }, envir)
