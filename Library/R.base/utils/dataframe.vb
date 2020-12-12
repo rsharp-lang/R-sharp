@@ -1,45 +1,45 @@
 ﻿#Region "Microsoft.VisualBasic::21ad1031e3a2bc7bc3e95aca0771be59, Library\R.base\utils\dataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module dataframe
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: appendCells, appendRow, cells, colnames, column
-    '               CreateRowObject, deserialize, openCsv, printTable, project
-    '               rawToDataFrame, readCsvRaw, readDataSet, rows, RowToString
-    '               transpose, vector
-    ' 
-    ' /********************************************************************************/
+' Module dataframe
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: appendCells, appendRow, cells, colnames, column
+'               CreateRowObject, deserialize, openCsv, printTable, project
+'               rawToDataFrame, readCsvRaw, readDataSet, rows, RowToString
+'               transpose, vector
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -151,6 +151,18 @@ Module dataframe
         Return vector
     End Function
 
+    <Extension>
+    Private Function measureColumnVector(col As String(), check_modes As Boolean) As Array
+        If check_modes Then
+            Return col _
+                .Skip(1) _
+                .ToArray _
+                .DoCall(AddressOf IO.DataImports.ParseVector)
+        Else
+            Return DirectCast(col.Skip(1).ToArray, Array)
+        End If
+    End Function
+
     ''' <summary>
     ''' convert the raw csv table object to R dataframe object.
     ''' </summary>
@@ -178,16 +190,12 @@ Module dataframe
         Dim dataframe As New Rdataframe() With {
             .columns = cols _
                 .SeqIterator _
+                .AsParallel _
+                .Select(Function(i) (i.i, colVec:=i.value.measureColumnVector(check_modes))) _
+                .OrderBy(Function(i) i.i) _
                 .ToDictionary(Function(col) colNames(col.i),
                               Function(col)
-                                  If check_modes Then
-                                      Return col.value _
-                                          .Skip(1) _
-                                          .ToArray _
-                                          .DoCall(AddressOf IO.DataImports.ParseVector)
-                                  Else
-                                      Return DirectCast(col.value.Skip(1).ToArray, Array)
-                                  End If
+                                  Return col.colVec
                               End Function)
         }
 
