@@ -2,11 +2,12 @@ imports ["dataset", "umap"] from "MLkit";
 
 let manifold = read.csv("F:\lipids\areas.csv")
 :> umap(
-	dimension         = 3, 
-	numberOfNeighbors = 15,
-    localConnectivity = 1,
-    KnnIter           = 64,
-    bandwidth         = 1
+	dimension            = 3, 
+	numberOfNeighbors    = 15,
+    localConnectivity    = 1,
+    KnnIter              = 64,
+    bandwidth            = 1,
+	customNumberOfEpochs = 100
 )
 ;
 
