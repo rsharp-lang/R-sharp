@@ -63,6 +63,9 @@ Namespace Runtime.Internal.Object.Converts
 
     Public Delegate Function IMakeDataFrame(x As Object, args As list, env As Environment) As dataframe
 
+    ''' <summary>
+    ''' ``as.data.frame``
+    ''' </summary>
     Public Module makeDataframe
 
         ReadOnly makesDataframe As New Dictionary(Of Type, IMakeDataFrame)
