@@ -447,6 +447,36 @@ Module dataframe
         End If
     End Function
 
+    <ExportAPI("as.index")>
+    <RApiReturn(GetType(list))>
+    Public Function asIndexList(<RRawVectorArgument> dataframe As Object, Optional env As Environment = Nothing) As Object
+        Dim data As pipeline = pipeline.TryCreatePipeline(Of EntityObject)(dataframe, env, suppress:=True)
+
+        If data.isError Then
+            data = pipeline.TryCreatePipeline(Of DataSet)(dataframe, env)
+
+            If data.isError Then
+                Return data.getError
+            End If
+
+            Return data.populates(Of DataSet)(env) _
+                .ToDictionary(Function(a) a.ID, Function(a) CObj(a)) _
+                .DoCall(Function(index)
+                            Return New list With {
+                                .slots = index
+                            }
+                        End Function)
+        Else
+            Return data.populates(Of EntityObject)(env) _
+                .ToDictionary(Function(a) a.ID, Function(a) CObj(a)) _
+                .DoCall(Function(index)
+                            Return New list With {
+                                .slots = index
+                            }
+                        End Function)
+        End If
+    End Function
+
     ''' <summary>
     ''' Read dataframe
     ''' </summary>
