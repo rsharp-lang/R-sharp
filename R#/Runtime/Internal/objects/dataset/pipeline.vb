@@ -83,6 +83,10 @@ Namespace Runtime.Internal.Object
             End Get
         End Property
 
+        ''' <summary>
+        ''' current data pipeline is a data message?
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property isMessage As Boolean
             Get
                 Return TypeOf pipeline Is Message AndAlso GetType(Message) Is elementType
@@ -122,6 +126,12 @@ Namespace Runtime.Internal.Object
             Return New vector(elementType, populates(Of Object)(env), env)
         End Function
 
+        ''' <summary>
+        ''' populate the data element from the pipeline stream
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         Public Iterator Function populates(Of T)(env As Environment) As IEnumerable(Of T)
             Dim cast As T
 
@@ -161,6 +171,13 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        ''' <summary>
+        ''' Create pipeline object from the given upstream data
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="upstream">the upstream data</param>
+        ''' <param name="finalize"></param>
+        ''' <returns></returns>
         <DebuggerStepThrough>
         Public Shared Function CreateFromPopulator(Of T)(upstream As IEnumerable(Of T), Optional finalize As Action = Nothing) As pipeline
             Return New pipeline(upstream, GetType(T)) With {
