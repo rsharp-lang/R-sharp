@@ -49,6 +49,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
@@ -77,7 +78,26 @@ Module dataframe
         Call RPrinter.AttachConsoleFormatter(Of DataSet())(AddressOf printTable)
         Call RPrinter.AttachConsoleFormatter(Of EntityObject())(AddressOf printTable)
         Call RPrinter.AttachConsoleFormatter(Of csv)(AddressOf printTable)
+
+        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(DataSet()), AddressOf dataframeTable(Of Double, DataSet))
+        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(EntityObject()), AddressOf dataframeTable(Of String, EntityObject))
     End Sub
+
+    Private Function dataframeTable(Of T, DataSet As {INamedValue, DynamicPropertyBase(Of T)})(data As DataSet(), args As list, env As Environment) As Rdataframe
+        Dim names As String() = data.Keys.ToArray
+        Dim table As New Rdataframe With {
+            .rownames = names,
+            .columns = New Dictionary(Of String, Array)
+        }
+
+        For Each colName As String In data.PropertyNames
+            table.columns(colName) = data _
+                .Select(Function(d) d(colName)) _
+                .ToArray
+        Next
+
+        Return table
+    End Function
 
     Private Function printTable(obj As Object) As String
         Dim matrix As csv
