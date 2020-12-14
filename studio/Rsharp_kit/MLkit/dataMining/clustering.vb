@@ -329,7 +329,7 @@ Module clustering
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("btree")>
-    <RApiReturn(GetType(btreeCluster), GetType(Cluster))>
+    <RApiReturn(GetType(BTreeCluster), GetType(Cluster))>
     Public Function btreeClusterFUN(d As DistanceMatrix,
                                     Optional equals As Double = 0.9,
                                     Optional gt As Double = 0.7,
@@ -353,7 +353,7 @@ Module clustering
             d = New DistanceMatrix(names.Indexing, distRows, False)
         End If
 
-        Dim cluster As btreeCluster = d.BTreeCluster(equals, gt)
+        Dim cluster As BTreeCluster = d.BTreeCluster(equals, gt)
 
         If hclust Then
             Return cluster.ToHClust
@@ -367,7 +367,7 @@ Module clustering
     ''' </summary>
     ''' <returns></returns>
     <Extension>
-    Private Function ToHClust(btree As btreeCluster) As Cluster
+    Private Function ToHClust(btree As BTreeCluster) As Cluster
         If btree.left Is Nothing AndAlso btree.right Is Nothing Then
             Return btree.hleaf
         Else
@@ -376,14 +376,14 @@ Module clustering
     End Function
 
     <Extension>
-    Private Function hleaf(btree As btreeCluster) As Cluster
+    Private Function hleaf(btree As BTreeCluster) As Cluster
         ' 是一个叶子节点
         If btree.members.IsNullOrEmpty Then
-            Return New Cluster(btree.key) With {
+            Return New Cluster(btree.uuid) With {
                 .Distance = New Distance(0, 1)
             }
         Else
-            Dim leafTree As New Cluster($"leaf-{btree.key}") With {
+            Dim leafTree As New Cluster($"leaf-{btree.uuid}") With {
                 .Distance = New Distance(0, btree.members.Length)
             }
 
@@ -398,8 +398,8 @@ Module clustering
     End Function
 
     <Extension>
-    Private Function hnode(btree As btreeCluster) As Cluster
-        Dim node As New Cluster($"node-{btree.key}")
+    Private Function hnode(btree As BTreeCluster) As Cluster
+        Dim node As New Cluster($"node-{btree.uuid}")
         Dim distance As Double
         Dim cl As Cluster
 
