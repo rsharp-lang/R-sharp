@@ -15,3 +15,8 @@ d = sim(t(d));
 
 print(d);
 
+btree(d, equals = 0.9, gt = 0.75)
+:> json
+:> writeLines(con = "F:\lipids\lipidsearch.json")
+;
+
