@@ -9,10 +9,12 @@ print(colnames(d));
 print("rownames:");
 print(rownames(d));
 
+# data normalization
 for(lipid in colnames(d)) {
 	d[, lipid] = d[, lipid] / max(d[, lipid]); 
 }
 
+# create a similarity matrix
 d = sim(t(d));
 
 print(d);
