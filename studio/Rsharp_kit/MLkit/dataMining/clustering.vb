@@ -362,7 +362,13 @@ Module clustering
         Else
             Dim data As pipeline = pipeline.TryCreatePipeline(Of DataSet)(d, env)
 
-
+            If data.isError Then
+                Return data.getError
+            Else
+                cluster = data _
+                    .populates(Of DataSet)(env) _
+                    .BTreeCluster(equals, gt)
+            End If
         End If
 
         If hclust Then
