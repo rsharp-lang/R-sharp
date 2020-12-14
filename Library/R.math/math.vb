@@ -1,43 +1,43 @@
 ﻿#Region "Microsoft.VisualBasic::d69f66e13d484ee26e5abaf861d2609d, Library\R.math\math.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module math
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: asFormula, create_deSolve_DataFrame, Hist, lm, predict
-    '               (+2 Overloads) RK4, ssm, summaryFit
-    ' 
-    ' /********************************************************************************/
+' Module math
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: asFormula, create_deSolve_DataFrame, Hist, lm, predict
+'               (+2 Overloads) RK4, ssm, summaryFit
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -45,12 +45,14 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.Bootstrapping
 Imports Microsoft.VisualBasic.Data.Bootstrapping.Multivariate
+Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math.Calculus
 Imports Microsoft.VisualBasic.Math.Calculus.Dynamics
 Imports Microsoft.VisualBasic.Math.Calculus.Dynamics.Data
 Imports Microsoft.VisualBasic.Math.Calculus.ODESolver
+Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Math.Distributions
 Imports Microsoft.VisualBasic.Math.Distributions.BinBox
 Imports Microsoft.VisualBasic.Math.LinearAlgebra
@@ -65,6 +67,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports baseMath = Microsoft.VisualBasic.Math
+Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports stdVec = Microsoft.VisualBasic.Math.LinearAlgebra.Vector
 Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
@@ -83,11 +86,11 @@ Module math
     End Sub
 
     Private Function summaryFit(x As lmCall, args As list, env As Environment) As Object
-
+        Throw New NotImplementedException
     End Function
 
-    Private Function create_deSolve_DataFrame(x As ODEsOut, args As list, env As Environment) As dataframe
-        Dim data As New dataframe With {
+    Private Function create_deSolve_DataFrame(x As ODEsOut, args As list, env As Environment) As Rdataframe
+        Dim data As New Rdataframe With {
             .columns = New Dictionary(Of String, Array)
         }
         Dim dx As String() = x.x _
@@ -234,12 +237,12 @@ Module math
                        Optional weights As Object = Nothing,
                        Optional env As Environment = Nothing) As Object
 
-        Dim df As dataframe
+        Dim df As Rdataframe
 
         If data Is Nothing Then
             Return Internal.debug.stop({"the required data can not be nothing!"}, env)
-        ElseIf TypeOf data Is dataframe Then
-            df = DirectCast(data, dataframe)
+        ElseIf TypeOf data Is Rdataframe Then
+            df = DirectCast(data, Rdataframe)
 
             If Not df.columns.ContainsKey(formula.var) Then
                 Return Internal.debug.stop({
@@ -249,7 +252,7 @@ Module math
                 }, env)
             End If
         Else
-            Return Message.InCompatibleType(GetType(dataframe), data.GetType, env)
+            Return Message.InCompatibleType(GetType(Rdataframe), data.GetType, env)
         End If
 
         Dim w As Double()
@@ -397,14 +400,14 @@ Module math
             Next
 
             names = Nothing
-        ElseIf TypeOf x Is dataframe Then
+        ElseIf TypeOf x Is Rdataframe Then
             For Each name As String In lm.variables
-                input(name) = REnv.asVector(Of Double)(DirectCast(x, dataframe).getColumnVector(name))
+                input(name) = REnv.asVector(Of Double)(DirectCast(x, Rdataframe).getColumnVector(name))
             Next
 
-            names = DirectCast(x, dataframe).rownames
+            names = DirectCast(x, Rdataframe).rownames
         Else
-            Return Message.InCompatibleType(GetType(dataframe), x.GetType, env)
+            Return Message.InCompatibleType(GetType(Rdataframe), x.GetType, env)
         End If
 
         Dim result As New List(Of Double)
@@ -454,4 +457,45 @@ Module math
 
         Return baseMath.SSM(vx.AsVector, vy.AsVector)
     End Function
+
+    ''' <summary>
+    ''' Create a similarity matrix
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <returns></returns>
+    <ExportAPI("sim")>
+    <RApiReturn(GetType(DistanceMatrix))>
+    Public Function sim(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+        Dim dataset As DataSet()
+
+        If TypeOf x Is Rdataframe Then
+            Dim colnames As String() = DirectCast(x, Rdataframe).columns.Keys.ToArray
+
+            dataset = DirectCast(x, Rdataframe) _
+                .forEachRow() _
+                .Select(Function(r)
+                            Return New DataSet With {
+                                .ID = r.name,
+                                .Properties = colnames _
+                                    .Select(Function(c, i) (c, r(i))) _
+                                    .ToDictionary(Function(t) t.c,
+                                                  Function(t)
+                                                      Return Val(t.Item2)
+                                                  End Function)
+                            }
+                        End Function) _
+                .ToArray
+        Else
+            Dim dataPipe As pipeline = pipeline.TryCreatePipeline(Of DataSet)(x, env)
+
+            If dataPipe.isError Then
+                Return dataPipe.getError
+            Else
+                dataset = dataPipe.populates(Of DataSet)(env).ToArray
+            End If
+        End If
+
+        Return dataset.Similarity
+    End Function
+
 End Module
