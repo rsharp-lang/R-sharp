@@ -45,6 +45,7 @@
 
 Imports System.Runtime.CompilerServices
 Imports System.Text
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
@@ -487,9 +488,21 @@ Module dataframe
     Public Function readDataSet(file$,
                                 Optional mode As DataModes = DataModes.numeric,
                                 Optional toRObj As Boolean = False,
-                                Optional silent As Boolean = True) As Object
+                                Optional silent As Boolean = True,
+                                Optional strict As Boolean = False,
+                                Optional env As Environment = Nothing) As Object
 
         Dim dataframe As New Rdataframe
+
+        If Not file.FileExists Then
+            Dim msg = {$"the given data table file is not exists on your file system!", $"file: {file}"}
+
+            If strict Then
+                Return Internal.debug.stop(msg, env)
+            Else
+                Call env.AddMessage(msg, MSG_TYPES.WRN)
+            End If
+        End If
 
         Select Case mode
             Case DataModes.numeric

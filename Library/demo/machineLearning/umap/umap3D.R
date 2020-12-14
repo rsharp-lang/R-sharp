@@ -1,6 +1,6 @@
 imports ["dataset", "umap"] from "MLkit";
 
-let manifold = read.csv("F:\lipids\areas.csv")
+let manifold = read.csv("F:\lipids\areas_lipidmaps.csv", row_names = 1)
 :> umap(
 	dimension            = 3, 
 	numberOfNeighbors    = 15,
