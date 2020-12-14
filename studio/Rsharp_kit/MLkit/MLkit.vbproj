@@ -232,7 +232,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="activation.vb" />
-    <Compile Include="dataMining\btreeCluster.vb" />
     <Compile Include="dataMining\dbscanResult.vb" />
     <Compile Include="dataset\LabelledVector.vb" />
     <Compile Include="dataset\datasetKit.vb" />
@@ -295,6 +294,10 @@
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data\DataFrame\47_dotnet_ms-vb_data.framework.vbproj">
       <Project>{7283c179-f852-4ead-8d8f-b82ef2cbd7db}</Project>
       <Name>47_dotnet_ms-vb_data.framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\DataMining\BinaryTree\BinaryTree.vbproj">
+      <Project>{3d5402e3-72cd-4e40-a68e-a919250ab5ee}</Project>
+      <Name>BinaryTree</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\DataMining\DataMining\DataMining.vbproj">
       <Project>{1b42809b-603f-4cea-a0db-91276582b9ca}</Project>

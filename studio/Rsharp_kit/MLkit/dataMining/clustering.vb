@@ -1,51 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::da0952bd9dd8c03cd8cf4395b226bbb0, studio\Rsharp_kit\MLkit\dataMining\clustering.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module clustering
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: btreeClusterFUN, clusterGroups, clusterResultDataFrame, clusterSummary, cmeansSummary
-    '               dbscan, fuzzyCMeans, hclust, Kmeans, showHclust
-    ' 
-    ' /********************************************************************************/
+' Module clustering
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: btreeClusterFUN, clusterGroups, clusterResultDataFrame, clusterSummary, cmeansSummary
+'               dbscan, fuzzyCMeans, hclust, Kmeans, showHclust
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.ComponentModel.Algorithm.BinaryTree
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
+Imports Microsoft.VisualBasic.DataMining.BinaryTree
 Imports Microsoft.VisualBasic.DataMining.DBSCAN
 Imports Microsoft.VisualBasic.DataMining.FuzzyCMeans
 Imports Microsoft.VisualBasic.DataMining.HierarchicalClustering
@@ -58,6 +59,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports Distance = Microsoft.VisualBasic.DataMining.HierarchicalClustering.Hierarchy.Distance
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -351,31 +353,76 @@ Module clustering
             d = New DistanceMatrix(names.Indexing, distRows, False)
         End If
 
-        Dim compares As Comparison(Of String) =
-            Function(x, y) As Integer
-                Dim similarity As Double = d(x, y)
-
-                If similarity >= equals Then
-                    Return 0
-                ElseIf similarity >= gt Then
-                    Return 1
-                Else
-                    Return -1
-                End If
-            End Function
-        Dim btree As New AVLTree(Of String, String)(compares, Function(str) str)
-
-        For Each id As String In d.keys
-            Call btree.Add(id, id, valueReplace:=False)
-        Next
-
-        Dim cluster As btreeCluster = btreeCluster.GetClusters(btree)
+        Dim cluster As btreeCluster = d.BTreeCluster(equals, gt)
 
         If hclust Then
             Return cluster.ToHClust
         Else
             Return cluster
         End If
+    End Function
+
+    ''' <summary>
+    ''' leaf distance value is ZERO always
+    ''' </summary>
+    ''' <returns></returns>
+    <Extension>
+    Private Function ToHClust(btree As btreeCluster) As Cluster
+        If btree.left Is Nothing AndAlso btree.right Is Nothing Then
+            Return btree.hleaf
+        Else
+            Return btree.hnode
+        End If
+    End Function
+
+    <Extension>
+    Private Function hleaf(btree As btreeCluster) As Cluster
+        ' 是一个叶子节点
+        If btree.members.IsNullOrEmpty Then
+            Return New Cluster(btree.key) With {
+                .Distance = New Distance(0, 1)
+            }
+        Else
+            Dim leafTree As New Cluster($"leaf-{btree.key}") With {
+                .Distance = New Distance(0, btree.members.Length)
+            }
+
+            For Each key As String In btree.members
+                Call New Cluster(key) With {
+                    .Distance = New Distance(0, 1)
+                }.DoCall(AddressOf leafTree.AddChild)
+            Next
+
+            Return leafTree
+        End If
+    End Function
+
+    <Extension>
+    Private Function hnode(btree As btreeCluster) As Cluster
+        Dim node As New Cluster($"node-{btree.key}")
+        Dim distance As Double
+        Dim cl As Cluster
+
+        If Not btree.left Is Nothing Then
+            cl = btree.left.ToHClust
+            node.AddChild(cl)
+            distance += cl.DistanceValue + 1
+        End If
+        If Not btree.right Is Nothing Then
+            cl = btree.right.ToHClust
+            node.AddChild(cl)
+            distance += cl.DistanceValue + 1
+        End If
+
+        For Each key As String In btree.members
+            Call New Cluster(key) With {
+                .Distance = New Distance(0, 1)
+            }.DoCall(AddressOf node.AddChild)
+        Next
+
+        node.Distance = New Distance(distance)
+
+        Return node
     End Function
 
     <ExportAPI("cluster.groups")>
@@ -441,7 +488,7 @@ Module clustering
     ''' interpreted as dissimilarity matrix or object. Otherwise Euclidean 
     ''' distances will be used.</param>
     ''' <param name="eps">Reachability distance, see Ester et al. (1996).</param>
-    ''' <param name="MinPts">Reachability minimum no. Of points, see Ester et al. (1996).</param>
+    ''' <param name="minPts">Reachability minimum no. Of points, see Ester et al. (1996).</param>
     ''' <param name="scale">scale the data if TRUE.</param>
     ''' <param name="method">
     ''' "dist" treats data as distance matrix (relatively fast but memory 
@@ -458,7 +505,7 @@ Module clustering
     <ExportAPI("dbscan")>
     Public Function dbscan(<RRawVectorArgument> data As Object,
                            eps As Double,
-                           Optional MinPts As Integer = 5,
+                           Optional minPts As Integer = 5,
                            Optional scale As Boolean = False,
                            Optional method As dbScanMethods = dbScanMethods.raw,
                            Optional seeds As Boolean = True,
@@ -503,7 +550,7 @@ Module clustering
         End Select
 
         Dim isseed As Integer() = Nothing
-        Dim result = New DbscanAlgorithm(Of DataSet)(dist).ComputeClusterDBSCAN(x, eps, MinPts, isseed)
+        Dim result = New DbscanAlgorithm(Of DataSet)(dist).ComputeClusterDBSCAN(x, eps, minPts, isseed)
         Dim clusterData As EntityClusterModel() = result _
             .Select(Function(c)
                         Return c _
@@ -521,7 +568,7 @@ Module clustering
         Return New dbscanResult With {
             .cluster = clusterData,
             .eps = eps,
-            .MinPts = MinPts,
+            .MinPts = minPts,
             .isseed = isseed.Select(Function(i) x(i).ID).ToArray
         }
     End Function
