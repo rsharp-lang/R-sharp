@@ -1,8 +1,9 @@
 imports ["dataset", "umap"] from "MLkit";
 
-let raw = read.csv("F:\lipids\areas.csv", check_modes = FALSE, check_names = FALSE);
+let raw = read.csv("F:\lipids\areas.csv", check_modes = FALSE, check_names = FALSE, row_names = 1);
 
-print(head(raw));
+print(rownames(raw));
+print(colnames(raw));
 
 for(col in colnames(raw)) {
 	raw[, col] = as.numeric(raw[, col]);
