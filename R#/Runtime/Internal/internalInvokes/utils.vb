@@ -541,5 +541,13 @@ Namespace Runtime.Internal.Invokes
             Dim result As Object = expr.Evaluate(caller)
             Return result
         End Function
+
+        ''' <summary>
+        ''' Pause the console program.
+        ''' </summary>
+        <ExportAPI("pause")>
+        Public Sub pause()
+            Call App.Pause()
+        End Sub
     End Module
 End Namespace
