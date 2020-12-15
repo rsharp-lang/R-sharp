@@ -204,6 +204,28 @@ Public Module InteropArgumentHelper
         End Select
     End Function
 
+    Public Function getColorSet(colorSet As Object, Optional default$ = "Set1:c12") As String
+        If colorSet Is Nothing Then
+            Return [default]
+        End If
+
+        Dim type As Type = colorSet.GetType
+
+        If type.IsArray Then
+            If type.GetElementType Is GetType(String) Then
+                Return DirectCast(colorSet, String()).JoinBy(",")
+            ElseIf type.GetElementType Is GetType(Color) Then
+                Return DirectCast(colorSet, Color()).Select(Function(c) c.ToHtmlColor).JoinBy(",")
+            Else
+                Return [default]
+            End If
+        ElseIf type Is GetType(String) Then
+            Return DirectCast(colorSet, String)
+        Else
+            Return [default]
+        End If
+    End Function
+
     Public Function getColor(color As Object, Optional default$ = "black") As String
         If color Is Nothing Then
             Return [default]
