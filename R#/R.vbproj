@@ -810,6 +810,7 @@
     <Compile Include="System\Document\UnixManPagePrinter.vb" />
     <Compile Include="System\Package\Database\LocalPackageDatabase.vb" />
     <Compile Include="System\Package\Database\PackageLoaderEntry.vb" />
+    <Compile Include="System\Package\PackageFile\Expression\RExpression.vb" />
     <Compile Include="System\Package\PackageFile\PackageModel.vb" />
     <Compile Include="System\Package\PackageFile\DESCRIPTION.vb" />
     <Compile Include="System\Package\PackageFile\CreatePackage.vb" />
