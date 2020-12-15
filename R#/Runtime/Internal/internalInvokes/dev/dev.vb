@@ -1,6 +1,7 @@
 ﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Invokes
@@ -15,7 +16,7 @@ Namespace Runtime.Internal.Invokes
         ''' </summary>
         ''' <param name="dir">The script source directory, by default is current workspace.</param>
         <ExportAPI("flash_load")>
-        Public Sub flash_load(<RDefaultExpression> Optional dir As String = "~getwd()", Optional env As GlobalEnvironment = Nothing)
+        Public Function flash_load(<RDefaultExpression> Optional dir As String = "~getwd()", Optional env As GlobalEnvironment = Nothing) As Object
             Dim Rlist As String() = dir _
                 .EnumerateFiles("*.r", "*.R") _
                 .Select(Function(path) path.GetFullPath) _
@@ -41,6 +42,8 @@ Namespace Runtime.Internal.Invokes
             If zzz.FileExists Then
                 Call env.doCall(".onLoad")
             End If
-        End Sub
+
+            Return New invisible()
+        End Function
     End Module
 End Namespace
