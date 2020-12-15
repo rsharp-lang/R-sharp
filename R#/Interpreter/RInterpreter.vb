@@ -314,7 +314,7 @@ Namespace Interpreter
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
         Public Function Evaluate(script As String) As Object
-            Return RunInternal(Rscript.FromText(script), {})
+            Return RunInternal(Rscript.FromText(script), {}, Nothing)
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
@@ -406,11 +406,12 @@ Namespace Interpreter
         '    Return result
         'End Function
 
-        Private Function RunInternal(Rscript As Rscript, arguments As NamedValue(Of Object)()) As Object
-            Dim globalEnvir As Environment = InitializeEnvironment(Rscript.fileName, arguments)
+        Private Function RunInternal(Rscript As Rscript, arguments As NamedValue(Of Object)(), ByRef globalEnvir As Environment) As Object
             Dim error$ = Nothing
             Dim program As Program = Program.CreateProgram(Rscript, debug:=debug, [error]:=[error])
             Dim result As Object
+
+            globalEnvir = InitializeEnvironment(Rscript.fileName, arguments)
 
             If Not [error].StringEmpty Then
                 result = Internal.debug.stop([error], globalEnvir)
@@ -427,7 +428,6 @@ Namespace Interpreter
             ' set last variable in current environment
             Call Me.globalEnvir(lastVariableName).SetValue(result, globalEnvir)
 
-            ' Return finalizeResult(result)
             Return result
         End Function
 
@@ -440,7 +440,10 @@ Namespace Interpreter
         ''' <returns></returns>
         ''' 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Function Source(filepath$, ParamArray arguments As NamedValue(Of Object)()) As Object
+        Public Function Source(filepath$,
+                               Optional arguments As NamedValue(Of Object)() = Nothing,
+                               Optional ByRef globalEnv As Environment = Nothing) As Object
+
             ' when source a given script by path
             ' then an object list variable with special name will be push into 
             ' the environment
@@ -451,9 +454,10 @@ Namespace Interpreter
 
             If filepath.FileExists Then
                 arguments = arguments _
+                    .SafeQuery _
                     .JoinIterates(New NamedValue(Of Object)("!script", New vbObject(script))) _
                     .ToArray
-                result = RunInternal(Rscript.FromFile(filepath), arguments)
+                result = RunInternal(Rscript.FromFile(filepath), arguments, globalEnv)
             Else
                 result = Internal.debug.stop({
                     $"cannot open the connection.",
