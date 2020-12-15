@@ -45,7 +45,7 @@ Imports System.Runtime.CompilerServices
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.System.Package.File.Expression
+Imports SMRUCC.Rsharp.System.Package.File.Expressions
 
 Namespace System.Package.File
 

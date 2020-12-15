@@ -46,7 +46,7 @@ Imports System.IO
 Imports System.IO.Compression
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Serialization.JSON
-Imports SMRUCC.Rsharp.System.Package.File.Expression
+Imports SMRUCC.Rsharp.System.Package.File.Expressions
 
 Namespace System.Package.File
 
