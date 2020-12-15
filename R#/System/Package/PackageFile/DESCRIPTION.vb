@@ -47,9 +47,17 @@ Namespace System.Package.File
 
     Public Class DESCRIPTION
 
+        ''' <summary>
+        ''' the package name
+        ''' </summary>
+        ''' <returns></returns>
         Public Property Package As String
         Public Property Type As String
         Public Property Title As String
+        ''' <summary>
+        ''' the package version string
+        ''' </summary>
+        ''' <returns></returns>
         Public Property Version As String
         Public Property [Date] As String
         Public Property Author As String
@@ -57,6 +65,10 @@ Namespace System.Package.File
         Public Property Description As String
         Public Property License As String
         Public Property MetaData As Dictionary(Of String, String)
+
+        Public Overrides Function ToString() As String
+            Return $"[{Package}_{Version}] {Title}"
+        End Function
 
         Public Shared Function Parse(file As String) As DESCRIPTION
 

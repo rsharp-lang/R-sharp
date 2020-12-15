@@ -16,7 +16,7 @@ Imports SMRUCC.Rsharp.System.Package.File
     Public Function Compile(args As CommandLine) As Integer
         Dim src$ = args <= "/src"
         Dim meta As DESCRIPTION = DESCRIPTION.Parse($"{src}/DESCRIPTION")
-        Dim save$ = args("/save") Or $"{src}/../{meta.Package}.zip"
+        Dim save$ = args("/save") Or $"{src}/../{meta.Package}_{meta.Version}.zip"
 
         Return meta.BuildPackage(src, save).CLICode
     End Function
