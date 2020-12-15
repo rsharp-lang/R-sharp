@@ -43,6 +43,9 @@
 #End Region
 
 Imports System.IO
+Imports System.IO.Compression
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.System.Package.File.Expression
 
 Namespace System.Package.File
@@ -58,7 +61,28 @@ Namespace System.Package.File
         Public Property symbols As Dictionary(Of String, RExpression)
 
         Public Sub Flush(outfile As Stream)
+            Using zip As New ZipArchive(outfile, ZipArchiveMode.Create)
+                Using file As New StreamWriter(zip.CreateEntry("index.json").Open)
+                    Call file.WriteLine(info.GetJson)
+                    Call file.Flush()
+                End Using
 
+                Dim symbols As New List(Of String)
+
+                For Each symbol As NamedValue(Of RExpression) In Me.symbols.Select(Function(t) New NamedValue(Of RExpression)(t.Key, t.Value))
+                    Using file As New StreamWriter(zip.CreateEntry(symbol.Name).Open)
+                        Call file.WriteLine(symbol.Value.GetJson)
+                        Call file.Flush()
+                    End Using
+
+                    Call symbols.Add(symbol.Name)
+                Next
+
+                Using file As New StreamWriter(zip.CreateEntry("symbols.json").Open)
+                    Call file.WriteLine(symbols.ToArray.GetJson)
+                    Call file.Flush()
+                End Using
+            End Using
         End Sub
 
     End Class
