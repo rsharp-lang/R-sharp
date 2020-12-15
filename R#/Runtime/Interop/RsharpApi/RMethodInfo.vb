@@ -273,6 +273,8 @@ Namespace Runtime.Interop
                     ' default value
                     If arg.type.raw Is GetType(Environment) Then
                         Yield envir
+                    ElseIf arg.type.raw Is GetType(GlobalEnvironment) Then
+                        Yield envir.globalEnvironment
                     ElseIf Not arg.isOptional Then
                         Yield missingParameter(arg, envir, name)
                     ElseIf TypeOf arg.default Is Expression Then
@@ -302,7 +304,7 @@ Namespace Runtime.Interop
 
         Friend Shared Function missingParameter(arg As RMethodArgument, envir As Environment, funcName$) As Object
             Dim messages$() = {
-                $"Missing parameter value for '{arg.name}'!",
+                $"missing parameter value for '{arg.name}'!",
                 $"parameter: {arg.name}",
                 $"type: {arg.type.raw.FullName}",
                 $"function: {funcName}",

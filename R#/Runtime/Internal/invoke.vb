@@ -109,6 +109,7 @@ Namespace Runtime.Internal
             Call GetType(graphics).DoCall(AddressOf pushEnvir)
             Call GetType(applys).DoCall(AddressOf pushEnvir)
             Call GetType(reflections).DoCall(AddressOf pushEnvir)
+            Call GetType(dev).DoCall(AddressOf pushEnvir)
         End Sub
 
         Private Shared Sub pushEnvir(baseModule As Type)
