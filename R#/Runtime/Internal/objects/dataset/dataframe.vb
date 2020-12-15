@@ -88,29 +88,33 @@ Namespace Runtime.Internal.Object
             End Get
         End Property
 
-        Public Function getColumnVector(columnName As String) As Array
-            Dim n As Integer = nrows
-            Dim col As Array = columns.TryGetValue(columnName)
+        Default Public ReadOnly Property getColumnVector(columnName As String) As Array
+            Get
+                Dim n As Integer = nrows
+                Dim col As Array = columns.TryGetValue(columnName)
 
-            If col Is Nothing Then
-                Return Nothing
-            ElseIf col.Length = n Then
-                Return col
-            Else
-                Return VectorExtensions _
-                    .Replicate(col.GetValue(Scan0), n) _
-                    .ToArray
-            End If
-        End Function
+                If col Is Nothing Then
+                    Return Nothing
+                ElseIf col.Length = n Then
+                    Return col
+                Else
+                    Return VectorExtensions _
+                        .Replicate(col.GetValue(Scan0), n) _
+                        .ToArray
+                End If
+            End Get
+        End Property
+
+        Default Public ReadOnly Property getColumnVector(index As Integer) As Array
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
+            Get
+                Return getColumnVector(getKeyByIndex(index))
+            End Get
+        End Property
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function getKeyByIndex(index As Integer) As String
             Return columns.Keys.ElementAtOrDefault(index - 1)
-        End Function
-
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Function getColumnVector(index As Integer) As Array
-            Return getColumnVector(getKeyByIndex(index))
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
