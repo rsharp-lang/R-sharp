@@ -284,6 +284,12 @@ Namespace Interpreter
             Return symbol
         End Function
 
+        ''' <summary>
+        ''' invoke a R function by name
+        ''' </summary>
+        ''' <param name="funcName">the R function name</param>
+        ''' <param name="args">the named parameter list</param>
+        ''' <returns></returns>
         Public Function Invoke(funcName$, args As NamedValue(Of Object)()) As Object
             Dim find As Object = getFunctionSymbol(funcName)
             Dim parameters As InvokeParameter() = args _

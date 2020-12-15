@@ -1,54 +1,55 @@
 ﻿#Region "Microsoft.VisualBasic::da60eadf83ab02b8cb7849538b31fd97, R#\Runtime\Environment\GlobalEnvironment.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class GlobalEnvironment
-    ' 
-    '         Properties: debugMode, lastException, log4vb_redirect, options, packages
-    '                     Rscript, scriptDir, stdout, types
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: [GetType], (+2 Overloads) LoadLibrary, MissingPackage
-    ' 
-    '         Sub: Dispose, RedirectOutput
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class GlobalEnvironment
+' 
+'         Properties: debugMode, lastException, log4vb_redirect, options, packages
+'                     Rscript, scriptDir, stdout, types
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: [GetType], (+2 Overloads) LoadLibrary, MissingPackage
+' 
+'         Sub: Dispose, RedirectOutput
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.IO
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter
@@ -121,6 +122,17 @@ Namespace Runtime
 
             Call types.Add("unit", RType.GetRSharpType(GetType(unit)))
         End Sub
+
+        ''' <summary>
+        ''' invoke a R function by name
+        ''' </summary>
+        ''' <param name="func">the R function name</param>
+        ''' <param name="args">the named parameter list</param>
+        ''' <returns></returns>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function doCall(func As String, ParamArray args As NamedValue(Of Object)()) As Object
+            Return Rscript.Invoke(func, args)
+        End Function
 
         ''' <summary>
         ''' get type definition from a given type object or type name
