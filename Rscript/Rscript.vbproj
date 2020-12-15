@@ -162,7 +162,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CLI\BuildPackage.vb" />
+    <Compile Include="CLI\CLI.vb" />
+    <Compile Include="RSystem\BuildPackage.vb" />
     <Compile Include="Program.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
