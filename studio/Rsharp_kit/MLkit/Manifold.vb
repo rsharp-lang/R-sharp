@@ -80,13 +80,19 @@ Module Manifold
             If camera Is Nothing Then
                 env.AddMessage("the 3D camera is nothing, default camera value will be apply!", MSG_TYPES.WRN)
                 camera = New Camera With {
-                    .screen = size.SizeParser
+                    .screen = size.SizeParser,
+                    .angleX = 120,
+                    .angleY = 120,
+                    .angleZ = 30,
+                    .fov = 1500,
+                    .viewDistance = 500
                 }
             End If
 
             Return input.DrawUmap3D(
                 camera:=camera,
-                size:=size
+                size:=size,
+                showLabels:=False
             )
         End If
     End Function
