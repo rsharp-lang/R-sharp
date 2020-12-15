@@ -13,8 +13,11 @@ Namespace System.Package.File.Expressions
 
         Public Shared Function CreateFromSymbolExpression(exec As Expression) As RExpression
             If TypeOf exec Is [Imports] Then
+                Return RImports.GetRImports(DirectCast(exec, [Imports]))
             ElseIf TypeOf exec Is Require Then
+                Return RImports.GetRImports(DirectCast(exec, Require))
             ElseIf TypeOf exec Is DeclareNewFunction Then
+                Return RFunction.FromSymbol(exec)
             Else
                 Return New ParserError
             End If
