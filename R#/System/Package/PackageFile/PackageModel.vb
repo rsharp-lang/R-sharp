@@ -59,6 +59,7 @@ Namespace System.Package.File
         ''' </summary>
         ''' <returns></returns>
         Public Property symbols As Dictionary(Of String, RExpression)
+        Public Property loading As RImports()
 
         Public Sub Flush(outfile As Stream)
             Using zip As New ZipArchive(outfile, ZipArchiveMode.Create)

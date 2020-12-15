@@ -42,7 +42,11 @@
 
 Imports System.IO
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.System.Package.File.Expressions
@@ -67,16 +71,34 @@ Namespace System.Package.File
                 .info = desc,
                 .symbols = New Dictionary(Of String, RExpression)
             }
+            Dim loading As New List(Of RImports)
 
             For Each script As String In srcR.ListFiles("*.R")
-                Dim loader As New RInterpreter()
-                Dim [imports] As Environment = Nothing
+                Dim error$ = Nothing
+                Dim exec As Program = Program.CreateProgram(Rscript.FromFile(script), [error]:=[error])
+                Dim json As RExpression
 
-                Call loader.Source(script, globalEnv:=[imports])
+                If Not [error].StringEmpty Then
+                    Return New Message With {
+                        .level = MSG_TYPES.ERR,
+                        .message = {[error]}
+                    }
+                Else
+                    For Each line As Expression In exec
+                        json = RExpression.CreateFromSymbolExpression(line)
 
-                For Each symbol As Symbol In [imports].symbols.Values
-                    file.symbols(symbol.name) = RExpression.CreateFromSymbol(symbol)
-                Next
+                        If json.GetType.ImplementInterface(Of INamedValue) Then
+                            file.symbols(DirectCast(json, INamedValue).Key) = json
+                        ElseIf TypeOf json Is RImports Then
+                            loading.Add(json)
+                        Else
+                            Return New Message With {
+                                .level = MSG_TYPES.ERR,
+                                .message = DirectCast(json, ParserError).message
+                            }
+                        End If
+                    Next
+                End If
             Next
 
             Call file.Flush(outfile)

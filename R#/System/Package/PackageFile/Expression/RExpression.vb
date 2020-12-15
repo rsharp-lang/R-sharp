@@ -1,6 +1,7 @@
 ﻿Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime.Components
 
@@ -10,32 +11,22 @@ Namespace System.Package.File.Expressions
 
         Public MustOverride Function GetExpression() As Expression
 
-        Public Shared Function CreateFromSymbol(symbol As Symbol) As RExpression
-
-        End Function
-    End Class
-
-    Public Class RImports : Inherits RExpression
-
-        Public Property packages As String()
-        Public Property [module] As String
-
-        Public Overrides Function GetExpression() As Expression
-            Dim names As Expression() = packages _
-                .Select(Function(name) New Literal(name)) _
-                .ToArray
-
-            If [module].StringEmpty Then
-                ' require
-                Return New Require(names)
+        Public Shared Function CreateFromSymbolExpression(exec As Expression) As RExpression
+            If TypeOf exec Is [Imports] Then
+            ElseIf TypeOf exec Is Require Then
+            ElseIf TypeOf exec Is DeclareNewFunction Then
             Else
-                Return New [Imports](New VectorLiteral(names), New Literal([module]))
+                Return New ParserError
             End If
         End Function
-
-        Public Shared Function GetRImports(require As Require) As [Variant](Of RImports, Message)
-
-        End Function
     End Class
 
+    Public Class ParserError : Inherits RExpression
+
+        Public Property message As String()
+
+        Public Overrides Function GetExpression() As Expression
+            Throw New NotImplementedException()
+        End Function
+    End Class
 End Namespace
