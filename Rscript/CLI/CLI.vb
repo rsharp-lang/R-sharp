@@ -1,8 +1,12 @@
 ﻿Imports System.ComponentModel
+Imports System.IO
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.InteropService.SharedORM
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.System.Package.File
+Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
 <CLI> Module CLI
 
@@ -18,6 +22,14 @@ Imports SMRUCC.Rsharp.System.Package.File
         Dim meta As DESCRIPTION = DESCRIPTION.Parse($"{src}/DESCRIPTION")
         Dim save$ = args("/save") Or $"{src}/../{meta.Package}_{meta.Version}.zip"
 
-        Return meta.BuildPackage(src, save).CLICode
+        Using outputfile As FileStream = save.Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False)
+            Dim err As Message = meta.Build(src, outputfile)
+
+            If RProgram.isException(err) Then
+                Return CInt(debug.PrintMessageInternal(err, Nothing))
+            Else
+                Return 0
+            End If
+        End Using
     End Function
 End Module

@@ -57,7 +57,6 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.My
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 
 Namespace Runtime.Internal
@@ -226,13 +225,28 @@ Namespace Runtime.Internal
             Return Nothing
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="message"></param>
+        ''' <param name="globalEnv">这个参数可以为空，空值的时候会默认将消息打印在标准输出</param>
+        ''' <returns></returns>
         Public Shared Function PrintMessageInternal(message As Message, globalEnv As GlobalEnvironment) As Object
-            Dim stdout As New StreamWriter(globalEnv.stdout.stream)
+            Dim stdout As StreamWriter
+            Dim redirectErr2stdout As Boolean
 
-            Call globalEnv.stdout.Flush()
-            Call writeErrMessage(message, stdout, globalEnv.Rscript.redirectError2stdout)
+            If globalEnv Is Nothing Then
+                stdout = App.StdOut
+                redirectErr2stdout = False
+            Else
+                stdout = New StreamWriter(globalEnv.stdout.stream)
+                redirectErr2stdout = globalEnv.Rscript.redirectError2stdout
+                globalEnv.stdout.Flush()
+            End If
 
-            Return Nothing
+            Call writeErrMessage(message, stdout, redirectErr2stdout)
+
+            Return 500
         End Function
 
         Public Shared Sub writeErrMessage(message As Message, Optional stdout As StreamWriter = Nothing, Optional redirectError2stdout As Boolean = False)
