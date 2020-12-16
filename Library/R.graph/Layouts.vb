@@ -107,6 +107,10 @@ Module Layouts
 
         For i As Integer = 0 To iterations
             Call physics.Collide()
+
+            If (100 * i / iterations) Mod 5 = 0 Then
+                Console.WriteLine($"- Completed {i + 1} of {iterations} [{CInt(100 * i / iterations)}%]")
+            End If
         Next
 
         Return g
