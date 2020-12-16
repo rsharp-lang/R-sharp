@@ -1,50 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::873f3af2789bdeec87f52f53191ee203, R#\Runtime\Internal\internalInvokes\base.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module base
-    ' 
-    '         Function: [dim], [stop], allocate, append, autoDispose
-    '                   cat, cbind, colnames, doPrintInternal, getOption
-    '                   invisible, isEmpty, isNull, length, makeNames
-    '                   names, ncol, neg, nrow, options
-    '                   print, rbind, Rdataframe, rep, replace
-    '                   Rlist, rownames, sink, source, str
-    '                   summary, t, unitOfT, warning
-    ' 
-    '         Sub: [exit], q, quit
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module base
+' 
+'         Function: [dim], [stop], allocate, append, autoDispose
+'                   cat, cbind, colnames, doPrintInternal, getOption
+'                   invisible, isEmpty, isNull, length, makeNames
+'                   names, ncol, neg, nrow, options
+'                   print, rbind, Rdataframe, rep, replace
+'                   Rlist, rownames, sink, source, str
+'                   summary, t, unitOfT, warning
+' 
+'         Sub: [exit], q, quit
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -52,6 +52,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
@@ -1328,6 +1329,22 @@ Namespace Runtime.Internal.Invokes
         Public Sub [exit](status As Integer)
             Call App.Exit(status)
         End Sub
+
+        <ExportAPI("factors")>
+        Public Function factors(x As String()) As Integer()
+            Dim index As New Index(Of String)(base:=1)
+            Dim i As New List(Of Integer)
+
+            For Each str As String In x
+                If index.IndexOf(str) = -1 Then
+                    Call index.Add(str)
+                End If
+
+                Call i.Add(index.IndexOf(str))
+            Next
+
+            Return i.ToArray
+        End Function
 
         ''' <summary>
         ''' 

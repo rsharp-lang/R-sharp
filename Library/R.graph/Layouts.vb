@@ -84,7 +84,7 @@ Module Layouts
                                   Optional condenseFactor As Integer = 3,
                                   Optional maxtx As Integer = 4,
                                   Optional maxty As Integer = 3,
-                                  <RRawVectorArgument> Optional dist_threshold As Object = "30,250",
+                                  <RRawVectorArgument> Optional dist As Object = "30,250",
                                   <RRawVectorArgument> Optional size As Object = "1000,1000",
                                   Optional iterations As Integer = 200,
                                   Optional env As Environment = Nothing) As NetworkGraph
@@ -94,7 +94,7 @@ Module Layouts
         End If
 
         Dim sizeStr = InteropArgumentHelper.getSize(size, "10000,10000")
-        Dim distStr = InteropArgumentHelper.getSize(dist_threshold, "30,256")
+        Dim distStr = InteropArgumentHelper.getSize(dist, "30,256")
         Dim physics As New Planner(
             g:=g,
             ejectFactor:=ejectFactor,

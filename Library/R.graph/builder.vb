@@ -11,11 +11,11 @@ Module builder
 
     <ExportAPI("correlation.graph")>
     <RApiReturn(GetType(NetworkGraph))>
-    Public Function FromCorrelations(x As DistanceMatrix, Optional threshold As Double = 0.65, Optional env As Environment = Nothing) As Object
-        If x.is_dist Then
-            Return Internal.debug.stop({"it seems that a distance matrix is given, a similarity matrix is required!"}, env)
-        Else
-            Return x.BuildNetwork(threshold).Item1
-        End If
+    Public Function FromCorrelations(x As CorrelationMatrix,
+                                     Optional threshold As Double = 0.65,
+                                     Optional pvalue As Double = 1,
+                                     Optional env As Environment = Nothing) As Object
+
+        Return x.BuildNetwork(threshold, pvalue).Item1
     End Function
 End Module
