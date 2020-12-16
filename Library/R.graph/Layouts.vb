@@ -1,41 +1,41 @@
 ﻿#Region "Microsoft.VisualBasic::9637ac74287de7d12687186d8b934d93, Library\R.graph\Layouts.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module Layouts
-    ' 
-    '     Function: forceDirect, orthogonalLayout, randomLayout
-    ' 
-    ' /********************************************************************************/
+' Module Layouts
+' 
+'     Function: forceDirect, orthogonalLayout, randomLayout
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -44,6 +44,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.Data.visualize.Network.Layouts
+Imports Microsoft.VisualBasic.Data.visualize.Network.Layouts.ForceDirected
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime
@@ -76,13 +77,57 @@ Module Layouts
     ''' </summary>
     ''' <param name="g">A network graph object.</param>
     ''' <param name="iterations">The number of layout iterations.</param>
+    ''' <returns></returns>
+    <ExportAPI("layout.force_directed")>
+    Public Function forceDirected(g As NetworkGraph,
+                                  Optional ejectFactor As Integer = 6,
+                                  Optional condenseFactor As Integer = 3,
+                                  Optional maxtx As Integer = 4,
+                                  Optional maxty As Integer = 3,
+                                  <RRawVectorArgument> Optional dist As Object = "30,250",
+                                  <RRawVectorArgument> Optional size As Object = "1000,1000",
+                                  Optional iterations As Integer = 200,
+                                  Optional env As Environment = Nothing) As NetworkGraph
+        If g.CheckZero Then
+            env.AddMessage("all of the vertex node in your network graph is in ZERO location, do random layout at first...", MSG_TYPES.WRN)
+            g = g.doRandomLayout
+        End If
+
+        Dim sizeStr = InteropArgumentHelper.getSize(size, "10000,10000")
+        Dim distStr = InteropArgumentHelper.getSize(dist, "30,256")
+        Dim physics As New Planner(
+            g:=g,
+            ejectFactor:=ejectFactor,
+            condenseFactor:=condenseFactor,
+            maxtx:=maxtx,
+            maxty:=maxty,
+            dist_threshold:=distStr,
+            size:=sizeStr
+        )
+
+        For i As Integer = 0 To iterations
+            Call physics.Collide()
+
+            If (100 * i / iterations) Mod 5 = 0 Then
+                Console.WriteLine($"- Completed {i + 1} of {iterations} [{CInt(100 * i / iterations)}%]")
+            End If
+        Next
+
+        Return g
+    End Function
+
+    ''' <summary>
+    ''' Do force directed layout
+    ''' </summary>
+    ''' <param name="g">A network graph object.</param>
+    ''' <param name="iterations">The number of layout iterations.</param>
     ''' <param name="clearScreen">
     ''' Clear of the console screen when display the progress bar.
     ''' </param>
     ''' <returns></returns>
-    <ExportAPI("layout.force_directed")>
+    <ExportAPI("layout.springForce")>
     <RApiReturn(GetType(NetworkGraph))>
-    Public Function forceDirect(g As NetworkGraph,
+    Public Function SpringForce(g As NetworkGraph,
                                 Optional stiffness# = 80,
                                 Optional repulsion# = 4000,
                                 Optional damping# = 0.83,

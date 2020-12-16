@@ -1,15 +1,13 @@
-﻿Imports Microsoft.VisualBasic.Language
+﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
-Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace System.Package.File.Expressions
 
     Public MustInherit Class RExpression
 
-        Public MustOverride Function GetExpression() As Expression
+        Public MustOverride Function GetExpression(desc As DESCRIPTION) As Expression
 
         Public Shared Function CreateFromSymbolExpression(exec As Expression) As RExpression
             If TypeOf exec Is [Imports] Then
@@ -19,16 +17,27 @@ Namespace System.Package.File.Expressions
             ElseIf TypeOf exec Is DeclareNewFunction Then
                 Return RFunction.FromSymbol(exec)
             Else
-                Return New ParserError
+                Return New ParserError($"'{exec.GetType.FullName}' is not implemented!")
             End If
         End Function
     End Class
 
     Public Class ParserError : Inherits RExpression
 
-        Public Property message As String()
+        Public ReadOnly Property message As String()
+        Public Property sourceMap As StackFrame
 
-        Public Overrides Function GetExpression() As Expression
+        Sub New(message As String(), Optional sourceMap As StackFrame = Nothing)
+            Me.message = message
+            Me.sourceMap = sourceMap
+        End Sub
+
+        Sub New(message As String, Optional sourceMap As StackFrame = Nothing)
+            Me.message = {message}
+            Me.sourceMap = sourceMap
+        End Sub
+
+        Public Overrides Function GetExpression(desc As DESCRIPTION) As Expression
             Throw New NotImplementedException()
         End Function
     End Class

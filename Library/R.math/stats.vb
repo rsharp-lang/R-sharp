@@ -300,13 +300,13 @@ Module stats
     ''' <param name="x">evaluate correlation for each row elements</param>
     ''' <returns></returns>
     <ExportAPI("corr")>
-    Public Function corr(x As Rdataframe, Optional spearman As Boolean = False) As DistanceMatrix
+    Public Function corr(x As Rdataframe, Optional spearman As Boolean = False) As CorrelationMatrix
         Dim rows As DataSet() = x.getRowNames _
             .Select(Function(id, index)
                         Return x.dataframeRow(Of Double, DataSet)(id, index)
                     End Function) _
             .ToArray
-        Dim cor As DistanceMatrix = rows.Correlation(spearman)
+        Dim cor As CorrelationMatrix = rows.Correlation(spearman)
 
         Return cor
     End Function

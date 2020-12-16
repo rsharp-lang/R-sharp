@@ -2,7 +2,6 @@
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
-Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace System.Package.File.Expressions
 
@@ -11,7 +10,7 @@ Namespace System.Package.File.Expressions
         Public Property packages As String()
         Public Property [module] As String
 
-        Public Overrides Function GetExpression() As Expression
+        Public Overrides Function GetExpression(desc As DESCRIPTION) As Expression
             Dim names As Expression() = packages _
                 .Select(Function(name) New Literal(name)) _
                 .ToArray
@@ -35,19 +34,19 @@ Namespace System.Package.File.Expressions
 
                 For Each str As Expression In DirectCast([imports].packages, VectorLiteral)
                     If Not TypeOf str Is Literal Then
-                        Return New ParserError
+                        Return New ParserError({"package name should be a string literal!", [imports].ToString})
                     Else
                         packages.Add(DirectCast(str, Literal).value)
                     End If
                 Next
             Else
-                Return New ParserError
+                Return New ParserError({"unsupported expression type for package name!", [imports].ToString})
             End If
 
             If TypeOf [imports].library Is Literal Then
                 [module] = DirectCast([imports].library, Literal).ValueStr
             Else
-                Return New ParserError
+                Return New ParserError({"library module name should be a string literal!", [imports].ToString})
             End If
 
             Return New RImports With {

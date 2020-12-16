@@ -151,7 +151,9 @@ Namespace Runtime.Internal.Object
                 Dim value As Object = slots(name)
                 Dim type As Type = GetType(T)
 
-                If type.IsArray Then
+                If Not value Is Nothing AndAlso value.GetType Is GetType(T) Then
+                    Return value
+                ElseIf type.IsArray Then
                     Return CObj(asVector(value, type.GetElementType, env))
                 Else
                     Return RCType.CTypeDynamic([single](value), GetType(T), env)

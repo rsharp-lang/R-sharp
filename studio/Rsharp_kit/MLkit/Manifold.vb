@@ -49,6 +49,7 @@ Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.DataMining.UMAP
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
 Imports Microsoft.VisualBasic.Imaging.Driver
+Imports Microsoft.VisualBasic.MIME.Markup.HTML.CSS
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime
@@ -71,9 +72,25 @@ Module Manifold
 
     Private Function plot(input As Umap, args As list, env As Environment) As GraphicsData
         Dim size$ = InteropArgumentHelper.getSize(args!size)
+        Dim pointSize# = args.getValue("point_size", env, 15.0)
+        Dim showLabels As Boolean = args.getValue("show_labels", env, False)
+        Dim labels As String() = args.getValue(Of String())("labels", env)
+        Dim labelStyle$ = args.getValue("label_style", env, CSSFont.Win10Normal)
+        Dim labelColor$ = args.getValue("label_color", env, "black")
+        Dim clusters As list = args.getValue(Of list)("clusters", env)
+        Dim bubbleAlpha As Integer = args.getValue("bubble_alpha", env, 0.0) * 255
+        Dim clusterData As Dictionary(Of String, String) = Nothing
+
+        If Not clusters Is Nothing Then
+            clusterData = clusters.slots _
+                .ToDictionary(Function(a) a.Key,
+                              Function(a)
+                                  Return Scripting.ToString([single](a.Value))
+                              End Function)
+        End If
 
         If input.dimension = 2 Then
-            Return input.DrawUmap2D(size:=size)
+            Return input.DrawUmap2D(size:=size, labels:=labels, clusters:=clusterData)
         Else
             Dim camera As Camera = args.getValue(Of Camera)("camera", env)
 
@@ -87,12 +104,20 @@ Module Manifold
                     .fov = 1500,
                     .viewDistance = 500
                 }
+            Else
+                size = $"{camera.screen.Width},{camera.screen.Height}"
             End If
 
             Return input.DrawUmap3D(
                 camera:=camera,
                 size:=size,
-                showLabels:=False
+                showLabels:=showLabels,
+                pointSize:=pointSize,
+                labels:=labels,
+                labelCSS:=labelStyle,
+                clusters:=clusterData,
+                labelColor:=labelColor,
+                bubbleAlpha:=bubbleAlpha
             )
         End If
     End Function
@@ -198,8 +223,8 @@ Module Manifold
         For i As Integer = 0 To nEpochs - 1
             Call umap.Step()
 
-            If i Mod 10 = 0 Then
-                Console.WriteLine($"- Completed {i + 1} of {nEpochs}")
+            If (100 * i / nEpochs) Mod 5 = 0 Then
+                Console.WriteLine($"- Completed {i + 1} of {nEpochs} [{CInt(100 * i / nEpochs)}%]")
             End If
         Next
 

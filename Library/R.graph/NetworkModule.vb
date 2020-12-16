@@ -443,7 +443,13 @@ Public Module NetworkModule
         Call nodes _
             .Select(AddressOf g.GetElementByID) _
             .DoEach(Sub(n)
-                        n.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) = type
+                        ' 如果执行了connected_graph函数
+                        ' 则有些节点会消失
+                        ' GetElementByID返回的是空值
+                        ' 跳过这些空值
+                        If Not n Is Nothing Then
+                            n.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) = type
+                        End If
                     End Sub)
         Return g
     End Function
