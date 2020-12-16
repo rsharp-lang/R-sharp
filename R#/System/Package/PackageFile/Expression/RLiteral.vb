@@ -9,6 +9,10 @@ Namespace System.Package.File.Expressions
         Public Property value As String
         Public Property type As TypeCodes
 
+        Public Overrides Function ToString() As String
+            Return $"({type}) {value}"
+        End Function
+
         Public Overrides Function GetExpression(desc As DESCRIPTION) As Expression
             Select Case type
                 Case TypeCodes.boolean
