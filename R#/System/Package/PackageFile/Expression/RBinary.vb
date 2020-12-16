@@ -10,7 +10,14 @@ Namespace System.Package.File.Expressions
         Public Property right As RExpression
 
         Public Overrides Function GetExpression(desc As DESCRIPTION) As Expression
-            Return New BinaryExpression(left.GetExpression(desc), right.GetExpression(desc), [operator])
+            Dim leftVal = left.GetExpression(desc)
+            Dim rightVal = right.GetExpression(desc)
+
+            If [operator] = "||" Then
+                Return New BinaryOrExpression(leftVal, rightVal)
+            Else
+                Return New BinaryExpression(leftVal, rightVal, [operator])
+            End If
         End Function
 
         Public Shared Function FromBinarySymbol(bin As BinaryExpression) As RExpression
