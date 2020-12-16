@@ -110,7 +110,7 @@ Namespace Interpreter.SyntaxParser
                 If left.isException Then
                     Return left
                 Else
-                    bin.left = left.expression
+                    bin = New BinaryExpression(left.expression, bin.right, bin.operator)
                 End If
 
                 Return New SyntaxResult(bin)
