@@ -87,19 +87,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             End Get
         End Property
 
-        Dim m_parameters As Expression()
-
         ''' <summary>
         ''' The parameters expression that passing to the target invoked function.
         ''' </summary>
         Public Property parameters As Expression()
-            Get
-                Return m_parameters
-            End Get
-            Friend Set(value As Expression())
-                m_parameters = value
-            End Set
-        End Property
 
         ''' <summary>
         ''' Use for create pipeline calls from identifier target
