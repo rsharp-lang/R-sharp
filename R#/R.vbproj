@@ -812,6 +812,7 @@
     <Compile Include="System\Document\UnixManPagePrinter.vb" />
     <Compile Include="System\Package\Database\LocalPackageDatabase.vb" />
     <Compile Include="System\Package\Database\PackageLoaderEntry.vb" />
+    <Compile Include="System\Package\PackageFile\Expression\RLiteral.vb" />
     <Compile Include="System\Package\PackageFile\Expression\RCallFunction.vb" />
     <Compile Include="System\Package\PackageFile\Expression\RUnary.vb" />
     <Compile Include="System\Package\PackageFile\Expression\RBinary.vb" />

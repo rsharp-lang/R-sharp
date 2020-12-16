@@ -2,6 +2,7 @@
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
 Namespace System.Package.File.Expressions
 
@@ -18,6 +19,8 @@ Namespace System.Package.File.Expressions
                 Return RFunction.FromSymbol(exec)
             ElseIf TypeOf exec Is FunctionInvoke Then
                 Return RCallFunction.FromSymbol(exec)
+            ElseIf TypeOf exec Is Literal Then
+                Return RLiteral.FromLiteral(exec)
             Else
                 Return New ParserError($"'{exec.GetType.FullName}' is not implemented!")
             End If
