@@ -30,10 +30,21 @@ Namespace System.Package.File.Expressions
             Dim params As RExpression() = symbol.params _
                 .Select(AddressOf RSymbol.GetSymbol) _
                 .ToArray
+            Dim bodyLines As New List(Of RExpression)
 
-            For Each item In params
+            For Each item As RExpression In params
                 If TypeOf item Is ParserError Then
                     Return item
+                End If
+            Next
+
+            For Each exec As Expression In symbol.body.EnumerateCodeLines
+                Dim line As RExpression = RExpression.CreateFromSymbolExpression(exec)
+
+                If TypeOf line Is ParserError Then
+                    Return line
+                Else
+                    bodyLines.Add(line)
                 End If
             Next
 
@@ -43,10 +54,7 @@ Namespace System.Package.File.Expressions
                     .Select(Function(a) DirectCast(a, RSymbol)) _
                     .ToArray,
                 .sourceMap = symbol.stackFrame,
-                .body = symbol.body _
-                    .EnumerateCodeLines _
-                    .Select(Function(exec) RExpression.CreateFromSymbolExpression(exec)) _
-                    .ToArray
+                .body = bodyLines.ToArray
             }
         End Function
     End Class

@@ -23,5 +23,16 @@ Namespace System.Package.File.Expressions
                 .[namespace] = [namespace]
             }
         End Function
+
+        Public Shared Function FromSymbol(calls As FunctionInvoke) As RExpression
+            Return New RCallFunction With {
+                .[namespace] = calls.namespace,
+                .parameters = calls.parameters _
+                    .Select(Function(a) RFunction.CreateFromSymbolExpression(a)) _
+                    .ToArray,
+                .sourceMap = calls.stackFrame,
+                .target = RExpression.CreateFromSymbolExpression(calls.funcName)
+            }
+        End Function
     End Class
 End Namespace

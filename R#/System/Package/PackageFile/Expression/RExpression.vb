@@ -16,6 +16,8 @@ Namespace System.Package.File.Expressions
                 Return RImports.GetRImports(DirectCast(exec, Require))
             ElseIf TypeOf exec Is DeclareNewFunction Then
                 Return RFunction.FromSymbol(exec)
+            ElseIf TypeOf exec Is FunctionInvoke Then
+                Return RCallFunction.FromSymbol(exec)
             Else
                 Return New ParserError($"'{exec.GetType.FullName}' is not implemented!")
             End If
