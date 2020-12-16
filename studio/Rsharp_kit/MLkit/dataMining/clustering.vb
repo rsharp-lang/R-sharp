@@ -201,7 +201,7 @@ Module clustering
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("kmeans")>
-    <RApiReturn(GetType(EntityClusterModel()))>
+    <RApiReturn(GetType(EntityClusterModel))>
     Public Function Kmeans(<RRawVectorArgument>
                            dataset As Object,
                            Optional centers% = 3,
@@ -441,17 +441,35 @@ Module clustering
         Return node
     End Function
 
+    ''' <summary>
+    ''' ### get cluster result data
+    ''' 
+    ''' </summary>
+    ''' <param name="data"></param>
+    ''' <param name="labels"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("cluster.groups")>
     <RApiReturn(GetType(String), GetType(list))>
     Public Function clusterGroups(<RRawVectorArgument> data As Object,
                                   <RRawVectorArgument>
                                   Optional labels As Object = Nothing,
+                                  Optional labelclass_tuple As Boolean = False,
                                   Optional env As Environment = Nothing) As Object
 
         Dim rawInputs As pipeline = pipeline.TryCreatePipeline(Of EntityClusterModel)(data, env)
 
         If rawInputs.isError Then
             Return rawInputs.getError
+        ElseIf labelclass_tuple Then
+            Return New list With {
+                .slots = rawInputs _
+                    .populates(Of EntityClusterModel)(env) _
+                    .ToDictionary(Function(a) a.ID,
+                                  Function(a)
+                                      Return CObj(a.Cluster)
+                                  End Function)
+            }
         End If
 
         Dim labelList As String() = REnv.asVector(Of String)(labels)
