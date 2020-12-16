@@ -15,6 +15,12 @@ Namespace System.Package.File.Expressions
 
             If [operator] = "||" Then
                 Return New BinaryOrExpression(leftVal, rightVal)
+            ElseIf [operator] = "in" Then
+                Return New BinaryInExpression(leftVal, rightVal)
+            ElseIf [operator] = "between" Then
+                Return New BinaryBetweenExpression(leftVal, rightVal)
+            ElseIf [operator] = "<<" Then
+                Return New AppendOperator(leftVal, rightVal)
             Else
                 Return New BinaryExpression(leftVal, rightVal, [operator])
             End If
