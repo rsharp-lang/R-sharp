@@ -2,6 +2,7 @@
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
 Namespace System.Package.File.Expressions
 
@@ -56,7 +57,15 @@ Namespace System.Package.File.Expressions
         End Function
 
         Public Shared Function GetRImports(require As Require) As RExpression
+            Dim packages As New List(Of String)
 
+            For Each pkgName As Expression In require.packages
+                packages.Add(ValueAssign.GetSymbol(pkgName))
+            Next
+
+            Return New RImports With {
+                .packages = packages.ToArray
+            }
         End Function
     End Class
 End Namespace
