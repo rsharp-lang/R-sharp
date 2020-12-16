@@ -69,6 +69,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             End Get
         End Property
 
+        Public ReadOnly Property isTuple As Boolean
+            Get
+                Return Not names.IsNullOrEmpty AndAlso names.Length > 1
+            End Get
+        End Property
+
         ''' <summary>
         ''' 初始值
         ''' </summary>
