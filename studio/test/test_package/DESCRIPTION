@@ -1,0 +1,11 @@
+Package: LipidSearch
+Type: Package
+Title: Data Visualization package for lipidsearch analysis result
+Version: 1.0.0.1254
+Date: 2020-12-15
+Author: xieguigang
+Maintainer: xieguigang <gg.xie@bionovogene.com>
+Description: A in-house data visualization package for create 
+    lipidsearch analysis report.
+License: bionovogene
+RoxygenNote: 7.1.1
