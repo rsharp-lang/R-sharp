@@ -54,8 +54,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
         Public Overrides ReadOnly Property type As TypeCodes
 
-        Friend left, right As Expression
-        Dim [operator] As String
+        Friend ReadOnly left, right As Expression
+        Friend ReadOnly [operator] As String
 
         Sub New(left As Expression, right As Expression, op$)
             Me.left = left
