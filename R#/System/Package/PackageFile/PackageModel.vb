@@ -64,7 +64,7 @@ Namespace System.Package.File
         Public Sub Flush(outfile As Stream)
             Using zip As New ZipArchive(outfile, ZipArchiveMode.Create)
                 Using file As New StreamWriter(zip.CreateEntry("index.json").Open)
-                    Call file.WriteLine(info.GetJson)
+                    Call file.WriteLine(info.GetJson(indent:=True))
                     Call file.Flush()
                 End Using
 
@@ -72,29 +72,19 @@ Namespace System.Package.File
                 Dim scriptJSON As String
                 Dim onLoad As RFunction
 
-                Static RExpression As Type() = {
-                    GetType(RLiteral),
-                    GetType(RImports),
-                    GetType(RCallFunction),
-                    GetType(RFunction),
-                    GetType(RSymbol),
-                    GetType(RBinary),
-                    GetType(RUnary)
-                }
-
                 For Each symbol As NamedValue(Of RExpression) In Me.symbols.Select(Function(t) New NamedValue(Of RExpression)(t.Key, t.Value))
                     If symbol.Name = ".onLoad" Then
                         onLoad = symbol.Value
 
                         Using file As New StreamWriter(zip.CreateEntry(".onload.json").Open)
-                            scriptJSON = onLoad.GetJson(knownTypes:=RExpression)
+                            scriptJSON = onLoad.GetJson()
 
                             Call file.WriteLine(scriptJSON)
                             Call file.Flush()
                         End Using
                     Else
-                        Using file As New StreamWriter(zip.CreateEntry(symbol.Name).Open)
-                            scriptJSON = symbol.Value.GetJson(knownTypes:=RExpression)
+                        Using file As New StreamWriter(zip.CreateEntry($"src/{symbol.Name}").Open)
+                            scriptJSON = CType(symbol.Value, JSONNode).GetJson()
 
                             Call file.WriteLine(scriptJSON)
                             Call file.Flush()
@@ -105,12 +95,12 @@ Namespace System.Package.File
                 Next
 
                 Using file As New StreamWriter(zip.CreateEntry("dependency.json").Open)
-                    Call file.WriteLine(loading.GetJson)
+                    Call file.WriteLine(loading.GetJson(indent:=True))
                     Call file.Flush()
                 End Using
 
                 Using file As New StreamWriter(zip.CreateEntry("symbols.json").Open)
-                    Call file.WriteLine(symbols.ToArray.GetJson)
+                    Call file.WriteLine(symbols.ToArray.GetJson(indent:=True))
                     Call file.Flush()
                 End Using
             End Using

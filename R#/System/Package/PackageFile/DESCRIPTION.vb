@@ -68,7 +68,7 @@ Namespace System.Package.File
         Public Property Maintainer As String
         Public Property Description As String
         Public Property License As String
-        Public Property MetaData As Dictionary(Of String, String)
+        Public Property meta As Dictionary(Of String, String)
 
         Public Overrides Function ToString() As String
             Return $"[{Package}_{Version}] {Title}"
@@ -76,7 +76,7 @@ Namespace System.Package.File
 
         Public Shared Function Parse(file As String) As DESCRIPTION
             Dim lines As String() = file.SolveListStream.ToArray
-            Dim meta As New DESCRIPTION With {.MetaData = New Dictionary(Of String, String)}
+            Dim meta As New DESCRIPTION With {.meta = New Dictionary(Of String, String)}
             Dim lastTag As String = Nothing
             Dim tag As NamedValue(Of String)
             Dim continuteLine As String
@@ -93,8 +93,8 @@ Namespace System.Package.File
                 If tag.Name.StringEmpty Then
                     If lastTag.StringEmpty Then
                         Throw New SyntaxErrorException("invalid content format of the 'DESCRIPTION' meta data file!")
-                    ElseIf meta.MetaData.ContainsKey(lastTag) Then
-                        continuteLine = meta.MetaData(lastTag) & vbCrLf & line
+                    ElseIf meta.meta.ContainsKey(lastTag) Then
+                        continuteLine = meta.meta(lastTag) & vbCrLf & line
                         writer(lastTag).SetValue(meta, continuteLine)
                     Else
                         continuteLine = Scripting.ToString(writer(lastTag).GetValue(meta)) & vbCrLf & line
@@ -102,7 +102,7 @@ Namespace System.Package.File
                     End If
                 ElseIf Not writer.ContainsKey(tag.Name.ToUpper) Then
                     lastTag = tag.Name
-                    meta.MetaData(lastTag) = tag.Value
+                    meta.meta(lastTag) = tag.Value
                 Else
                     lastTag = tag.Name.ToUpper
                     writer(lastTag).SetValue(meta, tag.Value)

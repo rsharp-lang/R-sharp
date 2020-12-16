@@ -6,9 +6,9 @@ Namespace System.Package.File.Expressions
 
     Public Class RCallFunction : Inherits RExpression
 
-        Public Property target As RExpression
+        Public Property target As JSONNode
         Public Property sourceMap As StackFrame
-        Public Property parameters As RExpression()
+        Public Property parameters As JSONNode()
         Public Property [namespace] As String
 
         Public Overrides Function GetExpression(desc As DESCRIPTION) As Expression
@@ -28,7 +28,7 @@ Namespace System.Package.File.Expressions
             Return New RCallFunction With {
                 .[namespace] = calls.namespace,
                 .parameters = calls.parameters _
-                    .Select(Function(a) RFunction.CreateFromSymbolExpression(a)) _
+                    .Select(Function(a) CType(RFunction.CreateFromSymbolExpression(a), JSONNode)) _
                     .ToArray,
                 .sourceMap = calls.stackFrame,
                 .target = RExpression.CreateFromSymbolExpression(calls.funcName)

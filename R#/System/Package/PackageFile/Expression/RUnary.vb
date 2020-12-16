@@ -6,7 +6,7 @@ Namespace System.Package.File.Expressions
     Public Class RUnary : Inherits RExpression
 
         Public Property [operator] As String
-        Public Property expression As RExpression
+        Public Property expression As JSONNode
 
         Public Sub New()
         End Sub

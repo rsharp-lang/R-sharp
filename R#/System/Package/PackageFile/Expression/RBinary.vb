@@ -6,8 +6,8 @@ Namespace System.Package.File.Expressions
     Public Class RBinary : Inherits RExpression
 
         Public Property [operator] As String
-        Public Property left As RExpression
-        Public Property right As RExpression
+        Public Property left As JSONNode
+        Public Property right As JSONNode
 
         Public Overrides Function GetExpression(desc As DESCRIPTION) As Expression
             Dim leftVal = left.GetExpression(desc)

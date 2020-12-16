@@ -21,6 +21,8 @@ Namespace System.Package.File.Expressions
                 Return RCallFunction.FromSymbol(exec)
             ElseIf TypeOf exec Is Literal Then
                 Return RLiteral.FromLiteral(exec)
+            ElseIf TypeOf exec Is VectorLiteral Then
+                Return RVector.FromVector(exec)
             Else
                 Return New ParserError($"'{exec.GetType.FullName}' is not implemented!")
             End If

@@ -10,7 +10,7 @@ Namespace System.Package.File.Expressions
 
         Public Property name As String Implements INamedValue.Key
         Public Property type As TypeCodes
-        Public Property value As RExpression
+        Public Property value As JSONNode
         Public Property [readonly] As Boolean
 
         Public Overrides Function GetExpression(desc As DESCRIPTION) As Expression

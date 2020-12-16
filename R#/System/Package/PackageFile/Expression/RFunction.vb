@@ -10,7 +10,7 @@ Namespace System.Package.File.Expressions
 
         Public Property name As String Implements INamedValue.Key
         Public Property parameters As RSymbol()
-        Public Property body As RExpression()
+        Public Property body As JSONNode()
         Public Property sourceMap As StackFrame
 
         Public Overrides Function GetExpression(desc As DESCRIPTION) As Expression
@@ -30,7 +30,7 @@ Namespace System.Package.File.Expressions
             Dim params As RExpression() = symbol.params _
                 .Select(AddressOf RSymbol.GetSymbol) _
                 .ToArray
-            Dim bodyLines As New List(Of RExpression)
+            Dim bodyLines As New List(Of JSONNode)
 
             For Each item As RExpression In params
                 If TypeOf item Is ParserError Then
