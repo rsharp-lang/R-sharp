@@ -825,6 +825,8 @@
     <Compile Include="System\Package\PackageFile\PackageModel.vb" />
     <Compile Include="System\Package\PackageFile\DESCRIPTION.vb" />
     <Compile Include="System\Package\PackageFile\CreatePackage.vb" />
+    <Compile Include="System\Package\PackageFile\Serialization\ExpressionTypes.vb" />
+    <Compile Include="System\Package\PackageFile\Serialization\Writer.vb" />
     <Compile Include="System\Package\zzz.vb" />
     <Compile Include="System\Package\PackageManager.vb" />
     <Compile Include="System\Package\Package.vb" />
