@@ -69,15 +69,45 @@ Namespace System.Package.File
                 End Using
 
                 Dim symbols As New List(Of String)
+                Dim scriptJSON As String
+                Dim onLoad As RFunction
+
+                Static RExpression As Type() = {
+                    GetType(RLiteral),
+                    GetType(RImports),
+                    GetType(RCallFunction),
+                    GetType(RFunction),
+                    GetType(RSymbol),
+                    GetType(RBinary),
+                    GetType(RUnary)
+                }
 
                 For Each symbol As NamedValue(Of RExpression) In Me.symbols.Select(Function(t) New NamedValue(Of RExpression)(t.Key, t.Value))
-                    Using file As New StreamWriter(zip.CreateEntry(symbol.Name).Open)
-                        Call file.WriteLine(symbol.Value.GetJson)
-                        Call file.Flush()
-                    End Using
+                    If symbol.Name = ".onLoad" Then
+                        onLoad = symbol.Value
 
-                    Call symbols.Add(symbol.Name)
+                        Using file As New StreamWriter(zip.CreateEntry(".onload.json").Open)
+                            scriptJSON = onLoad.GetJson(knownTypes:=RExpression)
+
+                            Call file.WriteLine(scriptJSON)
+                            Call file.Flush()
+                        End Using
+                    Else
+                        Using file As New StreamWriter(zip.CreateEntry(symbol.Name).Open)
+                            scriptJSON = symbol.Value.GetJson(knownTypes:=RExpression)
+
+                            Call file.WriteLine(scriptJSON)
+                            Call file.Flush()
+                        End Using
+
+                        Call symbols.Add(symbol.Name)
+                    End If
                 Next
+
+                Using file As New StreamWriter(zip.CreateEntry("dependency.json").Open)
+                    Call file.WriteLine(loading.GetJson)
+                    Call file.Flush()
+                End Using
 
                 Using file As New StreamWriter(zip.CreateEntry("symbols.json").Open)
                     Call file.WriteLine(symbols.ToArray.GetJson)

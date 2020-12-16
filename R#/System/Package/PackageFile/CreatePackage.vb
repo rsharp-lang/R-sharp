@@ -100,7 +100,8 @@ Namespace System.Package.File
                 End If
             Next
 
-            Call file.Flush(outfile)
+            file.loading = loading.ToArray
+            file.Flush(outfile)
 
             Return Nothing
         End Function
