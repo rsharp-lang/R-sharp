@@ -58,8 +58,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
 
         Public Property packages As Expression()
 
-        Sub New(names As Expression())
-            packages = names
+        Sub New(names As IEnumerable(Of Expression))
+            packages = names.ToArray
         End Sub
 
         ''' <summary>

@@ -1,0 +1,10 @@
+[{
+    "library": "visualkit",
+    "packages": ["visualPlot"]
+  },{
+    "library": "phenotype_kit",
+    "packages": ["geneExpression"]
+  },{
+    "library": "MLkit",
+    "packages": ["dataset","umap","clustering"]
+  }]

@@ -53,7 +53,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
         Public Overrides ReadOnly Property type As TypeCodes
 
-        ReadOnly left, right As Expression
+        Friend ReadOnly left, right As Expression
 
         Sub New(a As Expression, b As Expression)
             left = a

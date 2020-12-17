@@ -201,7 +201,7 @@ Module clustering
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("kmeans")>
-    <RApiReturn(GetType(EntityClusterModel()))>
+    <RApiReturn(GetType(EntityClusterModel))>
     Public Function Kmeans(<RRawVectorArgument>
                            dataset As Object,
                            Optional centers% = 3,
@@ -320,6 +320,22 @@ Module clustering
         Return cluster
     End Function
 
+    <Extension>
+    Private Function ensureNotIsDistance(d As DistanceMatrix) As DistanceMatrix
+        Dim distRows As Double()() = d.PopulateRows.Select(Function(a) a.ToArray).ToArray
+        Dim names As String() = d.keys
+        Dim q As Double() = distRows.IteratesALL.QuantileLevels(fast:=distRows.Length >= 200)
+
+        distRows = q _
+            .Split(names.Length) _
+            .Select(Function(v)
+                        Return v.Select(Function(a) 1 - a).ToArray
+                    End Function) _
+            .ToArray
+
+        Return New DistanceMatrix(names.Indexing, distRows, False)
+    End Function
+
     ''' <summary>
     ''' do btree clustering
     ''' </summary>
@@ -330,35 +346,35 @@ Module clustering
     ''' <returns></returns>
     <ExportAPI("btree")>
     <RApiReturn(GetType(BTreeCluster), GetType(Cluster))>
-    Public Function btreeClusterFUN(d As DistanceMatrix,
+    Public Function btreeClusterFUN(<RRawVectorArgument> d As Object,
                                     Optional equals As Double = 0.9,
                                     Optional gt As Double = 0.7,
                                     Optional hclust As Boolean = False,
                                     Optional env As Environment = Nothing) As Object
+        Dim cluster As BTreeCluster
+
         If d Is Nothing Then
             Return Internal.debug.stop(New NullReferenceException("the given distance matrix object can not be nothing!"), env)
         End If
 
-        If d.is_dist Then
-            Dim distRows As Double()() = d.PopulateRows.Select(Function(a) a.ToArray).ToArray
-            Dim names As String() = d.keys
-            Dim q As Double() = distRows.IteratesALL.QuantileLevels(fast:=distRows.Length >= 200)
+        If TypeOf d Is DistanceMatrix Then
+            cluster = DirectCast(d, DistanceMatrix).ensureNotIsDistance.BTreeCluster(equals, gt)
+        Else
+            Dim data As pipeline = pipeline.TryCreatePipeline(Of DataSet)(d, env)
 
-            distRows = q _
-                .Split(names.Length) _
-                .Select(Function(v)
-                            Return v.Select(Function(a) 1 - a).ToArray
-                        End Function) _
-                .ToArray
-            d = New DistanceMatrix(names.Indexing, distRows, False)
+            If data.isError Then
+                Return data.getError
+            Else
+                cluster = data _
+                    .populates(Of DataSet)(env) _
+                    .BTreeCluster(equals, gt)
+            End If
         End If
-
-        Dim cluster As BTreeCluster = d.BTreeCluster(equals, gt)
 
         If hclust Then
             Return cluster.ToHClust
         Else
-            Return cluster
+            Return Cluster
         End If
     End Function
 
@@ -425,17 +441,35 @@ Module clustering
         Return node
     End Function
 
+    ''' <summary>
+    ''' ### get cluster result data
+    ''' 
+    ''' </summary>
+    ''' <param name="data"></param>
+    ''' <param name="labels"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("cluster.groups")>
     <RApiReturn(GetType(String), GetType(list))>
     Public Function clusterGroups(<RRawVectorArgument> data As Object,
                                   <RRawVectorArgument>
                                   Optional labels As Object = Nothing,
+                                  Optional labelclass_tuple As Boolean = False,
                                   Optional env As Environment = Nothing) As Object
 
         Dim rawInputs As pipeline = pipeline.TryCreatePipeline(Of EntityClusterModel)(data, env)
 
         If rawInputs.isError Then
             Return rawInputs.getError
+        ElseIf labelclass_tuple Then
+            Return New list With {
+                .slots = rawInputs _
+                    .populates(Of EntityClusterModel)(env) _
+                    .ToDictionary(Function(a) a.ID,
+                                  Function(a)
+                                      Return CObj(a.Cluster)
+                                  End Function)
+            }
         End If
 
         Dim labelList As String() = REnv.asVector(Of String)(labels)

@@ -86,7 +86,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
 
         Public ReadOnly Property scriptSource As String
 
-        Sub New(packages As Expression, library As Expression, source$)
+        Sub New(packages As Expression, library As Expression, Optional source$ = Nothing)
             Me.packages = packages
             Me.library = library
             Me.scriptSource = source

@@ -78,6 +78,8 @@ Namespace Interpreter.SyntaxParser
             Return result
         End Function
 
+        Public Const R_runtime As String = "SMRUCC/R#_runtime"
+
         Public Function GetStackTrace(token As Token, Optional name$ = Nothing) As StackFrame
             Return New StackFrame With {
                 .File = source.fileName,
@@ -85,7 +87,7 @@ Namespace Interpreter.SyntaxParser
                 .Method = New Method With {
                     .Method = If(name, token.text),
                     .[Module] = "n/a",
-                    .[Namespace] = "SMRUCC/R#"
+                    .[Namespace] = R_runtime
                 }
             }
         End Function

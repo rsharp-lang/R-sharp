@@ -40,7 +40,6 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine
-Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.System.Configuration
@@ -48,7 +47,7 @@ Imports SMRUCC.Rsharp.System.Configuration
 Module Program
 
     Public Function Main() As Integer
-        Return GetType(Program).RunCLI(App.CommandLine, executeFile:=AddressOf Run)
+        Return GetType(CLI).RunCLI(App.CommandLine, executeFile:=AddressOf Run)
     End Function
 
     Private Function Run(filepath$, args As CommandLine) As Integer
@@ -78,10 +77,5 @@ Module Program
         Else
             Return 0
         End If
-    End Function
-
-    <ExportAPI("/compile")>
-    Public Function Compile(args As CommandLine) As Integer
-
     End Function
 End Module

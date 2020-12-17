@@ -1,0 +1,15 @@
+{
+  "Author": "xieguigang",
+  "Date": "2020-12-15",
+  "Description": "A in-house data visualization package for create\r\n    lipidsearch analysis report.",
+  "License": "bionovogene",
+  "Maintainer": "xieguigang <gg.xie@bionovogene.com>",
+  "Package": "LipidSearch",
+  "Title": "Data Visualization package for lipidsearch analysis result",
+  "Type": "Package",
+  "Version": "1.0.0.1254",
+  "meta": {
+    "RoxygenNote": "7.1.1",
+    "BuiltTime": "2020\/12\/17 14:49:41"
+  }
+}

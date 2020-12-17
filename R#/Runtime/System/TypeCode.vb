@@ -48,7 +48,7 @@
 Namespace Runtime.Components
 
     ''' <summary>
-    ''' The R# types
+    ''' The R# types (byte)
     ''' </summary>
     Public Enum TypeCodes As Byte
 

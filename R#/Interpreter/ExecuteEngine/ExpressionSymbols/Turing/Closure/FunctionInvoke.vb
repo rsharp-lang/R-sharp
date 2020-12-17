@@ -87,19 +87,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             End Get
         End Property
 
-        Dim m_parameters As Expression()
-
         ''' <summary>
         ''' The parameters expression that passing to the target invoked function.
         ''' </summary>
         Public Property parameters As Expression()
-            Get
-                Return m_parameters
-            End Get
-            Friend Set(value As Expression())
-                m_parameters = value
-            End Set
-        End Property
 
         ''' <summary>
         ''' Use for create pipeline calls from identifier target
@@ -130,7 +121,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         End Function
 
         Public Overrides Function ToString() As String
-            If [namespace].StringEmpty Then
+            If [namespace].StringEmpty OrElse [namespace] = "n/a" Then
                 Return $"Call {funcName}({parameters.JoinBy(", ")})"
             Else
                 Return $"Call {[namespace]}::{funcName}({parameters.JoinBy(", ")})"
@@ -215,7 +206,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             ' 系统环境下的函数符号
             Dim funcVar As Object
 
-            If Not [namespace].StringEmpty Then
+            If (Not [namespace].StringEmpty) AndAlso (Not [namespace] = "n/a") Then
                 Return NamespaceFunctionSymbolReference.getPackageApiImpl(
                     env:=envir,
                     [namespace]:=[namespace],

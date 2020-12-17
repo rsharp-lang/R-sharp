@@ -110,7 +110,9 @@ Namespace Interpreter.SyntaxParser
                 If left.isException Then
                     Return left
                 Else
-                    bin.left = left.expression
+                    ' 20201216
+                    ' replace left value
+                    bin = New BinaryExpression(left.expression, bin.right, bin.operator)
                 End If
 
                 Return New SyntaxResult(bin)
