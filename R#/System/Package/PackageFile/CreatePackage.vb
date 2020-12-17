@@ -45,6 +45,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
@@ -109,7 +110,7 @@ Namespace System.Package.File
                 End If
             Next
 
-            file.loading = loading.ToArray
+            file.loading = loading.DoCall(AddressOf Dependency.GetDependency).ToArray
             file.Flush(outfile)
 
             Return Nothing

@@ -61,7 +61,7 @@ Namespace System.Package.File
         ''' </summary>
         ''' <returns></returns>
         Public Property symbols As Dictionary(Of String, Expression)
-        Public Property loading As Expression()
+        Public Property loading As Dependency()
 
         Public Sub Flush(outfile As Stream)
             Using zip As New ZipArchive(outfile, ZipArchiveMode.Create)
