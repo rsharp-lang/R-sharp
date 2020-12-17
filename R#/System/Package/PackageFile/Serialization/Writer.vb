@@ -1,8 +1,10 @@
 ﻿Imports System.IO
 Imports System.Text
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.System.Package.File.Expressions
 
@@ -26,6 +28,7 @@ Namespace System.Package.File
         Public ReadOnly Property RLiteral As RLiteral
         Public ReadOnly Property RBinary As RBinary
         Public ReadOnly Property RCallFunction As RCallFunction
+        Public ReadOnly Property RFunction As RFunction
         Public ReadOnly Property RImports As RRequire
         Public ReadOnly Property RUnary As RUnary
         Public ReadOnly Property RVector As RVector
@@ -44,13 +47,20 @@ Namespace System.Package.File
 
         Public Function GetBuffer(x As Expression) As Byte()
             Select Case x.GetType
-                Case GetType(RSymbol) : Return RSymbol.GetBuffer(x)
-                Case GetType(RLiteral) : Return RLiteral.GetBuffer(x)
-                Case GetType(RBinary) : Return RBinary.GetBuffer(x)
-                Case GetType(RCallFunction) : Return RCallFunction.GetBuffer(x)
-                Case GetType(RRequire) : Return RImports.GetBuffer(x)
-                Case GetType(RUnary) : Return RUnary.GetBuffer(x)
-                Case GetType(RVector) : Return RVector.GetBuffer(x)
+                Case GetType(DeclareNewSymbol) : Return RSymbol.GetBuffer(x)
+                Case GetType(DeclareNewFunction) : Return RFunction.GetBuffer(x)
+                Case GetType(Literal) : Return RLiteral.GetBuffer(x)
+                Case GetType(BinaryOrExpression),
+                     GetType(BinaryBetweenExpression),
+                     GetType(BinaryInExpression),
+                     GetType(AppendOperator)
+
+                    Return RBinary.GetBuffer(x)
+
+                Case GetType(FunctionInvoke) : Return RCallFunction.GetBuffer(x)
+                Case GetType(Require), GetType([Imports]) : Return RImports.GetBuffer(x)
+                Case GetType(UnaryNot) : Return RUnary.GetBuffer(x)
+                Case GetType(VectorLiteral) : Return RVector.GetBuffer(x)
                 Case Else
                     Throw New NotImplementedException(x.GetType.FullName)
             End Select
@@ -64,7 +74,7 @@ Namespace System.Package.File
         ''' 函数返回表达式的长度
         ''' </returns>
         Public Function Write(x As Expression) As Integer
-            Dim buffer As Byte() = getBuffer(x)
+            Dim buffer As Byte() = GetBuffer(x)
             Call Me.buffer.Write(buffer)
             Return buffer.Length
         End Function
