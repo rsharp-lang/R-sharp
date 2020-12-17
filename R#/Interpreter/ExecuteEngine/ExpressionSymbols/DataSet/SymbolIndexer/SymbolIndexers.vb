@@ -46,7 +46,7 @@
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
-    Public Enum SymbolIndexers
+    Public Enum SymbolIndexers As Byte
         ''' <summary>
         ''' a[x]
         ''' </summary>
