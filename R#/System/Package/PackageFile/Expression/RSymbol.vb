@@ -77,7 +77,14 @@ Namespace System.Package.File.Expressions
                     Call outfile.Write(CType(0, Byte))
                 Next
 
-                Call outfile.Write(context.GetBuffer(x.value))
+                If x.value Is Nothing Then
+                    Call outfile.Write(0)
+                Else
+                    Dim bytes As Byte() = context.GetBuffer(x.value)
+
+                    Call outfile.Write(bytes.Length)
+                    Call outfile.Write(bytes)
+                End If
 
                 Call outfile.Flush()
                 Call saveSize(outfile)

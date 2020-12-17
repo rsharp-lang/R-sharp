@@ -110,7 +110,8 @@ Namespace System.Package.File
                 Case GetType(BinaryOrExpression),
                      GetType(BinaryBetweenExpression),
                      GetType(BinaryInExpression),
-                     GetType(AppendOperator)
+                     GetType(AppendOperator),
+                     GetType(BinaryExpression)
 
                     Return RBinary.GetBuffer(x)
 
