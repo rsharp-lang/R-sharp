@@ -52,8 +52,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
     Public Class BinaryBetweenExpression : Inherits Expression
 
-        Dim collectionSet As Expression
-        Dim range As Expression
+        ''' <summary>
+        ''' left
+        ''' </summary>
+        Friend ReadOnly collectionSet As Expression
+        ''' <summary>
+        ''' right
+        ''' </summary>
+        Friend ReadOnly range As Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
             Get

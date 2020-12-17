@@ -8,5 +8,7 @@
         SymbolDeclare
         SymbolReference
         Require
+        UnaryNot
+        Binary
     End Enum
 End Namespace

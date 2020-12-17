@@ -16,7 +16,14 @@ Namespace System.Package.File.Expressions
 
         Public Overloads Sub WriteBuffer(ms As MemoryStream, x As UnaryNot)
             Using outfile As New BinaryWriter(ms)
+                Call outfile.Write(CInt(ExpressionTypes.UnaryNot))
+                Call outfile.Write(0)
+                Call outfile.Write(CByte(x.type))
 
+                Call outfile.Write(context.GetBuffer(x.logical))
+
+                Call outfile.Flush()
+                Call saveSize(outfile)
             End Using
         End Sub
 

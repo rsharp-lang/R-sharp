@@ -56,7 +56,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             End Get
         End Property
 
-        ReadOnly logical As Expression
+        Friend ReadOnly logical As Expression
 
         Sub New(logical As Expression)
             Me.logical = logical
