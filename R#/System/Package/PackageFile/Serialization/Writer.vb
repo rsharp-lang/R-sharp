@@ -7,6 +7,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.System.Package.File.Expressions
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 
 Namespace System.Package.File
 
@@ -43,6 +44,7 @@ Namespace System.Package.File
             Me.RImports = New RRequire(Me)
             Me.RUnary = New RUnary(Me)
             Me.RVector = New RVector(Me)
+            Me.RFunction = New RFunction(Me)
         End Sub
 
         Public Function GetBuffer(x As Expression) As Byte()
@@ -77,6 +79,10 @@ Namespace System.Package.File
             Dim buffer As Byte() = GetBuffer(x)
             Call Me.buffer.Write(buffer)
             Return buffer.Length
+        End Function
+
+        Public Shared Function GetBuffer(sourceMap As StackFrame) As Byte()
+
         End Function
 
         Protected Overridable Sub Dispose(disposing As Boolean)
