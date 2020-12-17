@@ -813,6 +813,7 @@
     <Compile Include="System\Package\Database\LocalPackageDatabase.vb" />
     <Compile Include="System\Package\Database\PackageLoaderEntry.vb" />
     <Compile Include="System\Package\PackageFile\Dependency.vb" />
+    <Compile Include="System\Package\PackageFile\Expression\RStringInterpolation.vb" />
     <Compile Include="System\Package\PackageFile\Expression\RSymbolReference.vb" />
     <Compile Include="System\Package\PackageFile\Expression\RVector.vb" />
     <Compile Include="System\Package\PackageFile\Expression\RLiteral.vb" />

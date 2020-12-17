@@ -84,6 +84,7 @@ Namespace System.Package.File
         Public ReadOnly Property RImports As RRequire
         Public ReadOnly Property RUnary As RUnary
         Public ReadOnly Property RVector As RVector
+        Public ReadOnly Property RString As RStringInterpolation
 
         Sub New(buffer As Stream)
             Me.buffer = New BinaryWriter(buffer)
@@ -100,6 +101,7 @@ Namespace System.Package.File
             Me.RVector = New RVector(Me)
             Me.RFunction = New RFunction(Me)
             Me.RSymbolRef = New RSymbolReference(Me)
+            Me.RString = New RStringInterpolation(Me)
         End Sub
 
         Public Function GetBuffer(x As Expression) As Byte()
@@ -107,6 +109,7 @@ Namespace System.Package.File
                 Case GetType(DeclareNewSymbol) : Return RSymbol.GetBuffer(x)
                 Case GetType(DeclareNewFunction) : Return RFunction.GetBuffer(x)
                 Case GetType(Literal) : Return RLiteral.GetBuffer(x)
+                Case GetType(StringInterpolation) : Return RString.GetBuffer(x)
                 Case GetType(BinaryOrExpression),
                      GetType(BinaryBetweenExpression),
                      GetType(BinaryInExpression),

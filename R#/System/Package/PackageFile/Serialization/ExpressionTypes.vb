@@ -50,6 +50,7 @@ Namespace System.Package.File
     Public Enum ExpressionTypes As Integer
         Literal
         VectorLiteral
+        StringInterpolation
         FunctionCall
         FunctionDeclare
         SymbolDeclare
