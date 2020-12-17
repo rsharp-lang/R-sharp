@@ -8,6 +8,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.System.Package.File.Expressions
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.SecurityString
 
 Namespace System.Package.File
 
@@ -81,10 +82,13 @@ Namespace System.Package.File
         ''' <returns>
         ''' 函数返回表达式的长度
         ''' </returns>
-        Public Function Write(x As Expression) As Integer
+        Public Function Write(x As Expression) As String
             Dim buffer As Byte() = GetBuffer(x)
+            Dim md5 As New Md5HashProvider
+
             Call Me.buffer.Write(buffer)
-            Return buffer.Length
+
+            Return md5.GetMd5Hash(buffer)
         End Function
 
         Public Shared Function GetBuffer(sourceMap As StackFrame) As Byte()

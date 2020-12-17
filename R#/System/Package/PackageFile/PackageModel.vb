@@ -45,6 +45,7 @@
 Imports System.IO
 Imports System.IO.Compression
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.SecurityString
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
@@ -68,11 +69,18 @@ Namespace System.Package.File
         Public Property assembly As String()
 
         Public Sub Flush(outfile As Stream)
+            Dim checksum As String = ""
+            Dim md5 As New Md5HashProvider
+            Dim text As String
+
             Using zip As New ZipArchive(outfile, ZipArchiveMode.Create)
                 info.meta("BuiltTime") = Now.ToString
 
                 Using file As New StreamWriter(zip.CreateEntry("index.json").Open)
-                    Call file.WriteLine(info.GetJson(indent:=True))
+                    text = info.GetJson(indent:=True)
+                    checksum = checksum & md5.GetMd5Hash(text)
+
+                    Call file.WriteLine(text)
                     Call file.Flush()
                 End Using
 
@@ -84,13 +92,13 @@ Namespace System.Package.File
                         onLoad = symbol.Value
 
                         Using file As New Writer(zip.CreateEntry(".onload").Open)
-                            Call file.Write(onLoad)
+                            checksum = checksum & file.Write(onLoad)
                         End Using
                     Else
                         Dim symbolRef As String = symbol.Name.MD5
 
                         Using file As New Writer(zip.CreateEntry($"src/{symbolRef}").Open)
-                            Call file.Write(symbol.Value)
+                            checksum = checksum & file.Write(symbol.Value)
                         End Using
 
                         Call symbols.Add(symbol.Name, symbolRef)
@@ -98,29 +106,48 @@ Namespace System.Package.File
                 Next
 
                 Using file As New StreamWriter(zip.CreateEntry("assembly.json").Open)
-                    Call file.WriteLine(assembly.Select(AddressOf FileName).GetJson(indent:=True))
+                    text = assembly.Select(AddressOf FileName).GetJson(indent:=True)
+                    checksum = checksum & md5.GetMd5Hash(text)
+
+                    Call file.WriteLine(text)
                     Call file.Flush()
                 End Using
 
                 Using file As New StreamWriter(zip.CreateEntry("assembly/readme.txt").Open)
-                    Call file.WriteLine(".NET assembly files")
+                    text = ".NET assembly files"
+                    checksum = checksum & md5.GetMd5Hash(text)
+
+                    Call file.WriteLine(text)
                     Call file.Flush()
                 End Using
 
                 For Each dll As String In assembly
                     Using file As New BinaryWriter(zip.CreateEntry($"assembly/{dll.FileName}").Open)
+                        checksum = checksum & md5.GetMd5Hash(dll.ReadBinary)
+
                         Call file.Write(dll.ReadBinary)
                         Call file.Flush()
                     End Using
                 Next
 
                 Using file As New StreamWriter(zip.CreateEntry("dependency.json").Open)
-                    Call file.WriteLine(loading.GetJson(indent:=True))
+                    text = loading.GetJson(indent:=True)
+                    checksum = checksum & md5.GetMd5Hash(text)
+
+                    Call file.WriteLine(text)
                     Call file.Flush()
                 End Using
 
                 Using file As New StreamWriter(zip.CreateEntry("symbols.json").Open)
-                    Call file.WriteLine(symbols.GetJson(indent:=True))
+                    text = symbols.GetJson(indent:=True)
+                    checksum = checksum & md5.GetMd5Hash(text)
+
+                    Call file.WriteLine(text)
+                    Call file.Flush()
+                End Using
+
+                Using file As New StreamWriter(zip.CreateEntry("CHECKSUM").Open)
+                    Call file.WriteLine(md5.GetMd5Hash(checksum).ToUpper)
                     Call file.Flush()
                 End Using
             End Using
