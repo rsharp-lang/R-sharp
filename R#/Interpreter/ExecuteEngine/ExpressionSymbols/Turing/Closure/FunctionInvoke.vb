@@ -215,12 +215,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             End If
 
             If TypeOf funcName Is Literal Then
-                Dim symbol As Object = envir.FindSymbol(DirectCast(funcName, Literal).ValueStr)?.value
+                Dim symbol As Symbol = envir.FindFunction(DirectCast(funcName, Literal).ValueStr)
 
                 If symbol Is Nothing Then
                     funcVar = Nothing
                 Else
-                    funcVar = symbol
+                    funcVar = symbol.value
                 End If
             Else
                 funcVar = funcName.Evaluate(envir)

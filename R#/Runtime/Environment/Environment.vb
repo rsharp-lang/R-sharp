@@ -91,6 +91,12 @@ Namespace Runtime
         Public ReadOnly Property symbols As Dictionary(Of Symbol)
 
         ''' <summary>
+        ''' 导入的函数列表
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property funcSymbols As Dictionary(Of Symbol)
+
+        ''' <summary>
         ''' 主要是存储警告消息
         ''' </summary>
         ''' <returns></returns>
@@ -256,6 +262,33 @@ Namespace Runtime
                 Return symbols(name)
             ElseIf [inherits] AndAlso Not parent Is Nothing Then
                 Return parent.FindSymbol(name)
+            Else
+                Return Nothing
+            End If
+        End Function
+
+        ''' <summary>
+        ''' 会首先在当前环境中的符号列表查找函数，如果不是函数则会在当前环境的函数列表中查找
+        ''' 如果当前环境中不存在，则会在父环境中查找符号
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <param name="[inherits]"></param>
+        ''' <returns></returns>
+        Public Function FindFunction(name As String, Optional [inherits] As Boolean = True) As Symbol
+            If (name.First = "["c AndAlso name.Last = "]"c) Then
+                Return globalEnvironment.FindFunction(name.GetStackValue("[", "]"))
+            End If
+
+            If symbols.ContainsKey(name) AndAlso symbols(name).isCallable Then
+                Return symbols(name)
+            End If
+
+            If funcSymbols.ContainsKey(name) Then
+                Return funcSymbols(name)
+            End If
+
+            If [inherits] AndAlso Not parent Is Nothing Then
+                Return parent.FindFunction(name)
             Else
                 Return Nothing
             End If

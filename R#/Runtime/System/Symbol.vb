@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::7e2576b4a85268bd062cb0b3da34d8f1, R#\Runtime\System\Symbol.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class Symbol
-    ' 
-    '         Properties: [readonly], [typeof], constraint, constraintValid, length
-    '                     name, typeCode, typeId, value
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: GetValueViewString, SetValue, ToString, ToVector
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class Symbol
+' 
+'         Properties: [readonly], [typeof], constraint, constraintValid, length
+'                     name, typeCode, typeId, value
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: GetValueViewString, SetValue, ToString, ToVector
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -50,6 +50,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Components
 
@@ -135,6 +136,16 @@ Namespace Runtime.Components
                 Else
                     Return 1
                 End If
+            End Get
+        End Property
+
+        ''' <summary>
+        ''' 当前的这个符号值是否是一个可以被调用的函数对象？
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property isCallable As Boolean
+            Get
+                Return REnv.isCallable(value)
             End Get
         End Property
 
