@@ -171,6 +171,7 @@ Namespace Runtime
 
         Sub New()
             symbols = New Dictionary(Of Symbol)
+            funcSymbols = New Dictionary(Of Symbol)
             parent = Nothing
             [global] = Nothing
             stackFrame = globalStackFrame
@@ -197,6 +198,7 @@ Namespace Runtime
 
             If isInherits Then
                 symbols = parent.symbols
+                funcSymbols = parent.funcSymbols
             End If
 
             If parent.global.log4vb_redirect Then
@@ -242,6 +244,9 @@ Namespace Runtime
                 If Not symbols Is parent.symbols Then
                     Call symbols.Clear()
                 End If
+                If Not funcSymbols Is parent.funcSymbols Then
+                    Call funcSymbols.Clear()
+                End If
             End If
 
             Call ifPromise.Clear()
@@ -260,6 +265,8 @@ Namespace Runtime
 
             If symbols.ContainsKey(name) Then
                 Return symbols(name)
+            ElseIf funcSymbols.ContainsKey(name) Then
+                Return funcSymbols(name)
             ElseIf [inherits] AndAlso Not parent Is Nothing Then
                 Return parent.FindSymbol(name)
             Else
