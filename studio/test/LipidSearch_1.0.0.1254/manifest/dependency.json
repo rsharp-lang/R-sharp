@@ -1,4 +1,13 @@
 [{
+    "library": null,
+    "packages": ["base.math"]
+  },{
+    "library": null,
+    "packages": ["grDevices.gr3D"]
+  },{
+    "library": null,
+    "packages": ["plot.charts"]
+  },{
     "library": "visualkit",
     "packages": ["visualPlot"]
   },{
