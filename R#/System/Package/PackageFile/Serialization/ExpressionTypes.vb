@@ -53,6 +53,7 @@ Namespace System.Package.File
         StringInterpolation
         FunctionCall
         FunctionDeclare
+        LambdaDeclare
         SymbolDeclare
         SymbolReference
         SymbolIndex

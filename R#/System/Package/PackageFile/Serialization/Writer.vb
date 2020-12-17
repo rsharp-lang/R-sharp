@@ -111,7 +111,11 @@ Namespace System.Package.File
         Public Function GetBuffer(x As Expression) As Byte()
             Select Case x.GetType
                 Case GetType(DeclareNewSymbol) : Return RSymbol.GetBuffer(x)
-                Case GetType(DeclareNewFunction) : Return RFunction.GetBuffer(x)
+                Case GetType(DeclareNewFunction),
+                     GetType(DeclareLambdaFunction)
+
+                    Return RFunction.GetBuffer(x)
+
                 Case GetType(Literal) : Return RLiteral.GetBuffer(x)
                 Case GetType(StringInterpolation) : Return RString.GetBuffer(x)
                 Case GetType(BinaryOrExpression),
