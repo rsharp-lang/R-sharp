@@ -44,9 +44,11 @@
 
 Imports System.IO
 Imports System.IO.Compression
+Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.SecurityString
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
@@ -137,9 +139,10 @@ Namespace System.Package.File
 
         Private Sub saveSymbols(zip As ZipArchive, symbols As Dictionary(Of String, String), ByRef checksum$)
             Dim md5 As New Md5HashProvider
+            Dim text As String
 
             Using file As New StreamWriter(zip.CreateEntry("manifest/symbols.json").Open)
-                Dim text = symbols.GetJson(indent:=True)
+                text = symbols.GetJson(indent:=True)
                 checksum = checksum & md5.GetMd5Hash(text)
 
                 Call file.WriteLine(text)
@@ -161,6 +164,31 @@ Namespace System.Package.File
             End Using
         End Sub
 
+        Private Sub writeRuntime(zip As ZipArchive, ByRef checksum$)
+            Dim md5 As New Md5HashProvider
+            Dim text As String
+
+            Using file As New StreamWriter(zip.CreateEntry("manifest/runtime.json").Open)
+                text = GetType(RInterpreter).Assembly _
+                    .FromAssembly _
+                    .GetJson(indent:=True)
+                checksum = checksum & md5.GetMd5Hash(text)
+
+                Call file.WriteLine(text)
+                Call file.Flush()
+            End Using
+
+            Using file As New StreamWriter(zip.CreateEntry("manifest/framework.json").Open)
+                text = GetType(App).Assembly _
+                    .FromAssembly _
+                    .GetJson(indent:=True)
+                checksum = checksum & md5.GetMd5Hash(text)
+
+                Call file.WriteLine(text)
+                Call file.Flush()
+            End Using
+        End Sub
+
         Public Sub Flush(outfile As Stream)
             Dim checksum As String = ""
             Dim md5 As New Md5HashProvider
@@ -172,6 +200,7 @@ Namespace System.Package.File
                 Call copyAssembly(zip, checksum)
                 Call saveDependency(zip, checksum)
                 Call writeIndex(zip, checksum)
+                Call writeRuntime(zip, checksum)
 
                 Using file As New StreamWriter(zip.CreateEntry("CHECKSUM").Open)
                     Call file.WriteLine(md5.GetMd5Hash(checksum).ToUpper)
