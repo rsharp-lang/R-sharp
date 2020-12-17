@@ -56,6 +56,7 @@ Namespace System.Package.File
         SymbolDeclare
         SymbolReference
         SymbolIndex
+        SymbolAssign
         Require
         UnaryNot
         Binary

@@ -78,6 +78,7 @@ Namespace System.Package.File
         Public ReadOnly Property RSymbol As RSymbol
         Public ReadOnly Property RSymbolRef As RSymbolReference
         Public ReadOnly Property RSymbolIndex As RSymbolIndex
+        Public ReadOnly Property RSymbolAssign As RSymbolAssign
         Public ReadOnly Property RLiteral As RLiteral
         Public ReadOnly Property RBinary As RBinary
         Public ReadOnly Property RCallFunction As RCallFunction
@@ -104,6 +105,7 @@ Namespace System.Package.File
             Me.RSymbolRef = New RSymbolReference(Me)
             Me.RString = New RStringInterpolation(Me)
             Me.RSymbolIndex = New RSymbolIndex(Me)
+            Me.RSymbolAssign = New RSymbolAssign(Me)
         End Sub
 
         Public Function GetBuffer(x As Expression) As Byte()
@@ -126,6 +128,7 @@ Namespace System.Package.File
                 Case GetType(VectorLiteral) : Return RVector.GetBuffer(x)
                 Case GetType(SymbolReference) : Return RSymbolRef.GetBuffer(x)
                 Case GetType(SymbolIndexer) : Return RSymbolIndex.GetBuffer(x)
+                Case GetType(ValueAssign) : Return RSymbolAssign.GetBuffer(x)
                 Case Else
                     Throw New NotImplementedException(x.GetType.FullName)
             End Select
