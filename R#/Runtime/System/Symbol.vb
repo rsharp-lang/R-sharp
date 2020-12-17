@@ -167,9 +167,14 @@ Namespace Runtime.Components
             End Get
         End Property
 
+        ''' <summary>
+        ''' NULL
+        ''' </summary>
+        ''' <param name="constraint"></param>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Sub New(Optional constraint As TypeCodes = TypeCodes.generic)
             Me.constraint = constraint
+            Me.m_val = Nothing
         End Sub
 
         Sub New(value As Object, Optional constraint As TypeCodes = TypeCodes.generic)
