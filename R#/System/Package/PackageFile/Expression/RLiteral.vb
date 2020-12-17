@@ -1,4 +1,5 @@
-﻿Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+﻿Imports System.IO
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime.Components
 
@@ -6,31 +7,35 @@ Namespace System.Package.File.Expressions
 
     Public Class RLiteral : Inherits RExpression
 
-        Public Property value As String
-        Public Property type As TypeCodes
+        Public Sub New(context As Writer)
+            MyBase.New(context)
+        End Sub
 
-        Public Overrides Function ToString() As String
-            Return $"({type}) {value}"
-        End Function
+        Public Overrides Sub WriteBuffer(ms As MemoryStream, x As Expression)
+            Call WriteBuffer(ms, DirectCast(x, Literal))
+        End Sub
 
-        Public Overrides Function GetExpression(desc As DESCRIPTION) As Expression
-            Select Case type
-                Case TypeCodes.boolean
-                    Return New Literal(value.ParseBoolean)
-                Case TypeCodes.double
-                    Return New Literal(value.ParseDouble)
-                Case TypeCodes.integer
-                    Return New Literal(value.ParseInteger)
-                Case Else
-                    Return New Literal(value)
-            End Select
-        End Function
+        Public Overloads Sub WriteBuffer(ms As MemoryStream, x As Literal)
+            Using outfile As New BinaryWriter(ms)
+                Call outfile.Write(DirectCast(ExpressionTypes.Literal, Integer))
+                Call outfile.Write(0)
+                Call outfile.Write(DirectCast(x.type, Byte))
 
-        Public Shared Function FromLiteral(x As Literal) As RExpression
-            Return New RLiteral With {
-                .type = x.type,
-                .value = x.value.ToString
-            }
+                Select Case x.type
+                    Case TypeCodes.boolean : Call outfile.Write(CType(If(DirectCast(x.value, Boolean), 1, 0), Byte))
+                    Case TypeCodes.double : Call outfile.Write(CType(x.value, Double))
+                    Case TypeCodes.integer : Call outfile.Write(CType(x.value, Long))
+                    Case Else
+                        Call outfile.Write(Scripting.ToString(x.value))
+                End Select
+
+                Call outfile.Flush()
+                Call saveSize(outfile)
+            End Using
+        End Sub
+
+        Public Overrides Function GetExpression(buffer As MemoryStream, desc As DESCRIPTION) As Expression
+            Throw New NotImplementedException()
         End Function
     End Class
 End Namespace

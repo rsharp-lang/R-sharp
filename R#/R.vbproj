@@ -813,12 +813,11 @@
     <Compile Include="System\Package\Database\LocalPackageDatabase.vb" />
     <Compile Include="System\Package\Database\PackageLoaderEntry.vb" />
     <Compile Include="System\Package\PackageFile\Expression\RVector.vb" />
-    <Compile Include="System\Package\PackageFile\JSONNode.vb" />
     <Compile Include="System\Package\PackageFile\Expression\RLiteral.vb" />
     <Compile Include="System\Package\PackageFile\Expression\RCallFunction.vb" />
     <Compile Include="System\Package\PackageFile\Expression\RUnary.vb" />
     <Compile Include="System\Package\PackageFile\Expression\RBinary.vb" />
-    <Compile Include="System\Package\PackageFile\Expression\RImports.vb" />
+    <Compile Include="System\Package\PackageFile\Expression\RRequire.vb" />
     <Compile Include="System\Package\PackageFile\Expression\RSymbol.vb" />
     <Compile Include="System\Package\PackageFile\Expression\RFunction.vb" />
     <Compile Include="System\Package\PackageFile\Expression\RExpression.vb" />

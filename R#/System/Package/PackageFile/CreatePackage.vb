@@ -70,7 +70,7 @@ Namespace System.Package.File
                 .info = desc,
                 .symbols = New Dictionary(Of String, RExpression)
             }
-            Dim loading As New List(Of RImports)
+            Dim loading As New List(Of RRequire)
 
             For Each script As String In srcR.ListFiles("*.R")
                 Dim error$ = Nothing
@@ -88,7 +88,7 @@ Namespace System.Package.File
 
                         If json.GetType.ImplementInterface(Of INamedValue) Then
                             file.symbols(DirectCast(json, INamedValue).Key) = json
-                        ElseIf TypeOf json Is RImports Then
+                        ElseIf TypeOf json Is RRequire Then
                             loading.Add(json)
                         Else
                             Return New Message With {
