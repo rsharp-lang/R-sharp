@@ -11,7 +11,13 @@ Namespace System.Package.File.Expressions
         End Sub
 
         Public Overrides Sub WriteBuffer(ms As MemoryStream, x As Expression)
-            Throw New NotImplementedException()
+            Call WriteBuffer(ms, DirectCast(x, UnaryNot))
+        End Sub
+
+        Public Overloads Sub WriteBuffer(ms As MemoryStream, x As UnaryNot)
+            Using outfile As New BinaryWriter(ms)
+
+            End Using
         End Sub
 
         Public Overrides Function GetExpression(buffer As MemoryStream, desc As DESCRIPTION) As Expression

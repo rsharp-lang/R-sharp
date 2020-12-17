@@ -46,6 +46,8 @@ Imports System.IO
 Imports System.IO.Compression
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.System.Package.File.Expressions
 
 Namespace System.Package.File
@@ -58,8 +60,8 @@ Namespace System.Package.File
         ''' only allows function and constant.
         ''' </summary>
         ''' <returns></returns>
-        Public Property symbols As Dictionary(Of String, RExpression)
-        Public Property loading As RRequire()
+        Public Property symbols As Dictionary(Of String, Expression)
+        Public Property loading As Expression()
 
         Public Sub Flush(outfile As Stream)
             Using zip As New ZipArchive(outfile, ZipArchiveMode.Create)
@@ -68,29 +70,24 @@ Namespace System.Package.File
                     Call file.Flush()
                 End Using
 
-                Dim symbols As New List(Of String)
-                Dim scriptJSON As String
-                Dim onLoad As RFunction
+                Dim symbols As New Dictionary(Of String, String)
+                Dim onLoad As DeclareNewFunction
 
-                For Each symbol As NamedValue(Of RExpression) In Me.symbols.Select(Function(t) New NamedValue(Of RExpression)(t.Key, t.Value))
+                For Each symbol As NamedValue(Of Expression) In Me.symbols.Select(Function(t) New NamedValue(Of Expression)(t.Key, t.Value))
                     If symbol.Name = ".onLoad" Then
                         onLoad = symbol.Value
 
-                        Using file As New StreamWriter(zip.CreateEntry(".onload.json").Open)
-                            scriptJSON = onLoad.GetJson()
-
-                            Call file.WriteLine(scriptJSON)
-                            Call file.Flush()
+                        Using file As New Writer(zip.CreateEntry(".onload").Open)
+                            Call file.Write(onLoad)
                         End Using
                     Else
-                        Using file As New StreamWriter(zip.CreateEntry($"src/{symbol.Name}").Open)
-                            scriptJSON = CType(symbol.Value, JSONNode).GetJson()
+                        Dim symbolRef As String = symbol.Name.MD5
 
-                            Call file.WriteLine(scriptJSON)
-                            Call file.Flush()
+                        Using file As New Writer(zip.CreateEntry($"src/{symbolRef}").Open)
+                            Call file.Write(symbol.Value)
                         End Using
 
-                        Call symbols.Add(symbol.Name)
+                        Call symbols.Add(symbol.Name, symbolRef)
                     End If
                 Next
 
