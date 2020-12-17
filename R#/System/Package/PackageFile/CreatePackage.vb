@@ -71,7 +71,8 @@ Namespace System.Package.File
             Dim srcR As String = $"{target}/R".GetDirectoryFullPath
             Dim file As New PackageModel With {
                 .info = desc,
-                .symbols = New Dictionary(Of String, Expression)
+                .symbols = New Dictionary(Of String, Expression),
+                .assembly = $"{target}/assembly".EnumerateFiles("*.dll")
             }
             Dim loading As New List(Of Expression)
 

@@ -58,6 +58,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
     Public Class SymbolReference : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
+            Get
+                Return TypeCodes.ref
+            End Get
+        End Property
 
         ''' <summary>
         ''' 目标变量名

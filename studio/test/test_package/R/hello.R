@@ -1,6 +1,6 @@
 let hello_world as function(words as string = ["user", "world"]) {
 	print("hello");
-	# print(words);
+	print(words);
 }
 
 let emptyFunc as function() {

@@ -61,6 +61,11 @@ Namespace System.Package.File
         ''' <returns></returns>
         Public Property symbols As Dictionary(Of String, Expression)
         Public Property loading As Dependency()
+        ''' <summary>
+        ''' dll files
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property assembly As String()
 
         Public Sub Flush(outfile As Stream)
             Using zip As New ZipArchive(outfile, ZipArchiveMode.Create)
@@ -90,6 +95,23 @@ Namespace System.Package.File
 
                         Call symbols.Add(symbol.Name, symbolRef)
                     End If
+                Next
+
+                Using file As New StreamWriter(zip.CreateEntry("assembly.json").Open)
+                    Call file.WriteLine(assembly.Select(AddressOf FileName).GetJson(indent:=True))
+                    Call file.Flush()
+                End Using
+
+                Using file As New StreamWriter(zip.CreateEntry("assembly/readme.txt").Open)
+                    Call file.WriteLine(".NET assembly files")
+                    Call file.Flush()
+                End Using
+
+                For Each dll As String In assembly
+                    Using file As New BinaryWriter(zip.CreateEntry($"assembly/{dll.FileName}").Open)
+                        Call file.Write(dll.ReadBinary)
+                        Call file.Flush()
+                    End Using
                 Next
 
                 Using file As New StreamWriter(zip.CreateEntry("dependency.json").Open)

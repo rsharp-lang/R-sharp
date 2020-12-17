@@ -26,6 +26,7 @@ Namespace System.Package.File
         Public Const Magic As String = "SMRUCC/R#"
 
         Public ReadOnly Property RSymbol As RSymbol
+        Public ReadOnly Property RSymbolRef As RSymbolReference
         Public ReadOnly Property RLiteral As RLiteral
         Public ReadOnly Property RBinary As RBinary
         Public ReadOnly Property RCallFunction As RCallFunction
@@ -48,6 +49,7 @@ Namespace System.Package.File
             Me.RUnary = New RUnary(Me)
             Me.RVector = New RVector(Me)
             Me.RFunction = New RFunction(Me)
+            Me.RSymbolRef = New RSymbolReference(Me)
         End Sub
 
         Public Function GetBuffer(x As Expression) As Byte()
@@ -66,6 +68,7 @@ Namespace System.Package.File
                 Case GetType(Require), GetType([Imports]) : Return RImports.GetBuffer(x)
                 Case GetType(UnaryNot) : Return RUnary.GetBuffer(x)
                 Case GetType(VectorLiteral) : Return RVector.GetBuffer(x)
+                Case GetType(SymbolReference) : Return RSymbolRef.GetBuffer(x)
                 Case Else
                     Throw New NotImplementedException(x.GetType.FullName)
             End Select
