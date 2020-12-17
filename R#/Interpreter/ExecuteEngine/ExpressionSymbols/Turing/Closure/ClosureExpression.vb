@@ -69,6 +69,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             End Get
         End Property
 
+        Public ReadOnly Property bodySize As Integer
+            Get
+                Return program.execQueue.Length
+            End Get
+        End Property
+
         Dim program As Program
 
         <DebuggerStepThrough>

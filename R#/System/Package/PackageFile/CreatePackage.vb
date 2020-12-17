@@ -45,8 +45,11 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.System.Package.File.Expressions
 
@@ -68,14 +71,14 @@ Namespace System.Package.File
             Dim srcR As String = $"{target}/R".GetDirectoryFullPath
             Dim file As New PackageModel With {
                 .info = desc,
-                .symbols = New Dictionary(Of String, RExpression)
+                .symbols = New Dictionary(Of String, Expression),
+                .assembly = $"{target}/assembly".EnumerateFiles("*.dll")
             }
-            Dim loading As New List(Of RImports)
+            Dim loading As New List(Of Expression)
 
             For Each script As String In srcR.ListFiles("*.R")
                 Dim error$ = Nothing
                 Dim exec As Program = Program.CreateProgram(Rscript.FromFile(script), [error]:=[error])
-                Dim json As RExpression
 
                 If Not [error].StringEmpty Then
                     Return New Message With {
@@ -84,23 +87,31 @@ Namespace System.Package.File
                     }
                 Else
                     For Each line As Expression In exec
-                        json = RExpression.CreateFromSymbolExpression(line)
+                        If TypeOf line Is DeclareNewSymbol Then
+                            Dim var As DeclareNewSymbol = line
 
-                        If json.GetType.ImplementInterface(Of INamedValue) Then
-                            file.symbols(DirectCast(json, INamedValue).Key) = json
-                        ElseIf TypeOf json Is RImports Then
-                            loading.Add(json)
+                            If var.isTuple Then
+                                Return New Message With {.message = {"top level declare new symbol is not allows tuple!"}, .level = MSG_TYPES.ERR}
+                            Else
+                                file.symbols.Add(var.names(Scan0), var)
+                            End If
+                        ElseIf TypeOf line Is DeclareNewFunction Then
+                            Dim fun As DeclareNewFunction = line
+
+                            file.symbols.Add(fun.funcName, fun)
+                        ElseIf TypeOf line Is [Imports] OrElse TypeOf line Is Require Then
+                            loading.Add(line)
                         Else
                             Return New Message With {
                                 .level = MSG_TYPES.ERR,
-                                .message = DirectCast(json, ParserError).message
+                                .message = {$"'{line.GetType.Name}' is not allow in top level script when create a R# package!"}
                             }
                         End If
                     Next
                 End If
             Next
 
-            file.loading = loading.ToArray
+            file.loading = loading.DoCall(AddressOf Dependency.GetDependency).ToArray
             file.Flush(outfile)
 
             Return Nothing

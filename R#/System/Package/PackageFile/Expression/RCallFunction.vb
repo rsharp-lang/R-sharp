@@ -1,4 +1,7 @@
-﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+﻿Imports System.IO
+Imports System.Text
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
@@ -6,33 +9,38 @@ Namespace System.Package.File.Expressions
 
     Public Class RCallFunction : Inherits RExpression
 
-        Public Property target As JSONNode
-        Public Property sourceMap As StackFrame
-        Public Property parameters As JSONNode()
-        Public Property [namespace] As String
+        Public Sub New(context As Writer)
+            MyBase.New(context)
+        End Sub
 
-        Public Overrides Function GetExpression(desc As DESCRIPTION) As Expression
-            Dim func As Expression = target.GetExpression(desc)
-            Dim arguments As Expression() = parameters _
-                .Select(Function(a)
-                            Return a.GetExpression(desc)
-                        End Function) _
-                .ToArray
+        Public Overrides Sub WriteBuffer(ms As MemoryStream, x As Expression)
+            Call WriteBuffer(ms, DirectCast(x, FunctionInvoke))
+        End Sub
 
-            Return New FunctionInvoke(func, sourceMap, arguments) With {
-                .[namespace] = [namespace]
-            }
-        End Function
+        Public Overloads Sub WriteBuffer(ms As MemoryStream, x As FunctionInvoke)
+            Using outfile As New BinaryWriter(ms)
+                Call outfile.Write(CInt(ExpressionTypes.FunctionCall))
+                Call outfile.Write(0)
+                Call outfile.Write(CByte(x.type))
 
-        Public Shared Function FromSymbol(calls As FunctionInvoke) As RExpression
-            Return New RCallFunction With {
-                .[namespace] = calls.namespace,
-                .parameters = calls.parameters _
-                    .Select(Function(a) CType(RFunction.CreateFromSymbolExpression(a), JSONNode)) _
-                    .ToArray,
-                .sourceMap = calls.stackFrame,
-                .target = RExpression.CreateFromSymbolExpression(calls.funcName)
-            }
+                Call outfile.Write(Writer.GetBuffer(sourceMap:=x.stackFrame))
+                Call outfile.Write(Encoding.ASCII.GetBytes(x.namespace Or "n/a".AsDefault))
+                Call outfile.Write(CByte(0))
+                Call outfile.Write(context.GetBuffer(x.funcName))
+
+                Call outfile.Write(CByte(x.parameters.Length))
+
+                For Each arg As Expression In x.parameters
+                    Call outfile.Write(context.GetBuffer(arg))
+                Next
+
+                Call outfile.Flush()
+                Call saveSize(outfile)
+            End Using
+        End Sub
+
+        Public Overrides Function GetExpression(buffer As MemoryStream, desc As DESCRIPTION) As Expression
+            Throw New NotImplementedException()
         End Function
     End Class
 End Namespace

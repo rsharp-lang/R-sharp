@@ -1,51 +1,48 @@
-﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+﻿Imports System.IO
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
 Namespace System.Package.File.Expressions
 
+    ''' <summary>
+    ''' the R expression writer/reader
+    ''' </summary>
+    ''' <remarks>
+    ''' expression: [ExpressionTypes, i32][dataSize, i32][TypeCodes, byte][expressionData, bytes]
+    '''              4                     4              1                ...
+    ''' </remarks>
     Public MustInherit Class RExpression
 
-        Public MustOverride Function GetExpression(desc As DESCRIPTION) As Expression
+        Protected ReadOnly context As Writer
 
-        Public Shared Function CreateFromSymbolExpression(exec As Expression) As RExpression
-            If TypeOf exec Is [Imports] Then
-                Return RImports.GetRImports(DirectCast(exec, [Imports]))
-            ElseIf TypeOf exec Is Require Then
-                Return RImports.GetRImports(DirectCast(exec, Require))
-            ElseIf TypeOf exec Is DeclareNewFunction Then
-                Return RFunction.FromSymbol(exec)
-            ElseIf TypeOf exec Is FunctionInvoke Then
-                Return RCallFunction.FromSymbol(exec)
-            ElseIf TypeOf exec Is Literal Then
-                Return RLiteral.FromLiteral(exec)
-            ElseIf TypeOf exec Is VectorLiteral Then
-                Return RVector.FromVector(exec)
-            Else
-                Return New ParserError($"'{exec.GetType.FullName}' is not implemented!")
-            End If
-        End Function
-    End Class
-
-    Public Class ParserError : Inherits RExpression
-
-        Public ReadOnly Property message As String()
-        Public Property sourceMap As StackFrame
-
-        Sub New(message As String(), Optional sourceMap As StackFrame = Nothing)
-            Me.message = message
-            Me.sourceMap = sourceMap
+        Sub New(context As Writer)
+            Me.context = context
         End Sub
 
-        Sub New(message As String, Optional sourceMap As StackFrame = Nothing)
-            Me.message = {message}
-            Me.sourceMap = sourceMap
-        End Sub
+        Public MustOverride Function GetExpression(buffer As MemoryStream, desc As DESCRIPTION) As Expression
+        Public MustOverride Sub WriteBuffer(ms As MemoryStream, x As Expression)
 
-        Public Overrides Function GetExpression(desc As DESCRIPTION) As Expression
-            Throw New NotImplementedException()
+        Public Function GetBuffer(x As Expression) As Byte()
+            Using ms As New MemoryStream
+                Call WriteBuffer(ms, x)
+                Return ms.ToArray
+            End Using
         End Function
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="outfile"></param>
+        ''' <remarks>
+        ''' expression: [ExpressionTypes, i32][dataSize, i32][TypeCodes, byte][expressionData, bytes]
+        '''              4                     4              1                ...
+        ''' </remarks>
+        Protected Shared Sub saveSize(outfile As BinaryWriter)
+            Dim totalLength As Integer = outfile.BaseStream.Length
+            Dim dataSize As Integer = totalLength - 4 - 4 - 1
+
+            Call outfile.Seek(4, SeekOrigin.Begin)
+            Call outfile.Write(dataSize)
+            Call outfile.Flush()
+        End Sub
     End Class
 End Namespace

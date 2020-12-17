@@ -1,10 +1,10 @@
 [{
-    "module": "visualkit",
+    "library": "visualkit",
     "packages": ["visualPlot"]
   },{
-    "module": "phenotype_kit",
+    "library": "phenotype_kit",
     "packages": ["geneExpression"]
   },{
-    "module": "MLkit",
+    "library": "MLkit",
     "packages": ["dataset","umap","clustering"]
   }]

@@ -1,4 +1,6 @@
-﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+﻿Imports System.IO
+Imports System.Text
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
@@ -6,56 +8,44 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Namespace System.Package.File.Expressions
 
     Public Class RFunction : Inherits RExpression
-        Implements INamedValue
 
-        Public Property name As String Implements INamedValue.Key
-        Public Property parameters As RSymbol()
-        Public Property body As JSONNode()
-        Public Property sourceMap As StackFrame
+        Public Sub New(context As Writer)
+            MyBase.New(context)
+        End Sub
 
-        Public Overrides Function GetExpression(desc As DESCRIPTION) As Expression
-            Dim params As DeclareNewSymbol() = parameters.Select(Function(v) v.GetExpression(desc)).ToArray
-            Dim closure As New ClosureExpression(body.Select(Function(exec) exec.GetExpression(desc)).ToArray)
-            Dim stackframe As StackFrame = sourceMap
+        Public Overrides Sub WriteBuffer(ms As MemoryStream, x As Expression)
+            Call WriteBuffer(ms, DirectCast(x, DeclareNewFunction))
+        End Sub
 
-            sourceMap.Method.Namespace = desc.Package
+        Public Overloads Sub WriteBuffer(ms As MemoryStream, x As DeclareNewFunction)
+            Using outfile As New BinaryWriter(ms)
+                Call outfile.Write(CInt(ExpressionTypes.FunctionDeclare))
+                Call outfile.Write(0)
+                Call outfile.Write(CByte(x.type))
 
-            Return New DeclareNewFunction(name, params, closure, stackframe) With {
-                .[Namespace] = desc.Package
-            }
-        End Function
+                Call outfile.Write(Writer.GetBuffer(sourceMap:=x.stackFrame))
+                Call outfile.Write(Encoding.ASCII.GetBytes(x.funcName))
+                Call outfile.Write(CByte(0))
 
-        Public Shared Function FromSymbol(symbol As DeclareNewFunction) As RExpression
-            Dim name As String = symbol.funcName
-            Dim params As RExpression() = symbol.params _
-                .Select(AddressOf RSymbol.GetSymbol) _
-                .ToArray
-            Dim bodyLines As New List(Of JSONNode)
+                Call outfile.Write(CByte(x.params.Length))
 
-            For Each item As RExpression In params
-                If TypeOf item Is ParserError Then
-                    Return item
-                End If
-            Next
+                For Each arg As DeclareNewSymbol In x.params
+                    Call outfile.Write(context.GetBuffer(arg))
+                Next
 
-            For Each exec As Expression In symbol.body.EnumerateCodeLines
-                Dim line As RExpression = RExpression.CreateFromSymbolExpression(exec)
+                Call outfile.Write(x.body.bodySize)
 
-                If TypeOf line Is ParserError Then
-                    Return line
-                Else
-                    bodyLines.Add(line)
-                End If
-            Next
+                For Each exec As Expression In x.body.EnumerateCodeLines
+                    Call outfile.Write(context.GetBuffer(exec))
+                Next
 
-            Return New RFunction With {
-                .name = name,
-                .parameters = params _
-                    .Select(Function(a) DirectCast(a, RSymbol)) _
-                    .ToArray,
-                .sourceMap = symbol.stackFrame,
-                .body = bodyLines.ToArray
-            }
+                Call outfile.Flush()
+                Call saveSize(outfile)
+            End Using
+        End Sub
+
+        Public Overrides Function GetExpression(buffer As MemoryStream, desc As DESCRIPTION) As Expression
+            Throw New NotImplementedException()
         End Function
     End Class
 End Namespace

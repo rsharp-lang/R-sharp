@@ -32,4 +32,12 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
             End If
         End Using
     End Function
+
+    <ExportAPI("--check")>
+    <Usage("--check --target <package.zip>")>
+    <Description("Verify a packed R# package is damaged or not?")>
+    Public Function Check(args As CommandLine) As Integer
+        Dim target As String = args <= "--target"
+
+    End Function
 End Module

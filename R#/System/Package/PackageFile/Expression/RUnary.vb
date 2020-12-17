@@ -1,22 +1,27 @@
-﻿Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+﻿Imports System.IO
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
 Namespace System.Package.File.Expressions
 
     Public Class RUnary : Inherits RExpression
 
-        Public Property [operator] As String
-        Public Property expression As JSONNode
-
-        Public Sub New()
+        Public Sub New(context As Writer)
+            MyBase.New(context)
         End Sub
 
-        Public Overrides Function GetExpression(desc As DESCRIPTION) As Expression
-            If [operator] = "!" Then
-                Return New UnaryNot(expression.GetExpression(desc))
-            Else
-                Throw New NotImplementedException
-            End If
+        Public Overrides Sub WriteBuffer(ms As MemoryStream, x As Expression)
+            Call WriteBuffer(ms, DirectCast(x, UnaryNot))
+        End Sub
+
+        Public Overloads Sub WriteBuffer(ms As MemoryStream, x As UnaryNot)
+            Using outfile As New BinaryWriter(ms)
+
+            End Using
+        End Sub
+
+        Public Overrides Function GetExpression(buffer As MemoryStream, desc As DESCRIPTION) As Expression
+            Throw New NotImplementedException()
         End Function
     End Class
 End Namespace

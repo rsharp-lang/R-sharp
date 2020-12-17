@@ -121,7 +121,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         End Function
 
         Public Overrides Function ToString() As String
-            If [namespace].StringEmpty Then
+            If [namespace].StringEmpty OrElse [namespace] = "n/a" Then
                 Return $"Call {funcName}({parameters.JoinBy(", ")})"
             Else
                 Return $"Call {[namespace]}::{funcName}({parameters.JoinBy(", ")})"
@@ -206,7 +206,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             ' 系统环境下的函数符号
             Dim funcVar As Object
 
-            If Not [namespace].StringEmpty Then
+            If (Not [namespace].StringEmpty) AndAlso (Not [namespace] = "n/a") Then
                 Return NamespaceFunctionSymbolReference.getPackageApiImpl(
                     env:=envir,
                     [namespace]:=[namespace],
