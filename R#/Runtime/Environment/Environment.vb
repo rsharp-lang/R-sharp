@@ -336,7 +336,12 @@ Namespace Runtime
                 ' 这样子的操作
                 ' Return Internal.debug.stop({String.Format(AlreadyExists, name)}, Me)
 
-                Call AddMessage($"symbol '{name}' is already exists in current environment", MSG_TYPES.WRN)
+                Call New String() {
+                    $"symbol '{name}' is already exists in current environment",
+                    $"symbol: {name}"
+                }.DoCall(Sub(info)
+                             Call AddMessage(info, MSG_TYPES.WRN)
+                         End Sub)
 
                 ' 只需要设置值就可以了
                 Return symbols(name).SetValue(value, Me)
