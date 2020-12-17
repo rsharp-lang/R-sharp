@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0bdf5532cad524554c8d629d56381718, R#\Runtime\Environment\Environment.vb"
+﻿#Region "Microsoft.VisualBasic::015cf2a04aa6f13e7cfe357a7775dc49, R#\Runtime\Environment\Environment.vb"
 
     ' Author:
     ' 
@@ -33,13 +33,13 @@
 
     '     Class Environment
     ' 
-    '         Properties: globalEnvironment, isGlobal, last, messages, parent
-    '                     stackFrame, stackTrace, symbols
+    '         Properties: funcSymbols, globalEnvironment, isGlobal, last, messages
+    '                     parent, stackFrame, stackTrace, symbols
     ' 
     '         Constructor: (+3 Overloads) Sub New
     ' 
-    '         Function: asRVector, Evaluate, FindSymbol, GetEnumerator, IEnumerable_GetEnumerator
-    '                   Push, ToString
+    '         Function: asRVector, Evaluate, FindFunction, FindSymbol, GetEnumerator
+    '                   IEnumerable_GetEnumerator, Push, ToString
     ' 
     '         Sub: AddMessage, Clear, Delete, (+2 Overloads) Dispose, redirectError
     '              redirectWarning, setStackInfo

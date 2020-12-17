@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9fb54de27ba18250f10548791e4d86dd, R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\NameMemberReference.vb"
+﻿#Region "Microsoft.VisualBasic::045ce898700f8bf5d8538430af0618c9, R#\Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\NameMemberReference.vb"
 
     ' Author:
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::90a8e9aa2eabdd1ed361c408c99c38b9, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\ClosureExpression.vb"
+﻿#Region "Microsoft.VisualBasic::b72385be8c533f4a9a0e6ce7500dc627, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\ClosureExpression.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Class ClosureExpression
     ' 
-    '         Properties: isEmpty, type
+    '         Properties: bodySize, isEmpty, type
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: EnumerateCodeLines, Evaluate, ParseExpressionTree, ToString

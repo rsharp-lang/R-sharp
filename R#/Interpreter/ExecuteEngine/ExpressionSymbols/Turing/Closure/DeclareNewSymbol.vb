@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::204c4db84355a0efbb04a7fb87d5edac, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewSymbol.vb"
+﻿#Region "Microsoft.VisualBasic::ed70228310bd7258d7aa76f491fb2d85, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewSymbol.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Class DeclareNewSymbol
     ' 
-    '         Properties: hasInitializeExpression, type, value
+    '         Properties: hasInitializeExpression, isTuple, type, value
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: Evaluate, getParameterView, PushNames, PushTuple, ToString

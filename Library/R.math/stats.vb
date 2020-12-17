@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::aa4a021faf13164f214c2fd95258cd82, Library\R.math\stats.vb"
+﻿#Region "Microsoft.VisualBasic::c2911db19ce2d793404b1b393088a4c6, Library\R.math\stats.vb"
 
     ' Author:
     ' 
