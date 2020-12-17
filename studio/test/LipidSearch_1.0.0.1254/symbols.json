@@ -1,7 +1,4 @@
-[{
-    "key": "hello_world",
-    "value": "99b1ff8f11781541f7f89f9bd41c4a17"
-  },{
-    "key": "emptyFunc",
-    "value": "0ebdd8fff8f09b15319aa987db6195ef"
-  }]
+{
+  "hello_world": "99b1ff8f11781541f7f89f9bd41c4a17",
+  "emptyFunc": "0ebdd8fff8f09b15319aa987db6195ef"
+}

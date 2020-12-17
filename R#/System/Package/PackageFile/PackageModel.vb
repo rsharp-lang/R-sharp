@@ -97,7 +97,7 @@ Namespace System.Package.File
                 End Using
 
                 Using file As New StreamWriter(zip.CreateEntry("symbols.json").Open)
-                    Call file.WriteLine(symbols.ToArray.GetJson(indent:=True))
+                    Call file.WriteLine(symbols.GetJson(indent:=True))
                     Call file.Flush()
                 End Using
             End Using
