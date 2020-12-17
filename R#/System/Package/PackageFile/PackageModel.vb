@@ -48,7 +48,6 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
-Imports SMRUCC.Rsharp.System.Package.File.Expressions
 
 Namespace System.Package.File
 
@@ -65,6 +64,8 @@ Namespace System.Package.File
 
         Public Sub Flush(outfile As Stream)
             Using zip As New ZipArchive(outfile, ZipArchiveMode.Create)
+                info.meta("BuiltTime") = Now.ToString
+
                 Using file As New StreamWriter(zip.CreateEntry("index.json").Open)
                     Call file.WriteLine(info.GetJson(indent:=True))
                     Call file.Flush()

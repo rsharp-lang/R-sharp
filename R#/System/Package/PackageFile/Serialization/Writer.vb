@@ -37,6 +37,9 @@ Namespace System.Package.File
         Sub New(buffer As Stream)
             Me.buffer = New BinaryWriter(buffer)
 
+            Call Me.buffer.Write(Encoding.ASCII.GetBytes(Magic))
+            Call Me.buffer.Flush()
+
             Me.RSymbol = New RSymbol(Me)
             Me.RLiteral = New RLiteral(Me)
             Me.RBinary = New RBinary(Me)
