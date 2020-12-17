@@ -82,7 +82,24 @@ Namespace System.Package.File
         End Function
 
         Public Shared Function GetBuffer(sourceMap As StackFrame) As Byte()
+            Using ms As New MemoryStream, outfile As New BinaryWriter(ms)
+                Call outfile.Write(0)
+                Call outfile.Write(Encoding.ASCII.GetBytes(sourceMap.File))
+                Call outfile.Write(CByte(0))
+                Call outfile.Write(Encoding.ASCII.GetBytes(sourceMap.Line))
+                Call outfile.Write(CByte(0))
+                Call outfile.Write(Encoding.ASCII.GetBytes(sourceMap.Method.Namespace))
+                Call outfile.Write(CByte(0))
+                Call outfile.Write(Encoding.ASCII.GetBytes(sourceMap.Method.Module))
+                Call outfile.Write(CByte(0))
+                Call outfile.Write(Encoding.ASCII.GetBytes(sourceMap.Method.Method))
 
+                Call outfile.Flush()
+                Call ms.Seek(Scan0, SeekOrigin.Begin)
+                Call outfile.Write(ms.Length - 4)
+
+                Return ms.ToArray
+            End Using
         End Function
 
         Protected Overridable Sub Dispose(disposing As Boolean)
