@@ -329,7 +329,18 @@ Namespace Runtime
         ''' <returns>返回错误消息或者对象值</returns>
         Public Function Push(name$, value As Object, [readonly] As Boolean, Optional mode As TypeCodes = TypeCodes.generic) As Object
             If symbols.ContainsKey(name) Then
-                Return Internal.debug.stop({String.Format(AlreadyExists, name)}, Me)
+                ' 变量可以被重复申明
+                ' 即允许
+                ' let x = 1
+                ' let x = 2
+                ' 这样子的操作
+                ' Return Internal.debug.stop({String.Format(AlreadyExists, name)}, Me)
+
+                Call AddMessage($"symbol '{name}' is already exists in current environment", MSG_TYPES.WRN)
+
+                ' 只需要设置值就可以了
+                Return symbols(name).SetValue(value, Me)
+
             ElseIf Not value Is Nothing Then
                 value = asRVector(mode, value)
             End If
