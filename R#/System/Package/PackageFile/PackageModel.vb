@@ -105,7 +105,7 @@ Namespace System.Package.File
                     End If
                 Next
 
-                Using file As New StreamWriter(zip.CreateEntry("assembly.json").Open)
+                Using file As New StreamWriter(zip.CreateEntry("manifest/assembly.json").Open)
                     text = assembly.Select(AddressOf FileName).GetJson(indent:=True)
                     checksum = checksum & md5.GetMd5Hash(text)
 
@@ -130,7 +130,7 @@ Namespace System.Package.File
                     End Using
                 Next
 
-                Using file As New StreamWriter(zip.CreateEntry("dependency.json").Open)
+                Using file As New StreamWriter(zip.CreateEntry("manifest/dependency.json").Open)
                     text = loading.GetJson(indent:=True)
                     checksum = checksum & md5.GetMd5Hash(text)
 
@@ -138,7 +138,7 @@ Namespace System.Package.File
                     Call file.Flush()
                 End Using
 
-                Using file As New StreamWriter(zip.CreateEntry("symbols.json").Open)
+                Using file As New StreamWriter(zip.CreateEntry("manifest/symbols.json").Open)
                     text = symbols.GetJson(indent:=True)
                     checksum = checksum & md5.GetMd5Hash(text)
 
