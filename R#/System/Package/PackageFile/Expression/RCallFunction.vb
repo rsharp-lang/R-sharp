@@ -46,6 +46,7 @@
 
 Imports System.IO
 Imports System.Text
+Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
@@ -85,7 +86,7 @@ Namespace System.Package.File.Expressions
                 Call outfile.Write(CByte(x.type))
 
                 Call outfile.Write(Writer.GetBuffer(sourceMap:=CType(x, IRuntimeTrace).stackFrame))
-                Call outfile.Write(Encoding.ASCII.GetBytes(namespace$))
+                Call outfile.Write(Encoding.ASCII.GetBytes(namespace$ Or "n/a".AsDefault))
                 Call outfile.Write(CByte(0))
                 Call outfile.Write(context.GetBuffer(funcName))
 

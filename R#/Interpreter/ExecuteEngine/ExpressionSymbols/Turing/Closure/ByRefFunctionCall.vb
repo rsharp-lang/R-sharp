@@ -77,6 +77,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Me.value = value
             Me.funcRef = target.funcName
             Me.target = target.parameters(Scan0)
+            Me.stackFrame = stackFrame
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
