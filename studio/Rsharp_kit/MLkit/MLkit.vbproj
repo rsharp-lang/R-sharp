@@ -222,7 +222,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LipidSearch|x64'">
     <DebugSymbols>true</DebugSymbols>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>..\..\..\..\..\..\biodeep\biodeep_pipeline\lipidsearch\assembly\</OutputPath>
+    <OutputPath>..\..\..\..\..\..\biodeep\biodeepdb_v3\Rscript\R\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <DocumentationFile>MLkit.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
