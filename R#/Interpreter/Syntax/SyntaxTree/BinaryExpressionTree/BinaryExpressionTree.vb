@@ -41,6 +41,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
@@ -189,7 +190,17 @@ Namespace Interpreter.SyntaxParser
                 .ToArray
 
             If tokens.isByRefCall Then
-                Return New ByRefFunctionCall(tokens(Scan0), tokens(2))
+                Dim sourceMap As New StackFrame With {
+                    .File = opts.source.fileName,
+                    .Line = lineNum,
+                    .Method = New Method With {
+                        .Method = tokens(Scan0).TryCast(Of Expression).ToString,
+                        .[Module] = "n/a",
+                        .[Namespace] = SyntaxBuilderOptions.R_runtime
+                    }
+                }
+
+                Return New ByRefFunctionCall(tokens(Scan0), tokens(2), sourceMap)
             ElseIf tokens.isNamespaceReferenceCall Then
                 Dim calls As FunctionInvoke = buf(2).TryCast(Of Expression)
                 Dim [namespace] As Expression = buf(Scan0).TryCast(Of Expression)

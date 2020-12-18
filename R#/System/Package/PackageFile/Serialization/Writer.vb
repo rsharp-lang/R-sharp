@@ -127,7 +127,11 @@ Namespace System.Package.File
 
                     Return RBinary.GetBuffer(x)
 
-                Case GetType(FunctionInvoke) : Return RCallFunction.GetBuffer(x)
+                Case GetType(FunctionInvoke),
+                     GetType(ByRefFunctionCall)
+
+                    Return RCallFunction.GetBuffer(x)
+
                 Case GetType(Require), GetType([Imports]) : Return RImports.GetBuffer(x)
                 Case GetType(UnaryNot) : Return RUnary.GetBuffer(x)
                 Case GetType(VectorLiteral) : Return RVector.GetBuffer(x)
