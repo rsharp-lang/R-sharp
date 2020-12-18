@@ -48,6 +48,7 @@ Imports System.IO
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
@@ -66,6 +67,8 @@ Namespace System.Package.File.Expressions
                 Return ExpressionTypes.FunctionDeclare
             ElseIf TypeOf x Is DeclareLambdaFunction Then
                 Return ExpressionTypes.LambdaDeclare
+            ElseIf TypeOf x Is FormulaExpression Then
+                Return ExpressionTypes.FormulaDeclare
             Else
                 Throw New NotImplementedException(x.GetType.FullName)
             End If
@@ -80,7 +83,9 @@ Namespace System.Package.File.Expressions
                 Call outfile.Write(0)
                 Call outfile.Write(CByte(x.type))
 
-                Call outfile.Write(Writer.GetBuffer(sourceMap:=CType(x, IRuntimeTrace).stackFrame))
+                If x.GetType.ImplementInterface(Of IRuntimeTrace) Then
+                    Call outfile.Write(Writer.GetBuffer(sourceMap:=CType(x, IRuntimeTrace).stackFrame))
+                End If
 
                 If TypeOf x Is DeclareNewFunction Then
                     params = DirectCast(x, DeclareNewFunction).params
@@ -90,6 +95,9 @@ Namespace System.Package.File.Expressions
 
                     Call outfile.Write(Encoding.ASCII.GetBytes(DirectCast(x, DeclareNewFunction).funcName))
                     Call outfile.Write(CByte(0))
+                ElseIf TypeOf x Is FormulaExpression Then
+                    params = {New SymbolReference(DirectCast(x, FormulaExpression).var)}
+                    body = {DirectCast(x, FormulaExpression).formula}
                 Else
                     body = {DirectCast(x, DeclareLambdaFunction).closure}
                     params = DirectCast(x, DeclareLambdaFunction).parameterNames _

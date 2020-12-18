@@ -112,7 +112,8 @@ Namespace System.Package.File
             Select Case x.GetType
                 Case GetType(DeclareNewSymbol) : Return RSymbol.GetBuffer(x)
                 Case GetType(DeclareNewFunction),
-                     GetType(DeclareLambdaFunction)
+                     GetType(DeclareLambdaFunction),
+                     GetType(FormulaExpression)
 
                     Return RFunction.GetBuffer(x)
 

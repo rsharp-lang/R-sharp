@@ -54,12 +54,15 @@ Namespace System.Package.File
         FunctionCall
         FunctionByRef
         FunctionDeclare
+        FormulaDeclare
         LambdaDeclare
         SymbolDeclare
         SymbolReference
         SymbolIndex
         SymbolAssign
         Require
+
+        Constructor
 
         GetArgument
         Shell
@@ -71,6 +74,7 @@ Namespace System.Package.File
         [Break]
         [Continute]
         [IIf]
+        [TypeOf]
 
         Suppress
         BreakPoint
