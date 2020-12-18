@@ -87,6 +87,9 @@ Module Layouts
                                   <RRawVectorArgument> Optional dist As Object = "30,250",
                                   <RRawVectorArgument> Optional size As Object = "1000,1000",
                                   Optional iterations As Integer = 200,
+                                  Optional groupPlanner As Boolean = False,
+                                  Optional groupAttraction As Double = 5,
+                                  Optional groupRepulsive As Double = 5,
                                   Optional env As Environment = Nothing) As NetworkGraph
         If g.CheckZero Then
             env.AddMessage("all of the vertex node in your network graph is in ZERO location, do random layout at first...", MSG_TYPES.WRN)
@@ -95,15 +98,31 @@ Module Layouts
 
         Dim sizeStr = InteropArgumentHelper.getSize(size, "10000,10000")
         Dim distStr = InteropArgumentHelper.getSize(dist, "30,256")
-        Dim physics As New Planner(
-            g:=g,
-            ejectFactor:=ejectFactor,
-            condenseFactor:=condenseFactor,
-            maxtx:=maxtx,
-            maxty:=maxty,
-            dist_threshold:=distStr,
-            size:=sizeStr
-        )
+        Dim physics As Planner
+
+        If groupPlanner Then
+            physics = New GroupPlanner(
+                g:=g,
+                ejectFactor:=ejectFactor,
+                condenseFactor:=condenseFactor,
+                maxtx:=maxtx,
+                maxty:=maxty,
+                dist_threshold:=distStr,
+                size:=sizeStr,
+                groupAttraction:=groupAttraction,
+                groupRepulsive:=groupRepulsive
+            )
+        Else
+            physics = New Planner(
+                g:=g,
+                ejectFactor:=ejectFactor,
+                condenseFactor:=condenseFactor,
+                maxtx:=maxtx,
+                maxty:=maxty,
+                dist_threshold:=distStr,
+                size:=sizeStr
+            )
+        End If
 
         For i As Integer = 0 To iterations
             Call physics.Collide()

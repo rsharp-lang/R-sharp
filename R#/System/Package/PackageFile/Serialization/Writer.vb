@@ -1,49 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::c7c6b8bccc927f3e5b603ac79cf03f4d, R#\System\Package\PackageFile\Serialization\Writer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class Writer
-    ' 
-    '         Properties: RBinary, RCallFunction, RFunction, RImports, RLiteral
-    '                     RSymbol, RSymbolRef, RUnary, RVector
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: (+2 Overloads) GetBuffer, Write
-    ' 
-    '         Sub: (+2 Overloads) Dispose
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class Writer
+' 
+'         Properties: RBinary, RCallFunction, RFunction, RImports, RLiteral
+'                     RSymbol, RSymbolRef, RUnary, RVector
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: (+2 Overloads) GetBuffer, Write
+' 
+'         Sub: (+2 Overloads) Dispose
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -58,6 +58,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.System.Package.File.Expressions
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.SecurityString
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
 Namespace System.Package.File
 
@@ -88,6 +89,12 @@ Namespace System.Package.File
         Public ReadOnly Property RVector As RVector
         Public ReadOnly Property RString As RStringInterpolation
 
+#Region "keywords"
+        Public ReadOnly Property Rfor As RFor
+        Public ReadOnly Property Rif As RIf
+        Public ReadOnly Property Relse As RElse
+#End Region
+
         Sub New(buffer As Stream)
             Me.buffer = New BinaryWriter(buffer)
 
@@ -106,17 +113,21 @@ Namespace System.Package.File
             Me.RString = New RStringInterpolation(Me)
             Me.RSymbolIndex = New RSymbolIndex(Me)
             Me.RSymbolAssign = New RSymbolAssign(Me)
+            Me.Rfor = New RFor(Me)
+            Me.Rif = New RIf(Me)
+            Me.Relse = New RElse(Me)
         End Sub
 
         Public Function GetBuffer(x As Expression) As Byte()
             Select Case x.GetType
                 Case GetType(DeclareNewSymbol) : Return RSymbol.GetBuffer(x)
                 Case GetType(DeclareNewFunction),
-                     GetType(DeclareLambdaFunction)
+                     GetType(DeclareLambdaFunction),
+                     GetType(FormulaExpression)
 
                     Return RFunction.GetBuffer(x)
 
-                Case GetType(Literal) : Return RLiteral.GetBuffer(x)
+                Case GetType(Literal), GetType(Regexp) : Return RLiteral.GetBuffer(x)
                 Case GetType(StringInterpolation) : Return RString.GetBuffer(x)
                 Case GetType(BinaryOrExpression),
                      GetType(BinaryBetweenExpression),
@@ -126,13 +137,23 @@ Namespace System.Package.File
 
                     Return RBinary.GetBuffer(x)
 
-                Case GetType(FunctionInvoke) : Return RCallFunction.GetBuffer(x)
+                Case GetType(FunctionInvoke),
+                     GetType(ByRefFunctionCall),
+                     GetType(IIfExpression)
+
+                    Return RCallFunction.GetBuffer(x)
+
                 Case GetType(Require), GetType([Imports]) : Return RImports.GetBuffer(x)
                 Case GetType(UnaryNot) : Return RUnary.GetBuffer(x)
                 Case GetType(VectorLiteral) : Return RVector.GetBuffer(x)
                 Case GetType(SymbolReference) : Return RSymbolRef.GetBuffer(x)
                 Case GetType(SymbolIndexer) : Return RSymbolIndex.GetBuffer(x)
                 Case GetType(ValueAssign) : Return RSymbolAssign.GetBuffer(x)
+
+                Case GetType(ForLoop) : Return Rfor.GetBuffer(x)
+                Case GetType(IfBranch) : Return Rif.GetBuffer(x)
+                Case GetType(ElseBranch) : Return Relse.GetBuffer(x)
+
                 Case Else
                     Throw New NotImplementedException(x.GetType.FullName)
             End Select

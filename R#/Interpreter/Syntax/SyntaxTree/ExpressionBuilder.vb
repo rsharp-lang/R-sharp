@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::46129f557f022b9f7452f50bd9e72b7f, R#\Interpreter\Syntax\SyntaxTree\ExpressionBuilder.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module ExpressionBuilder
-    ' 
-    '         Function: getTupleSymbols, getValueAssign, keywordExpressionHandler, ParseExpression, parseInvoke
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module ExpressionBuilder
+' 
+'         Function: getTupleSymbols, getValueAssign, keywordExpressionHandler, ParseExpression, parseInvoke
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -53,6 +53,7 @@ Imports SMRUCC.Rsharp.Interpreter.SyntaxParser
 Imports SMRUCC.Rsharp.Interpreter.SyntaxParser.SyntaxImplements
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 
 Namespace Interpreter.SyntaxParser
 
@@ -280,11 +281,12 @@ Binary:
                     Return vals
                 Else
                     Dim calls As SyntaxResult = SyntaxImplements.FunctionInvoke(target, opts)
+                    Dim sourceMap As StackFrame = opts.GetStackTrace(target(Scan0), target(Scan0).text)
 
                     If calls.isException Then
                         Return calls
                     Else
-                        Return New ByRefFunctionCall(calls.expression, vals.expression)
+                        Return New ByRefFunctionCall(calls.expression, vals.expression, sourceMap)
                     End If
                 End If
             ElseIf target.Length >= 3 Then

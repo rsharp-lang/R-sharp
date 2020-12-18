@@ -1,50 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::c2ac344f45032f266f8075ecc49eb97b, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\IIfExpression.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class IIfExpression
-    ' 
-    '         Properties: type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class IIfExpression
+' 
+'         Properties: type
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.System.Package.File
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
@@ -52,22 +56,36 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
     ''' ifelse expression
     ''' </summary>
     Public Class IIfExpression : Inherits Expression
+        Implements IRuntimeTrace
 
-        Friend ifTest As Expression
-        Friend trueResult As Expression
-        Friend falseResult As Expression
+        Friend ReadOnly ifTest As Expression
+        Friend ReadOnly trueResult As Expression
+        Friend ReadOnly falseResult As Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
+            Get
+                Return trueResult.type
+            End Get
+        End Property
 
-        Sub New(iftest As Expression, trueResult As Expression, falseResult As Expression)
+        Public Overrides ReadOnly Property expressionName As ExpressionTypes
+            Get
+                Return ExpressionTypes.IIf
+            End Get
+        End Property
+
+        Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
+
+        Sub New(iftest As Expression, trueResult As Expression, falseResult As Expression, stackFrame As StackFrame)
             Me.ifTest = iftest
             Me.trueResult = trueResult
             Me.falseResult = falseResult
+            Me.stackFrame = stackFrame
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim ifTestResult = ifTest.Evaluate(envir)
-            Dim test As Boolean = Runtime.asLogical(ifTestResult)(Scan0)
+            Dim test As Boolean = REnv.asLogical(ifTestResult)(Scan0)
 
             If test = True Then
                 Return trueResult.Evaluate(envir)

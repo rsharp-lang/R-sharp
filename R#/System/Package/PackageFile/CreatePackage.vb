@@ -72,7 +72,7 @@ Namespace System.Package.File
             Dim file As New PackageModel With {
                 .info = desc,
                 .symbols = New Dictionary(Of String, Expression),
-                .assembly = $"{target}/assembly".EnumerateFiles("*.dll")
+                .assembly = $"{target}/assembly".EnumerateFiles("*.dll").ToArray
             }
             Dim loading As New List(Of Expression)
 
@@ -111,8 +111,18 @@ Namespace System.Package.File
                 End If
             Next
 
-            file.loading = loading.DoCall(AddressOf Dependency.GetDependency).ToArray
-            file.Flush(outfile)
+            file.loading = loading _
+                .Where(Function(i)
+                           If Not TypeOf i Is [Imports] Then
+                               Return True
+                           Else
+                               Return Not DirectCast(i, [Imports]).isImportsScript
+                           End If
+                       End Function) _
+                .DoCall(AddressOf Dependency.GetDependency) _
+                .ToArray
+
+            Call file.Flush(outfile)
 
             Return Nothing
         End Function

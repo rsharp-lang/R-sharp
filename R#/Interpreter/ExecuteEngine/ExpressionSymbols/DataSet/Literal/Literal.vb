@@ -1,52 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::b3fcf9560bcfc9864e72c312cfd6f345, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\Literal.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class Literal
-    ' 
-    '         Properties: [FALSE], [TRUE], NULL, type, ValueStr
-    ' 
-    '         Constructor: (+5 Overloads) Sub New
-    '         Function: Evaluate, ToString
-    '         Operators: <>, =
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class Literal
+' 
+'         Properties: [FALSE], [TRUE], NULL, type, ValueStr
+' 
+'         Constructor: (+5 Overloads) Sub New
+'         Function: Evaluate, ToString
+'         Operators: <>, =
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.System.Package.File
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
@@ -55,6 +56,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         Public Overrides ReadOnly Property type As TypeCodes
             Get
                 Return m_type
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property expressionName As ExpressionTypes
+            Get
+                Return ExpressionTypes.Literal
             End Get
         End Property
 

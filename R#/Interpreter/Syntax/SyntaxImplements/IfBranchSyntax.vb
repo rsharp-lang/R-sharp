@@ -55,6 +55,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Dim ifTest = Expression.CreateExpression(test, opts)
             Dim trueResult = Expression.CreateExpression(ifelse(Scan0), opts)
             Dim falseResult = Expression.CreateExpression(ifelse(2), opts)
+            Dim sourceMap = opts.GetStackTrace(test(Scan0), "iif")
 
             If ifTest.isException Then
                 Return ifTest
@@ -66,7 +67,8 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 Return New IIfExpression(
                     iftest:=ifTest.expression,
                     trueResult:=trueResult.expression,
-                    falseResult:=falseResult.expression
+                    falseResult:=falseResult.expression,
+                    stackFrame:=sourceMap
                 )
             End If
         End Function

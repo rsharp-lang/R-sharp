@@ -100,7 +100,12 @@ Namespace System.Package.File
             Dim text As String
 
             Using file As New StreamWriter(zip.CreateEntry("manifest/assembly.json").Open)
-                text = assembly.Select(AddressOf FileName).GetJson(indent:=True)
+                text = assembly _
+                    .ToDictionary(Function(path) path.FileName,
+                                  Function(fileName)
+                                      Return md5.GetMd5Hash(fileName.ReadBinary)
+                                  End Function) _
+                    .GetJson(indent:=True)
                 checksum = checksum & md5.GetMd5Hash(text)
 
                 Call file.WriteLine(text)

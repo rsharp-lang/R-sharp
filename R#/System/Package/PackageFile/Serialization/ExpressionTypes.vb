@@ -50,15 +50,48 @@ Namespace System.Package.File
     Public Enum ExpressionTypes As Integer
         Literal
         VectorLiteral
+        SequenceLiteral
+        ExpressionLiteral
+
         StringInterpolation
         FunctionCall
+        FunctionByRef
         FunctionDeclare
+        ClosureDeclare
+        LinqDeclare
+        FormulaDeclare
         LambdaDeclare
         SymbolDeclare
         SymbolReference
+        SymbolNamespaceReference
         SymbolIndex
         SymbolAssign
+        SymbolRegexp
+        SymbolMemberAssign
         Require
+
+        Constructor
+
+        GetArgument
+        Shell
+
+        [While]
+        [For]
+        [If]
+        [Else]
+        [Break]
+        [Continute]
+        [IIf]
+        [TypeOf]
+        [With]
+        [Return]
+        [Using]
+        [Do]
+
+        Suppress
+        BreakPoint
+        Comment
+
         UnaryNot
         Binary
     End Enum

@@ -92,6 +92,12 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Return New FunctionInvoke(funcName, frame, parameters.ToArray)
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="tokens">scan0 is the name target</param>
+        ''' <param name="opts"></param>
+        ''' <returns></returns>
         Public Function FunctionInvoke(tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
             Return FunctionInvoke(tokens(Scan0), tokens.Skip(1).ToArray, opts)
         End Function
