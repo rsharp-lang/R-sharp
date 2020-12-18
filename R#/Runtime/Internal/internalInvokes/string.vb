@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8fec7243e2aba824dfaf581468292b1f, R#\Runtime\Internal\internalInvokes\string.vb"
+﻿#Region "Microsoft.VisualBasic::c875262996c3a9cf995c52bed38bab45, R#\Runtime\Internal\internalInvokes\string.vb"
 
     ' Author:
     ' 
@@ -52,6 +52,7 @@
 
 #End Region
 
+Imports System.Drawing
 Imports System.IO
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
@@ -215,7 +216,21 @@ Namespace Runtime.Internal.Invokes
                 GetType(Dictionary(Of String, Object)),
                 GetType(Integer()),
                 GetType(Boolean()),
-                GetType(String())
+                GetType(String()),
+                GetType(Double),
+                GetType(Double()),
+                GetType(Single),
+                GetType(Single()),
+                GetType(Date),
+                GetType(Date()),
+                GetType(Long),
+                GetType(Long()),
+                GetType(Byte),
+                GetType(Byte()),
+                GetType(Short),
+                GetType(Short()),
+                GetType(Color),
+                GetType(Color())
             }
 
             Try

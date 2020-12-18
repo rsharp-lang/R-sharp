@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7cb3344b76ac9c465de75fea92b3662a, Library\R_graphic.interop\InteropArgumentHelper.vb"
+﻿#Region "Microsoft.VisualBasic::331bd626440efce8bc1ee89114489cd3, Library\R_graphic.interop\InteropArgumentHelper.vb"
 
     ' Author:
     ' 
@@ -33,8 +33,8 @@
 
     ' Module InteropArgumentHelper
     ' 
-    '     Function: getColor, getFontCSS, getPadding, GetRawColor, getSize
-    '               getStrokePenCSS, getVector2D, getVector3D, paddingFromNumbers
+    '     Function: getColor, getColorSet, getFontCSS, getPadding, GetRawColor
+    '               getSize, getStrokePenCSS, getVector2D, getVector3D, paddingFromNumbers
     ' 
     ' /********************************************************************************/
 

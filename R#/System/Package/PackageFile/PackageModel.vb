@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::93db2c490af0bc77a91e90860a42ac58, R#\System\Package\PackageFile\PackageModel.vb"
+﻿#Region "Microsoft.VisualBasic::458840c3f5977be7d66c02dcd1a48ed8, R#\System\Package\PackageFile\PackageModel.vb"
 
 ' Author:
 ' 
@@ -33,7 +33,7 @@
 
 '     Class PackageModel
 ' 
-'         Properties: info
+'         Properties: assembly, info, loading, symbols
 ' 
 '         Sub: Flush
 ' 
@@ -44,9 +44,11 @@
 
 Imports System.IO
 Imports System.IO.Compression
+Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.SecurityString
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
@@ -68,83 +70,137 @@ Namespace System.Package.File
         ''' <returns></returns>
         Public Property assembly As String()
 
-        Public Sub Flush(outfile As Stream)
-            Dim checksum As String = ""
+        Private Function writeSymbols(zip As ZipArchive, ByRef checksum$) As Dictionary(Of String, String)
+            Dim onLoad As DeclareNewFunction
+            Dim symbols As New Dictionary(Of String, String)
+
+            For Each symbol As NamedValue(Of Expression) In Me.symbols.Select(Function(t) New NamedValue(Of Expression)(t.Key, t.Value))
+                If symbol.Name = ".onLoad" Then
+                    onLoad = symbol.Value
+
+                    Using file As New Writer(zip.CreateEntry(".onload").Open)
+                        checksum = checksum & file.Write(onLoad)
+                    End Using
+                Else
+                    Dim symbolRef As String = symbol.Name.MD5
+
+                    Using file As New Writer(zip.CreateEntry($"src/{symbolRef}").Open)
+                        checksum = checksum & file.Write(symbol.Value)
+                    End Using
+
+                    Call symbols.Add(symbol.Name, symbolRef)
+                End If
+            Next
+
+            Return symbols
+        End Function
+
+        Private Sub copyAssembly(zip As ZipArchive, ByRef checksum$)
             Dim md5 As New Md5HashProvider
             Dim text As String
 
+            Using file As New StreamWriter(zip.CreateEntry("manifest/assembly.json").Open)
+                text = assembly.Select(AddressOf FileName).GetJson(indent:=True)
+                checksum = checksum & md5.GetMd5Hash(text)
+
+                Call file.WriteLine(text)
+                Call file.Flush()
+            End Using
+
+            Using file As New StreamWriter(zip.CreateEntry("assembly/readme.txt").Open)
+                text = ".NET assembly files"
+                checksum = checksum & md5.GetMd5Hash(text)
+
+                Call file.WriteLine(text)
+                Call file.Flush()
+            End Using
+
+            For Each dll As String In assembly
+                Using file As New BinaryWriter(zip.CreateEntry($"assembly/{dll.FileName}").Open)
+                    checksum = checksum & md5.GetMd5Hash(dll.ReadBinary)
+
+                    Call file.Write(dll.ReadBinary)
+                    Call file.Flush()
+                End Using
+            Next
+        End Sub
+
+        Private Sub saveDependency(zip As ZipArchive, ByRef checksum$)
+            Dim md5 As New Md5HashProvider
+
+            Using file As New StreamWriter(zip.CreateEntry("manifest/dependency.json").Open)
+                Dim text = loading.GetJson(indent:=True)
+                checksum = checksum & md5.GetMd5Hash(text)
+
+                Call file.WriteLine(text)
+                Call file.Flush()
+            End Using
+        End Sub
+
+        Private Sub saveSymbols(zip As ZipArchive, symbols As Dictionary(Of String, String), ByRef checksum$)
+            Dim md5 As New Md5HashProvider
+            Dim text As String
+
+            Using file As New StreamWriter(zip.CreateEntry("manifest/symbols.json").Open)
+                text = symbols.GetJson(indent:=True)
+                checksum = checksum & md5.GetMd5Hash(text)
+
+                Call file.WriteLine(text)
+                Call file.Flush()
+            End Using
+        End Sub
+
+        Private Sub writeIndex(zip As ZipArchive, ByRef checksum$)
+            Dim text As String
+            Dim md5 As New Md5HashProvider
+
+            Using file As New StreamWriter(zip.CreateEntry("index.json").Open)
+                info.meta("builtTime") = Now.ToString
+                text = info.GetJson(indent:=True)
+                checksum = checksum & md5.GetMd5Hash(text)
+
+                Call file.WriteLine(text)
+                Call file.Flush()
+            End Using
+        End Sub
+
+        Private Sub writeRuntime(zip As ZipArchive, ByRef checksum$)
+            Dim md5 As New Md5HashProvider
+            Dim text As String
+
+            Using file As New StreamWriter(zip.CreateEntry("manifest/runtime.json").Open)
+                text = GetType(RInterpreter).Assembly _
+                    .FromAssembly _
+                    .GetJson(indent:=True)
+                checksum = checksum & md5.GetMd5Hash(text)
+
+                Call file.WriteLine(text)
+                Call file.Flush()
+            End Using
+
+            Using file As New StreamWriter(zip.CreateEntry("manifest/framework.json").Open)
+                text = GetType(App).Assembly _
+                    .FromAssembly _
+                    .GetJson(indent:=True)
+                checksum = checksum & md5.GetMd5Hash(text)
+
+                Call file.WriteLine(text)
+                Call file.Flush()
+            End Using
+        End Sub
+
+        Public Sub Flush(outfile As Stream)
+            Dim checksum As String = ""
+            Dim md5 As New Md5HashProvider
+
             Using zip As New ZipArchive(outfile, ZipArchiveMode.Create)
-                info.meta("BuiltTime") = Now.ToString
+                Dim symbols As Dictionary(Of String, String) = writeSymbols(zip, checksum)
 
-                Using file As New StreamWriter(zip.CreateEntry("index.json").Open)
-                    text = info.GetJson(indent:=True)
-                    checksum = checksum & md5.GetMd5Hash(text)
-
-                    Call file.WriteLine(text)
-                    Call file.Flush()
-                End Using
-
-                Dim symbols As New Dictionary(Of String, String)
-                Dim onLoad As DeclareNewFunction
-
-                For Each symbol As NamedValue(Of Expression) In Me.symbols.Select(Function(t) New NamedValue(Of Expression)(t.Key, t.Value))
-                    If symbol.Name = ".onLoad" Then
-                        onLoad = symbol.Value
-
-                        Using file As New Writer(zip.CreateEntry(".onload").Open)
-                            checksum = checksum & file.Write(onLoad)
-                        End Using
-                    Else
-                        Dim symbolRef As String = symbol.Name.MD5
-
-                        Using file As New Writer(zip.CreateEntry($"src/{symbolRef}").Open)
-                            checksum = checksum & file.Write(symbol.Value)
-                        End Using
-
-                        Call symbols.Add(symbol.Name, symbolRef)
-                    End If
-                Next
-
-                Using file As New StreamWriter(zip.CreateEntry("manifest/assembly.json").Open)
-                    text = assembly.Select(AddressOf FileName).GetJson(indent:=True)
-                    checksum = checksum & md5.GetMd5Hash(text)
-
-                    Call file.WriteLine(text)
-                    Call file.Flush()
-                End Using
-
-                Using file As New StreamWriter(zip.CreateEntry("assembly/readme.txt").Open)
-                    text = ".NET assembly files"
-                    checksum = checksum & md5.GetMd5Hash(text)
-
-                    Call file.WriteLine(text)
-                    Call file.Flush()
-                End Using
-
-                For Each dll As String In assembly
-                    Using file As New BinaryWriter(zip.CreateEntry($"assembly/{dll.FileName}").Open)
-                        checksum = checksum & md5.GetMd5Hash(dll.ReadBinary)
-
-                        Call file.Write(dll.ReadBinary)
-                        Call file.Flush()
-                    End Using
-                Next
-
-                Using file As New StreamWriter(zip.CreateEntry("manifest/dependency.json").Open)
-                    text = loading.GetJson(indent:=True)
-                    checksum = checksum & md5.GetMd5Hash(text)
-
-                    Call file.WriteLine(text)
-                    Call file.Flush()
-                End Using
-
-                Using file As New StreamWriter(zip.CreateEntry("manifest/symbols.json").Open)
-                    text = symbols.GetJson(indent:=True)
-                    checksum = checksum & md5.GetMd5Hash(text)
-
-                    Call file.WriteLine(text)
-                    Call file.Flush()
-                End Using
+                Call saveSymbols(zip, symbols, checksum)
+                Call copyAssembly(zip, checksum)
+                Call saveDependency(zip, checksum)
+                Call writeIndex(zip, checksum)
+                Call writeRuntime(zip, checksum)
 
                 Using file As New StreamWriter(zip.CreateEntry("CHECKSUM").Open)
                     Call file.WriteLine(md5.GetMd5Hash(checksum).ToUpper)

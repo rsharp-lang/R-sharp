@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0315a6c05173d4b4557f833bcd74ba26, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\UnaryNot.vb"
+﻿#Region "Microsoft.VisualBasic::02647813fe7141404ce0adacda40fc3f, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\UnaryNot.vb"
 
     ' Author:
     ' 
@@ -56,7 +56,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             End Get
         End Property
 
-        ReadOnly logical As Expression
+        Friend ReadOnly logical As Expression
 
         Sub New(logical As Expression)
             Me.logical = logical

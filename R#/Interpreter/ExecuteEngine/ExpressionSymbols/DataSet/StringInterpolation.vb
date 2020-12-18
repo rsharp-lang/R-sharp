@@ -60,7 +60,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         ''' <summary>
         ''' 这些表达式产生的全部都是字符串结果值
         ''' </summary>
-        ReadOnly stringParts As Expression()
+        Friend ReadOnly stringParts As Expression()
 
         Sub New(stringParts As Expression())
             Me.stringParts = stringParts

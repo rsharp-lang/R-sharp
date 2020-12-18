@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d1e79dd186e3ca995b3e8eb27a1225a0, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
+﻿#Region "Microsoft.VisualBasic::f6b663ced096b22c191e95f1e8da4504, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
 
     ' Author:
     ' 

@@ -1,0 +1,14 @@
+{
+  "AssemblyCompany": "sciBASIC.NET",
+  "AssemblyCopyright": "Copyright © <xie.guigang@live.com>, GPL3 Licensed 2020",
+  "AssemblyDescription": "sciBASIC.NET Framework: Core runtime for Microsoft VisualBasic 2020",
+  "AssemblyFileVersion": "",
+  "AssemblyFullName": "Microsoft.VisualBasic.Framework_v47_dotnet_8da45dcd8060cc9a, Version=4.7.7656.40381, Culture=neutral, PublicKeyToken=null",
+  "AssemblyProduct": "Microsoft.VisualBasic",
+  "AssemblyTitle": "sciBASIC.NET Framework: Core runtime for Microsoft VisualBasic 2020",
+  "AssemblyTrademark": null,
+  "AssemblyVersion": "4.7.7656.40381",
+  "BuiltTime": "\/Date(1608084090000+0800)\/",
+  "ComVisible": false,
+  "Guid": "390cf8ae-fe48-414a-be09-92bdb8c4011b"
+}

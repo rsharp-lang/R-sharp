@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8aab1e20477cafec96cb9246c68eec86, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\FunctionInvoke.vb"
+﻿#Region "Microsoft.VisualBasic::478c6e8f53c14b29132cd64a45a8115d, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\FunctionInvoke.vb"
 
     ' Author:
     ' 
@@ -215,12 +215,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             End If
 
             If TypeOf funcName Is Literal Then
-                Dim symbol As Object = envir.FindSymbol(DirectCast(funcName, Literal).ValueStr)?.value
+                Dim symbol As Symbol = envir.FindFunction(DirectCast(funcName, Literal).ValueStr)
 
                 If symbol Is Nothing Then
                     funcVar = Nothing
                 Else
-                    funcVar = symbol
+                    funcVar = symbol.value
                 End If
             Else
                 funcVar = funcName.Evaluate(envir)

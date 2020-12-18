@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::625cdd290ebe36b132d27888786fe246, R#\Runtime\Extensions.vb"
+﻿#Region "Microsoft.VisualBasic::8183dc2ceb06a982a3d9ddad666cf3f3, R#\Runtime\Extensions.vb"
 
     ' Author:
     ' 
@@ -33,13 +33,15 @@
 
     '     Module Extensions
     ' 
-    '         Function: MeasureArrayElementType, MeasureRealElementType, TryCatch
+    '         Function: isCallable, MeasureArrayElementType, MeasureRealElementType, TryCatch
     ' 
     ' 
     ' /********************************************************************************/
 
 #End Region
 
+Imports Microsoft.VisualBasic.Emit.Delegates
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports vbObject = SMRUCC.Rsharp.Runtime.Internal.Object.vbObject
 
 Namespace Runtime
@@ -148,6 +150,16 @@ Namespace Runtime
                     ' 反之说明类型间没有继承关系，即互不兼容，则返回object类型
                     Return GetType(Object)
                 End If
+            End If
+        End Function
+
+        Public Function isCallable(x As Object) As Boolean
+            If x Is Nothing Then
+                Return False
+            ElseIf x.GetType.ImplementInterface(Of RFunction) Then
+                Return True
+            Else
+                Return False
             End If
         End Function
     End Module

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::636cd298ddb2f002d5352832d6f59144, R#\Runtime\Internal\internalInvokes\utils.vb"
+﻿#Region "Microsoft.VisualBasic::293ee82ab9553f2eb389e81d2a8b9c93, R#\Runtime\Internal\internalInvokes\utils.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,7 @@
     '         Function: debugTool, GetInstalledPackages, head, installPackages, keyGroups
     '                   md5, memorySize, system, wget
     ' 
-    '         Sub: cls, sleep
+    '         Sub: cls, pause, sleep
     ' 
     ' 
     ' /********************************************************************************/

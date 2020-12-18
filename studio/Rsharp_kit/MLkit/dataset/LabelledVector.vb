@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6cdf48684a252503960d8312c25cfd67, studio\Rsharp_kit\MLkit\dataset\LabelledVector.vb"
+﻿#Region "Microsoft.VisualBasic::119926855cfa22b5268c0dcd76d6bac5, studio\Rsharp_kit\MLkit\dataset\LabelledVector.vb"
 
     ' Author:
     ' 
@@ -90,4 +90,3 @@ Public NotInheritable Class LabelledVector : Implements INamedValue
         Return data
     End Function
 End Class
-

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7e2576b4a85268bd062cb0b3da34d8f1, R#\Runtime\System\Symbol.vb"
+﻿#Region "Microsoft.VisualBasic::fb323e9fcbbc27f010efc73895f622e9, R#\Runtime\System\Symbol.vb"
 
     ' Author:
     ' 
@@ -33,8 +33,8 @@
 
     '     Class Symbol
     ' 
-    '         Properties: [readonly], [typeof], constraint, constraintValid, length
-    '                     name, typeCode, typeId, value
+    '         Properties: [readonly], [typeof], constraint, constraintValid, isCallable
+    '                     length, name, typeCode, typeId, value
     ' 
     '         Constructor: (+2 Overloads) Sub New
     '         Function: GetValueViewString, SetValue, ToString, ToVector
@@ -50,6 +50,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Components
 
@@ -139,6 +140,16 @@ Namespace Runtime.Components
         End Property
 
         ''' <summary>
+        ''' 当前的这个符号值是否是一个可以被调用的函数对象？
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property isCallable As Boolean
+            Get
+                Return REnv.isCallable(value)
+            End Get
+        End Property
+
+        ''' <summary>
         ''' 当前的变量值的类型代码是否满足类型约束条件
         ''' </summary>
         ''' <returns></returns>
@@ -156,9 +167,14 @@ Namespace Runtime.Components
             End Get
         End Property
 
+        ''' <summary>
+        ''' NULL
+        ''' </summary>
+        ''' <param name="constraint"></param>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Sub New(Optional constraint As TypeCodes = TypeCodes.generic)
             Me.constraint = constraint
+            Me.m_val = Nothing
         End Sub
 
         Sub New(value As Object, Optional constraint As TypeCodes = TypeCodes.generic)

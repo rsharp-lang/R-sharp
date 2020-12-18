@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::694a5208f9f90ca8ee19ac57b1193ee7, R#\Runtime\Environment\RContentOutput.vb"
+﻿#Region "Microsoft.VisualBasic::961881f766c9d97994f280b37fdbd26f, R#\Runtime\Environment\RContentOutput.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Class RContentOutput
     ' 
-    '         Properties: Encoding, env, recommendType, stream
+    '         Properties: Encoding, env, isLogOpen, recommendType, stream
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Sub: closeSink, Flush, openSink, (+5 Overloads) Write, (+2 Overloads) WriteLine

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e9a00484a338ae00ee5835e6155453d6, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryBetweenExpression.vb"
+﻿#Region "Microsoft.VisualBasic::437d2ab59f8b380b42ddbd3eae2c5627, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryBetweenExpression.vb"
 
     ' Author:
     ' 
@@ -52,8 +52,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
     Public Class BinaryBetweenExpression : Inherits Expression
 
-        Dim collectionSet As Expression
-        Dim range As Expression
+        ''' <summary>
+        ''' left
+        ''' </summary>
+        Friend ReadOnly collectionSet As Expression
+        ''' <summary>
+        ''' right
+        ''' </summary>
+        Friend ReadOnly range As Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
             Get

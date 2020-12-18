@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a2dcdf01d425fa0276c2b9178f172f8b, R#\System\Package\ImportsPackage.vb"
+﻿#Region "Microsoft.VisualBasic::274fc9d79ca601ab8934c663732fd9dc, R#\System\Package\ImportsPackage.vb"
 
     ' Author:
     ' 
@@ -141,11 +141,16 @@ Namespace System.Package
             Dim masked As New List(Of String)
 
             For Each api As RMethodInfo In Rmethods
-                symbol = [global].FindSymbol(api.name)
+                symbol = [global].FindFunction(api.name)
 
                 If symbol Is Nothing Then
                     ' add new
-                    [global].Push(api.name, api, [readonly]:=False, mode:=TypeCodes.closure)
+                    symbol = New Symbol(api, TypeCodes.closure) With {
+                        .name = api.name,
+                        .[readonly] = False
+                    }
+
+                    [global].funcSymbols.Add(symbol)
                 Else
                     ' overrides and masked by current package
                     symbol.SetValue(api, envir)

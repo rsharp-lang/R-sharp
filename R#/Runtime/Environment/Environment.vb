@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0bdf5532cad524554c8d629d56381718, R#\Runtime\Environment\Environment.vb"
+﻿#Region "Microsoft.VisualBasic::015cf2a04aa6f13e7cfe357a7775dc49, R#\Runtime\Environment\Environment.vb"
 
     ' Author:
     ' 
@@ -33,13 +33,13 @@
 
     '     Class Environment
     ' 
-    '         Properties: globalEnvironment, isGlobal, last, messages, parent
-    '                     stackFrame, stackTrace, symbols
+    '         Properties: funcSymbols, globalEnvironment, isGlobal, last, messages
+    '                     parent, stackFrame, stackTrace, symbols
     ' 
     '         Constructor: (+3 Overloads) Sub New
     ' 
-    '         Function: asRVector, Evaluate, FindSymbol, GetEnumerator, IEnumerable_GetEnumerator
-    '                   Push, ToString
+    '         Function: asRVector, Evaluate, FindFunction, FindSymbol, GetEnumerator
+    '                   IEnumerable_GetEnumerator, Push, ToString
     ' 
     '         Sub: AddMessage, Clear, Delete, (+2 Overloads) Dispose, redirectError
     '              redirectWarning, setStackInfo
@@ -89,6 +89,12 @@ Namespace Runtime
         End Property
 
         Public ReadOnly Property symbols As Dictionary(Of Symbol)
+
+        ''' <summary>
+        ''' 导入的函数列表
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property funcSymbols As Dictionary(Of Symbol)
 
         ''' <summary>
         ''' 主要是存储警告消息
@@ -165,6 +171,7 @@ Namespace Runtime
 
         Sub New()
             symbols = New Dictionary(Of Symbol)
+            funcSymbols = New Dictionary(Of Symbol)
             parent = Nothing
             [global] = Nothing
             stackFrame = globalStackFrame
@@ -191,6 +198,7 @@ Namespace Runtime
 
             If isInherits Then
                 symbols = parent.symbols
+                funcSymbols = parent.funcSymbols
             End If
 
             If parent.global.log4vb_redirect Then
@@ -236,6 +244,9 @@ Namespace Runtime
                 If Not symbols Is parent.symbols Then
                     Call symbols.Clear()
                 End If
+                If Not funcSymbols Is parent.funcSymbols Then
+                    Call funcSymbols.Clear()
+                End If
             End If
 
             Call ifPromise.Clear()
@@ -254,8 +265,37 @@ Namespace Runtime
 
             If symbols.ContainsKey(name) Then
                 Return symbols(name)
+            ElseIf funcSymbols.ContainsKey(name) Then
+                Return funcSymbols(name)
             ElseIf [inherits] AndAlso Not parent Is Nothing Then
                 Return parent.FindSymbol(name)
+            Else
+                Return Nothing
+            End If
+        End Function
+
+        ''' <summary>
+        ''' 会首先在当前环境中的符号列表查找函数，如果不是函数则会在当前环境的函数列表中查找
+        ''' 如果当前环境中不存在，则会在父环境中查找符号
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <param name="[inherits]"></param>
+        ''' <returns></returns>
+        Public Function FindFunction(name As String, Optional [inherits] As Boolean = True) As Symbol
+            If (name.First = "["c AndAlso name.Last = "]"c) Then
+                Return globalEnvironment.FindFunction(name.GetStackValue("[", "]"))
+            End If
+
+            If symbols.ContainsKey(name) AndAlso symbols(name).isCallable Then
+                Return symbols(name)
+            End If
+
+            If funcSymbols.ContainsKey(name) Then
+                Return funcSymbols(name)
+            End If
+
+            If [inherits] AndAlso Not parent Is Nothing Then
+                Return parent.FindFunction(name)
             Else
                 Return Nothing
             End If
@@ -289,7 +329,23 @@ Namespace Runtime
         ''' <returns>返回错误消息或者对象值</returns>
         Public Function Push(name$, value As Object, [readonly] As Boolean, Optional mode As TypeCodes = TypeCodes.generic) As Object
             If symbols.ContainsKey(name) Then
-                Return Internal.debug.stop({String.Format(AlreadyExists, name)}, Me)
+                ' 变量可以被重复申明
+                ' 即允许
+                ' let x = 1
+                ' let x = 2
+                ' 这样子的操作
+                ' Return Internal.debug.stop({String.Format(AlreadyExists, name)}, Me)
+
+                Call New String() {
+                    $"symbol '{name}' is already exists in current environment",
+                    $"symbol: {name}"
+                }.DoCall(Sub(info)
+                             Call AddMessage(info, MSG_TYPES.WRN)
+                         End Sub)
+
+                ' 只需要设置值就可以了
+                Return symbols(name).SetValue(value, Me)
+
             ElseIf Not value Is Nothing Then
                 value = asRVector(mode, value)
             End If
