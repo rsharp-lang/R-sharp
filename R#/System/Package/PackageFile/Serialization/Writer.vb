@@ -76,6 +76,8 @@ Namespace System.Package.File
 
         Public Const Magic As String = "SMRUCC/R#"
 
+        Shared ReadOnly magicBytes As Byte() = Encoding.ASCII.GetBytes(Magic)
+
         Public ReadOnly Property RSymbol As RSymbol
         Public ReadOnly Property RSymbolRef As RSymbolReference
         Public ReadOnly Property RSymbolIndex As RSymbolIndex
@@ -98,7 +100,7 @@ Namespace System.Package.File
         Sub New(buffer As Stream)
             Me.buffer = New BinaryWriter(buffer)
 
-            Call Me.buffer.Write(Encoding.ASCII.GetBytes(Magic))
+            Call Me.buffer.Write(magicBytes)
             Call Me.buffer.Flush()
 
             Me.RSymbol = New RSymbol(Me)

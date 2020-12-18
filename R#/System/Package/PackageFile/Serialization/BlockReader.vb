@@ -43,6 +43,7 @@
 #End Region
 
 Imports System.IO
+Imports System.Text
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
 
@@ -56,6 +57,17 @@ Namespace System.Package.File
 
         Public Function Parse() As Expression
 
+        End Function
+
+        Public Shared Function Read(reader As BinaryReader) As BlockReader
+            ' check magic
+            Dim magic As String = Encoding.ASCII.GetString(reader.ReadBytes(Writer.Magic.Length))
+
+            If magic <> Writer.Magic Then
+                Throw New InvalidDataException("magic header is not correct!")
+            End If
+
+            Return Read(reader, magic.Length)
         End Function
 
         Public Shared Function Read(reader As BinaryReader, i As Long) As BlockReader
