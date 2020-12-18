@@ -7967,8 +7967,8 @@ Global
 		{4FB0A3C2-E1DF-45AC-B263-5C8BC7BAC483}.Release|x86.Build.0 = Release|Any CPU
 		{4FB0A3C2-E1DF-45AC-B263-5C8BC7BAC483}.Rsharp_app_release|Any CPU.ActiveCfg = Release|Any CPU
 		{4FB0A3C2-E1DF-45AC-B263-5C8BC7BAC483}.Rsharp_app_release|Any CPU.Build.0 = Release|Any CPU
-		{4FB0A3C2-E1DF-45AC-B263-5C8BC7BAC483}.Rsharp_app_release|x64.ActiveCfg = Release|Any CPU
-		{4FB0A3C2-E1DF-45AC-B263-5C8BC7BAC483}.Rsharp_app_release|x64.Build.0 = Release|Any CPU
+		{4FB0A3C2-E1DF-45AC-B263-5C8BC7BAC483}.Rsharp_app_release|x64.ActiveCfg = Rsharp_app_release|x64
+		{4FB0A3C2-E1DF-45AC-B263-5C8BC7BAC483}.Rsharp_app_release|x64.Build.0 = Rsharp_app_release|x64
 		{4FB0A3C2-E1DF-45AC-B263-5C8BC7BAC483}.Rsharp_app_release|x86.ActiveCfg = Release|Any CPU
 		{4FB0A3C2-E1DF-45AC-B263-5C8BC7BAC483}.Rsharp_app_release|x86.Build.0 = Release|Any CPU
 		{4FB0A3C2-E1DF-45AC-B263-5C8BC7BAC483}.sciBASIC.NET-test-release|Any CPU.ActiveCfg = Debug|Any CPU
