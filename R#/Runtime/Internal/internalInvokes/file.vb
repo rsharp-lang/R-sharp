@@ -595,6 +595,18 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' ### ransfer Binary Data To and From Connections
+        ''' 
+        ''' Read binary data from or write binary data to a connection or raw vector.
+        ''' </summary>
+        ''' <param name="file">A connection Object Or a character String naming a file Or a raw vector.</param>
+        ''' <returns></returns>
+        <ExportAPI("readBin")>
+        Public Function readBin(file As String) As Object
+            Return file.ReadBinary
+        End Function
+
+        ''' <summary>
         ''' close connections, i.e., “generalized files”, such as possibly compressed files, URLs, pipes, etc.
         ''' </summary>
         ''' <param name="con">a connection.</param>
