@@ -813,6 +813,9 @@
     <Compile Include="System\Package\Database\LocalPackageDatabase.vb" />
     <Compile Include="System\Package\Database\PackageLoaderEntry.vb" />
     <Compile Include="System\Package\PackageFile\Dependency.vb" />
+    <Compile Include="System\Package\PackageFile\Expression\RElse.vb" />
+    <Compile Include="System\Package\PackageFile\Expression\RIf.vb" />
+    <Compile Include="System\Package\PackageFile\Expression\RFor.vb" />
     <Compile Include="System\Package\PackageFile\Expression\RSymbolAssign.vb" />
     <Compile Include="System\Package\PackageFile\Expression\RSymbolIndex.vb" />
     <Compile Include="System\Package\PackageFile\Expression\RStringInterpolation.vb" />

@@ -67,7 +67,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
         ''' <summary>
         ''' 单个变量或者tuple的时候为多个变量
         ''' </summary>
-        Dim variables$()
+        Friend ReadOnly variables$()
 
         Public ReadOnly Property sequence As Expression
 
@@ -79,7 +79,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
         ''' <summary>
         ''' ``%dopar%``
         ''' </summary>
-        Dim parallel As Boolean = False
+        Friend ReadOnly parallel As Boolean = False
 
         ''' <summary>
         ''' 循环体的返回值类型就是for循环的返回值类型

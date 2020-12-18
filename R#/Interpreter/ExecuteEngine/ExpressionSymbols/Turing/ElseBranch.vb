@@ -73,7 +73,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
         Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
 
-        Dim closure As DeclareNewFunction
+        Friend ReadOnly closure As DeclareNewFunction
 
         Sub New(bodyClosure As ClosureExpression, stackframe As StackFrame)
             closure = New DeclareNewFunction(
