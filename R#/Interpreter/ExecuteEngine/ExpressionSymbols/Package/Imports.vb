@@ -49,6 +49,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -93,6 +94,26 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         End Property
 
         Public ReadOnly Property scriptSource As String
+
+        ''' <summary>
+        ''' 当前的语句是否是用于导入其他的脚本文件模块？
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property isImportsScript As Boolean
+            Get
+                If Not packages Is Nothing Then
+                    Return False
+                ElseIf Not scriptSource.FileExists Then
+                    Return False
+                ElseIf Not TypeOf library Is Literal Then
+                    Return False
+                Else
+                    Dim target As String = scriptSource.ParentPath & "/" & DirectCast(library, Literal).value.ToString
+                    target = target.GetFullPath
+                    Return target.FileExists
+                End If
+            End Get
+        End Property
 
         Sub New(packages As Expression, library As Expression, Optional source$ = Nothing)
             Me.packages = packages
