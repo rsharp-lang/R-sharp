@@ -1,47 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::0e06b351f7298895ea404fb1c3596cde, Library\R.graph\NetworkModule.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module NetworkModule
-    ' 
-    '     Function: addEdge, addEdges, addNode, addNodes, attributes
-    '               computeNetwork, connectedNetwork, DecomposeGraph, degree, emptyNetwork
-    '               getByGroup, getEdges, getElementByID, getNodes, LoadNetwork
-    '               nodeNames, printGraph, printNode, SaveNetwork, setAttributes
-    '               trimEdges, typeGroupOfNodes
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Module NetworkModule
+' 
+'     Function: addEdge, addEdges, addNode, addNodes, attributes
+'               computeNetwork, connectedNetwork, DecomposeGraph, degree, emptyNetwork
+'               getByGroup, getEdges, getElementByID, getNodes, LoadNetwork
+'               nodeNames, printGraph, printNode, SaveNetwork, setAttributes
+'               trimEdges, typeGroupOfNodes
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -284,6 +284,36 @@ Public Module NetworkModule
         Next
 
         Return node
+    End Function
+
+    ''' <summary>
+    ''' set or get mass value of the nodes in the given graph
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <param name="mass"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("mass")>
+    Public Function nodeMass(g As NetworkGraph,
+                             <RByRefValueAssign>
+                             Optional mass As list = Nothing,
+                             Optional env As Environment = Nothing) As list
+
+        If Not mass Is Nothing Then
+            For Each key As String In mass.slots.Keys
+                If Not g.GetElementByID(key) Is Nothing Then
+                    g.GetElementByID(key).data.mass = mass.getValue(key, env, 0.0)
+                End If
+            Next
+        End If
+
+        Return New list With {
+            .slots = g.vertex _
+                .ToDictionary(Function(v) v.label,
+                              Function(v)
+                                  Return CObj(v.data.mass)
+                              End Function)
+        }
     End Function
 
     ''' <summary>

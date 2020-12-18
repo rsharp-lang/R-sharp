@@ -88,6 +88,8 @@ Module Layouts
                                   <RRawVectorArgument> Optional size As Object = "1000,1000",
                                   Optional iterations As Integer = 200,
                                   Optional groupPlanner As Boolean = False,
+                                  Optional groupAttraction As Double = 5,
+                                  Optional groupRepulsive As Double = 5,
                                   Optional env As Environment = Nothing) As NetworkGraph
         If g.CheckZero Then
             env.AddMessage("all of the vertex node in your network graph is in ZERO location, do random layout at first...", MSG_TYPES.WRN)
@@ -106,7 +108,9 @@ Module Layouts
                 maxtx:=maxtx,
                 maxty:=maxty,
                 dist_threshold:=distStr,
-                size:=sizeStr
+                size:=sizeStr,
+                groupAttraction:=groupAttraction,
+                groupRepulsive:=groupRepulsive
             )
         Else
             physics = New Planner(
