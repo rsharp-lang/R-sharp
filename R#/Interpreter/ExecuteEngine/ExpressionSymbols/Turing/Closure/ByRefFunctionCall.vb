@@ -49,6 +49,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.System.Package.File
 Imports REnv = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
@@ -62,6 +63,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         Public Overrides ReadOnly Property type As TypeCodes
             Get
                 Return value.type
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property expressionName As ExpressionTypes
+            Get
+                Return ExpressionTypes.FunctionByRef
             End Get
         End Property
 
