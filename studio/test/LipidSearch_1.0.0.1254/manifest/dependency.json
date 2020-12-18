@@ -1,4 +1,7 @@
 [{
+    "library": "devkit",
+    "packages": ["package_utils"]
+  },{
     "library": null,
     "packages": ["base.math"]
   },{
