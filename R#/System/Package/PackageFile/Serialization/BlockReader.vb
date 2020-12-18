@@ -52,17 +52,17 @@ Namespace System.Package.File
 
     Public Class BlockReader
 
-        Public Property Expression As ExpressionTypes
+        Public Property expression As ExpressionTypes
         Public Property type As TypeCodes
         Public Property body As Byte()
 
         Public Function Parse(desc As DESCRIPTION) As Expression
             Using buffer As New MemoryStream(body)
-                Select Case Expression
-                    Case ExpressionTypes.Binary : Return New RBinary(Nothing).GetExpression(buffer, type, desc)
-                    Case ExpressionTypes.FunctionDeclare : Return New RFunction(Nothing).GetExpression(buffer, type, desc)
+                Select Case expression
+                    Case ExpressionTypes.Binary : Return New RBinary(Nothing).GetExpression(buffer, expression, desc)
+                    Case ExpressionTypes.FunctionDeclare : Return New RFunction(Nothing).GetExpression(buffer, expression, desc)
                     Case Else
-                        Throw New NotImplementedException(Expression.Description)
+                        Throw New NotImplementedException(expression.Description)
                 End Select
             End Using
         End Function
@@ -93,7 +93,7 @@ Namespace System.Package.File
 
             Return New BlockReader With {
                 .body = body,
-                .Expression = type,
+                .expression = type,
                 .type = typecode
             }
         End Function

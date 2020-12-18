@@ -49,16 +49,16 @@
 
 Imports System.IO
 Imports System.Text
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.SecurityString
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
-Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.System.Package.File.Expressions
-Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
-Imports Microsoft.VisualBasic.SecurityString
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
 Namespace System.Package.File
 
@@ -192,10 +192,38 @@ Namespace System.Package.File
 
                 Call outfile.Flush()
                 Call ms.Seek(Scan0, SeekOrigin.Begin)
-                Call outfile.Write(ms.Length - 4)
+                Call outfile.Write(CInt(ms.Length - 4))
+                Call outfile.Flush()
 
                 Return ms.ToArray
             End Using
+        End Function
+
+        Private Shared Iterator Function readZEROBlock(bin As BinaryReader) As IEnumerable(Of Byte)
+            Dim [byte] As Value(Of Byte) = 0
+
+            Do While ([byte] = bin.ReadByte) <> 0
+                Yield [byte].Value
+            Loop
+        End Function
+
+        Public Shared Function ReadSourceMap(bin As BinaryReader) As StackFrame
+            Dim length As Integer = bin.ReadInt32
+            Dim bytes As Byte() = bin.ReadBytes(length)
+            Dim strings As String() = bytes _
+                .Split(Function(b) b = 0, DelimiterLocation.NotIncludes) _
+                .Select(AddressOf Encoding.ASCII.GetString) _
+                .ToArray
+
+            Return New StackFrame With {
+                .File = strings(0),
+                .Line = strings(1),
+                .Method = New Method With {
+                    .[Namespace] = strings(2),
+                    .[Module] = strings(3),
+                    .Method = strings(4)
+                }
+            }
         End Function
 
         Protected Overridable Sub Dispose(disposing As Boolean)
