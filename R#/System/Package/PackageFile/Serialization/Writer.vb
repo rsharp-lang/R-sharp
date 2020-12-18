@@ -127,7 +127,7 @@ Namespace System.Package.File
 
                     Return RFunction.GetBuffer(x)
 
-                Case GetType(Literal) : Return RLiteral.GetBuffer(x)
+                Case GetType(Literal), GetType(Regexp) : Return RLiteral.GetBuffer(x)
                 Case GetType(StringInterpolation) : Return RString.GetBuffer(x)
                 Case GetType(BinaryOrExpression),
                      GetType(BinaryBetweenExpression),
@@ -138,7 +138,8 @@ Namespace System.Package.File
                     Return RBinary.GetBuffer(x)
 
                 Case GetType(FunctionInvoke),
-                     GetType(ByRefFunctionCall)
+                     GetType(ByRefFunctionCall),
+                     GetType(IIfExpression)
 
                     Return RCallFunction.GetBuffer(x)
 

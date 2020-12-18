@@ -43,9 +43,12 @@
 
 #End Region
 
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.System.Package.File
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
@@ -53,10 +56,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
     ''' ifelse expression
     ''' </summary>
     Public Class IIfExpression : Inherits Expression
+        Implements IRuntimeTrace
 
-        Friend ifTest As Expression
-        Friend trueResult As Expression
-        Friend falseResult As Expression
+        Friend ReadOnly ifTest As Expression
+        Friend ReadOnly trueResult As Expression
+        Friend ReadOnly falseResult As Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
             Get
@@ -70,15 +74,18 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
             End Get
         End Property
 
-        Sub New(iftest As Expression, trueResult As Expression, falseResult As Expression)
+        Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
+
+        Sub New(iftest As Expression, trueResult As Expression, falseResult As Expression, stackFrame As StackFrame)
             Me.ifTest = iftest
             Me.trueResult = trueResult
             Me.falseResult = falseResult
+            Me.stackFrame = stackFrame
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim ifTestResult = ifTest.Evaluate(envir)
-            Dim test As Boolean = Runtime.asLogical(ifTestResult)(Scan0)
+            Dim test As Boolean = REnv.asLogical(ifTestResult)(Scan0)
 
             If test = True Then
                 Return trueResult.Evaluate(envir)

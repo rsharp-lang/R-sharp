@@ -48,7 +48,9 @@ Imports System.IO
 Imports System.Text
 Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 
 Namespace System.Package.File.Expressions
@@ -62,6 +64,14 @@ Namespace System.Package.File.Expressions
         Private Shared Function getParameters(x As Expression) As Expression()
             If TypeOf x Is FunctionInvoke Then
                 Return DirectCast(x, FunctionInvoke).parameters
+            ElseIf TypeOf x Is IIfExpression Then
+                Dim iif As IIfExpression = x
+
+                Return {
+                    iif.ifTest,
+                    iif.trueResult,
+                    iif.falseResult
+                }
             Else
                 Return {DirectCast(x, ByRefFunctionCall).target, DirectCast(x, ByRefFunctionCall).value}
             End If
@@ -70,6 +80,8 @@ Namespace System.Package.File.Expressions
         Private Shared Function getFunctionName(x As Expression) As Expression
             If TypeOf x Is FunctionInvoke Then
                 Return DirectCast(x, FunctionInvoke).funcName
+            ElseIf TypeOf x Is IIfExpression Then
+                Return New Literal("iif")
             Else
                 Return DirectCast(x, ByRefFunctionCall).funcRef
             End If
@@ -104,6 +116,8 @@ Namespace System.Package.File.Expressions
         Private Shared Function getTypeCode(x As Expression) As ExpressionTypes
             If TypeOf x Is FunctionInvoke Then
                 Return ExpressionTypes.FunctionCall
+            ElseIf TypeOf x Is IIfExpression Then
+                Return ExpressionTypes.IIf
             ElseIf TypeOf x Is ByRefFunctionCall Then
                 Return ExpressionTypes.FunctionByRef
             Else
