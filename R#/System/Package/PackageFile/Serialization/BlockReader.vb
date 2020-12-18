@@ -46,6 +46,7 @@ Imports System.IO
 Imports System.Text
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.System.Package.File.Expressions
 
 Namespace System.Package.File
 
@@ -55,10 +56,15 @@ Namespace System.Package.File
         Public Property type As TypeCodes
         Public Property body As Byte()
 
-        Public Function Parse() As Expression
-            Select Case ExpressionTypes
-                Case 
-            End Select
+        Public Function Parse(desc As DESCRIPTION) As Expression
+            Using buffer As New MemoryStream(body)
+                Select Case Expression
+                    Case ExpressionTypes.Binary : Return New RBinary(Nothing).GetExpression(buffer, type, desc)
+                    Case ExpressionTypes.FunctionDeclare : Return New RFunction(Nothing).GetExpression(buffer, type, desc)
+                    Case Else
+                        Throw New NotImplementedException(Expression.Description)
+                End Select
+            End Using
         End Function
 
         Public Shared Function Read(reader As BinaryReader) As BlockReader

@@ -46,8 +46,6 @@
 
 Imports System.IO
 Imports System.Text
-Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
-Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
@@ -122,7 +120,7 @@ Namespace System.Package.File.Expressions
             End Using
         End Sub
 
-        Public Overrides Function GetExpression(buffer As MemoryStream, desc As DESCRIPTION) As Expression
+        Public Overrides Function GetExpression(buffer As MemoryStream, type As ExpressionTypes, desc As DESCRIPTION) As Expression
             Throw New NotImplementedException()
         End Function
     End Class

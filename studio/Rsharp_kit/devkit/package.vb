@@ -23,7 +23,7 @@ Module package
 
         Using io As New BinaryReader(DirectCast(raw, Stream))
             io.BaseStream.Seek(Scan0, SeekOrigin.Begin)
-            Return BlockReader.Read(io).Parse
+            Return BlockReader.Read(io).Parse(New DESCRIPTION)
         End Using
     End Function
 End Module
