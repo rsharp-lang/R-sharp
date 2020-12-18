@@ -22,6 +22,7 @@ Module package
         End If
 
         Using io As New BinaryReader(DirectCast(raw, Stream))
+            io.BaseStream.Seek(Scan0, SeekOrigin.Begin)
             Return BlockReader.Read(io).Parse
         End Using
     End Function

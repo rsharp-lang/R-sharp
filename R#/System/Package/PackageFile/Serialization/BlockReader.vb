@@ -56,7 +56,9 @@ Namespace System.Package.File
         Public Property body As Byte()
 
         Public Function Parse() As Expression
-
+            Select Case ExpressionTypes
+                Case 
+            End Select
         End Function
 
         Public Shared Function Read(reader As BinaryReader) As BlockReader
