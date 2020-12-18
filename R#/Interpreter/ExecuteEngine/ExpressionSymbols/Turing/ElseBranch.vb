@@ -72,6 +72,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
         End Property
 
         Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
+            Get
+                Return closure.stackFrame
+            End Get
+        End Property
 
         Friend ReadOnly closure As DeclareNewFunction
 
