@@ -43,6 +43,7 @@
 
 #End Region
 
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -71,6 +72,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
 
         Sub New(names As IEnumerable(Of Expression))
             packages = names.ToArray
+        End Sub
+
+        Sub New(names As IEnumerable(Of String))
+            packages = names.Select(Function(name) New Literal(name)).ToArray
         End Sub
 
         ''' <summary>

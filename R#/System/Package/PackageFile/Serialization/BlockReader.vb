@@ -59,8 +59,15 @@ Namespace System.Package.File
         Public Function Parse(desc As DESCRIPTION) As Expression
             Using buffer As New MemoryStream(body)
                 Select Case expression
-                    Case ExpressionTypes.Binary : Return New RBinary(Nothing).GetExpression(buffer, expression, desc)
-                    Case ExpressionTypes.FunctionDeclare : Return New RFunction(Nothing).GetExpression(buffer, expression, desc)
+                    Case ExpressionTypes.Binary : Return New RBinary(Nothing).GetExpression(buffer, Me, desc)
+                    Case ExpressionTypes.FunctionDeclare : Return New RFunction(Nothing).GetExpression(buffer, Me, desc)
+                    Case ExpressionTypes.Literal,
+                         ExpressionTypes.SymbolRegexp
+
+                        Return New RLiteral(Nothing).GetExpression(buffer, Me, desc)
+
+                    Case ExpressionTypes.Require : Return New RRequire(Nothing).GetExpression(buffer, Me, desc)
+
                     Case Else
                         Throw New NotImplementedException(expression.Description)
                 End Select

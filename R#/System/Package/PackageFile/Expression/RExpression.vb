@@ -64,7 +64,7 @@ Namespace System.Package.File.Expressions
             Me.context = context
         End Sub
 
-        Public MustOverride Function GetExpression(buffer As MemoryStream, type As ExpressionTypes, desc As DESCRIPTION) As Expression
+        Public MustOverride Function GetExpression(buffer As MemoryStream, raw As BlockReader, desc As DESCRIPTION) As Expression
         Public MustOverride Sub WriteBuffer(ms As MemoryStream, x As Expression)
 
         Public Function GetBuffer(x As Expression) As Byte()

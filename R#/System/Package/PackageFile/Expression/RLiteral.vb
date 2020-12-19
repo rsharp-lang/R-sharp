@@ -113,9 +113,17 @@ Namespace System.Package.File.Expressions
                     Return New Literal(Encoding.UTF8.GetString(bin.ReadBytes(bin.BaseStream.Length)))
             End Select
         End Function
-    
-        Public Overrides Function GetExpression(buffer As MemoryStream, type As ExpressionTypes, desc As DESCRIPTION) As Expression
-            Throw New NotImplementedException()
+
+        Public Overrides Function GetExpression(buffer As MemoryStream, raw As BlockReader, desc As DESCRIPTION) As Expression
+            Using bin As New BinaryReader(buffer)
+                If raw.expression = ExpressionTypes.Literal Then
+                    Return readLiteral(bin, raw.type)
+                ElseIf raw.expression = ExpressionTypes.SymbolRegexp Then
+                    Return readRegexp(bin)
+                Else
+                    Throw New InvalidCastException(raw.expression.ToString)
+                End If
+            End Using
         End Function
     End Class
 End Namespace

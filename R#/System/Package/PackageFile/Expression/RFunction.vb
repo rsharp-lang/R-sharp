@@ -125,9 +125,9 @@ Namespace System.Package.File.Expressions
             Dim sourceMap As StackFrame = Writer.ReadSourceMap(reader)
         End Function
 
-        Public Overrides Function GetExpression(buffer As MemoryStream, type As ExpressionTypes, desc As DESCRIPTION) As Expression
+        Public Overrides Function GetExpression(buffer As MemoryStream, raw As BlockReader, desc As DESCRIPTION) As Expression
             Using io As New BinaryReader(buffer)
-                Select Case type
+                Select Case raw.type
                     Case ExpressionTypes.FunctionDeclare : Return ParseFunction(io, desc)
 
                 End Select

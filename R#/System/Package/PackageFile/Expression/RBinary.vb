@@ -114,7 +114,7 @@ Namespace System.Package.File.Expressions
             End If
         End Function
 
-        Public Overrides Function GetExpression(buffer As MemoryStream, type As ExpressionTypes, desc As DESCRIPTION) As Expression
+        Public Overrides Function GetExpression(buffer As MemoryStream, raw As BlockReader, desc As DESCRIPTION) As Expression
             Throw New NotImplementedException()
         End Function
     End Class
