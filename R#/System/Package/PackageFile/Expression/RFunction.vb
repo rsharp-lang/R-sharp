@@ -143,8 +143,9 @@ Namespace System.Package.File.Expressions
                 Call BlockReader.ParseBlock(reader).Parse(desc).DoCall(AddressOf body.Add)
             Next
 
-            Dim name$ = $"[{args.JoinBy(", ")}] -> {body(Scan0).ToString}"
-            Dim target As New DeclareNewSymbol(args.Select(Function(a) DirectCast(a, Literal).value.ToString).ToArray, Nothing, TypeCodes.generic, False)
+            Dim names As String() = args.Select(Function(a) DirectCast(a, Literal).value.ToString).ToArray
+            Dim name$ = $"[{names.JoinBy(", ")}] -> {body(Scan0).ToString}"
+            Dim target As New DeclareNewSymbol(names, Nothing, TypeCodes.generic, False)
 
             Return New DeclareLambdaFunction(name, target, body(Scan0), sourceMap)
         End Function

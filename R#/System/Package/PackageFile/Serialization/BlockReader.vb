@@ -73,6 +73,7 @@ Namespace System.Package.File
 
                     Case ExpressionTypes.FunctionCall : Return New RCallFunction(Nothing).GetExpression(buffer, Me, desc)
 
+                    Case ExpressionTypes.StringInterpolation : Return New RStringInterpolation(Nothing).GetExpression(buffer, Me, desc)
                     Case ExpressionTypes.Literal,
                          ExpressionTypes.SymbolRegexp
 
@@ -84,6 +85,7 @@ Namespace System.Package.File
                     Case ExpressionTypes.SymbolDeclare : Return New RSymbol(Nothing).GetExpression(buffer, Me, desc)
                     Case ExpressionTypes.SymbolIndex : Return New RSymbolIndex(Nothing).GetExpression(buffer, Me, desc)
                     Case ExpressionTypes.SymbolReference : Return New RSymbolReference(Nothing).GetExpression(buffer, Me, desc)
+                    Case ExpressionTypes.SymbolAssign : Return New RSymbolAssign(Nothing).GetExpression(buffer, Me, desc)
 
                     Case Else
                         Throw New NotImplementedException(expression.Description)
