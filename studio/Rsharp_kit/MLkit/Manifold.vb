@@ -91,7 +91,12 @@ Module Manifold
         End If
 
         If input.dimension = 2 Then
-            Return input.DrawUmap2D(size:=size, labels:=labels, clusters:=clusterData)
+            Return input.DrawUmap2D(
+                size:=size,
+                labels:=labels,
+                clusters:=clusterData,
+                pointSize:=pointSize
+            )
         Else
             Dim camera As Camera = args.getValue(Of Camera)("camera", env)
 
