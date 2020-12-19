@@ -3,12 +3,12 @@
   "AssemblyCopyright": "Copyright © xie.guigang@gcmodeller.org 2019",
   "AssemblyDescription": "R# language runtime and script interpreter",
   "AssemblyFileVersion": "",
-  "AssemblyFullName": "REnv, Version=2.333.7658.36894, Culture=neutral, PublicKeyToken=null",
+  "AssemblyFullName": "REnv, Version=2.333.7658.38335, Culture=neutral, PublicKeyToken=null",
   "AssemblyProduct": "GCModeller",
   "AssemblyTitle": "R# language runtime and script interpreter",
   "AssemblyTrademark": null,
-  "AssemblyVersion": "2.333.7658.36894",
-  "BuiltTime": "\/Date(1608249916000+0800)\/",
+  "AssemblyVersion": "2.333.7658.38335",
+  "BuiltTime": "\/Date(1608252798000+0800)\/",
   "ComVisible": false,
   "Guid": "b7cee4b8-0683-4943-84bc-5596073d8c26"
 }

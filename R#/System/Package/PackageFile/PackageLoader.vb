@@ -1,7 +1,7 @@
 ﻿Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Serialization.JSON
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.System.Configuration
 
@@ -33,6 +33,14 @@ Namespace System.Package.File
                     Call BlockReader.Read(bin).Parse(desc:=meta).Evaluate(env)
                 End Using
             Next
+
+            Dim onLoad As String = $"{dir}/.onload"
+
+            If onLoad.FileExists Then
+                Using bin As New BinaryReader(onLoad.Open)
+                    Call DirectCast(BlockReader.Read(bin).Parse(desc:=meta).Evaluate(env), DeclareNewFunction).Invoke(env, params:={})
+                End Using
+            End If
         End Sub
     End Module
 End Namespace
