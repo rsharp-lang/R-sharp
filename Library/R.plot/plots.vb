@@ -172,10 +172,11 @@ Module plots
         Dim theme As New Theme With {
             .padding = padding,
             .tagCSS = labelStyle,
-            .gridStroke = linkStroke,
+            .gridStrokeX = linkStroke,
+            .gridStrokeY = linkStroke,
             .axisTickCSS = tickStyle,
             .axisStroke = axisStroke,
-            .PointSize = ptSize,
+            .pointSize = ptSize,
             .background = bg,
             .axisTickFormat = axisFormat
         }
