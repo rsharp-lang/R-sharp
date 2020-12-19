@@ -65,7 +65,12 @@ Namespace System.Package.File
                 Select Case expression
                     Case ExpressionTypes.Binary : Return New RBinary(Nothing).GetExpression(buffer, Me, desc)
 
-                    Case ExpressionTypes.FunctionDeclare : Return New RFunction(Nothing).GetExpression(buffer, Me, desc)
+                    Case ExpressionTypes.FunctionDeclare,
+                         ExpressionTypes.FormulaDeclare,
+                         ExpressionTypes.LambdaDeclare
+
+                        Return New RFunction(Nothing).GetExpression(buffer, Me, desc)
+
                     Case ExpressionTypes.FunctionCall : Return New RCallFunction(Nothing).GetExpression(buffer, Me, desc)
 
                     Case ExpressionTypes.Literal,

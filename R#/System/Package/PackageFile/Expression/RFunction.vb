@@ -52,6 +52,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 
 Namespace System.Package.File.Expressions
@@ -122,6 +123,32 @@ Namespace System.Package.File.Expressions
             End Using
         End Sub
 
+        Private Shared Function parseLambda(reader As BinaryReader, desc As DESCRIPTION) As DeclareLambdaFunction
+            Dim sourceMap As StackFrame = Writer.ReadSourceMap(reader)
+            Dim parmSize As Integer = reader.ReadByte
+            Dim args As New List(Of Expression)
+
+            For i As Integer = 0 To parmSize - 1
+                Call BlockReader.ParseBlock(reader).Parse(desc).DoCall(AddressOf args.Add)
+            Next
+
+            Dim bodySize As Integer = reader.ReadInt32
+            Dim body As New List(Of Expression)
+
+            If bodySize <> 1 Then
+                Throw New InvalidProgramException($"lambda function can not be more than one line!")
+            End If
+
+            For i As Integer = 0 To bodySize - 1
+                Call BlockReader.ParseBlock(reader).Parse(desc).DoCall(AddressOf body.Add)
+            Next
+
+            Dim name$ = $"[{args.JoinBy(", ")}] -> {body(Scan0).ToString}"
+            Dim target As New DeclareNewSymbol(args.Select(Function(a) DirectCast(a, Literal).value.ToString).ToArray, Nothing, TypeCodes.generic, False)
+
+            Return New DeclareLambdaFunction(name, target, body(Scan0), sourceMap)
+        End Function
+
         Private Shared Function ParseFunction(reader As BinaryReader, desc As DESCRIPTION) As DeclareNewFunction
             Dim sourceMap As StackFrame = Writer.ReadSourceMap(reader)
             Dim funcName As String = Writer.readZEROBlock(reader).DoCall(Function(bytes) Encoding.ASCII.GetString(bytes.ToArray))
@@ -146,7 +173,9 @@ Namespace System.Package.File.Expressions
             Using io As New BinaryReader(buffer)
                 Select Case raw.expression
                     Case ExpressionTypes.FunctionDeclare : Return ParseFunction(io, desc)
-
+                    Case ExpressionTypes.LambdaDeclare : Return parseLambda(io, desc)
+                    Case Else
+                        Throw New NotImplementedException(raw.ToString)
                 End Select
             End Using
 
