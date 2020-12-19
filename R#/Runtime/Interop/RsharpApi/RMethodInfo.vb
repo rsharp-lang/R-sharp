@@ -291,6 +291,10 @@ Namespace Runtime.Interop
                         If arg.isOptional Then
                             If TypeOf arg.default Is Expression Then
                                 Yield DirectCast(arg.default, Expression).Evaluate(envir)
+                            ElseIf arg.type.raw Is GetType(Environment) Then
+                                Yield envir
+                            ElseIf arg.type.raw Is GetType(GlobalEnvironment) Then
+                                Yield envir.globalEnvironment
                             Else
                                 Yield arg.default
                             End If
