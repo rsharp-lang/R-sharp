@@ -65,6 +65,7 @@ Namespace System.Package.File.Expressions
                 Call outfile.Write(CByte(x.type))
 
                 Call outfile.Write(Encoding.ASCII.GetBytes(getOperator(x)))
+                Call outfile.Write(CByte(0))
                 Call outfile.Write(context.GetBuffer(left(x)))
                 Call outfile.Write(context.GetBuffer(right(x)))
 
