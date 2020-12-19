@@ -154,7 +154,7 @@ Namespace System.Package.File.Expressions
             Dim sourceMap As StackFrame = Writer.ReadSourceMap(reader)
             Dim funcName As String = Writer.readZEROBlock(reader).DoCall(Function(bytes) Encoding.ASCII.GetString(bytes.ToArray))
             Dim parms As Integer = reader.ReadByte
-            Dim args As New List(Of Expression)
+            Dim args As New List(Of DeclareNewSymbol)
 
             For i As Integer = 0 To parms - 1
                 args.Add(BlockReader.ParseBlock(reader).Parse(desc))
