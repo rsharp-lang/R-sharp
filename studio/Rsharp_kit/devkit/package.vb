@@ -35,6 +35,6 @@ Module package
     ''' <returns></returns>
     <ExportAPI("loadPackage")>
     Public Function loadPackage(dir As String, Optional env As Environment = Nothing) As Object
-        Return PackageLoader.LoadPackage(dir, env.globalEnvironment)
+        Return PackageLoader2.LoadPackage(dir, env.globalEnvironment)
     End Function
 End Module

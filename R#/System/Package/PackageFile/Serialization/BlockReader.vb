@@ -93,6 +93,11 @@ Namespace System.Package.File
             End Using
         End Function
 
+        ''' <summary>
+        ''' 从头开始读文件使用的函数
+        ''' </summary>
+        ''' <param name="reader"></param>
+        ''' <returns></returns>
         Public Shared Function Read(reader As BinaryReader) As BlockReader
             ' check magic
             Dim magic As String = Encoding.ASCII.GetString(reader.ReadBytes(Writer.Magic.Length))
