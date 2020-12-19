@@ -207,7 +207,7 @@ Namespace System.Package.File
             Loop
         End Function
 
-        Public Shared Function ReadSourceMap(bin As BinaryReader) As StackFrame
+        Public Shared Function ReadSourceMap(bin As BinaryReader, desc As DESCRIPTION) As StackFrame
             Dim length As Integer = bin.ReadInt32
             Dim bytes As Byte() = bin.ReadBytes(length)
             Dim strings As String() = bytes _
@@ -219,9 +219,9 @@ Namespace System.Package.File
                 .File = strings(0),
                 .Line = strings(1),
                 .Method = New Method With {
-                    .[Namespace] = strings(2),
+                    .[Namespace] = desc.Package,
                     .[Module] = strings(3),
-                    .Method = strings(4)
+                    .[Method] = strings(4)
                 }
             }
         End Function

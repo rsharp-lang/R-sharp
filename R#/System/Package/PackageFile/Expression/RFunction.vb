@@ -146,7 +146,7 @@ Namespace System.Package.File.Expressions
         End Function
 
         Private Shared Function parseLambda(reader As BinaryReader, desc As DESCRIPTION) As DeclareLambdaFunction
-            Dim sourceMap As StackFrame = Writer.ReadSourceMap(reader)
+            Dim sourceMap As StackFrame = Writer.ReadSourceMap(reader, desc)
             Dim parmSize As Integer = reader.ReadByte
             Dim args As New List(Of Expression)
 
@@ -173,7 +173,7 @@ Namespace System.Package.File.Expressions
         End Function
 
         Private Shared Function ParseFunction(reader As BinaryReader, desc As DESCRIPTION) As DeclareNewFunction
-            Dim sourceMap As StackFrame = Writer.ReadSourceMap(reader)
+            Dim sourceMap As StackFrame = Writer.ReadSourceMap(reader, desc)
             Dim funcName As String = Writer.readZEROBlock(reader).DoCall(Function(bytes) Encoding.ASCII.GetString(bytes.ToArray))
             Dim parms As Integer = reader.ReadByte
             Dim args As New List(Of DeclareNewSymbol)
@@ -189,7 +189,14 @@ Namespace System.Package.File.Expressions
                 body.Add(BlockReader.ParseBlock(reader).Parse(desc))
             Next
 
-            Return New DeclareNewFunction(funcName, args.ToArray, New ClosureExpression(body.ToArray), sourceMap)
+            Return New DeclareNewFunction(
+                funcName:=funcName,
+                params:=args.ToArray,
+                body:=New ClosureExpression(body.ToArray),
+                stackframe:=sourceMap
+            ) With {
+                .[Namespace] = desc.Package
+            }
         End Function
 
         Public Overrides Function GetExpression(buffer As MemoryStream, raw As BlockReader, desc As DESCRIPTION) As Expression

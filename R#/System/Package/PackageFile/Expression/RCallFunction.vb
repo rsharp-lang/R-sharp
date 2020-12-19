@@ -116,7 +116,7 @@ Namespace System.Package.File.Expressions
         End Sub
 
         Private Shared Function parseByRef(bin As BinaryReader, desc As DESCRIPTION) As ByRefFunctionCall
-            Dim sourceMap As StackFrame = Writer.ReadSourceMap(bin)
+            Dim sourceMap As StackFrame = Writer.ReadSourceMap(bin, desc)
             Dim ns$ = Writer.readZEROBlock(bin).DoCall(Function(bytes) Encoding.ASCII.GetString(bytes.ToArray))
             Dim func As Expression = BlockReader.ParseBlock(bin).Parse(desc)
             Dim paramSize As Integer = bin.ReadByte
@@ -144,7 +144,7 @@ Namespace System.Package.File.Expressions
         End Function
 
         Private Shared Function parseInvoke(bin As BinaryReader, desc As DESCRIPTION) As FunctionInvoke
-            Dim sourceMap As StackFrame = Writer.ReadSourceMap(bin)
+            Dim sourceMap As StackFrame = Writer.ReadSourceMap(bin, desc)
             Dim ns$ = Writer.readZEROBlock(bin).DoCall(Function(bytes) Encoding.ASCII.GetString(bytes.ToArray))
             Dim func As Expression = BlockReader.ParseBlock(bin).Parse(desc)
             Dim parmSize As Integer = bin.ReadByte

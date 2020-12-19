@@ -34,7 +34,7 @@ Namespace System.Package.File.Expressions
 
         Public Overrides Function GetExpression(buffer As MemoryStream, raw As BlockReader, desc As DESCRIPTION) As Expression
             Using bin As New BinaryReader(buffer)
-                Dim sourceMap As StackFrame = Writer.ReadSourceMap(bin)
+                Dim sourceMap As StackFrame = Writer.ReadSourceMap(bin, desc)
                 Dim test As Expression = BlockReader.ParseBlock(bin).Parse(desc)
                 Dim trueExpr As DeclareNewFunction = BlockReader.ParseBlock(bin).Parse(desc)
 
