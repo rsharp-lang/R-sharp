@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::69e7d11ccd9d7df62569ab5060aa9828, R#\System\Package\PackageFile\Serialization\ExpressionTypes.vb"
+﻿#Region "Microsoft.VisualBasic::e1bff09a5f965b0adc3eca4edda5c543, R#\System\Package\PackageFile\Serialization\ExpressionTypes.vb"
 
     ' Author:
     ' 
@@ -33,8 +33,14 @@
 
     '     Enum ExpressionTypes
     ' 
-    '         Binary, FunctionCall, FunctionDeclare, Literal, Require
-    '         SymbolDeclare, SymbolReference, UnaryNot, VectorLiteral
+    '         [Break], [Continute], [Do], [Else], [For]
+    '         [If], [IIf], [Return], [TypeOf], [Using]
+    '         [While], [With], Binary, BreakPoint, ClosureDeclare
+    '         Comment, Constructor, ExpressionLiteral, FormulaDeclare, FunctionByRef
+    '         FunctionCall, FunctionDeclare, GetArgument, LambdaDeclare, LinqDeclare
+    '         Literal, Require, SequenceLiteral, Shell, StringInterpolation
+    '         Suppress, SymbolAssign, SymbolDeclare, SymbolIndex, SymbolMemberAssign
+    '         SymbolNamespaceReference, SymbolReference, SymbolRegexp, UnaryNot, VectorLiteral
     ' 
     '  
     ' 

@@ -1,45 +1,45 @@
-﻿#Region "Microsoft.VisualBasic::7302c732b5436d58b1d41691fabbcc0d, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\CreateObject.vb"
+﻿#Region "Microsoft.VisualBasic::f4e1ef3fad63d3c78ad14f2b784dd8bf, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\CreateObject.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class CreateObject
-' 
-'         Properties: constructor, name, stackFrame, type
-' 
-'         Constructor: (+1 Overloads) Sub New
-'         Function: Evaluate, ToString, TryGetType
-' 
-' 
-' /********************************************************************************/
+    '     Class CreateObject
+    ' 
+    '         Properties: constructor, expressionName, name, stackFrame, type
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    '         Function: Evaluate, ToString, TryGetType
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

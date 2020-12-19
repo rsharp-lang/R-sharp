@@ -1,51 +1,51 @@
-﻿#Region "Microsoft.VisualBasic::28f752a3b490ace7a72136214ef91bb2, R#\Runtime\Interop\RsharpApi\MethodInvoke.vb"
+﻿#Region "Microsoft.VisualBasic::c6e622dc7085cdd0eb095ae2eac37dd5, R#\Runtime\Interop\RsharpApi\MethodInvoke.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class MethodInvoke
-' 
-'         Properties: isStatic
-' 
-'         Function: Invoke, ToString
-' 
-'     Class RuntimeValueLiteral
-' 
-'         Properties: type, value
-' 
-'         Constructor: (+1 Overloads) Sub New
-'         Function: Evaluate, ToString
-' 
-' 
-' /********************************************************************************/
+    '     Class MethodInvoke
+    ' 
+    '         Properties: isStatic
+    ' 
+    '         Function: Invoke, ToString
+    ' 
+    '     Class RuntimeValueLiteral
+    ' 
+    '         Properties: expressionName, type, value
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    '         Function: Evaluate, ToString
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

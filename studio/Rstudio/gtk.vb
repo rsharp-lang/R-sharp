@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ffaa10a0508b0645bd842150137bff50, studio\Rstudio\gtk.vb"
+﻿#Region "Microsoft.VisualBasic::fd411e0332de9b5047d83555ac31bb4a, studio\Rstudio\gtk.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports System.Environment
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -95,4 +94,3 @@ Module gtk
         End If
     End Function
 End Module
-

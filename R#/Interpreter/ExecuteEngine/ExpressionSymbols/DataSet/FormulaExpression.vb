@@ -1,45 +1,45 @@
-﻿#Region "Microsoft.VisualBasic::7be363f24c87acc7cead137eb597fc77, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\FormulaExpression.vb"
+﻿#Region "Microsoft.VisualBasic::a8d32718b33f6359dbe294efe4f23b1b, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\FormulaExpression.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class FormulaExpression
-' 
-'         Properties: formula, type, var
-' 
-'         Constructor: (+1 Overloads) Sub New
-'         Function: Evaluate, (+2 Overloads) GetSymbols, ToString
-' 
-' 
-' /********************************************************************************/
+    '     Class FormulaExpression
+    ' 
+    '         Properties: expressionName, formula, type, var
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    '         Function: Evaluate, (+2 Overloads) GetSymbols, ToString
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
