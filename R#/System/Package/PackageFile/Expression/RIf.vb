@@ -1,7 +1,9 @@
 ﻿
 Imports System.IO
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
 Namespace System.Package.File.Expressions
 
@@ -31,7 +33,13 @@ Namespace System.Package.File.Expressions
         End Sub
 
         Public Overrides Function GetExpression(buffer As MemoryStream, raw As BlockReader, desc As DESCRIPTION) As Expression
-            Throw New NotImplementedException()
+            Using bin As New BinaryReader(buffer)
+                Dim sourceMap As StackFrame = Writer.ReadSourceMap(bin)
+                Dim test As Expression = BlockReader.ParseBlock(bin).Parse(desc)
+                Dim trueExpr As DeclareNewFunction = BlockReader.ParseBlock(bin).Parse(desc)
+
+                Return New IfBranch(test, trueExpr, sourceMap)
+            End Using
         End Function
     End Class
 End Namespace

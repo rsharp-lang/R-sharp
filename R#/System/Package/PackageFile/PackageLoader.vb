@@ -24,17 +24,15 @@ Namespace System.Package.File
         ''' </summary>
         ''' <param name="dir"></param>
         ''' <param name="env"></param>
-        ''' <returns></returns>
-        Public Function LoadPackage(dir As String, env As GlobalEnvironment)
+        Public Sub LoadPackage(dir As String, env As GlobalEnvironment)
             Dim meta As DESCRIPTION = $"{dir}/index.json".LoadJsonFile(Of DESCRIPTION)
             Dim symbols As Dictionary(Of String, String) = $"{dir}/manifest/symbols.json".LoadJsonFile(Of Dictionary(Of String, String))
 
             For Each symbol In symbols
                 Using bin As New BinaryReader($"{dir}/src/{symbol.Value}".Open)
-                    Dim symbolObj As Expression = BlockReader.Read(bin).Parse(desc:=meta)
-                    Dim result As Object = symbolObj.Evaluate(env)
+                    Call BlockReader.Read(bin).Parse(desc:=meta).Evaluate(env)
                 End Using
             Next
-        End Function
+        End Sub
     End Module
 End Namespace

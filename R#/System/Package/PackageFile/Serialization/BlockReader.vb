@@ -72,6 +72,7 @@ Namespace System.Package.File
                         Return New RFunction(Nothing).GetExpression(buffer, Me, desc)
 
                     Case ExpressionTypes.FunctionCall : Return New RCallFunction(Nothing).GetExpression(buffer, Me, desc)
+                    Case ExpressionTypes.If : Return New RIf(Nothing).GetExpression(buffer, Me, desc)
 
                     Case ExpressionTypes.StringInterpolation : Return New RStringInterpolation(Nothing).GetExpression(buffer, Me, desc)
                     Case ExpressionTypes.Literal,

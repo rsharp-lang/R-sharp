@@ -112,15 +112,23 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
             End Function
         End Class
 
-        Sub New(ifTest As Expression, trueClosure As ClosureExpression, stackframe As StackFrame)
+        Sub New(ifTest As Expression, trueClosure As DeclareNewFunction, stackframe As StackFrame)
             Me.ifTest = ifTest
-            Me.trueClosure = New DeclareNewFunction(
-                funcName:="if_closure_internal",
-                params:={},
-                body:=trueClosure,
+            Me.trueClosure = trueClosure
+            Me.stackFrame = stackframe
+        End Sub
+
+        Sub New(ifTest As Expression, trueClosure As ClosureExpression, stackframe As StackFrame)
+            Call Me.New(
+                ifTest:=ifTest,
+                trueClosure:=New DeclareNewFunction(
+                    funcName:="if_closure_internal",
+                    params:={},
+                    body:=trueClosure,
+                    stackframe:=stackframe
+                ),
                 stackframe:=stackframe
             )
-            Me.stackFrame = stackframe
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object

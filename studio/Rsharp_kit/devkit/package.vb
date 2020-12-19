@@ -32,9 +32,8 @@ Module package
     ''' </summary>
     ''' <param name="dir"></param>
     ''' <param name="env"></param>
-    ''' <returns></returns>
     <ExportAPI("loadPackage")>
-    Public Function loadPackage(dir As String, Optional env As Environment = Nothing) As Object
-        Return PackageLoader2.LoadPackage(dir, env.globalEnvironment)
-    End Function
+    Public Sub loadPackage(dir As String, Optional env As Environment = Nothing)
+        Call PackageLoader2.LoadPackage(dir, env.globalEnvironment)
+    End Sub
 End Module
