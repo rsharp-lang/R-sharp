@@ -1,12 +1,30 @@
 ﻿Imports System.IO
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.System.Configuration
 
 Namespace System.Package.File
 
     Public Module PackageLoader2
 
+        <Extension>
+        Public Function GetPackageDirectory(opt As Options, packageName$) As String
+            Dim libDir As String
+
+            libDir = opt.lib & $"/Library/{packageName}"
+            libDir = libDir.GetDirectoryFullPath
+
+            Return libDir
+        End Function
+
+        ''' <summary>
+        ''' attach installed package
+        ''' </summary>
+        ''' <param name="dir"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         Public Function LoadPackage(dir As String, env As GlobalEnvironment)
             Dim meta As DESCRIPTION = $"{dir}/index.json".LoadJsonFile(Of DESCRIPTION)
             Dim symbols As Dictionary(Of String, String) = $"{dir}/manifest/symbols.json".LoadJsonFile(Of Dictionary(Of String, String))
