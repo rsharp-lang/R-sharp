@@ -71,6 +71,7 @@ Namespace System.Package.File
                         Return New RLiteral(Nothing).GetExpression(buffer, Me, desc)
 
                     Case ExpressionTypes.Require : Return New RRequire(Nothing).GetExpression(buffer, Me, desc)
+                    Case ExpressionTypes.SymbolDeclare : Return New RSymbol(Nothing).GetExpression(buffer, Me, desc)
 
                     Case Else
                         Throw New NotImplementedException(expression.Description)
