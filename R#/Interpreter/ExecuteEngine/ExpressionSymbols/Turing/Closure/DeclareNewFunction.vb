@@ -266,9 +266,20 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         End Function
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim result = envir.Push(funcName, Me, [readonly]:=False, mode:=TypeCodes.closure)
+            Dim symbol As Symbol = envir.FindFunction(funcName)
+
+            If symbol Is Nothing Then
+                envir.funcSymbols(funcName) = New Symbol(Me, TypeCodes.closure) With {
+                    .name = funcName,
+                    .[readonly] = False
+                }
+            Else
+                symbol.SetValue(Me, envir)
+            End If
+
             Me.envir = New Environment(envir, stackFrame, isInherits:=True)
-            Return result
+
+            Return Me
         End Function
 
         Public Overrides Function ToString() As String
