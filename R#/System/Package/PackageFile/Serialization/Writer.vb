@@ -199,7 +199,7 @@ Namespace System.Package.File
             End Using
         End Function
 
-        Private Shared Iterator Function readZEROBlock(bin As BinaryReader) As IEnumerable(Of Byte)
+        Friend Shared Iterator Function readZEROBlock(bin As BinaryReader) As IEnumerable(Of Byte)
             Dim [byte] As Value(Of Byte) = 0
 
             Do While ([byte] = bin.ReadByte) <> 0

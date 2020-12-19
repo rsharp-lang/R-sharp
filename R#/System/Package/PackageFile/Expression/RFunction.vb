@@ -48,6 +48,7 @@ Imports System.IO
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
@@ -123,11 +124,27 @@ Namespace System.Package.File.Expressions
 
         Private Shared Function ParseFunction(reader As BinaryReader, desc As DESCRIPTION) As DeclareNewFunction
             Dim sourceMap As StackFrame = Writer.ReadSourceMap(reader)
+            Dim funcName As String = Writer.readZEROBlock(reader).DoCall(Function(bytes) Encoding.ASCII.GetString(bytes.ToArray))
+            Dim parms As Integer = reader.ReadByte
+            Dim args As New List(Of Expression)
+
+            For i As Integer = 0 To parms - 1
+                args.Add(BlockReader.ParseBlock(reader).Parse(desc))
+            Next
+
+            Dim lines As Integer = reader.ReadInt32
+            Dim body As New List(Of Expression)
+
+            For i As Integer = 0 To lines - 1
+                body.Add(BlockReader.ParseBlock(reader).Parse(desc))
+            Next
+
+            Return New DeclareNewFunction(funcName, args.ToArray, New ClosureExpression(body.ToArray), sourceMap)
         End Function
 
         Public Overrides Function GetExpression(buffer As MemoryStream, raw As BlockReader, desc As DESCRIPTION) As Expression
             Using io As New BinaryReader(buffer)
-                Select Case raw.type
+                Select Case raw.expression
                     Case ExpressionTypes.FunctionDeclare : Return ParseFunction(io, desc)
 
                 End Select
