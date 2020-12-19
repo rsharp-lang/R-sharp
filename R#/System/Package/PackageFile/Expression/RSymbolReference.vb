@@ -75,7 +75,10 @@ Namespace System.Package.File.Expressions
         End Sub
 
         Public Overrides Function GetExpression(buffer As MemoryStream, raw As BlockReader, desc As DESCRIPTION) As Expression
-            Throw New NotImplementedException()
+            Dim symbolName As String = Encoding.ASCII.GetString(buffer.ToArray)
+            Dim ref As New SymbolReference(symbolName)
+
+            Return ref
         End Function
     End Class
 End Namespace

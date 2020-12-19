@@ -72,6 +72,8 @@ Namespace System.Package.File
 
                     Case ExpressionTypes.Require : Return New RRequire(Nothing).GetExpression(buffer, Me, desc)
                     Case ExpressionTypes.SymbolDeclare : Return New RSymbol(Nothing).GetExpression(buffer, Me, desc)
+                    Case ExpressionTypes.SymbolIndex : Return New RSymbolIndex(Nothing).GetExpression(buffer, Me, desc)
+                    Case ExpressionTypes.SymbolReference : Return New RSymbolReference(Nothing).GetExpression(buffer, Me, desc)
 
                     Case Else
                         Throw New NotImplementedException(expression.Description)
