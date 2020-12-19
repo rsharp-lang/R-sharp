@@ -767,7 +767,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CLI\CLI.vb" />
-    <Compile Include="CLI\IPC.vb" />
+    <Compile Include="CLI\Utils.vb" />
     <Compile Include="Terminal.vb" />
     <Compile Include="Program.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -820,6 +820,5 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\Rstudio.common\Rstudio.common.projitems" Label="Shared" />
-  <Import Project="..\..\..\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\TcpRequest\TcpRequest.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
