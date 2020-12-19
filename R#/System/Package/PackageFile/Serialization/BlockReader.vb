@@ -56,17 +56,48 @@ Namespace System.Package.File
         Public Property type As TypeCodes
         Public Property body As Byte()
 
+        Public Overrides Function ToString() As String
+            Return $"[{expression.Description}] {type.Description}  &H{body.Length.ToHexString} bytes"
+        End Function
+
         Public Function Parse(desc As DESCRIPTION) As Expression
             Using buffer As New MemoryStream(body)
                 Select Case expression
-                    Case ExpressionTypes.Binary : Return New RBinary(Nothing).GetExpression(buffer, expression, desc)
-                    Case ExpressionTypes.FunctionDeclare : Return New RFunction(Nothing).GetExpression(buffer, expression, desc)
+                    Case ExpressionTypes.Binary : Return New RBinary(Nothing).GetExpression(buffer, Me, desc)
+
+                    Case ExpressionTypes.FunctionDeclare,
+                         ExpressionTypes.FormulaDeclare,
+                         ExpressionTypes.LambdaDeclare
+
+                        Return New RFunction(Nothing).GetExpression(buffer, Me, desc)
+
+                    Case ExpressionTypes.FunctionCall : Return New RCallFunction(Nothing).GetExpression(buffer, Me, desc)
+
+                    Case ExpressionTypes.StringInterpolation : Return New RStringInterpolation(Nothing).GetExpression(buffer, Me, desc)
+                    Case ExpressionTypes.Literal,
+                         ExpressionTypes.SymbolRegexp
+
+                        Return New RLiteral(Nothing).GetExpression(buffer, Me, desc)
+
+                    Case ExpressionTypes.VectorLiteral : Return New RVector(Nothing).GetExpression(buffer, Me, desc)
+
+                    Case ExpressionTypes.Require : Return New RRequire(Nothing).GetExpression(buffer, Me, desc)
+                    Case ExpressionTypes.SymbolDeclare : Return New RSymbol(Nothing).GetExpression(buffer, Me, desc)
+                    Case ExpressionTypes.SymbolIndex : Return New RSymbolIndex(Nothing).GetExpression(buffer, Me, desc)
+                    Case ExpressionTypes.SymbolReference : Return New RSymbolReference(Nothing).GetExpression(buffer, Me, desc)
+                    Case ExpressionTypes.SymbolAssign : Return New RSymbolAssign(Nothing).GetExpression(buffer, Me, desc)
+
                     Case Else
                         Throw New NotImplementedException(expression.Description)
                 End Select
             End Using
         End Function
 
+        ''' <summary>
+        ''' 从头开始读文件使用的函数
+        ''' </summary>
+        ''' <param name="reader"></param>
+        ''' <returns></returns>
         Public Shared Function Read(reader As BinaryReader) As BlockReader
             ' check magic
             Dim magic As String = Encoding.ASCII.GetString(reader.ReadBytes(Writer.Magic.Length))
@@ -78,24 +109,22 @@ Namespace System.Package.File
             Return Read(reader, magic.Length)
         End Function
 
-        Public Shared Function Read(reader As BinaryReader, i As Long) As BlockReader
-            Dim type As ExpressionTypes
-            Dim size As Integer
-            Dim typecode As TypeCodes
-            Dim body As Byte()
-
-            Call reader.BaseStream.Seek(i, SeekOrigin.Begin)
-
-            type = reader.ReadInt32
-            size = reader.ReadInt32
-            typecode = reader.ReadByte
-            body = reader.ReadBytes(size)
+        Friend Shared Function ParseBlock(reader As BinaryReader) As BlockReader
+            Dim type As ExpressionTypes = reader.ReadInt32
+            Dim size As Integer = reader.ReadInt32
+            Dim typecode As TypeCodes = reader.ReadByte
+            Dim body As Byte() = reader.ReadBytes(size)
 
             Return New BlockReader With {
                 .body = body,
                 .expression = type,
                 .type = typecode
             }
+        End Function
+
+        Public Shared Function Read(reader As BinaryReader, i As Long) As BlockReader
+            Call reader.BaseStream.Seek(i, SeekOrigin.Begin)
+            Return ParseBlock(reader)
         End Function
 
     End Class

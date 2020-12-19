@@ -72,6 +72,44 @@ Module Layouts
         End If
     End Function
 
+    <ExportAPI("layout.circular_force")>
+    Public Function forceDirected(g As NetworkGraph,
+                                  Optional ejectFactor As Integer = 6,
+                                  Optional condenseFactor As Integer = 3,
+                                  Optional maxtx As Integer = 4,
+                                  Optional maxty As Integer = 3,
+                                  <RRawVectorArgument> Optional dist As Object = "30,250",
+                                  <RRawVectorArgument> Optional size As Object = "1000,1000",
+                                  Optional iterations As Integer = 200,
+                                  Optional env As Environment = Nothing) As NetworkGraph
+        If g.CheckZero Then
+            env.AddMessage("all of the vertex node in your network graph is in ZERO location, do random layout at first...", MSG_TYPES.WRN)
+            g = g.doRandomLayout
+        End If
+
+        Dim sizeStr = InteropArgumentHelper.getSize(size, "10000,10000")
+        Dim distStr = InteropArgumentHelper.getSize(dist, "30,256")
+        Dim physics As Planner = New CircularPlanner(
+            g:=g,
+            ejectFactor:=ejectFactor,
+            condenseFactor:=condenseFactor,
+            maxtx:=maxtx,
+            maxty:=maxty,
+            dist_threshold:=distStr,
+            size:=sizeStr
+        )
+
+        For i As Integer = 0 To iterations
+            Call physics.Collide()
+
+            If (100 * i / iterations) Mod 5 = 0 Then
+                Console.WriteLine($"- Completed {i + 1} of {iterations} [{CInt(100 * i / iterations)}%]")
+            End If
+        Next
+
+        Return g
+    End Function
+
     ''' <summary>
     ''' Do force directed layout
     ''' </summary>

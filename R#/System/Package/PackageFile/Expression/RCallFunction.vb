@@ -46,7 +46,9 @@
 
 Imports System.IO
 Imports System.Text
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
@@ -125,8 +127,32 @@ Namespace System.Package.File.Expressions
             End If
         End Function
 
-        Public Overrides Function GetExpression(buffer As MemoryStream, type As ExpressionTypes, desc As DESCRIPTION) As Expression
-            Throw New NotImplementedException()
+        Private Shared Function parseInvoke(bin As BinaryReader, desc As DESCRIPTION) As FunctionInvoke
+            Dim sourceMap As StackFrame = Writer.ReadSourceMap(bin)
+            Dim ns$ = Writer.readZEROBlock(bin).DoCall(Function(bytes) Encoding.ASCII.GetString(bytes.ToArray))
+            Dim func As Expression = BlockReader.ParseBlock(bin).Parse(desc)
+            Dim parmSize As Integer = bin.ReadByte
+            Dim args As New List(Of Expression)
+
+            For i As Integer = 0 To parmSize - 1
+                Call BlockReader.ParseBlock(bin).Parse(desc).DoCall(AddressOf args.Add)
+            Next
+
+            Return New FunctionInvoke(func, sourceMap, args.ToArray) With {.[namespace] = ns}
+        End Function
+
+        Public Overrides Function GetExpression(buffer As MemoryStream, raw As BlockReader, desc As DESCRIPTION) As Expression
+            Using bin As New BinaryReader(buffer)
+                Select Case raw.expression
+                    Case ExpressionTypes.FunctionCall : Return parseInvoke(bin, desc)
+                    Case ExpressionTypes.IIf
+                        Throw New InvalidCastException(raw.expression.ToString)
+                    Case ExpressionTypes.FunctionByRef
+                        Throw New InvalidCastException(raw.expression.ToString)
+                    Case Else
+                        Throw New InvalidCastException(raw.expression.ToString)
+                End Select
+            End Using
         End Function
     End Class
 End Namespace

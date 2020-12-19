@@ -75,7 +75,6 @@ Namespace System.Package.File.Expressions
                 Call outfile.Write(DirectCast(x.type, Byte))
 
                 Call outfile.Write(Encoding.UTF8.GetBytes(x.pattern))
-                Call outfile.Write(CByte(0))
 
                 Call outfile.Flush()
                 Call saveSize(outfile)
@@ -93,7 +92,7 @@ Namespace System.Package.File.Expressions
                     Case TypeCodes.double : Call outfile.Write(CType(x.value, Double))
                     Case TypeCodes.integer : Call outfile.Write(CType(x.value, Long))
                     Case Else
-                        Call outfile.Write(Scripting.ToString(x.value))
+                        Call outfile.Write(Encoding.UTF8.GetBytes(Scripting.ToString(x.value)))
                 End Select
 
                 Call outfile.Flush()
@@ -101,8 +100,30 @@ Namespace System.Package.File.Expressions
             End Using
         End Sub
 
-        Public Overrides Function GetExpression(buffer As MemoryStream, type As ExpressionTypes, desc As DESCRIPTION) As Expression
-            Throw New NotImplementedException()
+        Private Shared Function readRegexp(bin As BinaryReader) As Regexp
+            Return New Regexp(Encoding.UTF8.GetString(bin.ReadBytes(bin.BaseStream.Length)))
+        End Function
+
+        Private Shared Function readLiteral(bin As BinaryReader, type As TypeCodes) As Literal
+            Select Case type
+                Case TypeCodes.boolean : Return New Literal(If(bin.ReadByte = 0, False, True))
+                Case TypeCodes.double : Return New Literal(bin.ReadDouble)
+                Case TypeCodes.integer : Return New Literal(bin.ReadInt64)
+                Case Else
+                    Return New Literal(Encoding.UTF8.GetString(bin.ReadBytes(bin.BaseStream.Length)))
+            End Select
+        End Function
+
+        Public Overrides Function GetExpression(buffer As MemoryStream, raw As BlockReader, desc As DESCRIPTION) As Expression
+            Using bin As New BinaryReader(buffer)
+                If raw.expression = ExpressionTypes.Literal Then
+                    Return readLiteral(bin, raw.type)
+                ElseIf raw.expression = ExpressionTypes.SymbolRegexp Then
+                    Return readRegexp(bin)
+                Else
+                    Throw New InvalidCastException(raw.expression.ToString)
+                End If
+            End Using
         End Function
     End Class
 End Namespace

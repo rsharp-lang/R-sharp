@@ -118,6 +118,10 @@ Namespace Runtime.Interop
                 End If
             ElseIf right Is Nothing Then
                 Return rightNull(left, env)
+            ElseIf left.GetType.IsArray AndAlso DirectCast(left, Array).Length = 0 Then
+                Return New Object() {}
+            ElseIf right.GetType.IsArray AndAlso DirectCast(right, Array).Length = 0 Then
+                Return New Object() {}
             Else
                 Dim t1 As RType = typeOfImpl(left)
                 Dim t2 As RType = typeOfImpl(right)

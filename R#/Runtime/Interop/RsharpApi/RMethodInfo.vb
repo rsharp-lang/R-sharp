@@ -291,6 +291,10 @@ Namespace Runtime.Interop
                         If arg.isOptional Then
                             If TypeOf arg.default Is Expression Then
                                 Yield DirectCast(arg.default, Expression).Evaluate(envir)
+                            ElseIf arg.type.raw Is GetType(Environment) Then
+                                Yield envir
+                            ElseIf arg.type.raw Is GetType(GlobalEnvironment) Then
+                                Yield envir.globalEnvironment
                             Else
                                 Yield arg.default
                             End If
@@ -329,7 +333,11 @@ Namespace Runtime.Interop
         ''' <returns></returns>
         Friend Shared Function getValue(arg As RMethodArgument, value As Object, trace$, ByRef envir As Environment, trygetListParam As Boolean) As Object
             If arg.type Like GetType(Environment) Then
-                Return envir
+                If value IsNot Nothing And value.GetType.IsInheritsFrom(GetType(Environment)) Then
+                    Return value
+                Else
+                    Return envir
+                End If
             ElseIf Program.isException(value, envir) Then
                 Return value
             ElseIf value Is Nothing Then

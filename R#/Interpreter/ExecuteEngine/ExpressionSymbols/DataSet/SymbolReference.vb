@@ -76,7 +76,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         ''' <returns></returns>
         Public ReadOnly Property symbol As String
 
-        Sub New(symbol As Token)
+        Friend Sub New(symbol As Token)
             Me.symbol = symbol.text
         End Sub
 

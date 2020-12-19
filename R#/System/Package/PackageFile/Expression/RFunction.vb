@@ -48,9 +48,11 @@ Imports System.IO
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 
 Namespace System.Package.File.Expressions
@@ -121,15 +123,60 @@ Namespace System.Package.File.Expressions
             End Using
         End Sub
 
-        Private Shared Function ParseFunction(reader As BinaryReader, desc As DESCRIPTION) As DeclareNewFunction
+        Private Shared Function parseLambda(reader As BinaryReader, desc As DESCRIPTION) As DeclareLambdaFunction
             Dim sourceMap As StackFrame = Writer.ReadSourceMap(reader)
+            Dim parmSize As Integer = reader.ReadByte
+            Dim args As New List(Of Expression)
+
+            For i As Integer = 0 To parmSize - 1
+                Call BlockReader.ParseBlock(reader).Parse(desc).DoCall(AddressOf args.Add)
+            Next
+
+            Dim bodySize As Integer = reader.ReadInt32
+            Dim body As New List(Of Expression)
+
+            If bodySize <> 1 Then
+                Throw New InvalidProgramException($"lambda function can not be more than one line!")
+            End If
+
+            For i As Integer = 0 To bodySize - 1
+                Call BlockReader.ParseBlock(reader).Parse(desc).DoCall(AddressOf body.Add)
+            Next
+
+            Dim names As String() = args.Select(Function(a) DirectCast(a, Literal).value.ToString).ToArray
+            Dim name$ = $"[{names.JoinBy(", ")}] -> {body(Scan0).ToString}"
+            Dim target As New DeclareNewSymbol(names, Nothing, TypeCodes.generic, False)
+
+            Return New DeclareLambdaFunction(name, target, body(Scan0), sourceMap)
         End Function
 
-        Public Overrides Function GetExpression(buffer As MemoryStream, type As ExpressionTypes, desc As DESCRIPTION) As Expression
-            Using io As New BinaryReader(buffer)
-                Select Case type
-                    Case ExpressionTypes.FunctionDeclare : Return ParseFunction(io, desc)
+        Private Shared Function ParseFunction(reader As BinaryReader, desc As DESCRIPTION) As DeclareNewFunction
+            Dim sourceMap As StackFrame = Writer.ReadSourceMap(reader)
+            Dim funcName As String = Writer.readZEROBlock(reader).DoCall(Function(bytes) Encoding.ASCII.GetString(bytes.ToArray))
+            Dim parms As Integer = reader.ReadByte
+            Dim args As New List(Of DeclareNewSymbol)
 
+            For i As Integer = 0 To parms - 1
+                args.Add(BlockReader.ParseBlock(reader).Parse(desc))
+            Next
+
+            Dim lines As Integer = reader.ReadInt32
+            Dim body As New List(Of Expression)
+
+            For i As Integer = 0 To lines - 1
+                body.Add(BlockReader.ParseBlock(reader).Parse(desc))
+            Next
+
+            Return New DeclareNewFunction(funcName, args.ToArray, New ClosureExpression(body.ToArray), sourceMap)
+        End Function
+
+        Public Overrides Function GetExpression(buffer As MemoryStream, raw As BlockReader, desc As DESCRIPTION) As Expression
+            Using io As New BinaryReader(buffer)
+                Select Case raw.expression
+                    Case ExpressionTypes.FunctionDeclare : Return ParseFunction(io, desc)
+                    Case ExpressionTypes.LambdaDeclare : Return parseLambda(io, desc)
+                    Case Else
+                        Throw New NotImplementedException(raw.ToString)
                 End Select
             End Using
 

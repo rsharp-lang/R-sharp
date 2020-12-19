@@ -75,11 +75,14 @@ Module Manifold
         Dim size$ = InteropArgumentHelper.getSize(args!size)
         Dim pointSize# = args.getValue("point_size", env, 15.0)
         Dim showLabels As Boolean = args.getValue("show_labels", env, False)
+        Dim showBubble As Boolean = args.getValue("show_bubble", env, False)
         Dim labels As String() = args.getValue(Of String())("labels", env)
         Dim labelStyle$ = args.getValue("label_style", env, CSSFont.Win10Normal)
         Dim labelColor$ = args.getValue("label_color", env, "black")
         Dim clusters As list = args.getValue(Of list)("clusters", env)
         Dim bubbleAlpha As Integer = args.getValue("bubble_alpha", env, 0.0) * 255
+        Dim legendLabelCSS$ = args.getValue("legendlabel_style", env, CSSFont.PlotLabelNormal)
+        Dim colors As String = args.getValue("colorSet", env, "Set1:c8")
         Dim clusterData As Dictionary(Of String, String) = Nothing
 
         If Not clusters Is Nothing Then
@@ -91,7 +94,15 @@ Module Manifold
         End If
 
         If input.dimension = 2 Then
-            Return input.DrawUmap2D(size:=size, labels:=labels, clusters:=clusterData)
+            Return input.DrawUmap2D(
+                size:=size,
+                labels:=labels,
+                clusters:=clusterData,
+                pointSize:=pointSize,
+                showConvexHull:=showBubble,
+                legendLabelCSS:=legendLabelCSS,
+                colorSet:=colors
+            )
         Else
             Dim camera As Camera = args.getValue(Of Camera)("camera", env)
 
@@ -118,7 +129,8 @@ Module Manifold
                 labelCSS:=labelStyle,
                 clusters:=clusterData,
                 labelColor:=labelColor,
-                bubbleAlpha:=bubbleAlpha
+                bubbleAlpha:=bubbleAlpha,
+                colorSet:=colors
             )
         End If
     End Function

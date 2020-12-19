@@ -172,10 +172,11 @@ Module plots
         Dim theme As New Theme With {
             .padding = padding,
             .tagCSS = labelStyle,
-            .gridStroke = linkStroke,
+            .gridStrokeX = linkStroke,
+            .gridStrokeY = linkStroke,
             .axisTickCSS = tickStyle,
             .axisStroke = axisStroke,
-            .PointSize = ptSize,
+            .pointSize = ptSize,
             .background = bg,
             .axisTickFormat = axisFormat
         }
@@ -294,7 +295,7 @@ Module plots
         Dim s As HistProfile() = items _
             .SeqIterator _
             .Select(Function(i)
-                        Dim histLegend As New Legend With {
+                        Dim histLegend As New LegendObject With {
                             .color = colors(i),
                             .fontstyle = CSSFont.Win7LargerBold,
                             .style = LegendStyles.Rectangle,

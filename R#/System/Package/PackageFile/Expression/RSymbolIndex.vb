@@ -29,8 +29,14 @@ Namespace System.Package.File.Expressions
             End Using
         End Sub
 
-        Public Overrides Function GetExpression(buffer As MemoryStream, type As ExpressionTypes, desc As DESCRIPTION) As Expression
-            Throw New NotImplementedException()
+        Public Overrides Function GetExpression(buffer As MemoryStream, raw As BlockReader, desc As DESCRIPTION) As Expression
+            Using bin As New BinaryReader(buffer)
+                Dim indexType As SymbolIndexers = bin.ReadByte
+                Dim symbol As Expression = BlockReader.ParseBlock(bin).Parse(desc)
+                Dim index As Expression = BlockReader.ParseBlock(bin).Parse(desc)
+
+                Return New SymbolIndexer(symbol, index, indexType)
+            End Using
         End Function
     End Class
 End Namespace

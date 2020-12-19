@@ -251,6 +251,7 @@ Namespace Runtime.Internal
 
         Public Shared Sub writeErrMessage(message As Message, Optional stdout As StreamWriter = Nothing, Optional redirectError2stdout As Boolean = False)
             Dim execRoutine$ = message.environmentStack _
+                .SafeQuery _
                 .Reverse _
                 .Select(Function(frame) frame.Method.Method) _
                 .JoinBy(" -> ")

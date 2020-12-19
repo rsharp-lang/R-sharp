@@ -1,47 +1,48 @@
 ﻿#Region "Microsoft.VisualBasic::274fc9d79ca601ab8934c663732fd9dc, R#\System\Package\ImportsPackage.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module ImportsPackage
-    ' 
-    '         Function: (+2 Overloads) GetAllApi, ImportsStatic, ImportsStaticInternalImpl
-    ' 
-    '         Sub: ImportsInstance
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module ImportsPackage
+' 
+'         Function: (+2 Overloads) GetAllApi, ImportsStatic, ImportsStaticInternalImpl
+' 
+'         Sub: ImportsInstance
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.ComponentModel.Composition
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -62,6 +63,13 @@ Namespace System.Package
             Return GetAllApi(package.package, strict:=True, includesInternal:=False)
         End Function
 
+        ''' <summary>
+        ''' 这个函数会获取得到通过<see cref="ExportAttribute"/>或者<see cref="ExportAPIAttribute"/>标记的函数
+        ''' </summary>
+        ''' <param name="package"></param>
+        ''' <param name="strict"></param>
+        ''' <param name="includesInternal"></param>
+        ''' <returns></returns>
         Public Iterator Function GetAllApi(package As Type,
                                            Optional strict As Boolean = True,
                                            Optional includesInternal As Boolean = False) As IEnumerable(Of NamedValue(Of MethodInfo))
@@ -77,12 +85,15 @@ Namespace System.Package
             Dim methods As MethodInfo() = package.GetMethods(access)
             Dim name As String
             Dim flag As ExportAPIAttribute
+            Dim exportFlag As ExportAttribute
 
             For Each method As MethodInfo In methods
                 flag = method.GetCustomAttribute(Of ExportAPIAttribute)
 
                 If flag Is Nothing Then
-                    If strict Then
+                    exportFlag = method.GetCustomAttribute(Of ExportAttribute)
+
+                    If strict AndAlso exportFlag Is Nothing Then
                         Continue For
                     Else
                         name = method.Name

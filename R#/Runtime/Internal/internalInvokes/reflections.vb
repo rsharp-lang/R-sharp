@@ -134,7 +134,18 @@ Namespace Runtime.Internal.Invokes
         ''' </remarks>
         <ExportAPI("eval")>
         Public Function eval(<RRawVectorArgument> expr As Object, Optional env As Environment = Nothing) As Object
+            Dim exprList As pipeline = pipeline.TryCreatePipeline(Of Expression)(expr, env)
+            Dim result As Object = Nothing
 
+            If exprList.isError Then
+                Return exprList.getError
+            End If
+
+            For Each expression As Expression In exprList.populates(Of Expression)(env)
+                result = expression.Evaluate(env)
+            Next
+
+            Return result
         End Function
 
         ''' <summary>
