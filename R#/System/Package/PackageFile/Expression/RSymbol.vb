@@ -77,9 +77,7 @@ Namespace System.Package.File.Expressions
                     Call outfile.Write(CType(0, Byte))
                 Next
 
-                If x.value Is Nothing Then
-                    Call outfile.Write(0)
-                Else
+                If Not x.value Is Nothing Then
                     Dim bytes As Byte() = context.GetBuffer(x.value)
 
                     Call outfile.Write(bytes.Length)
@@ -104,7 +102,7 @@ Namespace System.Package.File.Expressions
                         .DoCall(AddressOf nameList.Add)
                 Next
 
-                If buffer.Position = buffer.Length - 1 Then
+                If buffer.Position >= buffer.Length Then
                     value = Literal.NULL
                 Else
                     sizeOf = bin.ReadInt32
