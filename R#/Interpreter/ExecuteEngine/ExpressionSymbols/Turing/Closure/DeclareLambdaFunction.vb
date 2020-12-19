@@ -216,7 +216,9 @@ RE0:
             Dim type As Type = result.GetType
 
             If type.IsArray Then
-                If type.GetElementType Is GetType(Out) Then
+                If DirectCast(result, Array).Length = 0 Then
+                    Return Nothing
+                ElseIf type.GetElementType Is GetType(Out) Then
                     result = DirectCast(result, Array).GetValue(Scan0)
                 ElseIf isStringOut Then
                     result = Scripting.ToString(DirectCast(result, Array).GetValue(Scan0))
