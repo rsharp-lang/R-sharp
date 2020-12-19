@@ -47,7 +47,6 @@
 Imports System.IO
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
-Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
@@ -122,7 +121,18 @@ Namespace System.Package.File.Expressions
             End Using
         End Sub
 
-        Public Overrides Function GetExpression(buffer As MemoryStream, desc As DESCRIPTION) As Expression
+        Private Shared Function ParseFunction(reader As BinaryReader, desc As DESCRIPTION) As DeclareNewFunction
+            Dim sourceMap As StackFrame = Writer.ReadSourceMap(reader)
+        End Function
+
+        Public Overrides Function GetExpression(buffer As MemoryStream, type As ExpressionTypes, desc As DESCRIPTION) As Expression
+            Using io As New BinaryReader(buffer)
+                Select Case type
+                    Case ExpressionTypes.FunctionDeclare : Return ParseFunction(io, desc)
+
+                End Select
+            End Using
+
             Throw New NotImplementedException()
         End Function
     End Class

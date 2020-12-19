@@ -1,5 +1,8 @@
 {
   "binaryTest": "3cb2d40ba0d4f9af100eb31fa84bc61a",
+  "expression": "63973cd3ad7ccf2c8d5dce94b215f683",
+  "symbol1": "72693699ba0323e0282510cafb6c517d",
+  "echo": "cbb11ed87dc8a95d81400c7f33c7c171",
   "hello_world": "99b1ff8f11781541f7f89f9bd41c4a17",
   "emptyFunc": "0ebdd8fff8f09b15319aa987db6195ef",
   "run_tuple": "54491da517c9816842799328992fa4e7",

@@ -113,9 +113,9 @@ Namespace System.Package.File.Expressions
                     Return New Literal(Encoding.UTF8.GetString(bin.ReadBytes(bin.BaseStream.Length)))
             End Select
         End Function
-
-        Public Overrides Function GetExpression(buffer As MemoryStream, desc As DESCRIPTION) As Expression
-
+    
+        Public Overrides Function GetExpression(buffer As MemoryStream, type As ExpressionTypes, desc As DESCRIPTION) As Expression
+            Throw New NotImplementedException()
         End Function
     End Class
 End Namespace
