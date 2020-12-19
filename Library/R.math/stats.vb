@@ -80,7 +80,24 @@ Module stats
         Internal.ConsolePrinter.AttachConsoleFormatter(Of TtestResult)(AddressOf printTtest)
         Internal.ConsolePrinter.AttachConsoleFormatter(Of TwoSampleResult)(AddressOf printTwoSampleTTest)
         Internal.ConsolePrinter.AttachConsoleFormatter(Of FishersExactPvalues)(Function(o) o.ToString)
+
+        Internal.Object.Converts.makeDataframe.addHandler(GetType(DataMatrix), AddressOf matrixDataFrame)
+        Internal.Object.Converts.makeDataframe.addHandler(GetType(DistanceMatrix), AddressOf matrixDataFrame)
+        Internal.Object.Converts.makeDataframe.addHandler(GetType(CorrelationMatrix), AddressOf matrixDataFrame)
     End Sub
+
+    Private Function matrixDataFrame(x As DataMatrix, args As list, env As Environment) As Rdataframe
+        Dim table As New Rdataframe With {
+            .columns = New Dictionary(Of String, Array),
+            .rownames = x.keys
+        }
+
+        For Each row In x.PopulateRowObjects(Of DataSet)
+            Call table.columns.Add(row.ID, row(table.rownames))
+        Next
+
+        Return table
+    End Function
 
     Private Function printTtest(t As TtestResult) As String
         Return t.ToString
