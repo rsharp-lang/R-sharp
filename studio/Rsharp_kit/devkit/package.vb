@@ -26,4 +26,15 @@ Module package
             Return BlockReader.Read(io).Parse(New DESCRIPTION)
         End Using
     End Function
+
+    ''' <summary>
+    ''' for debug used only
+    ''' </summary>
+    ''' <param name="dir"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("loadPackage")>
+    Public Function loadPackage(dir As String, Optional env As Environment = Nothing) As Object
+        Return PackageLoader.LoadPackage(dir, env.globalEnvironment)
+    End Function
 End Module

@@ -854,6 +854,7 @@
     <Compile Include="System\Package\PackageFile\Expression\RSymbol.vb" />
     <Compile Include="System\Package\PackageFile\Expression\RFunction.vb" />
     <Compile Include="System\Package\PackageFile\Expression\RExpression.vb" />
+    <Compile Include="System\Package\PackageFile\PackageLoader.vb" />
     <Compile Include="System\Package\PackageFile\PackageModel.vb" />
     <Compile Include="System\Package\PackageFile\DESCRIPTION.vb" />
     <Compile Include="System\Package\PackageFile\CreatePackage.vb" />
