@@ -69,8 +69,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
         Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
 
-        ReadOnly params As DeclareNewSymbol
-        ReadOnly closure As ClosureExpression
+        Friend ReadOnly params As DeclareNewSymbol
+        Friend ReadOnly closure As ClosureExpression
 
         Sub New(params As DeclareNewSymbol, closure As ClosureExpression, stackframe As StackFrame)
             Me.params = params

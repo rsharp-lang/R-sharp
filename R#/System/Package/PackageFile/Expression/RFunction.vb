@@ -70,6 +70,8 @@ Namespace System.Package.File.Expressions
                 Return ExpressionTypes.LambdaDeclare
             ElseIf TypeOf x Is FormulaExpression Then
                 Return ExpressionTypes.FormulaDeclare
+            ElseIf TypeOf x Is UsingClosure Then
+                Return ExpressionTypes.Using
             Else
                 Throw New NotImplementedException(x.GetType.FullName)
             End If
@@ -99,6 +101,9 @@ Namespace System.Package.File.Expressions
                 ElseIf TypeOf x Is FormulaExpression Then
                     params = {New SymbolReference(DirectCast(x, FormulaExpression).var)}
                     body = {DirectCast(x, FormulaExpression).formula}
+                ElseIf TypeOf x Is UsingClosure Then
+                    params = {DirectCast(x, UsingClosure).params}
+                    body = DirectCast(x, UsingClosure).closure.EnumerateCodeLines.ToArray
                 Else
                     body = {DirectCast(x, DeclareLambdaFunction).closure}
                     params = DirectCast(x, DeclareLambdaFunction).parameterNames _

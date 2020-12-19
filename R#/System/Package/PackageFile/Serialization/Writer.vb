@@ -126,7 +126,8 @@ Namespace System.Package.File
                 Case GetType(DeclareNewSymbol) : Return RSymbol.GetBuffer(x)
                 Case GetType(DeclareNewFunction),
                      GetType(DeclareLambdaFunction),
-                     GetType(FormulaExpression)
+                     GetType(FormulaExpression),
+                     GetType(UsingClosure)
 
                     Return RFunction.GetBuffer(x)
 
@@ -142,7 +143,8 @@ Namespace System.Package.File
 
                 Case GetType(FunctionInvoke),
                      GetType(ByRefFunctionCall),
-                     GetType(IIfExpression)
+                     GetType(IIfExpression),
+                     GetType(CreateObject)
 
                     Return RCallFunction.GetBuffer(x)
 

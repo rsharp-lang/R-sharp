@@ -75,6 +75,8 @@ Namespace System.Package.File.Expressions
                     iif.trueResult,
                     iif.falseResult
                 }
+            ElseIf TypeOf x Is CreateObject Then
+                Return DirectCast(x, CreateObject).constructor
             Else
                 Return {DirectCast(x, ByRefFunctionCall).target, DirectCast(x, ByRefFunctionCall).value}
             End If
@@ -85,6 +87,8 @@ Namespace System.Package.File.Expressions
                 Return DirectCast(x, FunctionInvoke).funcName
             ElseIf TypeOf x Is IIfExpression Then
                 Return New Literal("iif")
+            ElseIf TypeOf x Is CreateObject Then
+                Return New Literal(DirectCast(x, CreateObject).name)
             Else
                 Return DirectCast(x, ByRefFunctionCall).funcRef
             End If
@@ -139,6 +143,8 @@ Namespace System.Package.File.Expressions
                 Return ExpressionTypes.IIf
             ElseIf TypeOf x Is ByRefFunctionCall Then
                 Return ExpressionTypes.FunctionByRef
+            ElseIf TypeOf x Is CreateObject Then
+                Return ExpressionTypes.Constructor
             Else
                 Throw New NotImplementedException(x.GetType.FullName)
             End If
