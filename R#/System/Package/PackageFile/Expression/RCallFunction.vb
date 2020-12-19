@@ -115,6 +115,22 @@ Namespace System.Package.File.Expressions
             End Using
         End Sub
 
+        Private Shared Function parseByRef(bin As BinaryReader, desc As DESCRIPTION) As ByRefFunctionCall
+            Dim sourceMap As StackFrame = Writer.ReadSourceMap(bin)
+            Dim ns$ = Writer.readZEROBlock(bin).DoCall(Function(bytes) Encoding.ASCII.GetString(bytes.ToArray))
+            Dim func As Expression = BlockReader.ParseBlock(bin).Parse(desc)
+            Dim paramSize As Integer = bin.ReadByte
+            Dim args As New List(Of Expression)
+
+            For i As Integer = 0 To paramSize - 1
+                Call BlockReader.ParseBlock(bin).Parse(desc).DoCall(AddressOf args.Add)
+            Next
+
+            Dim invoke As New FunctionInvoke(func, sourceMap, args(Scan0))
+
+            Return New ByRefFunctionCall(invoke, args(1), sourceMap)
+        End Function
+
         Private Shared Function getTypeCode(x As Expression) As ExpressionTypes
             If TypeOf x Is FunctionInvoke Then
                 Return ExpressionTypes.FunctionCall
@@ -147,8 +163,7 @@ Namespace System.Package.File.Expressions
                     Case ExpressionTypes.FunctionCall : Return parseInvoke(bin, desc)
                     Case ExpressionTypes.IIf
                         Throw New InvalidCastException(raw.expression.ToString)
-                    Case ExpressionTypes.FunctionByRef
-                        Throw New InvalidCastException(raw.expression.ToString)
+                    Case ExpressionTypes.FunctionByRef : Return parseByRef(bin, desc)
                     Case Else
                         Throw New InvalidCastException(raw.expression.ToString)
                 End Select

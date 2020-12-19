@@ -78,12 +78,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         Friend ReadOnly target As Expression
         Friend ReadOnly value As Expression
 
-        Sub New(invoke As Expression, value As Expression, stackFrame As StackFrame)
-            Dim target As FunctionInvoke = invoke
-
+        Sub New(invoke As FunctionInvoke, value As Expression, stackFrame As StackFrame)
             Me.value = value
-            Me.funcRef = target.funcName
-            Me.target = target.parameters(Scan0)
+            Me.funcRef = invoke.funcName
+            Me.target = invoke.parameters(Scan0)
             Me.stackFrame = stackFrame
         End Sub
 

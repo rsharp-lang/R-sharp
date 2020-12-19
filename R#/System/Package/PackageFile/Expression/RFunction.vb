@@ -123,6 +123,28 @@ Namespace System.Package.File.Expressions
             End Using
         End Sub
 
+        Private Shared Function parseFormula(reader As BinaryReader, desc As DESCRIPTION) As FormulaExpression
+            Dim parmSize As Integer = reader.ReadByte
+            Dim args As New List(Of Expression)
+
+            For i As Integer = 0 To parmSize - 1
+                Call BlockReader.ParseBlock(reader).Parse(desc).DoCall(AddressOf args.Add)
+            Next
+
+            Dim bodySize As Integer = reader.ReadInt32
+            Dim body As New List(Of Expression)
+
+            If bodySize <> 1 Then
+                Throw New InvalidProgramException($"formula expression can not be more than one line!")
+            End If
+
+            For i As Integer = 0 To bodySize - 1
+                Call BlockReader.ParseBlock(reader).Parse(desc).DoCall(AddressOf body.Add)
+            Next
+
+            Return New FormulaExpression(DirectCast(args(Scan0), SymbolReference).symbol, body(Scan0))
+        End Function
+
         Private Shared Function parseLambda(reader As BinaryReader, desc As DESCRIPTION) As DeclareLambdaFunction
             Dim sourceMap As StackFrame = Writer.ReadSourceMap(reader)
             Dim parmSize As Integer = reader.ReadByte
@@ -175,6 +197,7 @@ Namespace System.Package.File.Expressions
                 Select Case raw.expression
                     Case ExpressionTypes.FunctionDeclare : Return ParseFunction(io, desc)
                     Case ExpressionTypes.LambdaDeclare : Return parseLambda(io, desc)
+                    Case ExpressionTypes.FormulaDeclare : Return parseFormula(io, desc)
                     Case Else
                         Throw New NotImplementedException(raw.ToString)
                 End Select
