@@ -43,29 +43,28 @@
 
 #End Region
 
+Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports System.Threading
+Imports Microsoft.VisualBasic.ApplicationServices
+Imports Microsoft.VisualBasic.CommandLine.Parsers
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.Net
-Imports SMRUCC.Rsharp.Runtime.Internal.Object
-Imports SMRUCC.Rsharp.Runtime.Interop
-Imports SMRUCC.Rsharp.System.Package
-Imports RPkg = SMRUCC.Rsharp.System.Package.Package
-Imports REnv = SMRUCC.Rsharp.Runtime
-Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
-Imports SMRUCC.Rsharp.Runtime.Components
-Imports System.IO
-Imports Microsoft.VisualBasic.SecurityString
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports Microsoft.VisualBasic.My
-Imports Microsoft.VisualBasic.Text
-Imports Microsoft.VisualBasic.ApplicationServices
-Imports Microsoft.VisualBasic.CommandLine.Parsers
+Imports Microsoft.VisualBasic.Net
+Imports Microsoft.VisualBasic.SecurityString
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
+Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.System.Package
+Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RPkg = SMRUCC.Rsharp.System.Package.Package
 
 Namespace Runtime.Internal.Invokes
 
@@ -646,7 +645,9 @@ Namespace Runtime.Internal.Invokes
                 Else
                     reader = dataSymbols(name)
                     pkgFile = $"{pkgFile}/data/{name}"
-                    load = env.globalEnvironment.Rscript.Invoke(reader, pkgFile)
+                    load = env.globalEnvironment _
+                        .Rscript _
+                        .Invoke(reader, pkgFile)
                 End If
 
                 If Program.isException(load) Then
