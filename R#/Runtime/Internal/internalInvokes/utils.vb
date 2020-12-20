@@ -740,12 +740,20 @@ Namespace Runtime.Internal.Invokes
         Public Function systemFile(fileName As String, package$, Optional env As Environment = Nothing) As Object
             Dim loaded = env.globalEnvironment.attachedNamespace
             Dim file As String = Nothing
+            Dim findFileByName = Function(dir As String) As String
+                                     Dim ls = dir.ListFiles("*").ToArray
+
+                                     For Each filepath As String In ls
+                                         If filepath.FileName = fileName Then
+                                             Return filepath
+                                         End If
+                                     Next
+
+                                     Return Nothing
+                                 End Function
 
             If loaded.ContainsKey(package) Then
-                file = loaded(package).libPath _
-                    .ListFiles _
-                    .Where(Function(path) path.FileName = fileName) _
-                    .FirstOrDefault
+                file = findFileByName(loaded(package).libPath)
             End If
 
             If Not file Is Nothing Then
@@ -754,10 +762,7 @@ Namespace Runtime.Internal.Invokes
 
             For Each dir As String In env.globalEnvironment.options.lib_loc.ListDirectory
                 If dir.BaseName = package Then
-                    Return loaded(package).libPath _
-                        .ListFiles _
-                        .Where(Function(path) path.FileName = fileName) _
-                        .FirstOrDefault
+                    Return findFileByName(dir )
                 End If
             Next
 
