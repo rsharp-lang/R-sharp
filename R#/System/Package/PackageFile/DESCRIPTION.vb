@@ -1,45 +1,45 @@
 ﻿#Region "Microsoft.VisualBasic::8f1b62ae859f2a721610c301e3ef7715, R#\System\Package\PackageFile\DESCRIPTION.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class DESCRIPTION
-    ' 
-    '         Properties: [Date], Author, Description, License, Maintainer
-    '                     meta, Package, Title, Type, Version
-    ' 
-    '         Function: Parse, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class DESCRIPTION
+' 
+'         Properties: [Date], Author, Description, License, Maintainer
+'                     meta, Package, Title, Type, Version
+' 
+'         Function: Parse, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -76,10 +76,22 @@ Namespace System.Package.File
 
         Public Shared Function Parse(file As String) As DESCRIPTION
             Dim lines As String() = file.SolveListStream.ToArray
-            Dim meta As New DESCRIPTION With {.meta = New Dictionary(Of String, String)}
+            Dim index As New DESCRIPTION With {
+                .meta = New Dictionary(Of String, String)
+            }
             Dim lastTag As String = Nothing
-            Dim tag As NamedValue(Of String)
+
+            For Each line As String In lines
+                Call ParserLoopStep(line, lastTag, index)
+            Next
+
+            Return index
+        End Function
+
+        Private Shared Sub ParserLoopStep(line As String, ByRef lastTag$, index As DESCRIPTION)
+            Dim tag As NamedValue(Of String) = line.GetTagValue(":", trim:=True)
             Dim continuteLine As String
+            Dim valueStr As String
 
             Static writer As Dictionary(Of String, PropertyInfo) = DataFramework.Schema(Of DESCRIPTION)(
                 flag:=PropertyAccess.Writeable,
@@ -87,30 +99,24 @@ Namespace System.Package.File
                 primitive:=True
             ).ToUpper
 
-            For Each line As String In lines
-                tag = line.GetTagValue(":", trim:=True)
-
-                If tag.Name.StringEmpty Then
-                    If lastTag.StringEmpty Then
-                        Throw New SyntaxErrorException("invalid content format of the 'DESCRIPTION' meta data file!")
-                    ElseIf meta.meta.ContainsKey(lastTag) Then
-                        continuteLine = meta.meta(lastTag) & vbCrLf & line
-                        writer(lastTag).SetValue(meta, continuteLine)
-                    Else
-                        continuteLine = Scripting.ToString(writer(lastTag).GetValue(meta)) & vbCrLf & line
-                        writer(lastTag).SetValue(meta, continuteLine)
-                    End If
-                ElseIf Not writer.ContainsKey(tag.Name.ToUpper) Then
-                    lastTag = tag.Name
-                    meta.meta(lastTag) = tag.Value
+            If tag.Name.StringEmpty Then
+                If lastTag.StringEmpty Then
+                    Throw New SyntaxErrorException("invalid content format of the 'DESCRIPTION' meta data file!")
+                ElseIf index.meta.ContainsKey(lastTag) Then
+                    continuteLine = index.meta(lastTag) & vbCrLf & line
+                    writer(lastTag).SetValue(index, continuteLine)
                 Else
-                    lastTag = tag.Name.ToUpper
-                    writer(lastTag).SetValue(meta, tag.Value)
+                    valueStr = writer(lastTag).GetValue(index)?.ToString
+                    continuteLine = valueStr & vbCrLf & line
+                    writer(lastTag).SetValue(index, continuteLine)
                 End If
-            Next
-
-            Return meta
-        End Function
-
+            ElseIf Not writer.ContainsKey(tag.Name.ToUpper) Then
+                lastTag = tag.Name
+                index.meta(lastTag) = tag.Value
+            Else
+                lastTag = tag.Name.ToUpper
+                writer(lastTag).SetValue(index, tag.Value)
+            End If
+        End Sub
     End Class
 End Namespace
