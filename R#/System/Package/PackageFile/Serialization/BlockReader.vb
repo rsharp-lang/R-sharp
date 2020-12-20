@@ -67,7 +67,8 @@ Namespace System.Package.File
 
                     Case ExpressionTypes.FunctionDeclare,
                          ExpressionTypes.FormulaDeclare,
-                         ExpressionTypes.LambdaDeclare
+                         ExpressionTypes.LambdaDeclare,
+                         ExpressionTypes.Using
 
                         Return New RFunction(Nothing).GetExpression(buffer, Me, desc)
 
