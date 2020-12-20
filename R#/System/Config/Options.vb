@@ -81,6 +81,16 @@ Namespace System.Configuration
         End Property
 
         ''' <summary>
+        ''' the folder path for save the installed R# zip packages
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property lib_loc As String
+            Get
+                Return getOption("lib.loc", [default]:=$"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/Library/R#/")
+            End Get
+        End Property
+
+        ''' <summary>
         ''' Max count number for print vector. integer, defaulting to 999. 
         ''' print or show methods can make use of this option, to limit the 
         ''' amount of information that is printed, to something in the 

@@ -63,6 +63,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Package
+Imports SMRUCC.Rsharp.System.Package.File
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RPkg = SMRUCC.Rsharp.System.Package.Package
 
@@ -622,12 +623,11 @@ Namespace Runtime.Internal.Invokes
                              Optional lib_loc$ = Nothing,
                              Optional env As Environment = Nothing) As Object
 
-            Dim dataSymbols As Dictionary(Of String, String)
-            Dim reader As String
-            Dim load As Object
+            Dim hit As Boolean = False
+            Dim err As New Value(Of Message)
 
             If lib_loc.StringEmpty Then
-                lib_loc = env.globalEnvironment.options.lib
+                lib_loc = env.globalEnvironment.options.lib_loc
             End If
 
             If package.IsNullOrEmpty Then
@@ -638,28 +638,27 @@ Namespace Runtime.Internal.Invokes
             End If
 
             For Each pkgFile As String In package.Select(Function(pkgName) $"{lib_loc}/{pkgName}")
-                dataSymbols = $"{pkgFile}/manifest/data.json".LoadJsonFile(Of Dictionary(Of String, String))
-
-                If Not dataSymbols.ContainsKey(name) Then
-                    Continue For
-                Else
-                    reader = dataSymbols(name)
-                    pkgFile = $"{pkgFile}/data/{name}"
-                    load = env.globalEnvironment _
-                        .Rscript _
-                        .Invoke(reader, pkgFile)
+                If Not (err = env.dataSearchByPackageDir(name, pkgFile, hit)) Is Nothing Then
+                    Return err.Value
+                ElseIf hit Then
+                    Return Nothing
                 End If
+            Next
 
-                If Program.isException(load) Then
-                    Return load
-                Else
-                    Return env _
-                        .globalEnvironment _
-                        .Push(
-                            name:=name,
-                            value:=load,
-                            [readonly]:=False
-                        )
+            ' 如果是attatch的程序包，则可能会在程序包库文件夹中搜索不到
+            ' 直接使用程序包之中的路径文件夹
+            Dim attached = env.globalEnvironment.attachedNamespace
+
+            For Each pkgNs As PackageNamespace In package _
+                .Where(Function(ns) attached.ContainsKey(ns)) _
+                .Select(Function(ns)
+                            Return attached(ns)
+                        End Function)
+
+                If Not (err = env.dataSearchByPackageDir(name, pkgNs.libPath, hit)) Is Nothing Then
+                    Return err.Value
+                ElseIf hit Then
+                    Return Nothing
                 End If
             Next
 
@@ -667,6 +666,39 @@ Namespace Runtime.Internal.Invokes
                  $"no dataset exists which is named '{name}'.",
                  $"dataset: {name}"
             }, env)
+        End Function
+
+        <Extension>
+        Private Function dataSearchByPackageDir(env As Environment, name As String, pkgFile As String, ByRef hit As Boolean) As Message
+            Dim dataSymbols = $"{pkgFile}/manifest/data.json".LoadJsonFile(Of Dictionary(Of String, String))
+            Dim reader As String
+            Dim load As Object
+
+            hit = False
+
+            If dataSymbols.IsNullOrEmpty OrElse Not dataSymbols.ContainsKey(name) Then
+                Return Nothing
+            Else
+                reader = dataSymbols(name)
+                pkgFile = $"{pkgFile}/data/{name}"
+                load = env.globalEnvironment _
+                    .Rscript _
+                    .Invoke(reader, pkgFile)
+            End If
+
+            If Program.isException(load) Then
+                Return load
+            Else
+                hit = True
+
+                Return TryCast(env _
+                    .globalEnvironment _
+                    .Push(
+                        name:=name,
+                        value:=load,
+                        [readonly]:=False
+                    ), Message)
+            End If
         End Function
     End Module
 End Namespace
