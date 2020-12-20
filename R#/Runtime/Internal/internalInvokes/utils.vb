@@ -552,6 +552,71 @@ Namespace Runtime.Internal.Invokes
             Call App.Pause()
         End Sub
 
+        ''' <summary>
+        ''' ### Data Sets
+        ''' 
+        ''' Loads specified data sets, or list the available data sets.
+        ''' </summary>
+        ''' <param name="name">literal character strings Or names.</param>
+        ''' <param name="package">
+        ''' a character vector giving the package(s) to look in for data sets, or NULL.
+        ''' By Default, all packages in the search path are used, then the 'data’ 
+        ''' subdirectory (if present) of the current working directory.
+        ''' </param>
+        ''' <param name="lib_loc">
+        ''' a character vector of directory names of R libraries, or NULL. 
+        ''' The default value of NULL corresponds to all libraries currently 
+        ''' known.
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' Currently, four formats of data files are supported:
+        ''' 
+        '''    1. files ending ‘.R’ or ‘.r’ are source()d in, with the R working directory changed 
+        '''       temporarily to the directory containing the respective file. (data ensures that the 
+        '''       utils package is attached, in case it had been run via utils::data.)
+        '''    2. files ending ‘.RData’ or ‘.rda’ are load()ed.
+        '''    3. files ending ‘.tab’, ‘.txt’ or ‘.TXT’ are read using read.table(..., header = TRUE, as.is=FALSE), 
+        '''       and hence result in a data frame.
+        '''    4. files ending ‘.csv’ or ‘.CSV’ are read using read.table(..., header = TRUE, sep = ";", as.is=FALSE), 
+        '''       and also result in a data frame.
+        '''       
+        ''' If more than one matching file name is found, the first on this list is used. (Files with 
+        ''' extensions ‘.txt’, ‘.tab’ or ‘.csv’ can be compressed, with or without further 
+        ''' extension ‘.gz’, ‘.bz2’ or ‘.xz’.)
+        ''' 
+        ''' The data sets to be loaded can be specified as a set of character strings or names, or as 
+        ''' the character vector list, or as both.
+        ''' 
+        ''' For each given data set, the first two types (‘.R’ or ‘.r’, and ‘.RData’ or ‘.rda’ 
+        ''' files) can create several variables in the load environment, which might all be named differently 
+        ''' from the data set. The third and fourth types will always result in the creation of a single 
+        ''' variable with the same name (without extension) as the data set.
+        ''' 
+        ''' If no data sets are specified, data lists the available data sets. It looks for a new-style 
+        ''' data index in the ‘Meta’ or, if this is not found, an old-style ‘00Index’ file in the ‘data’ 
+        ''' directory of each specified package, and uses these files to prepare a listing. If there is a 
+        ''' ‘data’ area but no index, available data files for loading are computed and included in the 
+        ''' listing, and a warning is given: such packages are incomplete. The information about available 
+        ''' data sets is returned in an object of class "packageIQR". The structure of this class is experimental. 
+        ''' Where the datasets have a different name from the argument that should be used to retrieve them 
+        ''' the index will have an entry like beaver1 (beavers) which tells us that dataset beaver1 can be 
+        ''' retrieved by the call data(beaver).
+        ''' 
+        ''' If lib.loc and package are both NULL (the default), the data sets are searched for in all the 
+        ''' currently loaded packages then in the ‘data’ directory (if any) of the current working 
+        ''' directory.
+        ''' 
+        ''' If lib.loc = NULL but package is specified as a character vector, the specified package(s) are 
+        ''' searched for first amongst loaded packages and then in the default library/ies (see .libPaths).
+        ''' 
+        ''' If lib.loc is specified (and not NULL), packages are searched for in the specified library/ies, 
+        ''' even if they are already loaded from another library.
+        ''' 
+        ''' To just look in the ‘data’ directory of the current working directory, set package = character(0) 
+        ''' (and lib.loc = NULL, the default).
+        ''' </remarks>
         <ExportAPI("data")>
         Public Function data(name As String,
                              Optional package As String() = Nothing,
@@ -562,7 +627,9 @@ Namespace Runtime.Internal.Invokes
             Dim reader As String
             Dim load As Object
 
-            lib_loc = env.globalEnvironment.options.lib
+            If lib_loc.StringEmpty Then
+                lib_loc = env.globalEnvironment.options.lib
+            End If
 
             If package.IsNullOrEmpty Then
                 package = env.globalEnvironment _
