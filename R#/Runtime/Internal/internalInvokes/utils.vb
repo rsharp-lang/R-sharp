@@ -724,5 +724,44 @@ Namespace Runtime.Internal.Invokes
 
             Return env.globalEnvironment.Rscript.Invoke(reader, args.ToArray)
         End Function
+
+        ''' <summary>
+        ''' ### Find Names of R System Files
+        ''' 
+        ''' Finds the full file names of files in packages etc.
+        ''' </summary>
+        ''' <param name="fileName"></param>
+        ''' <param name="package">a character String With the name Of a Single package.
+        ''' An Error occurs If more than one package name Is given.
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("system.file")>
+        Public Function systemFile(fileName As String, package$, Optional env As Environment = Nothing) As Object
+            Dim loaded = env.globalEnvironment.attachedNamespace
+            Dim file As String = Nothing
+
+            If loaded.ContainsKey(package) Then
+                file = loaded(package).libPath _
+                    .ListFiles _
+                    .Where(Function(path) path.FileName = fileName) _
+                    .FirstOrDefault
+            End If
+
+            If Not file Is Nothing Then
+                Return file
+            End If
+
+            For Each dir As String In env.globalEnvironment.options.lib_loc.ListDirectory
+                If dir.BaseName = package Then
+                    Return loaded(package).libPath _
+                        .ListFiles _
+                        .Where(Function(path) path.FileName = fileName) _
+                        .FirstOrDefault
+                End If
+            Next
+
+            Return Nothing
+        End Function
     End Module
 End Namespace
