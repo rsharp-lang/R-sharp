@@ -74,7 +74,12 @@ Namespace System.Package.File.Expressions
         End Sub
 
         Public Overrides Function GetExpression(buffer As MemoryStream, raw As BlockReader, desc As DESCRIPTION) As Expression
-            Throw New NotImplementedException()
+            Using bin As New BinaryReader(buffer)
+                Dim logical As Expression = BlockReader.ParseBlock(bin).Parse(desc)
+                Dim unary As New UnaryNot(logical)
+
+                Return unary
+            End Using
         End Function
     End Class
 End Namespace

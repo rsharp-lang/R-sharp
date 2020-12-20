@@ -162,6 +162,12 @@ Namespace Runtime.Interop
                 .ToArray
         End Function
 
+        ''' <summary>
+        ''' direct invoke
+        ''' </summary>
+        ''' <param name="parameters"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         Public Function Invoke(parameters As Object(), env As Environment) As Object Implements RFunction.Invoke
             Dim result As Object
 

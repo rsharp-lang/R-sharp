@@ -1,53 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::61af5087dbdbc3602806a0d86c44fdc2, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Package\Imports.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class [Imports]
-    ' 
-    '         Properties: expressionName, isImportsScript, library, packages, scriptSource
-    '                     type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, GetDllFile, GetExternalScriptFile, importsExternalScript, importsLibrary
-    '                   importsPackages, isImportsAllPackages, LoadLibrary, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class [Imports]
+' 
+'         Properties: expressionName, isImportsScript, library, packages, scriptSource
+'                     type
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate, GetDllFile, GetExternalScriptFile, importsExternalScript, importsLibrary
+'                   importsPackages, isImportsAllPackages, LoadLibrary, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Reflection
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
@@ -234,7 +235,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
                 Return libDll
             End If
 
-load:       Return LoadLibrary(Scripting.ToString(libDll), env, names)
+            Dim filepath As String = Scripting.ToString(libDll)
+
+load:       Return LoadLibrary(filepath, env, names)
         End Function
 
         ''' <summary>
@@ -278,6 +281,12 @@ load:       Return LoadLibrary(Scripting.ToString(libDll), env, names)
             Return libFile
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="libDll">the file name of the dll file, example like: ``file.dll``</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         Public Shared Function GetDllFile(libDll As String, env As Environment) As Object
             If libDll.StringEmpty Then
                 Return Internal.debug.stop("No package module provided!", env)
@@ -312,6 +321,18 @@ load:       Return LoadLibrary(Scripting.ToString(libDll), env, names)
                     Next
                 End If
 
+                ' load from the assembly of attatch packages
+                For Each pkg In env.globalEnvironment.attachedNamespace.Values
+                    Dim assemblyDir As String = $"{pkg.libPath}/assembly"
+                    Dim location As Value(Of String) = ""
+
+                    If (location = $"{assemblyDir}/{libDll}.dll").FileExists Then
+                        Return location
+                    ElseIf (location = $"{assemblyDir}/{libDll}").FileExists Then
+                        Return location
+                    End If
+                Next
+
                 Return Internal.debug.stop($"Missing library file: '{libDll}'!", env)
             End If
 
@@ -327,7 +348,7 @@ load:       Return LoadLibrary(Scripting.ToString(libDll), env, names)
         ''' </summary>
         ''' <param name="libDll">A given dll module file its file path</param>
         ''' <param name="envir"></param>
-        ''' <param name="names"></param>
+        ''' <param name="names">a list of package module in target assembly file <paramref name="libDll"/></param>
         ''' <returns></returns>
         Public Shared Function LoadLibrary(libDll$, envir As Environment, names As Index(Of String)) As Object
             Dim importsAll As Boolean = names.DoCall(AddressOf isImportsAllPackages)

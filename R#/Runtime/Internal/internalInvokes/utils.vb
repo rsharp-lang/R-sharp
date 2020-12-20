@@ -1,69 +1,71 @@
 ﻿#Region "Microsoft.VisualBasic::293ee82ab9553f2eb389e81d2a8b9c93, R#\Runtime\Internal\internalInvokes\utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module utils
-    ' 
-    '         Function: debugTool, GetInstalledPackages, head, installPackages, keyGroups
-    '                   md5, memorySize, system, wget
-    ' 
-    '         Sub: cls, pause, sleep
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module utils
+' 
+'         Function: debugTool, GetInstalledPackages, head, installPackages, keyGroups
+'                   md5, memorySize, system, wget
+' 
+'         Sub: cls, pause, sleep
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports System.Threading
+Imports Microsoft.VisualBasic.ApplicationServices
+Imports Microsoft.VisualBasic.CommandLine.Parsers
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.My
 Imports Microsoft.VisualBasic.Net
+Imports Microsoft.VisualBasic.SecurityString
+Imports Microsoft.VisualBasic.Serialization.JSON
+Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Package
-Imports RPkg = SMRUCC.Rsharp.System.Package.Package
+Imports SMRUCC.Rsharp.System.Package.File
 Imports REnv = SMRUCC.Rsharp.Runtime
-Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
-Imports SMRUCC.Rsharp.Runtime.Components
-Imports System.IO
-Imports Microsoft.VisualBasic.SecurityString
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
-Imports Microsoft.VisualBasic.My
-Imports Microsoft.VisualBasic.Text
-Imports Microsoft.VisualBasic.ApplicationServices
-Imports Microsoft.VisualBasic.CommandLine.Parsers
+Imports RPkg = SMRUCC.Rsharp.System.Package.Package
 
 Namespace Runtime.Internal.Invokes
 
@@ -549,5 +551,222 @@ Namespace Runtime.Internal.Invokes
         Public Sub pause()
             Call App.Pause()
         End Sub
+
+        ''' <summary>
+        ''' ### Data Sets
+        ''' 
+        ''' Loads specified data sets, or list the available data sets.
+        ''' </summary>
+        ''' <param name="name">literal character strings Or names.</param>
+        ''' <param name="package">
+        ''' a character vector giving the package(s) to look in for data sets, or NULL.
+        ''' By Default, all packages in the search path are used, then the 'data’ 
+        ''' subdirectory (if present) of the current working directory.
+        ''' </param>
+        ''' <param name="lib_loc">
+        ''' a character vector of directory names of R libraries, or NULL. 
+        ''' The default value of NULL corresponds to all libraries currently 
+        ''' known.
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' Currently, four formats of data files are supported:
+        ''' 
+        '''    1. files ending ‘.R’ or ‘.r’ are source()d in, with the R working directory changed 
+        '''       temporarily to the directory containing the respective file. (data ensures that the 
+        '''       utils package is attached, in case it had been run via utils::data.)
+        '''    2. files ending ‘.RData’ or ‘.rda’ are load()ed.
+        '''    3. files ending ‘.tab’, ‘.txt’ or ‘.TXT’ are read using read.table(..., header = TRUE, as.is=FALSE), 
+        '''       and hence result in a data frame.
+        '''    4. files ending ‘.csv’ or ‘.CSV’ are read using read.table(..., header = TRUE, sep = ";", as.is=FALSE), 
+        '''       and also result in a data frame.
+        '''       
+        ''' If more than one matching file name is found, the first on this list is used. (Files with 
+        ''' extensions ‘.txt’, ‘.tab’ or ‘.csv’ can be compressed, with or without further 
+        ''' extension ‘.gz’, ‘.bz2’ or ‘.xz’.)
+        ''' 
+        ''' The data sets to be loaded can be specified as a set of character strings or names, or as 
+        ''' the character vector list, or as both.
+        ''' 
+        ''' For each given data set, the first two types (‘.R’ or ‘.r’, and ‘.RData’ or ‘.rda’ 
+        ''' files) can create several variables in the load environment, which might all be named differently 
+        ''' from the data set. The third and fourth types will always result in the creation of a single 
+        ''' variable with the same name (without extension) as the data set.
+        ''' 
+        ''' If no data sets are specified, data lists the available data sets. It looks for a new-style 
+        ''' data index in the ‘Meta’ or, if this is not found, an old-style ‘00Index’ file in the ‘data’ 
+        ''' directory of each specified package, and uses these files to prepare a listing. If there is a 
+        ''' ‘data’ area but no index, available data files for loading are computed and included in the 
+        ''' listing, and a warning is given: such packages are incomplete. The information about available 
+        ''' data sets is returned in an object of class "packageIQR". The structure of this class is experimental. 
+        ''' Where the datasets have a different name from the argument that should be used to retrieve them 
+        ''' the index will have an entry like beaver1 (beavers) which tells us that dataset beaver1 can be 
+        ''' retrieved by the call data(beaver).
+        ''' 
+        ''' If lib.loc and package are both NULL (the default), the data sets are searched for in all the 
+        ''' currently loaded packages then in the ‘data’ directory (if any) of the current working 
+        ''' directory.
+        ''' 
+        ''' If lib.loc = NULL but package is specified as a character vector, the specified package(s) are 
+        ''' searched for first amongst loaded packages and then in the default library/ies (see .libPaths).
+        ''' 
+        ''' If lib.loc is specified (and not NULL), packages are searched for in the specified library/ies, 
+        ''' even if they are already loaded from another library.
+        ''' 
+        ''' To just look in the ‘data’ directory of the current working directory, set package = character(0) 
+        ''' (and lib.loc = NULL, the default).
+        ''' </remarks>
+        <ExportAPI("data")>
+        Public Function data(name As String,
+                             Optional package As String() = Nothing,
+                             Optional lib_loc$ = Nothing,
+                             Optional env As Environment = Nothing) As Object
+
+            Dim hit As Boolean = False
+            Dim err As New Value(Of Message)
+
+            If lib_loc.StringEmpty Then
+                lib_loc = env.globalEnvironment.options.lib_loc
+            End If
+
+            If package.IsNullOrEmpty Then
+                package = env.globalEnvironment _
+                    .attachedNamespace _
+                    .Keys _
+                    .ToArray
+            End If
+
+            For Each pkgFile As String In package.Select(Function(pkgName) $"{lib_loc}/{pkgName}")
+                If Not (err = env.dataSearchByPackageDir(name, pkgFile, hit)) Is Nothing Then
+                    Return err.Value
+                ElseIf hit Then
+                    Return Nothing
+                End If
+            Next
+
+            ' 如果是attatch的程序包，则可能会在程序包库文件夹中搜索不到
+            ' 直接使用程序包之中的路径文件夹
+            Dim attached = env.globalEnvironment.attachedNamespace
+
+            For Each pkgNs As PackageNamespace In package _
+                .Where(Function(ns) attached.ContainsKey(ns)) _
+                .Select(Function(ns)
+                            Return attached(ns)
+                        End Function)
+
+                If Not (err = env.dataSearchByPackageDir(name, pkgNs.libPath, hit)) Is Nothing Then
+                    Return err.Value
+                ElseIf hit Then
+                    Return Nothing
+                End If
+            Next
+
+            Return Internal.debug.stop({
+                 $"no dataset exists which is named '{name}'.",
+                 $"dataset: {name}"
+            }, env)
+        End Function
+
+        <Extension>
+        Private Function dataSearchByPackageDir(env As Environment, name As String, pkgFile As String, ByRef hit As Boolean) As Message
+            Dim dataSymbols = $"{pkgFile}/manifest/data.json".LoadJsonFile(Of Dictionary(Of String, String))
+            Dim reader As String
+            Dim load As Object
+
+            hit = False
+
+            If dataSymbols.IsNullOrEmpty OrElse Not dataSymbols.ContainsKey(name) Then
+                Return Nothing
+            Else
+                reader = dataSymbols(name)
+                pkgFile = $"{pkgFile}/data/{name}"
+                load = env.readFile(reader, pkgFile)
+            End If
+
+            If Program.isException(load) Then
+                Return load
+            Else
+                hit = True
+
+                Return TryCast(env _
+                    .globalEnvironment _
+                    .Push(
+                        name:=name,
+                        value:=load,
+                        [readonly]:=False
+                    ), Message)
+            End If
+        End Function
+
+        <Extension>
+        Private Function readFile(env As Environment, reader As String, file$) As Object
+            Dim tokens As String() = reader.Split(","c)
+            Dim args As New List(Of Object)
+
+            reader = tokens(Scan0)
+
+            For Each item In tokens.Skip(1)
+                If item = "%s" Then
+                    args.Add(file)
+                ElseIf item = "$" Then
+                    args.Add(env.globalEnvironment)
+                ElseIf item = "NULL" Then
+                    args.Add(Nothing)
+                ElseIf item = "TRUE" OrElse item = "FALSE" Then
+                    args.Add(item.ParseBoolean)
+                ElseIf item.Last = "%" Then
+                    args.Add(item.Replace("%", "").DoCall(AddressOf Integer.Parse))
+                Else
+                    args.Add(item)
+                End If
+            Next
+
+            Return env.globalEnvironment.Rscript.Invoke(reader, args.ToArray)
+        End Function
+
+        ''' <summary>
+        ''' ### Find Names of R System Files
+        ''' 
+        ''' Finds the full file names of files in packages etc.
+        ''' </summary>
+        ''' <param name="fileName"></param>
+        ''' <param name="package">a character String With the name Of a Single package.
+        ''' An Error occurs If more than one package name Is given.
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("system.file")>
+        Public Function systemFile(fileName As String, package$, Optional env As Environment = Nothing) As Object
+            Dim loaded = env.globalEnvironment.attachedNamespace
+            Dim file As String = Nothing
+            Dim findFileByName = Function(dir As String) As String
+                                     Dim ls = dir.ListFiles("*").ToArray
+
+                                     For Each filepath As String In ls
+                                         If filepath.FileName = fileName Then
+                                             Return filepath
+                                         End If
+                                     Next
+
+                                     Return Nothing
+                                 End Function
+
+            If loaded.ContainsKey(package) Then
+                file = findFileByName(loaded(package).libPath)
+            End If
+
+            If Not file Is Nothing Then
+                Return file
+            End If
+
+            For Each dir As String In env.globalEnvironment.options.lib_loc.ListDirectory
+                If dir.BaseName = package Then
+                    Return findFileByName(dir )
+                End If
+            Next
+
+            Return Nothing
+        End Function
     End Module
 End Namespace
