@@ -74,7 +74,8 @@ Namespace System.Package.File
 
                     Case ExpressionTypes.FunctionCall,
                          ExpressionTypes.FunctionByRef,
-                         ExpressionTypes.IIf
+                         ExpressionTypes.IIf,
+                         ExpressionTypes.Constructor
 
                         Return New RCallFunction(Nothing).GetExpression(buffer, Me, desc)
 

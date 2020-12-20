@@ -128,6 +128,25 @@ Namespace System.Package.File.Expressions
             End Using
         End Sub
 
+        Private Shared Function parseUsingClosure(reader As BinaryReader, desc As DESCRIPTION) As UsingClosure
+            Dim sourceMap As StackFrame = Writer.ReadSourceMap(reader, desc)
+            Dim parmSize As Integer = reader.ReadByte
+            Dim args As New List(Of Expression)
+
+            For i As Integer = 0 To parmSize - 1
+                Call BlockReader.ParseBlock(reader).Parse(desc).DoCall(AddressOf args.Add)
+            Next
+
+            Dim bodySize As Integer = reader.ReadInt32
+            Dim body As New List(Of Expression)
+
+            For i As Integer = 0 To bodySize - 1
+                Call BlockReader.ParseBlock(reader).Parse(desc).DoCall(AddressOf body.Add)
+            Next
+
+            Return New UsingClosure(args(Scan0), New ClosureExpression(body.ToArray), sourceMap)
+        End Function
+
         Private Shared Function parseFormula(reader As BinaryReader, desc As DESCRIPTION) As FormulaExpression
             Dim parmSize As Integer = reader.ReadByte
             Dim args As New List(Of Expression)
@@ -210,6 +229,7 @@ Namespace System.Package.File.Expressions
                     Case ExpressionTypes.FunctionDeclare : Return ParseFunction(io, desc)
                     Case ExpressionTypes.LambdaDeclare : Return parseLambda(io, desc)
                     Case ExpressionTypes.FormulaDeclare : Return parseFormula(io, desc)
+                    Case ExpressionTypes.Using : Return parseUsingClosure(io, desc)
                     Case Else
                         Throw New NotImplementedException(raw.ToString)
                 End Select

@@ -120,6 +120,20 @@ Namespace System.Package.File.Expressions
             End Using
         End Sub
 
+        Private Shared Function parseNew(bin As BinaryReader, desc As DESCRIPTION) As CreateObject
+            Dim sourceMap As StackFrame = Writer.ReadSourceMap(bin, desc)
+            Dim ns$ = Writer.readZEROBlock(bin).DoCall(Function(bytes) Encoding.ASCII.GetString(bytes.ToArray))
+            Dim name As Literal = BlockReader.ParseBlock(bin).Parse(desc)
+            Dim paramSize As Integer = bin.ReadByte
+            Dim args As New List(Of Expression)
+
+            For i As Integer = 0 To paramSize - 1
+                Call BlockReader.ParseBlock(bin).Parse(desc).DoCall(AddressOf args.Add)
+            Next
+
+            Return New CreateObject(name.value, args.ToArray, sourceMap)
+        End Function
+
         Private Shared Function parseIif(bin As BinaryReader, desc As DESCRIPTION) As IIfExpression
             Dim sourceMap As StackFrame = Writer.ReadSourceMap(bin, desc)
             Dim ns$ = Writer.readZEROBlock(bin).DoCall(Function(bytes) Encoding.ASCII.GetString(bytes.ToArray))
@@ -184,6 +198,7 @@ Namespace System.Package.File.Expressions
                     Case ExpressionTypes.FunctionCall : Return parseInvoke(bin, desc)
                     Case ExpressionTypes.IIf : Return parseIif(bin, desc)
                     Case ExpressionTypes.FunctionByRef : Return parseByRef(bin, desc)
+                    Case ExpressionTypes.Constructor : Return parseNew(bin, desc)
                     Case Else
                         Throw New InvalidCastException(raw.expression.ToString)
                 End Select
