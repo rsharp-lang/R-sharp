@@ -73,6 +73,9 @@ Namespace Runtime.Internal.Object.Converts
             If objType.IsArray AndAlso Not type.IsArray Then
                 obj = [single](obj)
                 objType = obj.GetType
+            ElseIf objType Is GetType(vector) AndAlso Not type.IsArray Then
+                obj = [single](obj)
+                objType = obj.GetType
             End If
 
             If objType Is GetType(vbObject) AndAlso Not type Is GetType(Object) Then
