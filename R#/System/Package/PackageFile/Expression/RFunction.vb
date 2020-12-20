@@ -1,46 +1,46 @@
-﻿#Region "Microsoft.VisualBasic::fcfc0a325e0556f6adc70a63b1124d8e, R#\System\Package\PackageFile\Expression\RFunction.vb"
+﻿#Region "Microsoft.VisualBasic::12eb16d66080123bdec75064342cfa28, R#\System\Package\PackageFile\Expression\RFunction.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class RFunction
-' 
-'         Constructor: (+1 Overloads) Sub New
-' 
-'         Function: GetExpression
-' 
-'         Sub: (+2 Overloads) WriteBuffer
-' 
-' 
-' /********************************************************************************/
+    '     Class RFunction
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    ' 
+    '         Function: GetExpression, getTypeCode, parseFormula, ParseFunction, parseLambda
+    ' 
+    '         Sub: WriteBuffer
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -70,6 +70,8 @@ Namespace System.Package.File.Expressions
                 Return ExpressionTypes.LambdaDeclare
             ElseIf TypeOf x Is FormulaExpression Then
                 Return ExpressionTypes.FormulaDeclare
+            ElseIf TypeOf x Is UsingClosure Then
+                Return ExpressionTypes.Using
             Else
                 Throw New NotImplementedException(x.GetType.FullName)
             End If
@@ -99,6 +101,9 @@ Namespace System.Package.File.Expressions
                 ElseIf TypeOf x Is FormulaExpression Then
                     params = {New SymbolReference(DirectCast(x, FormulaExpression).var)}
                     body = {DirectCast(x, FormulaExpression).formula}
+                ElseIf TypeOf x Is UsingClosure Then
+                    params = {DirectCast(x, UsingClosure).params}
+                    body = DirectCast(x, UsingClosure).closure.EnumerateCodeLines.ToArray
                 Else
                     body = {DirectCast(x, DeclareLambdaFunction).closure}
                     params = DirectCast(x, DeclareLambdaFunction).parameterNames _
@@ -123,8 +128,30 @@ Namespace System.Package.File.Expressions
             End Using
         End Sub
 
+        Private Shared Function parseFormula(reader As BinaryReader, desc As DESCRIPTION) As FormulaExpression
+            Dim parmSize As Integer = reader.ReadByte
+            Dim args As New List(Of Expression)
+
+            For i As Integer = 0 To parmSize - 1
+                Call BlockReader.ParseBlock(reader).Parse(desc).DoCall(AddressOf args.Add)
+            Next
+
+            Dim bodySize As Integer = reader.ReadInt32
+            Dim body As New List(Of Expression)
+
+            If bodySize <> 1 Then
+                Throw New InvalidProgramException($"formula expression can not be more than one line!")
+            End If
+
+            For i As Integer = 0 To bodySize - 1
+                Call BlockReader.ParseBlock(reader).Parse(desc).DoCall(AddressOf body.Add)
+            Next
+
+            Return New FormulaExpression(DirectCast(args(Scan0), SymbolReference).symbol, body(Scan0))
+        End Function
+
         Private Shared Function parseLambda(reader As BinaryReader, desc As DESCRIPTION) As DeclareLambdaFunction
-            Dim sourceMap As StackFrame = Writer.ReadSourceMap(reader)
+            Dim sourceMap As StackFrame = Writer.ReadSourceMap(reader, desc)
             Dim parmSize As Integer = reader.ReadByte
             Dim args As New List(Of Expression)
 
@@ -151,7 +178,7 @@ Namespace System.Package.File.Expressions
         End Function
 
         Private Shared Function ParseFunction(reader As BinaryReader, desc As DESCRIPTION) As DeclareNewFunction
-            Dim sourceMap As StackFrame = Writer.ReadSourceMap(reader)
+            Dim sourceMap As StackFrame = Writer.ReadSourceMap(reader, desc)
             Dim funcName As String = Writer.readZEROBlock(reader).DoCall(Function(bytes) Encoding.ASCII.GetString(bytes.ToArray))
             Dim parms As Integer = reader.ReadByte
             Dim args As New List(Of DeclareNewSymbol)
@@ -167,7 +194,14 @@ Namespace System.Package.File.Expressions
                 body.Add(BlockReader.ParseBlock(reader).Parse(desc))
             Next
 
-            Return New DeclareNewFunction(funcName, args.ToArray, New ClosureExpression(body.ToArray), sourceMap)
+            Return New DeclareNewFunction(
+                funcName:=funcName,
+                params:=args.ToArray,
+                body:=New ClosureExpression(body.ToArray),
+                stackframe:=sourceMap
+            ) With {
+                .[Namespace] = desc.Package
+            }
         End Function
 
         Public Overrides Function GetExpression(buffer As MemoryStream, raw As BlockReader, desc As DESCRIPTION) As Expression
@@ -175,6 +209,7 @@ Namespace System.Package.File.Expressions
                 Select Case raw.expression
                     Case ExpressionTypes.FunctionDeclare : Return ParseFunction(io, desc)
                     Case ExpressionTypes.LambdaDeclare : Return parseLambda(io, desc)
+                    Case ExpressionTypes.FormulaDeclare : Return parseFormula(io, desc)
                     Case Else
                         Throw New NotImplementedException(raw.ToString)
                 End Select

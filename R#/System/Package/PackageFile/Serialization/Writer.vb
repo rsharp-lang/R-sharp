@@ -1,49 +1,50 @@
-﻿#Region "Microsoft.VisualBasic::c7c6b8bccc927f3e5b603ac79cf03f4d, R#\System\Package\PackageFile\Serialization\Writer.vb"
+﻿#Region "Microsoft.VisualBasic::75e0cfe1fd5a7567757bd881a57e84bd, R#\System\Package\PackageFile\Serialization\Writer.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class Writer
-' 
-'         Properties: RBinary, RCallFunction, RFunction, RImports, RLiteral
-'                     RSymbol, RSymbolRef, RUnary, RVector
-' 
-'         Constructor: (+1 Overloads) Sub New
-' 
-'         Function: (+2 Overloads) GetBuffer, Write
-' 
-'         Sub: (+2 Overloads) Dispose
-' 
-' 
-' /********************************************************************************/
+    '     Class Writer
+    ' 
+    '         Properties: RBinary, RCallFunction, Relse, Rfor, RFunction
+    '                     Rif, RImports, RLiteral, RString, RSymbol
+    '                     RSymbolAssign, RSymbolIndex, RSymbolRef, RUnary, RVector
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    ' 
+    '         Function: (+2 Overloads) GetBuffer, ReadSourceMap, readZEROBlock, Write
+    ' 
+    '         Sub: (+2 Overloads) Dispose
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -125,7 +126,8 @@ Namespace System.Package.File
                 Case GetType(DeclareNewSymbol) : Return RSymbol.GetBuffer(x)
                 Case GetType(DeclareNewFunction),
                      GetType(DeclareLambdaFunction),
-                     GetType(FormulaExpression)
+                     GetType(FormulaExpression),
+                     GetType(UsingClosure)
 
                     Return RFunction.GetBuffer(x)
 
@@ -141,7 +143,8 @@ Namespace System.Package.File
 
                 Case GetType(FunctionInvoke),
                      GetType(ByRefFunctionCall),
-                     GetType(IIfExpression)
+                     GetType(IIfExpression),
+                     GetType(CreateObject)
 
                     Return RCallFunction.GetBuffer(x)
 
@@ -207,7 +210,7 @@ Namespace System.Package.File
             Loop
         End Function
 
-        Public Shared Function ReadSourceMap(bin As BinaryReader) As StackFrame
+        Public Shared Function ReadSourceMap(bin As BinaryReader, desc As DESCRIPTION) As StackFrame
             Dim length As Integer = bin.ReadInt32
             Dim bytes As Byte() = bin.ReadBytes(length)
             Dim strings As String() = bytes _
@@ -219,9 +222,9 @@ Namespace System.Package.File
                 .File = strings(0),
                 .Line = strings(1),
                 .Method = New Method With {
-                    .[Namespace] = strings(2),
+                    .[Namespace] = desc.Package,
                     .[Module] = strings(3),
-                    .Method = strings(4)
+                    .[Method] = strings(4)
                 }
             }
         End Function

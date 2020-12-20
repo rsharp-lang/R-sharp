@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::007ff63255be0e35194ee767a7be8376, R#\Interpreter\Syntax\SyntaxImplements\IfBranchSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::6db31fd3db139fe9195c4b92461d925d, R#\Interpreter\Syntax\SyntaxImplements\IfBranchSyntax.vb"
 
     ' Author:
     ' 
@@ -44,6 +44,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 
@@ -94,7 +95,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Dim stackframe As StackFrame = opts.GetStackTrace(blocks(Scan0)(Scan0), "if_closure")
             Dim [if] As New IfBranch(
                 ifTest:=ifTest.expression,
-                trueClosure:=closureInternal.expression,
+                trueClosure:=DirectCast(closureInternal.expression, ClosureExpression),
                 stackframe:=stackframe
             )
 

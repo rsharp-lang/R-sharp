@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1b7f44ed5a0673e5a9bc2edba45adaef, Library\R.graph\Layouts.vb"
+﻿#Region "Microsoft.VisualBasic::9e13d73f248cf1354e27019ce719acaa, Library\R.graph\Layouts.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     ' Module Layouts
     ' 
-    '     Function: forceDirected, orthogonalLayout, randomLayout, SpringForce
+    '     Function: (+2 Overloads) forceDirected, orthogonalLayout, randomLayout, SpringForce
     ' 
     ' /********************************************************************************/
 

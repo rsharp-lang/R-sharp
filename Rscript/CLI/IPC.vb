@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1950926ebef0a3c1ab5e10e70588955b, studio\R-terminal\CLI\IPC.vb"
+﻿#Region "Microsoft.VisualBasic::1950926ebef0a3c1ab5e10e70588955b, Rscript\CLI\IPC.vb"
 
     ' Author:
     ' 

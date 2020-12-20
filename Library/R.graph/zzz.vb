@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3b17b4d70b47e68266b77925afd2cbfc, Library\R.graph\zzz.vb"
+﻿#Region "Microsoft.VisualBasic::5bca0434842327edb0ef46343fcb9314, Library\R.graph\zzz.vb"
 
     ' Author:
     ' 
@@ -45,4 +45,3 @@ Public Class zzz
         Call NetworkModule.Main()
     End Sub
 End Class
-

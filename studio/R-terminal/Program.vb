@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::14fcbb2d802ef48a912b4872c40d87e7, studio\R-terminal\Program.vb"
+﻿#Region "Microsoft.VisualBasic::5491daedc946e6cf47637f5d780ab2d5, studio\R-terminal\Program.vb"
 
     ' Author:
     ' 
@@ -35,16 +35,21 @@
     ' 
     '     Function: Main, RunExpression, RunScript
     ' 
+    '     Sub: attachPackageFile
+    ' 
     ' /********************************************************************************/
 
 #End Region
 
 #Const DEBUG = 0
 
+Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Zip
 Imports Microsoft.VisualBasic.CommandLine
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.System.Configuration
+Imports SMRUCC.Rsharp.System.Package.File
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
@@ -79,11 +84,18 @@ Module Program
         Return Rscript.handleResult(result, R.globalEnvir, program)
     End Function
 
+    ''' <summary>
+    ''' R# script.R ...
+    ''' </summary>
+    ''' <param name="filepath$"></param>
+    ''' <param name="args"></param>
+    ''' <returns></returns>
     Private Function RunScript(filepath$, args As CommandLine) As Integer
         Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
         Dim silent As Boolean = args("--silent")
         Dim ignoreMissingStartupPackages As Boolean = args("--ignore-missing-startup-packages")
         Dim verbose As Boolean = args("--verbose")
+        Dim attach As String = args("--attach")
 
         If args("--debug") Then
             R.debug = True
@@ -114,8 +126,24 @@ Module Program
             Call Console.WriteLine()
         End If
 
+        If Not attach.StringEmpty Then
+            If attach.FileExists Then
+                Call R.attachPackageFile(zip:=attach)
+            Else
+                Call Console.WriteLine($"[warning] the specific attach package file '{attach.GetFullPath}' is not found!")
+            End If
+        End If
+
         Dim result As Object = R.Source(filepath)
 
         Return Rscript.handleResult(result, R.globalEnvir, Nothing)
     End Function
+
+    <Extension>
+    Private Sub attachPackageFile(R As RInterpreter, zip As String)
+        Dim tmpDir As String = App.GetAppSysTempFile("_package", App.PID.ToHexString, zip.BaseName)
+
+        Call UnZip.ImprovedExtractToDirectory(zip, tmpDir, Overwrite.Always)
+        Call PackageLoader2.LoadPackage(tmpDir, R.globalEnvir)
+    End Sub
 End Module

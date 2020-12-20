@@ -1,45 +1,45 @@
-﻿#Region "Microsoft.VisualBasic::a9f5777262e24d739a9421ee380a4f06, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolReference.vb"
+﻿#Region "Microsoft.VisualBasic::af93b281a9276756e68a6acf19e37ac1, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolReference.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class SymbolReference
-' 
-'         Properties: symbol, type
-' 
-'         Constructor: (+2 Overloads) Sub New
-'         Function: Evaluate, GetReferenceObject, ToString
-' 
-' 
-' /********************************************************************************/
+    '     Class SymbolReference
+    ' 
+    '         Properties: expressionName, symbol, type
+    ' 
+    '         Constructor: (+2 Overloads) Sub New
+    '         Function: Evaluate, GetReferenceObject, ToString
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

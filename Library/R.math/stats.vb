@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c2911db19ce2d793404b1b393088a4c6, Library\R.math\stats.vb"
+﻿#Region "Microsoft.VisualBasic::c92b87e4292a8a3299af68a39d3850ce, Library\R.math\stats.vb"
 
     ' Author:
     ' 
@@ -35,8 +35,8 @@
     ' 
     '     Constructor: (+1 Overloads) Sub New
     '     Function: asDist, corr, dataframeRow, dist, fisher_test
-    '               prcomp, printMatrix, printTtest, printTwoSampleTTest, spline
-    '               tabulateMode, ttest
+    '               matrixDataFrame, prcomp, printMatrix, printTtest, printTwoSampleTTest
+    '               spline, tabulateMode, ttest
     ' 
     ' Enum SplineAlgorithms
     ' 

@@ -1,46 +1,47 @@
-﻿#Region "Microsoft.VisualBasic::afbe5d494cedcba02d8b9a587f430736, R#\System\Package\PackageFile\Expression\RCallFunction.vb"
+﻿#Region "Microsoft.VisualBasic::c45b12cb236cfdccc46382dda4b67809, R#\System\Package\PackageFile\Expression\RCallFunction.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class RCallFunction
-' 
-'         Constructor: (+1 Overloads) Sub New
-' 
-'         Function: GetExpression
-' 
-'         Sub: (+2 Overloads) WriteBuffer
-' 
-' 
-' /********************************************************************************/
+    '     Class RCallFunction
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    ' 
+    '         Function: GetExpression, getFunctionName, getParameters, getTypeCode, parseByRef
+    '                   parseInvoke
+    ' 
+    '         Sub: WriteBuffer
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
@@ -74,6 +75,8 @@ Namespace System.Package.File.Expressions
                     iif.trueResult,
                     iif.falseResult
                 }
+            ElseIf TypeOf x Is CreateObject Then
+                Return DirectCast(x, CreateObject).constructor
             Else
                 Return {DirectCast(x, ByRefFunctionCall).target, DirectCast(x, ByRefFunctionCall).value}
             End If
@@ -84,6 +87,8 @@ Namespace System.Package.File.Expressions
                 Return DirectCast(x, FunctionInvoke).funcName
             ElseIf TypeOf x Is IIfExpression Then
                 Return New Literal("iif")
+            ElseIf TypeOf x Is CreateObject Then
+                Return New Literal(DirectCast(x, CreateObject).name)
             Else
                 Return DirectCast(x, ByRefFunctionCall).funcRef
             End If
@@ -115,6 +120,22 @@ Namespace System.Package.File.Expressions
             End Using
         End Sub
 
+        Private Shared Function parseByRef(bin As BinaryReader, desc As DESCRIPTION) As ByRefFunctionCall
+            Dim sourceMap As StackFrame = Writer.ReadSourceMap(bin, desc)
+            Dim ns$ = Writer.readZEROBlock(bin).DoCall(Function(bytes) Encoding.ASCII.GetString(bytes.ToArray))
+            Dim func As Expression = BlockReader.ParseBlock(bin).Parse(desc)
+            Dim paramSize As Integer = bin.ReadByte
+            Dim args As New List(Of Expression)
+
+            For i As Integer = 0 To paramSize - 1
+                Call BlockReader.ParseBlock(bin).Parse(desc).DoCall(AddressOf args.Add)
+            Next
+
+            Dim invoke As New FunctionInvoke(func, sourceMap, args(Scan0))
+
+            Return New ByRefFunctionCall(invoke, args(1), sourceMap)
+        End Function
+
         Private Shared Function getTypeCode(x As Expression) As ExpressionTypes
             If TypeOf x Is FunctionInvoke Then
                 Return ExpressionTypes.FunctionCall
@@ -122,13 +143,15 @@ Namespace System.Package.File.Expressions
                 Return ExpressionTypes.IIf
             ElseIf TypeOf x Is ByRefFunctionCall Then
                 Return ExpressionTypes.FunctionByRef
+            ElseIf TypeOf x Is CreateObject Then
+                Return ExpressionTypes.Constructor
             Else
                 Throw New NotImplementedException(x.GetType.FullName)
             End If
         End Function
 
         Private Shared Function parseInvoke(bin As BinaryReader, desc As DESCRIPTION) As FunctionInvoke
-            Dim sourceMap As StackFrame = Writer.ReadSourceMap(bin)
+            Dim sourceMap As StackFrame = Writer.ReadSourceMap(bin, desc)
             Dim ns$ = Writer.readZEROBlock(bin).DoCall(Function(bytes) Encoding.ASCII.GetString(bytes.ToArray))
             Dim func As Expression = BlockReader.ParseBlock(bin).Parse(desc)
             Dim parmSize As Integer = bin.ReadByte
@@ -147,8 +170,7 @@ Namespace System.Package.File.Expressions
                     Case ExpressionTypes.FunctionCall : Return parseInvoke(bin, desc)
                     Case ExpressionTypes.IIf
                         Throw New InvalidCastException(raw.expression.ToString)
-                    Case ExpressionTypes.FunctionByRef
-                        Throw New InvalidCastException(raw.expression.ToString)
+                    Case ExpressionTypes.FunctionByRef : Return parseByRef(bin, desc)
                     Case Else
                         Throw New InvalidCastException(raw.expression.ToString)
                 End Select
