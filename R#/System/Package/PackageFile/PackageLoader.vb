@@ -82,6 +82,7 @@ Namespace System.Package.File
 
             Call env.loadDependency(pkg:=[namespace])
             Call env.callOnLoad(pkg:=[namespace])
+            Call env.attachedNamespace.Add([namespace].packageName, [namespace])
         End Sub
 
         <Extension>

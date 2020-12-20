@@ -15,6 +15,12 @@ Namespace System.Package.File
         Public Property runtime As AssemblyInfo
         Public Property framework As AssemblyInfo
 
+        Public ReadOnly Property packageName As String
+            Get
+                Return meta.Package
+            End Get
+        End Property
+
         Sub New(dir As String)
             meta = $"{dir}/index.json".LoadJsonFile(Of DESCRIPTION)
             checksum = $"{dir}/CHECKSUM".ReadAllText
