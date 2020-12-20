@@ -838,6 +838,7 @@
     <Compile Include="System\Document\UnixManPagePrinter.vb" />
     <Compile Include="System\Package\Database\LocalPackageDatabase.vb" />
     <Compile Include="System\Package\Database\PackageLoaderEntry.vb" />
+    <Compile Include="System\Package\PackageFile\PackageNamespace.vb" />
     <Compile Include="System\Package\PackageFile\Dependency.vb" />
     <Compile Include="System\Package\PackageFile\Expression\RElse.vb" />
     <Compile Include="System\Package\PackageFile\Expression\RIf.vb" />

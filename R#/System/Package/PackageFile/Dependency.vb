@@ -53,6 +53,11 @@ Namespace System.Package.File
     Public Class Dependency
 
         Public Property packages As String()
+
+        ''' <summary>
+        ''' assembly file name
+        ''' </summary>
+        ''' <returns></returns>
         Public Property library As String
 
         Sub New()

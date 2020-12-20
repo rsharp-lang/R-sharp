@@ -278,6 +278,12 @@ load:       Return LoadLibrary(Scripting.ToString(libDll), env, names)
             Return libFile
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="libDll">the file name of the dll file, example like: ``file.dll``</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         Public Shared Function GetDllFile(libDll As String, env As Environment) As Object
             If libDll.StringEmpty Then
                 Return Internal.debug.stop("No package module provided!", env)
@@ -327,7 +333,7 @@ load:       Return LoadLibrary(Scripting.ToString(libDll), env, names)
         ''' </summary>
         ''' <param name="libDll">A given dll module file its file path</param>
         ''' <param name="envir"></param>
-        ''' <param name="names"></param>
+        ''' <param name="names">a list of package module in target assembly file <paramref name="libDll"/></param>
         ''' <returns></returns>
         Public Shared Function LoadLibrary(libDll$, envir As Environment, names As Index(Of String)) As Object
             Dim importsAll As Boolean = names.DoCall(AddressOf isImportsAllPackages)

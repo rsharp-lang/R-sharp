@@ -44,8 +44,10 @@
 
 Imports System.IO
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.System.Configuration
@@ -70,31 +72,45 @@ Namespace System.Package.File
         ''' <param name="dir"></param>
         ''' <param name="env"></param>
         Public Sub LoadPackage(dir As String, env As GlobalEnvironment)
-            Dim meta As DESCRIPTION = $"{dir}/index.json".LoadJsonFile(Of DESCRIPTION)
-            Dim symbols As Dictionary(Of String, String) = $"{dir}/manifest/symbols.json".LoadJsonFile(Of Dictionary(Of String, String))
+            Dim [namespace] As New PackageNamespace(dir)
 
-            For Each symbol In symbols
+            For Each symbol As NamedValue(Of String) In [namespace].EnumerateSymbols
                 Using bin As New BinaryReader($"{dir}/src/{symbol.Value}".Open)
-                    Call BlockReader.Read(bin).Parse(desc:=meta).Evaluate(env)
+                    Call BlockReader.Read(bin).Parse(desc:=[namespace].meta).Evaluate(env)
                 End Using
             Next
 
-            Call env.callOnLoad(dir, meta)
+            Call env.loadDependency(pkg:=[namespace])
+            Call env.callOnLoad(pkg:=[namespace])
         End Sub
 
         <Extension>
-        Private Sub loadDependency(env As GlobalEnvironment, dir As String, meta As DESCRIPTION)
+        Private Sub loadDependency(env As GlobalEnvironment, pkg As PackageNamespace)
+            For Each dependency As Dependency In pkg.dependency
+                If dependency.library.StringEmpty Then
+                    For Each pkgName As String In dependency.packages
+                        Call env.LoadLibrary(pkgName)
+                    Next
+                Else
+                    Dim dllFile As String = pkg.FindAssemblyPath(dependency.library)
 
+                    If Not dllFile.FileExists Then
+                        dllFile = [Imports].GetDllFile($"{dependency.library}.dll", env)
+                    End If
+
+                    Call [Imports].LoadLibrary(dllFile, env, dependency.packages)
+                End If
+            Next
         End Sub
 
         <Extension>
-        Private Sub callOnLoad(env As GlobalEnvironment, dir As String, meta As DESCRIPTION)
-            Dim onLoad As String = $"{dir}/.onload"
+        Private Sub callOnLoad(env As GlobalEnvironment, pkg As PackageNamespace)
+            Dim onLoad As String = $"{pkg.libPath}/.onload"
 
             If onLoad.FileExists Then
                 Using bin As New BinaryReader(onLoad.Open)
                     Call BlockReader.Read(bin) _
-                        .Parse(desc:=meta) _
+                        .Parse(desc:=pkg.meta) _
                         .DoCall(Function(func)
                                     Return DirectCast(func, DeclareNewFunction)
                                 End Function) _
