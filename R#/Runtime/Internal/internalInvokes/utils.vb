@@ -681,9 +681,7 @@ Namespace Runtime.Internal.Invokes
             Else
                 reader = dataSymbols(name)
                 pkgFile = $"{pkgFile}/data/{name}"
-                load = env.globalEnvironment _
-                    .Rscript _
-                    .Invoke(reader, pkgFile)
+                load = env.readFile(reader, pkgFile)
             End If
 
             If Program.isException(load) Then
@@ -699,6 +697,30 @@ Namespace Runtime.Internal.Invokes
                         [readonly]:=False
                     ), Message)
             End If
+        End Function
+
+        <Extension>
+        Private Function readFile(env As Environment, reader As String, file$) As Object
+            Dim tokens As String() = reader.Split(","c)
+            Dim args As New List(Of Object)
+
+            reader = tokens(Scan0)
+
+            For Each item In tokens.Skip(1)
+                If item = "%s" Then
+                    args.Add(file)
+                ElseIf item = "$" Then
+                    args.Add(env.globalEnvironment)
+                ElseIf item = "NULL" Then
+                    args.Add(Nothing)
+                ElseIf item = "TRUE" OrElse item = "FALSE" Then
+                    args.Add(item.ParseBoolean)
+                Else
+                    args.Add(item)
+                End If
+            Next
+
+            Return env.globalEnvironment.Rscript.Invoke(reader, args.ToArray)
         End Function
     End Module
 End Namespace
