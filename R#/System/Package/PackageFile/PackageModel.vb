@@ -66,6 +66,7 @@ Namespace System.Package.File
         ''' </summary>
         ''' <returns></returns>
         Public Property symbols As Dictionary(Of String, Expression)
+        Public Property dataSymbols As Dictionary(Of String, String)
         Public Property loading As Dependency()
         ''' <summary>
         ''' dll files
@@ -158,6 +159,33 @@ Namespace System.Package.File
             End Using
         End Sub
 
+        Private Sub saveDataSymbols(zip As ZipArchive, ByRef checksum$)
+            Dim md5 As New Md5HashProvider
+            Dim text As String
+
+            Using file As New StreamWriter(zip.CreateEntry("manifest/data.json").Open)
+                text = dataSymbols _
+                    .ToDictionary(Function(d) d.Key.BaseName,
+                                  Function(d)
+                                      Return d.Value
+                                  End Function) _
+                    .GetJson(indent:=True)
+                checksum = checksum & MD5.GetMd5Hash(text)
+
+                Call file.WriteLine(text)
+                Call file.Flush()
+            End Using
+
+            For Each ref As KeyValuePair(Of String, String) In dataSymbols
+                Using file As Stream = zip.CreateEntry($"data/{ref.Key.BaseName}").Open
+                    Dim buffer As Byte() = ref.Key.ReadBinary
+
+                    Call file.Write(buffer, Scan0, buffer.Length)
+                    Call file.Flush()
+                End Using
+            Next
+        End Sub
+
         Private Sub writeIndex(zip As ZipArchive, ByRef checksum$)
             Dim text As String
             Dim md5 As New Md5HashProvider
@@ -205,6 +233,7 @@ Namespace System.Package.File
                 Dim symbols As Dictionary(Of String, String) = writeSymbols(zip, checksum)
 
                 Call saveSymbols(zip, symbols, checksum)
+                Call saveDataSymbols(zip, checksum)
                 Call copyAssembly(zip, checksum)
                 Call saveDependency(zip, checksum)
                 Call writeIndex(zip, checksum)

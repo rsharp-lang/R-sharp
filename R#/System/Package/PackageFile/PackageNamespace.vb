@@ -12,6 +12,7 @@ Namespace System.Package.File
         Public Property assembly As Dictionary(Of String, String)
         Public Property dependency As Dependency()
         Public Property symbols As Dictionary(Of String, String)
+        Public Property datafiles As Dictionary(Of String, String)
         Public Property runtime As AssemblyInfo
         Public Property framework As AssemblyInfo
 
@@ -28,6 +29,7 @@ Namespace System.Package.File
             assembly = $"{dir}/manifest/assembly.json".LoadJsonFile(Of Dictionary(Of String, String))
             dependency = $"{dir}/manifest/dependency.json".LoadJsonFile(Of Dependency())
             symbols = $"{dir}/manifest/symbols.json".LoadJsonFile(Of Dictionary(Of String, String))
+            datafiles = $"{dir}/manifest/data.json".LoadJsonFile(Of Dictionary(Of String, String))
             runtime = $"{dir}/manifest/runtime.json".LoadJsonFile(Of AssemblyInfo)
             framework = $"{dir}/manifest/framework.json".LoadJsonFile(Of AssemblyInfo)
         End Sub
