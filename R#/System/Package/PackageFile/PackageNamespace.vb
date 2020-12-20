@@ -23,7 +23,7 @@ Namespace System.Package.File
 
         Sub New(dir As String)
             meta = $"{dir}/index.json".LoadJsonFile(Of DESCRIPTION)
-            checksum = $"{dir}/CHECKSUM".ReadAllText
+            checksum = $"{dir}/CHECKSUM".ReadFirstLine
             libPath = dir
             assembly = $"{dir}/manifest/assembly.json".LoadJsonFile(Of Dictionary(Of String, String))
             dependency = $"{dir}/manifest/dependency.json".LoadJsonFile(Of Dependency())
