@@ -1,45 +1,45 @@
 ﻿#Region "Microsoft.VisualBasic::293ee82ab9553f2eb389e81d2a8b9c93, R#\Runtime\Internal\internalInvokes\utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module utils
-    ' 
-    '         Function: debugTool, GetInstalledPackages, head, installPackages, keyGroups
-    '                   md5, memorySize, system, wget
-    ' 
-    '         Sub: cls, pause, sleep
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module utils
+' 
+'         Function: debugTool, GetInstalledPackages, head, installPackages, keyGroups
+'                   md5, memorySize, system, wget
+' 
+'         Sub: cls, pause, sleep
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -64,6 +64,8 @@ Imports Microsoft.VisualBasic.My
 Imports Microsoft.VisualBasic.Text
 Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.CommandLine.Parsers
+Imports Microsoft.VisualBasic.Serialization.JSON
+Imports SMRUCC.Rsharp.Interpreter
 
 Namespace Runtime.Internal.Invokes
 
@@ -549,5 +551,54 @@ Namespace Runtime.Internal.Invokes
         Public Sub pause()
             Call App.Pause()
         End Sub
+
+        <ExportAPI("data")>
+        Public Function data(name As String,
+                             Optional package As String() = Nothing,
+                             Optional lib_loc$ = Nothing,
+                             Optional env As Environment = Nothing) As Object
+
+            Dim dataSymbols As Dictionary(Of String, String)
+            Dim reader As String
+            Dim load As Object
+
+            lib_loc = env.globalEnvironment.options.lib
+
+            If package.IsNullOrEmpty Then
+                package = env.globalEnvironment _
+                    .attachedNamespace _
+                    .Keys _
+                    .ToArray
+            End If
+
+            For Each pkgFile As String In package.Select(Function(pkgName) $"{lib_loc}/{pkgName}")
+                dataSymbols = $"{pkgFile}/manifest/data.json".LoadJsonFile(Of Dictionary(Of String, String))
+
+                If Not dataSymbols.ContainsKey(name) Then
+                    Continue For
+                Else
+                    reader = dataSymbols(name)
+                    pkgFile = $"{pkgFile}/data/{name}"
+                    load = env.globalEnvironment.Rscript.Invoke(reader, pkgFile)
+                End If
+
+                If Program.isException(load) Then
+                    Return load
+                Else
+                    Return env _
+                        .globalEnvironment _
+                        .Push(
+                            name:=name,
+                            value:=load,
+                            [readonly]:=False
+                        )
+                End If
+            Next
+
+            Return Internal.debug.stop({
+                 $"no dataset exists which is named '{name}'.",
+                 $"dataset: {name}"
+            }, env)
+        End Function
     End Module
 End Namespace
