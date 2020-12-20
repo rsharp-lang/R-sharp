@@ -90,7 +90,7 @@ Namespace System.Package.File.Expressions
 
         Public Overrides Function GetExpression(buffer As MemoryStream, raw As BlockReader, desc As DESCRIPTION) As Expression
             Using bin As New BinaryReader(buffer)
-                Dim sourceMap As StackFrame = Writer.ReadSourceMap(bin)
+                Dim sourceMap As StackFrame = Writer.ReadSourceMap(bin, desc)
                 Dim parallel As Boolean = If(bin.ReadByte = 0, False, True)
                 Dim varSize As Integer = bin.ReadInt32
                 Dim vars As New List(Of String)

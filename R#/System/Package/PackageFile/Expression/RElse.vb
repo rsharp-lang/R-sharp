@@ -46,6 +46,7 @@
 
 
 Imports System.IO
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
@@ -76,7 +77,12 @@ Namespace System.Package.File.Expressions
         End Sub
 
         Public Overrides Function GetExpression(buffer As MemoryStream, raw As BlockReader, desc As DESCRIPTION) As Expression
-            Throw New NotImplementedException()
+            Using bin As New BinaryReader(buffer)
+                Dim sourceMap As StackFrame = Writer.ReadSourceMap(bin, desc)
+                Dim closure As Expression = BlockReader.ParseBlock(bin).Parse(desc)
+
+                Return New ElseBranch(closure, sourceMap)
+            End Using
         End Function
     End Class
 End Namespace
