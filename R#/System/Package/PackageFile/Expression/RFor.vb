@@ -1,6 +1,8 @@
 ﻿
 Imports System.IO
 Imports System.Text
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
@@ -41,7 +43,25 @@ Namespace System.Package.File.Expressions
         End Sub
 
         Public Overrides Function GetExpression(buffer As MemoryStream, raw As BlockReader, desc As DESCRIPTION) As Expression
-            Throw New NotImplementedException()
+            Using bin As New BinaryReader(buffer)
+                Dim sourceMap As StackFrame = Writer.ReadSourceMap(bin)
+                Dim parallel As Boolean = If(bin.ReadByte = 0, False, True)
+                Dim varSize As Integer = bin.ReadInt32
+                Dim vars As New List(Of String)
+
+                For i As Integer = 0 To varSize - 1
+                    Call Writer.readZEROBlock(bin) _
+                        .DoCall(Function(bytes)
+                                    Return Encoding.ASCII.GetString(bytes.ToArray)
+                                End Function) _
+                        .DoCall(AddressOf vars.Add)
+                Next
+
+                Dim seq As Expression = BlockReader.ParseBlock(bin).Parse(desc)
+                Dim [loop] As Expression = BlockReader.ParseBlock(bin).Parse(desc)
+
+                Return New ForLoop(vars.ToArray, seq, [loop], parallel, sourceMap)
+            End Using
         End Function
     End Class
 End Namespace
