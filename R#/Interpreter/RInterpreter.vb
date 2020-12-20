@@ -262,6 +262,12 @@ Namespace Interpreter
             globalEnvir.Push(name, New RMethodInfo(name, closure, target), [readonly]:=False, mode:=TypeCodes.closure)
         End Sub
 
+        ''' <summary>
+        ''' direct invoke
+        ''' </summary>
+        ''' <param name="funcName$"></param>
+        ''' <param name="args"></param>
+        ''' <returns></returns>
         Public Function Invoke(funcName$, ParamArray args As Object()) As Object
             Dim find As Object = getFunctionSymbol(funcName)
 
