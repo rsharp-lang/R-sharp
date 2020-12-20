@@ -79,13 +79,17 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
         Friend ReadOnly closure As DeclareNewFunction
 
+        Friend Sub New(bodyClosure As DeclareNewFunction)
+            Me.closure = bodyClosure
+        End Sub
+
         Sub New(bodyClosure As ClosureExpression, stackframe As StackFrame)
-            closure = New DeclareNewFunction(
+            Call Me.New(New DeclareNewFunction(
                 body:=bodyClosure,
                 funcName:="else_branch_internal",
                 params:={},
                 stackframe:=stackframe
-            )
+            ))
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
