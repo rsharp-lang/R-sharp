@@ -715,6 +715,8 @@ Namespace Runtime.Internal.Invokes
                     args.Add(Nothing)
                 ElseIf item = "TRUE" OrElse item = "FALSE" Then
                     args.Add(item.ParseBoolean)
+                ElseIf item.Last = "%" Then
+                    args.Add(item.Replace("%", "").DoCall(AddressOf Integer.Parse))
                 Else
                     args.Add(item)
                 End If
