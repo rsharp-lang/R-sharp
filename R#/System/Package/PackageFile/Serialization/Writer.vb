@@ -144,7 +144,8 @@ Namespace System.Package.File
                 Case GetType(FunctionInvoke),
                      GetType(ByRefFunctionCall),
                      GetType(IIfExpression),
-                     GetType(CreateObject)
+                     GetType(CreateObject),
+                     GetType(SequenceLiteral)
 
                     Return RCallFunction.GetBuffer(x)
 

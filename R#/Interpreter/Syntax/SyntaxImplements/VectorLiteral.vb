@@ -1,46 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::613ce4b10adb27f0dbe04fc5396b895a, R#\Interpreter\Syntax\SyntaxImplements\VectorLiteral.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module VectorLiteralSyntax
-    ' 
-    '         Function: LiteralSyntax, (+2 Overloads) SequenceLiteral, TypeCodeOf, VectorLiteral
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module VectorLiteralSyntax
+' 
+'         Function: LiteralSyntax, (+2 Overloads) SequenceLiteral, TypeCodeOf, VectorLiteral
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -161,6 +162,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         Public Function SequenceLiteral(from As Token(), [to] As Token(), steps As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim fromSyntax = Expression.CreateExpression(from, opts)
             Dim toSyntax = Expression.CreateExpression([to], opts)
+            Dim sourceMap As StackFrame = opts.GetStackTrace(from(Scan0), "sequence")
 
             If fromSyntax.isException Then
                 Return fromSyntax
@@ -169,7 +171,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             End If
 
             If steps.IsNullOrEmpty Then
-                Return New SequenceLiteral(fromSyntax.expression, toSyntax.expression, New Literal(1))
+                Return New SequenceLiteral(fromSyntax.expression, toSyntax.expression, New Literal(1), sourceMap)
             ElseIf steps.isLiteral Then
                 Dim stepLiteral As SyntaxResult = SyntaxImplements.LiteralSyntax(steps(Scan0), opts)
 
@@ -180,7 +182,8 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 Return New SequenceLiteral(
                     from:=fromSyntax.expression,
                     [to]:=toSyntax.expression,
-                    steps:=stepLiteral.expression
+                    steps:=stepLiteral.expression,
+                    stackFrame:=sourceMap
                 )
             Else
                 Dim stepsSyntax As SyntaxResult = Expression.CreateExpression(steps, opts)
@@ -191,7 +194,8 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     Return New SequenceLiteral(
                         from:=fromSyntax.expression,
                         [to]:=toSyntax.expression,
-                        steps:=stepsSyntax.expression
+                        steps:=stepsSyntax.expression,
+                        stackFrame:=sourceMap
                     )
                 End If
             End If
