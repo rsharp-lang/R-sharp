@@ -11,11 +11,11 @@ Imports Microsoft.VisualBasic.ApplicationServices
 '  // 
 '  // R# scripting host
 '  // 
-'  // VERSION:   1.99.7661.24729
-'  // ASSEMBLY:  Rscript, Version=1.99.7661.24729, Culture=neutral, PublicKeyToken=null
+'  // VERSION:   1.99.7661.24958
+'  // ASSEMBLY:  Rscript, Version=1.99.7661.24958, Culture=neutral, PublicKeyToken=null
 '  // COPYRIGHT: Copyright (c) SMRUCC genomics  2020
 '  // GUID:      16d477b1-e7fb-41eb-9b61-7ea75c5d2939
-'  // BUILT:     12/22/2020 1:44:18 PM
+'  // BUILT:     12/22/2020 1:51:56 PM
 '  // 
 ' 
 ' 
@@ -76,18 +76,18 @@ Namespace RscriptCommandLine
         '''               a folder that exists in this folder path which is named &apos;R&apos; is required!
         ''' </param>
         Public Function Compile(src As String, Optional save As String = "") As Integer
-            Dim cli = GetCompileCommandLine(src:=src, save:=save)
+            Dim cli = GetCompileCommandLine(src:=src, save:=save, internal_pipelineMode:=internal_pipelineMode)
             Dim proc As IIORedirectAbstract = RunDotNetApp(cli)
             Return proc.Run()
         End Function
-        Public Function GetCompileCommandLine(src As String, Optional save As String = "") As String
+        Public Function GetCompileCommandLine(src As String, Optional save As String = "", Optional internal_pipelineMode As Boolean = True) As String
             Dim CLI As New StringBuilder("--build")
             Call CLI.Append(" ")
             Call CLI.Append("/src " & """" & src & """ ")
             If Not save.StringEmpty Then
                 Call CLI.Append("/save " & """" & save & """ ")
             End If
-            Call CLI.Append("/@set --internal_pipeline=TRUE ")
+            Call CLI.Append("/@set --internal_pipeline={internal_pipelineMode.ToString.ToUpper()} ")
 
 
             Return CLI.ToString()
@@ -102,15 +102,15 @@ Namespace RscriptCommandLine
         '''
 
         Public Function Check(target As String) As Integer
-            Dim cli = GetCheckCommandLine(target:=target)
+            Dim cli = GetCheckCommandLine(target:=target, internal_pipelineMode:=internal_pipelineMode)
             Dim proc As IIORedirectAbstract = RunDotNetApp(cli)
             Return proc.Run()
         End Function
-        Public Function GetCheckCommandLine(target As String) As String
+        Public Function GetCheckCommandLine(target As String, Optional internal_pipelineMode As Boolean = True) As String
             Dim CLI As New StringBuilder("--check")
             Call CLI.Append(" ")
             Call CLI.Append("--target " & """" & target & """ ")
-            Call CLI.Append("/@set --internal_pipeline=TRUE ")
+            Call CLI.Append("/@set --internal_pipeline={internal_pipelineMode.ToString.ToUpper()} ")
 
 
             Return CLI.ToString()
@@ -152,7 +152,7 @@ Namespace RscriptCommandLine
                                          timeout:=timeout,
                                          retry:=retry,
                                          master:=master,
-                                         entry:=entry)
+                                         entry:=entry, internal_pipelineMode:=internal_pipelineMode)
             Dim proc As IIORedirectAbstract = RunDotNetApp(cli)
             Return proc.Run()
         End Function
@@ -163,7 +163,7 @@ Namespace RscriptCommandLine
                                      Optional timeout As String = "1000",
                                      Optional retry As String = "5",
                                      Optional master As String = "localhost",
-                                     Optional entry As String = "NULL") As String
+                                     Optional entry As String = "NULL", Optional internal_pipelineMode As Boolean = True) As String
             Dim CLI As New StringBuilder("--slave")
             Call CLI.Append(" ")
             Call CLI.Append("/exec " & """" & exec & """ ")
@@ -182,7 +182,7 @@ Namespace RscriptCommandLine
             If Not entry.StringEmpty Then
                 Call CLI.Append("/entry " & """" & entry & """ ")
             End If
-            Call CLI.Append("/@set --internal_pipeline=TRUE ")
+            Call CLI.Append("/@set --internal_pipeline={internal_pipelineMode.ToString.ToUpper()} ")
 
 
             Return CLI.ToString()
