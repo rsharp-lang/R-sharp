@@ -1,47 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::db6dccd30c39be03decee016a4a0e1c4, studio\Rserve\Rweb\Rweb.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Class Rweb
-    ' 
-    '     Properties: NextRequestId
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: callback, getHttpProcessor, Run
-    ' 
-    '     Sub: handleGETRequest, handleOtherMethod, handlePOSTRequest, pushBackResult, runRweb
-    ' 
-    ' /********************************************************************************/
+' Class Rweb
+' 
+'     Properties: NextRequestId
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: callback, getHttpProcessor, Run
+' 
+'     Sub: handleGETRequest, handleOtherMethod, handlePOSTRequest, pushBackResult, runRweb
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -182,17 +182,25 @@ Public Class Rweb : Inherits HttpServer
         Dim port As Integer = socket.LocalPort
         Dim master As String = "localhost"
         Dim entry As String = "run"
+        Dim Rslave = RscriptCommandLine.Rscript.FromEnvironment(directory:=App.HOME)
 
         Call args.GetJson.__DEBUG_ECHO
 
         ' --slave /exec <script.R> /args <json_base64> /request-id <request_id> /PORT=<port_number> [/MASTER=<ip, default=localhost> /entry=<function_name, default=NULL>]
-        Dim arguments As String = $"--slave /exec {Rscript.CLIPath} /request-id {request_id} /PORT={port} /MASTER={master} /entry={entry} /args ""{argsText}"""
-        Dim Rslave As String = $"{App.HOME}/R#.exe"
+        Dim arguments As String = Rslave.GetslaveModeCommandLine(
+            exec:=Rscript,
+            args:=argsText,
+            request_id:=request_id,
+            PORT:=port,
+            master:=master,
+            entry:=entry,
+            internal_pipelineMode:=False
+        )
 
         If App.IsMicrosoftPlatform Then
-            Call App.Shell(Rslave, arguments, CLR:=True, debug:=True).Run()
+            Call App.Shell(Rslave.Path, arguments, CLR:=True, debug:=True).Run()
         Else
-            Call UNIX.Shell("mono", $"{Rslave.CLIPath} {arguments}", verbose:=True)
+            Call UNIX.Shell("mono", $"{Rslave.Path.CLIPath} {arguments}", verbose:=True)
         End If
 
         If Not is_background Then
