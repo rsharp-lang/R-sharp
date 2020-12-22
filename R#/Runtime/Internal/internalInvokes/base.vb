@@ -86,8 +86,17 @@ Namespace Runtime.Internal.Invokes
     Public Module base
 
         <ExportAPI("order")>
-        Public Function order(x As Double()) As Integer()
-            Return x.Ranking(Strategies.OrdinalRanking, desc:=True).Select(Function(i) CInt(i)).ToArray
+        Public Function order(x As Double(), Optional desc As Boolean = False) As Integer()
+            Dim rank = x.Ranking(Strategies.OrdinalRanking, desc:=desc).Select(Function(i) CInt(i)).ToArray
+            Dim ii As New List(Of Integer)
+            Dim di As Integer
+
+            For i As Integer = 0 To rank.Length - 1
+                di = i
+                ii.Add(Which(rank.Select(Function(xi) xi = di)).First)
+            Next
+
+            Return ii.ToArray
         End Function
 
         ''' <summary>
