@@ -91,9 +91,9 @@ Namespace Runtime.Internal.Invokes
             Dim ii As New List(Of Integer)
             Dim di As Integer
 
-            For i As Integer = 0 To rank.Length - 1
+            For i As Integer = 1 To rank.Length
                 di = i
-                ii.Add(Which(rank.Select(Function(xi) xi = di)).First)
+                ii.Add(Which(rank.Select(Function(xi) xi = di)).First + 1)
             Next
 
             Return ii.ToArray
