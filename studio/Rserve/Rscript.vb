@@ -11,11 +11,11 @@ Imports Microsoft.VisualBasic.ApplicationServices
 '  // 
 '  // R# scripting host
 '  // 
-'  // VERSION:   1.99.7661.24958
-'  // ASSEMBLY:  Rscript, Version=1.99.7661.24958, Culture=neutral, PublicKeyToken=null
+'  // VERSION:   1.99.7661.25020
+'  // ASSEMBLY:  Rscript, Version=1.99.7661.25020, Culture=neutral, PublicKeyToken=null
 '  // COPYRIGHT: Copyright (c) SMRUCC genomics  2020
 '  // GUID:      16d477b1-e7fb-41eb-9b61-7ea75c5d2939
-'  // BUILT:     12/22/2020 1:51:56 PM
+'  // BUILT:     12/22/2020 1:54:00 PM
 '  // 
 ' 
 ' 
@@ -76,7 +76,7 @@ Namespace RscriptCommandLine
         '''               a folder that exists in this folder path which is named &apos;R&apos; is required!
         ''' </param>
         Public Function Compile(src As String, Optional save As String = "") As Integer
-            Dim cli = GetCompileCommandLine(src:=src, save:=save, internal_pipelineMode:=internal_pipelineMode)
+            Dim cli = GetCompileCommandLine(src:=src, save:=save, internal_pipelineMode:=True)
             Dim proc As IIORedirectAbstract = RunDotNetApp(cli)
             Return proc.Run()
         End Function
@@ -87,7 +87,7 @@ Namespace RscriptCommandLine
             If Not save.StringEmpty Then
                 Call CLI.Append("/save " & """" & save & """ ")
             End If
-            Call CLI.Append("/@set --internal_pipeline={internal_pipelineMode.ToString.ToUpper()} ")
+            Call CLI.Append($"/@set --internal_pipeline={internal_pipelineMode.ToString.ToUpper()} ")
 
 
             Return CLI.ToString()
@@ -102,7 +102,7 @@ Namespace RscriptCommandLine
         '''
 
         Public Function Check(target As String) As Integer
-            Dim cli = GetCheckCommandLine(target:=target, internal_pipelineMode:=internal_pipelineMode)
+            Dim cli = GetCheckCommandLine(target:=target, internal_pipelineMode:=True)
             Dim proc As IIORedirectAbstract = RunDotNetApp(cli)
             Return proc.Run()
         End Function
@@ -110,7 +110,7 @@ Namespace RscriptCommandLine
             Dim CLI As New StringBuilder("--check")
             Call CLI.Append(" ")
             Call CLI.Append("--target " & """" & target & """ ")
-            Call CLI.Append("/@set --internal_pipeline={internal_pipelineMode.ToString.ToUpper()} ")
+            Call CLI.Append($"/@set --internal_pipeline={internal_pipelineMode.ToString.ToUpper()} ")
 
 
             Return CLI.ToString()
@@ -152,7 +152,7 @@ Namespace RscriptCommandLine
                                          timeout:=timeout,
                                          retry:=retry,
                                          master:=master,
-                                         entry:=entry, internal_pipelineMode:=internal_pipelineMode)
+                                         entry:=entry, internal_pipelineMode:=True)
             Dim proc As IIORedirectAbstract = RunDotNetApp(cli)
             Return proc.Run()
         End Function
@@ -182,7 +182,7 @@ Namespace RscriptCommandLine
             If Not entry.StringEmpty Then
                 Call CLI.Append("/entry " & """" & entry & """ ")
             End If
-            Call CLI.Append("/@set --internal_pipeline={internal_pipelineMode.ToString.ToUpper()} ")
+            Call CLI.Append($"/@set --internal_pipeline={internal_pipelineMode.ToString.ToUpper()} ")
 
 
             Return CLI.ToString()
