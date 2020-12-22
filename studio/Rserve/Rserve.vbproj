@@ -185,6 +185,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Rscript.vb" />
     <Compile Include="Rweb\RSessionBackend.vb" />
     <Compile Include="Rweb\RInvoke.vb" />
     <Compile Include="Rweb\RSession.vb" />
