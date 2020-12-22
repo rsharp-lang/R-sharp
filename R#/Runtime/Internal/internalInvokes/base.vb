@@ -76,6 +76,7 @@ Imports SMRUCC.Rsharp.System.Configuration
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RObj = SMRUCC.Rsharp.Runtime.Internal.Object
 Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
+Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Runtime.Internal.Invokes
 
@@ -897,7 +898,7 @@ Namespace Runtime.Internal.Invokes
                     Dim cfgValue As Object = value.Evaluate(envir)
 
                     Try
-                        values.slots(name) = configs.setOption(name, Scripting.ToString(cfgValue))
+                        values.slots(name) = configs.setOption(name, any.ToString(cfgValue))
                     Catch ex As Exception
                         Return Internal.debug.stop(ex, envir)
                     End Try
@@ -1155,7 +1156,7 @@ Namespace Runtime.Internal.Invokes
                     .JoinBy(vbCrLf)
             Else
                 strs = vec _
-                    .Select(Function(o) Scripting.ToString(o, "")) _
+                    .Select(Function(o) any.ToString(o, "")) _
                     .JoinBy(sprintf(sep)) _
                     .DoCall(AddressOf sprintf)
             End If
