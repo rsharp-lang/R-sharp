@@ -1,4 +1,5 @@
 ﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math.Correlations.Ranking
 
 Namespace Runtime.Internal.Invokes
@@ -52,6 +53,67 @@ Namespace Runtime.Internal.Invokes
                              Optional ties_method As Strategies = Strategies.OrdinalRanking) As Double()
 
             Return x.Ranking(ties_method)
+        End Function
+
+        ''' <summary>
+        ''' ### Ordering Permutation
+        ''' 
+        ''' order returns a permutation which rearranges its first argument 
+        ''' into ascending or descending order, breaking ties by further 
+        ''' arguments. sort.list is the same, using only one argument.
+        ''' </summary>
+        ''' <param name="x">a sequence of numeric, complex, character or 
+        ''' logical vectors, all of the same length, or a classed R object.
+        ''' </param>
+        ''' <param name="decreasing">
+        ''' logical. Should the sort order be increasing or decreasing? 
+        ''' For the "radix" method, this can be a vector of length equal to 
+        ''' the number of arguments in .... For the other methods, it must 
+        ''' be length one.</param>
+        ''' <returns>An integer vector unless any of the inputs has 2^31 or 
+        ''' more elements, when it is a double vector.</returns>
+        ''' <remarks>
+        ''' In the case of ties in the first vector, values in the second are 
+        ''' used to break the ties. If the values are still tied, values in 
+        ''' the later arguments are used to break the tie (see the first 
+        ''' example). The sort used is stable (except for method = "quick"), 
+        ''' so any unresolved ties will be left in their original ordering.
+        '''
+        ''' Complex values are sorted first by the real part, then the imaginary 
+        ''' part.
+        '''
+        ''' Except for method "radix", the sort order for character vectors will 
+        ''' depend on the collating sequence of the locale in use: see 
+        ''' Comparison.
+        '''
+        ''' The "shell" method is generally the safest bet and is the default 
+        ''' method, except for short factors, numeric vectors, integer vectors 
+        ''' and logical vectors, where "radix" is assumed. Method "radix" stably 
+        ''' sorts logical, numeric and character vectors in linear time. It 
+        ''' outperforms the other methods, although there are caveats (see sort). 
+        ''' Method "quick" for sort.list is only supported for numeric x with 
+        ''' na.last = NA, is not stable, and is slower than "radix".
+        '''
+        ''' partial = NULL is supported for compatibility with other implementations 
+        ''' of S, but no other values are accepted and ordering is always complete.
+        '''
+        ''' For a classed R object, the sort order is taken from xtfrm: as its help 
+        ''' page notes, this can be slow unless a suitable method has been defined 
+        ''' or is.numeric(x) is true. For factors, this sorts on the internal 
+        ''' codes, which is particularly appropriate for ordered factors.
+        ''' </remarks>
+        <ExportAPI("order")>
+        Public Function order(x As Double(), Optional decreasing As Boolean = False) As Integer()
+            Dim rank As Integer() = x.OrdinalRankingOrder(desc:=decreasing)
+            Dim ii As New List(Of Integer)
+            Dim di As Integer
+
+            For i As Integer = 1 To rank.Length
+                di = i
+                ii.Add(Which(rank.Select(Function(xi) xi = di)).First + 1)
+            Next
+
+            Return ii.ToArray
         End Function
     End Module
 End Namespace

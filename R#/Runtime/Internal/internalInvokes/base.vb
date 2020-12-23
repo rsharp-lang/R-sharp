@@ -85,20 +85,6 @@ Namespace Runtime.Internal.Invokes
     ''' </summary>
     Public Module base
 
-        <ExportAPI("order")>
-        Public Function order(x As Double(), Optional desc As Boolean = False) As Integer()
-            Dim rank = x.Ranking(Strategies.OrdinalRanking, desc:=desc).Select(Function(i) CInt(i)).ToArray
-            Dim ii As New List(Of Integer)
-            Dim di As Integer
-
-            For i As Integer = 1 To rank.Length
-                di = i
-                ii.Add(Which(rank.Select(Function(xi) xi = di)).First + 1)
-            Next
-
-            Return ii.ToArray
-        End Function
-
         ''' <summary>
         ''' ### Dimensions of an Object
         ''' 
