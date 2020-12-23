@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::64bb6b75558ac2370be16773f1ee84ee, R#\System\Package\PackageFile\PackageModel.vb"
+﻿#Region "Microsoft.VisualBasic::4ef5d4f145e65c9a9642a47f73ca6d9d, R#\System\Package\PackageFile\PackageModel.vb"
 
     ' Author:
     ' 
@@ -33,12 +33,12 @@
 
     '     Class PackageModel
     ' 
-    '         Properties: assembly, info, loading, symbols
+    '         Properties: assembly, dataSymbols, info, loading, symbols
     ' 
     '         Function: writeSymbols
     ' 
-    '         Sub: copyAssembly, Flush, saveDependency, saveSymbols, writeIndex
-    '              writeRuntime
+    '         Sub: copyAssembly, Flush, saveDataSymbols, saveDependency, saveSymbols
+    '              writeIndex, writeRuntime
     ' 
     ' 
     ' /********************************************************************************/

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0ede581f5d216a99423ef4a1046bdc5d, studio\Rsharp_kit\roxygenNet\roxygen.vb"
+﻿#Region "Microsoft.VisualBasic::0242f0046b71e7737b9644314cad5747, studio\Rsharp_kit\roxygenNet\roxygen.vb"
 
     ' Author:
     ' 
@@ -42,4 +42,3 @@
 Public Module roxygen
 
 End Module
-

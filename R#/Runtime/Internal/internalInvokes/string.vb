@@ -1,54 +1,55 @@
-﻿#Region "Microsoft.VisualBasic::c875262996c3a9cf995c52bed38bab45, R#\Runtime\Internal\internalInvokes\string.vb"
+﻿#Region "Microsoft.VisualBasic::ef01959d0b45edbc325a9292d6a5dd0b, R#\Runtime\Internal\internalInvokes\string.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Module stringr
-' 
-'         Function: [string], base64, base64Decode, bencode, chr
-'                   Csprintf, decodeObject, fromBstring, grep, html
-'                   json, match, nchar, paste, regexp
-'                   sprintfSingle, str_empty, str_pad, str_replace, strPad_internal
-'                   strsplit, tagvalue, tolower, urldecode, xml
-' 
-'     Enum str_padSides
-' 
-'         both, left, right
-' 
-'  
-' 
-' 
-' 
-' 
-' /********************************************************************************/
+    '     Module stringr
+    ' 
+    '         Function: [string], base64, base64Decode, bencode, chr
+    '                   Csprintf, decodeObject, fromBstring, grep, html
+    '                   json, loadXml, match, nchar, paste
+    '                   regexp, sprintfSingle, str_empty, str_pad, str_replace
+    '                   strPad_internal, strsplit, tagvalue, tolower, urldecode
+    '                   xml
+    ' 
+    '     Enum str_padSides
+    ' 
+    '         both, left, right
+    ' 
+    '  
+    ' 
+    ' 
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

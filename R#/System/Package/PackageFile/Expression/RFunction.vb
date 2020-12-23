@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::12eb16d66080123bdec75064342cfa28, R#\System\Package\PackageFile\Expression\RFunction.vb"
+﻿#Region "Microsoft.VisualBasic::493b0808c58cdff97ec30bde3ea6aac9, R#\System\Package\PackageFile\Expression\RFunction.vb"
 
     ' Author:
     ' 
@@ -36,6 +36,7 @@
     '         Constructor: (+1 Overloads) Sub New
     ' 
     '         Function: GetExpression, getTypeCode, parseFormula, ParseFunction, parseLambda
+    '                   parseUsingClosure
     ' 
     '         Sub: WriteBuffer
     ' 

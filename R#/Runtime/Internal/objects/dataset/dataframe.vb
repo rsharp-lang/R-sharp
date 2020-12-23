@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ce02085892d2599473fa7345d6e96264, R#\Runtime\Internal\objects\dataset\dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::3b3c906938a5d9545ac41c71a3760bda, R#\Runtime\Internal\objects\dataset\dataframe.vb"
 
     ' Author:
     ' 

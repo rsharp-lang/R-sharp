@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7a6d5ad6f4a094ddb8db1cc7e30749fb, R#\System\Package\PackageFile\Expression\RSymbolAssign.vb"
+﻿#Region "Microsoft.VisualBasic::5dcb6cc9cd1adc72daa4a74dcc408ffd, R#\System\Package\PackageFile\Expression\RSymbolAssign.vb"
 
     ' Author:
     ' 
@@ -43,7 +43,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports System.IO
 Imports Microsoft.VisualBasic.Linq

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b3c0d4ced944872030b2cf9a5fa13e3c, Library\R.graphics\ColorBrewer.vb"
+﻿#Region "Microsoft.VisualBasic::fce85d3573acea97fbf2c9afd988831b, Library\R.graphics\ColorBrewer.vb"
 
     ' Author:
     ' 
@@ -246,4 +246,3 @@ Public Module ColorBrewer
 #End Region
 
 End Module
-
