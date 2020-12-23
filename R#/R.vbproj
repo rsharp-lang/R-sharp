@@ -748,6 +748,7 @@
     <Compile Include="Runtime\Environment\RContentOutput.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\dev\dev.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\Linq\orders.vb" />
+    <Compile Include="Runtime\Internal\internalInvokes\Math\ranking.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\Math\varUseMethods.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\reflections.vb" />
     <Compile Include="Runtime\Internal\objects\RConversion\castRaw.vb" />
