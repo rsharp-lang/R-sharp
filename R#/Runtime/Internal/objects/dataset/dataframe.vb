@@ -73,10 +73,14 @@ Namespace Runtime.Internal.Object
         Public ReadOnly Property nrows As Integer
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
-                Return Aggregate col As Array
-                       In columns.Values
-                       Let len = col.Length
-                       Into Max(len)
+                If columns.Count = 0 Then
+                    Return 0
+                Else
+                    Return Aggregate col As Array
+                           In columns.Values
+                           Let len = col.Length
+                           Into Max(len)
+                End If
             End Get
         End Property
 

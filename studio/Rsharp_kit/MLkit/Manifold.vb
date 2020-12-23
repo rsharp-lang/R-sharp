@@ -79,6 +79,7 @@ Module Manifold
         Dim labels As String() = args.getValue(Of String())("labels", env)
         Dim labelStyle$ = args.getValue("label_style", env, CSSFont.Win10Normal)
         Dim labelColor$ = args.getValue("label_color", env, "black")
+        ' [label => clusterid]
         Dim clusters As list = args.getValue(Of list)("clusters", env)
         Dim bubbleAlpha As Integer = args.getValue("bubble_alpha", env, 0.0) * 255
         Dim legendLabelCSS$ = args.getValue("legendlabel_style", env, CSSFont.PlotLabelNormal)

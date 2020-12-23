@@ -1,51 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::c055aa81cf5c31cd44c0e019036315f1, R#\Runtime\Internal\internalInvokes\base.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module base
-    ' 
-    '         Function: [dim], [stop], allocate, append, autoDispose
-    '                   cat, cbind, colnames, doPrintInternal, factors
-    '                   getOption, invisible, isEmpty, isNA, isNull
-    '                   length, makeNames, names, ncol, neg
-    '                   nrow, options, print, rbind, Rdataframe
-    '                   rep, replace, Rlist, rownames, sink
-    '                   source, str, summary, t, unitOfT
-    '                   warning
-    ' 
-    '         Sub: [exit], q, quit
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module base
+' 
+'         Function: [dim], [stop], allocate, append, autoDispose
+'                   cat, cbind, colnames, doPrintInternal, factors
+'                   getOption, invisible, isEmpty, isNA, isNull
+'                   length, makeNames, names, ncol, neg
+'                   nrow, options, print, rbind, Rdataframe
+'                   rep, replace, Rlist, rownames, sink
+'                   source, str, summary, t, unitOfT
+'                   warning
+' 
+'         Sub: [exit], q, quit
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -59,6 +59,7 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Math.Correlations
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
@@ -75,6 +76,7 @@ Imports SMRUCC.Rsharp.System.Configuration
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RObj = SMRUCC.Rsharp.Runtime.Internal.Object
 Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
+Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Runtime.Internal.Invokes
 
@@ -82,6 +84,20 @@ Namespace Runtime.Internal.Invokes
     ''' 在这个模块之中仅包含有最基本的数据操作函数
     ''' </summary>
     Public Module base
+
+        <ExportAPI("order")>
+        Public Function order(x As Double(), Optional desc As Boolean = False) As Integer()
+            Dim rank = x.Ranking(Strategies.OrdinalRanking, desc:=desc).Select(Function(i) CInt(i)).ToArray
+            Dim ii As New List(Of Integer)
+            Dim di As Integer
+
+            For i As Integer = 1 To rank.Length
+                di = i
+                ii.Add(Which(rank.Select(Function(xi) xi = di)).First + 1)
+            Next
+
+            Return ii.ToArray
+        End Function
 
         ''' <summary>
         ''' ### Dimensions of an Object
@@ -891,7 +907,7 @@ Namespace Runtime.Internal.Invokes
                     Dim cfgValue As Object = value.Evaluate(envir)
 
                     Try
-                        values.slots(name) = configs.setOption(name, Scripting.ToString(cfgValue))
+                        values.slots(name) = configs.setOption(name, any.ToString(cfgValue))
                     Catch ex As Exception
                         Return Internal.debug.stop(ex, envir)
                     End Try
@@ -1149,7 +1165,7 @@ Namespace Runtime.Internal.Invokes
                     .JoinBy(vbCrLf)
             Else
                 strs = vec _
-                    .Select(Function(o) Scripting.ToString(o, "")) _
+                    .Select(Function(o) any.ToString(o, "")) _
                     .JoinBy(sprintf(sep)) _
                     .DoCall(AddressOf sprintf)
             End If

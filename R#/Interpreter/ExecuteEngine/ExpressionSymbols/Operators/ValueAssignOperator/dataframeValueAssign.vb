@@ -113,7 +113,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
             Dim nrows As Integer = targetObj.nrows
 
-            If valueArray.Length <> nrows AndAlso valueArray.Length <> 1 Then
+            If nrows = 0 Then
+                ' is an empty dataframe
+                targetObj.columns(indexStr) = valueArray
+            ElseIf valueArray.Length <> nrows AndAlso valueArray.Length <> 1 Then
                 Return Internal.debug.stop({
                     $"the given value is not equal size to the dataframe row numbers!",
                     $"nrows: {nrows}",
