@@ -1,46 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::6f3c157f48bef1f767b078ca44e884a0, studio\Rsharp_kit\webKit\URL.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module URL
-    ' 
-    '     Function: [get], content, HttpCookies, post, upload
-    '               urlencode, wget
-    ' 
-    ' /********************************************************************************/
+' Module URL
+' 
+'     Function: [get], content, HttpCookies, post, upload
+'               urlencode, wget
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Net
 Imports Microsoft.VisualBasic.Net.Http
@@ -149,13 +150,38 @@ Public Module URL
     End Function
 
     <ExportAPI("requests.post")>
+    <RApiReturn(GetType(WebResponseResult))>
     Public Function post(url As String,
                          Optional params As list = Nothing,
                          Optional headers As list = Nothing,
-                         Optional env As Environment = Nothing) As WebResponseResult
+                         Optional env As Environment = Nothing) As Object
 
         Dim httpHeaders As Dictionary(Of String, String) = headers?.AsGeneric(Of String)(env)
         Dim verbose As Boolean = env.globalEnvironment.options.verbose
+        Dim args As New List(Of KeyValuePair(Of String, String))
+        Dim value As Object
+
+        If Not params Is Nothing Then
+            For Each key As String In params.slots.Keys
+                value = params.slots(key)
+
+                If value Is Nothing Then
+                    value = ""
+                ElseIf TypeOf value Is String Then
+                    value = value
+                ElseIf TypeOf value Is Message Then
+                    Return value
+                Else
+                    value = stringr.json(value)
+
+                    If TypeOf value Is Message Then
+                        Return value
+                    End If
+                End If
+
+                args += New KeyValuePair(Of String, String)(key, value)
+            Next
+        End If
 
         Return WebServiceUtils.PostRequest(url, params?.AsGeneric(Of String)(env))
     End Function

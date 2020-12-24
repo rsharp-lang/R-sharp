@@ -80,7 +80,7 @@ Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 
 Namespace Runtime.Internal.Invokes
 
-    Module stringr
+    Public Module stringr
 
         <ExportAPI("html")>
         Public Function html(<RRawVectorArgument> x As Object, env As Environment) As Object
