@@ -115,14 +115,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Linq
             Me.stackFrame = stackframe
         End Sub
 
-        Friend Shared Function produceSequenceVector(seq As Expression, env As Environment, ByRef isList As Boolean) As Object
-            Dim sequence As Object = seq.Evaluate(env)
-
-            If sequence Is Nothing Then
-                Return {}
-            ElseIf RProgram.isException(sequence) Then
-                Return sequence
-            ElseIf sequence.GetType Is GetType(list) Then
+        Friend Shared Function produceSequenceVector(sequence As Object, ByRef isList As Boolean) As Object
+            If sequence.GetType Is GetType(list) Then
                 sequence = DirectCast(sequence, list).slots
             End If
 
@@ -147,10 +141,18 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Linq
         Public Overrides Function Evaluate(parent As Environment) As Object
             Dim env As New Environment(parent, stackFrame, isInherits:=False)
             Dim isList As Boolean = False
+            Dim sequence As Object = Me.sequence.Evaluate(env)
+
+            If sequence Is Nothing Then
+                Return {}
+            ElseIf RProgram.isException(sequence) Then
+                Return sequence
+            End If
+
             ' 20191105
             ' 序列的产生需要放在变量申明之前
             ' 否则linq表达式中的与外部环境中的同名变量会导致NULL错误出现
-            Dim source As Object = produceSequenceVector(Me.sequence, env, isList)
+            Dim source As Object = produceSequenceVector(sequence, isList)
 
             If RProgram.isException(source) Then
                 Return source
