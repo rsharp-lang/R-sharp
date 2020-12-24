@@ -183,7 +183,7 @@ Public Module URL
             Next
         End If
 
-        Return WebServiceUtils.PostRequest(url, params?.AsGeneric(Of String)(env))
+        Return WebServiceUtils.PostRequest(url, args)
     End Function
 
     ''' <summary>

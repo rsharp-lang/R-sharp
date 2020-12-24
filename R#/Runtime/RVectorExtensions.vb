@@ -245,6 +245,12 @@ Namespace Runtime
             Return ofList
         End Function
 
+        ''' <summary>
+        ''' 返回错误消息或者结果向量
+        ''' </summary>
+        ''' <param name="vec"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
         Public Function TryCastGenericArray(vec As Array, env As Environment) As Object

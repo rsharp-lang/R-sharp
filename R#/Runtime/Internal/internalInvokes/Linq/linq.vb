@@ -218,6 +218,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 If pipelineFilter Then
                     Dim objs As New List(Of Object)
 
+                    ' returns the object vector where test result is true
                     For Each obj In testResult
                         If TypeOf obj Is Message Then
                             Return obj
@@ -230,10 +231,11 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                         End If
                     Next
 
-                    Return objs.ToArray
+                    Return REnv.TryCastGenericArray(objs.ToArray, env)
                 Else
                     Dim booleans As New List(Of Boolean)
 
+                    ' returns the logical test vector result
                     For Each obj In testResult
                         If TypeOf obj Is Message Then
                             Return obj
