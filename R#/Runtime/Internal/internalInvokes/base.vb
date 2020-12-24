@@ -986,6 +986,14 @@ Namespace Runtime.Internal.Invokes
             Return resultNames
         End Function
 
+        <ExportAPI("unique.names")>
+        Public Function uniqueNames(<RRawVectorArgument(GetType(String))> names As Object) As String()
+            Dim nameList As String() = asVector(Of String)(names)
+            Dim resultNames As String() = nameList.uniqueNames
+
+            Return resultNames
+        End Function
+
         ''' <summary>
         ''' # Row and Column Names
         ''' 
