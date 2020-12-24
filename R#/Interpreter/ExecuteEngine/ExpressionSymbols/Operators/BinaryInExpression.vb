@@ -97,12 +97,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 Return sequence
             End If
 
-            If TypeOf sequence Is list AndAlso REnv.MeasureRealElementType(testLeft) Is GetType(String) Then
-                Return testListIndex(sequence, REnv.TryCastGenericArray(testLeft, env:=envir))
-            End If
+            Dim flags As Boolean()
 
-            Dim index As Index(Of Object) = getIndex(sequence).Indexing
-            Dim flags As Boolean() = testVectorIndexOf(index, testLeft)
+            If TypeOf sequence Is list AndAlso REnv.MeasureRealElementType(testLeft) Is GetType(String) Then
+                flags = testListIndex(sequence, REnv.TryCastGenericArray(testLeft, env:=envir))
+            Else
+                flags = testVectorIndexOf(getIndex(sequence).Indexing, testLeft)
+            End If
 
             Return flags
         End Function
