@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::eb5e2fbe38ab6919bbfc7e8334748325, Library\R.base\utils\utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module utils
-    ' 
-    '     Function: DataFrameRows, ensureRowNames, MeasureGenericType, read_csv, saveGeneric
-    '               setRowNames, write_csv
-    ' 
-    ' /********************************************************************************/
+' Module utils
+' 
+'     Function: DataFrameRows, ensureRowNames, MeasureGenericType, read_csv, saveGeneric
+'               setRowNames, write_csv
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -58,6 +58,7 @@ Imports fileStream = System.IO.Stream
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports textStream = System.IO.StreamReader
+Imports any = Microsoft.VisualBasic.Scripting
 
 ''' <summary>
 ''' The R Utils Package 
@@ -194,7 +195,7 @@ Public Module utils
         Select Case row_names.elementType.mode
             Case TypeCodes.string, TypeCodes.double
                 If row_names.length = 1 Then
-                    Dim key = Scripting.ToString(row_names.data.GetValue(Scan0))
+                    Dim key = any.ToString(row_names.data.GetValue(Scan0))
 
                     If dataframe.columns.ContainsKey(key) Then
                         dataframe.rownames = dataframe.columns(key)
@@ -205,7 +206,7 @@ Public Module utils
                 Else
                     dataframe.rownames = row_names.data _
                         .AsObjectEnumerator(Of Object) _
-                        .Select(AddressOf Scripting.ToString) _
+                        .Select(AddressOf any.ToString) _
                         .ToArray
                 End If
             Case TypeCodes.integer
@@ -213,7 +214,10 @@ Public Module utils
                     Dim i As Integer = CInt(row_names.data.GetValue(Scan0)) - 1
                     Dim project = dataframe.columns.Keys(i)
 
-                    dataframe.rownames = dataframe.columns(project)
+                    dataframe.rownames = dataframe.columns(project) _
+                        .AsObjectEnumerator _
+                        .Select(Function(x) any.ToString(x)) _
+                        .ToArray
                     dataframe.columns.Remove(project)
                 Else
 
