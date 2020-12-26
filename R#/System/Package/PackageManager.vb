@@ -157,6 +157,8 @@ Namespace System.Package
 
                 If libDir = "/" OrElse libDirOld = "/" Then
                     Throw New InvalidProgramException($"we unsure why library path of package '{pkginfo.Package}' is pointed to the root directory?")
+                Else
+                    Call libDirOld.MkDIR
                 End If
             End If
 
