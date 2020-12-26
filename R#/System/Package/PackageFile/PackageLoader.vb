@@ -51,6 +51,7 @@ Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.System.Configuration
 
 Namespace System.Package.File
@@ -98,7 +99,7 @@ Namespace System.Package.File
         ''' </summary>
         ''' <param name="dir"></param>
         ''' <param name="env"></param>
-        Public Sub LoadPackage(dir As String, env As GlobalEnvironment)
+        Public Function LoadPackage(dir As String, env As GlobalEnvironment) As Message
             Dim [namespace] As New PackageNamespace(dir)
 
             For Each symbol As NamedValue(Of String) In [namespace].EnumerateSymbols
@@ -110,7 +111,9 @@ Namespace System.Package.File
             Call env.loadDependency(pkg:=[namespace])
             Call env.callOnLoad(pkg:=[namespace])
             Call env.attachedNamespace.Add([namespace].packageName, [namespace])
-        End Sub
+
+            Return Nothing
+        End Function
 
         <Extension>
         Private Sub loadDependency(env As GlobalEnvironment, pkg As PackageNamespace)

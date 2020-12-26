@@ -166,12 +166,12 @@ Namespace Runtime
         Public Function LoadLibrary(packageName As String, Optional silent As Boolean = False, Optional ignoreMissingStartupPackages As Boolean = False) As Message
             Dim exception As Exception = Nothing
             Dim package As RPkg = Nothing
-            Dim isRzipPackage As Boolean = False
+            Dim RzipPackageFolder As String = Nothing
 
             If Not packages.hasLibPackage(packageName) Then
                 package = packages.FindPackage(packageName, exception)
             Else
-                isRzipPackage = True
+                RzipPackageFolder = PackageLoader2.GetPackageDirectory(options, packageName)
             End If
 
             If Not packageName Like packages.loadedPackages Then
@@ -187,9 +187,8 @@ Namespace Runtime
                 Return Nothing
             End If
 
-            If isRzipPackage Then
-                Call PackageLoader2.LoadPackage(PackageLoader2.GetPackageDirectory(options, packageName), [global])
-                Return Nothing
+            If Not RzipPackageFolder Is Nothing Then
+                Return PackageLoader2.LoadPackage(RzipPackageFolder, [global])
             ElseIf package Is Nothing Then
                 If Not ignoreMissingStartupPackages Then
                     Return MissingPackage(packageName, exception)
