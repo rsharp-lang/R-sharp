@@ -59,6 +59,7 @@ Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.System.Configuration
 Imports SMRUCC.Rsharp.System.Package.File
+Imports fs = System.IO.Directory
 
 Namespace System.Package
 
@@ -146,14 +147,25 @@ Namespace System.Package
         Private Function installZip(zipFile As String) As String()
             Dim pkginfo As DESCRIPTION = PackageLoader2.GetPackageIndex(zipFile)
             Dim libDir As String
+            Dim libDirOld As String
 
             If pkginfo Is Nothing OrElse pkginfo.Package.StringEmpty Then
                 Throw New InvalidProgramException($"the given package file '{zipFile}' is not a valid R# package!")
             Else
                 libDir = PackageLoader2.GetPackageDirectory(config, pkginfo.Package)
+                libDirOld = $"{libDir.TrimDIR}.old"
+
+                If libDir = "/" OrElse libDirOld = "/" Then
+                    Throw New InvalidProgramException($"we unsure why library path of package '{pkginfo.Package}' is pointed to the root directory?")
+                End If
+            End If
+
+            If libDir.FileExists Then
+                Call fs.Move(libDir, libDirOld)
             End If
 
             Call UnZip.ImprovedExtractToDirectory(zipFile, libDir, Overwrite.Always)
+            Call fs.Delete(libDirOld, recursive:=True)
 
             Dim packageIndex As Dictionary(Of String, PackageInfo) = pkgDb.packages _
                 .AsEnumerable _
