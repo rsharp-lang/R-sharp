@@ -1,51 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::16b4019f78a17d7b1669e37c34ea152d, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\ModeOf.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class ModeOf
-    ' 
-    '         Properties: expressionName, keyword, target, type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class ModeOf
+' 
+'         Properties: expressionName, keyword, target, type
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Package.File
 
@@ -114,9 +115,27 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 If value Is Nothing Then
                     Return RType.GetRSharpType(GetType(Void))
                 Else
-                    Return RType.GetRSharpType(value.GetType)
+                    Return [TypeOf](value)
                 End If
             End If
         End Function
+
+        ''' <summary>
+        ''' 根据向量化的运算特性，在这里是否应该对于array以及vector，都只返回element type? 
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
+        Private Shared Function [TypeOf](x As Object) As RType
+            If x.GetType.IsArray Then
+                Return RType.GetRSharpType(x.GetType.GetElementType)
+            ElseIf TypeOf x Is vector Then
+                Return DirectCast(x, vector).elementType
+            ElseIf TypeOf x Is list Then
+
+            Else
+                Return RType.GetRSharpType(x.GetType)
+            End If
+        End Function
+
     End Class
 End Namespace

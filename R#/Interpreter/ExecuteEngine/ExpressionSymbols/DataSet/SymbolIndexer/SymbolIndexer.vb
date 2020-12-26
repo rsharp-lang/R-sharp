@@ -55,6 +55,7 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Package.File
+Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
@@ -204,7 +205,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                         Return obj.getColumnVector(strKey)
                     End If
                 Else
-                    Dim strKey As String = Scripting.ToString(key)
+                    Dim strKey As String = any.ToString(key)
 
                     If obj.columns.ContainsKey(strKey) Then
                         Return obj.getColumnVector(strKey)
@@ -288,9 +289,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     }, envir)
                 End If
             ElseIf indexer.Length = 1 Then
-                Return DirectCast(obj, RNameIndex).getByName(Scripting.ToString(indexer.GetValue(Scan0)))
+                Return DirectCast(obj, RNameIndex).getByName(any.ToString(indexer.GetValue(Scan0)))
             Else
-                Return DirectCast(obj, RNameIndex).getByName(Runtime.asVector(Of String)(indexer))
+                Return DirectCast(obj, RNameIndex).getByName(REnv.asVector(Of String)(indexer))
             End If
         End Function
 

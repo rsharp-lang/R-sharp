@@ -49,7 +49,7 @@ Namespace Runtime.Components
 
     Public MustInherit Class RsharpDataObject
 
-        Protected m_type As RType
+        Protected m_type As RType = RType.any
 
         <ScriptIgnore>
         Public Overridable Property elementType As RType

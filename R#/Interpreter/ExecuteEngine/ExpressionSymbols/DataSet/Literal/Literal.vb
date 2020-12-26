@@ -49,6 +49,7 @@ Imports System.Runtime.CompilerServices
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.System.Package.File
+Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
@@ -92,7 +93,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 If value Is Nothing Then
                     Return ""
                 Else
-                    Return Scripting.ToString(value)
+                    Return any.ToString(value)
                 End If
             End Get
         End Property

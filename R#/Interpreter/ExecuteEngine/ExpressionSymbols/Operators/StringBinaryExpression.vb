@@ -44,6 +44,7 @@ Imports System.Runtime.CompilerServices
 Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.Text.Patterns
 Imports SMRUCC.Rsharp.Runtime
+Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
@@ -117,7 +118,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                    In Runtime _
                        .asVector(Of Object)(a) _
                        .AsQueryable
-                   Let str As String = Scripting.ToString(element, "NULL")
+                   Let str As String = any.ToString(element, "NULL")
                    Select str
         End Function
     End Module
