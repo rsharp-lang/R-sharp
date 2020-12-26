@@ -64,6 +64,11 @@ Namespace System.Package.File
         ''' <param name="libDir"></param>
         ''' <returns></returns>
         Public Function CheckPackage(libDir As String) As Boolean
+            ' Error: package or namespace load failed for 'mzkit':
+            '  .onLoad failed in loadNamespace() for 'mzkit', details:
+            '   call: fun(libname, pkgname)
+            '   error: 1
+
             Return True
         End Function
 

@@ -167,6 +167,32 @@ Namespace System.Package
             ' ** testing if installed package keeps a record of temporary installation path
             ' * DONE (mzkit)
 
+            ' install error output
+            '
+            ' * installing to library 'C:/Program Files/R/R-3.6.3/library'
+            ' * installing *source* package 'mzkit' ...
+            ' ** using staged installation
+            ' ** R
+            ' ** byte-compile and prepare package for lazy loading
+            ' ** help
+            ' *** installing help indices
+            '   converting help for package 'mzkit'
+            '     hello                                   html  
+            '     finding HTML links ... ����
+            ' ** building package indices
+            ' ** testing if installed package can be loaded from temporary location
+            ' Error: package or namespace load failed for 'mzkit':
+            '  .onLoad failed in loadNamespace() for 'mzkit', details:
+            '   call: fun(libname, pkgname)
+            '   error: 1
+            ' ����: ����ʧ��
+            ' ִֹͣ��
+            ' ERROR: loading failed
+            ' * removing 'C:/Program Files/R/R-3.6.3/library/mzkit'
+            ' * restoring previous 'C:/Program Files/R/R-3.6.3/library/mzkit'
+            '
+            ' Exited with status 1.
+
             If pkginfo Is Nothing OrElse pkginfo.Package.StringEmpty Then
                 Throw New InvalidProgramException($"the given package file '{zipFile}' is not a valid R# package!")
             Else
@@ -200,14 +226,20 @@ Namespace System.Package
 
             Call Console.WriteLine("** testing if installed package can be loaded from temporary location")
             Call Console.WriteLine("** testing if installed package can be loaded from final location")
-            Call Console.WriteLine("** testing if installed package keeps a record of temporary installation path")
 
             If Not PackageLoader2.CheckPackage(libDir) Then
+                Call Console.WriteLine("ERROR: loading failed")
+
+                Call Console.WriteLine($"* removing '{libDir.GetDirectoryFullPath}'")
                 Call fs.Delete(libDir)
+
+                Call Console.WriteLine($"* restoring previous '{libDirOld.GetDirectoryFullPath}'")
                 Call fs.Move(libDirOld, libDir)
 
                 Return Nothing
             End If
+
+            Call Console.WriteLine("** testing if installed package keeps a record of temporary installation path")
 
             Dim packageIndex As Dictionary(Of String, PackageInfo) = pkgDb.packages _
                 .AsEnumerable _
