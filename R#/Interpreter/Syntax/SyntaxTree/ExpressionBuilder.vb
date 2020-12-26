@@ -97,7 +97,7 @@ Namespace Interpreter.SyntaxParser
                         Return New Suppress(evaluate.expression)
                     End If
                 Case "modeof", "typeof", "valueof"
-                    Return SyntaxImplements.ModeOf(keyword, code(1), opts)
+                    Return SyntaxImplements.ModeOf(keyword, code.Skip(1).IteratesALL.ToArray, opts)
                 Case "require"
                     Return code(1) _
                         .Skip(1) _
