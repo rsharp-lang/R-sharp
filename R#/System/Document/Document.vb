@@ -9,7 +9,7 @@ Namespace System
         Public Property description As String
         Public Property parameters As NamedValue()
         Public Property returns As String
-        Public Property author As String
+        Public Property author As String()
         Public Property details As String
         Public Property keywords As String()
         Public Property declares As FunctionDeclare

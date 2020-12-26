@@ -5,7 +5,8 @@
 #'    multiple lines
 #' 
 #' @param a a string parameter
-#' @param a integer vector with default value \code{[1,2,3]}
+#' @param b integer vector with default 
+#' value \code{[1,2,3]}
 #' 
 #' @return nothing?
 #' 
