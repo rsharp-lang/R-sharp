@@ -18,3 +18,9 @@
 let func as function(a as string, b = [1,2,3]) {
 
 }
+
+
+
+
+
+print();
