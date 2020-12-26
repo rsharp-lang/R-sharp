@@ -236,7 +236,7 @@ Namespace Runtime.Internal.Object.Converts
                 ElseIf listType Is GetType(list) Then
                     Return DirectCast(x, list).unlistOfRList(containsListNames)
                 ElseIf listType.ImplementInterface(GetType(IDictionary)) Then
-                    Return New list(x).unlistOfRList(containsListNames)
+                    Return New list(DirectCast(x, IDictionary)).unlistOfRList(containsListNames)
                 ElseIf listType Is GetType(pipeline) Then
                     Return tryUnlistArray(DirectCast(x, pipeline).pipeline, containsListNames)
                 Else

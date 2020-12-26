@@ -43,19 +43,17 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.System
 
 <Package("roxygen")>
 Public Module roxygen
 
     <ExportAPI("parse")>
     Public Function ParseDocuments(script As String) As list
-        Dim list As New list With {
-            .slots = New Dictionary(Of String, Object),
-            .elementType = RType.list
-        }
+        Dim list As New list(GetType(Document))
 
-        For Each item In Document.ParseDocuments(script)
-            list.slots(item.Name) = item.Value
+        For Each item As Document In RoxygenDocument.ParseDocuments(script)
+            list.slots(item.declares.name) = item
         Next
 
         Return list
