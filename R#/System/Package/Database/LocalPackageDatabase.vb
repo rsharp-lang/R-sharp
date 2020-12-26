@@ -85,7 +85,15 @@ Namespace System.Package
         ''' <param name="libraryFileName"></param>
         ''' <returns></returns>
         Public Function hasLibFile(libraryFileName As String) As Boolean
-            Return assemblies.items.Any(Function(pkg) pkg.module.assembly = libraryFileName)
+            If assemblies Is Nothing Then
+                assemblies = New XmlList(Of PackageLoaderEntry)
+            End If
+
+            Return assemblies.items _
+                .SafeQuery _
+                .Any(Function(pkg)
+                         Return pkg.module.assembly = libraryFileName
+                     End Function)
         End Function
 
         ''' <summary>
@@ -111,7 +119,15 @@ Namespace System.Package
         End Function
 
         Public Function hasLibPackage(pkgName As String) As Boolean
-            Return packages.items.Any(Function(pkg) pkg.namespace = pkgName)
+            If packages Is Nothing Then
+                packages = New XmlList(Of PackageInfo)
+            End If
+
+            Return packages.items _
+                .SafeQuery _
+                .Any(Function(pkg)
+                         Return pkg.namespace = pkgName
+                     End Function)
         End Function
 
         ''' <summary>

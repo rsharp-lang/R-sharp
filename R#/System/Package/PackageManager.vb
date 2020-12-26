@@ -173,7 +173,7 @@ Namespace System.Package
                 .symbols = symbolNames
             }
 
-            pkgDb.assemblies = packageIndex.Values.ToArray
+            pkgDb.packages = packageIndex.Values.ToArray
             pkgDb.system = GetType(LocalPackageDatabase).Assembly.FromAssembly
 
             Return symbolNames
