@@ -52,8 +52,20 @@ Namespace Runtime
 
     Public Class MagicScriptSymbol : Implements ICTypeList
 
+        ''' <summary>
+        ''' dir path that contains the running script
+        ''' </summary>
+        ''' <returns></returns>
         Public Property dir As String
+        ''' <summary>
+        ''' the file name of current running script
+        ''' </summary>
+        ''' <returns></returns>
         Public Property file As String
+        ''' <summary>
+        ''' the full path of the current running script
+        ''' </summary>
+        ''' <returns></returns>
         Public Property fullName As String
 
         <RNameAlias("startup.time")>

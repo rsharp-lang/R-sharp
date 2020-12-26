@@ -46,7 +46,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.System.Package.File
 
-Namespace Interpreter.ExecuteEngine.ExpressionSymbols
+Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Annotation
 
     ''' <summary>
     ''' ``@stop``
@@ -57,7 +57,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
 
         Public Overrides ReadOnly Property expressionName As ExpressionTypes
             Get
-                Return ExpressionTypes.BreakPoint
+                Return ExpressionTypes.Annotation
             End Get
         End Property
 

@@ -636,7 +636,8 @@
   <ItemGroup>
     <Compile Include="Interpreter\ExecutableLoop.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExecuteBreaks.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\BreakPoint.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\BreakPoint.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\ScriptSymbol.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\FormulaExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\CreateObject.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\ExpressionLiteral.vb" />
