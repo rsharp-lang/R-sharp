@@ -169,6 +169,13 @@ Namespace System.Package
             Call UnZip.ImprovedExtractToDirectory(zipFile, libDir, Overwrite.Always)
             Call fs.Delete(libDirOld, recursive:=True)
 
+            If Not PackageLoader2.CheckPackage(libDir) Then
+                Call fs.Delete(libDir)
+                Call fs.Move(libDirOld, libDir)
+
+                Return Nothing
+            End If
+
             Dim packageIndex As Dictionary(Of String, PackageInfo) = pkgDb.packages _
                 .AsEnumerable _
                 .ToDictionary(Function(pkg)

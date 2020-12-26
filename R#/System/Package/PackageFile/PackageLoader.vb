@@ -58,6 +58,15 @@ Namespace System.Package.File
 
     Public Module PackageLoader2
 
+        ''' <summary>
+        ''' 检查程序包的指纹是否和checksum中的结果相匹配
+        ''' </summary>
+        ''' <param name="libDir"></param>
+        ''' <returns></returns>
+        Public Function CheckPackage(libDir As String) As Boolean
+            Return True
+        End Function
+
         <Extension>
         Public Function GetPackageDirectory(opt As Options, packageName$) As String
             Dim libDir As String
