@@ -20,7 +20,17 @@ Public Class RoxygenDocument
 
         For Each item In symbols
             If TypeOf item Is DeclareNewFunction Then
+                Dim func As DeclareNewFunction = DirectCast(item, DeclareNewFunction)
+                Dim docs As Document = list.TryGetValue(func.funcName)
 
+                docs.declares = New FunctionDeclare With {
+                    .name = func.funcName,
+                    .parameters = func.params _
+                        .Select(AddressOf FunctionDeclare.GetArgument) _
+                        .ToArray
+                }
+
+                Yield docs
             Else
                 Throw New NotImplementedException(item.GetType.FullName)
             End If
@@ -34,7 +44,10 @@ Public Class RoxygenDocument
             If line.StartsWith("#'") Then
                 buffer.Add(line.Substring(2).Trim)
             ElseIf buffer > 0 Then
-                Dim name As String() = line.Trim.Split.Where(Function(s) Not s.StringEmpty).ToArray
+                Dim name As String() = line.Trim _
+                    .Split _
+                    .Where(Function(s) Not s.StringEmpty) _
+                    .ToArray
 
                 Yield New NamedValue(Of Document) With {
                     .Name = name(1),

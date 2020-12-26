@@ -16,7 +16,7 @@
 #' 
 #' @keywords keyword1,keyword2,keyword3
 #' 
-let func as function(a as string, b = [1,2,3]) {
+let func as function(a as string, b = [1,2,3], c = ["12345", FALSE], d = list(a=1,b=333)) {
 
 }
 
