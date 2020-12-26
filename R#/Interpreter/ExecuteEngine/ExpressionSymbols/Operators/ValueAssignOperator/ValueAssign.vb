@@ -59,6 +59,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Package.File
+Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
@@ -330,7 +331,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
             Select Case symbolName.GetType
                 Case GetType(Literal)
-                    Dim symbol As String = Scripting.ToString(DirectCast(symbolName, Literal).value)
+                    Dim symbol As String = any.ToString(DirectCast(symbolName, Literal).value)
 
                     Select Case symbol
                         Case "NA", "NULL", "TRUE", "FALSE", "NaN"

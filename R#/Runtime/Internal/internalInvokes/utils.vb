@@ -753,6 +753,7 @@ Namespace Runtime.Internal.Invokes
                                      Return Nothing
                                  End Function
 
+            ' 优先搜索已经加载的程序包
             If loaded.ContainsKey(package) Then
                 file = findFileByName(loaded(package).libPath)
             End If
@@ -761,13 +762,14 @@ Namespace Runtime.Internal.Invokes
                 Return file
             End If
 
-            For Each dir As String In env.globalEnvironment.options.lib_loc.ListDirectory
+            ' 当搜索失败的时候才会在已经安装的程序列表之中进行搜索
+            For Each dir As String In $"{env.globalEnvironment.options.lib_loc}/Library/".ListDirectory
                 If dir.BaseName = package Then
-                    Return findFileByName(dir )
+                    Return findFileByName(dir)
                 End If
             Next
 
-            Return Nothing
+            Return Internal.debug.stop({$"we could not found any installed package which is named '{package}'!", $"package: {package}"}, env)
         End Function
     End Module
 End Namespace

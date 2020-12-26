@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::21596edb56f792e3eeceeee87b365274, R#\Runtime\Internal\objects\RConversion\castList.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module castList
-    ' 
-    '         Function: CTypeList, dataframe_castList, listInternal, objCastList
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module castList
+' 
+'         Function: CTypeList, dataframe_castList, listInternal, objCastList
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -45,7 +45,9 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Interop.CType
+Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Object.Converts
@@ -64,7 +66,7 @@ Namespace Runtime.Internal.Object.Converts
             Dim val As Object
 
             For Each item In list.slots
-                key = Scripting.CTypeDynamic(item.Key, keyType)
+                key = any.CTypeDynamic(item.Key, keyType)
                 val = RCType.CTypeDynamic(item.Value, valType, env)
                 table.Add(key, val)
             Next
@@ -90,16 +92,25 @@ Namespace Runtime.Internal.Object.Converts
                 Case GetType(dataframe)
                     Return dataframe_castList(obj, args, env)
                 Case Else
+                    ' 将字典对象转换为列表对象
                     If type.ImplementInterface(GetType(IDictionary)) Then
                         Dim objList As New Dictionary(Of String, Object)
+                        Dim eleType As RType = RType.any
 
                         With DirectCast(obj, IDictionary)
                             For Each key As Object In .Keys
-                                Call objList.Add(Scripting.ToString(key), .Item(key))
+                                Call objList.Add(any.ToString(key), .Item(key))
                             Next
                         End With
 
-                        Return New list With {.slots = objList}
+                        If Not type.GetGenericArguments.ElementAtOrDefault(1) Is Nothing Then
+                            eleType = RType.GetRSharpType(type.GetGenericArguments(1))
+                        End If
+
+                        Return New list With {
+                            .slots = objList,
+                            .elementType = eleType
+                        }
                     Else
                         Return New vbObject(obj).objCastList(args, env)
                     End If
@@ -109,7 +120,7 @@ Namespace Runtime.Internal.Object.Converts
         <Extension>
         Private Function dataframe_castList(obj As Object, args As list, env As Environment) As Object
             Dim byRow As Boolean = REnv.asLogical(args!byrow)(Scan0)
-            Dim names As String = Scripting.ToString(REnv.getFirst(args!names), null:=Nothing)
+            Dim names As String = any.ToString(REnv.getFirst(args!names), null:=Nothing)
 
             If byRow Then
                 Dim list As list = DirectCast(obj, dataframe).listByRows

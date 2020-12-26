@@ -308,7 +308,7 @@ Namespace Runtime.Internal.Object.Converts
                                       Function(k)
                                           Return k.Value
                                       End Function),
-                    .rownames = raw.rownames.ToArray
+                    .rownames = If(raw.rownames.IsNullOrEmpty, Nothing, raw.rownames.ToArray)
                 }
 
                 Return clone

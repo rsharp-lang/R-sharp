@@ -59,7 +59,7 @@ Namespace System.Package
         <XmlAttribute>
         Public Property numOfpackages As Integer Implements IList(Of PackageLoaderEntry).size
             Get
-                Return packages.SafeQuery.Count
+                Return assemblies.SafeQuery.Count + packages.SafeQuery.Count
             End Get
             Set(value As Integer)
                 ' readonly / do nothing
@@ -68,7 +68,16 @@ Namespace System.Package
 
         <XmlElement>
         Public Property system As AssemblyInfo
-        Public Property packages As XmlList(Of PackageLoaderEntry)
+        ''' <summary>
+        ''' .NET assembly list
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property assemblies As XmlList(Of PackageLoaderEntry)
+        ''' <summary>
+        ''' installed R# zip package
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property packages As XmlList(Of PackageInfo)
 
         ''' <summary>
         ''' Check if the given dll module <paramref name="libraryFileName"/> is exists in database or not.
@@ -76,7 +85,15 @@ Namespace System.Package
         ''' <param name="libraryFileName"></param>
         ''' <returns></returns>
         Public Function hasLibFile(libraryFileName As String) As Boolean
-            Return packages.items.Any(Function(pkg) pkg.module.assembly = libraryFileName)
+            If assemblies Is Nothing Then
+                assemblies = New XmlList(Of PackageLoaderEntry)
+            End If
+
+            Return assemblies.items _
+                .SafeQuery _
+                .Any(Function(pkg)
+                         Return pkg.module.assembly = libraryFileName
+                     End Function)
         End Function
 
         ''' <summary>
@@ -87,7 +104,7 @@ Namespace System.Package
         ''' <param name="exception"></param>
         ''' <returns></returns>
         Public Function FindPackage(packageName As String, ByRef exception As Exception) As Package
-            Dim entry As PackageLoaderEntry = packages.items _
+            Dim entry As PackageLoaderEntry = assemblies.items _
                 .SafeQuery _
                 .Where(Function(pkg)
                            Return pkg.namespace = packageName
@@ -101,6 +118,22 @@ Namespace System.Package
             End If
         End Function
 
+        Public Function hasLibPackage(pkgName As String) As Boolean
+            If packages Is Nothing Then
+                packages = New XmlList(Of PackageInfo)
+            End If
+
+            Return packages.items _
+                .SafeQuery _
+                .Any(Function(pkg)
+                         Return pkg.namespace = pkgName
+                     End Function)
+        End Function
+
+        ''' <summary>
+        ''' current xml database file path
+        ''' </summary>
+        ''' <returns></returns>
         Public Shared ReadOnly Property localDb As String
 
         Shared Sub New()
@@ -109,7 +142,7 @@ Namespace System.Package
 
         Public Shared Function EmptyRepository() As LocalPackageDatabase
             Return New LocalPackageDatabase With {
-                .packages = {},
+                .assemblies = {},
                 .system = GetType(LocalPackageDatabase).Assembly.FromAssembly
             }
         End Function
@@ -129,7 +162,7 @@ Namespace System.Package
                 .ToArray
             Dim systemInfo As AssemblyInfo = GetType(LocalPackageDatabase).Assembly.FromAssembly
             Dim localDb As New LocalPackageDatabase With {
-                .packages = packages,
+                .assemblies = packages,
                 .system = systemInfo
             }
 
@@ -137,7 +170,7 @@ Namespace System.Package
         End Function
 
         Public Iterator Function GenericEnumerator() As IEnumerator(Of PackageLoaderEntry) Implements Enumeration(Of PackageLoaderEntry).GenericEnumerator
-            For Each package As PackageLoaderEntry In packages.AsEnumerable
+            For Each package As PackageLoaderEntry In assemblies.AsEnumerable
                 Yield package
             Next
         End Function

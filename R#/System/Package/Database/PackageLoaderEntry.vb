@@ -50,8 +50,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 
 Namespace System.Package
 
-    <XmlType("package")>
-    Public Class PackageLoaderEntry
+    Public Class PackageInfo
 
         ''' <summary>
         ''' Package name
@@ -95,13 +94,17 @@ Namespace System.Package
         <XmlAttribute>
         Public Property category As APICategories = APICategories.SoftwareTools
 
+        Public Property symbols As String()
+    End Class
+
+    <XmlType("package")>
+    Public Class PackageLoaderEntry : Inherits PackageInfo
+
         ''' <summary>
         ''' The package loader entry information
         ''' </summary>
         ''' <returns></returns>
         Public Property [module] As TypeInfo
-
-        Public Property symbols As String()
 
         Sub New()
         End Sub

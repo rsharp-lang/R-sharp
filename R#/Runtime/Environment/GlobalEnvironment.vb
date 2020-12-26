@@ -165,7 +165,14 @@ Namespace Runtime
 
         Public Function LoadLibrary(packageName As String, Optional silent As Boolean = False, Optional ignoreMissingStartupPackages As Boolean = False) As Message
             Dim exception As Exception = Nothing
-            Dim package As RPkg = packages.FindPackage(packageName, exception)
+            Dim package As RPkg = Nothing
+            Dim RzipPackageFolder As String = Nothing
+
+            If Not packages.hasLibPackage(packageName) Then
+                package = packages.FindPackage(packageName, exception)
+            Else
+                RzipPackageFolder = PackageLoader2.GetPackageDirectory(options, packageName)
+            End If
 
             If Not packageName Like packages.loadedPackages Then
                 If Not silent Then
@@ -176,10 +183,13 @@ Namespace Runtime
                     Call packages.addAttached(package)
                 End If
             Else
+                ' 跳过已经加在的程序包，不再进行重复加载了
                 Return Nothing
             End If
 
-            If package Is Nothing Then
+            If Not RzipPackageFolder Is Nothing Then
+                Return PackageLoader2.LoadPackage(RzipPackageFolder, [global])
+            ElseIf package Is Nothing Then
                 If Not ignoreMissingStartupPackages Then
                     Return MissingPackage(packageName, exception)
                 Else
