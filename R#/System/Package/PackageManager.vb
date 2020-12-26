@@ -149,9 +149,30 @@ Namespace System.Package
             Dim libDir As String
             Dim libDirOld As String
 
+            ' install success output
+            '
+            ' * installing to library 'C:/Program Files/R/R-3.6.3/library'
+            ' * installing *source* package 'mzkit' ...
+            ' ** using staged installation
+            ' ** R
+            ' ** byte-compile and prepare package for lazy loading
+            ' ** help
+            ' *** installing help indices
+            '   converting help for package 'mzkit'
+            '    finding HTML links ...    hello                                   html   ����
+            '
+            ' ** building package indices
+            ' ** testing if installed package can be loaded from temporary location
+            ' ** testing if installed package can be loaded from final location
+            ' ** testing if installed package keeps a record of temporary installation path
+            ' * DONE (mzkit)
+
             If pkginfo Is Nothing OrElse pkginfo.Package.StringEmpty Then
                 Throw New InvalidProgramException($"the given package file '{zipFile}' is not a valid R# package!")
             Else
+                Call Console.WriteLine($"* installing to library '{config.lib_loc.GetDirectoryFullPath}'")
+                Call Console.WriteLine($"* installing *source* package '{pkginfo.Package}' ...")
+
                 libDir = PackageLoader2.GetPackageDirectory(config, pkginfo.Package)
                 libDirOld = $"{libDir.TrimDIR}.old"
 
@@ -162,12 +183,24 @@ Namespace System.Package
                 End If
             End If
 
+            Call Console.WriteLine("** using staged installation")
+            Call Console.WriteLine("** R#")
+            Call Console.WriteLine("** byte-compile and prepare package for lazy loading")
+            Call Console.WriteLine("** help")
+            Call Console.WriteLine("*** installing help indices")
+            Call Console.WriteLine($"  converting help for package '{pkginfo.Package}'")
+            Call Console.WriteLine("** building package indices")
+
             If libDir.FileExists Then
                 Call fs.Move(libDir, libDirOld)
             End If
 
             Call UnZip.ImprovedExtractToDirectory(zipFile, libDir, Overwrite.Always)
             Call fs.Delete(libDirOld, recursive:=True)
+
+            Call Console.WriteLine("** testing if installed package can be loaded from temporary location")
+            Call Console.WriteLine("** testing if installed package can be loaded from final location")
+            Call Console.WriteLine("** testing if installed package keeps a record of temporary installation path")
 
             If Not PackageLoader2.CheckPackage(libDir) Then
                 Call fs.Delete(libDir)
@@ -196,6 +229,8 @@ Namespace System.Package
 
             pkgDb.packages = packageIndex.Values.ToArray
             pkgDb.system = GetType(LocalPackageDatabase).Assembly.FromAssembly
+
+            Call Console.WriteLine($"* DONE ({pkginfo.Package})")
 
             Return symbolNames
         End Function
