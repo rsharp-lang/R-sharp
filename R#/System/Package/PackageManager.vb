@@ -98,6 +98,10 @@ Namespace System.Package
             Return pkgDb.hasLibFile(libraryFileName)
         End Function
 
+        Public Function hasLibPackage(pkgName As String) As Boolean
+            Return pkgDb.hasLibPackage(pkgName)
+        End Function
+
         Public Function GetPackageDocuments(pkgName As String) As String
             Dim type As Type = Me.FindPackage(pkgName, Nothing).package
             Dim docs As ProjectType = packageDocs.GetAnnotations(type)

@@ -55,10 +55,10 @@ Partial Module CLI
 
     <ExportAPI("--install.packages")>
     <Description("Install new packages.")>
-    <Usage("--install.packages /module <*.dll> [--verbose]")>
+    <Usage("--install.packages /module <*.dll/*.zip> [--verbose]")>
     <ArgumentAttribute("/module", False, CLITypes.File,
-              Extensions:="*.dll",
-              Description:=".NET Framework 4.8 assembly module file.")>
+              Extensions:="*.dll,*.zip",
+              Description:=".NET Framework 4.8 assembly module file or compiled R# zip package file.")>
     <Group(SystemConfig)>
     Public Function Install(args As CommandLine) As Integer
         Dim module$ = args <= "/module"
