@@ -74,14 +74,14 @@ Partial Module CLI
 
         Using pkgMgr As New PackageManager(config)
             If Not [module].ToLower.StartsWith("scan=") Then
-                Call pkgMgr.InstallLocals(dllFile:=[module])
+                Call pkgMgr.InstallLocals(pkgFile:=[module])
             Else
                 For Each file As String In ls - l - "*.dll" <= [module].GetTagValue("=", trim:=True).Value
                     Try
                         Dim assm As Assembly = Assembly.LoadFrom(file.GetFullPath)
 
                         If Not assm.GetCustomAttribute(Of RPackageModuleAttribute) Is Nothing Then
-                            Call pkgMgr.InstallLocals(dllFile:=file)
+                            Call pkgMgr.InstallLocals(pkgFile:=file)
                         End If
                     Catch ex As Exception
 
@@ -152,7 +152,7 @@ Partial Module CLI
                 End If
 
                 If file.FileExists Then
-                    Call pkgMgr.InstallLocals(dllFile:=file)
+                    Call pkgMgr.InstallLocals(pkgFile:=file)
                     Call pkgMgr.Flush()
                 Else
                     Call $"missing module dll: {file}".PrintException

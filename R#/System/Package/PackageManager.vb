@@ -1,60 +1,64 @@
 ﻿#Region "Microsoft.VisualBasic::5aed4f4aea8fe2a28b2158143a7c42df, R#\System\Package\PackageManager.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class PackageManager
-    ' 
-    '         Properties: loadedPackages, packageDocs
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: EnumerateAttachedPackages, FindPackage, GenericEnumerator, GetEnumerator, GetPackageDocuments
-    '                   hasLibFile, InstallLocals
-    ' 
-    '         Sub: addAttached, (+2 Overloads) Dispose, Flush
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class PackageManager
+' 
+'         Properties: loadedPackages, packageDocs
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: EnumerateAttachedPackages, FindPackage, GenericEnumerator, GetEnumerator, GetPackageDocuments
+'                   hasLibFile, InstallLocals
+' 
+'         Sub: addAttached, (+2 Overloads) Dispose, Flush
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
+Imports Microsoft.VisualBasic.ApplicationServices.Zip
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.System.Configuration
+Imports SMRUCC.Rsharp.System.Package.File
 
 Namespace System.Package
 
@@ -120,10 +124,64 @@ Namespace System.Package
         ''' <summary>
         ''' 在调用了这个函数进行包模块的安装之后，需要调用<see cref="Flush()"/>函数更新数据库才可以完成安装
         ''' </summary>
-        ''' <param name="dllFile"></param>
+        ''' <param name="pkgFile"></param>
         ''' <returns></returns>
-        Public Function InstallLocals(dllFile As String) As String()
-            Dim packageIndex As Dictionary(Of String, PackageLoaderEntry) = pkgDb.packages _
+        Public Function InstallLocals(pkgFile As String) As String()
+            If pkgFile.ExtensionSuffix("dll") Then
+                Return installDll(dllFile:=pkgFile)
+            Else
+                Return installZip(zipFile:=pkgFile)
+            End If
+        End Function
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="zipFile"></param>
+        ''' <returns>returns the symbol names in target zip package file.</returns>
+        Private Function installZip(zipFile As String) As String()
+            Dim pkginfo As DESCRIPTION = PackageLoader2.GetPackageIndex(zipFile)
+            Dim libDir As String
+
+            If pkginfo Is Nothing OrElse pkginfo.Package.StringEmpty Then
+                Throw New InvalidProgramException($"the given package file '{zipFile}' is not a valid R# package!")
+            Else
+                libDir = PackageLoader2.GetPackageDirectory(config, pkginfo.Package)
+            End If
+
+            Call UnZip.ImprovedExtractToDirectory(zipFile, libDir, Overwrite.Always)
+
+            Dim packageIndex As Dictionary(Of String, PackageInfo) = pkgDb.packages _
+                .AsEnumerable _
+                .ToDictionary(Function(pkg)
+                                  Return pkg.namespace
+                              End Function)
+            Dim symbolNames As String() = ($"{libDir}/manifest/symbols.json") _
+                .LoadJsonFile(Of Dictionary(Of String, String)) _
+                .Keys _
+                .ToArray
+
+            packageIndex(pkginfo.Package) = New PackageInfo With {
+                .[namespace] = pkginfo.Package,
+                .category = APICategories.ResearchTools,
+                .description = pkginfo.Description,
+                .publisher = pkginfo.Author,
+                .symbols = symbolNames
+            }
+
+            pkgDb.assemblies = packageIndex.Values.ToArray
+            pkgDb.system = GetType(LocalPackageDatabase).Assembly.FromAssembly
+
+            Return symbolNames
+        End Function
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="dllFile"></param>
+        ''' <returns>returns module names in target dll assembly file</returns>
+        Private Function installDll(dllFile As String) As String()
+            Dim packageIndex As Dictionary(Of String, PackageLoaderEntry) = pkgDb.assemblies _
                 .AsEnumerable _
                 .ToDictionary(Function(pkg)
                                   Return pkg.namespace
@@ -140,7 +198,7 @@ Namespace System.Package
                 Call $"load: {pkg.info.Namespace}".__INFO_ECHO
             Next
 
-            pkgDb.packages = packageIndex.Values.ToArray
+            pkgDb.assemblies = packageIndex.Values.ToArray
             pkgDb.system = GetType(LocalPackageDatabase).Assembly.FromAssembly
 
             Return names.ToArray
@@ -182,8 +240,8 @@ Namespace System.Package
 
             ' [INFOM 4/27/2020 8:40:05 PM] [Log] /root/.local/share/GCModeller/R#/.logs/err/2020-04-27, 20-40-05_0000c.log
 
-            If pkgDb.packages Is Nothing Then
-                pkgDb.packages = New XmlList(Of PackageLoaderEntry) With {
+            If pkgDb.assemblies Is Nothing Then
+                pkgDb.assemblies = New XmlList(Of PackageLoaderEntry) With {
                     .items = {}
                 }
             End If
@@ -230,7 +288,7 @@ Namespace System.Package
         Public Iterator Function GenericEnumerator() As IEnumerator(Of Package) Implements Enumeration(Of Package).GenericEnumerator
             Dim pkg As Package
 
-            For Each loader As PackageLoaderEntry In pkgDb.packages.AsEnumerable
+            For Each loader As PackageLoaderEntry In pkgDb.assemblies.AsEnumerable
                 pkg = loader.GetLoader(Nothing)
 
                 If pkg Is Nothing Then
