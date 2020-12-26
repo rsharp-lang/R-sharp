@@ -12,7 +12,11 @@ Public Class RoxygenDocument
     Public Shared Iterator Function ParseDocuments(scriptText As String) As IEnumerable(Of Document)
         Dim script As Program = Program.BuildProgram(scriptText)
         Dim symbols As Expression() = script.Where(Function(line) TypeOf line Is DeclareNewFunction).ToArray
-        Dim list As NamedValue(Of Document)() = SplitBlocks(scriptText).ToArray
+        Dim list As Dictionary(Of String, Document) = SplitBlocks(scriptText) _
+            .ToDictionary(Function(a) a.Name,
+                          Function(a)
+                              Return a.Value
+                          End Function)
 
         For Each item In symbols
             If TypeOf item Is DeclareNewFunction Then
@@ -68,7 +72,7 @@ Public Class RoxygenDocument
     End Function
 
     Private Shared Function ParseDocument(lines As String()) As Document
-        Dim title As String = lines(Scan0)
+        Dim title As String = lines(Scan0).Trim
         Dim tagsData As Dictionary(Of String, String()) = lines _
             .Skip(1) _
             .Select(Function(line)

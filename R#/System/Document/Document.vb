@@ -14,6 +14,10 @@ Namespace System
         Public Property keywords As String()
         Public Property declares As FunctionDeclare
 
+        Public Overrides Function ToString() As String
+            Return title
+        End Function
+
     End Class
 
     Public Class FunctionDeclare
