@@ -62,7 +62,7 @@ Namespace System.Package.File
         Public Function GetPackageDirectory(opt As Options, packageName$) As String
             Dim libDir As String
 
-            libDir = opt.lib & $"/Library/{packageName}"
+            libDir = opt.lib_loc & $"/Library/{packageName}"
             libDir = libDir.GetDirectoryFullPath
 
             Return libDir
