@@ -104,6 +104,31 @@ Public Module NetworkModule
         Return str.ToString
     End Function
 
+    <ExportAPI("metadata")>
+    Public Function metaData(title As String,
+                             Optional description As String = "n/a",
+                             Optional creators As String() = Nothing,
+                             Optional create_time As String = Nothing,
+                             Optional links As String() = Nothing,
+                             Optional keywords As String() = Nothing,
+                             <RListObjectArgument>
+                             Optional meta As list = Nothing,
+                             Optional env As Environment = Nothing) As MetaData
+
+        Dim metalist As Dictionary(Of String, String) = meta.AsGeneric(Of String)(env)
+        Dim data As New MetaData With {
+            .additionals = metalist,
+            .create_time = create_time,
+            .creators = creators,
+            .description = description,
+            .keywords = keywords,
+            .links = links,
+            .title = title
+        }
+
+        Return data
+    End Function
+
     ''' <summary>
     ''' save the network graph
     ''' </summary>
@@ -113,7 +138,7 @@ Public Module NetworkModule
     ''' <returns></returns>
     <ExportAPI("save.network")>
     <RApiReturn(GetType(Boolean))>
-    Public Function SaveNetwork(g As Object, file$, Optional properties As String() = Nothing, Optional env As Environment = Nothing) As Object
+    Public Function SaveNetwork(g As Object, file$, Optional properties As String() = Nothing, Optional meta As MetaData = Nothing, Optional env As Environment = Nothing) As Object
         Dim tables As NetworkTables
 
         If g Is Nothing Then
@@ -121,9 +146,13 @@ Public Module NetworkModule
         End If
 
         If g.GetType Is GetType(NetworkGraph) Then
-            tables = DirectCast(g, NetworkGraph).Tabular(properties)
+            tables = DirectCast(g, NetworkGraph).Tabular(properties, meta:=meta)
         ElseIf g.GetType Is GetType(NetworkTables) Then
             tables = g
+
+            If Not meta Is Nothing Then
+                tables.meta = meta
+            End If
         Else
             Return Internal.debug.stop(New InvalidProgramException(g.GetType.FullName), env)
         End If
