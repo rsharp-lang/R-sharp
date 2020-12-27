@@ -57,6 +57,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports Canvas = Microsoft.VisualBasic.Imaging.Graphics2D
 
 <Package("graphics2D")>
 Module graphics2D
@@ -72,8 +73,20 @@ Module graphics2D
     End Function
 
     <ExportAPI("draw.legend")>
-    Public Function drawLegends(canvas As Object, legends As LegendObject(), location As PointF) As Object
+    Public Function drawLegends(canvas As Object, legends As LegendObject(), location As PointF, Optional env As Environment = Nothing) As Object
+        Dim g As IGraphics
 
+        If TypeOf canvas Is Bitmap OrElse TypeOf canvas Is Image Then
+            g = New Canvas(DirectCast(canvas, Image))
+        ElseIf TypeOf canvas Is IGraphics Then
+            g = canvas
+        Else
+            Return Message.InCompatibleType(GetType(IGraphics), canvas.GetType, env)
+        End If
+
+        Call g.DrawLegends(location, legends)
+
+        Return g
     End Function
 
     <ExportAPI("rect")>
