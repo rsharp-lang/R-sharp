@@ -67,7 +67,15 @@ Namespace System
         Public Property sourceMap As StackFrame
 
         Public Overrides Function ToString() As String
-            Return $"{name}({parameters.Select(Function(a) "").JoinBy(", ")})"
+            Return $"{name}({parameters _
+                .Select(Function(a)
+                            If a.text.StringEmpty Then
+                                Return a.name
+                            Else
+                                Return $"{a.name} = {a.text}"
+                            End If
+                        End Function) _
+                .JoinBy(", ")})"
         End Function
 
         Public Shared Function GetArgument(arg As DeclareNewSymbol) As NamedValue
