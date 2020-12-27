@@ -521,11 +521,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColorBrewer.vb" />
-    <Compile Include="gr2D.vb" />
+    <Compile Include="Plot2D\gr2D.vb" />
     <Compile Include="Render3D\gr3D.vb" />
     <Compile Include="grDevices.vb" />
     <Compile Include="grSVG.vb" />
-    <Compile Include="gr2DLabeler.vb" />
+    <Compile Include="Plot2D\gr2DLabeler.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
