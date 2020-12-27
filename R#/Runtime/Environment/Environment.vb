@@ -271,19 +271,24 @@ Namespace Runtime
             ElseIf [inherits] AndAlso Not parent Is Nothing Then
                 Return parent.FindSymbol(name)
             ElseIf name.IndexOf("::") > 0 Then
-                Dim tokens As String() = Strings.Split(name, "::")
+                Return FindFunctionWithNamespaceRestrict(name, [inherits]:=[inherits])
+            Else
+                Return Nothing
+            End If
+        End Function
 
-                If funcSymbols.ContainsKey(tokens(1)) Then
-                    Dim func As RMethodInfo = funcSymbols(tokens(1)).value
-                    Dim pkgInfo As Package = func.GetPackageInfo
+        Public Function FindFunctionWithNamespaceRestrict(name As String, Optional [inherits] As Boolean = True) As Symbol
+            Dim tokens As String() = Strings.Split(name, "::")
+            Dim funcSymbol As Symbol = FindFunction(name:=tokens(1), [inherits]:=[inherits])
 
-                    If pkgInfo.namespace <> tokens(Scan0) Then
-                        Return Nothing
-                    Else
-                        Return funcSymbols(tokens(1))
-                    End If
-                Else
+            If Not funcSymbols Is Nothing Then
+                Dim func As RMethodInfo = funcSymbols(tokens(1)).value
+                Dim pkgInfo As Package = func.GetPackageInfo
+
+                If pkgInfo.namespace <> tokens(Scan0) Then
                     Return Nothing
+                Else
+                    Return funcSymbol
                 End If
             Else
                 Return Nothing

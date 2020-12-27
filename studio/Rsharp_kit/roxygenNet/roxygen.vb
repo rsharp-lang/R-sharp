@@ -91,7 +91,10 @@ Public Module roxygen
 
         For Each Rfile As String In ls - l - r - "*.R" <= $"{package_dir}/R"
             For Each symbol As Document In RoxygenDocument.ParseDocuments(Rfile.ReadAllText)
-                Call symbol.UnixMan.SaveTo($"{man_dir}/{symbol.declares.name}.1")
+                Call symbol _
+                    .UnixMan _
+                    .ToString _
+                    .SaveTo($"{man_dir}/{symbol.declares.name}.1")
             Next
         Next
 

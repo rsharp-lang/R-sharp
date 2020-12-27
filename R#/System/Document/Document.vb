@@ -1,4 +1,7 @@
-﻿Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.ApplicationServices.Terminal.Utility
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
@@ -18,13 +21,40 @@ Namespace System
         Public Property details As String
         Public Property keywords As String()
         Public Property declares As FunctionDeclare
+        Public Property examples As String
+        Public Property see_also As String
 
         Public Overrides Function ToString() As String
             Return title
         End Function
 
-        Public Function UnixMan() As String
+        Public Function UnixMan() As UnixManPage
+            Dim man As New UnixManPage With {
+                .AUTHOR = author.SafeQuery.JoinBy(","),
+                .DESCRIPTION = description,
+                .DETAILS = details,
+                .NAME = declares.name,
+                .VALUE = returns,
+                .OPTIONS = declares.parameters _
+                    .Select(Function(arg)
+                                Return New NamedValue(Of String)(arg.name, arg.text)
+                            End Function) _
+                    .ToArray,
+                .PROLOG = declares.ToString,
+                .EXAMPLES = examples,
+                .FILES = declares.sourceMap.ToString,
+                .SEE_ALSO = see_also,
+                .SYNOPSIS = declares.ToString,
+                .index = New Index With {
+                    .category = 1,
+                    .keyword = keywords.JoinBy(", "),
+                    .index = declares.name,
+                    .[date] = Now,
+                    .title = title
+                }
+            }
 
+            Return man
         End Function
 
     End Class
@@ -33,6 +63,11 @@ Namespace System
 
         Public Property name As String
         Public Property parameters As NamedValue()
+        Public Property sourceMap As StackFrame
+
+        Public Overrides Function ToString() As String
+            Return $"{name}({parameters.Select(Function(a) "").JoinBy(", ")})"
+        End Function
 
         Public Shared Function GetArgument(arg As DeclareNewSymbol) As NamedValue
             Dim name As String = arg.names.JoinBy(", ")
