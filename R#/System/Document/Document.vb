@@ -36,6 +36,7 @@ Namespace System
                 .NAME = declares.name,
                 .VALUE = returns,
                 .OPTIONS = declares.parameters _
+                    .SafeQuery _
                     .Select(Function(arg)
                                 Return New NamedValue(Of String)(arg.name, arg.text)
                             End Function) _

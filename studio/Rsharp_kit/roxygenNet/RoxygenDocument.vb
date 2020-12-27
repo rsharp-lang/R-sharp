@@ -5,14 +5,15 @@ Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.System
 
 Public Class RoxygenDocument
 
-    Public Shared Iterator Function ParseDocuments(scriptText As String) As IEnumerable(Of Document)
-        Dim script As Program = Program.BuildProgram(scriptText)
+    Public Shared Iterator Function ParseDocuments(R As Rscript) As IEnumerable(Of Document)
+        Dim script As Program = Program.CreateProgram(R)
         Dim symbols As Expression() = script.Where(Function(line) TypeOf line Is DeclareNewFunction).ToArray
-        Dim list As Dictionary(Of String, Document) = SplitBlocks(scriptText) _
+        Dim list As Dictionary(Of String, Document) = SplitBlocks(R.script) _
             .ToDictionary(Function(a) a.Name,
                           Function(a)
                               Return a.Value
@@ -27,7 +28,8 @@ Public Class RoxygenDocument
                     .name = func.funcName,
                     .parameters = func.params _
                         .Select(AddressOf FunctionDeclare.GetArgument) _
-                        .ToArray
+                        .ToArray,
+                    .sourceMap = func.stackFrame
                 }
 
                 Yield docs

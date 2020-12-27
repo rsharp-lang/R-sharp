@@ -46,6 +46,7 @@ Imports SMRUCC.Rsharp.System
 Imports Microsoft.VisualBasic.Language.UnixBash
 Imports SMRUCC.Rsharp.System.Package.File
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal.Utility
+Imports SMRUCC.Rsharp.Runtime.Components
 
 ''' <summary>
 ''' # In-Line Documentation for R
@@ -62,8 +63,9 @@ Public Module roxygen
     <ExportAPI("parse")>
     Public Function ParseDocuments(script As String) As list
         Dim list As New list(GetType(Document))
+        Dim R As Rscript = Rscript.AutoHandleScript(handle:=script)
 
-        For Each item As Document In RoxygenDocument.ParseDocuments(script)
+        For Each item As Document In RoxygenDocument.ParseDocuments(R)
             list.slots(item.declares.name) = item
         Next
 
@@ -92,9 +94,12 @@ Public Module roxygen
         Dim man_dir As String = $"{package_dir}/man"
         Dim meta As DESCRIPTION = DESCRIPTION.Parse($"{package_dir}/DESCRIPTION")
         Dim man As UnixManPage
+        Dim Rscript As Rscript
 
         For Each Rfile As String In ls - l - r - "*.R" <= $"{package_dir}/R"
-            For Each symbol As Document In RoxygenDocument.ParseDocuments(Rfile.ReadAllText)
+            Rscript = Rscript.AutoHandleScript(handle:=Rfile)
+
+            For Each symbol As Document In RoxygenDocument.ParseDocuments(Rscript)
                 man = symbol.UnixMan
                 man.COPYRIGHT = $"Copyright © {meta.Author}, {meta.License} Licensed {Now.Year}"
                 man.LICENSE = meta.License
