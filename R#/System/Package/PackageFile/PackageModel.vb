@@ -1,47 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::4ef5d4f145e65c9a9642a47f73ca6d9d, R#\System\Package\PackageFile\PackageModel.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class PackageModel
-    ' 
-    '         Properties: assembly, dataSymbols, info, loading, symbols
-    ' 
-    '         Function: writeSymbols
-    ' 
-    '         Sub: copyAssembly, Flush, saveDataSymbols, saveDependency, saveSymbols
-    '              writeIndex, writeRuntime
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class PackageModel
+' 
+'         Properties: assembly, dataSymbols, info, loading, symbols
+' 
+'         Function: writeSymbols
+' 
+'         Sub: copyAssembly, Flush, saveDataSymbols, saveDependency, saveSymbols
+'              writeIndex, writeRuntime
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -171,7 +171,7 @@ Namespace System.Package.File
                                       Return d.Value
                                   End Function) _
                     .GetJson(indent:=True)
-                checksum = checksum & MD5.GetMd5Hash(text)
+                checksum = checksum & md5.GetMd5Hash(text)
 
                 Call file.WriteLine(text)
                 Call file.Flush()
@@ -226,6 +226,19 @@ Namespace System.Package.File
             End Using
         End Sub
 
+        Private Sub saveUnixManIndex(zip As ZipArchive, ByRef checksum$)
+            Dim md5 As New Md5HashProvider
+            Dim text As String
+
+            Using file As New StreamWriter(zip.CreateEntry("manifest/unixman.json").Open)
+                text = unixman.GetJson(indent:=True)
+                checksum = checksum & md5.GetMd5Hash(text)
+
+                Call file.WriteLine(text)
+                Call file.Flush()
+            End Using
+        End Sub
+
         Public Sub Flush(outfile As Stream)
             Dim checksum As String = ""
             Dim md5 As New Md5HashProvider
@@ -235,6 +248,7 @@ Namespace System.Package.File
 
                 Call saveSymbols(zip, symbols, checksum)
                 Call saveDataSymbols(zip, checksum)
+                Call saveUnixManIndex(zip, checksum)
                 Call copyAssembly(zip, checksum)
                 Call saveDependency(zip, checksum)
                 Call writeIndex(zip, checksum)

@@ -108,6 +108,6 @@ Public Module roxygen
             Next
         Next
 
-        Return 0
+        Return Nothing
     End Function
 End Module

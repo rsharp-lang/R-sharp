@@ -24,6 +24,12 @@ Public Class RoxygenDocument
                 Dim func As DeclareNewFunction = DirectCast(item, DeclareNewFunction)
                 Dim docs As Document = list.TryGetValue(func.funcName)
 
+                If docs Is Nothing Then
+                    docs = New Document With {
+                        .title = func.funcName
+                    }
+                End If
+
                 docs.declares = New FunctionDeclare With {
                     .name = func.funcName,
                     .parameters = func.params _
