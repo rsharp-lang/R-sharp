@@ -771,5 +771,10 @@ Namespace Runtime.Internal.Invokes
 
             Return Internal.debug.stop({$"we could not found any installed package which is named '{package}'!", $"package: {package}"}, env)
         End Function
+
+        <ExportAPI("now")>
+        Public Function now() As Date
+            Return Date.Now
+        End Function
     End Module
 End Namespace
