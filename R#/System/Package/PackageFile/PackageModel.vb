@@ -229,9 +229,21 @@ Namespace System.Package.File
         Private Sub saveUnixManIndex(zip As ZipArchive, ByRef checksum$)
             Dim md5 As New Md5HashProvider
             Dim text As String
+            Dim manIndex As New Dictionary(Of String, String)
+
+            For Each man As String In unixman.Values
+                text = man.ReadAllText
+                manIndex(man.BaseName) = md5.GetMd5Hash(text)
+                checksum = checksum & manIndex(man.BaseName)
+
+                Using file As New StreamWriter(zip.CreateEntry($"man/{man.BaseName}.1").Open)
+                    Call file.WriteLine(text)
+                    Call file.Flush()
+                End Using
+            Next
 
             Using file As New StreamWriter(zip.CreateEntry("manifest/unixman.json").Open)
-                text = unixman.GetJson(indent:=True)
+                text = manIndex.GetJson(indent:=True)
                 checksum = checksum & md5.GetMd5Hash(text)
 
                 Call file.WriteLine(text)

@@ -114,13 +114,9 @@ Namespace System.Package.File
             If Not err Is Nothing Then
                 Return err
             Else
-                Using checksum As New Md5HashProvider
-                    For Each unixMan As String In ls - l - r - "*.1" <= $"{package_dir}/man"
-                        file.unixman(unixMan.BaseName) = unixMan _
-                            .ReadAllText _
-                            .DoCall(AddressOf checksum.GetMd5Hash)
-                    Next
-                End Using
+                For Each unixMan As String In ls - l - r - "*.1" <= $"{package_dir}/man"
+                    file.unixman(unixMan.BaseName) = unixMan
+                Next
             End If
 
             Return Nothing
