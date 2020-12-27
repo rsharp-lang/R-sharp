@@ -278,6 +278,13 @@ Namespace Interpreter
             End If
         End Function
 
+        ''' <summary>
+        ''' 因为不仅仅使用dll之中的api，也可能使用运行时用户定义的函数
+        ''' 所以在这里使用<see cref="GlobalEnvironment.FindSymbol(String, Boolean)"/>
+        ''' 而非使用<see cref="GlobalEnvironment.FindFunction(String, Boolean)"/>
+        ''' </summary>
+        ''' <param name="funcName"></param>
+        ''' <returns></returns>
         Private Function getFunctionSymbol(funcName As String) As Object
             Dim symbol As Symbol = globalEnvir.FindSymbol(funcName)
 
