@@ -44,6 +44,8 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.System
 Imports Microsoft.VisualBasic.Language.UnixBash
+Imports SMRUCC.Rsharp.System.Package.File
+Imports Microsoft.VisualBasic.ApplicationServices.Terminal.Utility
 
 ''' <summary>
 ''' # In-Line Documentation for R
@@ -88,13 +90,16 @@ Public Module roxygen
     <ExportAPI("roxygenize")>
     Public Function roxygenize(package_dir As String) As Object
         Dim man_dir As String = $"{package_dir}/man"
+        Dim meta As DESCRIPTION = DESCRIPTION.Parse($"{package_dir}/DESCRIPTION")
+        Dim man As UnixManPage
 
         For Each Rfile As String In ls - l - r - "*.R" <= $"{package_dir}/R"
             For Each symbol As Document In RoxygenDocument.ParseDocuments(Rfile.ReadAllText)
-                Call symbol _
-                    .UnixMan _
-                    .ToString _
-                    .SaveTo($"{man_dir}/{symbol.declares.name}.1")
+                man = symbol.UnixMan
+                man.COPYRIGHT = $"Copyright © {meta.Author}, {meta.License} Licensed {Now.Year}"
+                man.LICENSE = meta.License
+
+                Call man.ToString.SaveTo($"{man_dir}/{symbol.declares.name}.1")
             Next
         Next
 
