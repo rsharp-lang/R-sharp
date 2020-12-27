@@ -214,17 +214,21 @@ Namespace System.Package
             Call Console.WriteLine("** byte-compile and prepare package for lazy loading")
             Call Console.WriteLine("** help")
             Call Console.WriteLine("*** installing help indices")
-            Call Console.WriteLine($"  converting help for package '{pkginfo.Package}'")
-            Call Console.WriteLine("** building package indices")
 
             If libDir.FileExists Then
                 Call fs.Move(libDir, libDirOld)
             End If
 
             Call UnZip.ImprovedExtractToDirectory(zipFile, libDir, Overwrite.Always)
-            Call fs.Delete(libDirOld, recursive:=True)
 
-            Call Console.WriteLine("** testing if installed package can be loaded from temporary location")
+            For Each file As String In $"{libDir}/man".ListFiles
+                Call Console.WriteLine($"    {file.FileName}")
+            Next
+
+            Call Console.WriteLine($"  converting help for package '{pkginfo.Package}'")
+                Call Console.WriteLine("** building package indices")
+
+                Call Console.WriteLine("** testing if installed package can be loaded from temporary location")
             Call Console.WriteLine("** testing if installed package can be loaded from final location")
 
             If Not PackageLoader2.CheckPackage(libDir) Then
@@ -237,6 +241,8 @@ Namespace System.Package
                 Call fs.Move(libDirOld, libDir)
 
                 Return Nothing
+            Else
+                Call fs.Delete(libDirOld, recursive:=True)
             End If
 
             Call Console.WriteLine("** testing if installed package keeps a record of temporary installation path")
