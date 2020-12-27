@@ -282,18 +282,9 @@ Namespace Language.TokenIcer
                     Throw New SyntaxErrorException
                 End If
 
-            ElseIf c = "@"c AndAlso code.PeekNext(4) = "stop" Then
-                Call code.PopNext(4)
+            ElseIf c = "@"c Then
 
-                ' special name
-                If buffer = 0 Then
-                    Return New Token With {
-                        .text = "@stop",
-                        .name = TokenType.annotation
-                    }
-                Else
-                    Throw New SyntaxErrorException
-                End If
+                Return populateToken(bufferNext:=c)
 
             ElseIf c Like longOperatorParts Then
                 Return populateToken(bufferNext:=c)
@@ -402,7 +393,9 @@ Namespace Language.TokenIcer
                 End If
             End If
 
-            If text.Trim(" "c, ASCII.TAB) = "" OrElse text = vbCr OrElse text = vbLf Then
+            If text.First = "@"c Then
+                Return New Token With {.name = TokenType.annotation, .text = text}
+            ElseIf text.Trim(" "c, ASCII.TAB) = "" OrElse text = vbCr OrElse text = vbLf Then
                 Return Nothing
             ElseIf escape.comment AndAlso text.First = "#"c Then
                 Return New Token With {.name = TokenType.comment, .text = text}

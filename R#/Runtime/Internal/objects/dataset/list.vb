@@ -51,6 +51,7 @@ Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Object
 
@@ -85,6 +86,11 @@ Namespace Runtime.Internal.Object
             For Each itemKey In table.Keys
                 _slots(itemKey.ToString) = table(itemKey)
             Next
+        End Sub
+
+        Sub New(type As Type)
+            elementType = RType.GetRSharpType(type)
+            slots = New Dictionary(Of String, Object)
         End Sub
 
         Public Function hasName(name As String) As Boolean Implements RNames.hasName

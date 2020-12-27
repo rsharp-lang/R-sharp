@@ -636,7 +636,8 @@
   <ItemGroup>
     <Compile Include="Interpreter\ExecutableLoop.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExecuteBreaks.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\BreakPoint.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\BreakPoint.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\ScriptSymbol.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\FormulaExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\CreateObject.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\ExpressionLiteral.vb" />
@@ -764,6 +765,7 @@
     <Compile Include="Runtime\Internal\objects\utils\TableFormatter.vb" />
     <Compile Include="Runtime\Interop\CType\ICType.vb" />
     <Compile Include="Runtime\Serialize\Buffer.vb" />
+    <Compile Include="System\Document\Document.vb" />
     <Compile Include="System\IPCBuffer.vb" />
     <Compile Include="System\Components\Encoder.vb" />
     <Compile Include="System\Components\RSessionInfo.vb" />

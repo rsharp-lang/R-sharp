@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9509e69ef9cb953c717eb0d6f151f844, studio\R.code\html.vb"
+﻿#Region "Microsoft.VisualBasic::6aaf7d521adfb687da6508ca34f20993, R#\Interpreter\ExecuteEngine\ExpressionSymbols\BreakPoint.vb"
 
     ' Author:
     ' 
@@ -31,40 +31,43 @@
 
     ' Summaries:
 
-    ' Module codeHtml
+    '     Class BreakPoint
     ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: html
+    '         Properties: expressionName, type
+    ' 
+    '         Function: Evaluate, ToString
+    ' 
     ' 
     ' /********************************************************************************/
 
 #End Region
 
-Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.Scripting.MetaData
-Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Internal
+Imports SMRUCC.Rsharp.System.Package.File
 
-<Package("devkit.code")>
-Public Module codeHtml
-
-    Sub New()
-        htmlPrinter.AttachHtmlFormatter(Of String())(Function(code) html(DirectCast(code, String()).FirstOrDefault))
-    End Sub
+Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Annotation
 
     ''' <summary>
-    ''' generate R code highlights
+    ''' ``@stop``
     ''' </summary>
-    ''' <param name="scriptText"></param>
-    ''' <param name="debug"></param>
-    ''' <returns></returns>
-    <ExportAPI("R.highlights")>
-    Public Function html(scriptText As String, Optional debug As Boolean = False) As String
-        Dim Rscript As Rscript = Rscript.AutoHandleScript(scriptText)
-        Dim [error] As String = Nothing
-        Dim program As Program = Program.CreateProgram(Rscript, debug:=debug, [error]:=[error])
+    Public Class BreakPoint : Inherits Expression
 
-        Return program.toHtml
-    End Function
-End Module
+        Public Overrides ReadOnly Property type As TypeCodes
+
+        Public Overrides ReadOnly Property expressionName As ExpressionTypes
+            Get
+                Return ExpressionTypes.Annotation
+            End Get
+        End Property
+
+        Public Overrides Function Evaluate(envir As Environment) As Object
+            Pause()
+            Return envir.last
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return "[R#.debugger.breakpoint]"
+        End Function
+    End Class
+End Namespace

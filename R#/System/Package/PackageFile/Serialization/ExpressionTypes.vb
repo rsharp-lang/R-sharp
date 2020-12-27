@@ -95,7 +95,7 @@ Namespace System.Package.File
         [Do]
 
         Suppress
-        BreakPoint
+        Annotation
         Comment
 
         UnaryNot
