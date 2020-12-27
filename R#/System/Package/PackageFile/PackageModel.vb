@@ -73,6 +73,7 @@ Namespace System.Package.File
         ''' </summary>
         ''' <returns></returns>
         Public Property assembly As String()
+        Public Property unixman As Dictionary(Of String, String)
 
         Private Function writeSymbols(zip As ZipArchive, ByRef checksum$) As Dictionary(Of String, String)
             Dim onLoad As DeclareNewFunction

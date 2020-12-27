@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::e8dd99a18dfe9b2d9e09cd9a72017d39, R#\System\Package\PackageFile\CreatePackage.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module CreatePackage
-    ' 
-    '         Function: Build, buildRscript, getDataSymbols, getFileReader, loadingDependency
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module CreatePackage
+' 
+'         Function: Build, buildRscript, getDataSymbols, getFileReader, loadingDependency
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -44,7 +44,9 @@ Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.SecurityString
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
@@ -81,9 +83,45 @@ Namespace System.Package.File
                 End If
             Next
 
+            file.buildUnixMan(package_dir:=target)
             file.dataSymbols = getDataSymbols($"{target}/data")
             file.loading = loading.loadingDependency
             file.Flush(outfile)
+
+            Return Nothing
+        End Function
+
+        <Extension>
+        Private Function buildUnixMan(file As PackageModel, package_dir As String) As Message
+            Dim plugin As String = $"{App.HOME}/roxygenNet.dll"
+            Dim REngine As New RInterpreter
+
+            file.unixman = New Dictionary(Of String, String)
+
+            If Not plugin.FileExists Then
+                Return Nothing
+            Else
+                Call PackageLoader.ParsePackages(plugin) _
+                    .Where(Function(pkg) pkg.namespace = "roxygen") _
+                    .FirstOrDefault _
+                    .DoCall(Sub(pkg)
+                                Call REngine.globalEnvir.ImportsStatic(pkg.package)
+                            End Sub)
+            End If
+
+            Dim err As Message = REngine.Invoke("roxygen::roxygenize", {package_dir})
+
+            If Not err Is Nothing Then
+                Return err
+            Else
+                Using checksum As New Md5HashProvider
+                    For Each unixMan As String In ls - l - r - "*.1" <= $"{package_dir}/man"
+                        file.unixman(unixMan.BaseName) = unixMan _
+                            .ReadAllText _
+                            .DoCall(AddressOf checksum.GetMd5Hash)
+                    Next
+                End Using
+            End If
 
             Return Nothing
         End Function
