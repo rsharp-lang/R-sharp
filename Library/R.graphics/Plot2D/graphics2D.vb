@@ -58,25 +58,38 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Canvas = Microsoft.VisualBasic.Imaging.Graphics2D
+Imports Microsoft.VisualBasic.Imaging.SVG
+Imports Microsoft.VisualBasic.Imaging.Driver
 
 <Package("graphics2D")>
 Module graphics2D
 
     <ExportAPI("legend")>
-    Public Function legend(title$, color As Object, fontstyle$, Optional shape As LegendStyles = LegendStyles.Circle) As LegendObject
+    Public Function legend(title$, color As Object, Optional font_style As Object = CSSFont.Win10Normal, Optional shape As LegendStyles = LegendStyles.Circle) As LegendObject
         Return New LegendObject With {
             .color = InteropArgumentHelper.getColor(color),
-            .fontstyle = fontstyle,
+            .fontstyle = InteropArgumentHelper.getFontCSS(font_style),
             .style = shape,
             .title = title
         }
     End Function
 
     <ExportAPI("draw.legend")>
-    Public Function drawLegends(canvas As Object, legends As LegendObject(), location As PointF, Optional env As Environment = Nothing) As Object
+    Public Function drawLegends(canvas As Object, legends As LegendObject(), location As PointF,
+                                Optional border As Object = Stroke.AxisStroke,
+                                Optional env As Environment = Nothing) As Object
         Dim g As IGraphics
+        Dim stroke As Stroke = Nothing
 
-        If TypeOf canvas Is Bitmap OrElse TypeOf canvas Is Image Then
+        If Not border Is Nothing Then
+            stroke = InteropArgumentHelper _
+                .getStrokePenCSS(border) _
+                .DoCall(AddressOf Stroke.TryParse)
+        End If
+
+        If TypeOf canvas Is ImageData Then
+            g = New Canvas(DirectCast(canvas, ImageData).AsGDIImage)
+        ElseIf TypeOf canvas Is Bitmap OrElse TypeOf canvas Is Image Then
             g = New Canvas(DirectCast(canvas, Image))
         ElseIf TypeOf canvas Is IGraphics Then
             g = canvas
@@ -84,9 +97,13 @@ Module graphics2D
             Return Message.InCompatibleType(GetType(IGraphics), canvas.GetType, env)
         End If
 
-        Call g.DrawLegends(location, legends)
+        Call g.DrawLegends(location, legends, regionBorder:=stroke)
 
-        Return g
+        Select Case g.GetType
+            Case GetType(Canvas) : Return DirectCast(g, Canvas).ImageResource
+            Case Else
+                Throw New NotImplementedException
+        End Select
     End Function
 
     <ExportAPI("rect")>
