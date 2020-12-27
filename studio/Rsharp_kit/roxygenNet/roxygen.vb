@@ -43,8 +43,18 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.System
+Imports Microsoft.VisualBasic.Language.UnixBash
 
-<Package("roxygen")>
+''' <summary>
+''' # In-Line Documentation for R
+''' 
+''' Generate your Rd documentation, 'NAMESPACE' file,
+''' And collation field using specially formatted comments. Writing
+''' documentation In-line With code makes it easier To keep your
+''' documentation up-To-Date As your requirements change. 'roxygenNet' is
+''' inspired by the 'roxygen2' system from Rstudio.
+''' </summary>
+<Package("roxygen", Category:=APICategories.SoftwareTools)>
 Public Module roxygen
 
     <ExportAPI("parse")>
@@ -56,5 +66,35 @@ Public Module roxygen
         Next
 
         Return list
+    End Function
+
+    ''' <summary>
+    ''' ### Process a package with the Rd, namespace and collate roclets.
+    ''' 
+    ''' This is the workhorse function that uses roclets, the built-in document 
+    ''' transformation functions, to build all documentation for a package. 
+    ''' See the documentation for the individual roclets, ``rd_roclet()``, 
+    ''' ``namespace_roclet()``, and for ``update_collate()``, for more details.
+    ''' </summary>
+    ''' <param name="package_dir">
+    ''' Location of package top level directory. Default is working directory.
+    ''' </param>
+    ''' <returns>NULL</returns>
+    ''' <remarks>
+    ''' Note that roxygen2 is a dynamic documentation system: it works by inspecting 
+    ''' loaded objects in the package. This means that you must be able to load 
+    ''' the package in order to document it: see load for details.
+    ''' </remarks>
+    <ExportAPI("roxygenize")>
+    Public Function roxygenize(package_dir As String) As Object
+        Dim man_dir As String = $"{package_dir}/man"
+
+        For Each Rfile As String In ls - l - r - "*.R" <= $"{package_dir}/R"
+            For Each symbol As Document In RoxygenDocument.ParseDocuments(Rfile.ReadAllText)
+                Call symbol.UnixMan.SaveTo($"{man_dir}/{symbol.declares.name}.1")
+            Next
+        Next
+
+        Return 0
     End Function
 End Module

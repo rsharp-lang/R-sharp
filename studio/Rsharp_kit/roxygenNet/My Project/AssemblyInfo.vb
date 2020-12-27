@@ -8,11 +8,11 @@ Imports System.Runtime.InteropServices
 
 '查看程序集特性的值
 
-<Assembly: AssemblyTitle("roxygenNet")>
-<Assembly: AssemblyDescription("")>
+<Assembly: AssemblyTitle("roxygenNet: In-Line Documentation for R")>
+<Assembly: AssemblyDescription("In-Line Documentation for R")>
 <Assembly: AssemblyCompany("")>
 <Assembly: AssemblyProduct("roxygenNet")>
-<Assembly: AssemblyCopyright("Copyright ©  2020")>
+<Assembly: AssemblyCopyright("Copyright © i@xieguigang.me 2020")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>

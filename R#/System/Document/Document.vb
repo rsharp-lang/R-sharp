@@ -23,6 +23,10 @@ Namespace System
             Return title
         End Function
 
+        Public Function UnixMan() As String
+
+        End Function
+
     End Class
 
     Public Class FunctionDeclare
