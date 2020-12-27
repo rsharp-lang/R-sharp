@@ -42,7 +42,6 @@
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
-Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System
 
 <Package("roxygen")>
