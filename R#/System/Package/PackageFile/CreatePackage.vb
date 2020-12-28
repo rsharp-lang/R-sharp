@@ -57,6 +57,11 @@ Namespace System.Package.File
 
     Public Module CreatePackage
 
+        <Extension>
+        Private Function checkIndex(desc As DESCRIPTION) As Message
+
+        End Function
+
         ''' <summary>
         ''' build a R# package file
         ''' </summary>
@@ -68,6 +73,15 @@ Namespace System.Package.File
         ''' 
         <Extension>
         Public Function Build(desc As DESCRIPTION, target As String, outfile As Stream) As Message
+            ' R build output
+            '
+            ' * checking for file '../mzkit/DESCRIPTION' ... OK
+            ' * preparing 'mzkit':
+            ' * checking DESCRIPTION meta-information ... OK
+            ' * checking for LF line-endings in source and make files and shell scripts
+            ' * checking for empty or unneeded directories
+            ' * building 'mzkit_0.1.0.tar.gz'
+
             Dim srcR As String = $"{target}/R".GetDirectoryFullPath
             Dim file As New PackageModel With {
                 .info = desc,
@@ -77,16 +91,44 @@ Namespace System.Package.File
             Dim loading As New List(Of Expression)
             Dim [error] As New Value(Of Message)
 
+            Call Console.Write($"* checking for file '{target}/DESCRIPTION' ... ")
+
+            If Not ([error] = desc.checkIndex) Is Nothing Then
+                Call Console.WriteLine("Failed!")
+                Return [error]
+            Else
+                Call Console.WriteLine("OK")
+            End If
+
+            Call Console.WriteLine($"* preparing '{desc.Package}':")
+            Call Console.WriteLine($"* checking DESCRIPTION meta-information ... OK")
+            Call Console.WriteLine($"* checking for LF line-endings in source and make files and shell scripts")
+            Call Console.WriteLine($"* checking for empty or unneeded directories")
+
+            Call Console.WriteLine($"* building '{desc.Package}_{desc.Version}.zip'")
+            Call Console.WriteLine($"   compile binary script...")
+
             For Each script As String In srcR.ListFiles("*.R")
                 If Not ([error] = file.buildRscript(script, loading)) Is Nothing Then
                     Return [error]
                 End If
+
+                Call Console.WriteLine($"        {script.FileName}... done")
             Next
 
+            Call Console.WriteLine($"   compile unix man pages...")
             file.buildUnixMan(package_dir:=target)
+
+            Call Console.WriteLine($"   query data items for lazy loading...")
             file.dataSymbols = getDataSymbols($"{target}/data")
+
+            Call Console.WriteLine($"   query package dependency...")
             file.loading = loading.loadingDependency
+
+            Call Console.WriteLine($"   write binary zip package...")
             file.Flush(outfile)
+
+            Call Console.WriteLine("* done!")
 
             Return Nothing
         End Function
