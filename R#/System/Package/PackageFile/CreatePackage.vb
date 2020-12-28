@@ -106,7 +106,7 @@ Namespace System.Package.File
             Call Console.WriteLine($"* checking for empty or unneeded directories")
 
             Call Console.WriteLine($"* building '{desc.Package}_{desc.Version}.zip'")
-            Call Console.WriteLine($"   compile binary script...")
+            Call Console.WriteLine($"     compile binary script...")
 
             For Each script As String In srcR.ListFiles("*.R")
                 If Not ([error] = file.buildRscript(script, loading)) Is Nothing Then
@@ -116,16 +116,16 @@ Namespace System.Package.File
                 Call Console.WriteLine($"        {script.FileName}... done")
             Next
 
-            Call Console.WriteLine($"   compile unix man pages...")
+            Call Console.WriteLine($"     compile unix man pages...")
             file.buildUnixMan(package_dir:=target)
 
-            Call Console.WriteLine($"   query data items for lazy loading...")
+            Call Console.WriteLine($"     query data items for lazy loading...")
             file.dataSymbols = getDataSymbols($"{target}/data")
 
-            Call Console.WriteLine($"   query package dependency...")
+            Call Console.WriteLine($"     query package dependency...")
             file.loading = loading.loadingDependency
 
-            Call Console.WriteLine($"   write binary zip package...")
+            Call Console.WriteLine($"     write binary zip package...")
             file.Flush(outfile)
 
             Call Console.WriteLine("* done!")
