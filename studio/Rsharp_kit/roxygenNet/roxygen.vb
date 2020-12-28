@@ -47,6 +47,7 @@ Imports Microsoft.VisualBasic.Language.UnixBash
 Imports SMRUCC.Rsharp.System.Package.File
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal.Utility
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports Microsoft.VisualBasic.MIME.Markup.MarkDown
 
 ''' <summary>
 ''' # In-Line Documentation for R
@@ -109,5 +110,15 @@ Public Module roxygen
         Next
 
         Return Nothing
+    End Function
+
+    ''' <summary>
+    ''' convert the markdown text content to html text
+    ''' </summary>
+    ''' <param name="markdown"></param>
+    ''' <returns></returns>
+    <ExportAPI("markdown2Html")>
+    Public Function markdown2Html(markdown As String) As String
+        Return New MarkdownHTML().Transform(text:=markdown)
     End Function
 End Module
