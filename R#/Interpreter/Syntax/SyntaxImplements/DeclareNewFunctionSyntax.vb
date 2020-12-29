@@ -99,14 +99,24 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         End Function
 
         Public Function DeclareNewFunction(code As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim [declare] As Token() = code(4)
+            Dim [declare] As Token() = code.Skip(4).IteratesALL.ToArray
             Dim parts As List(Of Token()) = [declare].SplitByTopLevelDelimiter(TokenType.close)
             Dim paramPart As Token() = parts(Scan0).Skip(1).ToArray
-            Dim bodyPart As SyntaxResult = parts(2).Skip(1) _
-                .ToArray _
-                .DoCall(Function(tokens)
-                            Return SyntaxImplements.ClosureExpression(tokens, opts)
-                        End Function)
+            Dim bodyPart As SyntaxResult
+            ' test if is an inline function
+            Dim bodyPart2 = parts.Skip(2).IteratesALL.ToArray
+
+            If bodyPart2(Scan0) = (TokenType.open, "{") AndAlso bodyPart2.Last = (TokenType.close, "}") Then
+                bodyPart = bodyPart2 _
+                    .Skip(1) _
+                    .Take(bodyPart2.Length - 2) _
+                    .ToArray _
+                    .DoCall(Function(tokens)
+                                Return SyntaxImplements.ClosureExpression(tokens, opts)
+                            End Function)
+            Else
+                bodyPart = SyntaxImplements.ClosureExpression(bodyPart2, opts)
+            End If
 
             If bodyPart.isException Then
                 Return bodyPart

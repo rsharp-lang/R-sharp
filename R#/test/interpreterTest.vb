@@ -75,7 +75,7 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
-
+        Call inlineFunctiontest()
         Call debugTest()
 
         Call formulaTest()
@@ -189,6 +189,14 @@ Module interpreterTest
 
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub inlineFunctiontest()
+        Call R.Evaluate("let x2 = function(x) { 333 / x  }")
+        Call R.Evaluate("let x = function(y) y+55555;  ")
+        Call R.Evaluate("let score = function(ppm) if(ppm > cutoff) {0;} else { 1-(ppm/(cutoff * 1.1125)) }")
 
         Pause()
     End Sub
