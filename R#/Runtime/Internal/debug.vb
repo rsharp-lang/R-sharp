@@ -1,49 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::9aa3802230e2062987d3d3c60ce5230b, R#\Runtime\Internal\debug.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class debug
-    ' 
-    '         Properties: verbose
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: [stop], createDotNetExceptionMessage, CreateMessageInternal, getEnvironmentStack, getMessageColor
-    '                   getMessagePrefix, PrintMessageInternal, PrintRExceptionStackTrace, PrintRStackTrace, PrintWarningMessages
-    ' 
-    '         Sub: write, writeErrMessage
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class debug
+' 
+'         Properties: verbose
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: [stop], createDotNetExceptionMessage, CreateMessageInternal, getEnvironmentStack, getMessageColor
+'                   getMessagePrefix, PrintMessageInternal, PrintRExceptionStackTrace, PrintRStackTrace, PrintWarningMessages
+' 
+'         Sub: write, writeErrMessage
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -203,6 +203,8 @@ Namespace Runtime.Internal
             Dim i As i32 = 1
             Dim backup As ConsoleColor
             Dim dev As StreamWriter = New StreamWriter(globalEnv.stdout.stream)
+            Dim topn As Integer = globalEnv.options.nwarnings
+            Dim warningList As Message() = warnings.ToArray
 
             If App.IsConsoleApp Then
                 backup = Console.ForegroundColor
@@ -210,9 +212,14 @@ Namespace Runtime.Internal
             End If
 
             Call globalEnv.stdout.Flush()
+
+            If warningList.Length >= topn Then
+                Call dev.WriteLine($"There were {topn} or more warnings (use warnings(all = TRUE) to see all warning messages).")
+            End If
+
             Call dev.WriteLine("Warning messages:")
 
-            For Each msg As Message In warnings
+            For Each msg As Message In warningList.Take(topn)
                 dev.WriteLine($"  {++i}. {msg.message.JoinBy("; ")}")
             Next
 

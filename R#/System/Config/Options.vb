@@ -70,6 +70,12 @@ Namespace System.Configuration
         ''' </summary>
         ReadOnly configValues As Dictionary(Of String, String)
 
+        Public ReadOnly Property nwarnings As Int32
+            Get
+                Return getOption(NameOf(nwarnings), [default]:=50)
+            End Get
+        End Property
+
         ''' <summary>
         ''' Package library repository file path.
         ''' </summary>
