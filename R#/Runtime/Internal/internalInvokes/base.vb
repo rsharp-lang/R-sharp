@@ -1127,6 +1127,18 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' ### Print Warning Messages
+        ''' 
+        ''' warnings and its print method print the variable last.warning in a pleasing form.
+        ''' </summary>
+        ''' <param name="all"></param>
+        ''' <param name="env"></param>
+        <ExportAPI("warnings")>
+        Public Sub warnings(Optional all As Boolean = False, Optional env As GlobalEnvironment = Nothing)
+            Call debug.PrintWarningMessages(env.messages, env, all)
+        End Sub
+
+        ''' <summary>
         ''' # Concatenate and Print
         ''' 
         ''' Outputs the objects, concatenating the representations. 

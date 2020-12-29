@@ -199,7 +199,7 @@ Namespace Runtime.Internal
             Return info.ToString
         End Function
 
-        Public Shared Function PrintWarningMessages(warnings As IEnumerable(Of Message), globalEnv As GlobalEnvironment) As Object
+        Public Shared Function PrintWarningMessages(warnings As IEnumerable(Of Message), globalEnv As GlobalEnvironment, Optional all As Boolean = False) As Object
             Dim i As i32 = 1
             Dim backup As ConsoleColor
             Dim dev As StreamWriter = New StreamWriter(globalEnv.stdout.stream)
@@ -213,13 +213,13 @@ Namespace Runtime.Internal
 
             Call globalEnv.stdout.Flush()
 
-            If warningList.Length >= topn Then
+            If Not all AndAlso warningList.Length >= topn Then
                 Call dev.WriteLine($"There were {topn} or more warnings (use warnings(all = TRUE) to see all warning messages).")
             End If
 
             Call dev.WriteLine("Warning messages:")
 
-            For Each msg As Message In warningList.Take(topn)
+            For Each msg As Message In If(all, warningList, warningList.Take(topn))
                 dev.WriteLine($"  {++i}. {msg.message.JoinBy("; ")}")
             Next
 
