@@ -475,20 +475,24 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         Private Function sprintfSingle(strformat$, args As Array()) As String()
-            Dim result As String() = args(Scan0) _
-                .AsObjectEnumerator _
-                .Select(Function(o, i)
-                            Dim aList As New List(Of Object) From {o}
+            If args.Length = 0 Then
+                Return {sprintf(strformat)}
+            Else
+                Dim result As String() = args(Scan0) _
+                    .AsObjectEnumerator _
+                    .Select(Function(o, i)
+                                Dim aList As New List(Of Object) From {o}
 
-                            For j As Integer = 1 To args.Length - 1
-                                aList.Add(args(j).GetValue(i))
-                            Next
+                                For j As Integer = 1 To args.Length - 1
+                                    aList.Add(args(j).GetValue(i))
+                                Next
 
-                            Return sprintf(strformat, aList.ToArray)
-                        End Function) _
-                .ToArray
+                                Return sprintf(strformat, aList.ToArray)
+                            End Function) _
+                    .ToArray
 
-            Return result
+                Return result
+            End If
         End Function
 
         ''' <summary>
