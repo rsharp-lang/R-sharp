@@ -422,12 +422,36 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' ### Vector Merging
+        ''' 
+        ''' Add elements to a vector.
+        ''' </summary>
+        ''' <param name="x">the vector the values are to be appended to.</param>
+        ''' <param name="values">to be included in the modified vector.</param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' A vector containing the values in x with the elements of values 
+        ''' appended after the specified element of x.
+        ''' </returns>
         <ExportAPI("append")>
         Public Function append(<RRawVectorArgument> x As Object, <RRawVectorArgument> values As Object, Optional env As Environment = Nothing) As Object
             If x Is Nothing Then
                 Return values
             ElseIf values Is Nothing Then
                 Return values
+            End If
+
+            If TypeOf x Is list Then
+                If TypeOf values Is list Then
+                    Dim listX As New list(DirectCast(x, list))
+
+                    For Each item In DirectCast(values, list).slots
+                        listX.slots(item.Key) = item.Value
+                    Next
+
+                    Return listX
+                End If
             End If
 
             Throw New NotImplementedException

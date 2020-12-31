@@ -232,7 +232,7 @@ Module Visualize
                                     Return drawNode.Invoke(env, InvokeParameter.CreateLiterals(gr, id, color, center, r))
                                 End Function
             Else
-                Return Internal.debug.stop(Message.InCompatibleType(GetType(DeclareNewFunction), nodeVisual.GetType, env,, NameOf(nodeVisual)), env)
+                Return Message.InCompatibleType(GetType(DeclareNewFunction), nodeVisual.GetType, env,, NameOf(nodeVisual))
             End If
         End If
 
@@ -242,8 +242,11 @@ Module Visualize
             Select Case nodeLabel.GetType
                 Case GetType(DeclareLambdaFunction)
                     Dim compute = DirectCast(nodeLabel, DeclareLambdaFunction).CreateLambda(Of String, String)(env)
-
                     getNodeLabel = Function(node) compute(node.label)
+
+                Case GetType(list)
+                    getNodeLabel = Function(node) DirectCast(nodeLabel, list).getValue(Of String)(node.label, env, [default]:="")
+
                 Case Else
                     Return Internal.debug.stop(New NotImplementedException(nodeSize.GetType.FullName), env)
             End Select
@@ -259,7 +262,7 @@ Module Visualize
                                     Return InteropArgumentHelper.getColor(vals).TranslateColor
                                 End Function
             Else
-                Return Internal.debug.stop(Message.InCompatibleType(GetType(DeclareNewFunction), labelColor.GetType, env,, NameOf(labelColor)), env)
+                Return Message.InCompatibleType(GetType(DeclareNewFunction), labelColor.GetType, env,, NameOf(labelColor))
             End If
         End If
 

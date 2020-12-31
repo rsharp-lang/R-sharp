@@ -80,6 +80,15 @@ Namespace Runtime.Internal.Object
         Sub New()
         End Sub
 
+        ''' <summary>
+        ''' data clone
+        ''' </summary>
+        ''' <param name="list"></param>
+        Sub New(list As list)
+            slots = New Dictionary(Of String, Object)(list.slots)
+            elementType = list.elementType
+        End Sub
+
         Sub New(table As IDictionary)
             _slots = New Dictionary(Of String, Object)
 
