@@ -160,7 +160,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
                 Dim env As New Environment(envir, stackFrame, isInherits:=False)
                 Dim resultVal As Object = trueClosure.Invoke(env, {})
 
-                Return New IfPromise(resultVal, True)
+                If Program.isException(resultVal) Then
+                    Return resultVal
+                Else
+                    Return New IfPromise(resultVal, True)
+                End If
             Else
                 Return New IfPromise(Nothing, False)
             End If

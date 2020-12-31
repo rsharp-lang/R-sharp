@@ -688,6 +688,6 @@ Public Module NetworkModule
     ''' <returns></returns>
     <ExportAPI("components")>
     Public Function components(graph As NetworkGraph) As NetworkGraph()
-        Return graph.IteratesSubNetworks(Of NetworkGraph)(singleNodeAsGraph:=True).ToArray
+        Return graph.IteratesSubNetworks(Of NetworkGraph)(singleNodeAsGraph:=True)
     End Function
 End Module
