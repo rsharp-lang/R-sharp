@@ -47,6 +47,7 @@ Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Shapes
+Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Imaging.Math2D
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.Markup
@@ -56,10 +57,8 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Canvas = Microsoft.VisualBasic.Imaging.Graphics2D
-Imports Microsoft.VisualBasic.Imaging.SVG
-Imports Microsoft.VisualBasic.Imaging.Driver
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 <Package("graphics2D")>
 Module graphics2D
