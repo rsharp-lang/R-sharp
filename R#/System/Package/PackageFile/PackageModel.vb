@@ -128,7 +128,7 @@ Namespace System.Package.File
                     Call JsonContract _
                         .GetObjectJson(
                             obj:=REngine.Invoke(encoder, args),
-                            indent:=False
+                            indent:=True
                         ) _
                         .DoCall(AddressOf file.WriteLine)
                 End Using
