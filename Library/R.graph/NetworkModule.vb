@@ -300,6 +300,29 @@ Public Module NetworkModule
         Return g
     End Function
 
+    <ExportAPI("delete.node")>
+    Public Function deleteNode(g As NetworkGraph, node As Object, Optional env As Environment = Nothing) As Object
+        Dim v As node
+
+        If node Is Nothing Then
+            Return g
+        ElseIf TypeOf node Is String Then
+            v = g.GetElementByID(DirectCast(node, String))
+
+            If v Is Nothing Then
+                Return Internal.debug.stop({$"we are not able to found a node with label id: {node}!", $"label: {node}"}, env)
+            End If
+        ElseIf TypeOf node Is node Then
+            v = node
+        Else
+            Return Message.InCompatibleType(GetType(node), node.GetType, env)
+        End If
+
+        Call g.RemoveNode(v)
+
+        Return g
+    End Function
+
     ''' <summary>
     ''' a nodes by given label list.
     ''' </summary>
