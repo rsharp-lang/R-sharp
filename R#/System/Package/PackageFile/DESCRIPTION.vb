@@ -82,15 +82,15 @@ Namespace System.Package.File
         Public Function toList() As list Implements ICTypeList.toList
             Return New list With {
                 .slots = New Dictionary(Of String, Object) From {
-                    {NameOf(Package), Package},
-                    {NameOf(Type), Type},
-                    {NameOf(Title), Title},
-                    {NameOf(Version), Version},
-                    {NameOf([Date]), [Date]},
-                    {NameOf(Author), Author},
-                    {NameOf(Maintainer), Maintainer},
-                    {NameOf(Description), Description},
-                    {NameOf(License), License},
+                    {NameOf(Package).ToLower, Package},
+                    {NameOf(Type).ToLower, Type},
+                    {NameOf(Title).ToLower, Title},
+                    {NameOf(Version).ToLower, Version},
+                    {NameOf([Date]).ToLower, [Date]},
+                    {NameOf(Author).ToLower, Author},
+                    {NameOf(Maintainer).ToLower, Maintainer},
+                    {NameOf(Description).ToLower, Description},
+                    {NameOf(License).ToLower, License},
                     {NameOf(meta), New list With {
                         .slots = meta _
                             .SafeQuery _

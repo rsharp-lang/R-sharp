@@ -748,6 +748,28 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' loading a ``DESCRIPTION`` file
+        ''' </summary>
+        ''' <param name="package">
+        ''' loading current package if the parameter is nothing
+        ''' </param>
+        ''' <returns></returns>
+        <ExportAPI("description")>
+        Public Function description(Optional package As String = Nothing, Optional env As Environment = Nothing) As Object
+            Dim globalEnv As GlobalEnvironment = env.globalEnvironment
+
+            If package.StringEmpty Then
+                package = env.parent.stackFrame.Method.Namespace
+            End If
+
+            If Not globalEnv.packages.hasLibPackage(package) Then
+                Return Internal.debug.stop({$"the required package '{package}' is not yet installed!", $"package: {package}"}, env)
+            Else
+                Return $"{globalEnv.packages.getPackageDir(package)}/index.json".LoadJsonFile(Of DESCRIPTION).toList
+            End If
+        End Function
+
         <Extension>
         Private Function FindSystemFile(env As GlobalEnvironment, fileName As String, package$) As String
             Dim loaded As Dictionary(Of String, PackageNamespace) = env.attachedNamespace

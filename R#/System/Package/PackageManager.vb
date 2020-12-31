@@ -99,8 +99,17 @@ Namespace System.Package
             Return pkgDb.hasLibFile(libraryFileName)
         End Function
 
+        ''' <summary>
+        ''' check if a required zip package is installed or not?
+        ''' </summary>
+        ''' <param name="pkgName"></param>
+        ''' <returns></returns>
         Public Function hasLibPackage(pkgName As String) As Boolean
             Return pkgDb.hasLibPackage(pkgName)
+        End Function
+
+        Public Function getPackageDir(pkgName As String) As String
+            Return PackageLoader2.GetPackageDirectory(config, pkgName)
         End Function
 
         Public Function GetPackageDocuments(pkgName As String) As String
@@ -226,9 +235,9 @@ Namespace System.Package
             Next
 
             Call Console.WriteLine($"  converting help for package '{pkginfo.Package}'")
-                Call Console.WriteLine("** building package indices")
+            Call Console.WriteLine("** building package indices")
 
-                Call Console.WriteLine("** testing if installed package can be loaded from temporary location")
+            Call Console.WriteLine("** testing if installed package can be loaded from temporary location")
             Call Console.WriteLine("** testing if installed package can be loaded from final location")
 
             If Not PackageLoader2.CheckPackage(libDir) Then
