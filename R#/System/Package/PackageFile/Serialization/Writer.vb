@@ -74,6 +74,7 @@ Namespace System.Package.File
 
         Dim buffer As BinaryWriter
         Dim disposedValue As Boolean
+        Dim sourceMaps As New List(Of StackFrame)
 
         Public Const Magic As String = "SMRUCC/R#"
 
@@ -181,7 +182,12 @@ Namespace System.Package.File
             Return md5.GetMd5Hash(buffer)
         End Function
 
-        Public Shared Function GetBuffer(sourceMap As StackFrame) As Byte()
+        ''' <summary>
+        ''' 这个函数会将传递进来的sourcemap对象加入到缓存之中
+        ''' </summary>
+        ''' <param name="sourceMap"></param>
+        ''' <returns></returns>
+        Public Function GetBuffer(sourceMap As StackFrame) As Byte()
             Using ms As New MemoryStream, outfile As New BinaryWriter(ms)
                 Call outfile.Write(0)
                 Call outfile.Write(Encoding.ASCII.GetBytes(sourceMap.File))
@@ -198,6 +204,7 @@ Namespace System.Package.File
                 Call ms.Seek(Scan0, SeekOrigin.Begin)
                 Call outfile.Write(CInt(ms.Length - 4))
                 Call outfile.Flush()
+                Call sourceMaps.Add(sourceMap)
 
                 Return ms.ToArray
             End Using
@@ -228,6 +235,10 @@ Namespace System.Package.File
                     .[Method] = strings(4)
                 }
             }
+        End Function
+
+        Public Function GetSymbols() As IEnumerable(Of StackFrame)
+            Return sourceMaps.AsEnumerable
         End Function
 
         Protected Overridable Sub Dispose(disposing As Boolean)

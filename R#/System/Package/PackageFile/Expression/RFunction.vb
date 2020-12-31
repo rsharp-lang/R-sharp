@@ -88,7 +88,7 @@ Namespace System.Package.File.Expressions
                 Call outfile.Write(CByte(x.type))
 
                 If x.GetType.ImplementInterface(Of IRuntimeTrace) Then
-                    Call outfile.Write(Writer.GetBuffer(sourceMap:=CType(x, IRuntimeTrace).stackFrame))
+                    Call outfile.Write(context.GetBuffer(sourceMap:=CType(x, IRuntimeTrace).stackFrame))
                 End If
 
                 If TypeOf x Is DeclareNewFunction Then

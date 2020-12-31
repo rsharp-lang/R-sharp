@@ -47,8 +47,11 @@
 
 Imports System.IO
 Imports System.IO.Compression
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.SecurityString
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Interpreter
@@ -78,24 +81,58 @@ Namespace System.Package.File
         Private Function writeSymbols(zip As ZipArchive, ByRef checksum$) As Dictionary(Of String, String)
             Dim onLoad As DeclareNewFunction
             Dim symbols As New Dictionary(Of String, String)
+            Dim sourceMaps As New List(Of StackFrame)
 
-            For Each symbol As NamedValue(Of Expression) In Me.symbols.Select(Function(t) New NamedValue(Of Expression)(t.Key, t.Value))
+            For Each symbol As NamedValue(Of Expression) In Me.symbols _
+                .Select(Function(t)
+                            Return New NamedValue(Of Expression) With {
+                                .Name = t.Key,
+                                .Value = t.Value
+                            }
+                        End Function)
+
                 If symbol.Name = ".onLoad" Then
                     onLoad = symbol.Value
 
                     Using file As New Writer(zip.CreateEntry(".onload").Open)
                         checksum = checksum & file.Write(onLoad)
+                        sourceMaps = sourceMaps + file.GetSymbols
                     End Using
                 Else
                     Dim symbolRef As String = symbol.Name.MD5
 
                     Using file As New Writer(zip.CreateEntry($"src/{symbolRef}").Open)
                         checksum = checksum & file.Write(symbol.Value)
+                        sourceMaps = sourceMaps + file.GetSymbols
                     End Using
 
                     Call symbols.Add(symbol.Name, symbolRef)
                 End If
             Next
+
+            Dim plugin As String = $"{App.HOME}/devkit.dll"
+
+            If plugin.FileExists Then
+                Using file As New StreamWriter(zip.CreateEntry($"source.map").Open)
+                    Dim REngine As New RInterpreter
+                    Dim encoder As String = "VisualStudio::sourceMap_encode"
+                    Dim args As Object() = {sourceMaps.ToArray, info.Package}
+
+                    Call PackageLoader.ParsePackages(plugin) _
+                        .Where(Function(pkg) pkg.namespace = "VisualStudio") _
+                        .FirstOrDefault _
+                        .DoCall(Sub(pkg)
+                                    Call REngine.globalEnvir.ImportsStatic(pkg.package)
+                                End Sub)
+
+                    Call JsonContract _
+                        .GetObjectJson(
+                            obj:=REngine.Invoke(encoder, args),
+                            indent:=False
+                        ) _
+                        .DoCall(AddressOf file.WriteLine)
+                End Using
+            End If
 
             Return symbols
         End Function

@@ -69,7 +69,7 @@ Namespace System.Package.File.Expressions
                 Call outfile.Write(0)
                 Call outfile.Write(CByte(x.type))
 
-                Call outfile.Write(Writer.GetBuffer(x.stackFrame))
+                Call outfile.Write(context.GetBuffer(x.stackFrame))
                 Call outfile.Write(CByte(If(x.parallel, 1, 0)))
 
                 Call outfile.Write(x.variables.Length)

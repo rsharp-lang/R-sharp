@@ -68,7 +68,7 @@ Namespace System.Package.File.Expressions
                 Call outfile.Write(0)
                 Call outfile.Write(CByte(x.type))
 
-                Call outfile.Write(Writer.GetBuffer(x.stackFrame))
+                Call outfile.Write(context.GetBuffer(x.stackFrame))
                 Call outfile.Write(context.GetBuffer(x.ifTest))
                 Call outfile.Write(context.GetBuffer(x.trueClosure))
 

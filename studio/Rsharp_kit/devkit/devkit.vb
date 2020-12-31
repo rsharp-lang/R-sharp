@@ -41,6 +41,7 @@
 #End Region
 
 Imports System.Reflection
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio
 Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.IL
@@ -106,5 +107,10 @@ Module devkit
     <ExportAPI("sourceMap")>
     Public Function decodeSourceMap(sourceMap As String) As mappingLine()
         Return sourceMap.LoadJSON(Of sourceMap).decodeMappings.ToArray
+    End Function
+
+    <ExportAPI("sourceMap_encode")>
+    Public Function encodeSourceMap(symbols As StackFrame(), file$) As sourceMap
+        Return symbols.encode(file)
     End Function
 End Module
