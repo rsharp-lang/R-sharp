@@ -85,6 +85,46 @@ Namespace Runtime.Internal.Invokes
     Public Module base
 
         ''' <summary>
+        ''' ### Conditional Element Selection
+        ''' 
+        ''' ifelse returns a value with the same shape as test which is filled with 
+        ''' elements selected from either yes or no depending on whether the 
+        ''' element of test is TRUE or FALSE.
+        ''' </summary>
+        ''' <param name="test">an object which can be coerced to logical mode.</param>
+        ''' <param name="yes">return values for true elements of test.</param>
+        ''' <param name="no">return values for false elements of test.</param>
+        ''' <returns>
+        ''' A vector of the same length and attributes (including dimensions and "class") 
+        ''' as test and data values from the values of yes or no. The mode of the answer 
+        ''' will be coerced from logical to accommodate first any values taken from yes 
+        ''' and then any values taken from no.
+        ''' </returns>
+        ''' <remarks>
+        ''' If yes or no are too short, their elements are recycled. yes will 
+        ''' be evaluated if and only if any element of test is true, and 
+        ''' analogously for no.
+        ''' 
+        ''' Missing values In test give missing values In the result.
+        ''' </remarks>
+        <ExportAPI("ifelse")>
+        Public Function ifelse(test As Boolean(), yes As Array, no As Array, Optional env As Environment = Nothing) As Object
+            Dim getYes As Func(Of Integer, Object) = New GetVectorElement(yes).Getter
+            Dim getNo As Func(Of Integer, Object) = New GetVectorElement(no).Getter
+            Dim result As New List(Of Object)
+
+            For i As Integer = 0 To test.Length - 1
+                If test(i) Then
+                    result.Add(getYes(i))
+                Else
+                    result.Add(getNo(i))
+                End If
+            Next
+
+            Return REnv.TryCastGenericArray(result, env)
+        End Function
+
+        ''' <summary>
         ''' ### Dimensions of an Object
         ''' 
         ''' Retrieve or set the dimension of an object.
