@@ -246,6 +246,17 @@ Public Module NetworkModule
         Return graph.GetConnectedGraph
     End Function
 
+    ''' <summary>
+    ''' set node data names
+    ''' </summary>
+    ''' <param name="graph"></param>
+    ''' <param name="setNames">
+    ''' a list object with node id to node name mapping. if the given name label in this 
+    ''' list object is null or empty, then it will removes the name label value of the 
+    ''' specific node object.
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("node.names")>
     Public Function nodeNames(graph As NetworkGraph,
                               <RByRefValueAssign>
@@ -253,14 +264,17 @@ Public Module NetworkModule
                               Optional env As Environment = Nothing) As Object
 
         If setNames Is Nothing Then
-            Return graph.vertex.Select(Function(a) a.data.label).ToArray
+            Return graph.vertex _
+                .Select(Function(a) a.data.label) _
+                .ToArray
         Else
             Dim names As New List(Of String)
             Dim sets As Dictionary(Of String, String) = setNames.AsGeneric(Of String)(env)
 
             For Each node As node In graph.vertex
-                If sets.ContainsKey(node.label) AndAlso Not sets(node.label).StringEmpty Then
+                If sets.ContainsKey(node.label) Then
                     node.data.label = sets(node.label)
+                    node.data.origID = sets(node.label)
                 End If
 
                 Call names.Add(node.data.label)

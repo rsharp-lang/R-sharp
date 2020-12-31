@@ -64,6 +64,7 @@ Namespace System.Package.File
             Using buffer As New MemoryStream(body)
                 Select Case expression
                     Case ExpressionTypes.Binary : Return New RBinary(Nothing).GetExpression(buffer, Me, desc)
+                    Case ExpressionTypes.UnaryNot : Return New RUnary(Nothing).GetExpression(buffer, Me, desc)
 
                     Case ExpressionTypes.FunctionDeclare,
                          ExpressionTypes.FormulaDeclare,
