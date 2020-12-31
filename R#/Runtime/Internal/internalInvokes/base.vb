@@ -59,7 +59,6 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.Math.Correlations
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
@@ -73,10 +72,10 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object.Utils
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.System.Components
 Imports SMRUCC.Rsharp.System.Configuration
+Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RObj = SMRUCC.Rsharp.Runtime.Internal.Object
 Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
-Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Runtime.Internal.Invokes
 

@@ -51,6 +51,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Data.GraphTheory.Network
 Imports Microsoft.VisualBasic.Data.visualize.Network
 Imports Microsoft.VisualBasic.Data.visualize.Network.Analysis
 Imports Microsoft.VisualBasic.Data.visualize.Network.Analysis.Model
@@ -80,7 +81,19 @@ Public Module NetworkModule
     Friend Sub Main()
         REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of NetworkGraph)(AddressOf printGraph)
         REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of node)(AddressOf printNode)
+
+        REnv.Internal.generic.add("summary", GetType(node()), AddressOf summaryNodes)
     End Sub
+
+    Private Function summaryNodes(nodes As node(), args As list, env As Environment) As Object
+        Dim summary As New StringBuilder
+
+        For Each v As node In nodes
+            Call summary.AppendLine($"#{v.ID}  {v.label}; degree: {v.degree.In} in, {v.degree.Out} out; class: {v.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) Or "n/a".AsDefault}")
+        Next
+
+        Return summary.ToString
+    End Function
 
     Private Function printGraph(obj As Object) As String
         Dim g As NetworkGraph = DirectCast(obj, NetworkGraph)
@@ -235,7 +248,7 @@ Public Module NetworkModule
 
     <ExportAPI("node.names")>
     Public Function nodeNames(graph As NetworkGraph,
-                              <RByRefValueAssignAttribute>
+                              <RByRefValueAssign>
                               Optional setNames As list = Nothing,
                               Optional env As Environment = Nothing) As Object
 
@@ -643,5 +656,15 @@ Public Module NetworkModule
     <ExportAPI("decompose")>
     Public Function DecomposeGraph(graph As NetworkGraph, Optional weakMode As Boolean = True, Optional minVertices As Integer = 5) As NetworkGraph()
         Return graph.DecomposeGraph(weakMode, minVertices).ToArray
+    End Function
+
+    ''' <summary>
+    ''' get subnetwork components directly by test node disconnections
+    ''' </summary>
+    ''' <param name="graph"></param>
+    ''' <returns></returns>
+    <ExportAPI("components")>
+    Public Function components(graph As NetworkGraph) As NetworkGraph()
+        Return graph.IteratesSubNetworks(Of NetworkGraph)(singleNodeAsGraph:=True).ToArray
     End Function
 End Module
