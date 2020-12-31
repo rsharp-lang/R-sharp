@@ -553,6 +553,10 @@ Namespace Runtime.Internal.Invokes
 
             Dim argumentsVal As Object = base.Rlist(args, env)
 
+            If TypeOf [object] Is vector Then
+                [object] = REnv.TryCastGenericArray(DirectCast([object], vector).data, env)
+            End If
+
             If Program.isException(argumentsVal) Then
                 Return argumentsVal
             Else
