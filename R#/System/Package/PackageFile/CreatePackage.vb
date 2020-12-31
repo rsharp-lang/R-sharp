@@ -135,8 +135,8 @@ Namespace System.Package.File
 
         <Extension>
         Private Function buildUnixMan(file As PackageModel, package_dir As String) As Message
-            Dim plugin As String = $"{App.HOME}/roxygenNet.dll"
             Dim REngine As New RInterpreter
+            Dim plugin As String = LibDLL.GetDllFile("roxygenNet.dll", REngine.globalEnvir)
 
             file.unixman = New Dictionary(Of String, String)
 

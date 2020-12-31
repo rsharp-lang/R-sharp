@@ -110,11 +110,11 @@ Namespace System.Package.File
                 End If
             Next
 
-            Dim plugin As String = $"{App.HOME}/devkit.dll"
+            Dim REngine As New RInterpreter
+            Dim plugin As String = LibDLL.GetDllFile($"devkit.dll", REngine.globalEnvir)
 
             If plugin.FileExists Then
                 Using file As New StreamWriter(zip.CreateEntry($"source.map").Open)
-                    Dim REngine As New RInterpreter
                     Dim encoder As String = "VisualStudio::sourceMap_encode"
                     Dim args As Object() = {sourceMaps.ToArray, info.Package}
 
