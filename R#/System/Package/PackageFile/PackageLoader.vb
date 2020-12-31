@@ -129,6 +129,11 @@ Namespace System.Package.File
             Return Nothing
         End Function
 
+        ''' <summary>
+        ''' 这个函数会加载通过``imports...from...``语句进行显示加载的依赖程序集
+        ''' </summary>
+        ''' <param name="env"></param>
+        ''' <param name="pkg"></param>
         <Extension>
         Private Sub loadDependency(env As GlobalEnvironment, pkg As PackageNamespace)
             For Each dependency As Dependency In pkg.dependency

@@ -750,7 +750,7 @@ Namespace Runtime.Internal.Invokes
 
         <Extension>
         Private Function FindSystemFile(env As GlobalEnvironment, fileName As String, package$) As String
-            Dim loaded = env.attachedNamespace
+            Dim loaded As Dictionary(Of String, PackageNamespace) = env.attachedNamespace
             Dim file As String = Nothing
             Dim findFileByName = Function(dir As String) As String
                                      Dim ls = dir.ListFiles("*").ToArray
