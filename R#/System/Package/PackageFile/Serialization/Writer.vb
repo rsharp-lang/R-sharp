@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4aadbca823f990559cb485e3c961028a, R#\System\Package\PackageFile\Serialization\Writer.vb"
+﻿#Region "Microsoft.VisualBasic::18f29852a5d75fa2e20ec0a9029249e8, R#\System\Package\PackageFile\Serialization\Writer.vb"
 
     ' Author:
     ' 
@@ -39,7 +39,7 @@
     ' 
     '         Constructor: (+1 Overloads) Sub New
     ' 
-    '         Function: (+2 Overloads) GetBuffer, ReadSourceMap, readZEROBlock, Write
+    '         Function: (+2 Overloads) GetBuffer, GetSymbols, ReadSourceMap, readZEROBlock, Write
     ' 
     '         Sub: (+2 Overloads) Dispose
     ' 

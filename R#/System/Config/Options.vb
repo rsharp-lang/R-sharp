@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bbb703d73446f1ec048aa2a11d16d007, R#\System\Config\Options.vb"
+﻿#Region "Microsoft.VisualBasic::6b2a690f99bb7378d31c7624f2261f20, R#\System\Config\Options.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,7 @@
     ' 
     '         Properties: [lib], [strict], digits, f64Format, HTTPUserAgent
     '                     lib_loc, localConfig, log4vb_redirect, maxPrint, MimeType
-    '                     stdout_multipline, verbose
+    '                     nwarnings, stdout_multipline, verbose
     ' 
     '         Constructor: (+1 Overloads) Sub New
     ' 

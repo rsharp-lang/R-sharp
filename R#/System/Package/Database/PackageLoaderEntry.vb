@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::866d08a4bfaeaf78ca722095356bda0b, R#\System\Package\Database\PackageLoaderEntry.vb"
+﻿#Region "Microsoft.VisualBasic::65d5f6df510e2039f4401dc5ee31a3cb, R#\System\Package\Database\PackageLoaderEntry.vb"
 
     ' Author:
     ' 
@@ -31,10 +31,14 @@
 
     ' Summaries:
 
+    '     Class PackageInfo
+    ' 
+    '         Properties: [namespace], category, cites, description, publisher
+    '                     revision, symbols, url
+    ' 
     '     Class PackageLoaderEntry
     ' 
-    '         Properties: [module], [namespace], category, cites, description
-    '                     publisher, revision, symbols, url
+    '         Properties: [module]
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: FromLoaderInfo, GetLoader, ToString

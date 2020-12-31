@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9b6174be71a1ceb73c391eff6ac57d85, Library\R.graphics\gr2DLabeler.vb"
+﻿#Region "Microsoft.VisualBasic::9b6174be71a1ceb73c391eff6ac57d85, Library\R.graphics\Plot2D\gr2DLabeler.vb"
 
     ' Author:
     ' 

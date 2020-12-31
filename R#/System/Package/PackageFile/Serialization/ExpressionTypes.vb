@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e1bff09a5f965b0adc3eca4edda5c543, R#\System\Package\PackageFile\Serialization\ExpressionTypes.vb"
+﻿#Region "Microsoft.VisualBasic::f3e61186d1a2aeafe2ae1e7dd53e629f, R#\System\Package\PackageFile\Serialization\ExpressionTypes.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,7 @@
     ' 
     '         [Break], [Continute], [Do], [Else], [For]
     '         [If], [IIf], [Return], [TypeOf], [Using]
-    '         [While], [With], Binary, BreakPoint, ClosureDeclare
+    '         [While], [With], Annotation, Binary, ClosureDeclare
     '         Comment, Constructor, ExpressionLiteral, FormulaDeclare, FunctionByRef
     '         FunctionCall, FunctionDeclare, GetArgument, LambdaDeclare, LinqDeclare
     '         Literal, Require, SequenceLiteral, Shell, StringInterpolation

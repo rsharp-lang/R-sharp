@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0749098c0817d41553cfcae362482f35, studio\Rserve\Rscript.vb"
+﻿#Region "Microsoft.VisualBasic::d5acb7181a4db9bec5560e2ad9301672, studio\Rserve\Rscript.vb"
 
     ' Author:
     ' 
@@ -233,7 +233,3 @@ Namespace RscriptCommandLine
         End Function
     End Class
 End Namespace
-
-
-
-

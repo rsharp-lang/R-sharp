@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b3dc87f4ab2724d6ccc17a387f9426f5, R#\Runtime\Internal\internalInvokes\utils.vb"
+﻿#Region "Microsoft.VisualBasic::eaacc36da0aa9c09061b8959eb8c4047, R#\Runtime\Internal\internalInvokes\utils.vb"
 
     ' Author:
     ' 
@@ -33,9 +33,10 @@
 
     '     Module utils
     ' 
-    '         Function: data, dataSearchByPackageDir, debugTool, GetInstalledPackages, head
-    '                   installPackages, keyGroups, md5, memorySize, readFile
-    '                   system, systemFile, wget
+    '         Function: data, dataSearchByPackageDir, debugTool, description, FindSystemFile
+    '                   GetInstalledPackages, head, installPackages, keyGroups, md5
+    '                   memorySize, now, readFile, system, systemFile
+    '                   wget
     ' 
     '         Sub: cls, pause, sleep
     ' 
