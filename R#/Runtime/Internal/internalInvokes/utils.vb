@@ -739,7 +739,18 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("system.file")>
         Public Function systemFile(fileName As String, package$, Optional env As Environment = Nothing) As Object
-            Dim loaded = env.globalEnvironment.attachedNamespace
+            Dim filepath As String = env.globalEnvironment.FindSystemFile(fileName, package)
+
+            If filepath.StringEmpty Then
+                Return Internal.debug.stop({$"we could not found any installed package which is named '{package}'!", $"package: {package}"}, env)
+            Else
+                Return filepath
+            End If
+        End Function
+
+        <Extension>
+        Private Function FindSystemFile(env As GlobalEnvironment, fileName As String, package$) As String
+            Dim loaded = env.attachedNamespace
             Dim file As String = Nothing
             Dim findFileByName = Function(dir As String) As String
                                      Dim ls = dir.ListFiles("*").ToArray
@@ -763,13 +774,13 @@ Namespace Runtime.Internal.Invokes
             End If
 
             ' 当搜索失败的时候才会在已经安装的程序列表之中进行搜索
-            For Each dir As String In $"{env.globalEnvironment.options.lib_loc}/Library/".ListDirectory
+            For Each dir As String In $"{env.options.lib_loc}/Library/".ListDirectory
                 If dir.BaseName = package Then
                     Return findFileByName(dir)
                 End If
             Next
 
-            Return Internal.debug.stop({$"we could not found any installed package which is named '{package}'!", $"package: {package}"}, env)
+            Return Nothing
         End Function
 
         <ExportAPI("now")>
