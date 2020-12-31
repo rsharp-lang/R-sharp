@@ -106,6 +106,36 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' ### Logarithms and Exponentials
+        ''' 
+        ''' log2 computes binary (i.e., base 2) logarithms. 
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
+        <ExportAPI("log2")>
+        Public Function log2(x As Array) As Double()
+            Return REnv.asVector(Of Double)(x) _
+                .AsObjectEnumerator(Of Double) _
+                .Select(Function(d) stdNum.Log(d, 2)) _
+                .ToArray
+        End Function
+
+        ''' <summary>
+        ''' ### Logarithms and Exponentials
+        ''' 
+        ''' log10 computes common (i.e., base 10) logarithms
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
+        <ExportAPI("log10")>
+        Public Function log10(x As Array) As Double()
+            Return REnv.asVector(Of Double)(x) _
+                .AsObjectEnumerator(Of Double) _
+                .Select(Function(d) stdNum.Log(d, 10)) _
+                .ToArray
+        End Function
+
+        ''' <summary>
         ''' #### Sum of Vector Elements
         ''' 
         ''' sum returns the sum of all the values present in its arguments.

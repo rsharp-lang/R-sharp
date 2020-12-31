@@ -50,6 +50,14 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 <Package("igraph.builder")>
 Module builder
 
+    ''' <summary>
+    ''' create a network graph based on the item correlations
+    ''' </summary>
+    ''' <param name="x">a correlation matrix</param>
+    ''' <param name="threshold">the absolute threshold value of the correlation value</param>
+    ''' <param name="pvalue"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("correlation.graph")>
     <RApiReturn(GetType(NetworkGraph))>
     Public Function FromCorrelations(x As CorrelationMatrix,
