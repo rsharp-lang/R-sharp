@@ -67,7 +67,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports REnv = SMRUCC.Rsharp.Runtime
-Imports RPkg = SMRUCC.Rsharp.System.Package.Package
+Imports RPkg = SMRUCC.Rsharp.Development.Package.Package
 
 Namespace Runtime.Internal.Invokes
 

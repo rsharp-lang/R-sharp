@@ -48,7 +48,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Development.Package.File
-Imports RPkg = SMRUCC.Rsharp.System.Package.Package
+Imports RPkg = SMRUCC.Rsharp.Development.Package.Package
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 

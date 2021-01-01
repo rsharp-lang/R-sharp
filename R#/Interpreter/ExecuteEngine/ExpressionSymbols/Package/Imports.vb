@@ -293,7 +293,7 @@ load:       Return LoadLibrary(filepath, env, names)
             If libDll.StringEmpty Then
                 Return Internal.debug.stop("No package module provided!", env)
             ElseIf Not libDll.FileExists Then
-                Dim location As String = System.Package.LibDLL.GetDllFile(libDll, env)
+                Dim location As String = Development.Package.LibDLL.GetDllFile(libDll, env)
 
                 If Not location.StringEmpty Then
                     Return location

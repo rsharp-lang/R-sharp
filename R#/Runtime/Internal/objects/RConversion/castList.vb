@@ -104,7 +104,7 @@ Namespace Runtime.Internal.Object.Converts
                         End With
 
                         If Not type.GetGenericArguments.ElementAtOrDefault(1) Is Nothing Then
-                            eleType = RType.GetRSharpType(type.GetGenericArguments(1))
+                            eleType = RType.GetRSharpType(type.GetGenericArguments()(1))
                         End If
 
                         Return New list With {

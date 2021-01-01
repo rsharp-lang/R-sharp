@@ -40,9 +40,9 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine
+Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.System.Configuration
 
 Module Program
 
