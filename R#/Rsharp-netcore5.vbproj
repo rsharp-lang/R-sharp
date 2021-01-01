@@ -25,6 +25,7 @@
 	  <DebugType>full</DebugType>
 	  <DocumentationFile>Microsoft.VisualBasic.Math.Core.xml</DocumentationFile>
 	  <DefineConstants>netcore5=1</DefineConstants>
+	  <BaseAddress>4194304</BaseAddress>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
