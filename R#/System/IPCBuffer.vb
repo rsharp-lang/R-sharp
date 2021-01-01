@@ -49,7 +49,7 @@ Imports Microsoft.VisualBasic.Serialization
 Imports SMRUCC.Rsharp.Runtime.Serialize
 Imports DataBuffer = SMRUCC.Rsharp.Runtime.Serialize.Buffer
 
-Namespace System
+Namespace Development
 
     Public Class IPCBuffer : Inherits RawStream
 

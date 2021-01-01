@@ -41,10 +41,10 @@
 #End Region
 
 Imports Microsoft.VisualBasic.Language
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime
-Imports SMRUCC.Rsharp.System.Package.File
 
-Namespace System.Package
+Namespace Development.Package
 
     Public Class LibDLL
 

@@ -53,7 +53,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
 
-Namespace System.Package
+Namespace Development.Package
 
     ''' <summary>
     ''' The R# package module wrapper

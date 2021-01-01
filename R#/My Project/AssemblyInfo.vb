@@ -7,6 +7,8 @@ Imports System.Runtime.InteropServices
 ' associated with an assembly.
 
 ' Review the values of the assembly attributes
+#If netcore5 = 0 Then
+
 
 <Assembly: AssemblyTitle("R# language runtime and script interpreter")>
 <Assembly: AssemblyDescription("R# language runtime and script interpreter")>
@@ -33,3 +35,4 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyVersion("2.333.*")>
 <Assembly: AssemblyFileVersion("2.13.*")>
+#End If

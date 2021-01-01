@@ -58,11 +58,11 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text.Xml.Models
-Imports SMRUCC.Rsharp.System.Configuration
-Imports SMRUCC.Rsharp.System.Package.File
+Imports SMRUCC.Rsharp.Development.Configuration
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports fs = System.IO.Directory
 
-Namespace System.Package
+Namespace Development.Package
 
     ''' <summary>
     ''' 这个对象可以枚举出所有已经安装的<see cref="Package"/>对象

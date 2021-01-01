@@ -50,7 +50,7 @@ Imports System.IO
 Imports System.IO.Compression
 Imports Microsoft.VisualBasic.ApplicationServices.Zip
 
-Namespace System.Components
+Namespace Development.Components
 
     ''' <summary>
     ''' open zip for read data.

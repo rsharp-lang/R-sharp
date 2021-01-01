@@ -49,7 +49,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports LibraryAssembly = System.Reflection.Assembly
 
-Namespace System
+Namespace Development
 
     ''' <summary>
     ''' Parser of the <see cref="Project"/> assembly

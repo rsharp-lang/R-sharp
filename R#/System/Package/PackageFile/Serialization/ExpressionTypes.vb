@@ -51,7 +51,7 @@
 
 #End Region
 
-Namespace System.Package.File
+Namespace Development.Package.File
 
     Public Enum ExpressionTypes As Integer
         Literal

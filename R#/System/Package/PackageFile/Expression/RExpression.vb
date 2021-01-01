@@ -47,7 +47,7 @@
 Imports System.IO
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 
-Namespace System.Package.File.Expressions
+Namespace Development.Package.File.Expressions
 
     ''' <summary>
     ''' the R expression writer/reader

@@ -52,9 +52,9 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.System.Configuration
+Imports SMRUCC.Rsharp.Development.Configuration
 
-Namespace System.Package.File
+Namespace Development.Package.File
 
     Public Module PackageLoader2
 

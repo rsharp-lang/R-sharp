@@ -48,7 +48,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Serialization.JSON
 
-Namespace System.Package.File
+Namespace Development.Package.File
 
     Public Class PackageNamespace
 

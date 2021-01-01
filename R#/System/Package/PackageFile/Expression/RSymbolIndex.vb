@@ -48,7 +48,7 @@ Imports System.IO
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
-Namespace System.Package.File.Expressions
+Namespace Development.Package.File.Expressions
 
     Public Class RSymbolIndex : Inherits RExpression
 

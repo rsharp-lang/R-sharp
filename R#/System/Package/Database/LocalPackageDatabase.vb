@@ -49,9 +49,9 @@ Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text.Xml.Models
-Imports SMRUCC.Rsharp.System.Configuration
+Imports SMRUCC.Rsharp.Development.Configuration
 
-Namespace System.Package
+Namespace Development.Package
 
     Public Class LocalPackageDatabase : Inherits XmlDataModel
         Implements IList(Of PackageLoaderEntry)

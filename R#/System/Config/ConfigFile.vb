@@ -50,7 +50,7 @@ Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text.Xml.Models
 
-Namespace System.Configuration
+Namespace Development.Configuration
 
     Public Class ConfigFile : Inherits XmlDataModel
         Implements IList(Of NamedValue)

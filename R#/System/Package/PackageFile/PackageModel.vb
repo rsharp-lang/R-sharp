@@ -59,7 +59,7 @@ Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
-Namespace System.Package.File
+Namespace Development.Package.File
 
     Public Class PackageModel
 

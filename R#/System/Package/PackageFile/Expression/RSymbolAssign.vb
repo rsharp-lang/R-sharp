@@ -49,7 +49,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
-Namespace System.Package.File.Expressions
+Namespace Development.Package.File.Expressions
 
     Public Class RSymbolAssign : Inherits RExpression
 

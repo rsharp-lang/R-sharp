@@ -43,7 +43,7 @@
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
-Namespace System.Components
+Namespace Development.Components
 
     Module Encoder
 

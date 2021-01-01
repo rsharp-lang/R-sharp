@@ -50,7 +50,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime.Components
 
-Namespace System.Package.File.Expressions
+Namespace Development.Package.File.Expressions
 
     Public Class RLiteral : Inherits RExpression
 

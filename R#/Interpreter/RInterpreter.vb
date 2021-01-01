@@ -67,7 +67,7 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports SMRUCC.Rsharp.System.Configuration
+Imports SMRUCC.Rsharp.Development.Configuration
 Imports REnv = SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports stdNum = System.Math
 

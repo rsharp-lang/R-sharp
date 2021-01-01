@@ -48,7 +48,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime.Interop
 
-Namespace System
+Namespace Development
 
     Module ConsoleMarkdownPrinter
 

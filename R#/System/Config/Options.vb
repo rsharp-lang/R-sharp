@@ -52,9 +52,9 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.Net.Protocols.ContentTypes
 Imports Microsoft.VisualBasic.Text.Xml.Models
-Imports SMRUCC.Rsharp.System.Package
+Imports SMRUCC.Rsharp.Development.Package
 
-Namespace System.Configuration
+Namespace Development.Configuration
 
     ''' <summary>
     ''' Data reader of <see cref="ConfigFile"/>. The operations in this module will modify 

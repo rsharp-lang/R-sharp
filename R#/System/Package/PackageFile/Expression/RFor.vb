@@ -51,7 +51,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
-Namespace System.Package.File.Expressions
+Namespace Development.Package.File.Expressions
 
     Public Class RFor : Inherits RExpression
 

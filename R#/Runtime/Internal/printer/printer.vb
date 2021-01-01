@@ -65,8 +65,8 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Utils
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports SMRUCC.Rsharp.System.Components
-Imports SMRUCC.Rsharp.System.Configuration
+Imports SMRUCC.Rsharp.Development.Components
+Imports SMRUCC.Rsharp.Development.Configuration
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.ConsolePrinter

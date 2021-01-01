@@ -44,7 +44,7 @@ Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 
-Namespace System.Package
+Namespace Development.Package
 
     ''' <summary>
     ''' R# ``zzz.R`` magic trick

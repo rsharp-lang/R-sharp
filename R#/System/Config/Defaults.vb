@@ -40,7 +40,7 @@
 
 #End Region
 
-Namespace System.Configuration
+Namespace Development.Configuration
 
     Module Defaults
 

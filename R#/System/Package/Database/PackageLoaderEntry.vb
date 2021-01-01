@@ -52,7 +52,7 @@ Imports System.Runtime.CompilerServices
 Imports System.Xml.Serialization
 Imports Microsoft.VisualBasic.Scripting.MetaData
 
-Namespace System.Package
+Namespace Development.Package
 
     Public Class PackageInfo
 

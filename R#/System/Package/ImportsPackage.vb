@@ -52,7 +52,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
 
-Namespace System.Package
+Namespace Development.Package
 
     ''' <summary>
     ''' Helper methods for add .NET function into <see cref="Environment"/> target

@@ -42,7 +42,7 @@
 
 #End Region
 
-Namespace System.Configuration
+Namespace Development.Configuration
 
     Public Class StartupConfigs
 

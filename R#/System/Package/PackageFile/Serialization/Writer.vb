@@ -59,9 +59,9 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
-Imports SMRUCC.Rsharp.System.Package.File.Expressions
+Imports SMRUCC.Rsharp.Development.Package.File.Expressions
 
-Namespace System.Package.File
+Namespace Development.Package.File
 
     ''' <summary>
     ''' 

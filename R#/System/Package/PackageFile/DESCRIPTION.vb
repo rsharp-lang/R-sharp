@@ -52,7 +52,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop.CType
 
-Namespace System.Package.File
+Namespace Development.Package.File
 
     Public Class DESCRIPTION : Implements ICTypeList
 

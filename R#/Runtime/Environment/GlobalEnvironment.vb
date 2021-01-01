@@ -57,9 +57,9 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports SMRUCC.Rsharp.System.Configuration
-Imports SMRUCC.Rsharp.System.Package
-Imports SMRUCC.Rsharp.System.Package.File
+Imports SMRUCC.Rsharp.Development.Configuration
+Imports SMRUCC.Rsharp.Development.Package
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports RPkg = SMRUCC.Rsharp.System.Package.Package
 
 Namespace Runtime

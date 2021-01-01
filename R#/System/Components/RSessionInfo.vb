@@ -52,7 +52,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
-Namespace System.Components
+Namespace Development.Components
 
     Public Class RSessionInfo
 

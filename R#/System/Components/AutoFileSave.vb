@@ -47,7 +47,7 @@
 Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.Net.Protocols.ContentTypes
 
-Namespace System.Components
+Namespace Development.Components
 
     Public Class AutoFileSave : Implements IDisposable, IFileReference
 

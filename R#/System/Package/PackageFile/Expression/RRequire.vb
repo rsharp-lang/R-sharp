@@ -50,7 +50,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
-Namespace System.Package.File.Expressions
+Namespace Development.Package.File.Expressions
 
     ''' <summary>
     ''' imports语句在脚本模式下可以出现在任意语句块之中，但是
