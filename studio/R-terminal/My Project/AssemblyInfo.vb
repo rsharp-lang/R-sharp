@@ -7,7 +7,7 @@ Imports System.Runtime.InteropServices
 ' associated with an assembly.
 
 ' Review the values of the assembly attributes
-
+#If netcore5 = 0 Then
 <Assembly: AssemblyTitle("R# terminal console")>
 <Assembly: AssemblyDescription("R# terminal console")>
 <Assembly: AssemblyCompany("SMRUCC genomics Institute <genomics@SMRUCC.org>")>
@@ -33,3 +33,4 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyVersion("2.13.*")>
 <Assembly: AssemblyFileVersion("1.8967.*")>
+#End If
