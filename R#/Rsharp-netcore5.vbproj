@@ -42,6 +42,7 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
 	  <DocumentationFile>Microsoft.VisualBasic.Math.Core.xml</DocumentationFile>
+	  <DefineConstants>netcore5=1</DefineConstants>
 	</PropertyGroup>
 
 	<ItemGroup>
