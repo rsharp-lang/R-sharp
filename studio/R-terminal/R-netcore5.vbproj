@@ -24,8 +24,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />
-    <ProjectReference Include="..\..\R#\Rsharp-netcore5.vbproj" />
+    <PackageReference Include="System.Runtime" Version="4.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj">
+      <Private>true</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\R#\Rsharp-netcore5.vbproj">
+      <Private>true</Private>
+    </ProjectReference>
   </ItemGroup>
 
   <Import Project="..\Rstudio.common\Rstudio.common.projitems" Label="Shared" />
