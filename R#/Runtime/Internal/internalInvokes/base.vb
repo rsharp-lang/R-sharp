@@ -1156,14 +1156,34 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' ### Stop Function Execution
         ''' 
+        ''' ``stop`` stops execution of the current expression and executes an error action.
         ''' </summary>
         ''' <param name="message">
-        ''' <see cref="String"/> array or <see cref="Exception"/>
+        ''' <see cref="String"/> array or <see cref="Exception"/>, zero Or more objects which 
+        ''' can be coerced to character (And which are pasted together with no separator) Or 
+        ''' a single condition object.
         ''' </param>
         ''' <param name="envir"></param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' The error action is controlled by error handlers established within the executing 
+        ''' code and by the current default error handler set by options(error=). The error 
+        ''' is first signaled as if using signalCondition(). If there are no handlers or if 
+        ''' all handlers return, then the error message is printed (if options("show.error.messages") 
+        ''' is true) and the default error handler is used. The default behaviour (the NULL 
+        ''' error-handler) in interactive use is to return to the top level prompt or the top 
+        ''' level browser, and in non-interactive use to (effectively) call q("no", status = 1, 
+        ''' runLast = FALSE). The default handler stores the error message in a buffer; it can 
+        ''' be retrieved by geterrmessage(). It also stores a trace of the call stack that can 
+        ''' be retrieved by traceback().
         ''' 
+        ''' Errors will be truncated To getOption("warning.length") characters, Default 1000.
+        ''' 
+        ''' If a condition Object Is supplied it should be the only argument, And further arguments 
+        ''' will be ignored, With a warning.
+        ''' </remarks>
         <ExportAPI("stop")>
         Public Function [stop](<RRawVectorArgument> message As Object, Optional envir As Environment = Nothing) As Message
             Return debug.stop(message, envir)

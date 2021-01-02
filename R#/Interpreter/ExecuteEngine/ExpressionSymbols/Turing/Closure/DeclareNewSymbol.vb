@@ -56,7 +56,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         ''' <summary>
         ''' 对于tuple类型，会存在多个变量
         ''' </summary>
-        Friend names As String()
+        Public ReadOnly Property names As String()
 
         Public ReadOnly Property hasInitializeExpression As Boolean = False
 

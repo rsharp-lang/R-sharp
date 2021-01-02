@@ -237,6 +237,28 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Return funcVar
         End Function
 
+        Public Function GetFunctionVar(env As Environment) As Object
+            Dim target As Object = getFuncVar(funcName, [namespace], env)
+
+            If Program.isException(target) Then
+                Return target
+            End If
+
+            If target Is Nothing AndAlso TypeOf funcName Is Literal Then
+                Dim funcStr = DirectCast(funcName, Literal).ValueStr
+                ' 可能是一个系统的内置函数
+                Dim method As RMethodInfo = Internal.invoke.getFunction(funcStr)
+
+                If method Is Nothing Then
+                    Return Message.SymbolNotFound(env, funcStr, TypeCodes.closure)
+                Else
+                    Return method
+                End If
+            Else
+                Return target
+            End If
+        End Function
+
         Private Function doInvokeFuncVar(funcVar As RFunction, envir As Environment) As Object
             If funcVar Is Nothing AndAlso TypeOf funcName Is Literal Then
                 Dim funcStr = DirectCast(funcName, Literal).ValueStr
