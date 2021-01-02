@@ -52,10 +52,10 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.Markup.MarkDown
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.SymbolBuilder
+Imports SMRUCC.Rsharp.Development
+Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports SMRUCC.Rsharp.System
-Imports SMRUCC.Rsharp.System.Package
 
 ''' <summary>
 ''' R# help document tools

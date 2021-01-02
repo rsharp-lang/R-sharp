@@ -49,9 +49,9 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Text
+Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
-Imports SMRUCC.Rsharp.System.Configuration
 Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
 Public Class RSessionBackend
