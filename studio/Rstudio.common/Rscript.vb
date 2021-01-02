@@ -63,7 +63,7 @@ Module Rscript
         Dim code As Integer = 0
 
         If RProgram.isException(result, globalEnv, isDotNETException:=requirePrintErr) Then
-            Call REnv.Internal.debug.PrintMessageInternal(result, globalEnv)
+            Call REnv.Internal.debug.PrintMessageInternal(DirectCast(result, Message), globalEnv)
             code = 500
             GoTo FINAL
         End If
@@ -71,7 +71,7 @@ Module Rscript
         If Not program Is Nothing Then
             If program.EndWithFuncCalls(echo.Objects) Then
                 ' do nothing
-                Dim funcName As Literal = DirectCast(program.Last, FunctionInvoke).funcName
+                Dim funcName As Literal = DirectCast(DirectCast(program.Last, FunctionInvoke).funcName, Literal)
 
                 If funcName = "cat" Then
                     Call Console.WriteLine()
