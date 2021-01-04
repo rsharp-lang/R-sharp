@@ -82,6 +82,15 @@ Namespace Development.Package
             Me.config = config
         End Sub
 
+        Private Sub New(config As Options, pkgDb As LocalPackageDatabase)
+            Me.pkgDb = pkgDb
+            Me.config = config
+        End Sub
+
+        Public Shared Function getEmpty(config As Options) As PackageManager
+            Return New PackageManager(config, LocalPackageDatabase.EmptyRepository)
+        End Function
+
         Public Sub addAttached(pkg As Package)
             Call loadedPackages.Add(pkg.namespace)
             Call attached.Add(pkg.namespace, pkg)

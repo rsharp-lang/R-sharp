@@ -176,6 +176,10 @@ Namespace Development.Configuration
             End Get
         End Property
 
+        ''' <summary>
+        ''' file path for save the config file
+        ''' </summary>
+        ''' <returns></returns>
         Public Property localConfig As String Implements IFileReference.FilePath
 
         Public ReadOnly Property MimeType As ContentType() Implements IFileReference.MimeType
@@ -185,8 +189,13 @@ Namespace Development.Configuration
         End Property
 
         Sub New(configs As String)
-            Me.file = ConfigFile.Load(configs)
+            Me.New(ConfigFile.Load(configs))
             Me.localConfig = configs
+        End Sub
+
+        Sub New(file As ConfigFile)
+            Me.file = file
+            Me.localConfig = ConfigFile.localConfigs
             Me.configValues = file.config _
                 .ToDictionary(Function(cfg) cfg.name,
                               Function(cfg)

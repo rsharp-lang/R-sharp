@@ -163,4 +163,13 @@ Partial Module CLI
         Return 0
     End Function
 
+    <ExportAPI("--reset")>
+    <Description("Reset the R# envronment, configuration and package list to default empty.")>
+    <Group(SystemConfig)>
+    Public Function reset(args As CommandLine) As Integer
+        Using config As New Options(ConfigFile.EmptyConfigs), pkgMgr As PackageManager = PackageManager.getEmpty(config)
+            Return 0
+        End Using
+    End Function
+
 End Module

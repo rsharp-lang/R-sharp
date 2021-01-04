@@ -115,6 +115,11 @@ Namespace Development.Package.File
         ''' <param name="env"></param>
         Public Function LoadPackage(dir As String, env As GlobalEnvironment) As Message
             Dim [namespace] As New PackageNamespace(dir)
+            Dim debugEcho As Boolean = env.debugMode
+
+            If debugEcho Then
+                Call Console.WriteLine($"load package from directory: '{dir}'.")
+            End If
 
             For Each symbol As NamedValue(Of String) In [namespace].EnumerateSymbols
                 Using bin As New BinaryReader($"{dir}/src/{symbol.Value}".Open)
