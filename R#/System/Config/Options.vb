@@ -87,12 +87,31 @@ Namespace Development.Configuration
         End Property
 
         ''' <summary>
+        ''' config folder on unix platform is a fixed directory. 
+        ''' </summary>
+        Public Const UnixLib As String = "/etc/r_env/"
+
+        ''' <summary>
         ''' the folder path for save the installed R# zip packages
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property lib_loc As String
             Get
-                Return getOption("lib.loc", [default]:=$"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/Library/R#/")
+                Dim defaultLibLoc As String
+
+                If App.IsMicrosoftPlatform Then
+                    ' 20210104
+                    ' path will be ``/root/Library`` on the unix platform
+                    ' this may cause environment conflicts when install in
+                    ' docker env
+                    defaultLibLoc = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/Library/R#/"
+                Else
+                    ' bugs fixed for config file conflicts between the host machine
+                    ' and docker virtual machine.
+                    defaultLibLoc = $"{UnixLib}/library/"
+                End If
+
+                Return getOption("lib.loc", [default]:=defaultLibLoc)
             End Get
         End Property
 

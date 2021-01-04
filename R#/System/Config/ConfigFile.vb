@@ -78,7 +78,12 @@ Namespace Development.Configuration
         Public Shared ReadOnly Property GCModellerSettings As String
 
         Shared Sub New()
-            GCModellerSettings = $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}/{App.ProductName}/.settings"
+            If App.IsMicrosoftPlatform Then
+                GCModellerSettings = $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}/{App.ProductName}/.settings"
+            Else
+                GCModellerSettings = $"{Options.UnixLib}/.settings"
+            End If
+
             localConfigs = $"{GCModellerSettings}/R#.configs.xml".GetFullPath
         End Sub
 
