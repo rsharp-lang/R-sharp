@@ -66,6 +66,7 @@ Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -359,7 +360,13 @@ Public Module NetworkModule
                     End If
                 Next
 
-                result(v.label) = formula.Evaluate(closure)
+                value = formula.Evaluate(closure)
+
+                If Program.isException(value) Then
+                    Return value
+                Else
+                    result(v.label) = value
+                End If
             Next
         End Using
 
