@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::2fad08d225dd0a4d1223be6a426c2b3a, Library\R.graphics\Plot2D\graphics2D.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module graphics2D
-    ' 
-    '     Function: axisTicks, DrawCircle, drawLegends, DrawTriangle, legend
-    '               line2D, offset2D, point2D, (+2 Overloads) rectangle, size
-    ' 
-    ' /********************************************************************************/
+' Module graphics2D
+' 
+'     Function: axisTicks, DrawCircle, drawLegends, DrawTriangle, legend
+'               line2D, offset2D, point2D, (+2 Overloads) rectangle, size
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -73,9 +73,23 @@ Module graphics2D
         }
     End Function
 
+    <ExportAPI("measureString")>
+    Public Function measureString(str As String, font As Object, Optional canvas As IGraphics = Nothing) As Double()
+        If canvas Is Nothing Then
+            canvas = New Bitmap(1, 1).CreateCanvas2D
+        End If
+
+        Dim fontStyle As Font = CSSFont.TryParse(InteropArgumentHelper.getFontCSS(font)).GDIObject(canvas.Dpi)
+        Dim size As SizeF = canvas.MeasureString(str, fontStyle)
+
+        Return New Double() {size.Width, size.Height}
+    End Function
+
     <ExportAPI("draw.legend")>
     Public Function drawLegends(canvas As Object, legends As LegendObject(), location As PointF,
                                 Optional border As Object = Stroke.AxisStroke,
+                                <RRawVectorArgument>
+                                Optional gSize As Object = "120,45",
                                 Optional env As Environment = Nothing) As Object
         Dim g As IGraphics
         Dim stroke As Stroke = Nothing
@@ -96,7 +110,7 @@ Module graphics2D
             Return Message.InCompatibleType(GetType(IGraphics), canvas.GetType, env)
         End If
 
-        Call g.DrawLegends(location, legends, regionBorder:=stroke)
+        Call g.DrawLegends(location, legends, gSize:=InteropArgumentHelper.getSize(gSize), regionBorder:=stroke)
 
         Select Case g.GetType
             Case GetType(Canvas) : Return DirectCast(g, Canvas).ImageResource
