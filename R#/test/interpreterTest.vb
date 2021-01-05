@@ -75,6 +75,7 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+        Call forLoop2()
 
         Call cVectorTest()
 
@@ -144,7 +145,7 @@ Module interpreterTest
 
         Call printClassTest()
 
-        Call forLoop2()
+
         Call sequenceGeneratorTest()
 
         Call closureTest()
@@ -844,12 +845,12 @@ let div as function(x ,y) {
     Sub forLoop2()
         Call R.Evaluate("
 
-for(x in 1:5 step 0.5) {
+for(let x in 1:5 step 0.5) {
 	print(`x -> ${x}`);
 }
 ")
-
-        Pause()
+        Call forLoopTest()
+        '  Pause()
     End Sub
 
     Sub forLoopTest()
