@@ -70,6 +70,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         Friend value As Object
         Friend m_type As TypeCodes
 
+        Public ReadOnly Property isNull As Boolean
+            Get
+                Return value Is Nothing
+            End Get
+        End Property
+
         Public Shared ReadOnly Property NULL As Literal
             Get
                 Return New Literal With {.value = Nothing}

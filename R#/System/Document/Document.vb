@@ -153,7 +153,13 @@ Namespace Development
                         Case TypeCodes.double, TypeCodes.integer : Return literal.Evaluate(Nothing).ToString
                         Case TypeCodes.string : Return literal.Evaluate(Nothing).ToString
                         Case Else
-                            Throw New InvalidCastException
+
+                            If literal.isNull Then
+                                Return "NULL"
+                            Else
+                                Throw New InvalidCastException
+                            End If
+
                     End Select
                 Case GetType(VectorLiteral)
 

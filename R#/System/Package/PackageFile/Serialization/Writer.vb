@@ -121,6 +121,7 @@ Namespace Development.Package.File
             Me.Rfor = New RFor(Me)
             Me.Rif = New RIf(Me)
             Me.Relse = New RElse(Me)
+            Me.RExpr = New RExprLiteral(Me)
         End Sub
 
         Public Function GetBuffer(x As Expression) As Byte()
