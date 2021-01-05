@@ -1,55 +1,56 @@
 ﻿#Region "Microsoft.VisualBasic::f848ed451ebf4d767c4ae111472a80e6, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\ByRefFunctionCall.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class ByRefFunctionCall
-    ' 
-    '         Properties: expressionName, stackFrame, type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, getTargetFunction, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class ByRefFunctionCall
+' 
+'         Properties: expressionName, stackFrame, type
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate, getTargetFunction, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports SMRUCC.Rsharp.Development.Package.File
 Imports REnv = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
@@ -76,14 +77,26 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
         Friend ReadOnly funcRef As Expression
         Friend ReadOnly target As Expression
+        Friend ReadOnly arguments As Expression()
         Friend ReadOnly value As Expression
 
         Sub New(invoke As FunctionInvoke, value As Expression, stackFrame As StackFrame)
             Me.value = value
             Me.funcRef = invoke.funcName
             Me.target = invoke.parameters(Scan0)
+            Me.arguments = invoke.parameters.Skip(1).ToArray
             Me.stackFrame = stackFrame
         End Sub
+
+        Public Iterator Function GetUnionParameters() As IEnumerable(Of Expression)
+            Yield target
+
+            For Each arg As Expression In arguments
+                Yield arg
+            Next
+
+            Yield value
+        End Function
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             ' only supprts .NET api with attribute 
@@ -107,7 +120,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             If [byref] Is Nothing Then
                 Return REnv.debug.stop(New NotSupportedException($"api '{api}' is not supports byref calls!"), envir)
             Else
-                Return api.Invoke(envir, InvokeParameter.Create(expressions:={target, value}))
+                Dim parameters As InvokeParameter() = GetUnionParameters.DoCall(AddressOf InvokeParameter.Create)
+
+                Return api.Invoke(envir, parameters)
             End If
         End Function
 

@@ -82,7 +82,7 @@ Namespace Development.Package.File.Expressions
 
                 Return {seq.from, seq.to, seq.steps}
             Else
-                Return {DirectCast(x, ByRefFunctionCall).target, DirectCast(x, ByRefFunctionCall).value}
+                Return DirectCast(x, ByRefFunctionCall).GetUnionParameters.ToArray
             End If
         End Function
 
@@ -176,12 +176,15 @@ Namespace Development.Package.File.Expressions
             Dim args As New List(Of Expression)
 
             For i As Integer = 0 To paramSize - 1
-                Call BlockReader.ParseBlock(bin).Parse(desc).DoCall(AddressOf args.Add)
+                Call BlockReader.ParseBlock(bin) _
+                    .Parse(desc) _
+                    .DoCall(AddressOf args.Add)
             Next
 
-            Dim invoke As New FunctionInvoke(func, sourceMap, args(Scan0))
+            Dim leftArguments = args.Take(args.Count - 1).ToArray
+            Dim invoke As New FunctionInvoke(func, sourceMap, leftArguments)
 
-            Return New ByRefFunctionCall(invoke, args(1), sourceMap)
+            Return New ByRefFunctionCall(invoke, args.Last, sourceMap)
         End Function
 
         Private Shared Function getTypeCode(x As Expression) As ExpressionTypes
