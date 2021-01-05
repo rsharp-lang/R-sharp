@@ -1,51 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::48af234cc2430105e75917806078aa8b, R#\Runtime\Internal\internalInvokes\base.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module base
-    ' 
-    '         Function: [dim], [stop], allocate, append, autoDispose
-    '                   cat, cbind, colnames, doPrintInternal, factors
-    '                   getOption, ifelse, invisible, isEmpty, isNA
-    '                   isNull, length, makeNames, names, ncol
-    '                   neg, nrow, options, print, rbind
-    '                   Rdataframe, rep, replace, Rlist, rownames
-    '                   sink, source, str, summary, t
-    '                   uniqueNames, unitOfT, warning
-    ' 
-    '         Sub: [exit], q, quit, warnings
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module base
+' 
+'         Function: [dim], [stop], allocate, append, autoDispose
+'                   cat, cbind, colnames, doPrintInternal, factors
+'                   getOption, ifelse, invisible, isEmpty, isNA
+'                   isNull, length, makeNames, names, ncol
+'                   neg, nrow, options, print, rbind
+'                   Rdataframe, rep, replace, Rlist, rownames
+'                   sink, source, str, summary, t
+'                   uniqueNames, unitOfT, warning
+' 
+'         Sub: [exit], q, quit, warnings
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -63,7 +63,9 @@ Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
@@ -101,7 +103,26 @@ Namespace Runtime.Internal.Invokes
         ''' </returns>
         <ExportAPI("c")>
         Public Function c(<RListObjectArgument> values As Object, Optional env As Environment = Nothing) As Object
+            Dim list As New List(Of Object)
+            Dim val As Object
 
+            For Each item As InvokeParameter In DirectCast(values, InvokeParameter())
+                If TypeOf item.value Is ValueAssign Then
+                    val = DirectCast(item.value, ValueAssign).value.Evaluate(env)
+                Else
+                    val = item.value.Evaluate(env)
+                End If
+
+                If Program.isException(val) Then
+                    Return val
+                End If
+
+                For Each x As Object In REnv.asVector(Of Object)(val)
+                    list.Add(x)
+                Next
+            Next
+
+            Return REnv.TryCastGenericArray(list.ToArray, env)
         End Function
 
         ''' <summary>

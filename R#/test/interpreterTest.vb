@@ -75,6 +75,9 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+
+        Call cVectorTest()
+
         Call inlineFunctiontest()
         Call debugTest()
 
@@ -189,6 +192,12 @@ Module interpreterTest
 
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub cVectorTest()
+        Call R.Evaluate("print(c(1:5, bb = 10.5, 'next'))")
 
         Pause()
     End Sub
