@@ -1,41 +1,41 @@
 ﻿#Region "Microsoft.VisualBasic::9e13d73f248cf1354e27019ce719acaa, Library\R.graph\Layouts.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module Layouts
-    ' 
-    '     Function: (+2 Overloads) forceDirected, orthogonalLayout, randomLayout, SpringForce
-    ' 
-    ' /********************************************************************************/
+' Module Layouts
+' 
+'     Function: (+2 Overloads) forceDirected, orthogonalLayout, randomLayout, SpringForce
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -48,6 +48,7 @@ Imports Microsoft.VisualBasic.Data.visualize.Network.Layouts.ForceDirected
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 ''' <summary>
@@ -128,6 +129,7 @@ Module Layouts
                                   Optional groupPlanner As Boolean = False,
                                   Optional groupAttraction As Double = 5,
                                   Optional groupRepulsive As Double = 5,
+                                  Optional avoids As RectangleF() = Nothing,
                                   Optional env As Environment = Nothing) As NetworkGraph
         If g.CheckZero Then
             env.AddMessage("all of the vertex node in your network graph is in ZERO location, do random layout at first...", MSG_TYPES.WRN)
@@ -148,7 +150,8 @@ Module Layouts
                 dist_threshold:=distStr,
                 size:=sizeStr,
                 groupAttraction:=groupAttraction,
-                groupRepulsive:=groupRepulsive
+                groupRepulsive:=groupRepulsive,
+                avoidRegions:=avoids
             )
         Else
             physics = New Planner(
@@ -158,7 +161,8 @@ Module Layouts
                 maxtx:=maxtx,
                 maxty:=maxty,
                 dist_threshold:=distStr,
-                size:=sizeStr
+                size:=sizeStr,
+                avoidRegions:=avoids
             )
         End If
 
@@ -166,7 +170,7 @@ Module Layouts
             Call physics.Collide()
 
             If (100 * i / iterations) Mod 5 = 0 Then
-                Console.WriteLine($"- Completed {i + 1} of {iterations} [{CInt(100 * i / iterations)}%]")
+                Call base.cat($"- Completed {i + 1} of {iterations} [{CInt(100 * i / iterations)}%]\n",,, env)
             End If
         Next
 
