@@ -334,7 +334,7 @@ Public Module NetworkModule
         Dim data As GraphData
         Dim label As String
 
-        Using closure As New Environment
+        Using closure As New Environment(env, env.stackFrame, isInherits:=False)
             For Each v As Object In elements
                 If v Is Nothing Then
                     Continue For
