@@ -68,7 +68,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
         Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
 
-        Dim expression As Expression
+        Friend ReadOnly expression As Expression
 
         Sub New(expression As Expression, stackFrame As StackFrame)
             Me.expression = expression

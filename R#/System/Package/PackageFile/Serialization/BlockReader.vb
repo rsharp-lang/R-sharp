@@ -90,6 +90,7 @@ Namespace Development.Package.File
                          ExpressionTypes.SymbolRegexp
 
                         Return New RLiteral(Nothing).GetExpression(buffer, Me, desc)
+                    Case ExpressionTypes.ExpressionLiteral : Return New RExprLiteral(Nothing).GetExpression(buffer, Me, desc)
 
                     Case ExpressionTypes.VectorLiteral : Return New RVector(Nothing).GetExpression(buffer, Me, desc)
 

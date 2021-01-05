@@ -92,6 +92,7 @@ Namespace Development.Package.File
         Public ReadOnly Property RUnary As RUnary
         Public ReadOnly Property RVector As RVector
         Public ReadOnly Property RString As RStringInterpolation
+        Public ReadOnly Property RExpr As RExprLiteral
 
 #Region "keywords"
         Public ReadOnly Property Rfor As RFor
@@ -160,6 +161,7 @@ Namespace Development.Package.File
                 Case GetType(ForLoop) : Return Rfor.GetBuffer(x)
                 Case GetType(IfBranch) : Return Rif.GetBuffer(x)
                 Case GetType(ElseBranch) : Return Relse.GetBuffer(x)
+                Case GetType(ExpressionLiteral) : Return RExpr.GetBuffer(x)
 
                 Case Else
                     Throw New NotImplementedException(x.GetType.FullName)

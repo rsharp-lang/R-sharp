@@ -875,6 +875,7 @@
     <Compile Include="System\Package\LibDLL.vb" />
     <Compile Include="System\Package\Database\LocalPackageDatabase.vb" />
     <Compile Include="System\Package\Database\PackageLoaderEntry.vb" />
+    <Compile Include="System\Package\PackageFile\Expression\RExprLiteral.vb" />
     <Compile Include="System\Package\PackageFile\PackageNamespace.vb" />
     <Compile Include="System\Package\PackageFile\Dependency.vb" />
     <Compile Include="System\Package\PackageFile\Expression\RElse.vb" />
