@@ -47,6 +47,7 @@
 #End Region
 
 Imports System.Drawing
+Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -71,6 +72,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports any = Microsoft.VisualBasic.Scripting
 Imports node = Microsoft.VisualBasic.Data.visualize.Network.Graph.Node
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -317,15 +319,36 @@ Public Module NetworkModule
         Return g
     End Function
 
+    ''' <summary>
+    ''' evaluate node values
+    ''' </summary>
+    ''' <param name="elements"></param>
+    ''' <param name="formula"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("eval")>
-    Public Function eval(nodes As node(), formula As Expression, Optional env As Environment = Nothing) As Object
+    Public Function eval(elements As Object(), formula As Expression, Optional env As Environment = Nothing) As Object
         Dim result As New Dictionary(Of String, Object)
         Dim var As Symbol
         Dim value As Object
+        Dim data As GraphData
+        Dim label As String
 
         Using closure As New Environment
-            For Each v As node In nodes
-                For Each symbol In v.data.Properties
+            For Each v As Object In elements
+                If v Is Nothing Then
+                    Continue For
+                ElseIf TypeOf v Is node Then
+                    data = DirectCast(v, node).data
+                    label = DirectCast(v, node).label
+                ElseIf TypeOf v Is Edge Then
+                    data = DirectCast(v, Edge).data
+                    label = DirectCast(v, Edge).ID
+                Else
+                    Return Message.InCompatibleType(GetType(node), v.GetType, env)
+                End If
+
+                For Each symbol In data.Properties
                     var = closure.FindSymbol(symbol.Key, [inherits]:=False)
                     value = DataImports.ParseVector({symbol.Value})
 
@@ -445,7 +468,7 @@ Public Module NetworkModule
             .Select(Function(a)
                         Return New NamedValue(Of String) With {
                             .Name = a.Name,
-                            .Value = Scripting.ToString(a.Value)
+                            .Value = any.ToString(a.Value)
                         }
                     End Function) _
             .ToArray
@@ -621,6 +644,89 @@ Public Module NetworkModule
         Return g.graphEdges.ToArray
     End Function
 
+    <Extension>
+    Private Function nodeAttributes(elements As node(), name$, values As Object, env As Environment) As Object
+        If values Is Nothing Then
+            Return elements _
+                .Select(Function(a)
+                            If name = "color" Then
+                                If a.data.color Is Nothing OrElse Not TypeOf a.data.color Is SolidBrush Then
+                                    Return "black"
+                                Else
+                                    Return DirectCast(a.data.color, SolidBrush).Color.ToHtmlColor
+                                End If
+                            Else
+                                Return If(a.data(name), "")
+                            End If
+                        End Function) _
+                .ToArray
+        ElseIf TypeOf values Is list Then
+            Dim valList As list = DirectCast(values, list)
+            Dim value As Object
+            Dim element As node
+            Dim hash As Dictionary(Of String, node) = elements.ToDictionary(Function(e) e.label)
+
+            For Each vName As String In valList.slots.Keys
+                value = REnv.single(valList.slots(vName))
+                element = hash.TryGetValue(vName)
+
+                If Not element Is Nothing Then
+                    If name = "color" Then
+                        If TypeOf value Is Brush Then
+                            element.data.color = value
+                        ElseIf TypeOf value Is Color Then
+                            element.data.color = New SolidBrush(DirectCast(value, Color))
+                        Else
+                            element.data.color = any.ToString(value).GetBrush
+                        End If
+                    Else
+                        element.data(name) = any.ToString(value)
+                    End If
+                End If
+            Next
+        Else
+            Dim valArray As New GetVectorElement(REnv.asVector(Of Object)(values))
+            Dim value As Object
+
+            If name = "color" Then
+                For i As Integer = 0 To elements.Length - 1
+                    value = valArray(i)
+
+                    If TypeOf value Is Brush Then
+                        elements(i).data.color = value
+                    ElseIf TypeOf value Is Color Then
+                        elements(i).data.color = New SolidBrush(DirectCast(value, Color))
+                    Else
+                        elements(i).data.color = any.ToString(value).GetBrush
+                    End If
+                Next
+            Else
+                For i As Integer = 0 To elements.Length - 1
+                    elements(i).data(name) = any.ToString(valArray(i))
+                Next
+            End If
+        End If
+
+        Return Nothing
+    End Function
+
+    <Extension>
+    Private Function edgeAttributes(elements As Edge(), name$, values As Object, env As Environment) As Object
+        If values Is Nothing Then
+            Return elements.Select(Function(a) If(a.data(name), "")).ToArray
+        Else
+            Return Internal.debug.stop(New NotImplementedException, env)
+        End If
+    End Function
+
+    ''' <summary>
+    ''' get or set element attribute values
+    ''' </summary>
+    ''' <param name="elements"></param>
+    ''' <param name="name$"></param>
+    ''' <param name="values"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("attributes")>
     Public Function attributes(<RRawVectorArgument> elements As Object, name$,
                                <RByRefValueAssign, RRawVectorArgument>
@@ -634,31 +740,13 @@ Public Module NetworkModule
                 Return Nothing
             End If
         ElseIf TypeOf elements Is node() Then
-            If values Is Nothing Then
-                Return DirectCast(elements, node()) _
-                    .Select(Function(a)
-                                If name = "color" Then
-                                    If a.data.color Is Nothing OrElse Not TypeOf a.data.color Is SolidBrush Then
-                                        Return "black"
-                                    Else
-                                        Return DirectCast(a.data.color, SolidBrush).Color.ToHtmlColor
-                                    End If
-                                Else
-                                    Return If(a.data(name), "")
-                                End If
-                            End Function) _
-                    .ToArray
-            Else
-                Return Internal.debug.stop(New NotImplementedException, env)
-            End If
+            Return DirectCast(elements, node()).nodeAttributes(name, values, env)
+
         ElseIf TypeOf elements Is Edge() Then
-            If values Is Nothing Then
-                Return DirectCast(elements, Edge()).Select(Function(a) If(a.data(name), "")).ToArray
-            Else
-                Return Internal.debug.stop(New NotImplementedException, env)
-            End If
+            Return DirectCast(elements, Edge()).edgeAttributes(name, values, env)
+
         Else
-            Return Internal.debug.stop(Message.InCompatibleType(GetType(node), elements.GetType, env,, NameOf(elements)), env)
+            Return Message.InCompatibleType(GetType(node), elements.GetType, env,, NameOf(elements))
         End If
     End Function
 
