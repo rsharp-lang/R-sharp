@@ -60,6 +60,8 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
+Imports SMRUCC.Rsharp.Development.Components
+Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -70,8 +72,6 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Utils
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports SMRUCC.Rsharp.Development.Components
-Imports SMRUCC.Rsharp.Development.Configuration
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RObj = SMRUCC.Rsharp.Runtime.Internal.Object
@@ -83,6 +83,26 @@ Namespace Runtime.Internal.Invokes
     ''' 在这个模块之中仅包含有最基本的数据操作函数
     ''' </summary>
     Public Module base
+
+        ''' <summary>
+        ''' ### Combine Values into a Vector or List
+        ''' 
+        ''' This is a generic function which combines its arguments.
+        ''' The Default method combines its arguments To form a vector. 
+        ''' All arguments are coerced To a common type which Is the 
+        ''' type Of the returned value, And all attributes except 
+        ''' names are removed.
+        ''' </summary>
+        ''' <param name="values">objects to be concatenated.</param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' NULL or an expression or a vector of an appropriate mode. 
+        ''' (With no arguments the value is NULL.)
+        ''' </returns>
+        <ExportAPI("c")>
+        Public Function c(<RListObjectArgument> values As Object, Optional env As Environment = Nothing) As Object
+
+        End Function
 
         ''' <summary>
         ''' ### Conditional Element Selection
