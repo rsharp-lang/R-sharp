@@ -23,6 +23,8 @@ Global
 		Debug|x64 = Debug|x64
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
+		Rsharp_app_release|Any CPU = Rsharp_app_release|Any CPU
+		Rsharp_app_release|x64 = Rsharp_app_release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{9C0BF322-A489-46B6-96DE-7315C35A06FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{9C0BF322-A489-46B6-96DE-7315C35A06FD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9C0BF322-A489-46B6-96DE-7315C35A06FD}.Release|x64.ActiveCfg = Release|x64
 		{9C0BF322-A489-46B6-96DE-7315C35A06FD}.Release|x64.Build.0 = Release|x64
+		{9C0BF322-A489-46B6-96DE-7315C35A06FD}.Rsharp_app_release|Any CPU.ActiveCfg = Rsharp_app_release|Any CPU
+		{9C0BF322-A489-46B6-96DE-7315C35A06FD}.Rsharp_app_release|Any CPU.Build.0 = Rsharp_app_release|Any CPU
+		{9C0BF322-A489-46B6-96DE-7315C35A06FD}.Rsharp_app_release|x64.ActiveCfg = Rsharp_app_release|x64
+		{9C0BF322-A489-46B6-96DE-7315C35A06FD}.Rsharp_app_release|x64.Build.0 = Rsharp_app_release|x64
 		{FE420494-C6FE-4763-B327-F96A6101CD21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FE420494-C6FE-4763-B327-F96A6101CD21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE420494-C6FE-4763-B327-F96A6101CD21}.Debug|x64.ActiveCfg = Debug|x64
@@ -41,6 +47,10 @@ Global
 		{FE420494-C6FE-4763-B327-F96A6101CD21}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FE420494-C6FE-4763-B327-F96A6101CD21}.Release|x64.ActiveCfg = Release|x64
 		{FE420494-C6FE-4763-B327-F96A6101CD21}.Release|x64.Build.0 = Release|x64
+		{FE420494-C6FE-4763-B327-F96A6101CD21}.Rsharp_app_release|Any CPU.ActiveCfg = Rsharp_app_release|Any CPU
+		{FE420494-C6FE-4763-B327-F96A6101CD21}.Rsharp_app_release|Any CPU.Build.0 = Rsharp_app_release|Any CPU
+		{FE420494-C6FE-4763-B327-F96A6101CD21}.Rsharp_app_release|x64.ActiveCfg = Rsharp_app_release|x64
+		{FE420494-C6FE-4763-B327-F96A6101CD21}.Rsharp_app_release|x64.Build.0 = Rsharp_app_release|x64
 		{F16C303A-A06E-4C28-BFFC-FF971B10DFE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F16C303A-A06E-4C28-BFFC-FF971B10DFE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F16C303A-A06E-4C28-BFFC-FF971B10DFE4}.Debug|x64.ActiveCfg = Debug|x64
@@ -49,6 +59,10 @@ Global
 		{F16C303A-A06E-4C28-BFFC-FF971B10DFE4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F16C303A-A06E-4C28-BFFC-FF971B10DFE4}.Release|x64.ActiveCfg = Release|x64
 		{F16C303A-A06E-4C28-BFFC-FF971B10DFE4}.Release|x64.Build.0 = Release|x64
+		{F16C303A-A06E-4C28-BFFC-FF971B10DFE4}.Rsharp_app_release|Any CPU.ActiveCfg = Release|Any CPU
+		{F16C303A-A06E-4C28-BFFC-FF971B10DFE4}.Rsharp_app_release|Any CPU.Build.0 = Release|Any CPU
+		{F16C303A-A06E-4C28-BFFC-FF971B10DFE4}.Rsharp_app_release|x64.ActiveCfg = Release|x64
+		{F16C303A-A06E-4C28-BFFC-FF971B10DFE4}.Rsharp_app_release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
