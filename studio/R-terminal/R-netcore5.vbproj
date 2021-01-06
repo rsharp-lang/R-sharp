@@ -24,6 +24,7 @@
     <DebugType>full</DebugType>
     <DefineConstants>netcore5=1</DefineConstants>
     <DocumentationFile>R#.xml</DocumentationFile>
+    <OutputPath>D:\GCModeller\src\R-sharp\App\</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -32,6 +33,9 @@
     <DocumentationFile>R#.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
+    <Optimize>false</Optimize>
+    <DefineDebug>false</DefineDebug>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -44,6 +48,14 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rsharp_app_release|x64'">
     <DocumentationFile>R#.xml</DocumentationFile>
+    <OutputPath>D:\GCModeller\src\R-sharp\App\</OutputPath>
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
+    <Optimize>false</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
