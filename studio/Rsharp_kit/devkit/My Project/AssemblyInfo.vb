@@ -8,7 +8,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 ' associated with an assembly.
 
 ' Review the values of the assembly attributes
-
+#if netcore5=0 then
 <Assembly: AssemblyTitle("R# and VB.NET application development kit")>
 <Assembly: AssemblyDescription("R# and VB.NET application development kit")>
 <Assembly: AssemblyCompany("SMRUCC")>
@@ -36,3 +36,4 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 <Assembly: AssemblyFileVersion("1.10.*")>
 
 <Assembly: RPackageModule>
+#end if
