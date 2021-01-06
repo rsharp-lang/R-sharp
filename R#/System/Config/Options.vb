@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6b2a690f99bb7378d31c7624f2261f20, R#\System\Config\Options.vb"
+﻿#Region "Microsoft.VisualBasic::f2ba5dac5b6df4e3a17cd5034bf148a4, R#\System\Config\Options.vb"
 
     ' Author:
     ' 
@@ -37,7 +37,7 @@
     '                     lib_loc, localConfig, log4vb_redirect, maxPrint, MimeType
     '                     nwarnings, stdout_multipline, verbose
     ' 
-    '         Constructor: (+1 Overloads) Sub New
+    '         Constructor: (+2 Overloads) Sub New
     ' 
     '         Function: getAllConfigs, getOption, setOption, ToString
     ' 

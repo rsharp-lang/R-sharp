@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3b73598c5d77d3b6584a80c02bffc566, studio\Rsharp_kit\devkit\package.vb"
+﻿#Region "Microsoft.VisualBasic::85ab6c55af992f50195aad8c3d17d614, studio\Rsharp_kit\devkit\package.vb"
 
     ' Author:
     ' 

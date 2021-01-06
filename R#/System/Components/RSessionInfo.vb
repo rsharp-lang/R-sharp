@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fc494b3be077395d37e79d8bd463039f, R#\System\Components\RSessionInfo.vb"
+﻿#Region "Microsoft.VisualBasic::aaef5f1d62c1e8bda2ba6cafbaa17929, R#\System\Components\RSessionInfo.vb"
 
     ' Author:
     ' 

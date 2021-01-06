@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::01cbf2b28abd1ebb90de87a0dddbaf33, R#\System\Package\PackageFile\PackageNamespace.vb"
+﻿#Region "Microsoft.VisualBasic::ec9495299e92e101434c6c3a74ad978f, R#\System\Package\PackageFile\PackageNamespace.vb"
 
     ' Author:
     ' 

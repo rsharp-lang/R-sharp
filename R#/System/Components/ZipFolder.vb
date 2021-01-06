@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6c100ed0435130f7353daa9366ad531c, R#\System\Components\ZipFolder.vb"
+﻿#Region "Microsoft.VisualBasic::0c4df684ba8d43bb726d22fd34430fa5, R#\System\Components\ZipFolder.vb"
 
     ' Author:
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9f47693f75ded68c7c135768c52886a4, studio\Rsharp_kit\roxygenNet\RoxygenDocument.vb"
+﻿#Region "Microsoft.VisualBasic::b57cfb147c6d074ab18f228e9136339e, studio\Rsharp_kit\roxygenNet\RoxygenDocument.vb"
 
     ' Author:
     ' 
@@ -168,4 +168,3 @@ Public Class RoxygenDocument
         }
     End Function
 End Class
-

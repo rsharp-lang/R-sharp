@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1872d23858150aca427594002e139d3a, R#\System\Package\PackageManager.vb"
+﻿#Region "Microsoft.VisualBasic::539e5e6ab7949b553511ad7dc2fce534, R#\System\Package\PackageManager.vb"
 
     ' Author:
     ' 
@@ -35,11 +35,11 @@
     ' 
     '         Properties: loadedPackages, packageDocs
     ' 
-    '         Constructor: (+1 Overloads) Sub New
+    '         Constructor: (+2 Overloads) Sub New
     ' 
-    '         Function: EnumerateAttachedPackages, FindPackage, GenericEnumerator, GetEnumerator, getPackageDir
-    '                   GetPackageDocuments, hasLibFile, hasLibPackage, installDll, InstallLocals
-    '                   installZip
+    '         Function: EnumerateAttachedPackages, FindPackage, GenericEnumerator, getEmpty, GetEnumerator
+    '                   getPackageDir, GetPackageDocuments, hasLibFile, hasLibPackage, installDll
+    '                   InstallLocals, installZip
     ' 
     '         Sub: addAttached, (+2 Overloads) Dispose, Flush
     ' 

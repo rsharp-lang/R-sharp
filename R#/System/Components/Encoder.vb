@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::62f85ac2cb60bee588b271641f81ec78, R#\System\Components\Encoder.vb"
+﻿#Region "Microsoft.VisualBasic::b87147c22fdfff81c9f27a9e8e911082, R#\System\Components\Encoder.vb"
 
     ' Author:
     ' 

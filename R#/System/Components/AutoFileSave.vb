@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::38b20bd21df2a1a891b629a2f8056bb5, R#\System\Components\AutoFileSave.vb"
+﻿#Region "Microsoft.VisualBasic::b178d1a01404fc975279cae995d5e393, R#\System\Components\AutoFileSave.vb"
 
     ' Author:
     ' 

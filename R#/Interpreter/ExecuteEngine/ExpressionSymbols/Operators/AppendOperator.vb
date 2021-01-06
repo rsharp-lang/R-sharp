@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2a0f710403608a9e13de877b340a8788, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\AppendOperator.vb"
+﻿#Region "Microsoft.VisualBasic::9e65b50d215a5490ed58ef4b49e91790, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\AppendOperator.vb"
 
     ' Author:
     ' 

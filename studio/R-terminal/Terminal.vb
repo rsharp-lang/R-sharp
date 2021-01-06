@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2e0cae475b812d852b2690dc12d927a4, studio\R-terminal\Terminal.vb"
+﻿#Region "Microsoft.VisualBasic::caa3c3d0b4cd7ebf4e5d8b90ffd3aebc, studio\R-terminal\Terminal.vb"
 
     ' Author:
     ' 

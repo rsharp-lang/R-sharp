@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6a3511904b1786fcd05d55a633619cbf, R#\System\IPCBuffer.vb"
+﻿#Region "Microsoft.VisualBasic::94d5e41c404c71fb2542b7800c3e8853, R#\System\IPCBuffer.vb"
 
     ' Author:
     ' 

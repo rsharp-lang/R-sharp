@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::204e87d591ed767cb2303873157d093e, R#\System\Document\UnixManPagePrinter.vb"
+﻿#Region "Microsoft.VisualBasic::6c8af01c20bec89108dbb838354c2103, R#\System\Document\UnixManPagePrinter.vb"
 
     ' Author:
     ' 

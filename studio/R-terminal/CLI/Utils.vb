@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e41583151ab32c81a8ad7bc8f468c2b9, studio\R-terminal\CLI\Utils.vb"
+﻿#Region "Microsoft.VisualBasic::91f656ede84b885c95dfee17401f1254, studio\R-terminal\CLI\Utils.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     ' Module CLI
     ' 
-    '     Function: ConfigStartups, InitializeEnvironment, Install
+    '     Function: ConfigStartups, InitializeEnvironment, Install, reset
     ' 
     ' /********************************************************************************/
 
