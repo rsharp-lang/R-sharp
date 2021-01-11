@@ -21,9 +21,16 @@ Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "R-netcore5", "studio\R-term
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "roxygenNet-netcore5", "studio\Rsharp_kit\roxygenNet\roxygenNet-netcore5.vbproj", "{41486534-DAB8-419E-8C14-38ED408C8DC9}"
 EndProject
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "Rscript-netcore5", "Rscript\Rscript-netcore5.vbproj", "{E1995E16-BA23-44EA-81BB-187E93F3D906}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "TcpRequest", "..\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\TcpRequest\TcpRequest.shproj", "{7DF565AE-6E7A-4667-AB6D-9908ACBEED8B}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\TcpRequest\TcpRequest.projitems*{7df565ae-6e7a-4667-ab6d-9908acbeed8b}*SharedItemsImports = 13
 		studio\Rstudio.common\Rstudio.common.projitems*{9aa7a0bd-50a7-4f14-a2cf-345519a55a3f}*SharedItemsImports = 5
+		studio\Rstudio.common\Rstudio.common.projitems*{e1995e16-ba23-44ea-81bb-187e93f3d906}*SharedItemsImports = 5
+		..\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\TcpRequest\TcpRequest.projitems*{e1995e16-ba23-44ea-81bb-187e93f3d906}*SharedItemsImports = 5
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -208,6 +215,30 @@ Global
 		{41486534-DAB8-419E-8C14-38ED408C8DC9}.Rsharp_app_release|Any CPU.Build.0 = Release|Any CPU
 		{41486534-DAB8-419E-8C14-38ED408C8DC9}.Rsharp_app_release|x64.ActiveCfg = Rsharp_app_release|x64
 		{41486534-DAB8-419E-8C14-38ED408C8DC9}.Rsharp_app_release|x64.Build.0 = Rsharp_app_release|x64
+		{E1995E16-BA23-44EA-81BB-187E93F3D906}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1995E16-BA23-44EA-81BB-187E93F3D906}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1995E16-BA23-44EA-81BB-187E93F3D906}.Debug|x64.ActiveCfg = Debug|x64
+		{E1995E16-BA23-44EA-81BB-187E93F3D906}.Debug|x64.Build.0 = Debug|x64
+		{E1995E16-BA23-44EA-81BB-187E93F3D906}.GCModeller(Release_X64)|Any CPU.ActiveCfg = Release|Any CPU
+		{E1995E16-BA23-44EA-81BB-187E93F3D906}.GCModeller(Release_X64)|Any CPU.Build.0 = Release|Any CPU
+		{E1995E16-BA23-44EA-81BB-187E93F3D906}.GCModeller(Release_X64)|x64.ActiveCfg = Release|x64
+		{E1995E16-BA23-44EA-81BB-187E93F3D906}.GCModeller(Release_X64)|x64.Build.0 = Release|x64
+		{E1995E16-BA23-44EA-81BB-187E93F3D906}.GCModeller(UNIX-Release_X64)|Any CPU.ActiveCfg = Release|Any CPU
+		{E1995E16-BA23-44EA-81BB-187E93F3D906}.GCModeller(UNIX-Release_X64)|Any CPU.Build.0 = Release|Any CPU
+		{E1995E16-BA23-44EA-81BB-187E93F3D906}.GCModeller(UNIX-Release_X64)|x64.ActiveCfg = Release|x64
+		{E1995E16-BA23-44EA-81BB-187E93F3D906}.GCModeller(UNIX-Release_X64)|x64.Build.0 = Release|x64
+		{E1995E16-BA23-44EA-81BB-187E93F3D906}.LipidSearch|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1995E16-BA23-44EA-81BB-187E93F3D906}.LipidSearch|Any CPU.Build.0 = Debug|Any CPU
+		{E1995E16-BA23-44EA-81BB-187E93F3D906}.LipidSearch|x64.ActiveCfg = Debug|x64
+		{E1995E16-BA23-44EA-81BB-187E93F3D906}.LipidSearch|x64.Build.0 = Debug|x64
+		{E1995E16-BA23-44EA-81BB-187E93F3D906}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1995E16-BA23-44EA-81BB-187E93F3D906}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1995E16-BA23-44EA-81BB-187E93F3D906}.Release|x64.ActiveCfg = Release|x64
+		{E1995E16-BA23-44EA-81BB-187E93F3D906}.Release|x64.Build.0 = Release|x64
+		{E1995E16-BA23-44EA-81BB-187E93F3D906}.Rsharp_app_release|Any CPU.ActiveCfg = Rsharp_app_release|Any CPU
+		{E1995E16-BA23-44EA-81BB-187E93F3D906}.Rsharp_app_release|Any CPU.Build.0 = Rsharp_app_release|Any CPU
+		{E1995E16-BA23-44EA-81BB-187E93F3D906}.Rsharp_app_release|x64.ActiveCfg = Rsharp_app_release|x64
+		{E1995E16-BA23-44EA-81BB-187E93F3D906}.Rsharp_app_release|x64.Build.0 = Rsharp_app_release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -218,6 +249,7 @@ Global
 		{2E017E63-376F-4BCE-AD19-FC752D63972A} = {AC58D495-6BB9-4CBB-88B7-CEA59BFEF351}
 		{B4B44A3D-D46D-4A9F-BF37-3BDFFCBAE9C0} = {AC58D495-6BB9-4CBB-88B7-CEA59BFEF351}
 		{41486534-DAB8-419E-8C14-38ED408C8DC9} = {EBFBBA84-B91C-41D2-B461-7E5B6A1A9209}
+		{7DF565AE-6E7A-4667-AB6D-9908ACBEED8B} = {AC58D495-6BB9-4CBB-88B7-CEA59BFEF351}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {685F6825-92A4-45A5-8738-721B2AA306B3}

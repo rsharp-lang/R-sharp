@@ -72,7 +72,7 @@ Module Program
 
         Dim result As Object = R.Source(filepath)
 
-        If Not result Is Nothing AndAlso result.GetType Is GetType(Message) Then
+        If (Not result Is Nothing) AndAlso result.GetType Is GetType(Message) Then
             Return DirectCast(result, Message).level
         Else
             Return 0
