@@ -8,7 +8,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 ' associated with an assembly.
 
 ' Review the values of the assembly attributes
-
+#if netcore5= 0 then 
 <Assembly: AssemblyTitle("R# mathematics and data science library module.")>
 <Assembly: AssemblyDescription("R# mathematics and data science library module.")>
 <Assembly: AssemblyCompany("SMRUCC/Rsharp")>
@@ -34,5 +34,5 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 <Assembly: AssemblyVersion("1.331.*")>
 <Assembly: AssemblyFileVersion("2.981.*")>
-
+#end if
 <Assembly: RPackageModule>
