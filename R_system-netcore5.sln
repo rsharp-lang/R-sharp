@@ -41,6 +41,10 @@ Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "xml-netcore5", "..\runtime\
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "xlsx-netcore5", "..\runtime\sciBASIC#\mime\application%vnd.openxmlformats-officedocument.spreadsheetml.sheet\Excel\xlsx-netcore5.vbproj", "{D5F9762A-F4AD-4E28-85E4-F604D88A1828}"
 EndProject
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "dataframeUtils-netcore5", "..\runtime\sciBASIC#\Data_science\Mathematica\Math\DataFrame\dataframeUtils-netcore5.vbproj", "{BA92E6CE-E6D2-49A5-A3F2-7B8E30CE9153}"
+EndProject
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "math-netcore5", "..\runtime\sciBASIC#\Data_science\Mathematica\Math\Math\math-netcore5.vbproj", "{81182645-3DD1-4D04-A38F-28B3C7C74138}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\TcpRequest\TcpRequest.projitems*{7df565ae-6e7a-4667-ab6d-9908acbeed8b}*SharedItemsImports = 13
@@ -447,6 +451,54 @@ Global
 		{D5F9762A-F4AD-4E28-85E4-F604D88A1828}.Rsharp_app_release|Any CPU.Build.0 = Release|Any CPU
 		{D5F9762A-F4AD-4E28-85E4-F604D88A1828}.Rsharp_app_release|x64.ActiveCfg = Rsharp_app_release|x64
 		{D5F9762A-F4AD-4E28-85E4-F604D88A1828}.Rsharp_app_release|x64.Build.0 = Rsharp_app_release|x64
+		{BA92E6CE-E6D2-49A5-A3F2-7B8E30CE9153}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA92E6CE-E6D2-49A5-A3F2-7B8E30CE9153}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA92E6CE-E6D2-49A5-A3F2-7B8E30CE9153}.Debug|x64.ActiveCfg = Debug|x64
+		{BA92E6CE-E6D2-49A5-A3F2-7B8E30CE9153}.Debug|x64.Build.0 = Debug|x64
+		{BA92E6CE-E6D2-49A5-A3F2-7B8E30CE9153}.GCModeller(Release_X64)|Any CPU.ActiveCfg = Release|Any CPU
+		{BA92E6CE-E6D2-49A5-A3F2-7B8E30CE9153}.GCModeller(Release_X64)|Any CPU.Build.0 = Release|Any CPU
+		{BA92E6CE-E6D2-49A5-A3F2-7B8E30CE9153}.GCModeller(Release_X64)|x64.ActiveCfg = Release|x64
+		{BA92E6CE-E6D2-49A5-A3F2-7B8E30CE9153}.GCModeller(Release_X64)|x64.Build.0 = Release|x64
+		{BA92E6CE-E6D2-49A5-A3F2-7B8E30CE9153}.GCModeller(UNIX-Release_X64)|Any CPU.ActiveCfg = Release|Any CPU
+		{BA92E6CE-E6D2-49A5-A3F2-7B8E30CE9153}.GCModeller(UNIX-Release_X64)|Any CPU.Build.0 = Release|Any CPU
+		{BA92E6CE-E6D2-49A5-A3F2-7B8E30CE9153}.GCModeller(UNIX-Release_X64)|x64.ActiveCfg = Release|x64
+		{BA92E6CE-E6D2-49A5-A3F2-7B8E30CE9153}.GCModeller(UNIX-Release_X64)|x64.Build.0 = Release|x64
+		{BA92E6CE-E6D2-49A5-A3F2-7B8E30CE9153}.LipidSearch|Any CPU.ActiveCfg = LipidSearch|Any CPU
+		{BA92E6CE-E6D2-49A5-A3F2-7B8E30CE9153}.LipidSearch|Any CPU.Build.0 = LipidSearch|Any CPU
+		{BA92E6CE-E6D2-49A5-A3F2-7B8E30CE9153}.LipidSearch|x64.ActiveCfg = LipidSearch|x64
+		{BA92E6CE-E6D2-49A5-A3F2-7B8E30CE9153}.LipidSearch|x64.Build.0 = LipidSearch|x64
+		{BA92E6CE-E6D2-49A5-A3F2-7B8E30CE9153}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA92E6CE-E6D2-49A5-A3F2-7B8E30CE9153}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA92E6CE-E6D2-49A5-A3F2-7B8E30CE9153}.Release|x64.ActiveCfg = Release|x64
+		{BA92E6CE-E6D2-49A5-A3F2-7B8E30CE9153}.Release|x64.Build.0 = Release|x64
+		{BA92E6CE-E6D2-49A5-A3F2-7B8E30CE9153}.Rsharp_app_release|Any CPU.ActiveCfg = Rsharp_app_release|Any CPU
+		{BA92E6CE-E6D2-49A5-A3F2-7B8E30CE9153}.Rsharp_app_release|Any CPU.Build.0 = Rsharp_app_release|Any CPU
+		{BA92E6CE-E6D2-49A5-A3F2-7B8E30CE9153}.Rsharp_app_release|x64.ActiveCfg = Rsharp_app_release|x64
+		{BA92E6CE-E6D2-49A5-A3F2-7B8E30CE9153}.Rsharp_app_release|x64.Build.0 = Rsharp_app_release|x64
+		{81182645-3DD1-4D04-A38F-28B3C7C74138}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81182645-3DD1-4D04-A38F-28B3C7C74138}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81182645-3DD1-4D04-A38F-28B3C7C74138}.Debug|x64.ActiveCfg = Debug|x64
+		{81182645-3DD1-4D04-A38F-28B3C7C74138}.Debug|x64.Build.0 = Debug|x64
+		{81182645-3DD1-4D04-A38F-28B3C7C74138}.GCModeller(Release_X64)|Any CPU.ActiveCfg = Release|Any CPU
+		{81182645-3DD1-4D04-A38F-28B3C7C74138}.GCModeller(Release_X64)|Any CPU.Build.0 = Release|Any CPU
+		{81182645-3DD1-4D04-A38F-28B3C7C74138}.GCModeller(Release_X64)|x64.ActiveCfg = Release|x64
+		{81182645-3DD1-4D04-A38F-28B3C7C74138}.GCModeller(Release_X64)|x64.Build.0 = Release|x64
+		{81182645-3DD1-4D04-A38F-28B3C7C74138}.GCModeller(UNIX-Release_X64)|Any CPU.ActiveCfg = Release|Any CPU
+		{81182645-3DD1-4D04-A38F-28B3C7C74138}.GCModeller(UNIX-Release_X64)|Any CPU.Build.0 = Release|Any CPU
+		{81182645-3DD1-4D04-A38F-28B3C7C74138}.GCModeller(UNIX-Release_X64)|x64.ActiveCfg = Release|x64
+		{81182645-3DD1-4D04-A38F-28B3C7C74138}.GCModeller(UNIX-Release_X64)|x64.Build.0 = Release|x64
+		{81182645-3DD1-4D04-A38F-28B3C7C74138}.LipidSearch|Any CPU.ActiveCfg = LipidSearch|Any CPU
+		{81182645-3DD1-4D04-A38F-28B3C7C74138}.LipidSearch|Any CPU.Build.0 = LipidSearch|Any CPU
+		{81182645-3DD1-4D04-A38F-28B3C7C74138}.LipidSearch|x64.ActiveCfg = LipidSearch|x64
+		{81182645-3DD1-4D04-A38F-28B3C7C74138}.LipidSearch|x64.Build.0 = LipidSearch|x64
+		{81182645-3DD1-4D04-A38F-28B3C7C74138}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81182645-3DD1-4D04-A38F-28B3C7C74138}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81182645-3DD1-4D04-A38F-28B3C7C74138}.Release|x64.ActiveCfg = Release|x64
+		{81182645-3DD1-4D04-A38F-28B3C7C74138}.Release|x64.Build.0 = Release|x64
+		{81182645-3DD1-4D04-A38F-28B3C7C74138}.Rsharp_app_release|Any CPU.ActiveCfg = Release|Any CPU
+		{81182645-3DD1-4D04-A38F-28B3C7C74138}.Rsharp_app_release|Any CPU.Build.0 = Release|Any CPU
+		{81182645-3DD1-4D04-A38F-28B3C7C74138}.Rsharp_app_release|x64.ActiveCfg = Release|x64
+		{81182645-3DD1-4D04-A38F-28B3C7C74138}.Rsharp_app_release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -465,6 +517,8 @@ Global
 		{6BDD3F78-22B1-45A7-BCE4-97318F5C19D5} = {AC58D495-6BB9-4CBB-88B7-CEA59BFEF351}
 		{ED7E939C-255D-4D87-9C2D-EE444FED5964} = {AC58D495-6BB9-4CBB-88B7-CEA59BFEF351}
 		{D5F9762A-F4AD-4E28-85E4-F604D88A1828} = {AC58D495-6BB9-4CBB-88B7-CEA59BFEF351}
+		{BA92E6CE-E6D2-49A5-A3F2-7B8E30CE9153} = {AC58D495-6BB9-4CBB-88B7-CEA59BFEF351}
+		{81182645-3DD1-4D04-A38F-28B3C7C74138} = {AC58D495-6BB9-4CBB-88B7-CEA59BFEF351}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {685F6825-92A4-45A5-8738-721B2AA306B3}
