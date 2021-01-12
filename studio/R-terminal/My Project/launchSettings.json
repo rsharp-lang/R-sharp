@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "R-netcore5": {
+      "commandName": "Project",
+      "workingDirectory": "D:\\GCModeller\\src\\R-sharp\\App\\net5.0"
+    }
+  }
+}
