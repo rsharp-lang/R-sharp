@@ -52,6 +52,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports cdfAttribute = Microsoft.VisualBasic.Data.IO.netCDF.Components.attribute
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Module rawSerializer
 
@@ -76,7 +77,7 @@ Module rawSerializer
 
             Call cdf.writeList(symbolRef, list)
         Else
-            Dim vector As Array = Runtime.asVector(Of Object)(obj)
+            Dim vector As Array = REnv.asVector(Of Object)(obj)
             Dim elTypes = vector.AsObjectEnumerator _
                 .Select(Function(o) o.GetType) _
                 .GroupBy(Function(t) t.FullName) _
@@ -86,7 +87,7 @@ Module rawSerializer
                 .First
 
             If elTypes Is GetType(String) Then
-                Call cdf.writeString(symbolRef, Runtime.asVector(Of String)(vector))
+                Call cdf.writeString(symbolRef, REnv.asVector(Of String)(vector))
             Else
                 Dim value As CDFData = (CObj(vector), elTypes.GetCDFTypeCode)
                 Dim attributes As cdfAttribute() = {

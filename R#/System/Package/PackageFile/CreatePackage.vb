@@ -47,7 +47,6 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.SecurityString
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
@@ -61,6 +60,36 @@ Namespace Development.Package.File
         <Extension>
         Private Function checkIndex(desc As DESCRIPTION) As Message
 
+            Return Nothing
+        End Function
+
+        Private Function getAssemblyList(dir As String) As assemblyPack
+            Dim dlls As String() = dir.EnumerateFiles("*.dll").ToArray
+            Dim framework As Value(Of String) = ""
+
+            If Not dlls.IsNullOrEmpty Then
+                Return New assemblyPack With {
+                    .assembly = dlls,
+                    .directory = dir,
+                    .framework = ".NET Framework 4.8"
+                }
+            End If
+
+            If (framework = $"{dir}/net5.0").DirectoryExists Then
+                Return New assemblyPack With {
+                    .assembly = framework.Value _
+                        .EnumerateFiles("*.dll") _
+                        .ToArray,
+                    .directory = framework,
+                    .framework = ".NET Core 5"
+                }
+            Else
+                Return New assemblyPack With {
+                    .assembly = {},
+                    .framework = "n/a",
+                    .directory = dir
+                }
+            End If
         End Function
 
         ''' <summary>
@@ -87,7 +116,7 @@ Namespace Development.Package.File
             Dim file As New PackageModel With {
                 .info = desc,
                 .symbols = New Dictionary(Of String, Expression),
-                .assembly = $"{target}/assembly".EnumerateFiles("*.dll").ToArray
+                .assembly = getAssemblyList($"{target}/assembly")
             }
             Dim loading As New List(Of Expression)
             Dim [error] As New Value(Of Message)

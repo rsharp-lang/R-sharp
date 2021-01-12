@@ -1,48 +1,48 @@
 ﻿#Region "Microsoft.VisualBasic::178d00128b9d3ec2fe7172d97d2b01c0, R#\System\Package\PackageFile\PackageModel.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class PackageModel
-    ' 
-    '         Properties: assembly, dataSymbols, info, loading, symbols
-    '                     unixman
-    ' 
-    '         Function: writeSymbols
-    ' 
-    '         Sub: copyAssembly, Flush, saveDataSymbols, saveDependency, saveSymbols
-    '              saveUnixManIndex, writeIndex, writeRuntime
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class PackageModel
+' 
+'         Properties: assembly, dataSymbols, info, loading, symbols
+'                     unixman
+' 
+'         Function: writeSymbols
+' 
+'         Sub: copyAssembly, Flush, saveDataSymbols, saveDependency, saveSymbols
+'              saveUnixManIndex, writeIndex, writeRuntime
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -50,6 +50,7 @@ Imports System.IO
 Imports System.IO.Compression
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Development
+Imports Microsoft.VisualBasic.ApplicationServices.Zip
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -60,6 +61,39 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
 Namespace Development.Package.File
+
+    Public Class assemblyPack : Implements Enumeration(Of String)
+
+        Public Property framework As String
+        ''' <summary>
+        ''' dll files, apply for md5 checksum calculation
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' 程序会将几乎所有的文件都打包进去
+        ''' </remarks>
+        Public Property assembly As String()
+        Public Property directory As String
+
+        Public Function GetFileContents() As String()
+            Return directory _
+                .ListFiles("*.*") _
+                .Where(Function(path)
+                           Return Not path.ExtensionSuffix("pdb")
+                       End Function) _
+                .ToArray
+        End Function
+
+        Public Iterator Function GenericEnumerator() As IEnumerator(Of String) Implements Enumeration(Of String).GenericEnumerator
+            For Each dll As String In assembly
+                Yield dll
+            Next
+        End Function
+
+        Public Iterator Function GetEnumerator() As IEnumerator Implements Enumeration(Of String).GetEnumerator
+            Yield GenericEnumerator()
+        End Function
+    End Class
 
     Public Class PackageModel
 
@@ -72,11 +106,7 @@ Namespace Development.Package.File
         Public Property symbols As Dictionary(Of String, Expression)
         Public Property dataSymbols As Dictionary(Of String, String)
         Public Property loading As Dependency()
-        ''' <summary>
-        ''' dll files
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property assembly As String()
+        Public Property assembly As assemblyPack
         Public Property unixman As Dictionary(Of String, String)
 
         Private Function writeSymbols(zip As ZipArchive, ByRef checksum$) As Dictionary(Of String, String)
@@ -141,9 +171,11 @@ Namespace Development.Package.File
         Private Sub copyAssembly(zip As ZipArchive, ByRef checksum$)
             Dim md5 As New Md5HashProvider
             Dim text As String
+            Dim asset As Value(Of String) = ""
 
             Using file As New StreamWriter(zip.CreateEntry("manifest/assembly.json").Open)
                 text = assembly _
+                    .AsEnumerable _
                     .ToDictionary(Function(path) path.FileName,
                                   Function(fileName)
                                       Return md5.GetMd5Hash(fileName.ReadBinary)
@@ -163,14 +195,18 @@ Namespace Development.Package.File
                 Call file.Flush()
             End Using
 
-            For Each dll As String In assembly
-                Using file As New BinaryWriter(zip.CreateEntry($"assembly/{dll.FileName}").Open)
-                    checksum = checksum & md5.GetMd5Hash(dll.ReadBinary)
+            ' dll is the file path
+            ' pack assembly folder
+            Dim contents As String() = assembly.GetFileContents
 
-                    Call file.Write(dll.ReadBinary)
-                    Call file.Flush()
-                End Using
-            Next
+            Call zip.WriteFiles(
+                files:=contents,
+                mode:=ZipArchiveMode.Create,
+                fileOverwrite:=Overwrite.Always,
+                compression:=CompressionLevel.Fastest,
+                relativeDir:=assembly.directory,
+                parent:="assembly"
+            )
         End Sub
 
         Private Sub saveDependency(zip As ZipArchive, ByRef checksum$)

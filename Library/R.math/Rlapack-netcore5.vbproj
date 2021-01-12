@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<RootNamespace>SMRUCC.Rsharp</RootNamespace>
+		<RootNamespace>Rlapack</RootNamespace>
 		<TargetFramework>net5.0</TargetFramework>
-		<AssemblyName>REnv</AssemblyName>
+		<AssemblyName>Rlapack</AssemblyName>
 		<Authors>xie.guigang@live.com</Authors>
 		<Company>sciBASIC.NET</Company>
 		<Version>5.0.1.2389</Version>
@@ -15,7 +15,7 @@
 		<Platforms>AnyCPU;x64</Platforms>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Description>R# language runtime and script interpreter</Description>
+		<Description>LAPACK (Linear Algebra PACKage)</Description>
 		<Configurations>Debug;Release;Rsharp_app_release;LipidSearch</Configurations>
 	</PropertyGroup>
 
@@ -69,6 +69,7 @@
 	  <DefineDebug>false</DefineDebug>
 	  <DefineTrace>true</DefineTrace>
 	  <BaseAddress>4194304</BaseAddress>
+	  <OutputPath>D:\GCModeller\src\R-sharp\App\</OutputPath>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LipidSearch|x64'">
@@ -87,11 +88,11 @@
 	  <Compile Remove="Test\**" />
 	  <EmbeddedResource Remove="Test\**" />
 	  <None Remove="Test\**" />
-	  <None Include="..\docs\images\R-sharp.png">
+	  <None Include="..\..\docs\images\R-sharp.png">
 	    <Pack>True</Pack>
 	    <PackagePath></PackagePath>
 	  </None>
-	  <None Include="..\LICENSE">
+	  <None Include="..\..\LICENSE">
 	    <Pack>True</Pack>
 	    <PackagePath></PackagePath>
 	  </None>
@@ -106,7 +107,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data\DataFrame\dataframework-netcore5.vbproj" />
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Mathematica\Math\DataFittings\linear-netcore5.vbproj" />
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Mathematica\Math\DataFrame\dataframeUtils-netcore5.vbproj" />
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Mathematica\Math\Math.Statistics\stats-netcore5.vbproj" />
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Mathematica\Math\MathLambda\symbolic-netcore5.vbproj" />
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Mathematica\Math\ODE\odes-netcore5.vbproj" />
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />
+    <ProjectReference Include="..\..\R#\Rsharp-netcore5.vbproj" />
   </ItemGroup>
 
 </Project>

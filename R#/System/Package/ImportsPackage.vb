@@ -1,44 +1,44 @@
 ﻿#Region "Microsoft.VisualBasic::552569852b018e297ffe8e1b52446be1, R#\System\Package\ImportsPackage.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module ImportsPackage
-    ' 
-    '         Function: (+2 Overloads) GetAllApi, ImportsStatic, ImportsStaticInternalImpl
-    ' 
-    '         Sub: ImportsInstance
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module ImportsPackage
+' 
+'         Function: (+2 Overloads) GetAllApi, ImportsStatic, ImportsStaticInternalImpl
+' 
+'         Sub: ImportsInstance
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -49,9 +49,12 @@ Imports System.Composition
 #End If
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Development.NetCore5
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -126,6 +129,9 @@ Namespace Development.Package
         <Extension>
         Public Function ImportsStatic(env As Environment, package As Type, Optional strict As Boolean = True) As IEnumerable(Of String)
             Try
+#If netcore5 = 1 Then
+                Call package.TryHandleNetCore5AssemblyBugs
+#End If
                 Call package.Assembly.TryRunZzzOnLoad
 
                 ' imports package and export api
@@ -144,6 +150,45 @@ Namespace Development.Package
                 End If
             End Try
         End Function
+
+        Private Function RetriveLoadedAssembly() As IEnumerable(Of String)
+            Return From assembly As Assembly
+                   In AppDomain.CurrentDomain.GetAssemblies()
+                   Where Not assembly.IsDynamic
+                   Select assembly.Location.BaseName
+        End Function
+
+        ''' <summary>
+        ''' handling of the bugs on .NET 5 runtime
+        ''' missing assembly when load reference type module
+        ''' </summary>
+        ''' <param name="package"></param>
+        <Extension>
+        Private Sub TryHandleNetCore5AssemblyBugs(package As Type)
+            Dim home As String = package.Assembly.Location.ParentPath
+            Dim moduleName As String = package.Assembly.GetName.Name
+            Dim deps As deps = $"{home}/{moduleName}.deps.json".LoadJsonFile(Of deps)
+            Dim referenceList As String() = deps _
+                .GetReferenceProject _
+                .Where(Function(name) name <> moduleName) _
+                .ToArray
+            Dim asmsIndex As Index(Of String) = RetriveLoadedAssembly.Indexing
+
+            Static globalsReference As New Dictionary(Of String, Assembly)
+
+            For Each name As String In referenceList _
+                .Where(Function(nameKey)
+                           Return (Not globalsReference.ContainsKey(nameKey)) AndAlso Not nameKey Like asmsIndex
+                       End Function)
+
+                ' 由于.net5环境下没有办法将dll自动生成在library文件夹之中
+                ' 所以在这里就直接在应用程序文件夹之中查找了
+                Dim dllName As String = $"{home}/{name}.dll"
+                Dim assembly As Assembly = Assembly.LoadFrom(dllName)
+
+                globalsReference(name) = assembly
+            Next
+        End Sub
 
         <Extension>
         Public Function ImportsStaticInternalImpl(envir As Environment, package As Type, Optional strict As Boolean = True) As IEnumerable(Of String)

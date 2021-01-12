@@ -53,12 +53,13 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Utils
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports any = Microsoft.VisualBasic.Scripting
 Imports csv = Microsoft.VisualBasic.Data.csv.IO.File
 Imports fileStream = System.IO.Stream
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports Rsharp = SMRUCC.Rsharp
 Imports textStream = System.IO.StreamReader
-Imports any = Microsoft.VisualBasic.Scripting
 
 ''' <summary>
 ''' The R Utils Package 
@@ -276,7 +277,7 @@ Public Module utils
         End If
 
         Dim type As Type = x.GetType
-        Dim encoding As Encodings = TextEncodings.GetEncodings(GetEncoding(fileEncoding))
+        Dim encoding As Encodings = TextEncodings.GetEncodings(Rsharp.GetEncoding(fileEncoding))
 
         If type Is GetType(Rdataframe) Then
             Return DirectCast(x, Rdataframe).DataFrameRows(row_names, env).Save(path:=file, encoding:=encoding, silent:=True)

@@ -57,6 +57,7 @@ Imports csv = Microsoft.VisualBasic.Data.csv.IO.File
 Imports msXlsx = Microsoft.VisualBasic.MIME.Office.Excel.File
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports Rsharp = SMRUCC.Rsharp
 
 ''' <summary>
 ''' Xlsx file toolkit
@@ -131,7 +132,7 @@ Module xlsx
         End If
 
         Dim type As Type = x.GetType
-        Dim encoding As Encodings = TextEncodings.GetEncodings(GetEncoding(fileEncoding))
+        Dim encoding As Encodings = TextEncodings.GetEncodings(Rsharp.GetEncoding(fileEncoding))
         Dim table As File
 
         If type Is GetType(Rdataframe) Then
