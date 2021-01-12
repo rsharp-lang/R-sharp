@@ -57,7 +57,7 @@ Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "linear-netcore5", "..\runti
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "symbolic-netcore5", "..\runtime\sciBASIC#\Data_science\Mathematica\Math\MathLambda\symbolic-netcore5.vbproj", "{66DC1D4A-6282-47FF-BC7E-CB29CA630282}"
 EndProject
-Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "dataframe-netcore5", "..\runtime\sciBASIC#\Data\DataFrame\dataframe-netcore5.vbproj", "{CA8393B5-BA49-4853-B26D-9B841F0228FA}"
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "dataframework-netcore5", "..\runtime\sciBASIC#\Data\DataFrame\dataframework-netcore5.vbproj", "{CA8393B5-BA49-4853-B26D-9B841F0228FA}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
