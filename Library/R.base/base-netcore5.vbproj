@@ -3,7 +3,7 @@
   <PropertyGroup>
     <RootNamespace>Rbase</RootNamespace>
     <TargetFramework>net5.0</TargetFramework>
-    <AssemblyName>Rbase</AssemblyName>
+    <AssemblyName>R</AssemblyName>
     <Platforms>AnyCPU;x64</Platforms>
     <Configurations>Debug;Release;Rsharp_app_release</Configurations>
   </PropertyGroup>
