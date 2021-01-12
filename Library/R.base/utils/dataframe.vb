@@ -65,7 +65,9 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports csv = Microsoft.VisualBasic.Data.csv.IO.File
 Imports Idataframe = Microsoft.VisualBasic.Data.csv.IO.DataFrame
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
+Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RPrinter = SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
+Imports Rsharp = SMRUCC.Rsharp
 
 ''' <summary>
 ''' The sciBASIC.NET dataframe api
@@ -318,7 +320,7 @@ Module dataframe
     ''' <returns></returns>
     <ExportAPI("dataset.colnames")>
     Public Function colnames(dataset As Array, <RByRefValueAssign> Optional values As Array = Nothing, Optional envir As Environment = Nothing) As Object
-        Dim baseElement As Type = Runtime.MeasureArrayElementType(dataset)
+        Dim baseElement As Type = REnv.MeasureArrayElementType(dataset)
 
         If values Is Nothing OrElse values.Length = 0 Then
             If baseElement Is GetType(EntityObject) Then
@@ -337,7 +339,7 @@ Module dataframe
                 Return Internal.debug.stop(New InvalidProgramException, envir)
             End If
         Else
-            Dim names As String() = DirectCast(Runtime.asVector(Of String)(values), String())
+            Dim names As String() = DirectCast(REnv.asVector(Of String)(values), String())
 
             If baseElement Is GetType(EntityObject) Then
                 Return dataset.AsObjectEnumerator(Of EntityObject) _
@@ -371,7 +373,7 @@ Module dataframe
             Return Nothing
         End If
 
-        Dim baseElement As Type = Runtime.MeasureArrayElementType(dataset)
+        Dim baseElement As Type = REnv.MeasureArrayElementType(dataset)
         Dim vectors As New List(Of Object)()
         Dim isGetter As Boolean = False
         Dim getValue As Func(Of Object) = Nothing
@@ -379,7 +381,7 @@ Module dataframe
         If values Is Nothing Then
             isGetter = True
         ElseIf values.Length = 1 Then
-            Dim firstValue As Object = Runtime.getFirst(values)
+            Dim firstValue As Object = REnv.getFirst(values)
             getValue = Function() firstValue
         Else
             Dim populator As IEnumerator = values.GetEnumerator
@@ -394,7 +396,7 @@ Module dataframe
         End If
 
         If baseElement Is GetType(EntityObject) Then
-            For Each item As EntityObject In Runtime.asVector(Of EntityObject)(dataset)
+            For Each item As EntityObject In REnv.asVector(Of EntityObject)(dataset)
                 If isGetter Then
                     vectors.Add(item(col))
                 Else
@@ -402,7 +404,7 @@ Module dataframe
                 End If
             Next
         ElseIf baseElement Is GetType(DataSet) Then
-            For Each item As DataSet In Runtime.asVector(Of DataSet)(dataset)
+            For Each item As DataSet In REnv.asVector(Of DataSet)(dataset)
                 If isGetter Then
                     vectors.Add(item(col))
                 Else
@@ -424,7 +426,7 @@ Module dataframe
     ''' <returns></returns>
     <ExportAPI("dataset.project")>
     Public Function project(dataset As Array, cols$(), Optional envir As Environment = Nothing) As Object
-        Dim baseElement As Type = Runtime.MeasureArrayElementType(dataset)
+        Dim baseElement As Type = REnv.MeasureArrayElementType(dataset)
 
         If baseElement Is GetType(EntityObject) Then
             Return dataset.AsObjectEnumerator _
@@ -457,7 +459,7 @@ Module dataframe
 
     <ExportAPI("dataset.transpose")>
     Public Function transpose(dataset As Array, Optional env As Environment = Nothing) As Object
-        Dim baseElement As Type = Runtime.MeasureArrayElementType(dataset)
+        Dim baseElement As Type = REnv.MeasureArrayElementType(dataset)
 
         If baseElement Is GetType(EntityObject) Then
             Return dataset.AsObjectEnumerator(Of EntityObject).Transpose

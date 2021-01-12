@@ -141,6 +141,7 @@ Namespace Development.Package.File
         Private Sub copyAssembly(zip As ZipArchive, ByRef checksum$)
             Dim md5 As New Md5HashProvider
             Dim text As String
+            Dim asset As Value(Of String) = ""
 
             Using file As New StreamWriter(zip.CreateEntry("manifest/assembly.json").Open)
                 text = assembly _
@@ -163,6 +164,7 @@ Namespace Development.Package.File
                 Call file.Flush()
             End Using
 
+            ' dll is the file path
             For Each dll As String In assembly
                 Using file As New BinaryWriter(zip.CreateEntry($"assembly/{dll.FileName}").Open)
                     checksum = checksum & md5.GetMd5Hash(dll.ReadBinary)
@@ -170,7 +172,38 @@ Namespace Development.Package.File
                     Call file.Write(dll.ReadBinary)
                     Call file.Flush()
                 End Using
+
+                ' copy assembly assets
+                If (asset = $"{dll}.config").FileExists Then
+                    Using file As New BinaryWriter(zip.CreateEntry($"assembly/{dll.FileName}.config").Open)
+                        checksum = checksum & md5.GetMd5Hash(asset.Value.ReadBinary)
+
+                        Call file.Write(asset.Value.ReadBinary)
+                        Call file.Flush()
+                    End Using
+                End If
+
+                ' copy .net 5 components
+                For Each extName As String In New String() {"runtimeconfig.dev.json", "runtimeconfig.json", "deps.json"}
+                    If (asset = $"{dll.ParentPath}/{dll.BaseName}.{extName}").FileExists Then
+                        Using file As New BinaryWriter(zip.CreateEntry($"assembly/{dll.BaseName}.{extName}").Open)
+                            checksum = checksum & md5.GetMd5Hash(asset.Value.ReadBinary)
+
+                            Call file.Write(asset.Value.ReadBinary)
+                            Call file.Flush()
+                        End Using
+                    End If
+                Next
             Next
+
+            ' copy .net 5 components
+            If (Not assembly.IsNullOrEmpty) AndAlso (asset = $"{assembly(Scan0).ParentPath}/runtimes").DirectoryExists Then
+
+            End If
+
+            If (Not assembly.IsNullOrEmpty) AndAlso (asset = $"{assembly(Scan0).ParentPath}/ref").DirectoryExists Then
+
+            End If
         End Sub
 
         Private Sub saveDependency(zip As ZipArchive, ByRef checksum$)

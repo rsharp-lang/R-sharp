@@ -61,6 +61,9 @@ Namespace Development.Package.File
         <Extension>
         Private Function checkIndex(desc As DESCRIPTION) As Message
 
+
+
+            Return Nothing
         End Function
 
         ''' <summary>
