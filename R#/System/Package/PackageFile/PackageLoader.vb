@@ -145,7 +145,9 @@ Namespace Development.Package.File
         ''' <param name="env"></param>
         ''' <param name="pkg"></param>
         <Extension>
-        Private Sub loadDependency(env As GlobalEnvironment, pkg As PackageNamespace)
+        Private Function loadDependency(env As GlobalEnvironment, pkg As PackageNamespace) As Message
+            Dim result As Object
+
             For Each dependency As Dependency In pkg.dependency
                 If dependency.library.StringEmpty Then
                     For Each pkgName As String In dependency.packages
@@ -155,13 +157,21 @@ Namespace Development.Package.File
                     Dim dllFile As String = pkg.FindAssemblyPath(dependency.library)
 
                     If Not dllFile.FileExists Then
-                        dllFile = [Imports].GetDllFile($"{dependency.library}.dll", env)
+                        result = [Imports].GetDllFile($"{dependency.library}.dll", env)
+
+                        If TypeOf result Is Message Then
+                            Return result
+                        Else
+                            dllFile = result
+                        End If
                     End If
 
                     Call [Imports].LoadLibrary(dllFile, env, dependency.packages)
                 End If
             Next
-        End Sub
+
+            Return Nothing
+        End Function
 
         <Extension>
         Private Sub callOnLoad(env As GlobalEnvironment, pkg As PackageNamespace)
