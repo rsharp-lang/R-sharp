@@ -246,7 +246,7 @@ Namespace Runtime.Internal
                 stdout = App.StdOut
                 redirectErr2stdout = False
             Else
-                stdout = New StreamWriter(globalEnv.stdout.stream)
+                stdout = New StreamWriter(globalEnv.stdout.stream, Encodings.ASCII.CodePage)
                 redirectErr2stdout = globalEnv.Rscript.redirectError2stdout
                 globalEnv.stdout.Flush()
             End If
