@@ -146,7 +146,7 @@ Partial Module CLI
         App.CurrentDirectory = App.HOME
 
         Using pkgMgr As New PackageManager(config)
-            For Each file As String In {"R.base.dll", "R.graph.dll", "R.graphics.dll", "R.math.dll", "R.plot.dll"}
+            For Each file As String In {"base.dll", "igraph.dll", "graphics.dll", "Rlapack.dll"}
                 If Not file.FileExists Then
                     file = "Library/" & file
                 End If
