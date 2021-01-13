@@ -1,4 +1,5 @@
 ﻿Imports System.Threading
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Parallel
 Imports snowFall.Protocol
 
@@ -7,6 +8,12 @@ Module Program
     Sub Main()
         Dim taskApi As New Func(Of integerValue, integerValue, integerValue())(AddressOf demoTask)
         Dim list As integerValue() = New SlaveTask(Host.CreateProcessor, AddressOf Host.SlaveTask, 1802).RunTask(taskApi, CType(5, integerValue), CType(2, integerValue))
+
+        ' 7 
+        ' 32
+        For Each item In list
+            Call Console.WriteLine(item.GetJson)
+        Next
 
         Pause()
     End Sub
