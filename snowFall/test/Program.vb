@@ -12,7 +12,7 @@ Module Program
     End Sub
 
     Public Function demoTask(a As integerValue, b As integerValue) As integerValue()
-        Call Thread.Sleep(5000)
+        Call Thread.Sleep(15000)
         Return {a + b, b ^ 5}
     End Function
 End Module
