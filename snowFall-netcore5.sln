@@ -21,6 +21,8 @@ Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "Rscript-netcore5", "Rscript
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "parallel-netcore5", "..\runtime\Darwinism\Parallel\parallel-netcore5.vbproj", "{B75B2472-CC99-4631-9D67-BFEC0DED3497}"
 EndProject
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "test-netcore5", "snowFall\test\test-netcore5.vbproj", "{009941F3-5FDF-4AEB-9AA1-7838FE3B5056}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		studio\Rstudio.common\Rstudio.common.projitems*{fff265dd-2819-4bb2-817d-8287877339e4}*SharedItemsImports = 5
@@ -149,6 +151,22 @@ Global
 		{B75B2472-CC99-4631-9D67-BFEC0DED3497}.Rsharp_app_release|Any CPU.Build.0 = Release|Any CPU
 		{B75B2472-CC99-4631-9D67-BFEC0DED3497}.Rsharp_app_release|x64.ActiveCfg = Release|Any CPU
 		{B75B2472-CC99-4631-9D67-BFEC0DED3497}.Rsharp_app_release|x64.Build.0 = Release|Any CPU
+		{009941F3-5FDF-4AEB-9AA1-7838FE3B5056}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{009941F3-5FDF-4AEB-9AA1-7838FE3B5056}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{009941F3-5FDF-4AEB-9AA1-7838FE3B5056}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{009941F3-5FDF-4AEB-9AA1-7838FE3B5056}.Debug|x64.Build.0 = Debug|Any CPU
+		{009941F3-5FDF-4AEB-9AA1-7838FE3B5056}.LipidSearch|Any CPU.ActiveCfg = Debug|Any CPU
+		{009941F3-5FDF-4AEB-9AA1-7838FE3B5056}.LipidSearch|Any CPU.Build.0 = Debug|Any CPU
+		{009941F3-5FDF-4AEB-9AA1-7838FE3B5056}.LipidSearch|x64.ActiveCfg = Debug|Any CPU
+		{009941F3-5FDF-4AEB-9AA1-7838FE3B5056}.LipidSearch|x64.Build.0 = Debug|Any CPU
+		{009941F3-5FDF-4AEB-9AA1-7838FE3B5056}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{009941F3-5FDF-4AEB-9AA1-7838FE3B5056}.Release|Any CPU.Build.0 = Release|Any CPU
+		{009941F3-5FDF-4AEB-9AA1-7838FE3B5056}.Release|x64.ActiveCfg = Release|Any CPU
+		{009941F3-5FDF-4AEB-9AA1-7838FE3B5056}.Release|x64.Build.0 = Release|Any CPU
+		{009941F3-5FDF-4AEB-9AA1-7838FE3B5056}.Rsharp_app_release|Any CPU.ActiveCfg = Release|Any CPU
+		{009941F3-5FDF-4AEB-9AA1-7838FE3B5056}.Rsharp_app_release|Any CPU.Build.0 = Release|Any CPU
+		{009941F3-5FDF-4AEB-9AA1-7838FE3B5056}.Rsharp_app_release|x64.ActiveCfg = Release|Any CPU
+		{009941F3-5FDF-4AEB-9AA1-7838FE3B5056}.Rsharp_app_release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

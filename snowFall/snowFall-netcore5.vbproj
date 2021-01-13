@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>imaging_netcore5</RootNamespace>
+    <RootNamespace>snowFall</RootNamespace>
     <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>snowFall</AssemblyName>
     <Description>High Performance Parallel Compute Library on Unix .NET 5 runtime for R# scripting</Description>
@@ -32,6 +32,13 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\runtime\Darwinism\Parallel\parallel-netcore5.vbproj" />
+    <ProjectReference Include="..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />
+    <ProjectReference Include="..\..\runtime\sciBASIC#\mime\application%json\JSON-netcore5.vbproj" />
+    <ProjectReference Include="..\..\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\network-netcore5.vbproj" />
   </ItemGroup>
 
 </Project>
