@@ -62,39 +62,6 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
 Namespace Development.Package.File
 
-    Public Class assemblyPack : Implements Enumeration(Of String)
-
-        Public Property framework As String
-        ''' <summary>
-        ''' dll files, apply for md5 checksum calculation
-        ''' </summary>
-        ''' <returns></returns>
-        ''' <remarks>
-        ''' 程序会将几乎所有的文件都打包进去
-        ''' </remarks>
-        Public Property assembly As String()
-        Public Property directory As String
-
-        Public Function GetFileContents() As String()
-            Return directory _
-                .ListFiles("*.*") _
-                .Where(Function(path)
-                           Return Not path.ExtensionSuffix("pdb")
-                       End Function) _
-                .ToArray
-        End Function
-
-        Public Iterator Function GenericEnumerator() As IEnumerator(Of String) Implements Enumeration(Of String).GenericEnumerator
-            For Each dll As String In assembly
-                Yield dll
-            Next
-        End Function
-
-        Public Iterator Function GetEnumerator() As IEnumerator Implements Enumeration(Of String).GetEnumerator
-            Yield GenericEnumerator()
-        End Function
-    End Class
-
     Public Class PackageModel
 
         Public Property info As DESCRIPTION
@@ -106,7 +73,7 @@ Namespace Development.Package.File
         Public Property symbols As Dictionary(Of String, Expression)
         Public Property dataSymbols As Dictionary(Of String, String)
         Public Property loading As Dependency()
-        Public Property assembly As assemblyPack
+        Public Property assembly As AssemblyPack
         Public Property unixman As Dictionary(Of String, String)
 
         Private Function writeSymbols(zip As ZipArchive, ByRef checksum$) As Dictionary(Of String, String)

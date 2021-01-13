@@ -63,12 +63,12 @@ Namespace Development.Package.File
             Return Nothing
         End Function
 
-        Private Function getAssemblyList(dir As String) As assemblyPack
+        Private Function getAssemblyList(dir As String) As AssemblyPack
             Dim dlls As String() = dir.EnumerateFiles("*.dll").ToArray
             Dim framework As Value(Of String) = ""
 
             If Not dlls.IsNullOrEmpty Then
-                Return New assemblyPack With {
+                Return New AssemblyPack With {
                     .assembly = dlls,
                     .directory = dir,
                     .framework = ".NET Framework 4.8"
@@ -76,7 +76,7 @@ Namespace Development.Package.File
             End If
 
             If (framework = $"{dir}/net5.0").DirectoryExists Then
-                Return New assemblyPack With {
+                Return New AssemblyPack With {
                     .assembly = framework.Value _
                         .EnumerateFiles("*.dll") _
                         .ToArray,
@@ -84,7 +84,7 @@ Namespace Development.Package.File
                     .framework = ".NET Core 5"
                 }
             Else
-                Return New assemblyPack With {
+                Return New AssemblyPack With {
                     .assembly = {},
                     .framework = "n/a",
                     .directory = dir
