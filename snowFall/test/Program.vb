@@ -1,16 +1,18 @@
-﻿Imports Parallel
+﻿Imports System.Threading
+Imports Parallel
 Imports snowFall.Protocol
 
 Module Program
 
     Sub Main()
         Dim taskApi As New Func(Of integerValue, integerValue, integerValue())(AddressOf demoTask)
-        Dim list As integerValue = New SlaveTask(Host.CreateProcessor, AddressOf Host.SlaveTask, 1802).RunTask(taskApi, CType(5, integerValue), CType(2, integerValue))
+        Dim list As integerValue() = New SlaveTask(Host.CreateProcessor, AddressOf Host.SlaveTask, 1802).RunTask(taskApi, CType(5, integerValue), CType(2, integerValue))
 
         Pause()
     End Sub
 
     Public Function demoTask(a As integerValue, b As integerValue) As integerValue()
+        Call Thread.Sleep(5000)
         Return {a + b, b ^ 5}
     End Function
 End Module
