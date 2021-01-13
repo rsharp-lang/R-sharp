@@ -101,7 +101,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Protocol.vb" />
+    <Compile Include="Protocol\Client.vb" />
+    <Compile Include="Protocol\Host.vb" />
     <Compile Include="Parallel.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
