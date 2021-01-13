@@ -2,7 +2,7 @@
 Imports System.Reflection
 Imports System.Runtime.InteropServices
 Imports SMRUCC.Rsharp.Runtime.Interop
-
+#If netcore5 = 0 Then
 ' General Information about an assembly is controlled through the following
 ' set of attributes. Change these attribute values to modify the information
 ' associated with an assembly.
@@ -34,5 +34,5 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 <Assembly: AssemblyVersion("1.231.*")>
 <Assembly: AssemblyFileVersion("1.20.*")>
-
+#End If
 <Assembly: RPackageModule>
