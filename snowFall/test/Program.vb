@@ -15,8 +15,18 @@ Module Program
             Call Console.WriteLine(item.GetJson)
         Next
 
+
+        Dim api2 As New Func(Of Dictionary(Of String, integerValue))(AddressOf populate)
+        Dim result2 As Dictionary(Of String, integerValue) = New SlaveTask(Host.CreateProcessor, AddressOf Host.SlaveTask).RunTask(api2)
+
+        Call Console.WriteLine(result2.GetJson)
+
         Pause()
     End Sub
+
+    Public Function populate() As Dictionary(Of String, integerValue)
+        Return New Dictionary(Of String, integerValue) From {{"a", New integerValue With {.vector = {1, 2, 3, 4, 5}}}}
+    End Function
 
     Public Function demoTask(a As integerValue, b As integerValue) As integerValue()
         Call Thread.Sleep(15000)
