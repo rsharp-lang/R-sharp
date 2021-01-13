@@ -54,7 +54,6 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
-Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -130,7 +129,7 @@ Namespace Development.Package
         Public Function ImportsStatic(env As Environment, package As Type, Optional strict As Boolean = True) As IEnumerable(Of String)
             Try
 #If netcore5 = 1 Then
-                Call package.TryHandleNetCore5AssemblyBugs
+                Call deps.TryHandleNetCore5AssemblyBugs(package)
 #End If
                 Call package.Assembly.TryRunZzzOnLoad
 
@@ -150,45 +149,6 @@ Namespace Development.Package
                 End If
             End Try
         End Function
-
-        Private Function RetriveLoadedAssembly() As IEnumerable(Of String)
-            Return From assembly As Assembly
-                   In AppDomain.CurrentDomain.GetAssemblies()
-                   Where Not assembly.IsDynamic
-                   Select assembly.Location.BaseName
-        End Function
-
-        ''' <summary>
-        ''' handling of the bugs on .NET 5 runtime
-        ''' missing assembly when load reference type module
-        ''' </summary>
-        ''' <param name="package"></param>
-        <Extension>
-        Private Sub TryHandleNetCore5AssemblyBugs(package As Type)
-            Dim home As String = package.Assembly.Location.ParentPath
-            Dim moduleName As String = package.Assembly.GetName.Name
-            Dim deps As deps = $"{home}/{moduleName}.deps.json".LoadJsonFile(Of deps)
-            Dim referenceList As String() = deps _
-                .GetReferenceProject _
-                .Where(Function(name) name <> moduleName) _
-                .ToArray
-            Dim asmsIndex As Index(Of String) = RetriveLoadedAssembly.Indexing
-
-            Static globalsReference As New Dictionary(Of String, Assembly)
-
-            For Each name As String In referenceList _
-                .Where(Function(nameKey)
-                           Return (Not globalsReference.ContainsKey(nameKey)) AndAlso Not nameKey Like asmsIndex
-                       End Function)
-
-                ' 由于.net5环境下没有办法将dll自动生成在library文件夹之中
-                ' 所以在这里就直接在应用程序文件夹之中查找了
-                Dim dllName As String = $"{home}/{name}.dll"
-                Dim assembly As Assembly = Assembly.LoadFrom(dllName)
-
-                globalsReference(name) = assembly
-            Next
-        End Sub
 
         <Extension>
         Public Function ImportsStaticInternalImpl(envir As Environment, package As Type, Optional strict As Boolean = True) As IEnumerable(Of String)
