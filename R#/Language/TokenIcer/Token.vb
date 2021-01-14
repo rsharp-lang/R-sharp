@@ -83,4 +83,10 @@ Namespace Language.TokenIcer
             Return Not token = type
         End Operator
     End Class
+
+    Public Class JoinToken : Inherits Token
+
+        Public Property [next] As Token
+
+    End Class
 End Namespace

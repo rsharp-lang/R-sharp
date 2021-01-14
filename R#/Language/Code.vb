@@ -65,5 +65,18 @@ Namespace Language
                 Return New IntRange(.First.span.start, .Last.span.stops)
             End With
         End Function
+
+        <Extension>
+        Friend Function joinNext(tken As Token, token As String) As JoinToken
+            Dim nextToken As Token = Scanner.MeasureToken(token)
+            Dim join As New JoinToken With {
+                .name = tken.name,
+                .text = tken.text,
+                .span = tken.span,
+                .[next] = nextToken
+            }
+
+            Return join
+        End Function
     End Module
 End Namespace

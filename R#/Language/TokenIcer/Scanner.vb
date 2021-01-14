@@ -129,6 +129,10 @@ Namespace Language.TokenIcer
                     End Select
 
                     Yield finalizeToken(token, start)
+
+                    If TypeOf token.Value Is JoinToken Then
+                        Yield finalizeToken(CType(token, JoinToken).next, start)
+                    End If
                 End If
             Loop
 
@@ -186,10 +190,10 @@ Namespace Language.TokenIcer
         ''' + ||
         ''' + ==
         ''' </summary>
-        ReadOnly longOperatorParts As Index(Of Char) = {"<"c, ">"c, "&"c, "|"c, ":"c, "="c, "-"c, "+"c, "!"}
-        ReadOnly longOperators As Index(Of String) = {"<=", "<-", "&&", "||", ":>", "::", "<<", "->", "=>", ">=", "==", "!=", "++", "--"}
-        ReadOnly shortOperators As Index(Of Char) = {"$"c, "+"c, "*"c, "/"c, "%"c, "^"c, "!"c}
-        ReadOnly keywords As Index(Of String) = {
+        Shared ReadOnly longOperatorParts As Index(Of Char) = {"<"c, ">"c, "&"c, "|"c, ":"c, "="c, "-"c, "+"c, "!"}
+        Shared ReadOnly longOperators As Index(Of String) = {"<=", "<-", "&&", "||", ":>", "::", "<<", "->", "=>", ">=", "==", "!=", "++", "--"}
+        Shared ReadOnly shortOperators As Index(Of Char) = {"$"c, "+"c, "*"c, "/"c, "%"c, "^"c, "!"c}
+        Shared ReadOnly keywords As Index(Of String) = {
             "let", "declare", "function", "return", "as", "integer", "double", "boolean", "string",
             "const", "imports", "require", "library",
             "if", "else", "for", "loop", "while", "repeat", "step", "break", "next",
@@ -313,7 +317,16 @@ Namespace Language.TokenIcer
                     ' 如果上一个单词是一个对象引用符号或者小括号
                     ' 则可能是symbol index引用
                     ' 则$符号不应该被加入到缓存之中
-                    If Not lastPopoutToken Is Nothing AndAlso Not (lastPopoutToken.name = TokenType.identifier OrElse lastPopoutToken.name = TokenType.close) Then
+                    If lastPopoutToken Is Nothing Then
+                        If buffer > 0 Then
+                            ' a$"name b"
+                            Return populateToken().joinNext(c)
+                        Else
+                            Throw New SyntaxErrorException
+                        End If
+                    ElseIf Not (lastPopoutToken.name = TokenType.identifier OrElse lastPopoutToken.name = TokenType.close) Then
+                        ' 正则表达式语法
+                        ' $"regexp"
                         buffer += "$"c
                         Return Nothing
                     End If
@@ -400,8 +413,12 @@ Namespace Language.TokenIcer
             ElseIf escape.comment AndAlso text.First = "#"c Then
                 Return New Token With {.name = TokenType.comment, .text = text}
             Else
-                text = text.Trim
+                Return MeasureToken(text)
             End If
+        End Function
+
+        Public Shared Function MeasureToken(text As String) As Token
+            text = text.Trim
 
             If text Like keywords Then
                 Return New Token With {
@@ -411,9 +428,9 @@ Namespace Language.TokenIcer
             End If
 
             Select Case text
-                Case RInterpreter.lastVariableName
-                    Return New Token With {.name = TokenType.identifier, .text = text}
-                Case ":>", "+", "-", "*", "=", "/", ">", "<", "~", "<=", ">=", "!", "<-", "&&", "&", "||"
+                'Case RInterpreter.lastVariableName
+                '    Return New Token With {.name = TokenType.identifier, .text = text}
+                Case ":>", "+", "-", "*", "=", "/", ">", "<", "~", "<=", ">=", "!", "<-", "&&", "&", "||", "$"
                     Return New Token With {.name = TokenType.operator, .text = text}
                 Case ":"
                     Return New Token With {.name = TokenType.sequence, .text = text}
