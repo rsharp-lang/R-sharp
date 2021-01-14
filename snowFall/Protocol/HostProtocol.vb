@@ -1,9 +1,14 @@
 ﻿Imports Microsoft.VisualBasic.CommandLine.InteropService
+Imports Parallel
 Imports snowFall.RscriptCommandLine
 
 Namespace Protocol
 
     Public Class Host
+
+        Public Shared Function CreateSlave() As SlaveTask
+            Return New SlaveTask(Host.CreateProcessor, AddressOf Host.SlaveTask)
+        End Function
 
         Public Shared Function CreateProcessor() As Rscript
             Return Rscript.FromEnvironment(App.HOME)
