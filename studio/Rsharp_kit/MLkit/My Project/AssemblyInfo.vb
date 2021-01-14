@@ -7,7 +7,7 @@ Imports System.Runtime.InteropServices
 ' associated with an assembly.
 
 ' Review the values of the assembly attributes
-
+#if netcore5=0 then 
 <Assembly: AssemblyTitle("MLkit: R# machine learning toolkit library")>
 <Assembly: AssemblyDescription("MLkit: R# machine learning toolkit library")>
 <Assembly: AssemblyCompany("")>
@@ -33,3 +33,4 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyVersion("1.3210.*")>
 <Assembly: AssemblyFileVersion("2.3321.*")>
+#end if
