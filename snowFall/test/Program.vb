@@ -29,7 +29,9 @@ Module Program
     End Function
 
     Public Function demoTask(a As integerValue, b As integerValue) As integerValue()
-        Call Thread.Sleep(15000)
+        Call Console.WriteLine(a.GetJson)
+        Call Console.WriteLine(b.GetJson)
+        Call Thread.Sleep(1000)
         Return {a + b, b ^ 5}
     End Function
 End Module
