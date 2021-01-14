@@ -452,7 +452,6 @@ Namespace Runtime.Internal.Invokes
                 args = {}
             Else
                 args = listValues _
-                    .Skip(1) _
                     .Select(Function(a)
                                 Return REnv.asVector(Of Object)(a)
                             End Function) _

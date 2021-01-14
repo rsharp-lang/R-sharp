@@ -2,7 +2,7 @@
 Imports System.Reflection
 Imports System.Runtime.InteropServices
 Imports SMRUCC.Rsharp.Runtime.Interop
-
+#If netcore5 = 0 Then
 ' 有关程序集的一般信息由以下
 ' 控制。更改这些特性值可修改
 ' 与程序集关联的信息。
@@ -34,5 +34,5 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 <Assembly: AssemblyVersion("1.0.0.0")>
 <Assembly: AssemblyFileVersion("1.0.0.0")>
-
+#end if
 <Assembly: RPackageModule>
