@@ -329,6 +329,10 @@ Namespace Language.TokenIcer
                         ' $"regexp"
                         buffer += "$"c
                         Return Nothing
+                        'ElseIf lastPopoutToken.name = TokenType.identifier OrElse lastPopoutToken.name = TokenType.close Then
+                        '    Return populateToken().joinNext(c)
+                        'Else
+                        '    Throw New SyntaxErrorException
                     End If
                 End If
 
