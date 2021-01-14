@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::50816f6235274fdcdff5dff2555e8267, Library\R.base\utils\JSON.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module JSON
-    ' 
-    '     Function: buildObject, createRObj, fromJSON, json_decode, parseBSON
-    '               writeBSON
-    ' 
-    ' /********************************************************************************/
+' Module JSON
+' 
+'     Function: buildObject, createRObj, fromJSON, json_decode, parseBSON
+'               writeBSON
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -48,6 +48,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.MIME.application.json.Javascript
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -65,6 +66,32 @@ Module JSON
     <ExportAPI("json_decode")>
     Public Function json_decode(str As String, Optional env As Environment = Nothing) As Object
         Return fromJSON(str, raw:=False, env:=env)
+    End Function
+
+    <ExportAPI("json_encode")>
+    <RApiReturn(GetType(String))>
+    Public Function json_encode(x As Object,
+                                Optional maskReadonly As Boolean = False,
+                                Optional indent As Boolean = False,
+                                Optional enumToStr As Boolean = True,
+                                Optional unixTimestamp As Boolean = True,
+                                Optional env As Environment = Nothing) As Object
+        If x Is Nothing Then
+            Return "null"
+        Else
+            x = Encoder.GetObject(x)
+        End If
+
+        Dim opts As New JSONSerializerOptions With {
+            .indent = indent,
+            .maskReadonly = maskReadonly,
+            .enumToString = enumToStr,
+            .unixTimestamp = unixTimestamp
+        }
+        Dim json As JsonElement = x.GetType.GetJsonElement(x, opts)
+        Dim jsonStr As String = json.BuildJsonString(opts)
+
+        Return jsonStr
     End Function
 
     <ExportAPI("parseJSON")>

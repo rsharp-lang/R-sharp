@@ -2,7 +2,7 @@
   "profiles": {
     "R-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"F:\\lipids\\search.R\" --debug --ignore-missing-startup-packages",
+      "commandLineArgs": "\"D:\\biodeep\\bionovogene_health\\metacardio\\task.R\" --debug --ignore-missing-startup-packages",
       "workingDirectory": "D:\\GCModeller\\src\\R-sharp\\App\\net5.0"
     }
   }

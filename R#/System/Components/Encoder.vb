@@ -45,7 +45,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Development.Components
 
-    Module Encoder
+    Public Module Encoder
 
         ''' <summary>
         ''' digest R# object as underlying .NET object
