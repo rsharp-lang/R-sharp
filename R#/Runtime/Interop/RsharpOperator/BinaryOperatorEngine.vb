@@ -56,6 +56,7 @@ Namespace Runtime.Interop
 
         Sub New()
             Call arithmeticOperators()
+            Call addEtcTypeCompres()
         End Sub
 
         Private Sub arithmeticOperators()
@@ -73,6 +74,31 @@ Namespace Runtime.Interop
                     Call addMixedOperators(left, right)
                 Next
             Next
+        End Sub
+
+        Private Sub addEtcTypeCompres()
+            Dim dateType As RType = RType.GetRSharpType(GetType(Date))
+
+            Call addBinary(dateType, dateType, "==", Function(a, b, env)
+                                                         Return BinaryCoreInternal(Of Date, Date, Boolean)(
+                                                             x:=asVector(Of Date)(a),
+                                                             y:=asVector(Of Date)(b),
+                                                             [do]:=Function(x, y)
+                                                                       Dim dx = DirectCast(x, Date)
+                                                                       Dim dy = DirectCast(y, Date)
+
+                                                                       If dx.Year <> dy.Year Then
+                                                                           Return False
+                                                                       ElseIf dx.Month <> dy.Month Then
+                                                                           Return False
+                                                                       ElseIf dx.Day <> dy.Day Then
+                                                                           Return False
+                                                                       Else
+                                                                           Return True
+                                                                       End If
+                                                                   End Function) _
+                                                             .ToArray
+                                                     End Function, Nothing)
         End Sub
 
         Private Sub addFloatOperators()
