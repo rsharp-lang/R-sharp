@@ -48,19 +48,37 @@ Namespace Development.Components
     Public Module Encoder
 
         ''' <summary>
+        ''' R语言为向量化语言，但是其他的大部分编程语言不是向量化的
+        ''' 所以在向量对象这里可能会存在一些bug
+        ''' 我们基于大部分的语言所需求的数据都不是向量化的假设
+        ''' 在这里将所有只包含有一个元素的向量认为是非向量数据
+        ''' </summary>
+        ''' <param name="vec"></param>
+        ''' <returns></returns>
+        Private Function TryHandleNonVector(vec As Array) As Object
+            If vec.Length = 1 Then
+                Return vec.GetValue(Scan0)
+            Else
+                Dim array As New List(Of Object)
+
+                For Each x As Object In vec
+                    Call array.Add(Encoder.GetObject(x))
+                Next
+
+                Return array.ToArray
+            End If
+        End Function
+
+        ''' <summary>
         ''' digest R# object as underlying .NET object
         ''' </summary>
         ''' <param name="Robj"></param>
         ''' <returns></returns>
         Public Function GetObject(Robj As Object) As Object
-            If TypeOf Robj Is vector Then
-                Dim array As New List(Of Object)
-
-                For Each x As Object In DirectCast(Robj, vector).data
-                    Call array.Add(Encoder.GetObject(x))
-                Next
-
-                Return array.ToArray
+            If (Not Robj Is Nothing) AndAlso Robj.GetType.IsArray Then
+                Return TryHandleNonVector(DirectCast(Robj, Array))
+            ElseIf TypeOf Robj Is vector Then
+                Return TryHandleNonVector(DirectCast(Robj, vector).data)
             ElseIf TypeOf Robj Is list Then
                 Dim list As New Dictionary(Of String, Object)
 
