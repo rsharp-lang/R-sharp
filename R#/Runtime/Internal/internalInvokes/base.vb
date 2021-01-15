@@ -86,6 +86,33 @@ Namespace Runtime.Internal.Invokes
     Public Module base
 
         ''' <summary>
+        ''' ### System Date and Time
+        ''' </summary>
+        ''' <param name="str"></param>
+        ''' <returns>
+        ''' Returns a character string of the current system date and time.
+        ''' </returns>
+        <ExportAPI("date")>
+        <RApiReturn(GetType(Date))>
+        Public Function [date](Optional str As String() = Nothing) As Object
+            If str.IsNullOrEmpty Then
+                Return DateTime.Now
+            Else
+                Return str.Select(AddressOf Date.Parse).ToArray
+            End If
+        End Function
+
+        <ExportAPI("year")>
+        <RApiReturn(GetType(Integer))>
+        Public Function year(Optional dates As Date() = Nothing) As Object
+            If dates.IsNullOrEmpty Then
+                Return DateTime.Now.Year
+            Else
+                Return dates.Select(Function(d) d.Year).ToArray
+            End If
+        End Function
+
+        ''' <summary>
         ''' ### Combine Values into a Vector or List
         ''' 
         ''' This is a generic function which combines its arguments.
