@@ -7,7 +7,7 @@
     <ProjectGuid>{C5C3428C-D64C-4E79-B239-77ADC66B1156}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>R.graphics</RootNamespace>
-    <AssemblyName>R.graphics</AssemblyName>
+    <AssemblyName>graphics</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
@@ -19,7 +19,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <WarningsAsErrors>
     </WarningsAsErrors>
@@ -30,7 +30,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <WarningsAsErrors>
     </WarningsAsErrors>
@@ -52,7 +52,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\..\..\..\..\biodeep\biodeepdb_v3\Rscript\R\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -63,7 +63,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\..\App\Library\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -75,7 +75,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Publish|x64'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\..\App\Library\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -88,7 +88,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DEMO|AnyCPU'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\DEMO\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -100,7 +100,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DEMO|x64'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\App\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <Optimize>false</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>full</DebugType>
@@ -114,7 +114,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'GCModeller%28Release_X64%29|AnyCPU'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\GCModeller%28Release_X64%29\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -126,7 +126,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'GCModeller%28Release_X64%29|x64'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\..\..\..\GCModeller\bin\Library\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <Optimize>false</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>full</DebugType>
@@ -140,7 +140,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Rsharp_app_release|AnyCPU'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Rsharp_app_release\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -152,7 +152,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Rsharp_app_release|x64'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\..\App\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <Optimize>false</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>full</DebugType>
@@ -166,7 +166,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Biodeep_UNIX_x64|AnyCPU'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Biodeep_UNIX_x64\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -180,7 +180,7 @@
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\..\..\..\..\MassSpectrum-toolkits\dist\bin\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -191,7 +191,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Biostack|AnyCPU'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Biostack\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -205,7 +205,7 @@
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\..\..\..\..\MassSpectrum-toolkits\dist\bin\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -216,7 +216,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'mzkit|AnyCPU'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\mzkit\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -230,7 +230,7 @@
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\..\..\..\..\mzkit\dist\bin\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -241,7 +241,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BioDeep_database|AnyCPU'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\BioDeep_database\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -255,7 +255,7 @@
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\x64\BioDeep_database\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -266,7 +266,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Surveillance-of-infectious-diseases|AnyCPU'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Surveillance-of-infectious-diseases\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -280,7 +280,7 @@
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\..\..\..\..\COVID-19\App\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -291,7 +291,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'GCModeller%28UNIX-Release_X64%29|AnyCPU'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\GCModeller%28UNIX-Release_X64%29\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -305,7 +305,7 @@
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\..\..\..\GCModeller\bin\Library\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -323,7 +323,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\x86\Debug\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -332,7 +332,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\x86\Release\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -348,7 +348,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DEMO|x86'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\x86\DEMO\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -358,7 +358,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'GCModeller%28Release_X64%29|x86'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\x86\GCModeller%28Release_X64%29\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -368,7 +368,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Rsharp_app_release|x86'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\x86\Rsharp_app_release\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -378,7 +378,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Biodeep_UNIX_x64|x86'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\x86\Biodeep_UNIX_x64\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -388,7 +388,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Biostack|x86'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\x86\Biostack\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -398,7 +398,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'mzkit|x86'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\x86\mzkit\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -408,7 +408,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BioDeep_database|x86'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\x86\BioDeep_database\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -418,7 +418,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Surveillance-of-infectious-diseases|x86'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\x86\Surveillance-of-infectious-diseases\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -428,7 +428,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'GCModeller%28UNIX-Release_X64%29|x86'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\x86\GCModeller%28UNIX-Release_X64%29\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -438,7 +438,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'mzkit_UnixDocker|AnyCPU'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\mzkit_UnixDocker\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -450,7 +450,7 @@
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\..\..\..\..\mzkit\dist\bin\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -459,7 +459,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'mzkit_UnixDocker|x86'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\x86\mzkit_UnixDocker\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -469,7 +469,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LipidSearch|AnyCPU'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\LipidSearch\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -481,7 +481,7 @@
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\..\..\..\..\biodeep\biodeepdb_v3\Rscript\R\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -490,7 +490,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LipidSearch|x86'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\x86\LipidSearch\</OutputPath>
-    <DocumentationFile>R.graphics.xml</DocumentationFile>
+    <DocumentationFile>graphics.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <DebugType>pdbonly</DebugType>
