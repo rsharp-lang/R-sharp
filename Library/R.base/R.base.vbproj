@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{6EC3D3F5-F19D-4899-AF88-161F6238E6E8}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>SMRUCC.Rsharp.Packages</RootNamespace>
+    <RootNamespace>Rbase</RootNamespace>
     <AssemblyName>base</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
@@ -538,6 +538,7 @@
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>

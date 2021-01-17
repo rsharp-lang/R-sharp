@@ -277,6 +277,10 @@ Namespace Runtime
                 valueType = value.GetType
             End If
 
+            If TypeOf value Is String AndAlso Not GetType(T) Is GetType(Char) Then
+                Return New T() {Conversion.CTypeDynamic(Of T)(value)}
+            End If
+
             If valueType Is typeofT Then
                 Return {DirectCast(value, T)}
             ElseIf valueType Is GetType(T()) Then
@@ -285,8 +289,10 @@ Namespace Runtime
                 Return typeofT.fromArray(Of T)(value)
             ElseIf valueType Is GetType(Group) Then
                 Return typeofT.fromArray(Of T)(DirectCast(value, Group).group)
-            ElseIf valueType.IsInheritsFrom(GetType(IEnumerable(Of T))) Then
+            ElseIf valueType.ImplementInterface(GetType(IEnumerable(Of T))) Then
                 Return DirectCast(value, IEnumerable(Of T)).ToArray
+            ElseIf valueType.ImplementInterface(GetType(IEnumerable)) Then
+                Return (From obj In DirectCast(value, IEnumerable) Select DirectCast(obj, T)).ToArray
             Else
                 If typeofT Is GetType(Object) Then
                     Return {DirectCast(value, T)}
