@@ -759,6 +759,24 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' ### Lists – Generic and Dotted Pairs
+        ''' 
+        ''' Functions to construct, coerce and check for both kinds of R lists.
+        ''' </summary>
+        ''' <param name="x">
+        ''' object to be coerced or tested.
+        ''' </param>
+        ''' <returns>
+        ''' is.list returns TRUE if and only if its argument is a list or 
+        ''' a pairlist of length > 0. is.pairlist returns TRUE if and only 
+        ''' if the argument is a pairlist or NULL (see below).
+        ''' </returns>
+        <ExportAPI("is.list")>
+        Public Function isList(x As Object) As Boolean
+            Return TypeOf x Is list
+        End Function
+
+        ''' <summary>
         ''' ### ‘Not Available’ / Missing Values
         ''' 
         ''' NA is a logical constant of length 1 which contains a missing value indicator. 
@@ -796,8 +814,13 @@ Namespace Runtime.Internal.Invokes
         ''' </returns>
         <ExportAPI("is.na")>
         Public Function isNA(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
-            Return pipeline _
-                .TryCreatePipeline(Of Double)(x, env) _
+            Dim numerics As pipeline = pipeline.TryCreatePipeline(Of Double)(x, env, suppress:=True)
+
+            If x Is Nothing OrElse numerics.isError Then
+                Return False
+            End If
+
+            Return numerics _
                 .populates(Of Double)(env) _
                 .Select(Function(a) a.IsNaNImaginary) _
                 .ToArray
