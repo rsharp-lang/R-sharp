@@ -8,7 +8,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 ' associated with an assembly.
 
 ' Review the values of the assembly attributes
-
+#if netcore5=0 then
 <Assembly: AssemblyTitle("R# graphics api library module")>
 <Assembly: AssemblyDescription("R# graphics api library module")>
 <Assembly: AssemblyCompany("SMRUCC")>
@@ -34,5 +34,5 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 <Assembly: AssemblyVersion("1.33.*")>
 <Assembly: AssemblyFileVersion("1.0.*")>
-
+#end if
 <Assembly: RPackageModule>

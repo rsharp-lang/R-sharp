@@ -263,6 +263,7 @@ Public Module utils
                               Optional file$ = Nothing,
                               Optional row_names As Boolean = True,
                               Optional fileEncoding As Object = "",
+                              Optional tsv As Boolean = False,
                               Optional env As Environment = Nothing) As Object
 
         If x Is Nothing Then
@@ -280,7 +281,7 @@ Public Module utils
         Dim encoding As Encodings = TextEncodings.GetEncodings(Rsharp.GetEncoding(fileEncoding))
 
         If type Is GetType(Rdataframe) Then
-            Return DirectCast(x, Rdataframe).DataFrameRows(row_names, env).Save(path:=file, encoding:=encoding, silent:=True)
+            Return DirectCast(x, Rdataframe).DataFrameRows(row_names, env).Save(path:=file, encoding:=encoding, silent:=True, tsv:=tsv)
         ElseIf type Is GetType(File) Then
             Return DirectCast(x, File).Save(path:=file, encoding:=encoding, silent:=True)
         ElseIf type Is GetType(IO.DataFrame) Then
