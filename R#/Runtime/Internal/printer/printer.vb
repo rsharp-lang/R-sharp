@@ -61,12 +61,13 @@ Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization
+Imports SMRUCC.Rsharp.Development.Components
+Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Utils
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports SMRUCC.Rsharp.Development.Components
-Imports SMRUCC.Rsharp.Development.Configuration
+Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.ConsolePrinter
@@ -291,7 +292,7 @@ printSingleElement:
                            Return DirectCast(o, Array) _
                               .AsObjectEnumerator _
                               .Select(Function(obj)
-                                          Return Scripting.ToString(obj, "NULL", True)
+                                          Return any.ToString(obj, "NULL", True)
                                       End Function) _
                               .JoinBy(", ")
                        End Function
@@ -303,7 +304,7 @@ printSingleElement:
                            If obj Is GetType(Void) Then
                                Return "NA"
                            Else
-                               Return Scripting.ToString(obj, "NULL", True)
+                               Return any.ToString(obj, "NULL", True)
                            End If
                        End Function
             Else
@@ -311,10 +312,10 @@ printSingleElement:
                     If Not (elementType.Namespace.StartsWith("System.") OrElse elementType.Namespace = "System") Then
                         Return AddressOf classPrinter.printClass
                     Else
-                        Return Function(obj) Scripting.ToString(obj, "NULL", True)
+                        Return Function(obj) any.ToString(obj, "NULL", True)
                     End If
                 Else
-                    Return Function(obj) Scripting.ToString(obj, "NULL", True)
+                    Return Function(obj) any.ToString(obj, "NULL", True)
                 End If
             End If
         End Function
