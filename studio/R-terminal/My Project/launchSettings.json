@@ -2,7 +2,7 @@
   "profiles": {
     "R-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\biodeep\\bionovogene_health\\metacardio\\wechat.R\" --debug --ignore-missing-startup-packages",
+      "commandLineArgs": " \"D:\\biodeep\\biodeep_pipeline\\automation_pipeline\\test\\run.R\" --debug",
       "workingDirectory": "D:\\GCModeller\\src\\R-sharp\\App\\net5.0"
     }
   }

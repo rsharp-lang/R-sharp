@@ -42,6 +42,7 @@
 
 Imports System.IO
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
@@ -100,6 +101,13 @@ Module JSON
 
         If raw Then
             Return rawElement
+        ElseIf rawElement Is Nothing Then
+            If env.globalEnvironment.options.strict Then
+                Return Internal.debug.stop("invalid format of the input json string!", env)
+            Else
+                env.AddMessage("invalid format of the input json string!", MSG_TYPES.WRN)
+                Return Nothing
+            End If
         Else
             Return rawElement.createRObj(env)
         End If
