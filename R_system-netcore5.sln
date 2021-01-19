@@ -107,7 +107,7 @@ Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "msgpack-netcore5", "..\runt
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "imaging-netcore5", "..\runtime\sciBASIC#\gr\Microsoft.VisualBasic.Imaging\imaging-netcore5.vbproj", "{2A40AC8D-84D4-4344-A390-6866F69B3E36}"
 EndProject
-Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "graphics", "Library\R.graphics\graphics.vbproj", "{46F9A10D-8827-474F-BBBB-2CE99A55912F}"
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "graphics-netcore5", "Library\R.graphics\graphics-netcore5.vbproj", "{46F9A10D-8827-474F-BBBB-2CE99A55912F}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "R_graphic.interop", "Library\R_graphic.interop\R_graphic.interop.shproj", "{53AF2B13-CCD5-4F73-94D5-612191E785A9}"
 EndProject
