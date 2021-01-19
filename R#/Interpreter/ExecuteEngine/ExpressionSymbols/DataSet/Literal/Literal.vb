@@ -78,7 +78,19 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
         Public Shared ReadOnly Property NULL As Literal
             Get
-                Return New Literal With {.value = Nothing}
+                Return New Literal With {
+                    .value = Nothing,
+                    .m_type = TypeCodes.NA
+                }
+            End Get
+        End Property
+
+        Public Shared ReadOnly Property NA As Literal
+            Get
+                Return New Literal With {
+                    .value = GetType(Void),
+                    .m_type = TypeCodes.NA
+                }
             End Get
         End Property
 

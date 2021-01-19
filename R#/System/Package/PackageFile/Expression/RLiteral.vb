@@ -49,6 +49,7 @@ Imports System.Text
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Development.Package.File.Expressions
 
@@ -92,7 +93,11 @@ Namespace Development.Package.File.Expressions
                     Case TypeCodes.double : Call outfile.Write(CType(x.value, Double))
                     Case TypeCodes.integer : Call outfile.Write(CType(x.value, Long))
                     Case Else
-                        Call outfile.Write(Encoding.UTF8.GetBytes(Scripting.ToString(x.value)))
+                        If x.value Is GetType(Void) Then
+                            Call outfile.Write(Encoding.UTF8.GetBytes("NA"))
+                        Else
+                            Call outfile.Write(Encoding.UTF8.GetBytes(any.ToString(x.value)))
+                        End If
                 End Select
 
                 Call outfile.Flush()
@@ -109,6 +114,16 @@ Namespace Development.Package.File.Expressions
                 Case TypeCodes.boolean : Return New Literal(If(bin.ReadByte = 0, False, True))
                 Case TypeCodes.double : Return New Literal(bin.ReadDouble)
                 Case TypeCodes.integer : Return New Literal(bin.ReadInt64)
+                Case TypeCodes.NA
+                    Dim str As String = Encoding.UTF8.GetString(bin.ReadBytes(bin.BaseStream.Length))
+
+                    If str = "NA" Then
+                        Return New Literal With {.m_type = TypeCodes.NA, .value = GetType(Void)}
+                    ElseIf str = "NULL" Then
+                        Return New Literal With {.m_type = TypeCodes.NA, .value = Nothing}
+                    Else
+                        Throw New NotImplementedException(str)
+                    End If
                 Case Else
                     Return New Literal(Encoding.UTF8.GetString(bin.ReadBytes(bin.BaseStream.Length)))
             End Select

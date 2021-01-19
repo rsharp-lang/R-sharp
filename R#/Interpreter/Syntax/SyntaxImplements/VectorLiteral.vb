@@ -66,7 +66,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 Case TokenType.stringLiteral, TokenType.cliShellInvoke
                     Return New Literal With {.m_type = TypeCodes.string, .value = token.text}
                 Case TokenType.missingLiteral
-                    Dim type = TypeCodes.generic
+                    Dim type As TypeCodes = TypeCodes.NA
                     Dim value As Object
 
                     Select Case token.text
