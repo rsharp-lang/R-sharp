@@ -720,6 +720,33 @@ RE0:
             End If
         End Function
 
+        <ExportAPI("is.logical")>
+        Public Function isLogical(<RRawVectorArgument> x As Object) As Boolean
+            If x Is Nothing Then
+                Return False
+            ElseIf x.GetType Is GetType(vector) Then
+                x = DirectCast(x, vector).data
+            ElseIf x.GetType Is GetType(list) Then
+                ' 只判断list的value
+                x = DirectCast(x, list).slots.Values.ToArray
+            ElseIf x.GetType.ImplementInterface(GetType(IDictionary)) Then
+                x = DirectCast(x, IDictionary).Values.AsSet.ToArray
+            End If
+
+            If x.GetType Like RType.logicals Then
+                Return True
+            ElseIf x.GetType.IsArray AndAlso DirectCast(x, Array) _
+                .AsObjectEnumerator _
+                .All(Function(xi)
+                         Return xi.GetType Like RType.logicals
+                     End Function) Then
+
+                Return True
+            Else
+                Return False
+            End If
+        End Function
+
         <ExportAPI("as.logical")>
         <RApiReturn(GetType(Boolean))>
         Public Function asLogicals(<RRawVectorArgument> obj As Object, Optional env As Environment = Nothing) As Object

@@ -47,6 +47,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Development.Package.File
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
@@ -74,13 +75,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim current As Array = Runtime.asVector(Of String)(stringParts(Scan0).Evaluate(envir))
+            Dim current As Array = REnv.asVector(Of String)(stringParts(Scan0).Evaluate(envir))
             Dim [next] As Object
 
             For Each part As Expression In stringParts.Skip(1)
                 [next] = part.Evaluate(envir)
 
-                With Runtime.asVector(Of Object)([next])
+                With REnv.asVector(Of Object)([next])
                     If .Length = 1 Then
                         [next] = .GetValue(Scan0)
                     End If
