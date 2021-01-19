@@ -564,22 +564,24 @@ Namespace Runtime.Internal.Invokes
             Dim parameters As InvokeParameter() = columns
             Dim values As IEnumerable(Of NamedValue(Of Object)) = parameters _
                 .SeqIterator _
-                .Select(Function(a)
-                            Dim name$
-
-                            If a.value.haveSymbolName(hasObjectList:=True) Then
-                                name = a.value.name
-                            Else
-                                name = "X" & (a.i + 1)
-                            End If
-
-                            Return New NamedValue(Of Object) With {
-                                .Name = name,
-                                .Value = a.value.Evaluate(envir)
-                            }
-                        End Function)
+                .Select(Function(a) columnVector(a, envir))
 
             Return values.RDataframe(envir)
+        End Function
+
+        Private Function columnVector(a As SeqValue(Of InvokeParameter), envir As Environment) As NamedValue(Of Object)
+            Dim name$
+
+            If a.value.haveSymbolName(hasObjectList:=True) Then
+                name = a.value.name
+            Else
+                name = "X" & (a.i + 1)
+            End If
+
+            Return New NamedValue(Of Object) With {
+                .Name = name,
+                .Value = a.value.Evaluate(envir)
+            }
         End Function
 
         ''' <summary>
@@ -816,8 +818,14 @@ Namespace Runtime.Internal.Invokes
         Public Function isNA(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
             Dim numerics As pipeline = pipeline.TryCreatePipeline(Of Double)(x, env, suppress:=True)
 
-            If x Is Nothing OrElse numerics.isError Then
+            If x Is Nothing Then
                 Return False
+            ElseIf numerics.isError Then
+                If x Is GetType(Void) Then
+                    Return True
+                Else
+                    Return False
+                End If
             End If
 
             Return numerics _

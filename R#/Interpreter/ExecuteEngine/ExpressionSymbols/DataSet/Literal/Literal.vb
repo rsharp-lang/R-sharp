@@ -76,6 +76,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End Get
         End Property
 
+        Public ReadOnly Property isNA As Boolean
+            Get
+                Return type = TypeCodes.NA AndAlso value Is GetType(Void)
+            End Get
+        End Property
+
         Public Shared ReadOnly Property NULL As Literal
             Get
                 Return New Literal With {
@@ -148,6 +154,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         ' <DebuggerStepThrough>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function Evaluate(envir As Environment) As Object
+            'If isNA Then
+            '    ' debug test
+            '    Return value
+            'Else
+            '    Return value
+            'End If
             Return value
         End Function
 

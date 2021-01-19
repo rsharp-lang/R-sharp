@@ -295,6 +295,17 @@ printSingleElement:
                                       End Function) _
                               .JoinBy(", ")
                        End Function
+            ElseIf elementType.FullName = "System.RuntimeType" Then
+                Return Function(obj)
+                           ' 20210119
+                           ' handle NA string at here
+                           ' system.void is the literal of NA
+                           If obj Is GetType(Void) Then
+                               Return "NA"
+                           Else
+                               Return Scripting.ToString(obj, "NULL", True)
+                           End If
+                       End Function
             Else
                 If allowClassPrinter Then
                     If Not (elementType.Namespace.StartsWith("System.") OrElse elementType.Namespace = "System") Then
