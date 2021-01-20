@@ -132,6 +132,16 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Me.value = value
         End Sub
 
+        Sub New(value As Long)
+            Me.m_type = TypeCodes.integer
+            Me.value = value
+        End Sub
+
+        Sub New(value As Single)
+            Me.m_type = TypeCodes.double
+            Me.value = CDbl(value)
+        End Sub
+
         ''' <summary>
         ''' create a string literal
         ''' </summary>
@@ -147,6 +157,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         End Sub
 
         Sub New(value As Integer)
+            Me.m_type = TypeCodes.integer
+            Me.value = CLng(value)
+        End Sub
+
+        Sub New(value As Byte)
             Me.m_type = TypeCodes.integer
             Me.value = CLng(value)
         End Sub
