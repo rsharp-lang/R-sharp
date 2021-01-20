@@ -101,9 +101,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 End If
             Next
 
-            Dim currentStrings As String() = DirectCast(REnv.asVector(Of String)(current), String()) _
-                .Select(Function(str) sprintf(str)) _
-                .ToArray
+            Dim currentStrings As String() = DirectCast(REnv.asVector(Of String)(current), String())
+            ' .Select(Function(str) sprintf(str)) _
+            ' .ToArray
             Dim strVec As New vector(currentStrings, RType.GetRSharpType(GetType(String)))
 
             Return strVec

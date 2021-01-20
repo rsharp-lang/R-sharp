@@ -163,16 +163,18 @@ Public Module utils
     End Function
 
     Public Function ensureRowNames(row_names As Object, env As Environment) As Object
+        Dim indexType As RType = RType.TypeOf(row_names)
+
         If Not TypeOf row_names Is vector Then
-            If RType.TypeOf(row_names).mode = TypeCodes.string OrElse RType.TypeOf(row_names).mode = TypeCodes.double Then
+            If indexType.mode = TypeCodes.string OrElse indexType.mode = TypeCodes.double Then
                 row_names = REnv _
                     .asVector(Of Object)(row_names) _
                     .AsObjectEnumerator(Of Object) _
-                    .Select(AddressOf Scripting.ToString) _
+                    .Select(AddressOf any.ToString) _
                     .DoCall(Function(v)
                                 Return New vector(GetType(String), v, env)
                             End Function)
-            ElseIf RType.TypeOf(row_names).mode = TypeCodes.integer Then
+            ElseIf indexType.mode = TypeCodes.integer Then
                 row_names = REnv _
                     .asVector(Of Object)(row_names) _
                     .AsObjectEnumerator(Of Object) _
