@@ -234,7 +234,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 obj = DirectCast(obj, Array).GetValue(Scan0)
             End If
 
-            If Not objType.ImplementInterface(GetType(RNameIndex)) Then
+            If objType Is GetType(dataframe) Then
+                If indexer.Length = 1 Then
+                    Return DirectCast(obj, dataframe).getColumnVector(indexer.GetValue(Scan0).ToString)
+                Else
+                    Return Internal.debug.stop("dataframe get by column name only supprts one key element!", envir)
+                End If
+            ElseIf Not objType.ImplementInterface(GetType(RNameIndex)) Then
                 If objType.ImplementInterface(Of IDictionary) AndAlso objType.GenericTypeArguments(Scan0) Is GetType(String) Then
                     Dim keys As String() = REnv.asVector(Of String)(indexer)
                     Dim table As IDictionary = DirectCast(obj, IDictionary)
