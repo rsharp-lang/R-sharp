@@ -1,42 +1,42 @@
 ﻿#Region "Microsoft.VisualBasic::f0bd60f56ab0fb67224d0a24323bbda6, R#\Extensions.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module Extensions
-    ' 
-    '     Function: AsRReturn, Buffer, EvaluateFramework, GetEncoding, GetObject
-    '               GetString, SafeCreateColumns
-    ' 
-    ' /********************************************************************************/
+' Module Extensions
+' 
+'     Function: AsRReturn, Buffer, EvaluateFramework, GetEncoding, GetObject
+'               GetString, SafeCreateColumns
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -46,9 +46,11 @@ Imports System.Text
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
 
@@ -162,16 +164,40 @@ Public Module Extensions
                         End Function)
         ElseIf TypeOf x Is vector Then
             With DirectCast(x, vector)
+                Dim list As New List(Of TOut)
+
+                For Each item As Object In .data.AsObjectEnumerator
+                    item = RCType.CTypeDynamic(item, GetType(T), env)
+
+                    If Program.isException(item) Then
+                        Return item
+                    Else
+                        list.Add(eval(item))
+                    End If
+                Next
+
                 Return New vector(
                     names:= .getNames,
-                    input:= .data.AsObjectEnumerator(Of T).Select(eval).ToArray,
+                    input:=list.ToArray,
                     type:=RType.GetRSharpType(GetType(TOut)),
                     env:=env
                 )
             End With
         ElseIf x.GetType.IsArray Then
+            Dim list As New List(Of TOut)
+
+            For Each item As Object In DirectCast(x, Array).AsObjectEnumerator
+                item = RCType.CTypeDynamic(item, GetType(T), env)
+
+                If Program.isException(item) Then
+                    Return item
+                Else
+                    list.Add(eval(item))
+                End If
+            Next
+
             Return New vector(
-                input:=DirectCast(x, Array).AsObjectEnumerator(Of T).Select(eval).ToArray,
+                input:=list.ToArray,
                 type:=RType.GetRSharpType(GetType(TOut))
             )
         ElseIf TypeOf x Is T Then
