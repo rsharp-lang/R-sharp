@@ -120,6 +120,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             If Program.isException(value) Then
                 Return value
             Else
+                If type = TypeCodes.boolean AndAlso TypeOf value Is String Then
+                    value = DirectCast(value, String).ParseBoolean
+                End If
+
                 Try
                     Dim err As Message = Nothing
                     ' add new symbol into the given environment stack
