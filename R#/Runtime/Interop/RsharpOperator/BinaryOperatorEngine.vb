@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bf26f880b019d0878995a836a27941a6, R#\Runtime\Interop\RsharpOperator\BinaryOperatorEngine.vb"
+﻿#Region "Microsoft.VisualBasic::57ac18de4a7bf15b435ef45f46cc1b7f, R#\Runtime\Interop\RsharpOperator\BinaryOperatorEngine.vb"
 
     ' Author:
     ' 
@@ -37,7 +37,8 @@
     ' 
     '         Function: getOperator
     ' 
-    '         Sub: addBinary, addFloatOperators, addIntegerOperators, addMixedOperators, arithmeticOperators
+    '         Sub: addBinary, addEtcTypeCompres, addFloatOperators, addIntegerOperators, addMixedOperators
+    '              arithmeticOperators
     ' 
     ' 
     ' /********************************************************************************/

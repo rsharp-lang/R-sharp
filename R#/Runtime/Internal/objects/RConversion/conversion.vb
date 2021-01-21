@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::05cf7218f0505503fb9286ae8420fa3c, R#\Runtime\Internal\objects\RConversion\conversion.vb"
+﻿#Region "Microsoft.VisualBasic::af56f4b1124caf2569df9066010b60d3, R#\Runtime\Internal\objects\RConversion\conversion.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,8 @@
     '         Function: asCharacters, asDataframe, asDate, asInteger, asList
     '                   asLogicals, asNumeric, asObject, asPipeline, asRaw
     '                   asVector, castArrayOfGeneric, castArrayOfObject, castType, handleUnsure
-    '                   isCharacter, tryUnlistArray, unlist, unlistOfRList, unlistRecursive
+    '                   isCharacter, isLogical, tryUnlistArray, unlist, unlistOfRList
+    '                   unlistRecursive
     ' 
     ' 
     ' /********************************************************************************/

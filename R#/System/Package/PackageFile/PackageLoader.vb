@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b15ddd32aedec9d50decdbebd963fdb4, R#\System\Package\PackageFile\PackageLoader.vb"
+﻿#Region "Microsoft.VisualBasic::620adfec2741c5fdd13ab3f96fd3a528, R#\System\Package\PackageFile\PackageLoader.vb"
 
     ' Author:
     ' 
@@ -33,9 +33,10 @@
 
     '     Module PackageLoader2
     ' 
-    '         Function: CheckPackage, GetPackageDirectory, GetPackageIndex, GetPackageName, LoadPackage
+    '         Function: CheckPackage, GetPackageDirectory, GetPackageIndex, GetPackageName, loadDependency
+    '                   LoadPackage
     ' 
-    '         Sub: callOnLoad, loadDependency
+    '         Sub: callOnLoad
     ' 
     ' 
     ' /********************************************************************************/

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8ecc9ad0cefbccd2f953a2b093bcf19a, R#\Language\TokenIcer\Token.vb"
+﻿#Region "Microsoft.VisualBasic::ff021a6237d735c3cf396b6a834591c6, R#\Language\TokenIcer\Token.vb"
 
     ' Author:
     ' 
@@ -37,6 +37,10 @@
     ' 
     '         Constructor: (+2 Overloads) Sub New
     '         Operators: <>, =
+    ' 
+    '     Class JoinToken
+    ' 
+    '         Properties: [next]
     ' 
     ' 
     ' /********************************************************************************/

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b87147c22fdfff81c9f27a9e8e911082, R#\System\Components\Encoder.vb"
+﻿#Region "Microsoft.VisualBasic::0f3482885b6cefb4c3d03c5409b4b6ff, R#\System\Components\Encoder.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Module Encoder
     ' 
-    '         Function: DigestRSharpObject, GetObject
+    '         Function: DigestRSharpObject, GetObject, TryHandleNonVector
     ' 
     ' 
     ' /********************************************************************************/

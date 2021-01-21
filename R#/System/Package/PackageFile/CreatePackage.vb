@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3c8fc020532988b66f44ea057917e62f, R#\System\Package\PackageFile\CreatePackage.vb"
+﻿#Region "Microsoft.VisualBasic::17de40d56ca3be636aea5e1667d39190, R#\System\Package\PackageFile\CreatePackage.vb"
 
     ' Author:
     ' 
@@ -33,8 +33,8 @@
 
     '     Module CreatePackage
     ' 
-    '         Function: Build, buildRscript, buildUnixMan, checkIndex, getDataSymbols
-    '                   getFileReader, loadingDependency
+    '         Function: Build, buildRscript, buildUnixMan, checkIndex, getAssemblyList
+    '                   getDataSymbols, getFileReader, loadingDependency
     ' 
     ' 
     ' /********************************************************************************/

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::42a1826153829742d86aa27a2824a83c, R#\Language\Code.vb"
+﻿#Region "Microsoft.VisualBasic::05e71c28875faeb35f9d21f023b3de26, R#\Language\Code.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Module Code
     ' 
-    '         Function: GetCodeSpan, ParseScript
+    '         Function: GetCodeSpan, joinNext, ParseScript
     ' 
     ' 
     ' /********************************************************************************/

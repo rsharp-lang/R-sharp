@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cf8963820c77895c8ae88a77d1e27605, R#\Runtime\Internal\internalInvokes\base.vb"
+﻿#Region "Microsoft.VisualBasic::c92b3fb140dd909daa3c5346a0fdb978, R#\Runtime\Internal\internalInvokes\base.vb"
 
     ' Author:
     ' 
@@ -33,14 +33,15 @@
 
     '     Module base
     ' 
-    '         Function: [dim], [stop], allocate, append, autoDispose
-    '                   c, cat, cbind, colnames, doPrintInternal
-    '                   factors, getOption, ifelse, invisible, isEmpty
-    '                   isNA, isNull, length, makeNames, names
-    '                   ncol, neg, nrow, options, print
-    '                   rbind, Rdataframe, rep, replace, Rlist
-    '                   rownames, sink, source, str, summary
-    '                   t, uniqueNames, unitOfT, warning
+    '         Function: [date], [dim], [stop], allocate, append
+    '                   autoDispose, c, cat, cbind, colnames
+    '                   columnVector, doPrintInternal, factors, getOption, ifelse
+    '                   invisible, isEmpty, isList, isNA, isNull
+    '                   length, makeNames, names, ncol, neg
+    '                   nrow, options, print, rbind, Rdataframe
+    '                   rep, replace, Rlist, rownames, sink
+    '                   source, str, summary, t, uniqueNames
+    '                   unitOfT, warning, year
     ' 
     '         Sub: [exit], q, quit, warnings
     ' 
