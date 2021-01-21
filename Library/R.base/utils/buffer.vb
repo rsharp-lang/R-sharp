@@ -1,53 +1,67 @@
-﻿
-Imports System.IO
+﻿Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
-Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports Rsharp = SMRUCC.Rsharp
 
 <Package("buffer", Category:=APICategories.UtilityTools)>
 Module buffer
 
-    <ExportAPI("numeric")>
+    <ExportAPI("float")>
     <RApiReturn(GetType(Double))>
-    Public Function numeric(<RRawVectorArgument> stream As Object, Optional networkOrder As Boolean = False, Optional env As Environment = Nothing) As Object
-        Dim bytes As pipeline = pipeline.TryCreatePipeline(Of Byte)(stream, env)
-        Dim buffer As Byte()
-
-        If stream Is Nothing Then
-            Return Nothing
-        End If
-
-        If bytes.isError Then
-            If TypeOf stream Is Stream Then
-                buffer = DirectCast(stream, Stream) _
-                    .PopulateBlocks _
-                    .IteratesALL _
-                    .ToArray
-            Else
-                Return bytes.getError
-            End If
+    Public Function float(<RRawVectorArgument> stream As Object, Optional networkOrder As Boolean = False, Optional sizeOf As Integer = 32, Optional env As Environment = Nothing) As Object
+        If sizeOf = 32 Then
+            Return env.numberFramework(stream, networkOrder, 4, AddressOf BitConverter.ToSingle)
+        ElseIf sizeOf = 64 Then
+            Return env.numberFramework(stream, networkOrder, 8, AddressOf BitConverter.ToDouble)
         Else
-            buffer = bytes.populates(Of Byte)(env).ToArray
+            Return Internal.debug.stop($"the given size value '{sizeOf}' is invalid!", env)
         End If
+    End Function
+
+    <Extension>
+    Private Function numberFramework(Of T)(env As Environment, <RRawVectorArgument> stream As Object, networkOrder As Boolean, width As Integer, fromBlock As Func(Of Byte(), Integer, T)) As Object
+        Dim buffer As [Variant](Of Byte(), Message) = Rsharp.Buffer(stream, env)
+
+        If buffer Is Nothing Then
+            Return Nothing
+        ElseIf buffer Like GetType(Message) Then
+            Return buffer.TryCast(Of Message)
+        End If
+
+        Dim bytes As Byte() = buffer.TryCast(Of Byte())
 
         If networkOrder AndAlso BitConverter.IsLittleEndian Then
-            Return buffer _
-                .Split(4) _
+            Return bytes _
+                .Split(width) _
                 .Select(Function(block)
                             Array.Reverse(block)
-                            Return BitConverter.ToSingle(block, Scan0)
+                            Return fromBlock(block, Scan0)
                         End Function) _
                 .ToArray
         Else
-            Return buffer _
-               .Split(4) _
+            Return bytes _
+               .Split(width) _
                .Select(Function(block)
-                           Return BitConverter.ToSingle(block, Scan0)
+                           Return fromBlock(block, Scan0)
                        End Function) _
                .ToArray
+        End If
+    End Function
+
+    <ExportAPI("integer")>
+    <RApiReturn(GetType(Integer))>
+    Public Function toInteger(<RRawVectorArgument> stream As Object, Optional networkOrder As Boolean = False, Optional sizeOf As Integer = 32, Optional env As Environment = Nothing) As Object
+        If sizeOf = 32 Then
+            Return env.numberFramework(stream, networkOrder, 4, AddressOf BitConverter.ToInt32)
+        ElseIf sizeOf = 64 Then
+            Return env.numberFramework(stream, networkOrder, 8, AddressOf BitConverter.ToInt64)
+        Else
+            Return Internal.debug.stop($"the given size value '{sizeOf}' is invalid!", env)
         End If
     End Function
 End Module

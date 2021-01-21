@@ -1,47 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::95c1aa9bcc8494849f594a5d0fc6cc2d, R#\Extensions.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module Extensions
-    ' 
-    '     Function: AsRReturn, EvaluateFramework, GetEncoding, GetObject, GetString
-    '               SafeCreateColumns
-    ' 
-    ' /********************************************************************************/
+' Module Extensions
+' 
+'     Function: AsRReturn, EvaluateFramework, GetEncoding, GetObject, GetString
+'               SafeCreateColumns
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports System.Text
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime
@@ -176,6 +178,27 @@ Public Module Extensions
             Return eval(DirectCast(x, T))
         Else
             Return Internal.debug.stop(Message.InCompatibleType(GetType(T), x.GetType, env), env)
+        End If
+    End Function
+
+    Public Function Buffer(<RRawVectorArgument> stream As Object, env As Environment) As [Variant](Of Byte(), Message)
+        Dim bytes As pipeline = pipeline.TryCreatePipeline(Of Byte)(stream, env)
+
+        If stream Is Nothing Then
+            Return Nothing
+        End If
+
+        If bytes.isError Then
+            If TypeOf stream Is Stream Then
+                Return DirectCast(stream, Stream) _
+                    .PopulateBlocks _
+                    .IteratesALL _
+                    .ToArray
+            Else
+                Return bytes.getError
+            End If
+        Else
+            Return bytes.populates(Of Byte)(env).ToArray
         End If
     End Function
 End Module

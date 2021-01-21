@@ -64,6 +64,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Net.Http
@@ -71,6 +72,7 @@ Imports Microsoft.VisualBasic.Scripting
 Imports Microsoft.VisualBasic.Serialization.Bencoding
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text.Xml.Models
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -266,21 +268,18 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("base64")>
         <RApiReturn(GetType(Byte))>
         Public Function base64(<RRawVectorArgument> raw As Object, Optional env As Environment = Nothing) As Object
-            Dim bytes As pipeline = pipeline.TryCreatePipeline(Of Byte)(raw, env)
+            Dim buffer As [Variant](Of Byte(), Message) = Rsharp.Buffer(raw, env)
 
-            If raw Is Nothing Then
+            If buffer Is Nothing Then
                 Return Nothing
+            ElseIf buffer Like GetType(Message) Then
+                Return buffer.TryCast(Of Message)
             End If
 
-            If bytes.isError Then
-                If TypeOf raw Is Stream Then
-                    Return DirectCast(raw, Stream).PopulateBlocks.IteratesALL.ToBase64String
-                Else
-                    Return bytes.getError
-                End If
-            Else
-                Return bytes.populates(Of Byte)(env).ToBase64String
-            End If
+            Dim bytes As Byte() = buffer.TryCast(Of Byte())
+            Dim base64Str As String = bytes.ToBase64String
+
+            Return base64Str
         End Function
 
         ''' <summary>
