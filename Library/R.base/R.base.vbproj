@@ -527,6 +527,7 @@
     <Compile Include="save\rawSerializer.vb" />
     <Compile Include="base\IO.vb" />
     <Compile Include="DataModes.vb" />
+    <Compile Include="utils\buffer.vb" />
     <Compile Include="utils\dataframe.vb" />
     <Compile Include="utils\console.vb" />
     <Compile Include="utils\JSON.vb" />
