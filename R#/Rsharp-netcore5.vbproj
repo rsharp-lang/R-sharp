@@ -18,6 +18,7 @@
 		<Description>R# language runtime and script interpreter</Description>
 		<Configurations>Debug;Release;Rsharp_app_release;LipidSearch</Configurations>
 		<RepositoryType>git</RepositoryType>
+		<AnalysisLevel>preview</AnalysisLevel>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
