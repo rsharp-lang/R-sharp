@@ -56,6 +56,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.My
+Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
@@ -63,7 +64,6 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports SMRUCC.Rsharp.Development.Package
 
 Namespace Runtime
 
@@ -148,7 +148,7 @@ Namespace Runtime
         ''' If the current stack does not contains the target variable, then the program will try to find the variable in his parent
         ''' if variable in format like [var], then it means a global or parent environment variable
         ''' </remarks>
-        Default Public Property value(name As String) As Symbol
+        Default Public Overridable Property value(name As String) As Symbol
             Get
                 Dim symbol As Symbol = FindSymbol(name)
 
@@ -259,7 +259,7 @@ Namespace Runtime
         ''' </summary>
         ''' <param name="name"></param>
         ''' <returns></returns>
-        Public Function FindSymbol(name As String, Optional [inherits] As Boolean = True) As Symbol
+        Public Overridable Function FindSymbol(name As String, Optional [inherits] As Boolean = True) As Symbol
             If (name.First = "["c AndAlso name.Last = "]"c) Then
                 Return globalEnvironment.FindSymbol(name.GetStackValue("[", "]"))
             End If

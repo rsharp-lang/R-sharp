@@ -177,6 +177,7 @@ Namespace Runtime.Internal.Invokes
         ''' that Is missing the final EOL marker.
         ''' </remarks>
         <ExportAPI("parse")>
+        <RApiReturn(GetType(Expression))>
         Public Function parse(text As String) As Object
 
         End Function

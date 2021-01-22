@@ -120,7 +120,7 @@ Namespace Runtime.Internal.Object
         End Function
 
         Public Shared Function asCharacter(levels As Integer(), factor As factor) As String()
-
+            Throw New NotImplementedException
         End Function
     End Class
 End Namespace

@@ -134,8 +134,9 @@ Namespace Runtime.Internal.Invokes
             Return join
         End Function
 
+        <ExportAPI("diff")>
         Public Function diff(<RRawVectorArgument> x As Object, <RRawVectorArgument> y As Object) As Object
-
+            Throw New NotImplementedException
         End Function
 
         <ExportAPI("index.of")>
@@ -148,6 +149,7 @@ Namespace Runtime.Internal.Invokes
 
             Dim typeofX As Type = x.GetType
 
+            Throw New NotImplementedException
         End Function
 
         <ExportAPI("loop")>

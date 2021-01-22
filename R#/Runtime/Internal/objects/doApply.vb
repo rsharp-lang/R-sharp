@@ -57,7 +57,12 @@ Namespace Runtime.Internal.Object
     Module doApply
 
         Public Function apply(df As dataframe, margin As margins, FUN As Object, env As Environment) As Object
+            If margin = margins.row Then
+            Else
 
+            End If
+
+            Throw New NotImplementedException
         End Function
     End Module
 End Namespace
