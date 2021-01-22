@@ -135,6 +135,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Else
                 Return RType.GetRSharpType(x.GetType)
             End If
+
+            Throw New NotImplementedException
         End Function
 
     End Class

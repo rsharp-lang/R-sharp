@@ -179,7 +179,7 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("parse")>
         <RApiReturn(GetType(Expression))>
         Public Function parse(text As String) As Object
-
+            Throw New NotImplementedException
         End Function
     End Module
 End Namespace

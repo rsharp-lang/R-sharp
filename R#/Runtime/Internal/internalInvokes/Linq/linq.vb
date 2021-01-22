@@ -667,6 +667,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                                 Optional action$ = "take",
                                 Optional env As Environment = Nothing) As Object
 
+            Throw New NotImplementedException
         End Function
     End Module
 End Namespace

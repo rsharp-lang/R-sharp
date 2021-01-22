@@ -88,6 +88,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             Else
                 ' select by row index
             End If
+
+            Throw New NotImplementedException
         End Function
     End Class
 End Namespace

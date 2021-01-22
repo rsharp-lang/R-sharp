@@ -475,6 +475,8 @@ Namespace Runtime.Internal.Invokes
             ElseIf TypeOf eval Is Func(Of Object, Double) Then
                 evalFUNC = New Evaluate(Of Object)(AddressOf DirectCast(eval, Func(Of Object, Double)).Invoke)
             End If
+
+            Throw New NotImplementedException
         End Function
 
         ''' <summary>
@@ -518,7 +520,7 @@ Namespace Runtime.Internal.Invokes
                 vy = vy.Where(Function(yi) Not yi.IsNaNImaginary).ToArray
             End If
 
-
+            Throw New NotImplementedException
         End Function
     End Module
 End Namespace
