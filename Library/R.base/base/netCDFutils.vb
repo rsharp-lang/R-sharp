@@ -1,48 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::076a41f85851ccce1ebdb97363626169, Library\R.base\base\netCDFutils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module netCDFutils
-    ' 
-    '     Function: getDataVariable, globalAttributes, openCDF, variableNames
-    ' 
-    ' /********************************************************************************/
+' Module netCDFutils
+' 
+'     Function: getDataVariable, globalAttributes, openCDF, variableNames
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.IO
+Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.IO
 Imports Microsoft.VisualBasic.Data.IO.netCDF
+Imports Microsoft.VisualBasic.Data.IO.netCDF.Components
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime
@@ -52,6 +54,29 @@ Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 
 <Package("netCDF.utils")>
 Module netCDFutils
+
+    Sub New()
+        Call Internal.ConsolePrinter.AttachConsoleFormatter(Of variable)(AddressOf printVar)
+    End Sub
+
+    Private Function printVar(var As variable) As String
+        Dim sb As New StringBuilder
+
+        sb.AppendLine($"{var.ToString}")
+        sb.AppendLine($"-----------------------------------")
+        sb.AppendLine($"dimensions: {var.dimensions.GetJson}")
+        sb.AppendLine($"      type: {var.type.Description}")
+        sb.AppendLine($"      size: {var.size}")
+        sb.AppendLine($"    offset: {var.offset}")
+        sb.AppendLine($" is_record: {var.record.ToString.ToUpper}")
+
+        If Not var.value Is Nothing Then
+            Call sb.AppendLine(New String("-"c, 64))
+            Call sb.AppendLine(var.value.ToString)
+        End If
+
+        Return sb.ToString
+    End Function
 
     <ExportAPI("open.netCDF")>
     <RApiReturn(GetType(netCDFReader))>
@@ -127,7 +152,7 @@ Module netCDFutils
     End Function
 
     <ExportAPI("var")>
-    Public Function getDataVariable(file As Object, <RRawVectorArgument> name As Object, Optional env As Environment = Nothing) As Object
+    Public Function getDataVariable(file As Object, name As String, Optional env As Environment = Nothing) As Object
         If TypeOf file Is String Then
             file = netCDFReader.Open(DirectCast(file, String))
         End If
@@ -135,6 +160,11 @@ Module netCDFutils
             Return Internal.debug.stop(New NotImplementedException, env)
         End If
 
-        ' Dim var = DirectCast(file, netCDFReader).getDataVariableEntry()
+        Dim var As variable = DirectCast(file, netCDFReader).getDataVariableEntry(name)
+        Dim data As CDFData = DirectCast(file, netCDFReader).getDataVariable(var)
+
+        var.value = data
+
+        Return var
     End Function
 End Module
