@@ -45,6 +45,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.IO
 Imports Microsoft.VisualBasic.Data.IO.netCDF
 Imports Microsoft.VisualBasic.Data.IO.netCDF.Components
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime
@@ -93,7 +94,7 @@ Module netCDFutils
     End Function
 
     <ExportAPI("globalAttributes")>
-    Public Function globalAttributes(file As Object, Optional env As Environment = Nothing) As Object
+    Public Function globalAttributes(file As Object, Optional list As Boolean = False, Optional env As Environment = Nothing) As Object
         If TypeOf file Is String Then
             file = netCDFReader.Open(DirectCast(file, String))
         End If
@@ -101,20 +102,34 @@ Module netCDFutils
             Return Internal.debug.stop(New NotImplementedException, env)
         End If
 
-        Dim attrs = DirectCast(file, netCDFReader).globalAttributes
-        Dim name As Array = attrs.Select(Function(a) a.name).ToArray
-        Dim type As Array = attrs.Select(Function(a) a.type.ToString).ToArray
-        Dim value As Array = attrs.Select(Function(a) a.value).ToArray
-        Dim table As New Rdataframe With {
-            .columns = New Dictionary(Of String, Array) From {
-                {NameOf(name), name},
-                {NameOf(type), type},
-                {NameOf(value), value}
-            },
-            .rownames = name
-        }
+        Dim attrs As attribute() = DirectCast(file, netCDFReader).globalAttributes
+        Dim name As String() = attrs.Select(Function(a) a.name).ToArray
+        Dim value As String() = attrs.Select(Function(a) a.value).ToArray
 
-        Return table
+        If list Then
+            Return New list With {
+                .slots = name _
+                    .SeqIterator _
+                    .ToDictionary(Function(i) CStr(i),
+                                  Function(i)
+                                      Return CObj(value(i))
+                                  End Function)
+            }
+        Else
+            Dim type As Array = attrs _
+                .Select(Function(a) a.type.ToString) _
+                .ToArray
+            Dim table As New Rdataframe With {
+                .columns = New Dictionary(Of String, Array) From {
+                    {NameOf(name), name},
+                    {NameOf(type), type},
+                    {NameOf(value), value}
+                },
+                .rownames = name
+            }
+
+            Return table
+        End If
     End Function
 
     <ExportAPI("variables")>
@@ -166,5 +181,15 @@ Module netCDFutils
         var.value = data
 
         Return var
+    End Function
+
+    ''' <summary>
+    ''' get value from variable
+    ''' </summary>
+    ''' <param name="var"></param>
+    ''' <returns></returns>
+    <ExportAPI("getValue")>
+    Public Function getValue(var As variable) As Object
+        Return var.value.genericValue
     End Function
 End Module
