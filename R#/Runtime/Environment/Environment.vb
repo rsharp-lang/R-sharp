@@ -431,6 +431,16 @@ Namespace Runtime
             End If
         End Function
 
+        Public Function enumerateFunctions() As IEnumerable(Of Symbol)
+            Dim list = funcSymbols.SafeQuery.Select(Function(fun) fun.Value).ToList
+
+            If Not parent Is Nothing Then
+                list.AddRange(parent.enumerateFunctions)
+            End If
+
+            Return list.Distinct
+        End Function
+
         Public Iterator Function GetEnumerator() As IEnumerator(Of Symbol) Implements IEnumerable(Of Symbol).GetEnumerator
             For Each var As Symbol In symbols.Values
                 Yield var

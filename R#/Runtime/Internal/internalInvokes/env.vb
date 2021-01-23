@@ -177,7 +177,18 @@ Namespace Runtime.Internal.Invokes
                         .Select(Function(pkg) pkg.namespace) _
                         .ToArray
                 Else
-                    Return debug.stop({"invalid query term!", "term: " & name}, env)
+                    Dim func = env.enumerateFunctions _
+                        .Where(Function(fun)
+                                   Return TypeOf fun.value Is RMethodInfo AndAlso DirectCast(fun.value, RMethodInfo).GetPackageInfo.namespace = name
+                               End Function) _
+                        .Select(Function(fun) DirectCast(fun.value, RMethodInfo).name) _
+                        .ToArray
+
+                    If func.IsNullOrEmpty Then
+                        Return debug.stop({"invalid query term!", "term: " & name}, env)
+                    Else
+                        Return func
+                    End If
                 End If
             End If
 
