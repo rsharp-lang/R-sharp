@@ -55,7 +55,10 @@ Module Program
 
     Sub Main()
         Dim taskApi As New Func(Of integerValue, integerValue, integerValue())(AddressOf demoTask)
-        Dim list As integerValue() = New SlaveTask(Host.CreateProcessor, AddressOf Host.SlaveTask, 1802).RunTask(taskApi, CType(5, integerValue), CType(2, integerValue))
+        Dim host2 As New SlaveTask(Host.CreateProcessor, AddressOf Host.SlaveTask, 1802)
+        Dim list As integerValue() = host2.RunTask(taskApi, CType(5, integerValue), CType(2, integerValue))
+
+        Call Console.WriteLine("function:")
 
         ' 7 
         ' 32
@@ -63,6 +66,16 @@ Module Program
             Call Console.WriteLine(item.GetJson)
         Next
 
+        host2 = New SlaveTask(Host.CreateProcessor, AddressOf Host.SlaveTask, 1569)
+
+        Dim lis2 = host2.RunTask(Function(a As integerValue, b As integerValue)
+                                     Return demoTask(a, b)
+                                 End Function, CType(5, integerValue), CType(2, integerValue))
+        Call Console.WriteLine("lambda:")
+
+        For Each item In lis2
+            Call Console.WriteLine(item.GetJson)
+        Next
 
         Dim api2 As New Func(Of Dictionary(Of String, integerValue))(AddressOf populate)
         Dim result2 As Dictionary(Of String, integerValue) = New SlaveTask(Host.CreateProcessor, AddressOf Host.SlaveTask).RunTask(api2)
