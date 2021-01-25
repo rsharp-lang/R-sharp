@@ -121,8 +121,10 @@ Namespace Development.Package.File.Expressions
                         Return New Literal With {.m_type = TypeCodes.NA, .value = GetType(Void)}
                     ElseIf str = "NULL" Then
                         Return New Literal With {.m_type = TypeCodes.NA, .value = Nothing}
+                    ElseIf str = "" Then
+                        Return New Literal With {.m_type = TypeCodes.string, .value = ""}
                     Else
-                        Throw New NotImplementedException(str)
+                        Throw New NotImplementedException($"unsure about the literal string: '{str}'")
                     End If
                 Case Else
                     Return New Literal(Encoding.UTF8.GetString(bin.ReadBytes(bin.BaseStream.Length)))
