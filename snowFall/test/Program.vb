@@ -55,8 +55,8 @@ Module Program
 
     Sub Main()
         Dim taskApi As New Func(Of integerValue, integerValue, integerValue())(AddressOf demoTask)
-        Dim host2 As New SlaveTask(Host.CreateProcessor, AddressOf Host.SlaveTask, 1802)
-        Dim list As integerValue() = host2.RunTask(taskApi, CType(5, integerValue), CType(2, integerValue))
+        Dim host2 As New SlaveTask(Host.CreateProcessor, AddressOf Host.SlaveTask)
+        Dim list As integerValue() = host2.RunTask(Of integerValue())(taskApi, CType(5, integerValue), CType(2, integerValue))
 
         Call Console.WriteLine("function:")
 
@@ -68,9 +68,9 @@ Module Program
 
         host2 = New SlaveTask(Host.CreateProcessor, AddressOf Host.SlaveTask, 1569)
 
-        Dim lis2 = host2.RunTask(Function(a As integerValue, b As integerValue)
-                                     Return demoTask(a, b)
-                                 End Function, CType(5, integerValue), CType(2, integerValue))
+        Dim lis2 As integerValue() = host2.RunTask(Of integerValue())(Function(a As integerValue, b As integerValue)
+                                                                          Return demoTask(a, b)
+                                                                      End Function, CType(5, integerValue), CType(2, integerValue))
         Call Console.WriteLine("lambda:")
 
         For Each item In lis2
@@ -78,7 +78,7 @@ Module Program
         Next
 
         Dim api2 As New Func(Of Dictionary(Of String, integerValue))(AddressOf populate)
-        Dim result2 As Dictionary(Of String, integerValue) = New SlaveTask(Host.CreateProcessor, AddressOf Host.SlaveTask).RunTask(api2)
+        Dim result2 As Dictionary(Of String, integerValue) = New SlaveTask(Host.CreateProcessor, AddressOf Host.SlaveTask).RunTask(Of Dictionary(Of String, integerValue))(api2)
 
         Call Console.WriteLine(result2.GetJson)
 
@@ -86,7 +86,9 @@ Module Program
     End Sub
 
     Public Function populate() As Dictionary(Of String, integerValue)
-        Return New Dictionary(Of String, integerValue) From {{"a", New integerValue With {.vector = {1, 2, 3, 4, 5}}}}
+        Return New Dictionary(Of String, integerValue) From {
+            {"a", New integerValue With {.vector = {1, 2, 3, 4, 5}}}
+        }
     End Function
 
     Public Function demoTask(a As integerValue, b As integerValue) As integerValue()
