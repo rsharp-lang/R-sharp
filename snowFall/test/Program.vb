@@ -53,7 +53,21 @@ Imports snowFall.Protocol
 
 Module Program
 
+    Sub ErrorTest()
+        Dim host2 As New SlaveTask(Host.CreateProcessor, AddressOf Host.SlaveTask, 6588)
+        Dim taskApi As New Func(Of String, Integer())(AddressOf createErrorMessage)
+
+        Call host2.RunTask(Of Integer())(taskApi, "hello world!")
+    End Sub
+
+    Public Function createErrorMessage(message As String) As Integer()
+        Throw New InvalidProgramException($"test error message: '{message}'")
+    End Function
+
     Sub Main()
+
+        Call ErrorTest()
+
         Dim taskApi As New Func(Of integerValue, integerValue, integerValue())(AddressOf demoTask)
         Dim host2 As New SlaveTask(Host.CreateProcessor, AddressOf Host.SlaveTask)
         Dim list As integerValue() = host2.RunTask(Of integerValue())(taskApi, CType(5, integerValue), CType(2, integerValue))
