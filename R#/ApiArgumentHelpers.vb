@@ -94,41 +94,7 @@ Public Module ApiArgumentHelpers
 
         Select Case value.GetType
             Case GetType(vector)
-                Dim v As vector = value
-                Dim vec As Double()
-
-                Select Case v.elementType.mode
-                    Case TypeCodes.double
-                        vec = REnv.asVector(Of Double)(v.data)
-                    Case TypeCodes.integer
-                        vec = REnv.asVector(Of Double)(v.data)
-                    Case TypeCodes.string
-
-                        If v.length = 1 Then
-                            Return CType(DirectCast(v.data.GetValue(Scan0), String), DoubleRange)
-                        Else
-                            vec = v.data _
-                                .AsObjectEnumerator(Of String) _
-                                .Select(AddressOf Val) _
-                                .ToArray
-                        End If
-
-                    Case Else
-                        Return debug.stop({
-                            "invalid vector data type!",
-                            "mode: " & v.elementType.mode,
-                            "raw: " & v.elementType.fullName
-                        }, env)
-                End Select
-
-                If vec.Length < 2 Then
-                    Return debug.stop({
-                        "a numeric range required two boundary value at least!",
-                        "api: " & api
-                    }, env)
-                Else
-                    Return New DoubleRange(vec)
-                End If
+                Return DirectCast(value, vector).rangeFromVector(env, api)
             Case GetType(DoubleRange)
                 Return DirectCast(value, DoubleRange)
             Case GetType(String)
@@ -140,6 +106,44 @@ Public Module ApiArgumentHelpers
                     "given: " & value.GetType.FullName
                 }, env)
         End Select
+    End Function
+
+    <Extension>
+    Private Function rangeFromVector(v As vector, env As Environment, api$) As Object
+        Dim vec As Double()
+
+        Select Case v.elementType.mode
+            Case TypeCodes.double
+                vec = REnv.asVector(Of Double)(v.data)
+            Case TypeCodes.integer
+                vec = REnv.asVector(Of Double)(v.data)
+            Case TypeCodes.string
+
+                If v.length = 1 Then
+                    Return CType(DirectCast(v.data.GetValue(Scan0), String), DoubleRange)
+                Else
+                    vec = v.data _
+                        .AsObjectEnumerator(Of String) _
+                        .Select(AddressOf Val) _
+                        .ToArray
+                End If
+
+            Case Else
+                Return debug.stop({
+                    "invalid vector data type!",
+                    "mode: " & v.elementType.mode,
+                    "raw: " & v.elementType.fullName
+                }, env)
+        End Select
+
+        If vec.Length < 2 Then
+            Return debug.stop({
+                "a numeric range required two boundary value at least!",
+                "api: " & api
+            }, env)
+        Else
+            Return New DoubleRange(vec)
+        End If
     End Function
 
     Public Function GetFileStream(file As Object, mode As FileAccess, env As Environment) As [Variant](Of Stream, Message)
