@@ -55,10 +55,12 @@ Imports snowFall.Protocol
 Module Program
 
     Sub ErrorTest()
-        Dim host2 As New SlaveTask(Host.CreateProcessor, AddressOf Host.SlaveTask, 6588)
+        Dim host2 As New SlaveTask(Host.CreateProcessor, AddressOf Host.SlaveTask, 6588, ignoreError:=True)
         Dim taskApi As New Func(Of String, Integer())(AddressOf createErrorMessage)
 
         Call host2.RunTask(Of Integer())(taskApi, "hello world!")
+
+        Pause()
     End Sub
 
     Public Function createErrorMessage(message As String) As Integer()
