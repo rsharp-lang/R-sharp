@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::19343c95801290cfd76f4950d4ae6f8d, Library\R.base\utils\buffer.vb"
+﻿#Region "Microsoft.VisualBasic::183677a70d1a3e7139954fe5f1c74fd9, Library\R.base\utils\buffer.vb"
 
     ' Author:
     ' 
@@ -106,4 +106,3 @@ Module buffer
         End If
     End Function
 End Module
-

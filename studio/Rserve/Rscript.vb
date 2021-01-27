@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9a39fe5973e1bcb8a4f6e66bde3c21cc, studio\Rserve\Rscript.vb"
+﻿#Region "Microsoft.VisualBasic::555d831911a6722cece6826fc52c265f, studio\Rserve\Rscript.vb"
 
     ' Author:
     ' 
@@ -260,7 +260,3 @@ Return CLI.ToString()
 End Function
 End Class
 End Namespace
-
-
-
-

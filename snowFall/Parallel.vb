@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::aec55fb74eb087a29c40a660a3c79add, snowFall\Parallel.vb"
+﻿#Region "Microsoft.VisualBasic::bdbd94de237757e1db76ef9831bfb054, snowFall\Parallel.vb"
 
     ' Author:
     ' 
@@ -56,4 +56,3 @@ Public Module Parallel
         Return New TaskBuilder(port).Run
     End Function
 End Module
-

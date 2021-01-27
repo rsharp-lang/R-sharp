@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bf80fb446b677ea5d0745c548077d753, R#\ApiArgumentHelpers.vb"
+﻿#Region "Microsoft.VisualBasic::c1ae56a7031f13caabb8607325327e07, R#\ApiArgumentHelpers.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     ' Module ApiArgumentHelpers
     ' 
-    '     Function: GetDoubleRange, GetFileStream, GetNamedValueTuple
+    '     Function: GetDoubleRange, GetFileStream, GetNamedValueTuple, rangeFromVector
     ' 
     ' /********************************************************************************/
 
