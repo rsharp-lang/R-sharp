@@ -284,7 +284,7 @@ Module stats
             Dim item2$ = projection!f2
             Dim val$ = projection!val
 
-            Return Builder.FromTabular(raw, item1, item2, val)
+            Return LoadDataMatrix.FromTabular(raw, item1, item2, val)
         End If
     End Function
 
