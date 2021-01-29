@@ -332,20 +332,41 @@ Namespace Runtime.Internal.Invokes
 
             Dim apply As RFunction = FUN
             Dim list As New Dictionary(Of String, Object)
+            Dim getName As Func(Of SeqValue(Of Object), String) = keyNameAuto(names, envir)
+            Dim value As Object
+            Dim keyName$
 
             If X.GetType Is GetType(Dictionary(Of String, Object)) Then
-                For Each d In DirectCast(X, Dictionary(Of String, Object))
-                    list(d.Key) = apply.Invoke(envir, invokeArgument(d.Value))
+                Dim i As i32 = Scan0
 
-                    If Program.isException(list(d.Key)) Then
-                        Return list(d.Key)
+                For Each d In DirectCast(X, Dictionary(Of String, Object))
+                    If names Is Nothing Then
+                        keyName = d.Key
+                    Else
+                        keyName = getName(New SeqValue(Of Object)(++i, d.Value))
+                    End If
+
+                    list(keyName) = apply.Invoke(envir, invokeArgument(d.Value))
+
+                    If Program.isException(list(keyName)) Then
+                        Return list(keyName)
+                    End If
+                Next
+            ElseIf TypeOf X Is pipeline Then
+                For Each obj As SeqValue(Of Object) In DirectCast(X, pipeline) _
+                    .populates(Of Object)(envir) _
+                    .SeqIterator
+
+                    keyName = getName(obj)
+                    value = apply.Invoke(envir, invokeArgument(d.value))
+
+                    If Program.isException(value) Then
+                        Return value
+                    Else
+                        list(keyName) = value
                     End If
                 Next
             Else
-                Dim getName As Func(Of SeqValue(Of Object), String) = keyNameAuto(names, envir)
-                Dim keyName$
-                Dim value As Object
-
                 For Each d As SeqValue(Of Object) In REnv.asVector(Of Object)(X) _
                     .AsObjectEnumerator _
                     .SeqIterator
