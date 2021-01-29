@@ -358,7 +358,7 @@ Namespace Runtime.Internal.Invokes
                     .SeqIterator
 
                     keyName = getName(obj)
-                    value = apply.Invoke(envir, invokeArgument(d.value))
+                    value = apply.Invoke(envir, invokeArgument(obj.value))
 
                     If Program.isException(value) Then
                         Return value
