@@ -315,6 +315,8 @@ Namespace Runtime.Internal.Object.Converts
                 }
 
                 Return clone
+            ElseIf x.GetType.IsArray AndAlso DirectCast(x, Array).Length = 0 Then
+                Return Nothing
             Else
                 args = base.Rlist(args, env)
 
