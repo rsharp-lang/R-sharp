@@ -163,6 +163,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="rdocumentation\package.vb" />
+    <Compile Include="rdocumentation\function.vb" />
     <Compile Include="RoxygenDocument.vb" />
     <Compile Include="roxygen.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
