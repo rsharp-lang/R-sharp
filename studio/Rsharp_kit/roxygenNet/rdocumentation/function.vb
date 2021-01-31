@@ -78,7 +78,7 @@ Public Class [function]
     End Function
 
     Public Function createHtml(docs As Document, pkg As RPackage) As String
-        Dim assembly = pkg.package.Assembly.FromAssembly
+        Dim assembly As AssemblyInfo = pkg.package.Assembly.FromAssembly
 
         With New ScriptBuilder(blankTemplate)
             !name_title = docs.declares.name
