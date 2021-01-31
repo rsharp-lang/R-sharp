@@ -546,11 +546,14 @@ Namespace Runtime.Internal.Invokes
         ''' appended after the specified element of x.
         ''' </returns>
         <ExportAPI("append")>
-        Public Function append(<RRawVectorArgument> x As Object, <RRawVectorArgument> values As Object, Optional env As Environment = Nothing) As Object
+        Public Function append(<RRawVectorArgument> x As Object,
+                               <RRawVectorArgument> values As Object,
+                               Optional env As Environment = Nothing) As Object
+
             If x Is Nothing Then
                 Return values
             ElseIf values Is Nothing Then
-                Return values
+                Return x
             End If
 
             If TypeOf x Is list Then
@@ -563,6 +566,46 @@ Namespace Runtime.Internal.Invokes
 
                     Return listX
                 End If
+            Else
+                Dim vec As Array
+
+                If TypeOf x Is vector Then
+                    vec = DirectCast(x, vector).data
+                Else
+                    vec = x
+                End If
+
+                Dim type As Type = vec.GetType
+                Dim type2 As Type
+                Dim vec2 As Array
+
+                If TypeOf values Is vector Then
+                    type2 = DirectCast(values, vector).data.GetType
+                    vec2 = DirectCast(values, vector).data
+                ElseIf values.GetType.IsArray Then
+                    type2 = values.GetType
+                    vec2 = values
+                Else
+                    Return Internal.debug.stop("invalid type match!", env)
+                End If
+
+                If Not type Is type2 Then
+                    type = GetType(Object)
+                End If
+
+                Dim union As Array = Array.CreateInstance(type, vec.Length + vec2.Length)
+
+                For i As Integer = 0 To vec.Length - 1
+                    union.SetValue(vec.GetValue(i), i)
+                Next
+                For i As Integer = 0 To vec2.Length - 1
+                    union.SetValue(vec2.GetValue(i), vec.Length + i)
+                Next
+
+                Return New vector With {
+                    .data = union,
+                    .elementType = RType.GetRSharpType(type)
+                }
             End If
 
             Throw New NotImplementedException
