@@ -91,6 +91,15 @@ Namespace Development
             Return type
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="func"></param>
+        ''' <param name="requireNoneNull">
+        ''' 默认当没有做注释的时候，这个函数会返回空值
+        ''' 反之这个参数为TRUE的时候会返回空文档对象实例
+        ''' </param>
+        ''' <returns></returns>
         Public Function GetAnnotations(func As MethodInfo, Optional requireNoneNull As Boolean = False) As ProjectMember
             Dim type As ProjectType = GetAnnotations(func.DeclaringType)
             Dim docs As ProjectMember
