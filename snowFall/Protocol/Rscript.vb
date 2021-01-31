@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9805e45ba580bc889217ba2d68201c21, snowFall\Protocol\Rscript.vb"
+﻿#Region "Microsoft.VisualBasic::ae97d83a60c9ccd37f2fe567191b6f15, snowFall\Protocol\Rscript.vb"
 
     ' Author:
     ' 
@@ -260,7 +260,3 @@ Return CLI.ToString()
 End Function
 End Class
 End Namespace
-
-
-
-

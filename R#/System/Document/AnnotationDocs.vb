@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0bf1a7e2569d4a4773b360652951b287, R#\System\Document\AnnotationDocs.vb"
+﻿#Region "Microsoft.VisualBasic::edeeb96bdd471bfafa826b0b80ae7bdd, R#\System\Document\AnnotationDocs.vb"
 
     ' Author:
     ' 
