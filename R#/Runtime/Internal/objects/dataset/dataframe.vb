@@ -135,7 +135,7 @@ Namespace Runtime.Internal.Object
         ''' </summary>
         ''' <param name="selector"></param>
         ''' <returns></returns>
-        Public Function projectByColumn(selector As Array) As dataframe
+        Public Function projectByColumn(selector As Array, Optional fullSize As Boolean = False) As dataframe
             Dim indexType As Type = MeasureRealElementType(selector)
 
             If indexType Like RType.characters Then
@@ -144,7 +144,21 @@ Namespace Runtime.Internal.Object
                     .columns = DirectCast(asVector(Of String)(selector), String()) _
                         .ToDictionary(Function(colName) colName,
                                       Function(key)
-                                          Return columns(key)
+                                          Dim col As Array = columns(key)
+
+                                          If fullSize Then
+                                              Dim nrows As Integer = Me.nrows
+                                              Dim vec As Array = Array.CreateInstance(col.GetType.GetElementType, nrows)
+                                              Dim getter = New GetVectorElement(col).Getter
+
+                                              For i As Integer = 0 To nrows - 1
+                                                  vec.SetValue(getter(i), i)
+                                              Next
+
+                                              Return vec
+                                          Else
+                                              Return col
+                                          End If
                                       End Function)
                 }
             ElseIf indexType Like RType.integers Then
@@ -366,6 +380,11 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        ''' <summary>
+        ''' has column name?
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function hasName(name As String) As Boolean Implements RNames.hasName
             Return columns.ContainsKey(name)
