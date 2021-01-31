@@ -632,7 +632,7 @@ Namespace Runtime.Internal.Invokes
         ''' objects (Not lists, matrices Of data frames) Then the argument names give the 
         ''' column names. For an unnamed simple argument, a deparsed version Of the 
         ''' argument Is used As the name (With an enclosing ``I(...)`` removed). For a named 
-        ''' matrix/list/data frame argument With more than one named column, the names Of 
+        ''' ``matrix``/``list``/``dataframe`` argument With more than one named column, the names Of 
         ''' the columns are the name Of the argument followed by a dot And the column name 
         ''' inside the argument: If the argument Is unnamed, the argument's column names 
         ''' are used. For a named or unnamed matrix/list/data frame argument that contains 

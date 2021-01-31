@@ -4,6 +4,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Serializati
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.Markup.MarkDown
 Imports Microsoft.VisualBasic.Scripting.SymbolBuilder
+Imports Microsoft.VisualBasic.Text
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Runtime
@@ -81,7 +82,9 @@ Public Class [function]
 
         With New ScriptBuilder(blankTemplate)
             !name_title = docs.declares.name
-            !usage = docs.declares.ToString
+            !usage = docs.declares _
+                .ToString _
+                .Trim(" "c, ASCII.CR, ASCII.LF)
             !title = docs.title
             !summary = docs.description
             !arguments = docs.parameters _
@@ -100,6 +103,12 @@ Public Class [function]
 
             If docs.keywords.IsNullOrEmpty Then
                 !display_keywords = "none"
+            End If
+
+            If docs.author.IsNullOrEmpty Then
+                !author = assembly.AssemblyCompany.Replace("<", "&lt;")
+            Else
+                !author = docs.author.JoinBy(", ")
             End If
 
             Return .ToString
