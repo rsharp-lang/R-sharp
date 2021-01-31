@@ -146,7 +146,8 @@ Namespace Runtime
                 End If
             End If
 
-            ' x is not single orelse x is not a collection, return x directly
+            ' x is not single 
+            ' OrElse x is not a collection, return x directly
             Return x
         End Function
 

@@ -54,6 +54,7 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RObj = SMRUCC.Rsharp.Runtime.Internal.Object
 
@@ -150,7 +151,7 @@ Namespace Runtime.Internal.Invokes
                     .Select(Function(a) (key:=a, value:=list(a))) _
                     .AsParallel _
                     .Select(Function(a)
-                                Return (key:=Scripting.ToString(a.key), value:=apply.Invoke(envir, invokeArgument(a.value)))
+                                Return (key:=any.ToString(a.key), value:=apply.Invoke(envir, invokeArgument(a.value)))
                             End Function)
 
                 For Each tuple As (key As String, value As Object) In values
