@@ -575,15 +575,15 @@ Namespace Runtime.Internal.Invokes
                     vec = x
                 End If
 
-                Dim type As Type = vec.GetType
+                Dim type As Type = vec.GetType.GetElementType
                 Dim type2 As Type
                 Dim vec2 As Array
 
                 If TypeOf values Is vector Then
-                    type2 = DirectCast(values, vector).data.GetType
+                    type2 = DirectCast(values, vector).data.GetType.GetElementType
                     vec2 = DirectCast(values, vector).data
                 ElseIf values.GetType.IsArray Then
-                    type2 = values.GetType
+                    type2 = values.GetType.GetElementType
                     vec2 = values
                 Else
                     Return Internal.debug.stop("invalid type match!", env)
@@ -596,10 +596,10 @@ Namespace Runtime.Internal.Invokes
                 Dim union As Array = Array.CreateInstance(type, vec.Length + vec2.Length)
 
                 For i As Integer = 0 To vec.Length - 1
-                    union.SetValue(vec.GetValue(i), i)
+                    union.SetValue(Conversion.CTypeDynamic(vec.GetValue(i), type), i)
                 Next
                 For i As Integer = 0 To vec2.Length - 1
-                    union.SetValue(vec2.GetValue(i), vec.Length + i)
+                    union.SetValue(Conversion.CTypeDynamic(vec2.GetValue(i), type), vec.Length + i)
                 Next
 
                 Return New vector With {
