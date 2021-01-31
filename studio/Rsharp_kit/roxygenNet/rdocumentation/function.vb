@@ -137,9 +137,9 @@ Public Class [function]
                        <link rel="stylesheet" href='/css/bootstrap-glyphicons.css'/>
                        <!--STYLES END-->
                    </head>
+
                    <body>
                        <div id="content">
-
 
                            <section class="navbar navbar-color navbar-fixed-top">
                                <nav class="clearfix">
@@ -150,9 +150,9 @@ Public Class [function]
                                        </a>
                                    </div>
                                    <ul class="navbar--navigation largescreen">
-
-                                       <li><a href="/login?rdr=%2Fpackages%2Fregtomean%2Fversions%2F1.0%2Ftopics%2Flanguage_test" class="btn btn-primary">Sign in</a></li>
-
+                                       <li>
+                                           <a href="/login?rdr=%2Fpackages%2Fregtomean%2Fversions%2F1.0%2Ftopics%2Flanguage_test" class="btn btn-primary">Sign in</a>
+                                       </li>
                                    </ul>
 
                                    <div class="navbar--search">
@@ -165,43 +165,37 @@ Public Class [function]
                                </nav>
                            </section>
 
-
                            <div class="page-wrap">
 
-                               <section class="topic packageData"
-                                   data-package-name="regtomean"
-                                   data-latest-version="1.0"
-                                   data-dcl='false'>
+                               <section class="topic packageData" data-package-name="{$package}" data-latest-version="1.0" data-dcl='false'>
 
                                    <header class='topic-header'>
                                        <div class="container">
 
                                            <div class="th--flex-position">
-                                               <div><!-- Do not remove this div, needed for th-flex-position -->
+                                               <div>
+                                                   <!-- Do not remove this div, needed for th-flex-position -->
                                                    <h1>{$name_title}</h1>
                                                </div>
-                                               <div><!-- Do not remove this div, needed for th-flex-position -->
+                                               <div>
+                                                   <!-- Do not remove this div, needed for th-flex-position -->
                                                    <div class="th--pkg-info">
                                                        <div class="th--origin">
-                                                           <span>From <a href="/packages/regtomean/versions/1.0">{$package}</a></span>
-
-                                                           <span>by <a href="/collaborators/name/Daniela Recchia">{$author}</a></span>
-
+                                                           <span>From <a href="/packages/{$package}/versions/{$version}">{$package}</a></span>
+                                                           <span>by <a href="/collaborators/name/{$author}">{$author}</a></span>
                                                        </div>
                                                        <div class="th--percentile">
-
-
                                                            <div class="percentile-widget percentile-task" data-url="/api/packages/regtomean/percentile">
                                                                <span class="percentile-th">
                                                                    <span class='percentile'>0th</span>
                                                                </span>
                                                                <p>Percentile</p>
                                                            </div>
-
                                                        </div>
                                                    </div>
                                                </div>
                                            </div>
+
                                        </div>
                                    </header>
 
@@ -225,11 +219,8 @@ Public Class [function]
                                            <pre><code class="R">{$usage}</code></pre>
                                        </section>
 
-
                                        <!-- Other info -->
-
                                        <div class="anchor" id="l_sections"></div>
-
 
                                        <section>
                                            <h5 class="topic--title">Arguments</h5>
@@ -238,16 +229,11 @@ Public Class [function]
                                            </dl>
                                        </section>
 
-                                       <!-- Other info -->
-
                                        <section>
                                            <div class="anchor" id="l_details"></div>
                                            <h5 class="topic--title">Details</h5>
                                            <p>{$details}</p>
                                        </section>
-
-
-
 
                                        <section class="topic--value">
                                            <div class="anchor" id="l_value"></div>
@@ -259,28 +245,19 @@ Public Class [function]
                                            <div class="anchor" id="alss"></div>
                                            <h5 class="topic--title">Aliases</h5>
                                            <ul class="topic--aliases">
-
                                                <li>{$name_title}</li>
-
                                            </ul>
                                        </section>
 
-
-
                                        <small>
-                                           <i> Documentation reproduced from package <span itemprop="name">{$package}</span>, version <span itemprop="version">{$version}</span>,
-        License: {$copyright}
-      </i>
+                                           <i>Documentation reproduced from package <span itemprop="name">{$package}</span>, version <span itemprop="version">{$version}</span>, License: {$copyright}</i>
                                        </small>
-
-
                                    </div>
                                </section>
 
                            </div>
 
                            <div class="footer">
-
                                <div class="navbar--title footer-largescreen pull-right">
 
                                    <a href="https://github.com/SMRUCC/R-sharp" class="js-external">
@@ -293,8 +270,6 @@ Public Class [function]
                                    <p class="footer--credits">Created by <a href="https://github.com/SMRUCC/R-sharp" class="js-external">roxygenNet for R# language</a></p>
                                </div>
                            </div>
-
-
 
                        </div>
                    </body>
