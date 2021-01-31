@@ -1,4 +1,8 @@
-﻿Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
+﻿Imports Microsoft.VisualBasic.ApplicationServices.Development
+Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
+Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Serialization
+Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.MIME.Markup.MarkDown
 Imports Microsoft.VisualBasic.Scripting.SymbolBuilder
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Development
@@ -6,8 +10,11 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
+Imports RPackage = SMRUCC.Rsharp.Development.Package.Package
 
 Public Class [function]
+
+    ReadOnly markdown As New MarkdownHTML
 
     Public Function createHtml(api As RFunction, env As Environment) As String
         If TypeOf api Is RMethodInfo Then
@@ -28,18 +35,75 @@ Public Class [function]
                 .Select(AddressOf argument) _
                 .ToArray
         }
+        Dim pkg As RPackage = api.GetPackageInfo
         Dim docs As New Document With {
-            .declares = func
+            .declares = func,
+            .title = Strings.Trim(xml.Summary.LineIterators.FirstOrDefault).Trim(" "c, "#"c),
+            .description = xml.Summary _
+                .LineIterators _
+                .Skip(1) _
+                .JoinBy("<br />") _
+                .DoCall(AddressOf markdown.Transform),
+            .parameters = xml.Params _
+                .Select(AddressOf argument) _
+                .ToArray,
+            .returns = markdown.Transform(xml.Returns),
+            .details = markdown.Transform(xml.Remarks)
         }
 
-        Return createHtml(docs)
+        Return createHtml(docs, pkg)
+    End Function
+
+    Private Function argument(arg As param) As NamedValue
+        Return New NamedValue With {
+            .name = arg.name,
+            .text = markdown.Transform(arg.text)
+        }
     End Function
 
     Private Function argument(arg As RMethodArgument) As NamedValue
+        Dim argName As String
+
+        If arg.isObjectList Then
+            argName = "..."
+        Else
+            argName = arg.name
+        End If
+
         Return New NamedValue With {
-            .name = arg.name,
+            .name = argName,
             .text = any.ToString(arg.default)
         }
+    End Function
+
+    Public Function createHtml(docs As Document, pkg As RPackage) As String
+        Dim assembly = pkg.package.Assembly.FromAssembly
+
+        With New ScriptBuilder(blankTemplate)
+            !name_title = docs.declares.name
+            !usage = docs.declares.ToString
+            !title = docs.title
+            !summary = docs.description
+            !arguments = docs.parameters _
+                .Select(Function(arg)
+                            Return $"
+<dt>{arg.name}</dt>
+<dd><p>{arg.text}</p></dd>
+"
+                        End Function) _
+                .JoinBy(vbCrLf)
+            !value = docs.returns
+            !details = docs.details
+            !package = pkg.namespace
+            !version = assembly.AssemblyVersion
+            !copyright = assembly.AssemblyCopyright
+
+            If docs.keywords.IsNullOrEmpty Then
+                !display_keywords = "none"
+            End If
+
+            Return .ToString
+        End With
     End Function
 
     Private Shared Function blankTemplate() As XElement
@@ -77,14 +141,8 @@ Public Class [function]
                                        </a>
                                    </div>
                                    <ul class="navbar--navigation largescreen">
-                                       <li><a href="https://www.datacamp.com/groups/business" class="btn btn-secondary-dark">R Enterprise Training</a></li>
-
-                                       <li><a href="https://github.com/datacamp/Rdocumentation" class="btn btn-secondary">R package</a></li>
-                                       <li><a href="/trends" class="btn btn-secondary">Leaderboard</a></li>
-
 
                                        <li><a href="/login?rdr=%2Fpackages%2Fregtomean%2Fversions%2F1.0%2Ftopics%2Flanguage_test" class="btn btn-primary">Sign in</a></li>
-
 
                                    </ul>
 
@@ -100,12 +158,6 @@ Public Class [function]
 
 
                            <div class="page-wrap">
-
-
-
-
-
-
 
                                <section class="topic packageData"
                                    data-package-name="regtomean"
@@ -137,7 +189,6 @@ Public Class [function]
                                                                <p>Percentile</p>
                                                            </div>
 
-
                                                        </div>
                                                    </div>
                                                </div>
@@ -145,23 +196,19 @@ Public Class [function]
                                        </div>
                                    </header>
 
-
                                    <div class="container">
                                        <section>
                                            <h5>{$title}</h5>
                                            <p>{$summary}</p>
                                        </section>
 
-
-                                       <section class="topic--keywords">
+                                       <section class="topic--keywords" style="display: {$display_keywords};">
                                            <div class="anchor" id="l_keywords"></div>
                                            <dl>
                                                <dt>Keywords</dt>
                                                <dd><a href="/search/keywords/datasets">datasets</a></dd>
                                            </dl>
                                        </section>
-
-
 
                                        <section id="usage">
                                            <div class="anchor" id="l_usage"></div>
@@ -170,15 +217,7 @@ Public Class [function]
                                        </section>
 
 
-
-
                                        <!-- Other info -->
-
-
-
-
-
-
 
                                        <div class="anchor" id="l_sections"></div>
 
@@ -186,25 +225,26 @@ Public Class [function]
                                        <section>
                                            <h5 class="topic--title">Arguments</h5>
                                            <dl>
-
-                                               <dt>Before</dt>
-                                               <dd><p>a numeric vector giving the data values for the first (before) measure.</p></dd>
-
-                                               <dt>After</dt>
-                                               <dd><p>a numeric vector giving the data values for the second (after) measure.</p></dd>
-
-                                               <dt>data</dt>
-                                               <dd><p>an optional data frame containing the variables in the formula. By <code>default</code> the variables are taken from <code>environment (formula)</code>.</p></dd>
-
+                                               {$arguments}
                                            </dl>
+                                       </section>
+
+                                       <!-- Other info -->
+
+                                       <section>
+                                           <div class="anchor" id="l_details"></div>
+                                           <h5 class="topic--title">Details</h5>
+                                           <p>{$details}</p>
                                        </section>
 
 
 
 
-
-
-
+                                       <section class="topic--value">
+                                           <div class="anchor" id="l_value"></div>
+                                           <h5 class="topic--title">Value</h5>
+                                           <p>{$value}</p>
+                                       </section>
 
                                        <section style="display: none;">
                                            <div class="anchor" id="alss"></div>
@@ -218,18 +258,9 @@ Public Class [function]
 
 
 
-                                       <section>
-                                           <div class="anchor" id="l_examples"></div>
-                                           <h5 class="topic--title">Examples</h5>
-
-                                           <pre><code class="R" data-package-name="{$package}">{$examples}</code></pre>
-
-                                       </section>
-
-
                                        <small>
-                                           <i> Documentation reproduced from package <span itemprop="name">{$package}</span>, version <span itemprop="version">1.0</span>,
-        License: MIT + file LICENSE
+                                           <i> Documentation reproduced from package <span itemprop="name">{$package}</span>, version <span itemprop="version">{$version}</span>,
+        License: {$copyright}
       </i>
                                        </small>
 
@@ -240,26 +271,17 @@ Public Class [function]
                            </div>
 
                            <div class="footer">
-                               <a class="navbar--title apidoc btn btn-default js-external" target="_blank" href="/docs">
-                                   <i class="fa fa-cogs"></i>
-      API documentation
-  </a>
+
                                <div class="navbar--title footer-largescreen pull-right">
 
-                                   <a href="https://github.com/datacamp/rdocumentation" class="js-external">
+                                   <a href="https://github.com/SMRUCC/R-sharp" class="js-external">
                                        <div class="github"></div>
-                                       <div class="logo-title">R package</div>
+                                       <div class="logo-title">R# language</div>
                                    </a>
 
-                               </div>
-                               <div class="navbar--title footer-largescreen pull-right">
-                                   <a href="https://github.com/datacamp/rdocumentation-app" class="js-external">
-                                       <div class="github"></div>
-                                       <div class="logo-title">Rdocumentation.org</div>
-                                   </a>
                                </div>
                                <div class="footer--credits--title">
-                                   <p class="footer--credits">Created by <a href="https://www.datacamp.com" class="js-external">DataCamp.com</a></p>
+                                   <p class="footer--credits">Created by <a href="https://github.com/SMRUCC/R-sharp" class="js-external">roxygenNet for R# language</a></p>
                                </div>
                            </div>
 
@@ -268,14 +290,5 @@ Public Class [function]
                        </div>
                    </body>
                </html>
-    End Function
-
-    Public Function createHtml(docs As Document) As String
-        With New ScriptBuilder(blankTemplate)
-            !name_title = docs.declares.name
-            !usage = docs.declares.ToString
-
-            Return .ToString
-        End With
     End Function
 End Class

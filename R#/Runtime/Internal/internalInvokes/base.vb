@@ -157,7 +157,7 @@ Namespace Runtime.Internal.Invokes
         ''' 
         ''' ifelse returns a value with the same shape as test which is filled with 
         ''' elements selected from either yes or no depending on whether the 
-        ''' element of test is TRUE or FALSE.
+        ''' element of test is ``TRUE`` or ``FALSE``.
         ''' </summary>
         ''' <param name="test">an object which can be coerced to logical mode.</param>
         ''' <param name="yes">return values for true elements of test.</param>
@@ -203,7 +203,7 @@ Namespace Runtime.Internal.Invokes
         ''' coerced to integer (by truncation).
         ''' 
         ''' For an array (and hence in particular, for a matrix) dim retrieves 
-        ''' the dim attribute of the object. It is NULL or a vector of mode 
+        ''' the dim attribute of the object. It is ``NULL`` or a vector of mode 
         ''' integer.
         ''' 
         ''' The replacement method changes the "dim" attribute (provided the New 
@@ -614,24 +614,24 @@ Namespace Runtime.Internal.Invokes
         ''' <summary>
         ''' #### Data Frames
         ''' 
-        ''' The function data.frame() creates data frames, tightly coupled collections 
+        ''' The function ``data.frame()`` creates data frames, tightly coupled collections 
         ''' of variables which share many of the properties of matrices and of lists, 
         ''' used as the fundamental data structure by most of R's modeling software.
         ''' </summary>
         ''' <param name="columns">
-        ''' these arguments are of either the form value or tag = value. Component names 
+        ''' these arguments are of either the form value or ``tag = value``. Component names 
         ''' are created based on the tag (if present) or the deparsed argument itself.
         ''' </param>
         ''' <param name="envir"></param>
         ''' <returns>
         ''' A data frame, a matrix-like structure whose columns may be of differing types 
-        ''' (numeric, logical, factor and character and so on).
+        ''' (``numeric``, ``logical``, ``factor`` and ``character`` and so on).
         '''
         ''' How the names Of the data frame are created Is complex, And the rest Of this 
         ''' paragraph Is only the basic story. If the arguments are all named And simple 
         ''' objects (Not lists, matrices Of data frames) Then the argument names give the 
         ''' column names. For an unnamed simple argument, a deparsed version Of the 
-        ''' argument Is used As the name (With an enclosing I(...) removed). For a named 
+        ''' argument Is used As the name (With an enclosing ``I(...)`` removed). For a named 
         ''' matrix/list/data frame argument With more than one named column, the names Of 
         ''' the columns are the name Of the argument followed by a dot And the column name 
         ''' inside the argument: If the argument Is unnamed, the argument's column names 
@@ -1298,7 +1298,7 @@ Namespace Runtime.Internal.Invokes
         ''' 
         ''' Retrieve or set the row or column names of a matrix-like object.
         ''' </summary>
-        ''' <param name="[object]">a matrix-like R object, with at least two dimensions for colnames.</param>
+        ''' <param name="x">a matrix-like R object, with at least two dimensions for colnames.</param>
         ''' <param name="namelist">a valid value for that component of ``dimnames(x)``. 
         ''' For a matrix or array this is either NULL or a character vector of non-zero 
         ''' length equal to the appropriate dimension.</param>
@@ -1324,19 +1324,19 @@ Namespace Runtime.Internal.Invokes
         ''' by as.character, And setting colnames will convert the row names To character.
         ''' </remarks>
         <ExportAPI("colnames")>
-        Public Function colnames([object] As Object,
+        Public Function colnames(x As Object,
                                  <RByRefValueAssign>
                                  Optional namelist As Array = Nothing,
                                  Optional envir As Environment = Nothing) As Object
 
-            If [object] Is Nothing Then
+            If x Is Nothing Then
                 Return Nothing
             End If
 
             If namelist Is Nothing OrElse namelist.Length = 0 Then
-                Return RObj.names.getColNames([object], envir)
+                Return RObj.names.getColNames(x, envir)
             Else
-                Return RObj.names.setColNames([object], namelist, envir)
+                Return RObj.names.setColNames(x, namelist, envir)
             End If
         End Function
 

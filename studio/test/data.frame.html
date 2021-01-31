@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
     <meta name="description" content="{$abstract}" />
-    <title>ifelse function | R Documentation</title>
+    <title>data.frame function | R Documentation</title>
     <base href="https://www.rdocumentation.org" />
     <link href="{$canonical_link}" rel="canonical" />
     <!--STYLES-->
@@ -49,7 +49,7 @@
               <div class="th--flex-position">
                 <div>
                   <!-- Do not remove this div, needed for th-flex-position -->
-                  <h1>ifelse</h1>
+                  <h1>data.frame</h1>
                 </div>
                 <div>
                   <!-- Do not remove this div, needed for th-flex-position -->
@@ -73,8 +73,8 @@
           </header>
           <div class="container">
             <section>
-              <h5>Conditional Element Selection</h5>
-              <p><p><br /> ifelse returns a value with the same shape as test which is filled with <br /> elements selected from either yes or no depending on whether the <br /> element of test is <code>TRUE</code> or <code>FALSE</code>.</p></p>
+              <h5>Data Frames</h5>
+              <p><p><br /> The function <code>data.frame()</code> creates data frames, tightly coupled collections <br /> of variables which share many of the properties of matrices and of lists, <br /> used as the fundamental data structure by most of R's modeling software.</p></p>
             </section>
             <section class="topic--keywords" style="display: none;">
               <div class="anchor" id="l_keywords"></div>
@@ -89,7 +89,7 @@
               <div class="anchor" id="l_usage"></div>
               <h5 class="topic--title">Usage</h5>
               <pre>
-                <code class="R">ifelse(test, yes, no, env)</code>
+                <code class="R">data.frame(..., envir)</code>
               </pre>
             </section>
             <!-- Other info -->
@@ -98,16 +98,13 @@
               <h5 class="topic--title">Arguments</h5>
               <dl>
                                                
-<dt>test</dt>
-<dd><p><p>an object which can be coerced to logical mode.</p></p></dd>
+<dt>columns</dt>
+<dd><p><p>these arguments are of either the form value or <code>tag = value</code>. Component names <br />
+ are created based on the tag (if present) or the deparsed argument itself.</p></p></dd>
 
 
-<dt>yes</dt>
-<dd><p><p>return values for true elements of test.</p></p></dd>
-
-
-<dt>no</dt>
-<dd><p><p>return values for false elements of test.</p></p></dd>
+<dt>envir</dt>
+<dd><p><p>-</p></p></dd>
 
                                            </dl>
             </section>
@@ -115,25 +112,33 @@
             <section>
               <div class="anchor" id="l_details"></div>
               <h5 class="topic--title">Details</h5>
-              <p><p>If yes or no are too short, their elements are recycled. yes will <br />
- be evaluated if and only if any element of test is true, and <br />
- analogously for no.</p>
-
-<p>Missing values In test give missing values In the result.</p></p>
+              <p></p>
             </section>
             <section class="topic--value">
               <div class="anchor" id="l_value"></div>
               <h5 class="topic--title">Value</h5>
-              <p><p>A vector of the same length and attributes (including dimensions and "class") <br />
- as test and data values from the values of yes or no. The mode of the answer <br />
- will be coerced from logical to accommodate first any values taken from yes <br />
- and then any values taken from no.</p></p>
+              <p><p>A data frame, a matrix-like structure whose columns may be of differing types <br />
+ (<code>numeric</code>, <code>logical</code>, <code>factor</code> and <code>character</code> and so on).</p>
+
+<p>How the names Of the data frame are created Is complex, And the rest Of this <br />
+ paragraph Is only the basic story. If the arguments are all named And simple <br />
+ objects (Not lists, matrices Of data frames) Then the argument names give the <br />
+ column names. For an unnamed simple argument, a deparsed version Of the <br />
+ argument Is used As the name (With an enclosing <code>I(...)</code> removed). For a named <br />
+ matrix/list/data frame argument With more than one named column, the names Of <br />
+ the columns are the name Of the argument followed by a dot And the column name <br />
+ inside the argument: If the argument Is unnamed, the argument's column names <br />
+ are used. For a named or unnamed matrix/list/data frame argument that contains <br />
+ a single column, the column name in the result is the column name in the <br />
+ argument. <br />
+ Finally, the names are adjusted to be unique and syntactically valid unless <br />
+ <code>check.names = FALSE</code>.</p></p>
             </section>
             <section style="display: none;">
               <div class="anchor" id="alss"></div>
               <h5 class="topic--title">Aliases</h5>
               <ul class="topic--aliases">
-                <li>ifelse</li>
+                <li>data.frame</li>
               </ul>
             </section>
             <small>
