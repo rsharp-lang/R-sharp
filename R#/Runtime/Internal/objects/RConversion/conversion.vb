@@ -213,10 +213,12 @@ Namespace Runtime.Internal.Object.Converts
                         Return New vector(names.ToArray, values.ToArray(Of Object), [typeof], env)
                     End If
                 Else
+                    Dim objs As Array = result.ToArray(Of Object)
+
                     If [typeof] Is Nothing Then
-                        Return New vector(result.ToArray(Of Object), RType.any)
+                        Return objs.TryCastGenericArray(env)
                     Else
-                        Return New vector(result.ToArray(Of Object), [typeof])
+                        Return New vector(objs, [typeof])
                     End If
                 End If
             End If
