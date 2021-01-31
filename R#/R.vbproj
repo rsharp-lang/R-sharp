@@ -796,6 +796,7 @@
     <Compile Include="Runtime\Interop\CType\ICType.vb" />
     <Compile Include="Runtime\Serialize\Buffer.vb" />
     <Compile Include="Runtime\System\GetVectorElement.vb" />
+    <Compile Include="System\Document\FunctionDeclare.vb" />
     <Compile Include="System\Document\Document.vb" />
     <Compile Include="System\IPCBuffer.vb" />
     <Compile Include="System\Components\Encoder.vb" />
@@ -870,10 +871,10 @@
     <Compile Include="Runtime\Interop\RsharpApi\RMethodArgument.vb" />
     <Compile Include="Runtime\System\InvokeParameter.vb" />
     <Compile Include="Runtime\RVectorExtensions.vb" />
-    <Compile Include="System\Document\HtmlMarkdownPrinter.vb" />
-    <Compile Include="System\Document\ConsoleMarkdownPrinter.vb" />
+    <Compile Include="System\Document\Printer\HtmlMarkdownPrinter.vb" />
+    <Compile Include="System\Document\Printer\ConsoleMarkdownPrinter.vb" />
     <Compile Include="System\Document\AnnotationDocs.vb" />
-    <Compile Include="System\Document\UnixManPagePrinter.vb" />
+    <Compile Include="System\Document\Printer\UnixManPagePrinter.vb" />
     <Compile Include="System\Package\LibDLL.vb" />
     <Compile Include="System\Package\Database\LocalPackageDatabase.vb" />
     <Compile Include="System\Package\Database\PackageLoaderEntry.vb" />
