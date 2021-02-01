@@ -109,7 +109,7 @@ Public Module ApiArgumentHelpers
     End Function
 
     <Extension>
-    Private Function rangeFromVector(v As vector, env As Environment, api$) As Object
+    Private Function rangeFromVector(v As vector, env As Environment, api$) As [Variant](Of DoubleRange, Message)
         Dim vec As Double()
 
         Select Case v.elementType.mode
