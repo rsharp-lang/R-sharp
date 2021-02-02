@@ -98,7 +98,11 @@ Namespace Runtime.Internal.Object
         End Sub
 
         Sub New(type As Type)
-            elementType = RType.GetRSharpType(type)
+            Call Me.New(RType.GetRSharpType(type))
+        End Sub
+
+        Sub New(type As RType)
+            elementType = type
             slots = New Dictionary(Of String, Object)
         End Sub
 

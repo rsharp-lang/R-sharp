@@ -84,7 +84,7 @@ Namespace Runtime.Interop
         End Property
 
         ''' <summary>
-        ''' 
+        ''' <paramref name="parser"/>参数的默认值为<see cref="DefaultVectorParser"/>
         ''' </summary>
         ''' <param name="vector">The element type of the target vector type</param>
         ''' <param name="parser">
