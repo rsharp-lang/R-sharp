@@ -69,7 +69,7 @@ Namespace Runtime
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
         Public Function GetEnvironmentStackTraceString(env As Environment) As String
-            Return env.parent?.ToString & " :> " & env.stackFrame.Method.ToString
+            Return env.parent?.ToString & "\" & env.stackFrame.Method.ToString
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
