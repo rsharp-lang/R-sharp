@@ -222,11 +222,11 @@ Namespace Runtime
         End Sub
 
         Protected Sub redirectError(obj$, msg$, level As MSG_TYPES)
-            Call AddMessage({msg, $"[{obj}] {Me.ToString}"}, level:=MSG_TYPES.ERR)
+            Call AddMessage({msg, $"{stackFrame.Method.ToString}\[{obj}]"}, level:=MSG_TYPES.ERR)
         End Sub
 
         Protected Sub redirectWarning(obj$, msg$, level As MSG_TYPES)
-            Call AddMessage({msg, $"[{obj}] {Me.ToString}"})
+            Call AddMessage({msg, $"{stackFrame.Method.ToString}\[{obj}]"})
         End Sub
 
         Public Sub AddMessage(message As Object, Optional level As MSG_TYPES = MSG_TYPES.WRN)
