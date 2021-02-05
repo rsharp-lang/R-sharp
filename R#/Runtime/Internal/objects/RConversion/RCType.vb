@@ -45,6 +45,7 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Development.Components
+Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Runtime.Internal.Object.Converts
 
@@ -76,6 +77,10 @@ Namespace Runtime.Internal.Object.Converts
             ElseIf objType Is GetType(vector) AndAlso Not type.IsArray Then
                 obj = [single](obj)
                 objType = obj.GetType
+            End If
+
+            If type Is GetType(Boolean) AndAlso objType Like RType.characters Then
+                Return any.ToString([single](obj)).ParseBoolean
             End If
 
             If objType Is GetType(vbObject) AndAlso Not type Is GetType(Object) Then

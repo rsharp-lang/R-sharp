@@ -48,6 +48,7 @@ Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
+Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Runtime
 
@@ -240,7 +241,7 @@ Namespace Runtime
             Dim elementType As Type = GetType(T)
 
             For Each key As Object In list.Keys
-                ofList(Scripting.ToString(key)) = RCType.CTypeDynamic(list.Item(key), elementType, env)
+                ofList(any.ToString(key)) = RCType.CTypeDynamic(list.Item(key), elementType, env)
             Next
 
             Return ofList
