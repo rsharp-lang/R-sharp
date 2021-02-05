@@ -381,7 +381,9 @@ Module plots
 
         Return points.Plot(
             size:=InteropArgumentHelper.getSize(args!size).SizeParser,
-            title:=math.ToString
+            title:=math.ToString,
+            padding:=InteropArgumentHelper.getPadding(args!padding),
+            gridFill:=InteropArgumentHelper.getColor(args("grid.fill"), "rgb(250,250,250)")
         )
     End Function
 
