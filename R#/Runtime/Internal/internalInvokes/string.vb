@@ -295,12 +295,21 @@ Namespace Runtime.Internal.Invokes
         ''' decode base64 string as text or the raw bytes buffer object.
         ''' </summary>
         ''' <param name="base64">a string in base64 encode pattern</param>
-        ''' <param name="asText_encoding">if this parameter is not nothing, then the output will be convert as text</param>
+        ''' <param name="asText_encoding">
+        ''' if this parameter is not nothing, then the output will be convert as text
+        ''' </param>
         ''' <param name="env"></param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' if the base64 encoded data is text data, that parameter 
+        ''' ``asText_encoding`` assign of value ``utf8`` usually. 
+        ''' </remarks>
         <ExportAPI("base64_decode")>
         <RApiReturn(GetType(String), GetType(Byte))>
-        Public Function base64Decode(base64 As String, Optional asText_encoding As Object = Nothing, Optional env As Environment = Nothing) As Object
+        Public Function base64Decode(base64 As String,
+                                     Optional asText_encoding As Object = Nothing,
+                                     Optional env As Environment = Nothing) As Object
+
             If Not asText_encoding Is Nothing Then
                 ' decode as string
                 Dim encoding As Encoding = GetEncoding(asText_encoding)
