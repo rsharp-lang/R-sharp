@@ -260,7 +260,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
-        ''' encode byte stream into base64 string
+        ''' encode byte stream or text content into base64 string
         ''' </summary>
         ''' <param name="raw"></param>
         ''' <param name="env"></param>
@@ -273,7 +273,16 @@ Namespace Runtime.Internal.Invokes
             If buffer Is Nothing Then
                 Return Nothing
             ElseIf buffer Like GetType(Message) Then
-                Return buffer.TryCast(Of Message)
+                Dim strings As pipeline = pipeline.TryCreatePipeline(Of String)(raw, env)
+
+                If strings.isError Then
+                    Return buffer.TryCast(Of Message)
+                Else
+                    Return strings _
+                        .populates(Of String)(env) _
+                        .Select(Function(str) Encoding.UTF8.GetBytes(str).ToBase64String) _
+                        .ToArray
+                End If
             End If
 
             Dim bytes As Byte() = buffer.TryCast(Of Byte())

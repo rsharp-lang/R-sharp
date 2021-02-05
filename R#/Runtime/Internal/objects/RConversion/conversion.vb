@@ -63,12 +63,19 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
+Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Runtime.Internal.Object.Converts
 
     Module RConversion
 
-        <ExportAPI("as.Date")>
+        ''' <summary>
+        ''' parse string text content as date time values
+        ''' </summary>
+        ''' <param name="obj"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("as.date")>
         Public Function asDate(<RRawVectorArgument> obj As Object, Optional env As Environment = Nothing) As Date()
             Return Rset _
                 .getObjectSet(obj, env) _
@@ -76,7 +83,7 @@ Namespace Runtime.Internal.Object.Converts
                             If TypeOf o Is Date Then
                                 Return CDate(o)
                             Else
-                                Return Date.Parse(Scripting.ToString(o))
+                                Return Date.Parse(any.ToString(o))
                             End If
                         End Function) _
                 .ToArray
