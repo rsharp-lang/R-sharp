@@ -207,9 +207,19 @@ Module interpreterTest
         [1,(2),(3),4,5,6]
 }")
         ' equals to 
-        Call R.Evaluate("print({
+        Call R.Evaluate("
+let a = NULL;
+
+print({
+
+    a = TRUE;
+    
     [1,2,3,4,5,6]
-})")
+});
+
+print(a);
+
+")
 
         Pause()
     End Sub
