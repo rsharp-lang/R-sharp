@@ -181,6 +181,17 @@ Namespace Interpreter.SyntaxParser
         End Function
 
         <Extension>
+        Public Function isAcceptor(tokens As Token()) As Boolean
+            Dim code = tokens.SplitByTopLevelDelimiter(TokenType.close, tokenText:=")")
+
+            If code = 3 AndAlso code(2).First = (TokenType.open, "{") AndAlso code(2).Last = (TokenType.close, "}") Then
+                Return True
+            Else
+                Return False
+            End If
+        End Function
+
+        <Extension>
         Public Function parseComplexSymbolIndexer(tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
             ' func(...)[x]
             Dim code = tokens.SplitByTopLevelDelimiter(TokenType.close, tokenText:=")")

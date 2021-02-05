@@ -134,6 +134,8 @@ Namespace Interpreter.SyntaxParser
                     Return SyntaxImplements.FunctionInvoke(tokens, opts)
                 ElseIf tokens.isSimpleSymbolIndexer Then
                     Return SyntaxImplements.SymbolIndexer(tokens, opts)
+                ElseIf tokens.isAcceptor Then
+
                 ElseIf tokens(Scan0).name = TokenType.open Then
                     Dim openSymbol = tokens(Scan0).text
 
