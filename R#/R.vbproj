@@ -689,6 +689,7 @@
     <Compile Include="Interpreter\Syntax\SyntaxBuilderOptions.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\CreateObjectSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\FormulaExpressionSyntax.vb" />
+    <Compile Include="Interpreter\Syntax\SyntaxImplements\FunctionAcceptorSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\WhileLoopSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\CommandLine.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\DeclareNewFunctionSyntax.vb" />
