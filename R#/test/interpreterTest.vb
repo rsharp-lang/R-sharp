@@ -75,7 +75,15 @@ Module interpreterTest
 
     Dim R As New RInterpreter With {.debug = True}
 
+    Sub doCalltest()
+        Call R.Evaluate("do.call('ls')")
+
+        Pause()
+    End Sub
+
     Sub Main()
+        Call doCalltest()
+
         Call acceptorTest()
         Call forLoop2()
 

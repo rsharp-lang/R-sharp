@@ -270,16 +270,17 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <returns>The result of the (evaluated) function call.</returns>
         <ExportAPI("do.call")>
-        Public Function doCall(what As Object, calls$,
+        Public Function doCall(what As Object,
+                               Optional calls$ = Nothing,
                                <RListObjectArgument>
                                Optional args As Object = Nothing,
                                Optional envir As Environment = Nothing) As Object
 
-            If what Is Nothing OrElse calls.StringEmpty Then
-                Return Internal.debug.stop("Nothing to call!", envir)
-            ElseIf what.GetType Is GetType(String) Then
+            If TypeOf what Is String AndAlso calls.StringEmpty Then
                 ' call static api by name
                 Return CallInternal(what, args, envir)
+            ElseIf what Is Nothing AndAlso calls.StringEmpty Then
+                Return Internal.debug.stop("Nothing to call!", envir)
             End If
 
             Dim targetType As Type = what.GetType
