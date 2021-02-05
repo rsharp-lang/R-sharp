@@ -1,52 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::2804f625deaf12d6615ed5478c60625d, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryOrExpression.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class BinaryOrExpression
-    ' 
-    '         Properties: expressionName, type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class BinaryOrExpression
+' 
+'         Properties: expressionName, type
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports SMRUCC.Rsharp.Development.Package.File
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
@@ -72,13 +73,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             ' fix for
             ' value || stop(xxxx)
             Dim a As Object = left.Evaluate(envir)
-            Dim ta As Type
-
-            If a Is Nothing Then
-                ta = GetType(Void)
-            Else
-                ta = a.GetType
-            End If
+            Dim ta As Type = RType.TypeOf(a)
 
             If ta Like RType.logicals Then
                 ' boolean = a || b
@@ -87,12 +82,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 If Program.isException(b) Then
                     Return b
                 Else
-                    Return Runtime.Core _
+                    Return REnv.Core _
                         .BinaryCoreInternal(Of Boolean, Boolean, Boolean)(
                             x:=Core.asLogical(a),
                             y:=Core.asLogical(b),
                             [do]:=Function(x, y) x OrElse y
-                        ).ToArray
+                        ) _
+                        .ToArray
                 End If
             Else
                 ' let arg as string = ?"--opt" || default;

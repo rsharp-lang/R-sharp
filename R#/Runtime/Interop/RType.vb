@@ -146,6 +146,10 @@ Namespace Runtime.Interop
             GetType(Char), GetType(Char())
         }
 
+        ''' <summary>
+        ''' <see cref="Object"/>
+        ''' </summary>
+        ''' <returns></returns>
         Friend Shared ReadOnly Property any As RType = GetRSharpType(GetType(Object))
 
         Private Sub New(raw As Type)
@@ -255,11 +259,15 @@ Namespace Runtime.Interop
         Public Shared Function [TypeOf](x As Object) As RType
             If x Is Nothing Then
                 Return any
-            ElseIf TypeOf x Is vector Then
-                Dim type = DirectCast(x, vector).elementType
+            ElseIf TypeOf x Is RsharpDataObject Then
+                Dim type As RType = DirectCast(x, RsharpDataObject).elementType
 
                 If type Is Nothing Then
-                    Return MeasureRealElementType(DirectCast(x, vector).data).DoCall(AddressOf RType.GetRSharpType)
+                    If TypeOf x Is vector Then
+                        Return MeasureRealElementType(DirectCast(x, vector).data).DoCall(AddressOf RType.GetRSharpType)
+                    Else
+                        Return GetRSharpType(x.GetType)
+                    End If
                 Else
                     Return type
                 End If
