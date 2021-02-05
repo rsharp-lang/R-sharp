@@ -31,8 +31,12 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             End If
 
             Dim parameterClosure As New ClosureExpression(firstParameterBody)
+            Dim args As New List(Of Expression)
 
-            invoke.parameters = {parameterClosure}.JoinIterates(invoke.parameters).ToArray
+            args.Add(parameterClosure)
+            args.AddRange(invoke.parameters)
+
+            invoke.parameters = args.ToArray
 
             Return New SyntaxResult(invoke)
         End Function
