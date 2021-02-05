@@ -76,6 +76,7 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub Main()
+        Call acceptorTest()
         Call forLoop2()
 
         Call cVectorTest()
@@ -196,6 +197,19 @@ Module interpreterTest
 
 
         Pause()
+    End Sub
+
+    Sub acceptorTest()
+
+        ' acceptor syntax
+        Call R.Evaluate("print() {
+
+        [1,2,3,4,5,6]
+}")
+        ' equals to 
+        Call R.Evaluate("print({
+    [1,2,3,4,5,6]
+})")
     End Sub
 
     Sub cVectorTest()
