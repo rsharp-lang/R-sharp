@@ -76,7 +76,7 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub doCalltest()
-        Call R.Evaluate("do.call('ls')")
+        Call R.Evaluate("do.call('ls', args = list(name = 'package:base'))")
 
         Pause()
     End Sub

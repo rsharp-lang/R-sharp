@@ -237,7 +237,17 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Return funcVar
         End Function
 
-        Public Function GetFunctionVar(env As Environment) As Object
+        ''' <summary>
+        ''' get internal function symbol object or runtime function 
+        ''' from the given runtime <see cref="Environment"/>.
+        ''' </summary>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' an error message will be return if the 
+        ''' target function symbol is not found in 
+        ''' the given runtime <paramref name="env"/>.
+        ''' </returns>
+        Public Shared Function GetFunctionVar(funcName As Expression, env As Environment, Optional [namespace] As String = Nothing) As Object
             Dim target As Object = getFuncVar(funcName, [namespace], env)
 
             If Program.isException(target) Then
@@ -257,6 +267,18 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Else
                 Return target
             End If
+        End Function
+
+        ''' <summary>
+        ''' get internal function symbol object or runtime function 
+        ''' from the given runtime <see cref="Environment"/>.
+        ''' </summary>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function GetFunctionVar(env As Environment) As Object
+            Return GetFunctionVar(funcName, env, [namespace])
         End Function
 
         Private Function doInvokeFuncVar(funcVar As RFunction, envir As Environment) As Object

@@ -308,7 +308,12 @@ Namespace Runtime.Interop
                 listObject.Add(params(j))
             Next
 
-            parameterVals(listIndex) = listObject.ToArray
+            If parameterVals(listIndex) IsNot Nothing AndAlso listObject.Count = 0 Then
+                ' skip
+            Else
+                parameterVals(listIndex) = listObject.ToArray
+            End If
+
             parameterVals = fillOptionalArguments(parameterVals, normalNames, declareArguments, declareNameIndex, [declare].name, 0, env)
             parameterVals = TryCastListObjects(parameterVals, listIndex, [declare].parameters(listIndex), env)
 

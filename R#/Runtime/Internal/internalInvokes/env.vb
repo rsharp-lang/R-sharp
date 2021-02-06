@@ -1,44 +1,44 @@
 ﻿#Region "Microsoft.VisualBasic::2e311b7844f0582d92bea321d8811513, R#\Runtime\Internal\internalInvokes\env.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module env
-    ' 
-    '         Function: [get], [typeof], CallInternal, doCall, environment
-    '                   getOutputDevice, globalenv, lockBinding, ls, objects
-    '                   objectSize, traceback, unlockBinding
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module env
+' 
+'         Function: [get], [typeof], CallInternal, doCall, environment
+'                   getOutputDevice, globalenv, lockBinding, ls, objects
+'                   objectSize, traceback, unlockBinding
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -53,6 +53,9 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Development.Package
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 
 Namespace Runtime.Internal.Invokes
 
@@ -314,7 +317,20 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         Public Function CallInternal(call$, args As Object, envir As Environment) As Object
-            Return Internal.debug.stop(New NotImplementedException("Call internal functions"), envir)
+            Dim ref As NamedValue(Of String) = [call].GetTagValue("::")
+            Dim callName As String = ref.Value
+            Dim [namespace] As String = ref.Name
+            Dim func As Object = FunctionInvoke.GetFunctionVar(New Literal(callName), envir, [namespace]:=[namespace])
+
+            If Program.isException(func) Then
+                Return func
+            End If
+
+            Dim invoke As RFunction = DirectCast(func, RFunction)
+            Dim arguments As New List(Of InvokeParameter)
+            Dim result As Object = invoke.Invoke(envir, arguments.ToArray)
+
+            Return result
         End Function
 
         ''' <summary>
