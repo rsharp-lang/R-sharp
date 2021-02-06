@@ -330,7 +330,7 @@ Namespace Runtime.Internal.Invokes
             Dim arguments As New List(Of InvokeParameter)
             Dim result As Object = invoke.Invoke(envir, arguments.ToArray)
 
-            Return result
+            Return FunctionInvoke.HandleResult(result, envir)
         End Function
 
         ''' <summary>

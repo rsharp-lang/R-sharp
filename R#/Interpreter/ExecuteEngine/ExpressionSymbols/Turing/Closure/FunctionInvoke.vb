@@ -52,6 +52,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
@@ -60,7 +61,6 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports SMRUCC.Rsharp.Development.Package.File
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
@@ -160,40 +160,51 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     result = doInvokeFuncVar(target, env)
                 End If
 
-                ' check the function invoke returns values
-                ' for 
-                '
-                ' 1. error message
-                ' 2. invisible
-                ' 3. returns expression, break expression
-                '
-                If result Is Nothing Then
-                    Return Nothing
-                ElseIf Program.isException(result) Then
-                    Return result
-                ElseIf TypeOf result Is RReturn Then
-                    Dim returns As RReturn = DirectCast(result, RReturn)
-                    Dim messages = env.globalEnvironment.messages
-
-                    If returns.HasValue Then
-                        messages.AddRange(returns.messages)
-                        Return returns.Value
-                    ElseIf returns.isError Then
-                        returns.messages.Where(Function(m) m.level <> MSG_TYPES.ERR).DoCall(AddressOf messages.AddRange)
-                        Return returns.messages.Where(Function(m) m.level = MSG_TYPES.ERR)
-                    Else
-                        ' 2019-12-15
-                        ' isError的时候也会导致hasValue为false
-                        ' 所以null的情况不可以和warning的情况合并在一起处理
-                        messages.AddRange(returns.messages)
-                        Return Nothing
-                    End If
-                ElseIf TypeOf result Is pipeline AndAlso DirectCast(result, pipeline).isError Then
-                    Return DirectCast(result, pipeline).getError
-                Else
-                    Return result
-                End If
+                Return HandleResult(result, envir)
             End Using
+        End Function
+
+        ''' <summary>
+        ''' check the function invoke returns values for:
+        '''
+        ''' 1. error message
+        ''' 2. invisible
+        ''' 3. returns expression, break expression
+        ''' 
+        ''' </summary>
+        ''' <param name="result"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        Public Shared Function HandleResult(result As Object, env As Environment) As Object
+            If result Is Nothing Then
+                Return Nothing
+            ElseIf Program.isException(result) Then
+                Return result
+            ElseIf TypeOf result Is RReturn Then
+                Dim returns As RReturn = DirectCast(result, RReturn)
+                Dim messages = env.globalEnvironment.messages
+
+                If returns.HasValue Then
+                    messages.AddRange(returns.messages)
+                    Return returns.Value
+                ElseIf returns.isError Then
+                    returns.messages _
+                        .Where(Function(m) m.level <> MSG_TYPES.ERR) _
+                        .DoCall(AddressOf messages.AddRange)
+
+                    Return returns.messages.Where(Function(m) m.level = MSG_TYPES.ERR)
+                Else
+                    ' 2019-12-15
+                    ' isError的时候也会导致hasValue为false
+                    ' 所以null的情况不可以和warning的情况合并在一起处理
+                    messages.AddRange(returns.messages)
+                    Return Nothing
+                End If
+            ElseIf TypeOf result Is pipeline AndAlso DirectCast(result, pipeline).isError Then
+                Return DirectCast(result, pipeline).getError
+            Else
+                Return result
+            End If
         End Function
 
         ''' <summary>
