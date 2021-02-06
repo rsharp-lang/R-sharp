@@ -56,6 +56,7 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports Microsoft.VisualBasic.Language
 
 Namespace Runtime.Internal.Invokes
 
@@ -328,6 +329,17 @@ Namespace Runtime.Internal.Invokes
 
             Dim invoke As RFunction = DirectCast(func, RFunction)
             Dim arguments As New List(Of InvokeParameter)
+
+            If TypeOf args Is list Then
+                Dim i As i32 = Scan0
+
+                For Each item In DirectCast(args, list).slots
+                    Call New InvokeParameter(name:=item.Key, item.Value, ++i).DoCall(AddressOf arguments.Add)
+                Next
+            ElseIf TypeOf args Is InvokeParameter() Then
+                arguments.AddRange(DirectCast(args, InvokeParameter()))
+            End If
+
             Dim result As Object = invoke.Invoke(envir, arguments.ToArray)
 
             Return FunctionInvoke.HandleResult(result, envir)
