@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8c11263924a104bef56e947995f14d37, studio\Rsharp_kit\roxygenNet\rdocumentation\function.vb"
+﻿#Region "Microsoft.VisualBasic::3e0f506703212fb2143e70e180443bd2, studio\Rsharp_kit\roxygenNet\rdocumentation\function.vb"
 
     ' Author:
     ' 
@@ -317,4 +317,3 @@ Public Class [function]
                </html>
     End Function
 End Class
-

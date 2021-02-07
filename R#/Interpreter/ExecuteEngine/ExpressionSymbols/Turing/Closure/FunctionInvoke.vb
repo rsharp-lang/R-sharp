@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6e39e44d9af618b8bbd74e4152b85527, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\FunctionInvoke.vb"
+﻿#Region "Microsoft.VisualBasic::e01feef47628989e3fdb9970346794cc, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\FunctionInvoke.vb"
 
     ' Author:
     ' 
@@ -37,8 +37,8 @@
     '                     type
     ' 
     '         Constructor: (+2 Overloads) Sub New
-    '         Function: allIsValueAssign, doInvokeFuncVar, EnumerateInvokedParameters, Evaluate, GetFunctionVar
-    '                   getFuncVar, invokeRInternal, runOptions, ToString
+    '         Function: allIsValueAssign, doInvokeFuncVar, EnumerateInvokedParameters, Evaluate, (+2 Overloads) GetFunctionVar
+    '                   getFuncVar, HandleResult, invokeRInternal, runOptions, ToString
     ' 
     ' 
     ' /********************************************************************************/

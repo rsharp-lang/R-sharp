@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f821b3238ff29e6eb8709881d8857c4f, R#\Interpreter\Syntax\SyntaxTree\ExpressionSignature.vb"
+﻿#Region "Microsoft.VisualBasic::9ce45439ffd70cb41ce7acd983562190, R#\Interpreter\Syntax\SyntaxTree\ExpressionSignature.vb"
 
     ' Author:
     ' 
@@ -33,10 +33,10 @@
 
     '     Module ExpressionSignature
     ' 
-    '         Function: ifElseTriple, isByRefCall, isComma, isFunctionInvoke, isIdentifier
-    '                   (+2 Overloads) isKeyword, (+2 Overloads) isLambdaFunction, isLiteral, isNamespaceReferenceCall, isOneOfKeywords
-    '                   isOperator, isSequenceSyntax, isSimpleSymbolIndexer, isStackOf, isTuple
-    '                   isValueAssign, parseComplexSymbolIndexer
+    '         Function: ifElseTriple, isAcceptor, isByRefCall, isComma, isFunctionInvoke
+    '                   isIdentifier, (+2 Overloads) isKeyword, (+2 Overloads) isLambdaFunction, isLiteral, isNamespaceReferenceCall
+    '                   isOneOfKeywords, isOperator, isSequenceSyntax, isSimpleSymbolIndexer, isStackOf
+    '                   isTuple, isValueAssign, parseComplexSymbolIndexer
     ' 
     ' 
     ' /********************************************************************************/
