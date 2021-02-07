@@ -1,6 +1,35 @@
 # Special Closures in R#
 
-There are sevral closure type in R# language
+## introduction: closure expression
+
+A closure expression is a kind of expression group that could produce values, here is a closure expression example:
+
+```R
+{
+    function1();
+    function2();
+    function3();
+}
+```
+
+As the result value of the closure expression is the value of the last expression, so you can assign the closure its expression value to a ``R#`` symbol like:
+
+```R
+# you can apply the closure expression syntax for divide your code 
+# into different code block in a more logical way. 
+let symbol as string = {
+    function1();
+    function2();
+
+    # the result value of the function3 invocation will be 
+    # assigned to the target symbol.
+    function3();
+}
+```
+
+> NOTE: please note that, the closure is an expression, even if the closure body it contains multiple expressions.
+
+There are sevral special closure types in R# language
 
 ## ``using`` closure
 
@@ -8,8 +37,20 @@ The ``using`` closure can apply for the automatically operation like write file,
 
 ```R
 using file as data.frame() :> auto(table -> table :> write.csv(file = "...")) {
-
+    # codes for modify the file data frame object
+    # ...
 }
+```
+
+if we restore the the using closure code as the original R code, then you can found out the secret of how we implements the ``using`` closure:
+
+```R
+let file = data.frame();
+
+# codes for modify the file data frame object
+# ...
+
+write.csv(file, file = "...")
 ```
 
 ## ``acceptor`` closure
