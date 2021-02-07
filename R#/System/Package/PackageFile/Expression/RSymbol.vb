@@ -46,6 +46,7 @@
 
 Imports System.IO
 Imports System.Text
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
@@ -69,6 +70,7 @@ Namespace Development.Package.File.Expressions
                 Call outfile.Write(0)
                 Call outfile.Write(DirectCast(x.type, Byte))
 
+                Call outfile.Write(context.GetBuffer(x.stackFrame))
                 Call outfile.Write(CType(If(x.is_readonly, 1, 0), Byte))
                 Call outfile.Write(CType(x.names.Length, Byte))
 
@@ -91,6 +93,7 @@ Namespace Development.Package.File.Expressions
 
         Public Overrides Function GetExpression(buffer As MemoryStream, raw As BlockReader, desc As DESCRIPTION) As Expression
             Using bin As New BinaryReader(buffer)
+                Dim trace As StackFrame = Writer.ReadSourceMap(bin, desc)
                 Dim [readonly] As Boolean = If(bin.ReadByte = 0, False, True)
                 Dim sizeOf As Integer = bin.ReadByte
                 Dim nameList As New List(Of String)
@@ -109,7 +112,13 @@ Namespace Development.Package.File.Expressions
                     value = BlockReader.ParseBlock(bin).Parse(desc)
                 End If
 
-                Return New DeclareNewSymbol(nameList.ToArray, value, raw.type, [readonly])
+                Return New DeclareNewSymbol(
+                    names:=nameList.ToArray,
+                    value:=value,
+                    type:=raw.type,
+                    [readonly]:=[readonly],
+                    stackFrame:=trace
+                )
             End Using
         End Function
     End Class

@@ -72,10 +72,15 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Dim i As Integer = 0
             Dim sequence As SyntaxResult = Nothing
             Dim locals As New List(Of DeclareNewSymbol)
+            Dim trace As New StackFrame
 
             For i = 1 To tokens.Count - 1
                 If tokens(i).isIdentifier Then
                     variables.Add(tokens(i)(Scan0).text)
+
+                    If Not trace Is Nothing Then
+                        trace = opts.GetStackTrace(tokens(i)(Scan0))
+                    End If
                 ElseIf tokens(i).isKeyword("in") Then
                     sequence = Expression.CreateExpression(tokens(i + 1), opts)
                     Exit For
@@ -92,7 +97,8 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     names:=variables.ToArray,
                     value:=Nothing,
                     type:=TypeCodes.generic,
-                    [readonly]:=False
+                    [readonly]:=False,
+                    stackFrame:=trace
                 )
             End If
 

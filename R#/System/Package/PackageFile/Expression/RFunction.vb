@@ -192,14 +192,18 @@ Namespace Development.Package.File.Expressions
 
             Dim names As String() = args.Select(Function(a) DirectCast(a, Literal).value.ToString).ToArray
             Dim name$ = $"[{names.JoinBy(", ")}] -> {body(Scan0).ToString}"
-            Dim target As New DeclareNewSymbol(names, Nothing, TypeCodes.generic, False)
+            Dim target As New DeclareNewSymbol(names, Nothing, TypeCodes.generic, False, sourceMap)
 
             Return New DeclareLambdaFunction(name, target, body(Scan0), sourceMap)
         End Function
 
         Private Shared Function ParseFunction(reader As BinaryReader, desc As DESCRIPTION) As DeclareNewFunction
             Dim sourceMap As StackFrame = Writer.ReadSourceMap(reader, desc)
-            Dim funcName As String = Writer.readZEROBlock(reader).DoCall(Function(bytes) Encoding.ASCII.GetString(bytes.ToArray))
+            Dim funcName As String = Writer _
+                .readZEROBlock(reader) _
+                .DoCall(Function(bytes)
+                            Return Encoding.ASCII.GetString(bytes.ToArray)
+                        End Function)
             Dim parms As Integer = reader.ReadByte
             Dim args As New List(Of DeclareNewSymbol)
 

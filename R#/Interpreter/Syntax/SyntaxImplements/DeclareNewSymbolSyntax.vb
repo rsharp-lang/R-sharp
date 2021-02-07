@@ -41,6 +41,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
@@ -95,6 +96,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Dim symbolNames = getNames(code(1))
             Dim type As TypeCodes
             Dim value As Expression = Nothing
+            Dim trace As StackFrame = opts.GetStackTrace(code(1)(Scan0))
 
             If code = 2 Then
                 type = TypeCodes.generic
@@ -122,7 +124,8 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 names:=symbolNames,
                 value:=value,
                 type:=type,
-                [readonly]:=[readonly]
+                [readonly]:=[readonly],
+                stackFrame:=trace
             )
 
             Return New SyntaxResult(symbol)
@@ -142,6 +145,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         Public Function DeclareNewSymbol(singleToken As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim symbolNames = getNames(singleToken)
             Dim type As TypeCodes
+            Dim trace As StackFrame = opts.GetStackTrace(singleToken(Scan0))
 
             If symbolNames Like GetType(SyntaxErrorException) Then
                 Return New SyntaxResult(symbolNames.TryCast(Of SyntaxErrorException), opts.debug)
@@ -157,7 +161,8 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 names:=symbolNames,
                 value:=Nothing,
                 type:=type,
-                [readonly]:=False
+                [readonly]:=False,
+                stackFrame:=trace
             )
         End Function
 
@@ -183,6 +188,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             End If
 
             Dim type As TypeCodes
+            Dim trace As StackFrame = opts.GetStackTrace(symbol(Scan0))
 
             If funcParameter Then
                 type = TypeCodes.generic
@@ -194,7 +200,8 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                 names:=symbolNames,
                 value:=valSyntaxTemp.expression,
                 type:=type,
-                [readonly]:=False
+                [readonly]:=False,
+                stackFrame:=trace
             )
         End Function
 

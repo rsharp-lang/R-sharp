@@ -57,12 +57,6 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         ''' </summary>
         Public Function DeclareLambdaFunction(args As SymbolReference, expression As Expression, lineNum%, opts As SyntaxBuilderOptions) As SyntaxResult
             Dim name$ = $"[lambda: {args} -> {expression}]"
-            Dim parameter As New DeclareNewSymbol(
-                names:={args.symbol},
-                value:=Nothing,
-                type:=TypeCodes.generic,
-                [readonly]:=False
-            )
             Dim stackframe As New StackFrame With {
                 .File = opts.source.fileName,
                 .Line = lineNum,
@@ -72,6 +66,13 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     .[Namespace] = "SMRUCC/R#"
                 }
             }
+            Dim parameter As New DeclareNewSymbol(
+                names:={args.symbol},
+                value:=Nothing,
+                type:=TypeCodes.generic,
+                [readonly]:=False,
+                stackFrame:=stackframe
+            )
             Dim lambda As New DeclareLambdaFunction(
                 name:=name,
                 parameter:=parameter,
