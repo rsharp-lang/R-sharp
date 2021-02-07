@@ -84,6 +84,7 @@ Namespace Development.Package.File
                     Case ExpressionTypes.If : Return New RIf(Nothing).GetExpression(buffer, Me, desc)
                     Case ExpressionTypes.For : Return New RFor(Nothing).GetExpression(buffer, Me, desc)
                     Case ExpressionTypes.Else : Return New RElse(Nothing).GetExpression(buffer, Me, desc)
+                    Case ExpressionTypes.ClosureDeclare : Return New RClosure(Nothing).GetExpression(buffer, Me, desc)
 
                     Case ExpressionTypes.StringInterpolation : Return New RStringInterpolation(Nothing).GetExpression(buffer, Me, desc)
                     Case ExpressionTypes.Literal,

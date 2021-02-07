@@ -94,6 +94,7 @@ Namespace Development.Package.File
         Public ReadOnly Property RVector As RVector
         Public ReadOnly Property RString As RStringInterpolation
         Public ReadOnly Property RExpr As RExprLiteral
+        Public ReadOnly Property RClosure As RClosure
 
 #Region "keywords"
         Public ReadOnly Property Rfor As RFor
@@ -123,6 +124,7 @@ Namespace Development.Package.File
             Me.Rif = New RIf(Me)
             Me.Relse = New RElse(Me)
             Me.RExpr = New RExprLiteral(Me)
+            Me.RClosure = New RClosure(Me)
         End Sub
 
         Public Function GetBuffer(x As Expression) As Byte()
@@ -164,6 +166,8 @@ Namespace Development.Package.File
                 Case GetType(IfBranch) : Return Rif.GetBuffer(x)
                 Case GetType(ElseBranch) : Return Relse.GetBuffer(x)
                 Case GetType(ExpressionLiteral) : Return RExpr.GetBuffer(x)
+
+                Case GetType(ClosureExpression) : Return RClosure.GetBuffer(x)
 
                 Case Else
                     Throw New NotImplementedException(x.GetType.FullName)
