@@ -205,6 +205,10 @@ Namespace Language.TokenIcer
             "new"
         }
 
+        Public Shared Function GetRKeywords() As String()
+            Return keywords.Objects
+        End Function
+
         Private Function walkChar(c As Char) As Token
             If c = ASCII.LF Then
                 lineNumber += 1
