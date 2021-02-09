@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f6085eaf7bf4bc20f0e6cdc3543ddd77, studio\Rsharp_kit\roxygenNet\rdocumentation.vb"
+﻿#Region "Microsoft.VisualBasic::eb9e39c8fefe9417d89c4f0259bf229b, studio\Rsharp_kit\roxygenNet\rdocumentation.vb"
 
     ' Author:
     ' 
@@ -39,7 +39,6 @@
 
 #End Region
 
-
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
@@ -53,4 +52,3 @@ Public Module rdocumentation
         Return New [function]().createHtml(func, env)
     End Function
 End Module
-

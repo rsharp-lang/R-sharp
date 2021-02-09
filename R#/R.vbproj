@@ -749,7 +749,7 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolReference.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\VectorLiteral.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\Literal.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewSymbol.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\DeclareNewSymbol.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxTree\ExpressionTree.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxTree\ExpressionSignature.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\BinaryExpressionTree.vb" />
@@ -884,6 +884,7 @@
     <Compile Include="System\Package\Database\LocalPackageDatabase.vb" />
     <Compile Include="System\Package\Database\PackageLoaderEntry.vb" />
     <Compile Include="System\Package\PackageFile\AssemblyPack.vb" />
+    <Compile Include="System\Package\PackageFile\Expression\RClosure.vb" />
     <Compile Include="System\Package\PackageFile\Expression\RExprLiteral.vb" />
     <Compile Include="System\Package\PackageFile\PackageNamespace.vb" />
     <Compile Include="System\Package\PackageFile\Dependency.vb" />

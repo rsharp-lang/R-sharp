@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::305dfcd92784a8e0767a421657a31cc4, R#\Runtime\Internal\objects\dataset\list.vb"
+﻿#Region "Microsoft.VisualBasic::e77ace9dec501a70190ea2c32f662bf6, R#\Runtime\Internal\objects\dataset\list.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,7 @@
     ' 
     '         Properties: length, slots
     ' 
-    '         Constructor: (+4 Overloads) Sub New
+    '         Constructor: (+5 Overloads) Sub New
     '         Function: AsGeneric, (+2 Overloads) getByIndex, (+2 Overloads) getByName, getNames, GetSlots
     '                   getValue, hasName, namedValues, setByindex, setByIndex
     '                   (+2 Overloads) setByName, setNames, ToString

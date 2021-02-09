@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e7cd6dd0c9c7be5bbd1bc7fea6ecee85, R#\System\Package\PackageFile\Expression\RFunction.vb"
+﻿#Region "Microsoft.VisualBasic::9876e796eb86bba73516b816e8b1bd78, R#\System\Package\PackageFile\Expression\RFunction.vb"
 
     ' Author:
     ' 
@@ -192,14 +192,18 @@ Namespace Development.Package.File.Expressions
 
             Dim names As String() = args.Select(Function(a) DirectCast(a, Literal).value.ToString).ToArray
             Dim name$ = $"[{names.JoinBy(", ")}] -> {body(Scan0).ToString}"
-            Dim target As New DeclareNewSymbol(names, Nothing, TypeCodes.generic, False)
+            Dim target As New DeclareNewSymbol(names, Nothing, TypeCodes.generic, False, sourceMap)
 
             Return New DeclareLambdaFunction(name, target, body(Scan0), sourceMap)
         End Function
 
         Private Shared Function ParseFunction(reader As BinaryReader, desc As DESCRIPTION) As DeclareNewFunction
             Dim sourceMap As StackFrame = Writer.ReadSourceMap(reader, desc)
-            Dim funcName As String = Writer.readZEROBlock(reader).DoCall(Function(bytes) Encoding.ASCII.GetString(bytes.ToArray))
+            Dim funcName As String = Writer _
+                .readZEROBlock(reader) _
+                .DoCall(Function(bytes)
+                            Return Encoding.ASCII.GetString(bytes.ToArray)
+                        End Function)
             Dim parms As Integer = reader.ReadByte
             Dim args As New List(Of DeclareNewSymbol)
 

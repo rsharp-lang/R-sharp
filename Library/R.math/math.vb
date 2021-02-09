@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b5622f46b10939fa1222b5f781150b58, Library\R.math\math.vb"
+﻿#Region "Microsoft.VisualBasic::cf1f4bf8c985833507c2fb75e8e4e7e1, Library\R.math\math.vb"
 
     ' Author:
     ' 
@@ -41,6 +41,7 @@
 
 #End Region
 
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.Bootstrapping
@@ -329,7 +330,14 @@ Module math
 
         ' 主要是生成lambda函数的closure表达式
         Dim name As String = lm.lm.Polynomial.ToString("G3")
-        Dim parameter As New DeclareNewSymbol(lm.variables, Nothing, TypeCodes.double, [readonly]:=False)
+        Dim trace As StackFrame = env.stackFrame
+        Dim parameter As New DeclareNewSymbol(
+            names:=lm.variables,
+            value:=Nothing,
+            type:=TypeCodes.double,
+            [readonly]:=False,
+            stackFrame:=trace
+        )
         Dim closure As Expression = lm.CreateFormulaCall
 
         Return New DeclareLambdaFunction(name, parameter, closure, env.stackFrame)

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6e56a33fb0f3780286aa3416e0335d7b, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewSymbol.vb"
+﻿#Region "Microsoft.VisualBasic::a093fcfada879ddab43fd8f6f6927a45, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\DeclareNewSymbol.vb"
 
     ' Author:
     ' 
@@ -33,8 +33,8 @@
 
     '     Class DeclareNewSymbol
     ' 
-    '         Properties: expressionName, hasInitializeExpression, isTuple, names, type
-    '                     value
+    '         Properties: expressionName, hasInitializeExpression, isTuple, names, stackFrame
+    '                     type, value
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: Evaluate, getParameterView, PushNames, PushTuple, ToString
@@ -44,15 +44,18 @@
 
 #End Region
 
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
-Imports SMRUCC.Rsharp.Development.Package.File
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
     Public Class DeclareNewSymbol : Inherits Expression
+        Implements IRuntimeTrace
 
         ''' <summary>
         ''' 对于tuple类型，会存在多个变量
@@ -92,11 +95,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             End Get
         End Property
 
-        Sub New(names$(), value As Expression, type As TypeCodes, [readonly] As Boolean)
+        Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
+
+        Sub New(names$(), value As Expression, type As TypeCodes, [readonly] As Boolean, stackFrame As StackFrame)
             Me.names = names
             Me.m_value = value
             Me.m_type = type
             Me.is_readonly = [readonly]
+            Me.stackFrame = stackFrame
 
             If Not value Is Nothing Then
                 hasInitializeExpression = True

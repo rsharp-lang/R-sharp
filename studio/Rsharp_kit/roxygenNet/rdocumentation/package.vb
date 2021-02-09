@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::90fa1e8c497e5e0a4307f79e0e36bc62, studio\Rsharp_kit\roxygenNet\rdocumentation\package.vb"
+﻿#Region "Microsoft.VisualBasic::7e1117335ce6890bb4fe1f3d695d0deb, studio\Rsharp_kit\roxygenNet\rdocumentation\package.vb"
 
     ' Author:
     ' 
@@ -45,4 +45,3 @@ Public Class package
 
     End Function
 End Class
-

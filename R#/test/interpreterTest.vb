@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7c1675301a1fa03be1b9eac4eda5f05f, R#\Test\interpreterTest.vb"
+﻿#Region "Microsoft.VisualBasic::be4f996b576bbc7afd233811a483c515, R#\Test\interpreterTest.vb"
 
     ' Author:
     ' 
@@ -33,13 +33,13 @@
 
     ' Module interpreterTest
     ' 
-    '     Sub: anonymous, appendTest, booleanCLIArgumentTest, closureEnvironmentTest, closureTest
-    '          cVectorTest, debugTest, formulaTest, functiondeclaretest2, headTest
-    '          inlineFunctiontest, isEmptyTest, lastSymbolTest, Main, markdownTest
-    '          missingSymbolInStringInterpolate, moduleTest, negativeValTest, numberLiteralsTest, objClasstest
-    '          orDefaultTest, printClassTest, regexpTest, sequenceGeneratorTest, strictTest
-    '          suppressTest, syntaxErrorTest, unaryNegTest, usingTest, whileTest
-    '          withTest
+    '     Sub: acceptorTest, anonymous, appendTest, booleanCLIArgumentTest, closureEnvironmentTest
+    '          closureTest, cVectorTest, debugTest, doCalltest, formulaTest
+    '          functiondeclaretest2, headTest, inlineFunctiontest, isEmptyTest, lastSymbolTest
+    '          Main, markdownTest, missingSymbolInStringInterpolate, moduleTest, negativeValTest
+    '          numberLiteralsTest, objClasstest, orDefaultTest, printClassTest, regexpTest
+    '          sequenceGeneratorTest, strictTest, suppressTest, syntaxErrorTest, unaryNegTest
+    '          usingTest, whileTest, withTest
     ' module test1
     ' 
     '     Sub: boolLiteralTest, branchTest, cliTest, commandLineArgumentTest, constantTest
@@ -76,7 +76,7 @@ Module interpreterTest
     Dim R As New RInterpreter With {.debug = True}
 
     Sub doCalltest()
-        Call R.Evaluate("do.call('ls')")
+        Call R.Evaluate("do.call('ls', args = list(name = 'package:base'))")
 
         Pause()
     End Sub

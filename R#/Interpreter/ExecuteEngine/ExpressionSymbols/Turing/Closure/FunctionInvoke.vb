@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6e39e44d9af618b8bbd74e4152b85527, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\FunctionInvoke.vb"
+﻿#Region "Microsoft.VisualBasic::e01feef47628989e3fdb9970346794cc, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\FunctionInvoke.vb"
 
     ' Author:
     ' 
@@ -37,8 +37,8 @@
     '                     type
     ' 
     '         Constructor: (+2 Overloads) Sub New
-    '         Function: allIsValueAssign, doInvokeFuncVar, EnumerateInvokedParameters, Evaluate, GetFunctionVar
-    '                   getFuncVar, invokeRInternal, runOptions, ToString
+    '         Function: allIsValueAssign, doInvokeFuncVar, EnumerateInvokedParameters, Evaluate, (+2 Overloads) GetFunctionVar
+    '                   getFuncVar, HandleResult, invokeRInternal, runOptions, ToString
     ' 
     ' 
     ' /********************************************************************************/
@@ -52,6 +52,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
@@ -60,7 +61,6 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports SMRUCC.Rsharp.Development.Package.File
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
@@ -160,40 +160,51 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     result = doInvokeFuncVar(target, env)
                 End If
 
-                ' check the function invoke returns values
-                ' for 
-                '
-                ' 1. error message
-                ' 2. invisible
-                ' 3. returns expression, break expression
-                '
-                If result Is Nothing Then
-                    Return Nothing
-                ElseIf Program.isException(result) Then
-                    Return result
-                ElseIf TypeOf result Is RReturn Then
-                    Dim returns As RReturn = DirectCast(result, RReturn)
-                    Dim messages = env.globalEnvironment.messages
-
-                    If returns.HasValue Then
-                        messages.AddRange(returns.messages)
-                        Return returns.Value
-                    ElseIf returns.isError Then
-                        returns.messages.Where(Function(m) m.level <> MSG_TYPES.ERR).DoCall(AddressOf messages.AddRange)
-                        Return returns.messages.Where(Function(m) m.level = MSG_TYPES.ERR)
-                    Else
-                        ' 2019-12-15
-                        ' isError的时候也会导致hasValue为false
-                        ' 所以null的情况不可以和warning的情况合并在一起处理
-                        messages.AddRange(returns.messages)
-                        Return Nothing
-                    End If
-                ElseIf TypeOf result Is pipeline AndAlso DirectCast(result, pipeline).isError Then
-                    Return DirectCast(result, pipeline).getError
-                Else
-                    Return result
-                End If
+                Return HandleResult(result, envir)
             End Using
+        End Function
+
+        ''' <summary>
+        ''' check the function invoke returns values for:
+        '''
+        ''' 1. error message
+        ''' 2. invisible
+        ''' 3. returns expression, break expression
+        ''' 
+        ''' </summary>
+        ''' <param name="result"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        Public Shared Function HandleResult(result As Object, env As Environment) As Object
+            If result Is Nothing Then
+                Return Nothing
+            ElseIf Program.isException(result) Then
+                Return result
+            ElseIf TypeOf result Is RReturn Then
+                Dim returns As RReturn = DirectCast(result, RReturn)
+                Dim messages = env.globalEnvironment.messages
+
+                If returns.HasValue Then
+                    messages.AddRange(returns.messages)
+                    Return returns.Value
+                ElseIf returns.isError Then
+                    returns.messages _
+                        .Where(Function(m) m.level <> MSG_TYPES.ERR) _
+                        .DoCall(AddressOf messages.AddRange)
+
+                    Return returns.messages.Where(Function(m) m.level = MSG_TYPES.ERR)
+                Else
+                    ' 2019-12-15
+                    ' isError的时候也会导致hasValue为false
+                    ' 所以null的情况不可以和warning的情况合并在一起处理
+                    messages.AddRange(returns.messages)
+                    Return Nothing
+                End If
+            ElseIf TypeOf result Is pipeline AndAlso DirectCast(result, pipeline).isError Then
+                Return DirectCast(result, pipeline).getError
+            Else
+                Return result
+            End If
         End Function
 
         ''' <summary>
@@ -237,7 +248,17 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Return funcVar
         End Function
 
-        Public Function GetFunctionVar(env As Environment) As Object
+        ''' <summary>
+        ''' get internal function symbol object or runtime function 
+        ''' from the given runtime <see cref="Environment"/>.
+        ''' </summary>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' an error message will be return if the 
+        ''' target function symbol is not found in 
+        ''' the given runtime <paramref name="env"/>.
+        ''' </returns>
+        Public Shared Function GetFunctionVar(funcName As Expression, env As Environment, Optional [namespace] As String = Nothing) As Object
             Dim target As Object = getFuncVar(funcName, [namespace], env)
 
             If Program.isException(target) Then
@@ -257,6 +278,18 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Else
                 Return target
             End If
+        End Function
+
+        ''' <summary>
+        ''' get internal function symbol object or runtime function 
+        ''' from the given runtime <see cref="Environment"/>.
+        ''' </summary>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function GetFunctionVar(env As Environment) As Object
+            Return GetFunctionVar(funcName, env, [namespace])
         End Function
 
         Private Function doInvokeFuncVar(funcVar As RFunction, envir As Environment) As Object

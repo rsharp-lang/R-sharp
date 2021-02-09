@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8e038b021a2e2294c60e8f0a7f7af905, R#\Interpreter\Syntax\SyntaxImplements\DeclareLambdaFunctionSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::5f2ab9ab88c3652d710274f512ded0ea, R#\Interpreter\Syntax\SyntaxImplements\DeclareLambdaFunctionSyntax.vb"
 
     ' Author:
     ' 
@@ -57,12 +57,6 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         ''' </summary>
         Public Function DeclareLambdaFunction(args As SymbolReference, expression As Expression, lineNum%, opts As SyntaxBuilderOptions) As SyntaxResult
             Dim name$ = $"[lambda: {args} -> {expression}]"
-            Dim parameter As New DeclareNewSymbol(
-                names:={args.symbol},
-                value:=Nothing,
-                type:=TypeCodes.generic,
-                [readonly]:=False
-            )
             Dim stackframe As New StackFrame With {
                 .File = opts.source.fileName,
                 .Line = lineNum,
@@ -72,6 +66,13 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     .[Namespace] = "SMRUCC/R#"
                 }
             }
+            Dim parameter As New DeclareNewSymbol(
+                names:={args.symbol},
+                value:=Nothing,
+                type:=TypeCodes.generic,
+                [readonly]:=False,
+                stackFrame:=stackframe
+            )
             Dim lambda As New DeclareLambdaFunction(
                 name:=name,
                 parameter:=parameter,

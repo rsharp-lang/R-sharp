@@ -1071,6 +1071,18 @@ Namespace Runtime.Internal.Invokes
                 .getObjectList(arguments, envir) _
                 .Where(Function(a) a.Name <> path) _
                 .ToArray
+
+            If args.Length = 1 AndAlso TypeOf arguments Is InvokeParameter() AndAlso TypeOf args(Scan0).Value Is list Then
+                args = DirectCast(args(Scan0).Value, list).slots _
+                    .Select(Function(tuple)
+                                Return New NamedValue(Of Object) With {
+                                    .Name = tuple.Key,
+                                    .Value = tuple.Value
+                                }
+                            End Function) _
+                    .ToArray
+            End If
+
             Dim R As RInterpreter = envir.globalEnvironment.Rscript
             Dim result As Object = R.Source(path, args)
 

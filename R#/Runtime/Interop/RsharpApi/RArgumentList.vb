@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::181d95a89c7b6cf84cfd6475882ebb18, R#\Runtime\Interop\RsharpApi\RArgumentList.vb"
+﻿#Region "Microsoft.VisualBasic::85eaed392d4c554344758541522ff90e, R#\Runtime\Interop\RsharpApi\RArgumentList.vb"
 
     ' Author:
     ' 
@@ -308,7 +308,12 @@ Namespace Runtime.Interop
                 listObject.Add(params(j))
             Next
 
-            parameterVals(listIndex) = listObject.ToArray
+            If parameterVals(listIndex) IsNot Nothing AndAlso listObject.Count = 0 Then
+                ' skip
+            Else
+                parameterVals(listIndex) = listObject.ToArray
+            End If
+
             parameterVals = fillOptionalArguments(parameterVals, normalNames, declareArguments, declareNameIndex, [declare].name, 0, env)
             parameterVals = TryCastListObjects(parameterVals, listIndex, [declare].parameters(listIndex), env)
 

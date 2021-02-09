@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::afa3c8b0df29f73c04a4d9a608bce922, R#\System\Package\PackageFile\Serialization\BlockReader.vb"
+﻿#Region "Microsoft.VisualBasic::6c33c939e05a981a8ca233d8a1440441, R#\System\Package\PackageFile\Serialization\BlockReader.vb"
 
     ' Author:
     ' 
@@ -84,6 +84,7 @@ Namespace Development.Package.File
                     Case ExpressionTypes.If : Return New RIf(Nothing).GetExpression(buffer, Me, desc)
                     Case ExpressionTypes.For : Return New RFor(Nothing).GetExpression(buffer, Me, desc)
                     Case ExpressionTypes.Else : Return New RElse(Nothing).GetExpression(buffer, Me, desc)
+                    Case ExpressionTypes.ClosureDeclare : Return New RClosure(Nothing).GetExpression(buffer, Me, desc)
 
                     Case ExpressionTypes.StringInterpolation : Return New RStringInterpolation(Nothing).GetExpression(buffer, Me, desc)
                     Case ExpressionTypes.Literal,

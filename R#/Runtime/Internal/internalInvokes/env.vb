@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2e311b7844f0582d92bea321d8811513, R#\Runtime\Internal\internalInvokes\env.vb"
+﻿#Region "Microsoft.VisualBasic::20942b3745f88f32bb1e171154b46a49, R#\Runtime\Internal\internalInvokes\env.vb"
 
     ' Author:
     ' 
@@ -53,6 +53,10 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Development.Package
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports Microsoft.VisualBasic.Language
 
 Namespace Runtime.Internal.Invokes
 
@@ -314,7 +318,31 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         Public Function CallInternal(call$, args As Object, envir As Environment) As Object
-            Return Internal.debug.stop(New NotImplementedException("Call internal functions"), envir)
+            Dim ref As NamedValue(Of String) = [call].GetTagValue("::")
+            Dim callName As String = ref.Value
+            Dim [namespace] As String = ref.Name
+            Dim func As Object = FunctionInvoke.GetFunctionVar(New Literal(callName), envir, [namespace]:=[namespace])
+
+            If Program.isException(func) Then
+                Return func
+            End If
+
+            Dim invoke As RFunction = DirectCast(func, RFunction)
+            Dim arguments As New List(Of InvokeParameter)
+
+            If TypeOf args Is list Then
+                Dim i As i32 = Scan0
+
+                For Each item In DirectCast(args, list).slots
+                    Call New InvokeParameter(name:=item.Key, item.Value, ++i).DoCall(AddressOf arguments.Add)
+                Next
+            ElseIf TypeOf args Is InvokeParameter() Then
+                arguments.AddRange(DirectCast(args, InvokeParameter()))
+            End If
+
+            Dim result As Object = invoke.Invoke(envir, arguments.ToArray)
+
+            Return FunctionInvoke.HandleResult(result, envir)
         End Function
 
         ''' <summary>
