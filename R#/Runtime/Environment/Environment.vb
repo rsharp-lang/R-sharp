@@ -367,7 +367,7 @@ Namespace Runtime
                 ' 只需要设置值就可以了
                 Return symbols(name).SetValue(value, Me)
 
-            ElseIf Not value Is Nothing Then
+            ElseIf (Not value Is Nothing) AndAlso (Not TypeOf value Is list) AndAlso (Not TypeOf value Is dataframe) Then
                 value = asRVector(mode, value)
             End If
 
