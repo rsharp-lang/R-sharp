@@ -631,6 +631,10 @@ RE0:
 
             If x.GetType.ImplementInterface(GetType(IDictionary)) Then
                 Return Runtime.CTypeOfList(Of Double)(x, env)
+            ElseIf TypeOf x Is Double() Then
+                Return New vector(x, RType.GetRSharpType(GetType(Double)))
+            ElseIf TypeOf x Is vector AndAlso DirectCast(x, vector).elementType Like RType.floats Then
+                Return New vector(x)
             Else
                 Dim data As Object() = pipeline _
                     .TryCreatePipeline(Of Object)(x, env) _

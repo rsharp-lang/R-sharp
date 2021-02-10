@@ -78,6 +78,20 @@ Namespace Runtime.Internal.Object
         End Sub
 
         ''' <summary>
+        ''' value copy
+        ''' </summary>
+        ''' <param name="vec"></param>
+        Sub New(vec As vector)
+            data = Array.CreateInstance(vec.data.GetType.GetElementType, vec.length)
+            Array.ConstrainedCopy(vec.data, Scan0, data, Scan0, length)
+            factor = vec.factor
+            unit = vec.unit
+            elementType = vec.elementType
+            names = vec.names
+            nameIndex = vec.nameIndex
+        End Sub
+
+        ''' <summary>
         ''' 这个构造函数主要是应用于内部编程的快速创建
         ''' </summary>
         ''' <param name="input"></param>
