@@ -150,13 +150,15 @@ Namespace Interpreter.SyntaxParser
                 ElseIf item.isIdentifier Then
                     Return New SymbolReference(item(Scan0))
                 ElseIf item.Length = 1 AndAlso item(Scan0).name = TokenType.annotation Then
-                    If item(Scan0).text = "@stop" Then
-                        Return New SyntaxResult(New BreakPoint)
-                    ElseIf item(Scan0).text = "@script" Then
-                        Return New SyntaxResult(New ScriptSymbol)
-                    Else
-                        Return New SyntaxResult(New NotImplementedException(item(Scan0).text), opts.debug)
-                    End If
+                    Select Case Strings.LCase(item(Scan0).text)
+                        Case "@stop" : Return New SyntaxResult(New BreakPoint)
+                        Case "@script" : Return New SyntaxResult(New ScriptSymbol)
+                        Case "@home" : Return New SyntaxResult(New HomeSymbol)
+                        Case "@host" : Return New SyntaxResult(New HostSymbol)
+
+                        Case Else
+                            Return New SyntaxResult(New NotImplementedException(item(Scan0).text), opts.debug)
+                    End Select
                 Else
                     Dim ifelse = item.ifElseTriple
 
