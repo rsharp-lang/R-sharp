@@ -291,7 +291,7 @@ Public Module utils
         ElseIf REnv.isVector(Of EntityObject)(x) Then
             Return DirectCast(REnv.asVector(Of EntityObject)(x), EntityObject()).SaveTo(path:=file, encoding:=encoding.CodePage, silent:=True)
         ElseIf REnv.isVector(Of DataSet)(x) Then
-            Return DirectCast(REnv.asVector(Of DataSet)(x), DataSet()).SaveTo(path:=file, encoding:=encoding.CodePage, silent:=True)
+            Return DirectCast(REnv.asVector(Of DataSet)(x), DataSet()).SaveTo(path:=file, encoding:=encoding.CodePage, silent:=True, metaBlank:=0)
         ElseIf type.IsArray OrElse type Is GetType(vector) Then
             Return saveGeneric(x, type, file, encoding.CodePage, env)
         Else
