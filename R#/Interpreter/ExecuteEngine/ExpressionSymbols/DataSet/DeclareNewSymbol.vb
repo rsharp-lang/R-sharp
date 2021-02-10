@@ -1,49 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::a093fcfada879ddab43fd8f6f6927a45, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\DeclareNewSymbol.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class DeclareNewSymbol
-    ' 
-    '         Properties: expressionName, hasInitializeExpression, isTuple, names, stackFrame
-    '                     type, value
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, getParameterView, PushNames, PushTuple, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class DeclareNewSymbol
+' 
+'         Properties: expressionName, hasInitializeExpression, isTuple, names, stackFrame
+'                     type, value
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: Evaluate, getParameterView, PushNames, PushTuple, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Development.Package.File
@@ -51,6 +52,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
@@ -81,8 +83,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         End Property
 
         Public ReadOnly Property isTuple As Boolean
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
-                Return Not names.IsNullOrEmpty AndAlso names.Length > 1
+                Return (Not names.IsNullOrEmpty) AndAlso names.Length > 1
             End Get
         End Property
 
@@ -245,11 +248,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
         Public Overrides Function ToString() As String
             If names.Length > 1 Then
-                Return $"Dim [{names.JoinBy(", ")}] As {type.Description} = {Scripting.ToString(value, "NULL")}"
+                Return $"Dim [{names.JoinBy(", ")}] As {type.Description} = {any.ToString(value, "NULL")}"
             ElseIf names.Length = 0 Then
                 Return "Syntax Error!"
             Else
-                Return $"Dim {names(Scan0)} As {type.Description} = {Scripting.ToString(value, "NULL")}"
+                Return $"Dim {names(Scan0)} As {type.Description} = {any.ToString(value, "NULL")}"
             End If
         End Function
 

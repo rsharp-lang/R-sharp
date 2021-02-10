@@ -367,7 +367,7 @@ Namespace Runtime
                 ' 只需要设置值就可以了
                 Return symbols(name).SetValue(value, Me)
 
-            ElseIf (Not value Is Nothing) AndAlso (Not TypeOf value Is list) AndAlso (Not TypeOf value Is dataframe) Then
+            ElseIf (Not value Is Nothing) Then
                 value = asRVector(mode, value)
             End If
 
@@ -399,6 +399,10 @@ Namespace Runtime
         ''' </param>
         ''' <returns></returns>
         Friend Shared Function asRVector(type As TypeCodes, value As Object) As Object
+            If (TypeOf value Is list) OrElse (TypeOf value Is dataframe) Then
+                Return value
+            End If
+
             If type = TypeCodes.generic Then
                 ' 没有定义as type做类型约束的时候
                 ' 会需要通过值来推断
