@@ -264,6 +264,10 @@ Namespace Interpreter
             globalEnvir.Push(name, New RMethodInfo(name, closure, target), [readonly]:=False, mode:=TypeCodes.closure)
         End Sub
 
+        Public Function [Set](name As String, value As Object) As Object
+            Return globalEnvir.Push(name, value, [readonly]:=False)
+        End Function
+
         Public Function Invoke(Of T)(funcName$, ParamArray args As Object()) As T
             Return DirectCast(Invoke(funcName, args), T)
         End Function
