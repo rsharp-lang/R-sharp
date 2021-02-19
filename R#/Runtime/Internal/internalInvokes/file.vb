@@ -200,6 +200,23 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' copy file contents in one dir to another dir
+        ''' </summary>
+        ''' <param name="from"></param>
+        ''' <param name="to"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("dir.copy")>
+        <RApiReturn(GetType(String))>
+        Public Function dirCopy(from$, to$, Optional env As Environment = Nothing) As Object
+            If Not from.DirectoryExists Then
+                Return Internal.debug.stop($"the content source directory '{from}' is not exists on your file system!", env)
+            Else
+                Return New FileIO.Directory(from).CopyTo([to]).ToArray
+            End If
+        End Function
+
+        ''' <summary>
         ''' Express File Paths in Canonical Form
         ''' 
         ''' Convert file paths to canonical form for the platform, to display them in a 
