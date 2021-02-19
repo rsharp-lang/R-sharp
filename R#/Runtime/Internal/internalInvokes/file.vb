@@ -833,7 +833,7 @@ Namespace Runtime.Internal.Invokes
         ''' </remarks>
         <ExportAPI("tempdir")>
         Public Function tempdir(Optional check As Boolean = False) As String
-            Static dir As String = (App.AppSystemTemp & $"/Rtmp{App.PID.ToString.MD5.Substring(3, 6).ToUpper}").GetDirectoryFullPath
+            Static dir As String = (App.SysTemp & $"/Rtmp{App.PID.ToString.MD5.Substring(3, 6).ToUpper}").GetDirectoryFullPath
 
             If check Then
                 Call dir.MkDIR
