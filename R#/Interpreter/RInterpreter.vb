@@ -1,51 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::8521221d51b5f154fc100064535e3e0a, R#\Interpreter\RInterpreter.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class RInterpreter
-    ' 
-    '         Properties: configFile, debug, globalEnvir, redirectError2stdout, Rsharp
-    '                     silent, strict, warnings
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: (+2 Overloads) Evaluate, FromEnvironmentConfiguration, getFunctionSymbol, InitializeEnvironment, (+3 Overloads) Invoke
-    '                   (+2 Overloads) LoadLibrary, options, RedirectOutput, Run, RunInternal
-    '                   Source
-    ' 
-    '         Sub: (+3 Overloads) Add, (+2 Overloads) Dispose, Print, PrintMemory
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class RInterpreter
+' 
+'         Properties: configFile, debug, globalEnvir, redirectError2stdout, Rsharp
+'                     silent, strict, warnings
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: (+2 Overloads) Evaluate, FromEnvironmentConfiguration, getFunctionSymbol, InitializeEnvironment, (+3 Overloads) Invoke
+'                   (+2 Overloads) LoadLibrary, options, RedirectOutput, Run, RunInternal
+'                   Source
+' 
+'         Sub: (+3 Overloads) Add, (+2 Overloads) Dispose, Print, PrintMemory
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -70,6 +70,8 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Development.Configuration
 Imports REnv = SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports stdNum = System.Math
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
 Namespace Interpreter
 
@@ -262,6 +264,10 @@ Namespace Interpreter
             globalEnvir.Push(name, New RMethodInfo(name, closure, target), [readonly]:=False, mode:=TypeCodes.closure)
         End Sub
 
+        Public Function [Set](name As String, value As Object) As Object
+            Return globalEnvir.Push(name, value, [readonly]:=False)
+        End Function
+
         Public Function Invoke(Of T)(funcName$, ParamArray args As Object()) As T
             Return DirectCast(Invoke(funcName, args), T)
         End Function
@@ -273,32 +279,13 @@ Namespace Interpreter
         ''' <param name="args"></param>
         ''' <returns></returns>
         Public Function Invoke(funcName$, ParamArray args As Object()) As Object
-            Dim find As Object = getFunctionSymbol(funcName)
+            Dim find As Object = FunctionInvoke.GetFunctionVar(New Literal(funcName), globalEnvir)
 
             If TypeOf find Is Message Then
                 Return find
             Else
-                Return DirectCast(DirectCast(find, Symbol).value, RFunction).Invoke(args, globalEnvir)
+                Return DirectCast(find, RFunction).Invoke(args, globalEnvir)
             End If
-        End Function
-
-        ''' <summary>
-        ''' 因为不仅仅使用dll之中的api，也可能使用运行时用户定义的函数
-        ''' 所以在这里使用<see cref="GlobalEnvironment.FindSymbol(String, Boolean)"/>
-        ''' 而非使用<see cref="GlobalEnvironment.FindFunction(String, Boolean)"/>
-        ''' </summary>
-        ''' <param name="funcName"></param>
-        ''' <returns></returns>
-        Private Function getFunctionSymbol(funcName As String) As Object
-            Dim symbol As Symbol = globalEnvir.FindSymbol(funcName)
-
-            If symbol Is Nothing Then
-                Return Internal.invoke.stop(New EntryPointNotFoundException($"No object named '{funcName}' could be found in global environment!"), globalEnvir)
-            ElseIf symbol.typeCode <> TypeCodes.closure OrElse Not symbol.typeof.ImplementInterface(GetType(RFunction)) Then
-                Return Internal.invoke.stop(New InvalidProgramException($"Object '{funcName}' is not a function!"), globalEnvir)
-            End If
-
-            Return symbol
         End Function
 
         ''' <summary>
@@ -308,7 +295,7 @@ Namespace Interpreter
         ''' <param name="args">the named parameter list</param>
         ''' <returns></returns>
         Public Function Invoke(funcName$, args As NamedValue(Of Object)()) As Object
-            Dim find As Object = getFunctionSymbol(funcName)
+            Dim find As Object = FunctionInvoke.GetFunctionVar(New Literal(funcName), globalEnvir)
             Dim parameters As InvokeParameter() = args _
                 .Select(Function(a, i)
                             Return New InvokeParameter(a.Name, a.Value, i + 1)
@@ -318,7 +305,7 @@ Namespace Interpreter
             If TypeOf find Is Message Then
                 Return find
             Else
-                Return DirectCast(DirectCast(find, Symbol).value, RFunction).Invoke(globalEnvir, parameters)
+                Return DirectCast(find, RFunction).Invoke(globalEnvir, parameters)
             End If
         End Function
 
