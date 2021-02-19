@@ -125,7 +125,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 End If
 
                 If indexer.Length = 0 Then
-                    Return emptyIndexError(Me, envir)
+                    If (indexType = SymbolIndexers.nameIndex OrElse indexType = SymbolIndexers.dataframeRanges) Then
+                        Return emptyIndexError(Me, envir)
+                    Else
+                        Return Nothing
+                    End If
                 End If
 
                 ' now obj is always have values:
