@@ -299,7 +299,15 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     }, envir)
                 End If
             ElseIf indexer.Length = 1 Then
-                Return DirectCast(obj, RNameIndex).getByName(any.ToString(indexer.GetValue(Scan0)))
+                Dim i As Object = indexer.GetValue(Scan0)
+
+                If RType.TypeOf(i) Like RType.integers Then
+                    Dim names As String() = DirectCast(obj, RNameIndex).getNames
+
+                    Return DirectCast(obj, RNameIndex).getByName(names(CInt(i) - 1))
+                Else
+                    Return DirectCast(obj, RNameIndex).getByName(any.ToString(i))
+                End If
             Else
                 Return DirectCast(obj, RNameIndex).getByName(REnv.asVector(Of String)(indexer))
             End If
