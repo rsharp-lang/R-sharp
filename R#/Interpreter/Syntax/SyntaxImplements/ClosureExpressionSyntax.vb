@@ -61,8 +61,20 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Dim [error] As SyntaxResult = Nothing
             Dim allTokens As Token() = tokens.ToArray
 
-            If allTokens.First = (TokenType.open, "{") AndAlso allTokens.Last = (TokenType.close, "}") AndAlso allTokens.SplitByTopLevelDelimiter(TokenType.terminator) = 1 Then
-                allTokens = allTokens.Skip(1).Take(allTokens.Length - 2).ToArray
+            If allTokens.IsNullOrEmpty Then
+                ' an empty closure
+                ' {}
+
+                Return New SyntaxResult(New ClosureExpression({}))
+
+            ElseIf allTokens.First = (TokenType.open, "{") AndAlso
+                   allTokens.Last = (TokenType.close, "}") AndAlso
+                   allTokens.SplitByTopLevelDelimiter(TokenType.terminator) = 1 Then
+
+                allTokens = allTokens _
+                    .Skip(1) _
+                    .Take(allTokens.Length - 2) _
+                    .ToArray
             End If
 
             Dim lines As Expression() = Interpreter _
