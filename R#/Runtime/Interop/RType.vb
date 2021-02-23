@@ -128,7 +128,9 @@ Namespace Runtime.Interop
 
         Friend Shared ReadOnly Property integers As Index(Of Type) = {
             GetType(Integer), GetType(Integer()),
-            GetType(Long), GetType(Long())
+            GetType(Long), GetType(Long()),
+            GetType(Short), GetType(Short()),
+            GetType(Byte), GetType(Byte())
         }
 
         Friend Shared ReadOnly Property floats As Index(Of Type) = {

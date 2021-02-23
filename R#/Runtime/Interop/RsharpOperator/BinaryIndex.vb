@@ -149,10 +149,18 @@ Namespace Runtime.Interop
         End Function
 
         Private Shared Function typeOfImpl(x As Object) As RType
+            Dim type As RType
+
             If TypeOf x Is vector Then
-                Return DirectCast(x, vector).elementType
+                type = DirectCast(x, vector).elementType
             Else
-                Return x.GetType.DoCall(AddressOf RType.GetRSharpType)
+                type = x.GetType.DoCall(AddressOf RType.GetRSharpType)
+            End If
+
+            If type.raw Is GetType(Byte) OrElse type.raw Is GetType(Byte()) Then
+                Return RType.GetRSharpType(GetType(Integer))
+            Else
+                Return type
             End If
         End Function
 
@@ -202,6 +210,10 @@ Namespace Runtime.Interop
                 $"typeof left: NA",
                 $"typeof right: {t}"
             }, env)
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return symbol
         End Function
     End Class
 End Namespace
