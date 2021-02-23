@@ -792,6 +792,7 @@
     <Compile Include="Runtime\Internal\internalInvokes\Math\ranking.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\Math\varUseMethods.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\reflections.vb" />
+    <Compile Include="Runtime\Internal\internalInvokes\string\str_padSides.vb" />
     <Compile Include="Runtime\Internal\objects\RConversion\castRaw.vb" />
     <Compile Include="Runtime\Serialize\bufferObjects\bitmapBuffer.vb" />
     <Compile Include="Runtime\Serialize\BufferObjects.vb" />
@@ -836,7 +837,7 @@
     <Compile Include="Runtime\Internal\objects\RConversion\makeList.vb" />
     <Compile Include="Runtime\Internal\objects\RConversion\castList.vb" />
     <Compile Include="Runtime\Internal\objects\reflector.vb" />
-    <Compile Include="Runtime\Internal\internalInvokes\strings.vb" />
+    <Compile Include="Runtime\Internal\internalInvokes\string\strings.vb" />
     <Compile Include="Runtime\Internal\objects\invisible.vb" />
     <Compile Include="Runtime\Internal\objects\names.vb" />
     <Compile Include="Runtime\Internal\objects\unit.vb" />
@@ -869,7 +870,7 @@
     <Compile Include="Runtime\Internal\internalInvokes\Linq\Group.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\Linq\linq.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\Math\math.vb" />
-    <Compile Include="Runtime\Internal\internalInvokes\string.vb" />
+    <Compile Include="Runtime\Internal\internalInvokes\string\string.vb" />
     <Compile Include="Runtime\Internal\objects\RConversion\conversion.vb" />
     <Compile Include="Runtime\Internal\printer\classPrinter.vb" />
     <Compile Include="Runtime\Internal\objects\dataset\vbObject.vb" />

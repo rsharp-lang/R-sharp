@@ -752,10 +752,4 @@ Namespace Runtime.Internal.Invokes
             Return substrs
         End Function
     End Module
-
-    Public Enum str_padSides
-        left
-        right
-        both
-    End Enum
 End Namespace
