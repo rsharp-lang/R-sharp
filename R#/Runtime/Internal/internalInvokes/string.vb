@@ -712,6 +712,45 @@ Namespace Runtime.Internal.Invokes
         Public Function chr(ascii As Integer()) As Char()
             Return ascii.SafeQuery.Select(Function(i) ChrW(i)).ToArray
         End Function
+
+        <ExportAPI("charAt")>
+        Public Function charAt(str As String, i As Integer) As Char
+            If Global.System.String.IsNullOrEmpty(str) Then
+                Return Nothing
+            ElseIf i <= 0 OrElse i > str.Length Then
+                Return Nothing
+            Else
+                Return str(i - 1)
+            End If
+        End Function
+
+        ''' <summary>
+        ''' ### Substrings of a Character Vector
+        ''' 
+        ''' Extract or replace substrings in a character vector.
+        ''' </summary>
+        ''' <param name="x">
+        ''' a character vector.
+        ''' </param>
+        ''' <param name="start">integer. The first element To be replaced.</param>
+        ''' <param name="stop">integer. The last element to be replaced.</param>
+        ''' <returns>For ``substr``, a character vector of the same length 
+        ''' and with the same attributes as x (after possible coercion).
+        ''' </returns>
+        <ExportAPI("substr")>
+        Public Function substr(<RRawVectorArgument> x As Object, start%, stop%, Optional env As Environment = Nothing) As String()
+            Dim strs As String() = REnv.asVector(Of String)(x)
+            Dim substrs As String() = strs _
+                .Select(Function(str)
+                            Return str.Substring(
+                                startIndex:=start - 1,
+                                length:=[stop] - start + 1
+                            )
+                        End Function) _
+                .ToArray
+
+            Return substrs
+        End Function
     End Module
 
     Public Enum str_padSides

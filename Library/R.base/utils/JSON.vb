@@ -65,8 +65,17 @@ Module JSON
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("json_decode")>
-    Public Function json_decode(str As String, Optional env As Environment = Nothing) As Object
-        Return fromJSON(str, raw:=False, env:=env)
+    Public Function json_decode(str As String, Optional throwEx As Boolean = True, Optional env As Environment = Nothing) As Object
+        Try
+            Return fromJSON(str, raw:=False, env:=env)
+        Catch ex As Exception
+            If throwEx Then
+                Throw
+            Else
+                Call env.AddMessage(ex.ToString, MSG_TYPES.WRN)
+                Return Nothing
+            End If
+        End Try
     End Function
 
     <ExportAPI("json_encode")>
