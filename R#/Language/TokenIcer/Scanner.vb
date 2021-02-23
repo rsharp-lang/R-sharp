@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1f50dcd314cef8a6fbb223460419843e, R#\Language\TokenIcer\Scanner.vb"
+﻿#Region "Microsoft.VisualBasic::52dcf8e5bdc87853af64f6ad0c90edf0, R#\Language\TokenIcer\Scanner.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,8 @@
     '         Properties: lastCharIsEscapeSplash
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: finalizeToken, GetTokens, MeasureToken, populateToken, walkChar
+    '         Function: finalizeToken, GetRKeywords, GetTokens, MeasureToken, populateToken
+    '                   walkChar
     '         Class Escapes
     ' 
     '             Function: ToString

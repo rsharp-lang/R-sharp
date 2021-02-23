@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3f9930e7c1f2e23f69731d3a8448eb46, R#\Interpreter\Syntax\SyntaxImplements\ClosureExpressionSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::09e83acb4e5434d9eaf2cd8274a0fc4b, R#\Interpreter\Syntax\SyntaxImplements\ClosureExpressionSyntax.vb"
 
     ' Author:
     ' 

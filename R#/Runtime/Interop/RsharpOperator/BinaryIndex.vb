@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f5c9085a746709239779070882486b7a, R#\Runtime\Interop\RsharpOperator\BinaryIndex.vb"
+﻿#Region "Microsoft.VisualBasic::f5498480cb39bcd27ec053160917a9fd, R#\Runtime\Interop\RsharpOperator\BinaryIndex.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '         Constructor: (+1 Overloads) Sub New
     ' 
     '         Function: Evaluate, hasOperator, leftNull, noneValue, rightNull
-    '                   typeOfImpl
+    '                   ToString, typeOfImpl
     ' 
     '         Sub: addOperator
     ' 
