@@ -48,6 +48,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Interop.CType
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Object
 
@@ -87,8 +88,8 @@ Namespace Runtime.Internal.Object
 
             If type.ImplementInterface(GetType(IDictionary)) Then
                 Return strList(list:=x, env:=env, indent:=indent, list_len:=list_len)
-            ElseIf Runtime.IsPrimitive(code, includeComplexList:=False) OrElse type.IsArray Then
-                Return strVector(Runtime.asVector(Of Object)(x), type, env)
+            ElseIf REnv.IsPrimitive(code, includeComplexList:=False) OrElse type.IsArray Then
+                Return strVector(REnv.asVector(Of Object)(x), type, env)
             ElseIf type Is GetType(dataframe) Then
                 Return dataframe(x, env, indent, list_len)
             Else
@@ -178,7 +179,8 @@ Namespace Runtime.Internal.Object
         ''' <param name="env"></param>
         ''' <returns></returns>
         Private Function strVector(a As Array, type As Type, env As GlobalEnvironment) As String
-            Dim typeCode$
+            Dim typeCode As String
+            Dim print As String
 
             If type Like RType.integers Then
                 typeCode = "int"
@@ -193,12 +195,31 @@ Namespace Runtime.Internal.Object
             End If
 
             If a.Length = 1 Then
-                Return $"{typeCode} {printer.ValueToString(a.GetValue(Scan0), env)}"
+                print = printer.ValueToString(a.GetValue(Scan0), env)
+
+                ' | __truncated__
+                If typeCode = "chr" AndAlso print.Length > 64 Then
+                    print = print.Substring(0, 64) & """| __truncated__"
+                End If
+
+                Return $"{typeCode} {print}"
             ElseIf a.Length <= 6 Then
-                Return $"{typeCode} [1:{a.Length}] {printer.getStrings(a, Nothing, env).JoinBy(" ")}"
+                print = printer.getStrings(a, Nothing, env).JoinBy(" ")
+
+                If typeCode = "chr" AndAlso print.Length > 64 Then
+                    print = print.Substring(0, 64) & """| __truncated__"
+                End If
             Else
-                Return $"{typeCode} [1:{a.Length}] {printer.getStrings(a, Nothing, env).Take(6).JoinBy(" ")} ..."
+                print = printer.getStrings(a, Nothing, env).Take(6).JoinBy(" ")
+
+                If typeCode = "chr" AndAlso print.Length > 64 Then
+                    print = print.Substring(0, 64) & """| __truncated__ ..."
+                Else
+                    print = print & " ..."
+                End If
             End If
+
+            Return $"{typeCode} [1:{a.Length}] {print}"
         End Function
     End Module
 End Namespace
