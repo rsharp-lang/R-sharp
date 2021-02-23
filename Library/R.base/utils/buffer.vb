@@ -47,6 +47,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -165,7 +166,11 @@ Module buffer
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("string")>
-    Public Function getString(<RRawVectorArgument> raw As Object, Optional env As Environment = Nothing) As Object
+    Public Function getString(<RRawVectorArgument>
+                              raw As Object,
+                              Optional encoding As Encodings = Encodings.UTF8,
+                              Optional env As Environment = Nothing) As Object
+
         Dim bytes As pipeline = pipeline.TryCreatePipeline(Of Byte)(raw, env, suppress:=True)
 
         If bytes.isError Then
@@ -189,7 +194,7 @@ Module buffer
             Return bytes _
                 .populates(Of Byte)(env) _
                 .ToArray _
-                .DoCall(AddressOf Encoding.UTF8.GetString)
+                .DoCall(AddressOf encoding.CodePage.GetString)
         End If
     End Function
 End Module

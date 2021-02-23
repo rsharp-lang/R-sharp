@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::d28921c0a1f5b187fb4348e68c41c4ba, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module linq
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: all, any, doWhile, first, groupBy
-    '                   groupsSummary, groupSummary, orderBy, produceKeyedSequence, projectAs
-    '                   reverse, runFilterPipeline, runWhichFilter, skip, take
-    '                   tryKeyBy, unique, where, whichMax, whichMin
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module linq
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: all, any, doWhile, first, groupBy
+'                   groupsSummary, groupSummary, orderBy, produceKeyedSequence, projectAs
+'                   reverse, runFilterPipeline, runWhichFilter, skip, take
+'                   tryKeyBy, unique, where, whichMax, whichMin
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -55,6 +55,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
@@ -668,6 +669,29 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                                 Optional env As Environment = Nothing) As Object
 
             Throw New NotImplementedException
+        End Function
+
+        <ExportAPI("split")>
+        Public Function split(<RRawVectorArgument> x As Object, delimiter As Object, Optional env As Environment = Nothing) As Object
+            Dim seq As pipeline = pipeline.TryCreatePipeline(Of Object)(x, env)
+            Dim _split As Predicate(Of Object)
+
+            If delimiter Is Nothing Then
+                Return Internal.debug.stop("the required delimiter value can not be nothing!", env)
+            ElseIf delimiter.GetType.ImplementInterface(Of RFunction) Then
+                _split = Function(obj)
+                             Return DirectCast(RCType.CTypeDynamic(REnv.single(DirectCast(delimiter, RFunction).Invoke(env, invokeArgument(obj))), GetType(Boolean), env), Boolean)
+                         End Function
+            Else
+                _split = Function(obj) obj Is delimiter
+            End If
+
+            Return seq.populates(Of Object)(env) _
+                .Split(_split) _
+                .Select(Function(block, i)
+                            Return New Group With {.group = block, .key = i + 1}
+                        End Function) _
+                .ToArray
         End Function
     End Module
 End Namespace
