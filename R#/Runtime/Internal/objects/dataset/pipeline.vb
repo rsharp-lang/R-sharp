@@ -1,52 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::ae465867c043b6bfc18bbcb4313beb0d, R#\Runtime\Internal\objects\dataset\pipeline.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class pipeline
-    ' 
-    '         Properties: [pipeFinalize], isError, isMessage
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: CreateFromPopulator, createVector, getError, populates, ToString
-    '                   TryCastObjectVector, TryCreatePipeline
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class pipeline
+' 
+'         Properties: [pipeFinalize], isError, isMessage
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: CreateFromPopulator, createVector, getError, populates, ToString
+'                   TryCastObjectVector, TryCreatePipeline
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 #If netcore5 = 1 Then
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 #Else
+Imports System.Runtime.CompilerServices
 Imports System.Web.Script.Serialization
 #End If
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
@@ -189,7 +190,11 @@ Namespace Runtime.Internal.Object
             }
         End Function
 
-        Public Shared Function TryCreatePipeline(Of T)(upstream As Object, env As Environment, Optional suppress As Boolean = False) As pipeline
+        Public Shared Function TryCreatePipeline(Of T)(upstream As Object, env As Environment,
+                                                       Optional suppress As Boolean = False,
+                                                       <CallerMemberName>
+                                                       Optional callerFrameName$ = Nothing) As pipeline
+
             If TypeOf upstream Is Dictionary(Of String, Object).ValueCollection Then
                 upstream = DirectCast(upstream, Dictionary(Of String, Object).ValueCollection).ToArray
             End If
@@ -229,12 +234,23 @@ Namespace Runtime.Internal.Object
                                 Return TryCastObjectVector(Of T)(ls, env, suppress)
                             End Function)
             ElseIf TypeOf upstream Is Group Then
-                Return DirectCast(upstream, Group).group _
+                Dim pipGroup As Group = DirectCast(upstream, Group)
+
+                If pipGroup.length = 0 Then
+                    Call env.AddMessage({
+                        $"the given group is empty!",
+                        $"caller: {callerFrameName}"
+                    }, MSG_TYPES.WRN)
+
+                    Return [Object].pipeline.CreateFromPopulator(Of T)({})
+                End If
+
+                Dim seq As Object() = pipGroup.group _
                     .AsObjectEnumerator(Of Object) _
-                    .ToArray _
-                    .DoCall(Function(group)
-                                Return TryCastObjectVector(Of T)(group, env, suppress)
-                            End Function)
+                    .ToArray
+                Dim pip As pipeline = TryCastObjectVector(Of T)(seq, env, suppress)
+
+                Return pip
             Else
                 Return Message.InCompatibleType(GetType(T), upstream.GetType, env, suppress:=suppress)
             End If
