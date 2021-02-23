@@ -680,7 +680,11 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 Return Internal.debug.stop("the required delimiter value can not be nothing!", env)
             ElseIf delimiter.GetType.ImplementInterface(Of RFunction) Then
                 _split = Function(obj)
-                             Return DirectCast(RCType.CTypeDynamic(REnv.single(DirectCast(delimiter, RFunction).Invoke(env, invokeArgument(obj))), GetType(Boolean), env), Boolean)
+                             Dim out As Object = DirectCast(delimiter, RFunction).Invoke(env, invokeArgument(obj))
+                             Dim sng As Object = REnv.single(out)
+                             Dim flag As Object = RCType.CTypeDynamic(sng, GetType(Boolean), env)
+
+                             Return DirectCast(flag, Boolean)
                          End Function
             Else
                 _split = Function(obj) obj Is delimiter
