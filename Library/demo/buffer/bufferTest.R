@@ -1,4 +1,4 @@
-imports "buffer" from "base";
+imports ["buffer", "JSON"] from "base";
 
 const buffer = readBin(`${dirname(@script)}/20210207.sld`);
 const data = buffer[buffer != 0];
@@ -10,3 +10,14 @@ str(chars);
 const json_list = $"[{].+?[}]"(chars);
 
 print(json_list);
+
+const filelist = lapply(json_list, json_decode);
+
+# str(filelist);
+
+data.frame(
+	sample = sapply(filelist, function(file) file$originalRawFileNameWithoutExtension),
+	injectionOrder = sapply(filelist, function(file) file$displayRowNumber)
+)
+:> write.csv(file = `${dirname(@script)}/seq.csv`, row_names = FALSE)
+;
