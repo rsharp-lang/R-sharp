@@ -41,6 +41,7 @@
 
 Imports System.IO
 Imports System.Runtime.CompilerServices
+Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -48,6 +49,7 @@ Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports Rsharp = SMRUCC.Rsharp
 
@@ -156,4 +158,38 @@ Module buffer
         End Using
     End Function
 
+    ''' <summary>
+    ''' char to string or raw bytes to string
+    ''' </summary>
+    ''' <param name="raw"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("string")>
+    Public Function getString(<RRawVectorArgument> raw As Object, Optional env As Environment = Nothing) As Object
+        Dim bytes As pipeline = pipeline.TryCreatePipeline(Of Byte)(raw, env, suppress:=True)
+
+        If bytes.isError Then
+            Dim ints As pipeline = pipeline.TryCreatePipeline(Of Integer)(raw, env, suppress:=True)
+
+            If ints.isError Then
+                Dim chars As pipeline = pipeline.TryCreatePipeline(Of Char)(raw, env)
+
+                If chars.isError Then
+                    Return chars.getError
+                Else
+                    Return chars.populates(Of Char)(env).CharString
+                End If
+            Else
+                Return ints _
+                    .populates(Of Integer)(env) _
+                    .Select(AddressOf ChrW) _
+                    .CharString
+            End If
+        Else
+            Return bytes _
+                .populates(Of Byte)(env) _
+                .ToArray _
+                .DoCall(AddressOf Encoding.UTF8.GetString)
+        End If
+    End Function
 End Module
