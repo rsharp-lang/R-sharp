@@ -185,16 +185,20 @@ Namespace Development.Package.File
                             End Sub)
             End If
 
-            Call Console.WriteLine("      ==> roxygen::roxygenize")
+            Call Console.WriteLine("       ==> roxygen::roxygenize")
 
             Dim err As Message = REngine.Invoke("roxygen::roxygenize", {package_dir})
 
             If Not err Is Nothing Then
                 Return err
             Else
+                Dim symbolName As String
+
                 For Each unixMan As String In ls - l - r - "*.1" <= $"{package_dir}/man"
-                    file.unixman(unixMan.BaseName) = unixMan
-                    Console.WriteLine(unixMan.BaseName)
+                    symbolName = unixMan.BaseName
+                    file.unixman(symbolName) = unixMan
+
+                    Call Console.WriteLine("       " & symbolName)
                 Next
             End If
 
