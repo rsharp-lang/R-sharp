@@ -147,7 +147,11 @@ Namespace Development.Package.File
             Next
 
             Call Console.WriteLine($"     compile unix man pages...")
-            file.buildUnixMan(package_dir:=target)
+
+            If Not [error] = file.buildUnixMan(package_dir:=target) Is Nothing Then
+                Call Console.WriteLine("Failed!")
+                Return [error]
+            End If
 
             Call Console.WriteLine($"     query data items for lazy loading...")
             file.dataSymbols = getDataSymbols($"{target}/data")
@@ -181,6 +185,8 @@ Namespace Development.Package.File
                             End Sub)
             End If
 
+            Call Console.WriteLine("      ==> roxygen::roxygenize")
+
             Dim err As Message = REngine.Invoke("roxygen::roxygenize", {package_dir})
 
             If Not err Is Nothing Then
@@ -188,6 +194,7 @@ Namespace Development.Package.File
             Else
                 For Each unixMan As String In ls - l - r - "*.1" <= $"{package_dir}/man"
                     file.unixman(unixMan.BaseName) = unixMan
+                    Console.WriteLine(unixMan.BaseName)
                 Next
             End If
 
