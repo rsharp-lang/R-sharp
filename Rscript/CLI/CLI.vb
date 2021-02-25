@@ -70,8 +70,12 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
             If RProgram.isException(err) Then
                 Return CInt(debug.PrintMessageInternal(err, Nothing))
             Else
-                Return 0
+                Call Console.WriteLine()
+                Call Console.WriteLine($"  Source package written to {save.ParentPath.GetDirectoryFullPath}")
+                Call Console.WriteLine()
             End If
+
+            Return 0
         End Using
     End Function
 

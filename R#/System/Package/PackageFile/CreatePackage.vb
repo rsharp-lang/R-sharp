@@ -121,7 +121,7 @@ Namespace Development.Package.File
             Dim loading As New List(Of Expression)
             Dim [error] As New Value(Of Message)
 
-            Call Console.Write($"* checking for file '{target}/DESCRIPTION' ... ")
+            Call Console.Write($"* checking for file '{(target & "/DESCRIPTION").GetFullPath}' ... ")
 
             If Not ([error] = desc.checkIndex) Is Nothing Then
                 Call Console.WriteLine("Failed!")
@@ -198,7 +198,7 @@ Namespace Development.Package.File
                     symbolName = unixMan.BaseName
                     file.unixman(symbolName) = unixMan
 
-                    Call Console.WriteLine("       " & symbolName)
+                    Call Console.WriteLine("        " & symbolName)
                 Next
             End If
 
