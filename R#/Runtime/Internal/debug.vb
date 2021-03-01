@@ -233,11 +233,13 @@ Namespace Runtime.Internal
         End Function
 
         ''' <summary>
-        ''' 
+        ''' return 500 error code
         ''' </summary>
         ''' <param name="message"></param>
         ''' <param name="globalEnv">这个参数可以为空，空值的时候会默认将消息打印在标准输出</param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' this function will returns 500 error code
+        ''' </returns>
         Public Shared Function PrintMessageInternal(message As Message, globalEnv As GlobalEnvironment) As Object
             Dim stdout As StreamWriter
             Dim redirectErr2stdout As Boolean
