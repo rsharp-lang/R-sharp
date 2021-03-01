@@ -55,6 +55,7 @@ Namespace Interpreter.SyntaxParser
         Public [error] As String
 
         Public isBuildVector As Boolean
+        Public currentLine As Integer
 
         Public ReadOnly Property haveSyntaxErr As Boolean
             Get

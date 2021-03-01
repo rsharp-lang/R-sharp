@@ -145,16 +145,21 @@ Namespace Runtime.Internal.Invokes
             End If
 
             If X.GetType.ImplementInterface(GetType(IDictionary)) Then
-                Dim list = DirectCast(X, IDictionary)
+                Dim list As IDictionary = DirectCast(X, IDictionary)
                 Dim values = DirectCast(list.Keys, IEnumerable) _
                     .Cast(Of Object) _
-                    .Select(Function(a) (key:=a, value:=list(a))) _
+                    .Select(Function(a, i) (i, key:=a, value:=list(a))) _
                     .AsParallel _
                     .Select(Function(a)
-                                Return (key:=any.ToString(a.key), value:=apply.Invoke(envir, invokeArgument(a.value)))
-                            End Function)
+                                Return (
+                                    i:=a.i,
+                                    key:=any.ToString(a.key),
+                                    value:=apply.Invoke(envir, invokeArgument(a.value))
+                                )
+                            End Function) _
+                    .OrderBy(Function(a) a.i)
 
-                For Each tuple As (key As String, value As Object) In values
+                For Each tuple As (i As Integer, key As String, value As Object) In values
                     If Program.isException(tuple.value) Then
                         Return tuple.value
                     End If
@@ -165,9 +170,14 @@ Namespace Runtime.Internal.Invokes
             Else
                 Dim values As IEnumerable(Of Object) = REnv.asVector(Of Object)(X) _
                     .AsObjectEnumerator _
+                    .SeqIterator _
                     .AsParallel _
                     .Select(Function(d)
-                                Return apply.Invoke(envir, invokeArgument(d))
+                                Return (d.i, value:=apply.Invoke(envir, invokeArgument(d.value)))
+                            End Function) _
+                    .OrderBy(Function(i) i.i) _
+                    .Select(Function(i)
+                                Return i.value
                             End Function)
 
                 For Each value As Object In values
@@ -252,7 +262,7 @@ Namespace Runtime.Internal.Invokes
                     End If
 
                     seq.Add(REnv.single(value))
-                    names.Add(Scripting.ToString(key))
+                    names.Add(any.ToString(key))
                 Next
 
                 Dim a As Object = TryCastGenericArray(seq.ToArray, envir)
@@ -270,7 +280,7 @@ Namespace Runtime.Internal.Invokes
                 Dim value As Object
                 Dim argsPreviews As InvokeParameter()
 
-                For Each d In Runtime.asVector(Of Object)(X) _
+                For Each d In REnv.asVector(Of Object)(X) _
                     .AsObjectEnumerator
 
                     argsPreviews = invokeArgument(d)

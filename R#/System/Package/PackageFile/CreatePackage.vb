@@ -121,7 +121,7 @@ Namespace Development.Package.File
             Dim loading As New List(Of Expression)
             Dim [error] As New Value(Of Message)
 
-            Call Console.Write($"* checking for file '{target}/DESCRIPTION' ... ")
+            Call Console.Write($"* checking for file '{(target & "/DESCRIPTION").GetFullPath}' ... ")
 
             If Not ([error] = desc.checkIndex) Is Nothing Then
                 Call Console.WriteLine("Failed!")
@@ -147,7 +147,11 @@ Namespace Development.Package.File
             Next
 
             Call Console.WriteLine($"     compile unix man pages...")
-            file.buildUnixMan(package_dir:=target)
+
+            If Not [error] = file.buildUnixMan(package_dir:=target) Is Nothing Then
+                Call Console.WriteLine("Failed!")
+                Return [error]
+            End If
 
             Call Console.WriteLine($"     query data items for lazy loading...")
             file.dataSymbols = getDataSymbols($"{target}/data")
@@ -181,13 +185,20 @@ Namespace Development.Package.File
                             End Sub)
             End If
 
+            Call Console.WriteLine("       ==> roxygen::roxygenize")
+
             Dim err As Message = REngine.Invoke("roxygen::roxygenize", {package_dir})
 
             If Not err Is Nothing Then
                 Return err
             Else
+                Dim symbolName As String
+
                 For Each unixMan As String In ls - l - r - "*.1" <= $"{package_dir}/man"
-                    file.unixman(unixMan.BaseName) = unixMan
+                    symbolName = unixMan.BaseName
+                    file.unixman(symbolName) = unixMan
+
+                    Call Console.WriteLine("        " & symbolName)
                 Next
             End If
 

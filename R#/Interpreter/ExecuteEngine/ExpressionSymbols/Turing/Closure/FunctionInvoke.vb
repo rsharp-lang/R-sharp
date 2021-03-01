@@ -253,6 +253,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         ''' from the given runtime <see cref="Environment"/>.
         ''' </summary>
         ''' <param name="env"></param>
+        ''' <param name="funcName">
+        ''' 这个参数不会处理ns::func的引用情况，请在调用这个函数之前完成解析
+        ''' </param>
         ''' <returns>
         ''' an error message will be return if the 
         ''' target function symbol is not found in 

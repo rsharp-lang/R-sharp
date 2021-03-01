@@ -1,51 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::adfa74e5f606bfbbb9253ba1b1ec73eb, R#\Interpreter\RInterpreter.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class RInterpreter
-    ' 
-    '         Properties: configFile, debug, globalEnvir, redirectError2stdout, Rsharp
-    '                     silent, strict, warnings
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: [Set], (+2 Overloads) Evaluate, FromEnvironmentConfiguration, InitializeEnvironment, (+3 Overloads) Invoke
-    '                   (+2 Overloads) LoadLibrary, options, RedirectOutput, Run, RunInternal
-    '                   Source
-    ' 
-    '         Sub: (+3 Overloads) Add, (+2 Overloads) Dispose, Print, PrintMemory
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class RInterpreter
+' 
+'         Properties: configFile, debug, globalEnvir, redirectError2stdout, Rsharp
+'                     silent, strict, warnings
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: [Set], (+2 Overloads) Evaluate, FromEnvironmentConfiguration, InitializeEnvironment, (+3 Overloads) Invoke
+'                   (+2 Overloads) LoadLibrary, options, RedirectOutput, Run, RunInternal
+'                   Source
+' 
+'         Sub: (+3 Overloads) Add, (+2 Overloads) Dispose, Print, PrintMemory
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -254,20 +254,24 @@ Namespace Interpreter
             Call globalEnvir.Push(name, value, [readonly]:=False, mode:=type)
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
         Public Sub Add(name$, closure As [Delegate])
             globalEnvir.Push(name, New RMethodInfo(name, closure), [readonly]:=False, mode:=TypeCodes.closure)
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
         Public Sub Add(name$, closure As MethodInfo, Optional target As Object = Nothing)
             globalEnvir.Push(name, New RMethodInfo(name, closure, target), [readonly]:=False, mode:=TypeCodes.closure)
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function [Set](name As String, value As Object) As Object
             Return globalEnvir.Push(name, value, [readonly]:=False)
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function Invoke(Of T)(funcName$, ParamArray args As Object()) As T
             Return DirectCast(Invoke(funcName, args), T)
         End Function
@@ -279,7 +283,19 @@ Namespace Interpreter
         ''' <param name="args"></param>
         ''' <returns></returns>
         Public Function Invoke(funcName$, ParamArray args As Object()) As Object
-            Dim find As Object = FunctionInvoke.GetFunctionVar(New Literal(funcName), globalEnvir)
+            Dim find As Object
+
+            If InStr(funcName, "::") > 0 Then
+                Dim nsRef As NamedValue(Of String) = funcName.GetTagValue("::")
+
+                find = FunctionInvoke.GetFunctionVar(
+                    funcName:=New Literal(nsRef.Value),
+                    env:=globalEnvir,
+                    [namespace]:=nsRef.Name
+                )
+            Else
+                find = FunctionInvoke.GetFunctionVar(New Literal(funcName), globalEnvir)
+            End If
 
             If TypeOf find Is Message Then
                 Return find

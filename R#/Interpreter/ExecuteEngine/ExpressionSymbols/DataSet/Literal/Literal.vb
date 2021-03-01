@@ -146,6 +146,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         ''' create a string literal
         ''' </summary>
         ''' <param name="value"></param>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <DebuggerStepThrough>
         Sub New(value As String)
             Me.m_type = TypeCodes.string
             Me.value = value
