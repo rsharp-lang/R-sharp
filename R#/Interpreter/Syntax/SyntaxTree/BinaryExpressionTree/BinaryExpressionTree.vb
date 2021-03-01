@@ -144,6 +144,8 @@ Namespace Interpreter.SyntaxParser
                 End If
             Next
 
+            opts.currentLine = tokenBlocks(Scan0).First.span.line
+
             ' 算数操作符以及字符串操作符按照操作符的优先度进行构建
             If Not (syntaxResult = buf.processOperators(oplist, operatorPriority, test:=Function(op, o) op.IndexOf(o) > -1, opts)) Is Nothing Then
                 Return syntaxResult
