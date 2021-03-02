@@ -106,6 +106,10 @@ Namespace Runtime.Internal.Object
             slots = New Dictionary(Of String, Object)
         End Sub
 
+        Public Sub add(name As String, value As Object)
+            Call slots.Add(name, value)
+        End Sub
+
         Public Function hasName(name As String) As Boolean Implements RNames.hasName
             Return slots.ContainsKey(name)
         End Function
