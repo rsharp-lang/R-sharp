@@ -71,6 +71,11 @@ Namespace Runtime.Internal.Object
             If TypeOf x Is vbObject Then
                 x = DirectCast(x, vbObject).target
             End If
+
+            If x Is Nothing Then
+                Return "<NULL>"
+            End If
+
             If TypeOf x Is MagicScriptSymbol Then
                 x = DirectCast(x, MagicScriptSymbol).toList.slots
             ElseIf x.GetType.ImplementInterface(Of ICTypeList) Then
@@ -188,11 +193,11 @@ Namespace Runtime.Internal.Object
             Dim text As New StringBuilder
 
             For Each item In From x As Object In a Take 6
-                text.AppendLine(GetStructure(item, env, "..", 99))
+                text.AppendLine("    " & GetStructure(item, env, "..", 99))
             Next
 
             Return $"any [1:{a.Length}] [
-    {text.ToString}{If(a.Length > 6, vbCrLf & "    ...", "")}
+{text.ToString}{If(a.Length > 6, vbCrLf & "    ...", "")}
 ]"
         End Function
 

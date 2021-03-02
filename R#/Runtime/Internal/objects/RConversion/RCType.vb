@@ -71,7 +71,9 @@ Namespace Runtime.Internal.Object.Converts
 
             Dim objType As Type = obj.GetType
 
-            If objType.IsArray AndAlso Not type.IsArray Then
+            If objType Is type Then
+                Return obj
+            ElseIf objType.IsArray AndAlso Not type.IsArray Then
                 obj = [single](obj)
                 objType = obj.GetType
             ElseIf objType Is GetType(vector) AndAlso Not type.IsArray Then
