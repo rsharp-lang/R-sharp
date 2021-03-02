@@ -107,6 +107,10 @@ Namespace Runtime.Internal.Object
         End Sub
 
         Public Sub add(name As String, value As Object)
+            If slots Is Nothing Then
+                slots = New Dictionary(Of String, Object)
+            End If
+
             Call slots.Add(name, value)
         End Sub
 

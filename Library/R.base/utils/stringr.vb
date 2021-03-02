@@ -43,6 +43,7 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Algorithm.DynamicProgramming.Levenshtein
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.application.xml
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Text
@@ -72,27 +73,53 @@ Module stringr
     <Extension>
     Private Function createRObj(xml As XmlElement, env As Environment) As Object
         Dim obj As New list
+        Dim attrs As New list
 
-        For Each attr In xml.attributes
-            obj.add(attr.Key, attr.Value)
+        For Each attr In xml.attributes.SafeQuery
+            attrs.add(attr.Key, attr.Value)
         Next
+
+        obj.add("attributes", attrs)
 
         If Not xml.text.StringEmpty Then
             obj.add("value", xml.text)
         End If
 
-        For Each ele As XmlElement In xml.elements
-            obj.add(ele.name, createRObj(ele, env))
+        For Each ele As IGrouping(Of String, XmlElement) In xml.elements.SafeQuery.GroupBy(Function(x) x.name)
+            If ele.Count = 1 Then
+                obj.add(ele.Key, createRObj(ele.First, env))
+            Else
+                Dim array As New List(Of Object)
+
+                For Each item As XmlElement In ele
+                    array.Add(createRObj(item, env))
+                Next
+
+                obj.add(ele.Key, array.ToArray)
+            End If
         Next
 
         Return obj
     End Function
 
+    ''' <summary>
+    ''' processing a unicode char like ``&lt;U+767D>`` 
+    ''' </summary>
+    ''' <param name="input"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("decode.R_unicode")>
     Public Function unescapeRUnicode(input As Object, Optional env As Environment = Nothing) As Object
         Return env.EvaluateFramework(Of String, String)(input, AddressOf Rlang.ProcessingRUniCode)
     End Function
 
+    ''' <summary>
+    ''' processing a unicode char like ``&lt;aa>``
+    ''' </summary>
+    ''' <param name="input"></param>
+    ''' <param name="encoding"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("decode.R_rawstring")>
     Public Function unescapeRRawstring(input As Object, Optional encoding As Encodings = Encodings.Unicode, Optional env As Environment = Nothing) As Object
         Return env.EvaluateFramework(Of String, String)(input, Function(str) Rlang.ProcessingRRawUniCode(str, encoding))
