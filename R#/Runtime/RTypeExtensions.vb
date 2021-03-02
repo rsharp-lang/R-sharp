@@ -94,6 +94,17 @@ Namespace Runtime
         ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
+        Public Function IsPrimitive(type As Type, Optional includeComplexList As Boolean = True) As Boolean
+            Return GetRTypeCode(type).IsPrimitive(includeComplexList)
+        End Function
+
+        ''' <summary>
+        ''' It is R# primitive type?
+        ''' </summary>
+        ''' <param name="type"></param>
+        ''' <returns></returns>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        <Extension>
         Public Function IsPrimitive(type As TypeCodes, Optional includeComplexList As Boolean = True) As Boolean
             Return type = TypeCodes.boolean OrElse
                    type = TypeCodes.double OrElse

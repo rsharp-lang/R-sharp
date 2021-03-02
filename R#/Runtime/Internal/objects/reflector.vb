@@ -89,7 +89,13 @@ Namespace Runtime.Internal.Object
             If type.ImplementInterface(GetType(IDictionary)) Then
                 Return strList(list:=x, env:=env, indent:=indent, list_len:=list_len)
             ElseIf REnv.IsPrimitive(code, includeComplexList:=False) OrElse type.IsArray Then
-                Return strVector(REnv.asVector(Of Object)(x), type, env)
+                Dim genericVec As Array = REnv.TryCastGenericArray(REnv.asVector(Of Object)(x), env)
+
+                If REnv.IsPrimitive(genericVec.GetType.GetElementType, includeComplexList:=False) Then
+                    Return strVector(genericVec, genericVec.GetType, env)
+                Else
+                    Return strGenericArray(genericVec, genericVec.GetType.GetElementType, env)
+                End If
             ElseIf type Is GetType(dataframe) Then
                 Return dataframe(x, env, indent, list_len)
             Else
@@ -169,6 +175,25 @@ Namespace Runtime.Internal.Object
             Next
 
             Return sb.printSlots(keyValues, Nothing)
+        End Function
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="a"></param>
+        ''' <param name="type">the element type</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        Private Function strGenericArray(a As Array, type As Type, env As GlobalEnvironment) As String
+            Dim text As New StringBuilder
+
+            For Each item In From x As Object In a Take 6
+                text.AppendLine(GetStructure(item, env, "..", 99))
+            Next
+
+            Return $"any [1:{a.Length}] [
+    {text.ToString}{If(a.Length > 6, vbCrLf & "    ...", "")}
+]"
         End Function
 
         ''' <summary>
