@@ -99,7 +99,7 @@ Namespace Runtime.Internal.Object
                 If REnv.IsPrimitive(genericVec.GetType.GetElementType, includeComplexList:=False) Then
                     Return strVector(genericVec, genericVec.GetType, env)
                 Else
-                    Return strGenericArray(genericVec, genericVec.GetType.GetElementType, env)
+                    Return strGenericArray(genericVec, genericVec.GetType.GetElementType, env, indent$, list_len%)
                 End If
             ElseIf type Is GetType(dataframe) Then
                 Return dataframe(x, env, indent, list_len)
@@ -189,11 +189,11 @@ Namespace Runtime.Internal.Object
         ''' <param name="type">the element type</param>
         ''' <param name="env"></param>
         ''' <returns></returns>
-        Private Function strGenericArray(a As Array, type As Type, env As GlobalEnvironment) As String
+        Private Function strGenericArray(a As Array, type As Type, env As GlobalEnvironment, indent$, list_len%) As String
             Dim text As New StringBuilder
 
             For Each item In From x As Object In a Take 6
-                text.AppendLine("    " & GetStructure(item, env, "..", 99))
+                text.AppendLine("    " & indent & GetStructure(item, env, indent, list_len))
             Next
 
             Return $"any [1:{a.Length}] [
