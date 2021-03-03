@@ -2,7 +2,6 @@
 Imports System.Numerics
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Data.IO
-Imports Microsoft.VisualBasic.Data.IO.Bzip2
 Imports Microsoft.VisualBasic.Text
 
 Public MustInherit Class Reader
@@ -20,6 +19,7 @@ Public MustInherit Class Reader
     ''' </summary>
     ''' <returns></returns>
     Public MustOverride Function parse_int() As Integer
+
     ''' <summary>
     ''' Parse a double.
     ''' </summary>
@@ -279,5 +279,4 @@ Public MustInherit Class Reader
                 Throw New NotImplementedException("Unknown file type")
         End Select
     End Function
-
 End Class
