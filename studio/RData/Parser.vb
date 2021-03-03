@@ -109,4 +109,18 @@ Module Parser
         Return r_object_type = RObjectType.NILVALUE OrElse r_object_type = RObjectType.REF
     End Function
 
+    ''' <summary>
+    ''' Read bits [start, stop) of an integer.
+    ''' </summary>
+    ''' <param name="data"></param>
+    ''' <param name="start"></param>
+    ''' <param name="[stop]"></param>
+    ''' <returns></returns>
+    Public Function bits(data As Integer, start As Integer, [stop] As Integer) As Integer
+        Dim count = [stop] - start
+        Dim mask = ((1 << count) - 1) << start
+        Dim bitvalue = data And mask
+
+        Return bitvalue >> start
+    End Function
 End Module
