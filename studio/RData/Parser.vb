@@ -1,4 +1,7 @@
 ﻿Imports System.IO
+Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Data.IO
+Imports Microsoft.VisualBasic.Text
 
 ''' <summary>
 ''' Parser interface for a R file.
@@ -28,9 +31,43 @@ Module Parser
     ''' </summary>
     ''' <param name="file"></param>
     ''' <returns></returns>
-    Public Function file_type(file As Stream) As FileTypes
+    Public Function file_type(file As BinaryDataReader) As FileTypes
         For Each item In magic_dict
-
+            If item.Value.SequenceEqual(file.ReadBytes(item.Value.Length)) Then
+                Return item.Key
+            Else
+                file.Seek(-item.Value.Length, SeekOrigin.Current)
+            End If
         Next
+
+        Return Nothing
+    End Function
+
+    Public Function rdata_format(file As BinaryDataReader) As RdataFormats
+        For Each item In format_dict
+            If item.Value.SequenceEqual(file.ReadBytes(item.Value.Length)) Then
+                Return item.Key
+            Else
+                file.Seek(-item.Value.Length, SeekOrigin.Current)
+            End If
+        Next
+
+        Return Nothing
+    End Function
+
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    <Extension>
+    Friend Function decode(bytes As Byte(), encoding As Encodings) As String
+        Return encoding.CodePage.GetString(bytes)
+    End Function
+
+    ''' <summary>
+    ''' Parse the internal information of an object.
+    ''' </summary>
+    ''' <param name="info_int"></param>
+    ''' <returns></returns>
+    Public Function parse_r_object_info(info_int As Integer) As RObjectInfo
+
+
     End Function
 End Module
