@@ -65,9 +65,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\CharFlags.vb" />
+    <Compile Include="Enums\RdataFormats.vb" />
+    <Compile Include="Enums\RObjectType.vb" />
     <Compile Include="ParserXDR.vb" />
     <Compile Include="Models.vb" />
-    <Compile Include="FileTypes.vb" />
+    <Compile Include="Enums\FileTypes.vb" />
     <Compile Include="Parser.vb" />
     <Compile Include="Reader.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />

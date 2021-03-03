@@ -1,29 +1,4 @@
-﻿Imports System.ComponentModel
-
-''' <summary>
-''' Type of file containing a R file.
-''' </summary>
-Public Enum FileTypes
-    Unknown = 0
-
-    <Description("bz2")> bzip2
-    <Description("gzip")> gzip
-    <Description("xz")> xz
-    <Description("rdata version 2 (binary)")> rdata_binary_v2
-    <Description("rdata version 3 (binary)")> rdata_binary_v3
-End Enum
-
-''' <summary>
-''' Format of a R file.
-''' </summary>
-Public Enum RdataFormats
-    Unknown = 0
-
-    <Description("XDR")> XDR
-    <Description("ASCII")> ASCII
-    <Description("binary")> binary
-End Enum
-
+﻿
 ''' <summary>
 ''' Type of a R object.
 ''' </summary>
@@ -142,11 +117,3 @@ Public Enum RObjectType
     REF = 255
 End Enum
 
-Public Enum CharFlags
-    HAS_HASH = 1
-    BYTES = 1 << 1
-    LATIN1 = 1 << 2
-    UTF8 = 1 << 3
-    CACHED = 1 << 5
-    ASCII = 1 << 6
-End Enum
