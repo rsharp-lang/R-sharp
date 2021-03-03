@@ -67,7 +67,46 @@ Module Parser
     ''' <param name="info_int"></param>
     ''' <returns></returns>
     Public Function parse_r_object_info(info_int As Integer) As RObjectInfo
+        Dim type_exp As RObjectType ' = bits(info_int, 0, 8)
+        Dim reference = 0
+        Dim object_flag As Boolean
+        Dim attributes As Boolean
+        Dim tag As Boolean
+        Dim gp As Integer
 
+        If is_special_r_object_type(type_exp) Then
+            object_flag = False
+            attributes = False
+            tag = False
+            gp = 0
+        Else
+            object_flag = bool(bits(info_int, 8, 9))
+            attributes = bool(bits(info_int, 9, 10))
+            tag = bool(bits(info_int, 10, 11))
+            gp = bits(info_int, 12, 28)
+        End If
 
+        If type_exp = RObjectType.REF Then
+            reference = bits(info_int, 8, 32)
+        End If
+
+        Return New RObjectInfo With {
+            .type = type_exp,
+            .[object] = object_flag,
+            .attributes = attributes,
+            .tag = tag,
+            .gp = gp,
+            .reference = reference
+        }
     End Function
+
+    ''' <summary>
+    ''' Check if a R type has a different serialization than the usual one.
+    ''' </summary>
+    ''' <param name="r_object_type"></param>
+    ''' <returns></returns>
+    Public Function is_special_r_object_type(r_object_type As RObjectType) As Boolean
+        Return r_object_type = RObjectType.NILVALUE OrElse r_object_type = RObjectType.REF
+    End Function
+
 End Module
