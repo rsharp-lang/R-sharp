@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports System.Numerics
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.Data.IO
 Imports Microsoft.VisualBasic.Data.IO.Bzip2
 Imports Microsoft.VisualBasic.Text
 
@@ -245,8 +246,38 @@ Public MustInherit Class Reader
         Return value
     End Function
 
-    Public Shared Function OpenFile(file As Stream) As Reader
-        Dim bz2 As New BZip2InputStream(inputStream:=file, headerless:=True)
+    ''' <summary>
+    ''' Select the appropiate parser and parse all the info.
+    ''' </summary>
+    ''' <param name="bin"></param>
+    ''' <returns></returns>
+    Public Shared Function ParseRDataBinary(bin As BinaryDataReader) As RData
+        Dim format_type = rdata_format(bin)
 
+        If format_type = RdataFormats.XDR Then
+            Return New ParserXDR(bin).parse_all
+        Else
+            Throw New NotImplementedException
+        End If
     End Function
+
+    ''' <summary>
+    ''' Parse the data of a R file, received as a sequence of bytes.
+    ''' </summary>
+    ''' <param name="bin">
+    ''' Data extracted of a R file.
+    ''' </param>
+    ''' <returns>Data contained in the file (versions and object).</returns>
+    Public Shared Function ParseData(bin As Stream) As RData
+        Dim reader As New BinaryDataReader(bin)
+        Dim filetype = file_type(reader)
+
+        Select Case filetype
+            Case FileTypes.rdata_binary_v2, FileTypes.rdata_binary_v3
+                Return ParseRDataBinary(reader)
+            Case Else
+                Throw New NotImplementedException("Unknown file type")
+        End Select
+    End Function
+
 End Class

@@ -80,9 +80,9 @@ Module Parser
             tag = False
             gp = 0
         Else
-            object_flag = bool(bits(info_int, 8, 9))
-            attributes = bool(bits(info_int, 9, 10))
-            tag = bool(bits(info_int, 10, 11))
+            object_flag = CBool(bits(info_int, 8, 9))
+            attributes = CBool(bits(info_int, 9, 10))
+            tag = CBool(bits(info_int, 10, 11))
             gp = bits(info_int, 12, 28)
         End If
 
