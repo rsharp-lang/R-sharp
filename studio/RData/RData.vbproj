@@ -68,8 +68,13 @@
     <Compile Include="Enums\CharFlags.vb" />
     <Compile Include="Enums\RdataFormats.vb" />
     <Compile Include="Enums\RObjectType.vb" />
+    <Compile Include="Models\RExtraInfo.vb" />
+    <Compile Include="Models\RData.vb" />
+    <Compile Include="Models\RObjectInfo.vb" />
+    <Compile Include="Models\RObject.vb" />
+    <Compile Include="Models\EnvironmentValue.vb" />
     <Compile Include="ParserXDR.vb" />
-    <Compile Include="Models.vb" />
+    <Compile Include="Models\RVersions.vb" />
     <Compile Include="Enums\FileTypes.vb" />
     <Compile Include="Parser.vb" />
     <Compile Include="Reader.vb" />
