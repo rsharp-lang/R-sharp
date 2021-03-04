@@ -522,6 +522,7 @@
     <Compile Include="base.vb" />
     <Compile Include="base\HDF5utils.vb" />
     <Compile Include="base\netCDFutils.vb" />
+    <Compile Include="zzz.vb" />
     <Compile Include="save\RData.vb" />
     <Compile Include="save\rawDeserializer.vb" />
     <Compile Include="save\rawSerializer.vb" />

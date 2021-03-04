@@ -1,51 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::e42800779b9d82bd64225e49d89f1374, Library\R.base\utils\utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module utils
-    ' 
-    '     Function: DataFrameRows, ensureRowNames, MeasureGenericType, read_csv, saveGeneric
-    '               setRowNames, write_csv
-    ' 
-    ' /********************************************************************************/
+' Module utils
+' 
+'     Function: DataFrameRows, ensureRowNames, MeasureGenericType, read_csv, saveGeneric
+'               setRowNames, write_csv
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
 Imports System.Text
+Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.MIME.Office.Excel.Model
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime
@@ -58,6 +61,7 @@ Imports csv = Microsoft.VisualBasic.Data.csv.IO.File
 Imports fileStream = System.IO.Stream
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RPrinter = SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports Rsharp = SMRUCC.Rsharp
 Imports textStream = System.IO.StreamReader
 
@@ -68,6 +72,29 @@ Imports textStream = System.IO.StreamReader
 <RTypeExport("entity", GetType(EntityObject))>
 <RTypeExport("dataset", GetType(DataSet))>
 Public Module utils
+
+    Friend Sub Main()
+        Call RPrinter.AttachConsoleFormatter(Of DataSet)(AddressOf printRawTable)
+    End Sub
+
+    Private Function printRawTable(raw As csv) As String
+        Dim matrix As New List(Of String())
+        Dim i As i32 = 1
+
+        Call {""} _
+            .JoinIterates(SheetTable.GetColumnIndex.Take(raw.Width)) _
+            .ToArray _
+            .DoCall(AddressOf matrix.Add)
+
+        For Each row As RowObject In raw.Rows
+            Call {(++i).ToString} _
+                .JoinIterates(row.AsEnumerable) _
+                .ToArray _
+                .DoCall(AddressOf matrix.Add)
+        Next
+
+        Return matrix.Print(False)
+    End Function
 
     ''' <summary>
     ''' ### Data Input

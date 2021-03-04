@@ -1,45 +1,45 @@
 ﻿#Region "Microsoft.VisualBasic::ce7470fda6511b384f56fe6737fbec01, Library\R.base\utils\dataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module dataframe
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: appendCells, appendRow, asIndexList, cells, colnames
-    '               column, CreateRowObject, dataframeTable, deserialize, measureColumnVector
-    '               openCsv, printTable, project, rawToDataFrame, readCsvRaw
-    '               readDataSet, rows, RowToString, transpose, vector
-    ' 
-    ' /********************************************************************************/
+' Module dataframe
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: appendCells, appendRow, asIndexList, cells, colnames
+'               column, CreateRowObject, dataframeTable, deserialize, measureColumnVector
+'               openCsv, printTable, project, rawToDataFrame, readCsvRaw
+'               readDataSet, rows, RowToString, transpose, vector
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -61,6 +61,7 @@ Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports csv = Microsoft.VisualBasic.Data.csv.IO.File
 Imports Idataframe = Microsoft.VisualBasic.Data.csv.IO.DataFrame
@@ -79,10 +80,10 @@ Module dataframe
         Call RPrinter.AttachConsoleFormatter(Of DataSet)(AddressOf RowToString)
         Call RPrinter.AttachConsoleFormatter(Of DataSet())(AddressOf printTable)
         Call RPrinter.AttachConsoleFormatter(Of EntityObject())(AddressOf printTable)
-        Call RPrinter.AttachConsoleFormatter(Of csv)(AddressOf printTable)
+        ' Call RPrinter.AttachConsoleFormatter(Of csv)(AddressOf printTable)
 
-        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(DataSet()), AddressOf dataframeTable(Of Double, DataSet))
-        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(EntityObject()), AddressOf dataframeTable(Of String, EntityObject))
+        Call makeDataframe.addHandler(GetType(DataSet()), AddressOf dataframeTable(Of Double, DataSet))
+        Call makeDataframe.addHandler(GetType(EntityObject()), AddressOf dataframeTable(Of String, EntityObject))
     End Sub
 
     Private Function dataframeTable(Of T, DataSet As {INamedValue, DynamicPropertyBase(Of T)})(data As DataSet(), args As list, env As Environment) As Rdataframe
@@ -109,8 +110,8 @@ Module dataframe
                 matrix = DirectCast(obj, DataSet()).ToCsvDoc
             Case GetType(EntityObject())
                 matrix = DirectCast(obj, EntityObject()).ToCsvDoc
-            Case GetType(csv)
-                matrix = DirectCast(obj, csv)
+                ' Case GetType(csv)
+                ' matrix = DirectCast(obj, csv)
             Case Else
                 Throw New NotImplementedException
         End Select
