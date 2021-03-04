@@ -74,7 +74,7 @@ Imports textStream = System.IO.StreamReader
 Public Module utils
 
     Friend Sub Main()
-        Call RPrinter.AttachConsoleFormatter(Of DataSet)(AddressOf printRawTable)
+        Call RPrinter.AttachConsoleFormatter(Of csv)(AddressOf printRawTable)
     End Sub
 
     Private Function printRawTable(raw As csv) As String
