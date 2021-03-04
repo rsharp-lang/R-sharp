@@ -98,7 +98,7 @@ Module xlsx
         If sheetIndex Is Nothing Then
             Return Internal.debug.stop("the sheet index can not be nothing!", env)
         ElseIf RType.TypeOf(sheetIndex).mode = TypeCodes.integer Then
-            table = xlsx.GetTable(CInt(sheetIndex))
+            table = xlsx.GetTable(CInt(sheetIndex) - 1)
         Else
             table = xlsx.GetTable(sheetName:=any.ToString(sheetIndex))
         End If
