@@ -58,6 +58,7 @@ Imports msXlsx = Microsoft.VisualBasic.MIME.Office.Excel.File
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Rsharp = SMRUCC.Rsharp
+Imports any = Microsoft.VisualBasic.Scripting
 
 ''' <summary>
 ''' Xlsx file toolkit
@@ -76,15 +77,15 @@ Module xlsx
     <ExportAPI("read.xlsx")>
     <RApiReturn(GetType(Rdataframe), GetType(csv))>
     Public Function readXlsx(file As Object,
-                             Optional sheetIndex$ = "Sheet1",
+                             Optional sheetIndex As Object = "Sheet1",
                              <RRawVectorArgument>
                              Optional row_names As Object = Nothing,
                              Optional raw As Boolean = False,
                              Optional check_names As Boolean = True,
                              Optional check_modes As Boolean = True,
                              Optional env As Environment = Nothing) As Object
-
         Dim xlsx As msXlsx
+        Dim table As csv
 
         If TypeOf file Is String Then
             xlsx = msXlsx.Open(DirectCast(file, String))
@@ -94,7 +95,13 @@ Module xlsx
             Return Internal.debug.stop(Message.InCompatibleType(GetType(String), file.GetType, env), env)
         End If
 
-        Dim table As csv = xlsx.GetTable(sheetName:=sheetIndex)
+        If sheetIndex Is Nothing Then
+            Return Internal.debug.stop("the sheet index can not be nothing!", env)
+        ElseIf RType.TypeOf(sheetIndex).mode = TypeCodes.integer Then
+            table = xlsx.GetTable(CInt(sheetIndex))
+        Else
+            table = xlsx.GetTable(sheetName:=any.ToString(sheetIndex))
+        End If
 
         If raw Then
             Return table
