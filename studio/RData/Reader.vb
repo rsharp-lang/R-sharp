@@ -255,7 +255,7 @@ Public MustInherit Class Reader
         Dim format_type = rdata_format(bin)
 
         If format_type = RdataFormats.XDR Then
-            Return New ParserXDR(bin).parse_all
+            Return New ParserXDR(bin, bin.Position).parse_all
         Else
             Throw New NotImplementedException
         End If
