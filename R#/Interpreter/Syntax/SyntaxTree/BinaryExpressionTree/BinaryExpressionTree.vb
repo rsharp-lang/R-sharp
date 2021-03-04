@@ -59,6 +59,16 @@ Namespace Interpreter.SyntaxParser
         ReadOnly comparisonOperators As String() = {"<", ">", "<=", ">=", "==", "!=", "in", "like", "between"}
         ReadOnly logicalOperators As String() = {"&&", "||", "!"}
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="tokenBlocks"></param>
+        ''' <param name="buf"></param>
+        ''' <param name="oplist"></param>
+        ''' <param name="opts"></param>
+        ''' <returns>
+        ''' returns error message
+        ''' </returns>
         <Extension>
         Private Function joinNegatives(tokenBlocks As List(Of Token()),
                                        ByRef buf As List(Of [Variant](Of SyntaxResult, String)),
@@ -69,8 +79,19 @@ Namespace Interpreter.SyntaxParser
             Dim index As i32 = Scan0
 
             If tokenBlocks(Scan0).Length = 1 AndAlso tokenBlocks(Scan0)(Scan0) = (TokenType.operator, {"-", "+"}) Then
-                ' insert a ZERO before
-                tokenBlocks.Insert(Scan0, {New Token With {.name = TokenType.numberLiteral, .text = 0}})
+                If tokenBlocks.Count > 1 AndAlso tokenBlocks(1).Length = 1 AndAlso tokenBlocks(1)(Scan0).isNumeric Then
+                    Dim unary As String = tokenBlocks(Scan0)(Scan0).text
+                    Dim number As Double = tokenBlocks(1)(Scan0).text.ParseDouble
+
+                    If unary = "-" Then
+                        tokenBlocks(1)(Scan0).text = -number
+                    End If
+
+                    tokenBlocks.RemoveAt(Scan0)
+                Else
+                    ' insert a ZERO before
+                    tokenBlocks.Insert(Scan0, {New Token With {.name = TokenType.numberLiteral, .text = 0}})
+                End If
             End If
 
             For i As Integer = Scan0 To tokenBlocks.Count - 1
@@ -134,7 +155,11 @@ Namespace Interpreter.SyntaxParser
                 New VectorAppendProcessor()  ' append操作符
             }
 
-            Call tokenBlocks.joinNegatives(buf, oplist, opts)
+            If Not syntaxResult = tokenBlocks.joinNegatives(buf, oplist, opts) Is Nothing Then
+                Return syntaxResult
+            ElseIf buf = 1 Then
+                Return buf(Scan0).TryCast(Of SyntaxResult)
+            End If
 
             Dim queue As New SyntaxQueue With {.buf = buf}
 
