@@ -46,9 +46,9 @@ Public MustInherit Class Reader
     ''' </summary>
     ''' <returns></returns>
     Public Function parse_all() As RData
-        Dim versions = parse_versions()
-        Dim extra_info = parse_extra_info(versions)
-        Dim obj = parse_R_object()
+        Dim versions As RVersions = parse_versions()
+        Dim extra_info As RExtraInfo = parse_extra_info(versions)
+        Dim obj As RObject = parse_R_object()
 
         Return New RData With {
             .versions = versions,

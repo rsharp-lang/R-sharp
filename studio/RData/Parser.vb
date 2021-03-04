@@ -93,7 +93,7 @@ Module Parser
     ''' <param name="info_int"></param>
     ''' <returns></returns>
     Public Function parse_r_object_info(info_int As Integer) As RObjectInfo
-        Dim type_exp As RObjectType ' = bits(info_int, 0, 8)
+        Dim type_exp As RObjectType = bits(info_int, 0, 8)
         Dim reference = 0
         Dim object_flag As Boolean
         Dim attributes As Boolean
