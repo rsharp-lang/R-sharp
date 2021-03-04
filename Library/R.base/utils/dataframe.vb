@@ -81,10 +81,26 @@ Module dataframe
         Call RPrinter.AttachConsoleFormatter(Of DataSet())(AddressOf printTable)
         Call RPrinter.AttachConsoleFormatter(Of EntityObject())(AddressOf printTable)
         ' Call RPrinter.AttachConsoleFormatter(Of csv)(AddressOf printTable)
+        Call RPrinter.AttachConsoleFormatter(Of RowObject)(AddressOf printRowVector)
 
         Call makeDataframe.addHandler(GetType(DataSet()), AddressOf dataframeTable(Of Double, DataSet))
         Call makeDataframe.addHandler(GetType(EntityObject()), AddressOf dataframeTable(Of String, EntityObject))
     End Sub
+
+    Private Function printRowVector(r As RowObject) As String
+        Dim cellsDataPreviews As String
+
+        If r.NumbersOfColumn > 6 Then
+            cellsDataPreviews = r _
+                .Take(6) _
+                .Select(Function(str) $"""{str}""") _
+                .JoinBy(vbTab) & vbTab & "..."
+        Else
+            cellsDataPreviews = r.Select(Function(str) $"""{str}""").JoinBy(vbTab)
+        End If
+
+        Return $"row, char [1:{r.NumbersOfColumn}] {cellsDataPreviews}"
+    End Function
 
     Private Function dataframeTable(Of T, DataSet As {INamedValue, DynamicPropertyBase(Of T)})(data As DataSet(), args As list, env As Environment) As Rdataframe
         Dim names As String() = data.Keys.ToArray
