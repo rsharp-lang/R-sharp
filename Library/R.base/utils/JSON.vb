@@ -174,7 +174,10 @@ Module JSON
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("parseBSON")>
-    Public Function parseBSON(<RRawVectorArgument> buffer As Object, Optional raw As Boolean = False, Optional env As Environment = Nothing) As Object
+    Public Function parseBSON(<RRawVectorArgument> buffer As Object,
+                              Optional raw As Boolean = False,
+                              Optional env As Environment = Nothing) As Object
+
         Dim bytes As pipeline = pipeline.TryCreatePipeline(Of Byte)(buffer, env, suppress:=True)
         Dim bufStream As Stream
 
