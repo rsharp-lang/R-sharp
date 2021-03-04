@@ -53,6 +53,14 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports RHtml = SMRUCC.Rsharp.Runtime.Internal.htmlPrinter
 Imports Rlang = Microsoft.VisualBasic.My.RlangInterop
 
+''' <summary>
+''' Simple, Consistent Wrappers for Common String Operations
+''' 
+''' stringr provide fast, correct implementations of common string manipulations. 
+''' stringr focusses on the most important and commonly used string manipulation 
+''' functions whereas stringi provides a comprehensive set covering almost anything 
+''' you can imagine. 
+''' </summary>
 <Package("stringr", Category:=APICategories.UtilityTools)>
 Module stringr
 
@@ -60,11 +68,25 @@ Module stringr
         RHtml.AttachHtmlFormatter(Of DistResult)(AddressOf ResultVisualize.HTMLVisualize)
     End Sub
 
+    ''' <summary>
+    ''' Compute the edit distance between two strings is defined as the 
+    ''' minimum number of edit operations required to transform one string 
+    ''' into another.
+    ''' </summary>
+    ''' <param name="x$"></param>
+    ''' <param name="y$"></param>
+    ''' <returns></returns>
     <ExportAPI("levenshtein")>
     Public Function Levenshtein(x$, y$) As DistResult
         Return LevenshteinDistance.ComputeDistance(x, y)
     End Function
 
+    ''' <summary>
+    ''' parse XML text data into R object
+    ''' </summary>
+    ''' <param name="str">the xml text</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("fromXML")>
     Public Function fromXML(str As String, Optional env As Environment = Nothing) As Object
         Return XmlElement.ParseXmlText(str).createRObj(env)

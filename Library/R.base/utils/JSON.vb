@@ -55,15 +55,40 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
+''' <summary>
+''' JSON (JavaScript Object Notation) is a lightweight data-interchange format. 
+''' It is easy for humans to read and write. It is easy for machines to parse and 
+''' generate. It is based on a subset of the JavaScript Programming Language 
+''' Standard ECMA-262 3rd Edition - December 1999. JSON is a text format that 
+''' is completely language independent but uses conventions of the ``R#`` language. 
+''' JSON is an ideal data-interchange language.
+'''
+''' JSON Is built On two structures:
+''' 
+''' + A collection Of name/value pairs. In various languages, this Is realized As 
+'''      an Object, record, struct, dictionary, hash table, keyed list, Or 
+'''      associative array.
+''' + An ordered list Of values. In most languages, this Is realized As an array, 
+'''      vector, list, Or sequence.
+'''      
+''' These are universal data structures. Virtually all modern programming languages 
+''' support them In one form Or another. It makes sense that a data format that 
+''' Is interchangeable With programming languages also be based On these structures.
+''' </summary>
 <Package("JSON", Category:=APICategories.UtilityTools, Publisher:="i@xieguigang.me")>
 Module JSON
 
     ''' <summary>
+    ''' ### Decodes a JSON string
+    ''' 
     ''' a short cut method of ``parseJSON`` 
     ''' </summary>
-    ''' <param name="str"></param>
+    ''' <param name="str">The json string being decoded.</param>
     ''' <param name="env"></param>
     ''' <returns></returns>
+    ''' <remarks>
+    ''' Takes a JSON encoded string and converts it into a R variable.
+    ''' </remarks>
     <ExportAPI("json_decode")>
     Public Function json_decode(str As String, Optional throwEx As Boolean = True, Optional env As Environment = Nothing) As Object
         Try
@@ -78,6 +103,18 @@ Module JSON
         End Try
     End Function
 
+    ''' <summary>
+    ''' Returns the JSON representation of a value
+    ''' </summary>
+    ''' <param name="x">The value being encoded. Can be any type except a resource.</param>
+    ''' <param name="maskReadonly"></param>
+    ''' <param name="indent"></param>
+    ''' <param name="enumToStr"></param>
+    ''' <param name="unixTimestamp"></param>
+    ''' <param name="env"></param>
+    ''' <returns>
+    ''' Returns a string containing the JSON representation of the supplied value.
+    ''' </returns>
     <ExportAPI("json_encode")>
     <RApiReturn(GetType(String))>
     Public Function json_encode(x As Object,
@@ -104,6 +141,13 @@ Module JSON
         Return jsonStr
     End Function
 
+    ''' <summary>
+    ''' parse JSON string into the raw JSON model or R data object
+    ''' </summary>
+    ''' <param name="str">The json string being decoded.</param>
+    ''' <param name="raw"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("parseJSON")>
     Public Function fromJSON(str As String, Optional raw As Boolean = False, Optional env As Environment = Nothing) As Object
         Dim rawElement As JsonElement = New JsonParser().OpenJSON(str)
@@ -122,6 +166,13 @@ Module JSON
         End If
     End Function
 
+    ''' <summary>
+    ''' parse the binary JSON data into the raw JSON model or R data object
+    ''' </summary>
+    ''' <param name="buffer">the binary data package in BSON format</param>
+    ''' <param name="raw"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("parseBSON")>
     Public Function parseBSON(<RRawVectorArgument> buffer As Object, Optional raw As Boolean = False, Optional env As Environment = Nothing) As Object
         Dim bytes As pipeline = pipeline.TryCreatePipeline(Of Byte)(buffer, env, suppress:=True)
@@ -146,6 +197,13 @@ Module JSON
         End If
     End Function
 
+    ''' <summary>
+    ''' Convert the raw json model into R data object
+    ''' </summary>
+    ''' <param name="json"></param>
+    ''' <param name="schema"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("object")>
     Public Function buildObject(json As JsonElement, schema As Object, Optional env As Environment = Nothing) As Object
         Dim type As RType = env.globalEnvironment.GetType([typeof]:=schema)
@@ -154,6 +212,16 @@ Module JSON
         Return obj
     End Function
 
+    ''' <summary>
+    ''' save any R object into BSON stream data
+    ''' </summary>
+    ''' <param name="obj"></param>
+    ''' <param name="file">
+    ''' the file resource that used for save the BSON data, if this parameter is empty, then
+    ''' a binary data stream that contains the BSON data will be returned.
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("write.bson")>
     Public Function writeBSON(obj As Object, Optional file As Object = Nothing, Optional env As Environment = Nothing) As Object
         Dim stream As Stream
