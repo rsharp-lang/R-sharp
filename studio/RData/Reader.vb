@@ -141,8 +141,8 @@ Public MustInherit Class Reader
             End If
 
             ' Read CAR and CDR
-            Dim car = parse_R_object(reference_list)
-            Dim cdr = parse_R_object(reference_list)
+            Dim car As RObject = parse_R_object(reference_list)
+            Dim cdr As RObject = parse_R_object(reference_list)
 
             value = (car, cdr)
         ElseIf info.type = RObjectType.ENV Then

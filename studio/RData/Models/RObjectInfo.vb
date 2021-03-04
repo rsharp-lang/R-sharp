@@ -12,4 +12,8 @@ Public Class RObjectInfo
     Public gp As Integer
     Public reference As Integer
 
+    Public Overrides Function ToString() As String
+        Return type.Description
+    End Function
+
 End Class
