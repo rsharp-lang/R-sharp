@@ -42,6 +42,7 @@
 
 Imports System.Runtime.CompilerServices
 Imports System.Text
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.csv
@@ -296,7 +297,8 @@ Public Module utils
                               Optional env As Environment = Nothing) As Object
 
         If x Is Nothing Then
-            Return Internal.debug.stop("Empty dataframe object!", env)
+            Call env.AddMessage("Empty dataframe object!", MSG_TYPES.WRN)
+            Return "".SaveTo(file)
         ElseIf Not file.StringEmpty Then
             ' test if the target table file is not locked by excel
             Dim err As Object = REnv.TryCatch(Function() "".SaveTo(file), debug:=env.globalEnvironment.debugMode)
