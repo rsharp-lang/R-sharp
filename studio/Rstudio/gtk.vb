@@ -47,7 +47,10 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
 
-<Package("gtk")>
+''' <summary>
+''' WinForm controls api for ``R#`` programming.
+''' </summary>
+<Package("gtk", Category:=APICategories.UtilityTools, Publisher:="I@xieguigang.me")>
 Module gtk
 
     ''' <summary>
@@ -97,7 +100,10 @@ Module gtk
         Dim filters As String() = REnv.asVector(Of String)(filter)
 
         If forSave Then
-            Using file As New SaveFileDialog With {.Title = title, .Filter = filters.JoinBy("|")}
+            Using file As New SaveFileDialog With {
+                .Title = title,
+                .Filter = filters.JoinBy("|")
+            }
                 If file.ShowDialog = DialogResult.OK Then
                     Return file.FileNames
                 Else
@@ -105,7 +111,10 @@ Module gtk
                 End If
             End Using
         Else
-            Using file As New OpenFileDialog With {.Title = title, .Filter = filters.JoinBy("|")}
+            Using file As New OpenFileDialog With {
+                .Title = title,
+                .Filter = filters.JoinBy("|")
+            }
                 If file.ShowDialog = DialogResult.OK Then
                     Return file.FileNames
                 Else
