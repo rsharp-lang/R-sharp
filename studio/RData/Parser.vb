@@ -1,7 +1,10 @@
 ﻿Imports System.IO
 Imports System.Runtime.CompilerServices
+Imports System.Text
 Imports Microsoft.VisualBasic.Data.IO
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Text
+Imports Microsoft.VisualBasic.Text.Parser
 
 ''' <summary>
 ''' Parser interface for a R file.
@@ -23,7 +26,30 @@ Module Parser
     }
 
     Private Function bytes(binaryStr As String) As Byte()
-        Throw New NotImplementedException
+        Dim bits As New List(Of Byte)
+        Dim bin As Char() = New Char(2 - 1) {}
+        Dim i As i32 = Scan0
+        Dim chars As CharPtr = binaryStr
+
+        Do While Not chars.EndRead
+            Dim c As Char = ++chars
+
+            If c = "\" AndAlso chars.Current = "x" Then
+                c = ++chars
+
+                bin(0) = ++chars
+                bin(1) = ++chars
+
+                bits += CByte(i32.GetHexInteger(bin(0) & bin(1)))
+            ElseIf c = "\" AndAlso chars.Current = "n" Then
+                c = ++chars
+                bits += CByte(ASCII.Byte.LF)
+            Else
+                bits += CByte(Asc(c))
+            End If
+        Loop
+
+        Return bits.ToArray
     End Function
 
     ''' <summary>
@@ -67,7 +93,7 @@ Module Parser
     ''' <param name="info_int"></param>
     ''' <returns></returns>
     Public Function parse_r_object_info(info_int As Integer) As RObjectInfo
-        Dim type_exp As RObjectType ' = bits(info_int, 0, 8)
+        Dim type_exp As RObjectType = bits(info_int, 0, 8)
         Dim reference = 0
         Dim object_flag As Boolean
         Dim attributes As Boolean

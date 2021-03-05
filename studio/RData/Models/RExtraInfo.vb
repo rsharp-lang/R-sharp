@@ -1,4 +1,6 @@
 ﻿
+Imports Microsoft.VisualBasic.Serialization.JSON
+
 ''' <summary>
 ''' Extra information.
 '''
@@ -6,5 +8,9 @@
 ''' </summary>
 Public Class RExtraInfo
 
-    Public encoding As String = Nothing
+    Public Property encoding As String = Nothing
+
+    Public Overrides Function ToString() As String
+        Return Me.GetJson
+    End Function
 End Class

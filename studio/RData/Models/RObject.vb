@@ -4,9 +4,13 @@
 ''' </summary>
 Public Class RObject
 
-    Public info As RObjectInfo
-    Public value As Object
+    Public Property info As RObjectInfo
+    Public Property value As Object
     Public Property attributes As RObject
-    Public tag As RObject
-    Public referenced_object As RObject
+    Public Property tag As RObject
+    Public Property referenced_object As RObject
+
+    Public Overrides Function ToString() As String
+        Return MyBase.ToString()
+    End Function
 End Class

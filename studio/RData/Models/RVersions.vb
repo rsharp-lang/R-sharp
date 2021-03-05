@@ -7,6 +7,10 @@ Public Class RVersions
     Public serialized As Integer
     Public minimum As Integer
 
+    Public Overrides Function ToString() As String
+        Return $"{format}.{serialized}.{minimum}"
+    End Function
+
 End Class
 
 

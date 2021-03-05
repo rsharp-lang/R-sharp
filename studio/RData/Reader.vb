@@ -46,9 +46,9 @@ Public MustInherit Class Reader
     ''' </summary>
     ''' <returns></returns>
     Public Function parse_all() As RData
-        Dim versions = parse_versions()
-        Dim extra_info = parse_extra_info(versions)
-        Dim obj = parse_R_object()
+        Dim versions As RVersions = parse_versions()
+        Dim extra_info As RExtraInfo = parse_extra_info(versions)
+        Dim obj As RObject = parse_R_object()
 
         Return New RData With {
             .versions = versions,
@@ -141,8 +141,8 @@ Public MustInherit Class Reader
             End If
 
             ' Read CAR and CDR
-            Dim car = parse_R_object(reference_list)
-            Dim cdr = parse_R_object(reference_list)
+            Dim car As RObject = parse_R_object(reference_list)
+            Dim cdr As RObject = parse_R_object(reference_list)
 
             value = (car, cdr)
         ElseIf info.type = RObjectType.ENV Then
@@ -255,7 +255,7 @@ Public MustInherit Class Reader
         Dim format_type = rdata_format(bin)
 
         If format_type = RdataFormats.XDR Then
-            Return New ParserXDR(bin).parse_all
+            Return New ParserXDR(bin, bin.Position).parse_all
         Else
             Throw New NotImplementedException
         End If
