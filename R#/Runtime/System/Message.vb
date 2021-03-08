@@ -66,6 +66,10 @@ Namespace Runtime.Components
         <XmlIgnore>
         Public Property source As Expression
 
+        Public Function ToException() As Exception
+
+        End Function
+
         Public Shared Function SymbolNotFound(envir As Environment, symbolName$, type As TypeCodes) As Message
             Dim exception$
 

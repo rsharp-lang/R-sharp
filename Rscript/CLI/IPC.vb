@@ -174,7 +174,9 @@ Partial Module CLI
         Next
 
         If Not result Is Nothing AndAlso result.GetType Is GetType(Message) Then
+            Call App.LogException(DirectCast(result, Message).ToException)
             Call Internal.debug.PrintMessageInternal(result, env.globalEnvironment)
+
             Return DirectCast(result, Message).level
         Else
             Return 0
