@@ -806,6 +806,7 @@
     <Compile Include="Runtime\Interop\CType\ICType.vb" />
     <Compile Include="Runtime\Serialize\Buffer.vb" />
     <Compile Include="Runtime\System\GetVectorElement.vb" />
+    <Compile Include="System\RuntimeError.vb" />
     <Compile Include="System\Document\FunctionDeclare.vb" />
     <Compile Include="System\Document\Document.vb" />
     <Compile Include="System\IPCBuffer.vb" />
