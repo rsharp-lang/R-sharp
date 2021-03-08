@@ -68,7 +68,7 @@ Namespace Runtime.Components
         Public Property source As Expression
 
         Public Function ToException() As RuntimeError
-
+            Return New RuntimeError(Me)
         End Function
 
         Public Shared Function SymbolNotFound(envir As Environment, symbolName$, type As TypeCodes) As Message
