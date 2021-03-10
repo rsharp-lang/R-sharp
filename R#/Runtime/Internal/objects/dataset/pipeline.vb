@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::ef3092c0d106505aee19d119dae00cae, R#\Runtime\Internal\objects\dataset\pipeline.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class pipeline
-    ' 
-    '         Properties: [pipeFinalize], isError, isMessage
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: CreateFromPopulator, createVector, getError, populates, ToString
-    '                   TryCastObjectVector, TryCreatePipeline
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class pipeline
+' 
+'         Properties: [pipeFinalize], isError, isMessage
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: CreateFromPopulator, createVector, getError, populates, ToString
+'                   TryCastObjectVector, TryCreatePipeline
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -51,6 +51,7 @@ Imports System.Runtime.CompilerServices
 Imports System.Web.Script.Serialization
 #End If
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
@@ -190,6 +191,18 @@ Namespace Runtime.Internal.Object
             }
         End Function
 
+        Private Shared Function fromVector(Of T)(upstream As vector, env As Environment, suppress As Boolean) As pipeline
+            If upstream.elementType Like GetType(T) Then
+                Return CreateFromPopulator(upstream.data.AsObjectEnumerator(Of T))
+            ElseIf GetType(T) Is GetType(Object) Then
+                Return CreateFromPopulator(upstream.data.AsObjectEnumerator)
+            ElseIf GetType(T).IsInterface AndAlso upstream.elementType.raw.ImplementInterface(Of T) Then
+                Return CreateFromPopulator(upstream.data.AsObjectEnumerator.Select(Function(o) CType(o, T)))
+            Else
+                Return Message.InCompatibleType(GetType(T), upstream.elementType.raw, env, suppress:=suppress)
+            End If
+        End Function
+
         Public Shared Function TryCreatePipeline(Of T)(upstream As Object, env As Environment,
                                                        Optional suppress As Boolean = False,
                                                        <CallerMemberName>
@@ -214,13 +227,7 @@ Namespace Runtime.Internal.Object
             ElseIf TypeOf upstream Is IEnumerable(Of T) Then
                 Return CreateFromPopulator(Of T)(DirectCast(upstream, IEnumerable(Of T)))
             ElseIf TypeOf upstream Is vector Then
-                If DirectCast(upstream, vector).elementType Like GetType(T) Then
-                    Return CreateFromPopulator(Of T)(DirectCast(upstream, vector).data.AsObjectEnumerator(Of T))
-                ElseIf GetType(T) Is GetType(Object) Then
-                    Return CreateFromPopulator(Of Object)(DirectCast(upstream, vector).data.AsObjectEnumerator)
-                Else
-                    Return Message.InCompatibleType(GetType(T), DirectCast(upstream, vector).elementType.raw, env, suppress:=suppress)
-                End If
+                Return fromVector(Of T)(DirectCast(upstream, vector), env, suppress)
             ElseIf TypeOf upstream Is Object() Then
                 Return TryCastObjectVector(Of T)(DirectCast(upstream, Object()), env, suppress)
             ElseIf GetType(T) Is GetType(Object) Then
