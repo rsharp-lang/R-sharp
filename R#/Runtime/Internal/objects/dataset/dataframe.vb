@@ -108,6 +108,11 @@ Namespace Runtime.Internal.Object
             End Get
         End Property
 
+        ''' <summary>
+        ''' <see cref="getKeyByIndex"/>
+        ''' </summary>
+        ''' <param name="index"></param>
+        ''' <returns></returns>
         Default Public ReadOnly Property getColumnVector(index As Integer) As Array
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
@@ -115,6 +120,11 @@ Namespace Runtime.Internal.Object
             End Get
         End Property
 
+        ''' <summary>
+        ''' 将列索引号转换为列名称
+        ''' </summary>
+        ''' <param name="index">以1为底的列索引号</param>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function getKeyByIndex(index As Integer) As String
             Return columns.Keys.ElementAtOrDefault(index - 1)
