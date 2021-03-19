@@ -108,6 +108,11 @@ Namespace Runtime.Internal.Object
             End Get
         End Property
 
+        ''' <summary>
+        ''' <see cref="getKeyByIndex"/>
+        ''' </summary>
+        ''' <param name="index"></param>
+        ''' <returns></returns>
         Default Public ReadOnly Property getColumnVector(index As Integer) As Array
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
@@ -115,6 +120,11 @@ Namespace Runtime.Internal.Object
             End Get
         End Property
 
+        ''' <summary>
+        ''' 将列索引号转换为列名称
+        ''' </summary>
+        ''' <param name="index">以1为底的列索引号</param>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function getKeyByIndex(index As Integer) As String
             Return columns.Keys.ElementAtOrDefault(index - 1)
@@ -179,7 +189,7 @@ Namespace Runtime.Internal.Object
             Dim indexType As Type = MeasureRealElementType(selector)
 
             If indexType Like RType.logicals Then
-                Return GetByRowIndex(index:=Which.IsTrue(asLogical(selector)))
+                Return GetByRowIndex(index:=which.IsTrue(asLogical(selector)))
             ElseIf indexType Like RType.integers Then
                 Return GetByRowIndex(index:=asVector(Of Integer)(selector))
             ElseIf indexType Like RType.characters Then

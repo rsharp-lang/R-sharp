@@ -208,7 +208,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
             If test Is Nothing Then
                 ' test for which index
-                Return Which.IsTrue(REnv.asLogical(sequence), offset:=1)
+                Return which.IsTrue(REnv.asLogical(sequence), offset:=1)
             ElseIf TypeOf sequence Is pipeline Then
                 ' run in pipeline mode
                 Return runFilterPipeline(sequence, test, pipelineFilter, env)
@@ -361,7 +361,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                     If dbl.Length = 0 Then
                         Return New Integer() {}
                     Else
-                        Return Which.Max(dbl) + 1
+                        Return which.Max(dbl) + 1
                     End If
                 End If
             Else
@@ -371,7 +371,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 If scores.Length = 0 Then
                     Return New Integer() {}
                 Else
-                    Return Which.Max(scores) + 1
+                    Return which.Max(scores) + 1
                 End If
             End If
         End Function
@@ -418,7 +418,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                     If dbl.Length = 0 Then
                         Return New Integer() {}
                     Else
-                        Return Which.Min(dbl) + 1
+                        Return which.Min(dbl) + 1
                     End If
                 End If
             Else
@@ -428,7 +428,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 If scores.Length = 0 Then
                     Return New Integer() {}
                 Else
-                    Return Which.Min(scores) + 1
+                    Return which.Min(scores) + 1
                 End If
             End If
         End Function

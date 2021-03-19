@@ -59,7 +59,7 @@ Imports IPEndPoint = Microsoft.VisualBasic.Net.IPEndPoint
 Partial Module CLI
 
     <ExportAPI("--slave")>
-    <Usage("--slave /exec <script.R> /args <json_base64> /request-id <request_id> /PORT=<port_number> [/timeout=<timeout in ms, default=1000> /retry=<retry_times, default=5> /MASTER=<ip, default=localhost> /entry=<function_name, default=NULL>]")>
+    <Usage("--slave /exec <script.R> /args <json_base64> /request-id <request_id> /PORT=<port_number> [--debug /timeout=<timeout in ms, default=1000> /retry=<retry_times, default=5> /MASTER=<ip, default=localhost> /entry=<function_name, default=NULL>]")>
     <Description("Create a R# cluster node for run background or parallel task. This IPC command will run a R# script file that specified by the ``/exec`` argument, and then post back the result data json to the specific master listener.")>
     <Argument("/exec", False, CLITypes.File, AcceptTypes:={GetType(String)}, Extensions:="*.R", Description:="a specific R# script for run")>
     <Argument("/args", False, CLITypes.Base64, PipelineTypes.std_in,
@@ -91,7 +91,32 @@ Partial Module CLI
         Dim request_id As String = args <= "/request-id"
         Dim retryTimes As Integer = args("/retry") Or 5
         Dim timeout As Double = args("/timeout") Or 1000
+        Dim isDebugMode As Boolean = args("--debug")
         Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
+        Dim result As Object = Nothing
+        Dim upstream As New IPEndPoint(master, port)
+
+        If Not script.FileExists Then
+            Dim msgErr As String = $"R# script file '{script.GetFullPath}' is not found on your filesystem!"
+
+            Call msgErr.PrintException
+
+            Return R.globalEnvir.postResult(
+                result:=Internal.debug.stop({
+                    msgErr,
+                    $"file: {script}",
+                    $"workdir: {App.CurrentDirectory}",
+                    $"fullName: {script.GetFullPath}"
+                }, envir:=R.globalEnvir,
+                   suppress:=True
+                ),
+                master:=upstream,
+                request_id:=request_id,
+                retryTimes:=retryTimes,
+                timeoutMS:=timeout
+            )
+        End If
+
         Dim parameters As NamedValue(Of Object)() = arguments _
             .Select(Function(a)
                         Return New NamedValue(Of Object) With {
@@ -101,14 +126,13 @@ Partial Module CLI
                     End Function) _
             .ToArray
 
-        R.debug = args("--debug")
+        R.debug = isDebugMode
 
         For Each pkgName As String In R.configFile.GetStartupLoadingPackages
             Call R.LoadLibrary(packageName:=pkgName)
         Next
 
-        Dim result As Object = R.Source(script, parameters)
-        Dim upstream As New IPEndPoint(master, port)
+        result = R.Source(script, parameters)
 
         If TypeOf result Is Message Then
             Return R.globalEnvir.postResult(
