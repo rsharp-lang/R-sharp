@@ -145,14 +145,25 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
-        ''' Get current environment
+        ''' Get current environment or envirnment of target function closure
         ''' </summary>
         ''' <param name="env"></param>
-        ''' <returns></returns>
+        ''' <param name="fun">
+        ''' a Function, a formula, Or NULL, which Is the default.
+        ''' </param>
+        ''' <returns>
+        ''' If fun is a function or a formula then environment(fun) returns 
+        ''' the environment associated with that function or formula. If fun 
+        ''' is NULL then the current evaluation environment is returned.
+        ''' </returns>
         <ExportAPI("environment")>
         <DebuggerStepThrough>
-        Private Function environment(env As Environment) As Object
-            Return env
+        Private Function environment(Optional fun As DeclareNewFunction = Nothing, Optional env As Environment = Nothing) As Object
+            If fun Is Nothing Then
+                Return env
+            Else
+                Return fun.envir
+            End If
         End Function
 
         ''' <summary>
