@@ -57,6 +57,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports Microsoft.VisualBasic.Language
+Imports System.Runtime.CompilerServices
 
 Namespace Runtime.Internal.Invokes
 
@@ -207,49 +208,7 @@ Namespace Runtime.Internal.Invokes
                 ' R# runtime environment
                 Return env.symbols.Keys.ToArray
             ElseIf opt.Name.StringEmpty Then
-                If opt.Value = "REnv" Then
-                    Return Internal.invoke.ls
-                ElseIf opt.Value = "Activator" Then
-                    Dim names As Array = globalEnv.types.Keys.ToArray
-                    Dim fullName As Array = DirectCast(names, String()) _
-                        .Select(Function(key)
-                                    Return globalEnv.types(key).fullName
-                                End Function) _
-                        .ToArray
-
-                    Return New dataframe With {
-                        .columns = New Dictionary(Of String, Array) From {
-                            {"name", names},
-                            {"fullName", fullName}
-                        },
-                        .rownames = names
-                    }
-                ElseIf opt.Value.DirectoryExists Then
-                    ' list dir?
-                    Return opt.Value _
-                        .ListFiles _
-                        .Select(AddressOf FileName) _
-                        .ToArray
-                ElseIf pkgMgr.hasLibFile(name.FileName) Then
-                    ' list all of the package names in current dll module
-                    Return PackageLoader _
-                        .ParsePackages(dll:=name) _
-                        .Select(Function(pkg) pkg.namespace) _
-                        .ToArray
-                Else
-                    Dim func = env.enumerateFunctions _
-                        .Where(Function(fun)
-                                   Return TypeOf fun.value Is RMethodInfo AndAlso DirectCast(fun.value, RMethodInfo).GetPackageInfo.namespace = name
-                               End Function) _
-                        .Select(Function(fun) DirectCast(fun.value, RMethodInfo).name) _
-                        .ToArray
-
-                    If func.IsNullOrEmpty Then
-                        Return debug.stop({"invalid query term!", "term: " & name}, env)
-                    Else
-                        Return func
-                    End If
-                End If
+                Return opt.listOptionItems(name, env)
             End If
 
             Select Case opt.Name.ToLower
@@ -265,6 +224,56 @@ Namespace Runtime.Internal.Invokes
                 Case Else
                     Return debug.stop(New NotSupportedException(name), env)
             End Select
+        End Function
+
+        <Extension>
+        Private Function listOptionItems(opt As NamedValue(Of String), name$, env As Environment)
+            Dim globalEnv As GlobalEnvironment = env.globalEnvironment
+            Dim pkgMgr As PackageManager = globalEnv.packages
+
+            If opt.Value = "REnv" Then
+                Return Internal.invoke.ls
+            ElseIf opt.Value = "Activator" Then
+                Dim names As Array = globalEnv.types.Keys.ToArray
+                Dim fullName As Array = DirectCast(names, String()) _
+                    .Select(Function(key)
+                                Return globalEnv.types(key).fullName
+                            End Function) _
+                    .ToArray
+
+                Return New dataframe With {
+                    .columns = New Dictionary(Of String, Array) From {
+                        {"name", names},
+                        {"fullName", fullName}
+                    },
+                    .rownames = names
+                }
+            ElseIf opt.Value.DirectoryExists Then
+                ' list dir?
+                Return opt.Value _
+                    .ListFiles _
+                    .Select(AddressOf FileName) _
+                    .ToArray
+            ElseIf pkgMgr.hasLibFile(name.FileName) Then
+                ' list all of the package names in current dll module
+                Return PackageLoader _
+                    .ParsePackages(dll:=name) _
+                    .Select(Function(pkg) pkg.namespace) _
+                    .ToArray
+            Else
+                Dim func = env.enumerateFunctions _
+                    .Where(Function(fun)
+                               Return TypeOf fun.value Is RMethodInfo AndAlso DirectCast(fun.value, RMethodInfo).GetPackageInfo.namespace = name
+                           End Function) _
+                    .Select(Function(fun) DirectCast(fun.value, RMethodInfo).name) _
+                    .ToArray
+
+                If func.IsNullOrEmpty Then
+                    Return debug.stop({"invalid query term!", "term: " & name}, env)
+                Else
+                    Return func
+                End If
+            End If
         End Function
 
         <ExportAPI("objects")>
