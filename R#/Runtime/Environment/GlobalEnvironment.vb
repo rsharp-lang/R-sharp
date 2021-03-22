@@ -173,7 +173,7 @@ Namespace Runtime
                 RzipPackageFolder = PackageLoader2.GetPackageDirectory(options, packageName)
             End If
 
-            If Not packageName Like packages.loadedPackages Then
+            If (Not packageName Like packages.loadedPackages) AndAlso (Not [global].attachedNamespace.ContainsKey(packageName)) Then
                 If Not silent Then
                     Call _stdout.WriteLine($"Loading required package: {packageName}")
                 End If

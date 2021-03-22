@@ -13,8 +13,10 @@ The ``R#`` language is not designed for the general data analysis purpose, but i
 #### Directory structure
 
 + [``R#``](./R#) The R# language core runtime and scripting engine
-+ [``R.base``](./R.base) The fundation library in R# scripting system
-+ [``R-terminal``](./R-terminal) The R# shell program  
++ [``Library``](./Library) The fundation library in R# scripting system
++ [``Rscript``](./Rscript) The R# scripting host
++ [``R-terminal``](./studio/R-terminal) The R# shell program  
++ [``Rsharp_kit``](./studio/Rsharp_kit) The R-sharp toolkit
 
 #### Demo R# code
 

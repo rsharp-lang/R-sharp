@@ -64,6 +64,51 @@ Namespace Runtime.Internal.Invokes
     Module env
 
         ''' <summary>
+        ''' ### Assign a Value to a Name
+        ''' 
+        ''' Assign a value to a name in an environment.
+        ''' </summary>
+        ''' <param name="env">the environment To use. See 'Details’.</param>
+        ''' <param name="name">
+        ''' a variable name, given as a character string. No coercion is done, 
+        ''' and the first element of a character vector of length greater than 
+        ''' one will be used, with a warning.</param>
+        ''' <param name="value">a value To be assigned To x.</param>
+        ''' <returns>
+        ''' This function is invoked for its side effect, which is assigning 
+        ''' value to the variable x. If no envir is specified, then the assignment 
+        ''' takes place in the currently active environment.
+        ''' If inherits Is TRUE, enclosing environments of the supplied environment 
+        ''' are searched until the variable x Is encountered. The value Is Then 
+        ''' assigned In the environment In which the variable Is encountered 
+        ''' (provided that the binding Is Not locked: see lockBinding : If it Is, 
+        ''' an error Is signaled). If the symbol Is Not encountered Then assignment 
+        ''' takes place In the user's workspace (the global environment).
+        ''' If inherits Is FALSE, assignment takes place in the initial frame of 
+        ''' envir, unless an existing binding Is locked Or there Is no existing 
+        ''' binding And the environment Is locked (when an error Is signaled).
+        ''' </returns>
+        ''' <remarks>
+        ''' There are no restrictions on the name given as x: it can be a 
+        ''' non-syntactic name (see make.names).
+        ''' The pos argument can specify the environment In which To assign 
+        ''' the Object In any Of several ways: as -1 (the default), as a 
+        ''' positive integer (the position in the search list); as the 
+        ''' character string name of an element in the search list; Or as 
+        ''' an environment (including using sys.frame to access the currently 
+        ''' active function calls). The envir argument Is an alternative way 
+        ''' to specify an environment, but Is primarily for back compatibility.
+        ''' assign does Not dispatch assignment methods, so it cannot be used 
+        ''' To Set elements Of vectors, names, attributes, etc.
+        ''' Note that assignment To an attached list Or data frame changes the 
+        ''' attached copy And Not the original Object: see attach And With.
+        ''' </remarks>
+        <ExportAPI("set")>
+        Public Function [set](env As Environment, name As String, <RByRefValueAssign> <RRawVectorArgument> value As Object) As Object
+            Return env.AssignSymbol(name, value)
+        End Function
+
+        ''' <summary>
         ''' # Return the Value of a Named Object
         ''' 
         ''' Search by name for an object (get) or zero or more objects (mget).
