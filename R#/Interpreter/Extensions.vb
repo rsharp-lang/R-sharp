@@ -56,6 +56,9 @@ Namespace Interpreter
 
     <HideModuleName> Module Extensions
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
         ReadOnly ignores As Index(Of TokenType) = {
             TokenType.comment,
             TokenType.terminator
@@ -68,6 +71,12 @@ Namespace Interpreter
             Return block.Length = 1 AndAlso block(Scan0).name Like ignores
         End Function
 
+        ''' <summary>
+        ''' 从所输入的R脚本文本之中解析出语句表达式列表
+        ''' </summary>
+        ''' <param name="Rscript"></param>
+        ''' <param name="opts"></param>
+        ''' <returns></returns>
         <Extension>
         Public Function GetExpressions(Rscript As Rscript, opts As SyntaxBuilderOptions) As IEnumerable(Of Expression)
             Dim tokens As Token() = Rscript.GetTokens
@@ -94,6 +103,14 @@ Namespace Interpreter
             End If
         End Function
 
+        ''' <summary>
+        ''' 将单词化的R脚本文件解析为语句表达式列表
+        ''' </summary>
+        ''' <param name="tokens">R脚本单词</param>
+        ''' <param name="Rscript"></param>
+        ''' <param name="errHandler"></param>
+        ''' <param name="opts"></param>
+        ''' <returns></returns>
         <Extension>
         Public Iterator Function GetExpressions(tokens As Token(),
                                                 Rscript As Rscript,
