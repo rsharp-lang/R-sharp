@@ -1,44 +1,44 @@
 ﻿#Region "Microsoft.VisualBasic::20942b3745f88f32bb1e171154b46a49, R#\Runtime\Internal\internalInvokes\env.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module env
-    ' 
-    '         Function: [get], [typeof], CallInternal, doCall, environment
-    '                   getOutputDevice, globalenv, lockBinding, ls, objects
-    '                   objectSize, traceback, unlockBinding
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module env
+' 
+'         Function: [get], [typeof], CallInternal, doCall, environment
+'                   getOutputDevice, globalenv, lockBinding, ls, objects
+'                   objectSize, traceback, unlockBinding
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -57,6 +57,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports Microsoft.VisualBasic.Language
+Imports System.Runtime.CompilerServices
 
 Namespace Runtime.Internal.Invokes
 
@@ -151,49 +152,7 @@ Namespace Runtime.Internal.Invokes
                 ' R# runtime environment
                 Return env.symbols.Keys.ToArray
             ElseIf opt.Name.StringEmpty Then
-                If opt.Value = "REnv" Then
-                    Return Internal.invoke.ls
-                ElseIf opt.Value = "Activator" Then
-                    Dim names As Array = globalEnv.types.Keys.ToArray
-                    Dim fullName As Array = DirectCast(names, String()) _
-                        .Select(Function(key)
-                                    Return globalEnv.types(key).fullName
-                                End Function) _
-                        .ToArray
-
-                    Return New dataframe With {
-                        .columns = New Dictionary(Of String, Array) From {
-                            {"name", names},
-                            {"fullName", fullName}
-                        },
-                        .rownames = names
-                    }
-                ElseIf opt.Value.DirectoryExists Then
-                    ' list dir?
-                    Return opt.Value _
-                        .ListFiles _
-                        .Select(AddressOf FileName) _
-                        .ToArray
-                ElseIf pkgMgr.hasLibFile(name.FileName) Then
-                    ' list all of the package names in current dll module
-                    Return PackageLoader _
-                        .ParsePackages(dll:=name) _
-                        .Select(Function(pkg) pkg.namespace) _
-                        .ToArray
-                Else
-                    Dim func = env.enumerateFunctions _
-                        .Where(Function(fun)
-                                   Return TypeOf fun.value Is RMethodInfo AndAlso DirectCast(fun.value, RMethodInfo).GetPackageInfo.namespace = name
-                               End Function) _
-                        .Select(Function(fun) DirectCast(fun.value, RMethodInfo).name) _
-                        .ToArray
-
-                    If func.IsNullOrEmpty Then
-                        Return debug.stop({"invalid query term!", "term: " & name}, env)
-                    Else
-                        Return func
-                    End If
-                End If
+                Return opt.listOptionItems(name, env)
             End If
 
             Select Case opt.Name.ToLower
@@ -209,6 +168,56 @@ Namespace Runtime.Internal.Invokes
                 Case Else
                     Return debug.stop(New NotSupportedException(name), env)
             End Select
+        End Function
+
+        <Extension>
+        Private Function listOptionItems(opt As NamedValue(Of String), name$, env As Environment)
+            Dim globalEnv As GlobalEnvironment = env.globalEnvironment
+            Dim pkgMgr As PackageManager = globalEnv.packages
+
+            If opt.Value = "REnv" Then
+                Return Internal.invoke.ls
+            ElseIf opt.Value = "Activator" Then
+                Dim names As Array = globalEnv.types.Keys.ToArray
+                Dim fullName As Array = DirectCast(names, String()) _
+                    .Select(Function(key)
+                                Return globalEnv.types(key).fullName
+                            End Function) _
+                    .ToArray
+
+                Return New dataframe With {
+                    .columns = New Dictionary(Of String, Array) From {
+                        {"name", names},
+                        {"fullName", fullName}
+                    },
+                    .rownames = names
+                }
+            ElseIf opt.Value.DirectoryExists Then
+                ' list dir?
+                Return opt.Value _
+                    .ListFiles _
+                    .Select(AddressOf FileName) _
+                    .ToArray
+            ElseIf pkgMgr.hasLibFile(name.FileName) Then
+                ' list all of the package names in current dll module
+                Return PackageLoader _
+                    .ParsePackages(dll:=name) _
+                    .Select(Function(pkg) pkg.namespace) _
+                    .ToArray
+            Else
+                Dim func = env.enumerateFunctions _
+                    .Where(Function(fun)
+                               Return TypeOf fun.value Is RMethodInfo AndAlso DirectCast(fun.value, RMethodInfo).GetPackageInfo.namespace = name
+                           End Function) _
+                    .Select(Function(fun) DirectCast(fun.value, RMethodInfo).name) _
+                    .ToArray
+
+                If func.IsNullOrEmpty Then
+                    Return debug.stop({"invalid query term!", "term: " & name}, env)
+                Else
+                    Return func
+                End If
+            End If
         End Function
 
         <ExportAPI("objects")>
