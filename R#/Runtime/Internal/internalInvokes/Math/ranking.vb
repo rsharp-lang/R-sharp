@@ -152,7 +152,7 @@ Namespace Runtime.Internal.Invokes
 
             For i As Integer = 1 To rank.Length
                 di = i
-                ii.Add(Which(rank.Select(Function(xi) xi = di)).First + 1)
+                ii.Add(which(rank.Select(Function(xi) xi = di)).First + 1)
             Next
 
             Return ii.ToArray

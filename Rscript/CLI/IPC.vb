@@ -93,6 +93,30 @@ Partial Module CLI
         Dim timeout As Double = args("/timeout") Or 1000
         Dim isDebugMode As Boolean = args("--debug")
         Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
+        Dim result As Object = Nothing
+        Dim upstream As New IPEndPoint(master, port)
+
+        If Not script.FileExists Then
+            Dim msgErr As String = $"R# script file '{script.GetFullPath}' is not found on your filesystem!"
+
+            Call msgErr.PrintException
+
+            Return R.globalEnvir.postResult(
+                result:=Internal.debug.stop({
+                    msgErr,
+                    $"file: {script}",
+                    $"workdir: {App.CurrentDirectory}",
+                    $"fullName: {script.GetFullPath}"
+                }, envir:=R.globalEnvir,
+                   suppress:=True
+                ),
+                master:=upstream,
+                request_id:=request_id,
+                retryTimes:=retryTimes,
+                timeoutMS:=timeout
+            )
+        End If
+
         Dim parameters As NamedValue(Of Object)() = arguments _
             .Select(Function(a)
                         Return New NamedValue(Of Object) With {
@@ -108,8 +132,7 @@ Partial Module CLI
             Call R.LoadLibrary(packageName:=pkgName)
         Next
 
-        Dim result As Object = R.Source(script, parameters)
-        Dim upstream As New IPEndPoint(master, port)
+        result = R.Source(script, parameters)
 
         If TypeOf result Is Message Then
             Return R.globalEnvir.postResult(
