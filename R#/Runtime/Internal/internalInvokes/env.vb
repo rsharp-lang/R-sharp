@@ -1,44 +1,44 @@
 ﻿#Region "Microsoft.VisualBasic::20942b3745f88f32bb1e171154b46a49, R#\Runtime\Internal\internalInvokes\env.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module env
-    ' 
-    '         Function: [get], [typeof], CallInternal, doCall, environment
-    '                   getOutputDevice, globalenv, lockBinding, ls, objects
-    '                   objectSize, traceback, unlockBinding
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module env
+' 
+'         Function: [get], [typeof], CallInternal, doCall, environment
+'                   getOutputDevice, globalenv, lockBinding, ls, objects
+'                   objectSize, traceback, unlockBinding
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -61,6 +61,51 @@ Imports Microsoft.VisualBasic.Language
 Namespace Runtime.Internal.Invokes
 
     Module env
+
+        ''' <summary>
+        ''' ### Assign a Value to a Name
+        ''' 
+        ''' Assign a value to a name in an environment.
+        ''' </summary>
+        ''' <param name="env">the environment To use. See 'Details’.</param>
+        ''' <param name="name">
+        ''' a variable name, given as a character string. No coercion is done, 
+        ''' and the first element of a character vector of length greater than 
+        ''' one will be used, with a warning.</param>
+        ''' <param name="value">a value To be assigned To x.</param>
+        ''' <returns>
+        ''' This function is invoked for its side effect, which is assigning 
+        ''' value to the variable x. If no envir is specified, then the assignment 
+        ''' takes place in the currently active environment.
+        ''' If inherits Is TRUE, enclosing environments of the supplied environment 
+        ''' are searched until the variable x Is encountered. The value Is Then 
+        ''' assigned In the environment In which the variable Is encountered 
+        ''' (provided that the binding Is Not locked: see lockBinding : If it Is, 
+        ''' an error Is signaled). If the symbol Is Not encountered Then assignment 
+        ''' takes place In the user's workspace (the global environment).
+        ''' If inherits Is FALSE, assignment takes place in the initial frame of 
+        ''' envir, unless an existing binding Is locked Or there Is no existing 
+        ''' binding And the environment Is locked (when an error Is signaled).
+        ''' </returns>
+        ''' <remarks>
+        ''' There are no restrictions on the name given as x: it can be a 
+        ''' non-syntactic name (see make.names).
+        ''' The pos argument can specify the environment In which To assign 
+        ''' the Object In any Of several ways: as -1 (the default), as a 
+        ''' positive integer (the position in the search list); as the 
+        ''' character string name of an element in the search list; Or as 
+        ''' an environment (including using sys.frame to access the currently 
+        ''' active function calls). The envir argument Is an alternative way 
+        ''' to specify an environment, but Is primarily for back compatibility.
+        ''' assign does Not dispatch assignment methods, so it cannot be used 
+        ''' To Set elements Of vectors, names, attributes, etc.
+        ''' Note that assignment To an attached list Or data frame changes the 
+        ''' attached copy And Not the original Object: see attach And With.
+        ''' </remarks>
+        <ExportAPI("set")>
+        Public Function [set](env As Environment, name As String, <RByRefValueAssign> <RRawVectorArgument> value As Object) As Object
+            Return env.AssignSymbol(name, value)
+        End Function
 
         ''' <summary>
         ''' # Return the Value of a Named Object

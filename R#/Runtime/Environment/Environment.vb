@@ -341,6 +341,16 @@ Namespace Runtime
                 .ToArray
         End Function
 
+        Public Function AssignSymbol(name As String, value As Object, Optional [strict] As Boolean = False) As Object
+            If symbols.ContainsKey(name) Then
+                Return symbols(name).SetValue(value, Me)
+            ElseIf strict Then
+                Return Message.SymbolNotFound(Me, name, TypeCodes.generic)
+            Else
+                Return Push(name, value, [readonly]:=False, TypeCodes.generic)
+            End If
+        End Function
+
         ''' <summary>
         ''' Variable declare
         ''' </summary>
