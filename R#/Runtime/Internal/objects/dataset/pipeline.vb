@@ -56,6 +56,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports System.Runtime.CompilerServices
 
 Namespace Runtime.Internal.Object
 
