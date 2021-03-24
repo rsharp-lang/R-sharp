@@ -47,16 +47,15 @@
 #If netcore5 = 1 Then
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 #Else
-Imports System.Runtime.CompilerServices
 Imports System.Web.Script.Serialization
 #End If
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports System.Runtime.CompilerServices
 
 Namespace Runtime.Internal.Object
 
