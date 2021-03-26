@@ -78,6 +78,12 @@ Namespace Runtime.Internal.Invokes
 
     Public Module stringr
 
+        ''' <summary>
+        ''' comvert any object to html text document
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("html")>
         Public Function html(<RRawVectorArgument> x As Object, env As Environment) As Object
             If x Is Nothing Then
@@ -88,7 +94,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
-        ''' Convert an R Object to a Character String
+        ''' # Convert an R Object to a Character String
         ''' 
         ''' This is a helper function for format to produce a 
         ''' single character string describing an R object.
@@ -98,14 +104,40 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("toString")>
         <RApiReturn(GetType(String))>
-        Public Function [string](<RRawVectorArgument> x As Object, env As Environment) As Object
+        Public Function [string](<RRawVectorArgument> x As Object, Optional format$ = Nothing, Optional env As Environment = Nothing) As Object
             If x Is Nothing Then
                 Return ""
-            ElseIf x.GetType.IsArray Then
-                Return printer.getStrings(x, Nothing, env.globalEnvironment).ToArray
-            Else
-                Return printer.ToString(x.GetType, env.globalEnvironment, True, False)(x)
             End If
+
+            Dim seqData As Array = REnv.TryCastGenericArray(REnv.asVector(Of Object)(x), env)
+            Dim toString As Func(Of Object, String)
+
+            If format.StringEmpty Then
+                toString = Function(xi) xi.ToString
+            ElseIf seqData.GetType.GetElementType Is Nothing Then
+                toString = Function(xi) xi.ToString
+            Else
+                Dim type As Type = seqData.GetType.GetElementType
+                Dim toStringF As MethodInfo = type _
+                    .GetMethods(PublicProperty) _
+                    .Where(Function(f)
+                               Dim args = f.GetParameters
+                               Return args.Length = 1 AndAlso args(Scan0).ParameterType Is GetType(String)
+                           End Function) _
+                    .FirstOrDefault
+
+                If toStringF Is Nothing Then
+                    toString = Function(xi) xi.ToString
+                    env.AddMessage($"a format text '{format}' is given, but typeof '{type.Name}' is not accept such format parameter...")
+                Else
+                    toString = Function(xi) DirectCast(toStringF.Invoke(xi, {format}), String)
+                End If
+            End If
+
+            Return seqData _
+                .AsObjectEnumerator _
+                .Select(toString) _
+                .ToArray
         End Function
 
         <ExportAPI("loadXml")>

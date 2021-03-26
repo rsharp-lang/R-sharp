@@ -54,6 +54,9 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Interpreter
 
+    ''' <summary>
+    ''' 使用for循环执行脚本语句
+    ''' </summary>
     Public NotInheritable Class ExecutableLoop
 
         Shared ReadOnly Rsharp As Process = Process.GetCurrentProcess()
