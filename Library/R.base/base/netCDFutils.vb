@@ -178,7 +178,7 @@ Module netCDFutils
         End If
 
         Dim var As variable = DirectCast(file, netCDFReader).getDataVariableEntry(name)
-        Dim data As CDFData = DirectCast(file, netCDFReader).getDataVariable(var)
+        Dim data As ICDFDataVector = DirectCast(file, netCDFReader).getDataVariable(var)
 
         var.value = data
 

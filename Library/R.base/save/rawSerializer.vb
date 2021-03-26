@@ -89,7 +89,7 @@ Module rawSerializer
             If elTypes Is GetType(String) Then
                 Call cdf.writeString(symbolRef, REnv.asVector(Of String)(vector))
             Else
-                Dim value As CDFData = (CObj(vector), elTypes.GetCDFTypeCode)
+                Dim value As ICDFDataVector = FromAny(CObj(vector), elTypes.GetCDFTypeCode)
                 Dim attributes As cdfAttribute() = {
                     New cdfAttribute With {.name = "length", .type = CDFDataTypes.INT, .value = vector.Length},
                     New cdfAttribute With {.name = "type", .type = CDFDataTypes.INT, .value = CInt(elTypes.GetRTypeCode)}
@@ -110,7 +110,7 @@ Module rawSerializer
 
             Call sb.Flush()
 
-            Dim value As New CDFData With {.chars = buffer.ToArray.ToBase64String}
+            Dim value As ICDFDataVector = CType(buffer.ToArray.ToBase64String.ToArray, chars)
             Dim attributes As cdfAttribute() = {
                 New cdfAttribute With {.name = "length", .type = CDFDataTypes.INT, .value = strings.Length},
                 New cdfAttribute With {.name = "type", .type = CDFDataTypes.INT, .value = CInt(TypeCodes.string)}
@@ -129,7 +129,7 @@ Module rawSerializer
             New cdfAttribute With {.name = "ncols", .type = CDFDataTypes.INT, .value = table.ncols},
             New cdfAttribute With {.name = "nrows", .type = CDFDataTypes.INT, .value = table.nrows}
         }
-        Dim symbolVal As CDFData = {CInt(TypeCodes.dataframe)}
+        Dim symbolVal As ICDFDataVector = CType({CInt(TypeCodes.dataframe)}, integers)
 
         Call cdf.AddVariable(symbolRef, symbolVal, {cdf.getDimension(GetType(Integer).FullName)}, attributes)
 
@@ -159,7 +159,7 @@ Module rawSerializer
             New cdfAttribute With {.name = "length", .type = CDFDataTypes.INT, .value = list.Count}，
             New cdfAttribute With {.name = "type", .type = CDFDataTypes.INT, .value = CInt(TypeCodes.list)}
         }
-        Dim symbolVal As CDFData = {CInt(TypeCodes.list)}
+        Dim symbolVal As ICDFDataVector = CType({CInt(TypeCodes.list)}, integers)
 
         Call cdf.AddVariable(symbolRef, symbolVal, {cdf.getDimension(GetType(Integer).FullName)}, attributes)
 
