@@ -871,7 +871,7 @@
     <Compile Include="Runtime\Internal\internalInvokes\Linq\Group.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\Linq\linq.vb" />
     <Compile Include="Runtime\Internal\internalInvokes\Math\math.vb" />
-    <Compile Include="Runtime\Internal\internalInvokes\string\string.vb" />
+    <Compile Include="Runtime\Internal\internalInvokes\string\stringr.vb" />
     <Compile Include="Runtime\Internal\objects\RConversion\conversion.vb" />
     <Compile Include="Runtime\Internal\printer\classPrinter.vb" />
     <Compile Include="Runtime\Internal\objects\dataset\vbObject.vb" />
