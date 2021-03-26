@@ -55,8 +55,8 @@ Module rawDeserializer
 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     <Extension>
-    Friend Function decodeStringVector(value As CDFData) As String()
-        Return value.chars.DecodeBase64.LoadJSON(Of String())
+    Friend Function decodeStringVector(value As ICDFDataVector) As String()
+        Return DirectCast(value, chars).CharString.DecodeBase64.LoadJSON(Of String())
     End Function
 
     Public Iterator Function loadObject(file As netCDFReader, symbols As String()) As IEnumerable(Of NamedValue(Of Object))
@@ -126,7 +126,7 @@ Module rawDeserializer
 
     <Extension>
     Public Function loadStrings(file As netCDFReader, symbolRef As String) As Object
-        Dim data As CDFData = file.getDataVariable(symbolRef)
+        Dim data As ICDFDataVector = file.getDataVariable(symbolRef)
         Dim strings As String() = data.decodeStringVector
 
         Return strings
@@ -134,7 +134,7 @@ Module rawDeserializer
 
     <Extension>
     Public Function loadElse(file As netCDFReader, symbolRef As String, type As TypeCodes) As Object
-        Dim data As CDFData = file.getDataVariable(symbolRef)
+        Dim data As ICDFDataVector = file.getDataVariable(symbolRef)
         Dim value As Object
 
         Select Case type
