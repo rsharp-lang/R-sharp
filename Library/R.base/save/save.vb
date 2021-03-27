@@ -187,14 +187,7 @@ Partial Module base
             New cdfAttribute With {.name = "level", .type = CDFDataTypes.INT, .value = CInt(RData.RDA)},
             New cdfAttribute With {.name = "time", .type = CDFDataTypes.DOUBLE, .value = UnixTimeStamp},
             New cdfAttribute With {.name = "github", .type = CDFDataTypes.CHAR, .value = LICENSE.githubURL}
-        ).Dimensions(Dimension.Byte,
-                     Dimension.Boolean,
-                     Dimension.Double,
-                     Dimension.Float,
-                     Dimension.Integer,
-                     Dimension.Long,
-                     Dimension.Short,
-                     Dimension.Text(maxChartSize))
+        )
 
             Dim Robjects As New NamedValue(Of Object) With {
                 .Name = "R#.objects",
@@ -256,13 +249,7 @@ Partial Module base
             New cdfAttribute With {.name = "maxCharSize", .type = CDFDataTypes.INT, .value = maxChartSize},
             New cdfAttribute With {.name = "level", .type = CDFDataTypes.INT, .value = CInt(RData.RDS)},
             New cdfAttribute With {.name = "version", .type = CDFDataTypes.CHAR, .value = version}
-        ).Dimensions(Dimension.Byte,
-                     Dimension.Double,
-                     Dimension.Float,
-                     Dimension.Integer,
-                     Dimension.Long,
-                     Dimension.Short,
-                     Dimension.Text(maxChartSize))
+        )
 
             Call cdf.writeObject("data", [object])
         End Using

@@ -95,6 +95,26 @@ Module netCDFutils
         End If
     End Function
 
+    <ExportAPI("dimensions")>
+    Public Function dimensions(file As Object, Optional env As Environment = Nothing) As Object
+        If TypeOf file Is String Then
+            file = netCDFReader.Open(DirectCast(file, String))
+        End If
+        If Not TypeOf file Is netCDFReader Then
+            Return Internal.debug.stop(New NotImplementedException, env)
+        End If
+
+        Dim dims = DirectCast(file, netCDFReader).dimensions
+        Dim record = {DirectCast(file, netCDFReader).recordDimension}
+        Dim table As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
+
+        table.columns("name") = dims.Select(Function(d) d.name).JoinIterates(record.Select(Function(d) d.name)).ToArray
+        table.columns("size") = dims.Select(Function(d) d.size).JoinIterates(record.Select(Function(d) d.length)).ToArray
+        table.columns("record") = dims.Select(Function(d) False).JoinIterates(record.Select(Function(d) True)).ToArray
+
+        Return table
+    End Function
+
     <ExportAPI("globalAttributes")>
     Public Function globalAttributes(file As Object, Optional list As Boolean = False, Optional env As Environment = Nothing) As Object
         If TypeOf file Is String Then
