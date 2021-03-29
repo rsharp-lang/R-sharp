@@ -59,6 +59,10 @@ Namespace Runtime.Internal.Object
             Dim nameAll As New List(Of String)
 
             For Each name As String In nameList
+                If name Is Nothing Then
+                    name = "X"
+                End If
+
                 name = name _
                     .Select(Function(c)
                                 If c = "_"c AndAlso allow_ Then
