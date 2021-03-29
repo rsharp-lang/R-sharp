@@ -123,8 +123,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Dim method As Symbol = globalEnv.FindFunction(funcName)
 
             If (Not method Is Nothing) AndAlso
-                TypeOf method Is INamespaceReferenceSymbol AndAlso
-                DirectCast(method, INamespaceReferenceSymbol).namespace = [namespace] Then
+                TypeOf method.value Is INamespaceReferenceSymbol AndAlso
+                DirectCast(method.value, INamespaceReferenceSymbol).namespace = [namespace] Then
 
                 Return method.value
             End If
