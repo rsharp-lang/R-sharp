@@ -98,4 +98,10 @@ Namespace Runtime.Components.Interface
         ReadOnly Property stackFrame As StackFrame
 
     End Interface
+
+    Public Interface INamespaceReferenceSymbol
+
+        ReadOnly Property [namespace] As String
+
+    End Interface
 End Namespace

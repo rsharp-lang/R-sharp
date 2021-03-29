@@ -71,6 +71,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
     Public Class DeclareNewFunction : Inherits Expression
         Implements RFunction
         Implements IRuntimeTrace
+        Implements INamespaceReferenceSymbol
 
         Public Overrides ReadOnly Property type As TypeCodes
             Get
@@ -88,7 +89,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         ''' 这个是当前的这个函数的程序包来源名称，在运行时创建的函数的命令空间为``SMRUCC/R#_runtime``
         ''' </summary>
         ''' <returns></returns>
-        Public Property [Namespace] As String = SyntaxBuilderOptions.R_runtime
+        Public Property [Namespace] As String = SyntaxBuilderOptions.R_runtime Implements INamespaceReferenceSymbol.namespace
 
         Public ReadOnly Property funcName As String Implements RFunction.name
         Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame

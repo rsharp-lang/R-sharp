@@ -301,7 +301,9 @@ Namespace Runtime
         ''' </summary>
         ''' <param name="name"></param>
         ''' <param name="[inherits]"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' returns nothing if symbol not found
+        ''' </returns>
         Public Function FindFunction(name As String, Optional [inherits] As Boolean = True) As Symbol
             If (name.First = "["c AndAlso name.Last = "]"c) Then
                 Return globalEnvironment.FindFunction(name.GetStackValue("[", "]"))

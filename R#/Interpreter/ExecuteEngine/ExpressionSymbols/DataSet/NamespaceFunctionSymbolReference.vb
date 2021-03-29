@@ -101,16 +101,40 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End Select
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="env"></param>
+        ''' <param name="namespace$"></param>
+        ''' <param name="funcNameSymbol"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' find in runtime environment at first
+        ''' and then installed packages
+        ''' </remarks>
         Friend Shared Function getPackageApiImpl(env As Environment, namespace$, funcNameSymbol As Expression) As Object
+            Dim funcName As Object = getFuncNameSymbolText(funcNameSymbol, env)
+
+            If TypeOf funcName Is Message Then
+                Return funcName
+            End If
+
+            Dim globalEnv As GlobalEnvironment = env.globalEnvironment
+            Dim method As Symbol = globalEnv.FindFunction(funcName)
+
+            If (Not method Is Nothing) AndAlso
+                TypeOf method Is INamespaceReferenceSymbol AndAlso
+                DirectCast(method, INamespaceReferenceSymbol).namespace = [namespace] Then
+
+                Return method.value
+            End If
+
             ' find package and then load method
             Dim [error] As Exception = Nothing
-            Dim pkg As RPkg = env.globalEnvironment.packages.FindPackage([namespace], [error])
-            Dim funcName As Object
+            Dim pkg As RPkg = globalEnv.packages.FindPackage([namespace], [error])
 
             If Not [error] Is Nothing Then
                 Return Internal.debug.stop([error], env)
-            Else
-                funcName = getFuncNameSymbolText(funcNameSymbol, env)
             End If
 
             If pkg Is Nothing Then
@@ -121,8 +145,6 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 End If
 
                 Return DirectCast(funcName, Symbol).value
-            ElseIf funcName.GetType Is GetType(Message) Then
-                Return funcName
             Else
                 Dim funcNameText As String = funcName.ToString
                 Dim api As RMethodInfo = pkg.GetFunction(funcNameText)
