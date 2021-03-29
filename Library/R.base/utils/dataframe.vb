@@ -63,6 +63,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports any = Microsoft.VisualBasic.Scripting
 Imports csv = Microsoft.VisualBasic.Data.csv.IO.File
 Imports Idataframe = Microsoft.VisualBasic.Data.csv.IO.DataFrame
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
@@ -311,14 +312,42 @@ Module dataframe
         Return New RDispose(table, Sub() table.Save(file, textEncode))
     End Function
 
+    <ExportAPI("as.dataframe.raw")>
+    <RApiReturn(GetType(File))>
+    Public Function AsDataframeRaw(<RRawVectorArgument> rows As Object,
+                                   <RRawVectorArgument>
+                                   Optional colnames As Object = Nothing,
+                                   Optional env As Environment = Nothing) As Object
+
+        Dim rowCols As RowObject()
+        Dim rowPipe As pipeline = pipeline.TryCreatePipeline(Of RowObject)(rows, env)
+
+        If rowPipe.isError Then
+            Return rowPipe.getError
+        Else
+            rowCols = rowPipe _
+                .populates(Of RowObject)(env) _
+                .ToArray
+        End If
+
+        If colnames Is Nothing Then
+            Return New csv(rowCols)
+        Else
+            Dim names As String() = REnv.asVector(Of String)(colnames)
+            Dim headers As New RowObject(names)
+
+            Return New csv().AppendLine(headers).AppendLines(rowCols)
+        End If
+    End Function
+
     <ExportAPI("row")>
     Public Function CreateRowObject(Optional vals As Array = Nothing) As RowObject
-        Return New RowObject(vals.AsObjectEnumerator.Select(AddressOf Scripting.ToString))
+        Return New RowObject(vals.AsObjectEnumerator.Select(AddressOf any.ToString))
     End Function
 
     <ExportAPI("append.cells")>
     Public Function appendCells(row As RowObject, cells As Array) As RowObject
-        row.AddRange(cells.AsObjectEnumerator.Select(AddressOf Scripting.ToString))
+        row.AddRange(cells.AsObjectEnumerator.Select(AddressOf any.ToString))
         Return row
     End Function
 

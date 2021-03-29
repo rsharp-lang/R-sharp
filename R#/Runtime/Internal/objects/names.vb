@@ -1,43 +1,43 @@
 ﻿#Region "Microsoft.VisualBasic::2b389cedcb720fcda0a82290f6b8064a, R#\Runtime\Internal\objects\names.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module names
-    ' 
-    '         Function: getColNames, getNames, getRowNames, makeNames, setColNames
-    '                   setNames, setRowNames, uniqueNames
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module names
+' 
+'         Function: getColNames, getNames, getRowNames, makeNames, setColNames
+'                   setNames, setRowNames, uniqueNames
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -55,6 +55,23 @@ Namespace Runtime.Internal.Object
     Public Module names
 
         <Extension>
+        Private Function checkChar(c As Char, allow_ As Boolean) As Char
+            If c = "_"c AndAlso allow_ Then
+                Return c
+            End If
+
+            If c >= "a"c AndAlso c <= "z"c Then
+                Return c
+            ElseIf c >= "A"c AndAlso c <= "Z"c Then
+                Return c
+            ElseIf c >= "0"c AndAlso c <= "9"c Then
+                Return c
+            Else
+                Return "."c
+            End If
+        End Function
+
+        <Extension>
         Public Function makeNames(nameList As IEnumerable(Of String), Optional unique As Boolean = False, Optional allow_ As Boolean = True) As String()
             Dim nameAll As New List(Of String)
 
@@ -64,21 +81,7 @@ Namespace Runtime.Internal.Object
                 End If
 
                 name = name _
-                    .Select(Function(c)
-                                If c = "_"c AndAlso allow_ Then
-                                    Return c
-                                Else
-                                    If c >= "a"c AndAlso c <= "z"c Then
-                                        Return c
-                                    ElseIf c >= "A"c AndAlso c <= "Z"c Then
-                                        Return c
-                                    ElseIf c >= "0"c AndAlso c <= "9"c Then
-                                        Return c
-                                    Else
-                                        Return "."c
-                                    End If
-                                End If
-                            End Function) _
+                    .Select(Function(c) c.checkChar(allow_)) _
                     .CharString
 
                 Call nameAll.Add(name)
