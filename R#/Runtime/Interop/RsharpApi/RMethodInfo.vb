@@ -65,7 +65,7 @@ Namespace Runtime.Interop
     ''' <summary>
     ''' Use for R# package method
     ''' </summary>
-    Public Class RMethodInfo : Implements RFunction, RPrint
+    Public Class RMethodInfo : Implements RFunction, RPrint, INamespaceReferenceSymbol
 
         ''' <summary>
         ''' The function name
@@ -80,6 +80,12 @@ Namespace Runtime.Interop
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property invisible As Boolean
+
+        Public ReadOnly Property [namespace] As String Implements INamespaceReferenceSymbol.namespace
+            Get
+                Return GetPackageInfo.namespace
+            End Get
+        End Property
 
         ReadOnly api As MethodInvoke
 
