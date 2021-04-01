@@ -600,15 +600,37 @@ Namespace Runtime.Internal.Invokes
         ''' See section ‘Modes’ for possible values.
         ''' </param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' + ``stdin``  for stdinput stream, and
+        ''' + ``stdout`` for stdoutput stream.
+        ''' </remarks>
         <ExportAPI("file")>
         Public Function file(description$,
                              Optional open As FileMode = FileMode.OpenOrCreate,
-                             Optional truncate As Boolean = False) As FileStream
+                             Optional truncate As Boolean = False) As Stream
 
-            If open = FileMode.Truncate OrElse open = FileMode.CreateNew Then
-                Return description.Open(open, doClear:=truncate)
+            If description.TextEquals("stdin") Then
+                ' read from console stdinput
+                ' can not truncated
+                If truncate Then
+                    Call $"you can'nt truncate the standard input stream.".Warning
+                End If
+
+                Return Console.OpenStandardInput
+            ElseIf description.TextEquals("stdout") Then
+                ' write to console stdoutput
+                ' can not truncated
+                If truncate Then
+                    Call $"you can'nt truncate the standard output stream.".Warning
+                End If
+
+                Return Console.OpenStandardOutput
             Else
-                Return description.Open(open, doClear:=False)
+                If open = FileMode.Truncate OrElse open = FileMode.CreateNew Then
+                    Return description.Open(open, doClear:=truncate)
+                Else
+                    Return description.Open(open, doClear:=False)
+                End If
             End If
         End Function
 
