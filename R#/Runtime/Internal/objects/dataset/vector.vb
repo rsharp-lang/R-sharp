@@ -181,7 +181,7 @@ Namespace Runtime.Internal.Object
             If Not name Like nameIndex Then
                 Return Nothing
             Else
-                Return getByIndex(nameIndex.IndexOf(name))
+                Return getByIndex(nameIndex.IndexOf(name) + 1)
             End If
         End Function
 

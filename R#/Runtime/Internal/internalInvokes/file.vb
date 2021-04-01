@@ -1,50 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::829d3261ac362d2f27cc6c1b91144ecb, R#\Runtime\Internal\internalInvokes\file.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module file
-    ' 
-    '         Function: basename, buffer, close, dataUri, dir_exists
-    '                   dirCopy, dirCreate, dirname, exists, file
-    '                   filecopy, fileinfo, fileInfoByFile, getwd, listDirs
-    '                   listFiles, loadListInternal, NextTempToken, normalizeFileName, normalizePath
-    '                   openGzip, openZip, readBin, readLines, readList
-    '                   readText, Rhome, saveList, setwd, tempdir
-    '                   tempfile, writeLines
-    ' 
-    '         Sub: fileRemove, fileRename
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module file
+' 
+'         Function: basename, buffer, close, dataUri, dir_exists
+'                   dirCopy, dirCreate, dirname, exists, file
+'                   filecopy, fileinfo, fileInfoByFile, getwd, listDirs
+'                   listFiles, loadListInternal, NextTempToken, normalizeFileName, normalizePath
+'                   openGzip, openZip, readBin, readLines, readList
+'                   readText, Rhome, saveList, setwd, tempdir
+'                   tempfile, writeLines
+' 
+'         Sub: fileRemove, fileRename
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -64,11 +64,12 @@ Imports Microsoft.VisualBasic.My.UNIX
 Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text
+Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Serialize
-Imports SMRUCC.Rsharp.Development.Components
+Imports any = Microsoft.VisualBasic.Scripting
 Imports BASICString = Microsoft.VisualBasic.Strings
 Imports fsOptions = Microsoft.VisualBasic.FileIO.SearchOption
 Imports randf = Microsoft.VisualBasic.Math.RandomExtensions
@@ -390,10 +391,43 @@ Namespace Runtime.Internal.Invokes
             Return files.Select(AddressOf FileExists).ToArray
         End Function
 
+        ''' <summary>
+        ''' dir.create creates the last element of the path, unless recursive = TRUE. 
+        ''' Trailing path separators are discarded. On Windows drives are allowed in 
+        ''' the path specification and unless the path is rooted, it will be interpreted 
+        ''' relative to the current directory on that drive. mode is ignored on Windows.
+        ''' 
+        ''' One of the idiosyncrasies of Windows Is that directory creation may report 
+        ''' success but create a directory with a different name, for example dir.create("G.S.") 
+        ''' creates '"G.S"’. This is undocumented, and what are the precise circumstances 
+        ''' is unknown (and might depend on the version of Windows). Also avoid directory 
+        ''' names with a trailing space.
+        ''' </summary>
+        ''' <param name="path">a character vector containing a single path name.</param>
+        ''' <param name="showWarnings">logical; should the warnings on failure be shown?</param>
+        ''' <param name="recursive">logical. Should elements of the path other than the last be created? 
+        ''' If true, Like the Unix command mkdir -p.</param>
+        ''' <param name="mode">the mode To be used On Unix-alikes: it will be coerced by as.octmode. 
+        ''' For Sys.chmod it Is recycled along paths.</param>
+        ''' <returns>
+        ''' dir.create and Sys.chmod return invisibly a logical vector indicating if 
+        ''' the operation succeeded for each of the files attempted. Using a missing 
+        ''' value for a path name will always be regarded as a failure. dir.create 
+        ''' indicates failure if the directory already exists. If showWarnings = TRUE, 
+        ''' dir.create will give a warning for an unexpected failure (e.g., not for a 
+        ''' missing value nor for an already existing component for recursive = TRUE).
+        ''' </returns>
+        ''' <remarks>
+        ''' There is no guarantee that these functions will handle Windows relative paths 
+        ''' of the form ‘d:path’: try ‘d:./path’ instead. In particular, ‘d:’ is 
+        ''' not recognized as a directory. Nor are \\?\ prefixes (and similar) supported.
+        ''' 
+        ''' UTF-8-encoded dirnames Not valid in the current locale can be used.
+        ''' </remarks>
         <ExportAPI("dir.create")>
         Public Function dirCreate(path$, Optional showWarnings As Boolean = True, Optional recursive As Boolean = False, Optional mode$ = "0777") As Boolean
             If showWarnings AndAlso path.DirectoryExists Then
-
+                Call $"in dir.create(""{path}"") : '{path}' already exists".Warning
             End If
 
             Call path.MkDIR
@@ -422,13 +456,35 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="con">a connection object or a character string.</param>
         ''' <returns></returns>
         <ExportAPI("readLines")>
-        Public Function readLines(con As String, Optional encoding As Encodings = Encodings.UTF8) As String()
-            Return con.ReadAllLines(encoding.CodePage)
+        Public Function readLines(con As Object, Optional encoding As Encodings = Encodings.UTF8) As String()
+            If TypeOf con Is Stream Then
+                Dim text As New StreamReader(DirectCast(con, Stream))
+                Dim lines As New List(Of String)
+                Dim line As Value(Of String) = ""
+
+                Do While True
+                    If Not (line = text.ReadLine) Is Nothing Then
+                        lines.Add(line)
+                    End If
+                Loop
+
+                Return lines.ToArray
+            Else
+                Return any _
+                    .ToString(con) _
+                    .ReadAllLines(encoding.CodePage)
+            End If
         End Function
 
+        ''' <summary>
+        ''' Reads all characters from the current position to the end of the given stream.
+        ''' </summary>
+        ''' <param name="con"></param>
+        ''' <param name="encoding"></param>
+        ''' <returns></returns>
         <ExportAPI("readText")>
-        Public Function readText(con As String, Optional encoding As Encodings = Encodings.UTF8) As String
-            Return con.ReadAllText(encoding.CodePage)
+        Public Function readText(con As Object, Optional encoding As Encodings = Encodings.UTF8) As String
+            Return readLines(con, encoding).JoinBy(vbLf)
         End Function
 
         ' writeLines(text, con = stdout(), sep = "\n", useBytes = FALSE)
@@ -838,7 +894,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         Private Function NextTempToken() As String
-            Return (randf.NextInteger(10000).ToString & Now.ToString).MD5.Substring(3, 9)
+            Return (randf.NextInteger(10000).ToString & now.ToString).MD5.Substring(3, 9)
         End Function
 
         ''' <summary>
