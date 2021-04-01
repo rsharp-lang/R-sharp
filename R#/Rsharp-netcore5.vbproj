@@ -16,7 +16,7 @@
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Description>R# language runtime and script interpreter</Description>
-		<Configurations>Debug;Release;Rsharp_app_release;LipidSearch;PlantMAT</Configurations>
+		<Configurations>Debug;Release;Rsharp_app_release;LipidSearch;PlantMAT;mzkit</Configurations>
 		<RepositoryType>git</RepositoryType>
 		<AnalysisLevel>preview</AnalysisLevel>
 	</PropertyGroup>
@@ -47,6 +47,11 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rsharp_app_release|AnyCPU'">
+	  <DocumentationFile>REnv.xml</DocumentationFile>
+	  <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit|AnyCPU'">
 	  <DocumentationFile>REnv.xml</DocumentationFile>
 	  <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 	</PropertyGroup>
@@ -83,6 +88,20 @@
 	  <DefineTrace>true</DefineTrace>
 	  <BaseAddress>4194304</BaseAddress>
 	  <OutputPath>D:\GCModeller\src\R-sharp\App\</OutputPath>
+	  <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit|x64'">
+	  <DocumentationFile>REnv.xml</DocumentationFile>
+	  <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
+	  <RemoveIntegerChecks>true</RemoveIntegerChecks>
+	  <Optimize>false</Optimize>
+	  <DebugSymbols>true</DebugSymbols>
+	  <DebugType>full</DebugType>
+	  <DefineDebug>false</DefineDebug>
+	  <DefineTrace>true</DefineTrace>
+	  <BaseAddress>4194304</BaseAddress>
+	  <OutputPath>D:\mzkit\Rscript\Library\mzkit_app\assembly\</OutputPath>
 	  <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 	</PropertyGroup>
 
