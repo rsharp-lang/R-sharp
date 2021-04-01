@@ -244,6 +244,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 Else
                     Return Internal.debug.stop("dataframe get by column name only supprts one key element!", envir)
                 End If
+            ElseIf objType Is GetType(vector) Then
+                If indexer.Length = 1 Then
+                    Return DirectCast(obj, vector).getByName(any.ToString(indexer.GetValue(Scan0)))
+                Else
+                    Return Internal.debug.stop("attempt to select more than one element in vectorIndex", envir)
+                End If
             ElseIf Not objType.ImplementInterface(GetType(RNameIndex)) Then
                 If objType.ImplementInterface(Of IDictionary) AndAlso objType.GenericTypeArguments(Scan0) Is GetType(String) Then
                     Dim keys As String() = REnv.asVector(Of String)(indexer)
