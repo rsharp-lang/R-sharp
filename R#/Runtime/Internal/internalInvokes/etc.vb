@@ -240,12 +240,19 @@ Namespace Runtime.Internal.Invokes
             Dim core As AssemblyInfo = GetType(Environment).Assembly.FromAssembly
             Dim version As Version = Version.Parse(core.AssemblyVersion)
             Dim built As DateTime = core.BuiltTime
+            Dim framework As String
+
+#If netcore5 = 1 Then
+            framework = ".NET Core 5.0"
+#Else
+            framework = ".NET Framework v4.8"
+#End If
 
             Return New list With {
                 .slots = New Dictionary(Of String, Object) From {
-                    {"platform", "Microsoft VisualStudio 2019/.NET Framework v4.8/Microsoft VisualBasic.NET"},
+                    {"platform", $"Microsoft VisualStudio 2019/{framework}/Microsoft VisualBasic.NET"},
                     {"arch", "x86_64"},
-                    {"os", ".NET Framework v4.8"},
+                    {"os", framework},
                     {"system", Win32.OSVersion.VersionString},
                     {"status", Win32.OSVersion.ServicePack},
                     {"major", version.Major},

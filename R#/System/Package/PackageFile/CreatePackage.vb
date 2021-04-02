@@ -157,7 +157,7 @@ Namespace Development.Package.File
             file.dataSymbols = getDataSymbols($"{target}/data")
 
             Call Console.WriteLine($"     query package dependency...")
-            file.loading = loading.loadingDependency
+            file.loading = loading.loadingDependency.ToArray
 
             Call Console.WriteLine($"     write binary zip package...")
             file.Flush(outfile)
@@ -246,8 +246,8 @@ Namespace Development.Package.File
         End Function
 
         <Extension>
-        Private Function loadingDependency(loading As IEnumerable(Of Expression)) As Dependency()
-            Return loading _
+        Private Iterator Function loadingDependency(loading As IEnumerable(Of Expression)) As IEnumerable(Of Dependency)
+            Dim allDeps = loading _
                 .Where(Function(i)
                            If Not TypeOf i Is [Imports] Then
                                Return True
@@ -257,6 +257,31 @@ Namespace Development.Package.File
                        End Function) _
                 .DoCall(AddressOf Dependency.GetDependency) _
                 .ToArray
+            Dim load As New List(Of (name$, pkg$))
+
+            For Each dep As Dependency In allDeps
+                If dep.packages.IsNullOrEmpty Then
+                    load.Add(("", dep.library))
+                Else
+                    dep.packages _
+                        .Select(Function(name) (name, dep.library)) _
+                        .DoCall(AddressOf load.AddRange)
+                End If
+            Next
+
+            For Each libfile In load.GroupBy(Function(a) a.pkg)
+                If libfile.Any(Function(a) a.name = "") Then
+                    Yield New Dependency With {.packages = {}, .library = libfile.Key}
+                Else
+                    Yield New Dependency With {
+                        .library = libfile.Key,
+                        .packages = libfile _
+                            .Select(Function(d) d.name) _
+                            .Distinct _
+                            .ToArray
+                    }
+                End If
+            Next
         End Function
 
         Private Function getDataSymbols(dir As String) As Dictionary(Of String, String)

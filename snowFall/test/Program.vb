@@ -1,51 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::66baba9366553a4195bd6757141e6550, snowFall\test\Program.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module Program
-    ' 
-    '     Function: createErrorMessage, demoTask, populate
-    ' 
-    '     Sub: ErrorTest, Main, serializeTest
-    ' 
-    ' Class integerValue
-    ' 
-    '     Properties: vector
-    '     Operators: ^, +
-    ' 
-    ' /********************************************************************************/
+' Module Program
+' 
+'     Function: createErrorMessage, demoTask, populate
+' 
+'     Sub: ErrorTest, Main, serializeTest
+' 
+' Class integerValue
+' 
+'     Properties: vector
+'     Operators: ^, +
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Data
 Imports System.Threading
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Parallel
@@ -54,16 +55,26 @@ Imports snowFall.Protocol
 
 Module Program
 
+    ReadOnly longStrings = {
+        New String("c"c, 10240),
+        RandomASCIIString(409600),
+        New String("+"c, 8888888)
+    }
+
     Sub ErrorTest()
         Dim host2 As New SlaveTask(Host.CreateProcessor, AddressOf Host.SlaveTask, 6588, ignoreError:=True)
-        Dim taskApi As New Func(Of String, Integer())(AddressOf createErrorMessage)
+        Dim taskApi As New Func(Of String, String(), Integer())(AddressOf createErrorMessage)
 
-        Call host2.RunTask(Of Integer())(taskApi, "hello world!")
+        Dim result = host2.RunTask(Of Integer())(taskApi, "hello world!", longStrings)
 
         Pause()
     End Sub
 
-    Public Function createErrorMessage(message As String) As Integer()
+    Public Function createErrorMessage(message As String, longStringCollection As String()) As Integer()
+        For Each line As String In longStringCollection
+            Call Console.WriteLine(line)
+        Next
+
         Throw New InvalidProgramException($"test error message: '{message}'")
     End Function
 
@@ -71,7 +82,7 @@ Module Program
         Try
             Try
                 Try
-                    Call createErrorMessage("12345")
+                    Call createErrorMessage("12345", longStrings)
                 Catch ex As Exception
                     Throw New SyntaxErrorException("bbbbb", ex)
                 End Try
@@ -91,7 +102,7 @@ Module Program
 
     Sub Main()
         ' Call serializeTest()
-        Call ErrorTest()
+        ' Call ErrorTest()
 
         Dim taskApi As New Func(Of integerValue, integerValue, integerValue())(AddressOf demoTask)
         Dim host2 As New SlaveTask(Host.CreateProcessor, AddressOf Host.SlaveTask)

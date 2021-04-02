@@ -1,45 +1,45 @@
 ﻿#Region "Microsoft.VisualBasic::245dbd82fb66fbd66a9ba24242f21c6b, R#\Runtime\Serialize\bufferObjects\vectorBuffer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class vectorBuffer
-    ' 
-    '         Properties: code, names, type, underlyingType, unit
-    '                     vector
-    ' 
-    '         Function: (+2 Overloads) CreateBuffer, GetVector, Serialize
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class vectorBuffer
+' 
+'         Properties: code, names, type, underlyingType, unit
+'                     vector
+' 
+'         Function: (+2 Overloads) CreateBuffer, GetVector, Serialize
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -158,41 +158,37 @@ Namespace Runtime.Serialize
             End Using
         End Function
 
-        Public Overrides Function Serialize() As Byte()
+        Public Overrides Sub Serialize(buffer As Stream)
             Dim type As Type = Type.GetType(Me.type)
             Dim bytes As Byte()
             Dim text As Encoding = Encodings.UTF8.CodePage
             Dim raw As Byte()
             Dim sizeof As Byte()
 
-            Using buffer As New MemoryStream
-                buffer.Write(BitConverter.GetBytes(names.Length), Scan0, 4)
-                buffer.Write(BitConverter.GetBytes(vector.Length), Scan0, 4)
+            buffer.Write(BitConverter.GetBytes(names.Length), Scan0, 4)
+            buffer.Write(BitConverter.GetBytes(vector.Length), Scan0, 4)
 
-                bytes = text.GetBytes(type.FullName)
-                buffer.Write(BitConverter.GetBytes(bytes.Length), Scan0, 4)
-                buffer.Write(bytes, Scan0, bytes.Length)
+            bytes = text.GetBytes(type.FullName)
+            buffer.Write(BitConverter.GetBytes(bytes.Length), Scan0, 4)
+            buffer.Write(bytes, Scan0, bytes.Length)
 
-                bytes = text.GetBytes(unit)
-                buffer.Write(BitConverter.GetBytes(bytes.Length), Scan0, 4)
-                buffer.Write(bytes, Scan0, bytes.Length)
+            bytes = text.GetBytes(unit)
+            buffer.Write(BitConverter.GetBytes(bytes.Length), Scan0, 4)
+            buffer.Write(bytes, Scan0, bytes.Length)
 
-                raw = RawStream.GetBytes(names)
-                sizeof = BitConverter.GetBytes(raw.Length)
+            raw = RawStream.GetBytes(names)
+            sizeof = BitConverter.GetBytes(raw.Length)
 
-                buffer.Write(sizeof, Scan0, 4)
-                buffer.Write(raw, Scan0, raw.Length)
+            buffer.Write(sizeof, Scan0, 4)
+            buffer.Write(raw, Scan0, raw.Length)
 
-                raw = RawStream.GetBytes(vector)
-                sizeof = BitConverter.GetBytes(raw.Length)
+            raw = RawStream.GetBytes(vector)
+            sizeof = BitConverter.GetBytes(raw.Length)
 
-                buffer.Write(sizeof, Scan0, 4)
-                buffer.Write(raw, Scan0, raw.Length)
+            buffer.Write(sizeof, Scan0, 4)
+            buffer.Write(raw, Scan0, raw.Length)
 
-                buffer.Flush()
-
-                Return buffer.ToArray
-            End Using
-        End Function
+            buffer.Flush()
+        End Sub
     End Class
 End Namespace

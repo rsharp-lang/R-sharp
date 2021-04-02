@@ -1,45 +1,45 @@
 ﻿#Region "Microsoft.VisualBasic::620adfec2741c5fdd13ab3f96fd3a528, R#\System\Package\PackageFile\PackageLoader.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module PackageLoader2
-    ' 
-    '         Function: CheckPackage, GetPackageDirectory, GetPackageIndex, GetPackageName, loadDependency
-    '                   LoadPackage
-    ' 
-    '         Sub: callOnLoad
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module PackageLoader2
+' 
+'         Function: CheckPackage, GetPackageDirectory, GetPackageIndex, GetPackageName, loadDependency
+'                   LoadPackage
+' 
+'         Sub: callOnLoad
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -54,6 +54,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Development.Configuration
+Imports Microsoft.VisualBasic.Language
 
 Namespace Development.Package.File
 
@@ -122,6 +123,7 @@ Namespace Development.Package.File
         Public Function LoadPackage(dir As String, env As GlobalEnvironment) As Message
             Dim [namespace] As New PackageNamespace(dir)
             Dim debugEcho As Boolean = env.debugMode
+            Dim result As New Value(Of Message)
 
             If debugEcho Then
                 Call Console.WriteLine($"load package from directory: '{dir}'.")
@@ -133,9 +135,14 @@ Namespace Development.Package.File
                 End Using
             Next
 
-            Call env.loadDependency(pkg:=[namespace])
-            Call env.callOnLoad(pkg:=[namespace])
-            Call env.attachedNamespace.Add([namespace].packageName, [namespace])
+            If Not (result = env.callOnLoad(pkg:=[namespace])) Is Nothing Then
+                Return result
+            End If
+            If Not (result = env.loadDependency(pkg:=[namespace])) Is Nothing Then
+                Return result
+            End If
+
+            env.attachedNamespace([namespace].packageName) = [namespace]
 
             Return Nothing
         End Function
@@ -175,12 +182,13 @@ Namespace Development.Package.File
         End Function
 
         <Extension>
-        Private Sub callOnLoad(env As GlobalEnvironment, pkg As PackageNamespace)
+        Private Function callOnLoad(env As GlobalEnvironment, pkg As PackageNamespace) As Message
             Dim onLoad As String = $"{pkg.libPath}/.onload"
+            Dim result As Object = Nothing
 
             If onLoad.FileExists Then
                 Using bin As New BinaryReader(onLoad.Open)
-                    Call BlockReader.Read(bin) _
+                    result = BlockReader.Read(bin) _
                         .Parse(desc:=pkg.meta) _
                         .DoCall(Function(func)
                                     Return DirectCast(func, DeclareNewFunction)
@@ -188,6 +196,12 @@ Namespace Development.Package.File
                         .Invoke(env, params:={})
                 End Using
             End If
-        End Sub
+
+            If TypeOf result Is Message Then
+                Return result
+            Else
+                Return Nothing
+            End If
+        End Function
     End Module
 End Namespace

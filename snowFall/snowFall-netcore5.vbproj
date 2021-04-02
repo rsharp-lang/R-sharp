@@ -48,7 +48,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PlantMAT|x64'">
-    <OutputPath>D:\PlantMAT\PlantMAT\assembly\</OutputPath>
+    <OutputPath>D:\PlantMAT\Apps\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Optimize>false</Optimize>
     <DebugSymbols>true</DebugSymbols>

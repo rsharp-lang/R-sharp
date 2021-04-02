@@ -98,20 +98,16 @@ Namespace Development
             }
         End Function
 
-        Public Overrides Function Serialize() As Byte()
+        Public Overrides Sub Serialize(memory As Stream)
             Dim text As Byte() = Encoding.UTF8.GetBytes(requestId)
             Dim int_size As Byte() = BitConverter.GetBytes(text.Length)
             Dim bytes As Byte() = buffer.Serialize
 
-            Using memory As New MemoryStream
-                Call memory.Write(int_size, Scan0, 4)
-                Call memory.Write(text, Scan0, text.Length)
-                Call memory.Write(BitConverter.GetBytes(bytes.Length), Scan0, 4)
-                Call memory.Write(bytes, Scan0, bytes.Length)
-                Call memory.Flush()
-
-                Return memory.ToArray
-            End Using
-        End Function
+            Call memory.Write(int_size, Scan0, 4)
+            Call memory.Write(text, Scan0, text.Length)
+            Call memory.Write(BitConverter.GetBytes(bytes.Length), Scan0, 4)
+            Call memory.Write(bytes, Scan0, bytes.Length)
+            Call memory.Flush()
+        End Sub
     End Class
 End Namespace

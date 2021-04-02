@@ -107,12 +107,14 @@ Namespace Runtime.Serialize
             Return CType(BitConverter.ToInt32(magic, Scan0), BufferObjects)
         End Function
 
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Overrides Function Serialize() As Byte()
-            Return BitConverter _
-                .GetBytes(CInt(code)) _
-                .JoinIterates(data.Serialize) _
-                .ToArray
-        End Function
+        Public Overrides Sub Serialize(buffer As Stream)
+            Dim chunkBuffer As Byte() = data.Serialize
+
+            Call buffer.Write(BitConverter.GetBytes(CInt(code)), Scan0, 4)
+            Call buffer.Write(chunkBuffer, Scan0, chunkBuffer.Length)
+            Call buffer.Flush()
+
+            Erase chunkBuffer
+        End Sub
     End Class
 End Namespace

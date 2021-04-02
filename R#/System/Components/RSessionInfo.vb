@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::aaef5f1d62c1e8bda2ba6cafbaa17929, R#\System\Components\RSessionInfo.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class RSessionInfo
-    ' 
-    '         Properties: activators, basePkgs, BLAS, environment_variables, LAPACK
-    '                     loadedOnly, locale, matprod, output_device, platform
-    '                     RNGkind, running, Rversion
-    ' 
-    '         Function: ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class RSessionInfo
+' 
+'         Properties: activators, basePkgs, BLAS, environment_variables, LAPACK
+'                     loadedOnly, locale, matprod, output_device, platform
+'                     RNGkind, running, Rversion
+' 
+'         Function: ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -122,7 +122,7 @@ Namespace Development.Components
 
             Call info.AppendLine(Rversion.GetString("version.string"))
             Call info.AppendLine($"Platform: {Rversion.GetString("platform")} ({Rversion.GetString("arch")})")
-            Call info.AppendLine($"Running under: {Rversion.GetString("system")}")
+            Call info.AppendLine($"Running under: {Rversion.GetString("system")} ({If(App.IsMicrosoftPlatform, "Microsoft", "UNIX")})")
             Call info.AppendLine($"Environment device: {output_device}")
             Call info.AppendLine()
             Call info.AppendLine($"Matrix products: {matprod}")
