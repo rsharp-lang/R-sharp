@@ -60,8 +60,13 @@ Namespace Runtime.Serialize
             Return New rawBuffer With {.buffer = New MemoryStream()}
         End Function
 
-        Public Overrides Function Serialize() As Byte()
-            Return buffer.ToArray
-        End Function
+        Public Overrides Sub Serialize(buffer As Stream)
+            Dim tmp As Byte() = Me.buffer.ToArray
+
+            Call buffer.Write(tmp, Scan0, tmp.Length)
+            Call buffer.Flush()
+
+            Erase tmp
+        End Sub
     End Class
 End Namespace

@@ -83,7 +83,16 @@ Namespace Runtime.Serialize
             End If
         End Sub
 
-        Public Overrides Function Serialize() As Byte()
+        Public Overrides Sub Serialize(buffer As Stream)
+            Dim data As Byte() = getGZip()
+
+            Call buffer.Write(data, Scan0, data.Length)
+            Call buffer.Flush()
+
+            Erase data
+        End Sub
+
+        Private Function getGZip() As Byte()
             Using buffer As New MemoryStream
                 Call bitmap.Save(buffer, Imaging.ImageFormat.Png)
                 Call buffer.Flush()
