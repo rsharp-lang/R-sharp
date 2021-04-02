@@ -133,8 +133,8 @@ Namespace Development.Package.File
                 End Using
             Next
 
-            Call env.loadDependency(pkg:=[namespace])
             Call env.callOnLoad(pkg:=[namespace])
+            Call env.loadDependency(pkg:=[namespace])
             Call env.attachedNamespace.Add([namespace].packageName, [namespace])
 
             Return Nothing
