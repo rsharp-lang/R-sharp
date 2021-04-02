@@ -95,7 +95,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 ''' ```
 ''' </summary>
 <Package("ColorBrewer")>
-Public Module ColorBrewer
+Public Module ColorBrewerSystem
 
 #Region "Sequential"
 

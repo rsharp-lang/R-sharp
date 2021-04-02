@@ -522,6 +522,7 @@
   <ItemGroup>
     <Compile Include="ColorBrewer.vb" />
     <Compile Include="Plot2D\graphics2D.vb" />
+    <Compile Include="Plot2D\plots.vb" />
     <Compile Include="Render3D\gr3D.vb" />
     <Compile Include="grDevices.vb" />
     <Compile Include="grSVG.vb" />
@@ -541,6 +542,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Render3D\plot3D.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -562,13 +564,57 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data\DataFrame\47_dotnet_ms-vb_data.framework.vbproj">
+      <Project>{7283c179-f852-4ead-8d8f-b82ef2cbd7db}</Project>
+      <Name>47_dotnet_ms-vb_data.framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\DataMining\DataMining\DataMining.vbproj">
+      <Project>{1b42809b-603f-4cea-a0db-91276582b9ca}</Project>
+      <Name>DataMining</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\DataMining\hierarchical-clustering\hierarchical-clustering\hierarchical-clustering.vbproj">
+      <Project>{6ca54af6-cadc-457e-94b9-384f2990f07e}</Project>
+      <Name>hierarchical-clustering</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\DataMining\UMAP\UMAP.vbproj">
+      <Project>{c57630a3-33b1-4cad-9dc8-3a9e66ce93ff}</Project>
+      <Name>UMAP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\MachineLearning\MachineLearning\MachineLearning.vbproj">
+      <Project>{a43ec013-2b55-4d25-b9f1-96bd5fb1e577}</Project>
+      <Name>MachineLearning</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Mathematica\Math\DataFittings\DataFittings.vbproj">
+      <Project>{fc125b0d-1942-496f-b502-9c0eb80e35b6}</Project>
+      <Name>DataFittings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Mathematica\Math\DataFrame\DataFrame.vbproj">
+      <Project>{6140aed7-e317-46dd-9c15-7fe400795992}</Project>
+      <Name>DataFrame</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Mathematica\Math\Math.Statistics\Math.Statistics.vbproj">
+      <Project>{3e195df1-9feb-44d5-904b-15626bbe74d7}</Project>
+      <Name>Math.Statistics</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Mathematica\Math\Math\math-core.vbproj">
       <Project>{e3367b88-5d0c-495a-8273-331656d4b5aa}</Project>
       <Name>math-core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Mathematica\Math\ODE\ODEsSolver.vbproj">
+      <Project>{14e0b048-3a0d-4fd6-aa79-9b815d6f1b30}</Project>
+      <Name>ODEsSolver</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Visualization\Plots-statistics\Plots.Statistics.vbproj">
+      <Project>{368ee92f-7aa0-47df-be48-2ae150369a4c}</Project>
+      <Name>Plots.Statistics</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Visualization\Plots\Plots.vbproj">
       <Project>{17f8e821-0a01-4975-9caa-ac95251226d5}</Project>
       <Name>Plots</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Visualization\Visualization\DataVisualization.vbproj">
+      <Project>{3a114030-d9fd-4913-8e85-a78c032e9000}</Project>
+      <Name>DataVisualization</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\gr\Microsoft.VisualBasic.Imaging\Microsoft.VisualBasic.Imaging.vbproj">
       <Project>{85e71b4b-9276-4ec8-aadc-c849205f1ea8}</Project>
@@ -577,6 +623,10 @@
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\47-dotnet_Microsoft.VisualBasic.vbproj">
       <Project>{fecce1fd-e1d4-49e3-a668-60bb5e7aed99}</Project>
       <Name>47-dotnet_Microsoft.VisualBasic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\mime\application%25xml\application_xml.vbproj">
+      <Project>{25af39f4-76af-411f-ac19-0dd1e128d801}</Project>
+      <Name>application_xml</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\mime\text%25html\MIME-htmls.vbproj">
       <Project>{2dd4be80-ddc3-4767-94a7-10f1c3395716}</Project>
