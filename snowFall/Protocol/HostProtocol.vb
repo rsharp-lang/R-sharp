@@ -48,6 +48,10 @@ Namespace Protocol
 
     Public Class Host
 
+        ''' <summary>
+        ''' Create a slave task factory
+        ''' </summary>
+        ''' <returns></returns>
         Public Shared Function CreateSlave() As SlaveTask
             Return New SlaveTask(Host.CreateProcessor, AddressOf Host.SlaveTask)
         End Function
