@@ -510,4 +510,9 @@ Module plots
             )
         End If
     End Function
+
+    <ExportAPI("contourPlot")>
+    Public Function ContourPlot() As Object
+
+    End Function
 End Module
