@@ -622,7 +622,7 @@ Namespace Runtime.Internal.Invokes
         ''' these arguments are of either the form value or ``tag = value``. Component names 
         ''' are created based on the tag (if present) or the deparsed argument itself.
         ''' </param>
-        ''' <param name="envir"></param>
+        ''' <param name="env"></param>
         ''' <returns>
         ''' A data frame, a matrix-like structure whose columns may be of differing types 
         ''' (``numeric``, ``logical``, ``factor`` and ``character`` and so on).
@@ -645,15 +645,17 @@ Namespace Runtime.Internal.Invokes
         <RApiReturn(GetType(dataframe))>
         Public Function Rdataframe(<RListObjectArgument>
                                    <RRawVectorArgument>
-                                   columns As Object, Optional envir As Environment = Nothing) As Object
+                                   columns As Object, Optional env As Environment = Nothing) As Object
 
             ' data.frame(a = 1, b = ["g","h","eee"], c = T)
             Dim parameters As InvokeParameter() = columns
             Dim values As IEnumerable(Of NamedValue(Of Object)) = parameters _
                 .SeqIterator _
-                .Select(Function(a) columnVector(a, envir))
+                .Select(Function(a)
+                            Return columnVector(a, env)
+                        End Function)
 
-            Return values.RDataframe(envir)
+            Return values.RDataframe(env)
         End Function
 
         Private Function columnVector(a As SeqValue(Of InvokeParameter), envir As Environment) As NamedValue(Of Object)

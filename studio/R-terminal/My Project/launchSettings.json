@@ -2,7 +2,7 @@
   "profiles": {
     "R-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"require(PlantMAT);print(MS1TopDown);\"",
+      "commandLineArgs": " data.frame(a = [TRUE, FALSE], b = [1,2,3], c = 5.666666666, d = 'xxxxx')",
       "workingDirectory": "D:\\GCModeller\\src\\R-sharp\\App\\net5.0"
     }
   }

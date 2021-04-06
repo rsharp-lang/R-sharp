@@ -138,6 +138,33 @@ Namespace Runtime.Internal.Object.Converts
             Return dataframe
         End Function
 
+        <Extension>
+        Public Function CheckDimension(data As dataframe, env As Environment) As Object
+            If data.columns.IsNullOrEmpty OrElse data.columns.Count = 1 Then
+                Return data
+            End If
+
+            Dim max As Integer = data.nrows
+            Dim noneAgree As (key$, size%)() = data.columns _
+                .Where(Function(col)
+                           Return col.Value.Length <> max AndAlso col.Value.Length <> 1
+                       End Function) _
+                .Select(Function(col) (col.Key, col.Value.Length)) _
+                .ToArray
+
+            If noneAgree.Length > 0 Then
+                Dim msg As New List(Of String) From {"arguments imply differing number of rows"}
+
+                For Each col In data.columns
+                    Call msg.Add($"{col.Key}: {col.Value.Length}")
+                Next
+
+                Return Internal.debug.stop(msg.ToArray, env)
+            Else
+                Return data
+            End If
+        End Function
+
         ''' <summary>
         ''' Internal implementation for <see cref="base.RDataframe"/> api
         ''' </summary>
@@ -162,7 +189,7 @@ Namespace Runtime.Internal.Object.Converts
                                       Function(a)
                                           Return env.createColumnVector(a.Value)
                                       End Function)
-                }
+                }.CheckDimension(env)
             ElseIf columns.Count = 1 Then
                 Dim first As NamedValue(Of Object) = columns.First
 
@@ -239,23 +266,17 @@ Namespace Runtime.Internal.Object.Converts
                 Return Internal.debug.stop(New InvalidCastException, env)
             End If
 
-            Return matrix
+            Return matrix.CheckDimension(env)
         End Function
 
         <Extension>
         Private Function createColumnVector(env As Environment, a As Object) As Array
             ' 假设dataframe之中每一列数据的类型都是相同的
             ' 则我们直接使用第一个元素的类型作为列的数据类型
-            Dim first As Object = REnv.getFirst(a, nonNULL:=True)
-            Dim colVec As Array
+            Dim array As Array = REnv.asVector(Of Object)(a)
+            Dim generic As Array = REnv.TryCastGenericArray(array, env)
 
-            If first Is Nothing Then
-                Return New Object() {}
-            Else
-                colVec = REnv.asVector(a, first.GetType, env)
-            End If
-
-            Return colVec
+            Return generic
         End Function
     End Module
 End Namespace
