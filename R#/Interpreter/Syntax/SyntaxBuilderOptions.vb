@@ -57,6 +57,10 @@ Namespace Interpreter.SyntaxParser
         Public isBuildVector As Boolean
         Public currentLine As Integer
 
+        ''' <summary>
+        ''' this property will returns true if the error message string is not empty
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property haveSyntaxErr As Boolean
             Get
                 Return Not [error].StringEmpty
