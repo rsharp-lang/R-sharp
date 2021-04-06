@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "--parallel --master \"6588\" --delegate \"Parallel::snowFall\" /@set --internal_pipeline=TRUE"
+      "commandLineArgs": "\"D:\\biodeep\\biodeepdb_v3\\metaCluster\\NPSearch\\R\\MS2TopDown.R\""
     }
   }
 }

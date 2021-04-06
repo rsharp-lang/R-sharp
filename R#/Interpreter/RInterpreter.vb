@@ -473,11 +473,13 @@ Namespace Interpreter
             Dim result As Object
 
             If filepath.FileExists Then
+                Dim Rscript As Rscript = Rscript.FromFile(filepath)
+
                 arguments = arguments _
                     .SafeQuery _
                     .JoinIterates(New NamedValue(Of Object)("!script", New vbObject(script))) _
                     .ToArray
-                result = RunInternal(Rscript.FromFile(filepath), arguments, globalEnv)
+                result = RunInternal(Rscript, arguments, globalEnv)
             Else
                 result = Internal.debug.stop({
                     $"cannot open the connection.",

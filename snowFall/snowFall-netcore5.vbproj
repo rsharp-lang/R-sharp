@@ -10,7 +10,7 @@
     <Copyright>I@xieguigang.me</Copyright>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>R-sharp.png</PackageIcon>
-    <Configurations>Debug;Release;Rsharp_app_release;LipidSearch;PlantMAT</Configurations>
+    <Configurations>Debug;Release;Rsharp_app_release;LipidSearch;PlantMAT;NPSearch</Configurations>
     <Platforms>AnyCPU;x64</Platforms>
     <PackageProjectUrl>https://github.com/SMRUCC/R-sharp</PackageProjectUrl>
     <RepositoryUrl>https://github.com/SMRUCC/R-sharp</RepositoryUrl>
@@ -59,6 +59,18 @@
     <DocumentationFile>snowFall.xml</DocumentationFile>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NPSearch|x64'">
+    <OutputPath>D:\PlantMAT\Apps\</OutputPath>
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
+    <Optimize>false</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
+    <DocumentationFile>snowFall.xml</DocumentationFile>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LipidSearch|x64'">
     <OutputPath>D:\GCModeller\src\R-sharp\App\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
@@ -80,6 +92,10 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PlantMAT|AnyCPU'">
+    <DocumentationFile>snowFall.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NPSearch|AnyCPU'">
     <DocumentationFile>snowFall.xml</DocumentationFile>
   </PropertyGroup>
 
