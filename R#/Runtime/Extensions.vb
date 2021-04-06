@@ -115,6 +115,8 @@ Namespace Runtime
 
             If types.Count = 0 Then
                 Return GetType(Void)
+            ElseIf types.Count = 1 Then
+                Return types(Scan0)
             Else
                 Dim tg = types _
                     .GroupBy(Function(t) t.FullName) _

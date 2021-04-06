@@ -62,7 +62,10 @@ Namespace Runtime.Internal.Object.Utils
             Dim rownames = df.getRowNames()
             Dim typeRow As String() = colNames _
                 .Select(Function(name)
-                            Return $"<{RType.GetRSharpType(df(name).GetType).ToString}>"
+                            Dim arrayType As Type = df(name).GetType
+                            Dim type As RType = RType.GetRSharpType(arrayType)
+
+                            Return $"<{type}>"
                         End Function) _
                 .ToArray
 

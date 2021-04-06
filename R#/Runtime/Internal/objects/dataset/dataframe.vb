@@ -101,9 +101,14 @@ Namespace Runtime.Internal.Object
                 ElseIf col.Length = n Then
                     Return col
                 Else
-                    Return VectorExtensions _
-                        .Replicate(col.GetValue(Scan0), n) _
-                        .ToArray
+                    Dim x As Object = col.GetValue(Scan0)
+                    Dim vec As Array = Array.CreateInstance(x.GetType, nrows)
+
+                    For i As Integer = 0 To vec.Length - 1
+                        Call vec.SetValue(x, i)
+                    Next
+
+                    Return vec
                 End If
             End Get
         End Property
