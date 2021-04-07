@@ -52,6 +52,7 @@ Module Program
 
     Private Function Run(filepath$, args As CommandLine) As Integer
         Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
+        Dim ignoreMissingStartupPackages As Boolean = args("--ignore-missing-startup-packages")
 
         If args("--debug") Then
             R.debug = True
@@ -60,9 +61,9 @@ Module Program
         Call Console.WriteLine(args.ToString)
         Call Console.WriteLine()
 
-        Call R.LoadLibrary("base")
-        Call R.LoadLibrary("utils")
-        Call R.LoadLibrary("grDevices")
+        Call R.LoadLibrary("base", ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
+        Call R.LoadLibrary("utils", ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
+        Call R.LoadLibrary("grDevices", ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
 
         Call Console.WriteLine()
 
