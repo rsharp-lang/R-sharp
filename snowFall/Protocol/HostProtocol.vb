@@ -52,8 +52,8 @@ Namespace Protocol
         ''' Create a slave task factory
         ''' </summary>
         ''' <returns></returns>
-        Public Shared Function CreateSlave() As SlaveTask
-            Return New SlaveTask(Host.CreateProcessor, AddressOf Host.SlaveTask)
+        Public Shared Function CreateSlave(Optional debugPort As Integer? = Nothing) As SlaveTask
+            Return New SlaveTask(Host.CreateProcessor, AddressOf Host.SlaveTask, debugPort)
         End Function
 
         Public Shared Function CreateProcessor() As Rscript
