@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript-netcore5": {
       "commandName": "Project",
-      "commandLineArgs": "\"D:\\biodeep\\biodeepdb_v3\\metaCluster\\NPSearch\\R\\MS2TopDown.R\" --debug --ignore-missing-startup-packages"
+      "commandLineArgs": "\"D:\\biodeep\\biodeep_pipeline\\biodeepNPSearch\\test\\NPSearch\\Run.R\" --parallel 1"
     }
   }
 }
