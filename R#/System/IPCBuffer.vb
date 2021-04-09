@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::94d5e41c404c71fb2542b7800c3e8853, R#\System\IPCBuffer.vb"
+﻿#Region "Microsoft.VisualBasic::d60e276ee1915cd5d32b7746ac3d363d, R#\System\IPCBuffer.vb"
 
     ' Author:
     ' 
@@ -36,7 +36,10 @@
     '         Properties: buffer, chunksize, requestId
     ' 
     '         Constructor: (+2 Overloads) Sub New
-    '         Function: ParseBuffer, Serialize, ToString
+    ' 
+    '         Function: ParseBuffer, ToString
+    ' 
+    '         Sub: Serialize
     ' 
     ' 
     ' /********************************************************************************/

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fd3c7d3a432ff1391f4df2311ff50151, R#\Runtime\Interop\RsharpApi\RMethodInfo.vb"
+﻿#Region "Microsoft.VisualBasic::edfe6c67313ce7088320d2f71357bb4e, R#\Runtime\Interop\RsharpApi\RMethodInfo.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Class RMethodInfo
     ' 
-    '         Properties: invisible, name, parameters, returns
+    '         Properties: [namespace], invisible, name, parameters, returns
     ' 
     '         Constructor: (+3 Overloads) Sub New
     '         Function: createNormalArguments, CreateParameterArrayFromListArgument, getArguments, GetPackageInfo, GetPrintContent

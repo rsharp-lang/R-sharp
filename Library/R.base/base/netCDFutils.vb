@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fb5dc4fa6e89cef4f3c3baad57cbd432, Library\R.base\base\netCDFutils.vb"
+﻿#Region "Microsoft.VisualBasic::ec8f3b875d55027f08a4442c51d01eab, Library\R.base\base\netCDFutils.vb"
 
     ' Author:
     ' 
@@ -34,8 +34,8 @@
     ' Module netCDFutils
     ' 
     '     Constructor: (+1 Overloads) Sub New
-    '     Function: getDataVariable, getValue, globalAttributes, openCDF, printVar
-    '               variableNames
+    '     Function: dimensions, getDataVariable, getValue, globalAttributes, openCDF
+    '               printVar, variableNames
     ' 
     ' /********************************************************************************/
 

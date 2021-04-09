@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::655f768c4a4e855ec9cb4891750a010d, R#\Runtime\Internal\objects\reflector.vb"
+﻿#Region "Microsoft.VisualBasic::66eb9b66e8b547eb6124e2cf985bdf30, R#\Runtime\Internal\objects\reflector.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,8 @@
 
     '     Module reflector
     ' 
-    '         Function: dataframe, GetStructure, printSlots, strList, strVector
+    '         Function: dataframe, GetStructure, printSlots, strGenericArray, strList
+    '                   strVector
     ' 
     ' 
     ' /********************************************************************************/

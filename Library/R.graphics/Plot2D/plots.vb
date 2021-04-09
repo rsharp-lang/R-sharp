@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::33548d99aad3dab74cc02c3f9c63155f, Library\R.plot\plots.vb"
+﻿#Region "Microsoft.VisualBasic::a57c400b99986ba82b2bc51630bde7e0, Library\R.graphics\Plot2D\plots.vb"
 
     ' Author:
     ' 
@@ -35,9 +35,9 @@
     ' 
     '     Constructor: (+1 Overloads) Sub New
     ' 
-    '     Function: barplot, CreateSerial, doVolinPlot, linearRegression, plot_binBox
-    '               plot_categoryBars, plot_corHeatmap, plot_deSolveResult, plot_hclust, plotFormula
-    '               plotODEResult, plotSerials
+    '     Function: barplot, ContourPlot, CreateSerial, doVolinPlot, linearRegression
+    '               plot_binBox, plot_categoryBars, plot_corHeatmap, plot_deSolveResult, plot_hclust
+    '               plotFormula, plotODEResult, plotSerials
     ' 
     '     Sub: Main
     ' 

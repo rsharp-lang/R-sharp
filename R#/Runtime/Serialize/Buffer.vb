@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::afa48378c244c9ebe1819fae47076953, R#\Runtime\Serialize\Buffer.vb"
+﻿#Region "Microsoft.VisualBasic::e6d76e9b8589150d9d8979e5511073fe, R#\Runtime\Serialize\Buffer.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,9 @@
     ' 
     '         Properties: code, data
     ' 
-    '         Function: MeasureBufferMagic, ParseBuffer, Serialize, ToString
+    '         Function: MeasureBufferMagic, ParseBuffer, ToString
+    ' 
+    '         Sub: Serialize
     ' 
     ' 
     ' /********************************************************************************/

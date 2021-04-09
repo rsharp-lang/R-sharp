@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::93e092daf3b3219d889056c322aae5e1, R#\Runtime\System\Interface\RFunction.vb"
+﻿#Region "Microsoft.VisualBasic::4be6fe6c4e6332505ca55a4c909895e7, R#\Runtime\System\Interface\RFunction.vb"
 
     ' Author:
     ' 
@@ -40,6 +40,10 @@
     '     Interface IRuntimeTrace
     ' 
     '         Properties: stackFrame
+    ' 
+    '     Interface INamespaceReferenceSymbol
+    ' 
+    '         Properties: [namespace]
     ' 
     ' 
     ' /********************************************************************************/

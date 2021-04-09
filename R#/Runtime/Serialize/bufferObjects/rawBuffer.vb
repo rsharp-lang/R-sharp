@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2e93a0bf952c6962b775d616fe08fe9d, R#\Runtime\Serialize\bufferObjects\rawBuffer.vb"
+﻿#Region "Microsoft.VisualBasic::20685b87bd65295a20911c8299f3fba0, R#\Runtime\Serialize\bufferObjects\rawBuffer.vb"
 
     ' Author:
     ' 
@@ -35,7 +35,9 @@
     ' 
     '         Properties: buffer, code
     ' 
-    '         Function: getEmptyBuffer, Serialize
+    '         Function: getEmptyBuffer
+    ' 
+    '         Sub: Serialize
     ' 
     ' 
     ' /********************************************************************************/

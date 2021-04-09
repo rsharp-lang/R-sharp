@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::90ac73d41bec20de9c1e4b2d2242756c, R#\Runtime\Internal\objects\RConversion\makeDataframe.vb"
+﻿#Region "Microsoft.VisualBasic::8a431b56cb8c7a92c668c7ab33b8303a, R#\Runtime\Internal\objects\RConversion\makeDataframe.vb"
 
     ' Author:
     ' 
@@ -38,8 +38,8 @@
     ' 
     '         Constructor: (+1 Overloads) Sub New
     ' 
-    '         Function: createColumnVector, createDataframe, fromList, is_ableConverts, RDataframe
-    '                   TracebackDataFrmae, tryTypeLineage
+    '         Function: CheckDimension, createColumnVector, createDataframe, fromList, is_ableConverts
+    '                   RDataframe, TracebackDataFrmae, tryTypeLineage
     ' 
     '         Sub: [addHandler]
     ' 

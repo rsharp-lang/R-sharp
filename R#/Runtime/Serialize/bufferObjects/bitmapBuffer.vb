@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8e6dee2146f3210769c9eba272ba3852, R#\Runtime\Serialize\bufferObjects\bitmapBuffer.vb"
+﻿#Region "Microsoft.VisualBasic::2f12b82445861a61ce82fbf3a0307312, R#\Runtime\Serialize\bufferObjects\bitmapBuffer.vb"
 
     ' Author:
     ' 
@@ -37,9 +37,9 @@
     ' 
     '         Constructor: (+3 Overloads) Sub New
     ' 
-    '         Function: Serialize
+    '         Function: getGZip
     ' 
-    '         Sub: loadAuto
+    '         Sub: loadAuto, Serialize
     ' 
     ' 
     ' /********************************************************************************/

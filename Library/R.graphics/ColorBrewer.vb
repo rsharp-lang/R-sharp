@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ad34ebfff8dbf2607ea3b7db4a923710, Library\R.graphics\ColorBrewer.vb"
+﻿#Region "Microsoft.VisualBasic::519c5e1b3a5f27aa6ea8e704c3d36f28, Library\R.graphics\ColorBrewer.vb"
 
     ' Author:
     ' 
@@ -31,7 +31,7 @@
 
     ' Summaries:
 
-    ' Module ColorBrewer
+    ' Module ColorBrewerSystem
     ' 
     '     Function: Accent, Blues, BrBG, BuGn, BuPu
     '               Dark2, GnBu, Greens, Greys, Oranges

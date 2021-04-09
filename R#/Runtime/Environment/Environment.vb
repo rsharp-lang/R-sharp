@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3d1d71586fab63b292d1c40a184c9154, R#\Runtime\Environment\Environment.vb"
+﻿#Region "Microsoft.VisualBasic::12304c6741a95890dca7a5d457777718, R#\Runtime\Environment\Environment.vb"
 
     ' Author:
     ' 
@@ -38,8 +38,9 @@
     ' 
     '         Constructor: (+3 Overloads) Sub New
     ' 
-    '         Function: asRVector, enumerateFunctions, Evaluate, FindFunction, FindFunctionWithNamespaceRestrict
-    '                   FindSymbol, GetEnumerator, IEnumerable_GetEnumerator, Push, ToString
+    '         Function: asRVector, AssignSymbol, enumerateFunctions, Evaluate, FindFunction
+    '                   FindFunctionWithNamespaceRestrict, FindSymbol, GetEnumerator, IEnumerable_GetEnumerator, Push
+    '                   ToString
     ' 
     '         Sub: AddMessage, Clear, Delete, (+2 Overloads) Dispose, redirectError
     '              redirectWarning, setStackInfo
