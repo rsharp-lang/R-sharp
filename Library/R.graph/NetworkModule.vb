@@ -421,8 +421,15 @@ Public Module NetworkModule
 
         Dim node As node = g.CreateNode(label)
 
-        For Each attribute As NamedValue(Of Object) In RListObjectArgumentAttribute.getObjectList(attrs, env)
-            node.data.Add(attribute.Name, Scripting.ToString(attribute.Value))
+        For Each attr As NamedValue(Of Object) In RListObjectArgumentAttribute.getObjectList(attrs, env)
+            Select Case attr.Name
+                Case "label"
+                    node.data.label = any.ToString(attr.Value)
+                Case "group"
+                    node.data.Add(NamesOf.REFLECTION_ID_MAPPING_NODETYPE, any.ToString(attr.Value))
+                Case Else
+                    Call node.data.Add(attr.Name, any.ToString(attr.Value))
+            End Select
         Next
 
         Return node
