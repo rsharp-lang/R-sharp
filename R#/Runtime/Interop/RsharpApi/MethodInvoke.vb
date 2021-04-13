@@ -51,9 +51,10 @@
 
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Development.Package.File
+Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Runtime.Interop
 
@@ -76,7 +77,7 @@ Namespace Runtime.Interop
 
         <DebuggerStepThrough>
         Public Overrides Function ToString() As String
-            Return $"{Scripting.ToString(target, "NULL")}::{method.ToString}"
+            Return $"{any.ToString(target, "NULL")}::{method.ToString}"
         End Function
 
     End Class
