@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::42a75b668f70695570bd94c234b69592, Library\R.base\save\save.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module base
-    ' 
-    '     Function: load, readRDS, save, saveRDS
-    ' 
-    '     Sub: saveImage
-    ' 
-    ' /********************************************************************************/
+' Module base
+' 
+'     Function: load, readRDS, save, saveRDS
+' 
+'     Sub: saveImage
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.IO.Compression
+Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.ApplicationServices.Zip
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.IO.netCDF
-Imports Microsoft.VisualBasic.Data.IO.netCDF.Components
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -115,7 +115,7 @@ Partial Module base
             Return Internal.debug.stop({"Disk file is unavailable...", file.GetFullPath}, envir)
         End If
 
-        Dim tmp = App.GetAppSysTempFile(".cdf", App.PID, prefix:=RandomASCIIString(8, True))
+        Dim tmp = TempFileSystem.GetAppSysTempFile(".cdf", App.PID, prefix:=RandomASCIIString(8, True))
 
         Call UnZip.ImprovedExtractToDirectory(file, tmp, Overwrite.Always, True)
 
@@ -174,7 +174,7 @@ Partial Module base
         End If
 
         ' 先保存为cdf文件
-        Dim tmp As String = App.GetAppSysTempFile(".cdf", App.PID, prefix:=RandomASCIIString(5, True)).TrimSuffix & "/R#.Data"
+        Dim tmp As String = TempFileSystem.GetAppSysTempFile(".cdf", App.PID, prefix:=RandomASCIIString(5, True)).TrimSuffix & "/R#.Data"
         Dim maxChartSize As Integer = 2048
         Dim objList As NamedValue(Of Object)() = RListObjectArgumentAttribute _
             .getObjectList(objects, envir) _
@@ -241,7 +241,7 @@ Partial Module base
         End If
 
         ' 先保存为cdf文件
-        Dim tmp As String = App.GetAppSysTempFile(".cdf", App.PID, prefix:=RandomASCIIString(5, True)).TrimSuffix & "/R#.Data"
+        Dim tmp As String = TempFileSystem.GetAppSysTempFile(".cdf", App.PID, prefix:=RandomASCIIString(5, True)).TrimSuffix & "/R#.Data"
         Dim maxChartSize As Integer = 2048
 
         Using cdf As CDFWriter = New CDFWriter(tmp).GlobalAttributes(

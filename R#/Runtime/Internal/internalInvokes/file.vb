@@ -430,7 +430,7 @@ Namespace Runtime.Internal.Invokes
                 Call $"in dir.create(""{path}"") : '{path}' already exists".Warning
             End If
 
-            Call path.MkDIR
+            Call path.MakeDir
 
             Return True
         End Function
@@ -914,7 +914,7 @@ Namespace Runtime.Internal.Invokes
             Static dir As String = (App.SysTemp & $"/Rtmp{App.PID.ToString.MD5.Substring(3, 6).ToUpper}").GetDirectoryFullPath
 
             If check Then
-                Call dir.MkDIR
+                Call dir.MakeDir
             End If
 
             Return dir
@@ -931,7 +931,7 @@ Namespace Runtime.Internal.Invokes
             If Not from.FileExists Then
                 Call env.AddMessage({$"the given file is not exists...", $"source file: {from}"}, MSG_TYPES.WRN)
             Else
-                Call [to].ParentPath.MkDIR
+                Call [to].ParentPath.MakeDir
                 Call from.FileMove(to$)
             End If
         End Sub
