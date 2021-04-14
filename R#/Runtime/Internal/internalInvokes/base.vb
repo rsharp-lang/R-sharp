@@ -729,6 +729,7 @@ Namespace Runtime.Internal.Invokes
             Dim key As String
             Dim value As Object
             Dim parameters As InvokeParameter() = slots
+            Dim uniqKeys As New Dictionary(Of String, Integer)
 
             If parameters Is Nothing Then
                 parameters = {}
@@ -749,9 +750,28 @@ Namespace Runtime.Internal.Invokes
                 If Program.isException(value) Then
                     Return value
                 Else
+                    If uniqKeys.ContainsKey(key) Then
+                        uniqKeys(key) += 1
+                        key = $"{key}_{uniqKeys(key)}"
+                    Else
+                        uniqKeys(key) = 0
+                    End If
+
                     list.Add(key, value)
                 End If
             Next
+
+            If uniqKeys.Where(Function(k) k.Value > 0).Any Then
+                Dim duplicatedKeys As String() = uniqKeys _
+                    .Where(Function(k) k.Value > 0) _
+                    .Select(Function(k) k.Key) _
+                    .ToArray
+
+                Call envir.AddMessage({
+                    $"There are {duplicatedKeys.Length} was found!",
+                    $"duplicates: {duplicatedKeys.JoinBy(", ")}"
+                }, MSG_TYPES.WRN)
+            End If
 
             Return New list With {.slots = list}
         End Function
