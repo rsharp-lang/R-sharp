@@ -129,12 +129,12 @@ Module gr2DLabeler
                           Optional rotate# = 0.5,
                           Optional showProgress As Boolean = True) As Labeler
 
-        Return labeler.Start(
-            nsweeps:=nsweeps,
-            T:=T,
-            initialT:=initialT,
-            rotate:=rotate,
-            showProgress:=showProgress
-        )
+        Return labeler _
+            .Temperature(T, initialT) _
+            .RotateChance(rotate) _
+            .Start(
+                nsweeps:=nsweeps,
+                showProgress:=showProgress
+            )
     End Function
 End Module
