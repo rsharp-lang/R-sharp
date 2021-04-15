@@ -118,5 +118,21 @@ Namespace Runtime.Internal.Invokes
 
             Return True
         End Function
+
+        ''' <summary>
+        ''' readImage: this function reads various types of images
+        ''' 
+        ''' Reads images of type .png, .jpeg, .jpg, .tiff
+        ''' 
+        ''' This function takes as input a string-path and returns the image in a matrix or array form. 
+        ''' Supported types of images are .png, .jpeg, .jpg, .tiff. Extension types similar to .tiff 
+        ''' such as .tif, .TIFF, .TIF are also supported
+        ''' </summary>
+        ''' <param name="file">a string specifying the path to the saved image</param>
+        ''' <returns>the image in a matrix or array form</returns>
+        <ExportAPI("readImage")>
+        Public Function readImage(file As String) As Object
+            Return file.LoadImage
+        End Function
     End Module
 End Namespace
