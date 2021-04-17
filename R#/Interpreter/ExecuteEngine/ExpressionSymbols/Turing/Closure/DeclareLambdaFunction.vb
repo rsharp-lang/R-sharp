@@ -54,6 +54,8 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Development.Package.File
+Imports Microsoft.VisualBasic.Emit.Delegates
+Imports System.Runtime.CompilerServices
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
@@ -223,9 +225,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             ElseIf v.Length > 1 Then
                 Dim typeTest As Type = GetType(T)
 
-                If typeTest.IsValueType Then
+                If typeTest.IsValueType AndAlso typeTest.ImplementInterface(Of ITuple) Then
                     Return Sub(x)
+                               Dim tuple As ITuple = DirectCast(CObj(x), ITuple)
 
+                               For i As Integer = 0 To v.Length - 1
+                                   Call v(i).SetValue(tuple(i), env)
+                               Next
                            End Sub
                 Else
                     Throw New InvalidCastException
