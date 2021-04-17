@@ -49,6 +49,7 @@ Imports System.Drawing
 Imports System.Drawing.Drawing2D
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.Bootstrapping
 Imports Microsoft.VisualBasic.Data.ChartPlots
 Imports Microsoft.VisualBasic.Data.ChartPlots.BarPlot
@@ -514,12 +515,22 @@ Module plots
     End Function
 
     <ExportAPI("contourPlot")>
-    Public Function ContourPlot(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
-        If x Is Nothing Then
-            Return Internal.debug.stop("object x can not be nothing!", env)
-        ElseIf TypeOf x Is Rdataframe Then
+    Public Function ContourPlot(<RRawVectorArgument> data As Object,
+                                <RListObjectArgument>
+                                Optional args As list = Nothing,
+                                Optional env As Environment = Nothing) As Object
+        If data Is Nothing Then
+            Return Internal.debug.stop("object 'data' can not be nothing!", env)
+        ElseIf TypeOf data Is Rdataframe Then
+            Throw New NotImplementedException
+        ElseIf TypeOf data Is DeclareLambdaFunction Then
+            Dim lambda As Func(Of (Double, Double), Double) = DirectCast(data, DeclareLambdaFunction).CreateLambda(Of (Double, Double), Double)(env)
+            Dim rx As DoubleRange = args.getValue(Of Double())("x", env)
+            Dim ry As DoubleRange = args.getValue(Of Double())("y", env)
+
+            Return Contour.Plot(Function(x, y) lambda((x, y)), rx, ry)
         Else
-            Return Message.InCompatibleType(GetType(FormulaExpression), x.GetType, env)
+            Return Message.InCompatibleType(GetType(FormulaExpression), data.GetType, env)
         End If
     End Function
 End Module
