@@ -514,6 +514,18 @@ Module plots
         End If
     End Function
 
+    ''' <summary>
+    ''' A contour plot is a graphical technique for representing a 3-dimensional 
+    ''' surface by plotting constant z slices, called contours, on a 2-dimensional 
+    ''' format. That is, given a value for z, lines are drawn for connecting the 
+    ''' ``(x,y)`` coordinates where that z value occurs.
+    ''' 
+    ''' The contour plot Is an alternative To a 3-D surface plot.
+    ''' </summary>
+    ''' <param name="data"></param>
+    ''' <param name="args"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("contourPlot")>
     Public Function ContourPlot(<RRawVectorArgument> data As Object,
                                 <RListObjectArgument>
