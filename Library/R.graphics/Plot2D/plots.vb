@@ -528,9 +528,12 @@ Module plots
     ''' <returns></returns>
     <ExportAPI("contourPlot")>
     Public Function ContourPlot(<RRawVectorArgument> data As Object,
+                                <RRawVectorArgument> Optional colorSet As Object = "Spectral:c10",
                                 <RListObjectArgument>
                                 Optional args As list = Nothing,
                                 Optional env As Environment = Nothing) As Object
+
+
         If data Is Nothing Then
             Return Internal.debug.stop("object 'data' can not be nothing!", env)
         ElseIf TypeOf data Is Rdataframe Then
