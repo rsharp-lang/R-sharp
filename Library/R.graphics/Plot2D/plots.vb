@@ -543,7 +543,13 @@ Module plots
             Dim rx As DoubleRange = args.getValue(Of Double())("x", env)
             Dim ry As DoubleRange = args.getValue(Of Double())("y", env)
 
-            Return Contour.Plot(Function(x, y) lambda((x, y)), rx, ry)
+            Return Contour.Plot(
+                fun:=Function(x, y) lambda((x, y)),
+                xrange:=rx,
+                yrange:=ry,
+                xsteps:=rx.Length / 200,
+                ysteps:=ry.Length / 200
+            )
         Else
             Return Message.InCompatibleType(GetType(FormulaExpression), data.GetType, env)
         End If
