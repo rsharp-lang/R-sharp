@@ -62,9 +62,22 @@ Namespace Language.TokenIcer
                         Return text.ParseBoolean
                     Case TokenType.numberLiteral
                         Return text.ParseDouble
+                    Case TokenType.integerLiteral
+                        Return text.ParseLong
+
                     Case Else
                         Return Nothing
                 End Select
+            End Get
+        End Property
+
+        Public ReadOnly Property isLiteral As Boolean
+            Get
+                Return name = TokenType.booleanLiteral OrElse
+                       name = TokenType.integerLiteral OrElse
+                       name = TokenType.missingLiteral OrElse
+                       name = TokenType.numberLiteral OrElse
+                       name = TokenType.stringLiteral
             End Get
         End Property
 
