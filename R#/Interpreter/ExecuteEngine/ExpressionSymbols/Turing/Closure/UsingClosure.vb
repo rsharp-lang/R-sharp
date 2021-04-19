@@ -52,7 +52,14 @@ Imports SMRUCC.Rsharp.Development.Package.File
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
-    Public Class UsingClosure : Inherits Expression
+    ''' <summary>
+    ''' ```R
+    ''' using xxx as creator() {
+    ''' 
+    ''' }
+    ''' ```
+    ''' </summary>
+    Public Class UsingClosure : Inherits SymbolExpression
         Implements IRuntimeTrace
 
         Public Overrides ReadOnly Property type As TypeCodes
