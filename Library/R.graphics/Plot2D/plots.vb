@@ -299,10 +299,12 @@ Module plots
     Public Function plotPieChart(<RRawVectorArgument> x As Object,
                                  Optional schema As Object = "Paired:c12",
                                  Optional d3 As Boolean = False,
+                                 Optional camera As Camera = Nothing,
+                                 <RRawVectorArgument>
+                                 Optional size As Object = "1600,1200",
                                  Optional env As Environment = Nothing) As Object
 
         Dim data As New List(Of FractionData)
-        Dim camera As Camera
         Dim colorSet As String = InteropArgumentHelper.getColorSet(schema, "Paired:c12")
         Dim colors As LoopArray(Of Color) = Designer.GetColors(colorSet)
 
@@ -332,11 +334,20 @@ Module plots
         End If
 
         If d3 Then
+            If camera Is Nothing Then
+                camera = New Camera With {
+                    .screen = InteropArgumentHelper.getSize(size).SizeParser
+                }
+            End If
+
             ' 3D
             Return data.Plot3D(camera)
         Else
             ' 2D
-            Return PieChart.Plot(data)
+            Return PieChart.Plot(
+                data:=data,
+                size:=InteropArgumentHelper.getSize(size)
+            )
         End If
     End Function
 
