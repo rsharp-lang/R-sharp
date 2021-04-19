@@ -25,14 +25,14 @@ Namespace Development
             Me.Rscript = Program.CreateProgram(Rscript, [error]:=message)
         End Sub
 
-        Private Sub AnalysisTree(expr As Expression)
+        Private Sub AnalysisTree(expr As Expression, attrs As Dictionary(Of String, String()))
             If expr Is Nothing OrElse TypeOf expr Is Literal Then
                 Return
             End If
 
             Select Case expr.GetType
-                Case GetType([Imports]) : Call analysisTree(DirectCast(expr, [Imports]))
-                Case GetType(BinaryOrExpression) : Call analysisTree(DirectCast(expr, BinaryOrExpression))
+                Case GetType([Imports]) : Call analysisTree(DirectCast(expr, [Imports]), attrs)
+                Case GetType(BinaryOrExpression) : Call analysisTree(DirectCast(expr, BinaryOrExpression), attrs)
                 Case GetType(DeclareNewSymbol) : Call analysisTree(DirectCast(expr, DeclareNewSymbol))
 
                 Case Else
@@ -41,49 +41,50 @@ Namespace Development
         End Sub
 
         Private Sub analysisTree(expr As DeclareNewSymbol)
-            Call AnalysisTree(expr.m_value)
+            Call AnalysisTree(expr.m_value, expr.attributes)
         End Sub
 
-        Private Sub analysisTree(expr As [Imports])
-            Call AnalysisTree(expr.packages)
-            Call AnalysisTree(expr.library)
+        Private Sub analysisTree(expr As [Imports], attrs As Dictionary(Of String, String()))
+            Call analysisTree(expr.packages)
+            Call analysisTree(expr.library)
         End Sub
 
-        Private Sub analysisTree(expr As BinaryOrExpression)
+        Private Sub analysisTree(expr As BinaryOrExpression, attrs As Dictionary(Of String, String()))
             Dim left As Expression = expr.left
             Dim right As Expression = expr.right
 
             If TypeOf left Is ArgumentValue Then
                 Dim name As String = DirectCast(left, ArgumentValue).name.ToString
+                Dim info As String
 
-                If TypeOf right Is FunctionInvoke Then
-                    Call New NamedValue(Of String) With {
-                        .Name = name,
-                        .Description = parseInfo(right)
-                    }.DoCall(AddressOf arguments.Add)
-                Else
-                    Call New NamedValue(Of String) With {
-                        .Name = name,
-                        .Value = parseDefault(right)
-                    }.DoCall(AddressOf arguments.Add)
+                If Not attrs.IsNullOrEmpty Then
+                    info = attrs.TryGetValue("info").JoinBy(";" & vbCrLf)
                 End If
+
+                Call New NamedValue(Of String) With {
+                    .Name = name,
+                    .Description = info,
+                    .Value = parseDefault(right)
+                }.DoCall(AddressOf arguments.Add)
             Else
-                Call AnalysisTree(left)
-                Call AnalysisTree(right)
+                Call AnalysisTree(left, attrs)
+                Call AnalysisTree(right, attrs)
             End If
         End Sub
 
         Private Function parseDefault(def As Expression) As String
+            If TypeOf def Is FunctionInvoke Then
+                If DirectCast(def, FunctionInvoke).funcName.ToString = "stop" Then
+                    Return $"<required: {DirectCast(def, FunctionInvoke).parameters(Scan0)}>"
+                End If
+            End If
 
-        End Function
-
-        Private Function parseInfo(calls As FunctionInvoke) As String
-
+            Return def.ToString
         End Function
 
         Public Function AnalysisAllCommands() As ShellScript
             For Each line As Expression In Rscript
-                Call AnalysisTree(line)
+                Call AnalysisTree(line, New Dictionary(Of String, String()))
             Next
 
             Return Me
