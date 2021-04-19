@@ -86,9 +86,18 @@ Module Program
 
         Dim Rscript As ShellScript = REnv.Components.Rscript.AutoHandleScript(handle:=script)
 
+        If Not Rscript.message.StringEmpty Then
+            Call Internal.debug.PrintMessageInternal(
+                 Internal.debug.stop(Rscript.message, R.globalEnvir), R.globalEnvir
+            )
+
+            Return 500
+        End If
+
         Call Rscript.AnalysisAllCommands()
+        Call Rscript.PrintUsage()
 
-
+        Return 0
     End Function
 
     Private Function RunExpression(args As CommandLine) As Integer

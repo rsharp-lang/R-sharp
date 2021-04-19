@@ -25,6 +25,10 @@ Namespace Development
             Me.Rscript = Program.CreateProgram(Rscript, [error]:=message)
         End Sub
 
+        Public Sub PrintUsage()
+
+        End Sub
+
         Private Sub AnalysisTree(expr As Expression, attrs As Dictionary(Of String, String()))
             If expr Is Nothing OrElse
                 TypeOf expr Is Literal OrElse
