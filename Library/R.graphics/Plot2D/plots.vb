@@ -49,12 +49,14 @@ Imports System.Drawing
 Imports System.Drawing.Drawing2D
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.ComponentModel.DataStructures
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.Bootstrapping
 Imports Microsoft.VisualBasic.Data.ChartPlots
 Imports Microsoft.VisualBasic.Data.ChartPlots.BarPlot
 Imports Microsoft.VisualBasic.Data.ChartPlots.BarPlot.Data
 Imports Microsoft.VisualBasic.Data.ChartPlots.BarPlot.Histogram
+Imports Microsoft.VisualBasic.Data.ChartPlots.Fractions
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Canvas
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
@@ -71,6 +73,7 @@ Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Shapes
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
 Imports Microsoft.VisualBasic.Imaging.Driver
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math.Calculus
 Imports Microsoft.VisualBasic.Math.Calculus.Dynamics.Data
@@ -274,6 +277,69 @@ Module plots
         )
     End Function
 
+    ''' <summary>
+    ''' ### Pie Charts
+    ''' 
+    ''' Draw a pie chart.
+    ''' </summary>
+    ''' <param name="x">a vector Of non-negative numerical quantities. The values In x are displayed As the areas Of pie slices.</param>
+    ''' <param name="d3"></param>
+    ''' <returns></returns>
+    ''' <remarks>
+    ''' Pie charts are a very bad way of displaying information. The eye is good at judging linear measures and 
+    ''' bad at judging relative areas. A bar chart or dot chart is a preferable way of displaying this type of 
+    ''' data.
+    ''' 
+    ''' Cleveland (1985), page 264 “Data that can be shown by pie charts always can be shown by a dot chart. 
+    ''' This means that judgements of position along a common scale can be made instead of the less accurate angle 
+    ''' judgements.” This statement Is based on the empirical investigations of Cleveland And McGill as well 
+    ''' as investigations by perceptual psychologists.
+    ''' </remarks>
+    <ExportAPI("pie")>
+    Public Function plotPieChart(<RRawVectorArgument> x As Object,
+                                 Optional schema As Object = "Paired:c12",
+                                 Optional d3 As Boolean = False,
+                                 Optional env As Environment = Nothing) As Object
+
+        Dim data As New List(Of FractionData)
+        Dim camera As Camera
+        Dim colorSet As String = InteropArgumentHelper.getColorSet(schema, "Paired:c12")
+        Dim colors As LoopArray(Of Color) = Designer.GetColors(colorSet)
+
+        If x Is Nothing Then
+            Return Internal.debug.stop("the requred x data object can not be nothing!", env)
+        ElseIf TypeOf x Is list Then
+            For Each tag As NamedValue(Of Object) In DirectCast(x, list).namedValues
+                data += New FractionData With {
+                    .Name = tag.Name,
+                    .Value = REnv.asVector(Of Double)(tag.Value).GetValue(Scan0),
+                    .Color = ++colors
+                }
+            Next
+        ElseIf TypeOf x Is vector Then
+            Dim names As String() = DirectCast(x, vector).getNames
+            Dim vec As Double() = REnv.asVector(Of Double)(x)
+
+            For i As Integer = 0 To names.Length - 1
+                data += New FractionData With {
+                    .Name = names(i),
+                    .Color = ++colors,
+                    .Value = vec(i)
+                }
+            Next
+        Else
+            Return Message.InCompatibleType(GetType(vector), x.GetType, env)
+        End If
+
+        If d3 Then
+            ' 3D
+            Return data.Plot3D(camera)
+        Else
+            ' 2D
+            Return PieChart.Plot(data)
+        End If
+    End Function
+
     <ExportAPI("barplot")>
     Public Function barplot(data As Rdataframe,
                             Optional category$ = "item",
@@ -379,7 +445,7 @@ Module plots
         End If
 
         Dim fx As Func(Of Double, Double) = math.CreateLambda(Of Double, Double)(env)
-        Dim x As Double() = asVector(Of Double)(args!x)
+        Dim x As Double() = REnv.asVector(Of Double)(args!x)
         Dim points As PointF() = x.Select(Function(xi) New PointF(xi, fx(xi))).ToArray
 
         Return points.Plot(
@@ -442,8 +508,8 @@ Module plots
                                  Optional alpha As Integer = 255,
                                  Optional ptSize As Integer = 5) As SerialData
 
-        Dim px As Double() = asVector(Of Double)(x)
-        Dim py As Double() = asVector(Of Double)(y)
+        Dim px As Double() = REnv.asVector(Of Double)(x)
+        Dim py As Double() = REnv.asVector(Of Double)(y)
         Dim points As PointData() = px _
             .Select(Function(xi, i)
                         Return New PointData With {
