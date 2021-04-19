@@ -49,12 +49,14 @@ Imports System.Drawing
 Imports System.Drawing.Drawing2D
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.ComponentModel.DataStructures
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.Bootstrapping
 Imports Microsoft.VisualBasic.Data.ChartPlots
 Imports Microsoft.VisualBasic.Data.ChartPlots.BarPlot
 Imports Microsoft.VisualBasic.Data.ChartPlots.BarPlot.Data
 Imports Microsoft.VisualBasic.Data.ChartPlots.BarPlot.Histogram
+Imports Microsoft.VisualBasic.Data.ChartPlots.Fractions
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Canvas
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
@@ -71,6 +73,7 @@ Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Shapes
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
 Imports Microsoft.VisualBasic.Imaging.Driver
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math.Calculus
 Imports Microsoft.VisualBasic.Math.Calculus.Dynamics.Data
@@ -274,8 +277,112 @@ Module plots
         )
     End Function
 
+    ''' <summary>
+    ''' ### Pie Charts
+    ''' 
+    ''' Draw a pie chart.
+    ''' </summary>
+    ''' <param name="x">a vector Of non-negative numerical quantities. The values In x are displayed As the areas Of pie slices.</param>
+    ''' <param name="d3"></param>
+    ''' <returns></returns>
+    ''' <remarks>
+    ''' Pie charts are a very bad way of displaying information. The eye is good at judging linear measures and 
+    ''' bad at judging relative areas. A bar chart or dot chart is a preferable way of displaying this type of 
+    ''' data.
+    ''' 
+    ''' Cleveland (1985), page 264 “Data that can be shown by pie charts always can be shown by a dot chart. 
+    ''' This means that judgements of position along a common scale can be made instead of the less accurate angle 
+    ''' judgements.” This statement Is based on the empirical investigations of Cleveland And McGill as well 
+    ''' as investigations by perceptual psychologists.
+    ''' </remarks>
+    <ExportAPI("pie")>
+    Public Function plotPieChart(<RRawVectorArgument> x As Object,
+                                 Optional schema As Object = "Paired:c12",
+                                 Optional d3 As Boolean = False,
+                                 Optional camera As Camera = Nothing,
+                                 <RRawVectorArgument>
+                                 Optional size As Object = "1600,1200",
+                                 Optional env As Environment = Nothing) As Object
+
+        Dim data As New List(Of FractionData)
+        Dim colorSet As String = InteropArgumentHelper.getColorSet(schema, "Paired:c12")
+        Dim colors As LoopArray(Of Color) = Designer.GetColors(colorSet)
+
+        If x Is Nothing Then
+            Return Internal.debug.stop("the requred x data object can not be nothing!", env)
+        ElseIf TypeOf x Is list Then
+            For Each tag As NamedValue(Of Object) In DirectCast(x, list).namedValues
+                data += New FractionData With {
+                    .Name = tag.Name,
+                    .Value = REnv.asVector(Of Double)(tag.Value).GetValue(Scan0),
+                    .Color = ++colors
+                }
+            Next
+        ElseIf TypeOf x Is vector Then
+            Dim names As String() = DirectCast(x, vector).getNames
+            Dim vec As Double() = REnv.asVector(Of Double)(x)
+
+            For i As Integer = 0 To names.Length - 1
+                data += New FractionData With {
+                    .Name = names(i),
+                    .Color = ++colors,
+                    .Value = vec(i)
+                }
+            Next
+        Else
+            Return Message.InCompatibleType(GetType(vector), x.GetType, env)
+        End If
+
+        If d3 Then
+            If camera Is Nothing Then
+                camera = New Camera With {
+                    .screen = InteropArgumentHelper.getSize(size).SizeParser
+                }
+            End If
+
+            ' 3D
+            Return data.Plot3D(camera)
+        Else
+            ' 2D
+            Return PieChart.Plot(
+                data:=data,
+                size:=InteropArgumentHelper.getSize(size)
+            )
+        End If
+    End Function
+
+    ''' <summary>
+    ''' ### Bar Plots
+    ''' 
+    ''' Creates a bar plot with vertical or horizontal bars.
+    ''' </summary>
+    ''' <param name="height">
+    ''' either a vector or matrix of values describing the bars which make up the plot. 
+    ''' If height is a vector, the plot consists of a sequence of rectangular bars with 
+    ''' heights given by the values in the vector. If height is a matrix and beside is 
+    ''' FALSE then each bar of the plot corresponds to a column of height, with the 
+    ''' values in the column giving the heights of stacked sub-bars making up the bar. 
+    ''' If height is a matrix and beside is TRUE, then the values in each column are 
+    ''' juxtaposed rather than stacked.
+    ''' </param>
+    ''' <param name="category$"></param>
+    ''' <param name="value$"></param>
+    ''' <param name="color$"></param>
+    ''' <param name="min$"></param>
+    ''' <param name="max$"></param>
+    ''' <param name="title">overall And sub title for the plot.</param>
+    ''' <param name="xlab">a label for the x axis.</param>
+    ''' <param name="ylab">a label For the y axis.</param>
+    ''' <param name="bg"></param>
+    ''' <param name="size"></param>
+    ''' <param name="padding"></param>
+    ''' <param name="show_grid"></param>
+    ''' <param name="show_legend"></param>
+    ''' <returns>
+    ''' the plot image
+    ''' </returns>
     <ExportAPI("barplot")>
-    Public Function barplot(data As Rdataframe,
+    Public Function barplot(height As Rdataframe,
                             Optional category$ = "item",
                             Optional value$ = "value",
                             Optional color$ = "color",
@@ -290,11 +397,11 @@ Module plots
                             Optional show_grid As Boolean = True,
                             Optional show_legend As Boolean = True) As Object
 
-        Dim items As String() = data.columns(category)
-        Dim values As Double() = REnv.asVector(Of Double)(data.columns(value))
-        Dim colors As String() = data.columns(color).AsObjectEnumerator.Select(AddressOf InteropArgumentHelper.getColor).ToArray
-        Dim minX As Double() = REnv.asVector(Of Double)(data.columns(min))
-        Dim maxX As Double() = REnv.asVector(Of Double)(data.columns(max))
+        Dim items As String() = height.columns(category)
+        Dim values As Double() = REnv.asVector(Of Double)(height.columns(value))
+        Dim colors As String() = height.columns(color).AsObjectEnumerator.Select(AddressOf InteropArgumentHelper.getColor).ToArray
+        Dim minX As Double() = REnv.asVector(Of Double)(height.columns(min))
+        Dim maxX As Double() = REnv.asVector(Of Double)(height.columns(max))
         Dim s As HistProfile() = items _
             .SeqIterator _
             .Select(Function(i)
@@ -379,7 +486,7 @@ Module plots
         End If
 
         Dim fx As Func(Of Double, Double) = math.CreateLambda(Of Double, Double)(env)
-        Dim x As Double() = asVector(Of Double)(args!x)
+        Dim x As Double() = REnv.asVector(Of Double)(args!x)
         Dim points As PointF() = x.Select(Function(xi) New PointF(xi, fx(xi))).ToArray
 
         Return points.Plot(
@@ -442,8 +549,8 @@ Module plots
                                  Optional alpha As Integer = 255,
                                  Optional ptSize As Integer = 5) As SerialData
 
-        Dim px As Double() = asVector(Of Double)(x)
-        Dim py As Double() = asVector(Of Double)(y)
+        Dim px As Double() = REnv.asVector(Of Double)(x)
+        Dim py As Double() = REnv.asVector(Of Double)(y)
         Dim points As PointData() = px _
             .Select(Function(xi, i)
                         Return New PointData With {
@@ -464,29 +571,64 @@ Module plots
         Return serial
     End Function
 
-    <ExportAPI("volinPlot")>
-    Public Function doVolinPlot(dataset As Array,
-                                <RRawVectorArgument> Optional size As Object = Canvas.Resolution2K.Size,
-                                <RRawVectorArgument> Optional margin As Object = Canvas.Resolution2K.PaddingWithTopTitle,
-                                Optional bg$ = "white",
-                                Optional colorSet$ = DesignerTerms.TSFShellColors,
-                                Optional ylab$ = "y axis",
-                                Optional title$ = "Volin Plot",
-                                Optional labelAngle As Double = -45,
-                                Optional env As Environment = Nothing) As Object
+    ''' <summary>
+    ''' ### Violin plot
+    ''' 
+    ''' A violin plot is a compact display of a continuous distribution. It is a blend of boxplot and density: 
+    ''' a violin plot is a mirrored density plot displayed in the same way as a boxplot.
+    ''' </summary>
+    ''' <param name="data">
+    ''' The data To be displayed In this layer. There are three options
+    ''' 
+    ''' If NULL, the Default, the data Is inherited from the plot data As specified In the Call To ggplot().
+    ''' A data.frame, Or other Object, will override the plot data. All objects will be fortified To produce 
+    ''' a data frame. See fortify() For which variables will be created.
+    ''' 
+    ''' A Function will be called With a Single argument, the plot data. The Return value must be a data.frame, 
+    ''' And will be used As the layer data. A Function can be created from a formula (e.g. ~ head(.x, 10)).
+    ''' </param>
+    ''' <param name="size"></param>
+    ''' <param name="margin"></param>
+    ''' <param name="bg$"></param>
+    ''' <param name="colorSet$"></param>
+    ''' <param name="ylab$"></param>
+    ''' <param name="title$"></param>
+    ''' <param name="labelAngle"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    ''' <remarks>
+    ''' Computed variables
+    ''' 
+    ''' + ``density`` density estimate
+    ''' + ``scaled`` density estimate, scaled To maximum Of 1
+    ''' + ``count`` density * number of points - probably useless for violin plots
+    ''' + ``violinwidth`` density scaled For the violin plot, according To area, counts Or To a constant maximum width
+    ''' + ``n`` number of points
+    ''' + ``width`` width of violin bounding box
+    ''' </remarks>
+    <ExportAPI("violinPlot")>
+    Public Function doViolinPlot(data As Array,
+                                 <RRawVectorArgument> Optional size As Object = Canvas.Resolution2K.Size,
+                                 <RRawVectorArgument> Optional margin As Object = Canvas.Resolution2K.PaddingWithTopTitle,
+                                 Optional bg$ = "white",
+                                 Optional colorSet$ = DesignerTerms.TSFShellColors,
+                                 Optional ylab$ = "y axis",
+                                 Optional title$ = "Volin Plot",
+                                 Optional labelAngle As Double = -45,
+                                 Optional env As Environment = Nothing) As Object
 
-        If dataset Is Nothing Then
+        If data Is Nothing Then
             Return Internal.debug.stop("the required dataset is nothing!", env)
         End If
 
-        Dim type As Type = REnv.MeasureArrayElementType(dataset)
+        Dim type As Type = REnv.MeasureArrayElementType(data)
 
         size = InteropArgumentHelper.getSize(size)
         margin = InteropArgumentHelper.getPadding(margin)
 
         If type Is GetType(DataSet) Then
-            Return VolinPlot.Plot(
-                dataset:=DirectCast(REnv.asVector(Of DataSet)(dataset), DataSet()),
+            Return ViolinPlot.Plot(
+                dataset:=DirectCast(REnv.asVector(Of DataSet)(data), DataSet()),
                 size:=size,
                 margin:=margin,
                 bg:=bg,
@@ -496,13 +638,13 @@ Module plots
                 labelAngle:=labelAngle
             )
         Else
-            Dim data As New NamedCollection(Of Double) With {
+            Dim dataSet As New NamedCollection(Of Double) With {
                 .name = title,
-                .value = REnv.asVector(Of Double)(dataset)
+                .value = REnv.asVector(Of Double)(data)
             }
 
-            Return VolinPlot.Plot(
-                dataset:={data},
+            Return ViolinPlot.Plot(
+                dataset:={dataSet},
                 size:=size,
                 margin:=margin,
                 bg:=bg,

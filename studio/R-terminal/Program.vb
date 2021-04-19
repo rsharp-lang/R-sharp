@@ -47,9 +47,11 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.ApplicationServices.Zip
 Imports Microsoft.VisualBasic.CommandLine
+Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Runtime
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
@@ -61,8 +63,32 @@ Module Program
             args:=App.CommandLine,
             executeFile:=AddressOf RunScript,
             executeEmpty:=AddressOf Terminal.RunTerminal,
-            executeNotFound:=AddressOf RunExpression
+            executeNotFound:=AddressOf RunExpression,
+            executeQuery:=AddressOf QueryCommandLineArgvs
         )
+    End Function
+
+    Private Function QueryCommandLineArgvs(args As CommandLine) As Integer
+        Dim script As String = args.SingleValue
+        Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
+
+        If Not script.FileExists Then
+            Call Internal.debug.PrintMessageInternal(
+                 Internal.debug.stop({
+                     $"the given R script file is not found on your filesystem!",
+                     $"Rscript: {script}"
+                 }, R.globalEnvir),
+                    R.globalEnvir
+            )
+
+            Return 404
+        End If
+
+        Dim Rscript As ShellScript = REnv.Components.Rscript.AutoHandleScript(handle:=script)
+
+        Call Rscript.AnalysisAllCommands()
+
+
     End Function
 
     Private Function RunExpression(args As CommandLine) As Integer
