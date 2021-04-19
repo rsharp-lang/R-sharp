@@ -61,8 +61,13 @@ Module Program
             args:=App.CommandLine,
             executeFile:=AddressOf RunScript,
             executeEmpty:=AddressOf Terminal.RunTerminal,
-            executeNotFound:=AddressOf RunExpression
+            executeNotFound:=AddressOf RunExpression,
+            executeQuery:=AddressOf QueryCommandLineArgvs
         )
+    End Function
+
+    Private Function QueryCommandLineArgvs(args As CommandLine) As Integer
+
     End Function
 
     Private Function RunExpression(args As CommandLine) As Integer
