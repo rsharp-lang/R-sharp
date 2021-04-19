@@ -82,6 +82,9 @@ Module interpreterTest
     End Sub
 
     Sub Main()
+
+        Call annotationTest()
+
         Call doCalltest()
 
         Call acceptorTest()
@@ -203,6 +206,25 @@ Module interpreterTest
 
         Call stringInterpolateTest()
 
+
+        Pause()
+    End Sub
+
+    Sub annotationTest()
+        Call R.Evaluate("
+
+
+[@unit ""KM""]
+let dist = 100;
+
+[@unit ""sec""]
+let time = 1;
+
+print(dist / time);
+
+
+
+")
 
         Pause()
     End Sub
