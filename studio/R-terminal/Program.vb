@@ -95,7 +95,7 @@ Module Program
         End If
 
         Call Rscript.AnalysisAllCommands()
-        Call Rscript.PrintUsage()
+        Call Rscript.PrintUsage(dev:=App.StdOut)
 
         Return 0
     End Function

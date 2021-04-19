@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+﻿Imports System.IO
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter
@@ -18,15 +19,39 @@ Namespace Development
 
         ReadOnly Rscript As Program
         ReadOnly arguments As New List(Of NamedValue(Of String))
+        ReadOnly sourceScript As String
 
         Public ReadOnly Property message As String
 
         Sub New(Rscript As Rscript)
             Me.Rscript = Program.CreateProgram(Rscript, [error]:=message)
+            Me.sourceScript = Rscript.fileName
         End Sub
 
-        Public Sub PrintUsage()
+        Public Sub PrintUsage(dev As TextWriter)
+            Dim cli As New List(Of String)
+            Dim maxName As String = arguments.Select(Function(a) a.Name).MaxLengthString
 
+            For Each arg As NamedValue(Of String) In arguments
+                If arg.Value.StartsWith("<required") Then
+                    cli.Add($"{arg.Name} <value>")
+                Else
+                    cli.Add($"[{arg.Name} <default={arg.Value}>]")
+                End If
+            Next
+
+            Call dev.WriteLine($"SYNOPSIS")
+            Call dev.WriteLine($"Rscript ""{sourceScript}"" {cli.JoinBy(" ")}")
+            Call dev.WriteLine()
+            Call dev.WriteLine("CommandLine Argument Values:")
+
+            Call dev.WriteLine()
+
+            For Each arg As NamedValue(Of String) In arguments
+                Call dev.WriteLine($" {arg.Name}: {New String(" "c, maxName.Length - arg.Name.Length)}{arg.Description}")
+            Next
+
+            Call dev.Flush()
         End Sub
 
         Private Sub AnalysisTree(expr As Expression, attrs As Dictionary(Of String, String()))
