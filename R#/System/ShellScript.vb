@@ -64,8 +64,8 @@ Namespace Development
             Dim right As Expression = expr.right
 
             If TypeOf left Is ArgumentValue Then
-                Dim name As String = DirectCast(left, ArgumentValue).name.ToString
-                Dim info As String
+                Dim name As String = DirectCast(left, ArgumentValue).name.ToString.Trim(""""c)
+                Dim info As String = Nothing
 
                 If Not attrs.IsNullOrEmpty Then
                     info = attrs.TryGetValue("info").JoinBy(";" & vbCrLf)
@@ -84,7 +84,7 @@ Namespace Development
 
         Private Function parseDefault(def As Expression) As String
             If TypeOf def Is FunctionInvoke Then
-                If DirectCast(def, FunctionInvoke).funcName.ToString = "stop" Then
+                If DirectCast(def, FunctionInvoke).funcName.ToString.Trim(""""c) = "stop" Then
                     Return $"<required: {DirectCast(def, FunctionInvoke).parameters(Scan0)}>"
                 End If
             End If
