@@ -215,6 +215,7 @@ Module interpreterTest
 
 
 [@unit ""KM""]
+[@span 5555555555555555]
 let dist = 100;
 
 [@unit ""sec""]

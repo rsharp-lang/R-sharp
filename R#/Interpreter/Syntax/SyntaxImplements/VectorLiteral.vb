@@ -88,6 +88,21 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             End Select
         End Function
 
+        <Extension>
+        Public Iterator Function ParseAnnotations(blocks As Token()) As IEnumerable(Of NamedValue(Of String))
+            For Each block As Token() In blocks.Split(4)
+                Yield block.Skip(1).Take(2).ToArray.ParseAnnotation
+            Next
+        End Function
+
+        <Extension>
+        Public Function ParseAnnotation(block As Token()) As NamedValue(Of String)
+            Dim name As String = block(Scan0).text.Substring(1)
+            Dim value As String = block(1).text
+
+            Return New NamedValue(Of String)(name, value)
+        End Function
+
         Public Function VectorLiteral(tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim blocks As List(Of Token()) = tokens _
                 .Skip(1) _
@@ -101,12 +116,9 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
 
                 ' is user annotation
                 If block(Scan0).name = TokenType.annotation AndAlso block(1).isLiteral Then
-                    Dim name As String = block(Scan0).text.Substring(1)
-                    Dim value As String = block(1).text
-
-                    Call opts.annotations.Add(New NamedValue(Of String)(name, value))
-
-                    Return New CodeComment($"{name}:={value}")
+                    Dim annotation As NamedValue(Of String) = block.ParseAnnotation
+                    Call opts.annotations.Add(annotation)
+                    Return New CodeComment($"{annotation.Name}:={annotation.Value}")
                 End If
             End If
 

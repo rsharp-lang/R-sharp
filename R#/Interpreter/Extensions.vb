@@ -146,8 +146,7 @@ Namespace Interpreter
                         .Split(2)
 
                     For Each joinBlock As Token()() In parts
-                        block = joinBlock.ElementAtOrDefault(1).ToArray
-                        block = joinBlock(Scan0).JoinIterates(block).ToArray
+                        block = joinBlock(Scan0).JoinIterates(joinBlock.ElementAtOrDefault(1)).ToArray
                         expr = Expression.CreateExpression(block, opts)
 
                         If expr.isException Then
