@@ -1,59 +1,61 @@
 ﻿#Region "Microsoft.VisualBasic::483131f7e233e7031548814d6cd1531d, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareLambdaFunction.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class DeclareLambdaFunction
-    ' 
-    '         Properties: closure, expressionName, name, parameterNames, stackFrame
-    '                     type
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: CreateLambda, Evaluate, getArguments, GetPrintContent, getReturns
-    '                   getSingle, (+2 Overloads) Invoke, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class DeclareLambdaFunction
+' 
+'         Properties: closure, expressionName, name, parameterNames, stackFrame
+'                     type
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: CreateLambda, Evaluate, getArguments, GetPrintContent, getReturns
+'                   getSingle, (+2 Overloads) Invoke, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports SMRUCC.Rsharp.Development.Package.File
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
@@ -172,8 +174,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         End Function
 
         Public Function CreateLambda(Of T, Out)(parent As Environment) As Func(Of T, Out)
-            Dim envir = New Environment(parent, stackFrame, isInherits:=False)
-            Dim v As Symbol
+            Dim envir As New Environment(parent, stackFrame, isInherits:=False)
+            Dim v As Symbol()
             Dim err As Message = Nothing
 
             Call DeclareNewSymbol _
@@ -185,15 +187,20 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                            err:=err
             )
 
-            v = envir.FindSymbol(parameter.names(Scan0), [inherits]:=False)
+            v = parameter.names _
+                .Select(Function(ref)
+                            Return envir.FindSymbol(ref, [inherits]:=False)
+                        End Function) _
+                .ToArray
 
             Dim isNumbericOut = GetType(Out).GetRTypeCode = TypeCodes.double OrElse GetType(Out).GetRTypeCode = TypeCodes.integer
             Dim isStringOut = GetType(Out) Is GetType(String)
+            Dim setValue = setValueHandler(Of T)(v, envir)
 
             Return Function(x As T) As Out
                        Dim result As Object
 
-                       v.SetValue(x, envir)
+                       setValue(x)
                        result = closure.Evaluate(envir)
 
                        If Program.isException(result) Then
@@ -210,6 +217,31 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
                        Return result
                    End Function
+        End Function
+
+        Private Shared Function setValueHandler(Of T)(v As Symbol(), env As Environment) As Action(Of T)
+            If v.Length = 1 Then
+                Return Sub(x) Call v(Scan0).SetValue(x, env)
+            ElseIf v.Length > 1 Then
+                Dim typeTest As Type = GetType(T)
+
+                If typeTest.IsValueType AndAlso typeTest.ImplementInterface(Of ITuple) Then
+                    Return Sub(x)
+                               Dim tuple As ITuple = DirectCast(CObj(x), ITuple)
+
+                               For i As Integer = 0 To v.Length - 1
+                                   Call v(i).SetValue(tuple(i), env)
+                               Next
+                           End Sub
+                Else
+                    Throw New InvalidCastException
+                End If
+            Else
+                ' v = 0
+                Return Sub()
+                           ' do nothing
+                       End Sub
+            End If
         End Function
 
         Private Shared Function getSingle(Of Out)(result As Object, isNumbericOut As Boolean, isStringOut As Boolean) As Object
