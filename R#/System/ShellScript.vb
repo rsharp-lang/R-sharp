@@ -26,7 +26,10 @@ Namespace Development
         End Sub
 
         Private Sub AnalysisTree(expr As Expression, attrs As Dictionary(Of String, String()))
-            If expr Is Nothing OrElse TypeOf expr Is Literal Then
+            If expr Is Nothing OrElse
+                TypeOf expr Is Literal OrElse
+                TypeOf expr Is SymbolReference Then
+
                 Return
             End If
 
@@ -34,10 +37,17 @@ Namespace Development
                 Case GetType([Imports]) : Call analysisTree(DirectCast(expr, [Imports]), attrs)
                 Case GetType(BinaryOrExpression) : Call analysisTree(DirectCast(expr, BinaryOrExpression), attrs)
                 Case GetType(DeclareNewSymbol) : Call analysisTree(DirectCast(expr, DeclareNewSymbol))
+                Case GetType(FunctionInvoke) : Call analysisTree(DirectCast(expr, FunctionInvoke), attrs)
 
                 Case Else
                     Throw New NotImplementedException(expr.GetType.FullName)
             End Select
+        End Sub
+
+        Private Sub analysisTree(expr As FunctionInvoke, attrs As Dictionary(Of String, String()))
+            For Each arg As Expression In expr.parameters
+                Call AnalysisTree(arg, attrs)
+            Next
         End Sub
 
         Private Sub analysisTree(expr As DeclareNewSymbol)
