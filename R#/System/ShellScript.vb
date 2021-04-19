@@ -1,5 +1,6 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Development
@@ -7,11 +8,22 @@ Namespace Development
     ''' <summary>
     ''' the R# shell script commandline arguments helper module
     ''' </summary>
-    Public Module ShellScript
+    Public Class ShellScript
 
-        <Extension>
-        Public Iterator Function AnalysisAllCommands(script As Rscript) As IEnumerable(Of NamedValue(Of String))
+        ReadOnly Rscript As Program
+
+        Public ReadOnly Property message As String
+
+        Sub New(Rscript As Rscript)
+            Me.Rscript = Program.CreateProgram(Rscript, [error]:=message)
+        End Sub
+
+        Public Function AnalysisAllCommands() As ShellScript
 
         End Function
-    End Module
+
+        Public Shared Widening Operator CType(Rscript As Rscript) As ShellScript
+            Return New ShellScript(Rscript)
+        End Operator
+    End Class
 End Namespace
