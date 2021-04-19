@@ -254,14 +254,14 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="SMRUCC.Rsharp.Interpreter.SyntaxParser.SyntaxBuilderOptions" Collapsed="true">
-    <Position X="168" Y="5.5" Width="1.5" />
+    <Position X="169.75" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AABAEAAAACgAAAIAAACAAQAAAAAAAAAEAAAAgAAAABA=</HashCode>
       <FileName>Interpreter\Syntax\SyntaxBuilderOptions.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SMRUCC.Rsharp.Interpreter.SyntaxParser.SyntaxResult" Collapsed="true">
-    <Position X="171.5" Y="5.5" Width="1.5" />
+    <Position X="173.25" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <FileName>Interpreter\Syntax\SyntaxResult.vb</FileName>
     </TypeIdentifier>
@@ -274,7 +274,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="SMRUCC.Rsharp.Interpreter.SyntaxParser.SyntaxQueue" Collapsed="true">
-    <Position X="169.75" Y="5.5" Width="1.5" />
+    <Position X="171.5" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Interpreter\Syntax\SyntaxTree\BinaryExpressionTree\GenericSymbolOperatorProcessor.vb</FileName>
@@ -316,7 +316,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="SMRUCC.Rsharp.Language.TokenIcer.StringInterpolation" Collapsed="true">
-    <Position X="182" Y="4.5" Width="1.5" />
+    <Position X="166.25" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAQAAAQAAAACAEAAAAAAAIAAAAAAAAgBAAAAAAAA=</HashCode>
       <FileName>Language\TokenIcer\StringInterpolation.vb</FileName>
@@ -386,14 +386,14 @@
     </TypeIdentifier>
   </Class>
   <Class Name="SMRUCC.Rsharp.Runtime.Internal.Object.unit" Collapsed="true">
-    <Position X="175" Y="5.5" Width="1.5" />
+    <Position X="176.75" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Runtime\Internal\objects\unit.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SMRUCC.Rsharp.Runtime.Internal.Object.vbObject" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="176.75" Y="5.5" Width="1.5" />
+    <Position X="178.5" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AQJAJAAAAAAAAAAEIAAAAAAAAAABAAAAgAAASAgAAAA=</HashCode>
       <FileName>Runtime\Internal\objects\dataset\vbObject.vb</FileName>
@@ -566,7 +566,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="SMRUCC.Rsharp.Runtime.Components.Symbol" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="166.25" Y="5.5" Width="1.5" />
+    <Position X="168" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AgAAAIAABAAAAgAEAEAAAAAAgAAEICAAAAAAIAAAEAI=</HashCode>
       <FileName>Runtime\System\Symbol.vb</FileName>
@@ -771,7 +771,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="SMRUCC.Rsharp.Development.Components.ZipFolder" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="180.25" Y="5.5" Width="1.5" />
+    <Position X="182" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAACAAAAAMAAAAAAAEAAAAAAAAAAIAAgAAAAQ=</HashCode>
       <FileName>System\Components\ZipFolder.vb</FileName>
@@ -887,7 +887,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="SMRUCC.Rsharp.Runtime.Internal.Object.Utils.TableFormatter" Collapsed="true">
-    <Position X="173.25" Y="5.5" Width="1.5" />
+    <Position X="175" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Runtime\Internal\objects\utils\TableFormatter.vb</FileName>
@@ -1000,7 +1000,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="SMRUCC.Rsharp.Development.Configuration.StartupConfigs" Collapsed="true">
-    <Position X="180.25" Y="4.5" Width="1.5" />
+    <Position X="182" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAA=</HashCode>
       <FileName>System\Config\StartupConfigs.vb</FileName>
@@ -1100,7 +1100,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="SMRUCC.Rsharp.Development.Package.File.Writer" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="178.5" Y="5.5" Width="1.5" />
+    <Position X="180.25" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AQQAUCAAAGAAAIAAABSIAABAIAEAAACgQABAAk3AAAA=</HashCode>
       <FileName>System\Package\PackageFile\Serialization\Writer.vb</FileName>
@@ -1231,6 +1231,12 @@
     <TypeIdentifier>
       <HashCode>AAAQAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>System\Package\PackageFile\Expression\RVector.vb</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SMRUCC.Rsharp.Development.ShellScript" Collapsed="true">
+    <Position X="180.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>System\ShellScript.vb</FileName>
     </TypeIdentifier>
   </Class>
   <Struct Name="SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline.Group" Collapsed="true" BaseTypeListCollapsed="true">
