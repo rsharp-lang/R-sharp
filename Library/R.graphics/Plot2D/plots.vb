@@ -340,8 +340,38 @@ Module plots
         End If
     End Function
 
+    ''' <summary>
+    ''' ### Bar Plots
+    ''' 
+    ''' Creates a bar plot with vertical or horizontal bars.
+    ''' </summary>
+    ''' <param name="height">
+    ''' either a vector or matrix of values describing the bars which make up the plot. 
+    ''' If height is a vector, the plot consists of a sequence of rectangular bars with 
+    ''' heights given by the values in the vector. If height is a matrix and beside is 
+    ''' FALSE then each bar of the plot corresponds to a column of height, with the 
+    ''' values in the column giving the heights of stacked sub-bars making up the bar. 
+    ''' If height is a matrix and beside is TRUE, then the values in each column are 
+    ''' juxtaposed rather than stacked.
+    ''' </param>
+    ''' <param name="category$"></param>
+    ''' <param name="value$"></param>
+    ''' <param name="color$"></param>
+    ''' <param name="min$"></param>
+    ''' <param name="max$"></param>
+    ''' <param name="title">overall And sub title for the plot.</param>
+    ''' <param name="xlab">a label for the x axis.</param>
+    ''' <param name="ylab">a label For the y axis.</param>
+    ''' <param name="bg"></param>
+    ''' <param name="size"></param>
+    ''' <param name="padding"></param>
+    ''' <param name="show_grid"></param>
+    ''' <param name="show_legend"></param>
+    ''' <returns>
+    ''' the plot image
+    ''' </returns>
     <ExportAPI("barplot")>
-    Public Function barplot(data As Rdataframe,
+    Public Function barplot(height As Rdataframe,
                             Optional category$ = "item",
                             Optional value$ = "value",
                             Optional color$ = "color",
@@ -356,11 +386,11 @@ Module plots
                             Optional show_grid As Boolean = True,
                             Optional show_legend As Boolean = True) As Object
 
-        Dim items As String() = data.columns(category)
-        Dim values As Double() = REnv.asVector(Of Double)(data.columns(value))
-        Dim colors As String() = data.columns(color).AsObjectEnumerator.Select(AddressOf InteropArgumentHelper.getColor).ToArray
-        Dim minX As Double() = REnv.asVector(Of Double)(data.columns(min))
-        Dim maxX As Double() = REnv.asVector(Of Double)(data.columns(max))
+        Dim items As String() = height.columns(category)
+        Dim values As Double() = REnv.asVector(Of Double)(height.columns(value))
+        Dim colors As String() = height.columns(color).AsObjectEnumerator.Select(AddressOf InteropArgumentHelper.getColor).ToArray
+        Dim minX As Double() = REnv.asVector(Of Double)(height.columns(min))
+        Dim maxX As Double() = REnv.asVector(Of Double)(height.columns(max))
         Dim s As HistProfile() = items _
             .SeqIterator _
             .Select(Function(i)
@@ -530,29 +560,64 @@ Module plots
         Return serial
     End Function
 
-    <ExportAPI("volinPlot")>
-    Public Function doVolinPlot(dataset As Array,
-                                <RRawVectorArgument> Optional size As Object = Canvas.Resolution2K.Size,
-                                <RRawVectorArgument> Optional margin As Object = Canvas.Resolution2K.PaddingWithTopTitle,
-                                Optional bg$ = "white",
-                                Optional colorSet$ = DesignerTerms.TSFShellColors,
-                                Optional ylab$ = "y axis",
-                                Optional title$ = "Volin Plot",
-                                Optional labelAngle As Double = -45,
-                                Optional env As Environment = Nothing) As Object
+    ''' <summary>
+    ''' ### Violin plot
+    ''' 
+    ''' A violin plot is a compact display of a continuous distribution. It is a blend of boxplot and density: 
+    ''' a violin plot is a mirrored density plot displayed in the same way as a boxplot.
+    ''' </summary>
+    ''' <param name="data">
+    ''' The data To be displayed In this layer. There are three options
+    ''' 
+    ''' If NULL, the Default, the data Is inherited from the plot data As specified In the Call To ggplot().
+    ''' A data.frame, Or other Object, will override the plot data. All objects will be fortified To produce 
+    ''' a data frame. See fortify() For which variables will be created.
+    ''' 
+    ''' A Function will be called With a Single argument, the plot data. The Return value must be a data.frame, 
+    ''' And will be used As the layer data. A Function can be created from a formula (e.g. ~ head(.x, 10)).
+    ''' </param>
+    ''' <param name="size"></param>
+    ''' <param name="margin"></param>
+    ''' <param name="bg$"></param>
+    ''' <param name="colorSet$"></param>
+    ''' <param name="ylab$"></param>
+    ''' <param name="title$"></param>
+    ''' <param name="labelAngle"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    ''' <remarks>
+    ''' Computed variables
+    ''' 
+    ''' + ``density`` density estimate
+    ''' + ``scaled`` density estimate, scaled To maximum Of 1
+    ''' + ``count`` density * number of points - probably useless for violin plots
+    ''' + ``violinwidth`` density scaled For the violin plot, according To area, counts Or To a constant maximum width
+    ''' + ``n`` number of points
+    ''' + ``width`` width of violin bounding box
+    ''' </remarks>
+    <ExportAPI("violinPlot")>
+    Public Function doViolinPlot(data As Array,
+                                 <RRawVectorArgument> Optional size As Object = Canvas.Resolution2K.Size,
+                                 <RRawVectorArgument> Optional margin As Object = Canvas.Resolution2K.PaddingWithTopTitle,
+                                 Optional bg$ = "white",
+                                 Optional colorSet$ = DesignerTerms.TSFShellColors,
+                                 Optional ylab$ = "y axis",
+                                 Optional title$ = "Volin Plot",
+                                 Optional labelAngle As Double = -45,
+                                 Optional env As Environment = Nothing) As Object
 
-        If dataset Is Nothing Then
+        If data Is Nothing Then
             Return Internal.debug.stop("the required dataset is nothing!", env)
         End If
 
-        Dim type As Type = REnv.MeasureArrayElementType(dataset)
+        Dim type As Type = REnv.MeasureArrayElementType(data)
 
         size = InteropArgumentHelper.getSize(size)
         margin = InteropArgumentHelper.getPadding(margin)
 
         If type Is GetType(DataSet) Then
-            Return VolinPlot.Plot(
-                dataset:=DirectCast(REnv.asVector(Of DataSet)(dataset), DataSet()),
+            Return ViolinPlot.Plot(
+                dataset:=DirectCast(REnv.asVector(Of DataSet)(data), DataSet()),
                 size:=size,
                 margin:=margin,
                 bg:=bg,
@@ -562,13 +627,13 @@ Module plots
                 labelAngle:=labelAngle
             )
         Else
-            Dim data As New NamedCollection(Of Double) With {
+            Dim dataSet As New NamedCollection(Of Double) With {
                 .name = title,
-                .value = REnv.asVector(Of Double)(dataset)
+                .value = REnv.asVector(Of Double)(data)
             }
 
-            Return VolinPlot.Plot(
-                dataset:={data},
+            Return ViolinPlot.Plot(
+                dataset:={dataSet},
                 size:=size,
                 margin:=margin,
                 bg:=bg,
