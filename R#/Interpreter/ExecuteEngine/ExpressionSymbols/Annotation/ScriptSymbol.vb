@@ -49,6 +49,9 @@ Imports SMRUCC.Rsharp.Development.Package.File
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Annotation
 
+    ''' <summary>
+    ''' ``@script``
+    ''' </summary>
     Public Class ScriptSymbol : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
