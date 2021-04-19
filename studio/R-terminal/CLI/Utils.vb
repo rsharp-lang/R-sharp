@@ -56,7 +56,7 @@ Partial Module CLI
     <ExportAPI("--install.packages")>
     <Description("Install new packages.")>
     <Usage("--install.packages /module <*.dll/*.zip> [--verbose]")>
-    <ArgumentAttribute("/module", False, CLITypes.File,
+    <Argument("/module", False, CLITypes.File,
               Extensions:="*.dll,*.zip",
               Description:=".NET Framework 4.8 assembly module file or compiled R# zip package file.")>
     <Group(SystemConfig)>
@@ -94,6 +94,7 @@ Partial Module CLI
     End Function
 
     <ExportAPI("--startups")>
+    <Description("Config of the startup packages.")>
     <Usage("--startups [--add <namespaceList> --remove <namespaceList>]")>
     <Group(SystemConfig)>
     Public Function ConfigStartups(args As CommandLine) As Integer
