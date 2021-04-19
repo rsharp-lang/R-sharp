@@ -1175,8 +1175,20 @@ Namespace Runtime.Internal.Invokes
 
                 ' invoke parameters
                 For Each value As InvokeParameter In DirectCast(opts, InvokeParameter())
-                    Dim name = value.name
+                    Dim name As String = value.name
                     Dim cfgValue As Object = value.Evaluate(envir)
+
+                    If Program.isException(cfgValue) Then
+                        Return cfgValue
+                    End If
+
+                    Dim vec As Array = REnv.asVector(Of Object)(cfgValue)
+
+                    If vec.Length > 0 Then
+                        cfgValue = vec.GetValue(Scan0)
+                    Else
+                        cfgValue = Nothing
+                    End If
 
                     Try
                         values.slots(name) = configs.setOption(name, any.ToString(cfgValue))
