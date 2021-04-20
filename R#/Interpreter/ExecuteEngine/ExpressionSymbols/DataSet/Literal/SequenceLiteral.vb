@@ -54,8 +54,9 @@ Imports SMRUCC.Rsharp.Development.Package.File
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
-    ' from:to step diff
-
+    ''' <summary>
+    ''' a syntax for generate a numeric sequence: ``from:to step diff``
+    ''' </summary>
     Public Class SequenceLiteral : Inherits Expression
         Implements IRuntimeTrace
 

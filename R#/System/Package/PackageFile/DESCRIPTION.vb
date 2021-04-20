@@ -118,6 +118,10 @@ Namespace Development.Package.File
             Return index
         End Function
 
+        Public Shared Function Parse(lines As String()) As Dictionary(Of String, String)
+
+        End Function
+
         Private Shared Sub ParserLoopStep(line As String, ByRef lastTag$, index As DESCRIPTION)
             Dim tag As NamedValue(Of String) = line.GetTagValue(":", trim:=True)
             Dim continuteLine As String
