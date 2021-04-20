@@ -71,10 +71,17 @@ Namespace Development
                 Case GetType(IfBranch) : Call analysisTree(DirectCast(expr, IfBranch), attrs)
                 Case GetType(ClosureExpression) : Call analysisTree(DirectCast(expr, ClosureExpression), attrs)
                 Case GetType(SymbolIndexer) : Call analysisTree(DirectCast(expr, SymbolIndexer), attrs)
+                Case GetType(VectorLiteral) : Call AnalysisTree(DirectCast(expr, VectorLiteral), attrs)
 
                 Case Else
                     Throw New NotImplementedException(expr.GetType.FullName)
             End Select
+        End Sub
+
+        Private Sub analysisTree(expr As VectorLiteral, attrs As Dictionary(Of String, String()))
+            For Each element As Expression In expr
+                Call AnalysisTree(element, attrs)
+            Next
         End Sub
 
         Private Sub analysisTree(expr As FunctionInvoke, attrs As Dictionary(Of String, String()))
@@ -88,8 +95,8 @@ Namespace Development
         End Sub
 
         Private Sub analysisTree(expr As [Imports], attrs As Dictionary(Of String, String()))
-            Call analysisTree(expr.packages)
-            Call analysisTree(expr.library)
+            Call AnalysisTree(expr.packages, attrs)
+            Call AnalysisTree(expr.library, attrs)
         End Sub
 
         Private Sub analysisTree(expr As BinaryOrExpression, attrs As Dictionary(Of String, String()))
