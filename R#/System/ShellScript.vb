@@ -110,6 +110,12 @@ Namespace Development
             Call AnalysisTree(expr.library, attrs)
         End Sub
 
+        ''' <summary>
+        ''' add a command line argument value
+        ''' </summary>
+        ''' <param name="expr"></param>
+        ''' <param name="default$"></param>
+        ''' <param name="attrs"></param>
         Private Sub AddArgumentValue(expr As Expression, default$, attrs As Dictionary(Of String, String()))
             Dim name As String = DirectCast(expr, ArgumentValue).name.ToString.Trim(""""c)
             Dim info As String = Nothing
