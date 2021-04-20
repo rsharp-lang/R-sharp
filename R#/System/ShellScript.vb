@@ -59,9 +59,11 @@ Namespace Development
 
         End Sub
 
-        Private Shared Function parseMetaData(meta As String())
-            Dim text As String = meta.Select(Function(line) line.Trim(" "c, "#"c)).JoinBy("")
+        Private Shared Function parseMetaData(meta As String()) As Dictionary(Of String, String)
+            Dim text As String() = meta.Select(Function(line) line.Trim(" "c, "#"c)).ToArray
+            Dim data = text.ParseTagData
 
+            Return data
         End Function
 
         Public Sub PrintUsage(dev As TextWriter)
@@ -124,7 +126,7 @@ Namespace Development
                 Case GetType(DeclareLambdaFunction) : Call analysisTree(DirectCast(expr, DeclareLambdaFunction), attrs)
                 Case GetType(AppendOperator) : Call analysisTree(DirectCast(expr, AppendOperator), attrs)
                 Case GetType(UnaryNot) : Call analysisTree(DirectCast(expr, UnaryNot), attrs)
-                Case GetType(SequenceLiteral) : Call AnalysisTree(DirectCast(expr, SequenceLiteral), attrs)
+                Case GetType(SequenceLiteral) : Call analysisTree(DirectCast(expr, SequenceLiteral), attrs)
 
                 Case Else
                     Throw New NotImplementedException(expr.GetType.FullName)
