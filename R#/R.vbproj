@@ -670,6 +670,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interpreter\ExecutableLoop.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\SymbolExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExecuteBreaks.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\BreakPoint.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\HostSymbol.vb" />

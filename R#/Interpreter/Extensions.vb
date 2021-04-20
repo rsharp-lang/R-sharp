@@ -145,7 +145,7 @@ Namespace Interpreter
                         .SplitByTopLevelDelimiter(TokenType.close,, "}") _
                         .Split(2)
 
-                    For Each joinBlock In parts
+                    For Each joinBlock As Token()() In parts
                         block = joinBlock(Scan0).JoinIterates(joinBlock.ElementAtOrDefault(1)).ToArray
                         expr = Expression.CreateExpression(block, opts)
 

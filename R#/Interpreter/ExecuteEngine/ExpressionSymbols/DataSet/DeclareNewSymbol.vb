@@ -56,7 +56,7 @@ Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
-    Public Class DeclareNewSymbol : Inherits Expression
+    Public Class DeclareNewSymbol : Inherits SymbolExpression
         Implements IRuntimeTrace
 
         ''' <summary>

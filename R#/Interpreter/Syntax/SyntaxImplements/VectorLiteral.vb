@@ -1,51 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::d2e4e683d57dfa1cc4ad639dff6729dc, R#\Interpreter\Syntax\SyntaxImplements\VectorLiteral.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module VectorLiteralSyntax
-    ' 
-    '         Function: LiteralSyntax, (+2 Overloads) SequenceLiteral, TypeCodeOf, VectorLiteral
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module VectorLiteralSyntax
+' 
+'         Function: LiteralSyntax, (+2 Overloads) SequenceLiteral, TypeCodeOf, VectorLiteral
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
@@ -77,10 +79,28 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                             Return New SyntaxResult(New SyntaxErrorException, opts.debug)
                     End Select
 
-                    Return New Literal With {.m_type = type, .value = value}
+                    Return New Literal With {
+                        .m_type = type,
+                        .value = value
+                    }
                 Case Else
                     Return New SyntaxResult(New InvalidExpressionException(token.ToString), opts.debug)
             End Select
+        End Function
+
+        <Extension>
+        Public Iterator Function ParseAnnotations(blocks As Token()) As IEnumerable(Of NamedValue(Of String))
+            For Each block As Token() In blocks.Split(4)
+                Yield block.Skip(1).Take(2).ToArray.ParseAnnotation
+            Next
+        End Function
+
+        <Extension>
+        Public Function ParseAnnotation(block As Token()) As NamedValue(Of String)
+            Dim name As String = block(Scan0).text.Substring(1)
+            Dim value As String = block(1).text
+
+            Return New NamedValue(Of String)(name, value)
         End Function
 
         Public Function VectorLiteral(tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
@@ -91,15 +111,29 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
             Dim values As New List(Of Expression)
             Dim syntaxTemp As SyntaxResult
 
-            For Each block As Token() In blocks
-                If Not (block.Length = 1 AndAlso block(Scan0).name = TokenType.comma) Then
-                    syntaxTemp = block.DoCall(Function(code) Expression.CreateExpression(code, opts))
+            If blocks.Count = 1 AndAlso blocks(Scan0).Length = 2 Then
+                Dim block As Token() = blocks(Scan0)
 
-                    If syntaxTemp.isException Then
-                        Return syntaxTemp
-                    Else
-                        values.Add(syntaxTemp.expression)
-                    End If
+                ' is user annotation
+                If block(Scan0).name = TokenType.annotation AndAlso block(1).isLiteral Then
+                    Dim annotation As NamedValue(Of String) = block.ParseAnnotation
+                    Call opts.annotations.Add(annotation)
+                    Return New CodeComment($"{annotation.Name}:={annotation.Value}")
+                End If
+            End If
+
+            For Each block As Token() In blocks
+                ' is a comma symbol
+                If block.Length = 1 AndAlso block(Scan0).name = TokenType.comma Then
+                    Continue For
+                End If
+
+                syntaxTemp = block.DoCall(Function(code) Expression.CreateExpression(code, opts))
+
+                If syntaxTemp.isException Then
+                    Return syntaxTemp
+                Else
+                    values.Add(syntaxTemp.expression)
                 End If
             Next
 

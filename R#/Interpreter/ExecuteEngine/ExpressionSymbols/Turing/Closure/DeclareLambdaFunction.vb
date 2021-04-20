@@ -67,7 +67,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
     ''' lambda函数与普通函数相比，lambda函数是没有environment的
     ''' 所以lambda函数会更加的轻量化
     ''' </remarks>
-    Public Class DeclareLambdaFunction : Inherits Expression
+    Public Class DeclareLambdaFunction : Inherits SymbolExpression
         Implements RFunction
         Implements RPrint
         Implements IRuntimeTrace
