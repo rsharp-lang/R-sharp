@@ -1,5 +1,6 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Text
 
 Namespace Development
 
@@ -12,6 +13,10 @@ Namespace Development
 
             For Each line As String In lines
                 Call ParserLoopStep(line, lastTag, index)
+            Next
+
+            For Each name As String In index.Keys.ToArray
+                index(name) = index(name).Trim(ASCII.CR, ASCII.LF)
             Next
 
             Return index
@@ -34,6 +39,7 @@ Namespace Development
                     index(lastTag) = continuteLine
                 End If
             Else
+                lastTag = tag.Name
                 index(lastTag) = tag.Value
             End If
         End Sub

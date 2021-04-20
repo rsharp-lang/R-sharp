@@ -2,7 +2,7 @@
 #
 # author: xieguigang
 # 
-# details: this is a demo script of show R# shell 
+# description: this is a demo script of show R# shell 
 #     scripting annotation features.
 #
 

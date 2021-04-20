@@ -1,8 +1,8 @@
 ﻿Imports System.IO
-Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.Default
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
@@ -46,6 +46,7 @@ Namespace Development
         ReadOnly arguments As New List(Of CommandLineArgument)
         ReadOnly sourceScript As String
         ReadOnly info As String = "<No description provided.>"
+        ReadOnly title As String
 
         Public ReadOnly Property message As String
 
@@ -56,12 +57,20 @@ Namespace Development
             Me.Rscript = Program.CreateProgram(Rscript, [error]:=message)
             Me.sourceScript = Rscript.fileName
 
+            Me.title = meta.TryGetValue("title") Or sourceScript.BaseName.AsDefault
 
+            If meta.ContainsKey("description") Then
+                info = meta!description
+            End If
         End Sub
 
         Private Shared Function parseMetaData(meta As String()) As Dictionary(Of String, String)
-            Dim text As String() = meta.Select(Function(line) line.Trim(" "c, "#"c)).ToArray
-            Dim data = text.ParseTagData
+            Dim text As String() = meta _
+                .Select(Function(line)
+                            Return line.Trim(" "c, "#"c, ASCII.CR, ASCII.LF)
+                        End Function) _
+                .ToArray
+            Dim data As Dictionary(Of String, String) = text.ParseTagData
 
             Return data
         End Function
@@ -71,7 +80,13 @@ Namespace Development
             Dim maxName As String = arguments.Select(Function(a) a.name).MaxLengthString
 
             Call dev.WriteLine()
-            Call dev.WriteLine($"  '{sourceScript}' - {info}")
+            Call dev.WriteLine($"  '{sourceScript}' - {title}")
+            Call dev.WriteLine()
+
+            For Each line As String In info.LineTokens
+                Call dev.WriteLine("  " & line)
+            Next
+
             Call dev.WriteLine()
 
             For Each arg As CommandLineArgument In arguments
@@ -240,6 +255,10 @@ Namespace Development
 
             If Not attrs Is Nothing Then
                 info = attrs!info
+
+                If attrs.type = TypeCodes.boolean Then
+                    [default] = "FALSE"
+                End If
             End If
 
             Call New CommandLineArgument With {
