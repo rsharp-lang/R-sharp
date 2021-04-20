@@ -68,6 +68,9 @@ Namespace Development
                 Case GetType(BinaryOrExpression) : Call analysisTree(DirectCast(expr, BinaryOrExpression), attrs)
                 Case GetType(DeclareNewSymbol) : Call analysisTree(DirectCast(expr, DeclareNewSymbol))
                 Case GetType(FunctionInvoke) : Call analysisTree(DirectCast(expr, FunctionInvoke), attrs)
+                Case GetType(IfBranch) : Call analysisTree(DirectCast(expr, IfBranch), attrs)
+                Case GetType(ClosureExpression) : Call analysisTree(DirectCast(expr, ClosureExpression), attrs)
+                Case GetType(SymbolIndexer) : Call analysisTree(DirectCast(expr, SymbolIndexer), attrs)
 
                 Case Else
                     Throw New NotImplementedException(expr.GetType.FullName)
@@ -122,20 +125,20 @@ Namespace Development
             Return def.ToString
         End Function
 
-        Private Sub analysisTree(expr As IfBranch)
-            AnalysisTree(expr.ifTest)
-            AnalysisTree(expr.trueClosure.body)
+        Private Sub analysisTree(expr As IfBranch, attrs As Dictionary(Of String, String()))
+            AnalysisTree(expr.ifTest, attrs)
+            analysisTree(expr.trueClosure.body, attrs)
         End Sub
 
-        Private Sub analysisTree(closure As ClosureExpression)
+        Private Sub analysisTree(closure As ClosureExpression, attrs As Dictionary(Of String, String()))
             For Each line As Expression In closure.EnumerateCodeLines
-                Call AnalysisTree(line)
+                Call AnalysisTree(line, attrs)
             Next
         End Sub
 
-        Private Sub analysisTree(expr As SymbolIndexer)
-            Call AnalysisTree(expr.symbol)
-            Call AnalysisTree(expr.index)
+        Private Sub analysisTree(expr As SymbolIndexer, attrs As Dictionary(Of String, String()))
+            Call AnalysisTree(expr.symbol, attrs)
+            Call AnalysisTree(expr.index, attrs)
         End Sub
 
         Public Function AnalysisAllCommands() As ShellScript
