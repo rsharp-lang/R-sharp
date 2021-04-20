@@ -4,6 +4,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
@@ -80,6 +81,22 @@ Namespace Development
         Private Function parseInfo(calls As FunctionInvoke) As String
 
         End Function
+
+        Private Sub analysisTree(expr As IfBranch)
+            AnalysisTree(expr.ifTest)
+            AnalysisTree(expr.trueClosure.body)
+        End Sub
+
+        Private Sub analysisTree(closure As ClosureExpression)
+            For Each line As Expression In closure.EnumerateCodeLines
+                Call AnalysisTree(line)
+            Next
+        End Sub
+
+        Private Sub analysisTree(expr As SymbolIndexer)
+            Call AnalysisTree(expr.symbol)
+            Call AnalysisTree(expr.index)
+        End Sub
 
         Public Function AnalysisAllCommands() As ShellScript
             For Each line As Expression In Rscript
