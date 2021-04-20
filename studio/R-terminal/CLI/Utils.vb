@@ -97,6 +97,12 @@ Partial Module CLI
     <Description("Config of the startup packages.")>
     <Usage("--startups [--add <namespaceList> --remove <namespaceList>]")>
     <Group(SystemConfig)>
+    <Argument("--add", True, CLITypes.String,
+              AcceptTypes:={GetType(String())},
+              Description:="A list of package namespace that will be added to startup list when start running R# scripting host.")>
+    <Argument("--remove", True, CLITypes.String,
+              AcceptTypes:={GetType(String())},
+              Description:="A list of package namespace that will be removed from startup list.")>
     Public Function ConfigStartups(args As CommandLine) As Integer
         Dim adds As String = args("--add")
         Dim remove As String = args("--remove")
