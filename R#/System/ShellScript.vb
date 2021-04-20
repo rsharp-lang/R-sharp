@@ -142,10 +142,17 @@ Namespace Development
                 Case GetType(AppendOperator) : Call analysisTree(DirectCast(expr, AppendOperator), attrs)
                 Case GetType(UnaryNot) : Call analysisTree(DirectCast(expr, UnaryNot), attrs)
                 Case GetType(SequenceLiteral) : Call analysisTree(DirectCast(expr, SequenceLiteral), attrs)
+                Case GetType(IIfExpression) : Call analysisTree(DirectCast(expr, IIfExpression), attrs)
 
                 Case Else
                     Throw New NotImplementedException(expr.GetType.FullName)
             End Select
+        End Sub
+
+        Private Sub analysisTree(expr As IIfExpression, attrs As ArgumentInfo)
+            Call AnalysisTree(expr.ifTest, attrs)
+            Call AnalysisTree(expr.trueResult, attrs)
+            Call AnalysisTree(expr.falseResult, attrs)
         End Sub
 
         Private Sub analysisTree(expr As SequenceLiteral, attrs As ArgumentInfo)
