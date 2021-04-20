@@ -11,6 +11,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports r = System.Text.RegularExpressions.Regex
 
 Namespace Development
 
@@ -44,17 +45,32 @@ Namespace Development
         ReadOnly Rscript As Program
         ReadOnly arguments As New List(Of CommandLineArgument)
         ReadOnly sourceScript As String
+        ReadOnly info As String = "<No description provided.>"
 
         Public ReadOnly Property message As String
 
         Sub New(Rscript As Rscript)
+            Dim metaLines As String() = r.Matches(Rscript.script, "^#.+?$", RegexICMul).ToArray
+            Dim meta = parseMetaData(metaLines)
+
             Me.Rscript = Program.CreateProgram(Rscript, [error]:=message)
             Me.sourceScript = Rscript.fileName
+
+
         End Sub
+
+        Private Shared Function parseMetaData(meta As String())
+            Dim text As String = meta.Select(Function(line) line.Trim(" "c, "#"c)).JoinBy("")
+
+        End Function
 
         Public Sub PrintUsage(dev As TextWriter)
             Dim cli As New List(Of String)
             Dim maxName As String = arguments.Select(Function(a) a.name).MaxLengthString
+
+            Call dev.WriteLine()
+            Call dev.WriteLine($"  '{sourceScript}' - {info}")
+            Call dev.WriteLine()
 
             For Each arg As CommandLineArgument In arguments
                 If arg.defaultValue.StartsWith("<required") Then
