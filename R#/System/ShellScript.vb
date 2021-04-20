@@ -71,7 +71,7 @@ Namespace Development
                 Case GetType(IfBranch) : Call analysisTree(DirectCast(expr, IfBranch), attrs)
                 Case GetType(ClosureExpression) : Call analysisTree(DirectCast(expr, ClosureExpression), attrs)
                 Case GetType(SymbolIndexer) : Call analysisTree(DirectCast(expr, SymbolIndexer), attrs)
-                Case GetType(VectorLiteral) : Call AnalysisTree(DirectCast(expr, VectorLiteral), attrs)
+                Case GetType(VectorLiteral) : Call analysisTree(DirectCast(expr, VectorLiteral), attrs)
 
                 Case Else
                     Throw New NotImplementedException(expr.GetType.FullName)
@@ -91,7 +91,18 @@ Namespace Development
         End Sub
 
         Private Sub analysisTree(expr As DeclareNewSymbol)
-            Call AnalysisTree(expr.m_value, expr.attributes)
+            Dim type As TypeCodes = expr.type
+
+            If type = TypeCodes.generic Then
+                type = TypeCodes.string
+            End If
+
+            If TypeOf expr.m_value Is ArgumentValue Then
+                ' default is NULL
+                Call AddArgumentValue(expr.m_value, "", expr.attributes)
+            Else
+                Call AnalysisTree(expr.m_value, expr.attributes)
+            End If
         End Sub
 
         Private Sub analysisTree(expr As [Imports], attrs As Dictionary(Of String, String()))
@@ -99,23 +110,27 @@ Namespace Development
             Call AnalysisTree(expr.library, attrs)
         End Sub
 
+        Private Sub AddArgumentValue(expr As Expression, default$, attrs As Dictionary(Of String, String()))
+            Dim name As String = DirectCast(expr, ArgumentValue).name.ToString.Trim(""""c)
+            Dim info As String = Nothing
+
+            If Not attrs.IsNullOrEmpty Then
+                info = attrs.TryGetValue("info").JoinBy(";" & vbCrLf)
+            End If
+
+            Call New NamedValue(Of String) With {
+                .Name = name,
+                .Description = info,
+                .Value = [default]
+            }.DoCall(AddressOf arguments.Add)
+        End Sub
+
         Private Sub analysisTree(expr As BinaryOrExpression, attrs As Dictionary(Of String, String()))
             Dim left As Expression = expr.left
             Dim right As Expression = expr.right
 
             If TypeOf left Is ArgumentValue Then
-                Dim name As String = DirectCast(left, ArgumentValue).name.ToString.Trim(""""c)
-                Dim info As String = Nothing
-
-                If Not attrs.IsNullOrEmpty Then
-                    info = attrs.TryGetValue("info").JoinBy(";" & vbCrLf)
-                End If
-
-                Call New NamedValue(Of String) With {
-                    .Name = name,
-                    .Description = info,
-                    .Value = parseDefault(right)
-                }.DoCall(AddressOf arguments.Add)
+                Call AddArgumentValue(left, parseDefault(right), attrs)
             Else
                 Call AnalysisTree(left, attrs)
                 Call AnalysisTree(right, attrs)
