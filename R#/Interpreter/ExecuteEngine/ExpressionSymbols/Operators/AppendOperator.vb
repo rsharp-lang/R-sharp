@@ -62,7 +62,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
         Public Overrides ReadOnly Property type As TypeCodes
             Get
-                Return a.type
+                Return target.type
             End Get
         End Property
 
@@ -72,16 +72,16 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             End Get
         End Property
 
-        ReadOnly a, b As Expression
+        Friend ReadOnly target, appendData As Expression
 
         Sub New(a As Expression, b As Expression)
-            Me.a = a
-            Me.b = b
+            Me.target = a
+            Me.appendData = b
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim x As Object = a.Evaluate(envir)
-            Dim y As Object = b.Evaluate(envir)
+            Dim x As Object = target.Evaluate(envir)
+            Dim y As Object = appendData.Evaluate(envir)
 
             If x Is Nothing Then
                 Return y
@@ -117,7 +117,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         End Function
 
         Public Overrides Function ToString() As String
-            Return $"Call base::vec::append({a}, {b})"
+            Return $"Call base::vec::append({target}, {appendData})"
         End Function
     End Class
 End Namespace
