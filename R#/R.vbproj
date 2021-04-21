@@ -48,7 +48,7 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>false</Optimize>
-    <OutputPath>./bin</OutputPath>
+    <OutputPath>bin\app\</OutputPath>
     <DocumentationFile>REnv.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
     <WarningsAsErrors>
