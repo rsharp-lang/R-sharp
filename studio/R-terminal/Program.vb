@@ -72,7 +72,9 @@ Module Program
         Dim script As String = args.SingleValue
         Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
 
-        If Not script.FileExists Then
+        If script.IsURLPattern Then
+            ' do nothing
+        ElseIf Not script.FileExists Then
             Call Internal.debug.PrintMessageInternal(
                  Internal.debug.stop({
                      $"the given R script file is not found on your filesystem!",
@@ -140,7 +142,7 @@ Module Program
             R.options(verbose:=True)
         End If
 
-        If Not silent Then
+        If Not silent AndAlso R.debug Then
             Call Console.WriteLine(args.ToString)
             Call Console.WriteLine()
         End If
