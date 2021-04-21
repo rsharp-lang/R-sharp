@@ -58,8 +58,10 @@ Module Program
             R.debug = True
         End If
 
-        Call Console.WriteLine(args.ToString)
-        Call Console.WriteLine()
+        If R.debug Then
+            Call Console.WriteLine(args.ToString)
+            Call Console.WriteLine()
+        End If
 
         Call R.LoadLibrary("base", ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
         Call R.LoadLibrary("utils", ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
