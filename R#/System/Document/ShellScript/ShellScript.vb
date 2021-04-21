@@ -32,7 +32,7 @@ Namespace Development.CommandLine
         Public ReadOnly Property message As String
 
         Sub New(Rscript As Rscript)
-            Dim metaLines As String() = r.Matches(Rscript.script, "^#.+?$", RegexICMul).ToArray
+            Dim metaLines As String() = r.Matches(Rscript.script, "^#\s.+?$", RegexICMul).ToArray
             Dim meta = parseMetaData(metaLines)
 
             Me.Rscript = Program.CreateProgram(Rscript, [error]:=message)

@@ -67,7 +67,10 @@ Namespace Development.Package.File
         Sub New([imports] As [Imports])
             library = ValueAssign.GetSymbol([imports].library)
 
-            If TypeOf [imports].packages Is Literal Then
+            If [imports].packages Is Nothing Then
+                packages = {library}
+                library = Nothing
+            ElseIf TypeOf [imports].packages Is Literal Then
                 packages = {DirectCast([imports].packages, Literal).value.ToString}
             Else
                 packages = DirectCast([imports].packages, VectorLiteral).values _
