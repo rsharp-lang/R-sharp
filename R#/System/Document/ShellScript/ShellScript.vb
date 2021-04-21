@@ -12,6 +12,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports r = System.Text.RegularExpressions.Regex
 
 Namespace Development.CommandLine
@@ -89,6 +90,34 @@ Namespace Development.CommandLine
             For Each arg As CommandLineArgument In arguments
                 Call dev.WriteLine($" {arg.name}: {New String(" "c, maxName.Length - arg.name.Length)}{arg.description Or none}")
             Next
+
+            If dependency > 0 Then
+                Dim requires = dependency.Where(Function(deps) deps.library.StringEmpty).ToArray
+                Dim import = dependency.Where(Function(deps) Not deps.library.StringEmpty).ToArray
+
+                Call dev.WriteLine()
+                Call dev.WriteLine("Dependency List:")
+
+                If Not requires.IsNullOrEmpty Then
+                    Dim allList As String() = requires _
+                        .Select(Function(pkg) pkg.packages) _
+                        .IteratesALL _
+                        .Distinct _
+                        .ToArray
+
+                    Call dev.WriteLine()
+                    Call dev.WriteLine("Loading: ")
+                    Call allList.printContentArray(Nothing, Nothing, 80, dev)
+                End If
+
+                If Not import.IsNullOrEmpty Then
+                    Dim allList = import.Select(Function(ref) $"{ref.library}::[{ref.packages.JoinBy(", ")}]").ToArray
+
+                    Call dev.WriteLine()
+                    Call dev.WriteLine("Imports: ")
+                    Call allList.printContentArray(Nothing, Nothing, 80, dev)
+                End If
+            End If
 
             Call dev.Flush()
         End Sub
