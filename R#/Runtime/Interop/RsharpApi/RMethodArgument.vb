@@ -58,10 +58,40 @@ Namespace Runtime.Interop
         ''' </summary>
         ''' <returns></returns>
         Public Property name As String Implements INamedValue.Key
+        ''' <summary>
+        ''' the type of this parameter that required
+        ''' </summary>
+        ''' <returns></returns>
         Public Property type As RType
+        ''' <summary>
+        ''' default value 
+        ''' </summary>
+        ''' <returns></returns>
         Public Property [default] As Object
+        ''' <summary>
+        ''' is an optional parameter?
+        ''' </summary>
+        ''' <returns></returns>
         Public Property isOptional As Boolean
+        ''' <summary>
+        ''' is a ``...`` list argument?
+        ''' </summary>
+        ''' <returns></returns>
         Public Property isObjectList As Boolean
+        ''' <summary>
+        ''' is a parameter that accept the byref value to this function?
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' byref call: 
+        ''' func(...) &lt;- value;
+        ''' 
+        ''' call in normal function invoke style:
+        ''' func(value, ...);
+        ''' 
+        ''' if this property is TRUE, then it meansthe byref assign of the value will
+        ''' passing to this parameter.
+        ''' </remarks>
         Public Property isByrefValueParameter As Boolean
 
         ''' <summary>
@@ -85,6 +115,10 @@ Namespace Runtime.Interop
             End If
         End Function
 
+        ''' <summary>
+        ''' show markdown document of this parameter
+        ''' </summary>
+        ''' <returns></returns>
         Public Overrides Function ToString() As String
             Return markdown()
         End Function
@@ -116,11 +150,21 @@ Namespace Runtime.Interop
             }
         End Function
 
+        ''' <summary>
+        ''' get the default value of this parameter
+        ''' </summary>
+        ''' <param name="rawVector"></param>
+        ''' <param name="defaultScript"></param>
+        ''' <param name="paramType"></param>
+        ''' <param name="hasExpression"></param>
+        ''' <param name="[default]"></param>
+        ''' <returns></returns>
         Private Shared Function getDefaultValue(rawVector As RRawVectorArgumentAttribute,
                                                 defaultScript As RDefaultValueAttribute,
                                                 paramType As Type,
                                                 hasExpression As Boolean,
                                                 [default] As Object) As Object
+
             If hasExpression AndAlso TypeOf [default] Is String AndAlso DirectCast([default], String).FirstOrDefault = "~"c Then
                 Return RDefaultExpressionAttribute.ParseDefaultExpression(CStr([default]))
             ElseIf rawVector Is Nothing Then

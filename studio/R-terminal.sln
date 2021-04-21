@@ -5,19 +5,15 @@ VisualStudioVersion = 16.0.29409.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "R", "..\R#\R.vbproj", "{0C2EB77C-39F2-460D-A3F8-CE905F867637}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "47-dotnet_Microsoft.VisualBasic", "..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\47-dotnet_Microsoft.VisualBasic.vbproj"", "{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "47-dotnet_Microsoft.VisualBasic", "..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\47-dotnet_Microsoft.VisualBasic.vbproj", "{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "R", "R", "{D8B65EE7-3052-4B20-8E88-D9415B8A81CD}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RCore", "RCore", "{D8B65EE7-3052-4B20-8E88-D9415B8A81CD}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "R-cmd", "R-Terminal\R-cmd.vbproj", "{3A35AC34-F313-4F72-89E9-EACCA217BC8D}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "TcpRequest", "..\..\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\TcpRequest\TcpRequest.shproj", "{7DF565AE-6E7A-4667-AB6D-9908ACBEED8B}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Rstudio.common\Rstudio.common.projitems*{3a35ac34-f313-4f72-89e9-eacca217bc8d}*SharedItemsImports = 4
-		..\..\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\TcpRequest\TcpRequest.projitems*{3a35ac34-f313-4f72-89e9-eacca217bc8d}*SharedItemsImports = 4
-		..\..\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\TcpRequest\TcpRequest.projitems*{7df565ae-6e7a-4667-ab6d-9908acbeed8b}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Biodeep|Any CPU = Biodeep|Any CPU
@@ -260,7 +256,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{0C2EB77C-39F2-460D-A3F8-CE905F867637} = {D8B65EE7-3052-4B20-8E88-D9415B8A81CD}
 		{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99} = {D8B65EE7-3052-4B20-8E88-D9415B8A81CD}
-		{7DF565AE-6E7A-4667-AB6D-9908ACBEED8B} = {D8B65EE7-3052-4B20-8E88-D9415B8A81CD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8123FDB5-00CD-4782-B524-D7AE4F3BF1F0}

@@ -234,7 +234,18 @@ Namespace Interpreter.SyntaxParser
             ElseIf code(Scan0).Length Mod 4 = 0 Then
                 Dim firstBlock As Token() = code(Scan0)
 
-                If firstBlock.First = (TokenType.open, "[") AndAlso firstBlock.Last = (TokenType.close, "]") Then
+                ' 20210421
+                ' syntax of user annotation
+                ' 
+                ' [@symbol primitive literal]
+                '
+                ' there is no comma symbol in the primitive literal, if there is any
+                ' comma symbol in the expression, then it means is a vector literal syntax
+                '
+                If (Not firstBlock.Any(Function(a) a = (TokenType.comma, ","))) AndAlso
+                    firstBlock.First = (TokenType.open, "[") AndAlso
+                    firstBlock.Last = (TokenType.close, "]") Then
+
                     Dim annotations = firstBlock.ParseAnnotations.ToArray
                     Dim result = code.Skip(1).AsList.ParseExpression(opts)
                     Dim attrGroups = annotations _

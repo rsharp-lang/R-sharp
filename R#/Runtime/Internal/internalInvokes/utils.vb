@@ -491,12 +491,20 @@ Namespace Runtime.Internal.Invokes
                 .ToArray
 
             If App.IsMicrosoftPlatform Then
-                Dim ps = App.Shell(executative, arguments, CLR:=clr, debug:=True, stdin:=inputStr.JoinBy(vbLf))
+                If clr Then
+                    Dim ps = App.Shell(executative, arguments, CLR:=clr, debug:=True, stdin:=inputStr.JoinBy(vbLf))
 
-                Call ps.Run()
+                    Call ps.Run()
 
-                If show_output_on_console Then
-                    Call Console.WriteLine(ps.StandardOutput)
+                    If show_output_on_console Then
+                        Call Console.WriteLine(ps.StandardOutput)
+                    End If
+                Else
+                    Dim stdout As String = CommandLine.Call(executative, arguments, inputStr.JoinBy(vbLf))
+
+                    If show_output_on_console Then
+                        Call Console.WriteLine(stdout)
+                    End If
                 End If
             ElseIf clr Then
                 Call UNIX.Shell("mono", $"{executative.CLIPath} {arguments}", verbose:=show_output_on_console, stdin:=inputStr.JoinBy(vbLf))
