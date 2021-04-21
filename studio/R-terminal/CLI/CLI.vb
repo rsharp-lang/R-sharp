@@ -192,9 +192,15 @@ R# ""$app"" $cli".Replace("{script}", script.FileName)
     Public Function SyntaxText(args As CommandLine) As Integer
         Dim script$ = args <= "/script"
         Dim Rscript As RlangScript = RlangScript.FromFile(script)
-        Dim program As RProgram = RProgram.CreateProgram(Rscript, debug:=False)
+        Dim error$ = Nothing
+        Dim program As RProgram = RProgram.CreateProgram(Rscript, [error]:=[error], debug:=False)
 
-        Call Console.WriteLine(program.ToString)
+        If Not [error].StringEmpty Then
+            Call Log4VB.Println([error], ConsoleColor.Red)
+            Call VBDebugger.WaitOutput()
+        Else
+            Call Console.WriteLine(program.ToString)
+        End If
 
         Return 0
     End Function
