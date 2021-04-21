@@ -1,18 +1,27 @@
 imports ["dataset", "machineLearning", "GA_toolkit"] from "MLkit";
 
-# demo script for running ANN model training
+# title: ANN model training
+#
+# description: demo script for running ANN model training
+#
 
 options(progress_bar = "disabled");
 
+[@info "the training data XML dataset file its file path."]
 let inputFile as string    = ?"--data"   || stop("no training data set was provided!");
+[@info "the save location of the result network model, for missing parameter will save at filename_ANN dir by default"]
 let output as string       = ?"--save"   || `${dirname(inputFile)}/${basename(inputFile)}_ANN/`;
+[@info "max number of iterations for training ANN."]
 let maxLoops as integer    = ?"--loops"  || 10000;
+[@info "the layer numbers and the layer size of the hidden layers of your ANN model"]
 let hiddens as string      = ?"--hidden" || "120,300,200,20";
+[@info "select a single specific output attribute will be trained..."]
 let attr as string         = ?"--attr";
 let split_out as boolean   = ?"--split";
 let GA_run as boolean      = ?"--ga";
 let GA_popSize as integer  = ?"--ga.pop_size" || 250;
-let dropout.rate as double = 0;
+[@info "the rate of random dropout."]
+let dropout.rate as double = ?"--dropout" || 0;
 let dataset = inputFile
 :> read.ML_model
 ;

@@ -53,7 +53,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
     Public Class ReturnValue : Inherits Expression
 
-        ReadOnly value As Expression
+        Friend ReadOnly value As Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
             Get

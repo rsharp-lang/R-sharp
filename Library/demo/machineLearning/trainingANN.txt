@@ -1,0 +1,21 @@
+
+  'trainingANN.R' - ANN model training
+
+  demo script for running ANN model training
+
+SYNOPSIS
+Rscript "trainingANN.R" --data <string> [--save <string, default="" & Call "dirname"(&inputFile) & "/" & Call "basename"(&inputFile) & "_ANN/">] [--loops <integer, default=10000>] [--hidden <string, default="120,300,200,20">] [--attr <string, default=>] [--split <boolean, default=FALSE>] [--ga <boolean, default=FALSE>] [--ga.pop_size <integer, default=250>] [--dropout <double, default=0>]
+
+CommandLine Argument Values:
+
+ --data:        the training data XML dataset file its file path.
+ --save:        the save location of the result network model, for missing parameter will save at filename_ANN dir by default
+ --loops:       max number of iterations for training ANN.
+ --hidden:      the layer numbers and the layer size of the hidden layers of your ANN model
+ --attr:        select a single specific output attribute will be trained...
+ --split:       -
+ --ga:          -
+ --ga.pop_size: -
+ --dropout:     the rate of random dropout.
+
+
