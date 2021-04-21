@@ -234,7 +234,10 @@ Namespace Interpreter.SyntaxParser
             ElseIf code(Scan0).Length Mod 4 = 0 Then
                 Dim firstBlock As Token() = code(Scan0)
 
-                If firstBlock.First = (TokenType.open, "[") AndAlso firstBlock.Last = (TokenType.close, "]") Then
+                If (Not firstBlock.Any(Function(a) a = (TokenType.comma, ","))) AndAlso
+                    firstBlock.First = (TokenType.open, "[") AndAlso
+                    firstBlock.Last = (TokenType.close, "]") Then
+
                     Dim annotations = firstBlock.ParseAnnotations.ToArray
                     Dim result = code.Skip(1).AsList.ParseExpression(opts)
                     Dim attrGroups = annotations _
