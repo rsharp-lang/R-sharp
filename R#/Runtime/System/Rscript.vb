@@ -136,7 +136,8 @@ Namespace Runtime.Components
                 Dim tmpfile As String = TempFileSystem.GetAppSysTempFile("", sessionID:=App.PID.ToHexString, prefix:=handle.BaseName) & "/" & handle.FileName
                 Dim Rscript As Rscript
 
-                handle.GET.SaveTo(tmpfile)
+                ' download script file in silent
+                handle.GET(echo:=False).SaveTo(tmpfile)
                 Rscript = FromFile(tmpfile)
 
                 Return Rscript

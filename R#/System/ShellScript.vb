@@ -143,6 +143,7 @@ Namespace Development
                 Case GetType(UnaryNot) : Call analysisTree(DirectCast(expr, UnaryNot), attrs)
                 Case GetType(SequenceLiteral) : Call analysisTree(DirectCast(expr, SequenceLiteral), attrs)
                 Case GetType(IIfExpression) : Call analysisTree(DirectCast(expr, IIfExpression), attrs)
+                Case GetType(Require) : Call analysisTree(DirectCast(expr, Require), attrs)
 
                 Case Else
                     Throw New NotImplementedException(expr.GetType.FullName)
@@ -243,6 +244,12 @@ Namespace Development
             Else
                 Call AnalysisTree(expr.m_value, attrs)
             End If
+        End Sub
+
+        Private Sub analysisTree(expr As Require, attrs As ArgumentInfo)
+            For Each name As Expression In expr.packages
+                Call AnalysisTree(name, attrs)
+            Next
         End Sub
 
         Private Sub analysisTree(expr As [Imports], attrs As ArgumentInfo)
