@@ -46,10 +46,27 @@
 
 Namespace Runtime.Interop
 
+    ''' <summary>
+    ''' indicates the location of ``...`` list arguments
+    ''' </summary>
     Public Enum ListObjectArgumentMargin
+        ''' <summary>
+        ''' the function didn't contains any ``...``
+        ''' </summary>
         none
+        ''' <summary>
+        ''' invalid function information
+        ''' </summary>
         invalid
+        ''' <summary>
+        ''' the first parameter of the function is a ``...`` list parameter
+        ''' </summary>
         left
+        ''' <summary>
+        ''' the last parameter or the last -1 parameter(if the last parameter 
+        ''' is a preserved <see cref="Environment"/> object) of the function 
+        ''' is a ``...`` list parameter.
+        ''' </summary>
         right
     End Enum
 End Namespace
