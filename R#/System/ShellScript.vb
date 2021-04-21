@@ -3,6 +3,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.Default
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
@@ -47,6 +48,7 @@ Namespace Development
         ReadOnly sourceScript As String
         ReadOnly info As String = "<No description provided.>"
         ReadOnly title As String
+        ReadOnly dependency As New List(Of Dependency)
 
         Public ReadOnly Property message As String
 
@@ -246,16 +248,26 @@ Namespace Development
             End If
         End Sub
 
+#Region "Dependency"
+
         Private Sub analysisTree(expr As Require, attrs As ArgumentInfo)
             For Each name As Expression In expr.packages
                 Call AnalysisTree(name, attrs)
             Next
+
+            ' add package reference
+            Call dependency.Add(New Dependency(expr))
         End Sub
 
         Private Sub analysisTree(expr As [Imports], attrs As ArgumentInfo)
             Call AnalysisTree(expr.packages, attrs)
             Call AnalysisTree(expr.library, attrs)
+
+            ' add package reference
+            Call dependency.Add(New Dependency(expr))
         End Sub
+
+#End Region
 
         ''' <summary>
         ''' add a command line argument value

@@ -77,7 +77,9 @@ Namespace Development.Package.File
         End Sub
 
         Sub New(require As Require)
-            packages = require.packages.Select(AddressOf ValueAssign.GetSymbol).ToArray
+            packages = require.packages _
+                .Select(AddressOf ValueAssign.GetSymbol) _
+                .ToArray
         End Sub
 
         Public Overrides Function ToString() As String
