@@ -1,47 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::33143391cf3c536dcafe17bc9d3e2e54, R#\Runtime\Internal\internalInvokes\string\stringr.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module stringr
-    ' 
-    '         Function: [string], base64, base64Decode, bencode, charAt
-    '                   chr, Csprintf, decodeObject, fromBstring, grep
-    '                   html, json, loadXml, match, nchar
-    '                   paste, regexp, sprintfSingle, str_empty, str_pad
-    '                   str_replace, strPad_internal, strsplit, substr, tagvalue
-    '                   tolower, urldecode, xml
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module stringr
+' 
+'         Function: [string], base64, base64Decode, bencode, charAt
+'                   chr, Csprintf, decodeObject, fromBstring, grep
+'                   html, json, loadXml, match, nchar
+'                   paste, regexp, sprintfSingle, str_empty, str_pad
+'                   str_replace, strPad_internal, strsplit, substr, tagvalue
+'                   tolower, urldecode, xml
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -65,9 +65,9 @@ Imports Microsoft.VisualBasic.Serialization.Bencoding
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports any = Microsoft.VisualBasic.Scripting
 Imports encoder = SMRUCC.Rsharp.Development.Components.Encoder
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
@@ -562,7 +562,11 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("strsplit")>
         <RApiReturn(GetType(String))>
-        Friend Function strsplit(text$(), Optional delimiter$ = " ", Optional fixed As Boolean = False, Optional env As Environment = Nothing) As Object
+        Friend Function strsplit(text$(),
+                                 Optional delimiter As Object = " ",
+                                 Optional fixed As Boolean = False,
+                                 Optional env As Environment = Nothing) As Object
+
             If delimiter Is Nothing Then
                 Return debug.stop("the given delimiter is nothing!", env)
             End If
@@ -570,22 +574,25 @@ Namespace Runtime.Internal.Invokes
             If text.IsNullOrEmpty Then
                 Return Nothing
             ElseIf text.Length = 1 Then
-                If fixed Then
-                    Return VBStr.Split(text(Scan0), delimiter)
-                Else
-                    Return text(Scan0).StringSplit(delimiter)
-                End If
+                Return text(Scan0).splitSingleStrAuto(delimiter, fixed)
             Else
                 Return text _
                     .SeqIterator _
                     .ToDictionary(Function(i) $"[[{i.i + 1}]]",
                                   Function(i)
-                                      If fixed Then
-                                          Return VBStr.Split(i.value, delimiter)
-                                      Else
-                                          Return i.value.StringSplit(delimiter)
-                                      End If
+                                      Return i.value.splitSingleStrAuto(delimiter, fixed)
                                   End Function)
+            End If
+        End Function
+
+        <Extension>
+        Private Function splitSingleStrAuto(str As String, delimiter As Object, fixed As Boolean) As String()
+            If fixed Then
+                Return VBStr.Split(str, any.ToString(delimiter))
+            ElseIf TypeOf delimiter Is Regex Then
+                Return str.StringSplit(DirectCast(delimiter, Regex))
+            Else
+                Return str.StringSplit(any.ToString(delimiter))
             End If
         End Function
 

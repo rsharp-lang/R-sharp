@@ -458,6 +458,33 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Return Nothing
         End Function
 
+        <ExportAPI("last")>
+        Public Function last(<RRawVectorArgument>
+                             sequence As Object,
+                             Optional test As RFunction = Nothing,
+                             Optional envir As Environment = Nothing) As Object
+
+            Dim pass As Boolean
+            Dim arg As InvokeParameter()
+
+            If test Is Nothing Then
+                Return Rset.getObjectSet(sequence, envir).LastOrDefault
+            End If
+
+            Dim lastVal As Object
+
+            For Each item As Object In Rset.getObjectSet(sequence, envir)
+                arg = InvokeParameter.CreateLiterals(item)
+                pass = REnv.asLogical(test.Invoke(envir, arg))(Scan0)
+
+                If pass Then
+                    lastVal = item
+                End If
+            Next
+
+            Return lastVal
+        End Function
+
         ''' <summary>
         ''' 
         ''' </summary>
