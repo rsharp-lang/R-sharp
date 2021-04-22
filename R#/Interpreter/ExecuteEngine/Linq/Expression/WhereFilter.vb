@@ -1,15 +1,16 @@
-﻿Imports SMRUCC.Rsharp.Runtime
+﻿
+Imports SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.LINQ
 
     ''' <summary>
-    ''' data projection: ``SELECT &lt;fields>``
+    ''' data filter: ``WHERE &lt;condition>``
     ''' </summary>
-    Public Class OutputProjection : Inherits LinqKeywordExpression
+    Public Class WhereFilter : Inherits LinqKeywordExpression
 
         Public Overrides ReadOnly Property keyword As String
             Get
-                Return "SELECT"
+                Return "WHERE"
             End Get
         End Property
 

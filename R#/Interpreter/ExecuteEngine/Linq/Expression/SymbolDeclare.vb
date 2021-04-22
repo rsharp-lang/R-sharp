@@ -3,13 +3,13 @@
 Namespace Interpreter.ExecuteEngine.LINQ
 
     ''' <summary>
-    ''' data projection: ``SELECT &lt;fields>``
+    ''' declare a new temp symbol: ``LET x = ...``
     ''' </summary>
-    Public Class OutputProjection : Inherits LinqKeywordExpression
+    Public Class SymbolDeclare : Inherits LinqKeywordExpression
 
         Public Overrides ReadOnly Property keyword As String
             Get
-                Return "SELECT"
+                Return "LET"
             End Get
         End Property
 
