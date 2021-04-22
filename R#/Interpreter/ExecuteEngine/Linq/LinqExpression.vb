@@ -56,7 +56,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
-Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Linq
+Namespace Interpreter.ExecuteEngine.LINQ
 
     ' from x in seq let y = ... where test select projection order by ... asceding distinct 
 

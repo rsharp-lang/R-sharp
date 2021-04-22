@@ -47,7 +47,7 @@
 Imports System.Runtime.CompilerServices
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
-Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Linq
+Namespace Interpreter.ExecuteEngine.LINQ
 
     Module LinqOutput
 
