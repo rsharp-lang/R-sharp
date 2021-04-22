@@ -54,13 +54,13 @@ Namespace Development.CommandLine
 
             For Each line As String In lines
                 If beginRegion Then
-                    If line = commentPattern.Match(line).Value Then
+                    If line <> "" AndAlso line = commentPattern.Match(line).Value Then
                         Yield line
                     Else
                         Exit For
                     End If
                 Else
-                    If line = commentPattern.Match(line).Value Then
+                    If line <> "" AndAlso line = commentPattern.Match(line).Value Then
                         beginRegion = True
                         Yield line
                     End If
@@ -74,7 +74,7 @@ Namespace Development.CommandLine
                             Return line.Trim(" "c, "#"c, ASCII.CR, ASCII.LF)
                         End Function) _
                 .ToArray
-            Dim data As Dictionary(Of String, String) = text.ParseTagData
+            Dim data As Dictionary(Of String, String) = text.ParseTagData(strict:=False)
 
             Return data
         End Function
