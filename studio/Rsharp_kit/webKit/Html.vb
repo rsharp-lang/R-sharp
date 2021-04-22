@@ -37,14 +37,14 @@ Module Html
                 Dim name As String = column(Scan0) _
                     .StripHTMLTags _
                     .UnescapeHTML _
-                    .Trim(" "c, ASCII.CR, ASCII.LF, ASCII.TAB, " "c)
+                    .Trim(" "c, ASCII.CR, ASCII.LF, ASCII.TAB, " "c, ASCII.NUL)
                 Dim data As String() = column _
                     .Skip(1) _
                     .Select(Function(cell)
                                 Return cell _
                                     .StripHTMLTags _
                                     .UnescapeHTML.TrimNull _
-                                    .Trim(" "c, ASCII.CR, ASCII.LF, ASCII.TAB, " "c)
+                                    .Trim(" "c, ASCII.CR, ASCII.LF, ASCII.TAB, " "c, ASCII.NUL)
                             End Function) _
                     .ToArray
 
