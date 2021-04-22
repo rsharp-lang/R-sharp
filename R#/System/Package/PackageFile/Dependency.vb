@@ -67,7 +67,10 @@ Namespace Development.Package.File
         Sub New([imports] As [Imports])
             library = ValueAssign.GetSymbol([imports].library)
 
-            If TypeOf [imports].packages Is Literal Then
+            If [imports].packages Is Nothing Then
+                packages = {library}
+                library = Nothing
+            ElseIf TypeOf [imports].packages Is Literal Then
                 packages = {DirectCast([imports].packages, Literal).value.ToString}
             Else
                 packages = DirectCast([imports].packages, VectorLiteral).values _
@@ -77,7 +80,9 @@ Namespace Development.Package.File
         End Sub
 
         Sub New(require As Require)
-            packages = require.packages.Select(AddressOf ValueAssign.GetSymbol).ToArray
+            packages = require.packages _
+                .Select(AddressOf ValueAssign.GetSymbol) _
+                .ToArray
         End Sub
 
         Public Overrides Function ToString() As String

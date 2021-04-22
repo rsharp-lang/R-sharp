@@ -809,7 +809,8 @@
     <Compile Include="Runtime\Serialize\Buffer.vb" />
     <Compile Include="Runtime\System\GetVectorElement.vb" />
     <Compile Include="System\Document\MetaTextParser.vb" />
-    <Compile Include="System\ShellScript.vb" />
+    <Compile Include="System\Document\ShellScript\CommandLineArgument.vb" />
+    <Compile Include="System\Document\ShellScript\ShellScript.vb" />
     <Compile Include="System\RuntimeError.vb" />
     <Compile Include="System\Document\FunctionDeclare.vb" />
     <Compile Include="System\Document\Document.vb" />

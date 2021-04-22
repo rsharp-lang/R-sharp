@@ -4,6 +4,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.Default
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
@@ -12,30 +13,10 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
+Imports r = System.Text.RegularExpressions.Regex
 
-Namespace Development
-
-    Friend Class ArgumentInfo
-
-        Friend attrs As New Dictionary(Of String, String())
-        Friend type As TypeCodes = TypeCodes.string
-
-        Default Public ReadOnly Property Item(name As String) As String
-            Get
-                Return attrs.TryGetValue("info").JoinBy(";" & vbCrLf)
-            End Get
-        End Property
-
-    End Class
-
-    Friend Class CommandLineArgument
-
-        Public Property name As String
-        Public Property defaultValue As String
-        Public Property type As String
-        Public Property description As String
-
-    End Class
+Namespace Development.CommandLine
 
     ''' <summary>
     ''' the R# shell script commandline arguments helper module
@@ -47,6 +28,7 @@ Namespace Development
         ReadOnly sourceScript As String
         ReadOnly info As String = "<No description provided.>"
         ReadOnly title As String
+        ReadOnly dependency As New List(Of Dependency)
 
         Public ReadOnly Property message As String
 
@@ -59,6 +41,7 @@ Namespace Development
 
             Me.Rscript = Program.CreateProgram(Rscript, [error]:=message)
             Me.sourceScript = Rscript.fileName
+
             Me.title = meta.TryGetValue("title") Or sourceScript.BaseName.AsDefault
 
             If meta.ContainsKey("description") Then
@@ -132,6 +115,34 @@ Namespace Development
                 Call dev.WriteLine($" {arg.name}: {New String(" "c, maxName.Length - arg.name.Length)}{arg.description Or none}")
             Next
 
+            If dependency > 0 Then
+                Dim requires = dependency.Where(Function(deps) deps.library.StringEmpty).ToArray
+                Dim import = dependency.Where(Function(deps) Not deps.library.StringEmpty).ToArray
+
+                Call dev.WriteLine()
+                Call dev.WriteLine("Dependency List:")
+
+                If Not requires.IsNullOrEmpty Then
+                    Dim allList As String() = requires _
+                        .Select(Function(pkg) pkg.packages) _
+                        .IteratesALL _
+                        .Distinct _
+                        .ToArray
+
+                    Call dev.WriteLine()
+                    Call dev.WriteLine("Loading: ")
+                    Call allList.printContentArray(Nothing, Nothing, 80, dev)
+                End If
+
+                If Not import.IsNullOrEmpty Then
+                    Dim allList = import.Select(Function(ref) $"{ref.library}::[{ref.packages.JoinBy(", ")}]").ToArray
+
+                    Call dev.WriteLine()
+                    Call dev.WriteLine("Imports: ")
+                    Call allList.printContentArray(Nothing, Nothing, 80, dev)
+                End If
+            End If
+
             Call dev.Flush()
         End Sub
 
@@ -144,28 +155,28 @@ Namespace Development
             End If
 
             Select Case expr.GetType
-                Case GetType([Imports]) : Call analysisTree(DirectCast(expr, [Imports]), attrs)
-                Case GetType(BinaryOrExpression) : Call analysisTree(DirectCast(expr, BinaryOrExpression), attrs)
+                Case GetType([Imports]) : Call AnalysisTree(DirectCast(expr, [Imports]), attrs)
+                Case GetType(BinaryOrExpression) : Call AnalysisTree(DirectCast(expr, BinaryOrExpression), attrs)
                 Case GetType(DeclareNewSymbol) : Call analysisTree(DirectCast(expr, DeclareNewSymbol))
-                Case GetType(FunctionInvoke) : Call analysisTree(DirectCast(expr, FunctionInvoke), attrs)
-                Case GetType(IfBranch) : Call analysisTree(DirectCast(expr, IfBranch), attrs)
-                Case GetType(ClosureExpression) : Call analysisTree(DirectCast(expr, ClosureExpression), attrs)
-                Case GetType(SymbolIndexer) : Call analysisTree(DirectCast(expr, SymbolIndexer), attrs)
-                Case GetType(VectorLiteral) : Call analysisTree(DirectCast(expr, VectorLiteral), attrs)
-                Case GetType(BinaryExpression) : Call analysisTree(DirectCast(expr, BinaryExpression), attrs)
-                Case GetType(BinaryInExpression) : Call analysisTree(DirectCast(expr, BinaryInExpression), attrs)
-                Case GetType(ElseBranch) : Call analysisTree(DirectCast(expr, ElseBranch), attrs)
-                Case GetType(StringInterpolation) : Call analysisTree(DirectCast(expr, StringInterpolation), attrs)
-                Case GetType(ValueAssign) : Call analysisTree(DirectCast(expr, ValueAssign), attrs)
-                Case GetType(DeclareNewFunction) : Call analysisTree(DirectCast(expr, DeclareNewFunction), attrs)
-                Case GetType(ForLoop) : Call analysisTree(DirectCast(expr, ForLoop), attrs)
-                Case GetType(ReturnValue) : Call analysisTree(DirectCast(expr, ReturnValue), attrs)
-                Case GetType(DeclareLambdaFunction) : Call analysisTree(DirectCast(expr, DeclareLambdaFunction), attrs)
-                Case GetType(AppendOperator) : Call analysisTree(DirectCast(expr, AppendOperator), attrs)
-                Case GetType(UnaryNot) : Call analysisTree(DirectCast(expr, UnaryNot), attrs)
-                Case GetType(SequenceLiteral) : Call analysisTree(DirectCast(expr, SequenceLiteral), attrs)
-                Case GetType(IIfExpression) : Call analysisTree(DirectCast(expr, IIfExpression), attrs)
-                Case GetType(Require) : Call analysisTree(DirectCast(expr, Require), attrs)
+                Case GetType(FunctionInvoke) : Call AnalysisTree(DirectCast(expr, FunctionInvoke), attrs)
+                Case GetType(IfBranch) : Call AnalysisTree(DirectCast(expr, IfBranch), attrs)
+                Case GetType(ClosureExpression) : Call AnalysisTree(DirectCast(expr, ClosureExpression), attrs)
+                Case GetType(SymbolIndexer) : Call AnalysisTree(DirectCast(expr, SymbolIndexer), attrs)
+                Case GetType(VectorLiteral) : Call AnalysisTree(DirectCast(expr, VectorLiteral), attrs)
+                Case GetType(BinaryExpression) : Call AnalysisTree(DirectCast(expr, BinaryExpression), attrs)
+                Case GetType(BinaryInExpression) : Call AnalysisTree(DirectCast(expr, BinaryInExpression), attrs)
+                Case GetType(ElseBranch) : Call AnalysisTree(DirectCast(expr, ElseBranch), attrs)
+                Case GetType(StringInterpolation) : Call AnalysisTree(DirectCast(expr, StringInterpolation), attrs)
+                Case GetType(ValueAssign) : Call AnalysisTree(DirectCast(expr, ValueAssign), attrs)
+                Case GetType(DeclareNewFunction) : Call AnalysisTree(DirectCast(expr, DeclareNewFunction), attrs)
+                Case GetType(ForLoop) : Call AnalysisTree(DirectCast(expr, ForLoop), attrs)
+                Case GetType(ReturnValue) : Call AnalysisTree(DirectCast(expr, ReturnValue), attrs)
+                Case GetType(DeclareLambdaFunction) : Call AnalysisTree(DirectCast(expr, DeclareLambdaFunction), attrs)
+                Case GetType(AppendOperator) : Call AnalysisTree(DirectCast(expr, AppendOperator), attrs)
+                Case GetType(UnaryNot) : Call AnalysisTree(DirectCast(expr, UnaryNot), attrs)
+                Case GetType(SequenceLiteral) : Call AnalysisTree(DirectCast(expr, SequenceLiteral), attrs)
+                Case GetType(IIfExpression) : Call AnalysisTree(DirectCast(expr, IIfExpression), attrs)
+                Case GetType(Require) : Call AnalysisTree(DirectCast(expr, Require), attrs)
 
                 Case Else
                     Throw New NotImplementedException(expr.GetType.FullName)
@@ -203,7 +214,7 @@ Namespace Development
 
         Private Sub analysisTree(expr As ForLoop, attrs As ArgumentInfo)
             Call AnalysisTree(expr.sequence, attrs)
-            Call analysisTree(expr.body.body, attrs)
+            Call AnalysisTree(expr.body.body, attrs)
         End Sub
 
         Private Sub analysisTree(expr As DeclareNewFunction, attrs As ArgumentInfo)
@@ -211,7 +222,7 @@ Namespace Development
                 Call analysisTree(arg)
             Next
 
-            Call analysisTree(expr.body, attrs)
+            Call AnalysisTree(expr.body, attrs)
         End Sub
 
         Private Sub analysisTree(expr As ValueAssign, attrs As ArgumentInfo)
@@ -225,7 +236,7 @@ Namespace Development
         End Sub
 
         Private Sub analysisTree(expr As ElseBranch, attrs As ArgumentInfo)
-            Call analysisTree(DirectCast(expr.closure.body, ClosureExpression), attrs)
+            Call AnalysisTree(DirectCast(expr.closure.body, ClosureExpression), attrs)
         End Sub
 
         Private Sub analysisTree(expr As BinaryInExpression, attrs As ArgumentInfo)
@@ -268,16 +279,26 @@ Namespace Development
             End If
         End Sub
 
+#Region "Dependency"
+
         Private Sub analysisTree(expr As Require, attrs As ArgumentInfo)
             For Each name As Expression In expr.packages
                 Call AnalysisTree(name, attrs)
             Next
+
+            ' add package reference
+            Call dependency.Add(New Dependency(expr))
         End Sub
 
         Private Sub analysisTree(expr As [Imports], attrs As ArgumentInfo)
             Call AnalysisTree(expr.packages, attrs)
             Call AnalysisTree(expr.library, attrs)
+
+            ' add package reference
+            Call dependency.Add(New Dependency(expr))
         End Sub
+
+#End Region
 
         ''' <summary>
         ''' add a command line argument value
@@ -329,7 +350,7 @@ Namespace Development
 
         Private Sub analysisTree(expr As IfBranch, attrs As ArgumentInfo)
             AnalysisTree(expr.ifTest, attrs)
-            analysisTree(expr.trueClosure.body, attrs)
+            AnalysisTree(expr.trueClosure.body, attrs)
         End Sub
 
         Private Sub analysisTree(closure As ClosureExpression, attrs As ArgumentInfo)
