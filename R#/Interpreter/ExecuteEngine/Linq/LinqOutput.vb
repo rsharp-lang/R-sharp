@@ -75,16 +75,4 @@ Namespace Interpreter.ExecuteEngine.LINQ
             End If
         End Function
     End Module
-
-    Friend Class LinqOutputUnit
-
-        Public key As String
-        Public sortKey As Object
-        Public value As Object
-
-        Public Overrides Function ToString() As String
-            Return $"[{key}] {Scripting.ToString(value, "null")}"
-        End Function
-
-    End Class
 End Namespace

@@ -217,7 +217,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
                     }
                 End If
 
-                Select Case token(Scan0).text
+                Select Case Strings.LCase(token(Scan0).text)
                     Case "let"
                         If Not (syntaxResult = local(locals)) Is Nothing Then
                             Return syntaxResult
