@@ -63,7 +63,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             End Get
         End Property
 
-        Friend ReadOnly left, right As Expression
+        Friend left, right As Expression
         Friend ReadOnly [operator] As String
 
         Sub New(left As Expression, right As Expression, op$)
