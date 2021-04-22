@@ -14,6 +14,11 @@ Namespace Interpreter.ExecuteEngine.LINQ
         ''' </summary>
         ''' <param name="expr"></param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' 这个是因为list或者dataframe之中的对象名称可能含有非法字符
+        ''' 需要使用字符串常量来表示，这个函数将字符串常量表示转换为变量
+        ''' 对象引用
+        ''' </remarks>
         Protected Shared Function FixLiteral(expr As Expression) As Expression
             If TypeOf expr Is BinaryExpression Then
                 Dim bin As BinaryExpression = DirectCast(expr, BinaryExpression)
