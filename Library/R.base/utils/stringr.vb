@@ -154,7 +154,10 @@ Module stringr
     ''' <param name="replace"></param>
     ''' <returns></returns>
     <ExportAPI("asciiString")>
-    Public Function asciiString(x As String, Optional replace As Char = "") As String
+    Public Function asciiString(x As String,
+                                Optional replace As Char = Nothing,
+                                Optional keepsNewLine As Boolean = True) As String
+
         If x.StringEmpty Then
             Return ""
         End If
@@ -164,6 +167,12 @@ Module stringr
 
         Return x _
             .Select(Function(c)
+                        If keepsNewLine AndAlso c = ASCII.LF Then
+                            Return c
+                        ElseIf keepsNewLine AndAlso c = ASCII.CR Then
+                            Return ASCII.LF
+                        End If
+
                         Dim bi As Integer = AscW(c)
 
                         If bi >= from AndAlso bi < ends Then
@@ -172,6 +181,7 @@ Module stringr
                             Return replace
                         End If
                     End Function) _
+            .Where(Function(c) Not c = ASCII.NUL) _
             .CharString
     End Function
 End Module

@@ -589,6 +589,12 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' string join with given delimiter
+        ''' </summary>
+        ''' <param name="strings$"></param>
+        ''' <param name="deli$"></param>
+        ''' <returns></returns>
         <ExportAPI("paste")>
         Friend Function paste(strings$(), Optional deli$ = " ") As Object
             Return strings.JoinBy(deli)
