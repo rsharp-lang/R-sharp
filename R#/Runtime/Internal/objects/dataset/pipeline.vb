@@ -203,6 +203,19 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        ''' <summary>
+        ''' try create populator with specific type constraint
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="upstream"></param>
+        ''' <param name="env"></param>
+        ''' <param name="suppress"></param>
+        ''' <param name="callerFrameName">debug used only</param>
+        ''' <returns>
+        ''' the required data sequence or an error message if the 
+        ''' upstream element type is not matched of the required 
+        ''' target type.
+        ''' </returns>
         Public Shared Function TryCreatePipeline(Of T)(upstream As Object, env As Environment,
                                                        Optional suppress As Boolean = False,
                                                        <CallerMemberName>
