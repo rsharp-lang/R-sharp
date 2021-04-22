@@ -28,6 +28,7 @@ Namespace Development.CommandLine
         ReadOnly info As String = "<No description provided.>"
         ReadOnly title As String
         ReadOnly dependency As New List(Of Dependency)
+        ReadOnly authors As String()
 
         Public ReadOnly Property message As String
 
@@ -45,6 +46,10 @@ Namespace Development.CommandLine
 
             If meta.ContainsKey("description") Then
                 info = meta!description
+            End If
+
+            If meta.ContainsKey("author") Then
+                authors = meta("author").StringSplit("\s*[,;]\s*")
             End If
         End Sub
 
@@ -140,6 +145,12 @@ Namespace Development.CommandLine
                     Call dev.WriteLine("Imports: ")
                     Call allList.printContentArray(Nothing, Nothing, 80, dev)
                 End If
+            End If
+
+            If Not authors.IsNullOrEmpty Then
+                Call dev.WriteLine()
+                Call dev.WriteLine("Authors:")
+                Call authors.printContentArray(Nothing, Nothing, 80, dev)
             End If
 
             Call dev.Flush()
