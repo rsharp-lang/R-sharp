@@ -672,6 +672,13 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Throw New NotImplementedException
         End Function
 
+        ''' <summary>
+        ''' split content sequence with a given condition as element delimiter.
+        ''' </summary>
+        ''' <param name="x">a given data sequence</param>
+        ''' <param name="delimiter">an element test function to determine that element is a delimiter object</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("split")>
         Public Function split(<RRawVectorArgument> x As Object, delimiter As Object, Optional env As Environment = Nothing) As Object
             Dim seq As pipeline = pipeline.TryCreatePipeline(Of Object)(x, env)
