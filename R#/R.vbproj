@@ -682,6 +682,7 @@
     <Compile Include="Interpreter\ExecuteEngine\Linq\LinqOutputUnit.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\LinqSyntaxParser.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\NamespaceDoc.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Query\AggregateExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Query\ProjectionExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Query\Options.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Query\QueryExpression.vb" />
