@@ -14,7 +14,6 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
-Imports r = System.Text.RegularExpressions.Regex
 
 Namespace Development.CommandLine
 
@@ -155,28 +154,28 @@ Namespace Development.CommandLine
             End If
 
             Select Case expr.GetType
-                Case GetType([Imports]) : Call AnalysisTree(DirectCast(expr, [Imports]), attrs)
-                Case GetType(BinaryOrExpression) : Call AnalysisTree(DirectCast(expr, BinaryOrExpression), attrs)
+                Case GetType([Imports]) : Call analysisTree(DirectCast(expr, [Imports]), attrs)
+                Case GetType(BinaryOrExpression) : Call analysisTree(DirectCast(expr, BinaryOrExpression), attrs)
                 Case GetType(DeclareNewSymbol) : Call analysisTree(DirectCast(expr, DeclareNewSymbol))
-                Case GetType(FunctionInvoke) : Call AnalysisTree(DirectCast(expr, FunctionInvoke), attrs)
-                Case GetType(IfBranch) : Call AnalysisTree(DirectCast(expr, IfBranch), attrs)
-                Case GetType(ClosureExpression) : Call AnalysisTree(DirectCast(expr, ClosureExpression), attrs)
-                Case GetType(SymbolIndexer) : Call AnalysisTree(DirectCast(expr, SymbolIndexer), attrs)
-                Case GetType(VectorLiteral) : Call AnalysisTree(DirectCast(expr, VectorLiteral), attrs)
-                Case GetType(BinaryExpression) : Call AnalysisTree(DirectCast(expr, BinaryExpression), attrs)
-                Case GetType(BinaryInExpression) : Call AnalysisTree(DirectCast(expr, BinaryInExpression), attrs)
-                Case GetType(ElseBranch) : Call AnalysisTree(DirectCast(expr, ElseBranch), attrs)
-                Case GetType(StringInterpolation) : Call AnalysisTree(DirectCast(expr, StringInterpolation), attrs)
-                Case GetType(ValueAssign) : Call AnalysisTree(DirectCast(expr, ValueAssign), attrs)
-                Case GetType(DeclareNewFunction) : Call AnalysisTree(DirectCast(expr, DeclareNewFunction), attrs)
-                Case GetType(ForLoop) : Call AnalysisTree(DirectCast(expr, ForLoop), attrs)
-                Case GetType(ReturnValue) : Call AnalysisTree(DirectCast(expr, ReturnValue), attrs)
-                Case GetType(DeclareLambdaFunction) : Call AnalysisTree(DirectCast(expr, DeclareLambdaFunction), attrs)
-                Case GetType(AppendOperator) : Call AnalysisTree(DirectCast(expr, AppendOperator), attrs)
-                Case GetType(UnaryNot) : Call AnalysisTree(DirectCast(expr, UnaryNot), attrs)
-                Case GetType(SequenceLiteral) : Call AnalysisTree(DirectCast(expr, SequenceLiteral), attrs)
-                Case GetType(IIfExpression) : Call AnalysisTree(DirectCast(expr, IIfExpression), attrs)
-                Case GetType(Require) : Call AnalysisTree(DirectCast(expr, Require), attrs)
+                Case GetType(FunctionInvoke) : Call analysisTree(DirectCast(expr, FunctionInvoke), attrs)
+                Case GetType(IfBranch) : Call analysisTree(DirectCast(expr, IfBranch), attrs)
+                Case GetType(ClosureExpression) : Call analysisTree(DirectCast(expr, ClosureExpression), attrs)
+                Case GetType(SymbolIndexer) : Call analysisTree(DirectCast(expr, SymbolIndexer), attrs)
+                Case GetType(VectorLiteral) : Call analysisTree(DirectCast(expr, VectorLiteral), attrs)
+                Case GetType(BinaryExpression) : Call analysisTree(DirectCast(expr, BinaryExpression), attrs)
+                Case GetType(BinaryInExpression) : Call analysisTree(DirectCast(expr, BinaryInExpression), attrs)
+                Case GetType(ElseBranch) : Call analysisTree(DirectCast(expr, ElseBranch), attrs)
+                Case GetType(StringInterpolation) : Call analysisTree(DirectCast(expr, StringInterpolation), attrs)
+                Case GetType(ValueAssign) : Call analysisTree(DirectCast(expr, ValueAssign), attrs)
+                Case GetType(DeclareNewFunction) : Call analysisTree(DirectCast(expr, DeclareNewFunction), attrs)
+                Case GetType(ForLoop) : Call analysisTree(DirectCast(expr, ForLoop), attrs)
+                Case GetType(ReturnValue) : Call analysisTree(DirectCast(expr, ReturnValue), attrs)
+                Case GetType(DeclareLambdaFunction) : Call analysisTree(DirectCast(expr, DeclareLambdaFunction), attrs)
+                Case GetType(AppendOperator) : Call analysisTree(DirectCast(expr, AppendOperator), attrs)
+                Case GetType(UnaryNot) : Call analysisTree(DirectCast(expr, UnaryNot), attrs)
+                Case GetType(SequenceLiteral) : Call analysisTree(DirectCast(expr, SequenceLiteral), attrs)
+                Case GetType(IIfExpression) : Call analysisTree(DirectCast(expr, IIfExpression), attrs)
+                Case GetType(Require) : Call analysisTree(DirectCast(expr, Require), attrs)
 
                 Case Else
                     Throw New NotImplementedException(expr.GetType.FullName)
@@ -214,7 +213,7 @@ Namespace Development.CommandLine
 
         Private Sub analysisTree(expr As ForLoop, attrs As ArgumentInfo)
             Call AnalysisTree(expr.sequence, attrs)
-            Call AnalysisTree(expr.body.body, attrs)
+            Call analysisTree(expr.body.body, attrs)
         End Sub
 
         Private Sub analysisTree(expr As DeclareNewFunction, attrs As ArgumentInfo)
@@ -222,7 +221,7 @@ Namespace Development.CommandLine
                 Call analysisTree(arg)
             Next
 
-            Call AnalysisTree(expr.body, attrs)
+            Call analysisTree(expr.body, attrs)
         End Sub
 
         Private Sub analysisTree(expr As ValueAssign, attrs As ArgumentInfo)
@@ -236,7 +235,7 @@ Namespace Development.CommandLine
         End Sub
 
         Private Sub analysisTree(expr As ElseBranch, attrs As ArgumentInfo)
-            Call AnalysisTree(DirectCast(expr.closure.body, ClosureExpression), attrs)
+            Call analysisTree(DirectCast(expr.closure.body, ClosureExpression), attrs)
         End Sub
 
         Private Sub analysisTree(expr As BinaryInExpression, attrs As ArgumentInfo)
@@ -263,13 +262,9 @@ Namespace Development.CommandLine
 
         Private Sub analysisTree(expr As DeclareNewSymbol)
             Dim type As TypeCodes = expr.type
-            Dim attrs As New ArgumentInfo With {.attrs = expr.attributes}
-
-            If type = TypeCodes.generic Then
-                type = TypeCodes.string
-            End If
-
-            attrs.type = type
+            Dim attrs As New ArgumentInfo(type) With {
+                .attrs = expr.attributes
+            }
 
             If TypeOf expr.m_value Is ArgumentValue Then
                 ' default is NULL
@@ -313,7 +308,7 @@ Namespace Development.CommandLine
             If Not attrs Is Nothing Then
                 info = attrs!info
 
-                If attrs.type = TypeCodes.boolean Then
+                If attrs.GetTypeCode = NameOf(TypeCodes.boolean) Then
                     [default] = "FALSE"
                 End If
             End If
@@ -322,7 +317,7 @@ Namespace Development.CommandLine
                 .name = name,
                 .description = info,
                 .defaultValue = [default],
-                .type = attrs.type.ToString
+                .type = attrs.GetTypeCode
             }.DoCall(AddressOf arguments.Add)
         End Sub
 
@@ -350,7 +345,7 @@ Namespace Development.CommandLine
 
         Private Sub analysisTree(expr As IfBranch, attrs As ArgumentInfo)
             AnalysisTree(expr.ifTest, attrs)
-            AnalysisTree(expr.trueClosure.body, attrs)
+            analysisTree(expr.trueClosure.body, attrs)
         End Sub
 
         Private Sub analysisTree(closure As ClosureExpression, attrs As ArgumentInfo)
@@ -366,7 +361,7 @@ Namespace Development.CommandLine
 
         Public Function AnalysisAllCommands() As ShellScript
             For Each line As Expression In Rscript
-                Call AnalysisTree(line, New ArgumentInfo)
+                Call AnalysisTree(line, New ArgumentInfo(TypeCodes.string))
             Next
 
             Return Me

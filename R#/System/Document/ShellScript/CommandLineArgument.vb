@@ -1,19 +1,4 @@
-﻿Imports SMRUCC.Rsharp.Runtime.Components
-
-Namespace Development.CommandLine
-
-    Friend Class ArgumentInfo
-
-        Friend attrs As New Dictionary(Of String, String())
-        Friend type As TypeCodes = TypeCodes.string
-
-        Default Public ReadOnly Property Item(name As String) As String
-            Get
-                Return attrs.TryGetValue("info").JoinBy(";" & vbCrLf)
-            End Get
-        End Property
-
-    End Class
+﻿Namespace Development.CommandLine
 
     Friend Class CommandLineArgument
 
