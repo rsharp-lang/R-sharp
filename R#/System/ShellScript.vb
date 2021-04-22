@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.Default
 Imports Microsoft.VisualBasic.Linq
@@ -11,7 +12,6 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports r = System.Text.RegularExpressions.Regex
 
 Namespace Development
 
@@ -51,8 +51,11 @@ Namespace Development
         Public ReadOnly Property message As String
 
         Sub New(Rscript As Rscript)
-            Dim metaLines As String() = r.Matches(Rscript.script, "^#.+?$", RegexICMul).ToArray
-            Dim meta = parseMetaData(metaLines)
+            Dim metaLines As String() = Rscript.script _
+                .LineTokens _
+                .DoCall(AddressOf loadMetaLines) _
+                .ToArray
+            Dim meta As Dictionary(Of String, String) = parseMetaData(metaLines)
 
             Me.Rscript = Program.CreateProgram(Rscript, [error]:=message)
             Me.sourceScript = Rscript.fileName
@@ -63,6 +66,26 @@ Namespace Development
                 info = meta!description
             End If
         End Sub
+
+        Private Shared Iterator Function loadMetaLines(lines As IEnumerable(Of String)) As IEnumerable(Of String)
+            Dim beginRegion As Boolean = False
+            Dim commentPattern As New Regex("^#\s.+?$", RegexICMul)
+
+            For Each line As String In lines
+                If beginRegion Then
+                    If line = commentPattern.Match(line).Value Then
+                        Yield line
+                    Else
+                        Exit For
+                    End If
+                Else
+                    If line = commentPattern.Match(line).Value Then
+                        beginRegion = True
+                        Yield line
+                    End If
+                End If
+            Next
+        End Function
 
         Private Shared Function parseMetaData(meta As String()) As Dictionary(Of String, String)
             Dim text As String() = meta _
