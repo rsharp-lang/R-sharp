@@ -640,8 +640,17 @@ RE0:
                     .TryCreatePipeline(Of Object)(x, env) _
                     .populates(Of Object)(env) _
                     .ToArray
+                Dim type As Type = REnv.MeasureRealElementType(data)
+
+                If type Is GetType(String) Then
+                    ' parse string to double
+                    Return data _
+                        .Select(Function(obj) CStr(obj).ParseDouble) _
+                        .ToArray
+                End If
+
                 Dim populates = Iterator Function() As IEnumerable(Of Double)
-                                    For Each item In data
+                                    For Each item As Object In data
                                         If item Is Nothing Then
                                             Yield 0
                                         ElseIf TypeOf item Is String Then
