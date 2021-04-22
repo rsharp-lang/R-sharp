@@ -140,7 +140,7 @@ Namespace Development.CommandLine
                         .ToArray
 
                     Call dev.WriteLine()
-                    Call dev.WriteLine("[+] Loading: ")
+                    Call dev.WriteLine(" Loading: ")
                     Call allList.printContentArray(Nothing, Nothing, 80, dev)
                 End If
 
@@ -148,7 +148,7 @@ Namespace Development.CommandLine
                     Dim allList = import.Select(Function(ref) $"{ref.library}::[{ref.packages.JoinBy(", ")}]").ToArray
 
                     Call dev.WriteLine()
-                    Call dev.WriteLine("[+] Imports: ")
+                    Call dev.WriteLine(" Imports: ")
                     Call allList.printContentArray(Nothing, Nothing, 80, dev)
                 End If
             End If
@@ -351,7 +351,7 @@ Namespace Development.CommandLine
                 End If
             End If
 
-            Return def.ToString
+            Return DefaultFormatter.FormatDefaultString(def)
         End Function
 
         Private Sub analysisTree(expr As IfBranch, attrs As ArgumentInfo)

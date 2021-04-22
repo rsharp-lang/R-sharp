@@ -811,6 +811,7 @@
     <Compile Include="System\Document\MetaTextParser.vb" />
     <Compile Include="System\Document\ShellScript\ArgumentInfo.vb" />
     <Compile Include="System\Document\ShellScript\CommandLineArgument.vb" />
+    <Compile Include="System\Document\ShellScript\DefaultFormatter.vb" />
     <Compile Include="System\Document\ShellScript\ShellScript.vb" />
     <Compile Include="System\RuntimeError.vb" />
     <Compile Include="System\Document\FunctionDeclare.vb" />

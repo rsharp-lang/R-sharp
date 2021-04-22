@@ -7,5 +7,9 @@
         Public Property type As String
         Public Property description As String
 
+        Public Overrides Function ToString() As String
+            Return $"{name}: {description}"
+        End Function
+
     End Class
 End Namespace
