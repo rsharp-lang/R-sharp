@@ -4,6 +4,7 @@ imports ["dataset", "machineLearning", "GA_toolkit"] from "MLkit";
 #
 # description: demo script for running ANN model training
 #
+# author: xieguigang
 
 options(progress_bar = "disabled");
 
@@ -14,6 +15,7 @@ let output as string       = ?"--save"   || `${dirname(inputFile)}/${basename(in
 [@info "max number of iterations for training ANN."]
 let maxLoops as integer    = ?"--loops"  || 10000;
 [@info "the layer numbers and the layer size of the hidden layers of your ANN model"]
+[@type "vector"]
 let hiddens as string      = ?"--hidden" || "120,300,200,20";
 [@info "select a single specific output attribute will be trained..."]
 let attr as string         = ?"--attr";

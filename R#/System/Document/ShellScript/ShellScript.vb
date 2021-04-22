@@ -119,6 +119,12 @@ Namespace Development.CommandLine
                 Call dev.WriteLine($" {arg.name}: {New String(" "c, maxName.Length - arg.name.Length)}{arg.description Or none}")
             Next
 
+            If Not authors.IsNullOrEmpty Then
+                Call dev.WriteLine()
+                Call dev.WriteLine("Authors:")
+                Call authors.printContentArray(Nothing, Nothing, 80, dev)
+            End If
+
             If dependency > 0 Then
                 Dim requires = dependency.Where(Function(deps) deps.library.StringEmpty).ToArray
                 Dim import = dependency.Where(Function(deps) Not deps.library.StringEmpty).ToArray
@@ -134,7 +140,7 @@ Namespace Development.CommandLine
                         .ToArray
 
                     Call dev.WriteLine()
-                    Call dev.WriteLine("Loading: ")
+                    Call dev.WriteLine("[+] Loading: ")
                     Call allList.printContentArray(Nothing, Nothing, 80, dev)
                 End If
 
@@ -142,15 +148,9 @@ Namespace Development.CommandLine
                     Dim allList = import.Select(Function(ref) $"{ref.library}::[{ref.packages.JoinBy(", ")}]").ToArray
 
                     Call dev.WriteLine()
-                    Call dev.WriteLine("Imports: ")
+                    Call dev.WriteLine("[+] Imports: ")
                     Call allList.printContentArray(Nothing, Nothing, 80, dev)
                 End If
-            End If
-
-            If Not authors.IsNullOrEmpty Then
-                Call dev.WriteLine()
-                Call dev.WriteLine("Authors:")
-                Call authors.printContentArray(Nothing, Nothing, 80, dev)
             End If
 
             Call dev.Flush()
