@@ -2,10 +2,10 @@ Generally, the vector style programming in ``R#`` just enables on the ``R#`` pri
 
 ## Declare Vector
 
-You can declare vector using ``|...|``, example as:
+You can declare vector using ``[...]``, example as:
 
 ```R
-var x as integer <- |1, 2, 3, 4, 5|;
+let x as integer <- [1, 2, 3, 4, 5];
 ```
 
 Vector its element type can be all of the R# primitive type: integer, numeric, character, string, boolean. For non-numeric type, like character, string, boolean, the numeric value was converted at first, like convert the string or character as the factor type. For boolean type, R# convert value ``TRUE`` to value 1, ``FALSE`` was convert to 0.
@@ -13,12 +13,12 @@ Vector its element type can be all of the R# primitive type: integer, numeric, c
 The vector declare expression can be split into multiple line, such as:
 
 ```R
-var x as double <-
-|
+let x as double <-
+[
     123.003,
     124.596,
     125.365
-|;
+];
 ```
 
 This will makes much easier for you to put code comment on the vector elements.
@@ -64,9 +64,9 @@ abs function just allow one identifer, if the expression have more than one iden
 
 ```R
 # vector declare
-var x as double <- |1,2,3,4|;
+let x as double <- [1,2,3,4];
 # abs function
-var abs.value <- |x|;
+let abs.value <- |x|;
 ```
 
 ### norm()
@@ -74,7 +74,7 @@ var abs.value <- |x|;
 norm function just allow one identifier
 
 ```R
-var x as double <- |1,2,3,4|;
-var norm.value <- ||x||;
+let x as double <- [1,2,3,4];
+let norm.value <- ||x||;
 ```
 
