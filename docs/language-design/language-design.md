@@ -670,8 +670,15 @@ let tuple.test as function(a as integer, b as integer) {
     [a, b, a ^ b];
 }
 
+let tuple.test2 as function(a, b) {
+    # list is also works fine
+    list(a, b, c = a^ b);
+}
+
 # and you can using tuple its member as the normal variable
 let [a, b, c] <- tuple.test(3, 2);
+
+[a, b, c] = tuple.test2(100, 1); 
 
 if (a == 3) {
     c <- c + a + b;
