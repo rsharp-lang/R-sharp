@@ -55,7 +55,7 @@ Namespace Development.CommandLine
 
         Private Shared Iterator Function loadMetaLines(lines As IEnumerable(Of String)) As IEnumerable(Of String)
             Dim beginRegion As Boolean = False
-            Dim commentPattern As New Regex("^#\s.+?$", RegexICMul)
+            Dim commentPattern As New Regex("^#((\s.+?)?|(\s+))$", RegexICMul)
 
             For Each line As String In lines
                 If beginRegion Then
