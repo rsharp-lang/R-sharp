@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.Default
 Imports Microsoft.VisualBasic.Linq
@@ -13,7 +14,6 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
-Imports r = System.Text.RegularExpressions.Regex
 
 Namespace Development.CommandLine
 
@@ -28,12 +28,16 @@ Namespace Development.CommandLine
         ReadOnly info As String = "<No description provided.>"
         ReadOnly title As String
         ReadOnly dependency As New List(Of Dependency)
+        ReadOnly authors As String()
 
         Public ReadOnly Property message As String
 
         Sub New(Rscript As Rscript)
-            Dim metaLines As String() = r.Matches(Rscript.script, "^#\s.+?$", RegexICMul).ToArray
-            Dim meta = parseMetaData(metaLines)
+            Dim metaLines As String() = Rscript.script _
+                .LineTokens _
+                .DoCall(AddressOf loadMetaLines) _
+                .ToArray
+            Dim meta As Dictionary(Of String, String) = parseMetaData(metaLines)
 
             Me.Rscript = Program.CreateProgram(Rscript, [error]:=message)
             Me.sourceScript = Rscript.fileName
@@ -43,7 +47,31 @@ Namespace Development.CommandLine
             If meta.ContainsKey("description") Then
                 info = meta!description
             End If
+
+            If meta.ContainsKey("author") Then
+                authors = meta("author").StringSplit("\s*[,;]\s*")
+            End If
         End Sub
+
+        Private Shared Iterator Function loadMetaLines(lines As IEnumerable(Of String)) As IEnumerable(Of String)
+            Dim beginRegion As Boolean = False
+            Dim commentPattern As New Regex("^#((\s.+?)?|(\s+))$", RegexICMul)
+
+            For Each line As String In lines
+                If beginRegion Then
+                    If line <> "" AndAlso line = commentPattern.Match(line).Value Then
+                        Yield line
+                    Else
+                        Exit For
+                    End If
+                Else
+                    If line <> "" AndAlso line = commentPattern.Match(line).Value Then
+                        beginRegion = True
+                        Yield line
+                    End If
+                End If
+            Next
+        End Function
 
         Private Shared Function parseMetaData(meta As String()) As Dictionary(Of String, String)
             Dim text As String() = meta _
@@ -51,7 +79,7 @@ Namespace Development.CommandLine
                             Return line.Trim(" "c, "#"c, ASCII.CR, ASCII.LF)
                         End Function) _
                 .ToArray
-            Dim data As Dictionary(Of String, String) = text.ParseTagData
+            Dim data As Dictionary(Of String, String) = text.ParseTagData(strict:=False)
 
             Return data
         End Function
@@ -73,6 +101,8 @@ Namespace Development.CommandLine
             For Each arg As CommandLineArgument In arguments
                 If arg.defaultValue.StartsWith("<required") Then
                     cli.Add($"{arg.name} <{arg.type}>")
+                ElseIf arg.isNumeric Then
+                    cli.Add($"[{arg.name} <{arg.type}, default={Trim(arg.defaultValue).Trim(""""c)}>]")
                 Else
                     cli.Add($"[{arg.name} <{arg.type}, default={arg.defaultValue}>]")
                 End If
@@ -91,6 +121,12 @@ Namespace Development.CommandLine
                 Call dev.WriteLine($" {arg.name}: {New String(" "c, maxName.Length - arg.name.Length)}{arg.description Or none}")
             Next
 
+            If Not authors.IsNullOrEmpty Then
+                Call dev.WriteLine()
+                Call dev.WriteLine("Authors:")
+                Call authors.printContentArray(Nothing, Nothing, 80, dev)
+            End If
+
             If dependency > 0 Then
                 Dim requires = dependency.Where(Function(deps) deps.library.StringEmpty).ToArray
                 Dim import = dependency.Where(Function(deps) Not deps.library.StringEmpty).ToArray
@@ -106,7 +142,7 @@ Namespace Development.CommandLine
                         .ToArray
 
                     Call dev.WriteLine()
-                    Call dev.WriteLine("Loading: ")
+                    Call dev.WriteLine(" Loading: ")
                     Call allList.printContentArray(Nothing, Nothing, 80, dev)
                 End If
 
@@ -114,7 +150,7 @@ Namespace Development.CommandLine
                     Dim allList = import.Select(Function(ref) $"{ref.library}::[{ref.packages.JoinBy(", ")}]").ToArray
 
                     Call dev.WriteLine()
-                    Call dev.WriteLine("Imports: ")
+                    Call dev.WriteLine(" Imports: ")
                     Call allList.printContentArray(Nothing, Nothing, 80, dev)
                 End If
             End If
@@ -239,13 +275,9 @@ Namespace Development.CommandLine
 
         Private Sub analysisTree(expr As DeclareNewSymbol)
             Dim type As TypeCodes = expr.type
-            Dim attrs As New ArgumentInfo With {.attrs = expr.attributes}
-
-            If type = TypeCodes.generic Then
-                type = TypeCodes.string
-            End If
-
-            attrs.type = type
+            Dim attrs As New ArgumentInfo(type) With {
+                .attrs = expr.attributes
+            }
 
             If TypeOf expr.m_value Is ArgumentValue Then
                 ' default is NULL
@@ -289,7 +321,7 @@ Namespace Development.CommandLine
             If Not attrs Is Nothing Then
                 info = attrs!info
 
-                If attrs.type = TypeCodes.boolean Then
+                If attrs.GetTypeCode = NameOf(TypeCodes.boolean) Then
                     [default] = "FALSE"
                 End If
             End If
@@ -298,7 +330,7 @@ Namespace Development.CommandLine
                 .name = name,
                 .description = info,
                 .defaultValue = [default],
-                .type = attrs.type.ToString
+                .type = attrs.GetTypeCode
             }.DoCall(AddressOf arguments.Add)
         End Sub
 
@@ -321,7 +353,7 @@ Namespace Development.CommandLine
                 End If
             End If
 
-            Return def.ToString
+            Return $"""{DefaultFormatter.FormatDefaultString(def)}"""
         End Function
 
         Private Sub analysisTree(expr As IfBranch, attrs As ArgumentInfo)
@@ -342,7 +374,7 @@ Namespace Development.CommandLine
 
         Public Function AnalysisAllCommands() As ShellScript
             For Each line As Expression In Rscript
-                Call AnalysisTree(line, New ArgumentInfo)
+                Call AnalysisTree(line, New ArgumentInfo(TypeCodes.string))
             Next
 
             Return Me

@@ -458,6 +458,33 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Return Nothing
         End Function
 
+        <ExportAPI("last")>
+        Public Function last(<RRawVectorArgument>
+                             sequence As Object,
+                             Optional test As RFunction = Nothing,
+                             Optional envir As Environment = Nothing) As Object
+
+            Dim pass As Boolean
+            Dim arg As InvokeParameter()
+
+            If test Is Nothing Then
+                Return Rset.getObjectSet(sequence, envir).LastOrDefault
+            End If
+
+            Dim lastVal As Object
+
+            For Each item As Object In Rset.getObjectSet(sequence, envir)
+                arg = InvokeParameter.CreateLiterals(item)
+                pass = REnv.asLogical(test.Invoke(envir, arg))(Scan0)
+
+                If pass Then
+                    lastVal = item
+                End If
+            Next
+
+            Return lastVal
+        End Function
+
         ''' <summary>
         ''' 
         ''' </summary>
@@ -672,16 +699,34 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Throw New NotImplementedException
         End Function
 
+        ''' <summary>
+        ''' split content sequence with a given condition as element delimiter.
+        ''' </summary>
+        ''' <param name="x">a given data sequence</param>
+        ''' <param name="delimiter">an element test function to determine that element is a delimiter object</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("split")>
         Public Function split(<RRawVectorArgument> x As Object, delimiter As Object, Optional env As Environment = Nothing) As Object
             Dim seq As pipeline = pipeline.TryCreatePipeline(Of Object)(x, env)
             Dim _split As Predicate(Of Object)
+            Dim _error As Message = Nothing
 
             If delimiter Is Nothing Then
                 Return Internal.debug.stop("the required delimiter value can not be nothing!", env)
             ElseIf delimiter.GetType.ImplementInterface(Of RFunction) Then
                 _split = Function(obj)
+                             If Not _error Is Nothing Then
+                                 Return False
+                             End If
+
                              Dim out As Object = DirectCast(delimiter, RFunction).Invoke(env, invokeArgument(obj))
+
+                             If TypeOf out Is Message Then
+                                 _error = out
+                                 Return False
+                             End If
+
                              Dim sng As Object = REnv.single(out)
                              Dim flag As Object = RCType.CTypeDynamic(sng, GetType(Boolean), env)
 
@@ -691,12 +736,18 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 _split = Function(obj) obj Is delimiter
             End If
 
-            Return seq.populates(Of Object)(env) _
+            Dim blocks() = seq.populates(Of Object)(env) _
                 .Split(_split) _
                 .Select(Function(block, i)
                             Return New Group With {.group = block, .key = i + 1}
                         End Function) _
                 .ToArray
+
+            If Not _error Is Nothing Then
+                Return _error
+            Else
+                Return blocks
+            End If
         End Function
     End Module
 End Namespace

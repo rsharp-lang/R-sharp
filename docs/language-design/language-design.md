@@ -6,6 +6,7 @@
 		* 2.1. [ Append Vector](#AppendVector)
 * 3. [ Types](#Types)
 	* 3.1. [ imports .NET type](#imports.NETtype)
+	* 3.2. [unit type](#unittype)
 * 4. [Get/Set value](#GetSetvalue)
 * 5. [1.5. Function and lambda function](#Functionandlambdafunction)
 * 6. [String](#String)
@@ -16,11 +17,15 @@
 	* 7.3. [pipeline operator](#pipelineoperator)
 	* 7.4. [IN operator](#INoperator)
 		* 7.4.1. [combine with ``Which`` operator](#combinewithWhichoperator)
+		* 7.4.2. [Difference of ``in`` and ``between``](#Differenceofinandbetween)
 * 8. [``[]`` bracket in R language](#bracketinRlanguage)
 * 9. [IO operation](#IOoperation)
 	* 9.1. [Simple external calls](#Simpleexternalcalls)
 * 10. [Using tuple](#Usingtuple)
 	* 10.1. [R object to tuple](#Robjecttotuple)
+* 11. [Linq Query](#LinqQuery)
+	* 11.1. [Query R dataframe](#QueryRdataframe)
+	* 11.2. [Join two data source](#Jointwodatasource)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
@@ -155,14 +160,14 @@ NOTE: As the ``R#`` language is not designed for general programming, the most u
 
 ``R#`` language have several primitive type, **by default all of them are vector type**:
 
-|primitive type in R|.NET type                |
-|-------------------|-------------------------|
-|``integer``        |**System.Int64** vector  |
-|``double``         |**System.Double** vector |
-|``uinteger``       |**System.UInt64** vector |
-|``string``         |**System.String** vector |
-|``char``           |**System.Char** vector   |
-|``boolean``        |**System.Boolean** vector|
+| primitive type in R | .NET type                 |
+|---------------------|---------------------------|
+| ``integer``         | **System.Int64** vector   |
+| ``double``          | **System.Double** vector  |
+| ``uinteger``        | **System.UInt64** vector  |
+| ``string``          | **System.String** vector  |
+| ``char``            | **System.Char** vector    |
+| ``boolean``         | **System.Boolean** vector |
 
 Generally, the R language is not designed as an OOP language, and the R# language is not designed as an OOP lnaguge too. But you can still declare the user type by using ``list()`` function, example like:
 
@@ -265,7 +270,7 @@ for implements such programming feature, then you should make sure about somethi
 2. target .NET object type should have one parameterless constructor
 3. export type at the top of your package module.
 
-### unit type
+###  3.2. <a name='unittype'></a>unit type
 
 There is a unit type R# language feature can let you mark the numeric data
 
@@ -363,20 +368,20 @@ if (not me is him) {
 
 Allows user operator
 
-|Operator   |Description          |
-|-----------|---------------------|
-|``+``      | add                 |
-|``-``      | substract           |
-|``*``      | multiply            |
-|``/``      | devide              |
-|``\``      | integer devide      |
-|``%``      | mod                 |
-|``^``      | power               |
-|``is``     | object equals       |
-|``like``   | object similarity   |
-|``in``     | in collection set   |
-|``which``  | index list for true |
-|``between``| in a given range    |
+| Operator    | Description         |
+|-------------|---------------------|
+| ``+``       | add                 |
+| ``-``       | substract           |
+| ``*``       | multiply            |
+| ``/``       | devide              |
+| ``\``       | integer devide      |
+| ``%``       | mod                 |
+| ``^``       | power               |
+| ``is``      | object equals       |
+| ``like``    | object similarity   |
+| ``in``      | in collection set   |
+| ``which``   | index list for true |
+| ``between`` | in a given range    |
 
 ####  7.2.1. <a name='Useroperator'></a>User operator
 
@@ -524,7 +529,7 @@ let x <- [1, 2, 3, 4, 5];
 let indices.true <- which x between [min, max];
 ```
 
-#### Difference of ``in`` and ``between``
+####  7.4.2. <a name='Differenceofinandbetween'></a>Difference of ``in`` and ``between``
 
 the ``in`` operator is apply for collection set element exact match and the ``between`` operator is apply for the numeric range test,
 example as:
@@ -670,8 +675,15 @@ let tuple.test as function(a as integer, b as integer) {
     [a, b, a ^ b];
 }
 
+let tuple.test2 as function(a, b) {
+    # list is also works fine
+    list(a, b, c = a^ b);
+}
+
 # and you can using tuple its member as the normal variable
 let [a, b, c] <- tuple.test(3, 2);
+
+[a, b, c] = tuple.test2(100, 1); 
 
 if (a == 3) {
     c <- c + a + b;
@@ -750,3 +762,79 @@ booleans;
 ```
 
 If the tuple is applied on a for loop, then it means convert each row in dataframe as tuple, or just applied the tuple on the var declaring, then it means converts the columns in dataframe as the tuple, so that the variable in tuple is a vector with nrows of the dataframe.
+
+##  11. <a name='LinqQuery'></a>Linq Query
+
+The ``R#`` language have native supports of the Linq query syntax like VisualBasic.NET language:
+
+```R
+let result = FROM x as double      # query object
+             IN [a,b,c,d,e]        # data source
+             WHERE predicate(x)    # subset
+             ORDER BY x DESCENDING # option pipeline
+             SKIP 100              # option pipeline
+             TAKE 20               # option pipeline
+             ;
+```
+
+Linq query in R# follows the rule for generate output result based on different data source:
+
+| from data source | produce     | equals to                          | note                                                                                  |
+|------------------|-------------|------------------------------------|---------------------------------------------------------------------------------------|
+| list             | list        | lapply                             | always produce a new list                                                             |
+| vector           | vector/list | sapply/lapply                      | based on the projection result: single is vector and compounds data will produce list |
+| dataframe        | dataframe   | dataframe subset/projection syntax | linq query is working as SQL, always produce a new dataframe table                    |
+
+###  11.1. <a name='QueryRdataframe'></a>Query R dataframe
+
+The linq query of the dataframe object in ``R#`` is by row, and the column names that used in query shoud be selected in the ``FROM`` closure, example as:
+
+```R
+# query dataframe
+const demo = data.frame(x = x(), y = y(), z = z());
+
+# make a table subset by rows
+let subset = FROM [x, y, z] 
+             IN demo
+             WHERE predicate(x, y, z)
+             ORDER BY z + x DESCENDING
+             ;
+# will produce a subset output
+# x, y, z
+
+# make a table projection by and subset by row
+let proj = FROM [x, y, z]
+           IN demo
+           WHERE predicate(x, y, z)
+           SELECT x, z # project x and z field produce a new dataframe subset
+           ;
+# will produce a table projection output
+# x, z
+```
+
+###  11.2. <a name='Jointwodatasource'></a>Join two data source
+
+As the mysql language, linq in R# language has the join function on two data source too:
+
+```R
+# make query after join two table
+const employee = data.frame(
+    ID = [1,2,3,4,5,6],
+    Name = ["Preety", "Priyanka", "Anurag", "Pranaya", "Hina", "Sambit"],
+    AddressId = [1, 2, 0,0,5,6]
+);
+
+const address = data.frame(
+    ID = [1, 2, 5 , 6], 
+    AddressLine = ["AddressLine1","AddressLine2","AddressLine5","AddressLine6"]
+);
+
+# the join operation
+let result = FROM [ID, Name, AddressId] IN employee
+             JOIN [ID, AddressLine] IN address
+             ON employee.AddressId == address.ID
+             WHERE employee.ID > 5
+             ;
+# will produce a join table output
+# employee.ID, Name, AddressId, address.ID, AddressLine
+```

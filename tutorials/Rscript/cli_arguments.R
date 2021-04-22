@@ -10,6 +10,7 @@
 let rawfile as string = ?"--input" || stop("missing raw data file input!");
 
 [@info "iterations count."]
+[@type "count"]
 let iteration as integer = ?"--loops.n" || 1000;
 
 [@info "script is running in debug mode?"]
