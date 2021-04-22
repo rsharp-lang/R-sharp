@@ -101,6 +101,8 @@ Namespace Development.CommandLine
             For Each arg As CommandLineArgument In arguments
                 If arg.defaultValue.StartsWith("<required") Then
                     cli.Add($"{arg.name} <{arg.type}>")
+                ElseIf arg.isNumeric Then
+                    cli.Add($"[{arg.name} <{arg.type}, default={Trim(arg.defaultValue).Trim(""""c)}>]")
                 Else
                     cli.Add($"[{arg.name} <{arg.type}, default={arg.defaultValue}>]")
                 End If
@@ -351,7 +353,7 @@ Namespace Development.CommandLine
                 End If
             End If
 
-            Return DefaultFormatter.FormatDefaultString(def)
+            Return $"""{DefaultFormatter.FormatDefaultString(def)}"""
         End Function
 
         Private Sub analysisTree(expr As IfBranch, attrs As ArgumentInfo)
