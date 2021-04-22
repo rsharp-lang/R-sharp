@@ -1,4 +1,5 @@
 let x = 8;
+
 # The linq expression is a SQL language liked expression in R#
 # use linq expression is better and faster than lapply and for loop
 # and write less code on data analysis program
