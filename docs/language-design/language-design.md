@@ -160,14 +160,14 @@ NOTE: As the ``R#`` language is not designed for general programming, the most u
 
 ``R#`` language have several primitive type, **by default all of them are vector type**:
 
-|primitive type in R|.NET type                |
-|-------------------|-------------------------|
-|``integer``        |**System.Int64** vector  |
-|``double``         |**System.Double** vector |
-|``uinteger``       |**System.UInt64** vector |
-|``string``         |**System.String** vector |
-|``char``           |**System.Char** vector   |
-|``boolean``        |**System.Boolean** vector|
+| primitive type in R | .NET type                 |
+|---------------------|---------------------------|
+| ``integer``         | **System.Int64** vector   |
+| ``double``          | **System.Double** vector  |
+| ``uinteger``        | **System.UInt64** vector  |
+| ``string``          | **System.String** vector  |
+| ``char``            | **System.Char** vector    |
+| ``boolean``         | **System.Boolean** vector |
 
 Generally, the R language is not designed as an OOP language, and the R# language is not designed as an OOP lnaguge too. But you can still declare the user type by using ``list()`` function, example like:
 
@@ -368,20 +368,20 @@ if (not me is him) {
 
 Allows user operator
 
-|Operator   |Description          |
-|-----------|---------------------|
-|``+``      | add                 |
-|``-``      | substract           |
-|``*``      | multiply            |
-|``/``      | devide              |
-|``\``      | integer devide      |
-|``%``      | mod                 |
-|``^``      | power               |
-|``is``     | object equals       |
-|``like``   | object similarity   |
-|``in``     | in collection set   |
-|``which``  | index list for true |
-|``between``| in a given range    |
+| Operator    | Description         |
+|-------------|---------------------|
+| ``+``       | add                 |
+| ``-``       | substract           |
+| ``*``       | multiply            |
+| ``/``       | devide              |
+| ``\``       | integer devide      |
+| ``%``       | mod                 |
+| ``^``       | power               |
+| ``is``      | object equals       |
+| ``like``    | object similarity   |
+| ``in``      | in collection set   |
+| ``which``   | index list for true |
+| ``between`` | in a given range    |
 
 ####  7.2.1. <a name='Useroperator'></a>User operator
 
@@ -768,14 +768,22 @@ If the tuple is applied on a for loop, then it means convert each row in datafra
 The ``R#`` language have native supports of the Linq query syntax like VisualBasic.NET language:
 
 ```R
-let result = FROM x as double 
-             IN [a,b,c,d,e]
-             WHERE predicate(x)
-             ORDER BY x DESCENDING
-             SKIP 100
-             TAKE 20
+let result = FROM x as double      # query object
+             IN [a,b,c,d,e]        # data source
+             WHERE predicate(x)    # subset
+             ORDER BY x DESCENDING # option pipeline
+             SKIP 100              # option pipeline
+             TAKE 20               # option pipeline
              ;
 ```
+
+Linq query in R# follows the rule for generate output result based on different data source:
+
+| from data source | produce     | equals to                          | note                                                                                  |
+|------------------|-------------|------------------------------------|---------------------------------------------------------------------------------------|
+| list             | list        | lapply                             | always produce a new list                                                             |
+| vector           | vector/list | sapply/lapply                      | based on the projection result: single is vector and compounds data will produce list |
+| dataframe        | dataframe   | dataframe subset/projection syntax | linq query is working as SQL, always produce a new dataframe table                    |
 
 ###  11.1. <a name='QueryRdataframe'></a>Query R dataframe
 
