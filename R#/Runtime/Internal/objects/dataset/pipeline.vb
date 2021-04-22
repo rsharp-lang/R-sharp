@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::baac9e0d6a3ccfd6c52c43f3829e5aaf, R#\Runtime\Internal\objects\dataset\pipeline.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class pipeline
-    ' 
-    '         Properties: [pipeFinalize], isError, isMessage
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: CreateFromPopulator, createVector, fromVector, getError, populates
-    '                   ToString, TryCastObjectVector, TryCreatePipeline
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class pipeline
+' 
+'         Properties: [pipeFinalize], isError, isMessage
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: CreateFromPopulator, createVector, fromVector, getError, populates
+'                   ToString, TryCastObjectVector, TryCreatePipeline
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -243,43 +243,42 @@ Namespace Runtime.Internal.Object
                 Return fromVector(Of T)(DirectCast(upstream, vector), env, suppress)
             ElseIf TypeOf upstream Is Object() Then
                 Return TryCastObjectVector(Of T)(DirectCast(upstream, Object()), env, suppress)
-            ElseIf GetType(T) Is GetType(Object) Then
-                Return CreateFromPopulator(Of T)({upstream})
             ElseIf TypeOf upstream Is list Then
                 ' unlist
-                Return DirectCast(upstream, list).slots _
-                    .Values _
-                    .ToArray _
+                Return DirectCast(upstream, list).data _
                     .DoCall(Function(ls)
-                                Return TryCastObjectVector(Of T)(ls, env, suppress)
+                                Return TryCastObjectVector(Of T)(ls.ToArray, env, suppress)
                             End Function)
             ElseIf TypeOf upstream Is Group Then
-                Dim pipGroup As Group = DirectCast(upstream, Group)
+                Return TryCastGroupStream(Of T)(DirectCast(upstream, Group), env, callerFrameName, suppress)
+            ElseIf GetType(T) Is GetType(Object) Then
+                Return CreateFromPopulator(Of T)({upstream})
+            Else
+                Return Message.InCompatibleType(GetType(T), upstream.GetType, env, suppress:=suppress)
+            End If
+        End Function
 
-                If pipGroup.length = 0 Then
-                    Call env.AddMessage({
-                        $"the given group is empty!",
-                        $"caller: {callerFrameName}"
-                    }, MSG_TYPES.WRN)
+        Private Shared Function TryCastGroupStream(Of T)(pipGroup As Group, env As Environment, callerFrameName$, suppress As Boolean) As pipeline
+            If pipGroup.length = 0 Then
+                Call env.AddMessage({
+                    $"the given group is empty!",
+                    $"caller: {callerFrameName}"
+                }, MSG_TYPES.WRN)
 
-                    Return [Object].pipeline.CreateFromPopulator(Of T)({})
-                End If
-
+                Return [Object].pipeline.CreateFromPopulator(Of T)({})
+            Else
                 Dim seq As Object() = pipGroup.group _
                     .AsObjectEnumerator(Of Object) _
                     .ToArray
-                Dim pip As pipeline = TryCastObjectVector(Of T)(seq, env, suppress)
 
-                Return pip
-            Else
-                Return Message.InCompatibleType(GetType(T), upstream.GetType, env, suppress:=suppress)
+                Return TryCastObjectVector(Of T)(seq, env, suppress)
             End If
         End Function
 
         Private Shared Function TryCastObjectVector(Of T)(objs As Object(), env As Environment, suppress As Boolean) As pipeline
             Dim type As Type = MeasureRealElementType(objs)
 
-            If type Is GetType(T) Then
+            If type Is GetType(T) OrElse GetType(T) Is GetType(Object) Then
                 Return New pipeline(objs, RType.GetRSharpType(type))
             Else
                 Return Message.InCompatibleType(GetType(T), type, env, suppress:=suppress)

@@ -70,6 +70,20 @@ Namespace Runtime.Internal.Object
         End Property
 
         ''' <summary>
+        ''' get all values collection from the ``slots`` symbol.
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property data As IEnumerable(Of Object)
+            Get
+                If slots.IsNullOrEmpty Then
+                    Return {}
+                Else
+                    Return slots.Values
+                End If
+            End Get
+        End Property
+
+        ''' <summary>
         ''' Get slot value by name
         ''' </summary>
         ''' <param name="name"></param>
