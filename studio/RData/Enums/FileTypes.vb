@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8bba7db8d07a335efbd2b7da73544924, studio\RData\Enums\FileTypes.vb"
+﻿#Region "Microsoft.VisualBasic::b8591dda9f3a03a93c2d41c13f8cf778, studio\RData\Enums\FileTypes.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,6 @@
     ' 
     ' 
     ' 
-    ' 
     ' /********************************************************************************/
 
 #End Region
@@ -57,5 +56,3 @@ Public Enum FileTypes
     <Description("rdata version 2 (binary)")> rdata_binary_v2
     <Description("rdata version 3 (binary)")> rdata_binary_v3
 End Enum
-
-

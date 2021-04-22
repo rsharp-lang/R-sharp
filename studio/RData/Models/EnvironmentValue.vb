@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f1d86c9b8bc5242ac6c6437c830a7dbd, studio\RData\Models\EnvironmentValue.vb"
+﻿#Region "Microsoft.VisualBasic::a0a08dd302d6f6dd609ede26fa069620, studio\RData\Models\EnvironmentValue.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 ''' <summary>
 ''' Value of an environment.

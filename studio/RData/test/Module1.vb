@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3098eb537b923e0680467d6483e37081, studio\RData\test\Module1.vb"
+﻿#Region "Microsoft.VisualBasic::2825665ca9eb4878d091988095b735d1, studio\RData\test\Module1.vb"
 
     ' Author:
     ' 
@@ -59,4 +59,3 @@ Module Module1
     End Sub
 
 End Module
-

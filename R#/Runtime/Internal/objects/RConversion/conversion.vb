@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::af62f7e1ee35b3abaa564934eae681e6, R#\Runtime\Internal\objects\RConversion\conversion.vb"
+﻿#Region "Microsoft.VisualBasic::bf6bc58406eb56a57ead00d79de0b382, R#\Runtime\Internal\objects\RConversion\conversion.vb"
 
     ' Author:
     ' 

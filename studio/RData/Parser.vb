@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e7d09caae9252e27709075a61f7ed35c, studio\RData\Parser.vb"
+﻿#Region "Microsoft.VisualBasic::4fda29ad459d0e12c59130bb69d63fca, studio\RData\Parser.vb"
 
     ' Author:
     ' 
@@ -192,4 +192,3 @@ Module Parser
         Return bitvalue >> start
     End Function
 End Module
-

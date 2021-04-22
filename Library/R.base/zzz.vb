@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::957a366444997eedcdbf3e99e9eb97d5, Library\R.base\zzz.vb"
+﻿#Region "Microsoft.VisualBasic::f51c75800ece52b8ee15aaa1c13e65f2, Library\R.base\zzz.vb"
 
     ' Author:
     ' 
@@ -39,11 +39,9 @@
 
 #End Region
 
-
 Public Class zzz
 
     Public Shared Sub onLoad()
         Call utils.Main()
     End Sub
 End Class
-

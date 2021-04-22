@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b98232ea07a36fb6cbee4b4b87c1f1a5, R#\Runtime\Internal\internalInvokes\graphics.vb"
+﻿#Region "Microsoft.VisualBasic::fe621204247aeb12dcf5beb75bca8d2b, R#\Runtime\Internal\internalInvokes\graphics.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Module graphics
     ' 
-    '         Function: bitmap, plot
+    '         Function: bitmap, plot, readImage
     ' 
     ' 
     ' /********************************************************************************/

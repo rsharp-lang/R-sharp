@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b9126e972e3b04fcc938670724dc7d13, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
+﻿#Region "Microsoft.VisualBasic::baf3255738db71103f8ed4194b02bdf9, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
 
     ' Author:
     ' 
@@ -35,10 +35,10 @@
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: all, any, doWhile, first, groupBy
-    '                   groupsSummary, groupSummary, orderBy, produceKeyedSequence, projectAs
-    '                   reverse, runFilterPipeline, runWhichFilter, skip, split
-    '                   take, tryKeyBy, unique, where, whichMax
-    '                   whichMin
+    '                   groupsSummary, groupSummary, last, orderBy, produceKeyedSequence
+    '                   projectAs, reverse, runFilterPipeline, runWhichFilter, skip
+    '                   split, take, tryKeyBy, unique, where
+    '                   whichMax, whichMin
     ' 
     ' 
     ' /********************************************************************************/
