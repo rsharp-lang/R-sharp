@@ -29,12 +29,12 @@ Namespace Development.CommandLine
         Public Function [GetTypeCode]() As String
             Static stringType As [Default](Of String) = "string"
 
+            If attrs.ContainsKey("type") Then
+                Return attrs("type").FirstOrDefault Or stringType
+            End If
+
             If type Is Nothing Then
-                If attrs.ContainsKey("type") Then
-                    Return attrs("type").FirstOrDefault Or stringType
-                Else
-                    Return "string"
-                End If
+                Return "string"
             Else
                 Return CType(type, TypeCodes).ToString
             End If
