@@ -671,7 +671,12 @@
   <ItemGroup>
     <Compile Include="Interpreter\ExecutableLoop.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\ExecutableContext.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Class1.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Options\TakeItems.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Options\SkipItems.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Options\OrderBy.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Options\PipelineKeyword.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\WhereFilter.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\SymbolDeclare.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\OutputProjection.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\LinqKeywordExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\LinqOutputUnit.vb" />
@@ -983,5 +988,6 @@
       <Name>47-dotnet_Microsoft.VisualBasic</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
