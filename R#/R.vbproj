@@ -670,6 +670,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interpreter\ExecutableLoop.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\ExecutableContext.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\OutputProjection.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\LinqKeywordExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\LinqOutputUnit.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\LinqSyntaxParser.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\NamespaceDoc.vb" />
