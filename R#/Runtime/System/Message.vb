@@ -61,6 +61,11 @@ Namespace Runtime.Components
         Public Property message As String()
         Public Property level As MSG_TYPES
         Public Property environmentStack As StackFrame()
+
+        ''' <summary>
+        ''' the R# scripting stack trace
+        ''' </summary>
+        ''' <returns></returns>
         Public Property trace As StackFrame()
 
         <SoapIgnore>

@@ -49,8 +49,23 @@ Namespace Development
 
     Public Class RuntimeError : Inherits VisualBasicAppException
 
+        ''' <summary>
+        ''' the stack trace of R# script
+        ''' </summary>
+        Dim _stackTrace As String
+
+        Public Overrides ReadOnly Property StackTrace As String
+            Get
+                Return _stackTrace
+            End Get
+        End Property
+
         Public Sub New(message As Message)
             MyBase.New(GetMessages(message).JoinBy("; "), caller:=SafeGetSource(message))
+
+            Me._stackTrace = message.trace _
+                .Select(Function(t) t.ToString) _
+                .JoinBy(vbCrLf)
         End Sub
 
         Private Shared Function SafeGetSource(msg As Message) As String
