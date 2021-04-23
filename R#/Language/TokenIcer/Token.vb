@@ -51,8 +51,15 @@ Imports Microsoft.VisualBasic.Scripting.TokenIcer
 
 Namespace Language.TokenIcer
 
+    ''' <summary>
+    ''' the R# language token word
+    ''' </summary>
     Public Class Token : Inherits CodeToken(Of TokenType)
 
+        ''' <summary>
+        ''' get the literal value of current token text represented.
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property literal As Object
             Get
                 Select Case name
@@ -71,6 +78,10 @@ Namespace Language.TokenIcer
             End Get
         End Property
 
+        ''' <summary>
+        ''' is value literal of current token type?
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property isLiteral As Boolean
             Get
                 Return name = TokenType.booleanLiteral OrElse
@@ -99,11 +110,5 @@ Namespace Language.TokenIcer
         Public Overloads Shared Operator <>(token As Token, type As TokenType) As Boolean
             Return Not token = type
         End Operator
-    End Class
-
-    Public Class JoinToken : Inherits Token
-
-        Public Property [next] As Token
-
     End Class
 End Namespace

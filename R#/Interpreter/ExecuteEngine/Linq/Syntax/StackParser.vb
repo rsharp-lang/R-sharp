@@ -53,21 +53,25 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
     ''' </summary>
     Module StackParser
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
         Friend Function isKeywordFrom(t As Token) As Boolean
             Return isKeyword(t, "from")
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
         Friend Function isKeywordAggregate(t As Token) As Boolean
             Return isKeyword(t, "aggregate")
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
         Friend Function isKeyword(t As Token, text As String) As Boolean
             Return t.name = TokenType.keyword AndAlso t.text.TextEquals(text)
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
         Friend Function isKeywordSelect(t As Token) As Boolean
             Return isKeyword(t, "select")
@@ -96,17 +100,17 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
         <Extension>
         Public Function SplitParameters(tokenList As IEnumerable(Of Token)) As IEnumerable(Of Token())
             Return tokenList _
-            .DoSplitByTopLevelStack(Function(t)
-                                        Return t.name = TokenType.comma
-                                    End Function, False, False, False)
+                .DoSplitByTopLevelStack(Function(t)
+                                            Return t.name = TokenType.comma
+                                        End Function, False, False, False)
         End Function
 
         <Extension>
         Public Iterator Function SplitOperators(tokenList As IEnumerable(Of Token)) As IEnumerable(Of Token())
             For Each block As Token() In tokenList _
-            .DoSplitByTopLevelStack(Function(t)
-                                        Return t.name = TokenType.operator
-                                    End Function, True, False, True)
+                .DoSplitByTopLevelStack(Function(t)
+                                            Return t.name = TokenType.operator
+                                        End Function, True, False, True)
 
                 If block(Scan0).name = TokenType.operator Then
                     Yield {block(Scan0)}

@@ -174,7 +174,9 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
         <Extension>
         Private Function CreateAggregateQuery(symbol As Token(), blocks As Token()()) As AggregateExpression
             Dim symbolExpr As SymbolDeclare = symbol.ParseExpression
-            Dim seq As Expression
+            ' Dim seq As Expression
+
+            Throw New NotImplementedException
         End Function
 
         <Extension>
@@ -240,7 +242,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                 Dim sortKey = tokenList.Skip(2).ToArray
                 Dim desc As Boolean
 
-                If sortKey.Last.name = Tokens.keyword AndAlso sortKey.Last.text.ToLower Like sortOrders Then
+                If sortKey.Last.name = TokenType.keyword AndAlso sortKey.Last.text.ToLower Like sortOrders Then
                     desc = sortKey.Last.text.TextEquals("descending")
                     sortKey = sortKey.Take(sortKey.Length - 1).ToArray
                 End If
@@ -257,14 +259,14 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
 
         <Extension>
         Private Function IsClosure(tokenList As Token()) As Boolean
-            Return tokenList(Scan0).name = Tokens.Open AndAlso tokenList.Last.name = Tokens.Close
+            Return tokenList(Scan0).name = TokenType.open AndAlso tokenList.Last.name = TokenType.close
         End Function
 
         <Extension>
         Public Function ParseExpression(tokenList As Token()) As Expression
             If tokenList.Length = 1 Then
                 Return tokenList(Scan0).ParseToken
-            ElseIf tokenList(Scan0).name = Tokens.keyword Then
+            ElseIf tokenList(Scan0).name = TokenType.keyword Then
                 Return tokenList.ParseKeywordExpression
             End If
 
@@ -273,9 +275,9 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
             If blocks.Length = 1 Then
                 tokenList = blocks(Scan0)
 
-                If tokenList.First = (Tokens.Open, "[") OrElse tokenList.First = (Tokens.Open, "{") Then
+                If tokenList.First = (TokenType.open, "[") OrElse tokenList.First = (TokenType.open, "{") Then
                     Return tokenList.Skip(1).Take(tokenList.Length - 2).GetVector
-                ElseIf tokenList.First = (Tokens.Open, "(") Then
+                ElseIf tokenList.First = (TokenType.open, "(") Then
                     tokenList = tokenList _
                         .Skip(1) _
                         .Take(tokenList.Length - 2) _
@@ -297,7 +299,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
             Dim blocks As Token()() = tokenList _
                 .SplitParameters _
                 .Select(Function(b)
-                            If b(Scan0).name = Tokens.Comma Then
+                            If b(Scan0).name = TokenType.comma Then
                                 Return b.Skip(1).ToArray
                             Else
                                 Return b
@@ -313,7 +315,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
         <Extension>
         Private Function GetVector(tokenList As IEnumerable(Of Token)) As Expression
             Dim elements As Expression() = tokenList.GetParameters.ToArray
-            Dim vec As New ArrayExpression(elements)
+            Dim vec As New VectorLiteral(elements)
 
             Return vec
         End Function
