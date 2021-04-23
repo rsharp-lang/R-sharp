@@ -50,6 +50,7 @@
 
 #End Region
 
+Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
@@ -527,7 +528,7 @@ Namespace Runtime.Internal.Invokes
             If o Is Nothing Then
                 Return Nothing
             Else
-                Return Runtime.asVector(Of Double)(o) _
+                Return REnv.asVector(Of Double)(o) _
                     .AsObjectEnumerator _
                     .Select(Function(d) -CDbl(d)) _
                     .ToArray
@@ -571,10 +572,54 @@ Namespace Runtime.Internal.Invokes
                 Return env.appendOfVector(vec, values)
             Else
                 ' add method is also ok!
+                Return env.objectAddInvoke(x, values)
+            End If
+        End Function
 
+        ''' <summary>
+        ''' implements ``append`` via the add method
+        ''' </summary>
+        ''' <param name="env"></param>
+        ''' <param name="x"></param>
+        ''' <param name="values"></param>
+        ''' <returns></returns>
+        <Extension>
+        Private Function objectAddInvoke(env As Environment, x As Object, values As Object) As Object
+            Static collectionCache As New Dictionary(Of Type, MethodInfo)
+
+            SyncLock collectionCache
+RE0:
+                If collectionCache.ContainsKey(x.GetType) Then
+                    If collectionCache(x.GetType) Is Nothing Then
+                        ' 之前已经被解析过了
+                        ' 但是找不到Add方法
+                        Return Internal.debug.stop({"x didn't contains a Add method!", $"type of x: {x.GetType.FullName}"}, env)
+                    End If
+                Else
+                    collectionCache(x.GetType) = x.GetType _
+                        .GetMethods(PublicProperty) _
+                        .Where(Function(f)
+                                   Return f.Name = "Add" AndAlso f.GetParameters.Length = 1
+                               End Function) _
+                        .FirstOrDefault
+
+                    GoTo RE0
+                End If
+            End SyncLock
+
+            Dim add As MethodInfo = collectionCache(x.GetType)
+            Dim valueType As Type = add.GetParameters.First.ParameterType
+            Dim valueData As Object = REnv.asVector(values, valueType, env)
+
+            If Program.isException(valueData) Then
+                Return valueData
             End If
 
-            Throw New NotImplementedException
+            For Each item As Object In DirectCast(valueData, Array)
+                Call add.Invoke(x, {item})
+            Next
+
+            Return x
         End Function
 
         <Extension>
