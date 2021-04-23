@@ -1,49 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::61c3a76f028efb879f257d53fda47346, LINQ\LINQ\Script\StackParser.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module StackParser
-    ' 
-    '     Function: DoSplitByTopLevelStack, GetParentPair, isKeyword, isKeywordAggregate, isKeywordFrom
-    '               isKeywordSelect, SplitByTopLevelStack, SplitOperators, SplitParameters
-    ' 
-    ' /********************************************************************************/
+' Module StackParser
+' 
+'     Function: DoSplitByTopLevelStack, GetParentPair, isKeyword, isKeywordAggregate, isKeywordFrom
+'               isKeywordSelect, SplitByTopLevelStack, SplitOperators, SplitParameters
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
-Imports LINQ.Language
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
+Imports SMRUCC.Rsharp.Language
+Imports SMRUCC.Rsharp.Language.TokenIcer
 
 Namespace Interpreter.ExecuteEngine.LINQ.Syntax
 
@@ -64,7 +65,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
 
         <Extension>
         Friend Function isKeyword(t As Token, text As String) As Boolean
-            Return t.name = Tokens.keyword AndAlso t.text.TextEquals(text)
+            Return t.name = TokenType.keyword AndAlso t.text.TextEquals(text)
         End Function
 
         <Extension>
@@ -88,7 +89,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
 
             Return tokenList _
                 .DoSplitByTopLevelStack(Function(t)
-                                            Return t.name = Tokens.keyword AndAlso (Not t.text.ToLower Like ignores)
+                                            Return t.name = TokenType.keyword AndAlso (Not t.text.ToLower Like ignores)
                                         End Function, True, True, False)
         End Function
 
@@ -96,7 +97,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
         Public Function SplitParameters(tokenList As IEnumerable(Of Token)) As IEnumerable(Of Token())
             Return tokenList _
             .DoSplitByTopLevelStack(Function(t)
-                                        Return t.name = Tokens.Comma
+                                        Return t.name = TokenType.comma
                                     End Function, False, False, False)
         End Function
 
@@ -104,16 +105,20 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
         Public Iterator Function SplitOperators(tokenList As IEnumerable(Of Token)) As IEnumerable(Of Token())
             For Each block As Token() In tokenList _
             .DoSplitByTopLevelStack(Function(t)
-                                        Return t.name = Tokens.Operator
+                                        Return t.name = TokenType.operator
                                     End Function, True, False, True)
 
-                If block(Scan0).name = Tokens.Operator Then
+                If block(Scan0).name = TokenType.operator Then
                     Yield {block(Scan0)}
                     Yield block.Skip(1).ToArray
                 Else
                     Yield block
                 End If
             Next
+        End Function
+
+        Private Function filter(t As Token) As Boolean
+            Return t.name <> TokenType.terminator AndAlso t.name <> TokenType.comment
         End Function
 
         ''' <summary>
@@ -130,7 +135,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
             Dim block As New List(Of Token)
             Dim stack As New Stack(Of String)
 
-            For Each item As Token In tokenList.Where(Function(t) t.name <> Tokens.Terminator AndAlso t.name <> Tokens.Comment)
+            For Each item As Token In tokenList.Where(Function(t) filter(t))
                 If delimiter(item) Then
                     If stack.Count > 1 Then
                         block.Add(item)
@@ -153,7 +158,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
 
                         stack.Push(item.text)
                     End If
-                ElseIf item.name = Tokens.Open Then
+                ElseIf item.name = TokenType.open Then
                     stack.Push(item.text)
 
                     If stack.Count > 1 Then
@@ -165,7 +170,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
 
                         block.Add(item)
                     End If
-                ElseIf item.name = Tokens.Close Then
+                ElseIf item.name = TokenType.close Then
                     Dim parent As String = stack.Pop
 
                     If parent <> GetParentPair(item.text) Then

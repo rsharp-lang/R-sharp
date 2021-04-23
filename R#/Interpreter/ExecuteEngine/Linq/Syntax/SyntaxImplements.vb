@@ -47,6 +47,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 
@@ -199,11 +200,11 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
             For Each item As Expression In values
                 If TypeOf item Is BinaryExpression Then
                     With DirectCast(item, BinaryExpression)
-                        If .LikeValueAssign Then
-                            fields.Add(New NamedValue(Of Expression)(DirectCast(.left, SymbolReference).symbolName, .right))
-                        Else
-                            fields.Add(New NamedValue(Of Expression)(item.ToString, item))
-                        End If
+                        fields.Add(New NamedValue(Of Expression)(item.ToString, item))
+                    End With
+                ElseIf TypeOf item Is ValueAssign Then
+                    With DirectCast(item, ValueAssign)
+                        fields.Add(New NamedValue(Of Expression)(DirectCast(.left, SymbolReference).symbolName, .right))
                     End With
                 ElseIf TypeOf item Is MemberReference Then
                     With DirectCast(item, MemberReference)
