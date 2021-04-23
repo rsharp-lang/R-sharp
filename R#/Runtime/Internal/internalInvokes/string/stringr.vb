@@ -102,9 +102,14 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="x">The object to be converted.</param>
         ''' <param name="env"></param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' this function just invoke the <see cref="ToString"/> method.
+        ''' </remarks>
         <ExportAPI("toString")>
         <RApiReturn(GetType(String))>
-        Public Function [string](<RRawVectorArgument> x As Object, Optional format$ = Nothing, Optional env As Environment = Nothing) As Object
+        Public Function [objToString](<RRawVectorArgument> x As Object,
+                                      Optional format$ = Nothing,
+                                      Optional env As Environment = Nothing) As Object
             If x Is Nothing Then
                 Return ""
             End If
@@ -121,8 +126,7 @@ Namespace Runtime.Internal.Invokes
                 Dim toStringF As MethodInfo = type _
                     .GetMethods(PublicProperty) _
                     .Where(Function(f)
-                               Dim args = f.GetParameters
-                               Return args.Length = 1 AndAlso args(Scan0).ParameterType Is GetType(String)
+                               Return findToStringWithFormat(f)
                            End Function) _
                     .FirstOrDefault
 
@@ -140,6 +144,31 @@ Namespace Runtime.Internal.Invokes
                 .ToArray
         End Function
 
+        <Extension>
+        Private Function findToStringWithFormat(f As MethodInfo) As Boolean
+            ' find a ToString method with a format parameter 
+            Dim args As ParameterInfo() = f.GetParameters
+            Dim isToStringName As Boolean = f.Name = "ToString"
+
+            If Not isToStringName Then
+                Return False
+            ElseIf args.Length <> 1 Then
+                Return False
+            Else
+                Return args(Scan0).ParameterType Is GetType(String)
+            End If
+        End Function
+
+        ''' <summary>
+        ''' load a .NET object from the xml data file
+        ''' </summary>
+        ''' <param name="file"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' this function will try to parse the object model information
+        ''' from the meta data in the xml data file
+        ''' </remarks>
         <ExportAPI("loadXml")>
         Public Function loadXml(file As String, Optional env As Environment = Nothing) As Object
             Dim type = DigitalSignature.GetModelInfo(file)

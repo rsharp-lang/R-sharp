@@ -75,12 +75,12 @@ Module xlsx
     ''' <param name="check_modes">
     ''' check the data type of each column in the dataframe? 
     ''' this options is working if the ``raw`` parameter is 
-    ''' set to ``TRUE``. 
+    ''' set to ``FALSE``. 
     ''' </param>
     ''' <param name="check_names">
     ''' make valid R# symbol names of each column in the dataframe?
     ''' this options is working if the ``raw`` parameter is set
-    ''' to ``TRUE``.
+    ''' to ``FALSE``.
     ''' </param>
     ''' <param name="row_names">
     ''' A character vector for set row names of the generated dataframe, or 
@@ -89,7 +89,7 @@ Module xlsx
     ''' dataframe object.
     ''' 
     ''' this options is working if the ``raw`` parameter is set
-    ''' to ``TRUE``.
+    ''' to ``FALSE``.
     ''' </param>
     ''' <param name="file">the file path of the target xlsx data file.</param>
     ''' <returns></returns>
