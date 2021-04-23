@@ -114,13 +114,18 @@ Namespace Runtime.Internal.Invokes
                 Return ""
             End If
 
+            ' NULL will be translate to empty string in R
+            '
+            ' > toString(NULL)
+            ' [1] ""
+
             Dim seqData As Array = REnv.TryCastGenericArray(REnv.asVector(Of Object)(x), env)
             Dim toString As Func(Of Object, String)
 
             If format.StringEmpty Then
-                toString = Function(xi) xi.ToString
+                toString = Function(xi) If(xi Is Nothing, "", xi.ToString)
             ElseIf seqData.GetType.GetElementType Is Nothing Then
-                toString = Function(xi) xi.ToString
+                toString = Function(xi) If(xi Is Nothing, "", xi.ToString)
             Else
                 Dim type As Type = seqData.GetType.GetElementType
                 Dim toStringF As MethodInfo = type _
@@ -131,10 +136,16 @@ Namespace Runtime.Internal.Invokes
                     .FirstOrDefault
 
                 If toStringF Is Nothing Then
-                    toString = Function(xi) xi.ToString
+                    toString = Function(xi) If(xi Is Nothing, "", xi.ToString)
                     env.AddMessage($"a format text '{format}' is given, but typeof '{type.Name}' is not accept such format parameter...")
                 Else
-                    toString = Function(xi) DirectCast(toStringF.Invoke(xi, {format}), String)
+                    toString = Function(xi)
+                                   If xi Is Nothing Then
+                                       Return ""
+                                   Else
+                                       Return DirectCast(toStringF.Invoke(xi, {format}), String)
+                                   End If
+                               End Function
                 End If
             End If
 
