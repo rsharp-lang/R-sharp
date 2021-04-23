@@ -140,6 +140,11 @@ Module dataframe
             .Print(False)
     End Function
 
+    ''' <summary>
+    ''' show data set summary
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <returns></returns>
     Private Function RowToString(x As Object) As String
         Dim id$, length%
         Dim keys$()
@@ -265,6 +270,21 @@ Module dataframe
     <ExportAPI("rows")>
     Public Function rows(file As File) As RowObject()
         Return file.ToArray
+    End Function
+
+    ''' <summary>
+    ''' convert the csv document row object to a text row in the table text file.
+    ''' </summary>
+    ''' <param name="r"></param>
+    ''' <param name="delimiter"></param>
+    ''' <returns></returns>
+    <ExportAPI("rowToString")>
+    Public Function rowToString(r As RowObject, Optional delimiter As Char = ",") As String
+        If r Is Nothing Then
+            Return ""
+        Else
+            Return r.AsLine(delimiter)
+        End If
     End Function
 
     ''' <summary>
