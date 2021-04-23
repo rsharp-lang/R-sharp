@@ -102,35 +102,50 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="x">The object to be converted.</param>
         ''' <param name="env"></param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' this function just invoke the <see cref="ToString"/> method.
+        ''' </remarks>
         <ExportAPI("toString")>
         <RApiReturn(GetType(String))>
-        Public Function [string](<RRawVectorArgument> x As Object, Optional format$ = Nothing, Optional env As Environment = Nothing) As Object
+        Public Function [objToString](<RRawVectorArgument> x As Object,
+                                      Optional format$ = Nothing,
+                                      Optional env As Environment = Nothing) As Object
             If x Is Nothing Then
                 Return ""
             End If
+
+            ' NULL will be translate to empty string in R
+            '
+            ' > toString(NULL)
+            ' [1] ""
 
             Dim seqData As Array = REnv.TryCastGenericArray(REnv.asVector(Of Object)(x), env)
             Dim toString As Func(Of Object, String)
 
             If format.StringEmpty Then
-                toString = Function(xi) xi.ToString
+                toString = Function(xi) If(xi Is Nothing, "", xi.ToString)
             ElseIf seqData.GetType.GetElementType Is Nothing Then
-                toString = Function(xi) xi.ToString
+                toString = Function(xi) If(xi Is Nothing, "", xi.ToString)
             Else
                 Dim type As Type = seqData.GetType.GetElementType
                 Dim toStringF As MethodInfo = type _
                     .GetMethods(PublicProperty) _
                     .Where(Function(f)
-                               Dim args = f.GetParameters
-                               Return args.Length = 1 AndAlso args(Scan0).ParameterType Is GetType(String)
+                               Return findToStringWithFormat(f)
                            End Function) _
                     .FirstOrDefault
 
                 If toStringF Is Nothing Then
-                    toString = Function(xi) xi.ToString
+                    toString = Function(xi) If(xi Is Nothing, "", xi.ToString)
                     env.AddMessage($"a format text '{format}' is given, but typeof '{type.Name}' is not accept such format parameter...")
                 Else
-                    toString = Function(xi) DirectCast(toStringF.Invoke(xi, {format}), String)
+                    toString = Function(xi)
+                                   If xi Is Nothing Then
+                                       Return ""
+                                   Else
+                                       Return DirectCast(toStringF.Invoke(xi, {format}), String)
+                                   End If
+                               End Function
                 End If
             End If
 
@@ -140,6 +155,31 @@ Namespace Runtime.Internal.Invokes
                 .ToArray
         End Function
 
+        <Extension>
+        Private Function findToStringWithFormat(f As MethodInfo) As Boolean
+            ' find a ToString method with a format parameter 
+            Dim args As ParameterInfo() = f.GetParameters
+            Dim isToStringName As Boolean = f.Name = "ToString"
+
+            If Not isToStringName Then
+                Return False
+            ElseIf args.Length <> 1 Then
+                Return False
+            Else
+                Return args(Scan0).ParameterType Is GetType(String)
+            End If
+        End Function
+
+        ''' <summary>
+        ''' load a .NET object from the xml data file
+        ''' </summary>
+        ''' <param name="file"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' this function will try to parse the object model information
+        ''' from the meta data in the xml data file
+        ''' </remarks>
         <ExportAPI("loadXml")>
         Public Function loadXml(file As String, Optional env As Environment = Nothing) As Object
             Dim type = DigitalSignature.GetModelInfo(file)

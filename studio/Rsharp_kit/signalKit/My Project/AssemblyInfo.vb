@@ -7,13 +7,13 @@ Imports System.Runtime.InteropServices
 ' associated with an assembly.
 
 ' Review the values of the assembly attributes
-#if netcore5=0 then 
-<Assembly: AssemblyTitle("signalKit")>
-<Assembly: AssemblyDescription("")>
-<Assembly: AssemblyCompany("")>
+#If netcore5 = 0 Then
+<Assembly: AssemblyTitle("Toolkit of signal processing in R# scripting")>
+<Assembly: AssemblyDescription("Toolkit of signal processing in R# scripting")>
+<Assembly: AssemblyCompany("SMRUCC")>
 <Assembly: AssemblyProduct("signalKit")>
-<Assembly: AssemblyCopyright("Copyright ©  2020")>
-<Assembly: AssemblyTrademark("")>
+<Assembly: AssemblyCopyright("Copyright © I@xieguigang.me 2020")>
+<Assembly: AssemblyTrademark("R#")>
 
 <Assembly: ComVisible(False)>
 

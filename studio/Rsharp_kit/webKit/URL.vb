@@ -149,6 +149,14 @@ Public Module URL
         Return New list With {.slots = cookies}
     End Function
 
+    ''' <summary>
+    ''' send http post request to the target web server.
+    ''' </summary>
+    ''' <param name="url">the url of target web services</param>
+    ''' <param name="params">post body, should be in key-value pair format.</param>
+    ''' <param name="headers">http headers</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("requests.post")>
     <RApiReturn(GetType(WebResponseResult))>
     Public Function post(url As String,

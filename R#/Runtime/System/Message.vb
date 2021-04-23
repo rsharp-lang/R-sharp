@@ -58,15 +58,37 @@ Namespace Runtime.Components
     ''' </summary>
     Public Class Message : Implements IEnumerable(Of String)
 
+        ''' <summary>
+        ''' the message content about this error or warning
+        ''' </summary>
+        ''' <returns></returns>
         Public Property message As String()
         Public Property level As MSG_TYPES
+
+        ''' <summary>
+        ''' [R# runtime] the R# scripting environment runtime stack trace
+        ''' </summary>
+        ''' <returns></returns>
         Public Property environmentStack As StackFrame()
+
+        ''' <summary>
+        ''' [VB.NET runtime] the R# engine stack trace
+        ''' </summary>
+        ''' <returns></returns>
         Public Property trace As StackFrame()
 
+        ''' <summary>
+        ''' the source R# expression that cause this error or warning message
+        ''' </summary>
+        ''' <returns></returns>
         <SoapIgnore>
         <XmlIgnore>
         Public Property source As Expression
 
+        ''' <summary>
+        ''' Convert R# error message to VB.NET exception object
+        ''' </summary>
+        ''' <returns></returns>
         Public Function ToException() As RuntimeError
             Return New RuntimeError(Me)
         End Function

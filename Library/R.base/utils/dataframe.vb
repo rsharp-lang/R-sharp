@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::085d59e86a11696c3484b7a410210255, Library\R.base\utils\dataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module dataframe
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: appendCells, appendRow, AsDataframeRaw, asIndexList, cells
-    '               colnames, column, CreateRowObject, dataframeTable, deserialize
-    '               measureColumnVector, openCsv, printRowVector, printTable, project
-    '               rawToDataFrame, readCsvRaw, readDataSet, rows, RowToString
-    '               transpose, vector
-    ' 
-    ' /********************************************************************************/
+' Module dataframe
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: appendCells, appendRow, AsDataframeRaw, asIndexList, cells
+'               colnames, column, CreateRowObject, dataframeTable, deserialize
+'               measureColumnVector, openCsv, printRowVector, printTable, project
+'               rawToDataFrame, readCsvRaw, readDataSet, rows, RowToString
+'               transpose, vector
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -56,6 +56,7 @@ Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.csv.StorageProvider.Reflection
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter
@@ -71,6 +72,7 @@ Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RPrinter = SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports Rsharp = SMRUCC.Rsharp
+Imports vec = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 
 ''' <summary>
 ''' The sciBASIC.NET dataframe api
@@ -140,6 +142,11 @@ Module dataframe
             .Print(False)
     End Function
 
+    ''' <summary>
+    ''' show data set summary
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <returns></returns>
     Private Function RowToString(x As Object) As String
         Dim id$, length%
         Dim keys$()
@@ -173,7 +180,7 @@ Module dataframe
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("as.objects")>
-    <RApiReturn(GetType(vector))>
+    <RApiReturn(GetType(vec))>
     Public Function deserialize(data As csv, type As Object,
                                 Optional strict As Boolean = False,
                                 Optional metaBlank$ = "",
@@ -188,7 +195,7 @@ Module dataframe
             metaBlank:=metaBlank,
             silent:=silent
         )
-        Dim vector As New vector(schema, result, env)
+        Dim vector As New vec(schema, result, env)
 
         Return vector
     End Function
@@ -263,8 +270,26 @@ Module dataframe
     ''' <param name="file"></param>
     ''' <returns></returns>
     <ExportAPI("rows")>
-    Public Function rows(file As File) As RowObject()
+    Public Function rows(file As csv) As RowObject()
         Return file.ToArray
+    End Function
+
+    ''' <summary>
+    ''' convert the csv document row object to a text row in the table text file.
+    ''' </summary>
+    ''' <param name="r"></param>
+    ''' <param name="delimiter">
+    ''' a character string that used as delimiter, meta data in C language like 
+    ''' ``\t`` is supported.
+    ''' </param>
+    ''' <returns></returns>
+    <ExportAPI("rowToString")>
+    Public Function rowToString(r As RowObject, Optional delimiter As String = ",") As String
+        If r Is Nothing Then
+            Return ""
+        Else
+            Return r.AsLine(CLangStringFormatProvider.ReplaceMetaChars(delimiter))
+        End If
     End Function
 
     ''' <summary>
@@ -274,7 +299,7 @@ Module dataframe
     ''' <param name="index"></param>
     ''' <returns></returns>
     <ExportAPI("column")>
-    Public Function column(file As File, index As Integer) As String()
+    Public Function column(file As csv, index As Integer) As String()
         Return file.Column(index).ToArray
     End Function
 
@@ -301,20 +326,20 @@ Module dataframe
     End Function
 
     <ExportAPI("read.csv.raw")>
-    Public Function readCsvRaw(file$, Optional encoding As Object = "") As File
+    Public Function readCsvRaw(file$, Optional encoding As Object = "") As csv
         Return csv.Load(file, Rsharp.GetEncoding(encoding))
     End Function
 
     <ExportAPI("open.csv")>
     Public Function openCsv(file$, Optional encoding As Object = "") As RDispose
-        Dim table As New File
+        Dim table As New csv
         Dim textEncode As Encoding = Rsharp.GetEncoding(encoding)
 
         Return New RDispose(table, Sub() table.Save(file, textEncode))
     End Function
 
     <ExportAPI("as.dataframe.raw")>
-    <RApiReturn(GetType(File))>
+    <RApiReturn(GetType(csv))>
     Public Function AsDataframeRaw(<RRawVectorArgument> rows As Object,
                                    <RRawVectorArgument>
                                    Optional colnames As Object = Nothing,
@@ -353,7 +378,7 @@ Module dataframe
     End Function
 
     <ExportAPI("append.row")>
-    Public Function appendRow(table As File, row As RowObject) As File
+    Public Function appendRow(table As csv, row As RowObject) As csv
         table.Add(row)
         Return table
     End Function
