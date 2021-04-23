@@ -1,62 +1,67 @@
 ﻿#Region "Microsoft.VisualBasic::5f880a78922dca450ecd65b64b7a4ba5, LINQ\LINQ\Script\SyntaxImplements.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module SyntaxImplements
-    ' 
-    '         Function: CreateAggregateQuery, CreateProjectionQuery, GetParameters, GetProjection, GetSequence
-    '                   GetVector, IsClosure, IsNumeric, JoinOperators, ParseExpression
-    '                   ParseKeywordExpression, ParseToken, PopulateExpressions, PopulateQueryExpression
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module SyntaxImplements
+' 
+'         Function: CreateAggregateQuery, CreateProjectionQuery, GetParameters, GetProjection, GetSequence
+'                   GetVector, IsClosure, IsNumeric, JoinOperators, ParseExpression
+'                   ParseKeywordExpression, ParseToken, PopulateExpressions, PopulateQueryExpression
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
-Imports LINQ.Interpreter.Expressions
-Imports LINQ.Interpreter.Query
-Imports LINQ.Language
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports SMRUCC.Rsharp.Language
+Imports SMRUCC.Rsharp.Language.TokenIcer
 
 Namespace Interpreter.ExecuteEngine.LINQ.Syntax
 
     Public Module SyntaxImplements
 
+        ''' <summary>
+        ''' target token is a number literal value? 
+        ''' </summary>
+        ''' <param name="t"></param>
+        ''' <returns></returns>
         <Extension>
         Private Function IsNumeric(t As Token) As Boolean
-            Return t.name = Tokens.Integer OrElse t.name = Tokens.Number
+            Return t.name = TokenType.integerLiteral OrElse t.name = TokenType.numberLiteral
         End Function
 
         <Extension>
@@ -71,14 +76,14 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                     t = list(i)
                 End If
 
-                If t = (Tokens.Operator, "-") AndAlso list(i + 1).isNumeric Then
+                If t = (TokenType.operator, "-") AndAlso list(i + 1).isNumeric Then
                     t = New Token(list(i + 1).name, -Val(list(i + 1).text))
                     list.RemoveAt(i + 1)
                     list.RemoveAt(i)
                     list.Insert(i, t)
-                ElseIf t = (Tokens.Operator, ">") OrElse t = (Tokens.Operator, "<") Then
-                    If list(i + 1) = (Tokens.Operator, "=") OrElse list(i + 1) = (Tokens.Operator, ">") Then
-                        t = New Token(Tokens.Operator, t.text & list(i + 1).text)
+                ElseIf t = (TokenType.operator, ">") OrElse t = (TokenType.operator, "<") Then
+                    If list(i + 1) = (TokenType.operator, "=") OrElse list(i + 1) = (TokenType.operator, ">") Then
+                        t = New Token(TokenType.operator, t.text & list(i + 1).text)
                         list.RemoveAt(i + 1)
                         list.RemoveAt(i)
                         list.Insert(i, t)
@@ -91,6 +96,11 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
 
         ReadOnly sortOrders As Index(Of String) = {"descending", "ascending"}
 
+        ''' <summary>
+        ''' the main entry of parse linq expression
+        ''' </summary>
+        ''' <param name="tokenList"></param>
+        ''' <returns></returns>
         <Extension>
         Public Function PopulateQueryExpression(tokenList As IEnumerable(Of Token)) As Expression
             Dim blocks As List(Of Token()) = tokenList _
@@ -103,7 +113,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                     Exit For
                 End If
 
-                If blocks(i).Length = 1 AndAlso blocks(i)(Scan0).name = Tokens.keyword Then
+                If blocks(i).Length = 1 AndAlso blocks(i)(Scan0).name = TokenType.keyword Then
                     If blocks(i)(Scan0).text.ToLower Like sortOrders Then
                         blocks(i - 1) = blocks(i - 1) _
                             .JoinIterates(blocks(i)) _
@@ -168,14 +178,14 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
 
         <Extension>
         Friend Function ParseToken(t As Token) As Expression
-            If t.name = Tokens.Symbol Then
+            If t.name = TokenType.identifier Then
                 Return New SymbolReference(t.text)
-            ElseIf t.name = Tokens.Boolean OrElse
-                t.name = Tokens.Integer OrElse
-                t.name = Tokens.Number OrElse
-                t.name = Tokens.Literal Then
+            ElseIf t.name = TokenType.booleanLiteral OrElse
+                t.name = TokenType.integerLiteral OrElse
+                t.name = TokenType.numberLiteral OrElse
+                t.name = TokenType.stringLiteral Then
 
-                Return New Literals(t)
+                Return New Literal(t)
             Else
                 Throw New NotImplementedException
             End If
