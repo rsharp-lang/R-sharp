@@ -225,7 +225,9 @@ Namespace Runtime.Internal.Object
         ''' <summary>
         ''' 
         ''' </summary>
-        ''' <param name="index"></param>
+        ''' <param name="index">
+        ''' index: integer 0 based
+        ''' </param>
         ''' <param name="drop">
         ''' 当drop参数为false的时候，返回一个数组向量
         ''' 反之返回一个list
