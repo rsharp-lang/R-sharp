@@ -5,7 +5,9 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Namespace Interpreter.ExecuteEngine.LINQ
 
     ''' <summary>
-    ''' the linq dataset object
+    ''' the linq dataset object, a helper module for 
+    ''' iterates through the data sequence that produced
+    ''' by the <see cref="QueryExpression"/>
     ''' </summary>
     Public MustInherit Class DataSet
 

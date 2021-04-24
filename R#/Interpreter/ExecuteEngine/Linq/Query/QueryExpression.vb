@@ -24,6 +24,11 @@
             Return sequence.Evaluate(context)
         End Function
 
+        ''' <summary>
+        ''' get data source iterator for query
+        ''' </summary>
+        ''' <param name="context"></param>
+        ''' <returns></returns>
         Protected Function GetDataSet(context As ExecutableContext) As DataSet
             Return DataSet.CreateDataSet(Me, context)
         End Function

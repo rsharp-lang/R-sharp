@@ -34,7 +34,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
             Call closure.AddSymbol(symbol.symbolName, symbol.type)
 
             For Each item As Object In dataset.PopulatesData()
-                closure.env.FindSymbol(symbol.symbolName).value = item
+                closure.SetSymbol(symbol.symbolName, item)
 
                 For Each line As Expression In executeQueue
                     If TypeOf line Is WhereFilter Then

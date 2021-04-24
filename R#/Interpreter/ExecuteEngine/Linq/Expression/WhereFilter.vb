@@ -21,7 +21,12 @@ Namespace Interpreter.ExecuteEngine.LINQ
         End Sub
 
 
+
         Public Overrides Function Evaluate(envir As Environment) As Object
+            Throw New NotImplementedException()
+        End Function
+
+        Public Overrides Function Exec(context As ExecutableContext) As Object
             Throw New NotImplementedException()
         End Function
     End Class

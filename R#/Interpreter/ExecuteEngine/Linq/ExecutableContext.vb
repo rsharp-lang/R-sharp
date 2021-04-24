@@ -31,6 +31,10 @@ Namespace Interpreter.ExecuteEngine.LINQ
             Return environment.FindSymbol(symbolName)
         End Function
 
+        Public Sub SetSymbol(name As String, value As Object)
+            Call environment.FindSymbol(name).SetValue(value, Me)
+        End Sub
+
         Public Overrides Function ToString() As String
             Return environment.ToString
         End Function
