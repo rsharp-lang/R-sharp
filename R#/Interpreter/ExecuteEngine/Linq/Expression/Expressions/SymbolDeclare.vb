@@ -44,14 +44,14 @@ Namespace Interpreter.ExecuteEngine.LINQ
             If TypeOf symbol Is Literal Then
                 symbolName = any.ToString(DirectCast(symbol, Literal).value)
                 context.AddSymbol(symbolName, TypeCodes.generic)
-            ElseIf TypeOf symbol Is RunTimeValueExpression AndAlso TypeOf DirectCast(symbol, RunTimeValueExpression).R Is VectorLiteral Then
+            ElseIf TypeOf symbol Is VectorLiteral Then
                 Dim symbols As New List(Of String)
 
-                For Each element In DirectCast(DirectCast(symbol, RunTimeValueExpression).R, VectorLiteral)
-                    If Not TypeOf element Is DataSets.Literal Then
+                For Each element As Expression In DirectCast(symbol, VectorLiteral).elements
+                    If Not TypeOf element Is Literal Then
                         Return Internal.debug.stop("symbol expression in tuple vector should be symbol or literal text!", context)
                     Else
-                        Call symbols.Add(any.ToString(DirectCast(element, DataSets.Literal).value))
+                        Call symbols.Add(any.ToString(DirectCast(element, Literal).value))
                         Call context.AddSymbol(symbols.Last, TypeCodes.generic)
                     End If
                 Next
