@@ -37,11 +37,14 @@ Namespace Interpreter.ExecuteEngine.LINQ
             Dim closure As New ExecutableContext(New Environment(context, context.stackFrame, isInherits:=False))
             Dim skipVal As Boolean
             Dim dataset As DataSet = GetDataSet(context)
+            Dim err As Message = symbol.Exec(closure)
 
-            Call closure.AddSymbol(symbol.symbol, TypeCodes.generic)
+            If Not err Is Nothing Then
+                Return err
+            End If
 
             For Each item As Object In dataset.PopulatesData()
-                closure.SetSymbol(symbol.symbol, item)
+                Call symbol.SetValue(item, closure)
 
                 For Each line As Expression In executeQueue
                     If TypeOf line Is WhereFilter Then

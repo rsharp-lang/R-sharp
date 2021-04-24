@@ -7,7 +7,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
     ''' </summary>
     Public Class RunTimeValueExpression : Inherits Expression
 
-        Dim R As RExpression
+        Friend ReadOnly R As RExpression
 
         Public Overrides ReadOnly Property name As String
             Get
