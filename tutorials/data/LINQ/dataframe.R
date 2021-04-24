@@ -12,4 +12,4 @@ let runQuery = {
     TAKE 10
 }
 
-print(runQuery());
+print(runQuery);
