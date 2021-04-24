@@ -16,6 +16,12 @@ Namespace Interpreter.ExecuteEngine.LINQ
             End Get
         End Property
 
+        Public ReadOnly Property symbolNames As String()
+            Get
+                Return environment.symbols.Keys.ToArray
+            End Get
+        End Property
+
         <DebuggerStepThrough>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Sub New(env As Environment)

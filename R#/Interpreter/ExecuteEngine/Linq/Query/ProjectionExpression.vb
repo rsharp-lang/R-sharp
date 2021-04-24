@@ -3,6 +3,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.My.JavaScript
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Interpreter.ExecuteEngine.LINQ
 
@@ -32,7 +33,15 @@ Namespace Interpreter.ExecuteEngine.LINQ
                 If symbol.isTuple Then
                     Dim fields = DirectCast(symbol.symbol, VectorLiteral).elements _
                         .Select(Function(a)
-                                    Return New NamedValue(Of Expression)(a.ToString, a)
+                                    Dim name As String = a.ToString
+
+                                    If TypeOf a Is Literal Then
+                                        name = any.ToString(DirectCast(a, Literal).value)
+                                    ElseIf TypeOf a Is SymbolReference Then
+                                        name = DirectCast(a, SymbolReference).symbolName
+                                    End If
+
+                                    Return New NamedValue(Of Expression)(name, a)
                                 End Function) _
                         .ToArray
 

@@ -796,7 +796,7 @@ print(table);
 let runQuery = {
     FROM [X, Y, Z] 
     IN table
-    WHERE Z > 7000 && Z <= 9000 
+    WHERE Z > 700 && Z <= 79000 
     ORDER BY Z
     TAKE 10
     SKIP 1
