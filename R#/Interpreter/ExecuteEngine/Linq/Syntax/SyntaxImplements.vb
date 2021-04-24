@@ -425,7 +425,9 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                 End If
             Next
 
-            Return New RunTimeValueExpression(New VectorLiteral(elements))
+            Return New VectorLiteral With {
+                .elements = elements.ToArray
+            }
         End Function
     End Module
 End Namespace
