@@ -10,6 +10,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports any = Microsoft.VisualBasic.Scripting
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
@@ -47,7 +48,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             If TypeOf LINQ Is ProjectionExpression Then
                 If TypeOf LINQ.dataset Is DataFrameDataSet Then
                     ' returns a new dataframe
-                    Return newDataFrame(DirectCast(result, JavaScriptObject()), DirectCast(LINQ, ProjectionExpression).project.fields.Keys)
+                    Dim fields As String() = DirectCast(LINQ, ProjectionExpression).project.fields _
+                        .Keys _
+                        .ToArray
+
+                    Return newDataFrame(DirectCast(result, JavaScriptObject()), fields, envir)
                 Else
                     ' returns a new sequence
                     Return result
@@ -59,7 +64,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End If
         End Function
 
-        Private Shared Function newDataFrame(js As JavaScriptObject(), project As String()) As dataframe
+        Private Shared Function newDataFrame(js As JavaScriptObject(), project As String(), env As Environment) As dataframe
             Dim table As New dataframe With {
                 .columns = New Dictionary(Of String, Array)
             }
@@ -78,6 +83,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 For i As Integer = 0 To vec.Length - 1
                     vec.SetValue(js(i)(name), i)
                 Next
+
+                table.columns(name) = REnv.TryCastGenericArray(vec, env)
             Next
 
             Return table
