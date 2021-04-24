@@ -26,44 +26,5 @@ Namespace Interpreter.ExecuteEngine.LINQ
                 Return New SequenceDataSet With {.sequence = result}
             End If
         End Function
-
     End Class
-
-    Public Class SequenceDataSet : Inherits DataSet
-
-        Public Property sequence As Object
-
-        Friend Overrides Function PopulatesData() As IEnumerable(Of Object)
-            Throw New NotImplementedException()
-        End Function
-    End Class
-
-    Public Class ErrorDataSet : Inherits DataSet
-
-        Public Property message As Message
-
-        Friend Overrides Iterator Function PopulatesData() As IEnumerable(Of Object)
-        End Function
-    End Class
-
-    ''' <summary>
-    ''' populate by rows
-    ''' </summary>
-    Public Class DataFrameDataSet : Inherits DataSet
-
-        Public Property dataframe As dataframe
-
-        ''' <summary>
-        ''' populate a list of javascript object
-        ''' </summary>
-        ''' <returns></returns>
-        Friend Overrides Iterator Function PopulatesData() As IEnumerable(Of Object)
-            Dim nrows As Integer = dataframe.nrows
-
-            For i As Integer = 0 To nrows
-
-            Next
-        End Function
-    End Class
-
 End Namespace

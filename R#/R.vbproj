@@ -671,6 +671,9 @@
   <ItemGroup>
     <Compile Include="Interpreter\ExecutableLoop.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\LinqQuery.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\DataSet\DataFrameDataSet.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\DataSet\ErrorDataSet.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\DataSet\SequenceDataSet.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\DataSet\DataSet.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\ExecutableContext.vb" />
