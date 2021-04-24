@@ -89,13 +89,14 @@ Namespace Interpreter.ExecuteEngine.LINQ
                 Case "^" : Return x ^ y
                 Case ">" : Return x > y
                 Case "<" : Return x < y
-                Case "=" : Return x = y
+                Case "==" : Return x = y
+                Case "%" : Return x Mod y
 
                 Case "&" : Return any.ToString(x) & any.ToString(y)
 
                 Case ">=" : Return x >= y
                 Case "<=" : Return x <= y
-                Case "<>" : Return x <> y
+                Case "<>", "!=" : Return x <> y
 
                 Case "&&" : Return CBool(x) AndAlso CBool(y)
                 Case "||" : Return CBool(x) OrElse CBool(y)
