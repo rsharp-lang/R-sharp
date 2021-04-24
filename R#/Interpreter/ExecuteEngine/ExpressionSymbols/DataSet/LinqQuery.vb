@@ -1,14 +1,17 @@
-﻿Imports Microsoft.VisualBasic.Emit.Delegates
+﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.LINQ
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
     Public Class LinqQuery : Inherits Expression
+        Implements IRuntimeTrace
 
         Public Overrides ReadOnly Property type As TypeCodes
             Get
@@ -22,10 +25,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End Get
         End Property
 
+        Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
+
         Dim LINQ As QueryExpression
 
-        Sub New(query As QueryExpression)
-            LINQ = query
+        Sub New(query As QueryExpression, stackFrame As StackFrame)
+            Me.LINQ = query
+            Me.stackFrame = stackFrame
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object

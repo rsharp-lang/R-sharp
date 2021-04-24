@@ -49,6 +49,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.LINQ
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.LINQ.Syntax
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -121,9 +122,9 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     .[Namespace] = "SMRUCC/R#"
                 }
             }
-            Dim LINQ As QueryExpression
+            Dim LINQ As QueryExpression = tokens.IteratesALL.PopulateQueryExpression
 
-            Return New LinqQuery(LINQ)
+            Return New LinqQuery(LINQ, stackframe)
 
             'If Not [error] Is Nothing AndAlso [error].isException Then
             '    Return [error]
