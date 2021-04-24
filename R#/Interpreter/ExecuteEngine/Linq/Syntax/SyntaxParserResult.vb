@@ -63,6 +63,14 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
             expression = expr
         End Sub
 
+        Public Overrides Function ToString() As String
+            If isError Then
+                Return "Error: " & message.Message
+            Else
+                Return expression.ToString
+            End If
+        End Function
+
         Public Shared Widening Operator CType(exp As Expression) As SyntaxParserResult
             Return New SyntaxParserResult(exp)
         End Operator
