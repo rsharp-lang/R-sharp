@@ -144,12 +144,16 @@ Namespace Interpreter.ExecuteEngine.LINQ
                 End If
             Next
 
-            Dim output = opt.RunOptionPipeline(projections, context).SafeQuery.ToArray
-
-            If opt.message Is Nothing Then
-                Return output
+            If projections.Count = 0 Then
+                Return projections.ToArray
             Else
-                Return opt.message
+                Dim output = opt.RunOptionPipeline(projections, context).SafeQuery.ToArray
+
+                If opt.message Is Nothing Then
+                    Return output
+                Else
+                    Return opt.message
+                End If
             End If
         End Function
 
