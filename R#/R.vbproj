@@ -674,6 +674,7 @@
     <Compile Include="Interpreter\ExecuteEngine\Linq\DataSet\DataSet.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\ExecutableContext.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\BinaryExpression.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\RunTimeValueExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\FunctionInvoke.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Literal.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\MemberReference.vb" />
@@ -686,8 +687,6 @@
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\SymbolDeclare.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\OutputProjection.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\LinqKeywordExpression.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\Linq\LinqOutputUnit.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\Linq\LinqSyntaxParser.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\NamespaceDoc.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Query\AggregateExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Query\ProjectionExpression.vb" />
@@ -716,7 +715,6 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\BreakLoop.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\RepeatClosure.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\WhileLoop.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\Linq\LinqOutput.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxBuilderOptions.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\CreateObjectSyntax.vb" />
     <Compile Include="Interpreter\Syntax\SyntaxImplements\FormulaExpressionSyntax.vb" />
@@ -760,7 +758,6 @@
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexer.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\CLI\CommandLine.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Package\Imports.vb" />
-    <Compile Include="Interpreter\ExecuteEngine\Linq\LinqExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\UsingClosure.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareLambdaFunction.vb" />
     <Compile Include="Interpreter\ExecuteEngine\ExpressionSymbols\Operators\UnaryNot.vb" />
