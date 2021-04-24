@@ -1,4 +1,5 @@
 ﻿Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.My.JavaScript
 Imports SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.LINQ
@@ -32,10 +33,6 @@ Namespace Interpreter.ExecuteEngine.LINQ
             Next
 
             Return obj
-        End Function
-
-        Public Overrides Function Evaluate(envir As Environment) As Object
-            Throw New NotImplementedException()
         End Function
 
         Public Overrides Function ToString() As String

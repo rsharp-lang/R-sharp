@@ -5,11 +5,7 @@
     ''' </summary>
     Public MustInherit Class Expression
 
-        Public ReadOnly Property name As String
-            Get
-                Return MyClass.GetType.Name.ToLower
-            End Get
-        End Property
+        Public MustOverride ReadOnly Property name As String
 
         ''' <summary>
         ''' Evaluate the expression

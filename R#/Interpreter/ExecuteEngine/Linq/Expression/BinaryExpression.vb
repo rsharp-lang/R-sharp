@@ -64,6 +64,12 @@ Namespace Interpreter.ExecuteEngine.LINQ
             End Get
         End Property
 
+        Public Overrides ReadOnly Property name As String
+            Get
+                Return $"(binary) a {op} b"
+            End Get
+        End Property
+
         Sub New(left As Expression, right As Expression, op As String)
             Me.left = left
             Me.right = right

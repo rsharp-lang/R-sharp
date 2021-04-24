@@ -1,5 +1,6 @@
 ﻿Imports Microsoft.VisualBasic.My.JavaScript
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Interpreter.ExecuteEngine.LINQ
 
@@ -10,6 +11,12 @@ Namespace Interpreter.ExecuteEngine.LINQ
 
         Dim opt As Options
         Dim project As OutputProjection
+
+        Public Overrides ReadOnly Property name As String
+            Get
+                Return "from ... [select ...]"
+            End Get
+        End Property
 
         Sub New(symbol As SymbolDeclare, sequence As Expression, exec As IEnumerable(Of Expression), proj As OutputProjection, opt As Options)
             Call MyBase.New(symbol, sequence, exec)
@@ -31,7 +38,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
             Dim skipVal As Boolean
             Dim dataset As DataSet = GetDataSet(context)
 
-            Call closure.AddSymbol(symbol.symbolName, symbol.type)
+            Call closure.AddSymbol(symbol.symbolName, TypeCodes.generic)
 
             For Each item As Object In dataset.PopulatesData()
                 closure.SetSymbol(symbol.symbolName, item)

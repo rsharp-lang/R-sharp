@@ -17,7 +17,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
         Public Function RunOptionPipeline(output As IEnumerable(Of JavaScriptObject), context As ExecutableContext) As IEnumerable(Of JavaScriptObject)
             Dim raw As JavaScriptObject() = output.ToArray
             Dim allNames As String() = raw(Scan0).GetNames
-            Dim env As Environment = context.environment
+            Dim env As Environment = context
 
             For Each name As String In allNames
                 If env.FindSymbol(name, [inherits]:=False) Is Nothing Then

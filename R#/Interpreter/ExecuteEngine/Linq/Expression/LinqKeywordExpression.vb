@@ -10,24 +10,11 @@ Namespace Interpreter.ExecuteEngine.LINQ
 
         Public MustOverride ReadOnly Property keyword As String
 
-        Public Overrides ReadOnly Property type As TypeCodes
+        Public Overrides ReadOnly Property name As String
             Get
-                Return TypeCodes.generic
+                Return keyword
             End Get
         End Property
-
-        Public Overrides ReadOnly Property expressionName As ExpressionTypes
-            Get
-                Return ExpressionTypes.LinqDeclare
-            End Get
-        End Property
-
-        ''' <summary>
-        ''' Evaluate the expression
-        ''' </summary>
-        ''' <param name="context"></param>
-        ''' <returns></returns>
-        Public MustOverride Function Exec(context As ExecutableContext) As Object
 
     End Class
 End Namespace
