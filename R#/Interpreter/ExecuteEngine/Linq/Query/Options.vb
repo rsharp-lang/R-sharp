@@ -32,5 +32,9 @@ Namespace Interpreter.ExecuteEngine.LINQ
             Return raw
         End Function
 
+        Public Overrides Function ToString() As String
+            Return pipeline.JoinBy(vbCrLf)
+        End Function
+
     End Class
 End Namespace

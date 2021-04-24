@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+﻿Imports System.Text
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.My.JavaScript
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -83,6 +84,21 @@ Namespace Interpreter.ExecuteEngine.LINQ
             Next
 
             Return opt.RunOptionPipeline(projections, context).ToArray
+        End Function
+
+        Public Overrides Function ToString() As String
+            Dim sb As New StringBuilder
+
+            Call sb.AppendLine($"FROM {symbol} IN {sequence}")
+
+            For Each line In executeQueue
+                Call sb.AppendLine(line.ToString)
+            Next
+
+            Call sb.AppendLine(project.ToString)
+            Call sb.AppendLine(opt.ToString)
+
+            Return sb.ToString
         End Function
     End Class
 End Namespace
