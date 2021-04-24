@@ -81,7 +81,7 @@ Namespace Interpreter.SyntaxParser
                 Case "elseif" : Return code.Skip(1).IteratesALL.DoCall(Function(tokens) SyntaxImplements.ElseIfClosure(tokens, opts))
                 Case "return" : Return SyntaxImplements.ReturnValue(code.Skip(1).IteratesALL, opts)
                 Case "for" : Return SyntaxImplements.ForLoop(code.Skip(1).IteratesALL, opts)
-                Case "from" : Return SyntaxImplements.LinqExpression(code, opts)
+                Case "from", "aggregate" : Return SyntaxImplements.LinqExpression(code, opts)
                 Case "imports" : Return SyntaxImplements.[Imports](code, opts)
                 Case "function"
                     Return SyntaxImplements.DeclareAnonymousFunction(code, opts)

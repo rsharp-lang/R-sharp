@@ -42,17 +42,11 @@
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
-Imports Microsoft.VisualBasic.Emit.Marshal
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.LINQ
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.LINQ.Syntax
-Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
-Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Interpreter.SyntaxParser.SyntaxImplements
 
@@ -68,51 +62,6 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
         ''' <returns></returns>
         <Extension>
         Public Function LinqExpression(tokens As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
-            'Dim variables As New List(Of String)
-            'Dim i As Integer = 0
-            'Dim sequence As SyntaxResult = Nothing
-            'Dim locals As New List(Of DeclareNewSymbol)
-            'Dim trace As New StackFrame
-
-            'For i = 1 To tokens.Count - 1
-            '    If tokens(i).isIdentifier Then
-            '        variables.Add(tokens(i)(Scan0).text)
-
-            '        If Not trace Is Nothing Then
-            '            trace = opts.GetStackTrace(tokens(i)(Scan0))
-            '        End If
-            '    ElseIf tokens(i).isKeyword("in") Then
-            '        sequence = Expression.CreateExpression(tokens(i + 1), opts)
-            '        Exit For
-            '    End If
-            'Next
-
-            'If sequence Is Nothing Then
-            '    Return New SyntaxResult("Missing sequence provider!", opts.debug)
-            'ElseIf sequence.isException Then
-            '    Return sequence
-            'Else
-            '    i += 2
-            '    locals = New DeclareNewSymbol(
-            '        names:=variables.ToArray,
-            '        value:=Nothing,
-            '        type:=TypeCodes.generic,
-            '        [readonly]:=False,
-            '        stackFrame:=trace
-            '    )
-            'End If
-
-            'tokens = tokens _
-            '    .Skip(i) _
-            '    .IteratesALL _
-            '    .SplitByTopLevelDelimiter(TokenType.keyword)
-
-            'Dim projection As Expression = Nothing
-            'Dim output As New List(Of ExpressionSymbols.Closure.FunctionInvoke)
-            'Dim program As ClosureExpression = Nothing
-            'Dim p As New Pointer(Of Token())(tokens)
-            'Dim parser As New LinqSyntaxParser(p, opts)
-            'Dim [error] As SyntaxResult = parser.doParseLINQProgram(locals, projection, output, program)
             Dim stackframe As New StackFrame With {
                 .File = opts.source.fileName,
                 .Line = tokens.First()(Scan0).span.line,
@@ -122,22 +71,13 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     .[Namespace] = "SMRUCC/R#"
                 }
             }
-            Dim LINQ As QueryExpression = tokens.IteratesALL.PopulateQueryExpression
+            Dim LINQ As SyntaxParserResult = tokens.IteratesALL.PopulateQueryExpression
 
-            Return New LinqQuery(LINQ, stackframe)
-
-            'If Not [error] Is Nothing AndAlso [error].isException Then
-            '    Return [error]
-            'Else
-            '    Return New LinqExpression(
-            '        locals:=locals,
-            '        sequence:=sequence.expression,
-            '        program:=program,
-            '        projection:=projection,
-            '        output:=output,
-            '        stackframe:=stackframe
-            '    )
-            'End If
+            If LINQ.isError Then
+                Return New SyntaxResult(LINQ.message, opts.debug)
+            Else
+                Return New LinqQuery(LINQ.expression, stackframe)
+            End If
         End Function
     End Module
 End Namespace

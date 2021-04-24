@@ -102,9 +102,11 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
         ''' the main entry of parse linq expression
         ''' </summary>
         ''' <param name="tokenList"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' <see cref="QueryExpression"/> or an error <see cref="Exception"/>
+        ''' </returns>
         <Extension>
-        Public Function PopulateQueryExpression(tokenList As IEnumerable(Of Token)) As Expression
+        Public Function PopulateQueryExpression(tokenList As IEnumerable(Of Token)) As SyntaxParserResult
             Dim blocks As List(Of Token()) = tokenList _
                 .JoinOperators _
                 .SplitByTopLevelStack _
@@ -130,7 +132,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
             ElseIf blocks(Scan0).First.isKeywordAggregate Then
                 Return blocks(Scan0).CreateAggregateQuery(blocks.Skip(1).ToArray)
             Else
-                Throw New SyntaxErrorException
+                Return New SyntaxParserResult(New SyntaxErrorException)
             End If
         End Function
 

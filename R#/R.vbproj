@@ -694,6 +694,7 @@
     <Compile Include="Interpreter\ExecuteEngine\Linq\Query\Options.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Query\QueryExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Syntax\BinaryBuilder.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Syntax\SyntaxParserResult.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Syntax\StackParser.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Syntax\SyntaxImplements.vb" />
     <Compile Include="Interpreter\ExecuteEngine\SymbolExpression.vb" />
