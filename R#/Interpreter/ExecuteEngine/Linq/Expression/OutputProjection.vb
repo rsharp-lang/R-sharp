@@ -1,6 +1,5 @@
 ﻿Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.My.JavaScript
-Imports SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.LINQ
 

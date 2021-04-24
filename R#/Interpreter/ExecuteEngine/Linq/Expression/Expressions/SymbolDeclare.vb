@@ -28,7 +28,13 @@ Namespace Interpreter.ExecuteEngine.LINQ
 
         Public ReadOnly Property isTuple As Boolean
             Get
-                Return Not tupleNames.IsNullOrEmpty
+                If Not tupleNames.IsNullOrEmpty Then
+                    Return True
+                ElseIf TypeOf symbol Is VectorLiteral Then
+                    Return True
+                Else
+                    Return False
+                End If
             End Get
         End Property
 
