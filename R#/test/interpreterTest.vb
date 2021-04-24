@@ -799,7 +799,7 @@ let runQuery = {
     FROM [X, Y, Z] 
     IN table
     WHERE Z > 700 && Z <= 79000 
-    SELECT X, Y, zz = Z 
+    SELECT X, Y, zz = log(Z), Z 
     ORDER BY Z
     TAKE 10
     SKIP 1

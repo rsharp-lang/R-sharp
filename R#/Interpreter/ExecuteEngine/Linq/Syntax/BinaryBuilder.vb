@@ -1,50 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::279b9954832552a56de21e38165d0ba1, R#\Interpreter\ExecuteEngine\Linq\Syntax\BinaryBuilder.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Module BinaryBuilder
-    ' 
-    '         Function: ParseBinary, ShrinkTokens
-    ' 
-    '         Sub: JoinBinary
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Module BinaryBuilder
+' 
+'         Function: ParseBinary, ShrinkTokens
+' 
+'         Sub: JoinBinary
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
+Imports SMRUCC.Rsharp.Interpreter.SyntaxParser
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 
@@ -62,8 +63,11 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
         }
 
         <Extension>
-        Public Function ParseBinary(tokenList As Token()) As SyntaxParserResult
-            Dim shrinks As List(Of [Variant](Of String, SyntaxParserResult)) = tokenList.SplitOperators.ShrinkTokens.AsList
+        Public Function ParseBinary(tokenList As Token(), opts As SyntaxBuilderOptions) As SyntaxParserResult
+            Dim shrinks As List(Of [Variant](Of String, SyntaxParserResult)) = tokenList _
+                .SplitOperators _
+                .ShrinkTokens(opts) _
+                .AsList
 
             For Each item In From x In shrinks Where Not x Like GetType(String)
                 If item.TryCast(Of SyntaxParserResult).isError Then
@@ -117,7 +121,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
         End Sub
 
         <Extension>
-        Private Iterator Function ShrinkTokens(blocks As IEnumerable(Of Token())) As IEnumerable(Of [Variant](Of String, SyntaxParserResult))
+        Private Iterator Function ShrinkTokens(blocks As IEnumerable(Of Token()), opts As SyntaxBuilderOptions) As IEnumerable(Of [Variant](Of String, SyntaxParserResult))
             For Each block As Token() In blocks.Where(Function(b) Not b.IsNullOrEmpty)
                 If block.Length = 1 AndAlso block(Scan0).name = TokenType.operator Then
                     Yield block(Scan0).text
@@ -133,7 +137,7 @@ Namespace Interpreter.ExecuteEngine.LINQ.Syntax
                         Yield New SyntaxParserResult(New MemberReference(symbol.expression, member.expression))
                     End If
                 Else
-                    Yield block.ParseExpression
+                    Yield block.ParseExpression(opts)
                 End If
             Next
         End Function

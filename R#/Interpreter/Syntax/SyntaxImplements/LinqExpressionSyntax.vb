@@ -71,7 +71,7 @@ Namespace Interpreter.SyntaxParser.SyntaxImplements
                     .[Namespace] = "SMRUCC/R#"
                 }
             }
-            Dim LINQ As SyntaxParserResult = tokens.IteratesALL.PopulateQueryExpression
+            Dim LINQ As SyntaxParserResult = tokens.IteratesALL.PopulateQueryExpression(opts)
 
             If LINQ.isError Then
                 Return New SyntaxResult(LINQ.message, opts.debug)

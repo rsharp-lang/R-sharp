@@ -678,6 +678,7 @@
     <Compile Include="Interpreter\ExecuteEngine\Linq\DataSet\DataSet.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\ExecutableContext.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Expressions\BinaryExpression.vb" />
+    <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Expressions\ValueAssign.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Expressions\VectorLiteral.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Expressions\RunTimeValueExpression.vb" />
     <Compile Include="Interpreter\ExecuteEngine\Linq\Expression\Expressions\FunctionInvoke.vb" />
